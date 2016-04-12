@@ -1,0 +1,175 @@
+/**
+ * Main classes
+ * =====================================================================================================================
+ *
+ * Some generic Coremedia styles and classes for responsive images, navigation, quickinfo and imagemap
+ */
+
+
+/**
+ * Responsive Images Plugin
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+
+/**
+ * Always take full width of parent container
+ */
+.cm-image--responsive {
+  vertical-align: middle;
+  width: 100%;
+}
+
+/**
+ * Non Responsive Content Plugin
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+.cm-non-adaptive-content-wrapper {
+  overflow: hidden;
+}
+
+.cm-non-adaptive-content {
+  /*top: -16.667% !important; /* for 1:1 */
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/* variant fitting to parent height */
+.cm-non-adaptive-content--fit-height {
+  height: 100%;
+  width: auto;
+}
+
+/**
+ * 360° Spinner
+ * ---------------------------------------------------------------------------------------------------------------------
+ */
+.cm-spinner--hidden {
+  display: none;
+}
+.cm-spinner__canvas {
+  position: relative;
+  cursor: ew-resize;
+}
+
+.cm-spinner__images {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cm-spinner__image {
+  position: absolute;
+  display: block;
+  visibility: hidden;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.cm-spinner__image.current-image {
+  visibility: visible;
+}
+
+/**
+ * Dropdown Navigation
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+
+/**
+ * hide dropdown-buttons if .cm-dropdown is not set
+ */
+.cm-dropdown-button {
+  display: none;
+}
+
+.cm-dropdown .cm-dropdown-button {
+  display: inherit;
+}
+
+/**
+ * hide all menus and items except for:
+ * - items containing opened menus
+ * - opened menus
+ * - items in active menus (root level and sublevels)
+ */
+.cm-dropdown .cm-dropdown-menu,
+.cm-dropdown .cm-dropdown-item {
+  display: none;
+}
+
+.cm-dropdown .cm-dropdown-item.cm-dropdown-menu--opened,
+.cm-dropdown .cm-dropdown-menu.cm-dropdown-menu--opened,
+.cm-dropdown.cm-dropdown-menu.cm-dropdown-menu--active > .cm-dropdown-item,
+.cm-dropdown .cm-dropdown-menu.cm-dropdown-menu--active > .cm-dropdown-item {
+  display: inherit;
+}
+
+/**
+ * Read More / Read Less functionality
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+.cm-readmore__wrapper {
+  overflow: hidden;
+}
+
+.cm-readmore__buttonbar {
+  display: none;
+  text-align: right;
+}
+
+.cm-readmore__button-more,
+.cm-readmore__button-less {
+  background: #ffffff;
+  border: none;
+  padding: 5px;
+  text-decoration: underline;
+}
+
+.cm-readmore--enabled > .cm-readmore__buttonbar {
+  display: block;
+}
+
+.cm-readmore--more > .cm-readmore__buttonbar > .cm-readmore__button-more {
+  display: none;
+}
+
+.cm-readmore--less > .cm-readmore__buttonbar > .cm-readmore__button-less {
+  display: none;
+}
+
+/**
+ * Hash Based Fragment Handler
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Optional CSS Styles to apply a loading indicator for fragments
+ */
+.cm-fragment--loading {
+  position: relative;
+}
+
+.cm-fragment--loading:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  opacity: 0.5;
+  -webkit-transition: background-color 0.5s ease;
+  -moz-transition: background-color 0.5s ease;
+  -o-transition: background-color 0.5s ease;
+  transition: background-color 0.5s ease;
+}

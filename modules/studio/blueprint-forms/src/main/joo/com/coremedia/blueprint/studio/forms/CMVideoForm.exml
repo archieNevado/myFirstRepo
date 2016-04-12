@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:bpbase-components="exml:com.coremedia.blueprint.base.components.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
+                baseClass="com.coremedia.blueprint.studio.forms.CMVideoFormBase">
+
+  <exml:import class="com.coremedia.blueprint.studio.BlueprintTabs_properties"/>
+  <exml:import class="com.coremedia.blueprint.studio.CustomLabels_properties"/>
+  <exml:import class="com.coremedia.blueprint.studio.BlueprintDocumentTypes_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.editorContext" />
+  <exml:import class="com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer" />
+  <exml:import class="com.coremedia.blueprint.base.components.timeline.Sequence" />
+
+  <exml:constant name="COPYRIGHT_FORM_ITEM_ID" value="copyrightFormItemId"/>
+  <exml:constant name="EXTRAS_TAB_ITEM_ID" value="extrasTab"/>
+
+  <editor:documentTabPanel>
+    <items>
+      <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_content_title}">
+        <items>
+          <bpforms:detailsDocumentForm/>
+          <!-- same as bpforms:teaserDocumentForm without bpforms:callToActionConfigurationForm -->
+          <editor:collapsibleFormPanel title="{CustomLabels_properties.INSTANCE.PropertyGroup_Teaser_label}"
+                                       itemId="teaserDocumentForm"
+                                       propertyNames="{['teaserTitle','teaserText']}"
+                                       expandOnValues="teaserTitle,teaserText.data"
+                                       collapsed="true"
+                                       reduceBottomPadding="true">
+            <items>
+              <editor:stringPropertyField propertyName="teaserTitle">
+                <plugins mode="append">
+                  <editor:stringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
+                </plugins>
+              </editor:stringPropertyField>
+              <editor:textAreaPropertyField propertyName="teaserText"
+                                            itemId="teaserText"
+                                            changeBuffer="1000">
+                <plugins mode="append">
+                  <editor:textAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
+                </plugins>
+              </editor:textAreaPropertyField>
+            </items>
+          </editor:collapsibleFormPanel>
+          <bpforms:dataDocumentForm title="{BlueprintDocumentTypes_properties.INSTANCE.CMVideo_data_text}"/>
+          <bpforms:viewTypeSelectorForm bindTo="{config.bindTo}" hideForSingleChoice="false"/>
+          <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMVideo_timeline_text}"
+                                       collapsed="false"
+                                       itemId="videoTimeLineForm">
+            <plugins>
+              <ui:bindVisibilityPlugin bindTo="{getVisibleForViewTypeValueExpression(config.bindTo, 'shoppable')}" />
+            </plugins>
+            <items>
+              <editor:linkListPropertyField linkType="{'CMTeasable'}"
+                                            cls="dnd-spacer"
+                                            itemId="default"
+                                            openCollectionViewHandler="{openCollectionViewHandler}"
+                                            propertyName="{'timeLine.' + Sequence.DEFAULT_TARGET_PROPERTY_NAME}"
+                                            bindTo="{config.bindTo}"
+                                            maxCardinality="1"
+                                            gridCtCls="image-link-list-grid">
+                <editor:fields>
+                  <ui:dataField name="thumbnailUrl"
+                                mapping=""
+                                ifUnreadable="" convert="{editorContext.getThumbnailUri}"/>
+                </editor:fields>
+                <editor:columns>
+                  <gridcolumn id="thumbnail"
+                              width="110"
+                              sortable="false"
+                              dataIndex="thumbnailUrl"
+                              renderer="{ImageLinkListRenderer.thumbColRenderer}"/>
+                  <editor:typeIconColumn/>
+                  <editor:nameColumn/>
+                  <editor:statusColumn/>
+                </editor:columns>
+              </editor:linkListPropertyField>
+              <bpbase-components:timelineEditor propertyName="timeLine" searchType="CMProductTeaser"/>
+            </items>
+          </editor:collapsibleFormPanel>
+          <editor:collapsibleFormPanel title="{CustomLabels_properties.INSTANCE.PropertyGroup_WidthAndHeight}"
+                                       itemId="cmVideoSizeForm"
+                                       collapsed="true"
+                                       reduceBottomPadding="true">
+            <items>
+              <editor:integerPropertyField propertyName="width"/>
+              <editor:integerPropertyField propertyName="height"/>
+            </items>
+          </editor:collapsibleFormPanel>
+          <bpforms:pictureDocumentForm collapsed="true"
+                                       maxCardinality="1"/>
+          <bpforms:viewTypeSelectorForm/>
+          <bpforms:validityDocumentForm/>
+        </items>
+      </editor:documentForm>
+      <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_extras_title}"
+                           itemId="{EXTRAS_TAB_ITEM_ID}">
+        <items>
+          <bpforms:categoryDocumentForm/>
+          <editor:collapsibleFormPanel collapsed="false"
+                                       reduceBottomPadding="true"
+                                       itemId="{COPYRIGHT_FORM_ITEM_ID}"
+                                       title="{CustomLabels_properties.INSTANCE.PropertyGroup_Description_label}"
+                                       forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
+            <items>
+              <editor:stringPropertyField propertyName="copyright"/>
+            </items>
+          </editor:collapsibleFormPanel>
+          <bpforms:seoForm/>
+        </items>
+      </editor:documentForm>
+      <bpforms:multiLanguageDocumentForm/>
+      <bpforms:metaDataWithoutSearchableForm/>
+    </items>
+  </editor:documentTabPanel>
+
+</exml:component>

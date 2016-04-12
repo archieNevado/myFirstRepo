@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:bp="exml:com.coremedia.blueprint.studio.config.components"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
+                baseClass="PictureDocumentFormBase">
+
+  <exml:import class="com.coremedia.blueprint.studio.CustomLabels_properties"/>
+
+  <exml:cfg name="maxCardinality" type="int">
+    <exml:description>Maximum amount of items in the list</exml:description>
+  </exml:cfg>
+
+  <exml:cfg name="picturePropertyName" type="String" default="pictures">
+    <exml:description>
+       The content property name of the list to bind the newly created content to.
+       Defaults to pictures.
+    </exml:description>
+  </exml:cfg>
+
+  <exml:cfg name="contentType" type="String" default="CMPicture">
+    <exml:description>
+       The content type to create, optional if the content type value expression is set. Defaults to CMPicture.
+    </exml:description>
+  </exml:cfg>
+
+  <exml:cfg name="openCollectionViewHandler" type="Function">
+    <exml:description>
+       An optional handler, to open the collection view in a different state. If not set, the collection view
+       opens per default in search mode for the corresponding content type.
+       Signature: function(linkListTargetType:ContentType, sourceContent:Content):void
+    </exml:description>
+  </exml:cfg>
+
+  <editor:collapsibleFormPanel title="{CustomLabels_properties.INSTANCE.PropertyGroup_Picture_label}"
+                               itemId="pictureDocumentForm">
+    <items>
+      <bp:imageLinkListPropertyField propertyName="{config.picturePropertyName}"
+                                     contentType="{config.contentType}"
+                                     autoWidth="true"
+                                     hideLabel="true"
+                                     maxCardinality="{config.maxCardinality}"
+                                     fieldLabel=""
+                                     openCollectionViewHandler="{config.openCollectionViewHandler}">
+        <bp:additionalToolbarItems>
+          <tbseparator/>
+          <bpb-components:quickCreateToolbarButton contentType="{config.contentType}"
+                                                   propertyName="{config.picturePropertyName}"
+                                                   forceReadOnlyValueExpression="{getGridEmptyValueExpression(config)}"
+                                                   bindTo="{config.bindTo}"/>
+        </bp:additionalToolbarItems>
+      </bp:imageLinkListPropertyField>
+    </items>
+  </editor:collapsibleFormPanel>
+</exml:component>

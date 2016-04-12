@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMTeaser folder="/Sites/Aurora Augmentation/United States/English/Editorial/Content/Magazine Fall/Story 4 - Coffee Roasting" name="To Drink Category Teaser" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>To Drink</teaserTitle>
+<pictures>
+<link href="../../../../Pictures/Product%20Teaser%20Pictures/04_Deli/To%20Drink/PC_COFFEE_LOVE4fa59d59.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20Teaser%20Pictures/04_Deli/To%20Drink/PC_COFFEE_LOVE_ESPRESSO%20Frontshot"/>
+</pictures>
+<related>
+</related>
+<target>
+<link href="../../../../Augmentation/PC_Deli/PC_ToDrink/PC_ToDrink.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_Deli/PC_ToDrink/PC_ToDrink"/>
+</target>
+</CMTeaser>

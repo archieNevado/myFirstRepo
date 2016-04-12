@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+
+  <import resource="classpath:/framework/spring/blueprint-contentbeans.xml"/>
+  <import resource="classpath:/framework/spring/blueprint-views.xml"/>
+  <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
+
+  <!-- register content beans -->
+  <bean name="contentBeanFactory:AMAsset"
+        class="com.coremedia.blueprint.assets.contentbeans.AMAssetImpl"
+        scope="prototype"/>
+  <bean name="contentBeanFactory:AMPictureAsset"
+        class="com.coremedia.blueprint.assets.contentbeans.AMPictureAssetImpl"
+        scope="prototype"/>
+  <bean name="contentBeanFactory:AMVideoAsset"
+        class="com.coremedia.blueprint.assets.contentbeans.AMVideoAssetImpl"
+        scope="prototype"/>
+  <bean name="contentBeanFactory:AMDocumentAsset"
+        class="com.coremedia.blueprint.assets.contentbeans.AMDocumentAssetImpl"
+        scope="prototype"/>
+  <bean name="contentBeanFactory:AMTaxonomy"
+        class="com.coremedia.blueprint.assets.contentbeans.AMTaxonomyImpl"
+        parent="abstractTaxonomyBean-blueprint-doctypes"
+        scope="prototype"/>
+
+  <!-- register view repository for templates below WEB-INF/templates/assets/ -->
+  <customize:prepend id="addAssetsViewRepository" bean="viewRepositories">
+    <list>
+      <value>assets</value>
+    </list>
+  </customize:prepend>
+
+  <customize:append id="assetContentbeanValidatorListCustomizer" bean="contentbeanValidatorList">
+    <list>
+      <bean class="com.coremedia.blueprint.assets.validation.HasPublishedRenditionsValidator"/>
+    </list>
+  </customize:append>
+
+</beans>

@@ -1,0 +1,10 @@
+name 'blueprint-mongodb'
+maintainer 'The Authors'
+maintainer_email 'you@example.com'
+license 'all_rights'
+description 'Installs/Configures blueprint-mongodb'
+long_description 'Installs/Configures blueprint-mongodb'
+version '1.0.0'
+
+depends 'mongodb', '~> 0.16.2'
+depends 'blueprint-yum'

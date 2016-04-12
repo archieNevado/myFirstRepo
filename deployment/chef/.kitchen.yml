@@ -1,0 +1,101 @@
+# for a documentation about possible configuration attributes visit https://docs.chef.io/config_yml_kitchen.html
+<%
+# Use host as default WCS HOST
+wcs_host = ENV.fetch('WCS_HOST', '192.168.252.1')
+# switch db type
+database_host  = ENV.fetch('DB_HOST', 'localhost')
+database_type  = ENV.fetch('DB_TYPE', 'mysql')
+puts '======================================================='
+puts " WCS_HOST:                #{wcs_host}"
+puts '---------Database--------------------------------------'
+puts " DB_HOST:                 #{database_host}"
+puts " DB_TYPE:                 #{database_type}"
+puts " currently supported:"
+puts "   * mysql        - MySQL 5.5"
+puts "   * postgresql   - PostgreSQL 9.3"
+puts '======================================================='
+puts ' http://overview.192.168.252.100.xip.io '
+puts '======================================================='
+%>
+---
+driver:
+  name: vagrant
+  vagrantfiles:
+    - config/cachier.rb
+    - config/linked-clones.rb
+  provider: virtualbox
+  customize:
+    memory: 8192
+    cpus: 2
+  synced_folders:
+    - ["./build", "/shared", "create: true"]
+    - ["~/.m2/repository", "/maven-repo"]
+    - ["../../boxes/target/shared/content", "/test-data"]
+  network:
+    - ['private_network',{ ip: '192.168.252.100' }]
+
+provisioner:
+  name: chef_solo
+  require_chef_omnibus: "12.8.1"
+  chef_omnibus_install_options: -d /tmp/vagrant-cache/chef-omnibus
+  solo_rb:
+    environment: kitchen
+# Uncomment the following lines to configure a proxy
+#    http_proxy: http://192.168.252.200:8123
+#    https_proxy: http://192.168.252.200:8123
+#    no_proxy: localhost,127.0.0.1
+
+platforms:
+- name: centos6-vagrant
+  driver:
+    box: coremedia/base
+    box_url: 'https://atlas.hashicorp.com/coremedia/boxes/base'
+    box_version: '1.16.0'
+
+- name: centos7-vagrant
+  driver:
+    box: coremedia/base7
+    box_url: 'https://atlas.hashicorp.com/coremedia/boxes/base7'
+    box_version: '2.1.0'
+
+suites:
+- name: default
+  # add platforms to test to this array, by default only one is listed so a simple kitchen converge will run this suite
+  includes: [centos6-vagrant]
+  run_list:
+    # install database
+    - role[<%= database_type %>]
+    - role[mongodb]
+    - role[solr-master]
+    - role[management]
+    - role[publication]
+    - role[studio]
+    - role[studio-proxy]
+    - role[delivery]
+    - role[delivery-proxy]
+    - recipe[blueprint-dev-tooling::overview]
+    # comment out to skip content import
+    - recipe[blueprint-dev-tooling::content]
+  attributes:
+    blueprint:
+      # these are convenience properties, convenience properties must be set in either an environment, a role or here in the kitchen file
+      # you cannot set it in a recipe if it is being used in other cookbooks attribute files.
+      hostname: 192.168.252.100.xip.io
+      wcs:
+        host: <%= wcs_host %>
+      dev:
+        db:
+          type: <%= database_type %>
+          host: <%= database_host %>
+        content:
+          # set this to either 'skip', 'force' or 'default'
+          mode: default
+# by default we here use the latest versions of tomcat. Be aware, that if a newer tomcat version is being released, you need to
+# change the urls and the version. If not set all artifacts will be downloaded from the much slower apache archive urls.
+#      tomcat:
+#        source: 'http://www.eu.apache.org/dist/tomcat/tomcat-7/v7.0.67/bin/apache-tomcat-7.0.67.zip'
+#        source_checksum: '5835c4a06fc276dd2865d17d5fb1f0dd791f55fd0cba18824a5f0c8124284337'
+#        jmx_remote_jar_source: 'http://www.eu.apache.org/dist/tomcat/tomcat-7/v7.0.67/bin/extras/catalina-jmx-remote.jar'
+#        jmx_remote_jar_source_checksum: 'c166ec1a40455717716ff7eaefb010cc20f322510098ab953bbf07f5c0642b77'
+#        version: '7.0.67'
+

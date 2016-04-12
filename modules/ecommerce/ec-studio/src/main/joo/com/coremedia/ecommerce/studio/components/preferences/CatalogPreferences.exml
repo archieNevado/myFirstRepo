@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:u="exml:untyped"
+                baseClass="com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase">
+
+  <exml:import class="com.coremedia.cms.editor.sdk.preferences.PreferenceWindowBase"/>
+  <exml:import class="com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.premular.fields.BooleanPropertyField"/>
+
+  <exml:constant name="CATALOG_PREFERENCES_ITEM_ID" type="String" value="contentCatalogPreferences"/>
+
+  <panel title="{ECommerceStudioPlugin_properties.INSTANCE.EcCatalogPreferences_tab_title}"
+         itemId="{CATALOG_PREFERENCES_ITEM_ID}"
+         layout="column"
+         style="padding:7px">
+    <items>
+      <container u:columnWidth="1"
+                 layout="form">
+        <items>
+          <checkbox itemId="catalogSettingsGroup"
+                    fieldLabel="{ECommerceStudioPlugin_properties.INSTANCE.EcCatalogPreferences_catalog_title}"
+                    boxLabel="{ECommerceStudioPlugin_properties.INSTANCE.EcCatalogPreferences_show_catalog_items}"
+                    ctCls="{BooleanPropertyField.BOOLEAN_PROPERTY_FIELD_CSS}">
+            <plugins>
+                <ui:bindPropertyPlugin bidirectional="true" ifUndefined="false"
+                                       bindTo="{getShowCatalogValueExpression()}"/>
+            </plugins>
+          </checkbox>
+        </items>
+      </container>
+    </items>
+  </panel>
+
+</exml:component>

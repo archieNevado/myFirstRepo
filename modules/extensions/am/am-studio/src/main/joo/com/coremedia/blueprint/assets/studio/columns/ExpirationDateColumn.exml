@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:gridColumn publicApi="config"
+                 xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                 xmlns:u="exml:untyped"
+                 xmlns="exml:ext.config">
+  <exml:import class="com.coremedia.cms.editor.Editor_properties"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AssetConstants"/>
+
+  <datecolumn header="{AMStudioPlugin_properties.INSTANCE.Column_ExpirationDate_text}"
+              width="126"
+              id="{AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE}"
+              format="{Editor_properties.INSTANCE.dateFormat}"
+              dataIndex="{AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE}"
+              u:sortField="{AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE}"
+              sortable="true"/>
+</exml:gridColumn>

@@ -1,0 +1,46 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+/*
+Tags
+========================================================================================================================
+
+Contains styling definitions for all content types as cm-tag.
+*/
+
+.#{$prefix}tag {
+  padding: 0 $padding-base-vertical;
+
+  @include breakpoint(md) {
+    padding: 0;
+  }
+
+  &__title {
+    display: inline-block;
+    margin: 0;
+    padding-right: $padding-base-horizontal;
+  }
+
+  &__items {
+    display: inline;
+    list-style: none;
+    vertical-align: top;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: inline-block;
+    padding: $padding-small-vertical $padding-base-vertical;
+    background: $brand-primary;
+    margin: 0 $padding-small-vertical $padding-small-vertical $padding-small-vertical;
+    border-color: $brand-primary;
+    border-radius: 5px;
+    color: palette(white);
+
+    & > a {
+      color: palette(white);
+    }
+  }
+}

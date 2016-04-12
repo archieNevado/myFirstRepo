@@ -1,0 +1,14 @@
+{
+  "name": "studio-proxy",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The role for the studio proxy node",
+  "run_list": [
+    "role[base]",
+    "recipe[blueprint-proxy::studio]",
+    "recipe[blueprint-proxy::preview]",
+    "recipe[blueprint-proxy::sitemanager]",
+    "recipe[blueprint-proxy::shop-preview]",
+    "recipe[blueprint-proxy::adobe-drive-server]"
+  ]
+}

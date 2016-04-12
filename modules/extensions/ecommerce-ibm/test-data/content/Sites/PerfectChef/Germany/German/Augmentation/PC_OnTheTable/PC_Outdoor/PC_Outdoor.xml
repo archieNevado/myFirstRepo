@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMExternalChannel folder="/Sites/PerfectChef/Germany/German/Augmentation/PC_OnTheTable/PC_Outdoor" name="PC_Outdoor" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../United%20States/English/Augmentation/PC_OnTheTable/PC_Outdoor/PC_Outdoor.xml" path="/Sites/PerfectChef/United%20States/English/Augmentation/PC_OnTheTable/PC_Outdoor/PC_Outdoor"/>
+</master>
+<masterVersion>0</masterVersion>
+<viewtype>
+</viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+</Struct>
+</localSettings>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment>essen-im-freien</segment>
+<title>Essen im Freien</title>
+<htmlTitle></htmlTitle>
+<keywords>Picknick, Essen, im Freien, draussen, aussen</keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+<link href="../../../../../../../Settings/Taxonomies/Subject/Outdoor.xml" path="/Settings/Taxonomies/Subject/Outdoor"/>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<children>
+</children>
+<javaScript>
+</javaScript>
+<css>
+</css>
+<placement>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<StructProperty Name="placements">
+<Struct>
+<StructProperty Name="96">
+<Struct>
+<BooleanProperty Name="locked">false</BooleanProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
+<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Categories/01_On%20The%20Table/Outdoor/Outdoor%20Hero%20Banner%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Categories/01_On%20The%20Table/Outdoor/Outdoor%20Hero%20Banner%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Site-Wide/Category%20Pages/Productlist-Placeholder%20Listing.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Category%20Pages/Productlist-Placeholder%20Listing"/>
+</LinkListProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
+</Struct>
+</StructProperty>
+</Struct>
+</placement>
+<header>
+</header>
+<footer>
+</footer>
+<pdpPagegrid>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/Fragment%20PDP.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Layouts/Fragment%20PDP"/>
+<StructProperty Name="placements">
+<Struct>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Categories/01_On%20The%20Table/Outdoor/Outdoor%20PDP%20Tab%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Categories/01_On%20The%20Table/Outdoor/Outdoor%20PDP%20Tab%20Collection"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/tab.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/tab"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Magazine%20Spring/Story%201%20-%20A%20Perfect%20Picnic/A%20Perfect%20Pi87248ed8.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Editorial/Content/Magazine%20Spring/Story%201%20-%20A%20Perfect%20Picnic/A%20Perfect%20Picnic%20Article"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/banner.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/banner"/>
+</Struct>
+</StructListProperty>
+</Struct>
+</pdpPagegrid>
+<externalId>ibm:///catalog/category/PC_Outdoor</externalId>
+</CMExternalChannel>

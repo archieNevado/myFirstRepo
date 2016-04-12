@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<exml:component publicApi="config"
+                xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:u="exml:untyped"
+                baseClass="AssetDetailsBlobPropertyFieldBase">
+
+  <exml:import class="ext.Container"/>
+  <exml:import class="com.coremedia.cms.editor.Editor_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.util.PropertyEditorUtil"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.config.documentTabPanel"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.premular.fields.BooleanPropertyField"/>
+  <exml:import class="com.coremedia.ui.data.ValueExpressionFactory"/>
+
+  <exml:cfg name="visiblePropertyName" type="String">
+    <exml:description>
+       An optional property name, which marks this blob's renditions as visible.
+    </exml:description>
+  </exml:cfg>
+
+  <exml:description>
+     A BlobPropertyField with an additional checkbox, which marks a blob as downloadable.
+     This component displays the blob and its string properties with an hbox layout.
+  </exml:description>
+
+  <editor:blobPropertyField containerLayout="hbox"
+                            modifiersValueExpression="{ValueExpressionFactory.createFromValue('assets')}">
+    <plugins mode="append">
+      <ui:addItemsPlugin applyTo="{findBlobDetailsContainer}">
+        <ui:items>
+          <checkbox itemId="{CHECKBOX_ITEM_ID}"
+                    ctCls="{BooleanPropertyField.BOOLEAN_PROPERTY_FIELD_CSS}"
+                    boxLabel="{AMStudioPlugin_properties.INSTANCE.Rendition_downloadable}"
+                    tabIndex="1"
+                    u:colspan="3">
+            <plugins>
+              <editor:bindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                        bindTo="{config.bindTo}"/>
+              <ui:immediateChangeEventsPlugin/>
+              <ui:bindPropertyPlugin
+                      bindTo="{config.bindTo.extendBy('properties', config.visiblePropertyName)}"
+                      bidirectional="true"
+                      ifUndefined="{false}"
+                      transformer="{function(value:Number):Boolean { return !!value; } }"
+                      componentEvent="check"
+                      reverseTransformer="{function(checked:Boolean):* { return checked; }}"/>
+              <editor:propertyFieldPlugin propertyName="{config.visiblePropertyName}"/>
+              <ui:bindVisibilityPlugin
+                      bindTo="{getCheckboxVisibleVE(config.visiblePropertyName, config.bindTo, config.propertyName)}"/>
+            </plugins>
+          </checkbox>
+        </ui:items>
+      </ui:addItemsPlugin>
+    </plugins>
+  </editor:blobPropertyField>
+</exml:component>

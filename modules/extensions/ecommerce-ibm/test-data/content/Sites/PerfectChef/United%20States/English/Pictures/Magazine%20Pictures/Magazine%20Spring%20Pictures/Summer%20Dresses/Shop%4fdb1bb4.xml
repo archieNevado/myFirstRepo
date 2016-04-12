@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMImageMap folder="/Sites/PerfectChef/United States/English/Pictures/Magazine Pictures/Magazine Spring Pictures/Summer Dresses" name="Shop the new Urban Look Image Map" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="overlay">
+<Struct>
+<BooleanProperty Name="displayTitle">true</BooleanProperty>
+<BooleanProperty Name="displayDefaultPrice">true</BooleanProperty>
+<BooleanProperty Name="displayPicture">true</BooleanProperty>
+<BooleanProperty Name="displayDiscountedPrice">true</BooleanProperty>
+<BooleanProperty Name="displayShortText">false</BooleanProperty>
+<BooleanProperty Name="hideOutOfStockProducts">true</BooleanProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="image-map">
+<Struct>
+<StringProperty Name="id">map-area-3</StringProperty>
+<StringProperty Name="coords">113,495,639,987</StringProperty>
+<StringProperty Name="alt"/>
+<StringProperty Name="rotation"/>
+<StringProperty Name="shape">rect</StringProperty>
+<StringProperty Name="target">_blank</StringProperty>
+<BooleanProperty Name="displayAsInlineOverlay">true</BooleanProperty>
+<StringProperty Name="inlineOverlayTheme">dark-on-light</StringProperty>
+<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../../Editorial/Products/Spring%20Campaign/Beige%20Peasant%20Top%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Products/Spring%20Campaign/Beige%20Peasant%20Top%20Teaser"/>
+</Struct>
+<Struct>
+<StringProperty Name="id">map-area-1</StringProperty>
+<StringProperty Name="coords">1334,378,1589,1037</StringProperty>
+<StringProperty Name="alt"/>
+<StringProperty Name="rotation"/>
+<StringProperty Name="shape">rect</StringProperty>
+<StringProperty Name="target">_blank</StringProperty>
+<BooleanProperty Name="displayAsInlineOverlay">true</BooleanProperty>
+<StringProperty Name="inlineOverlayTheme">dark-on-light</StringProperty>
+<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../../Editorial/Products/Spring%20Campaign/Leather%20Bag%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Products/Spring%20Campaign/Leather%20Bag%20Teaser"/>
+</Struct>
+<Struct>
+<StringProperty Name="id">map-area-0</StringProperty>
+<StringProperty Name="coords">760,344,1020,518</StringProperty>
+<StringProperty Name="alt"/>
+<StringProperty Name="rotation"/>
+<StringProperty Name="shape">rect</StringProperty>
+<StringProperty Name="target">_blank</StringProperty>
+<BooleanProperty Name="displayAsInlineOverlay">true</BooleanProperty>
+<StringProperty Name="inlineOverlayTheme">dark-on-light</StringProperty>
+<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../../Editorial/Products/Spring%20Campaign/Sunglasses%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Products/Spring%20Campaign/Sunglasses%20Teaser"/>
+</Struct>
+</StructListProperty>
+</Struct>
+</localSettings>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Shop the new Urban Look</teaserTitle>
+<pictures>
+<link href="Shop%8ff74a5e.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Spring%20Pictures/Summer%20Dresses/Shop%20the%20new%20Urban%20Look%20Picture"/>
+</pictures>
+<related>
+</related>
+<target>
+<link href="../../../../Navigation/Fragments/Search%20Landing%20Pages/Spring%20Summer%20Dresses%20Landing%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/Spring%20Summer%20Dresses%20Landing%20Page"/>
+</target>
+</CMImageMap>

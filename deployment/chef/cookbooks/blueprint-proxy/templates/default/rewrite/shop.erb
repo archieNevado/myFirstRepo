@@ -1,0 +1,33 @@
+<%- if @params[:preview] -%>
+  ServerAlias <%= @params[:time_travel_alias] %>
+
+  RequestHeader set X-FragmentHost preview
+  Header unset X-Frame-Options
+
+  RewriteCond %{HTTP_HOST} ^<%= @params[:time_travel_alias].gsub('.', '\.') %>$
+  RewriteCond %{REQUEST_URI} ^/webapp/wcs/stores/(.*)$
+  RewriteRule ^/(.*)$ /webapp/wcs/preview/%1 [R=302,L]
+
+  RewriteRule ^/lobtools/(.*) /lobtools/$1 [PT,L]
+
+  <%- ([@params[:server_name]] + @params[:server_aliases]).each do |alias_name| -%>
+  RewriteCond %{HTTP_HOST} ^<%= alias_name.gsub('.', '\.') %>$
+  RewriteRule ^/$ /webapp/wcs/stores/servlet/en/auroraesite [R=302,L]
+  <%- end %>
+
+  <%- if !@params[:wcs_tools_alias_map].nil?  && (@params[:ssl].nil? || @params[:ssl] == false) -%>
+  <%- @params[:wcs_tools_alias_map].each do |key, value| -%>
+  <%- rewrite_flag = value =~ /\?/ ? '[QSA,R=302,L]' : '[R=302,L]' -%>
+  ServerAlias <%= key %>
+  RewriteCond %{HTTP_HOST} ^<%= key.gsub('.', '\.') %>$
+  RewriteRule ^/$ /<%= value %> <%= rewrite_flag %>
+
+  <%- end -%>
+  <%- end -%>
+<%- else -%>
+  RequestHeader set X-FragmentHost live
+  Header unset X-Frame-Options
+
+  # Send empty URL to aurora home page
+  RewriteRule ^/$ /webapp/wcs/stores/servlet/en/auroraesite [R=302,L]
+<%- end -%>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMProductTeaser folder="/Sites/Aurora Augmentation/United States/English/Editorial/Products" name="Hermitage Flowery Leather Bag" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Hermitage Leather Bag</teaserTitle>
+<pictures>
+<link href="../../Pictures/Product%20360%20Pictures/Leather%20Bag/Leather-Bag%20Front%20Shot.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20360%20Pictures/Leather%20Bag/Leather-Bag%20Front%20Shot"/>
+</pictures>
+<related>
+</related>
+<externalId>ibm:///catalog/product/PC_HERMITAGE_LEATHER_BAG</externalId>
+</CMProductTeaser>

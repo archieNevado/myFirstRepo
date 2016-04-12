@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:am="exml:com.coremedia.blueprint.assets.studio.config">
+
+  <exml:import class="com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AssetConstants"/>
+
+  <am:amAssetForm originalIconCls="content-type-l content-type-AMPictureAsset-icon">
+    <am:renditions>
+      <editor:collapsibleFormPanel itemId="web"
+                                   noBottomPadding="true"
+                                   title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_web_label}"
+                                   expandOnValues="{AssetConstants.PROPERTY_ASSET_WEB}"
+                                   collapsed="true">
+        <items>
+          <am:assetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_WEB}"
+                                            hideLabel="true"
+                                            visiblePropertyName="metadata.renditions.web.show"/>
+          <spacer height="20px"/>
+          <editor:imageReferrerListPanel propertyName="asset"
+                                         contentType="CMPicture"
+                                         title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_web_referrers_label}"
+                                         displayToolbarWhenEmpty="{true}">
+            <plugins mode="append">
+              <ui:nestedRulesPlugin>
+                <ui:rules>
+                  <toolbar>
+                    <plugins>
+                      <ui:addItemsPlugin after="copyToClipboard">
+                        <ui:items>
+                          <tbseparator cls="header-tbseparator"
+                                       margins="0 6 0 3"/>
+                          <ui:iconButton itemId="createPicture">
+                            <baseAction>
+                              <am:createPictureFromPictureAssetAction contentValueExpression="{config.bindTo}"/>
+                            </baseAction>
+                          </ui:iconButton>
+                        </ui:items>
+                      </ui:addItemsPlugin>
+                    </plugins>
+                  </toolbar>
+                </ui:rules>
+              </ui:nestedRulesPlugin>
+            </plugins>
+          </editor:imageReferrerListPanel>
+        </items>
+      </editor:collapsibleFormPanel>
+      <editor:collapsibleFormPanel itemId="print"
+                                   title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_print_label}"
+                                   collapsed="true">
+        <items>
+          <am:assetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_PRINT}"
+                                            hideLabel="true"
+                                            showImageThumbnail="false"
+                                            visiblePropertyName="metadata.renditions.print.show"/>
+        </items>
+      </editor:collapsibleFormPanel>
+    </am:renditions>
+  </am:amAssetForm>
+
+</exml:component>

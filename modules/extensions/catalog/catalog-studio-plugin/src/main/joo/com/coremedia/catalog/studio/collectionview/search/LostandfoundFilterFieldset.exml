@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                baseClass="com.coremedia.catalog.studio.collectionview.search.LostandfoundFilterFieldsetBase">
+
+  <exml:import class="com.coremedia.cms.editor.Editor_properties"/>
+  <exml:import class="com.coremedia.catalog.studio.CatalogStudioPlugin_properties"/>
+  <exml:import class="ext.Component"/>
+
+  <exml:constant name="FILTER_ID" value="lostandfoundfilterid">
+    <exml:description>
+       The filter ID for this filter. It is used as itemId and identifier in saved searches.
+    </exml:description>
+  </exml:constant>
+
+  <editor:conditionalFilterFieldset itemId="{FILTER_ID}"
+                         id="lostandfoundfilterfieldset"
+                         title="{CatalogStudioPlugin_properties.INSTANCE.Filter_LostAndFound_text}"
+                         autoWidth="true">
+    <items>
+      <container cls="collection-status-filters"
+                 hideLabel="true"
+                 autoWidth="true">
+        <items>
+          <checkbox itemId="filterLostandfoundCheckbox"
+                    ctCls="x-form-item"
+                    boxLabel="{CatalogStudioPlugin_properties.INSTANCE.Filter_LostAndFound_checkbox}"
+                    hideLabel="true">
+            <plugins>
+              <ui:bindPropertyPlugin bidirectional="true">
+                <ui:bindTo>
+                  <ui:valueExpression expression="{LOSTANDFOUND_CHECKBOX_SELECTED}"
+                                      context="{getStateBean()}"/>
+                </ui:bindTo>
+              </ui:bindPropertyPlugin>
+              <ui:immediateChangeEventsPlugin/>
+            </plugins>
+          </checkbox>
+        </items>
+      </container>
+    </items>
+  </editor:conditionalFilterFieldset>
+
+</exml:component>

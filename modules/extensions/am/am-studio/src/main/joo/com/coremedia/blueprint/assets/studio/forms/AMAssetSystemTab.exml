@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
+
+  <exml:import class="com.coremedia.blueprint.studio.BlueprintTabs_properties"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AMDocumentTypes_properties"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AssetConstants"/>
+  <exml:import class="com.coremedia.cap.common.session"/>
+
+  <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_system_title}" itemId="system" autoHide="true">
+    <plugins>
+      <ui:addItemsPlugin onlyIf="{function():Boolean {return session.getUser().isAdministrative();}}">
+        <ui:items>
+          <editor:collapsibleFormPanel title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_state_label}"
+                                       itemId="stateFormPanel"
+                                       collapsed="true">
+            <items>
+              <editor:structPropertyField propertyName="state"
+                                          hideLabel="true"/>
+            </items>
+          </editor:collapsibleFormPanel>
+        </ui:items>
+        <ui:after>
+          <editor:documentInfo/>
+        </ui:after>
+      </ui:addItemsPlugin>
+    </plugins>
+    <items>
+      <editor:documentInfo/>
+      <editor:versionHistory/>
+
+      <editor:collapsibleFormPanel title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_metadata_label}"
+                                   itemId="metadataForm" collapsed="true">
+        <items>
+          <editor:structPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_METADATA}"
+                                      hideLabel="true"
+                                      itemId="metadataStructPropertyField"/>
+        </items>
+      </editor:collapsibleFormPanel>
+    </items>
+  </editor:documentForm>
+
+</exml:component>

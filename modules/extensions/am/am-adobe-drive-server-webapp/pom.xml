@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>am</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>am-adobe-drive-server-webapp</artifactId>
+  <packaging>war</packaging>
+
+  <description>The Adobe Driver Server</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>adobe-drive-server-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>am-common</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>drive</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <configuration>
+          <port>38${HTTP_PORT_SUFFIX}</port>
+          <ajpPort>38${AJP_PORT_SUFFIX}</ajpPort>
+          <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
+          <contextFile>${project.basedir}/tomcat-context.xml</contextFile>
+          <path>/</path>
+          <systemProperties>
+            <catalina.base>${project.build.directory}</catalina.base>
+            <resourcePath.base>${project.basedir}</resourcePath.base>
+            <repository.url>${repository.url}</repository.url>
+            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
+          </systemProperties>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

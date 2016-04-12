@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                baseClass="com.coremedia.catalog.studio.repository.RepositoryCatalogSearchListContainerBase">
+
+  <exml:import class="com.coremedia.cms.editor.sdk.context.ComponentContextManager"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.config.collectionView"/>
+  <exml:import class="com.coremedia.ui.data.ValueExpression"/>
+
+  <exml:var name="selectedItemsValueExpression" type="ValueExpression"
+            value="{ComponentContextManager.getInstance().getContextExpression(this, collectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME)}"/>
+
+
+  <exml:constant name="VIEW_CONTAINER_ITEM_ID" value="repositoryCatalogSearchContainer"/>
+
+  <editor:sortableSwitchingContainer itemId="{VIEW_CONTAINER_ITEM_ID}"
+                         hideBorders="true"
+                         activeItemValueExpression="{getActiveViewExpression()}">
+  <items>
+      <editor:searchList itemId="{CollectionViewConstants.LIST_VIEW}"
+                         selectedItemsValueExpression="{selectedItemsValueExpression}"
+                         instanceName="catalog"/>
+      <editor:searchThumbnails itemId="{CollectionViewConstants.THUMBNAILS_VIEW}"/>
+    </items>
+  </editor:sortableSwitchingContainer>
+
+</exml:component>

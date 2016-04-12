@@ -1,0 +1,105 @@
+!tape
+name: contract_testFindContractIdsForUser
+interactions:
+- recorded: 2016-01-15T11:16:26.565Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 15 Jan 2016 11:16:26 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000k-0qU4R7LIjvMFXcI7o1pvV:-1; Path=/; Domain=.toko-test-02.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+      X-Betamax: PLAY
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin","version":"7.0.8.0"}'
+- recorded: 2016-01-15T11:16:26.666Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/loginidentity
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 15 Jan 2016 11:16:26 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000X7Og_89EKrjEy2C58W1CuvZ:-1; Path=/; Domain=.toko-test-02.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+      X-Betamax: PLAY
+    body: '{"userId":"2","WCToken":"2%2CrGh8s%2B9AUX1wE2CXEk%2Fs0VUW1RH%2BXLwd%2FFwSvSPLFzlJ%2FJVgfLf9cw08E2GaI9dNwQNxM%2Ftd8YcGgzRujfDChV%2Bb%2FiLFkpDqftGCD%2FnW2%2BUbD5Z%2Bj2ZYyZGdQz%2BDG7%2BrG6c97Xh8ehpwSvjLxiEDy12O4pVpN2dVEb6rL0o5Fzlwp8F2lCKHO0BoqgOfKeAIiAHxWP8Yo74YQwEvxSsKfQ%3D%3D","WCTrustedToken":"2%2CrPzq3MYTTvT15gT%2BXp8h8CZXOuQ%3D","personalizationID":"1452690067366-2"}'
+- recorded: 2016-01-15T11:16:26.736Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/contract?q=eligible&catalogId=10152&currency=USD&forUser=gstevens&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      WCToken: 2%2CrGh8s%2B9AUX1wE2CXEk%2Fs0VUW1RH%2BXLwd%2FFwSvSPLFzlJ%2FJVgfLf9cw08E2GaI9dNwQNxM%2Ftd8YcGgzRujfDChV%2Bb%2FiLFkpDqftGCD%2FnW2%2BUbD5Z%2Bj2ZYyZGdQz%2BDG7%2BrG6c97Xh8ehpwSvjLxiEDy12O4pVpN2dVEb6rL0o5Fzlwp8F2lCKHO0BoqgOfKeAIiAHxWP8Yo74YQwEvxSsKfQ%3D%3D
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 15 Jan 2016 11:16:26 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00000vpXNmDs8jj6rfIelc6fdDN:-1; Path=/; Domain=.toko-test-02.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"contracts":{"4000000000000000013":"Default Contract for AuroraB2BESite"}}'
+- recorded: 2016-01-15T11:16:27.193Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/contract?q=eligible&catalogId=10152&currency=USD&forUser=preview&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      WCToken: 2%2CrGh8s%2B9AUX1wE2CXEk%2Fs0VUW1RH%2BXLwd%2FFwSvSPLFzlJ%2FJVgfLf9cw08E2GaI9dNwQNxM%2Ftd8YcGgzRujfDChV%2Bb%2FiLFkpDqftGCD%2FnW2%2BUbD5Z%2Bj2ZYyZGdQz%2BDG7%2BrG6c97Xh8ehpwSvjLxiEDy12O4pVpN2dVEb6rL0o5Fzlwp8F2lCKHO0BoqgOfKeAIiAHxWP8Yo74YQwEvxSsKfQ%3D%3D
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 15 Jan 2016 11:16:27 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000k3hnPW8gHNxd_IybChxHT9j:-1; Path=/; Domain=.toko-test-02.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"contracts":{"4000000000000000507":"Exterior Architects (Preview-Contract)","4000000000000000508":"Interior Architects LLC gets 20% off lighting products and 15% off others (Preview-Contract)"}}'

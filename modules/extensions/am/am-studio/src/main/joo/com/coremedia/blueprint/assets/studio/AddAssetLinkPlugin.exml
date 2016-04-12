@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:plugin xmlns:exml="http://www.jangaroo.net/exml/0.8"
+             xmlns="exml:ext.config"
+             xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+             xmlns:ui="exml:com.coremedia.ui.config"
+             xmlns:bp="exml:com.coremedia.blueprint.studio.config.components">
+  <exml:import class="com.coremedia.blueprint.studio.config.cmPictureForm"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.config.documentTabPanel"/>
+
+  <exml:constant name="ASSET_LINK_ITEM_ID" value="assetLink"/>
+
+  <exml:var name="componentConfig" type="documentTabPanel"
+            value="{documentTabPanel(config.component.initialConfig)}"/>
+  <exml:cfg name="tabItemId" type="String" />
+  <exml:cfg name="title" type="String" />
+
+  <ui:nestedRulesPlugin>
+    <ui:rules>
+      <editor:documentForm itemId="{config.tabItemId}">
+        <plugins>
+          <ui:addItemsPlugin>
+            <ui:items>
+              <editor:collapsibleFormPanel collapsed="true"
+                                           itemId="{ASSET_LINK_ITEM_ID}"
+                                           title="{config.title}"
+                                           forceReadOnlyValueExpression="{componentConfig.forceReadOnlyValueExpression}">
+                <items>
+                  <bp:imageLinkListPropertyField propertyName="asset"
+                                                 autoWidth="true"
+                                                 hideLabel="true"
+                                                 openCollectionViewHandler="{AMStudioPluginBase.openAssetSearch}"/>
+                </items>
+              </editor:collapsibleFormPanel>
+            </ui:items>
+          </ui:addItemsPlugin>
+        </plugins>
+      </editor:documentForm>
+    </ui:rules>
+  </ui:nestedRulesPlugin>
+</exml:plugin>

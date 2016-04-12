@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMTeaser folder="/Sites/PerfectChef/United States/English/Navigation/Categories/02_In The Kitchen" name="Mixers Teaser" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Mixers</teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<target>
+<link href="../../../Augmentation/PC_InTheKitchen/PC_Appliances/PC_Mixers/PC_Mixers.xml" path="/Sites/PerfectChef/United%20States/English/Augmentation/PC_InTheKitchen/PC_Appliances/PC_Mixers/PC_Mixers"/>
+</target>
+</CMTeaser>

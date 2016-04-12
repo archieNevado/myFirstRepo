@@ -1,0 +1,91 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+/*
+Video
+========================================================================================================================
+
+Contains styling definitions for videos.
+*/
+
+video {
+  max-width: 100%; // restrict video to fit in grid
+}
+
+.#{$prefix}play-button {
+  width: $overlay-size;
+  height: $overlay-size;
+  background: none;
+  border-radius: 50%;
+  color: palette(white);
+
+  &__svg {
+    width: 100%; max-height: 100%;
+    color: palette(black); // color of inner circle
+    fill: palette(white); // color of play button
+    transition: all $transition-duration ease(in-out-quad);
+  }
+
+  &__png {
+    width: 100%;
+    height: 100%;
+    background: url("#{$path-to-images}button_video_play.png") no-repeat center center;
+    background-size: contain;
+  }
+
+  // when parent is hovered or focused button changes color and fill
+  a:hover > & &__svg {
+      color: palette(white);
+      fill: $brand-primary;
+      transition: all $transition-duration ease(in-out-quad); // firefox 43 needs it twice
+  }
+  a:focus > & &__svg {
+    color: $brand-primary ;
+    fill: palette(white);
+  }
+}
+
+.#{$prefix}superhero--video {
+  .#{$prefix}superhero__image {
+    // hide on desktop, only if video exist
+    @include breakpoint(md) {
+      display: none;
+    }
+
+    .#{$prefix}image--responsive {
+      height: 100%;
+      background-size: cover;
+    }
+  }
+
+  .#{$prefix}superhero__video {
+    // hide on mobile and tablet, show on desktop only
+    display: none;
+    @include breakpoint(md) {
+      display: inline-block;
+    }
+
+    position: absolute;
+    top: 0;  left: 0;
+    margin: auto;
+    min-height: 100%;
+    min-width: 100%;
+
+    // center via object fit
+    //
+    @supports (object-fit: cover) {
+      object-fit: cover;
+      object-position: 50% 50%;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  // hide dimmer for videos on desktop, because we're showing the background video
+  .#{$prefix}superhero__dimmer {
+    @include breakpoint(md) {
+      display: none;
+    }
+  }
+}

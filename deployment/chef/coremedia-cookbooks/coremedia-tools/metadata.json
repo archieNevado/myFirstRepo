@@ -1,0 +1,42 @@
+{
+  "name": "coremedia-tools",
+  "description": "Installs/Configures coremedia-tools",
+  "long_description": "# Description\n\nThis is a library cookbook to install CoreMedia Tools. It provides a definition to install arbitrary tools created with\nthe `coremedia-application-maven-plugin` based on the `application-runtime` artifact of CoreMedia.\n\n# Filesystem layout\n\n```\n<log_dir> --> <path>/var/logs\n<path>\n    |-bin\n    |-lib\n    `-var/logs\n```\n\n# Requirements\n\n## Platform:\n\n*No platforms defined*\n\n## Cookbooks:\n\n* coremedia_maven (~> 2.0)\n\n# Attributes\n\n*No attributes defined*\n\n# Recipes\n\n*No recipes defined*\n\n# Definitions\n\n* [coremedia_tool](#coremedia_tool) - This definition installs CoreMedia Blueprint tools.\n\n## coremedia_tool\n\nThis definition installs CoreMedia Blueprint tools.\n\n### Parameters\n\n- path: The path to install the tool. Defaults to `/opt/<name of definition>`.\n- group_id: The maven groupId of the tools artifact..\n- artifact_id: The maven artifactId of the tools artifact..\n- version: The maven version of the tools artifact..\n- checksum: The SHA-256 checksum of the tools artifact..\n- java_home: The JAVA_HOME to use for the tool.. Defaults to: $JAVA_HOME\n- jvm_args: Extra JVM args to set for tool executions.. Defaults to: []\n- sensitive: Set to true to disable template logging.. Defaults to: nil\n- property_files: A hash where the name of a property file below `properties/corem` can map to a hash of key value pairs representing the properties of that file. If present the file will be rendered with the hashes content.. Defaults to: {}\n- user: The user to install the tool for..\n- group: The group to install the tool for..\n- log_dir: The directory a symlink for the logs should be created for..\n- nexus_url: The nexus base url if you want to retrieve artifacts using the rest API of nexus. This allows versions like `LATEST`, `RELEASE` and `x-SNAPSHOT` to be resolved correctly. (optional).\n- nexus_repo: The nexus repo name. Use the part of the url not the numeric id. (optional defaults to `releases`).\n\n### Examples\n\n```ruby\ncoremedia_tool 'content-management-server-tools' do\n  group_id  'com.coremedia.blueprint'\n  artifact_id 'content-management-server-tools'\n  version '7.5-SNAPSHOT'\n  user 'coremedia'\n  group 'coremedia'\n  path \"/opt/coremedia/content-management-server-tools\"\n  property_files ('capclient.properties' => { 'repository.url' => 'http://localhost/40080/coremedia/ior' })\nend\n```\n# Author\n\nAuthor:: Felix Simmendinger (<felix.simmendinger@coremedia.com>)\n",
+  "maintainer": "Felix Simmendinger",
+  "maintainer_email": "felix.simmendinger@coremedia.com",
+  "license": "Copyright (C) 2015, CoreMedia AG proprietary License, all rights reserved.",
+  "platforms": {
+
+  },
+  "dependencies": {
+    "coremedia_maven": "~> 2.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "1.0.3",
+  "source_url": "https://github.com/coremedia-contributions/blueprint-application-cookbooks/tree/coremedia-tools",
+  "issues_url": "",
+  "privacy": false
+}

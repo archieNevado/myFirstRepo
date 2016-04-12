@@ -1,0 +1,12 @@
+{
+  "run_list": [
+    "role[mysql]",
+    "role[mongodb]",
+    "role[solr-master]",
+    "role[management]",
+    "role[publication]",
+    "role[studio]",
+    "role[delivery]",
+    "role[proxy]"
+  ]
+}

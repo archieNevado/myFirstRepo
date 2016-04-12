@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>CoreMedia LiveContext 2.0</title>
+  <link rel="stylesheet" type="text/css" href="//www.coremedia.com/maintenance/resources/my-layout.css">
+</head>
+<body>
+<div class="page_margins" id="top">
+  <div class="page">
+    <div id="header">
+      <div id="header_content" class="clearfix">
+        <div class="logoBox">
+          <h1><a href="//coremedia.com/">CoreMedia</a></h1>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div id="nav_content" class="clearfix">
+        <div
+        class="primaryNav">
+          <div class="content"></div>
+        </div>
+      </div>
+    </div>
+    <div id="main" class="maintenance">
+      <div id="col3" style="margin:auto;width:65%">
+        <div id="col3_content" class="clearfix">
+          <div class="floatbox">
+            <div class="detailView articleDetails">
+              <h1>Welcome to CoreMedia LiveContext 2.0</h1>
+              <hr>
+              <div>
+                <h2>You can access our storefronts and sites on the following URLs</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left:40px;">
+
+                  <li><a
+                  href="//helios.<%= node['blueprint']['hostname'] %>"
+                  target="_blank">Perfect Chef (Content-Led Scenario) </a></li>
+                  <li><a
+                  href="//shop-helios.<%= node['blueprint']['hostname'] %>"
+                  target="_blank">Aurora ESite (Commerce-Led Scenario)</a></li>
+                  <li><a
+                  href="//shop-helios.<%= node['blueprint']['hostname'] %>/webapp/wcs/stores/servlet/en/aurorab2besite"
+                  target="_blank">Aurora B2B ESite</a></li>
+                  <li>
+                    <a href="//corporate.<%= node['blueprint']['hostname'] %>/corporate"
+                       target="_blank">Chef Corp. Corporate Site (English)</a> /
+                    <a href="//corporate.<%= node['blueprint']['hostname'] %>/corporate-de-de"
+                       target="_blank">(German)</a>
+                  </li>
+                </ul>
+
+                <h2>The management interfaces are available at</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
+                  <li>
+                    <a href="//studio.<%= node['blueprint']['hostname'] %>"
+                       target="_blank">CoreMedia Studio</a>
+                  </li>
+                  <li>
+                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8000/lobtools/cmc/ManagementCenterMain?locale=en_US"
+                       target="_blank">IBM WCS Management Center</a>
+                  </li>
+                  <li>
+                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8000/webapp/wcs/tools/servlet/ToolsLogon?XMLFile=common.mcLogon"
+                       target="_blank">IBM WCS Accellerator</a>
+                  </li>
+                  <li>
+                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8002/webapp/wcs/admin/servlet/ToolsLogon?XMLFile=adminconsole.AdminConsoleLogon"
+                       target="_blank">IBM WCS Administration Console</a>
+                  </li>
+                  <li>
+                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8004/webapp/wcs/orgadmin/servlet/ToolsLogon?XMLFile=buyerconsole.BuyAdminConsoleLogon&storeId=0"
+                       target="_blank">IBM WCS Organization Administration Console</a>
+                  </li>
+                </ul>
+                <p><br/></p>
+
+                <h2>Other Links</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
+                  <li>
+                    <a href="//sitemanager.<%= node['blueprint']['hostname'] %>"
+                       target="_blank">CoreMedia SiteManager</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="http://<%= node['blueprint']['hostname'] %>:40080/solr"
+                       target="_blank">Solr Manager</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="//drive.<%= node['blueprint']['hostname'] %>"
+                       target="_blank">Adobe Drive REST Backend</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="//corporate.<%= node['blueprint']['hostname'] %>/blueprint/servlet/corporate/company/asset-download-portal"
+                       target="_blank">LIVE Asset-Download-Portal</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:9104/ibm/console/"
+                       target="_blank">IBM WCS Websphere Console | Login: configadmin/configadmin01</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:9043/ibm/console/"
+                       target="_blank">IBM WCS Solr Websphere Console | Login: no login</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="http://<%= node['blueprint']['wcs']['host'] %>:8008/"
+                       target="_blank">IBM IHS Admin Control Server | Login: ihsadmin/ihsadmin</a>
+                    <p></p>
+                  </li>
+                </ul>
+                <p><br/></p>
+
+                <h2>Repository IORs</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
+                  <li>
+                    <a href="http://<%= node['blueprint']['hostname'] %>:40180/coremedia/ior"
+                       target="_blank">Content Management Server IOR</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="http://<%= node['blueprint']['hostname'] %>:40280/coremedia/ior"
+                       target="_blank">Master Live Server IOR</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="http://<%= node['blueprint']['hostname'] %>:40380/workflow/ior"
+                       target="_blank">Workflow Server IOR</a>
+                    <p></p>
+                  </li>
+                  <li>
+                    <a href="http://<%= node['blueprint']['hostname'] %>:42180/coremedia/ior"
+                       target="_blank">Replication Live Server IOR</a>
+                    <p></p>
+                  </li>
+                </ul>
+                <p><br/></p>
+
+                <h2>JMX Service Addresses</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
+                  <li>solr - <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                    :40098/jndi/rmi://<%= node['blueprint']['hostname'] %>:40099/jmxrmi</code>
+                  </li>
+                  <li>content-management-server -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40198/jndi/rmi://<%= node['blueprint']['hostname'] %>:40199/jmxrmi</code></li>
+                  <li>master-live-server -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40298/jndi/rmi://<%= node['blueprint']['hostname'] %>:40299/jmxrmi</code></li>
+                  <li>workflow-server -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40398/jndi/rmi://<%= node['blueprint']['hostname'] %>:40399/jmxrmi</code></li>
+                  <li>content-feeder -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40498/jndi/rmi://<%= node['blueprint']['hostname'] %>:40499/jmxrmi</code></li>
+                  <li>user-changes -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40598/jndi/rmi://<%= node['blueprint']['hostname'] %>:40599/jmxrmi</code></li>
+                  <li>elastic-worker -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40698/jndi/rmi://<%= node['blueprint']['hostname'] %>:40699/jmxrmi</code></li>
+                  <li>caefeeder-preview -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40798/jndi/rmi://<%= node['blueprint']['hostname'] %>:40799/jmxrmi</code></li>
+                  <li>caefeeder-live -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40898/jndi/rmi://<%= node['blueprint']['hostname'] %>:40899/jmxrmi</code></li>
+                  <li>cae-preview -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :40998/jndi/rmi://<%= node['blueprint']['hostname'] %>:40999/jmxrmi</code></li>
+                  <li>studio -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :41098/jndi/rmi://<%= node['blueprint']['hostname'] %>:41099/jmxrmi</code></li>
+                  <li>adobe-drive-server -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :41198/jndi/rmi://<%= node['blueprint']['hostname'] %>:41199/jmxrmi</code></li>
+                  <li>sitemanager -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :41398/jndi/rmi://<%= node['blueprint']['hostname'] %>:41399/jmxrmi</code></li>
+                  <li>replication-live-server -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :42098/jndi/rmi://<%= node['blueprint']['hostname'] %>:42099/jmxrmi</code></li>
+                  <li>cae-live -
+                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
+                      :42198/jndi/rmi://<%= node['blueprint']['hostname'] %>:42199/jmxrmi</code></li>
+                </ul>
+                <p><br/></p>
+
+                <h2>Installed Versions</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
+                  <li>solr - <%= node['blueprint']['webapps']['solr']['version'] %></li>
+                  <li>solr config - <%= node['blueprint']['webapps']['solr']['config_zip_version'] %></li>
+                  <li>content-management-server
+                    - <%= node['blueprint']['webapps']['content-management-server']['version'] %></li>
+                  <li>master-live-server - <%= node['blueprint']['webapps']['master-live-server']['version'] %></li>
+                  <li>workflow-server - <%= node['blueprint']['webapps']['workflow-server']['version'] %></li>
+                  <li>content-feeder - <%= node['blueprint']['webapps']['content-feeder']['version'] %></li>
+                  <li>user-changes - <%= node['blueprint']['webapps']['user-changes']['version'] %></li>
+                  <li>elastic-worker - <%= node['blueprint']['webapps']['elastic-worker']['version'] %></li>
+                  <li>caefeeder-preview - <%= node['blueprint']['webapps']['caefeeder-preview']['version'] %></li>
+                  <li>caefeeder-live - <%= node['blueprint']['webapps']['caefeeder-live']['version'] %></li>
+                  <li>cae-preview - <%= node['blueprint']['webapps']['cae-preview']['version'] %></li>
+                  <li>studio - <%= node['blueprint']['webapps']['studio']['version'] %></li>
+                  <li>adobe-drive-server - <%= node['blueprint']['webapps']['adobe-drive-server']['version'] %></li>
+                  <li>sitemanager - <%= node['blueprint']['webapps']['sitemanager']['version'] %></li>
+                  <li>replication-live-server
+                    - <%= node['blueprint']['webapps']['replication-live-server']['version'] %></li>
+                  <li>cae-live - <%= node['blueprint']['webapps']['cae-live']['version'] %></li>
+                </ul>
+
+                Enjoy!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="ie_clearing">&nbsp;</div>
+      </div>
+    </div>
+    <div id="footer">
+      <div
+      id="footer_content" class="clearfix">
+        <div class="copyrightBox"> ©
+          Copyright 2014. CoreMedia AG. CoreMedia
+          Corporation. All Rights Reserved.
+        </div>
+        <div class="poweredBox"> Powered by CoreMedia CMS <span class="icon-coremedia"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

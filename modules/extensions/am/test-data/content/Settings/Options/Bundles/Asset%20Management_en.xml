@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Settings/Options/Bundles" name="Asset Management_en" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale></locale>
+<master>
+</master>
+<masterVersion>0</masterVersion>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+<StringProperty Name="am_download_portal">Asset Download Portal</StringProperty>
+<StringProperty Name="am_category">Category</StringProperty>
+<StringProperty Name="am_categories">Categories</StringProperty>
+<StringProperty Name="am_tag">Tag</StringProperty>
+<StringProperty Name="am_search_result">Search Result</StringProperty>
+<StringProperty Name="am_asset_collection_overview">Your Asset Collection</StringProperty>
+<StringProperty Name="am_search_placeholder">Search Assets...</StringProperty>
+<StringProperty Name="am_assets">Assets</StringProperty>
+<StringProperty Name="am_download">Download</StringProperty>
+<StringProperty Name="am_download_collection_overview">Download Collection</StringProperty>
+<StringProperty Name="am_download_collection_overview_title">Your Download Collection</StringProperty>
+<StringProperty Name="am_download_collection_overview_empty">There are no items in your Download Collection.</StringProperty>
+<StringProperty Name="am_download_collection_overview_button">Download Collection</StringProperty>
+<StringProperty Name="am_download_collection_download_button">Download All Assets</StringProperty>
+<StringProperty Name="am_download_collection_download_button_info">As a zip file</StringProperty>
+<StringProperty Name="am_add_rendition_to_download_collection">Add to Download Collection</StringProperty>
+<StringProperty Name="am_remove_rendition_from_download_collection">Remove from Download Collection</StringProperty>
+<StringProperty Name="am_overlay_add_to_download_collection">Add to Collection</StringProperty>
+<StringProperty Name="am_overlay_update_download_collection">Update Collection</StringProperty>
+<StringProperty Name="am_asset_metadata_copyright">Copyright</StringProperty>
+<StringProperty Name="am_asset_metadata_expirationDate">Expiration Date</StringProperty>
+<StringProperty Name="am_renditions">Renditions</StringProperty>
+<StringProperty Name="am_rendition_original">Original</StringProperty>
+<StringProperty Name="am_rendition_print">Print</StringProperty>
+<StringProperty Name="am_rendition_web">Web</StringProperty>
+<StringProperty Name="am_rendition_download">Download</StringProperty>
+<StringProperty Name="am_back_to_download_portal">Back to Download-Portal</StringProperty>
+<StringProperty Name="am_search_notification_results">{0} search results for - {1} - found.</StringProperty>
+<StringProperty Name="am_search_notification_one_result">One search result for - {0} - found.</StringProperty>
+<StringProperty Name="am_search_notification_no_results">Your search - {0} - did not yield a result.</StringProperty>
+<StringProperty Name="am_search_notification_query_too_short">Your search - {0} - is too short.</StringProperty>
+<StringProperty Name="am_search_notification_invalid_query">Your search - {0} - is invalid.</StringProperty>
+<StringProperty Name="am_error_not_found_title">404 - Not Found</StringProperty>
+<StringProperty Name="am_error_not_found_message">The requested resource was not found.</StringProperty>
+<StringProperty Name="am_preview_label_download_portal">Download Portal</StringProperty>
+<StringProperty Name="am_preview_label_rendition_web">Web</StringProperty>
+<StringProperty Name="am_preview_label_rendition_print">Print</StringProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

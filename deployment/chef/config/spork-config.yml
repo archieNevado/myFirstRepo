@@ -1,0 +1,30 @@
+default_environments:
+# we cannot add development role here unless you are not using chef-solo
+#  - development
+  - staging
+# promoting a cookbook should only go to staging by default. To stage to prodution, use knife spork promote production <COOKBOOK NAME>
+#  - production
+version_change_threshold: 2
+preserve_constraint_operators: true
+save_environment_locally_on_create: false
+always_promote_remote: true
+skip_berkshelf: false
+role_match_file_name: true
+role_safe_delete: true
+json_options:
+  indent: "    "
+plugins:
+  foodcritic:
+    tags: ['correctness']
+  git:
+    enabled: false
+    auto_push: true
+    branch: some_branch
+
+  rubocop:
+    epic_fail: true
+    show_name: false
+    autocorrect: false
+    out_file: <file>
+    sev_level: <C|W|E>
+    lint: false

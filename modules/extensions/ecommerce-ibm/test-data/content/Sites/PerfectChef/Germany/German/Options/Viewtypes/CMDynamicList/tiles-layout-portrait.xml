@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMViewtype folder="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMDynamicList" name="tiles-layout-portrait" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>de-DE</locale>
+<master>
+</master>
+<description>Displays a collection in a tiles layout (portrait).</description>
+<icon href="tiles-layout-portrait.icon.png" mimetype="image/png"/>
+<layout>tiles-layout-portrait</layout>
+</CMViewtype>

@@ -1,0 +1,79 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+/*
+Hero
+========================================================================================================================
+
+Contains styling definitions for all content types as cm-hero.
+- cm-hero
+*/
+
+.#{$prefix}hero {
+  position: relative;
+
+  &__picture-box {
+    @include aspect-ratio-box(4, 3);
+
+    @include breakpoint(sm-and-up) {
+      @include aspect-ratio-box(16, 9);
+    }
+  }
+
+  &__picture {
+    background: $brand-primary;
+    @include stretch-absolute();
+  }
+
+  &__dimmer {
+    @include dimmer();
+  }
+
+  &__banderole,
+  &__cta {
+    @include banderole(5.25%);
+  }
+
+  &__button,
+  &__text,
+  &__headline {
+    color: palette(white);
+    margin-top: 0;
+    margin-bottom: $padding-base-horizontal;
+
+    @include breakpoint(sm-and-up) {
+      margin-bottom: $padding-large-horizontal;
+    }
+  }
+
+  &__headline,
+  &__text {
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  &--video {
+    .#{$prefix}hero__text {
+      display: none;
+
+      @include breakpoint(sm-and-up) {
+        display: block;
+      }
+    }
+  }
+
+  &__popup-opener {
+    display: block;
+  }
+
+  &__play {
+    @include center-absolute;
+    transform: translate(-50%, -90%); // a little higher for spacing
+    z-index: 1;
+
+    @include breakpoint(xs) {
+      max-width: 20%; // make sure there is space for headline
+      transform: translate(-50%, -110%);
+    }
+  }
+}

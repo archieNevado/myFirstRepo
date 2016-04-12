@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:cat="exml:com.coremedia.blueprint.studio.config.catalog"
+                xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:u="exml:untyped"
+                baseClass="com.coremedia.catalog.studio.CatalogStudioPluginBase">
+
+  <exml:import class="com.coremedia.blueprint.studio.BlueprintFormsStudioPluginBase"/>
+  <exml:import class="com.coremedia.catalog.studio.actions.CatalogActions_properties"/>
+  <exml:import class="com.coremedia.catalog.studio.CatalogValidator_properties"/>
+  <exml:import class="com.coremedia.catalog.studio.library.CatalogTreeRelation"/>
+  <exml:import class="com.coremedia.cms.editor.ContentTypes_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.collectionview.CollectionView"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.config.collectionView"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.actions.Actions_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.validation.Validators_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.collectionview.ICollectionView"/>
+  <exml:import class="com.coremedia.ecommerce.studio.library.EcCatalogTreeFilter"/>
+  <exml:import class="com.coremedia.blueprint.studio.config.cmVideoForm"/>
+
+  <exml:constant name="LOST_AND_FOUND_TYPE" value="lostAndFound" type="String"/>
+
+  <editor:studioPlugin>
+    <ui:rules>
+      <editor:startup>
+        <plugins>
+          <editor:configureListViewPlugin instanceName="catalog">
+            <editor:listViewDataFields>
+              <ui:dataField name="productCode"
+                            mapping="properties.productCode"/>
+            </editor:listViewDataFields>
+            <editor:repositoryListViewColumns>
+              <editor:listViewTypeIconColumn width="75"
+                                             showTypeName="true"
+                                             sortable="true"
+                                             u:sortField="type"
+                                             u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+              <editor:listViewNameColumn sortable="true"
+                                         u:defaultSortColumn="true"
+                                         u:defaultSortDirection="asc"/>
+              <cat:productCodeColumn width="126" sortable="true" u:sortField="productCode"/>
+              <editor:listViewCreationDateColumn width="120"
+                                                 sortable="true"
+                                                 u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+              <editor:listViewStatusColumn width="46"
+                                           sortable="true"
+                                           u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+              <editor:freshnessColumn sortable="true"
+                                      hidden="true"/>
+            </editor:repositoryListViewColumns>
+            <editor:searchListViewColumns>
+              <editor:listViewTypeIconColumn width="75"
+                                             showTypeName="true"
+                                             u:sortField="type"
+                                             sortable="true"
+                                             u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+              <editor:listViewNameColumn sortable="true"/>
+              <cat:productCodeColumn width="126" sortable="true" u:sortField="productCode"/>
+              <editor:listViewSiteColumn/>
+              <editor:listViewSiteLocaleColumn/>
+              <editor:listViewCreationDateColumn sortable="true"
+                                                 width="120"
+                                                 u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+              <editor:listViewStatusColumn width="46"
+                                           sortable="true"
+                                           u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+              <editor:freshnessColumn sortable="true"
+                                      hidden="true"/>
+              <editor:scoreColumn sortable="true"
+                                  hidden="true"
+                                  hideable="false"
+                                  u:defaultSortColumn="true"
+                                  u:defaultSortDirection="desc"/>
+            </editor:searchListViewColumns>
+          </editor:configureListViewPlugin>
+        </plugins>
+      </editor:startup>
+
+      <bpforms:cmPictureForm>
+        <plugins>
+          <ui:addItemsPlugin recursive="true">
+            <ui:items>
+              <cat:referrerImageListWrapper/>
+            </ui:items>
+            <ui:after>
+              <component itemId="{cmPictureForm.COPYRIGHT_FORM_ITEM_ID}"/>
+            </ui:after>
+          </ui:addItemsPlugin>
+        </plugins>
+      </bpforms:cmPictureForm>
+
+      <bpforms:cmVideoForm>
+        <plugins>
+          <ui:addItemsPlugin recursive="true">
+            <ui:items>
+              <cat:referrerImageListWrapper/>
+            </ui:items>
+            <ui:after>
+              <component itemId="{cmVideoForm.COPYRIGHT_FORM_ITEM_ID}"/>
+            </ui:after>
+          </ui:addItemsPlugin>
+        </plugins>
+      </bpforms:cmVideoForm>
+
+      <editor:tabbedDocumentFormDispatcher>
+        <plugins>
+          <editor:addTabbedDocumentFormsPlugin>
+            <editor:documentTabPanels>
+              <cat:cmProductForm itemId="CMProduct"/>
+              <cat:cmCategoryForm itemId="CMCategory"/>
+            </editor:documentTabPanels>
+          </editor:addTabbedDocumentFormsPlugin>
+        </plugins>
+      </editor:tabbedDocumentFormDispatcher>
+
+      <editor:collectionView>
+        <plugins>
+          <cat:catalogLibraryPlugin/>
+        </plugins>
+      </editor:collectionView>
+
+      <editor:searchFilters>
+        <plugins>
+          <ui:addItemsPlugin>
+            <ui:items>
+              <cat:lostandfoundFilterFieldset/>
+            </ui:items>
+          </ui:addItemsPlugin>
+        </plugins>
+      </editor:searchFilters>
+    </ui:rules>
+
+    <editor:configuration>
+      <editor:configureDocumentTypes names="CMCategory,CMProduct"
+                                     mayCreate="{mayCreate}"/>
+
+      <editor:copyResourceBundleProperties destination="{ContentTypes_properties}"
+                                           source="{CatalogStudioPlugin_properties}"/>
+      <editor:copyResourceBundleProperties destination="{Validators_properties}"
+                                           source="{CatalogValidator_properties}"/>
+      <editor:copyResourceBundleProperties destination="{Actions_properties}"
+                                           source="{CatalogActions_properties}"/>
+
+      <editor:registerLibraryTreeFilter filter="{new EcCatalogTreeFilter('Products')}"/>
+      <editor:registerLibraryTreeFilter filter="{new DeletedContentCatalogTreeFilter()}"/>
+
+    </editor:configuration>
+
+  </editor:studioPlugin>
+</exml:component>

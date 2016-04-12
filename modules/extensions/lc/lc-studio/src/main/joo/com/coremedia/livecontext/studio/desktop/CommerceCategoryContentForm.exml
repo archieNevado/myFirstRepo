@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:livecontext="exml:com.coremedia.livecontext.studio.config">
+
+  <exml:import class="com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames"/>
+  <exml:import class="com.coremedia.ui.data.ValueExpression"/>
+  <exml:import class="com.coremedia.ui.data.ValueExpressionFactory"/>
+  <exml:import class="com.coremedia.cap.content.Content"/>
+  <exml:import class="com.coremedia.ecommerce.studio.tree.augmentedCategoryTreeRelation"/>
+  <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.config.documentForm"/>
+
+  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}"
+            type="LivecontextStudioPlugin_properties"/>
+
+  <exml:var name="augmentedCategoryExpression" value="{ValueExpressionFactory.createFromFunction(function():*{
+    return augmentedCategoryTreeRelation.getParentUnchecked(config.bindTo.getValue());
+  })}" type="ValueExpression"/>
+
+  <exml:var name="backedContentExpression" value="{config.bindTo.extendBy('content')}" type="ValueExpression"/>
+
+  <editor:documentForm title="{BUNDLE.Commerce_Tab_content_title}">
+    <items>
+      <livecontext:commerceDetailsForm itemId="categoryDetails"
+                                       ctCls="{documentForm.PROPERTY_FIELD_MAX_WIDTH_CSS_CLASS}"
+                                       titleLabel="{BUNDLE.Commerce_Category_name_label}"/>
+      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_PropertyGroup_thumbnail_title}"
+                                   itemId="picture">
+        <items>
+          <ui:image width="120">
+            <plugins>
+              <ui:bindPropertyPlugin componentProperty="src"
+                                     bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.THUMBNAIL_URL)}"/>
+            </plugins>
+          </ui:image>
+        </items>
+      </editor:collapsibleFormPanel>
+      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_richMedia_title}"
+                                   itemId="richMedia">
+        <items>
+          <livecontext:catalogAssetsProperty propertyName="{CatalogObjectPropertyNames.VISUALS}"
+                                             assetContentTypes="{['CMPicture', 'CMVideo', 'CMSpinner']}"
+                                             emptyText="{BUNDLE.Commerce_Product_richMedia_emptyText}"/>
+        </items>
+      </editor:collapsibleFormPanel>
+      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_downloads_title}"
+                                   itemId="downloads">
+        <items>
+          <livecontext:catalogAssetsProperty propertyName="{CatalogObjectPropertyNames.DOWNLOADS}"
+                                             assetContentTypes="{['CMDownload']}"
+                                             emptyText="{BUNDLE.Commerce_Product_downloads_emptyText}"/>
+        </items>
+      </editor:collapsibleFormPanel>
+      <livecontext:commerceAugmentedPageGridForm itemId="placement"
+                                                 showLocal="true"
+                                                 forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
+                                                 bindTo="{augmentedCategoryExpression}"
+                                                 pageGridPropertyName="placement"/>
+      <editor:collapsibleFormPanel title="Backed Content"
+                                   itemId="backedContent">
+        <plugins>
+          <ui:bindVisibilityPlugin bindTo="{backedContentExpression}"/>
+        </plugins>
+        <items>
+          <editor:simpleContentList itemId="backedContentList"
+                                    contentList="{ValueExpressionFactory.convertToSingletonArray(backedContentExpression)}"/>
+        </items>
+      </editor:collapsibleFormPanel>
+    </items>
+  </editor:documentForm>
+</exml:component>

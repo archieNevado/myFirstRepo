@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMExternalChannel folder="/Sites/PerfectChef/Germany/German/Augmentation/PC_InTheKitchen/PC_Pots" name="PC_Pots" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../United%20States/English/Augmentation/PC_InTheKitchen/PC_Pots/PC_Pots.xml" path="/Sites/PerfectChef/United%20States/English/Augmentation/PC_InTheKitchen/PC_Pots/PC_Pots"/>
+</master>
+<masterVersion>0</masterVersion>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment>toepfe</segment>
+<title>Töpfe</title>
+<htmlTitle></htmlTitle>
+<keywords>Töpfe</keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+<link href="../../../../../../../Settings/Taxonomies/Subject/Pots.xml" path="/Settings/Taxonomies/Subject/Pots"/>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<children>
+</children>
+<javaScript>
+</javaScript>
+<css>
+</css>
+<placement>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<StructProperty Name="placements">
+<Struct>
+<StructProperty Name="648">
+<Struct>
+<BooleanProperty Name="locked">false</BooleanProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
+<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Categories/02_In%20The%20Kitchen/Pots/Pots%20Hero%20Banner%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Categories/02_In%20The%20Kitchen/Pots/Pots%20Hero%20Banner%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Site-Wide/Category%20Pages/Productlist-Placeholder%20Listing.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Category%20Pages/Productlist-Placeholder%20Listing"/>
+</LinkListProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</placement>
+<header>
+</header>
+<footer>
+</footer>
+<pdpPagegrid>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/Fragment%20PDP.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Layouts/Fragment%20PDP"/>
+<StructProperty Name="placements">
+<Struct>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+</StructListProperty>
+</Struct>
+</pdpPagegrid>
+<externalId>ibm:///catalog/category/PC_Pots</externalId>
+</CMExternalChannel>

@@ -1,0 +1,158 @@
+!tape
+name: wt_testFindAllWorkspaces
+interactions:
+- recorded: 2016-03-21T15:05:54.967Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 21 Mar 2016 15:04:57 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000DBUOe7UK-EH_7xoSFZiJ3Xg:-1; HTTPOnly; Path=/; Domain=.toko-test-09.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
+      Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
+      Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
+      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
+- recorded: 2016-03-21T15:05:54.974Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 21 Mar 2016 15:04:57 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000QCjUgIyifdNIQrXtiCWjWAD:-1; HTTPOnly; Path=/; Domain=.toko-test-09.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2016-01-15T11:16:53.067Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 15 Jan 2016 11:16:53 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000B1yCACWJbEJgZRxOMlxiIg_:-1; Path=/; Domain=.toko-test-02.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2C5IfYlvBATKI9XATI5cRzIsJRc73FYC7RndDbix%2BTGYpecHASJWOxiER440a5JyTtrb6QCvQa8PVxc5o15p0qsEJ4%2FTZcWz%2BdQ5T4SsCFYqPOzcWLF17wNtIyZbzh%2Bgk2ONlL%2BstUGBFZDo1X%2FYl3unoorLhq943ZJ7yiEQv%2F1GuxBTyqNptR2BNi%2FSua1S3rsFMfeYTc7LWxcmBEeb0PMA%3D%3D","WCTrustedToken":"2%2CiJEbg0Kk30w91WavDAQA1tiT7kY%3D","personalizationID":"1452690067366-2"}'
+- recorded: 2016-01-15T11:16:53.161Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/workspaces/byall/Active?catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Length: '0'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      WCToken: 2%2C5IfYlvBATKI9XATI5cRzIsJRc73FYC7RndDbix%2BTGYpecHASJWOxiER440a5JyTtrb6QCvQa8PVxc5o15p0qsEJ4%2FTZcWz%2BdQ5T4SsCFYqPOzcWLF17wNtIyZbzh%2Bgk2ONlL%2BstUGBFZDo1X%2FYl3unoorLhq943ZJ7yiEQv%2F1GuxBTyqNptR2BNi%2FSua1S3rsFMfeYTc7LWxcmBEeb0PMA%3D%3D
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 15 Jan 2016 11:16:53 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00005PfVJunF7ttnkTlozcz_YtA:-1; Path=/; Domain=.toko-test-02.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"storeId":"10301","workspaces":[{"identifier":"W_10001","id":"10001","name":"Anniversary Loyalty Campaign","description":"The workspace for anniversary loyalty campaign tasks"},{"identifier":"W_10002","id":"10002","name":"Maintenance","description":"The
+      workspace for routine updates to catalog and marketing"}]}'
+- recorded: 2016-03-21T15:09:57.131Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 21 Mar 2016 15:08:59 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000r4FY5aDboXY6MkWsAIRgtBo:-1; HTTPOnly; Path=/; Domain=.toko-test-09.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"WCToken":"2%2C1LJEZNcTiUKoZuUefREDxryxZ9QtFse%2FAl28983SUH45r2PSkqQTTen0mxU4AlV%2FRSol%2FmBuD5EEdMRreFB4SSYPBLnxEhURvJhC%2FurK3trVmHJR5cABKRlOJIicOIze5hfi9JJfeENx4PBsIE5QyiqOpvhdZurNnZkgMJTKdnOaGXQrGrFkIJlTKN3r5f1J8Z0lw6uNeB%2FSFqHoi8IKkA%3D%3D","userId":"2","WCTrustedToken":"2%2CziLLJE1ZHUAcEEaGzF7HTDa9cQfvTEK2CbGT3kMPys8%3D","personalizationID":"1458523398815-1"}'
+- recorded: 2016-03-21T15:09:57.148Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/workspaces/byall/Active?catalogId=3074457345616676668&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '0'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      WCToken: 2%2C1LJEZNcTiUKoZuUefREDxryxZ9QtFse%2FAl28983SUH45r2PSkqQTTen0mxU4AlV%2FRSol%2FmBuD5EEdMRreFB4SSYPBLnxEhURvJhC%2FurK3trVmHJR5cABKRlOJIicOIze5hfi9JJfeENx4PBsIE5QyiqOpvhdZurNnZkgMJTKdnOaGXQrGrFkIJlTKN3r5f1J8Z0lw6uNeB%2FSFqHoi8IKkA%3D%3D
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 21 Mar 2016 15:08:59 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000PeRtW-8X9-VyC2AkttTvgnT:-1; HTTPOnly; Path=/; Domain=.toko-test-09.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"workspaces":[{"id":"10001","description":"The workspace for anniversary loyalty campaign tasks","name":"Anniversary Loyalty Campaign","identifier":"W_10001"},{"id":"10002","description":"The workspace for routine updates to catalog and marketing","name":"Maintenance","identifier":"W_10002"}],"storeId":"715838084"}'

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>lc</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>lc-studio-test-helper</artifactId>
+  <packaging>jangaroo</packaging>
+  <name>lc-studio-test-helper</name>
+  <description>Internally reused test helpers for lc-studio</description>
+
+  <properties>
+    <selenium.host>localhost</selenium.host>
+    <jooUnitSeleniumBrowserStartCommand>*firefox</jooUnitSeleniumBrowserStartCommand>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>ui-components</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ec-studio-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ec-studio</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ec-studio-test-helper</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>editor-components</artifactId>
+    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>com.coremedia.ui.toolkit</groupId>-->
+      <!--<artifactId>client-core-test-helper</artifactId>-->
+    <!--</dependency>-->
+    <dependency>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>ext-as</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>net.jangaroo</groupId>
+        <artifactId>jangaroo-maven-plugin</artifactId>
+        <version>${jangaroo.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>net.jangaroo</groupId>
+        <artifactId>exml-maven-plugin</artifactId>
+        <version>${jangaroo.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <configClassPackage>com.coremedia.livecontext.studio.testhelper.config</configClassPackage>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <usedDependencies>
+            <usedDependency>${project.groupId}:ec-studio-model</usedDependency>
+            <usedDependency>${project.groupId}:ec-studio</usedDependency>
+            <usedDependency>${project.groupId}:ec-studio-test-helper</usedDependency>
+            <usedDependency>com.coremedia.ui.toolkit:ui-components</usedDependency>
+            <usedDependency>com.coremedia.ui.sdk:editor-components</usedDependency>
+            <usedDependency>net.jangaroo:ext-as</usedDependency>
+          </usedDependencies>
+        </configuration>
+      </plugin>
+    </plugins>
+
+    <sourceDirectory>src/main/joo</sourceDirectory>
+    <testSourceDirectory>src/test/joo</testSourceDirectory>
+    <testOutputDirectory>target/jangaroo-output-test</testOutputDirectory>
+  </build>
+
+</project>
+

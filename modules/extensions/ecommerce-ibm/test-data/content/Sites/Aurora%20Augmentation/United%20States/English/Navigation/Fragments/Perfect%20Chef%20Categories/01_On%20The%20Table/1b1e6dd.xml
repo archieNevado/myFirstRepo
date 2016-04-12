@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMTeaser folder="/Sites/Aurora Augmentation/United States/English/Navigation/Fragments/Perfect Chef Categories/01_On The Table" name="Tableware Category Teaser" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Plates</teaserTitle>
+<pictures>
+<link href="../../../../Pictures/Product%20Category%20Pictures/On%20The%20Table/Tableware%20Cac0e5ed7b.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20Category%20Pictures/On%20The%20Table/Tableware%20Category%20Picture"/>
+</pictures>
+<related>
+</related>
+<target>
+<link href="../../../../Augmentation/PC_OnTheTable/PC_Tableware/PC_Tableware.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_OnTheTable/PC_Tableware/PC_Tableware"/>
+</target>
+</CMTeaser>

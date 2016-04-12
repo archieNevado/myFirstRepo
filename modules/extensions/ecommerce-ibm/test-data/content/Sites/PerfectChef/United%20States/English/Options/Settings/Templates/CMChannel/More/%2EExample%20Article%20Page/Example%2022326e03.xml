@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMCollection folder="/Sites/PerfectChef/United States/English/Options/Settings/Templates/CMChannel/More/.Example Article Page" name="Example Article Related Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+<link href="../../../../../Viewtypes/CMCollection/unboxed.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/unboxed"/>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Related Content</teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<items>
+<link href="../%2EExample%20Category%20Page%201/Sampl9e47f3ee.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/Templates/CMChannel/More/%2EExample%20Category%20Page%201/Sample%201%20Picture"/>
+<link href="../%2EExample%20Category%20Page%201/Sampl332ca6af.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/Templates/CMChannel/More/%2EExample%20Category%20Page%201/Sample%202%20Picture"/>
+<link href="../%2EExample%20Category%20Page%201/Samplc8115970.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/Templates/CMChannel/More/%2EExample%20Category%20Page%201/Sample%203%20Picture"/>
+</items>
+</CMCollection>

@@ -1,0 +1,85 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+/*
+Container
+========================================================================================================================
+
+Contains styling definitions for all content types as cm-container.
+- cm-container
+*/
+
+.#{$prefix}container {
+  width: 100%;
+
+  > :not(.#{$prefix}container) {
+    @include center-margin(x);
+    max-width: $screen-max;
+  }
+
+  &--superhero {
+    height: 100vh;
+    overflow: hidden; //fix the 100vw overflow in firefox
+  }
+
+  &--gap {
+    border-top: 13px solid $brand-primary;
+    border-bottom: 13px solid $brand-primary;
+
+    @include breakpoint(md) {
+      border: none;
+    }
+  }
+
+  &--superhero,
+  &--gap {
+    > :not(.#{$prefix}container) {
+      max-width: none;
+    }
+  }
+
+  /* todo: change classes below */
+  /* container with different paddings */
+  &--default,
+  &--details {
+    > :not(.#{$prefix}container):first-child {
+      margin-top: $padding-base-horizontal;
+    }
+
+    > :not(.#{$prefix}container):last-child {
+      margin-bottom: $padding-base-horizontal;
+    }
+
+    @include breakpoint(sm-and-up) {
+      > :not(.#{$prefix}container):first-child {
+        margin-top: $padding-large-vertical;
+      }
+
+      > :not(.#{$prefix}container):last-child {
+        margin-bottom: $padding-large-vertical;
+      }
+    }
+  }
+
+  &--square,
+  &--medialist {
+    > :not(.#{$prefix}container):first-child {
+      margin-top: $padding-base-horizontal;
+    }
+
+    > :not(.#{$prefix}container) {
+      padding-left: $padding-base-horizontal;
+    }
+
+    @include breakpoint(sm-and-up) {
+      > :not(.#{$prefix}container):first-child {
+        margin-top: $padding-large-vertical;
+      }
+
+      > :not(.#{$prefix}container) {
+        padding-left: $padding-large-vertical;
+      }
+    }
+  }
+}

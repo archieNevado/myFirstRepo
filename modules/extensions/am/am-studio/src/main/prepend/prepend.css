@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+/**
+  * image preload
+  */
+body:after {
+  content:
+  url('../../images/am-studio-icons-16px.png')
+  url('../../images/am-studio-icons-64px.png')
+  url('../../images/am-studio-icons-128px.png');
+  display: none;
+}

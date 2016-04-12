@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:am="exml:com.coremedia.blueprint.assets.studio.config">
+
+  <exml:import class="com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.blueprint.assets.studio.AssetConstants"/>
+
+  <am:amAssetForm originalIconCls="content-type-l content-type-AMDocumentAsset-icon">
+    <am:renditions>
+      <editor:collapsibleFormPanel itemId="download"
+                                   title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_download_label}"
+                                   expandOnValues="{AssetConstants.PROPERTY_ASSET_DOWNLOAD}"
+                                   collapsed="true">
+        <items>
+          <am:assetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_DOWNLOAD}"
+                                            hideLabel="true"
+                                            showImageThumbnail="false"
+                                            blobIconCls="{config.downloadIconCls}"
+                                            visiblePropertyName="metadata.renditions.download.show"/>
+        </items>
+      </editor:collapsibleFormPanel>
+    </am:renditions>
+  </am:amAssetForm>
+
+</exml:component>

@@ -1,0 +1,195 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+/*
+Square
+========================================================================================================================
+
+Contains styling definitions for all content types as cm-square.
+- cm-square
+*/
+
+.#{$prefix}square {
+  padding: 0 $padding-base-horizontal $padding-base-horizontal 0;
+  margin: 0;
+
+  @include breakpoint(sm-and-up) {
+    padding: 0 $padding-large-vertical $padding-large-vertical 0;
+
+    &.is-last {
+      padding: 0 $padding-large-vertical $padding-large-horizontal 0;
+    }
+  }
+
+  &:hover {
+    a .#{$prefix}square {
+
+      &__dimmer {
+        opacity: 0.44;
+      }
+
+      &__headline {
+        transform: translate3d(0, 5px, 0);
+        & > span {
+          &:after {
+            opacity: 1;
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    a .#{$prefix}button {
+      transform: translate3d(0, -5px, 0);
+    }
+  }
+
+  // removing hover effects for video
+  // the play-button takes the hover
+  &--video:hover {
+    a .#{$prefix}square {
+
+      &__headline {
+        transform: none;
+        & > span {
+          &:after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  // if teaser text
+  &.is-text {
+
+    &:hover {
+      a .#{$prefix}square {
+        &__headline {
+          transform: translate3d(0, 10px, 0);
+          & > span {
+            &:after {
+              opacity: 1;
+              width: 100%;
+            }
+          }
+        }
+      }
+
+      a .#{$prefix}button {
+        transform: translate3d(0, -10px, 0);
+      }
+    }
+  }
+
+  // if teaser text
+  &--video.is-text {
+
+    &:hover {
+      a .#{$prefix}square {
+        &__headline {
+          transform: none;
+          & > span {
+            &:after {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
+  &__picture-box {
+    @include aspect-ratio-box(1, 1);
+  }
+
+  &__picture {
+    background: #B04747 none; /* no loading spinner */
+    @include stretch-absolute();
+  }
+
+  &__dimmer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.33;
+    background-color: palette(black);
+    transition: all $transition-duration ease(in-out-quad);
+  }
+
+  &__caption {
+    @include center-absolute(true, false);
+    width: 100%;
+    padding-left: 12.6%;
+    padding-right: 12.6%;
+    text-align: center;
+  }
+
+  &--video &__caption {
+    // set to the bottom to clear space for play-button
+    top: auto;
+    bottom: 0;
+
+    @include breakpoint(sm) {
+      bottom: -7%;
+    }
+    @include breakpoint(md) {
+      bottom: 8%;
+    }
+
+  }
+
+  &__text,
+  &__headline {
+    color: palette(white);
+    margin: 0;
+    padding-bottom: $padding-large-vertical;
+    transition: all $transition-duration ease(in-out-quad);
+  }
+  &--video &__text {
+    // no space for the text with play-button
+    display: none;
+  }
+
+
+  &__headline {
+    & > span {
+      display: inline-block;
+      @include flickeringFix(true);
+
+      &:after {
+        content: '';
+        position: relative;
+        display: block;
+        bottom: -5px;
+        margin: auto;
+        width: 0;
+        opacity: 0;
+        height: 1px;
+        background-color: palette(white);
+        transition: all $transition-duration ease(in-out-quad);
+      }
+    }
+  }
+
+  &__popup-opener {
+    display: block;
+    position: static;
+  }
+
+  &__play {
+    @include center-absolute;
+    transform: translate(-50%, -80%); // a little higher for spacing
+    z-index: 1; // move over dimmer and text
+  }
+
+}
