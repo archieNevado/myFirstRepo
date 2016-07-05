@@ -1,11 +1,15 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
+import com.coremedia.blueprint.elastic.social.cae.user.UserFilter;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Answers;
+import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -20,6 +24,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.web.ProviderSignInAttempt;
 import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.core.collection.ParameterMap;
@@ -43,7 +48,9 @@ import static org.mockito.Mockito.when;
 public class LoginHelperTest {
   private String name = "test";
   private String password = "secret";
-  private LoginHelper loginHelper;
+
+  @InjectMocks
+  private LoginHelper loginHelper = new LoginHelper();
 
   @Mock
   private CommunityUser communityUser;
@@ -99,6 +106,9 @@ public class LoginHelperTest {
   @Mock
   private Connection connection;
 
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private SpringSocialConfiguration springSocialConfiguration;
+
   @Before
   public void setup() {
     when(loginForm.getName()).thenReturn(name);
@@ -108,12 +118,6 @@ public class LoginHelperTest {
     when(requestContext.getExternalContext()).thenReturn(externalContext);
     when(externalContext.getNativeRequest()).thenReturn(request);
     when(externalContext.getNativeResponse()).thenReturn(response);
-
-    loginHelper = new LoginHelper();
-    inject(loginHelper, authenticationManager);
-    inject(loginHelper, userFilter);
-    inject(loginHelper, sessionAuthenticationStrategy);
-    inject(loginHelper, securityContextRepository);
   }
 
   @Test
@@ -197,7 +201,7 @@ public class LoginHelperTest {
   public void preProcessWithProviderConnection() {
     when(request.getSession(false)).thenReturn(session);
     when(session.getAttribute(ProviderSignInAttempt.class.getName())).thenReturn(providerSignInAttempt);
-    when(providerSignInAttempt.getConnection()).thenReturn(connection);
+    when(providerSignInAttempt.getConnection(any(ConnectionFactoryLocator.class))).thenReturn(connection);
     loginHelper.preProcess(requestContext);
 
     verify(session).getAttribute(ProviderSignInAttempt.class.getName());

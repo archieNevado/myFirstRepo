@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/ChefWave/ChefWave%20HD%20Small%20Fryer%202%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/ChefWave/ChefWave%20HD%20Small%20Fryer%202%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1338</height>
-<data md5="8bb66644c19cfb91ea30ffab44702eb5" href="../../../../../../../../__blob/8bb66644c19cfb91ea30ffab44702eb5.blob" mimetype="image/jpeg"/>
+<data md5="8bb66644c19cfb91ea30ffab44702eb5" size="437100" href="../../../../../../../../__blob/8bb66644c19cfb91ea30ffab44702eb5.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

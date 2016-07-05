@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20Category%20Pictures/Deli/To%20Drink%20Category%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Category%20Pictures/Deli/To%20Drink%20Category%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -108,7 +107,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1365</height>
-<data md5="83cb95a1a0e7b3317a61d0c3a7893571" href="../../../../../../../__blob/83cb95a1a0e7b3317a61d0c3a7893571.blob" mimetype="image/jpeg"/>
+<data md5="83cb95a1a0e7b3317a61d0c3a7893571" size="280549" href="../../../../../../../__blob/83cb95a1a0e7b3317a61d0c3a7893571.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

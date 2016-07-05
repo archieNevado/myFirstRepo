@@ -1,24 +1,24 @@
 package com.coremedia.livecontext.asset;
 
 import com.coremedia.blueprint.cae.handlers.HandlerBase;
-import com.coremedia.blueprint.cae.handlers.TransformedBlobHandler;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
+import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
-import com.google.common.collect.ImmutableMap;
+import com.coremedia.transform.TransformedBlob;
 import org.apache.commons.lang3.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +34,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
   private LiveContextSiteResolver siteResolver;
   private ContentBeanFactory contentBeanFactory;
   private Map<String, String> pictureFormats;
+  private TransformImageService transformImageService;
 
   protected static final String STORE_ID = "storeId";
   protected static final String LOCALE = "locale";
@@ -46,13 +47,15 @@ public class CatalogPictureHandlerBase extends HandlerBase {
    * @param locale the locale
    * @param formatName the picture format name
    * @param id the reference id
+   * @param extension the mime type extension
    * @param request the request
    */
   protected ModelAndView handleRequestWidthHeight(String storeId,
                                                 String locale,
                                                 String formatName,
                                                 String id,
-                                                HttpServletRequest request) throws IOException {
+                                                String extension,
+                                                WebRequest request) throws IOException {
     Site site = siteResolver.findSiteFor(storeId, LocaleUtils.toLocale(locale));
     if (site == null) {
       //Site not found
@@ -78,15 +81,22 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     String width = split[1];
     String height = split[2];
 
-    //redirect
-    request.setAttribute(ViewUtils.PARAMETERS, ImmutableMap.<String, Object>of(
-            TransformedBlobHandler.WIDTH_SEGMENT, width,
-            TransformedBlobHandler.HEIGHT_SEGMENT, height,
-            TransformedBlobHandler.TRANSFORMATION_SEGMENT, transformationName
-    ));
-
     CMPicture catalogPicture = contentBeanFactory.createBeanFor(catalogPictureObject, CMPicture.class);
-    return HandlerHelper.redirectTo(catalogPicture.getTransformedData(transformationName));
+
+    Blob transformedBlob = transformImageService.transformWithDimensions(catalogPictureObject, catalogPicture.getData(),
+        (TransformedBlob) catalogPicture.getTransformedData(transformationName), transformationName,
+        extension, Integer.parseInt(width), Integer.parseInt(height));
+
+    if (transformedBlob == null) {
+      return HandlerHelper.notFound();
+    }
+
+    if (request.checkNotModified(transformedBlob.getETag())) {
+      // shortcut exit - no further processing necessary
+      return null;
+    }
+
+    return HandlerHelper.createModel(transformedBlob);
   }
 
   /**
@@ -128,4 +138,8 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     this.assetService = assetService;
   }
 
+  @Required
+  public void setTransformImageService(TransformImageService transformImageService) {
+    this.transformImageService = transformImageService;
+  }
 }

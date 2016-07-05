@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Product Reviews" name="Best Baking Pans Review Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Product Reviews" name="Best Baking Pans Review Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Videos/Product%20Reviews/Best%20Baking%20Pans%20Review%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Product%20Reviews/Best%20Baking%20Pans%20Review%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Beste Backformen</alt>
 <copyright>America's Test Kitchen / YouTube embedded</copyright>
 <dataUrl></dataUrl>
-<data md5="f030e0c18d61f093a8dc51c7fdef646e" href="../../../../../../__blob/f030e0c18d61f093a8dc51c7fdef646e.blob" mimetype="image/jpeg"/>
+<data md5="f030e0c18d61f093a8dc51c7fdef646e" size="318604" href="../../../../../../__blob/f030e0c18d61f093a8dc51c7fdef646e.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

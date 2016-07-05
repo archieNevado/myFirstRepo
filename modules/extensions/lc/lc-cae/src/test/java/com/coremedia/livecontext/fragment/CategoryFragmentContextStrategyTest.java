@@ -1,12 +1,12 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.context.LiveContextNavigation;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -20,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -105,12 +106,8 @@ public class CategoryFragmentContextStrategyTest {
   @Test
   public void resolveContextNoCategoryFoundForGivenExternalTechId() {
     when(catalogService.findCategoryById(DEFAULT_ID)).thenReturn(null);
-    try {
-      testling.resolveContext(site, DEFAULT_EXTERNAL_TECH_ID);
-      assertTrue("Expected an exception here.", false);
-    } catch (EvaluationException e) {
-      assertTrue(e.getCause() instanceof IllegalArgumentException);
-    }
+    LiveContextNavigation context = testling.resolveContext(site, DEFAULT_EXTERNAL_TECH_ID);
+    assertNull("Expected an exception here.", context);
   }
 
   @Test

@@ -4,6 +4,6 @@
 <master>
 </master>
 <description>Displays a collection as a teaserlist</description>
-<icon md5="729ac264f017d22b808a746a6b08a6bb" href="../../../../../../../__blob/729ac264f017d22b808a746a6b08a6bb.blob" mimetype="image/png"/>
+<icon md5="729ac264f017d22b808a746a6b08a6bb" size="4635" href="../../../../../../../__blob/729ac264f017d22b808a746a6b08a6bb.blob" mimetype="image/png"/>
 <layout>tiles-layout-highlight</layout>
 </CMViewtype>

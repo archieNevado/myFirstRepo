@@ -144,23 +144,23 @@ default['blueprint']['common_libs']['coremedia-tomcat.jar']['version'] = node['b
 
 default['blueprint']['common_libs']['slf4j-api.jar']['group_id'] = 'org.slf4j'
 default['blueprint']['common_libs']['slf4j-api.jar']['artifact_id'] = 'slf4j-api'
-default['blueprint']['common_libs']['slf4j-api.jar']['version'] = '1.7.6'
-default['blueprint']['common_libs']['slf4j-api.jar']['checksum'] = '059a84383fad78d85d9c3951bebafab7200c704c411a9d25c913340c3877604a'
+default['blueprint']['common_libs']['slf4j-api.jar']['version'] = '1.7.12'
+default['blueprint']['common_libs']['slf4j-api.jar']['checksum'] = '0aee9a77a4940d72932b0d0d9557793f872e66a03f598e473f45e7efecdccf99'
 
 default['blueprint']['common_libs']['jul-to-slf4j.jar']['group_id'] = 'org.slf4j'
 default['blueprint']['common_libs']['jul-to-slf4j.jar']['artifact_id'] = 'jul-to-slf4j'
-default['blueprint']['common_libs']['jul-to-slf4j.jar']['version'] = '1.7.6'
-default['blueprint']['common_libs']['jul-to-slf4j.jar']['checksum'] = 'b71451847d2643a1bfe83df69fbf696860fe2689b95c9bd96188fb7808444f64'
+default['blueprint']['common_libs']['jul-to-slf4j.jar']['version'] = '1.7.12'
+default['blueprint']['common_libs']['jul-to-slf4j.jar']['checksum'] = '00a25fcbec155c28152c2252aeadb0ace7947a519fe5d858dbb988de412b8529'
 
 default['blueprint']['common_libs']['jcl-over-slf4j.jar']['group_id'] = 'org.slf4j'
 default['blueprint']['common_libs']['jcl-over-slf4j.jar']['artifact_id'] = 'jcl-over-slf4j'
-default['blueprint']['common_libs']['jcl-over-slf4j.jar']['version'] = '1.7.6'
-default['blueprint']['common_libs']['jcl-over-slf4j.jar']['checksum'] = 'd52f5e9a861f4e124ec43d711b566b4c2afe6e0709b490497fb9ca33e1ca0ba5'
+default['blueprint']['common_libs']['jcl-over-slf4j.jar']['version'] = '1.7.12'
+default['blueprint']['common_libs']['jcl-over-slf4j.jar']['checksum'] = '702d1b805b9fa319609f7bdd7022017919be2280b4116666aaae5a01c0b50158'
 
 default['blueprint']['common_libs']['slf4j-log4j12.jar']['group_id'] = 'org.slf4j'
 default['blueprint']['common_libs']['slf4j-log4j12.jar']['artifact_id'] = 'slf4j-log4j12'
-default['blueprint']['common_libs']['slf4j-log4j12.jar']['version'] = '1.7.6'
-default['blueprint']['common_libs']['slf4j-log4j12.jar']['checksum'] = 'df49e9357c7adc5242abbf399c0cf2d54e470b9126fc641d67e13f48716d2932'
+default['blueprint']['common_libs']['slf4j-log4j12.jar']['version'] = '1.7.12'
+default['blueprint']['common_libs']['slf4j-log4j12.jar']['checksum'] = '84b96c9ab58313f44321bda0602408e79f33613c05a379b99a0000b24c4e6c3c'
 
 default['blueprint']['common_libs']['log4j.jar']['group_id'] = 'log4j'
 default['blueprint']['common_libs']['log4j.jar']['artifact_id'] = 'log4j'

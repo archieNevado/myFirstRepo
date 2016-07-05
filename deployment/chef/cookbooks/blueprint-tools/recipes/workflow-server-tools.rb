@@ -1,4 +1,5 @@
 include_recipe 'blueprint-base::default'
+include_recipe 'blueprint-tools::_base'
 coremedia_tool 'workflow-server' do
   path node['blueprint']['tools']['workflow-server']['dir']
   group_id node['blueprint']['tools']['workflow-server']['group_id']

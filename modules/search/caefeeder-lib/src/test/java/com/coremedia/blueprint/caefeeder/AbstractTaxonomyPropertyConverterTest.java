@@ -8,7 +8,7 @@ import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.persistentcache.EvaluationException;
-import com.coremedia.cap.persistentcache.PersistentCache2;
+import com.coremedia.cap.persistentcache.PersistentCache;
 import com.coremedia.cap.persistentcache.PersistentCacheKey;
 import com.coremedia.cap.persistentcache.StoreException;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
@@ -84,7 +84,7 @@ public abstract class AbstractTaxonomyPropertyConverterTest {
     TreePathKeyFactory taxonomyIdPathKeyFactory = createTreePathKeyFactory();
     taxonomyIdPathKeyFactory.setContentRepository(contentRepository);
     taxonomyIdPathKeyFactory.setTreeRelation(taxonomyTreeRelation);
-    PersistentCache2 dummyPersistentCache = new DummyPersistentCache();
+    PersistentCache dummyPersistentCache = new DummyPersistentCache();
     taxonomyIdPathKeyFactory.setPersistentCache(dummyPersistentCache);
     taxonomyPropertyConverter = new TaxonomyPropertyConverter();
     taxonomyPropertyConverter.setTaxonomyPathKeyFactory(taxonomyIdPathKeyFactory);
@@ -92,7 +92,7 @@ public abstract class AbstractTaxonomyPropertyConverterTest {
 
   protected abstract TreePathKeyFactory createTreePathKeyFactory();
 
-  private static class DummyPersistentCache implements PersistentCache2 {
+  private static class DummyPersistentCache implements PersistentCache {
     @Override
     public Object getCached(PersistentCacheKey key) throws StoreException, EvaluationException {
       return get(key);

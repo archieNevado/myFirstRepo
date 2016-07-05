@@ -18,15 +18,6 @@
   max-width: 530px; /* 508px (max size of 4x3 images) + 20px padding + 2px border )*/
 }
 
-/*.cm-preview-content > .content > .cm-spinner > .cm-spinner__canvas {
-  border: 1px solid #B7B7B7;
-  padding: 10px;
-  -webkit-box-shadow: inset 0 0 10px #B7B7B7;
-  -moz-box-shadow: inset 0 0 10px #B7B7B7;
-  box-shadow: inset 0 0 10px #B7B7B7;
-  background-color: #fff;
-}*/
-
 /* normal teaser's width depends on the selected device */
 @media only screen  and (max-width: 599px) and (orientation: portrait) {
   .cm-preview-content > .content > .cm-teaser,

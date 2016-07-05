@@ -59,8 +59,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handles all Download Portal related request and link processing.
@@ -409,8 +409,11 @@ public class DownloadPortalHandler {
       File downloadFile = downloadPortalFactory.getPreparedDownload(renditionsToDownload);
       if (null != downloadFile ) {
         FileInputStream fis = new FileInputStream(downloadFile);
-        IOUtils.copy(fis, response.getOutputStream());
-        IOUtils.closeQuietly(fis);
+        try {
+          IOUtils.copy(fis, response.getOutputStream());
+        } finally {
+          IOUtils.closeQuietly(fis);
+        }
         response.setStatus(HttpServletResponse.SC_OK);
       } else {
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);

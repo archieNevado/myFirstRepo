@@ -2,7 +2,6 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 
 import javax.ws.rs.Path;
@@ -25,22 +24,17 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
   }
 
   private void fillRepresentation(SegmentRepresentation representation) {
-    try {
-      Segment entity = getEntity();
+    Segment entity = getEntity();
 
-      if (entity == null) {
-        LOG.error("Error loading segment bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load segment bean");
-      }
-
-      representation.setId(entity.getId());
-      representation.setName(entity.getName());
-      representation.setExternalId(entity.getExternalId());
-      representation.setExternalTechId(entity.getExternalTechId());
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    if (entity == null) {
+      LOG.warn("Error loading segment bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load segment bean");
     }
+
+    representation.setId(entity.getId());
+    representation.setName(entity.getName());
+    representation.setExternalId(entity.getExternalId());
+    representation.setExternalTechId(entity.getExternalTechId());
   }
 
   @Override

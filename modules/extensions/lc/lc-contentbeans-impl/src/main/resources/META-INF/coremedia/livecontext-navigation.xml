@@ -12,6 +12,7 @@
   <import resource="classpath:/META-INF/coremedia/lc-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/framework/spring/blueprint-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
 
   <bean name="liveContextNavigationTreeRelation" class="com.coremedia.livecontext.navigation.LiveContextNavigationTreeRelation">
     <property name="navigationFactory" ref="liveContextNavigationFactory"/>
@@ -28,20 +29,23 @@
     <property name="validationService" ref="validationService"/>
   </bean>
 
-  <bean id="liveContextNavigationSettingsFinder" class="com.coremedia.livecontext.navigation.LiveContextNavigationSettingsFinder">
-    <property name="treeRelation" ref="liveContextNavigationTreeRelation"/>
-    <property name="delegate" ref="delegateSettingsFinder"/>
-  </bean>
-  <bean id="delegateSettingsFinder" class="com.coremedia.blueprint.base.settings.impl.CMLinkableSettingsFinder">
-    <property name="cache" ref="cache"/>
-  </bean>
-
-  <customize:prepend id="liveContextNavigationSettingsServiceConfigurer" bean="settingsFinders" order="100001">
+  <customize:append id="liveContextNavigationSettingsFinderCustomizer" bean="contentSettingsFinderHierarchies">
     <description>
-      Adds the liveContextNavigationSettingsFinder to the SettingsService.
+      Adds the externalChannelContentTreeRelation to the cmlinkable settings finder for contents of type CMExternalChannel.
     </description>
     <map>
-      <entry key="com.coremedia.livecontext.context.LiveContextNavigation" value-ref="liveContextNavigationSettingsFinder"/>
+      <entry key="CMExternalChannel" value-ref="externalChannelContentTreeRelation"/>
+    </map>
+  </customize:append>
+
+  <customize:prepend id="liveContextCategorySettingsServiceConfigurer" bean="settingsFinders" order="100001">
+    <description>
+      Adds the LiveContextCategoryNavivationSettingsFinder to the SettingsService.
+    </description>
+    <map>
+      <entry key="com.coremedia.livecontext.navigation.LiveContextCategoryNavigation">
+        <bean class="com.coremedia.livecontext.navigation.LiveContextCategoryNavigationSettingsFinder"/>
+      </entry>
     </map>
   </customize:prepend>
 

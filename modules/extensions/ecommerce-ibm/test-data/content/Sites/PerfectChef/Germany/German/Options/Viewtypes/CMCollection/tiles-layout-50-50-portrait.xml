@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-50-50-portrait.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-50-50-portrait"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Displays a collection in 50:50 tiles layout (portrait).</description>
 <icon href="tiles-layout-50-50-portrait.icon.png" mimetype="image/png"/>
 <layout>tiles-layout-50-50-portrait</layout>

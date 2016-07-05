@@ -6,6 +6,7 @@ import com.coremedia.elastic.social.api.ratings.RatingService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.livecontext.ecommerce.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
@@ -102,22 +103,22 @@ public class UserMapper {
 
   //---------- Config -------------------------
 
-  @Required
+  @Autowired
   public void setCommunityUserService(CommunityUserService communityUserService) {
     this.communityUserService = communityUserService;
   }
 
-  @Required
+  @Autowired
   public void setCommentService(CommentService commentService) {
     this.commentService = commentService;
   }
 
-  @Required
+  @Autowired
   public void setRatingService(RatingService ratingService) {
     this.ratingService = ratingService;
   }
 
-  @Required
+  @Autowired
   public void setLikeService(LikeService likeService) {
     this.likeService = likeService;
   }

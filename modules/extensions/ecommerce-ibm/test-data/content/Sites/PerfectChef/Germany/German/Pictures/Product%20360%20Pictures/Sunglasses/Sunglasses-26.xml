@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20360%20Pictures/Sunglasses/Sunglasses-26.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20360%20Pictures/Sunglasses/Sunglasses-26"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -49,7 +48,7 @@
 <dataUrl></dataUrl>
 <width>1600</width>
 <height>1600</height>
-<data md5="746b2d2f54fb7bd7acf9964a7aaae36c" href="../../../../../../../__blob/746b2d2f54fb7bd7acf9964a7aaae36c.blob" mimetype="image/jpeg"/>
+<data md5="746b2d2f54fb7bd7acf9964a7aaae36c" size="59599" href="../../../../../../../__blob/746b2d2f54fb7bd7acf9964a7aaae36c.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

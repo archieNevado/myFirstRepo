@@ -19,6 +19,7 @@
   <exml:import class="com.coremedia.ui.data.ValueExpressionFactory"/>
   <exml:import class="com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames"/>
   <exml:import class="com.coremedia.cms.editor.sdk.config.documentForm"/>
+  <exml:import class="com.coremedia.livecontext.studio.CatalogThumbnailResolver" />
 
   <exml:constant name="CATALOG_STRUCTURE_TAB_ITEM_ID" value="catalogStructureTab"/>
   <exml:constant name="CATALOG_LINK_ITEM_ID" value="catalogLink"/>
@@ -48,7 +49,7 @@
               <ui:image width="120">
                 <plugins>
                   <ui:bindPropertyPlugin componentProperty="src"
-                                         bindTo="{catalogObjectExpression.extendBy(CatalogObjectPropertyNames.THUMBNAIL_URL)}"/>
+                                         bindTo="{CatalogThumbnailResolver.imageValueExpression(config.bindTo)}"/>
                 </plugins>
               </ui:image>
             </items>
@@ -82,7 +83,8 @@
       <editor:documentForm title="{LivecontextStudioPlugin_properties.INSTANCE.CMExternalChannel_tab_PDP_pagegrid_title}">
       <items>
         <livecontext:commerceAugmentedPageGridForm itemId="pdpPagegrid"
-                                                   pageGridPropertyName="pdpPagegrid"/>
+                                                   pageGridPropertyName="pdpPagegrid"
+                                                   fallbackPageGridPropertyName="placement"/>
       </items>
     </editor:documentForm>
       <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_extras_title}">

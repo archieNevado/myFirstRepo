@@ -1,7 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Contracts;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 
 import javax.ws.rs.Path;
@@ -27,29 +26,24 @@ public class ContractsResource extends AbstractCatalogResource<Contracts> {
   }
 
   private void fillRepresentation(ContractsRepresentation representation) {
-    try {
-      Contracts contracts = getEntity();
+    Contracts contracts = getEntity();
 
-      if (contracts == null) {
-        LOG.error("Error loading contracts bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load contracts bean");
-      }
+    if (contracts == null) {
+      LOG.warn("Error loading contracts bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load contracts bean");
+    }
 
-      representation.setId(contracts.getId());
-      if (getConnection().getContractService() != null) {
-        Collection<Contract> contractIdsForServiceUser = getConnection().getContractService().findContractIdsForServiceUser(getStoreContext());
-        //filter default contract from contract list
-        Collection<Contract> filteredContracts = new ArrayList<>();
-        for (Contract contract : contractIdsForServiceUser) {
-          if (!contract.isDefaultContract()){
-            filteredContracts.add(contract);
-          }
+    representation.setId(contracts.getId());
+    if (getConnection().getContractService() != null) {
+      Collection<Contract> contractIdsForServiceUser = getConnection().getContractService().findContractIdsForServiceUser(getStoreContext());
+      //filter default contract from contract list
+      Collection<Contract> filteredContracts = new ArrayList<>();
+      for (Contract contract : contractIdsForServiceUser) {
+        if (!contract.isDefaultContract()){
+          filteredContracts.add(contract);
         }
-        representation.setContracts(filteredContracts);
       }
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+      representation.setContracts(filteredContracts);
     }
   }
 

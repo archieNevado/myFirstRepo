@@ -6,8 +6,8 @@ import com.coremedia.blueprint.cae.search.SearchFilterProvider;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.cap.feeder.FeedableElement;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.util.StringUtils;
 
@@ -18,8 +18,7 @@ import java.util.List;
  * The default {@link SolrQueryBuilder} implementation.
  */
 public class SolrSearchQueryBuilder implements SolrQueryBuilder {
-
-  private static final Log LOG = LogFactory.getLog(SolrSearchQueryBuilder.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SolrSearchQueryBuilder.class);
   private static final String CONSTANT_FILTER_QUERY = createConstantFilterQuery();
 
   private SearchPreprocessor<SearchQueryBean> searchPreprocessor;

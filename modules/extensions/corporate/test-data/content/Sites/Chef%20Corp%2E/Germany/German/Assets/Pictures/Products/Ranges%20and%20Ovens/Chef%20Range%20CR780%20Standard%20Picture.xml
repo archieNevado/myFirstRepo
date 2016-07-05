@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/Ranges%20and%20Ovens/Chef%20Range%20CR780%20Standardfefc665b.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/Ranges%20and%20Ovens/Chef%20Range%20CR780%20Standard%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1321</height>
-<data md5="4625c48c0787f1f8160800f92ba4cfc0" href="../../../../../../../../__blob/4625c48c0787f1f8160800f92ba4cfc0.blob" mimetype="image/jpeg"/>
+<data md5="4625c48c0787f1f8160800f92ba4cfc0" size="258405" href="../../../../../../../../__blob/4625c48c0787f1f8160800f92ba4cfc0.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

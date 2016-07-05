@@ -35,25 +35,15 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1604.1-20</blueprint-base.version>
-    <cms.version>1604.1-20</cms.version>
-    <personalization.version>1604.1-20</personalization.version>
-    <elastic.version>1604.1-20</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1604.1-20</studio.version>
-    <caetoolbox.version>1604.1-20</caetoolbox.version>
-    <livecontext.version>1604.1-20</livecontext.version>
+    <blueprint-base.version>1604.2-55</blueprint-base.version>
+    <cms.version>1604.2-55</cms.version>
+    <personalization.version>1604.2-55</personalization.version>
+    <elastic.version>1604.2-55</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1604.2-55</studio.version>
+    <caetoolbox.version>1604.2-55</caetoolbox.version>
+    <livecontext.version>1604.2-55</livecontext.version>
     <jangaroo.version>2.0.17</jangaroo.version>
-    <jangaroo.libs.version>2.0.15</jangaroo.libs.version>
-
-
-    <!--
-      Location of the Site Manager user manual.
-
-      If your editors are supposed to work in internet-restricted environments,
-      you must host the manuals inhouse (e.g. add them to the webstart webapp) and
-      adjust this url accordingly.
-    -->
-    <cms.editor.manuals.base.url>https://documentation.coremedia.com/editor-user/${cms.version}</cms.editor.manuals.base.url>
+    <jangaroo.libs.version>2.0.17</jangaroo.libs.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
     <tomcat.version>7.0.59</tomcat.version>
@@ -68,38 +58,17 @@
     | if all services are running on one box you can use installation
     -->
     <installation.host>localhost</installation.host>
-
-    <cms.host>${installation.host}</cms.host>
-    <mls.host>${installation.host}</mls.host>
-    <rls.host>${installation.host}</rls.host>
     <solr.host>${installation.host}</solr.host>
-    <caefeeder-preview.host>${installation.host}</caefeeder-preview.host>
-    <caefeeder-live.host>${installation.host}</caefeeder-live.host>
-    <mongo.db.host>${installation.host}</mongo.db.host>
-    <mongo.db.port>27017</mongo.db.port>
-    <database.host>${installation.host}</database.host>
+    <content-management-server.host>${installation.host}</content-management-server.host>
+    <workflow-server.host>${installation.host}</workflow-server.host>
+    <master-live-server.host>${installation.host}</master-live-server.host>
     <studio.host>${installation.host}</studio.host>
-
-    <!--
-    | Semicolon separated list of folders for the inbox of the web resources importer. Import following themes by default:
-    | basic, corporate, perfectchef, aurora and the extensions elastic social (es and lc-es)
-    -->
-    <blueprint.rootdir>${session.executionRootDirectory}</blueprint.rootdir>
-    <css.importer.inbox.cae>${blueprint.rootdir}/modules/cae/cae-themes/basic-theme/target/resources/themes</css.importer.inbox.cae>
-    <css.importer.inbox.corporate>${blueprint.rootdir}/modules/extensions/corporate/corporate-theme/target/resources/themes</css.importer.inbox.corporate>
-    <css.importer.inbox.es>${blueprint.rootdir}/modules/extensions/es/es-theme/target/resources/themes</css.importer.inbox.es>
-    <css.importer.inbox.aurora>${blueprint.rootdir}/modules/extensions/ecommerce-ibm/lc-themes/aurora-theme/target/resources/themes</css.importer.inbox.aurora>
-    <css.importer.inbox.pc>${blueprint.rootdir}/modules/extensions/ecommerce-ibm/lc-themes/perfectchef-theme/target/resources/themes</css.importer.inbox.pc>
-    <css.importer.inbox>${css.importer.inbox.cae};${css.importer.inbox.corporate};${css.importer.inbox.es};${css.importer.inbox.aurora};${css.importer.inbox.pc}</css.importer.inbox>
-
-    <!--
-    | true if links to resources such as JavaScript and CSS should be generated to point to files in the
-    | application container (e.g. in modules under META-INF/resources/) instead of the content repository.
-    | this is useful while developing JSPs, CSS and JavaScript before importing the files into the repository.
-    -->
-    <cae.use.local.resources>false</cae.use.local.resources>
-    <cae.developer.mode>false</cae.developer.mode>
-    <view.debug.enabled>true</view.debug.enabled>
+    <cae-preview.host>${installation.host}</cae-preview.host>
+    <cae-live.host>${installation.host}</cae-live.host>
+    <db.host>${installation.host}</db.host>
+    <mongoDb.host>${installation.host}</mongoDb.host>
+    <wcs.host>${installation.host}</wcs.host>
+    <proxy.host>${installation.host}</proxy.host>
 
     <!--
     | "build" is the default grunt task to generate webresources in themes without templates jars.
@@ -112,83 +81,10 @@
     -->
     <cae.themes.grunt.task.test>test</cae.themes.grunt.task.test>
 
-    <!--
-      Blueprint port configuration
-
-      All Blueprint ports are composed from a component prefix (e.g. CMS, STUDIO)
-      and a protocol suffix (e.g. HTTP, AJP).
-      There are default prefixes and suffixes for all components and protocols,
-      which in most cases constitute unique ports.
-
-      However there are some subtle issues concerning CAE and Studio.
-      During local development you run the preview CAE and Studio in separate
-      Tomcat instances by the tomcat7 Maven plugin.  In a production setup
-      the two webapps are deployed in a common Tomcat instance.
-      In both cases you want to proxy the CAE by an Apache.
-
-      We use distinct names for the CAE and Studio port prefixes and suffixes,
-      even though some of them have the same values or even the default values.
-      This makes it easier to change them without unexpected side effects.
-      The values are appropriate for the production setup.  For local development
-      some values are adjusted in the development-ports profile.
-     -->
-
-    <!-- default port prefixes -->
-    <CONTENT_FEEDER_PORT_PREFIX>39</CONTENT_FEEDER_PORT_PREFIX>
-    <STUDIO_PORT_PREFIX>40</STUDIO_PORT_PREFIX>
-    <PREVIEW_PORT_PREFIX>40</PREVIEW_PORT_PREFIX>
-    <CMS_PORT_PREFIX>41</CMS_PORT_PREFIX>
-    <MLS_PORT_PREFIX>42</MLS_PORT_PREFIX>
-    <WFS_PORT_PREFIX>43</WFS_PORT_PREFIX>
-    <SOLR_MASTER_PORT_PREFIX>44</SOLR_MASTER_PORT_PREFIX>
-    <SOLR_SLAVE_PORT_PREFIX>45</SOLR_SLAVE_PORT_PREFIX>
-    <CAEFEEDER_PREVIEW_PORT_PREFIX>46</CAEFEEDER_PREVIEW_PORT_PREFIX>
-    <CAEFEEDER_LIVE_PORT_PREFIX>47</CAEFEEDER_LIVE_PORT_PREFIX>
-    <RLS_PORT_PREFIX>48</RLS_PORT_PREFIX>
-    <DELIVERY_PORT_PREFIX>49</DELIVERY_PORT_PREFIX>
-
-    <!--default port suffixes-->
-    <HTTP_PORT_SUFFIX>080</HTTP_PORT_SUFFIX>
-    <HTTPS_PORT_SUFFIX>443</HTTPS_PORT_SUFFIX>
-    <SHUTDOWN_PORT_SUFFIX>005</SHUTDOWN_PORT_SUFFIX>
-    <AJP_PORT_SUFFIX>009</AJP_PORT_SUFFIX>
-    <JMX_REGISTRY_PORT_SUFFIX>099</JMX_REGISTRY_PORT_SUFFIX>
-    <JMX_SERVER_PORT_SUFFIX>098</JMX_SERVER_PORT_SUFFIX>
-    <DEBUG_PORT_SUFFIX>777</DEBUG_PORT_SUFFIX>
-    <CORBA_PORT_SUFFIX>683</CORBA_PORT_SUFFIX>
-    <CORBA_SSL_PORT_SUFFIX>684</CORBA_SSL_PORT_SUFFIX>
-
-    <!-- point out the role of some suffixes -->
-    <PREVIEW_AJP_PORT_SUFFIX>${AJP_PORT_SUFFIX}</PREVIEW_AJP_PORT_SUFFIX>
-    <STUDIO_AJP_PORT_SUFFIX>${AJP_PORT_SUFFIX}</STUDIO_AJP_PORT_SUFFIX>
-    <DELIVERY_AJP_PORT_SUFFIX>${AJP_PORT_SUFFIX}</DELIVERY_AJP_PORT_SUFFIX>
-    <PREVIEW_HTTP_PORT_SUFFIX>${HTTP_PORT_SUFFIX}</PREVIEW_HTTP_PORT_SUFFIX>
-    <STUDIO_HTTP_PORT_SUFFIX>${HTTP_PORT_SUFFIX}</STUDIO_HTTP_PORT_SUFFIX>
-    <DELIVERY_HTTP_PORT_SUFFIX>${HTTP_PORT_SUFFIX}</DELIVERY_HTTP_PORT_SUFFIX>
-
-    <WFS_USE_CAPLIST>true</WFS_USE_CAPLIST>
-    <WFS_STUDIO_URL/>
-    <WFS_STUDIO_USER/>
-    <WFS_STUDIO_PW/>
-    <STUDIO_MEMORY_SERIALIZATION_FILE/>
-
-    <tenant.default>helios</tenant.default>
-    <elastic.social.mail.smtp.server>${installation.host}</elastic.social.mail.smtp.server>
-    <es.cae.http.port>${DELIVERY_PORT_PREFIX}${DELIVERY_HTTP_PORT_SUFFIX}</es.cae.http.port>
-    <es.cae.http.host>${installation.host}</es.cae.http.host>
-    <es.cae.protocol>http</es.cae.protocol>
-    <signCookie.publicKey>MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAITPdcUYMRXQgFy5dzachyoaEikD1T6sKiABaOKa583jKjPF3GvCKeRB/TQ+mCTl7fYDoYpCuqQIIe2sdU+AX+8CAwEAAQ==</signCookie.publicKey>
-    <signCookie.privateKey>MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAhM91xRgxFdCAXLl3NpyHKhoSKQPVPqwqIAFo4prnzeMqM8Xca8Ip5EH9ND6YJOXt9gOhikK6pAgh7ax1T4Bf7wIDAQABAkA1m+B3/HnjylPmGd8rJifRMNDfyXJMaAZhAPCrd8fV7SJ6a1hpZVcx7DNl6egSmeMGH1Kg3UFgzznRG1CZZmdRAiEA4YZyXuDPDdZn+mKgrZu4sJ1XwcEWzyEfi9qYRr151A0CIQCWwb8mjqEebCbfq5Kr4YKnbW9sWst5kljzl26qlg+Y6wIhAJHuNH2OTIywqzGKtlwAQp8OASYfsomu7kHJ3fUQUA/VAiEAi+1G26XU/CTMLBzW5TxKBdb4ba0UYUGp2Ga87A6eaYMCIDtlY/pvURhB7a5tr6vo1bU7YrfdxtISAhgcc6UFxHhB</signCookie.privateKey>
-
     <!-- configure the control room persistence extensions here -->
     <controlroom.persistence.extension>es</controlroom.persistence.extension>
     <notification.persistence.extension>elastic</notification.persistence.extension>
     <caplist>com.coremedia.cotopaxi.list.elastic.mongodb.MongoCapListConnectorFactory</caplist>
-
-    <repository.url>http://${cms.host}:${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}/coremedia/ior</repository.url>
-    <repository.workflow/>
-
-    <studio.previewUrlPrefix>http://${studio.host}:${PREVIEW_PORT_PREFIX}${PREVIEW_HTTP_PORT_SUFFIX}/blueprint/servlet</studio.previewUrlPrefix>
 
   </properties>
 
@@ -200,37 +96,7 @@
       </properties>
     </profile>
     <profile>
-      <id>preview-cae-with-es-demodata-generator</id>
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>es-demodata-bom</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.coremedia.maven</groupId>
-            <artifactId>coremedia-blueprint-maven-plugin</artifactId>
-            <inherited>false</inherited>
-            <executions>
-              <execution>
-                <phase>generate-sources</phase>
-                <goals>
-                  <goal>update-extensions</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
+      <!--TODO: CUSTOMER DOES NOT KNOW TOKO ????-->
       <id>cae-and-studio-with-es-toko-component</id>
       <dependencyManagement>
         <dependencies>
@@ -262,33 +128,12 @@
       </build>
     </profile>
     <profile>
-      <id>development-ports</id>
+      <id>kitchen</id>
       <!--
-       |  Use this profile to run Studio and the CAEs locally
-       |  with the tomcat7 Maven plugin.
+       |  Use this profile to develop against the kitchen setup
        -->
       <properties>
-        <!-- Make the preview ports distinct from the Studio ports -->
-        <PREVIEW_AJP_PORT_SUFFIX>010</PREVIEW_AJP_PORT_SUFFIX>
-        <PREVIEW_HTTP_PORT_SUFFIX>081</PREVIEW_HTTP_PORT_SUFFIX>
-      </properties>
-    </profile>
-    <profile>
-      <id>vagrant</id>
-      <!--
-       |  Use this profile to develop against the vagrant setup
-       -->
-      <properties>
-        <vagrant.box.ip>192.168.252.100</vagrant.box.ip>
-        <cms.host>${vagrant.box.ip}</cms.host>
-        <mls.host>${vagrant.box.ip}</mls.host>
-        <solr.host>${vagrant.box.ip}</solr.host>
-        <caefeeder-preview.host>${vagrant.box.ip}</caefeeder-preview.host>
-        <caefeeder-live.host>${vagrant.box.ip}</caefeeder-live.host>
-        <mongo.db.host>${vagrant.box.ip}</mongo.db.host>
-        <database.host>${vagrant.box.ip}</database.host>
-        <studio.host>${vagrant.box.ip}</studio.host>
-        <rls.host>${vagrant.box.ip}</rls.host>
+        <installation.host>192.168.252.100.xip.io</installation.host>
       </properties>
     </profile>
     <profile>
@@ -315,6 +160,7 @@
       </build>
     </profile>
     <profile>
+      <!--TODO: WHY IS THIS PROFILE HERE ????-->
       <id>controlroom-memory</id>
       <!--
       this profile replaces the controlroom and the notifications
@@ -324,25 +170,25 @@
       <properties>
         <controlroom.persistence.extension>memory</controlroom.persistence.extension>
         <notification.persistence.extension>memory</notification.persistence.extension>
-        <WFS_USE_CAPLIST>false</WFS_USE_CAPLIST>
-        <WFS_STUDIO_URL>http://${studio.host}:${STUDIO_PORT_PREFIX}${HTTP_PORT_SUFFIX}/studio</WFS_STUDIO_URL>
-        <WFS_STUDIO_USER>admin</WFS_STUDIO_USER>
-        <WFS_STUDIO_PW>admin</WFS_STUDIO_PW>
-        <STUDIO_MEMORY_SERIALIZATION_FILE>${java.io.tmpdir}/models.ser</STUDIO_MEMORY_SERIALIZATION_FILE>
       </properties>
+    </profile>
+    <profile>
+      <id>deployment-archive</id>
+      <!--
+       | This profile creates the deployment archive containing the chef setup, the deployment artifacts
+       | (webapps, tools and some jars) and the content.
+       -->
+      <modules>
+        <module>deployment</module>
+      </modules>
     </profile>
   </profiles>
 
   <modules>
     <module>modules</module>
-    <module>packages</module>
-    <!-- its important that test-data is build before boxes because the test-data.zip must be build before
-     boxes merge all test-data.zip. In parallel build this is no problem, but when building sequential the module order
-     affects the build order because test-data is independent to other modules and no module depends on test-data -->
     <module>test-data</module>
-    <module>boxes</module>
+    <module>deployment</module>
   </modules>
-
 
   <prerequisites>
     <maven>3.1</maven>
@@ -740,18 +586,6 @@
       </dependency>
 
       <dependency>
-        <groupId>com.drewnoakes</groupId>
-        <artifactId>metadata-extractor</artifactId>
-        <version>2.6.2</version>
-        <exclusions>
-          <exclusion>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-
-      <dependency>
         <groupId>org.springframework.mobile</groupId>
         <artifactId>spring-mobile-device</artifactId>
         <version>1.0.1.RELEASE</version>
@@ -829,10 +663,10 @@
         <plugin>
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
-          <version>0.0.28</version>
+          <version>1.0</version>
           <configuration>
-            <nodeVersion>v4.3.2</nodeVersion> <!-- LTS -->
-            <npmVersion>3.8.0</npmVersion>
+            <nodeVersion>v4.4.3</nodeVersion> <!-- LTS -->
+            <npmVersion>3.8.6</npmVersion>
             <!-- install nodejs and npm just once for all themes -->
             <installDirectory>${blueprint.rootdir}</installDirectory>
           </configuration>
@@ -840,12 +674,17 @@
         <plugin>
           <groupId>com.coremedia.maven</groupId>
           <artifactId>coremedia-webresource-content-maven-plugin</artifactId>
-          <version>0.18</version>
+          <version>0.19</version>
           <!-- Provide doctypes to create web resources as content-->
           <dependencies>
             <dependency>
               <groupId>${project.groupId}</groupId>
               <artifactId>contentserver-blueprint-component</artifactId>
+              <version>${project.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>css-importer-lib</artifactId>
               <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -1028,6 +867,29 @@
           <version>2.2</version>
           <configuration>
             <uriEncoding>utf-8</uriEncoding>
+            <systemProperties>
+              <!--
+               | By passing these through, we do not have to define them each time in any submodule.
+               | If however, you want to suppress them, you need to set the attribute combine.self="override" on the
+               | systemProperties element, see https://maven.apache.org/pom.html for more information
+              -->
+              <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
+              <!--TODO: wofuer ist diese Property-->
+              <catalina.base>${project.build.directory}</catalina.base>
+              <!--TODO: Wofuer ist diese Property-->
+              <resourcePath.base>${project.basedir}</resourcePath.base>
+              <solr.host>${solr.host}</solr.host>
+              <content-management-server.host>${content-management-server.host}</content-management-server.host>
+              <workflow-server.host>${workflow-server.host}</workflow-server.host>
+              <master-live-server.host>${master-live-server.host}</master-live-server.host>
+              <studio.host>${studio.host}</studio.host>
+              <cae-preview.host>${cae-preview.host}</cae-preview.host>
+              <cae-live.host>${cae-live.host}</cae-live.host>
+              <db.host>${db.host}</db.host>
+              <mongoDb.host>${mongoDb.host}</mongoDb.host>
+              <wcs.host>${wcs.host}</wcs.host>
+              <proxy.host>${proxy.host}</proxy.host>
+            </systemProperties>
           </configuration>
           <dependencies>
             <dependency>
@@ -1308,6 +1170,8 @@
                     <exclude>rhino:js</exclude>
                     <!-- uses GPL -->
                     <exclude>net.joala:*</exclude>
+                    <!-- JDK5 -->
+                    <exclude>com.google.guava:guava-jdk5</exclude>
                   </excludes>
                   <includes>
                     <!--

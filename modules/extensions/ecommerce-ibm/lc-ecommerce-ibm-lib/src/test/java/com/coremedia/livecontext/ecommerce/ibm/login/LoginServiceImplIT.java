@@ -61,7 +61,6 @@ public class LoginServiceImplIT extends AbstractServiceTest {
    * permanently.
    */
   @Test
-  @Ignore
   public void testLoginSuccessWithWorkspaces() throws Exception {
     if (!"*".equals(System.getProperty("betamax.ignoreHosts"))) {
       return;

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMArticle/single-column.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMArticle/single-column"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Displays article text with single column layout on every device</description>
 <icon href="single-column.icon.png" mimetype="image/png"/>
 <layout>single-column</layout>

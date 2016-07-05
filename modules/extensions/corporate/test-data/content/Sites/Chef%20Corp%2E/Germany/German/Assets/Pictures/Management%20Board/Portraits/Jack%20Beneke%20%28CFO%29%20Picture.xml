@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Management%20Board/Portraits/Jack%20Beneke%20%28CFO%29%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Management%20Board/Portraits/Jack%20Beneke%20%28CFO%29%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>800</width>
 <height>800</height>
-<data md5="fbe33fa811b821460ff63e0cbebb8bca" href="../../../../../../../../__blob/fbe33fa811b821460ff63e0cbebb8bca.blob" mimetype="image/jpeg"/>
+<data md5="fbe33fa811b821460ff63e0cbebb8bca" size="444822" href="../../../../../../../../__blob/fbe33fa811b821460ff63e0cbebb8bca.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

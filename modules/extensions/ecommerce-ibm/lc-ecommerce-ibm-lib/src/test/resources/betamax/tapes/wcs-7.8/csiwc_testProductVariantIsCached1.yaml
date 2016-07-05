@@ -1,0 +1,149 @@
+!tape
+name: csiwc_testProductVariantIsCached1
+interactions:
+- recorded: 2016-05-19T09:27:18.198Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:18 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000qQD7U1VfW4ZhGNR33vu_Ugd:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2016-05-19T09:27:18.209Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:18 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000ZtABH-A8zuZsgBM_hnRXHmQ:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2016-05-19T09:27:18.243Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/GFR033_330101?catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:18 GMT
+      Expires: Thu, 19 May 2016 10:27:19 GMT
+      Set-Cookie: JSESSIONID=0000x_oeBDxqAGwYJmqEfGPs3_l:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/GFR033_330101?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"16652","shortDescription":"Sun
+      drenched oranges.","buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete and balanced breakfast.","xcatentry_seoSegment":"oranges-gfr033-330101--1","parentCategoryID":"10135","metaKeyword":"
+      Sunshine","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16653","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.6"}],"productType":"ItemBean","name":"Oranges","xcatentry_cmSeoSegment":"10101_oranges-gfr033-330101--1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","uniqueID":"16653","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","manufacturer":"Sunshine","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"metaDescription":"Sun
+      drenched oranges.","title":"Oranges | AuroraESite","partNumber":"GFR033_330101","storeID":"10101","fullImageAltDescription":"Image for Oranges from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:27:18.266Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10135?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:19 GMT
+      Expires: Thu, 19 May 2016 10:27:19 GMT
+      Set-Cookie: JSESSIONID=0000_-uyEcMLT_6d_foIxjFDiQl:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Fruit","metaKeyword":"Fruit","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135","identifier":"Fruit","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10135","parentCatalogGroupID":["10133"],"name":"Fruit","thumbnail":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","fullImage":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","uniqueID":"10135","xcatgroup_seoSegment":"fruit-10135--1","metaDescription":"Fruit","title":"Fruit
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_fruit-10135--1","fullImageAltDescription":"Image for Fruit from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:27:18.315Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byId/16652?catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:19 GMT
+      Expires: Thu, 19 May 2016 10:27:19 GMT
+      Set-Cookie: JSESSIONID=0000zs0pqnikEx1yBEQ20MdtMky:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16652?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"singleSKUUniqueID":"16653","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16652","productType":"ProductBean","name":"Oranges","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","manufacturer":"Sunshine","SKUs":[{"Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","identifier":"FruitBrand","comparable":"false","name":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","identifier":"FruitType","comparable":"true","name":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"SKUUniqueID":"16653","Price":[{"SKUPriceDescription":"I","SKUPriceValue":"1.6","SKUPriceUsage":"Offer"}]}],"numberOfSKUs":"1","title":"Oranges
+      | AuroraESite","partNumber":"GFR033_3301","shortDescription":"Sun drenched oranges.","buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete and balanced breakfast.","xcatentry_seoSegment":"oranges-gfr033-3301--1","parentCategoryID":"10135","metaKeyword":"
+      Sunshine","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.6"}],"xcatentry_cmSeoSegment":"10101_oranges-gfr033-3301--1","uniqueID":"16652","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"},{"usage":"Descriptive","Values":[{"values":"Large","identifier":"GFR033_3301","uniqueID":"7000000000000004633"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Size","comparable":"true","name":"Size","description":"Size","displayable":"true","uniqueID":"7000000000000000214"},{"usage":"Descriptive","Values":[{"values":"\/lb","identifier":"GFR033_3301","uniqueID":"7000000000000004655"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Price","comparable":"false","name":"Price","description":"Price","displayable":"true","uniqueID":"7000000000000000302"},{"usage":"Descriptive","Values":[{"values":"Citrus","identifier":"GFR033_3301","uniqueID":"7000000000000004666"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Type","comparable":"false","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000299"},{"usage":"Descriptive","Values":[{"values":"Fruit","identifier":"GFR033_3301","uniqueID":"7000000000000004644"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Category","comparable":"false","name":"Category","description":"Category","displayable":"true","uniqueID":"7000000000000000298"}],"metaDescription":"Sun
+      drenched oranges.","hasSingleSKU":"true","storeID":"10101","fullImageAltDescription":"Image for Oranges from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:27:18.351Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byId/16653?catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:19 GMT
+      Expires: Thu, 19 May 2016 10:27:19 GMT
+      Set-Cookie: JSESSIONID=0000MrmGTF6AAkWX_tW8kQmElsJ:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16653?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"16652","shortDescription":"Sun
+      drenched oranges.","buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete and balanced breakfast.","xcatentry_seoSegment":"oranges-gfr033-330101--1","parentCategoryID":"10135","metaKeyword":"
+      Sunshine","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16653","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.6"}],"productType":"ItemBean","name":"Oranges","xcatentry_cmSeoSegment":"10101_oranges-gfr033-330101--1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","uniqueID":"16653","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","manufacturer":"Sunshine","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"metaDescription":"Sun
+      drenched oranges.","title":"Oranges | AuroraESite","partNumber":"GFR033_330101","storeID":"10101","fullImageAltDescription":"Image for Oranges from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

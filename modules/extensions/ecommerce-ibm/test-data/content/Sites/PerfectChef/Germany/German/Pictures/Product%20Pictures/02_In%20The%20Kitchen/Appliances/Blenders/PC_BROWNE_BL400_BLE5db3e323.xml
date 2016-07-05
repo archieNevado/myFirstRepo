@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/02_In The Kitchen/Appliances/Blenders" name="PC_BROWNE_BL400_BLENDER Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/02_In The Kitchen/Appliances/Blenders" name="PC_BROWNE_BL400_BLENDER Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Appliances/Blenders/PC_BROWNE_fe860749.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Appliances/Blenders/PC_BROWNE_BL400_BLENDER%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Browne BL300 Blender</alt>
 <copyright>John Kasawa / Shutterstock 74244943</copyright>
 <dataUrl></dataUrl>
-<data md5="557372186108f8eb050457d69b55ec5d" href="../../../../../../../../../__blob/557372186108f8eb050457d69b55ec5d.blob" mimetype="image/jpeg"/>
+<data md5="557372186108f8eb050457d69b55ec5d" size="358937" href="../../../../../../../../../__blob/557372186108f8eb050457d69b55ec5d.blob" mimetype="image/jpeg"/>
 <asset>
 <link href="../../../../../../../../../Assets/Products/Blenders%20and%20Food%20Processors/Browne%20BL400%20Blender%20Frontshot.xml" path="/Assets/Products/Blenders%20and%20Food%20Processors/Browne%20BL400%20Blender%20Frontshot"/>
 </asset>

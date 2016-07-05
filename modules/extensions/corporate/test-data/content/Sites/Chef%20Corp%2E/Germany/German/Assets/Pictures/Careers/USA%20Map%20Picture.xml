@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Careers/USA%20Map%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Careers/USA%20Map%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>3328</width>
 <height>3328</height>
-<data md5="c4eab3828ae7fa78e1c69a120c6e9587" href="../../../../../../../__blob/c4eab3828ae7fa78e1c69a120c6e9587.blob" mimetype="image/jpeg"/>
+<data md5="c4eab3828ae7fa78e1c69a120c6e9587" size="109378" href="../../../../../../../__blob/c4eab3828ae7fa78e1c69a120c6e9587.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

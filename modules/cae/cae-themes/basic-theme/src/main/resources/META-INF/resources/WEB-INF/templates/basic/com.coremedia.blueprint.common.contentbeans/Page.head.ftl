@@ -25,8 +25,7 @@
 </#if>
 <#-- SEO: canonical -->
 <#if self.content?has_content>
-    <#assign currentPageUrl= cm.getLink(self.content)/>
-    <link rel="canonical" href="${cm.getLink(self.content)}" />
+    <link rel="canonical" href="${cm.getLink(self.content, {"absolute":true})}" />
 </#if>
 <#-- SEO: i18n -->
 <#if (self.content.localizations)?has_content>
@@ -34,7 +33,7 @@
   <#list localizations as localization>
     <#-- list all localized variants without self -->
     <#if localization.locale != self.content.locale>
-        <link rel="alternate" hreflang="${localization.locale.toLanguageTag()}" href="${cm.getLink(localization)}" title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}" />
+        <link rel="alternate" hreflang="${bp.getPageLanguageTag(localization)}" href="${cm.getLink(localization)}" title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}" />
     </#if>
   </#list>
 </#if>

@@ -1,19 +1,18 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
-import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
+import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
+import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.FixValueCacheKey;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
+import org.apache.commons.collections.Transformer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
+import static java.util.Arrays.asList;
 
 public class MarketingSpotServiceImpl implements MarketingSpotService {
 
@@ -32,8 +31,6 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     private CommerceBeanFactory commerceBeanFactory;
     private WcMarketingSpotWrapperService marketingSpotWrapperService;
     private boolean useExternalIdForBeanCreation;
-    private boolean enableAggressiveCaching;
-
 
     @Override
     @Nonnull
@@ -59,7 +56,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
                 new MarketingSpotCacheKey(CommerceIdHelper.formatMarketingSpotTechId(externalTechId),
                         StoreContextHelper.getCurrentContext(), UserContextHelper.getCurrentContext(),
                         marketingSpotWrapperService, commerceCache));
-        return createMarketingSpotBeanFor(wcMarketingSpot);
+        return createMarketingSpotBeanFor(wcMarketingSpot, false);
     }
 
     @Override
@@ -69,7 +66,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
         Map<String, Object> wcMarketingSpot = (Map<String, Object>) commerceCache.get(
                 new MarketingSpotCacheKey(CommerceIdHelper.formatMarketingSpotId(externalId),
                         StoreContextHelper.getCurrentContext(), UserContextHelper.getCurrentContext(), marketingSpotWrapperService, commerceCache));
-        return createMarketingSpotBeanFor(wcMarketingSpot);
+        return createMarketingSpotBeanFor(wcMarketingSpot, false);
     }
 
   @Override
@@ -87,29 +84,42 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
         return result;
     }
 
-    protected MarketingSpot createMarketingSpotBeanFor(Map<String, Object> marketingSpotWrapper) {
-        if (marketingSpotWrapper != null) {
-          // results may come from different REST handlers identified by resourceName field ('spot' or 'espot')
-          // must be distinguished when retrieving data
-            String id = useExternalIdForBeanCreation ?
-                    CommerceIdHelper.formatMarketingSpotId(DataMapHelper.getValueForKey(marketingSpotWrapper,
-                            isESpotResult(marketingSpotWrapper) ? "MarketingSpotData[0].eSpotName" : "MarketingSpot[0].spotName", String.class)) :
-                    CommerceIdHelper.formatMarketingSpotTechId(DataMapHelper.getValueForKey(marketingSpotWrapper,
-                            isESpotResult(marketingSpotWrapper) ? "MarketingSpotData[0].marketingSpotIdentifier" : "MarketingSpot[0].spotId", String.class));
+  @Nullable
+  protected MarketingSpot createMarketingSpotBeanFor(@Nullable Map<String, Object> marketingSpotWrapper, boolean reloadById) {
+    if (marketingSpotWrapper != null) {
+      // results may come from different REST handlers identified by resourceName field ('spot' or 'espot')
+      // must be distinguished when retrieving data
+      String id = useExternalIdForBeanCreation ?
+              CommerceIdHelper.formatMarketingSpotId(DataMapHelper.getValueForKey(marketingSpotWrapper,
+                      isESpotResult(marketingSpotWrapper) ? "MarketingSpotData[0].eSpotName" : "MarketingSpot[0].spotName", String.class)) :
+              CommerceIdHelper.formatMarketingSpotTechId(DataMapHelper.getValueForKey(marketingSpotWrapper,
+                      isESpotResult(marketingSpotWrapper) ? "MarketingSpotData[0].marketingSpotIdentifier" : "MarketingSpot[0].spotId", String.class));
 
-            StoreContext currentContext = StoreContextHelper.getCurrentContext();
-            if (CommerceIdHelper.isMarketingSpotId(id)) {
-                MarketingSpot spot = (MarketingSpot) commerceBeanFactory.createBeanFor(id, currentContext);
-                ((AbstractIbmCommerceBean) spot).setDelegate(marketingSpotWrapper);
-                if (enableAggressiveCaching) {
-                    commerceCache.put(
-                      new FixValueCacheKey(id, currentContext, marketingSpotWrapper, AbstractCommerceCacheKey.CONFIG_KEY_MARKETING_SPOT, commerceCache));
-                }
-                return spot;
+      StoreContext currentContext = StoreContextHelper.getCurrentContext();
+      if (CommerceIdHelper.isMarketingSpotId(id)) {
+        final MarketingSpotImpl spot = (MarketingSpotImpl) commerceBeanFactory.createBeanFor(id, currentContext);
+        Transformer transformer = null;
+        if (reloadById) {
+          transformer = new Transformer() {
+
+            private Map<String, Object> delegateFromCache;
+
+            @Override
+            public Object transform(Object input) {
+              if (null == delegateFromCache) {
+                delegateFromCache = spot.getDelegateFromCache();
+              }
+              //noinspection SuspiciousMethodCalls
+              return delegateFromCache.get(input);
             }
+          };
         }
-        return null;
+        spot.setDelegate(CatalogServiceImpl.asLazyMap(marketingSpotWrapper, transformer));
+        return spot;
+      }
     }
+    return null;
+  }
 
   protected List<MarketingSpot> createMarketingSpotBeansFor(Map<String, Object> marketingSpotWrappers) {
     if (marketingSpotWrappers == null || marketingSpotWrappers.isEmpty()) {
@@ -125,7 +135,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
         outerWrapper.put("resourceId", marketingSpotWrappers.get("resourceId"));
         outerWrapper.put("resourceName", marketingSpotWrappers.get("resourceName"));
         outerWrapper.put(isESpotResult(outerWrapper) ? "MarketingSpotData" : "MarketingSpot", asList(wrapper));
-        result.add(createMarketingSpotBeanFor(outerWrapper));
+        result.add(createMarketingSpotBeanFor(outerWrapper, true));
       }
     }
     return Collections.unmodifiableList(result);
@@ -174,15 +184,6 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     @SuppressWarnings("unused")
     public void setUseExternalIdForBeanCreation(boolean useExternalIdForBeanCreation) {
         this.useExternalIdForBeanCreation = useExternalIdForBeanCreation;
-    }
-    @SuppressWarnings("unused")
-    public boolean isEnableAggressiveCaching() {
-        return enableAggressiveCaching;
-    }
-
-    @SuppressWarnings("unused")
-    public void setEnableAggressiveCaching(boolean enableAggressiveCaching) {
-        this.enableAggressiveCaching = enableAggressiveCaching;
     }
 
   @Nonnull

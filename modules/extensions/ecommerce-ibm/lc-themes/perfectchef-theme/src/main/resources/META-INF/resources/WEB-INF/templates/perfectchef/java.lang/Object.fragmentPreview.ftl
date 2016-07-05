@@ -2,7 +2,7 @@
 <#include "../includes/slider-fragment.ftl" />
 <#-- @ftlvariable name="self" type="java.lang.Object" -->
 
-<#assign language=bp.getPageLanguage(self) />
+<#assign language=bp.getPageLanguageTag(self) />
 <#assign direction=bp.getPageDirection(self) />
 <!DOCTYPE html>
 <!--[if lte IE 8]> <html class="no-js lt-ie9" lang="${language}" dir="${direction}"> <![endif]-->

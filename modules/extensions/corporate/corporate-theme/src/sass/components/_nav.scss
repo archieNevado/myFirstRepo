@@ -20,7 +20,7 @@ Contains styling definitions for all content types as cm-nav.
     width: 100%;
     border: 0;
     background: $brand-primary;
-    z-index: 2; //below header (t-index 3)
+    z-index: 2; //below header (z-index 3), but above containers (z-index 1)
 
     @include breakpoint(md) {
       margin-bottom: 20px;

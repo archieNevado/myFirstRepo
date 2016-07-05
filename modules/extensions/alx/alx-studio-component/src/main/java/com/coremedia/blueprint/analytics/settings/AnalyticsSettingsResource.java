@@ -38,7 +38,15 @@ public class AnalyticsSettingsResource {
 
     if (content != null && !content.isDeleted()) {
       for(AnalyticsSettingsProvider analyticsSettingsProvider : analyticsSettingsProviders) {
-        final String reportURL = analyticsSettingsProvider.getReportUrlFor(content);
+        String reportURL = null;
+        try {
+          reportURL = analyticsSettingsProvider.getReportUrlFor(content);
+        } catch (RuntimeException e) {
+          LOG.info("ignoring exception while creating report url for service {} and content {}: {}",
+                  analyticsSettingsProvider.getServiceKey(),
+                  content,
+                  e.getMessage());
+        }
         alxUrlMap.put(analyticsSettingsProvider.getServiceKey(), reportURL);
       }
     }

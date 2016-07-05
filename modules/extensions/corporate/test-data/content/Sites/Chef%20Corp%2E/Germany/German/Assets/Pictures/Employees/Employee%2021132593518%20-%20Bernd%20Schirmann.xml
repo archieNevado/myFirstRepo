@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Employees/Employee%2021132593518%20-%20Walter%20Pinkman.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Employees/Employee%2021132593518%20-%20Walter%20Pinkman"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>800</width>
 <height>800</height>
-<data md5="6519edbed024deb6936cf91a63cda29c" href="../../../../../../../__blob/6519edbed024deb6936cf91a63cda29c.blob" mimetype="image/jpeg"/>
+<data md5="6519edbed024deb6936cf91a63cda29c" size="474918" href="../../../../../../../__blob/6519edbed024deb6936cf91a63cda29c.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

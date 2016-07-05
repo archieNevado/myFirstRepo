@@ -46,7 +46,10 @@ public class StoreInfoServiceImpl implements StoreInfoService {
 
   public String getWcsVersion() {
     Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache));
-    return DataMapHelper.getValueForPath(storeInfos, "wcsVersion", String.class);
+    if (null != storeInfos) {
+      return DataMapHelper.getValueForPath(storeInfos, "wcsVersion", String.class);
+    }
+    return null;
   }
 
   @Override
@@ -54,7 +57,7 @@ public class StoreInfoServiceImpl implements StoreInfoService {
     try {
       Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache));
       return storeInfos != null && !storeInfos.isEmpty();
-    }catch (CommerceException ex){
+    } catch (CommerceException ex) {
       return false;
     }
   }

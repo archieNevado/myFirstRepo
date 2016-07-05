@@ -1,0 +1,31 @@
+{
+  "blueprint": {
+    "hostname": "192.168.252.100.xip.io",
+    "loopback_hostname": "localhost",
+    "maven_repository_url": "file://localhost/tmp/maven-repo",
+    "tomcat": {
+      "java_home": "/usr/lib/jvm/java"
+    },
+    "tools": {
+      "java_home": "/usr/lib/jvm/java"
+    },
+    "wcs": {
+      "host": "WCS_HOST",
+      "application.properties": {
+        "livecontext.cookie.domain": ".DOMAIN"
+      }
+    }
+  },
+  "run_list": [
+    "role[mysql]",
+    "role[mongodb]",
+    "role[solr-master]",
+    "role[management]",
+    "role[publication]",
+    "role[studio]",
+    "role[studio-proxy]",
+    "role[delivery]",
+    "role[delivery-proxy]",
+    "recipe[blueprint-dev-tooling::overview]"
+  ]
+}

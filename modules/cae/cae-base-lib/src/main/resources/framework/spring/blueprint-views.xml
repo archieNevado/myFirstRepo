@@ -111,6 +111,8 @@
     </property>
   </bean>
 
+  <bean id="httpHeadView" class="com.coremedia.blueprint.cae.view.HttpHeadView"/>
+
   <bean id="plainView" class="com.coremedia.blueprint.cae.view.PlainView">
     <description>
       A programmed view to generate plain text from markup.
@@ -153,6 +155,7 @@
         <entry key="com.coremedia.blueprint.common.contentbeans.CodeResources#css" value-ref="mergedCssResourcesView"/>
         <entry key="com.coremedia.xml.Markup#plain" value-ref="plainView"/>
         <entry key="com.coremedia.objectserver.web.HttpError" value-ref="blueprintHttpErrorView"/>
+        <entry key="com.coremedia.blueprint.cae.web.HttpHead" value-ref="httpHeadView"/>
         <entry key="com.coremedia.blueprint.common.robots.RobotsBean" value-ref="robotsView"/>
         <entry key="com.coremedia.blueprint.common.feeds.FeedSource#asFeed" value-ref="feedView"/>
       </map>

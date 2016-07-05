@@ -4,6 +4,10 @@
 .#{$prefix}imagemap {
   position: relative;
 
+  &__button-group {
+    display: none;
+  }
+
   &__hotzone--icon {
     border-radius: 12px;
     font-size: 24px;
@@ -107,5 +111,25 @@
 
   &__text p {
     margin: 0;
+  }
+
+  &__button {
+    color: white;
+    border-color: white;
+  }
+
+  .cm-teasable--alternative & {
+    &__title {
+      color: black;
+    }
+
+    &__text {
+      color: black;
+    }
+
+    &__button {
+      color: black;
+      border-color: black;
+    }
   }
 }

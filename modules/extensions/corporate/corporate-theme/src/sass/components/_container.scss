@@ -11,7 +11,18 @@ Contains styling definitions for all content types as cm-container.
 */
 
 .#{$prefix}container {
+  position: relative;
   width: 100%;
+  z-index: 1; //fix CMS-5405 - to keep inner elements with different z-index inside this container
+
+  &__more {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: palette(white);
+    font-size: 3rem;
+    text-align: center;
+  }
 
   > :not(.#{$prefix}container) {
     @include center-margin(x);

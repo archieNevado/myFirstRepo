@@ -1,16 +1,12 @@
 package com.coremedia.blueprint.common.services.validation;
 
 import com.google.common.base.Predicate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static java.lang.String.format;
 
 public abstract class AbstractValidator<T> implements Validator<T> {
   
@@ -70,7 +66,12 @@ public abstract class AbstractValidator<T> implements Validator<T> {
             validItems.add(item);
           }
         } catch (Exception e) {
-          LOG.info("caught exception while validating item '{}'", item, e);
+          if (LOG.isDebugEnabled()) {
+            LOG.debug("caught exception while validating item '{}'", item, e);
+          }
+          else {
+            LOG.info("caught exception while validating item '{}': {}", item, e.getMessage());
+          }
         }
       } else {
         validItems.add(item);

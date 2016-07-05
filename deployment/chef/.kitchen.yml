@@ -28,9 +28,9 @@ driver:
     memory: 8192
     cpus: 2
   synced_folders:
-    - ["./build", "/shared", "create: true"]
+    - ["./.kitchen/build", "/shared", "create: true"]
     - ["~/.m2/repository", "/maven-repo"]
-    - ["../../boxes/target/shared/content", "/test-data"]
+    - ["../../test-data/target", "/test-data"]
   network:
     - ['private_network',{ ip: '192.168.252.100' }]
 
@@ -56,7 +56,7 @@ platforms:
   driver:
     box: coremedia/base7
     box_url: 'https://atlas.hashicorp.com/coremedia/boxes/base7'
-    box_version: '2.1.0'
+    box_version: '2.3.0'
 
 suites:
 - name: default
@@ -93,9 +93,9 @@ suites:
 # by default we here use the latest versions of tomcat. Be aware, that if a newer tomcat version is being released, you need to
 # change the urls and the version. If not set all artifacts will be downloaded from the much slower apache archive urls.
 #      tomcat:
-#        source: 'http://www.eu.apache.org/dist/tomcat/tomcat-7/v7.0.67/bin/apache-tomcat-7.0.67.zip'
-#        source_checksum: '5835c4a06fc276dd2865d17d5fb1f0dd791f55fd0cba18824a5f0c8124284337'
-#        jmx_remote_jar_source: 'http://www.eu.apache.org/dist/tomcat/tomcat-7/v7.0.67/bin/extras/catalina-jmx-remote.jar'
-#        jmx_remote_jar_source_checksum: 'c166ec1a40455717716ff7eaefb010cc20f322510098ab953bbf07f5c0642b77'
-#        version: '7.0.67'
+#        source: 'http://www.eu.apache.org/dist/tomcat/tomcat-7/v7.0.69/bin/apache-tomcat-7.0.69.zip'
+#        source_checksum: 'f093d033cb84e104f9f00f120dc6f3b39471d8e12be8fc250374ac9891c257b1'
+#        jmx_remote_jar_source: 'http://www.eu.apache.org/dist/tomcat/tomcat-7/v7.0.69/bin/extras/catalina-jmx-remote.jar'
+#        jmx_remote_jar_source_checksum: '5fe0c568afe6f24998817bfb9e6a77e1b430112a52ed914d48a1f9a401f86fb1'
+#        version: '7.0.69'
 

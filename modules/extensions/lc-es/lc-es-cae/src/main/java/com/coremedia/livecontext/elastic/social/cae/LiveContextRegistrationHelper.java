@@ -3,18 +3,21 @@ package com.coremedia.livecontext.elastic.social.cae;
 import com.coremedia.blueprint.elastic.social.cae.flows.LoginHelper;
 import com.coremedia.blueprint.elastic.social.cae.flows.Registration;
 import com.coremedia.blueprint.elastic.social.cae.flows.RegistrationHelper;
+import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.SocialAuthenticationToken;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.webflow.execution.RequestContext;
 
+import javax.annotation.PostConstruct;
+
 import static com.coremedia.blueprint.elastic.social.cae.flows.RegistrationHelper.getRequestAttributes;
-import static org.springframework.social.connect.web.ProviderSignInUtils.getConnection;
 
 public class LiveContextRegistrationHelper {
 
@@ -22,6 +25,10 @@ public class LiveContextRegistrationHelper {
 
   private LoginHelper loginHelper;
   private CommunityUserService communityUserService;
+  private ProviderSignInUtils providerSignInUtils;
+
+  @Autowired
+  private SpringSocialConfiguration springSocialConfiguration;
 
   /**
    * Redirect a logged in user to the home page instead of the registration page.
@@ -30,7 +37,7 @@ public class LiveContextRegistrationHelper {
    */
   public void registerAndLoginSilent(RequestContext context) {
     RequestAttributes requestAttributes = getRequestAttributes(context);
-    Connection<?> connection = getConnection(requestAttributes);
+    Connection<?> connection = providerSignInUtils.getConnectionFromSession(getRequestAttributes(context)); // NOSONAR
     //ignore call: no connection data available
     if (connection == null) {
       return;
@@ -58,18 +65,23 @@ public class LiveContextRegistrationHelper {
     }
   }
 
-  @Required
+  @Autowired
   public void setLoginHelper(LoginHelper loginHelper) {
     this.loginHelper = loginHelper;
   }
 
-  @Required
+  @Autowired
   public void setRegistrationHelper(RegistrationHelper registrationHelper) {
     this.registrationHelper = registrationHelper;
   }
 
-  @Required
+  @Autowired
   public void setCommunityUserService(CommunityUserService communityUserService) {
     this.communityUserService = communityUserService;
+  }
+
+  @PostConstruct
+  void initialize() {
+    providerSignInUtils = new ProviderSignInUtils(springSocialConfiguration.connectionFactoryLocator(), springSocialConfiguration.usersConnectionRepository());
   }
 }

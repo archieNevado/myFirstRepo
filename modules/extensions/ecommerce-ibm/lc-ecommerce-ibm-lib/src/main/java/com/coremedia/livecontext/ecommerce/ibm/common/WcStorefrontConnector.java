@@ -12,9 +12,9 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +27,9 @@ import java.util.Map;
  * Connector to execute regular HTTP request (not REST) calls against the WCS system.
  */
 public class WcStorefrontConnector {
+
+  private static Logger LOG = LoggerFactory.getLogger(WcStorefrontConnector.class);
+
   private HttpClient httpClient;
   private int connectionRequestTimeout = -1;
   private int connectionTimeout = -1;
@@ -42,7 +45,7 @@ public class WcStorefrontConnector {
 
     CookieStore cookieStore = new BasicCookieStore();
     HttpClientContext localContext = buildRequestContext(cookieStore);
-    UriComponents encodedUriComponent = connectorHelper.buildRequestUrl(requestTemplateUri, parameters).encode();
+    UriComponents encodedUriComponent = buildRequestUrl(requestTemplateUri, parameters).encode();
     URI requestUri = encodedUriComponent.toUri();
     HttpResponse response = null;
     HttpGet upgradeRequest = new HttpGet(requestUri);
@@ -114,14 +117,20 @@ public class WcStorefrontConnector {
     return HttpClientContext.adapt(localContext);
   }
 
-  @Required
-  public void setConnectorHelper(ConnectorHelper connectorHelper) {
-    this.connectorHelper = connectorHelper;
+  /**
+   * Build an URIComponent by the given request template uri and it's parameter key/value pair.
+   * All variables in the template uri will be replaced if a given key/value pair exists in the given map.
+   *
+   * @param requestTemplateUri uri with some variables which should be replaced. For example:
+   *                           http://any.host.com/Login?storeid={storeid}
+   * @param parameters map full with key value pairs, where keys must match the variable in template uri. For example:
+   *                   In the example template uri above it must exist an entry in the map with the key "storeid".
+   * @return An UriComponents object which can be used to retrieve an uri. This UriComponents is not encoded yet.
+   */
+  @Nonnull
+  UriComponents buildRequestUrl(@Nonnull String requestTemplateUri, @Nonnull Map<String, String> parameters) {
+    return UriComponentsBuilder.fromUriString(requestTemplateUri).buildAndExpand(parameters);
   }
-
-  private ConnectorHelper connectorHelper;
-
-  private static Logger LOG = LoggerFactory.getLogger(WcStorefrontConnector.class);
 
   @SuppressWarnings("unused")
   public int getConnectionRequestTimeout() {

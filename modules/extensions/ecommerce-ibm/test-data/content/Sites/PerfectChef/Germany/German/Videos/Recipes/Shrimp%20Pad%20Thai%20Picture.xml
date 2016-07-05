@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../United%20States/English/Videos/Recipes/Shrimp%20Pad%20Thai%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Recipes/Shrimp%20Pad%20Thai%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Shrimp Pad Thai</alt>
 <copyright>cooksmarts.com / Vimeo CC-BY-SA 3.0</copyright>
 <dataUrl></dataUrl>
-<data md5="f740943fe515f7993910c1451acd66fd" href="../../../../../../__blob/f740943fe515f7993910c1451acd66fd.blob" mimetype="image/jpeg"/>
+<data md5="f740943fe515f7993910c1451acd66fd" size="55009" href="../../../../../../__blob/f740943fe515f7993910c1451acd66fd.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

@@ -3,7 +3,6 @@ package com.coremedia.livecontext.tree;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.tree.CommerceTreeRelation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -17,7 +16,10 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,9 +31,10 @@ import static org.mockito.Matchers.endsWith;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ExternalChannelContentTreeRelationTest {
+  private static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT_CATEGORY_ID";
 
   @Mock
   private Category testCategory;
@@ -67,16 +70,11 @@ public class ExternalChannelContentTreeRelationTest {
   @Mock
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
+  @InjectMocks
   ExternalChannelContentTreeRelation testling;
 
   @Before
   public void setup() {
-    initMocks(this);
-    testling = new ExternalChannelContentTreeRelation();
-    testling.setAugmentationService(augmentationService);
-    testling.setCommerceTreeRelation(commerceTreeRelation);
-    testling.setSitesService(sitesService);
-    testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
     MockCommerceEnvBuilder.create().setupEnv();
 
     initContentMock();
@@ -125,9 +123,8 @@ public class ExternalChannelContentTreeRelationTest {
   private void initCategoryTreeMock() {
     when(rootCategory.isRoot()).thenReturn(true);
     when(rootCategory.getChildren()).thenReturn(Collections.singletonList(topCategory));
-    when(rootCategory.getReference()).thenReturn(Category.EXTERNAL_ID_ROOT_CATEGORY);
-    when(commerceTreeRelation.getParentOf(rootCategory)).thenReturn(null);
-    when(getCommerceBeanFactory().createBeanFor(endsWith(Category.EXTERNAL_ID_ROOT_CATEGORY), any(StoreContext.class))).thenReturn(rootCategory);
+    when(rootCategory.getReference()).thenReturn(EXTERNAL_ID_ROOT_CATEGORY);
+    when(getCommerceBeanFactory().createBeanFor(endsWith(EXTERNAL_ID_ROOT_CATEGORY), any(StoreContext.class))).thenReturn(rootCategory);
 
     when(topCategory.isRoot()).thenReturn(false);
     when(topCategory.getChildren()).thenReturn(Collections.singletonList(childCategory));
@@ -163,7 +160,7 @@ public class ExternalChannelContentTreeRelationTest {
     when(siteRootChannel.getType()).thenReturn(type);
 
     //catalogRootContent
-    when(catalogRootContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(Category.EXTERNAL_ID_ROOT_CATEGORY);
+    when(catalogRootContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(EXTERNAL_ID_ROOT_CATEGORY);
     when(catalogRootContent.getType()).thenReturn(type);
 
     //childContent

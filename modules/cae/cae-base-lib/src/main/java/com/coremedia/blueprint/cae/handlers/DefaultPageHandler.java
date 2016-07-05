@@ -16,7 +16,6 @@ import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -57,7 +56,7 @@ public class DefaultPageHandler extends PageHandlerBase {
    */
   @Nonnull
   protected ModelAndView handleRequestInternal(@Nullable CMLinkable linkable,
-                                               int segmentId,
+                                               String segmentId,
                                                @Nullable List<String> navigationPath,
                                                @Nonnull String vanity,
                                                @Nullable String view) {
@@ -102,10 +101,9 @@ public class DefaultPageHandler extends PageHandlerBase {
   @Nullable
   protected ModelAndView createModelAndView(@Nullable List<String> navigationPath,
                                             @Nullable String view) {
-    if (CollectionUtils.isEmpty(navigationPath)) {
+    if (navigationPath == null || navigationPath.isEmpty()) {
       return null;
     }
-    @SuppressWarnings("ConstantConditions")
     CMChannel rootChannel = (CMChannel) getNavigation(navigationPath.get(0));
     if (rootChannel == null) {
       return null;

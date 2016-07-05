@@ -1,9 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.ecommerce.ibm.CookieNameValueMatcher;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserSessionServiceImpl;
 import org.apache.http.Header;
 import org.apache.http.cookie.Cookie;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -43,17 +47,8 @@ public class StoreFrontServiceTest {
   }
 
   @Test
-  public void handleStoreFrontCallNoCookies() throws GeneralSecurityException {
-    when(storeFrontResponse.getOriginalResponse().getHeaders("Set-Cookie")).thenReturn(null);
-    StoreFrontResponse response = testling.handleStorefrontCall(STOREFRONT_REQUEST_URL, PARAMETERS, sourceRequest, sourceResponse);
-
-    assertNotNull(response);
-    verifyNoCookiesAtAll();
-  }
-
-  @Test
   public void handleStoreFrontCallEmptyCookies() throws GeneralSecurityException {
-    when(storeFrontResponse.getOriginalResponse().getHeaders("Set-Cookie")).thenReturn(new Header[]{});
+    when(storeFrontResponse.getCookies()).thenReturn(new ArrayList<Cookie>());
     StoreFrontResponse response = testling.handleStorefrontCall(STOREFRONT_REQUEST_URL, PARAMETERS, sourceRequest, sourceResponse);
 
     assertNotNull(response);
@@ -65,16 +60,9 @@ public class StoreFrontServiceTest {
     StoreFrontResponse response = testling.handleStorefrontCall(STOREFRONT_REQUEST_URL, PARAMETERS, sourceRequest, sourceResponse);
 
     assertNotNull(response);
-    verify(sourceResponse).addHeader(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID, GUEST_OR_LOGGEDIN_USER_ID);
-    verify(sourceResponse).addHeader(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + ANONYMOUS_USER_ID, "DEL");
+    verify(sourceResponse).addCookie(argThat(new CookieNameValueMatcher(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME+GUEST_OR_LOGGEDIN_USER_ID,GUEST_OR_LOGGEDIN_USER_ID)));
+    verify(sourceResponse).addCookie(argThat(new CookieNameValueMatcher(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME+ANONYMOUS_USER_ID, "DEL")));
     verify(sourceResponse, never()).setHeader(any(String.class), any(String.class));
-  }
-
-  @Test
-  public void isLoggedInStoreFrontNoCookiesAtAll() {
-    when(storeFrontResponse.getCookies()).thenReturn(null);
-    assertFalse(testling.isKnownUser(storeFrontResponse));
-    verify(storeFrontResponse).getCookies();
   }
 
   @Test
@@ -321,6 +309,7 @@ public class StoreFrontServiceTest {
   }
 
   private void verifyNoCookiesAtAll() {
+    verify(sourceResponse, never()).addCookie(any(javax.servlet.http.Cookie.class));
     verify(sourceResponse, never()).addHeader(any(String.class), any(String.class));
     verify(sourceResponse, never()).setHeader(any(String.class), any(String.class));
   }

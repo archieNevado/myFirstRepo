@@ -30,6 +30,7 @@
   <import resource="classpath:/framework/spring/blueprint-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
+  <import resource="classpath:/com/coremedia/cap/transform/transform-services.xml"/>
   <import resource="blueprint-i18n.xml"/>
   <import resource="blueprint-search.xml"/>
 
@@ -163,8 +164,7 @@
       Handles scaled/transformed images/blobs
     </description>
     <property name="secureHashCodeGeneratorStrategy" ref="secureHashCodeGeneratorStrategy"/>
-    <property name="defaultJpegQuality" value="0.95"/>
-    <property name="blobTransformer" ref="blobTransformer"/>
+    <property name="transformImageService" ref="transformImageService"/>
   </bean>
 
   <bean id="capBlobHandler" class="com.coremedia.blueprint.cae.handlers.CapBlobHandler" parent="handlerBase">
@@ -270,7 +270,7 @@
       <!-- converts request/response bodies from/to XML -->
       <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
       <!-- converts request/response bodies from/to JSON -->
-      <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+      <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
     </list>
   </customize:append>
 
@@ -331,7 +331,7 @@
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).URI_PATTERN_SINGLE}" value="604800"/>
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).URI_PATTERN_SINGLE_CSS_LINK}" value="604800"/>
     <!-- do not cache preview urls and dynamic requests -->
-    <entry key="#{T(com.coremedia.blueprint.base.links.UriConstants.Patterns).DYNAMIC_URI_PATTERN}" value="0"/>
+    <entry key="#{T(com.coremedia.blueprint.links.BlueprintUriConstants.Patterns).DYNAMIC_URI_PATTERN}" value="0"/>
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.PreviewHandler).URI_PATTERN}" value="0"/>
   </util:map>
 

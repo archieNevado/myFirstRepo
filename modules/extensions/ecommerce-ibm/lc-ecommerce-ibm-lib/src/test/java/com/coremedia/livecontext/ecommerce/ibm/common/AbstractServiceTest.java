@@ -11,7 +11,6 @@ import com.coremedia.livecontext.ecommerce.ibm.user.UserContextProviderImpl;
 import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -23,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
-import java.util.Properties;
 
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
 import static com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest.LocalConfig.PROFILE;
@@ -76,20 +74,8 @@ public abstract class AbstractServiceTest {
   @Inject
   protected StoreInfoService storeInfoService;
 
-  /*
-  Set betamax default mode to READ_ONLY if not defined by user
-   */
-  private static final Properties sysProps;
-
-  static {
-    sysProps = System.getProperties();
-    if (StringUtils.isEmpty(sysProps.getProperty("betamax.defaultMode"))) {
-      sysProps.setProperty("betamax.defaultMode", "READ_ONLY");
-    }
-  }
-
   @Rule
-  public Recorder recorder = new Recorder(sysProps);
+  public Recorder recorder = new Recorder(BetamaxTestHelper.updateSystemPropertiesWithBetamaxConfig());
 
   @Before
   public void setup() {
@@ -105,6 +91,7 @@ public abstract class AbstractServiceTest {
     loginService.clearIdentityCache();
 
     commerceCache.setEnabled(false);
+    commerceCache.getCache().clear();
   }
 
   public TestConfig getTestConfig() {

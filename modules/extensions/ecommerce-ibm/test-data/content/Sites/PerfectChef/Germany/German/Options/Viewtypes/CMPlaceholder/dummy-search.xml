@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMPlaceholder/dummy-search.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMPlaceholder/dummy-search"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Search Dummy</description>
 <icon href="dummy-search.icon.png" mimetype="image/png"/>
 <layout>dummy-search</layout>

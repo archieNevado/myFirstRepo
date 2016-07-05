@@ -1,7 +1,6 @@
 package com.coremedia.ecommerce.common;
 
 import com.adobe.xmp.XMPException;
-import com.adobe.xmp.XMPIterator;
 import com.adobe.xmp.XMPMeta;
 import com.adobe.xmp.options.IteratorOptions;
 import com.adobe.xmp.properties.XMPPropertyInfo;
@@ -12,11 +11,14 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.xmp.XmpDirectory;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
+import com.google.common.collect.Iterators;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -164,30 +166,37 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
     if (metadata == null) {
       return Collections.emptyMap();
     }
-    XmpDirectory directory = metadata.getDirectory(XmpDirectory.class);
-    if (directory == null) {
-      return Collections.emptyMap();
-    }
-    XMPMeta meta = directory.getXMPMeta();
-    if (meta == null) {
+    Collection<XmpDirectory> directories = metadata.getDirectoriesOfType(XmpDirectory.class);
+    if (directories == null) {
       return Collections.emptyMap();
     }
     Predicate<XMPPropertyInfo> predicate = getFilterPredicate();
     Function<XMPPropertyInfo, String> convert = getConvertFunction();
-    XMPIterator iterator;
+    Map<String, String> result = new HashMap<>();
+    for (XmpDirectory directory : directories) {
+      Iterator<XMPPropertyInfo> iterator = xmpPropertyIterator(directory);
+      while (iterator.hasNext()) {
+        XMPPropertyInfo next = iterator.next();
+        if (predicate.include(next)) {
+          result.put(next.getPath(), convert.apply(next));
+        }
+      }
+    }
+    return result;
+  }
+
+  private Iterator<XMPPropertyInfo> xmpPropertyIterator(XmpDirectory directory) {
+    XMPMeta meta = directory.getXMPMeta();
+    if (meta == null) {
+      return Collections.emptyIterator();
+    }
+    Iterator<?> iterator;
     try {
       iterator = meta.iterator(schemaNS, propertyName, ITERATOR_OPTIONS);
     } catch (XMPException e) {
       throw new XmpException(e);
     }
-    Map<String, String> result = new HashMap<>();
-    while (iterator.hasNext()) {
-      XMPPropertyInfo next = (XMPPropertyInfo) iterator.next();
-      if (predicate.include(next)) {
-        result.put(next.getPath(), convert.apply(next));
-      }
-    }
-    return result;
+    return Iterators.filter(iterator, XMPPropertyInfo.class);
   }
 
   @Override

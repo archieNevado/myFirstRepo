@@ -28,7 +28,7 @@ base_service_name = 'cae-live'
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('master-live-server')}/ior"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['solr.search.url'] = "#{cm_webapp_url('solr')}/live"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.heapCacheSize'] = 300 * 1024 * 1024
+node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobStreamingSizeThreshold'] = -1
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobStreamingThreads'] = -1
@@ -42,6 +42,7 @@ node.default['blueprint']['webapps'][base_service_name]['application.properties'
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['livecontext.apache.live.production.wcs.host'] = "shop-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.host.helios'] = "helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.host.corporate'] = "corporate.#{node['blueprint']['hostname']}"
+node.default['blueprint']['webapps'][base_service_name]['application.properties']['link.urlPrefixType'] = "live"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.site.mapping.helios'] = "//helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.site.mapping.corporate'] = "//corporate.#{node['blueprint']['hostname']}"
 # by default disable periodic sitemap generation.

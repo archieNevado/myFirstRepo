@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Events/Chef%20Corp%20at%20IBM%20Experience%20One%20Amplify%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Events/Chef%20Corp%20at%20IBM%20Experience%20One%20Amplify%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1632</width>
 <height>1224</height>
-<data md5="36f284f2dc93b0bbee0484c5b0023d8b" href="../../../../../../../__blob/36f284f2dc93b0bbee0484c5b0023d8b.blob" mimetype="image/jpeg"/>
+<data md5="36f284f2dc93b0bbee0484c5b0023d8b" size="285179" href="../../../../../../../__blob/36f284f2dc93b0bbee0484c5b0023d8b.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

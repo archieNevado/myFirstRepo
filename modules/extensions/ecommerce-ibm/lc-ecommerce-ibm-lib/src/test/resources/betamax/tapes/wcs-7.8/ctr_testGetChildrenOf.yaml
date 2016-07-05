@@ -1,0 +1,121 @@
+!tape
+name: ctr_testGetChildrenOf
+interactions:
+- recorded: 2016-05-23T14:46:30.563Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 14:46:30 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00001rk5n2OQUR92GF2K7DtdybJ:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2016-05-23T14:46:30.684Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 14:46:30 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00001qG9T1C4DaQirwy-5_gScX1:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2016-05-23T14:46:30.814Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/@top?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 14:46:30 GMT
+      Expires: Mon, 23 May 2016 15:46:30 GMT
+      Set-Cookie: JSESSIONID=0000jNakLPYBQ9VH4OV-kf2LkyP:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"10","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/@top?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"longDescription":"Find
+      everything to make your table special and unforgettable.","shortDescription":"On The Table","metaKeyword":"on the table, tableware","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10201","identifier":"PC_OnTheTable","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10201","name":"On
+      The Table","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","uniqueID":"10201","xcatgroup_seoSegment":"pc-on-the-table","metaDescription":"On
+      The Table","title":"On The Table | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-on-the-table","fullImageAltDescription":"Image for On The Table from AuroraESite"},{"longDescription":"Find the best kitchen tools and gadgets to prepare special meals.","shortDescription":"In
+      The Kitchen","metaKeyword":"in the kitchen, cooking","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10202","identifier":"PC_InTheKitchen","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10202","name":"In
+      The Kitchen","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_InTheKitchen.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_InTheKitchen.jpg","uniqueID":"10202","xcatgroup_seoSegment":"pc-in-the-kitchen","metaDescription":"In
+      The Kitchen","title":"In The Kitchen | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-in-the-kitchen","fullImageAltDescription":"Image for In The Kitchen from AuroraESite"},{"longDescription":"From fashionwear to cooking magazines - everything a perfect
+      chef needs","shortDescription":"For The Cook","metaKeyword":"for the cook, him, her","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10203","identifier":"PC_ForTheCook","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10203","name":"For
+      The Cook","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ForTheCook.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_ForTheCook.jpg","uniqueID":"10203","xcatgroup_seoSegment":"pc-for-the-cook","metaDescription":"For
+      The Cook","title":"For The Cook | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-for-the-cook","fullImageAltDescription":"Image for For The Cook from AuroraESite"},{"longDescription":"Explore exotic tastes by sampling our selection of exciting ingredients.","shortDescription":"Deli","metaKeyword":"deli,
+      groceries","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10204","identifier":"PC_Deli","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10204","name":"Deli","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Deli.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Deli.jpg","uniqueID":"10204","xcatgroup_seoSegment":"pc-deli","metaDescription":"Deli","title":"Deli
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-deli","fullImageAltDescription":"Image for Deli from AuroraESite"},{"shortDescription":"The latest styles for the entire family.","metaKeyword":"family apparel, cloths, shirt, pants, tops, bottoms, dresses,
+      dress","identifier":"Apparel","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10101","name":"Apparel","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","uniqueID":"10101","xcatgroup_seoSegment":"apparel","metaDescription":"The
+      latest styles for the entire family.","title":"Apparel | AuroraESite","xcatgroup_cmSeoSegment":"10101_apparel","fullImageAltDescription":"Image for Apparel from AuroraESite"},{"shortDescription":"Electronics","metaKeyword":"Electronics","identifier":"Electronics","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10127","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10127","name":"Electronics","thumbnail":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","fullImage":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","uniqueID":"10127","xcatgroup_seoSegment":"electronics","metaDescription":"Electronics","title":"Electronics
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_electronics","fullImageAltDescription":"Image for Electronics from AuroraESite"},{"shortDescription":"Grocery","metaKeyword":"Grocery","identifier":"Grocery","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10133","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10133","name":"Grocery","thumbnail":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","fullImage":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","uniqueID":"10133","xcatgroup_seoSegment":"grocery","metaDescription":"Grocery","title":"Grocery
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_grocery","fullImageAltDescription":"Image for Grocery from AuroraESite"},{"shortDescription":"Health","metaKeyword":"Health","identifier":"Health","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10138","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10138","name":"Health","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png","uniqueID":"10138","xcatgroup_seoSegment":"health","metaDescription":"Health","title":"Health
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_health","fullImageAltDescription":"Image for Health from AuroraESite"},{"shortDescription":"Home & Furnishing","metaKeyword":"Home & Furnishing","identifier":"Home Furnishings","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10141","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10141","name":"Home
+      & Furnishing","thumbnail":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","fullImage":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","uniqueID":"10141","xcatgroup_seoSegment":"home---furnishing","metaDescription":"Home
+      & Furnishing","title":"Home & Furnishing | AuroraESite","xcatgroup_cmSeoSegment":"10101_home---furnishing","fullImageAltDescription":"Image for Home & Furnishing from AuroraESite"},{"shortDescription":"Newsletters & Magazines","metaKeyword":"Newsletters
+      & Magazines","identifier":"NewslettersAndMagazines","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10148","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10148","name":"Newsletters
+      & Magazines","thumbnail":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","fullImage":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","uniqueID":"10148","xcatgroup_seoSegment":"newsletters---magazines","metaDescription":"Newsletters
+      & Magazines","title":"Newsletters & Magazines | AuroraESite","xcatgroup_cmSeoSegment":"10101_newsletters---magazines","fullImageAltDescription":"Image for Newsletters & Magazines from AuroraESite"}],"recordSetCount":"10","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-23T14:46:30.894Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byParentCategory/10201?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 14:46:30 GMT
+      Expires: Mon, 23 May 2016 15:46:30 GMT
+      Set-Cookie: JSESSIONID=0000gaOxuW6ExPZjE6kt7PQcUaP:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"5","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byParentCategory\/10201?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Glasses","xcatgroup_seoSegment":"pc-glasses;pc-glasses-pcesite","identifier":"PC_Glasses","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10205","name":"Glasses","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10205","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Glasses.jpg","uniqueID":"10205","xcatgroup_cmSeoSegment":"10101_pc-glasses;10302_pc-glasses-pcesite"},{"shortDescription":"Cutlery","xcatgroup_seoSegment":"pc-cutlery","identifier":"PC_Cutlery","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10206","name":"Cutlery","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10206","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Cutlery.jpg","uniqueID":"10206","xcatgroup_cmSeoSegment":"10101_pc-cutlery"},{"shortDescription":"Plates
+      and Tableware","xcatgroup_seoSegment":"pc-tableware","identifier":"PC_Tableware","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10207","name":"Tableware","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10207","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Tableware.jpg","uniqueID":"10207","xcatgroup_cmSeoSegment":"10101_pc-tableware"},{"shortDescription":"Decoration
+      and Trinkets","xcatgroup_seoSegment":"pc-decoration","identifier":"PC_Decoration","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10208","name":"Decoration","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10208","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Decoration.jpg","uniqueID":"10208","xcatgroup_cmSeoSegment":"10101_pc-decoration"},{"shortDescription":"Outdoor
+      Dining","xcatgroup_seoSegment":"pc-outdoor-dining","identifier":"PC_Outdoor","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10209","name":"Outdoor Dining","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10209","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Outdoor.jpg","uniqueID":"10209","xcatgroup_cmSeoSegment":"10101_pc-outdoor-dining"}],"recordSetCount":"5","MetaData":[{"metaKey":"price","metaData":"1"}]}'

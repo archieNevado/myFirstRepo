@@ -7,7 +7,7 @@
 <#assign target=cm.localParameters().openInTab!true?then(' target="_blank"', "") />
 
 <#if self.data?has_content>
-  <a class="${cssClasses}" href="${cm.getLink(self.data)}"${target} title="${self.teaserTitle!''}"<@cm.metadata data=[self.content, "properties.teaserTitle"] />>
+  <a class="${cssClasses}" href="${cm.getLink(self.data)}"<@cm.unescape target/> title="${self.teaserTitle!''}"<@cm.metadata data=[self.content, "properties.teaserTitle"] />>
     ${self.teaserTitle!""}
     <@cm.include self=self view="infos" />
   </a>

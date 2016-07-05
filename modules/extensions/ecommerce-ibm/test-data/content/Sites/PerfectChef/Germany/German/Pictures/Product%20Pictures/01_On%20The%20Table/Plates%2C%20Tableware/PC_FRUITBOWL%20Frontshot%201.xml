@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Plates, Tableware" name="PC_FRUITBOWL Frontshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Plates, Tableware" name="PC_FRUITBOWL Frontshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Plates%2C%20Tableware/PC_FRUITBO86be9703.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Plates%2C%20Tableware/PC_FRUITBOWL%20Frontshot%201"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Obstschale</alt>
 <copyright>Valentyn Volkov / Shutterstock 77293585</copyright>
 <dataUrl></dataUrl>
-<data md5="bdf1b149ad148cff5ab1b4a5694111e7" href="../../../../../../../../__blob/bdf1b149ad148cff5ab1b4a5694111e7.blob" mimetype="image/jpeg"/>
+<data md5="bdf1b149ad148cff5ab1b4a5694111e7" size="567826" href="../../../../../../../../__blob/bdf1b149ad148cff5ab1b4a5694111e7.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

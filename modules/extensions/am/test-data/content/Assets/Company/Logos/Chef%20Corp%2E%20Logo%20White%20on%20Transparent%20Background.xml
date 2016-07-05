@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Logos" name="Chef Corp. Logo White on Transparent Background" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="5236c610fc9d44c3677cd5de16c80f73" href="../../../__blob/5236c610fc9d44c3677cd5de16c80f73.blob" mimetype="image/svg+xml"/>
-<thumbnail md5="08ff1a929c2583c3301cafc36b77e6a0" href="../../../__blob/08ff1a929c2583c3301cafc36b77e6a0.blob" mimetype="image/png"/>
+<original md5="5236c610fc9d44c3677cd5de16c80f73" size="1530" href="../../../__blob/5236c610fc9d44c3677cd5de16c80f73.blob" mimetype="image/svg+xml"/>
+<thumbnail md5="08ff1a929c2583c3301cafc36b77e6a0" size="6788" href="../../../__blob/08ff1a929c2583c3301cafc36b77e6a0.blob" mimetype="image/png"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -78,6 +78,6 @@
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Press.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Press"/>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Logos.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Logos"/>
 </assetTaxonomy>
-<web md5="e0bb37f0299415d16cac0f7db12dd6af" href="../../../__blob/e0bb37f0299415d16cac0f7db12dd6af.blob" mimetype="image/png"/>
-<print md5="290c6dc9fd2389ae2d4a3ea2ea4a9413" href="../../../__blob/290c6dc9fd2389ae2d4a3ea2ea4a9413.blob" mimetype="image/png"/>
+<web md5="e0bb37f0299415d16cac0f7db12dd6af" size="4553" href="../../../__blob/e0bb37f0299415d16cac0f7db12dd6af.blob" mimetype="image/png"/>
+<print md5="290c6dc9fd2389ae2d4a3ea2ea4a9413" size="20613" href="../../../__blob/290c6dc9fd2389ae2d4a3ea2ea4a9413.blob" mimetype="image/png"/>
 </AMPictureAsset>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Elegant/Spring/For Her" name="PC_RED_SUIT Actionshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Elegant/Spring/For Her" name="PC_RED_SUIT Actionshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Elegant/Springde8f973d.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Elegant/Spring/For%20Her/PC_RED_SUIT%20Actionshot%201"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -110,7 +109,7 @@
 <alt>Red Suit</alt>
 <copyright>Alexander Bild / Shutterstock 167023247</copyright>
 <dataUrl></dataUrl>
-<data md5="450e6434f9364fd945a78e78cac8f80d" href="../../../../../../../../../../__blob/450e6434f9364fd945a78e78cac8f80d.blob" mimetype="image/jpeg"/>
+<data md5="450e6434f9364fd945a78e78cac8f80d" size="1205281" href="../../../../../../../../../../__blob/450e6434f9364fd945a78e78cac8f80d.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

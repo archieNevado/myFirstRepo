@@ -294,19 +294,15 @@ public class DemoDataGenerator implements Runnable {
         user = userGenerator.getRandomUser();
       }
 
-      if (user != null) {
-        boolean hasAttachments = attachmentOnReviewRate > 0 && count % attachmentOnReviewRate == 0;
-        boolean hasComplaints = reviewComplaintRate > 0 && count % reviewComplaintRate == 0;
+      boolean hasAttachments = attachmentOnReviewRate > 0 && count % attachmentOnReviewRate == 0;
+      boolean hasComplaints = reviewComplaintRate > 0 && count % reviewComplaintRate == 0;
 
-        Review review = reviewGenerator.createReview(reviewGenerator.getModerationType(target), user, userName, target,
-                getCategories(target), hasAttachments);
+      Review review = reviewGenerator.createReview(reviewGenerator.getModerationType(target), user, userName, target,
+              getCategories(target), hasAttachments);
 
-        // complaints
-        if (hasComplaints) {
-          reviewGenerator.complainOnComment(target, review, anonymous);
-        }
-      } else {
-        LOG.info("Could not find/create an user, so creation of a review was skipped");
+      // complaints
+      if (hasComplaints) {
+        reviewGenerator.complainOnComment(target, review, anonymous);
       }
     } else {
       LOG.info("Could not find a target for anonymous={}, so creation of a review was skipped", anonymous);

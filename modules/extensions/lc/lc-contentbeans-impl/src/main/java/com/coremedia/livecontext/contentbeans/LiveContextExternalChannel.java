@@ -1,14 +1,15 @@
 package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.util.CatalogRootHelper;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridService;
 import com.coremedia.blueprint.common.navigation.Linkable;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +38,20 @@ public class LiveContextExternalChannel extends CMExternalChannelBase implements
 
   @Override
   public Category getCategory() {
-    StoreContext storeContext = getStoreContextProvider().findContextByContent(this.getContent());
-    Category category = getCatalogService().withStoreContext(storeContext).findCategoryById(
-            getCurrentCommerceIdProvider().formatCategoryId(getExternalId()));
-    if (category == null) {
-      LOG.debug("Content #{}: No category found for externalId:{} - maybe the category only exists in a Workspace?",
-              getContent().getId(), getExternalId());
+    Content content = this.getContent();
+    String externalId = getExternalId();
+    StoreContextProvider storeContextProvider = getStoreContextProvider();
+    if(null != storeContextProvider) {
+      StoreContext storeContext = storeContextProvider.findContextByContent(content);
+      Category category = getCatalogService().withStoreContext(storeContext).findCategoryById(
+              getCurrentCommerceIdProvider().formatCategoryId(externalId));
+      if (category == null) {
+        LOG.debug("Content #{}: No category found for externalId:{} - maybe the category only exists in a Workspace?",
+                content, externalId);
+      }
+      return category;
     }
-    return category;
+    return null;
   }
 
   @Nonnull
@@ -68,7 +76,8 @@ public class LiveContextExternalChannel extends CMExternalChannelBase implements
   @Override
   protected List<Linkable> getExternalChildren(Site site) {
     if (isCommerceChildrenSelected()) {
-      StoreContext storeContext = getStoreContextProvider().findContextBySite(site);
+      StoreContextProvider storeContextProvider = getStoreContextProvider();
+      StoreContext storeContext = null != storeContextProvider ? storeContextProvider.findContextBySite(site) : null;
       if (storeContext != null) {
         CatalogService catalogService = getCatalogService().withStoreContext(storeContext);
         List<Category> subCategories = new ArrayList<>();
@@ -90,12 +99,15 @@ public class LiveContextExternalChannel extends CMExternalChannelBase implements
     return new ArrayList<>(treeRelation.getChildrenOf(this));
   }
 
+  @Nullable
   private StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
+    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    return null != currentConnection ? currentConnection.getStoreContextProvider() : null;
   }
 
   public boolean isCatalogRoot() {
-    return CatalogRootHelper.isCatalogRoot(getContent());
+    Category category = getCategory();
+    return null != category && category.isRoot();
   }
 
   public PageGrid getPdpPagegrid() {
@@ -112,4 +124,11 @@ public class LiveContextExternalChannel extends CMExternalChannelBase implements
     this.pdpPageGridService = pdpPageGridService;
   }
 
+  @Override
+  public String toString() {
+    return "LiveContextExternalChannel{" +
+            "content=" + getContent().getPath() +
+            ", externalId=" + getExternalId() +
+            '}';
+  }
 }

@@ -16,6 +16,7 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
+import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ui.data.Blob;
 
 public class AMStudioPluginBase extends StudioPlugin {
@@ -33,7 +34,7 @@ public class AMStudioPluginBase extends StudioPlugin {
   override public function init(editorContext:IEditorContext):void {
     super.init(editorContext);
 
-    editorContext.registerThumbnailUriRenderer(AssetConstants.DOCTYPE_ASSET, renderAMAsset);
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(AssetConstants.DOCTYPE_ASSET, AssetConstants.PROPERTY_ASSET_THUMBNAIL));
 
     editorContext.registerContentInitializer(AssetConstants.DOCTYPE_PICTURE_ASSET, initAMPictureAsset);
     editorContext.registerContentInitializer(AssetConstants.DOCTYPE_VIDEO_ASSET, initAMVideoAsset);
@@ -80,21 +81,6 @@ public class AMStudioPluginBase extends StudioPlugin {
     if (array.indexOf(item) === -1) {
       array.push(item);
     }
-  }
-
-  private static function renderAMAsset(content:Content):String {
-    var properties:ContentProperties = content.getProperties();
-    if (!properties) {
-      return undefined;
-    }
-    var blob:Blob = properties.get(AssetConstants.PROPERTY_ASSET_THUMBNAIL);
-    if (blob === undefined) {
-      return undefined;
-    }
-    if (blob === null) {
-      return null;
-    }
-    return blob.getUri();
   }
 
   private static function initAMAsset(content:Content):void {

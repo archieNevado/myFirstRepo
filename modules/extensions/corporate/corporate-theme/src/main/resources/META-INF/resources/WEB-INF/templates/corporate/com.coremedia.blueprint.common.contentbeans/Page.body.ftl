@@ -12,12 +12,10 @@
 <body id="top" class="cm-grid ${(self.pageGrid.cssClassName)!""} ${gridModifier} container-fluid"<@cm.metadata data=sliderMetadata />>
 
 <#-- skiplinks -->
-<div class="cm-skiplinks sr-only sr-only-focusable">
-  <ul>
-    <li><a href="#cm-navigation"><@bp.message "Skiplinks_Navigation" /></a></li>
-    <li><a href="#cm-main"><@bp.message "Skiplinks_Content" /></a></li>
-    <li><a href="#cm-search"><@bp.message "Skiplinks_Search" /></a></li>
-  </ul>
+<div class="cm-skiplinks">
+<a class="sr-only sr-only-focusable" href="#cm-navigation"><@bp.message "Skiplinks_Navigation" /></a>
+<a class="sr-only sr-only-focusable" href="#cm-main"><@bp.message "Skiplinks_Content" /></a>
+<a class="sr-only sr-only-focusable" href="#cm-search"><@bp.message "Skiplinks_Search" /></a>
 </div>
 
 <#-- render page grid with content -->

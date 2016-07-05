@@ -71,27 +71,46 @@
       </build>
     </profile>
   </profiles>
+
   <build>
     <plugins>
+      <!-- Copy Content to target folder -->
       <plugin>
-        <!--create a dummy dir if skipThemes is set so that we allways have an assembled zip file, even if its empty-->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
-            <id>create-dummmy-dir</id>
+            <id>es-copy-content-resources</id>
+            <phase>package</phase>
             <goals>
-              <goal>run</goal>
+              <goal>copy-resources</goal>
             </goals>
-            <phase>compile</phase>
             <configuration>
-              <target>
-                <mkdir dir="${project.build.directory}/content"/>
-              </target>
+              <outputDirectory>${basedir}/target/content</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>content</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>es-copy-users-resources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/users</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>users</directory>
+                </resource>
+              </resources>
             </configuration>
           </execution>
         </executions>
       </plugin>
+
       <!-- Build testdata zip-->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>

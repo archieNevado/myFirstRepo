@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.externalpreview;
 
+import com.coremedia.blueprint.links.BlueprintUriConstants;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -14,8 +15,6 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
-
 /**
  * Accepts Studio requests to update the data to preview for a specific user, identified by a token.
  * Invalidates outdated preview data automatically.
@@ -24,7 +23,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SE
 public class ExternalPreviewHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternalPreviewHandler.class);
 
-  private static final String URI_PATTERN = "/" + PREFIX_SERVICE + "/externalpreview";
+  private static final String URI_PATTERN = "/" + BlueprintUriConstants.Prefixes.PREFIX_SERVICE + "/externalpreview";
 
   //the max length for data
   private static final int MAX_DATA_LENGTH = 4048;

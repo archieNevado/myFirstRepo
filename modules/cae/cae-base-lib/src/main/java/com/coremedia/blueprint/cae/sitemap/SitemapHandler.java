@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 
 @RequestMapping
 public class SitemapHandler {

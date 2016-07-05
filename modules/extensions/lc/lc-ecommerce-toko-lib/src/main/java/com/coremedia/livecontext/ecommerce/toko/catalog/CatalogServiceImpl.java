@@ -7,7 +7,9 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.toko.common.AbstractTokoCommerceBean;
 import com.coremedia.livecontext.ecommerce.toko.common.CommerceIdHelper;
@@ -29,9 +31,12 @@ import java.util.Map;
 public class CatalogServiceImpl implements CatalogService{
 
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
+  private static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT";
 
   private CommerceBeanFactory commerceBeanFactory;
   private TokoCatalogMock tokoCatalogMock;
+  private CommerceIdProvider commerceIdProvider;
+  private StoreContextProvider storeContextProvider;
 
   @Nullable
   @Override
@@ -58,6 +63,13 @@ public class CatalogServiceImpl implements CatalogService{
   public List<Product> findProductsByCategory(@Nonnull Category category) throws CommerceException {
     List<JsonNode> delegates = tokoCatalogMock.getProductsByCategoryId(category.getExternalId());
     return createCommerceBeansFor(delegates, Product.class);
+  }
+
+  @Nonnull
+  @Override
+  public Category findRootCategory() throws CommerceException {
+    String rootCategoryId = commerceIdProvider.formatCategoryId(EXTERNAL_ID_ROOT_CATEGORY);
+    return (Category) getCommerceBeanFactory().createBeanFor(rootCategoryId, storeContextProvider.getCurrentContext());
   }
 
   @Nonnull
@@ -128,6 +140,16 @@ public class CatalogServiceImpl implements CatalogService{
   @Required
   public void setTokoCatalogMock(TokoCatalogMock tokoCatalogMock) {
     this.tokoCatalogMock = tokoCatalogMock;
+  }
+
+  @Required
+  public void setCommerceIdProvider(CommerceIdProvider commerceIdProvider) {
+    this.commerceIdProvider = commerceIdProvider;
+  }
+
+  @Required
+  public void setStoreContextProvider(StoreContextProvider storeContextProvider) {
+    this.storeContextProvider = storeContextProvider;
   }
 
   @SuppressWarnings("unchecked")

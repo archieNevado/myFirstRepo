@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Personalization/Profiles/Matt%20Weller%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Options/Personalization/Profiles/Matt%20Weller%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2045</width>
 <height>2048</height>
-<data md5="09cec3cd2c40f3e8ee483dfe4000ea67" href="../../../../../../../__blob/09cec3cd2c40f3e8ee483dfe4000ea67.blob" mimetype="image/jpeg"/>
+<data md5="09cec3cd2c40f3e8ee483dfe4000ea67" size="570369" href="../../../../../../../__blob/09cec3cd2c40f3e8ee483dfe4000ea67.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

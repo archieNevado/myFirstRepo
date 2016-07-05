@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Recipes" name="Breaded Chicken Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Recipes" name="Breaded Chicken Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Videos/Recipes/Breaded%20Chicken%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Recipes/Breaded%20Chicken%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Paniertes Hähnchen</alt>
 <copyright>cooksmarts.com / Vimeo CC-BY-SA 3.0</copyright>
 <dataUrl></dataUrl>
-<data md5="819fc0d81243b24852064358efa68a39" href="../../../../../../__blob/819fc0d81243b24852064358efa68a39.blob" mimetype="image/jpeg"/>
+<data md5="819fc0d81243b24852064358efa68a39" size="131139" href="../../../../../../__blob/819fc0d81243b24852064358efa68a39.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

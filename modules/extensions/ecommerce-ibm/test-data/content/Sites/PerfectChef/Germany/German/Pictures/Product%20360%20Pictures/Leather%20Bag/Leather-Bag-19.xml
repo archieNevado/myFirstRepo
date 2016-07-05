@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20360%20Pictures/Leather%20Bag/Leather-Bag-19.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20360%20Pictures/Leather%20Bag/Leather-Bag-19"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -49,7 +48,7 @@
 <dataUrl></dataUrl>
 <width>2800</width>
 <height>2000</height>
-<data md5="20dae9084a05aaaf00065e8aa8cac399" href="../../../../../../../__blob/20dae9084a05aaaf00065e8aa8cac399.blob" mimetype="image/jpeg"/>
+<data md5="20dae9084a05aaaf00065e8aa8cac399" size="144728" href="../../../../../../../__blob/20dae9084a05aaaf00065e8aa8cac399.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

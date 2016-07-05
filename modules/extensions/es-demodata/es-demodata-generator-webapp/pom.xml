@@ -14,7 +14,7 @@
   <description>Creates Users and Comments for one Tenant on Startup.</description>
 
   <properties>
-    <finalName>es-demodata-generator-webapp</finalName>
+    <development-properties.dir>${project.basedir}/../../../../workspace-configuration/development-properties/default</development-properties.dir>
   </properties>
 
   <dependencies>
@@ -74,7 +74,7 @@
   </dependencies>
 
   <build>
-    <finalName>${finalName}</finalName>
+    <finalName>demodata-generator</finalName>
     <plugins>
       <!--
          invoke "mvn tomcat7:run" for running this webapp locally using a tomcat
@@ -84,26 +84,14 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
           <path>/${project.build.finalName}</path>
-          <port>40088</port>
+          <port>43080</port>
           <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
           <systemProperties>
-            <repository.url>http://${cms.host}:${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}/coremedia/ior</repository.url>
-            <solr.search.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr/preview</solr.search.url>
-            <mongoDb.clientURI>mongodb://${mongo.db.host}:27017</mongoDb.clientURI>
-            <elastic.solr.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr</elastic.solr.url>
-            <!--
-               Sets a JMX remote url so that the webapp can be accessed via JMX when running with tomcat plugin.
-               When running this application in a standalone tomcat, then the tomcat's built-in remote connector server
-               can be used instead.
-            -->
-            <management.server.remote.url>service:jmx:rmi:///jndi/rmi://localhost:40583/esddgen</management.server.remote.url>
-            <!--
-               Storing logs below target so that they will be cleaned on "mvn clean", too
-            -->
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-            <tenant.default>${tenant.default}</tenant.default>
-            <cae.developer.mode>${cae.developer.mode}</cae.developer.mode>
+            <propertieslocations>classpath:/demodata-generator.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>

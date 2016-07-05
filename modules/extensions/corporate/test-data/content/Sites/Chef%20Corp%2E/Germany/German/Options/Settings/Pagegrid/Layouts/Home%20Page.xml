@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Options/Settings/Pagegrid/Layouts/Home%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Layouts/Home%20Page"/>
 </master>
-<masterVersion>1</masterVersion>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <IntProperty Name="colCount">12</IntProperty>

@@ -42,23 +42,28 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
   @Override
   public String getReportUrlFor(Content content) {
     if(content.getType().isSubtypeOf("CMLinkable")) {
-      try {
-        UriComponentsBuilder uriComponentsBuilder = pageHandler.buildLinkForLinkable(content);
+      final Content navigation = contextStrategy.findAndSelectContextFor(content, null);
+      if(null != navigation) {
+        UriComponentsBuilder uriComponentsBuilder = pageHandler.buildLinkForPage(content, navigation);
 
-        if (absolute()) {
-          liveCaeSettings.fillIn(uriComponentsBuilder);
+        if (null != uriComponentsBuilder) {
+          if (absolute()) {
+            liveCaeSettings.fillIn(uriComponentsBuilder);
+          }
+
+          final String linkToSelf = uriComponentsBuilder.build().toUriString();
+          final String reportURL = buildReportUrl(content, navigation, linkToSelf);
+
+          LOG.info("report URL for content {} and provider {} is: {}", content, getServiceKey(), reportURL);
+          return reportURL;
+        } else {
+          LOG.info("cannot generate report URL for content {} with navigation {}", content, navigation);
         }
-
-        final String linkToSelf = uriComponentsBuilder.build().toUriString();
-        final String reportURL = buildReportUrl(content, linkToSelf);
-
-        LOG.info("report URL for content {} and provider {} is: {}", content, getServiceKey(), reportURL);
-        return reportURL;
-      } catch (Exception e) { // NOSONAR; Fail-Safe approach, create no URL on error
-        LOG.warn("Failure creating report URL for content {} of type {}. Report URL won't be created.", content, content.getType().getName(), e);
+      } else {
+        LOG.info("cannot generate report URL for content {}: unable to find navigation context", content);
       }
     } else {
-      LOG.info("cannot generate report URL for non-linkable content {} of type {}", content, content.getType().getName());
+      LOG.debug("cannot generate report URL for non-linkable content {} of type {}", content, content.getType().getName());
     }
     return null;
   }
@@ -78,9 +83,8 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
     return defaultResult;
   }
 
-  private String buildReportUrl(Content content, String linkToSelf) {
+  private String buildReportUrl(Content content, Content navigation, String linkToSelf) {
     final String serviceKey = getServiceKey();
-    final Content navigation = contextStrategy.findAndSelectContextFor(content, null);
     final Map<String, Object> settings = settingsService.mergedSettingAsMap(serviceKey, String.class, Object.class, content, navigation);
     if (!settings.isEmpty()) {
       String reportURL = buildReportUrl(settings, linkToSelf);
@@ -94,7 +98,7 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
     return null;
   }
 
-  protected Map<String, Object> hideSensitiveData(Map<String, Object> settings) {
+  private Map<String, Object> hideSensitiveData(Map<String, Object> settings) {
     return Maps.transformEntries(settings, new Maps.EntryTransformer<String, Object, Object>() {
       @Override
       public Object transformEntry(String key, Object value) {

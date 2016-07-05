@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Management Board" name="Jack Beneke (CFO) Portrait" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="b597949872c0a634fded00e9f5062e0e" href="../../../__blob/b597949872c0a634fded00e9f5062e0e.blob" mimetype="image/tiff"/>
-<thumbnail md5="fc6122fb1869306de573997557f9662e" href="../../../__blob/fc6122fb1869306de573997557f9662e.blob" mimetype="image/jpeg"/>
+<original md5="b597949872c0a634fded00e9f5062e0e" size="218768" href="../../../__blob/b597949872c0a634fded00e9f5062e0e.blob" mimetype="image/tiff"/>
+<thumbnail md5="fc6122fb1869306de573997557f9662e" size="13487" href="../../../__blob/fc6122fb1869306de573997557f9662e.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -61,5 +61,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Portraits.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Portraits"/>
 </assetTaxonomy>
-<web md5="fbe33fa811b821460ff63e0cbebb8bca" href="../../../__blob/fbe33fa811b821460ff63e0cbebb8bca.blob" mimetype="image/jpeg"/>
+<web md5="fbe33fa811b821460ff63e0cbebb8bca" size="444822" href="../../../__blob/fbe33fa811b821460ff63e0cbebb8bca.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

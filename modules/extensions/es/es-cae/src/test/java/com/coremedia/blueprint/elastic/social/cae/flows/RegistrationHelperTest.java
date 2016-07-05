@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
 import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialPlugin;
@@ -27,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
+import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
@@ -35,6 +37,7 @@ import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.DefaultMessageResolver;
 import org.springframework.binding.message.MessageResolver;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.web.ProviderSignInAttempt;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -177,6 +180,9 @@ public class RegistrationHelperTest {
 
   @Mock
   private Enumeration<String> headerNames;
+  
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private SpringSocialConfiguration springSocialConfiguration;
 
   @SuppressWarnings("unchecked")
   @Before
@@ -218,7 +224,7 @@ public class RegistrationHelperTest {
     when(entity.getContentType()).thenReturn(contentType);
     when(contentType.getValue()).thenReturn(CONTENT_TYPE);
 
-    when(providerSignInAttempt.getConnection()).thenReturn(connection);
+    when(providerSignInAttempt.getConnection(any(ConnectionFactoryLocator.class))).thenReturn(connection);
     when(httpSession.getAttribute(ProviderSignInAttempt.class.getName())).thenReturn(providerSignInAttempt);
 
     when(registrationService.getUserByToken(any(String.class))).thenReturn(communityUser);
@@ -501,7 +507,7 @@ public class RegistrationHelperTest {
 
   @Test
   public void preProcessConnectionNull() {
-    when(providerSignInAttempt.getConnection()).thenReturn(null);
+    when(providerSignInAttempt.getConnection(any(ConnectionFactoryLocator.class))).thenReturn(null);
 
     registrationHelper.preProcess(initRegistration(), requestContext);
     verify(communityUserService, never()).getUserByEmail(EMAIL);

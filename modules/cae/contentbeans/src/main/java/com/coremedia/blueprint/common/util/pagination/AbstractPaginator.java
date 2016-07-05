@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.common.util.pagination;
 
 import com.coremedia.xml.Markup;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 abstract class AbstractPaginator implements Paginator {
-  private static final Log LOG = LogFactory.getLog(AbstractPaginator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractPaginator.class);
 
   protected ThreadLocal<XMLInputFactory> xmlInputFactory = new ThreadLocal<XMLInputFactory>() {
     @Override

@@ -1,7 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 
@@ -25,22 +24,17 @@ public class WorkspaceResource extends AbstractCatalogResource<Workspace> {
   }
 
   private void fillRepresentation(WorkspaceRepresentation representation) {
-    try {
-      Workspace entity = getEntity();
+    Workspace entity = getEntity();
 
-      if (entity == null) {
-        LOG.error("Error loading workspace bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load workspace bean");
-      }
-
-      representation.setId(entity.getId());
-      representation.setName(entity.getName());
-      representation.setExternalId(entity.getExternalId());
-      representation.setExternalTechId(entity.getExternalTechId());
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    if (entity == null) {
+      LOG.warn("Error loading workspace bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load workspace bean");
     }
+
+    representation.setId(entity.getId());
+    representation.setName(entity.getName());
+    representation.setExternalId(entity.getExternalId());
+    representation.setExternalTechId(entity.getExternalTechId());
   }
 
   @Override

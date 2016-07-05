@@ -20,10 +20,11 @@
                                             hideLabel="true"
                                             visiblePropertyName="metadata.renditions.web.show"/>
           <spacer height="20px"/>
-          <editor:imageReferrerListPanel propertyName="asset"
-                                         contentType="CMPicture"
-                                         title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_web_referrers_label}"
-                                         displayToolbarWhenEmpty="{true}">
+          <editor:referrerListPanel propertyName="asset"
+                                    showThumbnail="true"
+                                    contentType="CMPicture"
+                                    title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_web_referrers_label}"
+                                    displayToolbarWhenEmpty="{true}">
             <plugins mode="append">
               <ui:nestedRulesPlugin>
                 <ui:rules>
@@ -45,7 +46,7 @@
                 </ui:rules>
               </ui:nestedRulesPlugin>
             </plugins>
-          </editor:imageReferrerListPanel>
+          </editor:referrerListPanel>
         </items>
       </editor:collapsibleFormPanel>
       <editor:collapsibleFormPanel itemId="print"

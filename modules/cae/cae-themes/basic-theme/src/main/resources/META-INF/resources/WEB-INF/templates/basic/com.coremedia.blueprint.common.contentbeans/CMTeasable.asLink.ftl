@@ -9,4 +9,4 @@
 <#assign link=cm.localParameters().link!cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=cm.localParameters().openInTab!false?then(' target="_blank"', "") />
 
-<a class="${cssClass}" href="${link}" ${target} ${attr} <@cm.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>
+<a class="${cssClass}" href="${link}" <@cm.unescape target/> <@cm.unescape attr /> <@cm.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>

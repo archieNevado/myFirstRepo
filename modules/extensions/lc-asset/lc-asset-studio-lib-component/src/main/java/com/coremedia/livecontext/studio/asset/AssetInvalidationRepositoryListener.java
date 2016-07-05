@@ -51,7 +51,7 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
 
     if (EVENT_WHITELIST.contains(event.getType())) {
       Content content = event.getContent();
-      if (content != null && isRelevantType(content)){
+      if (content != null && !content.isDestroyed() && isRelevantType(content)){
         HashSet<String> invalidations = getInvalidations(event);
         if(!invalidations.isEmpty()) {
           commerceCacheInvalidationSource.triggerDelayedInvalidation(

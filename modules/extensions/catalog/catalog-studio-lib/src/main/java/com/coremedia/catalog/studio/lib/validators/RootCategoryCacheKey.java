@@ -48,8 +48,7 @@ class RootCategoryCacheKey extends CacheKey<Category> {
 
   @Override
   public Category evaluate(Cache cache) throws Exception {
-    String rootCategoryId = connection.getIdProvider().formatCategoryId(Category.EXTERNAL_ID_ROOT_CATEGORY);
-    return catalogService.findCategoryById(rootCategoryId);
+    return catalogService.findRootCategory();
   }
 
   @Override

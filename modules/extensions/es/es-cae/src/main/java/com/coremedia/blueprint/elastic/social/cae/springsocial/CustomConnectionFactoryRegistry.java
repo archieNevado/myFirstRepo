@@ -82,9 +82,14 @@ public class CustomConnectionFactoryRegistry implements ConnectionFactoryLocator
 
     String facebookClientId = providerConfiguration.getCurrentFacebookClientId(tenant);
     String facebookClientSecret = providerConfiguration.getCurrentFacebookClientSecret(tenant);
+    String facebookClientNamespace = providerConfiguration.getCurrentFacebookClientNamespace(tenant);
 
-    if (StringUtils.isEmpty(facebookClientId) || StringUtils.isEmpty(facebookClientSecret)) {
+    if (StringUtils.isBlank(facebookClientId) || StringUtils.isBlank(facebookClientSecret)) {
       throw new IllegalArgumentException("Facebook is not setup correctly");
+    }
+
+    if (StringUtils.isBlank(facebookClientNamespace)) {
+      facebookClientNamespace = "";
     }
 
     if (!StringUtils.equals(facebookClientId, currentFacebookClientId)
@@ -93,7 +98,7 @@ public class CustomConnectionFactoryRegistry implements ConnectionFactoryLocator
       currentFacebookClientSecret = facebookClientSecret;
 
       facebookConnectionFactory = new OAuth2ConnectionFactory<>(FACEBOOK_PROVIDER_ID,
-              new FacebookServiceProvider(facebookClientId, facebookClientSecret), facebookAdapter);
+              new FacebookServiceProvider(facebookClientId, facebookClientSecret, facebookClientNamespace), facebookAdapter);
     }
 
     return facebookConnectionFactory;

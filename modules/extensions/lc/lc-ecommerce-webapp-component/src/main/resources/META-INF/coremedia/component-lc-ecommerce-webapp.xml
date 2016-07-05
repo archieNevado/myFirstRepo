@@ -4,6 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
-  <import resource="classpath:/framework/spring/lc-ecommerce-filter.xml"/>
+  <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
+
+  <bean id="commerceConnectionFilter" class="com.coremedia.blueprint.livecontext.ecommerce.filter.CommerceConnectionFilter"/>
 
 </beans>

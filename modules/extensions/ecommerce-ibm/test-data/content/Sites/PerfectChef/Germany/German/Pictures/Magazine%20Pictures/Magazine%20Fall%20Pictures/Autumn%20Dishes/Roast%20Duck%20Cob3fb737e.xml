@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Fall%20Pictures/Autumn%20Dishes/Roast%20d15a0cb4.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Fall%20Pictures/Autumn%20Dishes/Roast%20Duck%20Confit%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1361</height>
-<data md5="c8a977d8b706d225186baf8f75e8f774" href="../../../../../../../../__blob/c8a977d8b706d225186baf8f75e8f774.blob" mimetype="image/jpeg"/>
+<data md5="c8a977d8b706d225186baf8f75e8f774" size="512684" href="../../../../../../../../__blob/c8a977d8b706d225186baf8f75e8f774.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

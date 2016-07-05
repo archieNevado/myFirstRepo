@@ -8,7 +8,7 @@ driver:
     memory: 512
     cpus: 1
   synced_folders:
-    - ["./build", "/shared", "create: true"]
+    - ["./.kitchen/build", "/shared", "create: true"]
   network:
     - ['private_network',{ ip: '192.168.252.100' }]
 provisioner:

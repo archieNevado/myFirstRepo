@@ -2,14 +2,14 @@ package com.coremedia.blueprint.common.util.pagination;
 
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.ByteArrayInputStream;
@@ -18,8 +18,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.isOpeningDiv;
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.isWhitespace;
+
 class StAXPlainTextPaginator extends AbstractPaginator {
-  private static final Log LOG = LogFactory.getLog(StAXPlainTextPaginator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(StAXPlainTextPaginator.class);
 
   private StringBuilder charactersBuffer = new StringBuilder();
   private XMLEvent divStart;
@@ -34,18 +37,10 @@ class StAXPlainTextPaginator extends AbstractPaginator {
     List<Markup> result = new ArrayList<>();
     while (xmlReader.hasNext()) {
       XMLEvent event = xmlReader.nextEvent();
-      if (event.isCharacters() && event.asCharacters().isWhiteSpace()) {
-        continue;
-      }
-
-      if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equals("div")) {
+      if (isOpeningDiv(event)) {
         divStart = event;
-        continue;
-      }
-
-      if (event.isCharacters()) {
-        Characters characters = event.asCharacters();
-        charactersBuffer = charactersBuffer.append(characters.getData().trim()).append(" ");
+      } else if (event.isCharacters() && !isWhitespace(event)) {
+        charactersBuffer.append(event.asCharacters().getData().trim()).append(" ");
       }
     }
     while (charactersBuffer.length() > 0) {
@@ -74,11 +69,10 @@ class StAXPlainTextPaginator extends AbstractPaginator {
   }
 
   private Markup buildMarkup(String characters) {
-    ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
     XMLEventWriter streamWriter = null;
     ByteArrayInputStream bytesInputStream = null;
 
-    try {
+    try (ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream()) {
       streamWriter = xmlOutputFactory.get().createXMLEventWriter(byteArrayStream);
       streamWriter.add(divStart);
       XMLEventFactory eventFactory = xmlEventFactory.get();
@@ -99,26 +93,8 @@ class StAXPlainTextPaginator extends AbstractPaginator {
       LOG.error("Error streaming xml", e);
       return null;
     } finally {
-      if (bytesInputStream != null) {
-        try {
-          bytesInputStream.close();
-        } catch (IOException e1) {
-          LOG.error("buildMarkup() - closing stream has failed !");
-        }
-      }
-      if (streamWriter != null) {
-        try {
-          streamWriter.close();
-        } catch (Exception e) {
-          LOG.error("buildMarkup() - closing stream has failed !");
-        }
-      }
-      try {
-        byteArrayStream.close();
-      } catch (Exception e) {
-        LOG.error("buildMarkup() - closing stream has failed !");
-      }
+      IOUtils.closeQuietly(bytesInputStream);
+      StAXUtil.closeQuietly(streamWriter);
     }
-
   }
 }

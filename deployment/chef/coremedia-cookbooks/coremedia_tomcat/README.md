@@ -201,9 +201,7 @@ The layout will be:
 
 ### Actions
 
-- [:install]:  Default action.
-- install: Install tomcat.
-- nothing:
+- install: Install tomcat. Default action.
 - update: Sets the `updated_by_last_action` flag of this resource to `true`. Use this to notify a service restart.
 
 ### Attribute Parameters
@@ -224,28 +222,28 @@ The layout will be:
 - nexus_repo: The repo name from which to resolve artifacts. Defaults to <code>"releases"</code>.
 - catalina_properties: A hash of properies to append to the `catalina.properties` file Defaults to <code>{}</code>.
 - port_prefix:  Defaults to <code>80</code>.
-- shutdown_port: The port where tomcat listens on shutdown commands. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6bb860@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:122></code>.
+- shutdown_port: The port where tomcat listens on shutdown commands. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76c88d1d8@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:122></code>.
 - shutdown_wait: The time to wait for tomcat to shut down Defaults to <code>30</code>.
 - shutdown_force: Use -KILL when shutdown_wait threshold is reached. Defaults to <code>false</code>.
 - max_threads: The maximum number of threads for the connector executor pool . Defaults to <code>200</code>.
 - min_threads: The minimum number of threads for the connector executor pool . Defaults to <code>20</code>.
-- http_port: The port tomcat listens on for HTTP requests. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6bb130@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:137></code>.
-- ajp_port: The port tomcat listens on for AJP requests. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6baf50@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:140></code>.
+- http_port: The port tomcat listens on for HTTP requests. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76bafc9d8@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:137></code>.
+- ajp_port: The port tomcat listens on for AJP requests. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76baf7118@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:140></code>.
 - debug: A flag to enable/disable the debug_opts. Defaults to <code>false</code>.
-- debug_opts: The debug options to add to CATALINA_OPTS Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6bab68@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:146></code>.
+- debug_opts: The debug options to add to CATALINA_OPTS Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76bae8ac8@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:146></code>.
 - jvm_route: The route name in case of AJP load balancing.
 - session_timeout: The timeout in minutes to kill sessions. Defaults to <code>60</code>.
 - heap: The maximum memory for the JVM heap space. JVM notation is supported, i.e. 1G or 512m Defaults to <code>"512m"</code>.
 - perm: The maximum memory for the JVM perm space. JVM notation is supported, i.e. 1G or 512m Defaults to <code>"128m"</code>.
 - catalina_opts: Additional CATALINA_OPTS. Defaults to <code>""</code>.
-- log_dir: The path of the symlink to the logs directory. Set to empty string to not create a link. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6ba028@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:164></code>.
-- java_home: The JVM to use. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6b9df8@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:167></code>.
+- log_dir: The path of the symlink to the logs directory. Set to empty string to not create a link. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76bab5538@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:164></code>.
+- java_home: The JVM to use. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76baa6a88@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:167></code>.
 - jmx_remote: Flag to enable or disable remote jmx. Defaults to <code>true</code>.
-- jmx_remote_server_name: The host name or ip that resolves to this node. If set to nil, node[:fqdn] will be used. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6b99c0@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:173></code>.
+- jmx_remote_server_name: The host name or ip that resolves to this node. If set to nil, node[:fqdn] will be used. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76ba870e8@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:173></code>.
 - jmx_remote_jar_source: The SHA-256 checksum of the jmx remote jar. Defaults to <code>nil</code>.
 - jmx_remote_jar_source_checksum:  Defaults to <code>nil</code>.
-- jmx_remote_registry_port: The port of the JMX registry. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6b93a8@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:182></code>.
-- jmx_remote_server_port: The port of the JMX server Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c6b91a0@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:185></code>.
+- jmx_remote_registry_port: The port of the JMX registry. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76ba66960@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:182></code>.
+- jmx_remote_server_port: The port of the JMX server Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76ba4fcd8@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/default.rb:185></code>.
 - jmx_remote_use_local_ports: A flag to force local ports to connect to the JMX/RMI server. Defaults to <code>false</code>.
 - jmx_remote_authenticate: A flag to disable jmx authentication. Defaults to <code>true</code>.
 - jmx_remote_ssl: A flag to enable or disable jmx remote over ssl. Defaults to <code>false</code>.
@@ -256,6 +254,7 @@ The layout will be:
 - context_config: A hash to pass to the context_template. See context section for the possible configuration keys in the default template. Defaults to <code>{}</code>.
 - context_template: The template name from which to create the context_file. Defaults to <code>"context.xml.erb"</code>.
 - context_template_cookbook: The cookbook, from which to load the context_template. Defaults to <code>"coremedia_tomcat"</code>.
+- clean_log_dir_on_start: Set this to true to clean the log directory on before starting tomcat Defaults to <code>false</code>.
 
 ### Port Schema
 If you set the `port_prefix` attribute, all ports and the debug_opts, which include a port will automatically be preset
@@ -321,9 +320,7 @@ To resolve the latest X-SNAPSHOT, RELEASE or LATEST version, you need to set `ne
 
 ### Actions
 
-- [:install]:  Default action.
-- install: Install the webapp in a directory which is not the `app_base` directory of tomcat.
-- nothing:
+- install: Install the webapp in a directory which is not the `app_base` directory of tomcat. Default action.
 - update: Sets the `updated_by_last_action` flag of this resource to `true`.
 
 ### Attribute Parameters
@@ -342,7 +339,7 @@ To resolve the latest X-SNAPSHOT, RELEASE or LATEST version, you need to set `ne
 - owner: User ownership (linux only), defaults to "root". Defaults to <code>"root"</code>.
 - group: Group membership (linux only), defaults to "root". Defaults to <code>"root"</code>.
 - context: The context name under which to deploy the webapp, defaults to the name of the resource
-- context_template: The template name from which to create the context_file (exploded mode only), set to false to skip the creation. Defaults to <code>#<Chef::DelayedEvaluator:0x007f919c681d90@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/webapp.rb:103></code>.
+- context_template: The template name from which to create the context_file (exploded mode only), set to false to skip the creation. Defaults to <code>#<Chef::DelayedEvaluator:0x007fc76a80e768@/Users/fsimmend/dev/git/chef-repo-dev/cookbooks/coremedia_tomcat/resources/webapp.rb:103></code>.
 - context_template_cookbook: The cookbook, from which to load the context_template. Defaults to <code>"coremedia_tomcat"</code>.
 - context_config: A hash to pass to the context_template. See [context section](#context-files) for the possible configuration keys in the default template. Defaults to <code>{}</code>.
 

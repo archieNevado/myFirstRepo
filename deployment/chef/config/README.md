@@ -4,8 +4,6 @@
 * `cachier.rb` - vagrant cachier config included by kitchen to cache files between boxes.
 * `linked-clones.rb` - activates linked clones in vagrant/virtualbox. This speeds up the box import massively.
 * `spork-config.yml` - configures knife-spork to manage environments.
-* `solo.rb` - example chef-solo configuration.
-* `node.json` - example node file, containing only a runlist with all roles.
 * `ci-setenv` - insource this in your jenkins shell step to run cookbook ci.
 
 

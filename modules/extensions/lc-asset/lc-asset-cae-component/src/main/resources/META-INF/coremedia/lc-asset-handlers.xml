@@ -19,6 +19,7 @@
   <bean id="catalogPictureHandlerBase" abstract="true" class="com.coremedia.livecontext.asset.CatalogPictureHandlerBase" parent="handlerBase">
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
     <property name="siteResolver" ref="liveContextSiteResolver"/>
+    <property name="transformImageService" ref="transformImageService"/>
   </bean>
 
   <bean id="productCatalogPictureHandler" class="com.coremedia.livecontext.asset.ProductCatalogPictureHandler" parent="catalogPictureHandlerBase">
@@ -83,11 +84,14 @@
     </list>
   </customize:prepend>
 
-  <util:map id="catalogPictureCacheMapping" map-class="java.util.LinkedHashMap">
-    <entry key="#{T(com.coremedia.livecontext.asset.ProductCatalogPictureHandler).IMAGE_URI_PATTERN}" value="0"/>
-    <entry key="#{T(com.coremedia.livecontext.asset.CategoryCatalogPictureHandler).IMAGE_URI_PATTERN}" value="0"/>
-  </util:map>
 
-  <customize:prepend id="appendAssetNoCacheHeader" bean="uriToCacheSecondsMapping" custom-ref="catalogPictureCacheMapping"/>
+  <customize:prepend id="appendAssetNoCacheHeader" bean="uriToCacheSecondsMapping" enabled="#{!${cae.is.preview}}">
+    <map>
+      <!-- XCatalogPictureHandler do support etags. The options request itself is cached for 5 minutes.
+           The payload is only reloaded, if the picture data realy changed. -->
+      <entry key="#{T(com.coremedia.livecontext.asset.ProductCatalogPictureHandler).IMAGE_URI_PATTERN}" value="300"/>
+      <entry key="#{T(com.coremedia.livecontext.asset.CategoryCatalogPictureHandler).IMAGE_URI_PATTERN}" value="300"/>
+    </map>
+  </customize:prepend>
 
 </beans>

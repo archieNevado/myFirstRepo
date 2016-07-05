@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Recipes" name="The Sexiest Bread Pudding Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Recipes" name="The Sexiest Bread Pudding Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Videos/Recipes/The%20Sexiest%20Bread%20Pudding%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Recipes/The%20Sexiest%20Bread%20Pudding%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Sexy Brotpudding</alt>
 <copyright>jin yoo / Vimeo CC-BY-SA 3.0</copyright>
 <dataUrl></dataUrl>
-<data md5="2d165c7b099439d04ab9d175e56a7aae" href="../../../../../../__blob/2d165c7b099439d04ab9d175e56a7aae.blob" mimetype="image/jpeg"/>
+<data md5="2d165c7b099439d04ab9d175e56a7aae" size="53558" href="../../../../../../__blob/2d165c7b099439d04ab9d175e56a7aae.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

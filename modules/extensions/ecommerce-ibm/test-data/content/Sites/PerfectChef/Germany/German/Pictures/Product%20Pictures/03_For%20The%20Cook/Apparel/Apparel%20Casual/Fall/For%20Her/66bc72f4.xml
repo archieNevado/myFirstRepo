@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Fall/For Her" name="PC_FITTED_DRESS Frontshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Fall/For Her" name="PC_FITTED_DRESS Frontshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Fall/Fob228d2c9.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Fall/For%20Her/PC_FITTED_DRESS%20Frontshot%201"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -110,7 +109,7 @@
 <alt>Grau anliegendes Kleid</alt>
 <copyright>Alexander Bild / Shutterstock 176344931</copyright>
 <dataUrl></dataUrl>
-<data md5="c55e31f901ee402cc7e037e1c0982388" href="../../../../../../../../../../../__blob/c55e31f901ee402cc7e037e1c0982388.blob" mimetype="image/jpeg"/>
+<data md5="c55e31f901ee402cc7e037e1c0982388" size="895934" href="../../../../../../../../../../../__blob/c55e31f901ee402cc7e037e1c0982388.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

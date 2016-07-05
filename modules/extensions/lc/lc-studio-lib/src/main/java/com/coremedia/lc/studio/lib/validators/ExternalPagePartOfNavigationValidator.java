@@ -1,6 +1,6 @@
 package com.coremedia.lc.studio.lib.validators;
 
-import com.coremedia.blueprint.studio.rest.validators.ChannelIsPartOfNavigationValidator;
+import com.coremedia.blueprint.base.rest.validators.ChannelIsPartOfNavigationValidator;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;

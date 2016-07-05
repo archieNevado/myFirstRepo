@@ -66,7 +66,7 @@
   }
 
   .cm-logo a {
-    width: 250px;
+    width: 213px;
     height: 70px;
     background-image: url(../img/logo_tablet.png);
   }
@@ -428,8 +428,6 @@
   }
 
   .cm-quickinfo {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     background: #fff;
     padding: 8px;
@@ -539,8 +537,6 @@
   }
 
   .cm-navigation--footer {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     float: left;
     padding-left: 15px;

@@ -20,6 +20,7 @@
     <module>editor</module>
     <module>editor-lib</module>
     <module>doctype-icons</module>
+    <module>editor-webstart-webapp</module>
   </modules>
 
 </project>

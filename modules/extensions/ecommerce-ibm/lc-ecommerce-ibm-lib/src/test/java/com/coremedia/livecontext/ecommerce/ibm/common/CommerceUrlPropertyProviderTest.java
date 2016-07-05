@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
-import com.google.common.base.Function;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nullable;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -52,22 +49,6 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
   private static final String PRODUCT_NON_SEO_URL = "ProductDisplay?productId={productId}&storeId={storeId}&langId={langId}";
   private static final String CATEGORY_NON_SEO_URL = "CategoryDisplay?categoryId={categoryId}&storeId={storeId}&langId={langId}";
 
-  private static final Function<String, String> URL_ENCODE_FUNCTION = new Function<String, String>() {
-    @Nullable
-    @Override
-    public String apply(String input) {
-      try {
-        return URLEncoder.encode(input, "UTF-8");
-      } catch (UnsupportedEncodingException e) {
-        throw new RuntimeException(e);
-      }
-    }
-  };
-
-  private CommerceConnection connection;
-
-  private CatalogServiceImpl catalogService;
-
   private CommerceUrlPropertyProvider testling;
 
   @Before
@@ -81,8 +62,8 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
     testling.setProductNonSeoUrl(PRODUCT_NON_SEO_URL);
     testling.setCategoryNonSeoUrl(CATEGORY_NON_SEO_URL);
 
-    connection = Mockito.mock(CommerceConnection.class);
-    catalogService = Mockito.mock(CatalogServiceImpl.class);
+    CommerceConnection connection = Mockito.mock(CommerceConnection.class);
+    CatalogServiceImpl catalogService = Mockito.mock(CatalogServiceImpl.class);
 
     Commerce.setCurrentConnection(connection);
     when(connection.getCatalogService()).thenReturn(catalogService);

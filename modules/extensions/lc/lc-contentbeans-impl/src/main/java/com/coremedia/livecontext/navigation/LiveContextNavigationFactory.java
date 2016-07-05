@@ -17,6 +17,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
@@ -30,7 +31,7 @@ public class LiveContextNavigationFactory {
   private SitesService sitesService;
   private ContentBeanFactory contentBeanFactory;
   private AugmentationService augmentationService;
-  private ValidationService<LiveContextExternalChannel> validationService;
+  private ValidationService<LiveContextNavigation> validationService;
 
   /**
    * Creates a new live context navigation from the given category.
@@ -46,7 +47,7 @@ public class LiveContextNavigationFactory {
   public LiveContextNavigation createNavigation(@Nonnull Category category, @Nonnull Site site) {
     if (augmentationService != null) {
       Content externalChannelContent = augmentationService.getContent(category);
-      LiveContextExternalChannel externalChannel = (LiveContextExternalChannel) contentBeanFactory.createBeanFor(externalChannelContent);
+      LiveContextNavigation externalChannel = (LiveContextNavigation) contentBeanFactory.createBeanFor(externalChannelContent);
       if (null != externalChannel && validationService.validate(externalChannel)) {
         return externalChannel;
       }
@@ -124,6 +125,7 @@ public class LiveContextNavigationFactory {
   }
 
   @Autowired(required = false)
+  @Qualifier("categoryAugmentationService")
   public void setAugmentationService(AugmentationService augmentationService) {
     this.augmentationService = augmentationService;
   }
@@ -134,7 +136,7 @@ public class LiveContextNavigationFactory {
   }
 
   @Required
-  public void setValidationService(ValidationService<LiveContextExternalChannel> validationService) {
+  public void setValidationService(ValidationService<LiveContextNavigation> validationService) {
     this.validationService = validationService;
   }
 }

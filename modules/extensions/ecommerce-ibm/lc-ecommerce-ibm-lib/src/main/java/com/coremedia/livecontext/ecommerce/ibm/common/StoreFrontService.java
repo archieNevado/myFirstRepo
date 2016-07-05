@@ -1,8 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponents;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +67,7 @@ public abstract class StoreFrontService {
     fullQualifiedUrl = ucb.build().toUriString();
 
     StoreFrontResponse storeFrontResponse = storefrontConnector.executeGet(fullQualifiedUrl, uriTemplateParameters, sourceRequest);
-    copyCookies(storeFrontResponse.getOriginalResponse(), sourceResponse);
+    copyCookies(sourceResponse,  storeFrontResponse.getCookies());
     return storeFrontResponse;
   }
 
@@ -107,16 +107,55 @@ public abstract class StoreFrontService {
    * Cookies are copied without further manipulation or interpretation by simply copying the store front header to
    * the source response, that will be returned to the CAE.
    *
-   * @param storeFrontResponse the response from the store front.
    * @param response the response that will be returned to the browser
+   * @param apacheCookies the apacheCookies
    */
-  private void copyCookies(HttpResponse storeFrontResponse, HttpServletResponse response) {
-    Header[] storeFrontHeaders = storeFrontResponse.getHeaders("Set-Cookie");
-    if (storeFrontHeaders != null) {
-      for (Header storeFrontHeader : storeFrontHeaders) {
-        response.addHeader(storeFrontHeader.getName(), storeFrontHeader.getValue());
+  private void copyCookies(HttpServletResponse response, List<Cookie> apacheCookies) {
+    for (Cookie apacheCookie : apacheCookies) {
+      if(apacheCookie != null) {
+        javax.servlet.http.Cookie cookie = convertCookie(apacheCookie);
+        response.addCookie(cookie);
       }
     }
+  }
+
+  @VisibleForTesting
+  javax.servlet.http.Cookie convertCookie(Cookie apacheCookie) {
+    String name = apacheCookie.getName();
+    String value = apacheCookie.getValue();
+
+    javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie(name, value);
+
+    value = apacheCookie.getDomain();
+    if (value != null) {
+      cookie.setDomain(value);
+    }
+
+    value = apacheCookie.getPath();
+    if (value != null) {
+      cookie.setPath(value);
+    }
+    cookie.setSecure(apacheCookie.isSecure());
+
+    value = apacheCookie.getComment();
+    if (value != null) {
+      cookie.setComment(value);
+    }
+
+    cookie.setVersion(apacheCookie.getVersion());
+
+    // From the Apache source code, maxAge is converted to expiry date using the following formula
+    // if (maxAge >= 0) {
+    //     setExpiryDate(new Date(System.currentTimeMillis() + maxAge * 1000L));
+    // }
+    // Reverse this to get the actual max age
+    Date expiryDate = apacheCookie.getExpiryDate();
+    if (expiryDate != null) {
+      long maxAge = (expiryDate.getTime() - System.currentTimeMillis()) / 1000;
+      // we have to lower down, no other option
+      cookie.setMaxAge((int) maxAge);
+    }
+    return cookie;
   }
 
   /**
@@ -136,16 +175,14 @@ public abstract class StoreFrontService {
     boolean isAnonymous = false;
 
     List<Cookie> cookies = storeFrontResponse.getCookies();
-    if (cookies != null) {
-      for (Cookie oneCookie : cookies) {
-        String name = oneCookie.getName();
-        String value = oneCookie.getValue();
-        if (!isGuestOrRegistered) {
-          isGuestOrRegistered = isGuestOrRegisteredUser(name, value);
-        }
-        if (!isAnonymous) {
-          isAnonymous = isAnonymousUser(name, value);
-        }
+    for (Cookie oneCookie : cookies) {
+      String name = oneCookie.getName();
+      String value = oneCookie.getValue();
+      if (!isGuestOrRegistered) {
+        isGuestOrRegistered = isGuestOrRegisteredUser(name, value);
+      }
+      if (!isAnonymous) {
+        isAnonymous = isAnonymousUser(name, value);
       }
     }
 

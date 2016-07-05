@@ -2,6 +2,7 @@ package com.coremedia.livecontext.studio {
 
 import com.coremedia.blueprint.base.components.quickcreate.QuickCreate;
 import com.coremedia.blueprint.base.components.quickcreate.processing.ProcessingData;
+import com.coremedia.blueprint.studio.CMChannelExtension;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
@@ -14,9 +15,8 @@ import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.preview.PreviewURI;
 import com.coremedia.cms.editor.sdk.sites.Site;
-import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
+import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ecommerce.studio.CatalogModel;
-import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.components.link.QuickCreateCatalogLink;
 import com.coremedia.ecommerce.studio.config.quickCreateCatalogLink;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
@@ -26,6 +26,7 @@ import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.livecontext.studio.config.livecontextStudioPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
 import com.coremedia.livecontext.studio.library.ShowInCatalogTreeHelper;
+import com.coremedia.livecontext.studio.pbe.StoreNodeRenderer;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.UrlUtil;
@@ -37,7 +38,7 @@ import ext.config.container;
 public class LivecontextStudioPluginBase extends StudioPlugin {
 
   internal static const CONTENT_LED_PROPERTY:String = 'livecontext.contentLed';
-  private static const EXTERNAL_ID_PROPERTY:String = 'externalId';
+  internal static const EXTERNAL_ID_PROPERTY:String = 'externalId';
 
   public function LivecontextStudioPluginBase(config:livecontextStudioPlugin = null) {
     if (UrlUtil.getHashParam('livecontext') === 'false') {
@@ -67,10 +68,18 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     /**
      * Apply image link list preview
      */
-    editorContext.registerThumbnailUriRenderer(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL, renderLiveContextPreview);
-    editorContext.registerThumbnailUriRenderer(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, renderLiveContextPreview);
-    editorContext.registerThumbnailUriRenderer(livecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, renderLiveContextPreview);
-    editorContext.registerThumbnailUriRenderer(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, renderLiveContextProductTeaserPreview);
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
+    editorContext.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
+
+
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_CATEGORY));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING_SPOT));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT_VARIANT));
 
     /**
      * Register Content initializer
@@ -79,6 +88,8 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     editorContext.registerContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, initProductTeaser);
     editorContext.registerContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL, initExternalChannel);
     editorContext.registerContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, initExternalPage);
+
+    editorContext['getMetadataNodeRendererRegistry']().register(new StoreNodeRenderer());
 
     /**
      * Extend Content initializer
@@ -120,7 +131,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
               return ComponentMgr.create(containerCfg);
             });
 
-    CMExternalPageExtension.register(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE);
+    CMChannelExtension.register(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE);
   }
 
   private static function initProductTeaser(content:Content):void {
@@ -153,32 +164,6 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     if (overlay) {
       overlay.set("displayDefaultPrice", true);
     }
-  }
-
-  private function renderLiveContextProductTeaserPreview(content:Content):String {
-    var result:String;
-    result = ImageLinkListRenderer.propertyPathLoader(content, 'properties.pictures');
-    if(!result){
-      result = renderLiveContextPreview(content)
-    }
-    return result;
-  }
-
-  /**
-   * Since all live context bean use the "externalId" property we can register the same
-   * rendering function for all content types.
-   * @param content The livecontext content to render.
-   * @return The preview url of the catalog object.
-   */
-  private function renderLiveContextPreview(content:Content):String {
-    var url:String = undefined;
-    var contentExpression:ValueExpression = ValueExpressionFactory.createFromValue(content);
-    var externalIdExpression:ValueExpression = contentExpression.extendBy('properties.' + livecontextStudioPlugin.EXTERNAL_ID_PROPERTY);
-    catalogHelper.getStoreForContentExpression(contentExpression).loadValue(function():void{
-      var catalogObject:CatalogObject = catalogHelper.getCatalogObject(externalIdExpression.getValue(), contentExpression) as CatalogObject;
-      url = catalogHelper.getImageUrl(catalogObject);
-    });
-    return url;
   }
 
   //noinspection JSUnusedGlobalSymbols

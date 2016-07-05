@@ -16,6 +16,7 @@ import com.coremedia.cms.editor.sdk.config.searchArea;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
@@ -40,6 +41,8 @@ import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.livecontext.studio.AbstractCatalogStudioTest;
+import com.coremedia.livecontext.studio.CatalogTeaserThumbnailResolver;
+import com.coremedia.livecontext.studio.CatalogThumbnailResolver;
 import com.coremedia.livecontext.studio.config.livecontextStudioPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewActionsPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
@@ -96,6 +99,20 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     //use ECommerceStudioPlugin to add CatalogRepositoryListContainer, CatalogSearchListContainer etc.
     new ECommerceStudioPlugin();
     new LivecontextCollectionViewActionsPlugin();
+
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
+    editorContext.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
+
+
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_CATEGORY));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING_SPOT));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT_VARIANT));
+
     QtipUtil.registerQtipFormatter();
   }
 

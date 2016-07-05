@@ -18,6 +18,8 @@
             <items>
               <editor:stringPropertyField propertyName="dataUrl"/>
               <editor:richTextPropertyField propertyName="code"/>
+              <editor:booleanPropertyField bindTo="{config.bindTo}"
+                                           propertyName="disableCompress"/>
             </items>
           </editor:collapsibleFormPanel>
           <!-- this attribute cannot be used with merged resources

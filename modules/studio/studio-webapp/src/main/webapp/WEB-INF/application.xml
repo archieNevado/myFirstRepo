@@ -4,6 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
   <import resource="classpath:/com/coremedia/blueprint/base/uapi/bpbase-uapi-cache-services.xml"/>
+  <import resource="classpath:/framework/spring/mediatransform.xml"/>
+
+  <!-- Must configure the urlSegmentService which comes in via component-bpbase-studio-rest / bpbase-links-services -->
+  <import resource="classpath:/com/coremedia/blueprint/segments/blueprint-segments.xml"/>
 
   <beans profile="controlroom-memory">
     <customize:append id="uapiMemoryCapListConnector" bean="connectionParameters" order="42">

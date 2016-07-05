@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-portrait.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-portrait"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Displays a collection in a tiles layout (portrait).</description>
 <icon href="tiles-layout-portrait.icon.png" mimetype="image/png"/>
 <layout>tiles-layout-portrait</layout>

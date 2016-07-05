@@ -1,6 +1,9 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
   <StructProperty  Name="commerce">
     <Struct>
+      <LinkListProperty Name="linkProperty" LinkType="coremedia:///cap/contenttype/CMTeasable">
+        <Link xlink:href="coremedia:///cap/resources/2"/>
+      </LinkListProperty>
       <BooleanProperty Name="selectChildren">true</BooleanProperty>
       <StringListProperty Name="children">
         <String>ibm:///catalog/category/A1</String>

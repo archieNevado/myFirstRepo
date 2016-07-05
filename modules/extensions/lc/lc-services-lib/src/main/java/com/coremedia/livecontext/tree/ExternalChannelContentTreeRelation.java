@@ -2,7 +2,6 @@ package com.coremedia.livecontext.tree;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.tree.CommerceTreeRelation;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -11,8 +10,10 @@ import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Nullable;
@@ -32,12 +33,12 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   //local variables to avoid contentbean dependency
   private static final String EXTERNAL_ID = "externalId";
   private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternalChannelContentTreeRelation.class);
 
   private AugmentationService augmentationService;
   private CommerceTreeRelation commerceTreeRelation;
   private SitesService sitesService;
   private CommerceConnectionInitializer commerceConnectionInitializer;
-
 
   @Override
   public Collection<Content> getChildrenOf(Content parent) {
@@ -67,9 +68,9 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
             return site.getSiteRootDocument();
           }
         } else if (((Category) childCategory).isRoot()) {
-          // Had to change this one, since it can lead to an endless loop when method is called with site root document.
+          // avoid infinite loop when called with site root document
           Content siteRoot = site.getSiteRootDocument();
-          return siteRoot.equals(child) ? null : siteRoot;
+          return child.equals(siteRoot) ? null : siteRoot;
         }
       }
     }
@@ -85,8 +86,9 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
       }
       if (null != augmentingContent) {
         return augmentingContent;
-      } else if (!category.isRoot()) {
-        Category parentCategory = commerceTreeRelation.getParentOf(category);
+      }
+      Category parentCategory = commerceTreeRelation.getParentOf(category);
+      if (null != parentCategory) {
         return getNearestContentForCategory(parentCategory, site);
       }
     }
@@ -107,6 +109,7 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
       parent = getParentOf(parent);
     }
     Collections.reverse(path);
+    LOGGER.trace("path to root for {}: {}", child, path);
     return path;
   }
 
@@ -124,23 +127,24 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
     return Commerce.getCurrentConnection().getCommerceBeanFactory();
   }
 
-  @Autowired (required = false)
+  @Autowired(required = false)
+  @Qualifier("categoryAugmentationService")
   public void setAugmentationService(AugmentationService augmentationService) {
     this.augmentationService = augmentationService;
   }
 
-  @Required
-  public void setCommerceTreeRelation(CommerceTreeRelation commerceTreeRelation) {
-    this.commerceTreeRelation = commerceTreeRelation;
-  }
-
-  @Required
+  @Autowired
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  @Required
+  @Autowired
   public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
     this.commerceConnectionInitializer = commerceConnectionInitializer;
+  }
+
+  @Autowired
+  public void setCommerceTreeRelation(CommerceTreeRelation commerceTreeRelation) {
+    this.commerceTreeRelation = commerceTreeRelation;
   }
 }

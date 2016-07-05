@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Elegant/Fall/For Him" name="PC_PINSTRIPE_SUIT Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Elegant/Fall/For Him" name="PC_PINSTRIPE_SUIT Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Elegant/Fall/66c2fcb9.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Elegant/Fall/For%20Him/PC_PINSTRIPE_SUIT%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -110,7 +109,7 @@
 <alt>Nadelstreifen-Anzug</alt>
 <copyright>Alexander Bild / Shutterstock 140615539</copyright>
 <dataUrl></dataUrl>
-<data md5="1eb6095ac8722c6f1f6c9d8a4846b549" href="../../../../../../../../../../../__blob/1eb6095ac8722c6f1f6c9d8a4846b549.blob" mimetype="image/jpeg"/>
+<data md5="1eb6095ac8722c6f1f6c9d8a4846b549" size="797140" href="../../../../../../../../../../../__blob/1eb6095ac8722c6f1f6c9d8a4846b549.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

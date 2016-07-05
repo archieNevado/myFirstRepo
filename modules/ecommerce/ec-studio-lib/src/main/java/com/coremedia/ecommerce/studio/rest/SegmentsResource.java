@@ -1,6 +1,5 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.ecommerce.studio.rest.model.Segments;
 
 import javax.ws.rs.Path;
@@ -24,21 +23,16 @@ public class SegmentsResource extends AbstractCatalogResource<Segments> {
   }
 
   private void fillRepresentation(SegmentsRepresentation representation) {
-    try {
-      Segments segments = getEntity();
+    Segments segments = getEntity();
 
-      if (segments == null) {
-        LOG.error("Error loading segments bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load segments bean");
-      }
+    if (segments == null) {
+      LOG.warn("Error loading segments bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load segments bean");
+    }
 
-      representation.setId(segments.getId());
-      if (getConnection().getSegmentService() != null) {
-        representation.setSegments(getConnection().getSegmentService().findAllSegments());
-      }
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    representation.setId(segments.getId());
+    if (getConnection().getSegmentService() != null) {
+      representation.setSegments(getConnection().getSegmentService().findAllSegments());
     }
   }
 

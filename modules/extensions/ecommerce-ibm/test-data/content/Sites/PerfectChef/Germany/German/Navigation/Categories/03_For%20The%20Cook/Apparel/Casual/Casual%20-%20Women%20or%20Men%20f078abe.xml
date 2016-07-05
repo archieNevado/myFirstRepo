@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Categories/03_For The Cook/Apparel/Casual" name="Casual - Women or Men Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Categories/03_For The Cook/Apparel/Casual" name="Casual - Women or Men Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Casual/Casual%20-%20Women%20or8b40814e.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Casual/Casual%20-%20Women%20or%20Men%20Collection"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 <link href="../../../../../Options/Viewtypes/CMCollection/tiles-layout-50-50-portrait.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMCollection/tiles-layout-50-50-portrait"/>
 </viewtype>

@@ -107,8 +107,17 @@ not versioned. Staging new attributes using cookbooks is always the preferred wa
 The config folder
 -----------------
 
-Below the config folder, you will find some example configurations for your chef tooling. 
+Below the config folder, you will find additional configuration files for CI and local development tooling. 
 
+The .chef folder
+----------------
+
+The `.chef` folder is the default location for configuration files to the chef command line clients.
+
+The nodes folder
+----------------
+
+This folder contains json node configuration files for chef-solo.
 
 Cookbook Development
 --------------------

@@ -6,8 +6,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_INTERNAL;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_INTERNAL;
 
 @RequestMapping
 public class TestUrlsGenerationHandler extends SitemapGenerationController {

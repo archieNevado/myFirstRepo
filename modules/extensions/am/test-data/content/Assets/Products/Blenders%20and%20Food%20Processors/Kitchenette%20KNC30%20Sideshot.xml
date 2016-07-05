@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Products/Blenders and Food Processors" name="Kitchenette KNC30 Sideshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="87063d0624782da45ef984b2d9a841f3" href="../../../__blob/87063d0624782da45ef984b2d9a841f3.blob" mimetype="image/jpeg"/>
-<thumbnail md5="1e4d2511587ab4d8b6e3f16a6f4fd0bb" href="../../../__blob/1e4d2511587ab4d8b6e3f16a6f4fd0bb.blob" mimetype="image/jpeg"/>
+<original md5="87063d0624782da45ef984b2d9a841f3" size="4786871" href="../../../__blob/87063d0624782da45ef984b2d9a841f3.blob" mimetype="image/jpeg"/>
+<thumbnail md5="1e4d2511587ab4d8b6e3f16a6f4fd0bb" size="16394" href="../../../__blob/1e4d2511587ab4d8b6e3f16a6f4fd0bb.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -71,5 +71,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Food%20Processor.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Food%20Processor"/>
 </assetTaxonomy>
-<web md5="89d295c9ade010d2a325020810e8311c" href="../../../__blob/89d295c9ade010d2a325020810e8311c.blob" mimetype="image/jpeg"/>
+<web md5="89d295c9ade010d2a325020810e8311c" size="377334" href="../../../__blob/89d295c9ade010d2a325020810e8311c.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

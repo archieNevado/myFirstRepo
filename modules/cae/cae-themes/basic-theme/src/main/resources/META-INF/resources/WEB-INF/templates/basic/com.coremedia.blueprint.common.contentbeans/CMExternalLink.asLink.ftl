@@ -7,5 +7,5 @@
 <#assign target=cm.localParameters().openInTab!true?then(' target="_blank"', "") />
 
 <#if self.url?has_content>
-  <a class="${cssClass!""}" href="${self.url}"${target}<@cm.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>
+  <a class="${cssClass!""}" href="${self.url}"<@cm.unescape target/><@cm.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>
 </#if>

@@ -29,6 +29,8 @@
   <bean id="liveContextFreemarkerFacade" class="com.coremedia.livecontext.web.taglib.LiveContextFreemarkerFacade">
     <property name="secureScheme" value="${livecontext.secure.scheme:https}" />
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
+    <property name="metadataRenderer" ref="metadataRenderer"/>
+    <property name="metadataInfo" ref="metadataInfo"/>
   </bean>
 
 </beans>

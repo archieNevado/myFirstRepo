@@ -27,17 +27,14 @@
         parent="abstractTaxonomyBean-blueprint-doctypes"
         scope="prototype"/>
 
+  <bean name="hasPublishedRenditionsValidator"
+        class="com.coremedia.blueprint.assets.validation.HasPublishedRenditionsValidator"/>
+
   <!-- register view repository for templates below WEB-INF/templates/assets/ -->
   <customize:prepend id="addAssetsViewRepository" bean="viewRepositories">
     <list>
       <value>assets</value>
     </list>
   </customize:prepend>
-
-  <customize:append id="assetContentbeanValidatorListCustomizer" bean="contentbeanValidatorList">
-    <list>
-      <bean class="com.coremedia.blueprint.assets.validation.HasPublishedRenditionsValidator"/>
-    </list>
-  </customize:append>
 
 </beans>

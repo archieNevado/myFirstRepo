@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.sitemap;
 
-import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -106,7 +106,7 @@ public class SitemapTriggerImpl implements SitemapTrigger, ServletContextAware {
     ucb.scheme("http");
     ucb.host(LOCALHOST);
     ucb.port(myOwnPort);
-    ucb.pathSegment(resolveContextPath(), "servlet", UriConstants.Prefixes.PREFIX_INTERNAL, segment, SitemapHelper.SITEMAP_ORG);
+    ucb.pathSegment(resolveContextPath(), "servlet", BlueprintUriConstants.Prefixes.PREFIX_INTERNAL, segment, SitemapHelper.SITEMAP_ORG);
     return ucb.build().toUri();
   }
 

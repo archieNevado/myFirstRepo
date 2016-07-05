@@ -36,7 +36,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
 
   @Test
   public void testHandleRequestInternalNavigationPathNull() {
-    assertNotFound("Should not be found", testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID,
+    assertNotFound("Should not be found", testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID_STR,
             null, DEFAULT_VANITY_NAME, null));
   }
 
@@ -44,7 +44,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void handleRequestInternalInvalidSegment() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn("invalid segment");
     when(defaultActionBean.getSegment()).thenReturn("invalid segment");
-    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID,
+    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID_STR,
             DEFAULT_NAVIGATION_PATH, DEFAULT_VANITY_NAME, null));
   }
 
@@ -52,14 +52,14 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void handleRequestInternalNoNavigationFound() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn(DEFAULT_VANITY_NAME);
     doReturn(null).when(defaultActionBean).getContexts();
-    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID,
+    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID_STR,
             DEFAULT_NAVIGATION_PATH, DEFAULT_VANITY_NAME, null));
   }
 
   @Test
   public void handleRequestInternal() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn(DEFAULT_VANITY_NAME);
-    assertDefaultPage(testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID, DEFAULT_NAVIGATION_PATH,
+    assertDefaultPage(testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID_STR, DEFAULT_NAVIGATION_PATH,
             DEFAULT_VANITY_NAME, null));
   }
 
@@ -67,13 +67,13 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void testHandleRequestInternalChannelWithDashAndNumber() {
     when(navigationSegmentsUriHelper.parsePath(Arrays.asList(DEFAULT_CONTEXT, "segment-2014")))
             .thenReturn(defaultNavigation);
-    assertNavigationPage(testling.handleRequestInternal(null, 2014, Arrays.asList(DEFAULT_CONTEXT), "segment", null));
+    assertNavigationPage(testling.handleRequestInternal(null, "2014", Arrays.asList(DEFAULT_CONTEXT), "segment", null));
   }
 
   @Test
   public void handleRequestInternalForTaxonomyWithOnlyOnePathSegment() {
     when(contentLinkBuilder.getVanityName(defaultTaxonomyContent)).thenReturn(DEFAULT_VANITY_NAME);
-    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID,
+    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID_STR,
             DEFAULT_NAVIGATION_PATH, DEFAULT_VANITY_NAME, null));
   }
 
@@ -82,7 +82,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
     when(contentLinkBuilder.getVanityName(defaultTaxonomyContent)).thenReturn(DEFAULT_VANITY_NAME);
     List<String> expectedNavigationPath = ImmutableList.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
     when(navigationSegmentsUriHelper.lookupRootSegment(DEFAULT_CONTEXT)).thenReturn(null);
-    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID,
+    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID_STR,
             expectedNavigationPath, DEFAULT_VANITY_NAME, null));
   }
 
@@ -90,7 +90,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void handleRequestInternalForTaxonomyWithTwoPathSegmentsInvalidNavigationPath() {
     when(contentLinkBuilder.getVanityName(defaultTaxonomyContent)).thenReturn(DEFAULT_VANITY_NAME);
     List<String> expectedNavigationPath = ImmutableList.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
-    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID,
+    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID_STR,
             expectedNavigationPath, DEFAULT_VANITY_NAME, null));
   }
 

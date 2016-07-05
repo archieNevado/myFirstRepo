@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
@@ -56,6 +57,8 @@ public abstract class ProductBase extends AbstractIbmCommerceBean implements Pro
   public void setDelegate(Object delegate) {
     this.delegate = (Map<String, Object>) delegate;
   }
+
+  abstract Map<String, Object> getDelegateFromCache();
 
   public WcCatalogWrapperService getCatalogWrapperService() {
     return catalogWrapperService;
@@ -171,9 +174,70 @@ public abstract class ProductBase extends AbstractIbmCommerceBean implements Pro
     return null;
   }
 
+  private String getCmSeoSegment() {
+    String cmLocalizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "cm_seo_token_ntk", String.class);
+    cmLocalizedSeoSegment = processCmLocalizedSeoSegment(cmLocalizedSeoSegment);
+
+    if (cmLocalizedSeoSegment != null) {
+      String[] localizedSeoSegments = cmLocalizedSeoSegment.split(";");
+      List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
+      if (localizedSeoSegmentList.size() > 1) {
+        String storeId = getStoreId();
+        for (String seoSegment : localizedSeoSegmentList) {
+          if (seoSegment.startsWith(storeId)) {
+            return seoSegment.substring(storeId.length() + 1);
+          }
+        }
+        return localizedSeoSegmentList.get(0).substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+      } else {
+        return cmLocalizedSeoSegment.substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+      }
+    } else {
+      return null;
+    }
+  }
+
+  private String processCmLocalizedSeoSegment(String cmLocalizedSeoSegment) {
+    if (isBlank(cmLocalizedSeoSegment)) {
+      if (getDefaultLocale() == null) {
+        LOG.warn("Default locale does not set for commerce beans.");
+      }
+      if (!getLocale().equals(getDefaultLocale())) {
+        LOG.debug("Product {} does not have a cm seo segment for the current locale {}. Return the cm seo segment for the default locale {}.",
+                getName(), getLocale(), getDefaultLocale());
+        StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(getDefaultLocale());
+
+        ProductBase master = (ProductBase) getCatalogService().withStoreContext(newStoreContext).findProductById(CommerceIdHelper.formatProductId(getExternalId()));
+        if (master != null && !equals(master)) {
+          cmLocalizedSeoSegment = master.getCmSeoSegment();
+        }
+      }
+    }
+    return cmLocalizedSeoSegment;
+  }
+
   @Override
   public String getSeoSegment() {
-    String localizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "seo_token_ntk", String.class);
+    String localizedSeoSegment = getCmSeoSegment();
+    if (isBlank(localizedSeoSegment)) {
+      localizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "seo_token_ntk", String.class);
+      localizedSeoSegment = processLocalizedSeoSegment(localizedSeoSegment);
+
+      if (localizedSeoSegment == null) {
+        localizedSeoSegment = "";
+      } else {
+        String[] localizedSeoSegments = localizedSeoSegment.split(";");
+        List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
+        if (localizedSeoSegmentList.size() > 1) {
+          localizedSeoSegment = localizedSeoSegmentList.get(0);
+        }
+      }
+    }
+
+    return localizedSeoSegment;
+  }
+
+  private String processLocalizedSeoSegment(String localizedSeoSegment) {
     if (isBlank(localizedSeoSegment)) {
       if (getDefaultLocale() == null) {
         LOG.warn("Default locale does not set for commerce beans.");
@@ -189,11 +253,6 @@ public abstract class ProductBase extends AbstractIbmCommerceBean implements Pro
         }
       }
     }
-
-    if (localizedSeoSegment == null) {
-      localizedSeoSegment = "";
-    }
-
     return localizedSeoSegment;
   }
 
@@ -240,7 +299,7 @@ public abstract class ProductBase extends AbstractIbmCommerceBean implements Pro
   public List<Content> getVisuals() {
     AssetService assetService = getAssetService();
     if(null != assetService) {
-      return assetService.findVisuals(getReference());
+      return assetService.findVisuals(getReference(), false);
     }
     return Collections.emptyList();
   }

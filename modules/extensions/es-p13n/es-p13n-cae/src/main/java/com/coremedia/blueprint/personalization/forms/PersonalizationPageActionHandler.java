@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static com.coremedia.objectserver.web.HandlerHelper.badRequest;
 import static java.util.Collections.singletonList;
 

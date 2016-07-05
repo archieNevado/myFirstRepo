@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product 360 Pictures/Sunglasses" name="Sunglasses-35" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product 360 Pictures/Sunglasses" name="Sunglasses-35" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20360%20Pictures/Sunglasses/Sunglasses-35.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20360%20Pictures/Sunglasses/Sunglasses-35"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -49,7 +48,7 @@
 <dataUrl></dataUrl>
 <width>1600</width>
 <height>1600</height>
-<data md5="9357a5b45282b9e48931d28b825810fa" href="../../../../../../../__blob/9357a5b45282b9e48931d28b825810fa.blob" mimetype="image/jpeg"/>
+<data md5="9357a5b45282b9e48931d28b825810fa" size="53940" href="../../../../../../../__blob/9357a5b45282b9e48931d28b825810fa.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

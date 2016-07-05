@@ -106,5 +106,10 @@ public abstract class CMAbstractCodeBase extends CMLocalizedImpl implements CMAb
   public String getDataUrl() {
     return getContent().getString(DATA_URL);
   }
+
+  @Override
+  public boolean isCompressionDisabled() {
+    return getContent().getBoolean(DISABLE_COMPRESSION);
+  }
 }
   

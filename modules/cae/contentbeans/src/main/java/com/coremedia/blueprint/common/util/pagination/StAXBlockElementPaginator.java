@@ -2,16 +2,13 @@ package com.coremedia.blueprint.common.util.pagination;
 
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,12 +16,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.elementIsA;
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.elementName;
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.getAttribute;
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.isClosingDiv;
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.isOpeningDiv;
+import static com.coremedia.blueprint.common.util.pagination.StAXUtil.isWhitespace;
+
 /**
  * StAX based Paginator. Empty blocks are ignored in block count but included in
  * Markup.
  */
 class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomatic complexity
-  private static final Log LOG = LogFactory.getLog(StAXBlockElementPaginator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(StAXBlockElementPaginator.class);
 
   private DelimitingPagingRule delimitingPagingRule;
 
@@ -48,9 +52,8 @@ class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomat
     delimitingPagingRule = rule;
   }
 
-
   @Override
-  protected List<Markup> splitInternally(XMLEventReader xmlReader, Markup markup) throws XMLStreamException { // NOSONAR  cyclomatic complexity
+  protected List<Markup> splitInternally(XMLEventReader xmlReader, Markup markup) throws XMLStreamException {
     List<Markup> result = new ArrayList<>();
     List<XMLEvent> blockElements = new ArrayList<>();
     int level = 0;
@@ -62,57 +65,30 @@ class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomat
         previousEvent = currentEvent;
       }
       currentEvent = xmlReader.nextEvent();
-      if (currentEvent.isStartDocument()) {
+      if (currentEvent.isStartDocument() ||
+              currentEvent.isEndDocument() ||
+              isWhitespace(currentEvent) ||
+              isClosingDiv(currentEvent)) {
         continue;
       }
-      if (currentEvent.isEndDocument()) {
-        continue;
-      }
-      if (currentEvent.isStartElement()
-              && currentEvent.asStartElement().getName().getLocalPart().equals("div")) {
+      if (isOpeningDiv(currentEvent)) {
         divStart = currentEvent;
         continue;
       }
-      if (currentEvent.isEndElement() && currentEvent.asEndElement().getName().getLocalPart().equals("div")) {
-        continue;
-      }
-      if (currentEvent.isCharacters() && currentEvent.asCharacters().isWhiteSpace()) {
-        continue;
-      }
-      String currentBlockName = null;
-      if (currentEvent.isStartElement()) {
-        level = level + 1;
-        currentBlockName = currentEvent.asStartElement().getName().getLocalPart();
-      }
-      if (currentEvent.isEndElement()) {
-        level = level - 1;
-        currentBlockName = currentEvent.asEndElement().getName().getLocalPart();
-      }
+      String currentBlockName = elementName(currentEvent);
+      level += depth(currentEvent);
 
-      if (null != delimitingPagingRule && null != currentBlockName && blockElements.size() > 0 &&
-              delimitingPagingRule.matchesDelimiterTags(currentBlockName) && currentEvent.isStartElement()) {
-
-        StartElement startElement = currentEvent.asStartElement();
-        Attribute classAttr = startElement.getAttributeByName(new QName("class"));
-
-
-        String classString = null;
-
-        if (null != classAttr) {
-          classString = classAttr.getValue();
-        }
-
-        if (delimitingPagingRule.matchesDelimiter(currentBlockName, classString)) {
-          Markup extractedMarkup = buildMarkUp(blockElements, markup.getGrammar());
-          if (extractedMarkup != null) {
-            result.add(extractedMarkup);
-          }
-        }
+      if (null != delimitingPagingRule &&
+              null != currentBlockName &&
+              !blockElements.isEmpty() &&
+              delimitingPagingRule.matchesDelimiterTags(currentBlockName) &&
+              currentEvent.isStartElement() &&
+              delimitingPagingRule.matchesDelimiter(currentBlockName, getAttribute(currentEvent, "class"))) {
+          addMarkupToResult(markup, blockElements, result);
       }
 
       if (currentEvent.isCharacters()) {
-        Characters characters = currentEvent.asCharacters();
-        charactersBuffer.append(characters.getData());
+        charactersBuffer.append(currentEvent.asCharacters().getData());
       }
 
       blockElements.add(currentEvent);
@@ -121,27 +97,31 @@ class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomat
         setBlockCounter(getBlockCounter() + 1);
       }
       if (currentBlockName != null && getPagingRule().match(currentBlockName) && level == 0) {
-        Markup extractedMarkup = buildMarkUp(blockElements, markup.getGrammar());
-        if (extractedMarkup != null) {
-          result.add(extractedMarkup);
-        }
+        addMarkupToResult(markup, blockElements, result);
       }
     }
-    if (containsNonEmptyBlock(blockElements) && blockElements.size() > 0) {
-      Markup extractedMarkup = buildMarkUp(blockElements, markup.getGrammar());
-      if (extractedMarkup != null) {
-        result.add(extractedMarkup);
-      }
+    if (containsNonEmptyBlock(blockElements) && !blockElements.isEmpty()) {
+      addMarkupToResult(markup, blockElements, result);
     }
     return result;
-
   }
 
-  private boolean isIgnorableEvent(XMLEvent currentEvent) {
-    return currentEvent.isCharacters() && currentEvent.asCharacters().toString().trim().length() == 0;
+  private static int depth(XMLEvent event) {
+    return event.isStartElement() ? 1 : event.isEndElement() ? -1 : 0;
   }
 
-  private boolean containsNonEmptyBlock(List<XMLEvent> blockElements) {
+  private void addMarkupToResult(Markup markup, List<XMLEvent> blockElements, List<Markup> result) {
+    Markup extractedMarkup = buildMarkUp(blockElements, markup.getGrammar());
+    if (extractedMarkup != null) {
+      result.add(extractedMarkup);
+    }
+  }
+
+  private static boolean isIgnorableEvent(XMLEvent event) {
+    return isWhitespace(event);
+  }
+
+  private static boolean containsNonEmptyBlock(List<XMLEvent> blockElements) {
     XMLEvent currentEvent = null;
     XMLEvent previousEvent = null;
     for (XMLEvent blockElement : blockElements) {
@@ -154,8 +134,7 @@ class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomat
       if (previousEvent == null) {
         continue;
       }
-      if ((previousEvent.isStartElement() && !previousEvent.asStartElement().getName().getLocalPart().equals(
-              currentBlockName))) {
+      if (previousEvent.isStartElement() && !elementIsA(previousEvent, currentBlockName)) {
         return true;
       }
     }
@@ -163,23 +142,18 @@ class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomat
   }
 
   // only count non-empty top level blocks
-  private boolean shouldCountBlock(int level, String currentBlockName, XMLEvent previousEvent) {
-    if (level != 0) {
+  private static boolean shouldCountBlock(int level, String currentBlockName, XMLEvent previousEvent) {
+    if (level!=0 || previousEvent==null) {
       return false;
     }
-    if (previousEvent == null) {
-      return false;
-    }
-    boolean isEmptyBlock = previousEvent.isStartElement()
-            && previousEvent.asStartElement().getName().getLocalPart().equals(currentBlockName);
+    boolean isEmptyBlock = previousEvent.isStartElement() && elementIsA(previousEvent, currentBlockName);
     return !isEmptyBlock;
   }
 
   private Markup buildMarkUp(List<XMLEvent> blockElements, String grammar) {
-    ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
     ByteArrayInputStream bytesInputStream = null;
     XMLEventWriter streamWriter = null;
-    try {
+    try (ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream()) {
       streamWriter = xmlOutputFactory.get().createXMLEventWriter(byteArrayStream, "UTF-8");
       streamWriter.add(divStart);
       for (XMLEvent xmlEvent : blockElements) {
@@ -203,26 +177,8 @@ class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomat
       LOG.error("Error streaming xml", e);
       return null;
     } finally {
-      if (bytesInputStream != null) {
-        try {
-          bytesInputStream.close();
-        } catch (IOException e1) {
-          LOG.error("buildMarUp() - closing stream has failed !");
-        }
-      }
-      if (streamWriter != null) {
-        try {
-          streamWriter.close();
-        } catch (Exception e) {
-          LOG.error("buildMarUp() - closing stream has failed !");
-        }
-      }
-      try {
-        byteArrayStream.close();
-      } catch (Exception e) {
-        LOG.error("buildMarUp() - closing stream has failed !");
-      }
+      IOUtils.closeQuietly(bytesInputStream);
+      StAXUtil.closeQuietly(streamWriter);
     }
-
   }
 }

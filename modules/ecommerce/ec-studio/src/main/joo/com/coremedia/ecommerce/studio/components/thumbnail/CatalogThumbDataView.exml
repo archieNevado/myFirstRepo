@@ -7,6 +7,7 @@
   <exml:import class="com.coremedia.ecommerce.studio.helper.AugmentationUtil"/>
   <exml:import class="com.coremedia.ecommerce.studio.helper.CatalogHelper"/>
   <exml:import class="com.coremedia.ecommerce.studio.model.CatalogObject"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.editorContext"/>
 
   <exml:cfg name="bindTo" type="com.coremedia.ui.data.ValueExpression">
     <exml:description>Value expression describing the bound data source.</exml:description>
@@ -64,7 +65,7 @@
           <datafield name="imageUri"
                      mapping="name"
                      convert="{function(v:String, catalogObject:CatalogObject):String {
-                          return CatalogHelper.getInstance().getImageUrl(catalogObject)}}"/>
+                          return editorContext.getThumbnailUri(catalogObject, null, CatalogHelper.getInstance().getType(catalogObject))}}"/>
           <datafield name="shortName"
                      mapping="name"/>
         </ui:fields>

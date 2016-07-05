@@ -8,11 +8,11 @@ node.default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.
 node.default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.rest.search.secureUrl'] = "https://#{wcs_host}:3738/search/previewresources"
 
 node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.driver'] = 'com.mysql.jdbc.Driver'
-node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm7management'
+node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm_management'
 node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.dbProperties'] = 'corem/mysql'
 
 node.default['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.driver'] = 'com.mysql.jdbc.Driver'
-node.default['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm7master'
+node.default['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm_master'
 node.default['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.dbProperties'] = 'corem/mysql'
 
 node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.driver'] = node['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.driver']
@@ -20,14 +20,14 @@ node.default['blueprint']['webapps']['workflow-server']['application.properties'
 node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.dbProperties'] = node['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.dbProperties']
 
 node.default['blueprint']['webapps']['replication-live-server']['application.properties']['sql.store.driver'] = 'com.mysql.jdbc.Driver'
-node.default['blueprint']['webapps']['replication-live-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm7replication'
+node.default['blueprint']['webapps']['replication-live-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm_replication'
 node.default['blueprint']['webapps']['replication-live-server']['application.properties']['sql.store.dbProperties'] = 'corem/mysql'
 
 node.default['blueprint']['webapps']['caefeeder-preview']['application.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
-node.default['blueprint']['webapps']['caefeeder-preview']['application.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm7mcaefeeder'
+node.default['blueprint']['webapps']['caefeeder-preview']['application.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm_mcaefeeder'
 
 node.default['blueprint']['webapps']['caefeeder-live']['application.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
-node.default['blueprint']['webapps']['caefeeder-live']['application.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm7caefeeder'
+node.default['blueprint']['webapps']['caefeeder-live']['application.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm_caefeeder'
 
 # REPO CONFIGURATION
 node.default['blueprint']['maven_repository_url'] = 'http://your.maven.repo'

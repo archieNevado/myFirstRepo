@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../../United%20States/English/Options/Settings/Templates/CMChannel/Detail%20Page/_folderProperties.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Templates/CMChannel/Detail%20Page/_folderProperties"/>
 </master>
-<masterVersion>1</masterVersion>
 <contexts>
 <link href="New%20Detail%20Page.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Templates/CMChannel/Detail%20Page/New%20Detail%20Page"/>
 </contexts>

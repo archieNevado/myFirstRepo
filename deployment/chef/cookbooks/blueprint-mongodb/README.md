@@ -1,8 +1,6 @@
 # Description
 
-This is the wrapper cookbook to install mongodb.
-
-
+This is the wrapper cookbook to install mongodb3.
 
 # Requirements
 
@@ -12,35 +10,24 @@ This is the wrapper cookbook to install mongodb.
 
 ## Cookbooks:
 
-* mongodb (~> 0.16.2)
-* blueprint-yum
+* ulimit (~> 0.3.0)
+* mongodb3 (~> 5.2.0)
 
 # Attributes
 
-* `node['blueprint']['mongodb']['yum']['baseurl']` - The baseurl for the mongodb rpm repository. Defaults to `http://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64`.
-* `node['blueprint']['mongodb']['yum']['mirrorlist']` - The mirrorlist url for the mongodb rpm repository. Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['exclude']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['enablegroups']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['http_caching']` -  Defaults to `all`.
-* `node['blueprint']['mongodb']['yum']['include_config']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['includepkgs']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['max_retries']` -  Defaults to `2`.
-* `node['blueprint']['mongodb']['yum']['metadata_expire']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['mirror_expire']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['priority']` -  Defaults to `1`.
-* `node['blueprint']['mongodb']['yum']['proxy']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['proxy_username']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['proxy_password']` -  Defaults to `nil`.
-* `node['blueprint']['mongodb']['yum']['timeout']` -  Defaults to `30`.
+* `node['ulimit']` - define ulimits for mongod. Defaults to `{ ... }`.
+* `node['mongodb']['yum']['mirrorlist']` - overwrite mirrorlist. Defaults to `https://s3-eu-west-1.amazonaws.com/mirrors.coremedia.com/repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/$basearch/mirror`.
+* `node['mongodb3']['version']` - fixed version. Defaults to `3.2.5`.
+* `node['mongodb3']['config']['mongod']['net']['bindIp']` - fixed configuration. Defaults to `127.0.0.1`.
+* `node['mongodb3']['config']['mongod']['net']['http']['RESTInterfaceEnabled']` -  Defaults to `true`.
+* `node['mongodb3']['config']['mongod']['security']['authorization']` -  Defaults to `nil`.
+* `node['mongodb3']['config']['mongod']['storage']['mmapv1']['smallFiles']` -  Defaults to `nil`.
 
 # Recipes
 
-* [blueprint-mongodb::default](#blueprint-mongodbdefault) - This recipe installs and configures mongodb.
-
-## blueprint-mongodb::default
-
-This recipe installs and configures mongodb.
+* blueprint-mongodb::default
 
 # Author
 
-Author:: Your Name (<your_name@domain.com>)
+Author:: Bodo Schulz (<bodo.schulz@coremedia.com>)
+

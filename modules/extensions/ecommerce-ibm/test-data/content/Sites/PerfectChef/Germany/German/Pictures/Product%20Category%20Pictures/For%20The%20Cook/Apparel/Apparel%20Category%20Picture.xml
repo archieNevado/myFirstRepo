@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Category Pictures/For The Cook/Apparel" name="Apparel Category Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Category Pictures/For The Cook/Apparel" name="Apparel Category Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Category%20Pictures/For%20The%20Cook/Apparel/Apparel%20Categocc3087e2.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Category%20Pictures/For%20The%20Cook/Apparel/Apparel%20Category%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -108,7 +107,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1362</height>
-<data md5="cc42b6fd20214d9bb096d8ed426868bc" href="../../../../../../../../__blob/cc42b6fd20214d9bb096d8ed426868bc.blob" mimetype="image/jpeg"/>
+<data md5="cc42b6fd20214d9bb096d8ed426868bc" size="570934" href="../../../../../../../../__blob/cc42b6fd20214d9bb096d8ed426868bc.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

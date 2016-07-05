@@ -1,3 +1,4 @@
 # Author
 
-Author:: Your Name (<your_name@domain.com>)
+Author:: Bodo Schulz (<bodo.schulz@coremedia.com>)
+

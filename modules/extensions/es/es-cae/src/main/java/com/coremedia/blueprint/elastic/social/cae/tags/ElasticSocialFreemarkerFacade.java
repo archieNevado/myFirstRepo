@@ -67,6 +67,10 @@ public class ElasticSocialFreemarkerFacade {
     return new ReviewsResult(target);
   }
 
+  public long getNumberOfComments(Object target) {
+    return elasticSocialService.getNumberOfComments(target);
+  }
+
   public boolean hasUserWrittenReview(Object target) {
     Review review = elasticSocialService.getReview(elasticSocialUserHelper.getCurrentUser(), target);
     return review != null;

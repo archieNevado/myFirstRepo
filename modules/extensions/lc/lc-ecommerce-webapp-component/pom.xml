@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -11,18 +9,49 @@
   </parent>
 
   <artifactId>lc-ecommerce-webapp-component</artifactId>
-  <description>This component module contains all rersources and configuration shared by webapps running with LC
-  </description>
+  <description>This component module contains all rersources and configuration shared by webapps running with LC</description>
 
   <properties>
-    <coremedia.project.extension.for>cae,studio-lib,contentfeeder</coremedia.project.extension.for>
+    <coremedia.project.extension.for>cae,studio-lib</coremedia.project.extension.for>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-multisite-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-lc-common</artifactId>
-      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-multisite</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
     </dependency>
   </dependencies>
 

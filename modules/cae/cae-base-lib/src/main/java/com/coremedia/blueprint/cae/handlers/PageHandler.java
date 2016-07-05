@@ -45,7 +45,7 @@ public class PageHandler extends DefaultPageHandler {
 
   @RequestMapping(SEO_FRIENDLY_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMLinkable linkable,
-                                    @PathVariable(SEGMENT_ID) int segmentId,
+                                    @PathVariable(SEGMENT_ID) String segmentId,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
                                     @PathVariable(SEGMENT_NAME) String vanity,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) String view) {

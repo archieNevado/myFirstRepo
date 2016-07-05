@@ -15,10 +15,10 @@ import org.springframework.web.util.UriTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 @Link
 @RequestMapping

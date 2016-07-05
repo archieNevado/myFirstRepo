@@ -17,14 +17,7 @@
   </description>
 
   <properties>
-    <finalName>blueprint</finalName>
-    <!-- always true if preview webapp is started with local tomcat plugin -->
-    <cae.use.local.resources>true</cae.use.local.resources>
-    <cae.developer.mode>true</cae.developer.mode>
-    <filter.viewlookup.by.predicate>true</filter.viewlookup.by.predicate>
-    <!-- force periodic reload of CAE view CacheKeys -->
-    <viewdispatcher.cache.enabled>false</viewdispatcher.cache.enabled>
-    <crossdomain.whitelist>*</crossdomain.whitelist>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
   </properties>
 
   <dependencies>
@@ -50,7 +43,7 @@
   </dependencies>
 
   <build>
-    <finalName>${finalName}</finalName>
+    <finalName>blueprint</finalName>
     <plugins>
       <!--
          invoke "mvn tomcat7:run" for running this webapp locally using a tomcat
@@ -59,62 +52,17 @@
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
-          <ajpPort>${PREVIEW_PORT_PREFIX}${PREVIEW_AJP_PORT_SUFFIX}</ajpPort>
+          <ajpPort>40909</ajpPort>
           <path>/${project.build.finalName}</path>
-          <port>${PREVIEW_PORT_PREFIX}${PREVIEW_HTTP_PORT_SUFFIX}</port>
+          <port>40980</port>
           <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
           <contextFile>${project.basedir}/src/main/servletengine/tomcat-context.xml</contextFile>
           <systemProperties>
-            <livecontext.crossdomain.whitelist>${crossdomain.whitelist}</livecontext.crossdomain.whitelist>
-            <repository.url>http://${cms.host}:${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}/coremedia/ior</repository.url>
-            <solr.search.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr/preview</solr.search.url>
-            <mongoDb.clientURI>mongodb://${mongo.db.host}:27017</mongoDb.clientURI>
-            <elastic.solr.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr</elastic.solr.url>
-            <signCookie.publicKey>${signCookie.publicKey}</signCookie.publicKey>
-            <signCookie.privateKey>${signCookie.privateKey}</signCookie.privateKey>
-            <blueprint.port>${PREVIEW_PORT_PREFIX}${PREVIEW_HTTP_PORT_SUFFIX}</blueprint.port>
-            <!--
-               Sets a JMX remote url so that the webapp can be accessed via JMX when running with tomcat plugin.
-               When running this application in a standalone tomcat, then the tomcat's built-in remote connector server
-               can be used instead.
-            -->
-            <management.server.remote.url>service:jmx:rmi:///jndi/rmi://localhost:1098/cae-preview</management.server.remote.url>
-            <!--
-               Storing logs below target so that they will be cleaned on "mvn clean", too
-            -->
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-
-            <tenant.default>${tenant.default}</tenant.default>
-            <elastic.social.mail.smtp.server>${elastic.social.mail.smtp.server}</elastic.social.mail.smtp.server>
-            <cae.use.local.resources>${cae.use.local.resources}</cae.use.local.resources>
-            <cae.developer.mode>${cae.developer.mode}</cae.developer.mode>
-            <view.debug.enabled>${view.debug.enabled}</view.debug.enabled>
-            <filter.viewlookup.by.predicate>${filter.viewlookup.by.predicate}</filter.viewlookup.by.predicate>
-            <viewdispatcher.cache.enabled>${viewdispatcher.cache.enabled}</viewdispatcher.cache.enabled>
-            <cae.is.standalone>${cae.is.standalone}</cae.is.standalone>
-            <blueprint.site.mapping.helios>${blueprint.site.mapping.helios}</blueprint.site.mapping.helios>
-            <blueprint.site.mapping.corporate>${blueprint.site.mapping.corporate}</blueprint.site.mapping.corporate>
-            <!--
-                CoreMedia LiveContext Configuration
-            -->
-            <livecontext.ibm.wcs.host>${livecontext.ibm.wcs.host}</livecontext.ibm.wcs.host>
-            <blueprint.host.helios>${blueprint.host.helios}</blueprint.host.helios>
-            <livecontext.apache.wcs.host>${livecontext.apache.wcs.host}</livecontext.apache.wcs.host>
-            <livecontext.apache.preview.production.wcs.host>${livecontext.apache.preview.production.wcs.host}</livecontext.apache.preview.production.wcs.host>
-            <livecontext.apache.preview.wcs.host>${livecontext.apache.preview.wcs.host}</livecontext.apache.preview.wcs.host>
-            <livecontext.ibm.wcs.rest.search.url>${livecontext.ibm.wcs.rest.search.url}</livecontext.ibm.wcs.rest.search.url>
-            <livecontext.ibm.wcs.rest.search.secureUrl>${livecontext.ibm.wcs.rest.search.secureUrl}</livecontext.ibm.wcs.rest.search.secureUrl>
-            <livecontext.ibm.wcs.cache.invalidation.enabled>${livecontext.ibm.wcs.cache.invalidation.enabled}</livecontext.ibm.wcs.cache.invalidation.enabled>
-            <livecontext.ibm.wcs.version>${livecontext.ibm.wcs.version}</livecontext.ibm.wcs.version>
-            <livecontext.ibm.wcs.store.id.aurora>${livecontext.ibm.wcs.store.id.aurora}</livecontext.ibm.wcs.store.id.aurora>
-            <livecontext.ibm.wcs.store.id.perfectchef>${livecontext.ibm.wcs.store.id.perfectchef}</livecontext.ibm.wcs.store.id.perfectchef>
-            <livecontext.ibm.wcs.catalog.id.aurora>${livecontext.ibm.wcs.catalog.id.aurora}</livecontext.ibm.wcs.catalog.id.aurora>
-            <livecontext.ibm.wcs.catalog.id.perfectchef>${livecontext.ibm.wcs.catalog.id.perfectchef}</livecontext.ibm.wcs.catalog.id.perfectchef>
-            <!--
-                CoreMedia Corporate Configuration
-            -->
-            <blueprint.host.corporate>${blueprint.host.corporate}</blueprint.host.corporate>
+            <propertieslocations>classpath:/wcs.properties,classpath:/cae-preview.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
 

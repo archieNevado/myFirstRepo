@@ -1,8 +1,8 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.util.CatalogRootHelper;
 import com.coremedia.ecommerce.studio.rest.model.Store;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.rest.linking.RemoteBeanLink;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -24,26 +24,28 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   }
 
   private void fillRepresentation(StoreRepresentation representation) {
-    try {
-      Store entity = getEntity();
+    Store entity = getEntity();
 
-      if (entity == null) {
-        LOG.warn("Error loading store bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load store bean");
-      }
-
-      representation.setMarketingEnabled(getConnection().getMarketingSpotService() != null &&
-              !getConnection().getMarketingSpotService().findMarketingSpots().isEmpty());
-      representation.setId(entity.getId());
-      representation.setVendorUrl(entity.getVendorUrl());
-      representation.setVendorName(entity.getVendorName());
-      representation.setVendorVersion(entity.getVendorVersion());
-      representation.setContext(getStoreContext());
-      representation.setRootCategory(CatalogRootHelper.getRootCategory());
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    if (entity == null) {
+      LOG.warn("Error loading store bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load store bean");
     }
+
+    CommerceConnection connection = getConnection();
+    representation.setMarketingEnabled(connection.getMarketingSpotService() != null &&
+            !connection.getMarketingSpotService().findMarketingSpots().isEmpty());
+    representation.setId(entity.getId());
+    representation.setVendorUrl(entity.getVendorUrl());
+    representation.setVendorName(entity.getVendorName());
+    representation.setVendorVersion(entity.getVendorVersion());
+    representation.setContext(getStoreContext());
+    representation.setRootCategory(RemoteBeanLink.create(rootCategoryUri(connection)));
+  }
+
+  private String rootCategoryUri(CommerceConnection connection) {
+    String siteId = connection.getStoreContext().getSiteId();
+    String workspaceId = connection.getStoreContext().getWorkspaceId();
+    return "livecontext/category/" + siteId + "/" + workspaceId + "/" + CategoryResource.ROOT_CATEGORY_ROLE_ID;
   }
 
   @Override

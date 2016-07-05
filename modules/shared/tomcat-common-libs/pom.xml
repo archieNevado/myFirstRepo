@@ -23,7 +23,7 @@
        | for more informations.
        -->
       <groupId>org.apache.tomcat</groupId>
-      <artifactId>catalina-jmx-remote</artifactId>
+      <artifactId>tomcat-catalina-jmx-remote</artifactId>
       <version>${tomcat.version}</version>
       <scope>runtime</scope>
     </dependency>

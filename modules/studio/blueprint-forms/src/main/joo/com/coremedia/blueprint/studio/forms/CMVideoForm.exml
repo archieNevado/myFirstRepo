@@ -64,7 +64,7 @@
                 <editor:fields>
                   <ui:dataField name="thumbnailUrl"
                                 mapping=""
-                                ifUnreadable="" convert="{editorContext.getThumbnailUri}"/>
+                                ifUnreadable="" />
                 </editor:fields>
                 <editor:columns>
                   <gridcolumn id="thumbnail"

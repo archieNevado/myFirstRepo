@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMPlaceholder/dummy-followus.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMPlaceholder/dummy-followus"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Dummy ViewType for Shopping Cart</description>
 <icon href="dummy-followus.icon.png" mimetype="image/png"/>
 <layout>dummy-followus</layout>

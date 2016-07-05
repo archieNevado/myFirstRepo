@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd
                            http://www.coremedia.com/2007/coremedia-spring-beans-customization
                            http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
@@ -37,10 +40,20 @@
   <bean id="assetDownloadPortalHandler" class="com.coremedia.blueprint.assets.cae.handlers.DownloadPortalHandler">
     <property name="contextHelper" ref="contextHelper"/>
     <property name="downloadPortalFactory" ref="amDownloadPortalFactory"/>
-    <property name="validationService" ref="validationService"/>
+    <property name="validationService" ref="amValidationService"/>
     <property name="contentRepository" ref="contentRepository"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
+
+  <bean id="amValidationService" class="com.coremedia.blueprint.cae.services.validation.ValidationServiceImpl">
+    <property name="validators" ref="amValidatorsList" />
+  </bean>
+
+  <util:list id="amValidatorsList">
+    <description>list bean of Validator implementations used by the amValidationService</description>
+    <ref bean="hasPublishedRenditionsValidator"/>
+    <ref bean="validityPeriodValidator"/>
+  </util:list>
 
   <bean id="assetRenditionBlobHandler" class="com.coremedia.blueprint.assets.cae.handlers.AssetRenditionBlobHandler">
     <property name="capBlobHandler" ref="capBlobHandler"/>

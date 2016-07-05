@@ -10,6 +10,11 @@
   </parent>
   <artifactId>user-changes-webapp</artifactId>
   <packaging>war</packaging>
+
+  <properties>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -56,26 +61,15 @@
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
-          <port>41085</port>
+          <port>40580</port>
           <warSourceDirectory>src/main/webapp</warSourceDirectory>
           <path>/</path>
           <systemProperties>
-            <catalina.base>${project.build.directory}</catalina.base>
-            <resourcePath.base>${project.basedir}</resourcePath.base>
-            <repository.url>
-              http://${cms.host}:${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}/coremedia/ior
-            </repository.url>
-            <repository.user>webserver</repository.user>
-            <repository.password>webserver</repository.password>
-            <!--
-               Sets a JMX remote url so that the webapp can be accessed via JMX when running with tomcat plugin.
-               When running this application in a standalone tomcat, then the tomcat's built-in remote connector server
-               can be used instead.
-            -->
-            <management.server.remote.url>service:jmx:rmi://localhost:41089/jndi/rmi://localhost:${STUDIO_PORT_PREFIX}${JMX_REGISTRY_PORT_SUFFIX}/user-changes</management.server.remote.url>
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-            <mongoDb.clientURI>mongodb://${mongo.db.host}:${mongo.db.port}</mongoDb.clientURI>
+            <propertieslocations>classpath:/user-changes.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>

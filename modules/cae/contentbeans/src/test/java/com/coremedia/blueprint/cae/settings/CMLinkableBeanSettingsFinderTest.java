@@ -7,6 +7,8 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.coremedia.objectserver.dataviews.DataViewHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +20,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CMLinkableBeanSettingsFinderTest.CMLinkableBeanSettingsFinderTestConfiguration .class)
@@ -36,6 +41,8 @@ public class CMLinkableBeanSettingsFinderTest {
   private ContentRepository contentRepository;
   @Inject
   private ContentBeanFactory contentBeanFactory;
+  @Inject
+  private DataViewFactory dataViewFactory;
 
   private CMLinkable linkable;
 
@@ -44,7 +51,7 @@ public class CMLinkableBeanSettingsFinderTest {
 
   @Before
   public void setup() {
-    linkable = contentBeanFactory.createBeanFor(contentRepository.getContent(IdHelper.formatContentId(124)), CMLinkable.class);
+    linkable = contentbeanFor(124);
   }
 
 
@@ -77,6 +84,72 @@ public class CMLinkableBeanSettingsFinderTest {
     assertNotNull("No map", value);
   }
 
+
+  @Test
+  public void testDataview() {
+    CMLinkable contentBean = contentbeanFor(2);
+    CMLinkable cbLink = settingsService.setting("link", CMLinkable.class, contentBean);
+    assertFalse(DataViewHelper.isDataView(cbLink));
+
+    CMLinkable dataview = dataviewFor(2);
+    CMLinkable dvLink = settingsService.setting("link", CMLinkable.class, dataview);
+    assertTrue(DataViewHelper.isDataView(dvLink));
+  }
+
+  @Test
+  public void testLinklistDataviews() {
+    CMLinkable dataview = dataviewFor(2);
+    assertDataviews(settingsService.settingAsList("linkList", CMLinkable.class, dataview), 2);
+  }
+
+  @Test
+  public void testNestedSettingDataview() {
+    CMLinkable contentBean = contentbeanFor(2);
+    CMLinkable cbLink = settingsService.nestedSetting(Arrays.asList("struct", "link"), CMLinkable.class, contentBean);
+    assertFalse(DataViewHelper.isDataView(cbLink));
+
+    CMLinkable dataview = dataviewFor(2);
+    CMLinkable dvLink = settingsService.nestedSetting(Arrays.asList("struct", "link"), CMLinkable.class, dataview);
+    assertTrue(DataViewHelper.isDataView(dvLink));
+  }
+
+  @Test
+  public void testNestedLinkDataview() {
+    CMLinkable contentBean = contentbeanFor(2);
+    Map<String, Object> cbMap = settingsService.settingAsMap("struct", String.class, Object.class, contentBean);
+    assertFalse(DataViewHelper.isDataView(cbMap.get("link")));
+
+    CMLinkable dataview = dataviewFor(2);
+    Map<String, Object> dvMap = settingsService.settingAsMap("struct", String.class, Object.class, dataview);
+    assertTrue(DataViewHelper.isDataView(dvMap.get("link")));
+  }
+
+  @Test
+  public void testNestedLinklistDataviews() {
+    CMLinkable dataview = dataviewFor(2);
+    Map<String, Object> dvMap = settingsService.settingAsMap("struct", String.class, Object.class, dataview);
+    assertDataviews(dvMap.get("linkList"), 2);
+  }
+
+  @Test
+  public void testStructListDataview() {
+    CMLinkable dataview = dataviewFor(2);
+    List<Map> dvList = settingsService.settingAsList("structList", Map.class, dataview);
+    assertEquals(2, dvList.size());
+    Object link = dvList.get(0).get("link");
+    assertTrue(link + " is not a dataview!", DataViewHelper.isDataView(link));
+  }
+
+  @Test
+  public void testStructListDataviews() {
+    CMLinkable dataview = dataviewFor(2);
+    List<Map> dvList = settingsService.settingAsList("structList", Map.class, dataview);
+    assertEquals(2, dvList.size());
+    Object linklist = dvList.get(1).get("linkList");
+    assertDataviews(linklist, 2);
+  }
+
+
   @Test
   public void testBeanProxy() {
     LinkablePropertyProxyTest proxy = settingsService.createProxy(LinkablePropertyProxyTest.class, linkable);
@@ -96,6 +169,27 @@ public class CMLinkableBeanSettingsFinderTest {
 
 
   // --- internal ---------------------------------------------------
+
+  private CMLinkable contentbeanFor(int id) {
+    return contentBeanFactory.createBeanFor(contentRepository.getContent(IdHelper.formatContentId(id)), CMLinkable.class);
+  }
+
+  private CMLinkable dataviewFor(int id) {
+    return dataviewFor(contentbeanFor(id));
+  }
+
+  private CMLinkable dataviewFor(CMLinkable contentBean) {
+    return dataViewFactory.loadCached(contentBean, null);
+  }
+
+  private static void assertDataviews(Object o, int expectedSize) {
+    assertTrue(o instanceof Collection);
+    Collection collection = (Collection)o;
+    assertEquals(expectedSize, collection.size());
+    for (Object item : collection) {
+      assertTrue(item + " is not a dataview!", DataViewHelper.isDataView(item));
+    }
+  }
 
   private interface LinkablePropertyProxyTest {
     CMLinkable getLinkProperty();

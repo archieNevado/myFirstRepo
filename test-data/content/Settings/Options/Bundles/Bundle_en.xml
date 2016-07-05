@@ -9,7 +9,7 @@
 <StringProperty Name="home">Home</StringProperty>
 <StringProperty Name="breadcrumbs.label">You are here:</StringProperty>
 <StringProperty Name="amount.of.comments">Comments: {0}</StringProperty>
-<StringProperty Name="copyright">© 2015 CoreMedia AG</StringProperty>
+<StringProperty Name="copyright">© 2016 CoreMedia AG</StringProperty>
 <StringProperty Name="text.more">read more</StringProperty>
 <StringProperty Name="download.now">download now</StringProperty>
 <StringProperty Name="meta.author">CoreMedia AG</StringProperty>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Magazine Pictures/Magazine Fall Pictures/Perfect Dinner" name="Perfect Dinner 02 Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Magazine Pictures/Magazine Fall Pictures/Perfect Dinner" name="Perfect Dinner 02 Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Fall%20Pictures/Perfect%20Dinner/Perfectf06c8a6b.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Fall%20Pictures/Perfect%20Dinner/Perfect%20Dinner%2002%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Ein Perfektes Dinner</alt>
 <copyright>Kzenon / Shutterstock 131685341</copyright>
 <dataUrl></dataUrl>
-<data md5="0b70f784fe72e460210056e01739762c" href="../../../../../../../../__blob/0b70f784fe72e460210056e01739762c.blob" mimetype="image/jpeg"/>
+<data md5="0b70f784fe72e460210056e01739762c" size="570184" href="../../../../../../../../__blob/0b70f784fe72e460210056e01739762c.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

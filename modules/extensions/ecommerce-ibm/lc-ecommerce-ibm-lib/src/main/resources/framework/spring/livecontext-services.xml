@@ -25,16 +25,16 @@
     <property name="socketTimeout" value="${livecontext.rest.connector.socketTimeout}"/>
     <property name="contractPreviewUserName" value="${livecontext.ibm.contract.preview.credentials.username}"/>
     <property name="contractPreviewUserPassword" value="${livecontext.ibm.contract.preview.credentials.password}"/>
+    <property name="serviceUser" value="${livecontext.service.credentials.username}"/>
+    <property name="servicePassword" value="${livecontext.service.credentials.password}"/>
+    <property name="commerceCache" ref="commerceCache"/>
   </bean>
 
   <bean id="storefrontConnector" class="com.coremedia.livecontext.ecommerce.ibm.common.WcStorefrontConnector">
-    <property name="connectorHelper" ref="connectorHelper"/>
     <property name="connectionPoolSize" value="${livecontext.storefront.connector.connectionPoolSize}"/>
     <property name="connectionTimeout" value="${livecontext.storefront.connector.connectionTimeout}"/>
     <property name="socketTimeout" value="${livecontext.storefront.connector.socketTimeout}"/>
   </bean>
-
-  <bean id="connectorHelper" class="com.coremedia.livecontext.ecommerce.ibm.common.ConnectorHelper"/>
 
   <bean id="catalogWrapperService"
         class="com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService">
@@ -85,10 +85,12 @@
   <bean id="catalogService" class="com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl">
     <property name="catalogWrapperService" ref="catalogWrapperService"/>
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
+    <property name="commerceIdProvider" ref="commerceIdProvider"/>
     <property name="commerceCache" ref="commerceCache"/>
     <property name="wcsUrl" value="http:${livecontext.apache.wcs.url}"/>
     <property name="wcsStoreUrl" value="${livecontext.ibm.wcs.store.url}"/>
     <property name="wcsAssetsUrl" value="${livecontext.ibm.wcs.assets.url}"/>
+    <property name="storeContextProvider" ref="storeContextProvider"/>
   </bean>
 
   <bean id="availabilityService" class="com.coremedia.livecontext.ecommerce.ibm.inventory.AvailabilityServiceImpl">
@@ -181,24 +183,6 @@
     <property name="storeConfigurations" ref="ibmStoreConfigurations"/>
     <property name="storeInfoService" ref="storeInfoService"/>
     <property name="cache" ref="cache"/>
-  </bean>
-
-  <!-- Cache beans -->
-
-  <bean id="cacheWrapperService" class="com.coremedia.livecontext.ecommerce.ibm.event.WcCacheWrapperService">
-    <property name="restConnector" ref="restConnector"/>
-  </bean>
-
-  <!-- activate this for active commerce cache invalidation -->
-  <bean id="commerceCacheInvalidationListener"
-        class="com.coremedia.livecontext.ecommerce.ibm.event.CommerceCacheInvalidationListener">
-    <property name="wcCacheWrapperService" ref="cacheWrapperService"/>
-    <property name="enabled" value="${livecontext.ibm.wcs.cache.invalidation.enabled}"/>
-    <property name="cacheInvalidationPropagators">
-      <list>
-        <ref bean="commerceCacheInvalidationPropagatorImpl"/>
-      </list>
-    </property>
   </bean>
 
   <bean id="assetUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.asset.AssetUrlProviderImpl">

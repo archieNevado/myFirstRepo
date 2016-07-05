@@ -3,6 +3,7 @@ package com.coremedia.blueprint.cae.handlers;
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
+import com.coremedia.blueprint.cae.web.HttpHead;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
@@ -24,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -252,5 +254,48 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
     }
     // add additional query parameters
     addLinkParametersAsQueryParameters(uriBuilder, linkParameters);
+  }
+
+  /**
+   * Don't try this at home!
+   * <p>
+   * In order to calculate the content length, a page is always rendered
+   * completely, even for a HEAD request.  This methods speeds up HEAD requests
+   * by provision of a reduced ModelAndView with a {@link HttpHead} bean, which
+   * is rendered by a {@link com.coremedia.blueprint.cae.view.HttpHeadView}.
+   * <p>
+   * However, there is a serious drawback!  While the
+   * <a href="https://tools.ietf.org/html/rfc7230#section-3.3.2">HTTP spec</a>
+   * requires to set the Content-length header correctly or not at all, the
+   * {@link javax.servlet.http.HttpServletResponse} does not support omission
+   * of the Content-length header.  Therefore, responses based on this model
+   * have a wrong Content-length header of 0.
+   * <p>
+   * Because of this violation of the HTTP standard the Blueprint does not use
+   * this method, but provides it only as a utility for projects.  Use it only
+   * if your CAE serves as an internal private back end for well known clients
+   * which do not care for the Content-length header.  Never use this method if
+   * your CAE is open for search crawlers or other black box clients.
+   */
+  protected ModelAndView optimizeForHeadRequest(ModelAndView modelAndView, HttpServletRequest request) {
+    boolean isHeadRequest = "HEAD".equals(request.getMethod());
+    if (HandlerHelper.isError(modelAndView) || !isHeadRequest) {
+      return modelAndView;
+    } else {
+      return HandlerHelper.createModel(createHttpHeadBean(modelAndView, request));
+    }
+  }
+
+  /**
+   * Create a {@link HttpHead} bean for
+   * {@link #optimizeForHeadRequest(ModelAndView, HttpServletRequest)}
+   * <p>
+   * To be overridden by particular page handlers that use
+   * {@link #optimizeForHeadRequest(ModelAndView, HttpServletRequest)}.
+   * Make sure that the HttpHead resembles the HTTP head of the response for
+   * an according GET request as closely as possible.
+   */
+  protected HttpHead createHttpHeadBean(ModelAndView modelAndView, HttpServletRequest request) {
+    return new HttpHead();
   }
 }

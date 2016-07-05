@@ -6,6 +6,8 @@ import com.atlassian.crowd.service.client.ClientPropertiesImpl;
 import com.atlassian.crowd.service.client.CrowdClient;
 import hox.corem.Corem;
 import hox.corem.login.CommonLoginModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -20,6 +22,8 @@ import java.util.Map;
 import java.util.Properties;
 
 public class CrowdLoginModule extends CommonLoginModule {
+  private static final Logger LOG = LoggerFactory.getLogger(CrowdLoginModule.class);
+
   private CrowdClient crowdClient = null;
   private String domain = "";
 
@@ -48,28 +52,21 @@ public class CrowdLoginModule extends CommonLoginModule {
     }
     Properties crowdProperties = new Properties();
     try {
-      FileInputStream stream = new FileInputStream(propfile);
-      try {
+      try (FileInputStream stream = new FileInputStream(propfile)) {
         crowdProperties.load(stream);
-      } finally {
-        stream.close();
       }
     } catch (IOException e) {
-      CommonLoginModule.log.error("Error while loading properties file: " + propfile, e);
+      LOG.error("Error while loading properties file: " + propfile, e);
     }
 
     final ClientProperties clientProperties = ClientPropertiesImpl.newInstanceFromProperties(crowdProperties);
     crowdClient = new RestCrowdClientFactory().newInstance(clientProperties);
-
-
-    if (CommonLoginModule.log.isDebugEnabled()) {
-      CommonLoginModule.log.debug("Crowd authentication initialized");
-    }
+    LOG.debug("Crowd authentication initialized");
   }
 
   @Override
   public boolean login() throws LoginException {
-    CommonLoginModule.log.debug("Invoke Crowd authentication");
+    LOG.debug("Invoke Crowd authentication");
 
     if (!super.login()) {
       return false;
@@ -83,35 +80,35 @@ public class CrowdLoginModule extends CommonLoginModule {
       Callback[] callbacks = new Callback[]{domainCallback, jndiCallback, passwordCallback};
       callbackHandler.handle(callbacks);
     } catch (Exception e) {
-      CommonLoginModule.log.error("Crowd authentication callback failed, cannot authenticate the user without the callback data.", e);
+      LOG.error("Crowd authentication callback failed, cannot authenticate the user without the callback data.", e);
       return false;
     }
 
     String theDomain = domainCallback.getName();
     if (theDomain == null || "".equals(theDomain.trim()) || domain != null && !domain.equals(theDomain)) {
-      CommonLoginModule.log.info("Not responsible for domain " + theDomain);
+      LOG.info("Not responsible for domain " + theDomain);
       return false;
     }
 
     String distinguishedName = jndiCallback.getName();
     if (distinguishedName == null) {
-      CommonLoginModule.log.info("No Distinguished Name, cannot authenticate builtin users against Crowd");
+      LOG.info("No Distinguished Name, cannot authenticate builtin users against Crowd");
       return false;
     }
 
     String password = passwordAsString(passwordCallback);
     if (password.isEmpty()) {
-      CommonLoginModule.log.error("Password not available, cannot authenticate against Crowd");
+      LOG.error("Password not available, cannot authenticate against Crowd");
       return false;
     }
 
     try {
       crowdClient.authenticateUser(distinguishedName, password);
-      CommonLoginModule.log.info("User '" + distinguishedName + "' logged in successfully");
+      LOG.info("User '" + distinguishedName + "' logged in successfully");
     } catch (Exception e) {
       // Not an exceptional case, regular login failure.
       // Do not log irrelevant alarming stacktraces.
-      CommonLoginModule.log.info("Authentication against Crowd: The user is not accepted.");
+      LOG.info("Authentication against Crowd: The user is not accepted.");
       LoginException loginException = new LoginException("Authentication against Crowd: The user is not accepted.");
       loginException.initCause(e);
       // We *do* preserve the stacktrace, even though it is questionable in this particular case.

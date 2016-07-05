@@ -26,6 +26,48 @@
           </folder>
         </folder>
       </folder>
+      <document id="2" type="CMArticle" name="Article">
+        <version number="1">
+          <markupProperty name="localSettings" url="2settings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <document id="4" type="CMArticle" name="Article4">
+        <version number="1">
+        </version>
+      </document>
+      <document id="6" type="CMArticle" name="Article6">
+        <version number="1">
+        </version>
+      </document>
+      <document id="8" type="CMArticle" name="Article8">
+        <version number="1">
+        </version>
+      </document>
+      <document id="10" type="CMArticle" name="Article10">
+        <version number="1">
+        </version>
+      </document>
+      <document id="12" type="CMArticle" name="Article12">
+        <version number="1">
+        </version>
+      </document>
+      <document id="14" type="CMArticle" name="Article14">
+        <version number="1">
+        </version>
+      </document>
+      <document id="16" type="CMArticle" name="Article16">
+        <version number="1">
+        </version>
+      </document>
+      <document id="18" type="CMArticle" name="Article18">
+        <version number="1">
+        </version>
+      </document>
+      <document id="20" type="CMArticle" name="Article20">
+        <version number="1">
+        </version>
+      </document>
+
     </folder>
   </content>
 </contentRepository>

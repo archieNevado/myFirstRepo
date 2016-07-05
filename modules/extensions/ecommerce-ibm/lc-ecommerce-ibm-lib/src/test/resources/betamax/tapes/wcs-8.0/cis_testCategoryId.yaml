@@ -1,0 +1,58 @@
+!tape
+name: cis_testCategoryId
+interactions:
+- recorded: 2016-05-23T15:46:31.333Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 15:46:31 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000ERCVD4eZ15JIeFwtmCPDOvT:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
+      Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
+      Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
+      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
+- recorded: 2016-05-23T15:46:31.357Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/Women?catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 15:46:31 GMT
+      Expires: Mon, 23 May 2016 16:46:31 GMT
+      Set-Cookie: JSESSIONID=0000kTA9P9CqE3Ta9H7-UxJJR--:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"parentCatalogGroupID":["3074457345616676668"],"metaDescription":"Women","uniqueID":"3074457345616676670","xcatgroup_seoSegment":"women","fullImage":"images\/catalog\/apparel\/women\/category\/catr_app_women.png","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676670","title":"Women
+      | AuroraESite","productsURL":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676670","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_app_women.png","shortDescription":"Women","name":"Women","metaKeyword":"casual,
+      cocktail, skirt, sweater, evening","fullImageAltDescription":"Image for Women from AuroraESite","identifier":"Women"}],"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/Women?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'

@@ -16,6 +16,7 @@
   </exml:cfg>
 
   <exml:cfg name="pageGridPropertyName" type="String"/>
+  <exml:cfg name="fallbackPageGridPropertyName" type="String"/>
 
   <editor:collapsibleFormPanel title="{CustomLabels_properties.INSTANCE.PropertyGroup_Placements_label}"
                                bwrapCfg="{{cls: 'x-panel-bwrap initial-overflow'}}">
@@ -25,6 +26,7 @@
                                   iconCls="btn-help"/>
       <spacer height="6"/>
       <bppm:pageGridPropertyField propertyName="{config.pageGridPropertyName}"
+                                  fallbackPropertyName="{config.fallbackPageGridPropertyName}"
                                   hideLabel="true"
                                   showLocal="{config.showLocal}"
                                   pageTreeRelation="{augmentedCategoryTreeRelation}"/>

@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.ecommerce.ibm.login;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.security.encryption.util.EncryptionServiceUtil;
 import com.coremedia.springframework.beans.RequiredPropertyNotSetException;
@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service interface to logon to the IBM WCS catalog.
@@ -41,7 +42,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
   private String servicePassword;
   private CommerceCache commerceCache;
 
-  private int previewTokenLifeTimeInSeconds = 300;
+  private long previewTokenLifeTimeInSeconds = TimeUnit.HOURS.toSeconds(3);
 
   private WcLoginWrapperService loginWrapperService;
 
@@ -60,6 +61,18 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
   @Required
   public void setLoginWrapperService(WcLoginWrapperService loginWrapperService) {
     this.loginWrapperService = loginWrapperService;
+  }
+
+  /**
+   * sets the lifetime for generated preview tokens in seconds.
+   * Value might be overriden by {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache duration.
+   * {@link #afterPropertiesSet} ensures that {@link #previewTokenLifeTimeInSeconds} is at least twice as long as
+   * {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache setting in {@link CommerceCache#setCacheTimesInSeconds(Map)}
+   * to avoid outdated previewToken in cache.
+   * @param previewTokenLifeTimeInSeconds (default is 3 hours, might be increased by higher cache duration times)
+   */
+  public void setPreviewTokenLifeTimeInSeconds(long previewTokenLifeTimeInSeconds) {
+    this.previewTokenLifeTimeInSeconds = previewTokenLifeTimeInSeconds;
   }
 
   @Required
@@ -84,7 +97,10 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
 
     long cacheDurationInSeconds = commerceCache.getCacheDurationInSeconds(PreviewTokenCacheKey.CONFIG_KEY_PREVIEW_TOKEN);
     //uapi cache key shall always expire before commerce previewToken expires
-    this.previewTokenLifeTimeInSeconds = (int) (cacheDurationInSeconds + 60);
+    if (previewTokenLifeTimeInSeconds < (cacheDurationInSeconds * 2)) {
+      previewTokenLifeTimeInSeconds = cacheDurationInSeconds * 2;
+      LOG.info("increasing previewTokenLifeTimeInSeconds to (cacheDurationInSeconds * 2) = "+previewTokenLifeTimeInSeconds);
+    }
   }
 
   @Override

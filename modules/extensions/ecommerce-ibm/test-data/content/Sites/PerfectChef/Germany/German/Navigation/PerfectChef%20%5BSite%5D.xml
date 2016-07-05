@@ -4,11 +4,13 @@
 <master>
 <link href="../../../United%20States/English/Navigation/PerfectChef%20%5BSite%5D.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/PerfectChef%20%5BSite%5D"/>
 </master>
-<masterVersion>1</masterVersion>
 <id>928fd4c3c00f01e3580ce73140aecdf8</id>
 <name>PerfectChef</name>
 <root>
 <link href="Perfect%20Chef%20Deutschland.xml" path="/Sites/PerfectChef/Germany/German/Navigation/Perfect%20Chef%20Deutschland"/>
 </root>
 <siteManagerGroup>manager-de-DE</siteManagerGroup>
+<linkedSettings>
+<link href="../Options/Settings/SiteSettings.xml" path="/Sites/PerfectChef/Germany/German/Options/Settings/SiteSettings"/>
+</linkedSettings>
 </CMSite>

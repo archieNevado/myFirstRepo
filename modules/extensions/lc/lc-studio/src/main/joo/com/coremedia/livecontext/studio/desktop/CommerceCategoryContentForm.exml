@@ -12,6 +12,7 @@
   <exml:import class="com.coremedia.ecommerce.studio.tree.augmentedCategoryTreeRelation"/>
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
   <exml:import class="com.coremedia.cms.editor.sdk.config.documentForm"/>
+  <exml:import class="com.coremedia.livecontext.studio.CatalogThumbnailResolver" />
 
   <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}"
             type="LivecontextStudioPlugin_properties"/>
@@ -33,7 +34,7 @@
           <ui:image width="120">
             <plugins>
               <ui:bindPropertyPlugin componentProperty="src"
-                                     bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.THUMBNAIL_URL)}"/>
+                                     bindTo="{CatalogThumbnailResolver.imageValueExpression(config.bindTo)}"/>
             </plugins>
           </ui:image>
         </items>

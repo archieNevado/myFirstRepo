@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Management Board" name="Management Board Groupshot on White Background" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="9641c92d7a261786e9b6d69be58fad16" href="../../../__blob/9641c92d7a261786e9b6d69be58fad16.blob" mimetype="image/tiff"/>
-<thumbnail md5="120fa9d2b3b540121bbc88b0ea129a4b" href="../../../__blob/120fa9d2b3b540121bbc88b0ea129a4b.blob" mimetype="image/jpeg"/>
+<original md5="9641c92d7a261786e9b6d69be58fad16" size="722846" href="../../../__blob/9641c92d7a261786e9b6d69be58fad16.blob" mimetype="image/tiff"/>
+<thumbnail md5="120fa9d2b3b540121bbc88b0ea129a4b" size="13438" href="../../../__blob/120fa9d2b3b540121bbc88b0ea129a4b.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -69,5 +69,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Management.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Management"/>
 </assetTaxonomy>
-<web md5="120fa9d2b3b540121bbc88b0ea129a4b" href="../../../__blob/120fa9d2b3b540121bbc88b0ea129a4b.blob" mimetype="image/jpeg"/>
+<web md5="120fa9d2b3b540121bbc88b0ea129a4b" size="13438" href="../../../__blob/120fa9d2b3b540121bbc88b0ea129a4b.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

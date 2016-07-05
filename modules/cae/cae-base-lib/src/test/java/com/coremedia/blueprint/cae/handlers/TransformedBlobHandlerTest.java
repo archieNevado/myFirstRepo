@@ -7,11 +7,15 @@ import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.Version;
+import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import com.coremedia.transform.BlobTransformer;
 import com.coremedia.transform.TransformedBeanBlob;
+import com.coremedia.transform.TransformedBlob;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
@@ -21,6 +25,7 @@ import java.io.OutputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -30,6 +35,7 @@ import static org.mockito.Mockito.when;
 /**
  * Tests {@link TransformedBlobHandler}
  */
+@RunWith(MockitoJUnitRunner.class)
 public class TransformedBlobHandlerTest extends HandlerBaseTest {
 
   private static final String URI = "/resource/image/1234/transformName/100/100/digest/So/london.jpg";
@@ -37,11 +43,20 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
 
   final String propertyName = "propertyName";
 
+  @Mock
   private TransformedBeanBlob transformedBlob;
+
+  @Mock
   private CMMedia cmMedia;
+
+  @Mock
   private DataViewFactory dataViewFactory;
-  private BlobTransformer blobTransformer;
+
+  @Mock
   private Content content;
+
+  @Mock
+  private TransformImageService transformImageService;
 
   //----
   private static final String DIGEST = "digest";
@@ -60,8 +75,6 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
 
     when(getUrlPathFormattingHelper().tidyUrlPath("London")).thenReturn(NAME);
 
-    dataViewFactory = mock(DataViewFactory.class);
-    blobTransformer = mock(BlobTransformer.class);
     DefaultSecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy = new DefaultSecureHashCodeGeneratorStrategy();
     secureHashCodeGeneratorStrategy.setEncoding("UTF-8");
 
@@ -70,7 +83,7 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     testling.setUrlPathFormattingHelper(getUrlPathFormattingHelper());
     testling.setSecureHashCodeGeneratorStrategy(secureHashCodeGeneratorStrategy);
     testling.setDataViewFactory(dataViewFactory);
-    testling.setBlobTransformer(blobTransformer);
+    testling.setTransformImageService(transformImageService);
 
     registerHandler(testling);
 
@@ -80,7 +93,6 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
 
     CapBlobRef capBlobRef = mock(CapBlobRef.class);
 
-    content = mock(Content.class);
     when(content.getName()).thenReturn("London");
     when(content.getId()).thenReturn("coremedia:///cap/content/1234");
     when(content.isCheckedIn()).thenReturn(true);
@@ -93,7 +105,6 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     when(capBlobRef.getContentType()).thenReturn(new MimeType(mimeType));
     when(capBlobRef.getPropertyName()).thenReturn(propertyName);
 
-    transformedBlob = mock(TransformedBeanBlob.class);
     when(transformedBlob.getOriginal()).thenReturn(capBlobRef);
     when(transformedBlob.getContentType()).thenReturn(new MimeType(mimeType));
     when(transformedBlob.getETag()).thenReturn(DIGEST);
@@ -101,12 +112,11 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     when(transformedBlob.getTransform()).thenReturn(TRANSFORM_NAME);
 
     // 3. --- mock content(-bean) related stuff
-    cmMedia = mock(CMMedia.class);
     when(cmMedia.getContent()).thenReturn(content);
     when(cmMedia.getContentId()).thenReturn(CONTENT_ID);
     when(cmMedia.getTransformedData(TRANSFORM_NAME)).thenReturn(transformedBlob);
     when(transformedBlob.getBean()).thenReturn(cmMedia);
-    when(blobTransformer.transformBlob(any(Blob.class), any(String.class))).thenReturn(transformedBlob);
+    when(transformImageService.transformWithDimensions(any(Content.class), any(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt())).thenReturn(transformedBlob);
 
     when(getIdContentBeanConverter().convert(String.valueOf(CONTENT_ID))).thenReturn(cmMedia);
 
@@ -184,7 +194,7 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     assertNotFound("hash", handleRequest("/resource/image/1234/transformName/100/100/digest/XXX/london.jpg"));
 
     verify(cmMedia, never()).getTransformedData(anyString());
-    verify(blobTransformer, never()).transformBlob(any(Blob.class), anyString());
+    verify(transformImageService, never()).transformWithDimensions(any(Content.class), any(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt());
   }
 
   /**

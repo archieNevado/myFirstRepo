@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import com.coremedia.blueprint.base.livecontext.util.CatalogRootHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.impl.SitesServiceImpl;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +41,22 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
       if (isRoot()) {
         return Collections.emptyMap();
       }
-      delegate = (Map<String, Object>) getCommerceCache().get(
-        new CategoryCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
+      delegate = getDelegateFromCache();
       if (delegate == null) {
         throw new NotFoundException(getId() + " (category not found in catalog)");
       }
     }
     return delegate;
+  }
+
+  /**
+   * Perform by-id-call to get detail data
+   * @return detail data map
+   */
+  Map<String, Object> getDelegateFromCache() {
+    //noinspection unchecked
+    return (Map<String, Object>) getCommerceCache().get(
+            new CategoryCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
   }
 
   @Override
@@ -77,7 +86,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   @Override
   public String getExternalId() {
     if (isRoot()) {
-      return EXTERNAL_ID_ROOT_CATEGORY;
+      return CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY;
     }
     return DataMapHelper.getValueForKey(getDelegate(), "identifier", String.class);
   }
@@ -90,7 +99,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   @Override
   public String getName() {
     if (isRoot()) {
-      return EXTERNAL_ID_ROOT_CATEGORY;
+      return CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY;
     }
     return DataMapHelper.getValueForKey(getDelegate(), "name", String.class);
   }
@@ -143,7 +152,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
         return (Category) getCommerceBeanFactory().createBeanFor(
                 CommerceIdHelper.formatCategoryTechId(parentCatalogGroupID), getContext());
       } else {
-        return (Category) getCommerceBeanFactory().createBeanFor(CommerceIdHelper.formatCategoryId(EXTERNAL_ID_ROOT_CATEGORY), getContext());
+        return (Category) getCommerceBeanFactory().createBeanFor(CommerceIdHelper.formatCategoryId(CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY), getContext());
       }
     }
   }
@@ -162,10 +171,70 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
     return result;
   }
 
+  private String getCmSeoSegment() {
+    String cmLocalizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "cm_seo_token_ntk", String.class);
+    cmLocalizedSeoSegment = processCmLocalizedSeoSegment(cmLocalizedSeoSegment);
+
+    if (cmLocalizedSeoSegment != null) {
+      String[] localizedSeoSegments = cmLocalizedSeoSegment.split(";");
+      List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
+      if (localizedSeoSegmentList.size() > 1) {
+        String storeId = getStoreId();
+        for (String seoSegment : localizedSeoSegmentList) {
+          if (seoSegment.startsWith(storeId)) {
+            return seoSegment.substring(storeId.length() + 1);
+          }
+        }
+        return localizedSeoSegmentList.get(0).substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+      } else {
+        return cmLocalizedSeoSegment.substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+      }
+    } else {
+      return null;
+    }
+  }
+
+  private String processCmLocalizedSeoSegment(String cmLocalizedSeoSegment) {
+    if (isBlank(cmLocalizedSeoSegment)) {
+      if (getDefaultLocale() == null) {
+        LOG.warn("Default locale does not set for commerce beans.");
+      }
+      if (!getLocale().equals(getDefaultLocale())) {
+        LOG.info("Category {} does not have a cm seo segment for locale {}. Return the cm seo segment of the category for the default locale {}.",
+                getName(), getLocale(), getDefaultLocale());
+        StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(getDefaultLocale());
+        CategoryImpl master = (CategoryImpl) getCatalogService().withStoreContext(newStoreContext).findCategoryById(CommerceIdHelper.formatCategoryId(getExternalId()));
+        if (master!=null && !equals(master)) {
+          cmLocalizedSeoSegment = master.getCmSeoSegment();
+        }
+      }
+    }
+    return cmLocalizedSeoSegment;
+  }
+
   @Override
   @Nonnull
   public String getSeoSegment() {
-    String localizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "seo_token_ntk", String.class);
+    String localizedSeoSegment = getCmSeoSegment();
+    if (isBlank(localizedSeoSegment)) {
+      localizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "seo_token_ntk", String.class);
+      localizedSeoSegment = processLocalizedSeoSegment(localizedSeoSegment);
+
+      if (localizedSeoSegment == null) {
+        localizedSeoSegment = "";
+      } else {
+        String[] localizedSeoSegments = localizedSeoSegment.split(";");
+        List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
+        if (localizedSeoSegmentList.size() > 1) {
+          localizedSeoSegment = localizedSeoSegmentList.get(0);
+        }
+      }
+    }
+
+    return localizedSeoSegment;
+  }
+
+  private String processLocalizedSeoSegment(String localizedSeoSegment) {
     if (isBlank(localizedSeoSegment)) {
       if (getDefaultLocale() == null) {
         LOG.warn("Default locale does not set for commerce beans.");
@@ -180,11 +249,6 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
         }
       }
     }
-
-    if (localizedSeoSegment == null) {
-      localizedSeoSegment = "";
-    }
-
     return localizedSeoSegment;
   }
 
@@ -252,7 +316,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
 
 
   public boolean isRoot(){
-    return CatalogRootHelper.isCatalogRoot(this);
+    return CatalogServiceImpl.isCatalogRootId(getId());
   }
 
   @Required

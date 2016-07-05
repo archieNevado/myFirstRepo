@@ -1,4 +1,5 @@
 include_recipe 'blueprint-base::default'
+include_recipe 'blueprint-tools::_base'
 coremedia_tool 'replication-live-server' do
   path node['blueprint']['tools']['replication-live-server']['dir']
   group_id node['blueprint']['tools']['replication-live-server']['group_id']

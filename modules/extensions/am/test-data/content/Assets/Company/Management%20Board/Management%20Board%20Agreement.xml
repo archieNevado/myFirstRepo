@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Management Board" name="Management Board Agreement" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="33f54e64da70ecac24dc66d305363dc6" href="../../../__blob/33f54e64da70ecac24dc66d305363dc6.blob" mimetype="image/tiff"/>
-<thumbnail md5="232d170d8ae971259a5d4c9e4adbd592" href="../../../__blob/232d170d8ae971259a5d4c9e4adbd592.blob" mimetype="image/jpeg"/>
+<original md5="33f54e64da70ecac24dc66d305363dc6" size="701598" href="../../../__blob/33f54e64da70ecac24dc66d305363dc6.blob" mimetype="image/tiff"/>
+<thumbnail md5="232d170d8ae971259a5d4c9e4adbd592" size="13439" href="../../../__blob/232d170d8ae971259a5d4c9e4adbd592.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -69,5 +69,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Management.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Management"/>
 </assetTaxonomy>
-<web md5="d1c0bd140b18bff659def7cb60370ff7" href="../../../__blob/d1c0bd140b18bff659def7cb60370ff7.blob" mimetype="image/jpeg"/>
+<web md5="d1c0bd140b18bff659def7cb60370ff7" size="274403" href="../../../__blob/d1c0bd140b18bff659def7cb60370ff7.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

@@ -5,6 +5,12 @@
 </master>
 <viewtype>
 </viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<BooleanProperty Name="callToActionDisabled">false</BooleanProperty>
+<StringProperty Name="callToActionCustomText">Send E-Mail</StringProperty>
+</Struct>
+</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles>

@@ -18,9 +18,27 @@
   <import resource="classpath:/com/coremedia/cap/content/wrapper/cap-unified-api-services.xml" />
   <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
 
-  <import resource="mediatransform.xml"/>
+  <import resource="classpath:/com/coremedia/cap/transform/transform-services.xml"/>
+  <import resource="classpath:/framework/spring/mediatransform.xml"/>
   <import resource="blueprint-contentbeans-settings.xml"/>
   <import resource="blueprint-services.xml"/>
+
+  <bean id="mediaTransformer" class="com.coremedia.transform.impl.ExpressionBasedBeanBlobTransformer">
+    <property name="blobTransformer" ref="blobTransformer"/>
+
+    <property name="dataExpression" value="data">
+      <description>
+        Spring EL expression to return the Blob to transform the bean passed to the transformer.
+      </description>
+    </property>
+
+    <property name="transformMapExpression" value="transformMap">
+      <description>
+        Spring EL expression to return the transform map (mapping transform names to operation strings)
+        for the bean passed to the transformer.
+      </description>
+    </property>
+  </bean>
 
   <bean id="aspectsProvider" class="com.coremedia.cae.aspect.provider.CompoundAspectsProvider">
     <property name="aspectsProviders" ref="aspectsProviders"/>
@@ -105,7 +123,7 @@
         class="com.coremedia.blueprint.cae.contentbeans.CMAudioImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMPicture" parent="abstractMediaBean-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMPictureImpl" scope="prototype">
-    <property name="transformationMapBuilder" ref="transformationMapBuilder"/>
+    <property name="transformImageService" ref="transformImageService"/>
   </bean>
 
   <bean name="contentBeanFactory:CMImageMap" parent="abstractTeasable-blueprint-doctypes"

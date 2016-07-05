@@ -1,13 +1,10 @@
 package com.coremedia.blueprint.elastic.social.cae.springsocial;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.elastic.tenant.TenantSiteMapping;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.settings.Settings;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
-import com.coremedia.blueprint.elastic.tenant.TenantSiteMapping;
-import com.coremedia.objectserver.beans.ContentBeanIdScheme;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;

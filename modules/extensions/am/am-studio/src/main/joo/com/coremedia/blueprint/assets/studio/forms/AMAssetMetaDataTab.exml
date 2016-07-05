@@ -6,7 +6,7 @@
                 xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
                 xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
                 xmlns:am="exml:com.coremedia.blueprint.assets.studio.config"
-                xmlns:u="exml:untyped" xmlns:collab="exml:com.coremedia.cms.editor.controlroom.config">
+                xmlns:u="exml:untyped">
 
   <exml:import class="com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties"/>
   <exml:import class="com.coremedia.ui.data.ValueExpressionFactory"/>

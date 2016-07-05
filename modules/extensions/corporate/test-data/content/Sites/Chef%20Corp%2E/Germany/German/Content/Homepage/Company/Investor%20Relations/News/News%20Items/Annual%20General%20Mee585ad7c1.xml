@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMArticle folder="/Sites/Chef Corp./Germany/German/Content/Homepage/Company/Investor Relations/News/News Items" name="Annual General Meeting Article" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMArticle folder="/Sites/Chef Corp./Germany/German/Content/Homepage/Company/Investor Relations/News/News Items" name="Annual General Meeting Article" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../United%20States/English/Content/Homepage/Company/Investor%20Relations/News/News%20Items/Press%20Relea54e316d6.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Investor%20Relations/News/News%20Items/Press%20Release%20-%20Annual%20General%20Meeting%20Article"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <linkedSettings>

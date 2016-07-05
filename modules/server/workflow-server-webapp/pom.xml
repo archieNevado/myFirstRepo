@@ -16,11 +16,7 @@
   </description>
 
   <properties>
-    <sql.store.driver>com.mysql.jdbc.Driver</sql.store.driver>
-    <sql.store.url>jdbc:mysql://localhost:3306/cm7management</sql.store.url>
-    <sql.store.user>cm7management</sql.store.user>
-    <sql.store.password>cm7management</sql.store.password>
-    <workflow.server.standalone>false</workflow.server.standalone>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
   </properties>
 
   <dependencies>
@@ -87,21 +83,14 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
           <path>/${project.build.finalName}</path>
-          <port>${WFS_PORT_PREFIX}${HTTP_PORT_SUFFIX}</port>
+          <port>40380</port>
           <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
           <systemProperties>
-            <sql.store.driver>${sql.store.driver}</sql.store.driver>
-            <sql.store.url>${sql.store.url}</sql.store.url>
-            <sql.store.user>${sql.store.user}</sql.store.user>
-            <sql.store.password>${sql.store.password}</sql.store.password>
-            <workflow.user>${workflow.user}</workflow.user>
-            <workflow.password>${workflow.password}</workflow.password>
-            <workflow.server.standalone.password>${workflow.server.standalone.password}</workflow.server.standalone.password>
-            <workflow.server.standalone>${workflow.server.standalone}</workflow.server.standalone>
-            <workflow.server.adapters.directory>${workflow.server.adapters.directory}</workflow.server.adapters.directory>
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-            <mongoDb.clientURI>mongodb://${mongo.db.host}:27017/</mongoDb.clientURI>
+            <propertieslocations>classpath:/workflow-server.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>
@@ -111,13 +100,7 @@
     <profile>
       <id>embedded</id>
       <properties>
-        <sql.store.driver>org.hsqldb.jdbc.JDBCDriver</sql.store.driver>
-        <sql.store.url>jdbc:hsqldb:mem:cmwf;sql.syntax_mys=true;</sql.store.url>
-        <workflow.user>admin</workflow.user>
-        <workflow.password>admin</workflow.password>
-        <workflow.server.standalone.password>admin</workflow.server.standalone.password>
-        <workflow.server.standalone>true</workflow.server.standalone>
-        <workflow.server.adapters.directory>com.coremedia.workflow.nocontent.NoDirectoryServiceAdapter</workflow.server.adapters.directory>
+        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/embedded-hsqldb</development-properties.dir>
       </properties>
       <dependencies>
         <dependency>
@@ -131,33 +114,10 @@
     <profile>
       <id>controlroom-memory</id>
       <properties>
+        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/controlroom-memory</development-properties.dir>
+        <!--TODO: We need this enforcer here because the root pom is corrupted after switching the extension. -->
         <enforcer.skip>true</enforcer.skip>
-        <studio.user>admin</studio.user>
-        <studio.password>admin</studio.password>
       </properties>
-      <build>
-        <plugins>
-          <!--
-             invoke "mvn tomcat7:run-war" for running this webapp locally
-          -->
-          <plugin>
-            <groupId>org.apache.tomcat.maven</groupId>
-            <artifactId>tomcat7-maven-plugin</artifactId>
-            <configuration>
-              <path>/${project.build.finalName}</path>
-              <port>${WFS_PORT_PREFIX}${HTTP_PORT_SUFFIX}</port>
-              <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
-              <systemProperties>
-                <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-                <studio.url>http://${studio.host}:${STUDIO_PORT_PREFIX}${HTTP_PORT_SUFFIX}</studio.url>
-                <coremedia.application.workflow.usecaplist>false</coremedia.application.workflow.usecaplist>
-                <studio.user>${studio.user}</studio.user>
-                <studio.password>${studio.password}</studio.password>
-              </systemProperties>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 </project>

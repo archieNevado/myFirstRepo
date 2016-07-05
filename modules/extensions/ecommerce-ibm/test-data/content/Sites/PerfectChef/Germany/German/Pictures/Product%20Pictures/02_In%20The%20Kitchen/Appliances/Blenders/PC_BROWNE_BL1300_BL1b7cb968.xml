@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/02_In The Kitchen/Appliances/Blenders" name="PC_BROWNE_BL1300_BLENDER Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/02_In The Kitchen/Appliances/Blenders" name="PC_BROWNE_BL1300_BLENDER Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Appliances/Blenders/PC_BROWNE_c414cc8b.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Appliances/Blenders/PC_BROWNE_BL1300_BLENDER%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Browne BL1300 Blender</alt>
 <copyright>Venus Angel / Shutterstock 74020897</copyright>
 <dataUrl></dataUrl>
-<data md5="86c6036b31986d087f6f38c8bfe4bf47" href="../../../../../../../../../__blob/86c6036b31986d087f6f38c8bfe4bf47.blob" mimetype="image/jpeg"/>
+<data md5="86c6036b31986d087f6f38c8bfe4bf47" size="498223" href="../../../../../../../../../__blob/86c6036b31986d087f6f38c8bfe4bf47.blob" mimetype="image/jpeg"/>
 <asset>
 <link href="../../../../../../../../../Assets/Products/Blenders%20and%20Food%20Processors/Browne%20BL1300%20Blender%20Frontshot.xml" path="/Assets/Products/Blenders%20and%20Food%20Processors/Browne%20BL1300%20Blender%20Frontshot"/>
 </asset>

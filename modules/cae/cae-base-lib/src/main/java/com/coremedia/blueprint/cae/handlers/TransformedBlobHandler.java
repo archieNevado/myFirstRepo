@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.base.links.BlobHelper;
 import com.coremedia.blueprint.cae.util.SecureHashCodeGeneratorStrategy;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.transform.BlobHelper;
+import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.coremedia.transform.BlobTransformer;
 import com.coremedia.transform.TransformedBeanBlob;
 import com.coremedia.transform.TransformedBlob;
 import com.google.common.collect.ImmutableMap;
@@ -23,16 +23,14 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
-import java.io.IOException;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions.createScaleAndRemoveMetadataTransformationString;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_NAME;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 
 /**
  * Controller and LinkScheme for transformed blobs
@@ -53,9 +51,7 @@ public class TransformedBlobHandler extends HandlerBase {
   public static final String HEIGHT_SEGMENT = "height";
 
   private SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy;
-  private BlobTransformer blobTransformer;
-  private String defaultJpegQuality;
-
+  private TransformImageService transformImageService;
   /**
    * URI Pattern for transformed blobs.
    * e.g. /image/4302/landscape_ratio4x3/590/442/969e0a0b2eb79df86df7ffecd1375115/eg/london.jpg
@@ -73,16 +69,6 @@ public class TransformedBlobHandler extends HandlerBase {
                   ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
   // --- spring config -------------------------------------------------------------------------------------------------
-
-  @Required
-  public void setBlobTransformer(BlobTransformer blobTransformer) {
-    this.blobTransformer = blobTransformer;
-  }
-
-  @Required
-  public void setDefaultJpegQuality(String defaultJpegQuality) {
-    this.defaultJpegQuality = defaultJpegQuality;
-  }
 
   public void setSecureHashCodeGeneratorStrategy(SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy) {
     this.secureHashCodeGeneratorStrategy = secureHashCodeGeneratorStrategy;
@@ -186,30 +172,14 @@ public class TransformedBlobHandler extends HandlerBase {
    * transformed blob, esp. if transformed blobs are cached by a CDN.
    */
   public Blob getTransformedBlob(CMMedia media, String transformName, String extension, Integer width, Integer height) {
-
+    Blob rawBlob = (Blob) media.getData();
     TransformedBlob transformedBlob = (TransformedBlob) media.getTransformedData(transformName);
     if (transformedBlob == null) {
       LOG.info("Requested transformation '{}' of {} but no such transformation exists.",transformName,media);
       return null;
     }
 
-    // Validate against extension of original blob. This may be different from the actual content type of the
-    // transformed blob, but the link generator appends the original extension for performance reasons.
-    if (!BlobHelper.isValidExtension(extension, transformedBlob.getOriginal(), getMimeTypeService())) {
-      return null;
-    }
-
-    // Scale the image to the desired dimension and be sure to remove all image metadata before delivery
-    final String deliveryTransformation = createScaleAndRemoveMetadataTransformationString(width, height);
-
-    Blob data = (Blob) media.getData();
-
-    try {
-      return blobTransformer.transformBlob(data, combineTransform(transformedBlob.getTransform(), deliveryTransformation));
-    } catch (IOException e) {
-      LOG.info("Error transforming blob.", e);
-      return null;
-    }
+    return transformImageService.transformWithDimensions(media.getContent(), rawBlob, transformedBlob, transformName, extension, width, height);
   }
 
   // === internal ======================================================================================================
@@ -222,23 +192,8 @@ public class TransformedBlobHandler extends HandlerBase {
     return null;
   }
 
-  /**
-   * Combines two transformation strings into one, and
-   * sets the default JPEG image compression quality if one is configured.
-   */
-  private String combineTransform(String t1, String t2) {
-    StringBuilder b = new StringBuilder();
-    b.append(t1);
-    if (b.length() > 0) {
-      b.append('/');
-    }
-    b.append(t2);
-    if (defaultJpegQuality != null && defaultJpegQuality.length() > 0) {
-      if (b.length() > 0) {
-        b.append('/');
-      }
-      b.append("djq;q=").append(defaultJpegQuality);
-    }
-    return b.toString();
+  @Required
+  public void setTransformImageService(TransformImageService transformImageService) {
+    this.transformImageService = transformImageService;
   }
 }

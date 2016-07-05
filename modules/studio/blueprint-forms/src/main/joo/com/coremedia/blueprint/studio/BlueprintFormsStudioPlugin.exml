@@ -94,15 +94,15 @@
           <ui:addItemsPlugin>
             <ui:items>
               <bpb-components:quickCreateMenuItem contentType="CMArticle"/>
-              <bpb-components:quickCreateMenuItem contentType="CMTeaser"/>
-              <bpb-components:quickCreateMenuItem contentType="CMPicture"/>
-              <bpb-components:quickCreateMenuItem contentType="CMVideo"/>
-              <bpb-components:quickCreateMenuItem contentType="CMImageMap"/>
-              <bpb-components:quickCreateMenuItem contentType="CMDownload"/>
-              <bpb-components:quickCreateMenuItem contentType="CMQueryList"/>
               <bpb-components:quickCreateMenuItem contentType="CMCollection"/>
+              <bpb-components:quickCreateMenuItem contentType="CMDownload"/>
               <bpb-components:quickCreateMenuItem contentType="CMGallery"/>
+              <bpb-components:quickCreateMenuItem contentType="CMImageMap"/>
+              <bpb-components:quickCreateMenuItem contentType="CMTeaser"/>
               <bpb-components:quickCreateMenuItem contentType="CMChannel"/>
+              <bpb-components:quickCreateMenuItem contentType="CMPicture"/>
+              <bpb-components:quickCreateMenuItem contentType="CMQueryList"/>
+              <bpb-components:quickCreateMenuItem contentType="CMVideo"/>
             </ui:items>
           </ui:addItemsPlugin>
         </plugins>
@@ -201,7 +201,7 @@
       <!-- exclude DocTypes from the create new documents menu -->
       <editor:configureDocumentTypes
               names="Dictionary,Preferences,Query,Folder_,CMDynamicList,CMVisual,EditorPreferences"
-              exclude="true"/>
+              exclude="true" excludeFromSearch="true"/>
 
       <!-- there is no preview available for these DocTypes -->
       <editor:configureDocumentTypes names="CMAction,CMCSS,CMExternalLink,CMFolderProperties,CMImage,CMJavaScript,

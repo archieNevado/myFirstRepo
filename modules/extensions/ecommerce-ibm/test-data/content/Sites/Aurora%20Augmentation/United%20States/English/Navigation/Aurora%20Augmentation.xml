@@ -52,6 +52,7 @@
 <children>
 <link href="../Augmentation/Aurora%20B2C%20Catalog%20Root.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Aurora%20B2C%20Catalog%20Root"/>
 <link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
+<link href="Fragments/Search%20Landing%20Pages/LiveContext%20Search%20L6364f111.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>
 <link href="Microsites/Microsite%20Root%20Page.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Microsites/Microsite%20Root%20Page"/>
 </children>
 <hidden>1</hidden>
@@ -62,7 +63,7 @@
 <css>
 <link href="../../../../../Themes/aurora/aurora%2Ecss.xml" path="/Themes/aurora/aurora%2Ecss"/>
 </css>
-<favicon md5="b01ec1d815971bfb59a29dbb80c6fdcc" href="../../../../../__blob/b01ec1d815971bfb59a29dbb80c6fdcc.blob" mimetype="image/x-icon"/>
+<favicon md5="b01ec1d815971bfb59a29dbb80c6fdcc" size="22382" href="../../../../../__blob/b01ec1d815971bfb59a29dbb80c6fdcc.blob" mimetype="image/x-icon"/>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">

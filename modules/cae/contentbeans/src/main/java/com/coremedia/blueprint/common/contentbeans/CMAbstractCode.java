@@ -122,4 +122,16 @@ public interface CMAbstractCode extends CMLocalized {
    * @return the value of the document property {@link #DATA_URL}
    */
   String getDataUrl();
+
+  /**
+   * Name of the document property 'disableCompress'.
+   */
+  String DISABLE_COMPRESSION = "disableCompress";
+
+  /**
+   * Returns the value of the document property {@link #DISABLE_COMPRESSION}.
+   *
+   * @return the value of the document property {@link #DISABLE_COMPRESSION}
+   */
+  boolean isCompressionDisabled();
 }

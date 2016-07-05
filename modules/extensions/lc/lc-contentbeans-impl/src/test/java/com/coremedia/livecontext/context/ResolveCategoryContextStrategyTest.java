@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.context;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
@@ -18,6 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -103,12 +104,8 @@ public class ResolveCategoryContextStrategyTest {
   @Test
   public void resolveContextNoCategoryFoundForGivenSeoSegment() {
     when(catalogService.findCategoryBySeoSegment(DEFAULT_SEO_SEGMENT)).thenReturn(null);
-    try {
-      testling.resolveContext(site, DEFAULT_SEO_SEGMENT);
-      assertTrue("Expected an exception here.", false);
-    } catch (EvaluationException e) {
-      assertTrue(e.getCause() instanceof IllegalArgumentException);
-    }
+    LiveContextNavigation context = testling.resolveContext(site, DEFAULT_SEO_SEGMENT);
+    assertNull("Expected null here.", context);
   }
 
   @SuppressWarnings("unchecked")

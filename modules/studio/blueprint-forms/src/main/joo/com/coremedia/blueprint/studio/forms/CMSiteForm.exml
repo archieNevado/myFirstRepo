@@ -30,7 +30,7 @@
         </items>
       </editor:documentForm>
       <bpforms:multiLanguageDocumentForm/>
-      <bpforms:metaDataWithoutSettingsForm/>
+      <bpforms:metaDataWithoutSearchableForm/>
     </items>
   </editor:documentTabPanel>
 

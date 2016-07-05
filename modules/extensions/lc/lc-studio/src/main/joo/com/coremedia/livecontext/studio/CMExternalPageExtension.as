@@ -11,19 +11,19 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 import ext.Component;
 
 /**
- * Extension, the enhances the QuickCreateDialog for CMChannel with the parent navigation editor
+ * Extension, the enhances the QuickCreateDialog for CMExternalPage with the parent navigation, externalId and
+ * externalUri editors
  */
 public class CMExternalPageExtension {
-
   //content and custom properties for quick create dialog
   public static const PARENT_PROPERTY:String = "parentChannel";
   public static const CHILDREN_PROPERTY:String = "children";
 
-  public static const CONTENT_TYPE_PAGE:String = "CMChannel";
+  public static const CONTENT_TYPE_PAGE:String = "CMExternalPage";
 
   public static function register(docType:String):void {
     /**
-     * Apply custom properties for CMChannel
+     * Apply custom properties for CMExternalPage
      */
     QuickCreate.addQuickCreateDialogProperty(docType, PARENT_PROPERTY, getCreateComponent(docType), 0);
 

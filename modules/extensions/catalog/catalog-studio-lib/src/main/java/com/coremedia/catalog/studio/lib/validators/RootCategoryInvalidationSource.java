@@ -89,7 +89,11 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
             Commerce.setCurrentConnection(connection);
             try {
               Category rootCategory = cache.get(new RootCategoryCacheKey(connection, catalogService, linker, rootCategoryInvalidationSource));
-              rootCategories.add(rootCategory);
+              if (rootCategory!=null) {
+                rootCategories.add(rootCategory);
+              } else {
+                LOG.debug("connection {} has no root category", connection);
+              }
             } catch (Exception e) {
               LOG.debug("unable to determine root category for connection {}", connection, e);
             }

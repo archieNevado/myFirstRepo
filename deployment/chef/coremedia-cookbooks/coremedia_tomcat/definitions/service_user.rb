@@ -25,7 +25,7 @@ end
 define :coremedia_tomcat_service_user, :filehandle_limit => 25_000, :process_limit => 5000 do
   params[:user] ||= params[:name]
   params[:group] ||= params[:user]
-  fail("Required argument home is missing for user #{params[:user]}") unless params[:home]
+  raise("Required argument home is missing for user #{params[:user]}") unless params[:home]
 
   user "user #{params[:user]}" do
     username params[:user]

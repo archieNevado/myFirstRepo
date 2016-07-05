@@ -527,6 +527,7 @@
 
 .am-picture-box {
   position: relative;
+  display: inline-block;
 
   &__picture {
     max-width: 100%;
@@ -561,6 +562,7 @@
   &--empty {
     background: $am-picture-box-empty-background-color url("../images/no-image.svg") no-repeat center center;
     background-size: 50%;
+    width: 100%;
 
     .am-picture-box__picture {
       padding-top: 100%; /* keep minimum space for background-image, 1:1 ratio */

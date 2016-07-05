@@ -37,12 +37,7 @@ class HttpClientFactory {
   }
 
   protected static HttpClient createHttpClient(boolean trustAllSslCertificates, boolean acceptCookies, int connectionPoolSize, int socketTimeout, int connectionTimeout, int connectionRequestTimeout) {
-    // Apache must not follow redirects when calling the store front. The 302 response of a storefront call
-    // might contain cookies, which we need to be aware of to copy all of them into the source response
-    // that returns to the browser. If apache follows those 302 responses subsequent calls might not
-    // contain those cookies anymore and we will never be able to copy them over to the original response
-    // from the CAE to the clients browser.
-    HttpClientBuilder clientBuilder = HttpClientBuilder.create().disableRedirectHandling().useSystemProperties();
+    HttpClientBuilder clientBuilder = HttpClientBuilder.create().useSystemProperties();
     clientBuilder.setConnectionManager(trustAllSslCertificates ? createTrustAllConnectionMgr(connectionPoolSize) :
             createDefaultConnectionMgr(connectionPoolSize));
 

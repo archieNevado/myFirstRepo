@@ -20,7 +20,7 @@
     <div class="cm-box__content">
 
       <form method="post" enctype="multipart/form-data" class="cm-form">
-        <input type="hidden" name="_CSRFToken" value="${_CSRFToken}"/>
+        <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
         <input type="hidden" name="execution" value="${flowExecutionKey}"/>
         <input type="hidden" name="_eventId_saveUser"/>
         <@bp.notificationFromSpring path="userDetails" dismissable=false />

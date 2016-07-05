@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:livecontext="exml:com.coremedia.livecontext.studio.config">
+
+  <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
+  <exml:import class="com.coremedia.blueprint.base.components.quickcreate.processing.ProcessingData"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.config.previewPanel" />
+
+  <exml:constant name="AUGMENT_SHOP_PAGE_MENU_ITEM_ID" value="augmentShopPage">
+    <exml:description>The itemId of the 'augment shop page' menu item.</exml:description>
+  </exml:constant>
+
+  <menuitem>
+    <baseAction>
+      <livecontext:metadataToEntitiesActionAdapter
+              metadataVariableName="{previewPanel.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
+              itemId="{AUGMENT_SHOP_PAGE_MENU_ITEM_ID}"
+              hideOnDisable="true"
+              useParentNode="true"
+              setEntities="setData"
+              text="{LivecontextStudioPlugin_properties.INSTANCE.Action_augmentShopPage_text}">
+        <livecontext:backingAction>
+          <livecontext:openCreateExternalPageDialogAction
+                  contentType="CMExternalPage"
+                  inheritEditors="false"
+                  defaultProperties="{ProcessingData.NAME_PROPERTY + ','
+                            + ProcessingData.FOLDER_PROPERTY}"/>
+        </livecontext:backingAction>
+      </livecontext:metadataToEntitiesActionAdapter>
+    </baseAction>
+  </menuitem>
+</exml:component>

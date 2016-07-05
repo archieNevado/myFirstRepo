@@ -123,11 +123,6 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
       LOG.warn("Could not find a site for content {}. Will not create an index url. Return null.", content.getPath());
       return null;
     }
-    Locale locale = site.getLocale();
-    if (locale == null) {
-      LOG.warn("Site {} does not have a locale. Will not create an index url. Return null.", site.getName());
-      return null;
-    }
 
     String language = site.getLocale().getLanguage();
     StoreContext storeContext = getStoreContextProvider().findContextBySite(site);

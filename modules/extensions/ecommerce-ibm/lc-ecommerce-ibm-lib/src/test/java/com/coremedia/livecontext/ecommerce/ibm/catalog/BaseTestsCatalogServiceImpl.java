@@ -14,6 +14,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.livecontext.ecommerce.ibm.contract.ContractServiceImpl;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import org.mockito.Mockito;
 
@@ -32,6 +33,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
@@ -43,7 +46,8 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
   private static final String PRODUCT_CODE = "CLA022_2203";
   private static final String PRODUCT_SEO_SEGMENT = "travel-laptop";
 
-  private static final String PRODUCT_VARIANT_CODE = System.getProperty("lc.test.productVariant.code", "CLA022_220301");
+  static final String PRODUCT_VARIANT_CODE = System.getProperty("lc.test.productVariant.code", "CLA022_220301");
+  static final String PRODUCT_VARIANT_CODE_B2B = "FB041_410101";
 
   private static final String PRODUCT2_CODE = "AuroraWMDRS-1";
 
@@ -51,9 +55,20 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
   private static final String PRODUCT_WITH_SLASH = "PC_PULLOVER_1/2_ZIP";
   private static final String PRODUCT_VARIANT_WITH_SLASH = "PC_PULLOVER_1/2_ZIP_SKU";
 
+  private static final String PRODUCT1_WITH_MULTI_SEO = "PC_WALL_CLOCK";
+  private static final String PRODUCT2_WITH_MULTI_SEO = "PC_CANDELABRA";
+  private static final String PRODUCT3_WITH_MULTI_SEO = "PC_FRUITBOWL";
+
+  private static final String CATEGORY1_WITH_MULTI_SEO = "PC_Magazines";
+  private static final String CATEGORY2_WITH_MULTI_SEO = "PC_ToEat";
+  private static final String CATEGORY3_WITH_MULTI_SEO = "PC_Glasses";
+
   @Inject
   @Named(BEAN_NAME_CATALOG_SERVICE)
   CatalogServiceImpl testling;
+
+  @Inject
+  ContractServiceImpl contractService;
 
   public void testFindProductByExternalId() throws Exception {
     Product product = testling.findProductByExternalId(PRODUCT_CODE);
@@ -76,6 +91,18 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
     Product product1 = testling.findProductByExternalId(PRODUCT_CODE);
     Product product2 = testling.findProductByExternalTechId(product1.getExternalTechId());
     assertProduct(product2);
+  }
+
+  public void testFindProductMultiSEOByExternalTechId() throws Exception {
+    Product product = testling.findProductByExternalId(PRODUCT1_WITH_MULTI_SEO);
+    assertNotNull(product.getSeoSegment());
+    assertTrue(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    product = testling.findProductByExternalId(PRODUCT2_WITH_MULTI_SEO);
+    assertNotNull(product.getSeoSegment());
+    assertTrue(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    product = testling.findProductByExternalId(PRODUCT3_WITH_MULTI_SEO);
+    assertNotNull(product.getSeoSegment());
+    assertFalse(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
   }
 
   public void testFindProductByExternalTechIdIsNull() throws Exception {
@@ -132,6 +159,7 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
   public void testFindProductBySeoSegment() throws Exception {
     Product product = testling.findProductBySeoSegment(PRODUCT_SEO_SEGMENT);
     assertEquals("travel-laptop", product.getSeoSegment());
+    assertNotNull(product.getLongDescription());
     assertProduct(product);
   }
 
@@ -161,6 +189,19 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
     List<Product> products = testling.findProductsByCategory(categoryMock);
     assertNotNull(products);
     assertTrue(products.isEmpty());
+  }
+
+  public void testFindProductsByCategoryIsRoot() throws Exception {
+    Category categoryMock = Mockito.mock(CategoryImpl.class);
+    WcCatalogWrapperService catalogWrapperServiceMock = spy(testling.getCatalogWrapperService());
+    testling.setCatalogWrapperService(catalogWrapperServiceMock);
+    when(categoryMock.isRoot()).thenReturn(true);
+    when(categoryMock.getExternalId()).thenReturn("ROOT");
+    when(categoryMock.getExternalTechId()).thenReturn(null);
+    List<Product> products = testling.findProductsByCategory(categoryMock);
+    assertNotNull(products);
+    assertTrue(products.isEmpty());
+    verifyNoMoreInteractions(catalogWrapperServiceMock);
   }
 
   public void testSearchProducts() throws Exception {
@@ -252,7 +293,7 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
     assertTrue(CommerceIdHelper.isCategoryId(category.getId()));
     assertEquals(new Locale("en","US"),category.getLocale());
     assertNotNull(category.getParent());
-    assertEquals(Category.EXTERNAL_ID_ROOT_CATEGORY,category.getParent().getExternalId());
+    assertEquals(CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY,category.getParent().getExternalId());
     assertEquals("Apparel", category.getBreadcrumb().get(0).getName());
   }
 
@@ -268,13 +309,11 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
   }
 
   public void testFindSubCategoriesWithContract() throws Exception {
-
-    Commerce.getCurrentConnection().getStoreContext().put("storeId", "10303");
-
-    Category category = findAndAssertCategory("Hardware", null);
+    Commerce.getCurrentConnection().setStoreContext(testConfig.getB2BStoreContext());
+    Category category = findAndAssertCategory("Lighting", null);
     assertNotNull(category);
 
-    category = findAndAssertCategory("Fasteners", category);
+    category = findAndAssertCategory("Fasteners", null);
     assertNotNull(category);
 
 //    Commerce.getCurrentConnection().getStoreContext().setContractId("4000000000000000502");
@@ -316,6 +355,18 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
     assertEquals("furniture", category2.getSeoSegment());
     //TODO assertEquals(category.getThumbnail(), "???");
 
+  }
+
+  public void testFindCategoryMultiSEOByExternalTechId() throws Exception {
+    Category category = testling.findCategoryById(CommerceIdHelper.formatCategoryId(CATEGORY1_WITH_MULTI_SEO));
+    assertNotNull(category.getSeoSegment());
+    assertTrue(category.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    category = testling.findCategoryById(CommerceIdHelper.formatCategoryId(CATEGORY2_WITH_MULTI_SEO));
+    assertNotNull(category.getSeoSegment());
+    assertTrue(category.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    category = testling.findCategoryById(CommerceIdHelper.formatCategoryId(CATEGORY3_WITH_MULTI_SEO));
+    assertNotNull(category.getSeoSegment());
+    assertFalse(category.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
   }
 
   public void testFindCategoryByExternalTechIdIsNull() throws Exception {
@@ -505,12 +556,11 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
     assertTrue(topCategories.size() > 0);
     Category category = null;
     for (Category c : topCategories) {
-      if (name.equals(c.getExternalId())) {
+      if (name.equals(c.getName())) {
         category = c;
       }
     }
     assertNotNull("Category \"" + name + "\" not found", category);
-    assertEquals(name, category.getName());
     return category;
   }
 

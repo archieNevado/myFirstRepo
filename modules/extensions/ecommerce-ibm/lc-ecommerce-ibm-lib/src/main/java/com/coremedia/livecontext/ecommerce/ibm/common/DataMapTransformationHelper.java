@@ -23,6 +23,8 @@ public class DataMapTransformationHelper {
     bodKeyMappings.put("productType", "catalogEntryTypeCode");
     bodKeyMappings.put("xcatentry_seoSegment", "seo_token_ntk");
     bodKeyMappings.put("xcatgroup_seoSegment", "seo_token_ntk");
+    bodKeyMappings.put("xcatentry_cmSeoSegment", "cm_seo_token_ntk");
+    bodKeyMappings.put("xcatgroup_cmSeoSegment", "cm_seo_token_ntk");
     bodKeyMappings.put("parentProductID", "parentCatalogEntryID");
     bodKeyMappings.put("parentCategoryID", "parentCatalogGroupID");
   }

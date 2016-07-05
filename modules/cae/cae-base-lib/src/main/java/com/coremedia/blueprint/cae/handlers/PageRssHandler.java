@@ -5,8 +5,8 @@ import com.coremedia.blueprint.common.contentbeans.BelowRootNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.feeds.FeedSource;
+import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
@@ -22,9 +22,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
-import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 
 /**
  * Handles RSS documents for {@link com.coremedia.blueprint.common.contentbeans.Page}s

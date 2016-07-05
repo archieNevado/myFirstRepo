@@ -44,11 +44,11 @@ This is the development cookbook for the CoreMedia Blueprint. It contains recipe
 * `node['blueprint']['dev']['rpm']['dir']` - The folder to create the RPMs in. By default the vagrant based kitchen setup will share this folder with your host machine. Defaults to `/shared/packages`.
 * `node['blueprint']['dev']['db']['type']` - The database to install (mysql | postgresql). Defaults to `mysql`.
 * `node['blueprint']['dev']['db']['host']` - The database host to create schemas on. Defaults to `localhost`.
-* `node['blueprint']['dev']['db']['schemas']['content-management-server']` - The schema, user and password for the content-management-server. Defaults to `cm7management`.
-* `node['blueprint']['dev']['db']['schemas']['master-live-server']` - The schema, user and password for the master-live-server. Defaults to `cm7master`.
-* `node['blueprint']['dev']['db']['schemas']['replication-live-server']` - The schema, user and password for the replication-live-server. Defaults to `cm7replication`.
-* `node['blueprint']['dev']['db']['schemas']['caefeeder-preview']` - The schema, user and password for the caefeeder preview. Defaults to `cm7mcaefeeder`.
-* `node['blueprint']['dev']['db']['schemas']['caefeeder-live']` - The schema, user and password for the caefeeder live. Defaults to `cm7caefeeder`.
+* `node['blueprint']['dev']['db']['schemas']['content-management-server']` - The schema, user and password for the content-management-server. Defaults to `cm_management`.
+* `node['blueprint']['dev']['db']['schemas']['master-live-server']` - The schema, user and password for the master-live-server. Defaults to `cm_master`.
+* `node['blueprint']['dev']['db']['schemas']['replication-live-server']` - The schema, user and password for the replication-live-server. Defaults to `cm_replication`.
+* `node['blueprint']['dev']['db']['schemas']['caefeeder-preview']` - The schema, user and password for the caefeeder preview. Defaults to `cm_mcaefeeder`.
+* `node['blueprint']['dev']['db']['schemas']['caefeeder-live']` - The schema, user and password for the caefeeder live. Defaults to `cm_caefeeder`.
 
 # Recipes
 

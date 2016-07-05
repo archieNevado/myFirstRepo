@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../../United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Appliances/Blenders/PC_LIFEMIX65341365.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Appliances/Blenders/PC_LIFEMIX_MX4000_BLENDER%20Frontshot"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -109,7 +108,7 @@
 <dataUrl></dataUrl>
 <width>4000</width>
 <height>4000</height>
-<data md5="bdc493bc3315df17706ba86d84051252" href="../../../../../../../../../__blob/bdc493bc3315df17706ba86d84051252.blob" mimetype="image/jpeg"/>
+<data md5="bdc493bc3315df17706ba86d84051252" size="606561" href="../../../../../../../../../__blob/bdc493bc3315df17706ba86d84051252.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

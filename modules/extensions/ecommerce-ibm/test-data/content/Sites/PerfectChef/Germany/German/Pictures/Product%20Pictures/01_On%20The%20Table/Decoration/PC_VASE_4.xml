@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Decoration" name="PC_VASE_4" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Decoration" name="PC_VASE_4" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Decoration/PC_VASE_4.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Decoration/PC_VASE_4"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Kristall-Vase</alt>
 <copyright>Naphat Rojanarangsiman / Shutterstock 180587558</copyright>
 <dataUrl></dataUrl>
-<data md5="79dc32d9788a5696ed644da59cf26ce5" href="../../../../../../../../__blob/79dc32d9788a5696ed644da59cf26ce5.blob" mimetype="image/jpeg"/>
+<data md5="79dc32d9788a5696ed644da59cf26ce5" size="556934" href="../../../../../../../../__blob/79dc32d9788a5696ed644da59cf26ce5.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

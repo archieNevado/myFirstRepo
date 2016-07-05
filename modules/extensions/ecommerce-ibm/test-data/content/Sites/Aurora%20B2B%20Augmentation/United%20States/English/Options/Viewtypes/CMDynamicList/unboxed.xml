@@ -4,6 +4,6 @@
 <master>
 </master>
 <description>Displays a collection as unboxed collection</description>
-<icon md5="4fec0eae01b125f5fa5e0ff0e8c7fca4" href="../../../../../../../__blob/4fec0eae01b125f5fa5e0ff0e8c7fca4.blob" mimetype="image/png"/>
+<icon md5="4fec0eae01b125f5fa5e0ff0e8c7fca4" size="3950" href="../../../../../../../__blob/4fec0eae01b125f5fa5e0ff0e8c7fca4.blob" mimetype="image/png"/>
 <layout>unboxed</layout>
 </CMViewtype>

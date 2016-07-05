@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMHTML" -->
 
-<#if self.data?has_content>
-  <#escape x as x?html>
-    <#noescape><@cm.include self=self.data view="script"/></#noescape>
-  </#escape>
-</#if>
+<#if preview.isPreviewCae()><span<@preview.metadata self.content/>></#if>
+  <#if self.data?has_content>
+    <@cm.include self=self.data view="script"/>
+  </#if>
+<#if preview.isPreviewCae()></span></#if>

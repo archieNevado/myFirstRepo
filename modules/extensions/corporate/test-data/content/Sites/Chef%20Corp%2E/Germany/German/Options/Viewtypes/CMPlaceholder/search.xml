@@ -4,8 +4,7 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMPlaceholder/search.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Viewtypes/CMPlaceholder/search"/>
 </master>
-<masterVersion>1</masterVersion>
 <description></description>
-<icon md5="9063448017d3a57e6a9afd50cb0bd7c9" href="../../../../../../../__blob/9063448017d3a57e6a9afd50cb0bd7c9.blob" mimetype="image/png"/>
+<icon md5="9063448017d3a57e6a9afd50cb0bd7c9" size="34147" href="../../../../../../../__blob/9063448017d3a57e6a9afd50cb0bd7c9.blob" mimetype="image/png"/>
 <layout>search</layout>
 </CMViewtype>

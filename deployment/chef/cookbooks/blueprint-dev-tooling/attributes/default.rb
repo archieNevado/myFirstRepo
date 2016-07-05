@@ -23,12 +23,12 @@ default['blueprint']['dev']['db']['type'] = 'mysql'
 #<> The database host to create schemas on
 default['blueprint']['dev']['db']['host'] = 'localhost'
 #<> The schema, user and password for the content-management-server
-default['blueprint']['dev']['db']['schemas']['content-management-server'] = 'cm7management'
+default['blueprint']['dev']['db']['schemas']['content-management-server'] = 'cm_management'
 #<> The schema, user and password for the master-live-server
-default['blueprint']['dev']['db']['schemas']['master-live-server'] = 'cm7master'
+default['blueprint']['dev']['db']['schemas']['master-live-server'] = 'cm_master'
 #<> The schema, user and password for the replication-live-server
-default['blueprint']['dev']['db']['schemas']['replication-live-server'] = 'cm7replication'
+default['blueprint']['dev']['db']['schemas']['replication-live-server'] = 'cm_replication'
 #<> The schema, user and password for the caefeeder preview
-default['blueprint']['dev']['db']['schemas']['caefeeder-preview'] = 'cm7mcaefeeder'
+default['blueprint']['dev']['db']['schemas']['caefeeder-preview'] = 'cm_mcaefeeder'
 #<> The schema, user and password for the caefeeder live
-default['blueprint']['dev']['db']['schemas']['caefeeder-live'] = 'cm7caefeeder'
+default['blueprint']['dev']['db']['schemas']['caefeeder-live'] = 'cm_caefeeder'

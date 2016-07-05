@@ -14,9 +14,8 @@ import com.coremedia.livecontext.ecommerce.user.User;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,16 +31,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class UserSessionServiceImpl extends StoreFrontService implements UserSessionService {
 
@@ -78,7 +76,7 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
       StoreFrontResponse storeFrontResponse = handleStorefrontCall(GUEST_LOGIN_URL, uriTemplateParameters, request, response);
 
       //apply user id update on the user context, other user context values remain untouched: not relevant
-      String newUserId = resolveUserId(response, resolveStoreId(), true);
+      String newUserId = resolveUserId(storeFrontResponse, resolveStoreId(), true);
       UserContext userContext = UserContextHelper.getCurrentContext();
       userContext.put(UserContextHelper.FOR_USER_ID, newUserId);
       String mergedCookies = mergeCookies(userContext.getCookieHeader(), storeFrontResponse.getHttpClientContext());
@@ -89,7 +87,7 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
         HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
           @Override
           public String getHeader(String name) {
-            if ("Cookie".equals(name) && cookies != null) {
+            if ("Cookie".equals(name) && !isEmpty(cookies)) {
               StringBuilder sb = new StringBuilder();
               for (org.apache.http.cookie.Cookie cookie : cookies) {
                 sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
@@ -153,58 +151,86 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
     if (request != null) {
       Cookie[] cookies = request.getCookies();
       if (cookies != null) {
-        List<String> cookieStrings = new ArrayList<>();
-        for (Cookie cookie : cookies) {
-          cookieStrings.add(cookie.getName() + "=" + cookie.getValue());
-        }
-
-        return resolveUserId(cookieStrings, currentStoreId, ignoreAnonymous);
+        return resolveUserIdFromJavaxCookies(Arrays.asList(cookies), currentStoreId, ignoreAnonymous);
       }
     }
-
     return null;
   }
 
-  private String resolveUserId(HttpServletResponse response, String currentStoreId, boolean ignoreAnonymous) {
-    return resolveUserId(response.getHeaders("Set-Cookie"), currentStoreId, ignoreAnonymous);
+  private String resolveUserId(StoreFrontResponse response, String currentStoreId, boolean ignoreAnonymous) {
+    return resolveUserIdFromApacheCookies(response.getCookies(), currentStoreId, ignoreAnonymous);
   }
 
-  private String resolveUserId(HttpResponse httpResponse, String currentStoreId, boolean ignoreAnonymous) {
-    if (httpResponse != null) {
-      Header[] cookieHeaders = httpResponse.getHeaders("Set-Cookie");
-      if (cookieHeaders != null) {
-        List<String> cookieStrings = new ArrayList<>();
-        for (Header cookieHeader : cookieHeaders) {
-          cookieStrings.add(cookieHeader.toString().substring("Set-Cookie:".length()).trim());
-        }
+  private String resolveUserIdFromJavaxCookies(List<Cookie> javaxCookies, String currentStoreId, boolean ignoreAnonymous) {
+    for (Cookie cookie : javaxCookies) {
+      String name = cookie.getName();
+      String value = cookie.getValue();
+      value = decodeCookieValue(value);
+      if (value == null) {
+        continue;
+      }
 
-        return resolveUserId(cookieStrings, currentStoreId, ignoreAnonymous);
+      String userId = resolveUserIdFromCookieData(name, value, currentStoreId, ignoreAnonymous);
+      if (userId != null) {
+        return userId;
       }
     }
-
     return null;
   }
 
-  private String resolveUserId(Collection<String> cookieStrings, String currentStoreId, boolean ignoreAnonymous) {
-    for (String cookieString : cookieStrings) {
-      String value = cookieString.substring(cookieString.indexOf("=") + 1, cookieString.length());
-      value = decodeUrl(value);
-      if ((cookieString.startsWith(StoreFrontService.IBM_WC_USERACTIVITY_COOKIE_NAME) ||
-        cookieString.startsWith(StoreFrontService.IBM_WCP_USERACTIVITY_COOKIE_NAME)) && !value.contains("DEL")) {
-        String[] values = value.split(",");
-        if (values.length >= 2) {
-          if (Integer.parseInt(values[0]) < 0 && ignoreAnonymous) {
-            continue;
-          }
-
-          String storeId = values[1];
-          //extract only the user id of the cookie that matches the store, commerce may have generated several
-          //WC_USERACTIVITY_* cookies, one for each store.
-          if (currentStoreId.equals(storeId)) {
-            return values[0];
-          }
-        }
+  private String resolveUserIdFromApacheCookies(List<org.apache.http.cookie.Cookie> cookies, String currentStoreId, boolean ignoreAnonymous) {
+    for (org.apache.http.cookie.Cookie cookie : cookies) {
+      String name = cookie.getName();
+      String value = cookie.getValue();
+      value = decodeCookieValue(value);
+      if (value == null) {
+        continue;
       }
+
+
+      String userId = resolveUserIdFromCookieData(name, value, currentStoreId, ignoreAnonymous);
+      if (userId != null) {
+        return userId;
+      }
+    }
+    return null;
+  }
+
+  @VisibleForTesting
+  String resolveUserIdFromCookieData(String cookieName, String cookieValue, String currentStoreId, boolean ignoreAnonymous) {
+    boolean isWcUserActivityCookie = cookieName.startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME);
+    boolean isPreviewWcUserActivityCookie = cookieName.startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME);
+    boolean isNotDeleted = !cookieValue.contains("DEL");
+
+    boolean isUserContainingCookie = (isWcUserActivityCookie || isPreviewWcUserActivityCookie) && isNotDeleted;
+
+    if (!isUserContainingCookie) {
+      return null;
+    }
+
+    String[] values = cookieValue.split(",");
+
+    if (values.length < 2) {
+      return null;
+    }
+
+    int userId;
+    try {
+      userId = Integer.parseInt(values[0]);
+    }
+    catch (NumberFormatException nfe) {
+      return null;
+    }
+
+    if (userId < 0 && ignoreAnonymous) {
+      return null;
+    }
+
+    String storeId = values[1];
+    //extract only the user id of the cookie that matches the store, commerce may have generated several
+    //WC_USERACTIVITY_* cookies, one for each store.
+    if (currentStoreId.equals(storeId)) {
+      return values[0];
     }
     return null;
   }
@@ -297,8 +323,8 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       for (Cookie cookie : cookies) {
-        if (cookie.getName().startsWith(StoreFrontService.IBM_WC_USERACTIVITY_COOKIE_NAME)
-                || cookie.getName().startsWith(StoreFrontService.IBM_WCP_USERACTIVITY_COOKIE_NAME)) {
+        if (cookie.getName().startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME)
+                || cookie.getName().startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME)) {
           if (Commerce.getCurrentConnection() != null && Commerce.getCurrentConnection().getStoreContext() != null) {
             String storeId = Commerce.getCurrentConnection().getStoreContext().getStoreId();
             if (storeId != null && cookie.getValue() != null && cookie.getValue().contains("%2c" + storeId)) {
@@ -316,7 +342,9 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
   private void refreshUserContext(StoreFrontResponse storeFrontResponse) {
     UserContext userContext = UserContextHelper.getCurrentContext();
     if (userContext != null) {
-      userContext.setUserId(resolveUserId(storeFrontResponse.getOriginalResponse(), resolveStoreId(), false));
+      userContext.setUserId(resolveUserId(storeFrontResponse, resolveStoreId(), false));
+      String mergeCookies = mergeCookies(userContext.getCookieHeader(), storeFrontResponse.getHttpClientContext());
+      userContext.setCookieHeader(mergeCookies);
     }
   }
 
@@ -365,13 +393,16 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
     this.userService = userService;
   }
 
-  private static String decodeUrl(String encodedUrl) {
+  private static String decodeCookieValue(String encodedValue) {
     try {
-      return URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.name());
+      return URLDecoder.decode(encodedValue, StandardCharsets.UTF_8.name());
     } catch (UnsupportedEncodingException e) {
       String msg = "UTF-8 is not supported, must not happen, use an approved JVM.";
       LOG.error(msg, e);
       throw new InternalError(msg);
+    } catch (IllegalArgumentException iae) {
+      LOG.warn("Cookie " + encodedValue + " can not be URL-decoded");
+      return null;
     }
   }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Management Board" name="Management Board with TV Screen" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="51599aadea75861cba4a1170ec803d01" href="../../../__blob/51599aadea75861cba4a1170ec803d01.blob" mimetype="image/tiff"/>
-<thumbnail md5="c0398d3723fd175beca9824636791afe" href="../../../__blob/c0398d3723fd175beca9824636791afe.blob" mimetype="image/jpeg"/>
+<original md5="51599aadea75861cba4a1170ec803d01" size="650392" href="../../../__blob/51599aadea75861cba4a1170ec803d01.blob" mimetype="image/tiff"/>
+<thumbnail md5="c0398d3723fd175beca9824636791afe" size="12201" href="../../../__blob/c0398d3723fd175beca9824636791afe.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -70,5 +70,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Management.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Management"/>
 </assetTaxonomy>
-<web md5="cd7c55fd166961512551ebff270a2b36" href="../../../__blob/cd7c55fd166961512551ebff270a2b36.blob" mimetype="image/jpeg"/>
+<web md5="cd7c55fd166961512551ebff270a2b36" size="251127" href="../../../__blob/cd7c55fd166961512551ebff270a2b36.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

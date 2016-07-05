@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20360%20Pictures/Pink%20Jacket/Pink-Jacket-04.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20360%20Pictures/Pink%20Jacket/Pink-Jacket-04"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -114,7 +113,7 @@
 <dataUrl></dataUrl>
 <width>2400</width>
 <height>1800</height>
-<data md5="6aac2e27dc1eb50290fcd542dd2f93cb" href="../../../../../../../__blob/6aac2e27dc1eb50290fcd542dd2f93cb.blob" mimetype="image/jpeg"/>
+<data md5="6aac2e27dc1eb50290fcd542dd2f93cb" size="301063" href="../../../../../../../__blob/6aac2e27dc1eb50290fcd542dd2f93cb.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

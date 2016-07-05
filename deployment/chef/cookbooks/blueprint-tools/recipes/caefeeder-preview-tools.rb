@@ -1,4 +1,5 @@
 include_recipe 'blueprint-base::default'
+include_recipe 'blueprint-tools::_base'
 coremedia_tool 'caefeeder-preview' do
   path node['blueprint']['tools']['caefeeder-preview']['dir']
   group_id node['blueprint']['tools']['caefeeder-preview']['group_id']

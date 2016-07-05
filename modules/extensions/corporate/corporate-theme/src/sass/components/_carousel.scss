@@ -13,7 +13,6 @@ Contains styling definitions for all content types as cm-carousel.
 
 .#{$prefix}carousel {
   height: 100%;
-  z-index: 1; //to keep inner elements with different z-index inside this container
 
   &-inner {
     height: 100%;
@@ -42,6 +41,7 @@ Contains styling definitions for all content types as cm-carousel.
     &--superhero {
       top: inherit;
       bottom: $padding-base-vertical;
+      z-index: 2; //controls should be above other items
     }
 
     &--details {

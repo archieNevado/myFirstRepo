@@ -16,8 +16,8 @@ import com.atlassian.crowd.service.client.CrowdClient;
 import com.coremedia.ldap.*;
 import hox.corem.Corem;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,7 @@ import java.util.Properties;
 
 public class CrowdUserProvider implements MemberHelper, UserProvider2 {
 
-  private static final Log LOG = LogFactory.getLog(CrowdUserProvider.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CrowdUserProvider.class);
 
   /**
    * Constant that holds the name of the property which specifies the domain this UserProvider is responsible for

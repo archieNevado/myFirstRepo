@@ -6,8 +6,8 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.feeder.MutableFeedable;
 import com.coremedia.cap.feeder.populate.FeedablePopulator;
 import com.coremedia.cap.struct.Struct;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
  * Keys and String-Values will be indexed.
  */
 public class StructFeedablePopulator implements FeedablePopulator<Object> {
-  private static final Log LOG = LogFactory.getLog(StructFeedablePopulator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(StructFeedablePopulator.class);
   private String solrFieldName = "textbody";
   private List<String> propertyNames;
 

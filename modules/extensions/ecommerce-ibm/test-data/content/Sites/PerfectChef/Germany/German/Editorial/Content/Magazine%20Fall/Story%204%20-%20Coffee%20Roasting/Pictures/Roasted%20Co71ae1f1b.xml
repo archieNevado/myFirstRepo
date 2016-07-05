@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../../United%20States/English/Editorial/Content/Magazine%20Fall/Story%204%20-%20Coffee%20Roasting/Pictures/Roa10cbd00a.xml" path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Story%204%20-%20Coffee%20Roasting/Pictures/Roasted%20Coffee%20Beans%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1280</width>
 <height>960</height>
-<data md5="fa259bd7f189fe1b0953ee481647d007" href="../../../../../../../../../__blob/fa259bd7f189fe1b0953ee481647d007.blob" mimetype="image/jpeg"/>
+<data md5="fa259bd7f189fe1b0953ee481647d007" size="177277" href="../../../../../../../../../__blob/fa259bd7f189fe1b0953ee481647d007.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

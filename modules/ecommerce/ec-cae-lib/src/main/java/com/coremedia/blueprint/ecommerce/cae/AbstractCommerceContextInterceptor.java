@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
+import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -22,8 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
-
 /**
  * Initializes the StoreContextProvider according to the current request.
  */
@@ -32,7 +31,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
 
   public static final String QUERY_PARAMETER_WORKSPACE_ID = "workspaceId";
 
-  private static final String DYNAMIC_FRAGMENT = "/" + PREFIX_DYNAMIC + "/";
+  private static final String DYNAMIC_FRAGMENT = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + "/";
   private static final String STORE_CONTEXT_INITIALIZED = AbstractCommerceContextInterceptor.class.getName()+"#storeContext.initialized";
   private static final String USER_CONTEXT_INITIALIZED = AbstractCommerceContextInterceptor.class.getName()+"#userContext.initialized";
 

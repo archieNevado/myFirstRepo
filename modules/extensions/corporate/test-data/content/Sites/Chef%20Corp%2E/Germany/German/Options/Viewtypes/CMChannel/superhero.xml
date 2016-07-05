@@ -4,8 +4,7 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMChannel/superhero.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Viewtypes/CMChannel/superhero"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Zeigt Inhalt als bildschirmfüllende Superhelden-Banner für Zielseiten.</description>
-<icon md5="bfacfd0b852df61193e7fbba339805c9" href="../../../../../../../__blob/bfacfd0b852df61193e7fbba339805c9.blob" mimetype="image/png"/>
+<icon md5="bfacfd0b852df61193e7fbba339805c9" size="34147" href="../../../../../../../__blob/bfacfd0b852df61193e7fbba339805c9.blob" mimetype="image/png"/>
 <layout>superhero</layout>
 </CMViewtype>

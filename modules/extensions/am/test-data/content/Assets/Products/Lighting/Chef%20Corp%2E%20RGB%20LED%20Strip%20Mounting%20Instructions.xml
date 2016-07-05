@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMVideoAsset folder="/Assets/Products/Lighting" name="Chef Corp. RGB LED Strip Mounting Instructions" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<thumbnail md5="4b2b628325047b8a532649a24659f938" href="../../../__blob/4b2b628325047b8a532649a24659f938.blob" mimetype="image/png"/>
+<thumbnail md5="4b2b628325047b8a532649a24659f938" size="160931" href="../../../__blob/4b2b628325047b8a532649a24659f938.blob" mimetype="image/png"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -67,5 +67,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Lighting.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Lighting"/>
 </assetTaxonomy>
-<web md5="834ccd1b54dffd057a87c33a1cc93115" href="../../../__blob/834ccd1b54dffd057a87c33a1cc93115.blob" mimetype="video/mp4"/>
+<web md5="834ccd1b54dffd057a87c33a1cc93115" size="617816" href="../../../__blob/834ccd1b54dffd057a87c33a1cc93115.blob" mimetype="video/mp4"/>
 </AMVideoAsset>

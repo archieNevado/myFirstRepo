@@ -2,6 +2,14 @@ coremedia_tomcat Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia_tomcat cookbook.
 
+v.2.0.11
+------------
+- add attribute `clean_log_dir_on_start` to `coremedia_tomcat` resource to allow cleaning the logs.
+
+v.2.0.10
+--------
+- support for Tomcat `8.0.x`
+
 v.2.0.9
 -------
 - add checksum option for `server_libs` and `common_libs` attributes. Simply add a key `checksum` to the libs hash

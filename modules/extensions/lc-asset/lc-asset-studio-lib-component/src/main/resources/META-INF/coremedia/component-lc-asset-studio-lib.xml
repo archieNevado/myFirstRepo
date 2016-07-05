@@ -7,6 +7,7 @@
                            http://www.coremedia.com/2007/coremedia-spring-beans-customization
                            http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
+  <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/livecontext/studio/cache.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
 
@@ -89,6 +90,15 @@
     <property name="searchService" ref="solrSearchService"/>
     <property name="cache" ref="cache"/>
     <property name="cacheForInSeconds" value="${livecontext.assetService.searchCacheDurationInSeconds}"/>
+  </bean>
+
+  <bean id="studioAssetCacheCapacityConfigurer" class="com.coremedia.cache.CacheCapacityConfigurer" init-method="init">
+    <property name="cache" ref="cache"/>
+    <property name="capacities">
+      <map>
+        <entry key="com.coremedia.livecontext.studio.asset.StudioAssetSearchService.SolrQueryCacheKey" value="100"/>
+      </map>
+    </property>
   </bean>
 
   <!--the asset service in Studio uses the ContentAssetSearchService -->

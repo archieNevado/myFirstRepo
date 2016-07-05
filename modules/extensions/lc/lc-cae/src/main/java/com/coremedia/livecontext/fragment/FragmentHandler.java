@@ -9,6 +9,7 @@ import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
+import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.common.util.Predicate;
@@ -22,7 +23,7 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 
 /**
  * Common base class for fragment handler. Each handler implements the Predicate interface
@@ -32,7 +33,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 public abstract class FragmentHandler extends PageHandlerBase implements Predicate<FragmentParameters> {
 
   private PageGridPlacementResolver pageGridPlacementResolver;
-  private ValidationService validationService;
+  protected ValidationService<Linkable> validationService;
 
   /**
    * Creates the ModelAndView depending on the parameters passed.
@@ -91,9 +92,7 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
 
     //noinspection unchecked
     if (!validationService.validate(channel)) {
-      final String msg = "Trying to render invalid content, returning " + SC_NOT_FOUND + ".  channel=" + channel.getContentId();
-      LOG.debug(msg);
-      return notFound(msg);
+      return handleInvalidLinkable(channel);
     }
     PageGridPlacement placement =  pageGridPlacementResolver.resolvePageGridPlacement(channel, placementName);
     if (placement == null) {
@@ -119,6 +118,11 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     return modelAndView;
   }
 
+  protected ModelAndView handleInvalidLinkable(Linkable linkable) {
+    LOG.debug("Trying to render invalid content, returning {} ({}).", SC_NO_CONTENT, linkable.getSegment());
+    return notFound("invalid content: " + linkable.getSegment());
+  }
+
   //-------------- Config --------------------
 
   @Required
@@ -126,8 +130,12 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     this.pageGridPlacementResolver = pageGridPlacementResolver;
   }
 
+  public ValidationService<Linkable> getValidationService() {
+    return validationService;
+  }
+
   @Required
-  public void setValidationService(ValidationService validationService) {
+  public void setValidationService(ValidationService<Linkable> validationService) {
     this.validationService = validationService;
   }
 }

@@ -91,14 +91,6 @@ public class LiveContextCategoryNavigationTest {
   }
 
   @Test
-  public void testGetChildrenNullByTreeRelation() throws Exception {
-    when(treeRelation.getChildrenOf(testling)).thenReturn(null);
-    List<? extends Linkable> actualChildren = testling.getChildren();
-    assertNotNull(actualChildren);
-    assertEquals("No Children exist so the list should be empty", 0, actualChildren.size());
-  }
-
-  @Test
   public void testGetParentNavigation2() throws Exception {
     Navigation parentCalculatedByTreeRelation = mock(Navigation.class);
     when(treeRelation.getParentOf(testling)).thenReturn(parentCalculatedByTreeRelation);

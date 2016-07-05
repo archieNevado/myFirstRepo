@@ -10,12 +10,7 @@ include_recipe 'blueprint-tomcat::_base'
 service_name = 'solr'
 # we cannot directly use the helper method in a definitions body, otherwise it gets evaluated too early
 start_service = cm_tomcat_default(service_name, 'start_service')
-
-# currently all files within the solr-config zip are prefixed with solr-home, therfore we need to extract the
-# solr-home dir first to a separate folder and then move it on change.
 solr_home = "#{node['blueprint']['base_dir']}/solr-home"
-# temporary directory to store the new solr home configuration
-solr_home_new = "#{node['blueprint']['cache_dir']}/solr-home-new"
 # webapp is exploded so we set it in the webapp context config
 node.force_default['blueprint']['webapps']['solr']['context_config']['env_entries']['solr/home']['value'] = solr_home
 blueprint_tomcat_service service_name do
@@ -33,8 +28,11 @@ coremedia_maven "#{node['blueprint']['cache_dir']}/solr-config.zip" do
   nexus_url node['blueprint']['nexus_url'] if node['blueprint']['nexus_url']
   nexus_repo node['blueprint']['nexus_repo']
   packaging 'zip'
-  extract_to solr_home_new
-  extract_force_clean true
+  # currently all files within the solr-config zip are prefixed with solr-home, therfore we need to extract the
+  # solr-home dir to the basedir
+  extract_to node['blueprint']['base_dir']
+  # do not clean otherwise the index will be lost
+  extract_force_clean false
   owner tomcat.user
   group tomcat.group
   # notify  tomcat to restart because of new solr config
@@ -71,23 +69,6 @@ template "#{classes_dir.path}/logging.properties" do
   notifies :update, webapp, :immediately
 end
 
-# this definition will shutdown and redeploy only on changes, this allows us to reinstall solr home when solr is down.
-coremedia_tomcat_service_lifecycle "#{service_name}-shutdown only on change" do
-  start_service false
-  tomcat tomcat
-  undeploy_unmanaged false
-  webapps [webapp]
-end
-
-# TODO: keep indices on delete
-execute 'update-solr-home' do
-  command "rm -rf #{solr_home} && mv #{solr_home_new}/solr-home #{solr_home} && rm -rf #{solr_home_new}"
-  user tomcat.user
-  group tomcat.group
-  only_if { ::File.exist?("#{solr_home_new}/solr-home") }
-end
-
-# start the tomcat again
 coremedia_tomcat_service_lifecycle service_name do
   tomcat tomcat
   webapps [webapp]

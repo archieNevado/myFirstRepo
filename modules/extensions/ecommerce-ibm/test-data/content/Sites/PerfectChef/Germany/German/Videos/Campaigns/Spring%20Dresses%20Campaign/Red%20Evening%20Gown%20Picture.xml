@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Campaigns/Spring Dresses Campaign" name="Red Evening Gown Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Campaigns/Spring Dresses Campaign" name="Red Evening Gown Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Videos/Campaigns/Spring%20Dresses%20Campaign/Red%20Evening%20Gown%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Campaigns/Spring%20Dresses%20Campaign/Red%20Evening%20Gown%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>426</width>
 <height>240</height>
-<data md5="f0f7b7f24c0cddda1cff655eedcecc52" href="../../../../../../../__blob/f0f7b7f24c0cddda1cff655eedcecc52.blob" mimetype="image/jpeg"/>
+<data md5="f0f7b7f24c0cddda1cff655eedcecc52" size="15522" href="../../../../../../../__blob/f0f7b7f24c0cddda1cff655eedcecc52.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

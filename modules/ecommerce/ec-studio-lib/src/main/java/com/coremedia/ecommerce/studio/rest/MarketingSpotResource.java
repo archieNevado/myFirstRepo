@@ -1,8 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.ecommerce.studio.rest.model.Store;
+import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -24,24 +23,19 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
   }
 
   private void fillRepresentation(MarketingSpotRepresentation representation) {
-    try {
-      MarketingSpot entity = getEntity();
+    MarketingSpot entity = getEntity();
 
-      if (entity == null) {
-        LOG.error("Error loading spot bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load spot bean");
-      }
-
-      representation.setId(entity.getId());
-      representation.setName(entity.getName());
-      representation.setShortDescription(entity.getDescription());
-      representation.setExternalId(entity.getExternalId());
-      representation.setExternalTechId(entity.getExternalTechId());
-      representation.setStore((new Store(entity.getContext())));
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    if (entity == null) {
+      LOG.warn("Error loading spot bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load spot bean");
     }
+
+    representation.setId(entity.getId());
+    representation.setName(entity.getName());
+    representation.setShortDescription(entity.getDescription());
+    representation.setExternalId(entity.getExternalId());
+    representation.setExternalTechId(entity.getExternalTechId());
+    representation.setStore((new Store(entity.getContext())));
   }
 
 

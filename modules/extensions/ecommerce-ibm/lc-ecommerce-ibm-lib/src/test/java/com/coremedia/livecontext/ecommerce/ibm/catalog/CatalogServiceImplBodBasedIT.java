@@ -109,6 +109,12 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
     super.testFindProductsByCategoryIsEmpty();
   }
 
+  @Test
+  @Override
+  public void testFindProductsByCategoryIsRoot() throws Exception {
+    super.testFindProductsByCategoryIsRoot();
+  }
+
   @Betamax(tape = "csi_testSearchProducts", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -139,7 +145,6 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
 
   @Betamax(tape = "csi_testFindSubCategoriesWithContract", match = {MatchRule.path, MatchRule.query})
   @Test
-  @Ignore
   @Override
   public void testFindSubCategoriesWithContract() throws Exception {
     super.testFindSubCategoriesWithContract();

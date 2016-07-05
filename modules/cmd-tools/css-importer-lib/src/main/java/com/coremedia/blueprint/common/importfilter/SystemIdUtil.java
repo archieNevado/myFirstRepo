@@ -20,6 +20,6 @@ final class SystemIdUtil {
   public static String extension(String systemId) {
     int dot = systemId.lastIndexOf('.');
     int slash = systemId.lastIndexOf('/');
-    return slash>dot || dot<0 || dot>=systemId.length() ? "" : systemId .substring(dot+1);
+    return slash>dot || dot<0 || dot>=systemId.length() ? "" : systemId.substring(dot+1);
   }
 }

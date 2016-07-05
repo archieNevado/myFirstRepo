@@ -3,8 +3,8 @@ package com.coremedia.blueprint.nuggad.sources;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.personalization.context.collector.AbstractContextSource;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.servlet.http.Cookie;
@@ -28,7 +28,7 @@ import java.util.List;
 @SuppressWarnings({"UnusedDeclaration"})
 public final class NuggAdSource extends AbstractContextSource {
 
-  private static final Log LOG = LogFactory.getLog(NuggAdSource.class);
+  private static final Logger LOG = LoggerFactory.getLogger(NuggAdSource.class);
   private static final String COOKIE_NAME = "nuggAIArray";
   private List parameterNames = new ArrayList();
 

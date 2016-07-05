@@ -1,10 +1,18 @@
 package com.coremedia.ecommerce.studio.model {
 import com.coremedia.ecommerce.studio.CatalogModel;
+import com.coremedia.ui.data.RemoteBean;
+import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.data.ValueExpressionFactory;
+import com.coremedia.ui.data.impl.RemoteServiceMethod;
+import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 
 [RestResource(uriTemplate="livecontext/store/{siteId:[^/]+}/{workspaceId:[^/]+}")]
 public class StoreImpl extends CatalogObjectImpl implements Store {
   private var siteId:String;
   private var workspaceId:String;
+  private var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod("livecontext/urlService", "POST", true, true);
+
+  private const resolvedUrls:Object = {};
 
   public function StoreImpl(uri:String, vars:Object) {
     siteId = vars['siteId'];
@@ -48,13 +56,19 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
 
 
   public function getCurrentWorkspace():Workspace {
-    if (!workspaceId || workspaceId === CatalogModel.NO_WS) return undefined;
-    if (!getWorkspaces()) return undefined;
-    if (!getWorkspaces().getWorkspaces()) return undefined;
+    if (!workspaceId || workspaceId === CatalogModel.NO_WS) {
+      return undefined;
+    }
+    if (!getWorkspaces()) {
+      return undefined;
+    }
+    if (!getWorkspaces().getWorkspaces()) {
+      return undefined;
+    }
 
     var workspaces:Array = getWorkspaces().getWorkspaces();
 
-    var filtered:Array = workspaces.filter(function(workspace:Workspace):Boolean {
+    var filtered:Array = workspaces.filter(function (workspace:Workspace):Boolean {
       return workspaceId === workspace.getExternalTechId();
     });
 
@@ -83,6 +97,26 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
 
   override public function getStore():Store {
     return this;
+  }
+
+  public function resolveShopUrlForPbe(shopUrl:String):RemoteBean {
+    var resolvedUrl:Object = resolvedUrls[shopUrl];
+    var ve:ValueExpression;
+    if(undefined === resolvedUrl) {
+      ve = ValueExpressionFactory.createFromValue();
+      resolvedUrl = {at : new Date(), ve : ve};
+    } else {
+      ve = resolvedUrl.ve;
+    }
+    if(undefined === resolvedUrls[shopUrl] || resolvedUrl.at < new Date() - 5000) {
+      resolvedUrls[shopUrl] = resolvedUrl;
+      remoteServiceMethod.request({shopUrl: shopUrl, siteId: getSiteId()},
+              function (response:RemoteServiceMethodResponse):void {
+                var bean:* = response.getResponseJSON().bean;
+                ve.setValue(bean);
+              });
+    }
+    return ve.getValue();
   }
 }
 }

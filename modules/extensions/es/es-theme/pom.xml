@@ -49,6 +49,13 @@
           <plugin>
             <groupId>com.github.eirslett</groupId>
             <artifactId>frontend-maven-plugin</artifactId>
+            <configuration>
+              <!--
+              | you cannot set this property in the root pom, there is no root pom property in multimodule
+              | builds in maven
+             -->
+              <installDirectory>${project.basedir}/../../../../</installDirectory>
+            </configuration>
             <executions>
               <!-- install node, npm and node_modules in local workspace -->
               <execution>

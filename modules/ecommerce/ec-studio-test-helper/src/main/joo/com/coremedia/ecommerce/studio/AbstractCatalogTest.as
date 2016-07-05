@@ -902,6 +902,35 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         "referrersUriTemplate" : "content/{id:[0-9]+}/referrers",
         "contentTypes": [
           {
+            "name": "CMExternalPage",
+            "description": null,
+            "directDescriptors": [
+              {
+                "$CapPropertyDescriptor": {
+                  "name": "externalId",
+                  "type": "String",
+                  "atomic": true
+                }
+              },
+              {
+                "$CapPropertyDescriptor": {
+                  "name": "externalUriPath",
+                  "type": "String",
+                  "atomic": true
+                }
+              }
+            ],
+            "id": "coremedia:///cap/contenttype/CMExternalPage",
+            "parent": {
+              "$Ref": "content/type/CMHasContexts"
+            },
+            "instancesBean": {
+              "$Ref": "content/type/CMExternalPage/instances"
+            },
+            "abstract": false,
+            "$Bean": "content/type/CMExternalPage"
+          },
+          {
             "name": "CMHasContexts",
             "description": null,
             "directDescriptors": [

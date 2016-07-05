@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Management Board" name="Sonya Schwartz (VP HR) Portrait" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="7a6ec47e3e0fddafc9dd3a25dce3d244" href="../../../__blob/7a6ec47e3e0fddafc9dd3a25dce3d244.blob" mimetype="image/tiff"/>
-<thumbnail md5="e067ee8242686f154accf43319d37656" href="../../../__blob/e067ee8242686f154accf43319d37656.blob" mimetype="image/jpeg"/>
+<original md5="7a6ec47e3e0fddafc9dd3a25dce3d244" size="194294" href="../../../__blob/7a6ec47e3e0fddafc9dd3a25dce3d244.blob" mimetype="image/tiff"/>
+<thumbnail md5="e067ee8242686f154accf43319d37656" size="15348" href="../../../__blob/e067ee8242686f154accf43319d37656.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -60,5 +60,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Portraits.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Portraits"/>
 </assetTaxonomy>
-<web md5="030202dffb37c212e9e4ce8c7fb35c9e" href="../../../__blob/030202dffb37c212e9e4ce8c7fb35c9e.blob" mimetype="image/jpeg"/>
+<web md5="030202dffb37c212e9e4ce8c7fb35c9e" size="331909" href="../../../__blob/030202dffb37c212e9e4ce8c7fb35c9e.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

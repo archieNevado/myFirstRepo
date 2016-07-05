@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.base.links.BlobHelper;
 import com.coremedia.blueprint.common.contentbeans.CMDownload;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.common.CapBlobRef;
@@ -8,6 +7,7 @@ import com.coremedia.cap.common.CapPropertyDescriptor;
 import com.coremedia.cap.common.CapPropertyDescriptorType;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.transform.BlobHelper;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
@@ -24,12 +24,12 @@ import java.util.Objects;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_WORD;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ETAG;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_NAME;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_PROPERTY;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;

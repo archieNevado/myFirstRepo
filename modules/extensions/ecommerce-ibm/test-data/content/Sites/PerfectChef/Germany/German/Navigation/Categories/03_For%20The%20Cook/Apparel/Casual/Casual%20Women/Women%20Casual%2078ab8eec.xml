@@ -2,9 +2,8 @@
 <CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Categories/03_For The Cook/Apparel/Casual/Casual Women" name="Women Casual Hero Banner Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
-<link href="../../../../../../../../United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Casual/Casual%20Women/Women%20480496a4.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Casual/Casual%20Women/Women%20Casual%20Hero%20Banner%20Collection"/>
+<link href="../../../../../../../../United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Casual/Women%20Casual/Women%20480496a4.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Casual/Women%20Casual/Women%20Casual%20Hero%20Banner%20Collection"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 <link href="../../../../../../Options/Viewtypes/CMCollection/slideshow.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMCollection/slideshow"/>
 </viewtype>

@@ -19,7 +19,7 @@ Contains styling definitions for all content types as cm-header.
 .#{$prefix}header {
   position: fixed;
   width: 100%;
-  z-index: 3;
+  z-index: 3; //above all default containers (z-index 1) and navigation (z-index 2)
   border: none;
   height: $logo-size-mobile;
   transition: background $transition-duration ease(in-out-quad);

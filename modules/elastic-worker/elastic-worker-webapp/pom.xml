@@ -14,8 +14,9 @@
   <description>Elastic Worker Webapp.</description>
 
   <properties>
-    <finalName>elastic-worker</finalName>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
   </properties>
+
 
   <dependencies>
     <dependency>
@@ -54,7 +55,7 @@
   </dependencies>
 
   <build>
-    <finalName>${finalName}</finalName>
+    <finalName>elastic-worker</finalName>
     <plugins>
       <!--
          invoke "mvn tomcat7:run" for running this webapp locally using a tomcat
@@ -64,25 +65,14 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
           <path>/${project.build.finalName}</path>
-          <port>40082</port>
+          <port>40680</port>
           <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
           <systemProperties>
-            <repository.url>http://${cms.host}:${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}/coremedia/ior</repository.url>
-            <mongoDb.clientURI>mongodb://${mongo.db.host}:27017</mongoDb.clientURI>
-            <elastic.solr.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr</elastic.solr.url>
-            <!--
-               Sets a JMX remote url so that the webapp can be accessed via JMX when running with tomcat plugin.
-               When running this application in a standalone tomcat, then the tomcat's built-in remote connector server
-               can be used instead.
-            -->
-            <management.server.remote.url>service:jmx:rmi:///jndi/rmi://localhost:40582/elastic-worker</management.server.remote.url>
-            <!--
-               Storing logs below target so that they will be cleaned on "mvn clean", too
-            -->
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-            <tenant.default>${tenant.default}</tenant.default>
-            <installation.host>${installation.host}</installation.host>
+            <propertieslocations>classpath:/elastic-worker.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>

@@ -45,21 +45,18 @@ public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionReso
   }
 
   protected ModelAndView getModelAndView(String viewName, Exception ex, HttpServletRequest request, HttpServletResponse response) {
-    LOG.info("Exception was thrown, trying to find a handler: ", ex);
+    LOG.info("{} was thrown, trying to find a handler: ", ex.getClass().getName());
 
-    ModelAndView modelAndView = null;
     for (ErrorAndExceptionHandler exhandler : errorAndExceptionHandler) {
-      modelAndView = exhandler.handleException(viewName, ex, request, response);
+      ModelAndView modelAndView = exhandler.handleException(viewName, ex, request, response);
       if (modelAndView != null) {
-        LOG.debug("Found handler for this exception: {}", exhandler.toString());
-        break;
+        LOG.debug("Found handler for {}: {}", ex.getClass().getName(), exhandler.toString());
+        return modelAndView;
       }
     }
 
-    if (modelAndView == null) {
-      LOG.debug("Could not find a handler for this exception.");
-    }
-    return modelAndView;
+    LOG.debug("Could not find a handler for {}.", ex.getClass().getName());
+    return null;
   }
 
   public void setExceptionHandler(List<ErrorAndExceptionHandler> handlers) {

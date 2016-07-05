@@ -41,13 +41,13 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
 import static com.coremedia.blueprint.cae.action.search.PageSearchActionHandler.ACTION_NAME;
 import static com.coremedia.blueprint.cae.action.search.PageSearchActionHandler.PARAMETER_QUERY;
 import static com.coremedia.blueprint.cae.action.search.PageSearchActionHandler.PARAMETER_ROOT_NAVIGATION_ID;
 import static com.coremedia.blueprint.cae.action.search.PageSearchActionHandlerTest.LocalConfig.PROFILE;
 import static com.coremedia.blueprint.cae.handlers.HandlerTestUtil.checkError;
 import static com.coremedia.blueprint.cae.handlers.HandlerTestUtil.checkPage;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;

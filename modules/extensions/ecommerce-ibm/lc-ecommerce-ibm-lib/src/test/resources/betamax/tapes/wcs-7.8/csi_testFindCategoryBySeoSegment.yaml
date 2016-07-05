@@ -1,0 +1,126 @@
+!tape
+name: csi_testFindCategoryBySeoSegment
+interactions:
+- recorded: 2016-05-19T09:26:44.434Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:45 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000UvX4z-tNi9tuyQgOnYmJQli:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2016-05-19T09:26:44.460Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/bySeo/en/auroraesite/blouses
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:45 GMT
+      Expires: Thu, 19 May 2016 10:26:45 GMT
+      Set-Cookie: JSESSIONID=0000nCjYenc2CiuY9k3kKFI2A7F:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/bySeo\/en\/auroraesite\/blouses?categoryview_forward=true&langId=-1&categoryId=10107","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Blouses","metaKeyword":"casual,
+      business, light, evening","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10107","identifier":"Women Shirts Blouses","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10107","parentCatalogGroupID":["10103"],"name":"Blouses","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_blouses.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_blouses.png","uniqueID":"10107","xcatgroup_seoSegment":"blouses","metaDescription":"Blouses","title":"Blouses
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_blouses","fullImageAltDescription":"Image for Blouses from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:26:44.492Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:45 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000j2ZuBCvXGMLhcpTFJr8A_QT:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2016-05-19T09:26:44.519Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10103?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:45 GMT
+      Expires: Thu, 19 May 2016 10:26:45 GMT
+      Set-Cookie: JSESSIONID=00007SY3Xgg5-aJ5OXYolT0Tq0u:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10103?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Women","metaKeyword":"casual,
+      cocktail, skirt, sweater, evening","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10103","identifier":"Women","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10103","parentCatalogGroupID":["10101"],"name":"Women","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_app_women.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_app_women.png","uniqueID":"10103","xcatgroup_seoSegment":"women","metaDescription":"Women","title":"Women
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_women","fullImageAltDescription":"Image for Women from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:26:44.546Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10101?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:45 GMT
+      Expires: Thu, 19 May 2016 10:26:45 GMT
+      Set-Cookie: JSESSIONID=00000YwJyy-0OnoKa8-OGIdLODz:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"The
+      latest styles for the entire family.","metaKeyword":"family apparel, cloths, shirt, pants, tops, bottoms, dresses, dress","identifier":"Apparel","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10101","name":"Apparel","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","uniqueID":"10101","xcatgroup_seoSegment":"apparel","metaDescription":"The
+      latest styles for the entire family.","title":"Apparel | AuroraESite","xcatgroup_cmSeoSegment":"10101_apparel","fullImageAltDescription":"Image for Apparel from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

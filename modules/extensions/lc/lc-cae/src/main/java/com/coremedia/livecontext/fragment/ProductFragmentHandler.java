@@ -40,7 +40,7 @@ public class ProductFragmentHandler extends FragmentHandler {
   private ResolveContextStrategy contextStrategy;
   private CommerceBeanFactory commerceBeanFactory;
   private boolean useStableIds = false;
-  private boolean fullPageRendering = false;
+  private boolean useContentPagegrid = false;
 
   /**
    * Renders the complete context (which is a CMChannel) of the given <code>product</code> using the given <code>view</code>.
@@ -109,15 +109,8 @@ public class ProductFragmentHandler extends FragmentHandler {
     return modelAndView;
   }
 
-  /**
-   * If we want to render a full page PDP, we have to ensure that the
-   * "Page" object accesses the PDP page grid instead of the regular one.
-   * @param content The current content to render (in this case a Product)
-   * @param context The current context to render: an augmented category
-   * @return The product detail page to render
-   */
   protected PageImpl createPageImpl(Object content, Navigation context) {
-    return fullPageRendering ? createProductDetailPage(content, context) : super.createPageImpl(content, context);
+    return useContentPagegrid ? super.createPageImpl(content, context): createProductDetailPage(content, context);
   }
 
   private ProductDetailPage createProductDetailPage(Object content, Navigation context) {
@@ -170,9 +163,9 @@ public class ProductFragmentHandler extends FragmentHandler {
    * Determines whether to use the page grid for content pages or for
    * product detail pages.
    *
-   * Default is false, which means content pages.
+   * Default is false, which means the pdp pagegrid is used.
    */
-  public void setFullPageRendering(boolean fullPageRendering) {
-    this.fullPageRendering = fullPageRendering;
+  public void setUseContentPagegrid(boolean useContentPagegrid) {
+    this.useContentPagegrid = useContentPagegrid;
   }
 }

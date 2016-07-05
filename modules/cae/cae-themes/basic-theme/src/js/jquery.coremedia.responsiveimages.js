@@ -3,12 +3,28 @@
  *
  * Picks a suitable image from a given set of images regarding given dimensions and the maximum size needed.
  *
- * Version 1.5
+ * Version 1.6
  * Copyright (c) 2016 CoreMedia AG
  *
  * Usage: $(".cm-image--responsive").responsiveImage();
  *
  * Example:
+ *
+ * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="[
+ *  {
+ *    "name" : "3x1",
+ *    "ratioWidth" : 3,
+ *    "ratioHeight" : 1,
+ *    "linksForWidth" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"}
+ *  },
+ *  {
+ *    "name" : "2x1",
+ *    "ratioWidth" : 2,
+ *    "ratioHeight" : 1,
+ *    "linksForWidth" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}
+ *  }]" />
+ *
+ * @Deprecated legacy format
  * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="{
  *    "3x1" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"},
  *    "2x1" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}}" />
@@ -74,28 +90,52 @@
           difference: undefined,
           linksForWidth: []
         };
-        var regexp = /^[a-zA-Z_]*(\d+)x(\d+)$/;
-        for (var name in responsiveImages) {
 
-          if (!responsiveImages.hasOwnProperty(name)) {
-            continue;
-          }
+        // @since 1.6
+        // default method to retrieve ratio from responsive images data
+        var getCandidateRatio = function(id, responsiveImages) {
+          var format = responsiveImages[id];
+          var ratioWidth = format.ratioWidth;
+          var ratioHeight = format.ratioHeight;
+          return {
+            name: format.name,
+            difference: Math.abs(containerRatio - (ratioWidth / ratioHeight)),
+            linksForWidth: format.linksForWidth
+          };
+        };
 
-          var match = regexp.exec(name);
-          if (match != null) {
-            var ratioWidth = parseInt(match[1]);
-            var ratioHeight = parseInt(match[2]);
-            var candidateRatio = {
-              name: name,
-              difference: Math.abs(containerRatio - (ratioWidth / ratioHeight)),
-              linksForWidth: responsiveImages[name]
-            };
-
-            if (typeof fittingRatio.name === "undefined"
-                    || typeof fittingRatio.difference === "undefined"
-                    || (fittingRatio.difference > candidateRatio.difference)) {
-              fittingRatio = candidateRatio;
+        // continue support of the old format that derived the ratio from the name. will be removed in the next major
+        // release
+        if (!$.isArray(responsiveImages)) {
+          logger.log("Using legacy data structure for responsive image setting. Please consider changing to the new format");
+          getCandidateRatio = function(id, responsiveImages) {
+            var regexp = /^[a-zA-Z_]*(\d+)x(\d+)$/;
+            if (!responsiveImages.hasOwnProperty(id)) {
+              return null;
             }
+
+            var match = regexp.exec(id);
+            if (match != null) {
+              var ratioWidth = parseInt(match[1]);
+              var ratioHeight = parseInt(match[2]);
+              return {
+                name: id,
+                difference: Math.abs(containerRatio - (ratioWidth / ratioHeight)),
+                linksForWidth: responsiveImages[id]
+              };
+            }
+            return null;
+          }
+        }
+
+        // determine the best fit in respect of the defined ratios and the container ratio
+        for (var id in responsiveImages) {
+          var candidateRatio = getCandidateRatio(id, responsiveImages);
+          if (candidateRatio != null
+                  && typeof fittingRatio.name === "undefined"
+                  || typeof fittingRatio.difference === "undefined"
+                  || (fittingRatio.difference > candidateRatio.difference)) {
+            fittingRatio = candidateRatio;
           }
         }
 

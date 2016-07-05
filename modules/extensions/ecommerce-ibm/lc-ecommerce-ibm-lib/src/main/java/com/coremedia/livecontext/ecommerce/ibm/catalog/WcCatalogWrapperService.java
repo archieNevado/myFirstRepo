@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCatalogId;
@@ -58,6 +58,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
   private static final String SEARCH_QUERY_PARAM_ORDERBY = "orderBy";
   private static final String SEARCH_QUERY_PARAM_METADATA = "metaData";
   private static final String SEARCH_QUERY_PARAM_SEARCHSOURCE = "searchSource";
+  private static final String SEARCH_QUERY_PARAM_DEPTH_AND_LIMIT = "depthAndLimit";
 
   //for better performance we fetch only the first 100 results.
   //TODO: In near future the studio client should be able to fetch the next 100 and so fort.
@@ -228,34 +229,10 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext) == StoreContextHelper.WCS_VERSION_7_7) {
         Map<String, Object> data = getRestConnector().callService(
-                FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_7, Collections.singletonList(getStoreId(storeContext)),
-                createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
-                new WcPriceParam(externalId, getCurrency(storeContext).getCurrencyCode(), getContractIds(storeContext)),
-                storeContext, userContext);
-
-        WcPrice result = null;
-        if (data != null) {
-          result = new WcPrice();
-          result.setDataMap(data);
-        }
-        return result;
-      } else if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_7) {
-        Map<String, Object> data = getRestConnector().callService(
-                FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_6, asList(getStoreId(storeContext), externalId),
-                createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
-                null, storeContext, userContext);
-
-        WcPriceV7_6 result = null;
-        if (data != null) {
-          result = new WcPriceV7_6();
-          result.setDataMap(data);
-        }
-        return result;
-      } else {
-        Map<String, Object> data = getRestConnector().callService(
-                FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID, asList(getStoreId(storeContext), externalId),
-                createParametersMap(null, null, null, UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
-                null, storeContext, userContext);
+            FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_7, Collections.singletonList(getStoreId(storeContext)),
+            createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
+            new WcPriceParam(externalId, getCurrency(storeContext).getCurrencyCode(), getContractIds(storeContext)),
+            storeContext, userContext);
 
         WcPrice result = null;
         if (data != null) {
@@ -264,6 +241,34 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
         }
         return result;
       }
+
+      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_7) {
+        Map<String, Object> data = getRestConnector().callService(
+            FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_6, asList(getStoreId(storeContext), externalId),
+            createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
+            null, storeContext, userContext);
+
+        WcPriceV7_6 result = null;
+        if (data != null) {
+          result = new WcPriceV7_6();
+          result.setDataMap(data);
+        }
+        return result;
+      }
+
+      Map<String, Object> data = getRestConnector().callService(
+          FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID, asList(getStoreId(storeContext), externalId),
+          createParametersMap(null, null, null, UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
+          null, storeContext, userContext);
+
+      WcPrice result = null;
+      if (data != null) {
+        result = new WcPrice();
+        result.setDataMap(data);
+      }
+
+      return result;
+
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -286,18 +291,19 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
           result.setDataMap(data);
         }
         return result;
-      } else {
-        Map<String, Object> data = getRestConnector().callService(
-                FIND_STATIC_PRODUCT_PRICES_BY_EXTERNAL_TECH_ID, asList(getStoreId(storeContext), externalId),
-                createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), getContractIds(storeContext)), null, storeContext, null);
-
-        WcPrices result = null;
-        if (data != null) {
-          result = new WcPrices();
-          result.setDataMap(data);
-        }
-        return result;
       }
+
+      Map<String, Object> data = getRestConnector().callService(
+          FIND_STATIC_PRODUCT_PRICES_BY_EXTERNAL_TECH_ID, asList(getStoreId(storeContext), externalId),
+          createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), getContractIds(storeContext)), null, storeContext, null);
+
+      WcPrices result = null;
+      if (data != null) {
+        result = new WcPrices();
+        result.setDataMap(data);
+      }
+      return result;
+
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -489,11 +495,22 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   public List<Map<String, Object>> findSubCategories(final String parentCategoryId, final StoreContext storeContext) throws CommerceException {
     try {
+
+      Map<String, String[]> params = createParametersMap(getCatalogId(storeContext), getLocale(storeContext), null, getContractIds(storeContext));
+      if (useSearchRestHandlerCategory(storeContext)) {
+        params.put(SEARCH_QUERY_PARAM_DEPTH_AND_LIMIT, new String[]{"-1"});
+      }
+
       //noinspection unchecked
       Map<String, Object> categoriesWrapper = getRestConnector().callService(
               useSearchRestHandlerCategory(storeContext) ? FIND_SUB_CATEGORIES_SEARCH : FIND_SUB_CATEGORIES, asList(getStoreId(storeContext), parentCategoryId),
-              createParametersMap(getCatalogId(storeContext), getLocale(storeContext), null, getContractIds(storeContext)), null, storeContext, null);
-      return getCategoryWrapperList(categoriesWrapper);
+              params, null, storeContext, null);
+
+      if (useSearchRestHandlerCategory(storeContext)) {
+        return getCategoryWrapperListForSubCategories(categoriesWrapper, parentCategoryId);
+      }else {
+        return getCategoryWrapperList(categoriesWrapper);
+      }
 
     } catch (CommerceException e) {
       throw e;
@@ -620,6 +637,36 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       return Collections.emptyList();
     }
     return Collections.unmodifiableList(categories);
+  }
+
+  /**
+   * Returns a list of category wrappers equivalent to {@link SearchType#getCategoryWrapperList(Map)}, but also considers
+   * differences in the JSON-Response of IBM Fix-Pack IFJR55049.
+   * @param categoriesMap The categories map retrieved by the commerce server.
+   * @param parentCategoryId
+   * @return The sub map containing the catalog group view section or null if not available.
+   */
+  protected List<Map<String, Object>> getCategoryWrapperListForSubCategories(Map<String, Object> categoriesMap, String parentCategoryId) {
+    if (categoriesMap == null) {
+      return Collections.emptyList();
+    }
+    String jsonCategoryId = DataMapHelper.getValueForPath(categoriesMap, "catalogGroupView[0].uniqueID", String.class);
+    if (jsonCategoryId != null && Objects.equals(jsonCategoryId, parentCategoryId)) {
+      //JSON handling for fix pack IFJR55049
+      Map<String, Object> resultMap = DataMapHelper.getValueForPath(categoriesMap, "catalogGroupView[0]", Map.class);
+
+      if (null != resultMap) {
+        List<Map<String, Object>> categories = DataMapHelper.getValueForKey(resultMap, "catalogGroupView", List.class);
+        if (null != categories) {
+          resultMap = DataMapTransformationHelper.transformCategoryBodMap(resultMap);
+          categories = DataMapHelper.getValueForKey(resultMap, "catalogGroupView", List.class);
+          return Collections.unmodifiableList(categories);
+        }
+      }
+    } else {
+      return getCategoryWrapperList(categoriesMap);
+    }
+    return Collections.emptyList();
   }
 
   /**

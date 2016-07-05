@@ -31,13 +31,22 @@ public class ProductImpl extends ProductBase {
   @SuppressWarnings("unchecked")
   protected Map<String, Object> getDelegate() {
     if (delegate == null) {
-      delegate = (Map<String, Object>) getCommerceCache().get(
-        new ProductCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
+      delegate = getDelegateFromCache();
       if (delegate == null) {
         throw new NotFoundException(getId() + " (product not found in catalog)");
       }
     }
     return delegate;
+  }
+
+  /**
+   * Perform by-id-call to get detail data
+   * @return detail data map
+   */
+  Map<String, Object> getDelegateFromCache() {
+    //noinspection unchecked
+    return (Map<String, Object>) getCommerceCache().get(
+            new ProductCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
   }
 
   @Override

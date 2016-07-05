@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Spring/For Her" name="PC_FLORAL_TOP Actionshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Spring/For Her" name="PC_FLORAL_TOP Actionshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Spring/2e6899d1.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Spring/For%20Her/PC_FLORAL_TOP%20Actionshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Floral Top</alt>
 <copyright>Alexander Bild / Shutterstock 150023966</copyright>
 <dataUrl></dataUrl>
-<data md5="37b01487fb8a3636afb63b51e3fbadc4" href="../../../../../../../../../../__blob/37b01487fb8a3636afb63b51e3fbadc4.blob" mimetype="image/jpeg"/>
+<data md5="37b01487fb8a3636afb63b51e3fbadc4" size="1151328" href="../../../../../../../../../../__blob/37b01487fb8a3636afb63b51e3fbadc4.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

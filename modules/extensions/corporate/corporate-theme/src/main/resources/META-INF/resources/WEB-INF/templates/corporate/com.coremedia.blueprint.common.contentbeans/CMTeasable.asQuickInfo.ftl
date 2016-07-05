@@ -39,7 +39,7 @@
 </#if>
 
 <#--<a class="cm-teasable__button cm-button cm-button--white btn btn-default" href=cm.getLink(self)>-->
-  <a class="cm-button cm-button--white btn btn-default" href="${cm.getLink(self)}">
+  <a class="cm-quickinfo__button cm-button btn btn-default" href="${cm.getLink(self)}">
   ${bp.getMessage("button_read_more")}
   </a>
 </div>

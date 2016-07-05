@@ -33,7 +33,7 @@
           <editor:configureListViewPlugin instanceName="{AssetCollectionViewExtension.INSTANCE_NAME}">
             <editor:listViewDataFields>
               <ui:dataField name="{AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE}"
-                            mapping="{'properties.' + AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE}"/>
+                            mapping="{'properties.' + AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE + '.date'}"/>
             </editor:listViewDataFields>
 
             <editor:repositoryListViewColumns>

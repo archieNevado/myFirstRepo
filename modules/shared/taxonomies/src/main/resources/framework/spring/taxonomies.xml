@@ -74,7 +74,7 @@
     <property name="contentRepository" ref="contentRepository"/>
     <property name="solrSearchService" ref="solrSearchService"/>
     <property name="sitesService" ref="sitesService"/>
-    <property name="siteConfigPath" value="${studio.siteConfigurationPath}" />
+    <property name="siteConfigPath" value="Options/" />
     <property name="globalConfigPath" value="${studio.globalConfigurationPath}" />
     <property name="aliasMapping">
       <map>

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Consumers/Home%20-%20Perfect%20Chef%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Consumers/Home%20-%20Perfect%20Chef%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1312</width>
 <height>1075</height>
-<data md5="22a735220078d14aa9968bc7a0b723b3" href="../../../../../../../__blob/22a735220078d14aa9968bc7a0b723b3.blob" mimetype="image/jpeg"/>
+<data md5="22a735220078d14aa9968bc7a0b723b3" size="410868" href="../../../../../../../__blob/22a735220078d14aa9968bc7a0b723b3.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

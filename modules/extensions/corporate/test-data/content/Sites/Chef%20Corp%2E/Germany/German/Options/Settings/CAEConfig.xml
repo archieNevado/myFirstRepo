@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../United%20States/English/Options/Settings/CAEConfig.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/CAEConfig"/>
 </master>
-<masterVersion>1</masterVersion>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StringListProperty Name="viewRepositoryNames">

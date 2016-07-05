@@ -8,10 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-/**
- * Handles {@link HttpError} instances by simply invoking {@link HttpServletResponse#sendError(int)} or
- * {@link HttpServletResponse#sendError(int, String)}
- */
 public class BlueprintHttpErrorView extends HttpErrorView {
 
   private List<Integer> errorsRendered;
@@ -19,8 +15,8 @@ public class BlueprintHttpErrorView extends HttpErrorView {
   @Override
   public void render(Object self, String viewName, HttpServletRequest request, HttpServletResponse response) {
 
-    if( !(self instanceof HttpError )) {
-      throw new IllegalArgumentException("Not a "+HttpError.class);
+    if (!(self instanceof HttpError)) {
+      throw new IllegalArgumentException(self + " is not a " + HttpError.class);
     }
 
     HttpError error = (HttpError) self;

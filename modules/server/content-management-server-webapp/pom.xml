@@ -18,12 +18,7 @@
   </description>
 
   <properties>
-    <cap.server.search.enable>true</cap.server.search.enable>
-    <sql.store.driver>com.mysql.jdbc.Driver</sql.store.driver>
-    <sql.store.url>jdbc:mysql://localhost:3306/cm7management</sql.store.url>
-    <sql.store.user>cm7management</sql.store.user>
-    <sql.store.password>cm7management</sql.store.password>
-    <cap.server.license>properties/corem/license.zip</cap.server.license>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
   </properties>
 
   <dependencies>
@@ -95,16 +90,13 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
           <path>/${project.build.finalName}</path>
-          <port>${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}</port>
+          <port>40180</port>
           <systemProperties>
-            <cap.server.search.enable>${cap.server.search.enable}</cap.server.search.enable>
-            <sql.store.driver>${sql.store.driver}</sql.store.driver>
-            <sql.store.url>${sql.store.url}</sql.store.url>
-            <sql.store.user>${sql.store.user}</sql.store.user>
-            <sql.store.password>${sql.store.password}</sql.store.password>
-            <cap.server.license>${cap.server.license}</cap.server.license>
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
+            <propertieslocations>classpath:/content-management-server.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>

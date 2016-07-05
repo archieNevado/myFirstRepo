@@ -13,9 +13,13 @@
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
 
+  <bean id="dataViewCollections" class="com.coremedia.objectserver.dataviews.DataViewCollections">
+    <constructor-arg ref="dataViewFactory"/>
+  </bean>
+
   <bean id="cmlinkableBeanSettingsFinder" class="com.coremedia.blueprint.cae.settings.CMLinkableBeanSettingsFinder">
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="dataViewCollections" ref="dataViewCollections"/>
   </bean>
 
   <bean id="pageSettingsFinder" class="com.coremedia.blueprint.cae.settings.PageSettingsFinder"/>

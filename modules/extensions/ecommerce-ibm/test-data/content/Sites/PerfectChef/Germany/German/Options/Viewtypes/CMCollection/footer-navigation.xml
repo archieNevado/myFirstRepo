@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMCollection/footer-navigation.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/footer-navigation"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Displays collection as footer navigation</description>
 <icon href="footer-navigation.icon.png" mimetype="image/png"/>
 <layout>footer-navigation</layout>

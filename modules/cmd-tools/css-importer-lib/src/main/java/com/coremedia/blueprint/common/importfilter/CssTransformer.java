@@ -1,29 +1,30 @@
 package com.coremedia.blueprint.common.importfilter;
 
+import com.coremedia.blueprint.importer.validation.JavaScriptCompressionValidator;
 import com.coremedia.dtd.CoremediaDtd;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.publisher.importer.AbstractTransformer;
 import com.coremedia.publisher.importer.TransformerParameters;
 import com.coremedia.xml.XmlUtil5;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +32,7 @@ import static java.util.Locale.ENGLISH;
 
 @SuppressWarnings({"JavaDoc"})
 public class CssTransformer extends AbstractTransformer {
-  private static final Log LOG = LogFactory.getLog(CssTransformer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CssTransformer.class);
 
   private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
@@ -106,10 +107,15 @@ public class CssTransformer extends AbstractTransformer {
     write(XML_HEADER);
     write(CoremediaDtd.DOCTYPE);
 
+    boolean isCompressed = isCompressedFromName(systemIdUri, filetype);
+
     if ("css".equals(filetype)) {
-      writeResourceDocument(name, targetPath, systemIdUri, is, DOCTYPE_CMCSS);
+      String css = IOUtils.toString(is, Charsets.UTF_8);
+      writeResourceDocument(name, targetPath, systemIdUri, css, DOCTYPE_CMCSS, isCompressed);
     } else if ("js".equals(filetype)) {
-      writeResourceDocument(name, targetPath, systemIdUri, is, DOCTYPE_JAVASCRIPT);
+      String js = IOUtils.toString(is, Charsets.UTF_8);
+      boolean isCompressible = JavaScriptCompressionValidator.isCompressibleJavaScript(systemIdUri.toString(), js, false);
+      writeResourceDocument(name, targetPath, systemIdUri, js, DOCTYPE_JAVASCRIPT, isCompressed || !isCompressible);
     } else if ("swf".equals(filetype)) {
       writeResouceDocumentBinary(name, targetPath, systemIdUri, "application/x-shockwave-flash", DOCTYPE_INTERACTIVE, "data");
     } else if ("jar".equals(filetype)) {
@@ -142,9 +148,13 @@ public class CssTransformer extends AbstractTransformer {
 
   // --- css and js -------------------------------------------------
 
-  private void writeResourceDocument(String name, URI path, URI systemId, InputStream is, String docType) throws IOException, URISyntaxException {
+  private void writeResourceDocument(String name, URI path, URI systemId, String script,
+                                     String docType, boolean disableCompression) throws IOException, URISyntaxException {
     writeOpening(name, path, systemId, docType);
-    writeResourceDataProperty(is, systemId, docType);
+    writeResourceDataProperty(script, systemId, docType);
+    if (disableCompression) {
+      writeDisableCompression();
+    }
     writeLinks(systemId);
     writeClosing();
   }
@@ -156,6 +166,10 @@ public class CssTransformer extends AbstractTransformer {
     writeResourceDataPropertyBinary(systemId, mimetype, blobProperty);
     writeLinks(systemId);
     writeClosing();
+  }
+
+  private void writeDisableCompression() throws IOException {
+    write("<integer name=\"disableCompress\" value=\"1\" />");
   }
 
   private void writeLinks(URI systemId) throws IOException {
@@ -177,15 +191,15 @@ public class CssTransformer extends AbstractTransformer {
     }
   }
 
-  private void writeResourceDataProperty(InputStream is, URI systemId, String docType) throws IOException, URISyntaxException {
+  private void writeResourceDataProperty(String script, URI systemId, String docType) throws IOException, URISyntaxException {
     write("<text name=\"code\"><div");
     writeAttr("xmlns", "http://www.coremedia.com/2003/richtext-1.0");
     writeAttr("xmlns:xlink", "http://www.w3.org/1999/xlink");
     write(">");
     if (DOCTYPE_CMCSS.equals(docType)) {
-      writeCss(is, systemId);
+      writeCss(script, systemId);
     } else if (DOCTYPE_JAVASCRIPT.equals(docType)) {
-      writeJavascript(is);
+      writeJavascript(script);
     }
     write("</div></text>");
   }
@@ -198,18 +212,18 @@ public class CssTransformer extends AbstractTransformer {
     write("/>");
   }
 
-  private void writeCss(InputStream is, URI systemId) throws IOException, URISyntaxException {
-    BufferedReader lineSrc = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-    for (String line=lineSrc.readLine(); line!=null; line=lineSrc.readLine()) {
+  private void writeCss(String css, URI systemId) throws IOException, URISyntaxException {
+    for (StringTokenizer st = new StringTokenizer(css, "\n"); st.hasMoreTokens(); ) {
+      String line = st.nextToken();
       if (line.trim().length() > 0) {
         writeLineAsP(urlsToXlinks(line, systemId));
       }
     }
   }
 
-  private void writeJavascript(InputStream is) throws IOException, URISyntaxException {
-    BufferedReader lineSrc = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-    for (String line=lineSrc.readLine(); line!=null; line=lineSrc.readLine()) {
+  private void writeJavascript(String js) throws IOException, URISyntaxException {
+    for (StringTokenizer st = new StringTokenizer(js, "\n"); st.hasMoreTokens(); ) {
+      String line = st.nextToken();
       if (line.trim().length() > 0) {
         writeLineAsP(XmlUtil5.escapeOrOmit(line));
       }
@@ -325,7 +339,7 @@ public class CssTransformer extends AbstractTransformer {
     if (!linkFile.canRead()) {
       return "Cannot read file " + linkFile.getAbsolutePath();
     }
-    if (!linkFileUri.getPath().startsWith(sourceUri.getPath())) {
+    if (!linkFileUri.getPath().startsWith(sourceUri.normalize().getPath())) {
       return "File " + linkFile.getAbsolutePath() + " is outside import scope";  // NOSONAR duplicate String
     }
     return null;
@@ -382,6 +396,15 @@ public class CssTransformer extends AbstractTransformer {
 
   protected static String getExtension(URI uri) {
     return SystemIdUtil.type(uri.getPath());
+  }
+
+  /**
+   * Adding ".min" JavaScript and CSS files directly before the file extension basically became a standard
+   * for denoting minified scripts. The importer uses this naming pattern to determine if the script is minified or not.
+   */
+  protected static boolean isCompressedFromName(URI uri, String extension) {
+    String uriPath = uri.getPath();
+    return uriPath.endsWith(".min." + extension);
   }
 
   /**

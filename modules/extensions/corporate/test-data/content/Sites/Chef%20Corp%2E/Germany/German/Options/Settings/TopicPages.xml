@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../United%20States/English/Options/Settings/TopicPages.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/TopicPages"/>
 </master>
-<masterVersion>1</masterVersion>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <LinkProperty Name="TopicPagePage" LinkType="coremedia:///cap/contenttype/CMChannel" xlink:href="coremedia:///cap/resources/../../Content/Topic%20Pages/Topicpage.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Topic%20Pages/Topicpage"/>

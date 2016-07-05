@@ -45,11 +45,17 @@ public class StoreFrontResponse {
    *
    * @return the list of cookies that were set by the store front
    */
+  @Nonnull
   public List<Cookie> getCookies() {
     if (httpClientContext == null || httpClientContext.getCookieStore() == null) {
       return Collections.emptyList();
     }
-    return httpClientContext.getCookieStore().getCookies();
+
+    List<Cookie> cookies = httpClientContext.getCookieStore().getCookies();
+    if (cookies == null) {
+      return Collections.emptyList();
+    }
+    return cookies;
   }
 
   /**

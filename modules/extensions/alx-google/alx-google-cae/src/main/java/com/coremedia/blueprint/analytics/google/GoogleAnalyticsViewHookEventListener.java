@@ -22,7 +22,7 @@ public class GoogleAnalyticsViewHookEventListener implements ViewHookEventListen
 
   @Override
   public RenderNode onViewHook(ViewHookEvent<Page> event) {
-    if (VIEW_HOOK_HEAD.equals(event.getId()) && event.getBean() != null) {
+    if (VIEW_HOOK_HEAD.equals(event.getId())) {
       GoogleAnalytics googleAnalytics = new GoogleAnalytics(event.getBean(), settingsService);
       if (googleAnalytics.isEnabled()) {
         return new RenderNode(googleAnalytics, HEAD_VIEW_NAME);

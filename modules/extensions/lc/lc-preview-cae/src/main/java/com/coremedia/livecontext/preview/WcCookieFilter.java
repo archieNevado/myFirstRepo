@@ -43,7 +43,7 @@ public class WcCookieFilter implements Filter {
   /**
    * RequestWrapper to filter cookies based on the prefix of the cookie name
    */
-  class PrefixBasedCookieFilteringRequestWrapper extends HttpServletRequestWrapper {
+  private static class PrefixBasedCookieFilteringRequestWrapper extends HttpServletRequestWrapper {
     private static final String REPLACEMENT = "NOT_APPLICABLE_HERE_";
     String filterPrefix;
 

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Company/Chef%20with%20Birthday%20Cake%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Company/Chef%20with%20Birthday%20Cake%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>4000</width>
 <height>2667</height>
-<data md5="dfc3d042d89b556c144bf61148cfadc1" href="../../../../../../../__blob/dfc3d042d89b556c144bf61148cfadc1.blob" mimetype="image/jpeg"/>
+<data md5="dfc3d042d89b556c144bf61148cfadc1" size="351355" href="../../../../../../../__blob/dfc3d042d89b556c144bf61148cfadc1.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

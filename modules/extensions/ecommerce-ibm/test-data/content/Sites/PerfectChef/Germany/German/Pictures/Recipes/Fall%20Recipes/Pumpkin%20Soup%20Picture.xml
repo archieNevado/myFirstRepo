@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Recipes/Fall Recipes" name="Pumpkin Soup Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Recipes/Fall Recipes" name="Pumpkin Soup Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Pictures/Recipes/Fall%20Recipes/Pumpkin%20Soup%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Recipes/Fall%20Recipes/Pumpkin%20Soup%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Kürbissuppe</alt>
 <copyright>Elena Shashkina / Shutterstock 111117023</copyright>
 <dataUrl></dataUrl>
-<data md5="bcb6edc094d8c1b69b795caee74dbd56" href="../../../../../../../__blob/bcb6edc094d8c1b69b795caee74dbd56.blob" mimetype="image/jpeg"/>
+<data md5="bcb6edc094d8c1b69b795caee74dbd56" size="393664" href="../../../../../../../__blob/bcb6edc094d8c1b69b795caee74dbd56.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

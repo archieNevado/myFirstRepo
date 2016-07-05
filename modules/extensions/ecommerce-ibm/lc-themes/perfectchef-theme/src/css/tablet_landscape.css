@@ -37,7 +37,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--productlisting > .cm-collection__item:nth-of-type(4n+1):nth-last-of-type(-n+4),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--productlisting > .cm-collection__item:nth-of-type(4n+1):nth-last-of-type(-n+4) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -77,7 +77,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--categories > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--categories > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -113,24 +113,17 @@
   }
 
   /* -- search ------------------------------------------------------------------------------------------------------ */
-
   .cm-search-form__fieldset {
     padding: 0;
   }
 
   /* -- article ----------------------------------------------------------------------------------------------------- */
   .cm-text {
-    -webkit-column-count: 2;
-    -moz-column-count: 2;
     column-count: 2;
-    -webkit-column-gap: 16px;
-    -moz-column-gap: 16px;
     column-gap: 16px;
   }
 
-  .cm-text--single-column  {
-    -webkit-column-count: 1;
-    -moz-column-count: 1;
+  .cm-text--single-column {
     column-count: 1;
   }
 

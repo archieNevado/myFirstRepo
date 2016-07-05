@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -31,6 +32,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -74,15 +76,14 @@ public class WcStorefrontConnectorTest {
 
   @Before
   public void defaultSetup() throws Exception {
-    testling = new WcStorefrontConnector();
-    testling.setConnectorHelper(connectorHelper);
+    testling = Mockito.spy(new WcStorefrontConnector());
 
     mockStatic(HttpClientFactory.class);
     PowerMockito.when(HttpClientFactory.createHttpClient(anyBoolean(), anyBoolean(), anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(httpClient);
     when(httpClient.execute(eq(storeFrontHttpGet), any(HttpContext.class))).thenReturn(storeFrontHttpResponse);
     PowerMockito.whenNew(HttpGet.class).withAnyArguments().thenReturn(storeFrontHttpGet);
 
-    when(connectorHelper.buildRequestUrl(URI_TEMPLATE, PARAMETERS)).thenReturn(storeFrontUriComponents);
+    doReturn(storeFrontUriComponents).when(testling).buildRequestUrl(URI_TEMPLATE, PARAMETERS);
     when(storeFrontUriComponents.encode()).thenReturn(storeFrontUriComponents);
     when(storeFrontUriComponents.toUri()).thenReturn(storeFrontUri);
     when(sourceRequest.getHeader("Cookie")).thenReturn(SOURCE_COOKIE_HEADER);
@@ -95,9 +96,6 @@ public class WcStorefrontConnectorTest {
 
   @Mock
   private HttpClient httpClient;
-
-  @Mock
-  private ConnectorHelper connectorHelper;
 
   @Mock
   private UriComponents storeFrontUriComponents;

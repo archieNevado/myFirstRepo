@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Events/Chef%20Corp%20Charity%20Golf%20Tournament%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Events/Chef%20Corp%20Charity%20Golf%20Tournament%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1365</height>
-<data md5="c800121ffb9731d2a02d989fa41e9067" href="../../../../../../../__blob/c800121ffb9731d2a02d989fa41e9067.blob" mimetype="image/jpeg"/>
+<data md5="c800121ffb9731d2a02d989fa41e9067" size="423886" href="../../../../../../../__blob/c800121ffb9731d2a02d989fa41e9067.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

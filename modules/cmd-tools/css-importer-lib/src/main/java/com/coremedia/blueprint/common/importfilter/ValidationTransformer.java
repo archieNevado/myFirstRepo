@@ -1,10 +1,11 @@
 package com.coremedia.blueprint.common.importfilter;
 
-import com.coremedia.blueprint.importer.validation.CssValidator;
-import com.coremedia.blueprint.importer.validation.JavaScriptValidator;
+import com.coremedia.blueprint.importer.validation.CssImportsValidator;
+import com.coremedia.blueprint.importer.validation.JavaScriptCompressionValidator;
 import com.coremedia.publisher.importer.AbstractTransformer;
 import com.coremedia.publisher.importer.MultiResult;
 import com.coremedia.publisher.importer.MultiSource;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,25 +30,15 @@ public class ValidationTransformer extends AbstractTransformer {
       throw new IllegalArgumentException("Result " + result + " is not a MultiResult");
     }
     try {
-      MultiSource multiSource = ((MultiSource)source).flattened();
-      MultiResult multiResult = (MultiResult)result;
+      MultiSource multiSource = ((MultiSource) source).flattened();
+      MultiResult multiResult = (MultiResult) result;
 
-      for (int i=0; i<multiSource.size(); ++i) {
+      for (int i = 0; i < multiSource.size(); ++i) {
         StreamSource streamSource = (StreamSource) multiSource.getSource(i, StreamSource.FEATURE);
         // Not sure how the validator's reported errors and thrown exceptions are related.
         // Handle both as errors here, omit the file and proceed with the import.
-        int numErrors;
-        try {
-          numErrors = validate(streamSource);
-        } catch (Exception e) {
-          // An exception has been thrown by a validator.
-          LOG.error("Validation errors in {}, omitted. See validation log files for details.", streamSource.getSystemId());
-          numErrors = 1;
-        }
-        if (numErrors==0) {
-          // This is the regular case.
-          multiResult.addNewResult(streamSource.getSystemId());
-        }
+        validate(streamSource);
+        multiResult.addNewResult(streamSource.getSystemId());
       }
 
     } catch (Exception e) {
@@ -61,22 +52,24 @@ public class ValidationTransformer extends AbstractTransformer {
 
   /**
    * Do the actual validation
-   * <p>
-   * @return the number of errors reported by the validator
+   * <p/>
+   *
    */
-  private int validate(StreamSource source) {
-    InputStream is = source.getInputStream();
-    try {
+  private void validate(StreamSource source) {
+    try (InputStream is = source.getInputStream()) {
       String systemId = source.getSystemId();
       String type = SystemIdUtil.type(systemId);
       if ("js".equals(type)) {
-        return JavaScriptValidator.validateJs(systemId, is);
+        String js = IOUtils.toString(is, Charsets.UTF_8);
+        JavaScriptCompressionValidator.isCompressibleJavaScript(systemId, js, true);
       } else if ("css".equals(type)) {
-        return CssValidator.validateCss(systemId, is);
+        String css = IOUtils.toString(is, Charsets.UTF_8);
+        CssImportsValidator.hasImportStatements(systemId, css);
       }
-      return 0;
-    } finally {
-      IOUtils.closeQuietly(is);
+    } catch (Exception e) {
+      // An exception has been thrown by a validator.
+      LOG.error("Validation errors in {}, omitted. See validation log files for details.", source.getSystemId());
+      LOG.debug("Validation exception occurred.", e);
     }
   }
 }

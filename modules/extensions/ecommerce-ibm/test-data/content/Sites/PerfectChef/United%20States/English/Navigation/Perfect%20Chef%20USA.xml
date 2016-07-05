@@ -65,7 +65,7 @@
 <link href="Categories/05_Recipes/Recipes%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/05_Recipes/Recipes%20Page"/>
 <link href="Categories/06_Magazine%20Spring/Magazine%20Spring%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/06_Magazine%20Spring/Magazine%20Spring%20Page"/>
 <link href="Site-Wide/Corporate%20Hidden%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Site-Wide/Corporate%20Hidden%20Page"/>
-<link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
+<link href="Fragments/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Fragments/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>
 <link href="Microsites/All%20Microsites%20Root%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Microsites/All%20Microsites%20Root%20Page"/>
 <link href="../Augmentation/Perfect%20Chef%20USA%20Catalog%20Root.xml" path="/Sites/PerfectChef/United%20States/English/Augmentation/Perfect%20Chef%20USA%20Catalog%20Root"/>
 </children>
@@ -77,7 +77,7 @@
 <css>
 <link href="../../../../../Themes/perfectchef/perfectchef%2Ecss.xml" path="/Themes/perfectchef/perfectchef%2Ecss"/>
 </css>
-<favicon md5="643239844b449a09c19441abc0d9f805" href="../../../../../__blob/643239844b449a09c19441abc0d9f805.blob" mimetype="image/x-icon"/>
+<favicon md5="643239844b449a09c19441abc0d9f805" size="1150" href="../../../../../__blob/643239844b449a09c19441abc0d9f805.blob" mimetype="image/x-icon"/>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">

@@ -1,9 +1,8 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
-import com.coremedia.blueprint.common.transformation.TransformationMapBuilder;
-import com.coremedia.cap.struct.Struct;
-import org.springframework.beans.factory.annotation.Required;
+import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
+import com.coremedia.cap.transform.TransformImageService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,15 +16,16 @@ public class CMPictureImpl extends CMPictureBase {
   private static final String TRANSFORMS = "transforms";
   private static final String DISABLE_CROPPING = "disableCropping";
 
-  private TransformationMapBuilder transformationMapBuilder;
+
+  private TransformImageService transformImageService;
 
   /*
    * Add additional methods here.
    * Add them to the interface {@link com.coremedia.blueprint.common.contentbeans.CMPicture} to make them public.
    */
-  @Required
-  public void setTransformationMapBuilder(TransformationMapBuilder transformationMapBuilder) {
-    this.transformationMapBuilder = transformationMapBuilder;
+
+  public void setTransformImageService(TransformImageService transformImageService) {
+    this.transformImageService = transformImageService;
   }
 
   /**
@@ -43,22 +43,29 @@ public class CMPictureImpl extends CMPictureBase {
 
   /**
    * Override the method to handle images, which does not have a transformation already.
-   * @return a map of transformations, merged from image settings and {@link TransformationMapBuilder} service
+   * @return a map of transformations, merged from image settings and {@link TransformImageService} service
    */
   @Override
-  public Map<String, String> getTransformMap() {
-    // We need a *mutable* map for the transformationMapBuilder
-    Map<String, String> transformations = new HashMap<>();
-    Struct transforms = getSettingsService().setting(TRANSFORMS, Struct.class, getContent());
-    if (transforms != null) {
-      Map<String, Object> structMap = transforms.getProperties();
-      for (Entry<String, Object> entry : structMap.entrySet()) {
-        if (entry.getValue() != null) {
-          transformations.put(entry.getKey(), entry.getValue().toString());
+  public Map<String,String> getTransformMap() {
+    Map<String,String> transformations = new HashMap<>();
+
+    try {
+      if (getLocalSettings() != null) {
+        Map<String,Object> structMap = getLocalSettings().getStruct(TRANSFORMS).getProperties();
+
+        //copy struct because it may be cached and the cache MUST NEVER be modified.
+        for(Entry<String,Object> entry : structMap.entrySet()) {
+          if(entry.getValue() != null) {
+            transformations.put(entry.getKey(),entry.getValue().toString());
+          }
         }
       }
     }
-    return transformationMapBuilder.build(this, transformations);
+    catch (NoSuchPropertyDescriptorException e) {
+      //no transforms configured for current content, empty map will be returned.
+    }
+
+    return transformImageService.getTransformationsUrls(this.getContent(), DATA, transformations);
   }
 
   @Override

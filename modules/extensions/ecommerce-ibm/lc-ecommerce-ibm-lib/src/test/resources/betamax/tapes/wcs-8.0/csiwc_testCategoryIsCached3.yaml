@@ -1,0 +1,149 @@
+!tape
+name: csiwc_testCategoryIsCached3
+interactions:
+- recorded: 2016-05-23T15:46:23.714Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 15:46:23 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000xn-ewvi1K72Na0BEzvgFf3S:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
+      Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
+      Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
+      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
+- recorded: 2016-05-23T15:46:23.742Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/bySeo/en/auroraesite/medicine
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 15:46:23 GMT
+      Expires: Mon, 23 May 2016 16:46:23 GMT
+      Set-Cookie: JSESSIONID=00006JRAvm4f7mtBJw4pPwqxTkj:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"parentCatalogGroupID":["3074457345616676705"],"metaDescription":"Medicine","uniqueID":"3074457345616676706","xcatgroup_seoSegment":"medicine","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676706","title":"Medicine
+      | AuroraESite","productsURL":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676706","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","shortDescription":"Medicine","name":"Medicine","metaKeyword":"Medicine","fullImageAltDescription":"Image
+      for Medicine from AuroraESite","identifier":"Medicine"}],"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/bySeo\/en\/auroraesite\/medicine?categoryview_forward=true&langId=-1&categoryId=3074457345616676706","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2016-05-23T15:46:23.755Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 15:46:23 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000I4LibtwBfL5KFTL-Wwofvaz:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2016-05-23T15:46:23.778Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/byId/3074457345616676705?catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 15:46:23 GMT
+      Expires: Mon, 23 May 2016 16:46:23 GMT
+      Set-Cookie: JSESSIONID=0000RpRjqoKX4IGzOAiSUZw9GTr:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676705","title":"Health | AuroraESite","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","productsURL":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676705","shortDescription":"Health","name":"Health","metaDescription":"Health","uniqueID":"3074457345616676705","metaKeyword":"Health","fullImageAltDescription":"Image
+      for Health from AuroraESite","xcatgroup_seoSegment":"health","identifier":"Health","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png"}],"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676705?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2016-05-23T15:46:23.807Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/byCategory/3074457345616676706?catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 23 May 2016 15:46:23 GMT
+      Expires: Mon, 23 May 2016 16:46:23 GMT
+      Set-Cookie: JSESSIONID=0000la3xj7gef4yLWXq6OkjCYZH:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"10","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676706?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"10","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"uniqueID":"3074457345616679453","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3701.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679453","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3701.jpg","shortDescription":"Immune
+      booster and soothing relief for your sore throat.","name":"Cold Be-Gone Vitamin C and Zinc Lozenges","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"8.49"}],"buyable":"true","longDescription":"Cold-Be-Gone''s lozenges provide instant
+      relief from sore throats due to cold and help boost your immune system by providing it with vitamins and minerals. Each lozenge contains 10 mg of Zinc.","xcatentry_seoSegment":"cold-be-gone-vitamin-c-and-zinc-lozenges","storeID":"715837934","partNumber":"HME037_3701"},{"uniqueID":"3074457345616679455","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3702.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679455","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3702.jpg","shortDescription":"Boost
+      your energy and lower reduce the risk of anemia.","name":"Healthy Boost Blood Booster","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"8.49"}],"buyable":"true","longDescription":"Iron is essential for normal thyroid hormone metabolism.
+      Healthy Boost''s Blood booster contains iron (ferrous sulphate) as well as Vitamin C which helps in the absorption of iron.","xcatentry_seoSegment":"healthy-boost-blood-booster-hme037-3702--1","storeID":"715837934","partNumber":"HME037_3702"},{"uniqueID":"3074457345616679457","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3703.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679457","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3703.jpg","shortDescription":"One
+      a day pill to improve overall health for women.","name":"Healthy Boost One a Day Multi-Vitamin for Women","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"12.99"}],"buyable":"true","longDescription":"Healthy Boost''s multivitamin for
+      women is designed specifically to strengthen bones, improve kidney and liver functioning, reduce stress, and improve skin tone.","xcatentry_seoSegment":"healthy-boost-one-a-day-multi-vitamin-for-women","storeID":"715837934","partNumber":"HME037_3703"},{"uniqueID":"3074457345616679459","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3704.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679459","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3704.jpg","shortDescription":"Designed
+      especially for men! Golden Root Complex improves circulation, energy, and libido.","name":"Healthy Boost Golden Root Complex","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"23.55"}],"buyable":"true","longDescription":"Golden Root has
+      long been known to increase circulation thereby promoting energy, decreasing general malaise, and naturally increasing libido. Each package contains 12 capsules with each capsule containing 300 mg.","xcatentry_seoSegment":"healthy-boost-golden-root-complex-hme037-3704--1","storeID":"715837934","partNumber":"HME037_3704"},{"uniqueID":"3074457345616679461","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3705.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679461","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3705.jpg","shortDescription":"Doctor
+      recommended pain relief.","name":"Regular Strength Acetaminophen","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"8.49"}],"buyable":"true","longDescription":"For quick acting pain relief. Each pill contains 325 mg of acetaminophen.
+      Each bottle contains 140 pills.","xcatentry_seoSegment":"regular-strength-acetaminophen-hme037-3705--1","storeID":"715837934","partNumber":"HME037_3705"},{"uniqueID":"3074457345616679463","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3706.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679463","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3706.jpg","shortDescription":"Fast
+      acting cold and sinus relief.","name":"Cold-Be-Gone Cold and Sinus Gel Caps","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"7.79"}],"buyable":"true","longDescription":"For effective relief of congestion, sinus pain, headache, sore
+      throat and fever. Active Ingredients  150 mg solubilized ibuprofen \/ Pseudoephedrine HCI 60 mg Analgesic \/ Decongestant. Each bottle contains 140 gel caps.","xcatentry_seoSegment":"cold-be-gone-cold-and-sinus-gel-caps","storeID":"715837934","partNumber":"HME037_3706"},{"uniqueID":"3074457345616679465","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3707.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679465","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3707.jpg","shortDescription":"For
+      serenity and more.","name":"Healthy Boost St. John''s Wort Oil","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"14.49"}],"buyable":"true","longDescription":"For over 500 years, St. John''s wort has been used to treat depression, insomnia,
+      and general irritability. St. John''s wort is a natural anti-depressant that promotes a balanced emotional well being.","xcatentry_seoSegment":"healthy-boost-st-johns-wort-oil","storeID":"715837934","partNumber":"HME037_3707"},{"uniqueID":"3074457345616679467","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3708.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679467","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3708.jpg","shortDescription":"Promotes
+      blood circulation and provides relief from arthritic pain.","name":"Healthy Boost Ginkgo Biloba","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"7.49"}],"buyable":"true","longDescription":"Increases oxygen absorption into blood as well
+      as general blood circulation. Rich in antioxidants, Ginkgo Biloba is also powerful against the effects of arthritis and atherosclerosis. Each bottle contains 25 capsules.","xcatentry_seoSegment":"healthy-boost-ginkgo-biloba-hme037-3708--1","storeID":"715837934","partNumber":"HME037_3708"},{"uniqueID":"3074457345616679469","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3709.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679469","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3709.jpg","shortDescription":"Fast
+      acting relief for heartburn and nausea.","name":"Healthy Boost Bismuth Subsalicylate","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"9.29"}],"buyable":"true","longDescription":"Bismuth subsalicylate is used to treat nausea, heartburn,
+      diarrhea, and indigestion. The liquid form is fast acting as it is absorbed quicker than pill form. Available in a 240 ml bottle. Cherry flavored.","xcatentry_seoSegment":"healthy-boost-bismuth-subsalicylate","storeID":"715837934","partNumber":"HME037_3709"},{"uniqueID":"3074457345616679471","parentCategoryID":"3074457345616676706","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3710.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679471","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3710.jpg","shortDescription":"Fast
+      acting relief for cold and flu symptoms.","name":"All-In-One Cold and Flu Syrup","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"8.49"}],"buyable":"true","longDescription":"Our All-In-One Cold and Flu formula provides effective relief
+      from  dry cough, chills, congestion, sore throat, fever, sinus pain and a runny nose. Grape flavored. Bottle is 180 ml.","xcatentry_seoSegment":"all-in-one-cold-and-flu-syrup","storeID":"715837934","partNumber":"HME037_3710"}],"recordSetStartNumber":"0","FacetView":[{"Entry":[{"count":"10","label":"({*
+      100} 100)","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"count":"0","label":"({100 200} 200)","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"count":"0","label":"({200 300} 300)","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"count":"0","label":"({300
+      400} 400)","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"count":"0","label":"({400 500} 500)","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"count":"0","label":"({500 *})","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD","value":"price_USD"},{"Entry":[{"count":"7","label":"Healthy
+      Boost","entryValue":"mfName_ntk_cs%3A%22Healthy+Boost%22"},{"count":"2","label":"Cold-Be-Gone","entryValue":"mfName_ntk_cs%3A%22Cold-Be-Gone%22"},{"count":"1","label":"All-In-One","entryValue":"mfName_ntk_cs%3A%22All-In-One%22"}],"name":"ManufacturerName","value":"mfName_ntk_cs"}],"BreadCrumbTrailEntryView":[{"value":"3074457345616676705","label":"Health","type":"FACET_ENTRY_CATEGORY"},{"value":"3074457345616676706","label":"Medicine","type":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview"}'

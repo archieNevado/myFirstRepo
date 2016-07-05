@@ -199,6 +199,10 @@
   <#return blueprintFreemarkerFacade.getLanguage(object) />
 </#function>
 
+<#function getPageLanguageTag object>
+  <#return blueprintFreemarkerFacade.getLanguageTag(object) />
+</#function>
+
 <#function getPageDirection object>
   <#return blueprintFreemarkerFacade.getDirection(object) />
 </#function>

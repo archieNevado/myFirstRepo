@@ -10,7 +10,7 @@ cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('content-management-server')}/ior"
 node.default['blueprint']['webapps'][service_name]['application.properties']['solr.search.url'] = "#{cm_webapp_url('solr')}/preview"
 node.default['blueprint']['webapps'][service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
-node.default['blueprint']['webapps'][service_name]['application.properties']['repository.heapCacheSize'] = 300 * 1024 * 1024
+node.default['blueprint']['webapps'][service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.blobStreamingSizeThreshold'] = -1
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.blobStreamingThreads'] = -1
@@ -22,6 +22,7 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['li
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.studio.helios'] = "studio-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.helios'] = "preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.corporate'] = "preview-corporate.#{node['blueprint']['hostname']}"
+node.default['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = "preview"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.helios'] = "//preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.corporate'] = "//preview-corporate.#{node['blueprint']['hostname']}"
 node.override['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = cache_dir

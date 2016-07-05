@@ -40,5 +40,13 @@ public class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, 
   public function getSiteId():String {
     return getUriPath().split('/')[2];
   }
+
+  public function getCustomAttributes():Object {
+    return get(CatalogObjectPropertyNames.CUSTOM_ATTRIBUTES);
+  }
+
+  public function getCustomAttribute(attribute:String):Object {
+    return getCustomAttributes() ? getCustomAttributes()[attribute] : null;
+  }
 }
 }

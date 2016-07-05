@@ -7,8 +7,8 @@ import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.web.HandlerHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +25,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 public class ChannelValidityInterceptor extends HandlerInterceptorAdapter {
 
-  private static final Log LOG = LogFactory.getLog(ChannelValidityInterceptor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ChannelValidityInterceptor.class);
 
   private TreeRelation<Content> treeRelation;
 

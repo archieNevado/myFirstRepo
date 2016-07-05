@@ -657,7 +657,7 @@ coremedia.blueprint.$(function () {
   // remove the spinner and event listener, when images are loaded
   $(".cm-image--loading").each(function () {
     var $image = $(this);
-    $image.imagesLoaded("load", function () {
+    $image.imagesLoaded().done(function () {
       coremedia.blueprint.logger.log("Responsive Image loaded, remove spinner");
       $image.removeClass("cm-image--loading");
     })

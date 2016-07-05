@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
@@ -30,4 +31,7 @@
   <bean id="catalogConfig" class="com.coremedia.ecommerce.studio.rest.CatalogServiceResource" scope="prototype">
     <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
   </bean>
+
+  <customize:append id="commerceExceptionMapperConfigurer" bean="jerseyConfigPropertyPackages"
+                    custom-value="com.coremedia.ecommerce.studio.rest.exception"/>
 </beans>

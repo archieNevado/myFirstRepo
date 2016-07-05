@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Landing Pages/Spring/Summer Dresses Landing Page" name="Spring Summer Dresses Landing Page Hero Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Landing Pages/Spring/Summer Dresses Landing Page" name="Spring Summer Dresses Landing Page Hero Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Navigation/Landing%20Pages/Spring/Spring%20Summer%20Dresses%20Landing%20Page%20He4f791ff.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Landing%20Pages/Spring/Spring%20Summer%20Dresses%20Landing%20Page%20Hero%20Collection"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 <link href="../../../../Options/Viewtypes/CMCollection/slideshow.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMCollection/slideshow"/>
 </viewtype>

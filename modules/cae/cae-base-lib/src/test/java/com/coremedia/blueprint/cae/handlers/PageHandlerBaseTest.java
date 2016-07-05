@@ -156,6 +156,7 @@ public abstract class PageHandlerBaseTest<T extends PageHandlerBase> {
   protected static final String DEFAULT_ACTION = "Vogon Constructor flagship";
   protected static final String DEFAULT_CONTEXT = "The Hitchhiker's Guide to the Galaxy";
   protected static final int DEFAULT_CONTENT_ID = 42;
+  protected static final String DEFAULT_CONTENT_ID_STR = Integer.toString(DEFAULT_CONTENT_ID);
   protected static final String DEFAULT_TITLE = "Don't panic!";
   protected static final String DEFAULT_KEYWORDS = "Point of View Gun";
   protected static final Calendar DEFAULT_VALID_FROM = Calendar.getInstance();

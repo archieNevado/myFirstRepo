@@ -1,0 +1,121 @@
+!tape
+name: csi_testSearchProductVariants
+interactions:
+- recorded: 2016-05-19T09:26:43.778Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:44 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00006n2gDDtKU_QpbHWwfNUUDMM:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2016-05-19T09:26:43.792Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:44 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000ApvLdeswk0SX424r_qIXZ4d:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2016-05-19T09:26:43.838Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/bySearchTerm/Leo%20Currency%20Dress%20Shoe?catalogId=10152&currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:44 GMT
+      Expires: Thu, 19 May 2016 10:26:44 GMT
+      Set-Cookie: JSESSIONID=0000_1SL3xXTZfsIsZoLwhcr17H:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"8","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/bySearchTerm\/Leo Currency Dress Shoe?catalogId=10152&currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102","resourceName":"productview","recordSetStartNumber":"0","recordSetComplete":"true","FacetView":[{"value":"price_USD","Entry":[{"label":"({*
+      100} 100)","count":"0","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"label":"({100 200} 200)","count":"8","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"label":"({200 300} 300)","count":"0","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"label":"({300
+      400} 400)","count":"0","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"label":"({400 500} 500)","count":"0","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"label":"({500 *})","count":"0","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD"},{"value":"parentCatgroup_id_search","Entry":[{"label":"Apparel","count":"8","entryValue":"10101"},{"label":"Men","count":"8","entryValue":"10102"},{"label":"Shoes","count":"8","entryValue":"10119"}],"name":"ParentCatalogGroup"},{"value":"mfName_ntk_cs","Entry":[{"label":"Leo","count":"8","entryValue":"mfName_ntk_cs%3A%22Leo%22"}],"name":"ManufacturerName"}],"CatalogEntryView":[{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120201","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15899","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120201","name":"Leo
+      Currency Dress Shoe","uniqueID":"15899","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120201"},{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120202","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15900","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120202","name":"Leo
+      Currency Dress Shoe","uniqueID":"15900","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120202"},{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120203","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15901","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120203","name":"Leo
+      Currency Dress Shoe","uniqueID":"15901","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120203"},{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120204","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15902","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120204","name":"Leo
+      Currency Dress Shoe","uniqueID":"15902","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120204"},{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120205","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15903","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120205","name":"Leo
+      Currency Dress Shoe","uniqueID":"15903","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120205"},{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120206","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15904","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120206","name":"Leo
+      Currency Dress Shoe","uniqueID":"15904","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120206"},{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120207","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15905","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120207","name":"Leo
+      Currency Dress Shoe","uniqueID":"15905","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120207"},{"longDescription":"This
+      classic dress shoe features a bicycle toe and micro-thin twin gores for comfort. Black stitch detail adds pizzazz to the all-leather upper.","buyable":"true","shortDescription":"Slip-on shoe in aged Cognac leather","parentProductID":"15898","xcatentry_seoSegment":"leo-currency-dress-shoe-msh012-120208","parentCategoryID":"10119","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15906","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"119.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_leo-currency-dress-shoe-msh012-120208","name":"Leo
+      Currency Dress Shoe","uniqueID":"15906","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","storeID":"10101","partNumber":"MSH012_120208"}],"recordSetCount":"8","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:26:43.881Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/bySearchTerm/CLA022_2203?catalogId=10152&currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:26:44 GMT
+      Expires: Thu, 19 May 2016 10:26:44 GMT
+      Set-Cookie: JSESSIONID=0000vOGJimW2yf0txfhAlojnknc:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/bySearchTerm\/CLA022_2203?catalogId=10152&currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102","resourceName":"productview","recordSetStartNumber":"0","recordSetComplete":"true","FacetView":[{"value":"price_USD","Entry":[{"label":"({*
+      100} 100)","count":"0","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"label":"({100 200} 200)","count":"0","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"label":"({200 300} 300)","count":"0","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"label":"({300
+      400} 400)","count":"0","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"label":"({400 500} 500)","count":"0","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"label":"({500 *})","count":"1","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD"},{"value":"parentCatgroup_id_search","Entry":[{"label":"Electronics","count":"1","entryValue":"10127"},{"label":"Laptops","count":"1","entryValue":"10130"}],"name":"ParentCatalogGroup"},{"value":"mfName_ntk_cs","Entry":[{"label":"DVR
+      Technics","count":"1","entryValue":"mfName_ntk_cs%3A%22DVR+Technics%22"}],"name":"ManufacturerName"}],"CatalogEntryView":[{"longDescription":"This tiny laptop is made with portability and battery life in mind, so that you can take it anywhere and not have
+      to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel companion.","buyable":"true","shortDescription":"A lightweight and portable laptop with excellent battery
+      life.","parentProductID":"16614","xcatentry_seoSegment":"travel-laptop-cla022-220301","parentCategoryID":"10130","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16615","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"575.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_travel-laptop-cla022-220301","name":"Travel
+      Laptop","uniqueID":"16615","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","storeID":"10101","partNumber":"CLA022_220301"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

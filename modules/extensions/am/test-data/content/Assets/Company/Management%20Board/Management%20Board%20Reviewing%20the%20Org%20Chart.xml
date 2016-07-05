@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Management Board" name="Management Board Reviewing the Org Chart" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="c84c1152443f4c583c34ec5f95cd524e" href="../../../__blob/c84c1152443f4c583c34ec5f95cd524e.blob" mimetype="image/tiff"/>
-<thumbnail md5="63aee504eacd2f8b1164fc6f788680bc" href="../../../__blob/63aee504eacd2f8b1164fc6f788680bc.blob" mimetype="image/jpeg"/>
+<original md5="c84c1152443f4c583c34ec5f95cd524e" size="792660" href="../../../__blob/c84c1152443f4c583c34ec5f95cd524e.blob" mimetype="image/tiff"/>
+<thumbnail md5="63aee504eacd2f8b1164fc6f788680bc" size="13932" href="../../../__blob/63aee504eacd2f8b1164fc6f788680bc.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -70,5 +70,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Management.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Management"/>
 </assetTaxonomy>
-<web md5="20a859a70c6a758abacbe2629452107d" href="../../../__blob/20a859a70c6a758abacbe2629452107d.blob" mimetype="image/jpeg"/>
+<web md5="20a859a70c6a758abacbe2629452107d" size="316959" href="../../../__blob/20a859a70c6a758abacbe2629452107d.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

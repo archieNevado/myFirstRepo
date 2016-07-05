@@ -24,7 +24,7 @@
           <editor:collapsibleFormPanel itemId="alxPageListDefaultContentForm"
                                        title="{AnalyticsStudioPluginDocTypes_properties.INSTANCE.CMALXPageList_defaultContent_text}">
             <items>
-              <bp:imageLinkListPropertyField contentType="CMPicture"
+              <bp:imageLinkListPropertyField contentType="CMTeasable"
                                              hideLabel="true"
                                              propertyName="defaultContent"
                                              bindTo="{config.bindTo}">

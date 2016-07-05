@@ -140,8 +140,7 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
           invalidStoreContext(issues, propertyValue);
         } catch (InvalidIdException e) {
           LOG.debug("Invalid catalog id: " + propertyValue, e);
-          // suppress "always evaluates to false", false positive, maybe caused by SONARJAVA-1491
-          @SuppressWarnings("squid:S2583") String s = currentContext != null ? currentContext.getStoreName() : "null";
+          String s = currentContext != null ? currentContext.getStoreName() : "null";
           invalidExternalId(issues, propertyValue, s);
         } catch (CommerceException e) {
           LOG.debug("Catalog could not be accessed: " + propertyValue, e);

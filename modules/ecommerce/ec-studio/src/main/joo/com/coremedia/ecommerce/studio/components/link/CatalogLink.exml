@@ -14,6 +14,7 @@
   <exml:import class="com.coremedia.ui.data.Bean"/>
   <exml:import class="com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer"/>
   <exml:import class="com.coremedia.ui.data.ValueExpressionFactory"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.editorContext"/>
 
   <exml:constant name="SELECTED_ITEMS_VARIABLE_NAME" value="selectedItems">
     <exml:description>
@@ -125,7 +126,7 @@
           <datafield name="imageUri"
                      mapping=""
                      convert="{function(v:String, catalogObject:CatalogObject):String {
-                          return CatalogHelper.getInstance().getImageUrl(catalogObject)}}"/>
+                          return editorContext.getThumbnailUri(catalogObject, null, CatalogHelper.getInstance().getType(catalogObject))}}"/>
         </ui:fields>
       </ui:bindListPlugin>
       <editor:bindReadOnlyStyleClassPlugin bindTo="{config.bindTo}"

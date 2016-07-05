@@ -8,22 +8,23 @@ include_recipe 'blueprint-tomcat::_base'
 service_name = 'sitemanager'
 # we cannot directly use the helper method in a definitions body, otherwise it gets evaluated too early
 start_service = cm_tomcat_default(service_name, 'start_service')
-
-node.default['blueprint']['webapps'][service_name]['capclient.properties']['cap.client.server.ior.url'] = "#{cm_webapp_url('content-management-server')}/ior"
-node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.configuration'] = "#{cm_webapp_url(service_name)}/webstart/properties/corem/editor.xml"
-node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.startup.configuration'] = "#{cm_webapp_url(service_name)}/webstart/properties/corem/editor-startup.xml"
+# because webstart webapp is started on the client, using the downloaded configuration files, we need to make sure, that the urls are
+# configured against urls where the host can be resolved anywhere
+node.default['blueprint']['webapps'][service_name]['capclient.properties']['cap.client.server.ior.url'] = "#{cm_webapp_url('content-management-server', node['blueprint']['hostname'])}/ior"
+node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.configuration'] = "#{cm_webapp_url(service_name, node['blueprint']['hostname'])}/webstart/properties/corem/editor.xml"
+node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.startup.configuration'] = "#{cm_webapp_url(service_name, node['blueprint']['hostname'])}/webstart/properties/corem/editor-startup.xml"
 node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.display.embedded.view'] = 'true'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['usermanager.searchResultSize'] = '490'
-node.default['blueprint']['webapps'][service_name]['editor.properties']['user.manual.url'] = 'https://documentation.coremedia.com/editor-user/1-SNAPSHOT/editor-user-{0}.pdf'
+node.default['blueprint']['webapps'][service_name]['editor.properties']['user.manual.url'] = 'https://documentation.coremedia.com/editor-user/16-SNAPSHOT/editor-user-{0}.pdf'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.richtext.model.traditional'] = 'false'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['show.content.change.popups'] = 'true'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['login.username'] = ''
 node.default['blueprint']['webapps'][service_name]['editor.properties']['login.domain'] = ''
 node.default['blueprint']['webapps'][service_name]['editor.properties']['login.password'] = ''
 node.default['blueprint']['webapps'][service_name]['editor.properties']['login.immediate'] = ''
-node.default['blueprint']['webapps'][service_name]['workflowclient.properties']['cap.client.server.ior.url'] = "#{cm_webapp_url('content-management-server')}/ior"
-node.default['blueprint']['webapps'][service_name]['workflowclient.properties']['workflow.client.server.ior.url'] = "#{cm_webapp_url('workflow-server')}/ior"
-node.default['blueprint']['webapps'][service_name]['jnlp_token']['SITE_MANAGER_ORB_SOCKET_FACTORY'] = 'com.sun.corba.se.impl.legacy.connection.defaultSocketFactory'
+node.default['blueprint']['webapps'][service_name]['workflowclient.properties']['cap.client.server.ior.url'] = "#{cm_webapp_url('content-management-server', node['blueprint']['hostname'])}/ior"
+node.default['blueprint']['webapps'][service_name]['workflowclient.properties']['workflow.client.server.ior.url'] = "#{cm_webapp_url('workflow-server', node['blueprint']['hostname'])}/ior"
+node.default['blueprint']['webapps'][service_name]['jnlp_token']['SITE_MANAGER_ORB_SOCKET_FACTORY'] = 'com.sun.corba.se.impl.legacy.connection.DefaultSocketFactory'
 node.default['blueprint']['webapps'][service_name]['jnlp_token']['SITE_MANAGER_CLEAR_TEXT_PORTS'] = '14300,14305'
 node.default['blueprint']['webapps'][service_name]['jnlp_token']['SITE_MANAGER_SSL_PORTS'] = '0'
 node.default['blueprint']['webapps'][service_name]['jnlp_token']['SITE_MANAGER_SSL_KEYSTORE_FILENAME'] = ''

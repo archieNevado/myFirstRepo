@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:u="exml:untyped"
+                xmlns:livecontext="exml:com.coremedia.livecontext.studio.config">
+
+  <exml:import class="com.coremedia.ui.data.ValueExpression"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.config.previewContextMenu"/>
+
+  <exml:cfg name="bindTo" type="ValueExpression"/>
+  <exml:cfg name="contextInfoValueExpression" type="ValueExpression"/>
+  <exml:cfg name="selectedNodeValueExpression" type="ValueExpression"/>
+  <exml:cfg name="metadataTreeValueExpression" type="ValueExpression"/>
+
+  <viewport>
+    <items>
+      <editor:previewPanel id="previewPanel"
+                           u:minWidth="300"
+                           collapsible="true"
+                           bindTo="{config.bindTo}"
+                           contextInfoValueExpression="{config.contextInfoValueExpression}"
+                           reloadAfterChangesDelay="1000">
+        <editor:contextMenu>
+          <livecontext:testPreviewContextMenu id="previewContextMenu"
+                  selectedNodeValueExpression="{config.selectedNodeValueExpression}"
+                  metadataTreeValueExpression="{config.metadataTreeValueExpression}"
+          />
+        </editor:contextMenu>
+      </editor:previewPanel>
+    </items>
+  </viewport>
+</exml:component>

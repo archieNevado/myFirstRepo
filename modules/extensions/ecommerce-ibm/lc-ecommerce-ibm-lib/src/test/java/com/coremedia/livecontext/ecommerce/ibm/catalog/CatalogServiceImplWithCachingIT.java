@@ -5,9 +5,9 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.junit.Before;
@@ -35,9 +35,8 @@ public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
 
   //Rest response values
   private static final String PRODUCT_CODE = "GFR033_3301";
-  private static final String PRODUCT_SEO = "oranges";
+  private static final String PRODUCT_SEO = "oranges-gfr033-3301--1";
   private static final String SKU_CODE = "GFR033_330101";
-  private static final String SKU_SEO = "oranges-gfr033-330101--1";
   private static final String CATEGORY_CODE = "Fruit";
   private static final String CATEGORY_SEO = "medicine";
 

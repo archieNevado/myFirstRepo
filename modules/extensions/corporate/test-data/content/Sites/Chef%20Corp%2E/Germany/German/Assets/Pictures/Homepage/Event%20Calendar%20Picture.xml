@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Homepage/Event%20Calendar%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Homepage/Event%20Calendar%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1536</height>
-<data md5="19ad0ec226386544ece6bebd5fbaae42" href="../../../../../../../__blob/19ad0ec226386544ece6bebd5fbaae42.blob" mimetype="image/jpeg"/>
+<data md5="19ad0ec226386544ece6bebd5fbaae42" size="198255" href="../../../../../../../__blob/19ad0ec226386544ece6bebd5fbaae42.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

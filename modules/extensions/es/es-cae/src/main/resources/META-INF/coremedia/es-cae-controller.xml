@@ -50,14 +50,20 @@
     <value>fragmentConnector</value>
   </util:list>
 
+  <util:list id="esPermittedLinkParameterNames" value-type="java.lang.String" list-class="java.util.ArrayList">
+    <value>targetView</value>
+  </util:list>
+
   <bean id="commentsResultHandler"
         class="com.coremedia.blueprint.elastic.social.cae.controller.CommentsResultHandler"
         parent="handlerBase">
+    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
   </bean>
 
   <bean id="reviewsResultHandler"
         class="com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResultHandler"
         parent="handlerBase">
+    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
   </bean>
 
 <!-- Features not yet implemented -->
@@ -65,21 +71,25 @@
   <bean id="complaintResultHandler"
         class="com.coremedia.blueprint.elastic.social.cae.controller.ComplaintResultHandler"
         parent="handlerBase">
+            <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
   </bean>
 
   <bean id="ratingResultHandler"
         class="com.coremedia.blueprint.elastic.social.cae.controller.RatingResultHandler"
         parent="handlerBase">
+    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
   </bean>
 
   <bean id="likeResultHandler"
         class="com.coremedia.blueprint.elastic.social.cae.controller.LikeResultHandler"
         parent="handlerBase">
+    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
   </bean>
 
   <bean id="shareResultHandler"
         class="com.coremedia.blueprint.elastic.social.cae.controller.ShareResultHandler"
         parent="handlerBase">
+    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
   </bean>
   -->
 

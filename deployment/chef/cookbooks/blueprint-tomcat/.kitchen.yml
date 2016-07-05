@@ -9,7 +9,7 @@ driver:
     memory: 8192
     cpus: 2
   synced_folders:
-    - ["./build", "/shared", "create: true"]
+    - ["./.kitchen/build", "/shared", "create: true"]
     - ["~/.m2/repository", "/maven-repo"]
   network:
     - ['private_network',{ ip: '192.168.252.100' }]
@@ -33,7 +33,7 @@ platforms:
   driver:
     box: coremedia/base7
     box_url: 'https://atlas.hashicorp.com/coremedia/boxes/base7'
-    box_version: '2.1.0'
+    box_version: '2.3.0'
 
 suites:
 - name: default

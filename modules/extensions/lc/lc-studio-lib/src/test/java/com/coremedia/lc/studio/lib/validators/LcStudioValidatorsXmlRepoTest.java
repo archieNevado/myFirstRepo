@@ -26,7 +26,6 @@ import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.Resource;
@@ -143,7 +142,7 @@ public class LcStudioValidatorsXmlRepoTest {
 
     // set mocked context initializer so that the commerce connection won't be set
     validator.setCommerceConnectionInitializer(mock(CommerceConnectionInitializer.class));
-    Commerce.setCurrentConnection(null);
+    Commerce.clearCurrent();
 
     Iterable<Issue> issues = validate(validator, 20);
 

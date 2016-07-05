@@ -1,17 +1,13 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * A catalog {@link Product} object as a RESTful resource.
@@ -28,35 +24,31 @@ public class ProductResource extends CommerceBeanResource<Product> {
   }
 
   protected void fillRepresentation(ProductRepresentation representation) {
-    try {
-      super.fillRepresentation(representation);
-      Product entity = getEntity();
-      representation.setName(entity.getName());
-      String shortDescription = entity.getShortDescription().asXml();
-      representation.setShortDescription(shortDescription);
-      String longDescription = entity.getLongDescription().asXml();
-      representation.setLongDescription(longDescription);
-      String thumbnailUrl = entity.getThumbnailUrl();
-      representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, getContentRepositoryResource().getEntity()));
-      representation.setCategory(entity.getCategory());
-      representation.setStore((new Store(entity.getContext())));
-      representation.setOfferPrice(entity.getOfferPrice());
-      representation.setListPrice(entity.getListPrice());
-      if(entity.getCurrency() != null && entity.getLocale() != null) {
-        representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
-      }
-      representation.setVariants(entity.getVariants());
-      // get visuals directly via AssetService to avoid fallback to default picture
-      AssetService assetService = getConnection().getAssetService();
-      if(null != assetService) {
-        representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
-      }
-      representation.setPictures(entity.getPictures());
-      representation.setDownloads(entity.getDownloads());
-      representation.setDescribingAttributes(entity.getDescribingAttributes());
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    super.fillRepresentation(representation);
+    Product entity = getEntity();
+    representation.setName(entity.getName());
+    String shortDescription = entity.getShortDescription().asXml();
+    representation.setShortDescription(shortDescription);
+    String longDescription = entity.getLongDescription().asXml();
+    representation.setLongDescription(longDescription);
+    String thumbnailUrl = entity.getThumbnailUrl();
+    representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, getContentRepositoryResource().getEntity()));
+    representation.setCategory(entity.getCategory());
+    representation.setStore((new Store(entity.getContext())));
+    representation.setOfferPrice(entity.getOfferPrice());
+    representation.setListPrice(entity.getListPrice());
+    if(entity.getCurrency() != null && entity.getLocale() != null) {
+      representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
     }
+    representation.setVariants(entity.getVariants());
+    // get visuals directly via AssetService to avoid fallback to default picture
+    AssetService assetService = getConnection().getAssetService();
+    if(null != assetService) {
+      representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
+    }
+    representation.setPictures(entity.getPictures());
+    representation.setDownloads(entity.getDownloads());
+    representation.setDescribingAttributes(entity.getDescribingAttributes());
   }
 
   @Override

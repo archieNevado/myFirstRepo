@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Products/Blenders and Food Processors" name="Browne BL1300 Blender Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="332abb9d858d1e7305a0206f912e451f" href="../../../__blob/332abb9d858d1e7305a0206f912e451f.blob" mimetype="image/jpeg"/>
-<thumbnail md5="d3efca5c0a1ca867683cbcf8519555e8" href="../../../__blob/d3efca5c0a1ca867683cbcf8519555e8.blob" mimetype="image/jpeg"/>
+<original md5="332abb9d858d1e7305a0206f912e451f" size="5311332" href="../../../__blob/332abb9d858d1e7305a0206f912e451f.blob" mimetype="image/jpeg"/>
+<thumbnail md5="d3efca5c0a1ca867683cbcf8519555e8" size="13977" href="../../../__blob/d3efca5c0a1ca867683cbcf8519555e8.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -72,5 +72,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Blender.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Blender"/>
 </assetTaxonomy>
-<web md5="86c6036b31986d087f6f38c8bfe4bf47" href="../../../__blob/86c6036b31986d087f6f38c8bfe4bf47.blob" mimetype="image/jpeg"/>
+<web md5="86c6036b31986d087f6f38c8bfe4bf47" size="498223" href="../../../__blob/86c6036b31986d087f6f38c8bfe4bf47.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

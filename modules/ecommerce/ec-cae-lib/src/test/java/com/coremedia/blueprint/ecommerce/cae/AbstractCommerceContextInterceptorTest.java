@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
-import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
+import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -71,7 +71,7 @@ public class AbstractCommerceContextInterceptorTest {
   @Test
   public void testNormalizeDynamicFragmentPath() {
     String path = "/cart/helios/action/cart";
-    String dynpath = "/" + UriConstants.Prefixes.PREFIX_DYNAMIC + path;
+    String dynpath = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + path;
     String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(dynpath);
     assertEquals("path not normalized", path, normalizedPath);
   }

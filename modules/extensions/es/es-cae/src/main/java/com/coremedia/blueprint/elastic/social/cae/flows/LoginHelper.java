@@ -1,6 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
+import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
+import com.coremedia.blueprint.elastic.social.cae.user.UserFilter;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import org.slf4j.Logger;
@@ -45,15 +48,20 @@ public class LoginHelper {
   @Inject
   private SecurityContextRepository securityContextRepository;
 
+  @Inject
+  private SpringSocialConfiguration springSocialConfiguration;
+
   private AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
 
   public void preProcess(RequestContext context) {
+    ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils(springSocialConfiguration.connectionFactoryLocator(), springSocialConfiguration.usersConnectionRepository());
+
     // If a user does not finish a provider registration, the provider connection must be removed
     // from the session. Otherwise the registration form is always initialized with the provider data
     // and the user cannot register without provider or with another provider.
     HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getNativeRequest();
     ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes(request);
-    if (ProviderSignInUtils.getConnection(servletRequestAttributes) != null) {
+    if (providerSignInUtils.getConnectionFromSession(servletRequestAttributes) != null) {
       servletRequestAttributes.removeAttribute(ProviderSignInAttempt.class.getName(), RequestAttributes.SCOPE_SESSION);
     }
   }

@@ -50,7 +50,7 @@
 <#if (cmpage.navigation.rootNavigation)?has_content>
   <nav id="cm-navigation" class="cm-header-is-collapse cm-nav-collapse navbar-collapse collapse">
     <@cm.include self=cmpage.navigation.rootNavigation view="asNavLinkList" params={
-      "maxDepth": bp.setting(self, "navigation_depth", 2),
+      "maxDepth": bp.setting(cmpage, "navigation_depth", 2),
       "cssClass": "cm-megamenu nav navbar navbar-nav row",
       "childrenCssClass": "cm-menu"
     } />

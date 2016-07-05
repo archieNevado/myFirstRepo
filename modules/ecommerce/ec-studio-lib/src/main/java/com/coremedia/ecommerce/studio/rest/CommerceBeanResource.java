@@ -35,6 +35,7 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     representation.setId(entity.getId());
     representation.setExternalId(entity.getExternalId());
     representation.setExternalTechId(entity.getExternalTechId());
+    representation.setCustomAttributes(entity.getCustomAttributes());
 
     //set preview url
     representation.setPreviewUrl(computePreviewUrl());

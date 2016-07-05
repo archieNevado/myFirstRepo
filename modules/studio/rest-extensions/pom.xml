@@ -15,7 +15,6 @@
 
   <modules>
     <module>taxonomies-rest-extension</module>
-    <module>validators-rest-extension</module>
   </modules>
 
 </project>

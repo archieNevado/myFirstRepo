@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Outdoor" name="PC_PICNIC_BASKET Frontshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Outdoor" name="PC_PICNIC_BASKET Frontshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Outdoor/PC_PICNIC_BASKET%20Frontshot%201.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Outdoor/PC_PICNIC_BASKET%20Frontshot%201"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -108,7 +107,7 @@
 <alt>Picknick-Korb</alt>
 <copyright>FikMik / Shutterstock 112420055</copyright>
 <dataUrl></dataUrl>
-<data md5="20941ce077f7a0ccd9d59ea34c36ae74" href="../../../../../../../../__blob/20941ce077f7a0ccd9d59ea34c36ae74.blob" mimetype="image/jpeg"/>
+<data md5="20941ce077f7a0ccd9d59ea34c36ae74" size="498389" href="../../../../../../../../__blob/20941ce077f7a0ccd9d59ea34c36ae74.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

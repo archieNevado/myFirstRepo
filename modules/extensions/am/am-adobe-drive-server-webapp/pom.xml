@@ -12,6 +12,10 @@
 
   <description>The Adobe Driver Server</description>
 
+  <properties>
+    <development-properties.dir>${project.basedir}/../../../../workspace-configuration/development-properties/default</development-properties.dir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -33,17 +37,17 @@
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
-          <port>38${HTTP_PORT_SUFFIX}</port>
-          <ajpPort>38${AJP_PORT_SUFFIX}</ajpPort>
+          <port>41180</port>
+          <ajpPort>41109</ajpPort>
           <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
           <contextFile>${project.basedir}/tomcat-context.xml</contextFile>
           <path>/</path>
           <systemProperties>
-            <catalina.base>${project.build.directory}</catalina.base>
-            <resourcePath.base>${project.basedir}</resourcePath.base>
-            <repository.url>${repository.url}</repository.url>
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
+            <propertieslocations>classpath:/adobe-drive-server.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>

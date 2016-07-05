@@ -20,7 +20,7 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.collectionview.tree.RepositoryTreeDragDropModel;
-import com.coremedia.cms.editor.sdk.config.imageReferrerListPanel;
+import com.coremedia.cms.editor.sdk.config.referrerListPanel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferenceWindow;
 import com.coremedia.cms.editor.sdk.sites.Site;
@@ -152,7 +152,7 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     }
   }
 
-  public static function getShopExpression(config:imageReferrerListPanel):ValueExpression {
+  public static function getShopExpression(config:referrerListPanel):ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():String {
       var store:Store = Store(CatalogHelper.getInstance().getStoreForContentExpression(config.bindTo).getValue());
       return store && store.getName() && CatalogHelper.getInstance().isCoreMediaStore(store);
@@ -340,6 +340,11 @@ public class CatalogStudioPluginBase extends StudioPlugin {
 
     var site:Site = editorContext.getSitesService().getSiteFor(selection);
     if(!site) {
+      return false;
+    }
+    
+    var cmCatalog:Boolean = CatalogHelper.getInstance().isActiveCoreMediaStore();
+    if(!cmCatalog) {
       return false;
     }
 

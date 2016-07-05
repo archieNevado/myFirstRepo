@@ -1,8 +1,12 @@
 package com.coremedia.ecommerce.studio.model {
 [RestResource(uriTemplate="livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
 public class CategoryImpl extends CatalogObjectImpl implements Category {
-  public function CategoryImpl(uri:String) {
+  public function CategoryImpl(uri:String,vars:Object) {
     super(uri);
+    // set immediate vars
+    setImmediateProperty(CatalogObjectPropertyNames.EXTERNAL_ID, vars.externalId);
+    setImmediateProperty("siteId", vars.siteId);
+    setImmediateProperty("workspaceId", vars.workspaceId);
   }
 
 

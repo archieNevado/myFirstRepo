@@ -38,11 +38,8 @@ import static org.mockito.Mockito.times;
 
 public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
 
-  private static final String BEAN_NAME_CATALOG_WRAPPER_SERVICE = "catalogWrapperServiceBod";
   private static final String PRODUCT_EXTERNAL_ID = System.getProperty("lc.test.product.externalId", "CLA022_2203");
   private static final String CATALOG_ID = System.getProperty("lc.test.catalogId", "10001");
-
-  private static final String BEAN_NAME_COMMERCE = "commerce";
 
   @Inject
   private WcCatalogWrapperService testling;

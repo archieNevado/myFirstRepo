@@ -1,9 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.util.CatalogRootHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -11,13 +9,15 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.FixValueCacheKey;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.map.LazyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -36,11 +36,14 @@ import java.util.Map;
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 
 public class CatalogServiceImpl implements CatalogService {
-
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
 
+  static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT";
+
   private WcCatalogWrapperService catalogWrapperService;
+  private StoreContextProvider storeContextProvider;
   private CommerceBeanFactory commerceBeanFactory;
+  private CommerceIdProvider commerceIdProvider;
   private CommerceCache commerceCache;
 
   private String wcsUrl;
@@ -48,7 +51,6 @@ public class CatalogServiceImpl implements CatalogService {
   private String wcsAssetsUrl;
 
   private boolean useExternalIdForBeanCreation;
-  private boolean enableAggressiveCaching;
 
   public WcCatalogWrapperService getCatalogWrapperService() {
     return catalogWrapperService;
@@ -64,8 +66,18 @@ public class CatalogServiceImpl implements CatalogService {
   }
 
   @Required
+  public void setStoreContextProvider(StoreContextProvider storeContextProvider) {
+    this.storeContextProvider = storeContextProvider;
+  }
+
+  @Required
   public void setCommerceBeanFactory(CommerceBeanFactory commerceBeanFactory) {
     this.commerceBeanFactory = commerceBeanFactory;
+  }
+
+  @Required
+  public void setCommerceIdProvider(CommerceIdProvider commerceIdProvider) {
+    this.commerceIdProvider = commerceIdProvider;
   }
 
   public CommerceCache getCommerceCache() {
@@ -115,10 +127,6 @@ public class CatalogServiceImpl implements CatalogService {
     this.useExternalIdForBeanCreation = useExternalIdForBeanCreation;
   }
 
-  public void setEnableAggressiveCaching(boolean enableAggressiveCaching) {
-    this.enableAggressiveCaching = enableAggressiveCaching;
-  }
-
   @PostConstruct
   void initialize(){
     if(null != wcsAssetsUrl) {
@@ -150,6 +158,10 @@ public class CatalogServiceImpl implements CatalogService {
     }
   }
 
+  static boolean isCatalogRootId(String categoryId) {
+    return categoryId != null && categoryId.endsWith("/" + EXTERNAL_ID_ROOT_CATEGORY);
+  }
+
   @Override
   @Nullable
   public Product findProductById(@Nonnull final String id) throws CommerceException {
@@ -159,7 +171,7 @@ public class CatalogServiceImpl implements CatalogService {
     }
     Map wcProductMap = (Map) commerceCache.get(
             new ProductCacheKey(id, currentContext, catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext);
+    return createProductBeanFor(wcProductMap, currentContext, false);
   }
 
   @Nullable
@@ -167,7 +179,7 @@ public class CatalogServiceImpl implements CatalogService {
     StoreContext currentContext = StoreContextHelper.getCurrentContext();
     Map wcProductMap = (Map) commerceCache.get(
             new ProductCacheKey(CommerceIdHelper.formatProductId(externalId), currentContext, catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext);
+    return createProductBeanFor(wcProductMap, currentContext, false);
   }
 
   @Nullable
@@ -175,7 +187,7 @@ public class CatalogServiceImpl implements CatalogService {
     StoreContext currentContext = StoreContextHelper.getCurrentContext();
     Map wcProductMap = (Map) commerceCache.get(
             new ProductCacheKey(CommerceIdHelper.formatProductTechId(externalTechId), currentContext, catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext);
+    return createProductBeanFor(wcProductMap, currentContext, false);
   }
 
   @Override
@@ -184,7 +196,7 @@ public class CatalogServiceImpl implements CatalogService {
     StoreContext currentContext = StoreContextHelper.getCurrentContext();
     Map wcProductMap = (Map) commerceCache.get(
             new ProductCacheKey(CommerceIdHelper.formatProductSeoId(seoSegment), currentContext, catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext);
+    return createProductBeanFor(wcProductMap, currentContext, false);
   }
 
   @Override
@@ -197,6 +209,10 @@ public class CatalogServiceImpl implements CatalogService {
   @Nonnull
   public List<Product> findProductsByCategory(@Nonnull final Category category) throws CommerceException {
     StoreContext currentContext = StoreContextHelper.getCurrentContext();
+    if (category.isRoot()) {
+      // the wcs has no root category thus asking would lead to an error
+      return Collections.emptyList();
+    }
     List<Map<String, Object>> wcProductsMap = (List<Map<String, Object>>) commerceCache.get(
             new ProductsByCategoryCacheKey(category.getExternalTechId(), currentContext, catalogWrapperService, commerceCache));
     return (List<Product>) createProductBeansFor(wcProductsMap, currentContext);
@@ -206,13 +222,13 @@ public class CatalogServiceImpl implements CatalogService {
   @Nullable
   public Category findCategoryById(@Nonnull final String id) throws CommerceException {
     StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    if (CatalogRootHelper.isCatalogRootId(id)){
+    if (isCatalogRootId(id)){
       return (Category) getCommerceBeanFactory()
-              .createBeanFor(CommerceIdHelper.formatCategoryId(Category.EXTERNAL_ID_ROOT_CATEGORY), currentContext);
+              .createBeanFor(CommerceIdHelper.formatCategoryId(EXTERNAL_ID_ROOT_CATEGORY), currentContext);
     }
     Map<String, Object> wcCategory = (Map<String, Object>) commerceCache.get(
             new CategoryCacheKey(id, currentContext, catalogWrapperService, commerceCache));
-    return createCategoryBeanFor(wcCategory, currentContext);
+    return createCategoryBeanFor(wcCategory, currentContext, false);
   }
 
   @Override
@@ -221,7 +237,14 @@ public class CatalogServiceImpl implements CatalogService {
     StoreContext currentContext = StoreContextHelper.getCurrentContext();
     Map<String, Object> wcCategory = (Map<String, Object>) commerceCache.get(
             new CategoryCacheKey(CommerceIdHelper.formatCategorySeoId(seoSegment), currentContext, catalogWrapperService, commerceCache));
-    return createCategoryBeanFor(wcCategory, currentContext);
+    return createCategoryBeanFor(wcCategory, currentContext, false);
+  }
+
+  @Override
+  @Nonnull
+  public Category findRootCategory() throws CommerceException {
+    String rootCategoryId = commerceIdProvider.formatCategoryId(EXTERNAL_ID_ROOT_CATEGORY);
+    return (Category) getCommerceBeanFactory().createBeanFor(rootCategoryId, storeContextProvider.getCurrentContext());
   }
 
   /**
@@ -242,7 +265,7 @@ public class CatalogServiceImpl implements CatalogService {
   @Nonnull
   public List<Category> findSubCategories(@Nonnull final Category parentCategory) throws CommerceException {
     StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    if (CatalogRootHelper.isCatalogRoot(parentCategory)) {
+    if (parentCategory.isRoot()) {
       return findTopCategories(null);
     }
     List<Map<String, Object>> wcCategories = (List<Map<String, Object>>) commerceCache.get(
@@ -314,7 +337,7 @@ public class CatalogServiceImpl implements CatalogService {
     return getCatalogWrapperService().getLanguageId(locale);
   }
 
-  protected Product createProductBeanFor(Map<String, Object> productWrapper, StoreContext context) {
+  protected Product createProductBeanFor(Map<String, Object> productWrapper, StoreContext context, boolean reloadById) {
     if (productWrapper != null) {
       String id;
       if (DataMapHelper.getValueForKey(productWrapper, "catalogEntryTypeCode", String.class).equals("ItemBean")) {
@@ -327,15 +350,28 @@ public class CatalogServiceImpl implements CatalogService {
                 CommerceIdHelper.formatProductTechId(DataMapHelper.getValueForKey(productWrapper, "uniqueID", String.class));
       }
       if (CommerceIdHelper.isProductId(id) || CommerceIdHelper.isProductVariantId(id)) {
-        Product product = (Product) commerceBeanFactory.createBeanFor(id, context);
-        ((AbstractIbmCommerceBean) product).setDelegate(productWrapper);
+        final ProductBase product = (ProductBase) commerceBeanFactory.createBeanFor(id, context);
         // register the product wrapper with the cache, it will optimize later accesses (there are good
         // chances that the beans will be called immediately after this call
         // Todo: currently we use it only for studio calls, but check if we can do it for a cae webapp as well
         // (it probably requires that we are able to reload beans dynamically if someone tries to read a property that is not available)
-        if (enableAggressiveCaching) {
-          commerceCache.put(new FixValueCacheKey(id, context, productWrapper, AbstractCommerceCacheKey.CONFIG_KEY_PRODUCT, commerceCache));
+        Transformer transformer = null;
+        if (reloadById) {
+          transformer = new Transformer() {
+
+            private Map<String, Object> delegateFromCache;
+
+            @Override
+            public Object transform(Object input) {
+              if (null == delegateFromCache) {
+                delegateFromCache = product.getDelegateFromCache();
+              }
+              //noinspection SuspiciousMethodCalls
+              return delegateFromCache.get(input);
+            }
+          };
         }
+        product.setDelegate(asLazyMap(productWrapper, transformer));
         return product;
       }
     }
@@ -348,30 +384,52 @@ public class CatalogServiceImpl implements CatalogService {
     }
     List<Product> result = new ArrayList<>(productWrappers.size());
     for (Map<String, Object> productWrapper : productWrappers) {
-      result.add(createProductBeanFor(productWrapper, context));
+      result.add(createProductBeanFor(productWrapper, context, true));
     }
     return Collections.unmodifiableList(result);
   }
 
-  protected Category createCategoryBeanFor(Map<String, Object> categoryWrapper, StoreContext context) {
+  protected Category createCategoryBeanFor(@Nullable Map<String, Object> categoryWrapper, @Nonnull StoreContext context, boolean reloadById) {
     if (categoryWrapper != null) {
       String id = useExternalIdForBeanCreation ?
               CommerceIdHelper.formatCategoryId(DataMapHelper.getValueForKey(categoryWrapper, "identifier", String.class)) :
               CommerceIdHelper.formatCategoryTechId(DataMapHelper.getValueForKey(categoryWrapper, "uniqueID", String.class));
       if (CommerceIdHelper.isCategoryId(id)) {
-        Category category = (Category) commerceBeanFactory.createBeanFor(id, context);
-        ((AbstractIbmCommerceBean) category).setDelegate(categoryWrapper);
+        final CategoryImpl category = (CategoryImpl) commerceBeanFactory.createBeanFor(id, context);
         // register the category wrapper with the cache, it will optimize later accesses (there are good
         // chances that the beans will be called immediately after this call
         // Todo: currently we use it only for studio calls, but check if we can do it for a cae webapp as well
         // (it probably requires that we are able to reload beans dynamically if someone tries to read a property that is not available)
-        if (enableAggressiveCaching) {
-          commerceCache.put(new FixValueCacheKey(id, context, categoryWrapper, AbstractCommerceCacheKey.CONFIG_KEY_CATEGORY, commerceCache));
+        Transformer transformer = null;
+        if (reloadById) {
+          transformer = new Transformer() {
+
+            private Map<String, Object> delegateFromCache;
+
+            @Override
+            public Object transform(Object input) {
+              if (null == delegateFromCache) {
+                delegateFromCache = category.getDelegateFromCache();
+              }
+              //noinspection SuspiciousMethodCalls
+              return delegateFromCache.get(input);
+            }
+          };
         }
+        category.setDelegate(asLazyMap(categoryWrapper, transformer));
         return category;
       }
     }
     return null;
+  }
+
+  @Nullable
+  public static Map<String, Object> asLazyMap(@Nullable Map<String, Object> map, @Nullable Transformer transformer) {
+    if(null != map && null != transformer) {
+      //noinspection unchecked
+      return LazyMap.decorate(map, transformer);
+    }
+    return map;
   }
 
   protected List<Category> createCategoryBeansFor(List<Map<String, Object>> categoryWrappers, StoreContext context) {
@@ -380,7 +438,7 @@ public class CatalogServiceImpl implements CatalogService {
     }
     List<Category> result = new ArrayList<>(categoryWrappers.size());
     for (Map<String, Object> categoryWrapper : categoryWrappers) {
-      result.add(createCategoryBeanFor(categoryWrapper, context));
+      result.add(createCategoryBeanFor(categoryWrapper, context, true));
     }
     return Collections.unmodifiableList(result);
   }

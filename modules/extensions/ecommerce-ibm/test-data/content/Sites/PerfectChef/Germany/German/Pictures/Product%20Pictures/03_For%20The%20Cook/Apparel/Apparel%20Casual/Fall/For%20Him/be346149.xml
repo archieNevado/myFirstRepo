@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Fall/For Him" name="PC_BLACK_JACKET Sideshot 2" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Fall/For Him" name="PC_BLACK_JACKET Sideshot 2" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Fall/Fo8aefe37d.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Fall/For%20Him/PC_BLACK_JACKET%20Sideshot%202"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -110,7 +109,7 @@
 <alt>Schwarze Jacke</alt>
 <copyright>Alexander Bild / Shutterstock 149005121</copyright>
 <dataUrl></dataUrl>
-<data md5="37444d846ba12f085f64493fef386cec" href="../../../../../../../../../../../__blob/37444d846ba12f085f64493fef386cec.blob" mimetype="image/jpeg"/>
+<data md5="37444d846ba12f085f64493fef386cec" size="1081445" href="../../../../../../../../../../../__blob/37444d846ba12f085f64493fef386cec.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

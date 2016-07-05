@@ -66,10 +66,7 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
   @Override
   public List<? extends Linkable> getChildren() {
     Collection<Linkable> children = treeRelation.getChildrenOf(this);
-    if (children != null) {
-      return (List<? extends Linkable>) children;
-    }
-    return Collections.emptyList();
+    return (List<? extends Linkable>) children;
   }
 
   @Override
@@ -181,7 +178,10 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
 
   @Override
   public String toString() {
-    return "LiveContextNavigation for '" + category.getName() + "'";
+    return "LiveContextExternalChannel{" +
+            "context=" + getContext().getContent().getPath() +
+            ", category=" + getCategory().getName() +
+            '}';
   }
 
   @Override

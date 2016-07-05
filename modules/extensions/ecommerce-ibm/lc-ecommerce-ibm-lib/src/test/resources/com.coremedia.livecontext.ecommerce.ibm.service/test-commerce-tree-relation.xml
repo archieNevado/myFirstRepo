@@ -9,6 +9,6 @@
 
   <context:annotation-config/>
 
-  <bean name="commerceTreeRelation" class="com.coremedia.blueprint.base.livecontext.tree.CommerceTreeRelation"/>
+  <bean name="commerceTreeRelation" class="com.coremedia.livecontext.tree.CommerceTreeRelation"/>
 
 </beans>

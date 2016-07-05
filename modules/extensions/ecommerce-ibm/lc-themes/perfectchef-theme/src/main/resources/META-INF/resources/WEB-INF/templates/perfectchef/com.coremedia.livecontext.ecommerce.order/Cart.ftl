@@ -31,7 +31,7 @@
               <div class="cm-cart-item__image cm-aspect-ratio-box">
                   <a href="${cm.getLink(productInSite)}">
                       <img class="cm-aspect-ratio-box__content"
-                           data-cm-non-adaptive-content='{"overflow": "true"}'
+                        <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": true} />
                            src="${item.product.defaultImageUrl}" alt="${item.product.defaultImageAlt!""}"/>
                   </a>
               </div>

@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.zip.Checksum;
  */
 public class DefaultSecureHashCodeGeneratorStrategy implements SecureHashCodeGeneratorStrategy {
 
-  private static final Log LOG = LogFactory.getLog(DefaultSecureHashCodeGeneratorStrategy.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultSecureHashCodeGeneratorStrategy.class);
 
   private static final String HASHCODE_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   private static final int HASH_LENGTH = 2;

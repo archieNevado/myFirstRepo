@@ -150,7 +150,7 @@ public class AnalyticsProvider {
   protected boolean isNonEmptyString(Object o, String propertyName) {
     final boolean b = o instanceof CharSequence && StringUtils.isNotEmpty((CharSequence) o);
     if (!b) {
-      LOG.info("required property {} is not set: {}", propertyName, this);
+      LOG.debug("required property {} is not set: {}", propertyName, this);
     }
     return b;
   }

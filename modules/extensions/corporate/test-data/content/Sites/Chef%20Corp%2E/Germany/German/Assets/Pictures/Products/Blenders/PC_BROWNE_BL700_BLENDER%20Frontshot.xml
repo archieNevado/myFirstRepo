@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Products/Blenders" name="PC_BROWNE_BL700_BLENDER Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Products/Blenders" name="PC_BROWNE_BL700_BLENDER Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/Blenders/PC_BROWNE_BL700_BLENDER%20Frontshot.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/Blenders/PC_BROWNE_BL700_BLENDER%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -100,7 +99,7 @@
 <alt>Bild vom Browne BL700 Mixer</alt>
 <copyright>Venus Angel/Shutterstock 82274485</copyright>
 <dataUrl></dataUrl>
-<data md5="87750e468ae4735b670b007fc0c59759" href="../../../../../../../../__blob/87750e468ae4735b670b007fc0c59759.blob" mimetype="image/jpeg"/>
+<data md5="87750e468ae4735b670b007fc0c59759" size="417928" href="../../../../../../../../__blob/87750e468ae4735b670b007fc0c59759.blob" mimetype="image/jpeg"/>
 <asset>
 <link href="../../../../../../../../Assets/Products/Blenders%20and%20Food%20Processors/Browne%20BL700%20Blender%20Frontshot.xml" path="/Assets/Products/Blenders%20and%20Food%20Processors/Browne%20BL700%20Blender%20Frontshot"/>
 </asset>

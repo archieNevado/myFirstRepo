@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Plates, Tableware" name="PC_SQUARE_PLATE Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Plates, Tableware" name="PC_SQUARE_PLATE Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Plates%2C%20Tableware/PC_SQUARE_e16ac4b6.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Plates%2C%20Tableware/PC_SQUARE_PLATE%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Quadratischen weißen Platte</alt>
 <copyright>Maglara / Shutterstock 131294045</copyright>
 <dataUrl></dataUrl>
-<data md5="e71fc568e22a1eb8a59f99c61f06fce7" href="../../../../../../../../__blob/e71fc568e22a1eb8a59f99c61f06fce7.blob" mimetype="image/jpeg"/>
+<data md5="e71fc568e22a1eb8a59f99c61f06fce7" size="725605" href="../../../../../../../../__blob/e71fc568e22a1eb8a59f99c61f06fce7.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

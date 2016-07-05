@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Management Board/Portraits" name="Christian Margolis (CEO) Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Management Board/Portraits" name="Christian Margolis (CEO) Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Management%20Board/Portraits/Christian%20Margolis%20%28CEO%29fefc665b.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Management%20Board/Portraits/Christian%20Margolis%20%28CEO%29%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>800</width>
 <height>800</height>
-<data md5="f23cc2362bf0ddae49f77c11ba4f1a17" href="../../../../../../../../__blob/f23cc2362bf0ddae49f77c11ba4f1a17.blob" mimetype="image/jpeg"/>
+<data md5="f23cc2362bf0ddae49f77c11ba4f1a17" size="329417" href="../../../../../../../../__blob/f23cc2362bf0ddae49f77c11ba4f1a17.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

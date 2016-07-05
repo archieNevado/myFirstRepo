@@ -1,0 +1,26 @@
+!tape
+name: commercecache_testPollCacheInvalidationsWithEntries
+interactions:
+- recorded: 2016-05-20T08:52:34.036Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/cacheinvalidation/1403708220082?maxWait=20000&chunkSize=5000
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 20 May 2016 08:52:33 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000O--Q0ZWch01KtpZDiGjxFSF:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"invalidations":[{"techId":"0","contentType":"clearall"}],"lastInvalidation":1463723095092}'

@@ -32,10 +32,7 @@
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-cae-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-contentbeans-api</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-links-api</artifactId>
@@ -119,7 +116,19 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-common</artifactId>
+      <artifactId>cap-multisite</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-transform</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>image-transformation</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -130,10 +139,6 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-multisite</artifactId>
     </dependency>
 
     <dependency>
@@ -149,6 +154,11 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
     </dependency>
 
     <dependency>
@@ -228,10 +238,6 @@
       <artifactId>commons-collections</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-xml</artifactId>

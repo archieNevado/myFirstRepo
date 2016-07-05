@@ -4,8 +4,8 @@ import com.coremedia.blueprint.base.cae.web.taglib.WordAbbreviator;
 import com.coremedia.xml.MarkupUtil;
 import com.coremedia.objectserver.view.ViewException;
 import com.coremedia.xml.Markup;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class TruncateTag extends TagSupport {
 
   private static final long serialVersionUID = 2047875060529051489L;
-  private static final Log LOG = LogFactory.getLog(TruncateTag.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TruncateTag.class);
   private static final int DEFAULT_LENGTH = 30;
 
   private Object value;

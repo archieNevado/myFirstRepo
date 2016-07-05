@@ -24,12 +24,6 @@
     </description>
   </customize:replace>
 
-  <customize:append id="esStudioSiteMappingCustomizer" bean="siteMappings">
-    <map>
-      <entry key="*" value="${blueprint.site.mapping.helios}"/>
-    </map>
-  </customize:append>
-
   <customize:append id="addTenantUrlPathLookupPatterns" bean="tenantUrlPathLookupStrategy" property="urlPrefixes">
     <list>
       <value>/elastic/social</value>

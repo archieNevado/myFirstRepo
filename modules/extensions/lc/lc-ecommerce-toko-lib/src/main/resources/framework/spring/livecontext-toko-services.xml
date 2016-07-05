@@ -12,6 +12,8 @@
   <bean id="tokoCatalogService" class="com.coremedia.livecontext.ecommerce.toko.catalog.CatalogServiceImpl">
     <property name="commerceBeanFactory" ref="tokoCommerceBeanFactory"/>
     <property name="tokoCatalogMock" ref="tokoCatalogMock"/>
+    <property name="storeContextProvider" ref="tokoStoreContextProvider"/>
+    <property name="commerceIdProvider" ref="tokoIdProvider"/>
   </bean>
 
   <bean id="tokoCatalogMock" class="com.coremedia.livecontext.ecommerce.toko.catalog.TokoCatalogMock"/>

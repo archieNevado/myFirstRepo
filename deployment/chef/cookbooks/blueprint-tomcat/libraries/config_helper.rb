@@ -5,7 +5,7 @@ class Chef
     # this method may be removed in future versions, as it has some deep caveats:
     # in a chef server environment you will find the hostnames by searching for roles but here we have no mapping of
     # role to service, this knowledge is encapsulated solely in the role itself. Here this is just a poor mans convenience search.
-    def cm_webapp_url(webapp_key, hostname = node['hostname'])
+    def cm_webapp_url(webapp_key, hostname = node['blueprint'].attribute?('loopback_hostname') ? node['blueprint']['loopback_hostname'] : node['fqdn'])
       port_prefix = node.deep_fetch('blueprint', 'tomcat', webapp_key, 'port_prefix')
       context = node.deep_fetch('blueprint', 'webapps', webapp_key, 'context')
       "http://#{hostname}:#{port_prefix}80/#{context}"

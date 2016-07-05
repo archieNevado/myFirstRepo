@@ -8,7 +8,7 @@
   <#assign length=dataUrl?size />
   <#assign videoId=dataUrl[length - 1] />
 
-<div class="${classVideo}" data-cm-non-adaptive-content='{"overflow": "false"}'>
+<div class="${classVideo}" <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": false} />>
   <iframe src="//player.vimeo.com/video/${videoId}?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;api=1&amp;player_id=${playerId}" class="cm-video cm-video--vimeo" data-cm-video--vimeo='{"playerId": "${playerId}"}' frameborder="0" width="100%" height="100%" webkitAllowFullScreen="" mozallowfullscreen="" allowFullScreen="">
     <@bp.notification type="warn" text=bp.getMessage("error_iframe_not_available") dismissable=true />
   </iframe>

@@ -166,3 +166,5 @@ attribute :context_config, :kind_of => Hash, :default => {}
 attribute :context_template, :kind_of => [FalseClass, String], :default => 'context.xml.erb'
 #<> @attribute context_template_cookbook The cookbook, from which to load the context_template.
 attribute :context_template_cookbook, :kind_of => String, :default => 'coremedia_tomcat'
+#<> @attribute clean_log_dir_on_start Set this to true to clean the log directory on before starting tomcat
+attribute :clean_log_dir_on_start, :kind_of => [FalseClass, TrueClass], :default => false

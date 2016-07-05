@@ -6,6 +6,12 @@
 <viewtype>
 <link href="../../../Options/Viewtypes/CMChannel/full-details.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Viewtypes/CMChannel/full-details"/>
 </viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<BooleanProperty Name="callToActionDisabled">true</BooleanProperty>
+<StringProperty Name="callToActionCustomText"/>
+</Struct>
+</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles>

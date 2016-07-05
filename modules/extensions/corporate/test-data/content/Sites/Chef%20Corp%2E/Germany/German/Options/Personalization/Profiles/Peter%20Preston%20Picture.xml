@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Personalization/Profiles/Peter%20Preston%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Personalization/Profiles/Peter%20Preston%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>998</width>
 <height>999</height>
-<data md5="f576c8cd182c096adfbe2c3c02c107ec" href="../../../../../../../__blob/f576c8cd182c096adfbe2c3c02c107ec.blob" mimetype="image/jpeg"/>
+<data md5="f576c8cd182c096adfbe2c3c02c107ec" size="182163" href="../../../../../../../__blob/f576c8cd182c096adfbe2c3c02c107ec.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

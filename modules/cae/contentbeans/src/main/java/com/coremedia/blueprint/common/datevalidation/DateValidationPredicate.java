@@ -2,8 +2,8 @@ package com.coremedia.blueprint.common.datevalidation;
 
 import com.google.common.base.Predicate;
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class DateValidationPredicate implements Predicate<Map<String, Calendar>>
   /**
    * Logging
    */
-  private static final Log LOG = LogFactory.getLog(DateValidationPredicate.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DateValidationPredicate.class);
 
   /**
    * The key for the validFrom Date when stored in the Map

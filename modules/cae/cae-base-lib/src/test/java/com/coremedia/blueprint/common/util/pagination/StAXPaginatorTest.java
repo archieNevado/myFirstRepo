@@ -3,6 +3,7 @@ package com.coremedia.blueprint.common.util.pagination;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
@@ -63,6 +64,6 @@ public class StAXPaginatorTest {
     Markup sourceMarkup = MarkupFactory.fromInputSource(new InputSource(stream));
     Paginator paginator = PagingRuleType.BlockCountRule.createPaginator(1);
     List<Markup> markups = paginator.split(sourceMarkup);
-    Assert.assertEquals(12, markups.size());
+    Assert.assertEquals(11, markups.size());
   }
 }

@@ -169,7 +169,9 @@ public class SearchService {
             .uniqueIndex(new Function<CMLinkable, String>() {
               @Override
               public String apply(@Nullable CMLinkable hit) {
-                assert hit != null;
+                if (hit == null) {
+                  throw new AssertionError();
+                }
                 return String.valueOf(hit.getContentId());
               }
             });

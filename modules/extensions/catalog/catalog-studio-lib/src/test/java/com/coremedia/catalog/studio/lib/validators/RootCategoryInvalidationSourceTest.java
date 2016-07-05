@@ -31,6 +31,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -44,10 +45,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, RootCategoryInvalidationSourceTest.LocalConfig.class})
@@ -147,14 +150,14 @@ public class RootCategoryInvalidationSourceTest {
     // reconfiguring the root category should raise invalidations
     Content newRootCategory = createAndConfigureRootCategory(RandomStringUtils.randomAlphanumeric(10));
     InvalidationSource.Invalidations invalidations = testling.getInvalidations(String.valueOf(0));
-    assertNotNull(invalidations);
+    assertNotNull(invalidations);  // this one needs @DirtiesContext
 
     // check contents of invalidations
     Category siteRootCategory = getSiteRootCategory();
     assertEquals(newRootCategory, ((CmsCategory) siteRootCategory).getContent());
     Set<String> uris = invalidations.getInvalidations();
-    assertEquals(1, uris.size());
-    assertEquals(siteRootCategory.getId(), Iterables.getFirst(uris, null));
+    assertEquals(2, uris.size());
+    assertTrue(uris.contains(siteRootCategory.getId()));
   }
 
   @Configuration

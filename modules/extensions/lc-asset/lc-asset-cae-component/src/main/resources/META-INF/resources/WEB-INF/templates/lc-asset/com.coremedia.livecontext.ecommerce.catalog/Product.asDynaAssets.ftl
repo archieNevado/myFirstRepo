@@ -6,55 +6,60 @@
 <div class="cm-product-assets" data-cm-refreshable-fragment='{"url": "${cm.getLink(self, 'asAssets')}"}'>
   <#if (types == 'all' || types == 'visuals')>
     <#assign visuals=bp.createBeansFor(self.visuals) />
-    <#if orientation?has_content && visuals?has_content>
+    <#if !visuals?has_content>
+      <#-- use catalog image if no visuals assigned -->
+      <@cm.include self=self.catalogPicture!cm.UNDEFINED params={"overflow":false}/>
+    <#else>
+      <#if orientation?has_content && visuals?has_content>
 
-    <#-- set image aspect ratio -->
-      <#assign classLightbox="" />
-      <#assign aspectRatio="portrait_ratio1x1" />
-      <#if (orientation == 'landscape') >
-        <#assign classLightbox="cm-lightbox--landscape" />
-        <#assign aspectRatio="landscape_ratio4x3" />
-      <#elseif (orientation == 'portrait') >
-        <#assign classLightbox="cm-lightbox--portrait" />
-        <#assign aspectRatio="portrait_ratio3x4" />
-      </#if>
-      <#assign limitAspectRatios=[aspectRatio] />
-    <#-- slideshow with large images -->
-        <div class="cm-product-assets__slideshow cm-collection--slideshow cm-slideshow--carousel cm-lightbox--gallery">
-        <#-- large image with link to lightBoxed image -->
-          <#list visuals![] as visual>
-            <@cm.include self=visual!cm.UNDEFINED view="asLightBox" params={
-              "classBox": classLightbox,
-              "limitAspectRatios": limitAspectRatios
-            } />
-          </#list>
-        </div>
-    <#-- this is the selector slideshow -->
-      <#if (visuals?size > 1)>
-          <div class="cm-product-assets__carousel cm-collection--slideshow cm-slideshow--carousel-chooser">
+      <#-- set image aspect ratio -->
+        <#assign classLightbox="" />
+        <#assign aspectRatio="portrait_ratio1x1" />
+        <#if (orientation == 'landscape') >
+          <#assign classLightbox="cm-lightbox--landscape" />
+          <#assign aspectRatio="landscape_ratio4x3" />
+        <#elseif (orientation == 'portrait') >
+          <#assign classLightbox="cm-lightbox--portrait" />
+          <#assign aspectRatio="portrait_ratio3x4" />
+        </#if>
+        <#assign limitAspectRatios=[aspectRatio] />
+      <#-- slideshow with large images -->
+          <div class="cm-product-assets__slideshow cm-collection--slideshow cm-slideshow--carousel cm-lightbox--gallery">
+          <#-- large image with link to lightBoxed image -->
             <#list visuals![] as visual>
-                <div class="cycle-slide">
-                  <@cm.include self=visual!cm.UNDEFINED view="asPlainTeaser" params={
-                  "limitAspectRatios": ["portrait_ratio1x1"],
-                  "classBox": "cm-aspect-ratio-box",
-                  "classImage": "cm-aspect-ratio-box__content"
-                  } />
-                </div>
+              <@cm.include self=visual!cm.UNDEFINED view="asLightBox" params={
+                "classBox": classLightbox,
+                "limitAspectRatios": limitAspectRatios
+              } />
             </#list>
-            <#-- add empty slides to get a responsive layout for 4 slides -->
-            <#if (visuals?size == 2 )>
-                <div class="cycle-slide cycle-slide-disabled"></div>
-                <div class="cycle-slide cycle-slide-disabled"></div>
-            <#elseif (visuals?size == 3 )>
-                <div class="cycle-slide cycle-slide-disabled"></div>
-            </#if>
-
-            <#-- controls to navigate thru images -->
-            <#if (visuals?size > 4)>
-              <div class="cm-collection--slideshow__prev cm-direction-arrow cm-direction-arrow--left"></div>
-              <div class="cm-collection--slideshow__next cm-direction-arrow cm-direction-arrow--right"></div>
-            </#if>
           </div>
+      <#-- this is the selector slideshow -->
+        <#if (visuals?size > 1)>
+            <div class="cm-product-assets__carousel cm-collection--slideshow cm-slideshow--carousel-chooser">
+              <#list visuals![] as visual>
+                  <div class="cycle-slide">
+                    <@cm.include self=visual!cm.UNDEFINED view="asPlainTeaser" params={
+                    "limitAspectRatios": ["portrait_ratio1x1"],
+                    "classBox": "cm-aspect-ratio-box",
+                    "classImage": "cm-aspect-ratio-box__content"
+                    } />
+                  </div>
+              </#list>
+              <#-- add empty slides to get a responsive layout for 4 slides -->
+              <#if (visuals?size == 2 )>
+                  <div class="cycle-slide cycle-slide-disabled"></div>
+                  <div class="cycle-slide cycle-slide-disabled"></div>
+              <#elseif (visuals?size == 3 )>
+                  <div class="cycle-slide cycle-slide-disabled"></div>
+              </#if>
+
+              <#-- controls to navigate thru images -->
+              <#if (visuals?size > 4)>
+                <div class="cm-collection--slideshow__prev cm-direction-arrow cm-direction-arrow--left"></div>
+                <div class="cm-collection--slideshow__next cm-direction-arrow cm-direction-arrow--right"></div>
+              </#if>
+            </div>
+        </#if>
       </#if>
     </#if>
   </#if>

@@ -27,14 +27,14 @@
   -ms-box-sizing: border-box;
   width: 100% !important;
 }
-#upload-drop-label {
+.upload-drop-label {
   display: block;
   margin: auto;
   padding-top: 4px;
   margin-top: 147px;
 }
-#upload-drop-label.dialog-upload-helptext-collapsed {
-  margin-top: 0;
+.upload-drop-label.dialog-upload-helptext-collapsed {
+  margin-top: 12px;
 }
 .file-container {
   margin-top: 12px;
@@ -190,4 +190,8 @@
 .upload-prompt-container .upload-list-wrapper span.upload-progress-dialog-separator:last-child {
   height: 0;
   visibility: hidden;
+}
+
+.upload-status-label {
+  margin-left: 20px;
 }

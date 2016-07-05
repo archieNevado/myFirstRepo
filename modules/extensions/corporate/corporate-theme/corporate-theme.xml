@@ -38,7 +38,7 @@
     <css>../basic/css/basic-icons.css</css>
     <css>../basic/css/quickinfo.css</css>
     <css>../basic/css/imagemap.css</css>
-
+    <!-- Vendor CSS -->
     <css>css/bootstrap.css</css>
     <css>vendor/magnific-popup/dist/magnific-popup.css</css>
     <!-- Corporate Styles -->

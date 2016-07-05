@@ -175,12 +175,10 @@ public class FeedView implements ServletView {
   private String getLanguage(List<CMLinkable> items) {
     for (CMLinkable item : items) {
       Locale locale = sitesService.getContentSiteAspect(item.getContent()).getLocale();
-      if (locale != null) {
-        String language = locale.getLanguage();
-        String country = locale.getCountry();
-        if (language.length() > 0) {
-          return country.length() > 0 ? language + "-" + country : language;
-        }
+      String language = locale.getLanguage();
+      String country = locale.getCountry();
+      if (language.length() > 0) {
+        return country.length() > 0 ? language + '-' + country : language;
       }
     }
     return null;

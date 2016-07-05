@@ -1,9 +1,12 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.webflow.execution.FlowSession;
 import org.springframework.webflow.execution.RequestContext;
@@ -40,7 +43,11 @@ public class LiveContextUrlFlowHelper {
   }
 
   public void pingCommerce(RequestContext context) {
-    Commerce.getCurrentConnection().getUserSessionService().pingCommerce(getRequest(context), (HttpServletResponse) context.getExternalContext().getNativeResponse());
+    CommerceConnection connection = Commerce.getCurrentConnection();
+    UserSessionService userSessionService = connection!=null ? connection.getUserSessionService() : null;
+    if (userSessionService!=null) {
+      userSessionService.pingCommerce(getRequest(context), (HttpServletResponse) context.getExternalContext().getNativeResponse());
+    }
   }
 
   public boolean isCheckoutFlow(RequestContext context) {
@@ -52,7 +59,7 @@ public class LiveContextUrlFlowHelper {
     return (HttpServletRequest) context.getExternalContext().getNativeRequest();
   }
 
-  @Required
+  @Value("${livecontext.apache.wcs.url}")
   public void setCommerceUrl(String commerceUrl) {
     this.commerceUrl = commerceUrl;
   }

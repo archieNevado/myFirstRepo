@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Logos" name="Perfect Chef Logo" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="9026fecb9d3bfda6306d9a9c33261407" href="../../../__blob/9026fecb9d3bfda6306d9a9c33261407.blob" mimetype="image/png"/>
-<thumbnail md5="f08fa7accd73112ac8113b2fbccf89a8" href="../../../__blob/f08fa7accd73112ac8113b2fbccf89a8.blob" mimetype="image/png"/>
+<original md5="9026fecb9d3bfda6306d9a9c33261407" size="18653" href="../../../__blob/9026fecb9d3bfda6306d9a9c33261407.blob" mimetype="image/png"/>
+<thumbnail md5="f08fa7accd73112ac8113b2fbccf89a8" size="7743" href="../../../__blob/f08fa7accd73112ac8113b2fbccf89a8.blob" mimetype="image/png"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -78,6 +78,6 @@
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Press.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Press"/>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Logos.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Logos"/>
 </assetTaxonomy>
-<web md5="ac921c70bab936e9ff5d7fe00cf0c6ba" href="../../../__blob/ac921c70bab936e9ff5d7fe00cf0c6ba.blob" mimetype="image/png"/>
-<print md5="9026fecb9d3bfda6306d9a9c33261407" href="../../../__blob/9026fecb9d3bfda6306d9a9c33261407.blob" mimetype="image/png"/>
+<web md5="ac921c70bab936e9ff5d7fe00cf0c6ba" size="11184" href="../../../__blob/ac921c70bab936e9ff5d7fe00cf0c6ba.blob" mimetype="image/png"/>
+<print md5="9026fecb9d3bfda6306d9a9c33261407" size="18653" href="../../../__blob/9026fecb9d3bfda6306d9a9c33261407.blob" mimetype="image/png"/>
 </AMPictureAsset>

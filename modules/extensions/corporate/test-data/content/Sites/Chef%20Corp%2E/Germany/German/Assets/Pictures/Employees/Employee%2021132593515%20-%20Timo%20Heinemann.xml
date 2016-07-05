@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Employees" name="Employee 21132593515 - Timo Heinemann" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Employees" name="Employee 21132593515 - Timo Heinemann" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Employees/Employee%2021132593515%20-%20Steven%20Schrader.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Employees/Employee%2021132593515%20-%20Steven%20Schrader"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>800</width>
 <height>800</height>
-<data md5="811bf0c0f29acbed050f74ecb149445b" href="../../../../../../../__blob/811bf0c0f29acbed050f74ecb149445b.blob" mimetype="image/jpeg"/>
+<data md5="811bf0c0f29acbed050f74ecb149445b" size="413610" href="../../../../../../../__blob/811bf0c0f29acbed050f74ecb149445b.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

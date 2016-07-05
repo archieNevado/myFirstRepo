@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Videos/Restaurant%20Videos/Sepia%20Restaurant%20Local%20HTML5%20Video%695103e5.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Videos/Restaurant%20Videos/Sepia%20Restaurant%20Local%20HTML5%20Video%20Still%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1280</width>
 <height>720</height>
-<data md5="793977298c63f2b62449c03ac9ba0fa2" href="../../../../../../../__blob/793977298c63f2b62449c03ac9ba0fa2.blob" mimetype="image/jpeg"/>
+<data md5="793977298c63f2b62449c03ac9ba0fa2" size="57692" href="../../../../../../../__blob/793977298c63f2b62449c03ac9ba0fa2.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

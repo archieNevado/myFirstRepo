@@ -4,8 +4,8 @@ import com.coremedia.blueprint.cae.exception.InvalidContentException;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.objectserver.web.HandlerHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -17,7 +17,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 public class ContentValidityInterceptor extends HandlerInterceptorAdapter {
 
-  private static final Log LOG = LogFactory.getLog(ContentValidityInterceptor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ContentValidityInterceptor.class);
 
   private ValidationService<Object> validationService;
 

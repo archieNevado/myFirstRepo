@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../United%20States/English/Assets/Videos/Corporate%20YouTube%20Video%20Still%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Videos/Corporate%20YouTube%20Video%20Still%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1920</width>
 <height>1080</height>
-<data md5="16dca67a69608158232419c121f30043" href="../../../../../../__blob/16dca67a69608158232419c121f30043.blob" mimetype="image/jpeg"/>
+<data md5="16dca67a69608158232419c121f30043" size="264436" href="../../../../../../__blob/16dca67a69608158232419c121f30043.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

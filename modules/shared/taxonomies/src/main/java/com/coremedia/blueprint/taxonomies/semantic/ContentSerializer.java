@@ -4,8 +4,8 @@ import com.coremedia.xml.MarkupUtil;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.xml.Markup;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public final class ContentSerializer {
   private ContentSerializer() {
   }
 
-  private static final Log LOG = LogFactory.getLog(ContentSerializer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ContentSerializer.class);
 
   public static String serialize(Content content, List<String> documentProperties) {
     StringBuilder stringBuilder = new StringBuilder();

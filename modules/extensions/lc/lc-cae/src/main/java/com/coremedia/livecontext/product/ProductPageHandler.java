@@ -8,6 +8,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
+import com.coremedia.livecontext.contentbeans.ProductDetailPage;
 import com.coremedia.livecontext.context.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
@@ -30,10 +31,10 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_REST;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static java.util.Objects.requireNonNull;
 
 @Link
@@ -48,6 +49,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   private static final String PRODUCT_SEO_SEGMENT = "productSeoSegment";
   private static final String PRODUCT_QUICKINFO_SEGMENT = "productQuickinfo";
   private static final String QUICKINFO_VIEW = "asQuickinfo";
+  private static final String PDP_PAGE_ID = "pdpPage";
 
   public static final String URI_PATTERN =
           "/" + SEGMENT_PRODUCT +
@@ -59,6 +61,18 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
           "/{" + SITE_CHANNEL_ID +
           "}/" + PRODUCT_QUICKINFO_SEGMENT +
           "/{" + PRODUCT_SEO_SEGMENT + "}";
+
+  private boolean useContentPagegrid = false;
+
+  /**
+   * Determines whether to use the page grid for content pages or for
+   * product detail pages.
+   *
+   * Default is false, which means the pdp pagegrid is used.
+   */
+  public void setUseContentPagegrid(boolean useContentPagegrid) {
+    this.useContentPagegrid = useContentPagegrid;
+  }
 
   // --- Handler ----------------------------------------------------
 
@@ -135,6 +149,17 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     return useCommerceProductLinks(site) ? originalUri : absoluteUri(originalUri, product, product.getSite(), linkParameters, request);
   }
 
+  @Override
+  protected PageImpl createPageImpl(Object content, Navigation context) {
+    return useContentPagegrid ? super.createPageImpl(content, context): createProductDetailPage(content, context);
+  }
+
+  private ProductDetailPage createProductDetailPage(Object content, Navigation context) {
+    ProductDetailPage page = getBeanFactory().getBean(PDP_PAGE_ID, ProductDetailPage.class);
+    page.setContent(content);
+    page.setNavigation(context);
+    return page;
+  }
 
   // --- internal ---------------------------------------------------
 

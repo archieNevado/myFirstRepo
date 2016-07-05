@@ -20,7 +20,9 @@ import com.coremedia.cap.content.ContentType;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -197,22 +199,50 @@ public class CMChannelImpl extends CMChannelBase {
 
   @Override
   public CMPicture getPicture() {
+    return grabSomePicture(new HashSet<CMChannelImpl>());
+  }
+
+  private CMPicture grabSomePicture(Collection<CMChannelImpl> visited) {
+    // Cycle detection for crisscross pagegridded channels
+    if (visited.contains(this)) {
+      return null;
+    }
+    visited.add(this);
+
+    // Regular lookup
     CMPicture picture = super.getPicture();
-    if (picture == null) {
-      PageGrid pageGrid = getPageGrid();
-      if (pageGrid != null) {
-        List<?> mainItems = pageGrid.getMainItems();
-        for (Object mainItem : mainItems) {
-          if (mainItem instanceof Content) {
-            CMTeasable item = (CMTeasable) getContentBeanFactory().createBeanFor((Content) mainItem);
-            CMPicture itemPicture = item.getPicture();
-            if (itemPicture != null) {
-              return itemPicture;
-            }
-          }
+    if (picture!=null) {
+      return picture;
+    }
+
+    // Desperate fallback
+    // (Consider making CMChannel#pictures a mandatory field instead.)
+    for (Object mainItem : getPageGrid().getMainItems()) {
+      CMTeasable teasable = asTeasable(mainItem);
+      if (teasable!=null) {
+        CMPicture itemPicture;
+        if (teasable instanceof CMChannelImpl) {
+          itemPicture = ((CMChannelImpl)teasable).grabSomePicture(visited);
+        } else {
+          itemPicture = teasable.getPicture();
+        }
+        if (itemPicture!=null) {
+          return itemPicture;
         }
       }
     }
-    return picture;
+
+    // Surrender
+    return null;
+  }
+
+  private CMTeasable asTeasable(Object obj) {
+    if (obj instanceof Content) {
+      Content content = (Content) obj;
+      if (content.isInstanceOf(CMTeasable.NAME)) {
+        return getContentBeanFactory().createBeanFor(content, CMTeasable.class);
+      }
+    }
+    return null;
   }
 }

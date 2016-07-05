@@ -3,15 +3,15 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 import com.coremedia.livecontext.ecommerce.event.CommerceCacheInvalidation;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * A cache invalidation message received form the commerce system.
  */
-public class CommerceCacheInvalidationImpl implements CommerceCacheInvalidation {
+class CommerceCacheInvalidationImpl implements CommerceCacheInvalidation {
 
-  private Map<String, Object> delegate;
+  private final Map<String, Object> delegate = new HashMap<>();
 
   @Override
   public long getTimestamp() {
@@ -24,9 +24,6 @@ public class CommerceCacheInvalidationImpl implements CommerceCacheInvalidation 
   }
 
   void setTechId(String techId) {
-    if (delegate == null) {
-      setDelegate(new Hashtable<String, Object>());
-    }
     delegate.put("techId", techId);
   }
 
@@ -36,9 +33,6 @@ public class CommerceCacheInvalidationImpl implements CommerceCacheInvalidation 
   }
 
   void setContentType(String contentType) {
-    if (delegate == null) {
-      setDelegate(new Hashtable<String, Object>());
-    }
     delegate.put("contentType", contentType);
   }
 
@@ -48,17 +42,14 @@ public class CommerceCacheInvalidationImpl implements CommerceCacheInvalidation 
   }
 
   void setName(String name) {
-    if (delegate == null) {
-      setDelegate(new Hashtable<String, Object>());
-    }
     delegate.put("name", name);
   }
 
-  public void setDelegate(Object delegate) {
-    this.delegate = (Map<String, Object>) delegate;
+  void putAll(Map<String, Object> delegate) {
+    this.delegate.putAll(delegate);
   }
 
-  public Map<String, Object> getDelegate() {
+  Map<String, Object> getDelegate() {
     return delegate;
   }
 }

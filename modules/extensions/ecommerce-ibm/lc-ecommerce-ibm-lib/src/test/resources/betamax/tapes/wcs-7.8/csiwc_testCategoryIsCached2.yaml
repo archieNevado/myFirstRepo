@@ -1,0 +1,163 @@
+!tape
+name: csiwc_testCategoryIsCached2
+interactions:
+- recorded: 2016-05-19T09:27:20.822Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:21 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000AuMuBnlcTWBVWfWSg_EmOkN:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2016-05-19T09:27:20.833Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:21 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000mqpkBWcOFdSgOlK6yqRcYFn:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2016-05-19T09:27:20.853Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/Fruit?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:21 GMT
+      Expires: Thu, 19 May 2016 10:27:21 GMT
+      Set-Cookie: JSESSIONID=0000i8biWPm7xCubivR9ffVoYC1:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/Fruit?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Fruit","metaKeyword":"Fruit","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135","identifier":"Fruit","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10135","parentCatalogGroupID":["10133"],"name":"Fruit","thumbnail":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","fullImage":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","uniqueID":"10135","xcatgroup_seoSegment":"fruit-10135--1","metaDescription":"Fruit","title":"Fruit
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_fruit-10135--1","fullImageAltDescription":"Image for Fruit from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:27:20.872Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10135?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:21 GMT
+      Expires: Thu, 19 May 2016 10:27:21 GMT
+      Set-Cookie: JSESSIONID=0000sMiZl5t8Xsj0N6g7nMj6g7i:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Fruit","metaKeyword":"Fruit","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135","identifier":"Fruit","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10135","parentCatalogGroupID":["10133"],"name":"Fruit","thumbnail":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","fullImage":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","uniqueID":"10135","xcatgroup_seoSegment":"fruit-10135--1","metaDescription":"Fruit","title":"Fruit
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_fruit-10135--1","fullImageAltDescription":"Image for Fruit from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:27:20.892Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10133?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:21 GMT
+      Expires: Thu, 19 May 2016 10:27:21 GMT
+      Set-Cookie: JSESSIONID=0000w4sr9v50fGjqvtcY5cjO9Lb:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10133?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Grocery","metaKeyword":"Grocery","identifier":"Grocery","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10133","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10133","name":"Grocery","thumbnail":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","fullImage":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","uniqueID":"10133","xcatgroup_seoSegment":"grocery","metaDescription":"Grocery","title":"Grocery
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_grocery","fullImageAltDescription":"Image for Grocery from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-05-19T09:27:20.920Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byCategory/10135?catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: gzip,deflate
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 19 May 2016 09:27:21 GMT
+      Expires: Thu, 19 May 2016 10:27:21 GMT
+      Set-Cookie: JSESSIONID=0000eiOxySAhqHCUKpQzGrvjg7c:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"11","BreadCrumbTrailEntryView":[{"value":"10133","label":"Grocery","type":"FACET_ENTRY_CATEGORY"},{"value":"10135","label":"Fruit","type":"FACET_ENTRY_CATEGORY"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10135?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetStartNumber":"0","recordSetComplete":"true","FacetView":[{"value":"price_USD","Entry":[{"label":"({*
+      100} 100)","count":"11","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"label":"({100 200} 200)","count":"0","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"label":"({200 300} 300)","count":"0","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"label":"({300
+      400} 400)","count":"0","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"label":"({400 500} 500)","count":"0","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"label":"({500 *})","count":"0","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","Entry":[{"label":"California
+      Sun","count":"3","entryValue":"mfName_ntk_cs%3A%22California+Sun%22"},{"label":"Oxford Orchards","count":"3","entryValue":"mfName_ntk_cs%3A%22Oxford+Orchards%22"},{"label":"Sunshine","count":"3","entryValue":"mfName_ntk_cs%3A%22Sunshine%22"},{"label":"Winston
+      Organics","count":"2","entryValue":"mfName_ntk_cs%3A%22Winston+Organics%22"}],"name":"ManufacturerName"}],"CatalogEntryView":[{"longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete
+      and balanced breakfast.","buyable":"true","shortDescription":"Sun drenched oranges.","xcatentry_seoSegment":"oranges-gfr033-3301--1","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16652","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.6"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_oranges-gfr033-3301--1","name":"Oranges","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","uniqueID":"16652","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","storeID":"10101","partNumber":"GFR033_3301"},{"longDescription":"Sweet
+      with just a bit of tartness, blackberries are perfect on their own or with ice cream. Part of a complete and balanced breakfast. Blackberries are also perfect for making jam.","buyable":"true","shortDescription":"Rocky mountain blackberries.","xcatentry_seoSegment":"blackberries","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16654","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"3.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_blackberries","name":"Blackberries","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3302.jpg","uniqueID":"16654","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3302.jpg","storeID":"10101","partNumber":"GFR033_3302"},{"longDescription":"Mangoes
+      are a delicious tropical delight. Rich in vitamins, antioxidants and minerals. Imported daily fresh from Peru.","buyable":"true","shortDescription":"Succulent sweet mangoes.","xcatentry_seoSegment":"mangoes","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16656","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"3.29"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_mangoes","name":"Mangoes","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3303.jpg","uniqueID":"16656","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","storeID":"10101","partNumber":"GFR033_3303"},{"longDescription":"Pears
+      have a soft buttery yet slightly grainy texture. Related to the quince fruit but easier to eat raw. A delicious alternative to the every day apple.","buyable":"true","shortDescription":"Juicy and sweet pears.","xcatentry_seoSegment":"pears","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16658","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"2.29"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_pears","name":"Pears","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3304.jpg","uniqueID":"16658","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3304.jpg","storeID":"10101","partNumber":"GFR033_3304"},{"longDescription":"Grapes
+      were once considered a luxury treat. Bursting with flavor, grapes are a refreshing snack. Great in a bowl with yogourt and granola.","buyable":"true","shortDescription":"Seedless California grapes","xcatentry_seoSegment":"seedless-grapes","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16660","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"3.29"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_seedless-grapes","name":"Seedless
+      Grapes","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3305.jpg","uniqueID":"16660","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3305.jpg","storeID":"10101","partNumber":"GFR033_3305"},{"longDescription":"Sweet
+      and juicy with a pit in the middle. Enjoy the taste of summer in fresh peaches. Part of a complete and balanced breakfast.","buyable":"true","shortDescription":"Field fresh peaches.","xcatentry_seoSegment":"peaches","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16662","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"2.79"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_peaches","name":"Peaches","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3306.jpg","uniqueID":"16662","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3306.jpg","storeID":"10101","partNumber":"GFR033_3306"},{"longDescription":"Fuller
+      in flavor than green grapes. Seedless grapes are the perfect guilt free snack. Bet you can''t eat just one!","buyable":"true","shortDescription":"Seedless California Concord grapes.","xcatentry_seoSegment":"concord-grapes","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16664","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"3.99"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_concord-grapes","name":"Concord
+      Grapes","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3307.jpg","uniqueID":"16664","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3307.jpg","storeID":"10101","partNumber":"GFR033_3307"},{"longDescription":"Plump
+      and bursting with flavour. Strawberries are great eaten fresh, on ice cream or dipped in chocolate. Great for making jam to store for the winter months.","buyable":"true","shortDescription":"Plump and juicy strawberries","xcatentry_seoSegment":"strawberries","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16666","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"2.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_strawberries","name":"Strawberries","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3308.jpg","uniqueID":"16666","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3308.jpg","storeID":"10101","partNumber":"GFR033_3308"},{"longDescription":"Red
+      Delicious apples are perfect for eating fresh, in salads, or for juicing. For more fun, try dipping apples in hot caramel. As a game, fill a tub with water and play bobbing for apples.","buyable":"true","shortDescription":"The most popular red apple.","xcatentry_seoSegment":"red-delicious-apples","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16668","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.29"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_red-delicious-apples","name":"Red
+      Delicious Apples","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3309.jpg","uniqueID":"16668","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3309.jpg","storeID":"10101","partNumber":"GFR033_3309"},{"longDescription":"Cross
+      between the Golden Delicious and the Japanese Indo. Firm, pleasing texture with just the right amount of tartness. Crispin apples keep their shape and texture in baking, making them perfect for pies.","buyable":"true","shortDescription":"Perfect pie or
+      sauce making apples.","xcatentry_seoSegment":"crispin-apples","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16670","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_crispin-apples","name":"Crispin
+      Apples","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3310.jpg","uniqueID":"16670","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3310.jpg","storeID":"10101","partNumber":"GFR033_3310"},{"longDescription":"Bananas
+      are high in vitamin B6, vitamin C and potassium. They are the perfect on the go snack and a healthy alternative to a chocolate bar. As an indulgence, make a banasplit with ice cream, whipped cream and chocolate syrup.","buyable":"true","shortDescription":"Fresh
+      and ripe bananas.","xcatentry_seoSegment":"bananas-gfr033-3311--1","parentCategoryID":"10135","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16672","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"0.79"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_bananas-gfr033-3311--1","name":"Bananas","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3311.jpg","uniqueID":"16672","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3311.jpg","storeID":"10101","partNumber":"GFR033_3311"}],"recordSetCount":"11","MetaData":[{"metaKey":"price","metaData":"1"}]}'

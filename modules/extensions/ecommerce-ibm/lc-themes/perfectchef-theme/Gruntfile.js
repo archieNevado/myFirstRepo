@@ -1,26 +1,33 @@
 module.exports = function (grunt) {
   'use strict';
 
-  // Force use of Unix newlines
-  grunt.util.linefeed = '\n';
-
   // These plugins provide necessary tasks.
   require('load-grunt-tasks')(grunt, {scope: 'devDependencies'});
   require('time-grunt')(grunt);
+
+  //global configuration, used in tasks
+  var globalConfig = {
+    distDir: 'target/resources/themes/perfectchef',
+    supportedBrowsers: [
+      "last 2 versions", //see https://github.com/ai/browserslist#major-browsers
+      "Firefox ESR",
+      "Explorer >= 9"
+    ]
+  };
 
   // --- Project configuration ---
   grunt.initConfig({
 
     // --- Properties ---
     pkg: grunt.file.readJSON('package.json'),
-    distDir: 'target/resources/themes/perfectchef',
-
+    globalConfig: globalConfig,
+    
     // --- Task configuration ---
     clean: {
       options: {
         force: true
       },
-      build: ['<%=  distDir %>']
+      build: ['<%=  globalConfig.distDir %>']
     },
     copy: {
       main: {
@@ -28,14 +35,36 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'src/',
           src: ['css/**', 'fonts/**', 'img/**', 'js/**', 'vendor/**'],
-          dest: '<%=  distDir %>/'
+          dest: '<%=  globalConfig.distDir %>/'
         }]
+      },
+      masonry: {
+        files: [{
+          expand: true,
+          cwd: 'node_modules/masonry-layout/dist',
+          src: '*.js',
+          dest: '<%= globalConfig.distDir %>/vendor/'
+        }]
+      }
+    },
+    // and add browser prefixes (just to own css)
+    postcss: {
+      options: {
+        map: true,
+        processors: [
+          require('autoprefixer')({browsers: globalConfig.supportedBrowsers})
+        ]
+      },
+      dist: {
+        src: [
+          '<%= globalConfig.distDir %>/css/*.css'
+        ]
       }
     },
     compress: {
       templates: {
         options: {
-          archive: '<%=  distDir %>/templates/perfectchef-templates.jar',
+          archive: '<%=  globalConfig.distDir %>/templates/perfectchef-templates.jar',
           mode: 'zip'
         },
         expand: true,
@@ -50,7 +79,7 @@ module.exports = function (grunt) {
       },
       sources: {
         files: 'src/**/*.*',
-        tasks: ['copy']
+        tasks: ['copy', 'autoprefixer']
       }
     }
   });
@@ -58,7 +87,7 @@ module.exports = function (grunt) {
   // --- Tasks ---
 
   // Full distribution task without templates.
-  grunt.registerTask('build', ['clean', 'copy']);
+  grunt.registerTask('build', ['clean', 'copy', 'postcss']);
 
   // Full distribution task with templates.
   grunt.registerTask('buildWithTemplates', ['build', 'compress:templates']);

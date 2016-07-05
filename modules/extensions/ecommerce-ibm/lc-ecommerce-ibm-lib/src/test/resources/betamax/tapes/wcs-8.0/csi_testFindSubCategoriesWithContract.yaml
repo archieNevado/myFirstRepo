@@ -1,0 +1,110 @@
+!tape
+name: csi_testFindSubCategoriesWithContract
+interactions:
+- recorded: 2016-05-30T16:01:51.011Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 30 May 2016 16:01:50 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000MvJonrmiQno2E_1WZN6cY_v:-1; HTTPOnly; Path=/; Domain=.toko-test-02.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
+      Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
+      Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
+      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
+- recorded: 2016-05-30T16:01:51.273Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 30 May 2016 16:01:51 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000X5_RvhEDQpnj4CUCZw_nxml:-1; HTTPOnly; Path=/; Domain=.toko-test-02.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2016-05-30T16:01:52.121Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838085/categoryview/@top?catalogId=3074457345616676718&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 30 May 2016 16:01:51 GMT
+      Expires: Mon, 30 May 2016 17:01:52 GMT
+      Set-Cookie: JSESSIONID=0000FOTeCT_7Ui4TBxWNXTmptF1:-1; HTTPOnly; Path=/; Domain=.toko-test-02.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"2","CatalogGroupView":[{"resourceId":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/categoryview\/byId\/3074457345616676719","title":"Fasteners | AuroraB2BESite","thumbnail":"images\/catalog\/hardware\/fasteners\/category\/catr_hw_fasteners.png","productsURL":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/productview\/byCategory\/3074457345616676719","shortDescription":"Screws,
+      bolts, and nuts for a wide range of fastening applications","name":"Fasteners","metaDescription":"Screws, bolts, and nuts for a wide range of fastening applications","uniqueID":"3074457345616676719","metaKeyword":"fasteners","fullImageAltDescription":"Image
+      for Fasteners from AuroraB2BESite","xcatgroup_seoSegment":"fasteners","identifier":"Fasteners","fullImage":"images\/catalog\/hardware\/fasteners\/category\/catr_hw_fasteners.png"},{"resourceId":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/categoryview\/byId\/3074457345616676720","title":"Lighting
+      | AuroraB2BESite","thumbnail":"images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","productsURL":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/productview\/byCategory\/3074457345616676720","shortDescription":"Light
+      bulbs in every shape and size","name":"Lighting","metaDescription":"Light bulbs in every shape and size","uniqueID":"3074457345616676720","metaKeyword":"lighting","fullImageAltDescription":"Image for Lighting from AuroraB2BESite","xcatgroup_seoSegment":"lighting-3074457345616676720--1","identifier":"Hardware
+      Lighting","fullImage":"images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png"}],"resourceId":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/categoryview\/@top?catalogId=3074457345616676718&langId=-1","recordSetCount":"2","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2016-05-30T16:01:52.316Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838085/categoryview/byParentCategory/3074457345616676719?catalogId=3074457345616676718&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 30 May 2016 16:01:52 GMT
+      Expires: Mon, 30 May 2016 17:01:52 GMT
+      Set-Cookie: JSESSIONID=0000EOpTMgs0yHGAfgsFKVrY8XN:-1; HTTPOnly; Path=/; Domain=.toko-test-02.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"3","CatalogGroupView":[{"resourceId":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/categoryview\/byId\/3074457345616676721","thumbnail":"images\/catalog\/hardware\/fasteners\/category\/catr_fbo_bolts.png","productsURL":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/productview\/byCategory\/3074457345616676721","shortDescription":"Bolts
+      designed to hold fast over the long term","parentCatalogGroupID":["3074457345616676719"],"name":"Bolts","uniqueID":"3074457345616676721","xcatgroup_seoSegment":"bolts","identifier":"Bolts"},{"resourceId":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/categoryview\/byId\/3074457345616676722","thumbnail":"images\/catalog\/hardware\/fasteners\/category\/catr_fnu_nuts.png","productsURL":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/productview\/byCategory\/3074457345616676722","shortDescription":"High-strength
+      nuts in various finishes","parentCatalogGroupID":["3074457345616676719"],"name":"Nuts","uniqueID":"3074457345616676722","xcatgroup_seoSegment":"nuts","identifier":"Nuts"},{"resourceId":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/categoryview\/byId\/3074457345616676723","thumbnail":"images\/catalog\/hardware\/fasteners\/category\/catr_fsc_screws.png","productsURL":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/productview\/byCategory\/3074457345616676723","shortDescription":"Top-quality
+      screws to suit all your fastening needs","parentCatalogGroupID":["3074457345616676719"],"name":"Screws","uniqueID":"3074457345616676723","xcatgroup_seoSegment":"screws","identifier":"Screws"}],"resourceId":"http:\/\/toko-wcs8-02.coremedia.vm\/wcs\/resources\/lbs\/store\/715838085\/categoryview\/byParentCategory\/3074457345616676719?catalogId=3074457345616676718&langId=-1","recordSetCount":"3","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'

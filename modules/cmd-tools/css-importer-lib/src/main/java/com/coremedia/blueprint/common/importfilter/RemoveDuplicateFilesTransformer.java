@@ -3,8 +3,8 @@ package com.coremedia.blueprint.common.importfilter;
 import com.coremedia.publisher.importer.AbstractTransformer;
 import com.coremedia.publisher.importer.MultiResult;
 import com.coremedia.publisher.importer.MultiSource;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Deprecated
 public class RemoveDuplicateFilesTransformer extends AbstractTransformer {
-  private static final Log LOG = LogFactory.getLog(RemoveDuplicateFilesTransformer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(RemoveDuplicateFilesTransformer.class);
 
 
   @Override

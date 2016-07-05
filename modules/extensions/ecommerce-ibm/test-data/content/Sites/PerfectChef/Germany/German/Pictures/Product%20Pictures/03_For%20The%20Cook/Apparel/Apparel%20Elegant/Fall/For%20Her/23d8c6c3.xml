@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Elegant/Fall/For Her" name="PC_EVENING_DRESS black Actionshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Elegant/Fall/For Her" name="PC_EVENING_DRESS black Actionshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Elegant/Fall/2c0e108f.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Elegant/Fall/For%20Her/PC_EVENING_DRESS%20black%20Actionshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -113,7 +112,7 @@
 <alt>Schwarz Abendkleid</alt>
 <copyright>Yuriyzhuravov / Shutterstock 65460535</copyright>
 <dataUrl></dataUrl>
-<data md5="cf9a82ad80afba496b4704e030bd3257" href="../../../../../../../../../../../__blob/cf9a82ad80afba496b4704e030bd3257.blob" mimetype="image/jpeg"/>
+<data md5="cf9a82ad80afba496b4704e030bd3257" size="1057072" href="../../../../../../../../../../../__blob/cf9a82ad80afba496b4704e030bd3257.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

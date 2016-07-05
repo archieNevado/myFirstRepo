@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Logos" name="Chef Corp. Logo Black" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="be56afb88c0b6bfcc02bddf62f3e4425" href="../../../__blob/be56afb88c0b6bfcc02bddf62f3e4425.blob" mimetype="image/svg+xml"/>
-<thumbnail md5="649607c1c6dddc026aba064711e614da" href="../../../__blob/649607c1c6dddc026aba064711e614da.blob" mimetype="image/png"/>
+<original md5="be56afb88c0b6bfcc02bddf62f3e4425" size="1668" href="../../../__blob/be56afb88c0b6bfcc02bddf62f3e4425.blob" mimetype="image/svg+xml"/>
+<thumbnail md5="649607c1c6dddc026aba064711e614da" size="4579" href="../../../__blob/649607c1c6dddc026aba064711e614da.blob" mimetype="image/png"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -78,6 +78,6 @@
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Press.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Press"/>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Logos.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Logos"/>
 </assetTaxonomy>
-<web md5="abfd4f11cd29b7b9800beae0460c8957" href="../../../__blob/abfd4f11cd29b7b9800beae0460c8957.blob" mimetype="image/png"/>
-<print md5="ef9c9065cefd0b8a059dfb60695a8f3c" href="../../../__blob/ef9c9065cefd0b8a059dfb60695a8f3c.blob" mimetype="image/tiff"/>
+<web md5="abfd4f11cd29b7b9800beae0460c8957" size="21944" href="../../../__blob/abfd4f11cd29b7b9800beae0460c8957.blob" mimetype="image/png"/>
+<print md5="ef9c9065cefd0b8a059dfb60695a8f3c" size="1625372" href="../../../__blob/ef9c9065cefd0b8a059dfb60695a8f3c.blob" mimetype="image/tiff"/>
 </AMPictureAsset>

@@ -53,8 +53,8 @@
             <ui:items>
               <!--Lower case used for the property name here, since the name must match
               the SOLR field name that is complete lower case. The editor converts to lowercase to be sure too. -->
-              <taxonomy:taxonomyFilterFieldset taxonomyId="Location" propertyName="locationtaxonomy"/>
               <taxonomy:taxonomyFilterFieldset taxonomyId="Subject" propertyName="subjecttaxonomy"/>
+              <taxonomy:taxonomyFilterFieldset taxonomyId="Location" propertyName="locationtaxonomy"/>
             </ui:items>
             <ui:after>
               <component itemId="{searchFilters.LAST_EDITED_FILTER_ITEM_ID}"/>

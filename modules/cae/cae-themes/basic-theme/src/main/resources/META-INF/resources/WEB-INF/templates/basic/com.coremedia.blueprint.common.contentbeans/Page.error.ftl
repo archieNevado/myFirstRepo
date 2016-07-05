@@ -5,8 +5,10 @@
 <#-- @ftlvariable name="errorText" type="java.lang.String" -->
 
 <#assign localeAttr="" />
+
 <#if self.locale?has_content>
-  <#assign localeAttr=" lang=\"" + self.locale!"" + "\"" />
+  <#assign language=bp.getPageLanguageTag(self) />
+  <#assign localeAttr=" lang=\"${language}\"" />
 </#if>
 <#if !errorHeadline?has_content>
   <#assign errorHeadline=bp.getMessage("error.headline") />

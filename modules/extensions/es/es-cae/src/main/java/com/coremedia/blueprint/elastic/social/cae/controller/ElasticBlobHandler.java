@@ -11,6 +11,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.BlobTransformer;
 import com.google.common.collect.ImmutableMap;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,10 +24,10 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_WORD;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ETAG;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_NAME;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
@@ -83,6 +84,9 @@ public class ElasticBlobHandler extends HandlerBase {
 
   @Inject
   private BlobService blobService;
+
+  @Value("${cae.is.preview:false}")
+  private boolean isCaePreview;
 
   protected String getName(Blob o) {
     return o.getFileName();
@@ -216,7 +220,7 @@ public class ElasticBlobHandler extends HandlerBase {
 
     Blob blob = blobService.get(imageId);
 
-    if (blob == null) {
+    if (blob == null || (!isCaePreview && blob.getOffline())) {
       return result;
     }
 

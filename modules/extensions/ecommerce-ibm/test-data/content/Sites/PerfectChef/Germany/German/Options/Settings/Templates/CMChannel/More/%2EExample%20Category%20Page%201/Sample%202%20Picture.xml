@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../../../United%20States/English/Options/Settings/Templates/CMChannel/More/%2EExample%20Category%20Page%201/Sampl332ca6af.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/Templates/CMChannel/More/%2EExample%20Category%20Page%201/Sample%202%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>320</width>
 <height>240</height>
-<data md5="cf4f3d2dd1289fc6488b9926c0966e52" href="../../../../../../../../../../__blob/cf4f3d2dd1289fc6488b9926c0966e52.blob" mimetype="image/jpeg"/>
+<data md5="cf4f3d2dd1289fc6488b9926c0966e52" size="20507" href="../../../../../../../../../../__blob/cf4f3d2dd1289fc6488b9926c0966e52.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../../United%20States/English/Options/Settings/Templates/CMChannel/Detail%20Page/New%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Templates/CMChannel/Detail%20Page/New%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1354</height>
-<data md5="b41d6d33681ad3e24ace2e524d52c2d1" href="../../../../../../../../../__blob/b41d6d33681ad3e24ace2e524d52c2d1.blob" mimetype="image/jpeg"/>
+<data md5="b41d6d33681ad3e24ace2e524d52c2d1" size="339364" href="../../../../../../../../../__blob/b41d6d33681ad3e24ace2e524d52c2d1.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

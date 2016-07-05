@@ -54,7 +54,7 @@ public class ProductIdExtractor {
     }
 
     MimeType contentType = blob.getContentType();
-    if (!contentType.toString().startsWith("image/")) {
+    if (!"image".equals(contentType.getPrimaryType())) {
       // Naive Fix for warnings on PDFs. Using a more powerful meta-data-extraction like Tika recommended.
       LOG.debug("Product ID extraction only supported for blobs of type image/*. Current type: {}", contentType);
       return Collections.emptyList();
@@ -77,7 +77,7 @@ public class ProductIdExtractor {
   public static List<String> extractProductIds(InputStream inputStream) {
     Metadata metadata;
     try {
-      metadata = ImageMetadataReader.readMetadata(new BufferedInputStream(inputStream), true);
+      metadata = ImageMetadataReader.readMetadata(new BufferedInputStream(inputStream));
     } catch (ImageProcessingException | IOException e) {
       LOG.warn("Could not extract metadata from input stream", e);
       return Collections.emptyList();

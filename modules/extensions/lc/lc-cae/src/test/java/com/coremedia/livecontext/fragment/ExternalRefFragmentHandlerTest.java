@@ -11,17 +11,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -102,6 +104,24 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   }
 
   @Test
+  public void testResolverReturnsInvalidLinkable() {
+    FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
+    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(linkableAndNavigation);
+    when(contentBeanFactory.createBeanFor(linkable, Navigation.class)).thenReturn(getRootChannelBean());
+    when(getSitesService().getContentSiteAspect(linkable)).thenReturn(contentSiteAspect);
+    when(contentSiteAspect.isPartOf(site)).thenReturn(true);
+    when(contentBeanFactory.createBeanFor(linkable, CMChannel.class)).thenReturn(getRootChannelBean());
+    when(validationService.validate(linkable)).thenReturn(false);
+    when(getSitesService().isContentInSite(site, navigationDoc)).thenReturn(true);
+    when(getSitesService().isContentInSite(site, linkable)).thenReturn(true);
+
+    ModelAndView result = getTestling().createModelAndView(params, request);
+    assertErrorPage(result, HttpServletResponse.SC_NOT_FOUND);
+    verifyDefault();
+  }
+
+  @Test
   public void testIgnorePlacementIfTheLinkableIsDifferentThanTheNavigation() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
     when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
@@ -109,10 +129,9 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
     when(getSitesService().isContentInSite(site, navigationDoc)).thenReturn(true);
     when(getSitesService().isContentInSite(site, linkable)).thenReturn(true);
 
-    TestExternalRefFragmentHandler testling = (TestExternalRefFragmentHandler) getTestling();
-    testling.createModelAndView(params, request);
-//    verify(fragmentPageHandler).createModelAndViewForLinkable(navigationDoc, linkable, VIEW);
-    assertTrue(testling.createModelAndViewForLinkableIsCalled);
+    ExternalRefFragmentHandler testlingSpied = Mockito.spy(getTestling());
+    testlingSpied.createModelAndView(params, request);
+    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString());
   }
 
   @Test
@@ -124,10 +143,9 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
     when(getSitesService().isContentInSite(site, navigationDoc)).thenReturn(true);
     when(getSitesService().isContentInSite(site, linkable)).thenReturn(true);
 
-    TestExternalRefFragmentHandler testling = (TestExternalRefFragmentHandler) getTestling();
-    testling.createModelAndView(params, request);
-//    verify(fragmentPageHandler).createModelAndViewForLinkable(navigationDoc, linkable, VIEW);
-    assertTrue(testling.createModelAndViewForLinkableIsCalled);
+    ExternalRefFragmentHandler testlingSpied = Mockito.spy(getTestling());
+    testlingSpied.createModelAndView(params, request);
+    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString());
   }
 
   @Test
@@ -144,12 +162,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
 
   @Override
   protected ExternalRefFragmentHandler createTestling() {
-    return new TestExternalRefFragmentHandler();
-/*
-    when(fragmentPageHandler.createFragmentModelAndViewForPlacementAndView(navigation, PLACEMENT, VIEW, rootChannelBean)).thenReturn(modelAndView);
-    when(fragmentPageHandler.createFragmentModelAndView(navigation, VIEW, rootChannelBean)).thenReturn(modelAndView);
-    when(fragmentPageHandler.createModelAndViewForPlacementAndView(rootChannelBean, PLACEMENT, VIEW)).thenReturn(modelAndView);
-*/
+    return new ExternalRefFragmentHandler();
   }
 
   @Before
@@ -179,18 +192,6 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
     params.setPlacement(PLACEMENT);
     params.setExternalReference(ref);
     return params;
-  }
-
-  private class TestExternalRefFragmentHandler extends ExternalRefFragmentHandler {
-
-    public boolean createModelAndViewForLinkableIsCalled = false;
-
-    @Nonnull
-    @Override
-    protected ModelAndView createModelAndViewForLinkable(@Nonnull Content channel, @Nonnull Content child, String view) {
-      createModelAndViewForLinkableIsCalled = true;
-      return modelAndView;
-    }
   }
 
 }

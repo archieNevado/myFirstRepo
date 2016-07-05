@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/Cooling%20and%20Storage/White%20polar%20bear%20stand9130bbd.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/Cooling%20and%20Storage/White%20polar%20bear%20standing%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1360</width>
 <height>2048</height>
-<data md5="3e351a9cae1a0afc81be3d52d6fee4cc" href="../../../../../../../../__blob/3e351a9cae1a0afc81be3d52d6fee4cc.blob" mimetype="image/jpeg"/>
+<data md5="3e351a9cae1a0afc81be3d52d6fee4cc" size="186911" href="../../../../../../../../__blob/3e351a9cae1a0afc81be3d52d6fee4cc.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

@@ -44,6 +44,9 @@ printStatus(){
 }
 
 start(){
+  <%- if @clean_log_dir_on_start -%>
+  kill -0 `cat "$CATALINA_PID" 2>/dev/null` >/dev/null 2>&1 || rm -f <%= @log_dir %>/*
+  <%- end -%>
   echo "Starting <%= @name %>"
   su <%= @user %> -s /bin/sh -p -c '$CATALINA_HOME/bin/startup.sh -Dprocessname=<%= @name %>'
   RETVAL=$?
@@ -57,6 +60,33 @@ stop(){
   printStatus $RETVAL
   [ $RETVAL = 0 ] && rm -f /var/lock/subsys/<%= @name %>
 }
+status(){
+  if [ ! -z "$CATALINA_PID" ]; then
+    if [ -f "$CATALINA_PID" ]; then
+      if [ -s "$CATALINA_PID" ]; then
+        kill -0 `cat "$CATALINA_PID" 2>/dev/null` >/dev/null 2>&1
+        if [ $? -gt 0 ]; then
+          echo -n "Tomcat <%= @name %> pid file exist but no process with id $(cat $CATALINA_PID) is running" && printStatus 1
+          echo
+          exit 1
+        else
+          echo -n "Tomcat <%= @name %> is running with pid: $(cat $CATALINA_PID)" && printStatus 0
+          echo
+          exit 0
+        fi
+      else
+        echo -n "Tomcat <%= @name %> pid file exist but file is empty." && printStatus 1
+        echo
+        exit 4
+      fi
+    else
+      echo -n "Tomcat <%= @name %> is stopped, no PID file found." && printStatus 1
+      echo
+      exit 3
+    fi
+  fi
+}
+
 case "$1" in
 start)
   start
@@ -73,30 +103,7 @@ stop)
   stop
 ;;
 status)
-if [ ! -z "$CATALINA_PID" ]; then
-  if [ -f "$CATALINA_PID" ]; then
-    if [ -s "$CATALINA_PID" ]; then
-      kill -0 `cat "$CATALINA_PID"` >/dev/null 2>&1
-      if [ $? -gt 0 ]; then
-        echo -n "Tomcat <%= @name %> pid file exist but no process with id $(cat $CATALINA_PID) is running" && printStatus 1
-        echo
-        exit 1
-      else
-        echo -n "Tomcat <%= @name %> is running with pid: $(cat $CATALINA_PID)" && printStatus 0
-        echo
-        exit 0
-      fi
-    else
-      echo -n "Tomcat <%= @name %> pid file exist but file is empty." && printStatus 1
-      echo
-      exit 4
-    fi
-  else
-    echo -n "Tomcat <%= @name %> is stopped, no PID file found." && printStatus 1
-    echo
-    exit 3
-  fi
-fi
+  status
 ;;
 *)
 echo "Usage: $0 {start|stop|restart|status|reload}"

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Magazine Pictures/Magazine Fall Pictures/Autumn Dishes" name="Mushrooms Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Magazine Pictures/Magazine Fall Pictures/Autumn Dishes" name="Mushrooms Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Fall%20Pictures/Autumn%20Dishes/Mushroome1b8b30e.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Fall%20Pictures/Autumn%20Dishes/Mushrooms%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1371</height>
-<data md5="7d3bc2441e88f0970b1109d524a8f38f" href="../../../../../../../../__blob/7d3bc2441e88f0970b1109d524a8f38f.blob" mimetype="image/jpeg"/>
+<data md5="7d3bc2441e88f0970b1109d524a8f38f" size="687401" href="../../../../../../../../__blob/7d3bc2441e88f0970b1109d524a8f38f.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

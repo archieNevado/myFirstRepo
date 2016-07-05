@@ -79,11 +79,16 @@ public class WcRestConnectorTest extends AbstractWrapperServiceTestCase {
    * Attention: This test is not beatamax ready. We should only run it when we test against the
    * real backend system (because it takes longer anyway).
    * To achieve this we test if the "betamax.ignoreHost" Java property is set to "*".
+   * This test only makes sense against wcs version <7.8, because ohterwise basic authentication is activated and no
+   * reconnect is neccessary.
    */
   @Test
   public void testReconnectForAuthorizedServiceCalls() throws Exception {
 
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) return;
+    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))
+            || Float.parseFloat(testConfig.getWcsVersion()) >= 7.8){
+      return;
+    }
 
     StoreContext storeContext = testConfig.getStoreContext();
     StoreContextHelper.setCurrentContext(storeContext);

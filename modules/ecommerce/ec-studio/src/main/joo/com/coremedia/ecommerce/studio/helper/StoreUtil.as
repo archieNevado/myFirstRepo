@@ -28,7 +28,7 @@ public class StoreUtil {
     return ValueExpressionFactory.createFromFunction(getRootCategoryForStore, store);
   }
 
-  internal static function getRootCategoryForStore(store:Store):Category {
+  public static function getRootCategoryForStore(store:Store):Category {
     if(store === undefined) {
       return undefined;
     }
@@ -59,7 +59,7 @@ public class StoreUtil {
     return accessible ? store : null;
   }
 
-  internal static function getActiveStore():Store {
+  public static function getActiveStore():Store {
     var siteId:String = editorContext.getSitesService().getPreferredSiteId();
     return getValidatedStore(siteId);
   }

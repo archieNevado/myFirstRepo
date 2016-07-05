@@ -14,7 +14,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 
 /**
- * A view to properly serialize client-code (JS, CSS) stored in CoreMedia richtext.
+ * A view to properly serialize client-code (JS, CSS or HTML) stored in CoreMedia richtext.
  *
  * @see com.coremedia.blueprint.common.contentbeans.CMAbstractCode#getCode()
  */

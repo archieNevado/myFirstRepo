@@ -24,8 +24,6 @@ public class CommerceIdHelperTest {
   private static final String SKU_ID = "ibm:///catalog/sku/" + SKU;
   private static final String SKU_TECH_ID = "ibm:///catalog/sku/" + CommerceIdHelper.TECH_ID_PREFIX + SKU;
   private static final String SKU_SEO_ID = "ibm:///catalog/sku/" + CommerceIdHelper.SEO_ID_PREFIX + SKU;
-  private static final String STORE_ID = "ibm:///catalog/store/" + STORE;
-  private static final String STORE_TECH_ID = "ibm:///catalog/store/" + CommerceIdHelper.TECH_ID_PREFIX + STORE;
 
   @Test
   public void testProductId() {

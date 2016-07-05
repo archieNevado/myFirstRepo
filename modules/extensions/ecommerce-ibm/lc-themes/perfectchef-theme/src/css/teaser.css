@@ -8,8 +8,6 @@
   position: relative;
   width: 100%;
   height: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -45,8 +43,6 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: 90px;
   height: 90px;
@@ -154,7 +150,6 @@
   width: auto;
 }
 
-
 /* --- headlines ---------------------------------------------------------------------------------------------------- */
 .cm-teaser--hero .cm-heading2--boxed {
   background-color: #80a3bf;
@@ -178,8 +173,6 @@
 
 /* --- teaser product in productlisting ----------------------------------------------------------------------------- */
 .cm-category-item {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%;
 }

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Professionals/Lighting%20-%20AuroraB2B%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Professionals/Lighting%20-%20AuroraB2B%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1920</width>
 <height>1074</height>
-<data md5="1458ad47f27a10aa507f905baefd03aa" href="../../../../../../../__blob/1458ad47f27a10aa507f905baefd03aa.blob" mimetype="image/jpeg"/>
+<data md5="1458ad47f27a10aa507f905baefd03aa" size="291136" href="../../../../../../../__blob/1458ad47f27a10aa507f905baefd03aa.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Employees/Employee%2021132593586%20-%20Gustavo%20White.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Employees/Employee%2021132593586%20-%20Gustavo%20White"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>800</width>
 <height>800</height>
-<data md5="d55bf055922893549f8d3742e6103ff3" href="../../../../../../../__blob/d55bf055922893549f8d3742e6103ff3.blob" mimetype="image/jpeg"/>
+<data md5="d55bf055922893549f8d3742e6103ff3" size="333579" href="../../../../../../../__blob/d55bf055922893549f8d3742e6103ff3.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

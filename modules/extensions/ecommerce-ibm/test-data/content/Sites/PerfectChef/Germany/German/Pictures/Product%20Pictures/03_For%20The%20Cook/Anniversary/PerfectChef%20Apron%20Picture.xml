@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Anniversary/PerfectChef%20Apron%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Anniversary/PerfectChef%20Apron%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -108,7 +107,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>2406</height>
-<data md5="f9457e7f8430e18b99c4f8c09c21198a" href="../../../../../../../../__blob/f9457e7f8430e18b99c4f8c09c21198a.blob" mimetype="image/jpeg"/>
+<data md5="f9457e7f8430e18b99c4f8c09c21198a" size="280118" href="../../../../../../../../__blob/f9457e7f8430e18b99c4f8c09c21198a.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

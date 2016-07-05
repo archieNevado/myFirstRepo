@@ -5,6 +5,7 @@ import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.common.ImageHelper;
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
+import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialPlugin;
@@ -28,6 +29,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -53,8 +55,6 @@ import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.add
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addInfoMessage;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.social.connect.web.ProviderSignInUtils.getConnection;
-import static org.springframework.social.connect.web.ProviderSignInUtils.handlePostSignUp;
 
 /**
  * A helper used by the registration web flow
@@ -82,6 +82,11 @@ public class RegistrationHelper {
 
   @Inject
   private ElasticSocialPlugin elasticSocialPlugin;
+  
+  @Inject
+  private SpringSocialConfiguration springSocialConfiguration;
+
+  private ProviderSignInUtils providerSignInUtils;
 
   @Inject
   @Named("httpClientAutoRedirect")
@@ -91,10 +96,11 @@ public class RegistrationHelper {
   @PostConstruct
   void initialize() {
     automaticActivationEnabled = settings.getBoolean(ELASTIC_AUTOMATIC_USER_ACTIVATION, false);
+    providerSignInUtils = new ProviderSignInUtils(springSocialConfiguration.connectionFactoryLocator(), springSocialConfiguration.usersConnectionRepository());
   }
 
   public void preProcess(Registration registration, RequestContext context) {
-    Connection<?> connection = getConnection(getRequestAttributes(context)); // NOSONAR
+    Connection<?> connection = providerSignInUtils.getConnectionFromSession(getRequestAttributes(context)); // NOSONAR
     registration.setRegisteringWithProvider(connection != null);
     if (connection != null) {
       org.springframework.social.connect.UserProfile userProfile = connection.fetchUserProfile();
@@ -185,7 +191,7 @@ public class RegistrationHelper {
               timeZone,
               userProperties);
       saveProfileImage(context, userProfileImage, user);
-      handlePostSignUp(user.getId(), getRequestAttributes(context));
+      providerSignInUtils.doPostSignUp(user.getId(), getRequestAttributes(context));
       if (isAutomaticActivationEnabled(context)) {
         LOG.info("Automatically activate user '{}'", registration.getUsername());
         activate(user.getProperty("token", String.class), context);

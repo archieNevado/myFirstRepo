@@ -1,24 +1,31 @@
 package com.coremedia.ecommerce.studio {
 
 import com.coremedia.blueprint.base.components.util.UserUtil;
+import com.coremedia.blueprint.base.pagegrid.PageGridUtil;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeDragDropModel;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ecommerce.studio.config.eCommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.helper.StoreUtil;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
+import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 public class ECommerceStudioPluginBase extends StudioPlugin {
 
-  public function ECommerceStudioPluginBase(config:eCommerceStudioPlugin = null) {
+  private static const EXTERNAL_CHANNEL_TYPE:String = "CMExternalChannel";
+
+  public function ECommerceStudioPluginBase(config:eCommerceStudioPlugin) {
     super(config)
   }
 
@@ -34,6 +41,9 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
             new CatalogTreeDragDropModel(catalogTreeModel));
 
     initCatalogPreferences();
+
+    // customize the initialization of page layouts
+    PageGridUtil.defaultLayoutResolver = getDefaultLayoutFromCatalogRoot;
   }
 
   internal function getShopExpression():ValueExpression {
@@ -125,6 +135,43 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
         break;
       }
     }
+  }
+
+  /**
+   * A default layout resolver that can read the initial layout of a new created augmented category
+   * from the current settings in catalog root. If the page is not an augmented category it returns
+   * null. That means the default method is called.
+   */
+  private static function getDefaultLayoutFromCatalogRoot(content:Content, pagegridProperty:String):Content {
+    // only content of CMExternalChannel (Augmented Pages) is affected
+    var ct:ContentType = content.getType();
+    if (ct === undefined) {
+      return undefined;
+    }
+    if (ct.isSubtypeOf(EXTERNAL_CHANNEL_TYPE)) {
+      var store:Store = StoreUtil.getActiveStore();
+      if (store === undefined) {
+        return undefined;
+      }
+      if (store) {
+        var rootCategory:Category = StoreUtil.getRootCategoryForStore(store);
+        if (rootCategory === undefined) {
+          return undefined;
+        }
+        if (rootCategory) {
+          var rootCategoryContent:Content = augmentationService.getContent(rootCategory);
+          if (rootCategoryContent === undefined) {
+            return undefined;
+          }
+          var layout:Content = PageGridUtil.getLayoutSettings(rootCategoryContent, pagegridProperty);
+          if (layout === undefined) {
+            return undefined;
+          }
+          return layout;
+        }
+      }
+    }
+    return null;
   }
 
 }

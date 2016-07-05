@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company" name="Press" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<thumbnail md5="b9e31c918e7d49c976144f3327840498" href="../../__blob/b9e31c918e7d49c976144f3327840498.blob" mimetype="image/jpeg"/>
+<thumbnail md5="b9e31c918e7d49c976144f3327840498" size="57633" href="../../__blob/b9e31c918e7d49c976144f3327840498.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="web">
@@ -58,5 +58,5 @@
 </locationTaxonomy>
 <assetTaxonomy>
 </assetTaxonomy>
-<web md5="d282a4d4aac991333993837e750c7377" href="../../__blob/d282a4d4aac991333993837e750c7377.blob" mimetype="image/jpeg"/>
+<web md5="d282a4d4aac991333993837e750c7377" size="190371" href="../../__blob/d282a4d4aac991333993837e750c7377.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

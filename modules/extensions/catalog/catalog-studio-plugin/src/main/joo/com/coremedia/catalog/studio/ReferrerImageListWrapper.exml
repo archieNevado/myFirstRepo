@@ -6,7 +6,8 @@
 
   <exml:import class="com.coremedia.catalog.studio.library.CatalogTreeRelation"/>
 
-  <editor:imageReferrerListPanel contentType="{CatalogTreeRelation.CONTENT_TYPE_PRODUCT}"
+  <editor:referrerListPanel contentType="{CatalogTreeRelation.CONTENT_TYPE_PRODUCT}"
+                            showThumbnail="true"
                                  propertyName="pictures"
                                  emptyText="{CatalogStudioPlugin_properties.INSTANCE.CMCategory_no_products_for_picture}"
                                  itemId="productsReferrer"
@@ -14,5 +15,5 @@
     <plugins>
       <ui:bindVisibilityPlugin bindTo="{CatalogStudioPluginBase.getShopExpression(config)}"/>
     </plugins>
-  </editor:imageReferrerListPanel>
+  </editor:referrerListPanel>
 </exml:component>

@@ -1,12 +1,14 @@
 package com.coremedia.blueprint.cae.view;
 
 import com.coremedia.blueprint.cae.richtext.filter.ScriptFilter;
+import com.coremedia.blueprint.cae.richtext.filter.ScriptSerializer;
 import com.coremedia.blueprint.cae.view.processing.Minifier;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.blueprint.common.contentbeans.CodeResources;
 import com.coremedia.cache.Cache;
 import com.coremedia.objectserver.view.ServletView;
 import com.coremedia.objectserver.view.XmlFilterFactory;
+import com.coremedia.xml.Markup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,20 +123,36 @@ public class CodeResourcesView implements ServletView {
    * @param out      the writer to render to
    */
   private void renderResource(HttpServletRequest request, HttpServletResponse response, CMAbstractCode code, Writer out) {
-      //construct xmlFilters to strip RichText from <div> and <p> tags
-      ArrayList<XMLFilter> filters = new ArrayList<>();
-      filters.addAll(xmlFilterFactory.createFilters(request, response, code.getCode(), "script"));
-      filters.add(new ScriptFilter());
+    String script = filterScriptMarkup(request, response, code);
+    if (!code.isCompressionDisabled()) {
+      CodeCacheKey cacheKey = new CodeCacheKey(script, code.getContent().getName(), minifier);
+      script = cache.get(cacheKey);
+    }
 
-      CodeCacheKey cacheKey = new CodeCacheKey(code.getCode(), filters, code.getContent().getName(), minifier);
-      String minifiedString = cache.get(cacheKey);
+    try {
+      out.write(script);
+      out.append('\n');
 
-      try {
-        out.write(minifiedString);
-        out.append('\n');
-      }
-      catch (IOException e) {
-        LOG.error("Unable to write Script to response.", e);
-      }
+    } catch (IOException e) {
+      LOG.error("Unable to write Script to response.", e);
+    }
   }
+
+  /**
+   * Removes the CoreMedia markup from the script code by applying all configured filters.
+   */
+  private String filterScriptMarkup(HttpServletRequest request, HttpServletResponse response, CMAbstractCode code) {
+    //construct xmlFilters to strip RichText from <div> and <p> tags
+    Markup unfilteredCode = code.getCode();
+    List<XMLFilter> filters = new ArrayList<>();
+    filters.addAll(xmlFilterFactory.createFilters(request, response, unfilteredCode, "script"));
+    filters.add(new ScriptFilter());
+
+    //strip <div> and <p> from markup
+    StringWriter writer = new StringWriter();
+    ScriptSerializer handler = new ScriptSerializer(writer);
+    unfilteredCode.writeOn(filters, handler);
+    return writer.getBuffer().toString();
+  }
+
 }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Category Pictures/On The Table" name="Decoration Category Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Category Pictures/On The Table" name="Decoration Category Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20Category%20Pictures/On%20The%20Table/Decoration%20Category%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Category%20Pictures/On%20The%20Table/Decoration%20Category%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -106,7 +105,7 @@
 <alt>Dekoration</alt>
 <copyright>Epstock / Shutterstock 107189051</copyright>
 <dataUrl></dataUrl>
-<data md5="f30c5682b7f01a5c2bea75b732a52cfe" href="../../../../../../../__blob/f30c5682b7f01a5c2bea75b732a52cfe.blob" mimetype="image/jpeg"/>
+<data md5="f30c5682b7f01a5c2bea75b732a52cfe" size="388330" href="../../../../../../../__blob/f30c5682b7f01a5c2bea75b732a52cfe.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

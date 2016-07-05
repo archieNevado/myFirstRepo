@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMGallery folder="/Sites/PerfectChef/Germany/German/Editorial/Content/Magazine Fall/Story 1 - A Perfect Dinner" name="A Perfect Dinner Gallery" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMGallery folder="/Sites/PerfectChef/Germany/German/Editorial/Content/Magazine Fall/Story 1 - A Perfect Dinner" name="A Perfect Dinner Gallery" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Editorial/Content/Magazine%20Fall/Story%201%20-%20A%20Perfect%20Dinner/A%20Perfece7149d3.xml" path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Story%201%20-%20A%20Perfect%20Dinner/A%20Perfect%20Dinner%20Gallery"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <linkedSettings>

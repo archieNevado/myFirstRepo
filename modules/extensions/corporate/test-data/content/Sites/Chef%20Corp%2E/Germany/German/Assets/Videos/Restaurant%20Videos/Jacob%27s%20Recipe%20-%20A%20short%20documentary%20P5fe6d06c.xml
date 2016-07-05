@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Videos/Restaurant Videos/Jacob's Recipe - A short documentary Pictures" name="Jacobs Recipe 12 Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Videos/Restaurant Videos/Jacob's Recipe - A short documentary Pictures" name="Jacobs Recipe 12 Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Assets/Videos/Restaurant%20Videos/Jacob%27s%20Recipe%20-%20A%20short%20docume5380e69b.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Videos/Restaurant%20Videos/Jacob%27s%20Recipe%20-%20A%20short%20documentary%20Pictures/Jacobs%20Recipe%2012%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <alt>Bild von Töpfen und Pfannen in einem Regal in der Küche</alt>
 <copyright>Ginger Studio/Vimeo CC-BY-SA 3.0</copyright>
 <dataUrl></dataUrl>
-<data md5="b7f088f53b2fdf45fc74fd481b733325" href="../../../../../../../__blob/b7f088f53b2fdf45fc74fd481b733325.blob" mimetype="image/jpeg"/>
+<data md5="b7f088f53b2fdf45fc74fd481b733325" size="143213" href="../../../../../../../__blob/b7f088f53b2fdf45fc74fd481b733325.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

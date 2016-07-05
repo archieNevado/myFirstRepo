@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ACTION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handler and Linkscheme for {@link com.coremedia.blueprint.common.contentbeans.CMAction} beans that are contained in a

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Company/Management Board" name="Christian Margolis (CEO) Portrait" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="1506a0a5a091596bf99fd7adb777d083" href="../../../__blob/1506a0a5a091596bf99fd7adb777d083.blob" mimetype="image/tiff"/>
-<thumbnail md5="c469fb2220531f6c8db2be44562b0949" href="../../../__blob/c469fb2220531f6c8db2be44562b0949.blob" mimetype="image/jpeg"/>
+<original md5="1506a0a5a091596bf99fd7adb777d083" size="170718" href="../../../__blob/1506a0a5a091596bf99fd7adb777d083.blob" mimetype="image/tiff"/>
+<thumbnail md5="c469fb2220531f6c8db2be44562b0949" size="13378" href="../../../__blob/c469fb2220531f6c8db2be44562b0949.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -61,5 +61,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Portraits.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Portraits"/>
 </assetTaxonomy>
-<web md5="f23cc2362bf0ddae49f77c11ba4f1a17" href="../../../__blob/f23cc2362bf0ddae49f77c11ba4f1a17.blob" mimetype="image/jpeg"/>
+<web md5="f23cc2362bf0ddae49f77c11ba4f1a17" size="329417" href="../../../__blob/f23cc2362bf0ddae49f77c11ba4f1a17.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

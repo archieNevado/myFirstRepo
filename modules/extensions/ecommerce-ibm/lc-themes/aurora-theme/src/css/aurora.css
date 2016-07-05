@@ -15,7 +15,6 @@ html, body, button, input, select, textarea {
 /* attach border to teasers and change base color of fonts */
 .cm-teaser {
   border: 1px solid #CCCBCB;
-  border-radius: 4px;
 }
 
 .cm-teaser__content ~ .cm-teaser__title {
@@ -51,7 +50,6 @@ html, body, button, input, select, textarea {
 /* --- hero banner -------------------------------------------------------------------------------------------------- */
 .cm-headline {
   border: 1px solid #CCCBCB;
-  border-radius: 4px 4px 4px 4px;
 }
 
 .cm-headline__title,
@@ -165,25 +163,13 @@ html, body, button, input, select, textarea {
   display: block;
 }
 
-/* --- collections -------------------------------------------------------------------------------------------------- */
-/* do not let teasers break layouts for certain masonry grids with adjusted width/height if using borders */
-.cm-collection--masonry .cm-collection__item > .cm-teaser {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-}
-
 /* --- slideshow ---------------------------------------------------------------------------------------------------- */
 .cm-collection--slideshow {
   border: 1px solid #CCCBCB;
-  border-radius: 4px 4px 4px 4px;
 }
 
 .cm-collection--slideshow .cm-teaser {
   border: none;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
 }
 
 /* --- imagemap ----------------------------------------------------------------------------------------------------- */
@@ -325,22 +311,36 @@ html, body, button, input, select, textarea {
   }
 
   /* --- tiles layout left collection ------------------------------------------------------------------------------- */
+  .cm-collection--tiles-left > .cm-collection__item:nth-child(1) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-left > .cm-collection__item:nth-child(1) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 20px / 3);
+    /* -(10px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 24px / 3);
   }
 
   /* --- tiles layout center collection ----------------------------------------------------------------------------- */
+  .cm-collection--tiles-center > .cm-collection__item:nth-child(2) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-center > .cm-collection__item:nth-child(2) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 20px / 3);
+    /* -(10px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 24px / 3);
   }
 
   /* --- tiles layout right collection ------------------------------------------------------------------------------ */
+  .cm-collection--tiles-right > .cm-collection__item:nth-child(3) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-right > .cm-collection__item:nth-child(3) .cm-aspect-ratio-box {
-    margin-right: 0;
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 20px / 3);
+    /* -(10px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 24px / 3);
   }
 }
 
@@ -414,21 +414,36 @@ html, body, button, input, select, textarea {
   }
 
   /* --- tiles layout left collection ------------------------------------------------------------------------------- */
+  .cm-collection--tiles-left > .cm-collection__item:nth-child(1) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-left > .cm-collection__item:nth-child(1) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 20px / 3);
+    /* -(10px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 24px / 3);
   }
 
   /* --- titles layout center  collection --------------------------------------------------------------------------- */
+  .cm-collection--tiles-center > .cm-collection__item:nth-child(2) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-center > .cm-collection__item:nth-child(2) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 20px / 3);
+    /* -(10px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 24px / 3);
   }
 
   /* --- titles layout right  collection ---------------------------------------------------------------------------- */
+  .cm-collection--tiles-right > .cm-collection__item:nth-child(3) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-right > .cm-collection__item:nth-child(3) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 20px / 3);
+    /* -(10px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 24px / 3);
   }
 
   /* marketing spot collection -------------------------------------------------------------------------------------- */
@@ -640,11 +655,6 @@ html, body, button, input, select, textarea {
     background: #fff;
     color: #373737;
     border: 1px solid #CCCBCB;
-    border-radius: 4px;
-  }
-
-  .cm-shoppable__teaser .cm-quickinfo__image .cm-image {
-    border-radius: 4px 4px 0 0;
   }
 
   .cm-shoppable__teaser .cm-quickinfo,
@@ -668,7 +678,9 @@ html, body, button, input, select, textarea {
     text-align: center;
   }
 
-
+  .cm-shoppable__teaser .cm-button .cm-button__text {
+    padding: 0 21px;  
+  }
 
   /* --- collection ------------------------------------------------------------------------------------------------- */
   /* grid */
@@ -701,27 +713,47 @@ html, body, button, input, select, textarea {
     width: calc(200% / 3 - 20px / 3);
   }
 
+  .cm-collection--tiles-highlight > .cm-collection__item:nth-child(1) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-highlight > .cm-collection__item:nth-child(1) .cm-aspect-ratio-box {
     /* -20px / 8 * 3 (see layout.css - adaption of height) */
     margin-bottom: calc(0px - 15px / 2); /* there is no negator, so calc(-15px / 2) is invalid */
   }
 
   /* --- tiles left collection -------------------------------------------------------------------------------------- */
+  .cm-collection--tiles-left > .cm-collection__item:nth-child(1) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-left > .cm-collection__item:nth-child(1) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 40px / 3);
+    /* -(20px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 44px / 3);
   }
 
   /* --- tiles center collection ------------------------------------------------------------------------------------ */
+  .cm-collection--tiles-center > .cm-collection__item:nth-child(2) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-center > .cm-collection__item:nth-child(2) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 40px / 3);
+    /* -(20px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 44px / 3);
   }
 
   /* --- tiles right collection ------------------------------------------------------------------------------------- */
+  .cm-collection--tiles-right > .cm-collection__item:nth-child(3) .cm-teaser {
+    /* because borders are used, all adapted elements need overflow hidden to prevent display bugs */
+    overflow: hidden;
+  }
+
   .cm-collection--tiles-right > .cm-collection__item:nth-child(3) .cm-aspect-ratio-box {
-    /* -10px * 2 / 3 (see layout.css - adaption of width) */
-    margin-right: calc(0px - 40px / 3);
+    /* -(20px+ 2 * 1px border) * 2 / 3 (see layout.css - adaption of width) */
+    margin-right: calc(0px - 44px / 3);
   }
 
   /* --- tiles 50:50 portrait collection ---------------------------------------------------------------------------- */
@@ -830,4 +862,9 @@ html, body, button, input, select, textarea {
 
 #footerRow1 > .section > ul > li > a {
   color: #FFFFFF;
+}
+
+/* CMS-5980: misaligned legend in AuroraESite */
+.spanacce {
+  display: block;
 }

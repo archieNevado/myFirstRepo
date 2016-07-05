@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handler gets search suggestions from shop search service.

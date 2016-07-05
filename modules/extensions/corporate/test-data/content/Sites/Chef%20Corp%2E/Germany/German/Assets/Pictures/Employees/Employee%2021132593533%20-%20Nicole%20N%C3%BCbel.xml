@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Employees/Employee%2021132593533%20-%20Lydia%20Alquist.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Employees/Employee%2021132593533%20-%20Lydia%20Alquist"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>800</width>
 <height>800</height>
-<data md5="e99cd25409872c4f1242cd2b3ff74ea2" href="../../../../../../../__blob/e99cd25409872c4f1242cd2b3ff74ea2.blob" mimetype="image/jpeg"/>
+<data md5="e99cd25409872c4f1242cd2b3ff74ea2" size="355641" href="../../../../../../../__blob/e99cd25409872c4f1242cd2b3ff74ea2.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

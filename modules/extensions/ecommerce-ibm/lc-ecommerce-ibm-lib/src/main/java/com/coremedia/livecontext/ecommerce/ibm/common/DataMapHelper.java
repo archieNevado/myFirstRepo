@@ -10,10 +10,8 @@ public class DataMapHelper {
   @Nullable
   @SuppressWarnings("unchecked")
   public static Object getValueForPath(@Nonnull Map<String, Object> map, @Nonnull String path) {
-    // TODO verify key each iteration
     Map<String, Object> myMap = map;
     Object value = null;
-    if (myMap != null) {
     String[] keys = path.split("\\.");
     for (int i = 0; i < keys.length; i++) {
       String key = keys[i];
@@ -41,7 +39,6 @@ public class DataMapHelper {
         value = myMap.get(key);
       }
     }
-    }
     return value;
   }
 
@@ -54,10 +51,7 @@ public class DataMapHelper {
   @Nullable
   @SuppressWarnings("unchecked")
   public static Object getValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
-    Object value = null;
-    if (map != null) {
-      value = map.get(key);
-    }
+    Object value = map.get(key);
     if (value instanceof List) {
       List<Map<String, Object>> list = (List<Map<String, Object>>) value;
       if (!list.isEmpty()) {
@@ -69,7 +63,7 @@ public class DataMapHelper {
 
   @Nullable
   public static <T> T getValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key, @Nonnull Class<T> type) {
-    Object valueForKey = getValueForPath(map, key); // TODO for key!
+    Object valueForKey = getValueForPath(map, key);
     return valueForKey == null ? null : type.cast(valueForKey);
   }
 

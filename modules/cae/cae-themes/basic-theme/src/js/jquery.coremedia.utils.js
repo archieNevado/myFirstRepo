@@ -7,7 +7,7 @@
    * @returns {jQuery}
    */
   $.fn.findAndSelf = function (selector) {
-    return this.find("*").addBack().filter(selector);
+    return this.filter(selector).add(this.find(selector));
   };
 
   /**

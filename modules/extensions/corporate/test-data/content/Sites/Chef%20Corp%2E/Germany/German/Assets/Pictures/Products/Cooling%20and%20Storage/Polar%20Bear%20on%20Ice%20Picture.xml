@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Products/Cooling and Storage" name="Polar Bear on Ice Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Products/Cooling and Storage" name="Polar Bear on Ice Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/Cooling%20and%20Storage/Polar%20Bear%20on%20Ice%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/Cooling%20and%20Storage/Polar%20Bear%20on%20Ice%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1353</height>
-<data md5="d9a11f5ad776a630884c490b7c3466a3" href="../../../../../../../../__blob/d9a11f5ad776a630884c490b7c3466a3.blob" mimetype="image/jpeg"/>
+<data md5="d9a11f5ad776a630884c490b7c3466a3" size="436708" href="../../../../../../../../__blob/d9a11f5ad776a630884c490b7c3466a3.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

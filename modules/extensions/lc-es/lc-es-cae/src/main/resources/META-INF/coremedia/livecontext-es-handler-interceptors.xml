@@ -13,7 +13,7 @@
   <bean class="org.springframework.web.servlet.handler.MappedInterceptor" id="mappedSessionSynchronizationInterceptor">
     <constructor-arg index="0">
       <array value-type="java.lang.String">
-        <util:constant static-field="com.coremedia.blueprint.base.links.UriConstants.Patterns.DYNAMIC_URI_PATTERN"/>
+        <util:constant static-field="com.coremedia.blueprint.links.BlueprintUriConstants.Patterns.DYNAMIC_URI_PATTERN"/>
       </array>
     </constructor-arg>
     <constructor-arg index="1" ref="sessionSynchronizationInterceptor"/>
@@ -22,6 +22,12 @@
   <bean id="sessionSynchronizationInterceptor" class="com.coremedia.livecontext.handler.SessionSynchronizationInterceptor">
     <property name="sessionSynchronizer" ref="liveContextUserService"/>
   </bean>
+
+  <customize:append id="appendSessionSynchronizationInterceptor" bean="handlerInterceptors">
+    <list>
+      <ref bean="mappedSessionSynchronizationInterceptor"/>
+    </list>
+  </customize:append>
 
   <customize:append id="appendWebCommerceContextInterceptorPatterns" bean="webCommerceContextInterceptorPatterns">
     <list>

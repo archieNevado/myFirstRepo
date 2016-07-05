@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Product Reviews" name="Best Cutting Board Review Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Product Reviews" name="Best Cutting Board Review Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Videos/Product%20Reviews/Best%20Cutting%20Board%20Review%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Product%20Reviews/Best%20Cutting%20Board%20Review%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Beste Schneidebretter</alt>
 <copyright>America's Test Kitchen / YouTube embedded</copyright>
 <dataUrl></dataUrl>
-<data md5="7c2a9948b594bfab63808228dcc3ff66" href="../../../../../../__blob/7c2a9948b594bfab63808228dcc3ff66.blob" mimetype="image/jpeg"/>
+<data md5="7c2a9948b594bfab63808228dcc3ff66" size="366917" href="../../../../../../__blob/7c2a9948b594bfab63808228dcc3ff66.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

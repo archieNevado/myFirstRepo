@@ -38,6 +38,8 @@ unless node['blueprint']['dev']['content']['content_zip'].empty?
 
   execute 'unzip content' do
     command "unzip -oqq #{unzip_from} -d #{content_dir}"
+    user node['blueprint']['user']
+    group node['blueprint']['group']
     not_if { ::File.exist?(content_dir) || node['blueprint']['dev']['content']['mode'] == 'skip' }
   end
 

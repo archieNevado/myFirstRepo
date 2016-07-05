@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMTeaser/storelocator.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMTeaser/storelocator"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Viewtype for a Store Locator</description>
 <icon href="storelocator.icon.png" mimetype="image/png"/>
 <layout>storelocator</layout>

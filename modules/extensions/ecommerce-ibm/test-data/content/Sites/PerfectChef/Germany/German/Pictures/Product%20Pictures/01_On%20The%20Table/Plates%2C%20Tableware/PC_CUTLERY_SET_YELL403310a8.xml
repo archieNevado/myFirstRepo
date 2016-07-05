@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Plates, Tableware" name="PC_CUTLERY_SET_YELLOW Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Plates, Tableware" name="PC_CUTLERY_SET_YELLOW Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Plates%2C%20Tableware/PC_CUTLERYd7771770.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Plates%2C%20Tableware/PC_CUTLERY_SET_YELLOW%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -108,7 +107,7 @@
 <alt>Besteck-Set Gelb</alt>
 <copyright>Africa Studio / 156813281 Shutterstock</copyright>
 <dataUrl></dataUrl>
-<data md5="2796b8cc8cf17c105cbd97b7eed3dd2e" href="../../../../../../../../__blob/2796b8cc8cf17c105cbd97b7eed3dd2e.blob" mimetype="image/jpeg"/>
+<data md5="2796b8cc8cf17c105cbd97b7eed3dd2e" size="371756" href="../../../../../../../../__blob/2796b8cc8cf17c105cbd97b7eed3dd2e.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

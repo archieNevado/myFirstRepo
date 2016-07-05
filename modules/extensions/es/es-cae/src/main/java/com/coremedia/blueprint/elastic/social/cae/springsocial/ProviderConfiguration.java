@@ -25,6 +25,7 @@ public class ProviderConfiguration {
   private static final Logger LOG = LoggerFactory.getLogger(ProviderConfiguration.class);
   private static final String FACEBOOK_CLIENT_ID = "facebook.clientId";
   private static final String FACEBOOK_CLIENT_SECRET = "facebook.clientSecret";
+  private static final String FACEBOOK_CLIENT_NAMESPACE = "facebook.clientNamespace";
   private static final String TWITTER_CONSUMER_KEY = "twitter.consumerKey";
   private static final String TWITTER_CONSUMER_SECRET = "twitter.consumerSecret";
   private static final String TENANT = "tenant";
@@ -42,6 +43,10 @@ public class ProviderConfiguration {
 
   public String getCurrentFacebookClientSecret(String tenant) {
     return getConnectionSetting(FACEBOOK_CLIENT_SECRET, tenant);
+  }
+
+  public String getCurrentFacebookClientNamespace(String tenant) {
+    return getConnectionSetting(FACEBOOK_CLIENT_NAMESPACE, tenant);
   }
 
   public String getCurrentTwitterConsumerKey(String tenant) {

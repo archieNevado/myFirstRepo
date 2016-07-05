@@ -4,6 +4,6 @@
 <master>
 </master>
 <description>Viewtype for a Store Locator</description>
-<icon md5="4d9db3bc3fc33692a72a55890696c750" href="../../../../../../../__blob/4d9db3bc3fc33692a72a55890696c750.blob" mimetype="image/png"/>
+<icon md5="4d9db3bc3fc33692a72a55890696c750" size="5203" href="../../../../../../../__blob/4d9db3bc3fc33692a72a55890696c750.blob" mimetype="image/png"/>
 <layout>storelocator</layout>
 </CMViewtype>

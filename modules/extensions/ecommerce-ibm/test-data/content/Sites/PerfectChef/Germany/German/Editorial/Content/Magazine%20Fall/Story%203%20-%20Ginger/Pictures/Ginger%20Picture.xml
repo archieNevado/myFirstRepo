@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../../United%20States/English/Editorial/Content/Magazine%20Fall/Story%203%20-%20Ginger/Pictures/Ginger%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Story%203%20-%20Ginger/Pictures/Ginger%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>4000</width>
 <height>2663</height>
-<data md5="106d1a35d189b3162fffb081a5b4e68a" href="../../../../../../../../../__blob/106d1a35d189b3162fffb081a5b4e68a.blob" mimetype="image/jpeg"/>
+<data md5="106d1a35d189b3162fffb081a5b4e68a" size="747966" href="../../../../../../../../../__blob/106d1a35d189b3162fffb081a5b4e68a.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

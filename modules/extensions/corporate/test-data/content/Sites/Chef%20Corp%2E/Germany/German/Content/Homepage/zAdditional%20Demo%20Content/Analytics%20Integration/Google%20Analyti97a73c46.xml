@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Content/Homepage/zAdditional%20Demo%20Content/Analytics%20Integration/Google%a8e168be.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/zAdditional%20Demo%20Content/Analytics%20Integration/Google%20Analytics%20P12%20Key%20File%20Download"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <linkedSettings>
@@ -28,5 +27,5 @@
 <notSearchable>1</notSearchable>
 <related>
 </related>
-<data md5="507496e75227736a1f77b942647ced6b" href="../../../../../../../../__blob/507496e75227736a1f77b942647ced6b.blob" mimetype="application/x-pkcs12"/>
+<data md5="507496e75227736a1f77b942647ced6b" size="1732" href="../../../../../../../../__blob/507496e75227736a1f77b942647ced6b.blob" mimetype="application/x-pkcs12"/>
 </CMDownload>

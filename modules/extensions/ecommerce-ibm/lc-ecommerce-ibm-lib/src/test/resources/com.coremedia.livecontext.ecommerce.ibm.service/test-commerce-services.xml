@@ -11,12 +11,9 @@
   <context:annotation-config/>
 
   <import resource="classpath:com/coremedia/cap/common/uapi-services.xml"/>
-  <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
-  <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
+  <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
   <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/framework/spring/search/solr-search.xml"/>
-
-  <bean id="commerce" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce"/>
 
   <context:property-placeholder
           ignore-unresolvable="true"
@@ -44,32 +41,13 @@
     <property name="uriSegmentPattern" value="{0}-{4}"/>
     <property name="siteManagerGroupPattern" value="manager-{4}"/>
     <property name="rootFolderPathPattern" value="/Sites/{0}/{6}/{5}"/>
+    <property name="variantPrefix" value="_"/>
     <property name="rootFolderPathDefaultCountry" value="NO_COUNTRY"/>
     <property name="nameProperty" value="name"/>
     <property name="translationWorkflowRobotUser" value="translation-workflow-robot"/>
   </bean>
 
   <bean id="testConfig" class="com.coremedia.livecontext.ecommerce.ibm.common.TestConfig"/>
-
-  <bean id="connectorHelper" class="com.coremedia.livecontext.ecommerce.ibm.common.ConnectorHelper">
-  </bean>
-
-  <!-- activate this for active commerce cache invalidation -->
-  <bean id="commerceCacheInvalidationListener"
-        class="com.coremedia.livecontext.ecommerce.ibm.event.CommerceCacheInvalidationListener" scope="singleton">
-    <property name="enabled" value="false"/>
-    <property name="wcCacheWrapperService" ref="cacheWrapperService"/>
-    <property name="cacheInvalidationPropagators">
-      <list>
-        <ref bean="commerceCacheInvalidationPropagatorImpl"/>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="commerceCacheInvalidationPropagatorImpl"
-        class="com.coremedia.livecontext.ecommerce.ibm.event.CommerceCacheInvalidationPropagatorImpl">
-    <property name="cache" ref="cache"/>
-  </bean>
 
   <bean id="availabilityWrapperService"
         class="com.coremedia.livecontext.ecommerce.ibm.inventory.WcAvailabilityWrapperService">
@@ -156,9 +134,7 @@
     <property name="restConnector" ref="restConnector"/>
   </bean>
 
-  <bean id="storefrontConnector" class="com.coremedia.livecontext.ecommerce.ibm.common.WcStorefrontConnector">
-    <property name="connectorHelper" ref="connectorHelper"/>
-  </bean>
+  <bean id="storefrontConnector" class="com.coremedia.livecontext.ecommerce.ibm.common.WcStorefrontConnector"/>
 
   <bean id="userContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.user.UserContextProviderImpl">
     <property name="userSessionService" ref="commerceUserSessionService"/>
@@ -245,6 +221,9 @@
     <property name="loginService" ref="userLoginService"/>
     <property name="contractPreviewUserName" value="${livecontext.ibm.contract.preview.credentials.username}"/>
     <property name="contractPreviewUserPassword" value="${livecontext.ibm.contract.preview.credentials.password}"/>
+    <property name="servicePassword" value="${service.credentials.password}"/>
+    <property name="serviceUser" value="${service.credentials.username}"/>
+    <property name="commerceCache" ref="commerceCache"/>
   </bean>
 
   <bean id="userLoginService" class="com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl">

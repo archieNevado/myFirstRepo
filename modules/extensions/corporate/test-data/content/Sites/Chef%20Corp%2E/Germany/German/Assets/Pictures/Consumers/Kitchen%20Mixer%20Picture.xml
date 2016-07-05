@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Consumers/Kitchen%20Mixer%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Consumers/Kitchen%20Mixer%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1361</height>
-<data md5="235113b7131408c84bdefdc0183906cd" href="../../../../../../../__blob/235113b7131408c84bdefdc0183906cd.blob" mimetype="image/jpeg"/>
+<data md5="235113b7131408c84bdefdc0183906cd" size="314468" href="../../../../../../../__blob/235113b7131408c84bdefdc0183906cd.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

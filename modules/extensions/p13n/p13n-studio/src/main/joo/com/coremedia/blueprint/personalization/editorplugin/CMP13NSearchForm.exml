@@ -26,7 +26,7 @@
                   itemId="cmP13nDefaultContentForm"
                   title="{PersonalizationDocTypes_properties.INSTANCE.CMSelectionRules_defaultContent_text}">
             <items>
-              <bp:imageLinkListPropertyField contentType="CMPicture"
+              <bp:imageLinkListPropertyField contentType="CMTeasable"
                                              hideLabel="true"
                                              propertyName="defaultContent"
                                              bindTo="{config.bindTo}">

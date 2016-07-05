@@ -24,7 +24,7 @@
                                        title="{AnalyticsStudioPluginDocTypes_properties.INSTANCE.CMALXEventList_defaultContent_text}"
                                        reduceBottomPadding="true">
             <items>
-              <bp:imageLinkListPropertyField contentType="CMPicture"
+              <bp:imageLinkListPropertyField contentType="CMTeasable"
                                              hideLabel="true"
                                              propertyName="items"
                                              bindTo="{config.bindTo}">

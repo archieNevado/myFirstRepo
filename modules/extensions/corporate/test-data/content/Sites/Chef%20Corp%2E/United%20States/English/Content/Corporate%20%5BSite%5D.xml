@@ -9,4 +9,7 @@
 <link href="Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page"/>
 </root>
 <siteManagerGroup>manager-c-en-US</siteManagerGroup>
+<linkedSettings>
+<link href="../Options/Settings/SiteSettings.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/SiteSettings"/>
+</linkedSettings>
 </CMSite>

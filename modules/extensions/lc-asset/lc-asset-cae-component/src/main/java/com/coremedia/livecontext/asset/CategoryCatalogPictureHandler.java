@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdH
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,10 +33,11 @@ public class CategoryCatalogPictureHandler extends CatalogPictureHandlerBase {
                                                @PathVariable(LOCALE) String locale,
                                                @PathVariable(FORMAT_NAME) String formatName,
                                                @PathVariable(PART_NUMBER) String partNumber,
-                                               HttpServletRequest request) throws IOException {
+                                               @PathVariable(SEGMENT_EXTENSION) String extension,
+                                               WebRequest request) throws IOException {
 
     String id = BaseCommerceIdHelper.getCurrentCommerceIdProvider().formatCategoryId(partNumber);
 
-    return handleRequestWidthHeight(storeId, locale, formatName, id, request);
+    return handleRequestWidthHeight(storeId, locale, formatName, id, extension, request);
   }
 }

@@ -70,3 +70,7 @@
 <#function getSecureScheme>
   <#return liveContextFreemarkerFacade.getSecureScheme() />
 </#function>
+
+<#function previewMetaData>
+  <#return liveContextFreemarkerFacade.getPreviewMetadata()>
+</#function>

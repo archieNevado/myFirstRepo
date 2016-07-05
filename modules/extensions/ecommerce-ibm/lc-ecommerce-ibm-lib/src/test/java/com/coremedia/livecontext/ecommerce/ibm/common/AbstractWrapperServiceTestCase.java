@@ -1,12 +1,13 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import co.freeside.betamax.Recorder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
-import java.util.Properties;
 
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
 import static com.coremedia.livecontext.ecommerce.ibm.common.AbstractWrapperServiceTestCase.LocalConfig.*;
@@ -55,20 +55,8 @@ public abstract class AbstractWrapperServiceTestCase {
   @Inject
   protected TestConfig testConfig;
 
-  /*
-  Set betamax default mode to READ_ONLY if not defined by user
-  */
-  private static final Properties sysProps;
-
-  static {
-    sysProps = System.getProperties();
-    if (StringUtils.isEmpty(sysProps.getProperty("betamax.defaultMode"))) {
-      sysProps.setProperty("betamax.defaultMode", "READ_ONLY");
-    }
-  }
-
   @Rule
-  public Recorder recorder = new Recorder(sysProps);
+  public Recorder recorder = new Recorder(BetamaxTestHelper.updateSystemPropertiesWithBetamaxConfig());
 
   @Inject
   protected LoginService loginService;

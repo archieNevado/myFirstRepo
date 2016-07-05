@@ -35,7 +35,7 @@
     <exml:description>A constant for the extension type</exml:description>
   </exml:constant>
 
-  <container height="77"
+  <container height="{UploadDialogBase.UPLOAD_AREA_COLLAPSED_HEIGHT}"
              layout="border"
              cls="file-container">
     <items>

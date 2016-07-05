@@ -25,13 +25,17 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   @Override
   protected Map<String, Object> getDelegate() {
     if (delegate == null) {
-      delegate = (Map<String, Object>) getCommerceCache().get(
-        new ProductCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
+      delegate = getDelegateFromCache();
       if (delegate == null) {
         throw new NotFoundException(getId() + " (sku not found in catalog)");
       }
     }
     return delegate;
+  }
+
+  Map<String, Object> getDelegateFromCache() {
+    return (Map<String, Object>) getCommerceCache().get(
+      new ProductCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
   }
 
   /**

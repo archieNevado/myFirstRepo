@@ -1,8 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.context.AbstractResolveContextStrategy;
-import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
@@ -12,8 +10,6 @@ import javax.annotation.Nullable;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.springframework.util.Assert.hasText;
-import static org.springframework.util.Assert.notNull;
 
 /**
  * <p>
@@ -33,35 +29,16 @@ public class CategoryFragmentContextStrategy extends AbstractResolveContextStrat
 
   @Nullable
   @Override
-  public LiveContextNavigation resolveContext(@Nonnull Site site, @Nonnull String id) {
-    notNull(site);
-    hasText(id);
-
-    return getCache().get(new CategoryFragmentContextProviderCacheKey(site, id));
-  }
-
-  @Nullable
-  @Override
   protected Category findNearestCategoryFor(@Nonnull String id, @Nonnull StoreContext storeContext) {
     checkArgument(isNotBlank(id), "You must provide an external id");
     //noinspection ConstantConditions
     checkArgument(storeContext != null, "You must provide a store context");
 
     // CMS-3247: Allow category resolution by stable id
-    String formattedId = useStableIds() ? getCurrentCommerceIdProvider().formatCategoryId(id) :
+    String formattedId = useStableIds ? getCurrentCommerceIdProvider().formatCategoryId(id) :
             getCurrentCommerceIdProvider().formatCategoryTechId(id);
 
     return getCatalogService().withStoreContext(storeContext).findCategoryById(formattedId);
-  }
-
-  private final class CategoryFragmentContextProviderCacheKey extends AbstractCommerceContextProviderCacheKey {
-    private CategoryFragmentContextProviderCacheKey(@Nonnull Site site, String seoSegment) {
-      super(site, seoSegment);
-    }
-  }
-
-  public boolean useStableIds() {
-    return useStableIds;
   }
 
   /**

@@ -9,4 +9,7 @@
 <link href="Aurora%20Augmentation.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation"/>
 </root>
 <siteManagerGroup>manager-en-US</siteManagerGroup>
+<linkedSettings>
+<link href="../Options/Settings/SiteSettings.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/SiteSettings"/>
+</linkedSettings>
 </CMSite>

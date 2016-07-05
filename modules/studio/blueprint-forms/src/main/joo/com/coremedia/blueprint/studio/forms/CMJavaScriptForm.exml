@@ -17,6 +17,8 @@
             <items>
               <editor:stringPropertyField propertyName="dataUrl"/>
               <editor:richTextPropertyField propertyName="code"/>
+              <editor:booleanPropertyField bindTo="{config.bindTo}"
+                                           propertyName="disableCompress"/>
             </items>
           </editor:collapsibleFormPanel>
           <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMJavaScript_include_text}"

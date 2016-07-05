@@ -31,7 +31,7 @@ public abstract class ContributionResult {
 
   protected synchronized void ensureLoaded() {
     if (elasticSocialService == null) {
-      throw new IllegalStateException("Cannot load feedback any result with out service");
+      throw new IllegalStateException("ElasticSocialService is not defined, cannot load feedback");
     }
     if (!loaded) {
       if (isEnabled()) {

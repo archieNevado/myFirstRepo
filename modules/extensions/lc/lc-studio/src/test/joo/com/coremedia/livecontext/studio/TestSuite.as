@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.studio {
 
 import com.coremedia.livecontext.studio.action.CollectionViewModelActionTest;
+import com.coremedia.livecontext.studio.action.OpenCreateExternalPageDialogActionTest;
 import com.coremedia.livecontext.studio.collectionview.CatalogCollectionViewTest;
 import com.coremedia.livecontext.studio.components.link.CatalogLinkPropertyFieldTest;
 import com.coremedia.livecontext.studio.components.link.CategoryAndProductLinksPropertyFieldTest;
@@ -14,7 +15,7 @@ import flexunit.framework.TestSuite;
 public class TestSuite {
   public static function suite():flexunit.framework.TestSuite {
     var suite:flexunit.framework.TestSuite = new flexunit.framework.TestSuite();
-
+    
     suite.addTestSuite(CatalogCollectionViewTest);
     suite.addTestSuite(CollectionViewModelActionTest);
     suite.addTestSuite(ProductNameTextFieldTest);

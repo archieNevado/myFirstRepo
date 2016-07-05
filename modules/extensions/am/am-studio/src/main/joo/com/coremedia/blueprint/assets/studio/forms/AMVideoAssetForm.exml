@@ -20,7 +20,8 @@
                                             hideLabel="true"
                                             visiblePropertyName="metadata.renditions.web.show"/>
           <spacer height="20px"/>
-          <editor:imageReferrerListPanel propertyName="asset"
+          <editor:referrerListPanel propertyName="asset"
+                                    showThumbnail="true"
                                          contentType="CMVideo"
                                          title="{AMStudioPlugin_properties.INSTANCE.PropertyGroup_web_referrers_label}"
                                          displayToolbarWhenEmpty="{true}">
@@ -45,7 +46,7 @@
                 </ui:rules>
               </ui:nestedRulesPlugin>
             </plugins>
-          </editor:imageReferrerListPanel>
+          </editor:referrerListPanel>
         </items>
       </editor:collapsibleFormPanel>
     </am:renditions>

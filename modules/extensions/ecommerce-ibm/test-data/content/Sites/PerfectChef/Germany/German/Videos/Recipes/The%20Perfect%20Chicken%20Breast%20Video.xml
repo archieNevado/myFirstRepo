@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMVideo folder="/Sites/PerfectChef/Germany/German/Videos/Recipes" name="The Perfect Chicken Breast Video" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMVideo folder="/Sites/PerfectChef/Germany/German/Videos/Recipes" name="The Perfect Chicken Breast Video" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Videos/Recipes/The%20Perfect%20Chicken%20Breast%20Video.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Recipes/The%20Perfect%20Chicken%20Breast%20Video"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <linkedSettings>

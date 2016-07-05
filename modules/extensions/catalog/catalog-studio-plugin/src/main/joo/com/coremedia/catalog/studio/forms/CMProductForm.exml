@@ -30,7 +30,7 @@
                 <items>
                   <editor:textAreaPropertyField propertyName="teaserText" initialHeight="100" hideLabel="true">
                     <plugins mode="append">
-                      <editor:textAreaPropertyFieldDelegatePlugin delegatePropertyName="longDescription"/>
+                      <editor:textAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
                     </plugins>
                   </editor:textAreaPropertyField>
                 </items>

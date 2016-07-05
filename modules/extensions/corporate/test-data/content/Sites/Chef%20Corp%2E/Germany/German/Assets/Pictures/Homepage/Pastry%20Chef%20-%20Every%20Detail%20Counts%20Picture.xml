@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Homepage/Pastry%20Chef%20-%20Every%20Detail%20Counts%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Homepage/Pastry%20Chef%20-%20Every%20Detail%20Counts%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>3072</width>
 <height>2048</height>
-<data md5="b8d6e722c7874196127adee85b7da6c8" href="../../../../../../../__blob/b8d6e722c7874196127adee85b7da6c8.blob" mimetype="image/jpeg"/>
+<data md5="b8d6e722c7874196127adee85b7da6c8" size="1310440" href="../../../../../../../__blob/b8d6e722c7874196127adee85b7da6c8.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

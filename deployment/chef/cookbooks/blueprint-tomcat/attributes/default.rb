@@ -1,9 +1,9 @@
 #<> The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute.
 default['blueprint']['tomcat']['source'] = nil
 #<> The SHA-256 checksum of the tomcat installation zip
-default['blueprint']['tomcat']['source_checksum'] = '5835c4a06fc276dd2865d17d5fb1f0dd791f55fd0cba18824a5f0c8124284337'
+default['blueprint']['tomcat']['source_checksum'] = 'f093d033cb84e104f9f00f120dc6f3b39471d8e12be8fc250374ac9891c257b1'
 #<> The version of tomcat to install
-default['blueprint']['tomcat']['version'] = '7.0.67'
+default['blueprint']['tomcat']['version'] = '7.0.69'
 #<> The path to the java home for the tomcat services
 default['blueprint']['tomcat']['java_home'] = '/usr/lib/jvm/java'
 #<> Global jvm agent opts. Use this to instrument the jvm for monitoring
@@ -28,7 +28,7 @@ default['blueprint']['tomcat']['jmx_remote'] = true
 #<> The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute.
 default['blueprint']['tomcat']['jmx_remote_jar_source'] = nil
 #<> The SHA-256 checksum of the catalina-jmx-remote.jar
-default['blueprint']['tomcat']['jmx_remote_jar_source_checksum'] = 'c166ec1a40455717716ff7eaefb010cc20f322510098ab953bbf07f5c0642b77'
+default['blueprint']['tomcat']['jmx_remote_jar_source_checksum'] = '5fe0c568afe6f24998817bfb9e6a77e1b430112a52ed914d48a1f9a401f86fb1'
 #<> A flag to enable/disable remote jmx authentication
 default['blueprint']['tomcat']['jmx_remote_authenticate'] = true
 #<> The server name under which the rmi server is registered. Set it to localhost and create a ssh tunnel(recommended) or set it to the actual hostname and open the ports and configure security and ssl.
@@ -45,6 +45,8 @@ default['blueprint']['tomcat']['start_service'] = true
 default['blueprint']['tomcat']['shutdown_force'] = true
 #<> The time to wait for tomcat to shut down
 default['blueprint']['tomcat']['shutdown_wait'] = 40
+#<> Set to true to delete logs before start
+default['blueprint']['tomcat']['clean_log_dir_on_start'] = false
 
 #<> The failed context shutdown listener to stop tomcat if the context failed.
 default['blueprint']['tomcat']['context_config']['listener']['shutdown_listener']['className'] = 'com.coremedia.tomcat.FailedContextShutdownServerListener'
@@ -59,10 +61,10 @@ default['blueprint']['tomcat']['replication-live-server']['heap'] = '256m'
 default['blueprint']['tomcat']['user-changes']['heap'] = '256m'
 default['blueprint']['tomcat']['elastic-worker']['heap'] = '256m'
 default['blueprint']['tomcat']['content-feeder']['heap'] = '256m'
-default['blueprint']['tomcat']['studio']['heap'] = '384m'
+default['blueprint']['tomcat']['studio']['heap'] = '512m'
 default['blueprint']['tomcat']['adobe-drive-server']['heap'] = '256m'
-default['blueprint']['tomcat']['cae-preview']['heap'] = '1024m'
-default['blueprint']['tomcat']['cae-live']['heap'] = '1024m'
+default['blueprint']['tomcat']['cae-preview']['heap'] = '512m'
+default['blueprint']['tomcat']['cae-live']['heap'] = '512m'
 default['blueprint']['tomcat']['solr']['heap'] = '256m'
 default['blueprint']['tomcat']['caefeeder-preview']['heap'] = '256m'
 default['blueprint']['tomcat']['caefeeder-live']['heap'] = '256m'

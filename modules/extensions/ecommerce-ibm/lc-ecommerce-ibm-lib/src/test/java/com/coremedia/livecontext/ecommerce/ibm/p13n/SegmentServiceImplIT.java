@@ -35,7 +35,7 @@ public class SegmentServiceImplIT extends AbstractServiceTest {
     assertNotNull(segments);
     assertTrue(segments.size() > 0);
     Segment lastSegment = segments.get(segments.size() - 1);
-    assertTrue("segment id has wrong format", lastSegment.getId().startsWith("ibm:///catalog/segment/8"));
+    assertTrue("segment id has wrong format", lastSegment.getId().startsWith("ibm:///catalog/segment/"));
     assertEquals("Repeat Customers", lastSegment.getName());
   }
 
@@ -53,7 +53,7 @@ public class SegmentServiceImplIT extends AbstractServiceTest {
     assertNotNull(segment.getExternalTechId());
     Segment segment2 = testling.findSegmentById(segment.getExternalTechId());
     assertNotNull(segment2);
-    assertTrue("segment2 id has wrong format", segment.getId().startsWith("ibm:///catalog/segment/8"));
+    assertTrue("segment2 id has wrong format", segment.getId().startsWith("ibm:///catalog/segment/"));
     assertEquals("both segment names should be equal", segment.getName(), segment2.getName());
     assertEquals("both segments should be equal", segment, segment2);
   }

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -26,6 +25,7 @@
 <resourceBundles>
 <link href="../../../../../../Settings/Options/Bundles/Bundle_de.xml" path="/Settings/Options/Bundles/Bundle_de"/>
 <link href="../../../../../../Settings/Options/Bundles/Corporate_de.xml" path="/Settings/Options/Bundles/Corporate_de"/>
+<link href="../../../../../../Settings/Options/Bundles/Asset%20Management_de.xml" path="/Settings/Options/Bundles/Asset%20Management_de"/>
 </resourceBundles>
 <segment>corporate-de-de</segment>
 <title>Startseite</title>
@@ -64,7 +64,7 @@
 <css>
 <link href="../../../../../../Themes/corporate/corporate%2Ecss.xml" path="/Themes/corporate/corporate%2Ecss"/>
 </css>
-<favicon md5="4c64271dde0847de76fb877d8a5fe795" href="../../../../../../__blob/4c64271dde0847de76fb877d8a5fe795.blob" mimetype="image/x-icon"/>
+<favicon md5="4c64271dde0847de76fb877d8a5fe795" size="15086" href="../../../../../../__blob/4c64271dde0847de76fb877d8a5fe795.blob" mimetype="image/x-icon"/>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">

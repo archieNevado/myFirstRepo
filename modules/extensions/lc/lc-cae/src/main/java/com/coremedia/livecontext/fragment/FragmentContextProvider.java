@@ -48,8 +48,19 @@ public class FragmentContextProvider implements Filter {
     //interface method not needed for this implementation.
   }
 
+  /**
+   * Returns the {@link FragmentContext} for the given request.
+   *
+   * @param request request
+   * @return FragmentContext
+   * @throws IllegalStateException if {@link #doFilter} was not called for the given request
+   */
   @Nonnull
   public static FragmentContext getFragmentContext(@Nonnull ServletRequest request) {
-    return (FragmentContext) request.getAttribute(FRAGMENT_CONTEXT_ATTRIBUTE);
+    Object attribute = request.getAttribute(FRAGMENT_CONTEXT_ATTRIBUTE);
+    if (!(attribute instanceof FragmentContext)) {
+      throw new IllegalStateException("FragmentContext not set. FragmentContextProvider#doFilter not invoked?");
+    }
+    return (FragmentContext) attribute;
   }
 }

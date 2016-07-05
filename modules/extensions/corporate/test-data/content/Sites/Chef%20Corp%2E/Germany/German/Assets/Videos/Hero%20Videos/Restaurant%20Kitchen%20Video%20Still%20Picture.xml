@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Videos/Hero%20Videos/Restaurant%20Kitchen%20Video%20Still%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Videos/Hero%20Videos/Restaurant%20Kitchen%20Video%20Still%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -102,7 +101,7 @@
 <dataUrl></dataUrl>
 <width>1920</width>
 <height>1080</height>
-<data md5="1ed195f2030691baffdd6f704f1d7f2c" href="../../../../../../../__blob/1ed195f2030691baffdd6f704f1d7f2c.blob" mimetype="image/jpeg"/>
+<data md5="1ed195f2030691baffdd6f704f1d7f2c" size="108009" href="../../../../../../../__blob/1ed195f2030691baffdd6f704f1d7f2c.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

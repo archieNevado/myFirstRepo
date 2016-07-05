@@ -88,6 +88,8 @@ public class StoreContextHelper {
               currentStoreContext.getCurrency().toString()
       );
       setWorkspaceId(result, currentStoreContext.getWorkspaceId());
+      String wcsVersion = Float.toString(getWcsVersion(currentStoreContext));
+      setWcsVersion(result, wcsVersion);
       return result;
     }
     return currentStoreContext;

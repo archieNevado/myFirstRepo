@@ -7,6 +7,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.sdk.components.BeanListChooser;
+import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ImageUtil;
 import com.coremedia.cms.editor.sdk.util.PathFormatter;
 import com.coremedia.ui.data.Bean;
@@ -178,7 +179,7 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
       var imageBlob:Blob = content.getProperties().get('icon');
       if (imageBlob) {
         var size:String = CreateFromTemplateStudioPluginSettings_properties.INSTANCE.template_icon_size;
-        return ImageUtil.getCroppingUri(imageBlob.getUri(), Number(size), Number(size));
+        return editorContext.getThumbnailUri(content, ImageUtil.getCroppingOperation(Number(size), Number(size)));
       }
     }
     return Ext.BLANK_IMAGE_URL;

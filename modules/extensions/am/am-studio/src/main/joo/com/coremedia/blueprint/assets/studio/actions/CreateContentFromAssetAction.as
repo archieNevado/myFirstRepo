@@ -18,6 +18,7 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.editor.sdk.actions.*;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ui.data.Blob;
+import com.coremedia.ui.data.Calendar;
 import com.coremedia.ui.data.RemoteBeanUtil;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
@@ -120,7 +121,7 @@ public class CreateContentFromAssetAction extends ContentAction {
           }
         }
         if (targetValidToProperty) {
-          var expirationDate:String = metadataStruct.get(AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE);
+          var expirationDate:Calendar = metadataStruct.get(AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE);
           if (expirationDate) {
             var validToDescriptor:CapPropertyDescriptor = createdContent.getType().getDescriptor(targetValidToProperty);
             if (validToDescriptor) {
@@ -164,7 +165,7 @@ public class CreateContentFromAssetAction extends ContentAction {
       }, createdContent, metadataStruct);
     };
     quickCreateConfig.defaultNameExpression = ValueExpressionFactory.createFromFunction(function ():String {
-      return asset.getName() + ' - ' +
+      return asset.getName() + ' ' +
               (BlueprintDocumentTypes_properties.INSTANCE[targetContentType + '_text'] || targetContentType);
     });
 

@@ -1,19 +1,20 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.rest.cap.common.represent.SuggestionRepresentation;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
 import com.coremedia.rest.cap.content.SearchParameterNames;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -74,7 +75,7 @@ public class CatalogServiceResource {
     newStoreContextForSite.setWorkspaceId(workspaceId);
 
     Map<String, String> searchParams = new HashMap<>();
-    if (category != null && !category.isEmpty() && !Category.EXTERNAL_ID_ROOT_CATEGORY.equals(category)) {
+    if (!StringUtils.isEmpty(category) && !isRootCategory(category)) {
       searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category);
     }
     if (limit > 0) {
@@ -97,6 +98,17 @@ public class CatalogServiceResource {
     }
 
     return new CatalogSearchResultRepresentation(searchResult.getSearchResult(), searchResult.getTotalCount());
+  }
+
+  private boolean isRootCategory(@Nonnull String categoryParam) {
+    // check if it is our symbolic URL segment for the root category
+    // (independent of the particular commerce system)
+    if (CategoryResource.ROOT_CATEGORY_ROLE_ID.equals(categoryParam)) {
+      return true;
+    }
+    // check if it is the actual id of the root category
+    // (depends on the commerce implementation)
+    return categoryParam.equals(getCatalogService().findRootCategory().getId());
   }
 
   @GET

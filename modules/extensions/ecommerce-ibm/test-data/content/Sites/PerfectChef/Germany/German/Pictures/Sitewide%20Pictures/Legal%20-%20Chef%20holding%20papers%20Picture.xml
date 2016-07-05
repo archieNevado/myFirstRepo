@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../United%20States/English/Pictures/Sitewide%20Pictures/Legal%20-%20Chef%20holding%20papers%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Sitewide%20Pictures/Legal%20-%20Chef%20holding%20papers%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>4000</width>
 <height>2811</height>
-<data md5="80ae1cd275c191f77a6b035678c90d4b" href="../../../../../../__blob/80ae1cd275c191f77a6b035678c90d4b.blob" mimetype="image/jpeg"/>
+<data md5="80ae1cd275c191f77a6b035678c90d4b" size="637032" href="../../../../../../__blob/80ae1cd275c191f77a6b035678c90d4b.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

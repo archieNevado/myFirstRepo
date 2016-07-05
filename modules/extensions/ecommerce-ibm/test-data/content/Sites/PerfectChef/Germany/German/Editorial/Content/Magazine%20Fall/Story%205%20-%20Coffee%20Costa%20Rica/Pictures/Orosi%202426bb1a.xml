@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Editorial/Content/Magazine Fall/Story 5 - Coffee Costa Rica/Pictures" name="Orosi Valley Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Editorial/Content/Magazine Fall/Story 5 - Coffee Costa Rica/Pictures" name="Orosi Valley Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../United%20States/English/Editorial/Content/Magazine%20Fall/Story%205%20-%20Coffee%20Costa%20Rica/Pictures73a1400a.xml" path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Story%205%20-%20Coffee%20Costa%20Rica/Pictures/Orosi%20Valley%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Orosi Tal</alt>
 <copyright>CC-BY-SA DirkvdM</copyright>
 <dataUrl></dataUrl>
-<data md5="296ac76218b9de7760e686e0e48cbbf1" href="../../../../../../../../../__blob/296ac76218b9de7760e686e0e48cbbf1.blob" mimetype="image/jpeg"/>
+<data md5="296ac76218b9de7760e686e0e48cbbf1" size="231001" href="../../../../../../../../../__blob/296ac76218b9de7760e686e0e48cbbf1.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

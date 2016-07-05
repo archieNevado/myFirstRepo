@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20Category%20Pictures/On%20The%20Table/On%20The%20Table%20Categ370059d1.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Category%20Pictures/On%20The%20Table/On%20The%20Table%20Category%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -108,7 +107,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1360</height>
-<data md5="f8d15c7351c971677dd080fa6753215b" href="../../../../../../../__blob/f8d15c7351c971677dd080fa6753215b.blob" mimetype="image/jpeg"/>
+<data md5="f8d15c7351c971677dd080fa6753215b" size="463987" href="../../../../../../../__blob/f8d15c7351c971677dd080fa6753215b.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

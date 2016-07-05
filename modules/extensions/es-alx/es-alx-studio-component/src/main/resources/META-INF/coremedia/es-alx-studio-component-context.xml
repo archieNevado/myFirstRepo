@@ -16,7 +16,7 @@
   <context:component-scan base-package="com.coremedia.blueprint.analytics.elastic.rest"/>
   <context:component-scan base-package="com.coremedia.elastic.core.rest.impl"/>
 
-  <customize:append id="addTenantUrlPathLookupPatterns" bean="tenantUrlPathLookupStrategy" property="urlPrefixes">
+  <customize:append id="addAlxTenantUrlPathLookupPatterns" bean="tenantUrlPathLookupStrategy" property="urlPrefixes">
     <list>
       <value>/elastic/alx</value>
     </list>

@@ -16,7 +16,7 @@ module.exports = function (grunt) {
     distDir: 'target/resources/themes/am',
     autoprefixerBrowsers: [
       "last 2 versions",
-      "Firefox >= 24",
+      "Firefox >= 45",
       "Explorer >= 9",
       "Safari >= 8"
     ],

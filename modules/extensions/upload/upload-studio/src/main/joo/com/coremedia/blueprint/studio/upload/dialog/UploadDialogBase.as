@@ -10,6 +10,8 @@ import com.coremedia.blueprint.studio.upload.UploadSettings;
 import com.coremedia.cap.common.session;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.components.folderprompt.FolderCreationResultImpl;
+import com.coremedia.cms.editor.sdk.components.html5.BrowsePlugin;
+import com.coremedia.cms.editor.sdk.config.browsePlugin;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.cms.editor.sdk.util.PathFormatter;
 import com.coremedia.ui.data.ValueExpression;
@@ -30,10 +32,10 @@ import ext.util.StringUtil;
  * items marked for uploading
  */
 public class UploadDialogBase extends Window {
-  protected static const UPLOAD_AREA_HEIGHT:int = 318;
-  protected static const UPLOAD_AREA_COLLAPSED_HEIGHT:int = 25;
-  protected static const UPLOAD_WINDOW_HEIGHT:int = 453;
-  protected static const UPLOAD_WINDOW_WIDTH:int = 480;
+  protected static const UPLOAD_AREA_HEIGHT:int = 378;
+  public static const UPLOAD_AREA_COLLAPSED_HEIGHT:int = 77;
+  protected static const UPLOAD_WINDOW_HEIGHT:int = 513;
+  protected static const UPLOAD_WINDOW_WIDTH:int = 540;
 
   private static const DROP_ZONE_COLLAPSED_CSS:String = 'dialog-upload-helptext-collapsed';
 
@@ -85,6 +87,19 @@ public class UploadDialogBase extends Window {
     if (fileContainers.isEmpty()) {
       toggleDropZoneStatus();
     }
+  }
+
+  /**
+   * The upload button handler, converts the selected files to FileWrapper objects.
+   * @param browsePlugin the browse plugin used for the file selection and contains the file selection.
+   */
+  protected function uploadButtonHandler(browsePlugin:BrowsePlugin):void {
+    var fileWrappers:Array = [];
+    var fileList:* = browsePlugin.getFileList();
+    for(var i:int = 0; i<fileList.length; i++) {
+      fileWrappers.push(new FileWrapper(fileList.item(i)));
+    }
+    handleDrop(fileWrappers);
   }
 
   /**
@@ -148,13 +163,18 @@ public class UploadDialogBase extends Window {
 
     //clear and add list of upload containers
     var list:Container = Ext.getCmp('upload-list') as Container;
+    var fileContainer:FileContainer = null;
     for (var i:int = 0; i < fileContainers.size(); i++) {
-      var fileContainer:FileContainer = fileContainers.getAt(i);
+      fileContainer = fileContainers.getAt(i);
       list.add(fileContainer);
       doLayout(false, true);
     }
 
     doLayout(false, true);
+
+    if(fileContainer) {
+      fileContainer.getEl().dom.scrollIntoView(false);
+    }
   }
 
   /**
@@ -165,12 +185,12 @@ public class UploadDialogBase extends Window {
     if (!dropAreaCollapsed) {
       dropAreaCollapsed = true;
       dropArea.setHeight(UPLOAD_AREA_COLLAPSED_HEIGHT);
-      Ext.getCmp('upload-drop-label').addClass(DROP_ZONE_COLLAPSED_CSS);
+      Ext.getCmp('upload-button-container').addClass(DROP_ZONE_COLLAPSED_CSS);
     }
     else {
       dropAreaCollapsed = false;
       dropArea.setHeight(UPLOAD_AREA_HEIGHT);
-      Ext.getCmp('upload-drop-label').removeClass(DROP_ZONE_COLLAPSED_CSS);
+      Ext.getCmp('upload-button-container').removeClass(DROP_ZONE_COLLAPSED_CSS);
     }
   }
 

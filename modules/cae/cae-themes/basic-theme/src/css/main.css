@@ -5,7 +5,6 @@
  * Some generic Coremedia styles and classes for responsive images, navigation, quickinfo and imagemap
  */
 
-
 /**
  * Responsive Images Plugin
  * ---------------------------------------------------------------------------------------------------------------------
@@ -51,6 +50,7 @@
 .cm-spinner--hidden {
   display: none;
 }
+
 .cm-spinner__canvas {
   position: relative;
   cursor: ew-resize;
@@ -168,8 +168,5 @@
   left: 0;
   background-color: #fff;
   opacity: 0.5;
-  -webkit-transition: background-color 0.5s ease;
-  -moz-transition: background-color 0.5s ease;
-  -o-transition: background-color 0.5s ease;
   transition: background-color 0.5s ease;
 }

@@ -21,6 +21,7 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['es
 node.default['blueprint']['webapps'][service_name]['application.properties']['es.cae.protocol'] = 'http'
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.studio.helios'] = "studio-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.corporate'] = "preview-corporate.#{node['blueprint']['hostname']}"
+node.default['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = "live"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.helios'] = "http://preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.corporate'] = "http://preview-corporate.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.studio.corporate'] = "studio-corporate.#{node['blueprint']['hostname']}"

@@ -98,7 +98,7 @@
       <artifactId>jsr305</artifactId>
       <scope>provided</scope>
     </dependency>
-
+    
     <!--
       Actually, we need the servlet-api only transitively for the TestInfrastructureBuilder
       used e.g. in TaxonomyIdsPropertyConverterTest.  However, we generally need the servlet-api
@@ -112,7 +112,7 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
-    </dependency>
+    </dependency>    
 
     <dependency>
       <groupId>javax.servlet.jsp.jstl</groupId>

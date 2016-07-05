@@ -7,7 +7,6 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,7 +26,6 @@ public class ContractServiceImplIT extends AbstractServiceTest {
   @Inject
   ContractServiceImpl testling;
 
-  @Ignore("B2B not yet working for WCSv8")
   @Betamax(tape = "contract_testFindContractIdsForUser", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindContractIdsForUser() throws Exception {
@@ -43,7 +41,6 @@ public class ContractServiceImplIT extends AbstractServiceTest {
     }
   }
 
-  @Ignore("B2B not yet working for WCSv8")
   @Betamax(tape = "contract_testFindContractIdsForUser", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindContractIdsForPreviewUser() throws Exception {
@@ -62,6 +59,7 @@ public class ContractServiceImplIT extends AbstractServiceTest {
     }
   }
 
+  @Betamax(tape = "contract_testFindContractIdsForServiceUserWithNoServiceUser", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindContractIdsForServiceUserWithNoServiceUser() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
@@ -70,7 +68,6 @@ public class ContractServiceImplIT extends AbstractServiceTest {
     assertTrue(contracts.size() == 0);
   }
 
-  @Ignore("B2B not yet working for WCSv8")
   @Betamax(tape = "contract_testFindContractById", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindContractById() throws Exception {

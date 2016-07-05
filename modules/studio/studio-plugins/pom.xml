@@ -16,7 +16,6 @@
   <modules>
     <module>taxonomy-studio-plugin</module>
     <module>dynamic-content-query-studio-plugin</module>
-    <module>struct-editor-studio-plugin</module>
     <module>controlroom-studio-plugin</module>
     <module>controlroom-memory-plugin</module>
   </modules>

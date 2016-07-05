@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMPictureAsset folder="/Assets/Products/Blenders and Food Processors" name="Kanetree KT4000 Mixer Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="80ff2c2ab518ef5cbc766e0529fef538" href="../../../__blob/80ff2c2ab518ef5cbc766e0529fef538.blob" mimetype="image/jpeg"/>
-<thumbnail md5="73937f83e3e0967f92485898eb98130f" href="../../../__blob/73937f83e3e0967f92485898eb98130f.blob" mimetype="image/jpeg"/>
+<original md5="80ff2c2ab518ef5cbc766e0529fef538" size="10447895" href="../../../__blob/80ff2c2ab518ef5cbc766e0529fef538.blob" mimetype="image/jpeg"/>
+<thumbnail md5="73937f83e3e0967f92485898eb98130f" size="11814" href="../../../__blob/73937f83e3e0967f92485898eb98130f.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -71,5 +71,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Food%20Processor.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Food%20Processor"/>
 </assetTaxonomy>
-<web md5="09488ddafe826995e517910e15071ef3" href="../../../__blob/09488ddafe826995e517910e15071ef3.blob" mimetype="image/jpeg"/>
+<web md5="09488ddafe826995e517910e15071ef3" size="392977" href="../../../__blob/09488ddafe826995e517910e15071ef3.blob" mimetype="image/jpeg"/>
 </AMPictureAsset>

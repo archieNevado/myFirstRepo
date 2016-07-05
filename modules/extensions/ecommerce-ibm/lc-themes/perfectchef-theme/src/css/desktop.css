@@ -55,7 +55,7 @@
   }
 
   .cm-logo a {
-    width: 303px;
+    width: 454px;
     height: 60px;
     background-image: url(../img/logo_desktop.png);
   }
@@ -224,7 +224,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--default > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--default > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -253,11 +253,11 @@
   /* remove gutter for elements in the last row */
   /* special case for first row */
   .cm-collection--tiles-highlight > .cm-collection__item:nth-of-type(1):nth-last-of-type(-n+2),
-  /* and for the following element */
+    /* and for the following element */
   .cm-collection--tiles-highlight > .cm-collection__item:nth-of-type(1):nth-last-of-type(-n+2) + .cm-collection__item,
-  /* last rows first element */
+    /* last rows first element */
   .cm-collection--tiles-highlight > .cm-collection__item:nth-of-type(3n+3):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-highlight > .cm-collection__item:nth-of-type(3n+3):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -278,13 +278,13 @@
   /* remove gutter for elements in the last row */
   /* special case for first element if it belongs to the last fifth elements */
   .cm-collection--tiles-left > .cm-collection__item:nth-of-type(1):nth-last-of-type(-n+5),
-  /* element 2 and 3 do not matter, they can keep their margin due to element 1 being larger */
-  /* element 4 and 5 */
+    /* element 2 and 3 do not matter, they can keep their margin due to element 1 being larger */
+    /* element 4 and 5 */
   .cm-collection--tiles-left > .cm-collection__item:nth-of-type(4):nth-last-of-type(-n+2),
   .cm-collection--tiles-left > .cm-collection__item:nth-of-type(5):nth-last-of-type(1),
-  /* other rows */
+    /* other rows */
   .cm-collection--tiles-left > .cm-collection__item:nth-of-type(3n+6):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-left > .cm-collection__item:nth-of-type(3n+6):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -305,15 +305,15 @@
   /* remove gutter for elements in the last row */
   /* element 1 */
   .cm-collection--tiles-center > .cm-collection__item:nth-of-type(1):nth-last-of-type(1),
-  /* special case for second element if it belongs to the last four elements */
+    /* special case for second element if it belongs to the last four elements */
   .cm-collection--tiles-center > .cm-collection__item:nth-of-type(2):nth-last-of-type(-n+4),
-  /* element 3 does not matter, it can keep its margin due to element 2 being larger */
-  /* element 4 and 5 */
+    /* element 3 does not matter, it can keep its margin due to element 2 being larger */
+    /* element 4 and 5 */
   .cm-collection--tiles-center > .cm-collection__item:nth-of-type(4):nth-last-of-type(-n+2),
   .cm-collection--tiles-center > .cm-collection__item:nth-of-type(5):nth-last-of-type(1),
-  /* other rows */
+    /* other rows */
   .cm-collection--tiles-center > .cm-collection__item:nth-of-type(3n+6):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-center > .cm-collection__item:nth-of-type(3n+6):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -334,16 +334,16 @@
   /* remove gutter for elements in the last row */
   /* element 1 */
   .cm-collection--tiles-right > .cm-collection__item:nth-of-type(1):nth-last-of-type(-n+2),
-  /* element 2 */
+    /* element 2 */
   .cm-collection--tiles-right > .cm-collection__item:nth-of-type(2):nth-last-of-type(1),
-  /* special case for third element if it belongs to the last four elements */
+    /* special case for third element if it belongs to the last four elements */
   .cm-collection--tiles-right > .cm-collection__item:nth-of-type(3):nth-last-of-type(-n+3),
-  /* element 4 and 5 */
+    /* element 4 and 5 */
   .cm-collection--tiles-right > .cm-collection__item:nth-of-type(4):nth-last-of-type(-n+2),
   .cm-collection--tiles-right > .cm-collection__item:nth-of-type(5):nth-last-of-type(1),
-  /* other rows */
+    /* other rows */
   .cm-collection--tiles-right > .cm-collection__item:nth-of-type(3n+6):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-right > .cm-collection__item:nth-of-type(3n+6):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -358,7 +358,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--tiles-portrait > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-portrait > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -373,7 +373,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--tiles-landscape > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-landscape > .cm-collection__item:nth-of-type(3n+1):nth-last-of-type(-n+3) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -408,7 +408,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--tiles-50-50-portrait > .cm-collection__item:nth-of-type(2n+1):nth-last-of-type(-n+2),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-50-50-portrait > .cm-collection__item:nth-of-type(2n+1):nth-last-of-type(-n+2) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -443,7 +443,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--tiles-50-50-landscape > .cm-collection__item:nth-of-type(2n+1):nth-last-of-type(-n+2),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--tiles-50-50-landscape > .cm-collection__item:nth-of-type(2n+1):nth-last-of-type(-n+2) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -471,7 +471,7 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--productlisting > .cm-collection__item:nth-of-type(5n+1):nth-last-of-type(-n+5),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--productlisting > .cm-collection__item:nth-of-type(5n+1):nth-last-of-type(-n+5) ~ .cm-collection__item {
     margin-bottom: 0;
   }
@@ -506,13 +506,12 @@
   /* remove gutter for elements in the last row */
   /* first element of last row */
   .cm-collection--productlisting > .cm-collection__item:nth-of-type(5n+1):nth-last-of-type(-n+5),
-  /* and for all following elements */
+    /* and for all following elements */
   .cm-collection--productlisting > .cm-collection__item:nth-of-type(5n+1):nth-last-of-type(-n+5) ~ .cm-collection__item {
     margin-bottom: 0;
   }
 
   /* --- titled collections ----------------------------------------------------------------------------------------- */
-
   .cm-frame {
     padding: 10px;
   }
@@ -530,7 +529,6 @@
   /*.cm-frame > .cm-teaser {
     margin: 0 37px;
   }*/
-
   /* --- teaser ----------------------------------------------------------------------------------------------------- */
   .cm-price--teaser {
     font-weight: normal;
@@ -610,8 +608,6 @@
 
   /* --- box -------------------------------------------------------------------------------------------------------- */
   .cm-box__header {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     margin-bottom: 10px;
   }
@@ -625,11 +621,7 @@
   }
 
   .cm-text {
-    -webkit-column-count: 2;
-    -moz-column-count: 2;
     column-count: 2;
-    -webkit-column-gap: 20px;
-    -moz-column-gap: 20px;
     column-gap: 20px;
   }
 
@@ -658,8 +650,6 @@
 
   /* article single column */
   .cm-text--single-column {
-    -webkit-column-count: 1;
-    -moz-column-count: 1;
     column-count: 1;
   }
 
@@ -690,9 +680,6 @@
   .cm-button {
     font-size: 1.25rem;
     line-height: 2.13333rem;
-    -webkit-transition: background 0.5s ease-in-out 0s, border-color 0.5s ease-in-out 0s;
-    -moz-transition: background 0.5s ease-in-out 0s, border-color 0.5s ease-in-out 0s;
-    -o-transition: background 0.5s ease-in-out 0s, border-color 0.5s ease-in-out 0s;
     transition: background 0.5s ease-in-out 0s, border-color 0.5s ease-in-out 0s;
   }
 
@@ -740,7 +727,7 @@
   }
 
   .cm-search-form__fieldset {
-    padding-left: 30px;
+    padding-left: 10px;
   }
 
   /* different name, because it is used by wcs */
@@ -770,10 +757,14 @@
   }
 
   /* --- teaser ----------------------------------------------------------------------------------------------------- */
-
   /*Fix for CMS-4977: Do not split embedded links or pictures*/
   .cm-teaser--embedded, .cm-image-box--embedded {
-    -webkit-column-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /*Fix for CMS-4976: For multi-column-buggy webkit*/
+  .cm-image-box--embedded .cm-image {
+    transform: translateZ(0);
   }
 
   .cm-teaser > a {
@@ -782,31 +773,18 @@
     display: block;
   }
 
-  .cm-image {
-    /*Fix for CMS-4976: For multi-column-buggy webkit*/
-    -webkit-transform: translateZ(0);
-  }
-
   .cm-teaser__content ~ .cm-teaser__info {
     margin: 5px;
   }
 
   .cm-teaser__content {
     /* faster zoom out after leaving the hover*/
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
   }
 
   .cm-teaser:hover .cm-teaser__content {
     /* smooth zoom in during hover, after a small delay */
-    -webkit-transform: scale(1.1);
-    -ms-transform: scale(1.1);
     transform: scale(1.1);
-    -webkit-transition: all 1s 0.2s ease;
-    -moz-transition: all 1s 0.2s ease;
-    -o-transition: all 1s 0.2s ease;
     transition: all 1s 0.2s ease;
   }
 
@@ -814,12 +792,7 @@
   .cm-teaser--image:hover .cm-teaser__content,
   .cm-teaser--text:hover .cm-teaser__content,
   .cm-teaser--video:hover .cm-teaser__content {
-    -webkit-transform: none;
-    -ms-transform: none;
     transform: none;
-    -webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
     transition: none;
   }
 
@@ -830,13 +803,13 @@
   }
 
   .cm-teaser--video__play,
-  .cm-spinner__icon  {
+  .cm-spinner__icon {
     width: 120px;
     height: 120px;
     background-image: url(../img/button_video_play_desktop.png);
   }
 
-  .cm-spinner__icon  {
+  .cm-spinner__icon {
     background-image: url(../img/button_spinner_desktop.png);
   }
 
@@ -849,8 +822,6 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
 
@@ -872,7 +843,6 @@
   }
 
   /* sidebar / related content / frame */
-
   .cm-placement-sidebar > :not(:last-child),
   .cm-box--related > :not(:last-child),
   .cm-frame--teaser > :not(:last-child) {
@@ -904,19 +874,11 @@
 
   /* disable zoom effect for imagemaps having hotzone functionality (indicated by cm-imagemap__wrapper) */
   .cm-imagemap .cm-imagemap__wrapper .cm-teaser__content {
-    -webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
     transition: none;
   }
 
   .cm-imagemap:hover .cm-imagemap__wrapper .cm-teaser__content {
-    -webkit-transform: none;
-    -ms-transform: none;
     transform: none;
-    -webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
     transition: none;
   }
 
@@ -924,8 +886,6 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     z-index: 4;
   }
@@ -936,8 +896,6 @@
   }
 
   .cm-quickinfo {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 306px;
     background: #fff;
@@ -1026,7 +984,7 @@
   }
 
   .cm-quickinfo--compact .cm-quickinfo__property--pricing,
-  /* only if pricing is present */
+    /* only if pricing is present */
   .cm-quickinfo--compact .cm-quickinfo__property--pricing + .cm-quickinfo__property--controls {
     display: table-cell;
     vertical-align: middle;
@@ -1043,14 +1001,13 @@
   /* shoppable videos */
   .cm-shoppable__video {
     float: left;
-    padding-right: 5px;
     width: 75%;
   }
 
   .cm-shoppable__teasers {
     display: block;
     float: right;
-    padding-left: 5px;
+    padding-left: 10px;
     width: 25%;
   }
 
@@ -1061,18 +1018,20 @@
     overflow: hidden; /* just in case there is more text */
   }
 
-
   .cm-shoppable__teaser .cm-quickinfo {
     position: relative;
     visibility: visible;
-    width: 100%; height: inherit;
+    width: 100%;
+    height: inherit;
     box-sizing: border-box;
     padding: 0 0 65px 0; /* provide space for button */
     color: #fff;
     background: transparent;
     box-shadow: none;
   }
+
   .cm-shoppable__teaser .cm-quickinfo__title {
+    font-size: 1.25rem;
     position: relative;
     color: #fff;
     margin: 0.5rem;
@@ -1084,20 +1043,23 @@
 
   .cm-shoppable__teaser .cm-quickinfo__property--controls {
     width: auto;
-    margin: 1.5rem 0.5rem 0.5rem 0.5rem;
+    margin: 1.5rem 0.3rem 0.3rem;
   }
 
   .cm-shoppable__teaser .cm-button-group {
-    position: absolute;   bottom: 10px;  left: 5px;  right: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: auto;
   }
+
   .cm-shoppable__teaser .cm-button {
     background-color: #fff;
     border-color: #fff;
     color: #373737;
     width: auto;
   }
-
 
   .cm-shoppable__teaser .cm-quickinfo__close {
     display: none;
@@ -1109,19 +1071,10 @@
 }
 
 /* --- highres/retina styles ---------------------------------------------------------------------------------------- */
-@media only screen and (min-width: 1025px) and (-webkit-min-device-pixel-ratio: 2), only screen and (min-width: 1025px) and (min-resolution: 192dpi) {
+@media only screen and (min-width: 1025px) and (-webkit-min-device-pixel-ratio: 2),
+       only screen and (min-width: 1025px) and (min-resolution: 192dpi) {
 
   .cm-logo > a {
     background-image: url(../img/logo_desktop_highres.png);
   }
-}
-
-/* websphere commcere changes */
-#articleListing li.item h1,
-#articleListing li.item h2 {
-  margin: 0;
-}
-
-#articleListing li.item .content {
-  padding: 5px 20px 15px 65px;
 }

@@ -5,15 +5,13 @@ import java.util.List;
 /**
  * Pojo generated from the json response from erroneous REST calls.
  */
-public class WcServiceErrors {
+@SuppressWarnings("unused") // values are injected by gson
+class WcServiceErrors {
 
   private List<WcServiceError> errors;
 
-  public List<WcServiceError> getErrors() {
+  List<WcServiceError> getErrors() {
     return errors;
   }
 
-  public void setErrors(List<WcServiceError> errors) {
-    this.errors = errors;
-  }
 }

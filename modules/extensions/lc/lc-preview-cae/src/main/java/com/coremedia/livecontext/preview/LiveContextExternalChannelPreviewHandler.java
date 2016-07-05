@@ -80,7 +80,9 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
       }
 
       if (useCommerceCategoryLinks(navigation.getSite()) && category != null) {
-        return buildCommerceLinkFor(null, category.getSeoSegment(), linkParameters);
+        String seoSegment = category.getSeoSegment();
+        Map<String, Object> updateParameters = (Map<String, Object>) updateQueryParams(category, linkParameters, seoSegment);
+        return buildCommerceLinkFor(null, seoSegment, updateParameters);
       } else {
         return externalNavigationHandler.buildCaeLinkForCategory(navigation, viewName, linkParameters);
       }

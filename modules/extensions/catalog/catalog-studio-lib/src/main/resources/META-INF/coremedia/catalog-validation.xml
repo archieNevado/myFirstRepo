@@ -7,7 +7,7 @@
        http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
   <import resource="classpath:com/coremedia/rest/cap/cap-rest-service.xml"/>
-  <import resource="classpath:META-INF/coremedia/component-validators.xml"/>
+  <import resource="classpath:META-INF/coremedia/component-bpbase-studio-rest.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"/>
 
   <bean id="catalogProductValidator" parent="contentTypeValidator" class="com.coremedia.catalog.studio.lib.validators.CatalogProductValidator">
@@ -19,21 +19,21 @@
     <property name="liveContextSettingName" value="LiveContext"/>
   </bean>
 
-  <bean id="cmCategorySegmentValidator" class="com.coremedia.blueprint.studio.rest.validators.ChannelSegmentValidator">
+  <bean id="cmCategorySegmentValidator" class="com.coremedia.blueprint.base.rest.validators.ChannelSegmentValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMCategory"/>
     <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
   </bean>
 
   <bean id="cmCategoryNavigationValidator"
-        class="com.coremedia.blueprint.studio.rest.validators.ChannelNavigationValidator">
+        class="com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMCategory"/>
     <property name="channelLoopCode" value="category_loop"/>
   </bean>
 
   <bean id="cmCategoryReferrerValidator"
-        class="com.coremedia.blueprint.studio.rest.validators.ChannelReferrerValidator">
+        class="com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMCategory"/>
     <property name="duplicateReferrerCode" value="duplicate_category_parent"/>

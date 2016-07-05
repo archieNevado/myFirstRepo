@@ -2,14 +2,14 @@ package com.coremedia.blueprint.common.util;
 
 import com.coremedia.blueprint.common.util.pagination.PagingRuleType;
 import com.coremedia.xml.Markup;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
 
 public final class ParagraphHelper {
-  private static final Log LOG = LogFactory.getLog(ParagraphHelper.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ParagraphHelper.class);
 
   public static final int DEFAULT_PARAGRAPH_PAGING_UNITS = 1;
 

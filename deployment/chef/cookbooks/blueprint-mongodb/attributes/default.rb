@@ -1,17 +1,21 @@
-#<> The baseurl for the mongodb rpm repository
-default['blueprint']['mongodb']['yum']['baseurl'] = "http://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64"
-#<> The mirrorlist url for the mongodb rpm repository
-default['blueprint']['mongodb']['yum']['mirrorlist'] = nil
-default['blueprint']['mongodb']['yum']['exclude'] = nil
-default['blueprint']['mongodb']['yum']['enablegroups'] = nil
-default['blueprint']['mongodb']['yum']['http_caching'] = 'all'
-default['blueprint']['mongodb']['yum']['include_config'] = nil
-default['blueprint']['mongodb']['yum']['includepkgs'] = nil
-default['blueprint']['mongodb']['yum']['max_retries'] = '2'
-default['blueprint']['mongodb']['yum']['metadata_expire'] = nil
-default['blueprint']['mongodb']['yum']['mirror_expire'] = nil
-default['blueprint']['mongodb']['yum']['priority'] = '1'
-default['blueprint']['mongodb']['yum']['proxy'] = nil
-default['blueprint']['mongodb']['yum']['proxy_username'] = nil
-default['blueprint']['mongodb']['yum']['proxy_password'] = nil
-default['blueprint']['mongodb']['yum']['timeout'] = '30'
+#<> define ulimits for mongod
+default['ulimit'] = {
+  users: {
+    mongod: {
+      filehandle_limit: 655_36,
+      process_limit: 655_36
+    }
+  }
+}
+#<> overwrite mirrorlist
+default['mongodb']['yum']['mirrorlist'] = 'https://s3-eu-west-1.amazonaws.com/mirrors.coremedia.com/repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/$basearch/mirror'
+
+#<> fixed version
+default['mongodb3']['version'] = '3.2.5'
+
+#<> fixed configuration
+# default['mongodb3']['config']['mongod']['net']['bindIp'] = '127.0.0.1'
+default['mongodb3']['config']['mongod']['net']['http']['RESTInterfaceEnabled'] = true
+default['mongodb3']['config']['mongod']['security']['authorization'] = nil
+default['mongodb3']['config']['mongod']['storage']['mmapv1']['smallFiles'] = nil
+# default['mongodb3']['config']['mongod']['storage']['journal']['enabled'] =  true

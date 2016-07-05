@@ -5,7 +5,8 @@ import com.coremedia.livecontext.ecommerce.common.CommerceRemoteError;
 /**
  * Pojo generated from the json response from erroneous REST calls.
  */
-public class WcServiceError implements CommerceRemoteError {
+@SuppressWarnings("unused") // values are injected by gson
+class WcServiceError implements CommerceRemoteError {
 
   private String errorCode;
   private String errorKey;
@@ -17,17 +18,9 @@ public class WcServiceError implements CommerceRemoteError {
     return errorCode;
   }
 
-  public void setErrorCode(String errorCode) {
-    this.errorCode = errorCode;
-  }
-
   @Override
   public String getErrorKey() {
     return errorKey;
-  }
-
-  public void setErrorKey(String errorKey) {
-    this.errorKey = errorKey;
   }
 
   @Override
@@ -35,16 +28,9 @@ public class WcServiceError implements CommerceRemoteError {
     return errorMessage;
   }
 
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
-  }
-
   @Override
   public String getErrorParameters() {
     return errorParameters;
   }
 
-  public void setErrorParameters(String errorParameters) {
-    this.errorParameters = errorParameters;
-  }
 }

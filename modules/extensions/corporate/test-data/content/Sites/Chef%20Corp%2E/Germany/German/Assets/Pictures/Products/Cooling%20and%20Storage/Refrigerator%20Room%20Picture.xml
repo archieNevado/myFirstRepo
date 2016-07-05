@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/Cooling%20and%20Storage/Refrigerator%20Room%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/Cooling%20and%20Storage/Refrigerator%20Room%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1365</width>
 <height>2048</height>
-<data md5="afc9e4b5e5e860ce1633b10ebae8e699" href="../../../../../../../../__blob/afc9e4b5e5e860ce1633b10ebae8e699.blob" mimetype="image/jpeg"/>
+<data md5="afc9e4b5e5e860ce1633b10ebae8e699" size="408656" href="../../../../../../../../__blob/afc9e4b5e5e860ce1633b10ebae8e699.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

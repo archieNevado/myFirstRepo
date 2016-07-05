@@ -4,8 +4,7 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMChannel/carousel.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Zeigt mehrere Artikel in einer gleitenden Karussell.</description>
-<icon md5="bdd06839662df2fda3f939a0a3fa5c2a" href="../../../../../../../__blob/bdd06839662df2fda3f939a0a3fa5c2a.blob" mimetype="image/png"/>
+<icon md5="bdd06839662df2fda3f939a0a3fa5c2a" size="34147" href="../../../../../../../__blob/bdd06839662df2fda3f939a0a3fa5c2a.blob" mimetype="image/png"/>
 <layout>carousel</layout>
 </CMViewtype>

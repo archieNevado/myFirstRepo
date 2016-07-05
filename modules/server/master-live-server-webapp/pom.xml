@@ -15,6 +15,10 @@
     To start the master-live-server-webapp run: mvn tomcat7:run-war
   </description>
 
+  <properties>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -67,10 +71,13 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
           <path>/${project.build.finalName}</path>
-          <port>${MLS_PORT_PREFIX}${HTTP_PORT_SUFFIX}</port>
+          <port>40280</port>
           <systemProperties>
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
+            <propertieslocations>classpath:/master-live-server.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>

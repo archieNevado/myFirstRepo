@@ -23,8 +23,8 @@ import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndPerson;
 import com.sun.syndication.feed.synd.SyndPersonImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.activation.MimeType;
@@ -42,7 +42,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI
 
 
 public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
-  private static final Log LOG = LogFactory.getLog(TeasableFeedItemDataProvider.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TeasableFeedItemDataProvider.class);
 
   private static final String AUTHOR_NAME = "";
   private static final String NEW_ITEM = "New Item";

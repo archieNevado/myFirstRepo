@@ -6,7 +6,16 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-abstract class AbstractErrorAndExceptionHandler<T extends Exception, S> implements ErrorAndExceptionHandler {
+/**
+ * Abstract base implementation of {@link ErrorAndExceptionHandler}.
+ * <p>
+ * Provides the general flow and leaves some details to be implemented in
+ * specific subclasses.
+ *
+ * @param <T> The concrete exception type
+ * @param <S> The type of the model's "self" object
+ */
+public abstract class AbstractErrorAndExceptionHandler<T extends Exception, S> implements ErrorAndExceptionHandler {
 
   @Override
   public ModelAndView handleException(String viewName, Exception ex, HttpServletRequest request, HttpServletResponse response) {
@@ -30,7 +39,7 @@ abstract class AbstractErrorAndExceptionHandler<T extends Exception, S> implemen
     return modelAndView;
   }
 
-  public void createResponse(HttpServletResponse response) {
+  private void createResponse(HttpServletResponse response) {
     final int statusCode = getStatusCode();
     if (statusCode > 0) {
       response.setStatus(statusCode);

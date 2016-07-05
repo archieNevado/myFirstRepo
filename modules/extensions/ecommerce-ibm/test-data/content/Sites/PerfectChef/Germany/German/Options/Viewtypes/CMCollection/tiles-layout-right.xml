@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-right.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-right"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Displays a collection in a right focused tiles layout.</description>
 <icon href="tiles-layout-right.icon.png" mimetype="image/png"/>
 <layout>tiles-layout-right</layout>

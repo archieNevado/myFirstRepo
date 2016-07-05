@@ -3,7 +3,14 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.contract.Contract;
+import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,8 +22,16 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
+
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
 import static com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImplSearchBasedIT.LocalConfig.PROFILE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for BOD REST interface.
@@ -75,6 +90,13 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testFindProductByExternalTechId();
   }
 
+  @Betamax(tape = "csi_testFindProductMultiSEOSegmentsByExternalTechId_search", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindProductMultiSEOByExternalTechId() throws Exception {
+    super.testFindProductMultiSEOByExternalTechId();
+  }
+
   @Betamax(tape = "csi_testFindProductByExternalTechIdIsNull_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -101,6 +123,24 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
   @Override
   public void testFindProductVariantByExternalId() throws Exception {
     super.testFindProductVariantByExternalId();
+  }
+
+  @Test
+  public void testFindProductVariantByExternalIdWithContractSupport() throws Exception {
+    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))){
+      return;
+    }
+
+    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
+    ProductVariant productVariant = testling.findProductVariantById(CommerceIdHelper.formatProductVariantId(PRODUCT_VARIANT_CODE_B2B));
+    assertNotNull(productVariant);
+    BigDecimal offerPrice = productVariant.getOfferPrice();
+
+    prepareContextsForContractBasedPreview();
+    ProductVariant productVariantContract = testling.findProductVariantById(CommerceIdHelper.formatProductVariantId(PRODUCT_VARIANT_CODE_B2B));
+    BigDecimal offerPriceContract = productVariantContract.getOfferPrice();
+
+    assertTrue("Contract price for product should be lower", offerPrice.floatValue() > offerPriceContract.floatValue());
   }
 
   @Betamax(tape = "csi_testFindProductVariantByExternalIdWithSlash_search", match = {MatchRule.path, MatchRule.query})
@@ -145,6 +185,12 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testFindProductsByCategoryIsEmpty();
   }
 
+  @Test
+  @Override
+  public void testFindProductsByCategoryIsRoot() throws Exception {
+    super.testFindProductsByCategoryIsRoot();
+  }
+
   @Betamax(tape = "csi_testSearchProducts_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -166,6 +212,23 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testFindTopCategories();
   }
 
+  @Test
+  public void testFindTopCategoriesWithContractSupport() throws Exception {
+    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))){
+      return;
+    }
+
+    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
+    List<Category> topCategories = testling.findTopCategories(null);
+    int topCategoriesCount = topCategories.size();
+
+    prepareContextsForContractBasedPreview();
+    List<Category> topCategoriesContract = testling.findTopCategories(null);
+    int topCategoriesContractCount = topCategoriesContract.size();
+
+    assertTrue("Contract filter for b2b topcategories not working", topCategoriesCount > topCategoriesContractCount);
+  }
+
   @Betamax(tape = "csi_testFindSubCategories_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -175,7 +238,6 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
 
   @Betamax(tape = "csi_testFindSubCategoriesWithContract_search", match = {MatchRule.path, MatchRule.query})
   @Test
-  @Ignore
   @Override
   public void testFindSubCategoriesWithContract() throws Exception {
     super.testFindSubCategoriesWithContract();
@@ -193,6 +255,13 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
   @Override
   public void testFindCategoryByExternalTechId() throws Exception {
     super.testFindCategoryByExternalTechId();
+  }
+
+  @Betamax(tape = "csi_testFindCategoryMultiSEOSegmentsByExternalTechId_search", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindCategoryMultiSEOByExternalTechId() throws Exception {
+    super.testFindCategoryMultiSEOByExternalTechId();
   }
 
   @Betamax(tape = "csi_testFindCategoryByExternalTechIdIsNull_search", match = {MatchRule.path, MatchRule.query})
@@ -243,5 +312,17 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
   @Override
   public void testFindCategoryByExternalIdWithSlash() {
     super.testFindCategoryByExternalIdWithSlash();
+  }
+
+  private void prepareContextsForContractBasedPreview() {
+    StoreContext b2BStoreContext = testConfig.getB2BStoreContext();
+    StoreContextHelper.setCurrentContext(b2BStoreContext);
+    UserContext userContext = userContextProvider.createContext(testConfig.getPreviewUserName());
+    UserContextHelper.setCurrentContext(userContext);
+    Collection<Contract> contracts = contractService.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
+    assertNotNull(contracts);
+    Contract contract = contracts.iterator().next();
+    assertNotNull(contract);
+    b2BStoreContext.setContractIdsForPreview(new String[]{contract.getExternalTechId()});
   }
 }

@@ -9,7 +9,7 @@ import com.coremedia.blueprint.id.Representation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.search.solr.SolrSearchEngine2;
+import com.coremedia.cap.search.solr.SolrSearchEngine;
 import com.coremedia.cap.search.solr.SolrSearchEngineFactory;
 import com.coremedia.cap.search.solr.SolrSearchException;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -42,7 +42,7 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
 
   private static final Logger LOG = LoggerFactory.getLogger(SolrSearchResultFactory.class);
 
-  private SolrSearchEngine2 searchEngine;
+  private SolrSearchEngine searchEngine;
   private SolrQueryBuilder queryBuilder;
   private ContentRepository contentRepository;
   private Representation<Object> representationMapper;
@@ -319,13 +319,13 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
 
   @Override
   public void afterPropertiesSet() {
-    searchEngine = solrSearchEngineFactory.createSearchEngine2();
+    searchEngine = solrSearchEngineFactory.createSearchEngine();
   }
 
   @Override
   public void destroy() throws Exception {
     if (searchEngine != null) {
-      searchEngine.shutdown();
+      searchEngine.close();
     }
   }
 

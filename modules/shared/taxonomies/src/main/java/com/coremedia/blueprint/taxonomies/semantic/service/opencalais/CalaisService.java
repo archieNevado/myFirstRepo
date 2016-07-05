@@ -97,19 +97,15 @@ public class CalaisService extends AbstractSemanticService {
 
     Site currentSite = getSiteForContent(content);
     Map openCalaisSettings = settingsService.mergedSettingAsMap("openCalais", String.class, String.class, content, currentSite);
-    if (openCalaisSettings != null) {
-      if (openCalaisSettings.containsKey("apiUrl")) {
-        LOG.debug("Found OpenCalais apiUrl to use in content settings. Preconfigured property will be replaced.");
-        Object oApiUrl = openCalaisSettings.get("apiUrl");
-        apiUrlToUse = oApiUrl != null ? String.valueOf(oApiUrl) : DDEFALUT_API_URL;
-      }
-      if (openCalaisSettings.containsKey("apiKey")) {
-        LOG.debug("Found OpenCalais apiKey to use in content settings. Preconfigured property will be replaced.");
-        Object oApiKey = openCalaisSettings.get("apiKey");
-        apiKeyToUse = String.valueOf(oApiKey);
-      }
-    } else if (LOG.isDebugEnabled()) {
-      LOG.debug("No OpenCalais properties found in content. Using preconfigured properties.");
+    if (openCalaisSettings.containsKey("apiUrl")) {
+      LOG.debug("Found OpenCalais apiUrl to use in content settings. Preconfigured property will be replaced.");
+      Object oApiUrl = openCalaisSettings.get("apiUrl");
+      apiUrlToUse = oApiUrl != null ? String.valueOf(oApiUrl) : DDEFALUT_API_URL;
+    }
+    if (openCalaisSettings.containsKey("apiKey")) {
+      LOG.debug("Found OpenCalais apiKey to use in content settings. Preconfigured property will be replaced.");
+      Object oApiKey = openCalaisSettings.get("apiKey");
+      apiKeyToUse = String.valueOf(oApiKey);
     }
     client.setApiUrl(apiUrlToUse);
     client.setUniqueAccessKey(apiKeyToUse);

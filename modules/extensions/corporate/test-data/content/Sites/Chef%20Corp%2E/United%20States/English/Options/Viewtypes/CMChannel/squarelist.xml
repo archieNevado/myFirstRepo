@@ -4,6 +4,6 @@
 <master>
 </master>
 <description>Displays multiple items as a list with small preview images.</description>
-<icon md5="c4c56fc121ad642253f72766358238ce" href="../../../../../../../__blob/c4c56fc121ad642253f72766358238ce.blob" mimetype="image/png"/>
+<icon md5="c4c56fc121ad642253f72766358238ce" size="34147" href="../../../../../../../__blob/c4c56fc121ad642253f72766358238ce.blob" mimetype="image/png"/>
 <layout>squarelist</layout>
 </CMViewtype>

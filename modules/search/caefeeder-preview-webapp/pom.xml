@@ -15,6 +15,10 @@
     To start the caefeeder-preview-webapp run: mvn tomcat7:run
   </description>
 
+  <properties>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -37,12 +41,13 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
           <path>/${project.build.finalName}</path>
-          <port>${CAEFEEDER_PREVIEW_PORT_PREFIX}${HTTP_PORT_SUFFIX}</port>
+          <port>40780</port>
           <systemProperties>
-            <repository.url>http://${cms.host}:${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}/coremedia/ior</repository.url>
-            <feeder.solr.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr/preview</feeder.solr.url>
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
+            <propertieslocations>classpath:/caefeeder-preview.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
     </plugins>

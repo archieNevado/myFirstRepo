@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMPlaceholder/social-sharing-bar.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMPlaceholder/social-sharing-bar"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Social Sharing Bar</description>
 <icon href="social-sharing-bar.icon.png" mimetype="image/png"/>
 <layout>social-sharing-bar</layout>

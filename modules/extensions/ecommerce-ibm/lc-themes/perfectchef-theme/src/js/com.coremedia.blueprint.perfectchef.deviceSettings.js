@@ -68,7 +68,7 @@ coremedia.blueprint.perfectchef.deviceSettings = function (module) {
       var $imagemap = $(this);
 
       var $imagemapLink = $imagemap.find(".cm-imagemap__link");
-      $imagemapLink.attr("href", undefined);
+      $imagemapLink.removeAttr("href");
 
       var $imagemapImage = $imagemap.find(".cm-imagemap__image");
       var $imagemapAreas = $imagemap.find(".cm-imagemap__areas");

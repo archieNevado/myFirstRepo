@@ -60,7 +60,7 @@ public class Interests implements CMActionState {
   private boolean isEnabled(String key) {
     CMAction cmAction = contentBeanFactory.createBeanFor(action.getContent(), CMAction.class);
     Map<String, Object> personalizationSettings = settingsService.settingAsMap("personalization", String.class, Object.class, cmAction);
-    return personalizationSettings != null && Boolean.TRUE.equals(personalizationSettings.get(key));
+    return Boolean.TRUE.equals(personalizationSettings.get(key));
   }
 
   @Override

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/News/Chef%20Corp%2E%20New%20HQ%20in%20Downtown%20Chicago%20%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/News/Chef%20Corp%2E%20New%20HQ%20in%20Downtown%20Chicago%20%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2048</width>
 <height>1337</height>
-<data md5="0d71c561cc4d51caf4b7afeb789169a9" href="../../../../../../../__blob/0d71c561cc4d51caf4b7afeb789169a9.blob" mimetype="image/jpeg"/>
+<data md5="0d71c561cc4d51caf4b7afeb789169a9" size="414226" href="../../../../../../../__blob/0d71c561cc4d51caf4b7afeb789169a9.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

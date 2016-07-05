@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMVideo/shoppable.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMVideo/shoppable"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>For shoppable Videos</description>
 <icon href="shoppable.icon.png" mimetype="image/png"/>
 <layout>shoppable</layout>

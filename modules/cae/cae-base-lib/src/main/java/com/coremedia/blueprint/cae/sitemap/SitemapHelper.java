@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.cae.sitemap;
 
-import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,7 +116,7 @@ public class SitemapHelper implements ServletContextAware {
       sb.append("/servlet");
     }
     sb.append("/");
-    sb.append(UriConstants.Prefixes.PREFIX_SERVICE);
+    sb.append(BlueprintUriConstants.Prefixes.PREFIX_SERVICE);
     sb.append("/");
     sb.append(SitemapHandler.ACTION_NAME);
     sb.append("/");

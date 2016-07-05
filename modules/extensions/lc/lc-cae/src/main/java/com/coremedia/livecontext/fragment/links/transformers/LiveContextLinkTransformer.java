@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.fragment.links.transformers;
 
-import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.web.taglib.FindNavigationContext;
@@ -11,6 +10,7 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
+import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.context.ProductInSite;
@@ -56,9 +56,6 @@ public class LiveContextLinkTransformer implements LinkTransformer {
   @Override
   public String transform(String cmsLink, Object bean, String view, HttpServletRequest request, HttpServletResponse response, boolean forRedirect) {
     // Only transform links for Fragment Requests
-    if (FragmentContextProvider.getFragmentContext(request) == null) {
-      return cmsLink;
-    }
     if (!FragmentContextProvider.getFragmentContext(request).isFragmentRequest()) {
       return cmsLink;
     }
@@ -88,7 +85,7 @@ public class LiveContextLinkTransformer implements LinkTransformer {
       return cmsLink;
     }
 
-    if (cmsLink != null && cmsLink.contains("/" + UriConstants.Prefixes.PREFIX_DYNAMIC + "/")) {
+    if (cmsLink != null && cmsLink.contains("/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + "/")) {
       return cmsLink;
     }
 

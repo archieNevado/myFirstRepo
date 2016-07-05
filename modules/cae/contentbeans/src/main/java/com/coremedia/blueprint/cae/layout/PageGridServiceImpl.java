@@ -7,6 +7,8 @@ import com.coremedia.blueprint.common.layout.PageGridService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 
+import javax.annotation.Nonnull;
+
 public class PageGridServiceImpl implements PageGridService {
 
   private ContentBackedPageGridService contentBackedPageGridService;
@@ -21,6 +23,7 @@ public class PageGridServiceImpl implements PageGridService {
   }
 
   @Override
+  @Nonnull
   public PageGrid getContentBackedPageGrid(CMNavigation navigationContext) {
     return new PageGridImpl(navigationContext, contentBackedPageGridService, validationService);
   }

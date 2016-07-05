@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-
+DIR=$(dirname $BASH_SOURCE)
 # generate executables to the installed gems in .bin of the workspace (--binstubs) with the correct ruby
 # for jenkins slaves that have more than one executor we need to separate the bundle paths, otherwise there will be race conditions
 
@@ -7,7 +7,7 @@ if [[ -e /opt/chefdk/bin/chef ]]; then
   echo "Found chefdk:"
   /opt/chefdk/bin/chef --version
   eval "$(/opt/chefdk/bin/chef shell-init bash)"
-  cp ./chefdk/Gemfile* ./
+  cp ${DIR}/chefdk/Gemfile* ./
   bundle install
 elif [[ -d /opt/chef/embedded/bin ]]; then
   echo "Found chef-client:"
@@ -20,7 +20,7 @@ elif [[ -d /opt/chef/embedded/bin ]]; then
     echo "you should better install gecode package, otherwise bundle install will take plenty of time the first time."
   fi
   test -f ${CHEF_RUBY_PATH}/bundle || echo "you need to install bundler, execute ${CHEF_RUBY_PATH}/gem install bundler"
-  cp ./chef-client/Gemfile* ./
+  cp ${DIR}/chef-client/Gemfile* ./
   ${CHEF_RUBY_PATH}/bundle install --binstubs --deployment --path=${HOME}/.bundle${EXECUTOR_NUMBER} --jobs 2 --retry 3 --shebang=${CHEF_RUBY_PATH}/ruby
   # add the binstubs to the path
   export PATH=${CHEF_RUBY_PATH}:$(pwd)/bin:$PATH

@@ -21,34 +21,38 @@ public class CMChannelExtension {
 
   public static const CONTENT_TYPE_PAGE:String = "CMChannel";
 
-  public static function register():void {
+  public static function register(contentType:String):void {
     /**
      * Apply custom properties for CMChannel
      */
-    QuickCreate.addQuickCreateDialogProperty(CONTENT_TYPE_PAGE, PARENT_PROPERTY, createComponent);
+    QuickCreate.addQuickCreateDialogProperty(contentType, PARENT_PROPERTY,
+            function (data:ProcessingData, properties:Object):Component {
+              return createComponent(data, properties, contentType)
+            });
 
-    QuickCreate.addSuccessHandler(CONTENT_TYPE_PAGE, process);
+    QuickCreate.addSuccessHandler(contentType, process);
   }
 
   /**
    * Creates the UI Component for the Quick Creation Dialog
    * @param data the Data Process Object
    * @param properties The properties of the bound object
+   * @param contentType The contentType of the document to be created
    * @return the UI Component
    */
-  private static function createComponent(data:ProcessingData, properties:Object):Component {
+  private static function createComponent(data:ProcessingData, properties:Object, contentType:String):Component {
     var c:Content = null;
     if (properties.bindTo) {
       c = properties.bindTo.getValue();
     }
-    if (c && c.getType().getName() === CONTENT_TYPE_PAGE) {
+    if (c && c.getType().isSubtypeOf(contentType)) {
       data.set(PARENT_PROPERTY, c);
-      ValueExpressionFactory.create(ContentPropertyNames.PATH, c).loadValue(function (path:String):void {
+      ValueExpressionFactory.create(ContentPropertyNames.PATH, c.getParent()).loadValue(function (path:String):void {
         data.set(ProcessingData.FOLDER_PROPERTY, path);
       });
     }
     properties.label = QuickCreate_properties.INSTANCE.parent_label;
-    properties.doctype = CONTENT_TYPE_PAGE;
+    properties.doctype = contentType;
     return new NavigationLinkFieldWrapper(navigationLinkFieldWrapper(properties));
   }
 

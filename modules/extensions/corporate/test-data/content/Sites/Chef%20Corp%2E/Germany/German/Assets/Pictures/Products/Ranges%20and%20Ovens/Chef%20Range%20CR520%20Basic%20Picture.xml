@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/Ranges%20and%20Ovens/Chef%20Range%20CR520%20Basic%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/Ranges%20and%20Ovens/Chef%20Range%20CR520%20Basic%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2450</width>
 <height>2633</height>
-<data md5="a6d09a8427640a8b32864600ebb20ea0" href="../../../../../../../../__blob/a6d09a8427640a8b32864600ebb20ea0.blob" mimetype="image/jpeg"/>
+<data md5="a6d09a8427640a8b32864600ebb20ea0" size="659555" href="../../../../../../../../__blob/a6d09a8427640a8b32864600ebb20ea0.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

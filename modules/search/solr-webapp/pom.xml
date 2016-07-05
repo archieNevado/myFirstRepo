@@ -122,12 +122,12 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
           <path>/solr</path>
-          <port>${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}</port>
+          <port>40080</port>
           <warDirectory>${project.build.directory}/solr</warDirectory>
           <ignorePackaging>true</ignorePackaging>
           <systemProperties>
             <solr.solr.home>${solr.home}</solr.solr.home>
-            <tomcat.port>${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}</tomcat.port>
+            <tomcat.port>40080</tomcat.port>
           </systemProperties>
         </configuration>
         <dependencies>
@@ -145,6 +145,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.7.6</version>
+            <scope>runtime</scope>
           </dependency>
           <dependency>
             <groupId>org.slf4j</groupId>

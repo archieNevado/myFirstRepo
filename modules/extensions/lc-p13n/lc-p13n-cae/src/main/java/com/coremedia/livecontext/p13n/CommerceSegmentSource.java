@@ -9,6 +9,7 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
 import com.coremedia.personalization.context.collector.AbstractContextSource;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ public class CommerceSegmentSource extends AbstractContextSource {
     if (Commerce.getCurrentConnection() == null ||
             getStoreContext() == null ||
             getUserContext() == null ||
+            StringUtils.isEmpty(getStoreContext().getUserSegments()) &&
             getUserContext().getContextNames().isEmpty()) {
       return;
     }

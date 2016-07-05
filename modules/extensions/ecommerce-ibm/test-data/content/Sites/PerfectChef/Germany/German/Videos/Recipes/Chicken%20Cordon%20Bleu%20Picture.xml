@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../United%20States/English/Videos/Recipes/Chicken%20Cordon%20Bleu%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Recipes/Chicken%20Cordon%20Bleu%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -99,7 +98,7 @@
 <alt>Hähnchen-Cordon-Bleu</alt>
 <copyright>cooksmarts.com / Vimeo CC-BY-SA 3.0</copyright>
 <dataUrl></dataUrl>
-<data md5="4f84daa41f5bca4ea5987bcd2d03f618" href="../../../../../../__blob/4f84daa41f5bca4ea5987bcd2d03f618.blob" mimetype="image/jpeg"/>
+<data md5="4f84daa41f5bca4ea5987bcd2d03f618" size="165411" href="../../../../../../__blob/4f84daa41f5bca4ea5987bcd2d03f618.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

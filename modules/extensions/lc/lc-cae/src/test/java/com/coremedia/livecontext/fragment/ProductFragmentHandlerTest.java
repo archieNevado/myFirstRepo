@@ -1,5 +1,7 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.cache.Cache;
+import com.coremedia.livecontext.contentbeans.ProductDetailPage;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +36,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
   @Test
   public void handleProductViewFragment() {
+    when(navigation.getContext()).thenReturn(cmExternalChannelContext);
     ModelAndView result = getTestling().createModelAndView(getFragmentParameters4Product(), request);
     assertDefaultPage(result);
     verifyDefault();
@@ -41,6 +44,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
   @Test
   public void handleProductViewFragmentWithCategory() {
+    when(navigation.getContext()).thenReturn(cmExternalChannelContext);
     FragmentParameters params = getFragmentParameters4Product();
     params.setCategoryId("categoryId");
     ModelAndView result = getTestling().createModelAndView(params, request);
@@ -77,6 +81,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
   @Before
   public void defaultSetup() {
     super.defaultSetup();
+    when(beanFactory.getBean("pdpPage", ProductDetailPage.class)).thenReturn(new ProductDetailPage(false, sitesService, Cache.currentCache()));
     getTestling().setContextStrategy(resolveContextStrategy);
     getTestling().setCommerceBeanFactory(commerceBeanFactory);
   }

@@ -158,6 +158,15 @@ public class CatalogObjectPropertyNames {
    * @see CatalogObjectImpl#getContent
    */
   public static const CONTENT:String = "content";
+
+  /**
+   * Name of the custom attributes property.
+   *
+   * @eventType customAttributes
+   * @see CatalogObject#getCustomAttributes()
+   */
+  public static const CUSTOM_ATTRIBUTES:String = "customAttributes";
+
   /**
    * @private
    * This class only defines constants.

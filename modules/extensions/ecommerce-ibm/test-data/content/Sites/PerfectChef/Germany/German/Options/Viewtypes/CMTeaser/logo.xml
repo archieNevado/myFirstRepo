@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMTeaser/logo.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMTeaser/logo"/>
 </master>
-<masterVersion>1</masterVersion>
 <description>Displays the Shop Logo in the Header</description>
 <icon href="logo.icon.png" mimetype="image/png"/>
 <layout>logo</layout>

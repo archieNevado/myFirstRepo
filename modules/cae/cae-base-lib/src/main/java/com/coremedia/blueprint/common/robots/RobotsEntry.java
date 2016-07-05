@@ -2,8 +2,8 @@ package com.coremedia.blueprint.common.robots;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.util.StringUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +14,7 @@ import java.util.Map;
  * POJO to represent one node in a Robots.txt
  */
 public class RobotsEntry {
+  private static final Logger LOG = LoggerFactory.getLogger(RobotsEntry.class);
 
   public static final String SITEMAP_TAG = "Sitemap";
   public static final String USER_AGENT_TAG = "User-agent";
@@ -24,8 +25,6 @@ public class RobotsEntry {
   private static final int DISALLOW_CASE = 0;
   private static final int ALLOW_CASE = 1;
   private static final int CUSTOM_CASE = 2;
-
-  private Log log = LogFactory.getLog(getClass());
 
   private String sitemapLink;
   private String userAgent;
@@ -47,31 +46,21 @@ public class RobotsEntry {
   }
 
   private void readRobotsSettings(Map settings) {
-
     // reading settings map and populate corresponding fields with configured values:
     if (settings != null) {
-
       // check for regular user agent node:
       Object value = settings.get(USER_AGENT_TAG);
-
       if (value instanceof String) {
-
         String userAgentValue = (String) value;
         readUserAgentNode(userAgentValue, settings);
-
       } else {
-
         readSitemapLink(settings);
       }
     }
   }
 
   private void readUserAgentNode(String userAgent, Map settings) {
-
-    if (log.isDebugEnabled()) {
-      log.debug("Found new entry of user agent node [" + userAgent + "]");
-    }
-
+    LOG.debug("Found new entry of user agent node [{}]", userAgent);
     setUserAgent(userAgent);
 
     Object value = settings.get(DISALLOW_TAG);
@@ -82,23 +71,15 @@ public class RobotsEntry {
 
     value = settings.get(CUSTOM_TAG);
     readSetting(value, CUSTOM_CASE, userAgent);
-
-    if (log.isDebugEnabled()) {
-      log.debug("added new node for robots.txt for user agent [" + userAgent + "]");
-    }
+    LOG.debug("added new node for robots.txt for user agent [{}]", userAgent);
   }
 
   private void readSitemapLink(Map settings) {
-
     // no user agent node, but maybe a sitemap node:
     Object value = settings.get(SITEMAP_TAG);
 
     if (value instanceof String) {
-
-      if (log.isDebugEnabled()) {
-        log.debug("Found new entry of sitemap node for robots.txt ...");
-      }
-
+      LOG.debug("Found new entry of sitemap node for robots.txt ...");
       setSitemapLink((String) value);
     }
   }
@@ -113,21 +94,18 @@ public class RobotsEntry {
   }
 
   private void addDisallow(CMLinkable linkable) {
-
     if (linkable != null) {
       disallowed.add(linkable);
     }
   }
 
   private void addAllow(CMLinkable linkable) {
-
     if (linkable != null) {
       allowed.add(linkable);
     }
   }
 
   private void addCustom(String entry) {
-
     if (!StringUtil.isEmpty(entry)) {
       custom.add(entry);
     }
@@ -172,8 +150,8 @@ public class RobotsEntry {
 
         if (link instanceof CMLinkable) {
           addDisallow((CMLinkable) link);
-        } else if (log.isWarnEnabled()) {
-          log.warn("ignoring unknown type for disallow entry to [" + userAgentValue + "] for robots.txt");
+        } else {
+          LOG.warn("ignoring unknown type for disallow entry to [{}] for robots.txt", userAgentValue);
         }
         break;
 
@@ -181,8 +159,8 @@ public class RobotsEntry {
 
         if (link instanceof CMLinkable) {
           addAllow((CMLinkable) link);
-        } else if (log.isWarnEnabled()) {
-          log.warn("ignoring unknown type for allow entry to [" + userAgentValue + "] for robots.txt");
+        } else {
+          LOG.warn("ignoring unknown type for allow entry to [{}] for robots.txt", userAgentValue);
         }
         break;
 
@@ -190,8 +168,8 @@ public class RobotsEntry {
 
         if (link instanceof String) {
           addCustom((String) link);
-        } else if (log.isWarnEnabled()) {
-          log.warn("ignoring unknown type for custom entry to [" + userAgentValue + "] for robots.txt");
+        } else {
+          LOG.warn("ignoring unknown type for custom entry to [{}] for robots.txt", userAgentValue);
         }
         break;
 

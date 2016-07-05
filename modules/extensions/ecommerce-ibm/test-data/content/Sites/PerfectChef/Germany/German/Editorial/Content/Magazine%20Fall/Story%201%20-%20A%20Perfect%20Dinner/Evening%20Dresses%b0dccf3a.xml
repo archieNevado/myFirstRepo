@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Editorial/Content/Magazine%20Fall/Story%201%20-%20A%20Perfect%20Dinner/Evening%25c33294a.xml" path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Story%201%20-%20A%20Perfect%20Dinner/Evening%20Dresses%20Landing%20Page%20Teaser"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <linkedSettings>
@@ -29,5 +28,6 @@
 <related>
 </related>
 <target>
+<link href="../../../../Augmentation/PC_ForTheCook/PC_Apparel/PC_ApparelWomen/PC_ApparelWomenExclusive/PC_Apparel595c060.xml" path="/Sites/PerfectChef/Germany/German/Augmentation/PC_ForTheCook/PC_Apparel/PC_ApparelWomen/PC_ApparelWomenExclusive/PC_ApparelWomenExclusive"/>
 </target>
 </CMTeaser>

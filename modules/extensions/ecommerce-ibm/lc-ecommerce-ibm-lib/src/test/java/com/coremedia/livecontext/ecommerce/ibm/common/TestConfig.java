@@ -10,17 +10,20 @@ public class TestConfig {
 
   private static final String STORE_CONFIG_ID = System.getProperty("lc.test.configID", "aurora");
   private static final String STORE_ID = System.getProperty("lc.test.storeId", "10202");
-  private static final String STORE_NAME = System.getProperty("lc.test.storeName", "AuroraESite");
-  private static final String B2B_STORE_ID = System.getProperty("lc.test.storeId", "715838085");
+  static final String STORE_NAME = System.getProperty("lc.test.storeName", "AuroraESite");
+  private static final String B2B_STORE_ID = System.getProperty("lc.test.storeId", "10303");
+  private static final String B2B_STORE_ID_V80 = System.getProperty("lc.test.storeId", "715838085");
   private static final String B2B_STORE_NAME = System.getProperty("lc.test.storeName", "AuroraB2BESite");
 
   private static String CATALOG_NAME = System.getProperty("lc.test.catalogName","Extended Sites Catalog Asset Store");
   private static String CATALOG_ID = System.getProperty("lc.test.catalogId", "10051");
 
-  private static String CATALOG_ID_V78 = System.getProperty("lc.test.catalogId", "10152");
+  private static String CATALOG_ID_B2C_V78 = System.getProperty("lc.test.catalogId", "10152");
+  private static String CATALOG_ID_B2B_V78 = System.getProperty("lc.test.catalogId", "10151");
   private static String STORE_ID_V78 = System.getProperty("lc.test.storeId", "10301");
 
-  private static String CATALOG_ID_V80 = System.getProperty("lc.test.catalogId", "3074457345616676668");
+  private static String CATALOG_ID_B2C_V80 = System.getProperty("lc.test.catalogId", "3074457345616676719");
+  private static String CATALOG_ID_B2B_V80 = System.getProperty("lc.test.catalogId", "3074457345616676718");
   private static String STORE_ID_V80 = System.getProperty("lc.test.storeId", "715838084");
 
   private static final String LOCALE = "en_US";
@@ -62,9 +65,9 @@ public class TestConfig {
   public StoreContext getStoreContext() {
     StoreContext result = null;
     if (StoreContextHelper.WCS_VERSION_8_0 == wcsVersion){
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_V80, LOCALE, CURRENCY);
+      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, CURRENCY);
     } else if (StoreContextHelper.WCS_VERSION_7_8 == wcsVersion){
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_V78, LOCALE, CURRENCY);
+      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, CURRENCY);
     } else {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
     }
@@ -86,9 +89,9 @@ public class TestConfig {
   public StoreContext getB2BStoreContext() {
     StoreContext result = null;
     if (StoreContextHelper.WCS_VERSION_8_0 == wcsVersion){
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_V80, LOCALE, CURRENCY);
+      result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
     } else if (StoreContextHelper.WCS_VERSION_7_8 == wcsVersion){
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_V78, LOCALE, CURRENCY);
+      result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
     } else {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
     }

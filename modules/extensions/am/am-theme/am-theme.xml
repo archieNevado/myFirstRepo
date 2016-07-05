@@ -22,13 +22,4 @@
     <css>css/am.css</css>
   </styleSheets>
 
-  <!-- add additional javaScripts and styleSheets for previewing a website in Studio -->
-  <!--<previewJavaScripts>
-    <javascript></javascript>
-  </previewJavaScripts>
-
-  <previewStyleSheets>
-    <css></css>
-  </previewStyleSheets>-->
-
 </themeDefinition>

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Events/Security%20Audit%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Events/Security%20Audit%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1365</width>
 <height>2048</height>
-<data md5="16b731e18b1d3f577ce66eadf87fcae0" href="../../../../../../../__blob/16b731e18b1d3f577ce66eadf87fcae0.blob" mimetype="image/jpeg"/>
+<data md5="16b731e18b1d3f577ce66eadf87fcae0" size="191875" href="../../../../../../../__blob/16b731e18b1d3f577ce66eadf87fcae0.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

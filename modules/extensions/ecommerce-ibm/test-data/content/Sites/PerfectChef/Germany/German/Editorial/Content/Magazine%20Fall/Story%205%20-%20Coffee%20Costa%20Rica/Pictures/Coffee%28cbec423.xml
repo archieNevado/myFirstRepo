@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Editorial/Content/Magazine Fall/Story 5 - Coffee Costa Rica/Pictures" name="Coffee Cherry Picker Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Editorial/Content/Magazine Fall/Story 5 - Coffee Costa Rica/Pictures" name="Coffee Cherry Picker Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../United%20States/English/Editorial/Content/Magazine%20Fall/Story%205%20-%20Coffee%20Costa%20Rica/Pictures270e40eb.xml" path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Story%205%20-%20Coffee%20Costa%20Rica/Pictures/Coffee%20Cherry%20Picker%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1280</width>
 <height>960</height>
-<data md5="e060506f6c801f8c0f3277d9d41ce513" href="../../../../../../../../../__blob/e060506f6c801f8c0f3277d9d41ce513.blob" mimetype="image/jpeg"/>
+<data md5="e060506f6c801f8c0f3277d9d41ce513" size="254137" href="../../../../../../../../../__blob/e060506f6c801f8c0f3277d9d41ce513.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

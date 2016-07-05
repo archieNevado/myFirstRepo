@@ -24,12 +24,12 @@ default['blueprint']['tools']['workflow-server']['property_files']['capclient.pr
 
 default['blueprint']['tools']['caefeeder-preview']['dir'] = "#{node['blueprint']['base_dir']}/caefeeder-preview-tools"
 default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
-default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm7mcaefeeder'
-default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.user'] = 'cm7mcaefeeder'
-default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.password'] = 'cm7mcaefeeder'
+default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm_mcaefeeder'
+default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.user'] = 'cm_mcaefeeder'
+default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.password'] = 'cm_mcaefeeder'
 
 default['blueprint']['tools']['caefeeder-live']['dir'] = "#{node['blueprint']['base_dir']}/caefeeder-live-tools"
 default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
-default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm7caefeeder'
-default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.user'] = 'cm7caefeeder'
-default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.password'] = 'cm7caefeeder'
+default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm_caefeeder'
+default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.user'] = 'cm_caefeeder'
+default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.password'] = 'cm_caefeeder'

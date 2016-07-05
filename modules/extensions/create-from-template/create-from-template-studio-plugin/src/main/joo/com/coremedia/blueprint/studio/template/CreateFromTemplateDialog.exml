@@ -80,7 +80,7 @@
     </items>
     <buttons>
       <ui:footerButton asSuggestion="true"
-                       text="{Editor_properties.INSTANCE.dialog_defaultSubmitButton_text}"
+                       text="{Editor_properties.INSTANCE.dialog_defaultCreateButton_text}"
                        itemId="createBtn"
                        handler="{handleSubmit}">
         <plugins>

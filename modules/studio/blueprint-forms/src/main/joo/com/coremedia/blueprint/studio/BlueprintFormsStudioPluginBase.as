@@ -4,11 +4,10 @@ import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.config.blueprintFormsStudioPlugin;
 import com.coremedia.blueprint.studio.plugins.SiteAwareVisibilityPluginBase;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
-import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
-import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
+import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 
 public class BlueprintFormsStudioPluginBase extends StudioPlugin {
   public function BlueprintFormsStudioPluginBase(config:blueprintFormsStudioPlugin = null) {
@@ -20,9 +19,9 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
 
     //caches the available users and groups
     UserUtil.init();
-    
+
     // Register Navigation Parent for CMChannel
-    CMChannelExtension.register();
+    CMChannelExtension.register(CMChannelExtension.CONTENT_TYPE_PAGE);
 
     //Enable advanced tabs
     TabExpandPlugin.ADVANCED_TABS_ENABLED = true;
@@ -31,38 +30,15 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
 
     ContentInitializer.applyInitializers();
 
-    editorContext.registerThumbnailUriRenderer("CMSelectionRules", renderCMSelectionRules);
-    editorContext.registerThumbnailUriRenderer("CMCollection", renderCMCollections);
-    editorContext.registerThumbnailUriRenderer("CMTeasable", renderCMTeasable);
-    editorContext.registerThumbnailUriRenderer("CMPicture", renderPicture);
-    editorContext.registerThumbnailUriRenderer("CMImage", renderPicture);
-    editorContext.registerThumbnailUriRenderer("CMSymbol", renderSymbol);
-    editorContext.registerThumbnailUriRenderer("CMSpinner", renderSpinner);
-  }
-
-
-  private static function renderSpinner(content:Content):String {
-    return ImageLinkListRenderer.propertyPathLoader(content, 'properties.pictures', 'properties.sequence');
-  }
-
-  private static function renderCMCollections(content:Content):String {
-    return ImageLinkListRenderer.propertyPathLoader(content, 'properties.pictures', 'properties.items');
-  }
-
-  private static function renderCMSelectionRules(content:Content):String {
-    return ImageLinkListRenderer.propertyPathLoader(content, 'properties.defaultContent');
-  }
-
-  private static function renderCMTeasable(content:Content):String {
-    return ImageLinkListRenderer.propertyPathLoader(content, 'properties.pictures');
-  }
-
-  private static function renderPicture(content:Content):String {
-    return ImageLinkListRenderer.blobPropertyUriResolver(content, 'data');
-  }
-
-  private static function renderSymbol(content:Content):String {
-    return ImageLinkListRenderer.blobPropertyUriResolver(content, 'icon');
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSelectionRules", "defaultContent"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMCollection", "pictures", "items"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMTeasable", "pictures"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSpinner", "pictures", "sequence"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMDownload", "data"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMImage", "data"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMVideo", "pictures"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMPicture", "data"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSymbol", "icon"));
   }
 
   /**

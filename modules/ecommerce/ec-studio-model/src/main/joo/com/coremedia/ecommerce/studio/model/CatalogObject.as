@@ -12,5 +12,14 @@ public interface CatalogObject extends RemoteBean{
   function getExternalTechId():String;
   function getStore():Store;
   function getSiteId():String;
+  function getCustomAttributes():Object;
+
+  /**
+   * Returns a custom attribute of this CatalogObject.
+   *
+   * @param attribute name of the attribute
+   * @return the custom attribute value or null if the custom attribute does exist
+   */
+  function getCustomAttribute(attribute:String):Object;
 }
 }

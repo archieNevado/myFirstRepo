@@ -57,7 +57,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
             matchingSites.add(site);
           }
         } catch (Exception e) {
-          LOG.warn("Something is wrong with store context for site {}({})", site.getName(), site.getLocale(), e);
+          LOG.warn("Something is wrong with store context for site {}({})", site.getName(), site.getLocale());
         }
       }
     } finally {
@@ -67,7 +67,13 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
     if (matchingSites.size() > 1) {
       throw new IllegalStateException("Found more than one site for store.id: " + storeId + " and locale: " + locale);
     }
-    return (matchingSites.size()==1) ? matchingSites.iterator().next() : null;
+    if (matchingSites.size()==0) {
+      LOG.warn("No site found with store.id={} and locale={}", storeId, locale);
+      return null;
+    }
+    final Site site = matchingSites.iterator().next();
+    LOG.debug("Found site {}({}) for store.id={} and locale={}", site.getName(), site.getLocale(), storeId, locale);
+    return site;
   }
 
 

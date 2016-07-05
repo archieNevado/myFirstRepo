@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 
 public class CMProductTeaserImpl extends CMTeasableImpl implements CMProductTeaser {
@@ -70,8 +71,16 @@ public class CMProductTeaserImpl extends CMTeasableImpl implements CMProductTeas
 
   @Override
   public Product getProduct() {
-    StoreContext storeContext = getStoreContextProvider().findContextByContent(this.getContent());
-    return getCatalogService().withStoreContext(storeContext).findProductById(getExternalId());
+    final String externalId = getExternalId();
+    if (isNotEmpty(externalId)) {
+      try {
+        StoreContext storeContext = getStoreContextProvider().findContextByContent(this.getContent());
+        return getCatalogService().withStoreContext(storeContext).findProductById(externalId);
+      } catch (CommerceException e) {
+        LOG.warn("could not retrieve product for ProductTeaser "+this.toString(), e);
+      }
+    }
+    return null;
   }
 
   @Override
@@ -150,7 +159,7 @@ public class CMProductTeaserImpl extends CMTeasableImpl implements CMProductTeas
     Site site = getSitesService().getContentSiteAspect(getContent()).getSite();
     Product product = getProduct();
     if (product != null && site != null) {
-      result = liveContextNavigationFactory.createProductInSite(getProduct(), site.getId());
+      result = liveContextNavigationFactory.createProductInSite(product, site.getId());
     }
     return result;
   }

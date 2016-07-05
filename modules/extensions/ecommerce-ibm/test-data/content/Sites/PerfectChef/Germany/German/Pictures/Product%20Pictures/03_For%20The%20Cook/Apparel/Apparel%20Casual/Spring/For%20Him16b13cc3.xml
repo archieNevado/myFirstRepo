@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Spring/For Him" name="PC_TSHIRT blue Actionshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Apparel/Apparel Casual/Spring/For Him" name="PC_TSHIRT blue Actionshot 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Spring/b3376d95.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Spring/For%20Him/PC_TSHIRT%20blue%20Actionshot%201"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -113,7 +112,7 @@
 <alt>Blaues T-Shirt</alt>
 <copyright>Alexander Bild / Shutterstock 169174709</copyright>
 <dataUrl></dataUrl>
-<data md5="22b19c952c2ca135eb00c165266f3725" href="../../../../../../../../../../__blob/22b19c952c2ca135eb00c165266f3725.blob" mimetype="image/jpeg"/>
+<data md5="22b19c952c2ca135eb00c165266f3725" size="702553" href="../../../../../../../../../../__blob/22b19c952c2ca135eb00c165266f3725.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

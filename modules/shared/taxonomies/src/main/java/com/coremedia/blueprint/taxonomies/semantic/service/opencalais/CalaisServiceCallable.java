@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.taxonomies.semantic.service.opencalais;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
  * Callable for OpenCalais
  */
 public class CalaisServiceCallable implements Callable<Map<String, Object>> {
-  private static final Log LOG = LogFactory.getLog(CalaisServiceCallable.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CalaisServiceCallable.class);
 
   private String data;
   private CalaisClient client;

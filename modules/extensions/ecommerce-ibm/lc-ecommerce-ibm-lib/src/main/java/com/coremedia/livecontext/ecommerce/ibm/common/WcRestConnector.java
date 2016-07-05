@@ -1,9 +1,9 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.cache.Cache;
-import com.coremedia.cache.CacheKey;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteError;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
@@ -14,12 +14,13 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcPreviewToken;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -43,13 +44,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import static java.lang.String.format;
@@ -93,10 +94,14 @@ public class WcRestConnector {
   private int connectionPoolSize = 200;
 
   private String contractPreviewUserName;
-
   private String contractPreviewUserPassword;
 
+  private String serviceUser;
+  private String servicePassword;
+
   protected LoginService loginService;
+
+  private CommerceCache commerceCache;
 
   // BOD based service methods
 
@@ -152,21 +157,28 @@ public class WcRestConnector {
                               UserContext userContext) throws CommerceException {
 
     StoreContext myStoreContext = storeContext != null ? storeContext : StoreContextHelper.getCurrentContext();
+    if (myStoreContext == null){
+      throw new NoStoreContextAvailable("No store context available in Rest Connector while calling " + serviceMethod.uriTemplate);
+    }
 
     try {
       // make the service call once
       return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
 
     } catch (UnauthorizedException e) {
-      LOG.info("Commerce connector responded with 'Unauthorized'. Will renew the session and retry.");
-      StoreContextHelper.setCurrentContext(myStoreContext);
-      loginService.renewServiceIdentityLogin();
-      if (myStoreContext.getContractIdsForPreview()!=null) {
-        LOG.debug("invalidating preview user...");
-        Cache.currentCache().invalidate(PreviewUserCacheKey.class.getName());
+      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_8) {
+        LOG.info("Commerce connector responded with 'Unauthorized'. Will renew the session and retry.");
+        StoreContextHelper.setCurrentContext(myStoreContext);
+        loginService.renewServiceIdentityLogin();
+        if (myStoreContext.getContractIdsForPreview() != null) {
+          LOG.debug("invalidating preview user...");
+          commerceCache.getCache().invalidate(PreviewUserCacheKey.class.getName());
+        }
+        // make the service call the second time
+        return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
+      } else {
+        throw e;
       }
-      // make the service call the second time
-      return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
     }
   }
 
@@ -189,11 +201,7 @@ public class WcRestConnector {
                                       StoreContext storeContext,
                                       UserContext userContext) throws CommerceException {
 
-    // it repairs a shortcomming of betamax that cannot record calls that use https
-    String betamaxMode = System.getProperty("betamax.defaultMode");
-    if ("READ_WRITE".equals(betamaxMode) || "WRITE_ONLY".equals(betamaxMode)) {
-      serviceMethod.secure = false;
-    }
+    setUnsecureIfBetamaxWriteEnabled(serviceMethod);
 
     T result = null;
 
@@ -328,6 +336,17 @@ public class WcRestConnector {
     return result;
   }
 
+  /**
+   * it repairs a shortcomming of betamax that cannot record calls that use https
+   */
+  private <T, P> void setUnsecureIfBetamaxWriteEnabled(WcRestServiceMethod<T, P> serviceMethod) {
+    String betamaxMode = System.getProperty("betamax.defaultMode");
+    String betamaxIgnoreHosts = System.getProperty("betamax.ignoreHosts");
+    if (!"*".equals(betamaxIgnoreHosts) && ("READ_WRITE".equals(betamaxMode) || "WRITE_ONLY".equals(betamaxMode))) {
+      serviceMethod.secure = false;
+    }
+  }
+
   private <T, P> boolean mustBeSecured(WcRestServiceMethod<T, P> serviceMethod, StoreContext storeContext, UserContext userContext) {
     if (serviceMethod.secure) {
       return true;
@@ -438,11 +457,13 @@ public class WcRestConnector {
     }
 
     // if contract preview, do not send user cookies but login our preview user, instead
-    if (serviceMethod.contractsSupport && storeContext != null && storeContext.getContractIdsForPreview() != null &&
+    if (serviceMethod.contractsSupport && storeContext.getContractIdsForPreview() != null &&
             StoreContextHelper.getWcsVersion(storeContext) >= StoreContextHelper.WCS_VERSION_7_8) {
       LOG.debug("contractIdsForPreview found: "+Arrays.toString(storeContext.getContractIdsForPreview()) + " - using preview user: " + contractPreviewUserName);
       headers.remove(HEADER_COOKIE);
-      WcCredentials previewCredentials = Cache.currentCache().get(new PreviewUserCacheKey(contractPreviewUserName,contractPreviewUserPassword));
+      String previewUser = CommercePropertyHelper.replaceTokens(contractPreviewUserName, storeContext);
+      String previewPassword = CommercePropertyHelper.replaceTokens(contractPreviewUserPassword, storeContext);
+      WcCredentials previewCredentials = (WcCredentials) commerceCache.get(new PreviewUserCacheKey(previewUser, previewPassword, storeContext, commerceCache, loginService));
       if (previewCredentials != null) {
         WcSession previewSession = previewCredentials.getSession();
         if (previewSession != null) {
@@ -456,9 +477,18 @@ public class WcRestConnector {
       }
     }
     else if (!headers.containsKey(HEADER_COOKIE)) {
-      boolean mustBeAuthenticated = serviceMethod.requiresAuthentication || (userContext != null && userContext.getUserId() != null) || (userContext != null && userContext.getUserName() != null)
-              || (storeContext != null && storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0);
-      if (mustBeAuthenticated || mustBeSecured) {
+      boolean mustBeAuthenticated = serviceMethod.requiresAuthentication || (userContext != null && userContext.getUserId() != null)
+              || (userContext != null && userContext.getUserName() != null)
+              || (storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0);
+
+      if (mustBeAuthenticated && StoreContextHelper.getWcsVersion(storeContext) >= StoreContextHelper.WCS_VERSION_7_8) {
+        //use basic authentication for wcs > 7.8
+        String user = CommercePropertyHelper.replaceTokens(serviceUser, storeContext);
+        String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
+        String credentials = Base64.encode((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
+        headers.put("Authorization", "Basic " + credentials);
+      } else if (mustBeAuthenticated || mustBeSecured) {
+        //use WCToken for wcsVersion < 7.8
         WcCredentials credentials = loginService.loginServiceIdentity();
         if (credentials != null) {
           WcSession session = credentials.getSession();
@@ -631,6 +661,16 @@ public class WcRestConnector {
   }
 
   @Required
+  public void setServiceUser(String serviceUser) {
+    this.serviceUser = serviceUser;
+  }
+
+  @Required
+  public void setServicePassword(String servicePassword) {
+    this.servicePassword = servicePassword;
+  }
+
+  @Required
   public void setContractPreviewUserName(String contractPreviewUserName) {
     this.contractPreviewUserName = contractPreviewUserName;
   }
@@ -638,6 +678,11 @@ public class WcRestConnector {
   @Required
   public void setLoginService(LoginService loginService) {
     this.loginService = loginService;
+  }
+
+  @Required
+  public void setCommerceCache(CommerceCache commerceCache) {
+    this.commerceCache = commerceCache;
   }
 
   @SuppressWarnings("unused")
@@ -679,7 +724,6 @@ public class WcRestConnector {
     this.connectionRequestTimeout = connectionRequestTimeout;
   }
 
-  @SuppressWarnings("unused")
   public static class WcRestServiceMethod<T, P> {
     private HttpMethod method;
     private String uriTemplate;
@@ -723,45 +767,4 @@ public class WcRestConnector {
     }
   }
 
-  private class PreviewUserCacheKey extends CacheKey<WcCredentials> {
-    private String username = "preview";
-    private String password = "passw0rd";
-
-    public PreviewUserCacheKey(String username, String password) {
-      this.username = username;
-      this.password = password;
-    }
-
-    @Override
-    public WcCredentials evaluate(Cache cache) throws Exception {
-      Cache.cacheFor(5, TimeUnit.MINUTES);
-      Cache.dependencyOn(PreviewUserCacheKey.class.getName());
-      return loginService.loginIdentity(username,password);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-
-      PreviewUserCacheKey that = (PreviewUserCacheKey) o;
-
-      if (username != null ? !username.equals(that.username) : that.username != null) {
-        return false;
-      }
-      return !(password != null ? !password.equals(that.password) : that.password != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-      int result = username != null ? username.hashCode() : 0;
-      result = 31 * result + (password != null ? password.hashCode() : 0);
-      return result;
-    }
-  }
 }

@@ -46,10 +46,15 @@ public class AssetServiceImplTest{
 
   private static final String EXTERNAL_ID_1 = "externalId1";
   private static final String EXTERNAL_ID_2 = "externalId2";
+  private static final String EXTERNAL_ID_SKU = "externalIdSKU";
   private static final String COMMERCE_ID_1 = "vendor:///catalog/product/" + EXTERNAL_ID_1;
   private static final String COMMERCE_ID_2 = "vendor:///catalog/product/" + EXTERNAL_ID_2;
+  private static final String COMMERCE_ID_SKU = "vendor:///catalog/sku/" + EXTERNAL_ID_SKU;
+  private static final String COMMERCE_ID_SKU_AS_PRODUCT = "vendor:///catalog/product/" + EXTERNAL_ID_SKU;
   private static final String LINKED_URL = "http://localhost:40081/blueprint/servlet/catalogimage/product/10202/en_US/full/" +
           EXTERNAL_ID_1 + ".jpg";
+  private static final String LINKED_URL_SKU = "http://localhost:40081/blueprint/servlet/catalogimage/product/10202/en_US/full/" +
+          EXTERNAL_ID_SKU + ".jpg";
   private static final String NOT_LINKED_URL = "http://localhost:40081/blueprint/servlet/catalogimage/product/10202/en_US/full/" +
           EXTERNAL_ID_2 + ".jpg";
   private static final String COMMERCE_URL =
@@ -111,6 +116,22 @@ public class AssetServiceImplTest{
   private CapPropertyDescriptor commerce2PropertyDescriptor;
 
   @Mock
+  private Content pictureSKU;
+
+  @Mock
+  private Struct localSettingsStructSKU;
+  @Mock
+  private CapType localSettingsStructSKUType;
+  @Mock
+  private CapPropertyDescriptor localSettingsSKUPropertyDescriptor;
+  @Mock
+  private Struct commerceStructSKU;
+  @Mock
+  private CapType commerceStructSKUType;
+  @Mock
+  private CapPropertyDescriptor commerceSKUPropertyDescriptor;
+
+  @Mock
   private Content pictureWithoutSite;
   @Mock
   private Content defaultPicture1;
@@ -167,6 +188,16 @@ public class AssetServiceImplTest{
     when(commerceStruct2.getStrings(CommerceReferenceHelper.REFERENCES_LIST_NAME)).thenReturn(Collections.singletonList(COMMERCE_ID_2));
     when(picture2.getType()).thenReturn(pictureContentType);
 
+    when(pictureSKU.getName()).thenReturn("pictureSKU");
+    when(pictureSKU.getStruct(CommerceReferenceHelper.STRUCT_PROPERTY_NAME)).thenReturn(localSettingsStructSKU);
+    when(localSettingsStructSKU.getType()).thenReturn(localSettingsStructSKUType);
+    when(localSettingsStructSKUType.getDescriptor(CommerceReferenceHelper.COMMERCE_SUBSTRUCT_NAME)).thenReturn(localSettingsSKUPropertyDescriptor);
+    when(localSettingsStructSKU.getStruct(CommerceReferenceHelper.COMMERCE_SUBSTRUCT_NAME)).thenReturn(commerceStructSKU);
+    when(commerceStructSKU.getType()).thenReturn(commerceStructSKUType);
+    when(commerceStructSKUType.getDescriptor(CommerceReferenceHelper.REFERENCES_LIST_NAME)).thenReturn(commerceSKUPropertyDescriptor);
+    when(commerceStructSKU.getStrings(CommerceReferenceHelper.REFERENCES_LIST_NAME)).thenReturn(Collections.singletonList(COMMERCE_ID_SKU));
+    when(pictureSKU.getType()).thenReturn(pictureContentType);
+
     when(defaultPicture1.getName()).thenReturn("defaultPicture1");
     when(defaultPicture1.getType()).thenReturn(pictureContentType);
     when(pictureWithoutSite.getName()).thenReturn("pictureWithoutSite");
@@ -182,6 +213,18 @@ public class AssetServiceImplTest{
     CatalogPicture catalogPicture = testling.getCatalogPicture(LINKED_URL);
     assertNotNull(catalogPicture);
     assertEquals(picture1, catalogPicture.getPicture());
+  }
+
+  @Test
+  public void testGetCatalogPictureSKU() throws Exception {
+    when(sitesService.getSite(anyString())).thenReturn(site1);
+    when(commerceConnection.getCatalogService().findProductById(COMMERCE_ID_SKU_AS_PRODUCT)).thenReturn(productVariant);
+    when(productVariant.getExternalId()).thenReturn(EXTERNAL_ID_SKU);
+    when(productVariant.getReference()).thenReturn(COMMERCE_ID_SKU);
+    testling.setAssets(new Content[]{pictureSKU});
+    CatalogPicture catalogPicture = testling.getCatalogPicture(LINKED_URL_SKU);
+    assertNotNull(catalogPicture);
+    assertEquals(pictureSKU, catalogPicture.getPicture());
   }
 
   @Test
@@ -219,6 +262,16 @@ public class AssetServiceImplTest{
     when(product.getExternalId()).thenReturn(EXTERNAL_ID_1);
     testling.setAssets(new Content[]{picture1});
     Collection<?> pictures = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_1, site1);
+    assertEquals(1, pictures.size());
+  }
+
+  @Test
+  public void testFindAssetsForSKUs() throws Exception {
+    when(commerceConnection.getCatalogService().findProductById(COMMERCE_ID_SKU)).thenReturn(productVariant);
+    when(productVariant.getParent()).thenReturn(product);
+    when(productVariant.getExternalId()).thenReturn(EXTERNAL_ID_SKU);
+    testling.setAssets(new Content[]{pictureSKU});
+    Collection<?> pictures = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_SKU, site1);
     assertEquals(1, pictures.size());
   }
 

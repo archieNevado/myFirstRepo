@@ -292,6 +292,9 @@
     <LinkListProperty Name="master" Max="1" LinkType="CMSite" Override="true" extensions:weakLink="true"/>
     <LinkListProperty Name="root" LinkType="CMNavigation" Max="1"/>
     <StringProperty Name="siteManagerGroup" Length="64"/>
+    <!-- localSettings/linkedSettings: same as in CMLinkable -->
+    <XmlProperty Name="localSettings" Grammar="coremedia-struct-2008"/>
+    <LinkListProperty Name="linkedSettings" LinkType="CMSettings"/>
   </DocType>
 
   <!--
@@ -354,6 +357,7 @@
     <IntProperty Name="ieRevealed"/>
     <LinkListProperty Name="include" LinkType="CMAbstractCode"/>
     <StringProperty Name="dataUrl" Length="1024"/>
+    <IntProperty Name="disableCompress"/>
   </DocType>
 
   <DocType Name="CMCSS" Parent="CMAbstractCode">

@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -31,6 +32,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -42,12 +44,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 
 /**
  * Handler for Commerce carts.
@@ -162,7 +164,8 @@ public class CartHandler extends LiveContextPageHandlerBase {
   }
 
   private Object handleAddOrderItem(HttpServletRequest request, HttpServletResponse response) {
-    if (getUserSessionService().ensureGuestIdentity(request, response)) {
+    UserSessionService userSessionService = getUserSessionService();
+    if (userSessionService!=null && userSessionService.ensureGuestIdentity(request, response)) {
       String externalTechId = request.getParameter(EXTERNAL_TECH_ID);
       addCartOrderItem(externalTechId);
       return Collections.emptyMap();
@@ -184,7 +187,8 @@ public class CartHandler extends LiveContextPageHandlerBase {
   }
 
   public UserSessionService getUserSessionService() {
-    return Commerce.getCurrentConnection().getUserSessionService();
+    CommerceConnection connection = Commerce.getCurrentConnection();
+    return connection!=null ? connection.getUserSessionService() : null;
   }
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -300,6 +304,25 @@ public class CartHandler extends LiveContextPageHandlerBase {
     @Override
     public String getExternalTechId() {
       return getDelegate().getExternalTechId();
+    }
+
+    /**
+     * @return null
+     */
+    @Override
+    public String getStatus() {
+      return null;
+    }
+
+    @Nonnull
+    @Override
+    public Map<String, Object> getCustomAttributes() {
+      return getDelegate().getCustomAttributes();
+    }
+
+    @Override
+    public <T> T getCustomAttribute(String key, Class<T> expectedType) {
+      return getDelegate().getCustomAttribute(key, expectedType);
     }
 
     @Override

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Videos/Campaigns/Fall%20Dresses%20Campaign/Red%20and%20White%20Cocktail%20Dress%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Campaigns/Fall%20Dresses%20Campaign/Red%20and%20White%20Cocktail%20Dress%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -102,7 +101,7 @@
 <dataUrl></dataUrl>
 <width>1920</width>
 <height>1080</height>
-<data md5="6bc015d5d77272ae5a454cbf302d1f46" href="../../../../../../../__blob/6bc015d5d77272ae5a454cbf302d1f46.blob" mimetype="image/jpeg"/>
+<data md5="6bc015d5d77272ae5a454cbf302d1f46" size="77003" href="../../../../../../../__blob/6bc015d5d77272ae5a454cbf302d1f46.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

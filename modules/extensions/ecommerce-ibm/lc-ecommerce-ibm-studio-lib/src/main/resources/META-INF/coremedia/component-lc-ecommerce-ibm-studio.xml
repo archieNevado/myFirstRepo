@@ -14,29 +14,12 @@
                      bean="catalogService"
                      property="useExternalIdForBeanCreation"
                      custom-value="true"/>
-  <customize:replace id="catalogServiceCachingBehaviourCustomizer"
-                     bean="catalogService"
-                     property="enableAggressiveCaching"
-                     custom-value="true"/>
   <customize:replace id="marketingSpotServiceBeanIdCustomizer"
                      bean="marketingSpotService"
                      property="useExternalIdForBeanCreation"
-                     custom-value="true"/>
-  <customize:replace id="marketingSpotCachingBehaviourCustomizer"
-                     bean="marketingSpotService"
-                     property="enableAggressiveCaching"
                      custom-value="true"/>
   <customize:replace id="marketingSpotWrapperServiceCustomizer"
                      bean="marketingSpotWrapperService"
                      property="useServiceCallsForStudio"
                      custom-value="true"/>
-
-  <customize:append id="commerceCacheInvalidationListenerCustomizer"
-                    bean="commerceCacheInvalidationListener"
-                    property="cacheInvalidationPropagators">
-    <list>
-      <ref bean="commerceInvalidationSource"/>
-    </list>
-  </customize:append>
-
 </beans>

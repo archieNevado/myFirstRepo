@@ -21,7 +21,7 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
 
   [ArrayElementType("Object")]
   private var availableSearchTypes:Array;
-  private var assetTreeRelation:ContentTreeRelation = new AssetTreeRelation();
+  private var assetTreeRelation:ContentTreeRelation;
 
   public function AssetCollectionViewExtension() {
     this.availableSearchTypes = computeAvailableSearchTypes();

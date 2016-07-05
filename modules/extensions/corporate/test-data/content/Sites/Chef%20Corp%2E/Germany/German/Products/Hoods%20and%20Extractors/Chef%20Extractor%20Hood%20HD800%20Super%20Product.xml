@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMProduct folder="/Sites/Chef Corp./Germany/German/Products/Hoods and Extractors" name="Chef Extractor Hood HD800 Super Product" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMProduct folder="/Sites/Chef Corp./Germany/German/Products/Hoods and Extractors" name="Chef Extractor Hood HD800 Super Product" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Products/Hoods%20and%20Extractors/Chef%20Extractor%20Hood%20HD800%20Super%20Product.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Products/Hoods%20and%20Extractors/Chef%20Extractor%20Hood%20HD800%20Super%20Product"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>

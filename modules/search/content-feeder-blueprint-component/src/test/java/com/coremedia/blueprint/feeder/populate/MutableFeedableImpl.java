@@ -1,20 +1,21 @@
 package com.coremedia.blueprint.feeder.populate;
 
 import com.coremedia.cap.common.Blob;
+import com.coremedia.cap.feeder.FeedableAspect;
 import com.coremedia.cap.feeder.FeedableElement;
 import com.coremedia.cap.feeder.MutableFeedable;
 import com.coremedia.xml.Markup;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 class MutableFeedableImpl implements MutableFeedable {
-
-  @Deprecated
-  @Override
-  public void setPartialUpdate(boolean b) {}
 
   @Override
   public void setBlobElement(String s, Blob blob) {}
@@ -73,6 +74,22 @@ class MutableFeedableImpl implements MutableFeedable {
   }
 
   @Override
+  public void setUpdatedAspects(@Nonnull Iterable<? extends FeedableAspect> aspects) {
+  }
+
+  @Override
+  public void setUpdatedAspect(@Nullable FeedableAspect aspects) {
+  }
+
+  @Override
+  public void setTriggers(@Nonnull Iterable<?> triggers) {
+  }
+
+  @Override
+  public void setTrigger(@Nullable Object trigger) {
+  }
+
+  @Override
   public String getId() {
     return null;
   }
@@ -80,6 +97,12 @@ class MutableFeedableImpl implements MutableFeedable {
   @Override
   public boolean isPartialUpdate() {
     return false;
+  }
+
+  @Nonnull
+  @Override
+  public Set<FeedableAspect> getUpdatedAspects() {
+    return Collections.emptySet();
   }
 
   @Override
@@ -94,11 +117,17 @@ class MutableFeedableImpl implements MutableFeedable {
 
   @Override
   public Collection<String> getElementNames() {
-    return null;
+    return Collections.emptySet();
   }
 
   @Override
   public Collection<FeedableElement> getElements() {
-    return null;
+    return Collections.emptySet();
+  }
+
+  @Nonnull
+  @Override
+  public Collection<Object> getTriggers() {
+    return Collections.emptySet();
   }
 }

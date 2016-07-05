@@ -152,6 +152,7 @@ define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name =
   tomcat_perm = cm_tomcat_default(service_name, 'perm', base_service_name)
   tomcat_shutdown_force = cm_tomcat_default(service_name, 'shutdown_force', base_service_name)
   tomcat_shutdown_wait = cm_tomcat_default(service_name, 'shutdown_wait', base_service_name)
+  tomcat_clean_log_dir_on_start = cm_tomcat_default(service_name, 'clean_log_dir_on_start', base_service_name)
 
   webapp_group_id = node.deep_fetch('blueprint', 'webapps', service_name, 'group_id')
   webapp_group_id ||= node.deep_fetch('blueprint', 'webapps', base_service_name, 'group_id') if base_service_name
@@ -260,6 +261,7 @@ define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name =
     jmx_remote_control_password tomcat_jmx_remote_control_password unless tomcat_jmx_remote_control_password.nil?
     log_dir "#{node['blueprint']['log_dir']}/#{service_name}"
     context_config tomcat_context_config
+    clean_log_dir_on_start tomcat_clean_log_dir_on_start
   end
 
   # download the webapp and outfit it with a context if desired.

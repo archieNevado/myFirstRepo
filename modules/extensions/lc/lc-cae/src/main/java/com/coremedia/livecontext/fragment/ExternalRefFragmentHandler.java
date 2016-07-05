@@ -88,7 +88,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
       return badRequest("The content resolved for the given external reference (" + externalRef + ") is not part of the given site");
     }
 
-    ModelAndView modelAndView = doCreateModelAndView(parameters, linkable, navigation);
+    ModelAndView modelAndView = doCreateModelAndView(parameters, navigation, linkable);
     return modelAndView!=null ? modelAndView : badRequest("Don't know how to handle fragment parameters " + parameters);
   }
 
@@ -102,11 +102,11 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
    * Blueprint usecases.  You can enhance or simplify it according to your
    * project's particular needs.
    */
-  protected ModelAndView doCreateModelAndView(FragmentParameters parameters, Content linkable, Content navigation) {
+  protected ModelAndView doCreateModelAndView(FragmentParameters parameters, Content navigation, Content linkable) {
     String view = parameters.getView();
 
     if (isBlank(parameters.getPlacement()) && usePageRendering) {
-      return createModelAndViewForPage(linkable, navigation, view);
+      return createModelAndViewForPage(navigation, linkable, view);
     }
 
     String placement = normalizedPlacement(parameters, linkable, view);
@@ -149,6 +149,10 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
       linkable = getDataViewFactory().loadCached(linkable, null);
     }
 
+    if (!getValidationService().validate(linkable)) {
+      return handleInvalidLinkable(linkable);
+    }
+
     Page page = asPage(navigation, navigation);
     ModelAndView modelAndView = HandlerHelper.createModelWithView(linkable, view);
     RequestAttributeConstants.setPage(modelAndView, page);
@@ -157,18 +161,21 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return modelAndView;
   }
 
-  private ModelAndView createModelAndViewForPlacement(Content navigation, String view, String placement) {
-    CMChannel channelBean = getContentBeanFactory().createBeanFor(navigation, CMChannel.class);
-    return createModelAndViewForPlacementAndView(channelBean, placement, view);
-  }
-
-  private ModelAndView createModelAndViewForPage(Content linkable, Content navigation, String view) {
+  private ModelAndView createModelAndViewForPage(Content navigation, Content linkable, String view) {
     Navigation navigationBean = getContentBeanFactory().createBeanFor(navigation, Navigation.class);
     Linkable linkableBean = getContentBeanFactory().createBeanFor(linkable, Linkable.class);
+    if (!getValidationService().validate(linkableBean)) {
+      return handleInvalidLinkable(linkableBean);
+    }
     Page page = asPage(navigationBean, linkableBean);
     return createModelAndView(page, view);
   }
 
+  private ModelAndView createModelAndViewForPlacement(Content navigation, String view, String placement) {
+    CMChannel channelBean = getContentBeanFactory().createBeanFor(navigation, CMChannel.class);
+    // validation will be done in following method
+    return createModelAndViewForPlacementAndView(channelBean, placement, view);
+  }
 
   // --------------- Helper -----------------
 

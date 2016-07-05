@@ -17,7 +17,6 @@
   <exml:import class="com.coremedia.catalog.studio.CatalogStudioPluginBase" />
   <exml:import class="com.coremedia.catalog.studio.library.CatalogTreeRelation"/>
   <exml:import class="com.coremedia.cms.editor.Editor_properties"/>
-  <exml:import class="com.coremedia.cms.editor.sdk.premular.ImageReferrerListPanelBase"/>
 
   <bpforms:cmChannelForm>
     <items>
@@ -78,7 +77,8 @@
       <editor:documentForm title="{CatalogStudioPlugin_properties.INSTANCE.Tab_catalog_structure_title}"
                            itemId="navigationTab">
         <items>
-          <editor:imageReferrerListPanel contentType="{CatalogTreeRelation.CONTENT_TYPE_CATEGORY}"
+          <editor:referrerListPanel contentType="{CatalogTreeRelation.CONTENT_TYPE_CATEGORY}"
+                                    showThumbnail="true"
                                          propertyName="children"
                                          reduceBottomPadding="true"
                                          hideHeaders="true"
@@ -86,18 +86,7 @@
                                          addBorder="true"
                                          emptyText="{CatalogStudioPlugin_properties.INSTANCE.CMCategory_no_parent}"
                                          title="{CatalogStudioPlugin_properties.INSTANCE.CMCategory_parentChannel_text}"
-                                         hideDeletedItemsCheckbox="true">
-            <editor:columns>
-              <templatecolumn id="name"
-                              header="{Editor_properties.INSTANCE.ImageReferrers_name_column_text}"
-                              width="200"
-                              sortable="false"
-                              menuDisabled="true"
-                              dataIndex="name"
-                              tpl="{ImageReferrerListPanelBase.getContentItemColumnTemplate()}"/>
-              <editor:statusColumn/>
-            </editor:columns>
-          </editor:imageReferrerListPanel>
+                                         hideDeletedItemsCheckbox="true" />
           <editor:collapsibleFormPanel itemId="cmChannelChildrenForm"
                                        title="{CatalogStudioPlugin_properties.INSTANCE.PropertyGroup_SubCategories_label}">
             <items>
@@ -108,7 +97,8 @@
                                              propertyName="children"/>
             </items>
           </editor:collapsibleFormPanel>
-          <editor:imageReferrerListPanel contentType="{CatalogTreeRelation.CONTENT_TYPE_PRODUCT}"
+          <editor:referrerListPanel contentType="{CatalogTreeRelation.CONTENT_TYPE_PRODUCT}"
+                                    showThumbnail="true"
                                          propertyName="contexts"
                                          hideHeaders="true"
                                          itemId="productsReferrer"
@@ -116,18 +106,7 @@
                                          addBorder="true"
                                          emptyText="{CatalogStudioPlugin_properties.INSTANCE.CMCategory_no_products}"
                                          title="{CatalogStudioPlugin_properties.INSTANCE.CMCategory_products_text}"
-                                         hideDeletedItemsCheckbox="true">
-            <editor:columns>
-              <templatecolumn id="name"
-                              header="{Editor_properties.INSTANCE.ImageReferrers_name_column_text}"
-                              width="200"
-                              sortable="false"
-                              menuDisabled="true"
-                              dataIndex="name"
-                              tpl="{ImageReferrerListPanelBase.getContentItemColumnTemplate()}"/>
-              <editor:statusColumn/>
-            </editor:columns>
-          </editor:imageReferrerListPanel>
+                                         hideDeletedItemsCheckbox="true" />
         </items>
       </editor:documentForm>
       <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_extras_title}">

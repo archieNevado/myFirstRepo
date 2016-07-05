@@ -47,13 +47,22 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   protected Map<String, Object> getDelegate() {
     if (delegate == null) {
       //noinspection unchecked
-      delegate = (Map<String, Object>) getCommerceCache().get(new MarketingSpotCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(),
-              getMarketingSpotWrapperService(), getCommerceCache()));
+      delegate = getDelegateFromCache();
       if (delegate == null) {
         throw new NotFoundException(getId() + " (marketing spot not found in catalog)");
       }
     }
     return delegate;
+  }
+
+  /**
+   * Perform by-id-call to get detail data
+   * @return detail data map
+   */
+  Map<String, Object> getDelegateFromCache() {
+    //noinspection unchecked
+    return (Map<String, Object>) getCommerceCache().get(new MarketingSpotCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(),
+            getMarketingSpotWrapperService(), getCommerceCache()));
   }
 
   @Override

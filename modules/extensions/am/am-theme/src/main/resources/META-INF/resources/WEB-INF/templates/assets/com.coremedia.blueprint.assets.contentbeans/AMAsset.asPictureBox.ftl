@@ -2,7 +2,9 @@
 <#-- @ftlvariable name="classBox" type="java.lang.String" -->
 <#-- @ftlvariable name="classImage" type="java.lang.String" -->
 <#-- @ftlvariable name="showBadge" type="java.lang.Boolean" -->
+<#-- @ftlvariable name="showQuickSelectButton" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="scalePicture" type="java.lang.Boolean" -->
+<#-- @ftlvariable name="metadata" type="java.util.List" -->
 
 <#assign classBox=cm.localParameters().classBox!"" />
 <#assign classImage=cm.localParameters().classImage!"" />
@@ -11,8 +13,9 @@
 <#assign scalePicture=cm.localParameters().scalePicture!false />
 <#assign emptyModifierClass=self.thumbnail?has_content?string("", "am-picture-box--empty") />
 <#assign scaleModifierClass=scalePicture?string("am-picture-box--scale", "") />
+<#assign metadata=cm.localParameters().metadata![] />
 
-<div class="am-picture-box ${emptyModifierClass} ${scaleModifierClass} ${classBox}"<@cm.metadata data="properties.thumbnail" />>
+<div class="am-picture-box ${emptyModifierClass} ${scaleModifierClass} ${classBox}"<@cm.metadata data=metadata + ["properties.thumbnail"] />>
   <#if self.thumbnail?has_content>
     <#assign imageSrc=cm.getLink(self.thumbnail)!"" />
     <img src="${imageSrc}"

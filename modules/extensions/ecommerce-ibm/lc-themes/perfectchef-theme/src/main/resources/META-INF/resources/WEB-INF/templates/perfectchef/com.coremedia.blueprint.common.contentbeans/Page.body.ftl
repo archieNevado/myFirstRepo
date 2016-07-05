@@ -4,12 +4,10 @@
 
 <body id="top"<@cm.metadata data=sliderMetadata />>
 
-<div class="cm-skiplinks cm-visuallyhidden">
-    <ul>
-        <li><a href="#cm-placement-main"><@bp.message "Skiplinks_Content" /></a></li>
-        <li><a href="#cm-search"><@bp.message "Skiplinks_Search" /></a></li>
-        <li><a href="#cm-navigation"><@bp.message "Skiplinks_Navigation" /></a></li>
-    </ul>
+<div class="cm-skiplinks">
+<a class="cm-visuallyhidden focusable" href="#cm-placement-main"><@bp.message "Skiplinks_Content" /></a>
+<a class="cm-visuallyhidden focusable" href="#cm-search"><@bp.message "Skiplinks_Search" /></a>
+<a class="cm-visuallyhidden focusable" href="#cm-navigation"><@bp.message "Skiplinks_Navigation" /></a>
 </div>
 
 <#if self.pageGrid?has_content>

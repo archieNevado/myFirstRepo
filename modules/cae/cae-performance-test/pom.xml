@@ -28,7 +28,7 @@
     -->
     <webapp.protocol>http</webapp.protocol>
     <webapp.host>localhost</webapp.host>
-    <webapp.port>40081</webapp.port>
+    <webapp.port>40980</webapp.port>
     <webapp.uris>${project.basedir}/src/test/jmeter/urilist.txt</webapp.uris>
   </properties>
 

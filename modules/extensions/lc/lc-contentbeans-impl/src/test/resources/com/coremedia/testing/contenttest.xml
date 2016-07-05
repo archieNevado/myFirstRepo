@@ -8,7 +8,6 @@
         <folder id="5" name="PerfectChef">
           <document id="2" type="CMChannel" name="PerfectChefRootChannel">
             <version number="1">
-              <!-- <markupProperty name="localSettings" url="10settings.xml" grammar="coremedia-struct-2008"/> -->
               <linkProperty name="linkedSettings">
                 <link id="8"/>
               </linkProperty>
@@ -18,8 +17,6 @@
               <stringProperty name="segment" value="perfectchef"/>
               <stringProperty name="title" value="PerfectChef Title"/>
               <stringProperty name="keywords" value="key,word,perfectchef"/>
-              <blobProperty name="favicon" url="42data.jpg" type="image/jpeg"/>
-              <!-- <markupProperty name="placement" url="10placement.xml" grammar="coremedia-struct-2008"/> -->
             </version>
           </document>
           <document id="4" type="CMSite" name="PerfectChefSite">

@@ -49,16 +49,6 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>corporate-studio</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>corporate-studio-lib</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>corporate-test-data</artifactId>
         <version>${project.version}</version>
         <classifier>content</classifier>

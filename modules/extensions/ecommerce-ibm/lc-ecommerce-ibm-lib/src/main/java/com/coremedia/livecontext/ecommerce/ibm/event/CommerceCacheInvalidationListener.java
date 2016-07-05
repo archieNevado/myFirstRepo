@@ -1,101 +1,71 @@
 package com.coremedia.livecontext.ecommerce.ibm.event;
 
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.event.CommerceCacheInvalidation;
 import com.coremedia.livecontext.ecommerce.event.CommerceCacheInvalidationPropagator;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.scheduling.TaskScheduler;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.getValueForKey;
 
 /**
- * A listener thread that polls the ibm commerce system for cache invalidation events.
+ * Service bean for polling invalidations from WCS.
  * All invalidation events are propagated to a list of {@link CommerceCacheInvalidationPropagator}
  */
-public class CommerceCacheInvalidationListener {
-  private static final Logger LOG = LoggerFactory.getLogger(CommerceCacheInvalidationListener.class);
-  public static final String EVENT_CLEAR_ALL_EVENT_ID = "clearall";
-  protected static final String CONTENT_IDENTIFIER_PRODUCT = "ProductDisplay";
-  protected static final String CONTENT_IDENTIFIER_CATEGORY = "CategoryDisplay";
-  protected static final String CONTENT_IDENTIFIER_MARKETING_SPOT = "espot";
-  protected static final String CONTENT_IDENTIFIER_SEGMENT = "segment";
-  protected static final String CONTENT_IDENTIFIER_TOP_CATEGORY = "TopCategoryDisplay";
+class CommerceCacheInvalidationListener {
+  static final String CONTENT_IDENTIFIER_PRODUCT = "ProductDisplay";
+  static final String CONTENT_IDENTIFIER_CATEGORY = "CategoryDisplay";
+  static final String CONTENT_IDENTIFIER_MARKETING_SPOT = "espot";
+  static final String CONTENT_IDENTIFIER_SEGMENT = "segment";
+  static final String CONTENT_IDENTIFIER_TOP_CATEGORY = "TopCategoryDisplay";
 
-  private List<CommerceCacheInvalidationPropagator> cacheInvalidationPropagators;
   long lastInvalidationTimestamp = -1;
-  private WcCacheWrapperService wcCacheWrapperService;
-  private boolean enabled = true;
 
-  private static final long PING_INTERVAL = 500;
-  private static final long PING_INTERVAL_ERROR = 30000;
+  private final List<CommerceCacheInvalidationPropagator> cacheInvalidationPropagators;
+  private final WcCacheWrapperService wcCacheWrapperService;
 
-  volatile ScheduledFuture<?> scheduledFuture;
-
-  @Autowired(required = false)
-  private TaskScheduler taskScheduler;
-
-  @PostConstruct
-  public void initialize() {
-    if (isEnabled() && taskScheduler != null) {
-      scheduledFuture = taskScheduler.schedule(new CacheInvalidatorThread(this), new Date(0));
-      LOG.info("Running CommerceCacheInvalidationListener in longpolling mode");
-    } else {
-      LOG.info("CommerceCacheInvalidationListener disabled ...");
-    }
+  @Autowired
+  CommerceCacheInvalidationListener(@Nonnull List<CommerceCacheInvalidationPropagator> cacheInvalidationPropagators,
+                                    @Nonnull WcCacheWrapperService wcCacheWrapperService) {
+    this.cacheInvalidationPropagators = cacheInvalidationPropagators;
+    this.wcCacheWrapperService = wcCacheWrapperService;
   }
 
-  @PreDestroy
-  public void destroy() {
-    if (null != scheduledFuture) {
-      LOG.info("stopping CommerceCacheInvalidationListener");
-      scheduledFuture.cancel(true);
-    }
-  }
-
-  protected List<CommerceCacheInvalidation> pollCacheInvalidations() throws CommerceException {
+  @Nonnull
+  List<CommerceCacheInvalidation> pollCacheInvalidations(@Nonnull StoreContext storeContext) {
     if (lastInvalidationTimestamp <= 0) {
-      lastInvalidationTimestamp = wcCacheWrapperService.getLatestTimestamp();
+      lastInvalidationTimestamp = wcCacheWrapperService.getLatestTimestamp(storeContext);
       return Collections.emptyList();
     }
 
-    Map<String, Object> cacheInvalidations = wcCacheWrapperService.getCacheInvalidations(lastInvalidationTimestamp);
-    if (cacheInvalidations != null) {
-      lastInvalidationTimestamp = getValueForKey(cacheInvalidations, "lastInvalidation", Double.class).longValue();
-      List<Map<String, Object>> invalidations = getValueForKey(cacheInvalidations, "invalidations", List.class);
+    Map<String, Object> cacheInvalidations = wcCacheWrapperService.getCacheInvalidations(lastInvalidationTimestamp, storeContext);
+    lastInvalidationTimestamp = getValueForKey(cacheInvalidations, "lastInvalidation", Double.class).longValue();
+    List<Map<String, Object>> invalidations = getValueForKey(cacheInvalidations, "invalidations", List.class);
 
-      // the list to return using API classes
-      List<CommerceCacheInvalidation> commerceCacheInvalidations = new ArrayList<>();
-      if (invalidations != null && !invalidations.isEmpty()) {
-        for (Map<String, Object> invalidation : invalidations) {
-          commerceCacheInvalidations.add(convertEvent(invalidation));
-        }
-        return commerceCacheInvalidations;
+    // the list to return using API classes
+    List<CommerceCacheInvalidation> commerceCacheInvalidations = new ArrayList<>();
+    if (invalidations != null && !invalidations.isEmpty()) {
+      for (Map<String, Object> invalidation : invalidations) {
+        commerceCacheInvalidations.add(convertEvent(invalidation));
       }
+      return commerceCacheInvalidations;
     }
     return Collections.emptyList();
   }
 
-  protected void invalidateCacheEntries(List<CommerceCacheInvalidation> remoteInvalidations) {
+  void invalidateCacheEntries(List<CommerceCacheInvalidation> remoteInvalidations) {
     for (CommerceCacheInvalidationPropagator propagator : cacheInvalidationPropagators) {
       propagator.invalidate(remoteInvalidations);
     }
   }
 
-  protected CommerceCacheInvalidation convertEvent(Map<String, Object> event) {
+  CommerceCacheInvalidation convertEvent(Map<String, Object> event) {
     CommerceCacheInvalidationImpl cacheInvalidation = new CommerceCacheInvalidationImpl();
     if (event != null) {
       switch (getValueForKey(event, "contentType", String.class)) {
@@ -118,71 +88,9 @@ public class CommerceCacheInvalidationListener {
           break;
       }
 
-      cacheInvalidation.setDelegate(event);
+      cacheInvalidation.putAll(event);
     }
     return cacheInvalidation;
   }
 
-  @Required
-  public void setWcCacheWrapperService(WcCacheWrapperService wcCacheWrapperService) {
-    this.wcCacheWrapperService = wcCacheWrapperService;
-  }
-
-  @Required
-  public void setCacheInvalidationPropagators(List<CommerceCacheInvalidationPropagator> cacheInvalidationPropagators) {
-    this.cacheInvalidationPropagators = cacheInvalidationPropagators;
-  }
-
-  public boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  @SuppressWarnings("unused")
-  public List<CommerceCacheInvalidationPropagator> getCacheInvalidationPropagators() {
-    return cacheInvalidationPropagators;
-  }
-
-  private static class CacheInvalidatorThread implements Runnable {
-    CommerceCacheInvalidationListener cacheInvalidator;
-    private boolean hasError = false;
-
-    public CacheInvalidatorThread(CommerceCacheInvalidationListener cacheInvalidator) {
-      this.cacheInvalidator = cacheInvalidator;
-    }
-
-    @Override
-    public void run() {
-      long delay = PING_INTERVAL;
-      try {
-        List<CommerceCacheInvalidation> invalidations = cacheInvalidator.pollCacheInvalidations();
-        if (hasError) {
-          // after former errors we now seem to work again...
-          LOG.info("Recovered from error situation, polling for cache invalidation is working again. Invalidating all cached commerce data...");
-          hasError = false;
-          // now we are re-connected, better to clear cache to remove stale cached errors during unconnected state
-          CommerceCacheInvalidationImpl syntheticClearAll = new CommerceCacheInvalidationImpl();
-          syntheticClearAll.setContentType(CommerceCacheInvalidationImpl.EVENT_CLEAR_ALL_EVENT_ID);
-          syntheticClearAll.setTechId("-1");
-
-          invalidations = Arrays.asList((CommerceCacheInvalidation) syntheticClearAll);
-        }
-        cacheInvalidator.invalidateCacheEntries(invalidations);
-
-      } catch (Exception e) {
-        delay = PING_INTERVAL_ERROR;
-        hasError = true;
-        LOG.warn("Exception while polling commerce system, delaying next request for " + delay + "ms", e.getMessage());
-      }
-
-      // schedule next execution of this thread...
-      ScheduledFuture<?> predecessor = cacheInvalidator.scheduledFuture;
-      if (!predecessor.isCancelled()) {
-        cacheInvalidator.scheduledFuture = cacheInvalidator.taskScheduler.schedule(this, new Date(System.currentTimeMillis() + delay));
-      }
-    }
-  }
 }

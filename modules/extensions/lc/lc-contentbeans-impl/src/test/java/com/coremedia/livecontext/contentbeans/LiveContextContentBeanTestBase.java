@@ -27,8 +27,8 @@ import java.util.GregorianCalendar;
 @ContextConfiguration({
         "classpath:/spring/test/test-repository.xml",
         "classpath:/framework/spring/blueprint-contentbeans.xml",
-        "classpath:META-INF/coremedia/component-livecontext-contentbeans.xml",
-        "classpath:META-INF/coremedia/component-livecontext-contentbeans-settings.xml",
+        "classpath:META-INF/coremedia/livecontext-contentbeans.xml",
+        "classpath:META-INF/coremedia/livecontext-contentbeans-settings.xml",
         "classpath:/META-INF/coremedia/lc-services.xml",
         "classpath:/framework/spring/lc-asset-services.xml"
 })

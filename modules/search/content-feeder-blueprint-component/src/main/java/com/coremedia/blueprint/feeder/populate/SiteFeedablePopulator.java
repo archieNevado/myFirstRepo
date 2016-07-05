@@ -2,7 +2,6 @@ package com.coremedia.blueprint.feeder.populate;
 
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.feeder.ContentFeedableAspect;
-import com.coremedia.cap.feeder.Feedable2;
 import com.coremedia.cap.feeder.MutableFeedable;
 import com.coremedia.cap.feeder.TextParameters;
 import com.coremedia.cap.feeder.populate.FeedablePopulator;
@@ -33,8 +32,7 @@ public class SiteFeedablePopulator implements FeedablePopulator<Content> {
     // set the Content's site if this is a full index document update (add/replace) where all fields need to be set
     // or if it's a partial update and the content's path has changed to a possibly different site
     if (feedable.isPartialUpdate()
-            && feedable instanceof Feedable2
-            && !((Feedable2) feedable).getUpdatedAspects().contains(ContentFeedableAspect.PATH)) {
+            && !feedable.getUpdatedAspects().contains(ContentFeedableAspect.PATH)) {
       return;
     }
 

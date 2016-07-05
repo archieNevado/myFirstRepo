@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 
 /**
  * This handler serves all fragment requests, called by the lc:include tag of commerce.
@@ -46,7 +46,7 @@ public class FragmentPageHandler extends PageHandlerBase {
   public static final String URI_PATTERN = FRAGMENT_URI_PREFIX +
           "/{" + SEGMENT_STOREID + '}' +
           "/{" + SEGMENT_LOCALE + '}' +
-          "/{" + SEGMENT_MATRIX_PARAMS + '}';
+          "/{" + SEGMENT_MATRIX_PARAMS + ":.*}";
 
   private boolean isPreview = false;
   private List<FragmentHandler> fragmentHandlers;

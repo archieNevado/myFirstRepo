@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Campaigns/Fall Dresses Campaign" name="Red Cocktail Dress Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Videos/Campaigns/Fall Dresses Campaign" name="Red Cocktail Dress Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Videos/Campaigns/Fall%20Dresses%20Campaign/Red%20Cocktail%20Dress%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Videos/Campaigns/Fall%20Dresses%20Campaign/Red%20Cocktail%20Dress%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>1920</width>
 <height>1080</height>
-<data md5="1bf59fcaef14e9a63183d85ff3b4ca37" href="../../../../../../../__blob/1bf59fcaef14e9a63183d85ff3b4ca37.blob" mimetype="image/jpeg"/>
+<data md5="1bf59fcaef14e9a63183d85ff3b4ca37" size="108228" href="../../../../../../../__blob/1bf59fcaef14e9a63183d85ff3b4ca37.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

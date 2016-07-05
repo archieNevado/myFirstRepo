@@ -11,7 +11,7 @@
 
     <@cm.include self=self!cm.UNDEFINED view="headline" params={"classHeadline": "cm-box__header"} />
 
-    <div class="cm-box__content cm-text"<@cm.metadata "properties.title" />>
+    <div class="cm-box__content"<@cm.metadata "properties.title" />>
       <h2>${self.title!""}</h2>
     </div>
 

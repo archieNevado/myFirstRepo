@@ -1,7 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 
@@ -26,22 +25,17 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
   }
 
   private void fillRepresentation(ContractRepresentation representation) {
-    try {
-      Contract entity = getEntity();
+    Contract entity = getEntity();
 
-      if (entity == null) {
-        LOG.error("Error loading contract bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load contract bean");
-      }
-
-      representation.setId(entity.getId());
-      representation.setName(entity.getName());
-      representation.setExternalId(entity.getExternalId());
-      representation.setExternalTechId(entity.getExternalTechId());
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    if (entity == null) {
+      LOG.warn("Error loading contract bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load contract bean");
     }
+
+    representation.setId(entity.getId());
+    representation.setName(entity.getName());
+    representation.setExternalId(entity.getExternalId());
+    representation.setExternalTechId(entity.getExternalTechId());
   }
 
   @Override

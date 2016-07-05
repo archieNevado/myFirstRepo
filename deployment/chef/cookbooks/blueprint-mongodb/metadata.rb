@@ -1,10 +1,10 @@
 name 'blueprint-mongodb'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
-license 'all_rights'
+maintainer 'Coremedia'
+maintainer_email 'bodo.schulz@coremedia.com'
+license 'Copyright (C) 2016, CoreMedia AG proprietary License, all rights reserved.'
 description 'Installs/Configures blueprint-mongodb'
-long_description 'Installs/Configures blueprint-mongodb'
-version '1.0.0'
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+version '1.0.3'
 
-depends 'mongodb', '~> 0.16.2'
-depends 'blueprint-yum'
+depends 'ulimit', '~> 0.3.0'
+depends 'mongodb3', '~> 5.2.0'

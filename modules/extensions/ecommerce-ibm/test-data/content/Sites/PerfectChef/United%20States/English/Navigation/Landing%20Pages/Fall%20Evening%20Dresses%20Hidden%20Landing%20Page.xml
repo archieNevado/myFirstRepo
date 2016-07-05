@@ -48,21 +48,6 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../../Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktailba6cba0.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktail%20Dresses%20Landing%20Page%20Hero%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../../Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktaile1c2441.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktail%20Dresses%20Landing%20Page%20Main%20Collection"/>
-</LinkListProperty>
-<BooleanProperty Name="locked">false</BooleanProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../../Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
-</Struct>
-<Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../../Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktailba6cba0.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktail%20Dresses%20Landing%20Page%20Hero%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../../Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktaile1c2441.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Landing%20Pages/Fall/Fall%20Evening%20Dresses%20Landing%20Page/Fall%20Cocktail%20Dresses%20Landing%20Page%20Main%20Collection"/>
-</LinkListProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Germany/German/Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
-</Struct>
-<Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 <Link xlink:href="coremedia:///cap/resources/Fall/Fall%20Cocktail%20Dresses%20Landing%20Page%20Here2b5b812.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Landing%20Pages/Fall/Fall%20Cocktail%20Dresses%20Landing%20Page%20Hero%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/Fall/Fall%20Cocktail%20Dresses%20Landing%20Page%20Maid7ee73.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Landing%20Pages/Fall/Fall%20Cocktail%20Dresses%20Landing%20Page%20Main%20Collection"/>
 </LinkListProperty>

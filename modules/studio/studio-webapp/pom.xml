@@ -13,9 +13,7 @@
 
   <description>The CoreMedia CMS Studio</description>
   <properties>
-    <models.createIndexes/>
-    <spring.profiles.active/>
-    <memory.collection.serialization.file/>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
   </properties>
 
   <dependencies>
@@ -38,6 +36,13 @@
       <artifactId>studio-lib-extension-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>content-services</artifactId>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -139,13 +144,6 @@
     </dependency>
 
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>validators-rest-extension</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-rest</artifactId>
       <scope>runtime</scope>
@@ -166,6 +164,13 @@
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-components</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>image-transformation</artifactId>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -201,58 +206,17 @@
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
-          <port>${STUDIO_PORT_PREFIX}${HTTP_PORT_SUFFIX}</port>
-          <ajpPort>${STUDIO_PORT_PREFIX}${AJP_PORT_SUFFIX}</ajpPort>
+          <port>41080</port>
+          <ajpPort>41009</ajpPort>
           <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
           <contextFile>${project.basedir}/tomcat-context.xml</contextFile>
           <path>/</path>
           <systemProperties>
-            <catalina.base>${project.build.directory}</catalina.base>
-            <resourcePath.base>${project.basedir}</resourcePath.base>
-            <repository.url>http://${cms.host}:${CMS_PORT_PREFIX}${HTTP_PORT_SUFFIX}/coremedia/ior</repository.url>
-            <solr.search.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr/preview</solr.search.url>
-            <mongoDb.clientURI>mongodb://${mongo.db.host}:27017</mongoDb.clientURI>
-            <elastic.solr.url>http://${solr.host}:${SOLR_MASTER_PORT_PREFIX}${HTTP_PORT_SUFFIX}/solr</elastic.solr.url>
-            <!--
-               Sets a JMX remote url so that the webapp can be accessed via JMX when running with tomcat plugin.
-               When running this application in a standalone tomcat, then the tomcat's built-in remote connector server
-               can be used instead.
-            -->
-            <management.server.remote.url>service:jmx:rmi://localhost:${STUDIO_PORT_PREFIX}${JMX_SERVER_PORT_SUFFIX}/jndi/rmi://localhost:${STUDIO_PORT_PREFIX}${JMX_REGISTRY_PORT_SUFFIX}/studio</management.server.remote.url>
-            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-            <tenant.default>${tenant.default}</tenant.default>
-            <elastic.social.mail.smtp.server>${elastic.social.mail.smtp.server}</elastic.social.mail.smtp.server>
-            <es.cae.http.port>${es.cae.http.port}</es.cae.http.port>
-            <es.cae.http.host>${es.cae.http.host}</es.cae.http.host>
-            <es.cae.protocol>${es.cae.protocol}</es.cae.protocol>
-            <studio.previewUrlPrefix>${studio.previewUrlPrefix}</studio.previewUrlPrefix>
-            <installation.host>${installation.host}</installation.host>
-            <models.createIndexes>${models.createIndexes}</models.createIndexes>
-            <memory.collection.serialization.file>${memory.collection.serialization.file}</memory.collection.serialization.file>
-            <!--
-                CoreMedia LiveContext Configuration
-            -->
-            <livecontext.ibm.wcs.host>${livecontext.ibm.wcs.host}</livecontext.ibm.wcs.host>
-            <livecontext.apache.wcs.host>${livecontext.apache.wcs.host}</livecontext.apache.wcs.host>
-            <blueprint.host.helios>${blueprint.host.helios}</blueprint.host.helios>
-            <livecontext.apache.preview.production.wcs.host>${livecontext.apache.preview.production.wcs.host}</livecontext.apache.preview.production.wcs.host>
-            <livecontext.ibm.wcs.cache.invalidation.enabled>${livecontext.ibm.wcs.cache.invalidation.enabled}</livecontext.ibm.wcs.cache.invalidation.enabled>
-            <livecontext.ibm.wcs.version>${livecontext.ibm.wcs.version}</livecontext.ibm.wcs.version>
-            <livecontext.ibm.wcs.store.id.aurora>${livecontext.ibm.wcs.store.id.aurora}</livecontext.ibm.wcs.store.id.aurora>
-            <livecontext.ibm.wcs.store.id.perfectchef>${livecontext.ibm.wcs.store.id.perfectchef}</livecontext.ibm.wcs.store.id.perfectchef>
-            <livecontext.ibm.wcs.catalog.id.aurora>${livecontext.ibm.wcs.catalog.id.aurora}</livecontext.ibm.wcs.catalog.id.aurora>
-            <livecontext.ibm.wcs.catalog.id.perfectchef>${livecontext.ibm.wcs.catalog.id.perfectchef}</livecontext.ibm.wcs.catalog.id.perfectchef>
-            <!--
-                CoreMedia Corporate Configuration
-            -->
-            <blueprint.host.corporate>${blueprint.host.corporate}</blueprint.host.corporate>
-
-            <!-- the following properties are only relevant in 'controlroom-memory' profile -->
-            <caplist>${caplist}</caplist>
-            <repository.url>${repository.url}</repository.url>
-            <repository.workflow>${repository.workflow}</repository.workflow>
-            <spring.profiles.active>${spring.profiles.active}</spring.profiles.active>
+            <propertieslocations>classpath:/wcs.properties,classpath:/studio.properties</propertieslocations>
           </systemProperties>
+          <additionalClasspathDirs>
+            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+          </additionalClasspathDirs>
         </configuration>
       </plugin>
       <plugin>
@@ -299,12 +263,8 @@
     <profile>
       <id>controlroom-memory</id>
       <properties>
-        <models.createIndexes>false</models.createIndexes>
-        <spring.profiles.active>controlroom-memory</spring.profiles.active>
-        <memory.collection.serialization.file>${java.io.tmpdir}/models.ser</memory.collection.serialization.file>
-        <caplist>com.coremedia.cotopaxi.list.memory.MemoryCapListConnectorFactory</caplist>
-        <usecaplist>true</usecaplist>
         <enforcer.skip>true</enforcer.skip>
+        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/controlroom-memory</development-properties.dir>
       </properties>
     </profile>
   </profiles>

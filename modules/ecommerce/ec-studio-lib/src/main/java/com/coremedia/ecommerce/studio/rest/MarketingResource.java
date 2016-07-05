@@ -1,6 +1,5 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.ecommerce.studio.rest.model.Marketing;
 
 import javax.ws.rs.Path;
@@ -25,21 +24,16 @@ public class MarketingResource extends AbstractCatalogResource<Marketing> {
   }
 
   private void fillRepresentation(MarketingRepresentation representation) {
-    try {
-      Marketing entity = getEntity();
+    Marketing entity = getEntity();
 
-      if (entity == null) {
-        LOG.error("Error loading marketing bean");
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load marketing bean");
-      }
+    if (entity == null) {
+      LOG.warn("Error loading marketing bean");
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load marketing bean");
+    }
 
-      representation.setId(entity.getId());
-      if (getConnection().getMarketingSpotService() != null) {
-        representation.setMarketingSpots(getConnection().getMarketingSpotService().findMarketingSpots());
-      }
-
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    representation.setId(entity.getId());
+    if (getConnection().getMarketingSpotService() != null) {
+      representation.setMarketingSpots(getConnection().getMarketingSpotService().findMarketingSpots());
     }
   }
 

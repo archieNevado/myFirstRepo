@@ -12,6 +12,7 @@ import com.coremedia.livecontext.context.CategoryInSite;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.livecontext.product.ProductList;
 import com.coremedia.livecontext.product.ProductListSubstitutionService;
@@ -19,6 +20,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,10 +36,10 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_SERVICE;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_REST;
 import static com.coremedia.blueprint.cae.constants.RequestAttributeConstants.setPage;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static org.springframework.util.Assert.hasText;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -163,7 +165,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   }
 
   private Object buildCatalogLink(LiveContextNavigation navigation, String viewName, Map<String, Object> linkParameters, boolean forceCommerceLink) {
-    if (getStoreContextProvider().getCurrentContext() != null) {
+    if (isStoreContextAvailable()) {
       Site site = navigation.getSite();
       Category category;
       try {
@@ -183,8 +185,13 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return UriComponentsBuilder.newInstance().build();
   }
 
+  private boolean isStoreContextAvailable() {
+    StoreContextProvider storeContextProvider = getStoreContextProvider();
+    return null != storeContextProvider && storeContextProvider.getCurrentContext() != null;
+  }
+
   private Object buildNonCatalogLink(CMExternalPage navigation, Map<String, Object> linkParameters) {
-    if (getStoreContextProvider().getCurrentContext() != null) {
+    if (isStoreContextAvailable()) {
       String urlTemplate = navigation.getExternalUriPath();
       if (isEmpty(navigation.getExternalUriPath())){
         urlTemplate = SEO_URI_PREFIX + navigation.getExternalId();
@@ -233,13 +240,16 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
       }
       if (category != null) {
         String navigationSegment = category.getSeoSegment();
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                .newInstance()
-                .pathSegment(SEGMENT_CATEGORY)
-                .pathSegment(siteSegment)
-                .pathSegment(navigationSegment);
-        addViewAndParameters(uriBuilder, viewName, linkParameters);
-        return uriBuilder.build();
+        if (StringUtils.hasText(navigationSegment)) {
+          UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                  .newInstance()
+                  .pathSegment(SEGMENT_CATEGORY)
+                  .pathSegment(siteSegment)
+                  .pathSegment(navigationSegment);
+          addViewAndParameters(uriBuilder, viewName, linkParameters);
+          return uriBuilder.build();
+        }
+        LOG.warn("Unable to build link for category {} because it has no seosegment", category);
       }
     }
 

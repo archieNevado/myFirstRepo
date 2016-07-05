@@ -4,9 +4,17 @@
 <master>
 <link href="../../../../United%20States/English/Navigation/Site-Wide/Corporate%20Hidden%20Page.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Site-Wide/Corporate%20Hidden%20Page"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="elasticSocial">
+<Struct>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles>

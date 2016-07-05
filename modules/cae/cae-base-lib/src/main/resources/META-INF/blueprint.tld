@@ -43,6 +43,22 @@
     </attribute>
   </tag>
 
+  <tag-file>
+    <name>errorpage</name>
+    <path>/META-INF/tags/errorpage.tag</path>
+  </tag-file>
+
+  <tag-file>
+    <description>Create a notification box of the following types "success", "error", warning" or "info"</description>
+    <name>notification</name>
+    <path>/META-INF/tags/notification.tag</path>
+  </tag-file>
+
+  <tag-file>
+    <name>notification-validation</name>
+    <path>/META-INF/tags/notification-validation.tag</path>
+  </tag-file>
+
   <function>
     <description>
       offers access to one value of the merged settings map
@@ -193,21 +209,4 @@
     <function-class>com.coremedia.xml.MarkupUtil</function-class>
     <function-signature>boolean isEmptyRichtext(com.coremedia.xml.Markup,boolean)</function-signature>
   </function>
-
-  <tag-file>
-    <name>errorpage</name>
-    <path>/META-INF/tags/errorpage.tag</path>
-  </tag-file>
-
-  <tag-file>
-    <description>Create a notification box of the following types "success", "error", warning" or "info"</description>
-    <name>notification</name>
-    <path>/META-INF/tags/notification.tag</path>
-  </tag-file>
-
-  <tag-file>
-    <name>notification-validation</name>
-    <path>/META-INF/tags/notification-validation.tag</path>
-  </tag-file>
-
 </taglib>

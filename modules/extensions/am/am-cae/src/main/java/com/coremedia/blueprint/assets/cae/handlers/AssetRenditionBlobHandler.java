@@ -23,12 +23,12 @@ import java.util.Map;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_WORD;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ETAG;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_NAME;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_PROPERTY;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 
 /**

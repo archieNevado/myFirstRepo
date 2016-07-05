@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product 360 Pictures/Pink Jacket" name="Pink-Jacket-03" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product 360 Pictures/Pink Jacket" name="Pink-Jacket-03" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20360%20Pictures/Pink%20Jacket/Pink-Jacket-03.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20360%20Pictures/Pink%20Jacket/Pink-Jacket-03"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -114,7 +113,7 @@
 <dataUrl></dataUrl>
 <width>2400</width>
 <height>1800</height>
-<data md5="27898a8596aaea49ffa8646fbf5d225f" href="../../../../../../../__blob/27898a8596aaea49ffa8646fbf5d225f.blob" mimetype="image/jpeg"/>
+<data md5="27898a8596aaea49ffa8646fbf5d225f" size="314642" href="../../../../../../../__blob/27898a8596aaea49ffa8646fbf5d225f.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

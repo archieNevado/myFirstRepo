@@ -104,7 +104,9 @@ action :install do
               :tomcat_dir => current,
               :service_dir => new_resource.path,
               :shutdown_wait => new_resource.shutdown_wait,
-              :shutdown_force => new_resource.shutdown_force)
+              :shutdown_force => new_resource.shutdown_force,
+              :log_dir => new_resource.log_dir,
+              :clean_log_dir_on_start => new_resource.clean_log_dir_on_start)
   end
 
   directory "#{tomcat_dir}/conf/Catalina" do
@@ -123,7 +125,7 @@ action :install do
   manage_libs(new_resource.common_libs, common_lib_dir)
 
   template "#{tomcat_dir}/conf/catalina.properties" do
-    source 'catalina.properties.erb'
+    source "#{version.major}/catalina.properties.erb"
     cookbook 'coremedia_tomcat'
     variables :catalina_properties => new_resource.catalina_properties
     owner new_resource.user
@@ -131,7 +133,7 @@ action :install do
   end
 
   template "#{tomcat_dir}/conf/server.xml" do
-    source 'server.xml.erb'
+    source "#{version.major}/server.xml.erb"
     cookbook 'coremedia_tomcat'
     owner new_resource.user
     group new_resource.group
@@ -148,7 +150,7 @@ action :install do
   end
 
   template "#{tomcat_dir}/conf/web.xml" do
-    source 'web.xml.erb'
+    source "#{version.major}/web.xml.erb"
     cookbook 'coremedia_tomcat'
     owner new_resource.user
     group new_resource.group

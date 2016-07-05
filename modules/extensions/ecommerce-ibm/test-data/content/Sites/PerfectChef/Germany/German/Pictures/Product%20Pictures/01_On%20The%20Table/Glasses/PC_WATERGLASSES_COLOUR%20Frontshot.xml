@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Glasses" name="PC_WATERGLASSES_COLOUR Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/01_On The Table/Glasses" name="PC_WATERGLASSES_COLOUR Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Glasses/PC_WATERGLASSES_COLOUR%24ce2d253.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/01_On%20The%20Table/Glasses/PC_WATERGLASSES_COLOUR%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>3 PC. Set Wassergläser</alt>
 <copyright>Alesikka / Shutterstock 152115356</copyright>
 <dataUrl></dataUrl>
-<data md5="529596b9a5f7ccbc87d462b759790440" href="../../../../../../../../__blob/529596b9a5f7ccbc87d462b759790440.blob" mimetype="image/jpeg"/>
+<data md5="529596b9a5f7ccbc87d462b759790440" size="432965" href="../../../../../../../../__blob/529596b9a5f7ccbc87d462b759790440.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

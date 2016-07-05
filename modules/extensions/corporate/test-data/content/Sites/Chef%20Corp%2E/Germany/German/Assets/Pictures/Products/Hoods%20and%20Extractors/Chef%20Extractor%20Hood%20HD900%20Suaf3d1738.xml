@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../../United%20States/English/Assets/Pictures/Products/Hoods%20and%20Extractors/Chef%20Extractor%20Hood%20H9391668.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Products/Hoods%20and%20Extractors/Chef%20Extractor%20Hood%20HD900%20Super%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>2995</width>
 <height>2499</height>
-<data md5="4380999c5c78bfa6c832f9132e17467a" href="../../../../../../../../__blob/4380999c5c78bfa6c832f9132e17467a.blob" mimetype="image/jpeg"/>
+<data md5="4380999c5c78bfa6c832f9132e17467a" size="343883" href="../../../../../../../../__blob/4380999c5c78bfa6c832f9132e17467a.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

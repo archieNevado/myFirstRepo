@@ -1,5 +1,5 @@
-sqlcmd -i %~dp0\delete_cm7caefeeder.sql
-sqlcmd -i %~dp0\delete_cm7management.sql
-sqlcmd -i %~dp0\delete_cm7master.sql
-sqlcmd -i %~dp0\delete_cm7mcaefeeder.sql
-sqlcmd -i %~dp0\delete_cm7replication.sql
+sqlcmd -i %~dp0\delete_cm_caefeeder.sql
+sqlcmd -i %~dp0\delete_cm_management.sql
+sqlcmd -i %~dp0\delete_cm_master.sql
+sqlcmd -i %~dp0\delete_cm_mcaefeeder.sql
+sqlcmd -i %~dp0\delete_cm_replication.sql

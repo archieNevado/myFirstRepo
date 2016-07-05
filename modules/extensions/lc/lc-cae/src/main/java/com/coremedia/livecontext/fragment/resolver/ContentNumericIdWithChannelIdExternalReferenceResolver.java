@@ -28,9 +28,9 @@ public class ContentNumericIdWithChannelIdExternalReferenceResolver extends Exte
         String[] numbers = referenceInfo.split("-");
         if (numbers.length == 2) {
           //noinspection ResultOfMethodCallIgnored
-          Integer.parseInt(numbers[0]);
+          Integer.parseInt(numbers[0]); // NOSONAR squid:S2201 "Return values should not be ignored"
           //noinspection ResultOfMethodCallIgnored
-          Integer.parseInt(numbers[1]);
+          Integer.parseInt(numbers[1]); // NOSONAR squid:S2201 "Return values should not be ignored"
           return true;
         }
       }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Literature/Magazines" name="PC_COOKING_MAG_1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/03_For The Cook/Literature/Magazines" name="PC_COOKING_MAG_1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../../United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Literature/Magazines/PC_COOKING_MAG_1.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/03_For%20The%20Cook/Literature/Magazines/PC_COOKING_MAG_1"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Kochen Magazin</alt>
 <copyright>Toranico / Shutterstock 115386991</copyright>
 <dataUrl></dataUrl>
-<data md5="f7a91c9b1cb9bc54948eb637b2c3158e" href="../../../../../../../../../__blob/f7a91c9b1cb9bc54948eb637b2c3158e.blob" mimetype="image/jpeg"/>
+<data md5="f7a91c9b1cb9bc54948eb637b2c3158e" size="299201" href="../../../../../../../../../__blob/f7a91c9b1cb9bc54948eb637b2c3158e.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

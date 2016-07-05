@@ -49,7 +49,8 @@ end
 # initialization of webapps started by tomcat or the content import
 node.default['postgresql']['server']['config_change_notify'] = :nothing
 
-# increase heapsizes
-node.default['blueprint']['tomcat']['studio']['heap'] = '512m'
-node.default['blueprint']['tomcat']['cae-preview']['heap'] = '1536m'
-node.default['blueprint']['tomcat']['cae-live']['heap'] = '2048m'
+# allow automatic schemamigration in this environment. If you allow it also in production or staging, you need to set
+# these attributes in those environments too
+node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.schema.alterTable'] = true
+node.default['blueprint']['webapps']['master-live-server']['application.properties']['sql.schema.alterTable'] = true
+node.default['blueprint']['webapps']['replication-live-server']['application.properties']['sql.schema.alterTable'] = true

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer" name="Customer Service Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer" name="Customer Service Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Navigation/Site-Wide/Footer/Customer%20Service.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Site-Wide/Footer/Customer%20Service"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>

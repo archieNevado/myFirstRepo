@@ -2,10 +2,8 @@ package com.coremedia.livecontext.fragment.resolver;
 
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
-import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +23,7 @@ public class ContentNumericIdExternalReferenceResolver extends ExternalReference
   protected boolean include(@Nonnull FragmentParameters fragmentParameters, @Nonnull String referenceInfo) {
     try {
       //noinspection ResultOfMethodCallIgnored
-      Integer.parseInt(referenceInfo);
+      Integer.parseInt(referenceInfo); // NOSONAR squid:S2201 "Return values should not be ignored"
       return true;
     } catch (NumberFormatException e) {
       return false;

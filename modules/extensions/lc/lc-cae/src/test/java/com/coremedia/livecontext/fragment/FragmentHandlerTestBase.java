@@ -16,6 +16,8 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.undoc.multisite.SitesService;
+import com.coremedia.livecontext.contentbeans.CMExternalChannel;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -91,6 +93,13 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(cmContext.getContent()).thenReturn(cmContextContent);
     when(cmContextContent.getType()).thenReturn(cmContextContentType);
     when(cmContextContentType.getName()).thenReturn(CMContext.NAME);
+
+    when(cmExternalChannelContext.getTitle()).thenReturn(TITLE);
+    when(cmExternalChannelContext.getKeywords()).thenReturn(KEYWORDS);
+    when(cmExternalChannelContext.getContentId()).thenReturn(CMCONTEXT_ID);
+    when(cmExternalChannelContext.getContent()).thenReturn(cmExternalChannelContextContent);
+    when(cmExternalChannelContextContent.getType()).thenReturn(cmExternalChannelContextContentType);
+    when(cmExternalChannelContextContentType.getName()).thenReturn(CMExternalChannel.NAME);
 
     when(rootChannelBean.getTitle()).thenReturn(TITLE);
     when(rootChannelBean.getKeywords()).thenReturn(KEYWORDS);
@@ -173,13 +182,13 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   private T testling;
 
   @Mock
-  private BeanFactory beanFactory;
+  protected BeanFactory beanFactory;
 
   @Mock
   protected ModelAndView modelAndView;
 
   @Mock
-  private SitesService sitesService;
+  protected SitesService sitesService;
 
   @Mock
   private StoreContextProvider storeContextProvider;
@@ -218,7 +227,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   private CMChannel rootChannelBean;
 
   @Mock
-  private LiveContextNavigation navigation;
+  protected LiveContextNavigation navigation;
 
   @Mock
   private CMChannel cmContext;
@@ -228,6 +237,15 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
 
   @Mock
   protected ContentType cmContextContentType;
+
+  @Mock
+  protected LiveContextExternalChannel cmExternalChannelContext;
+
+  @Mock
+  private Content cmExternalChannelContextContent;
+
+  @Mock
+  protected ContentType cmExternalChannelContextContentType;
 
   @Mock
   protected ContentBeanFactory contentBeanFactory;

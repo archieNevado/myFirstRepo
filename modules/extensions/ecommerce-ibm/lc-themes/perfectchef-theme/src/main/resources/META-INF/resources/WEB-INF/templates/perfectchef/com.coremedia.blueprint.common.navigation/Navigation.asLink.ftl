@@ -5,4 +5,4 @@
 <#assign cssClass=cm.localParameters().cssClass!"" />
 <#assign target=cm.localParameters().openInTab!false?then(' target="_blank"', "") />
 
-<a class="${cssClass}" href="${cm.getLink(self!cm.UNDEFINED)}"${target}>${self.title!""}</a>
+<a class="${cssClass}" href="${cm.getLink(self!cm.UNDEFINED)}"<@cm.unescape target/>>${self.title!""}</a>

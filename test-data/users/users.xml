@@ -7,7 +7,6 @@
     <rule content="/Settings" type="Folder_" rights="R"/>
     <members>
       <group id="global-manager" name="global-manager" contentgroup="true" livegroup="false" administrative="false">
-        <rule content="/Settings/Meta/Mail" type="CMMail" rights="RMDAP"/>
         <rule content="/Settings/Options/Bundles" type="CMSettings" rights="RMDAP"/>
         <rule content="/Settings/Options/Settings" type="CMSettings" rights="RMAP"/>
         <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Videos/Hero%20Videos/Smiling%20Chef%20in%20the%20Kitchen%20Video.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Videos/Hero%20Videos/Smiling%20Chef%20in%20the%20Kitchen%20Video"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -37,7 +36,7 @@
 <alt>shutterstock_v4416473_1280</alt>
 <copyright>Hotelfoxtrot/Shutterstock 4416473</copyright>
 <dataUrl></dataUrl>
-<data md5="53b3b7d8d2abab2e860ea928f7cc540d" href="../../../../../../../__blob/53b3b7d8d2abab2e860ea928f7cc540d.blob" mimetype="video/mp4"/>
+<data md5="53b3b7d8d2abab2e860ea928f7cc540d" size="1589218" href="../../../../../../../__blob/53b3b7d8d2abab2e860ea928f7cc540d.blob" mimetype="video/mp4"/>
 <asset>
 </asset>
 </CMVideo>

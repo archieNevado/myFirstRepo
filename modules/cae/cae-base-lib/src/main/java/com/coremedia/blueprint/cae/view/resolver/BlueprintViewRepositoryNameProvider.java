@@ -70,9 +70,7 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
     Navigation navigation = NavigationLinkSupport.getNavigation(model);
     if (navigation != null) {
       List<? extends String> vrNames = settingsService.settingAsList(VIEW_REPOSITORY_NAMES, String.class, navigation);
-      if (vrNames!=null) {
-        result.addAll(vrNames);
-      }
+      result.addAll(vrNames);
     }
     // 2. From configuration: get list of the basic configured repositories valid for all contexts
     result.addAll(commonViewRepositoryNames);

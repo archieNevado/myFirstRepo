@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.common.contentbeans.CMPlaceholder;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -12,7 +13,6 @@ import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
@@ -36,11 +36,11 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 @RequestMapping
 @Link

@@ -12,6 +12,7 @@ coremedia.blueprint = (function (module) {
  *  CoreMedia Blueprint Javascript Framework Extension for Perfectchef
  */
 coremedia.blueprint.perfectchef = function (module) {
+  "use strict";
 
   var $ = coremedia.blueprint.$;
   /**
@@ -178,6 +179,7 @@ coremedia.blueprint.perfectchef = function (module) {
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
 coremedia.blueprint.$(function () {
+  "use strict";
 
   var $ = coremedia.blueprint.$;
   var $window = $(window);
@@ -190,6 +192,7 @@ coremedia.blueprint.$(function () {
 
   // initialize masonry collections that are not initialized automatically
   coremedia.blueprint.nodeDecorationService.addNodeDecoratorByData({isInitLayout: true}, "masonry-options", function ($target, config) {
+    $('.cm-collection--productlisting .cm-category-item__title').equalHeights();
     if (!config.isInitLayout) {
       $target.masonry(config);
       $target.masonry("unbindResize");
@@ -1263,6 +1266,7 @@ coremedia.blueprint.$(function () {
   var layout = function () {
     coremedia.blueprint.logger.log("Layout changed");
     coremedia.blueprint.perfectchef.updateMasonry();
+    $('.cm-collection--productlisting .cm-category-item__title').equalHeights();
     // only on desktop
     if (coremedia.blueprint.deviceDetector.getLastDevice().type == coremedia.blueprint.perfectchef.DEVICE_DESKTOP) {
       coremedia.blueprint.perfectchef.setMegaMenuItemsWidth();

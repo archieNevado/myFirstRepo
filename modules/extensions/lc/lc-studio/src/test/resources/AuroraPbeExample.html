@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./AuroraPbeExample_files/aurora.js"
+            data-cm-metadata="[{&quot;_&quot;:{&quot;$Ref&quot;:&quot;content/38&quot;}}]"></script>
+
+    <script type="text/javascript" src="./AuroraPbeExample_files/jquery-min.js"></script>
+    <script type="text/javascript" src="./AuroraPbeExample_files/previewBootstrap.js"></script>
+    <script type="text/javascript">
+        coremedia.preview.$(document).ready(function ($) {
+
+            //handle page itself
+            $('#cm_pbe1').attr('data-cm-metadata', JSON.stringify([{'_': {'$Ref': 'livecontext/store/HeliosSiteId/NO_WS'}}, {
+                '_': 'properties.shopUrl',
+                'pageId': 'corporate-info',
+                'storeId': '10851',
+                'catalogId': '10152',
+                'langId': 'en_US',
+                'siteId': 'HeliosSiteId',
+                'shopUrl': 'https://shop-preview-helios.toko-test-03.coremedia.vm/webapp/wcs/preview/servlet/en/auroraesite/corporate-info'
+            }]));
+
+            $('#cm_pbe2').attr('data-cm-metadata', JSON.stringify([{'_': {'$Ref': 'livecontext/store/HeliosSiteId/NO_WS'}}, {
+                '_': 'properties.shopUrl',
+                'pageId': 'not_augmented',
+                'storeId': '10851',
+                'catalogId': '10152',
+                'langId': 'en_US',
+                'siteId': 'HeliosSiteId',
+                'shopUrl': 'https://shop-preview-helios.toko-test-03.coremedia.vm/webapp/wcs/preview/servlet/en/auroraesite/not_augmented'
+            }]));
+
+            $('#cm_pbe4').attr('data-cm-metadata', JSON.stringify([{'_': {'$Ref': 'livecontext/store/HeliosSiteId/NO_WS'}}, {
+                '_': 'properties.shopUrl',
+                'pageId': 'AdvancedSearchDisplay',
+                'storeId': '10851',
+                'catalogId': '10152',
+                'langId': 'en_US',
+                'siteId': 'HeliosSiteId',
+                'shopUrl': 'https://shop-preview-helios.toko-test-03.coremedia.vm/webapp/wcs/preview/servlet/AdvancedSearchDisplay?catalogId=10152&langId=-1&storeId=10851'
+            }]));
+        });
+        function decodeEntities(encodedString) {
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = encodedString;
+            return textArea.value;
+        }
+    </script>
+</head>
+
+<body>
+<div id="cm_pbe1">
+    site is augmented
+</div>
+<div id="cm_pbe2">
+    site is not augmented (SEO-URL)
+</div>
+<div id="cm_pbe3"
+     data-cm-metadata="[{&quot;_&quot;:{&quot;$Ref&quot;:&quot;content/500&quot;}},{&quot;_&quot;:&quot;properties.property&quot;},{&quot;_&quot;:{&quot;$Ref&quot;:&quot;content/6462&quot;}}]">
+    this is a content context
+</div>
+<div id="cm_pbe4">
+    site is not augmented (NO SEO-URL)
+</div>
+</body>
+</html>

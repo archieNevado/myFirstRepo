@@ -5,12 +5,14 @@
   <#assign fragmentViews=fragmentViews + [{"viewName": "asDownloadPortal", "titleKey": "am_preview_label_download_portal"}] />
 </#if>
 <#list self.renditions as rendition>
-  <#assign name=rendition.name!"" />
-  <#if name?has_content && name != "original">
-    <#assign viewName="[" + name + "]" />
-    <#assign titleKey="am_preview_label_rendition_" + name />
-    <#assign title=name?cap_first />
-    <#assign fragmentViews=fragmentViews + [{"bean": rendition, "viewName": viewName, "titleKey": titleKey, "title": title}] />
+  <#if rendition.blob?has_content>
+    <#assign name=rendition.name!"" />
+    <#if name?has_content && name != "original">
+      <#assign viewName="[" + name + "]" />
+      <#assign titleKey="am_preview_label_rendition_" + name />
+      <#assign title=name?cap_first />
+      <#assign fragmentViews=fragmentViews + [{"bean": rendition, "viewName": viewName, "titleKey": titleKey, "title": title}] />
+    </#if>
   </#if>
 </#list>
 

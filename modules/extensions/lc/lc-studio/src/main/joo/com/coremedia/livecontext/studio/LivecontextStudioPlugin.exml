@@ -31,6 +31,7 @@
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
   <exml:import class="ext.Container"/>
   <exml:import class="ext.Panel"/>
+  <exml:import class="com.coremedia.blueprint.base.components.quickcreate.processing.ProcessingData"/>
 
   <exml:constant name="CONTENT_TYPE_MARKETING_SPOT" value="CMMarketingSpot"/>
   <exml:constant name="CONTENT_TYPE_EXTERNAL_CHANNEL" value="CMExternalChannel"/>
@@ -103,9 +104,9 @@
                                         return cont.find('itemId', 'validTo')[0].ownerCt;
                                         }}">
             <ui:items>
-               <editor:booleanPropertyField propertyName="localSettings.useTeaserTargetValidity"
-                                            ctCls="live-context-plugin-visibility-control"
-                                            dontTransformToInteger="true"/>
+              <editor:booleanPropertyField propertyName="localSettings.useTeaserTargetValidity"
+                                           ctCls="live-context-plugin-visibility-control"
+                                           dontTransformToInteger="true"/>
             </ui:items>
           </ui:addItemsPlugin>
         </plugins>
@@ -237,12 +238,14 @@
               <menuseparator/>
               <menuitem>
                 <baseAction>
-                  <livecontext:createProductTeaserAction catalogObjectVariableName="{workAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
+                  <livecontext:createProductTeaserAction
+                          catalogObjectVariableName="{workAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
                 </baseAction>
               </menuitem>
               <menuitem>
                 <baseAction>
-                  <livecontext:augmentCategoryAction catalogObjectVariableName="{workAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
+                  <livecontext:augmentCategoryAction
+                          catalogObjectVariableName="{workAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
                 </baseAction>
               </menuitem>
             </ui:items>
@@ -280,6 +283,23 @@
           </ui:addItemsPlugin>
         </plugins>
       </editor:actionsToolbar>
+      <editor:previewContextMenu>
+        <plugins mode="append">
+          <ui:addItemsPlugin>
+            <ui:items>
+              <livecontext:openCreateExternalPageMenuItem/>
+              <livecontext:shopPageOpenInTabMenuItem/>
+              <livecontext:shopPageOpenInBackgroundMenuItem/>
+              <livecontext:shopPageShowInLibraryMenuItem/>
+            </ui:items>
+          </ui:addItemsPlugin>
+        </plugins>
+      </editor:previewContextMenu>
+      <editor:breadcrumbElement>
+        <plugins mode="append">
+          <livecontext:disableStoreNodePlugin/>
+        </plugins>
+      </editor:breadcrumbElement>
     </ui:rules>
 
     <editor:configuration>

@@ -13,6 +13,7 @@
 
   <properties>
     <coremedia.project.extension.for>studio</coremedia.project.extension.for>
+    <skipJooUnitTests>true</skipJooUnitTests>
   </properties>
 
   <dependencies>
@@ -129,7 +130,7 @@
         <extensions>false</extensions>
         <configuration>
           <jooUnitTestExecutionTimeout>120000</jooUnitTestExecutionTimeout>
-          <skipJooUnitTests>${skipJooUnitTests}</skipJooUnitTests>
+            <skipJooUnitTests>${skipJooUnitTests}</skipJooUnitTests>
         </configuration>
       </plugin>
 

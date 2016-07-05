@@ -41,26 +41,26 @@
     <property name="sitesService" ref="sitesService" />
   </bean>
 
-  <bean id="cmExternalChannelSegmentValidator" class="com.coremedia.blueprint.studio.rest.validators.ChannelSegmentValidator">
+  <bean id="cmExternalChannelSegmentValidator" class="com.coremedia.blueprint.base.rest.validators.ChannelSegmentValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMExternalChannel"/>
     <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
   </bean>
 
   <bean id="cmExternalChannelNavigationValidator"
-        class="com.coremedia.blueprint.studio.rest.validators.ChannelNavigationValidator">
+        class="com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMExternalChannel"/>
   </bean>
 
   <bean id="cmExternalChannelReferrerValidator"
-        class="com.coremedia.blueprint.studio.rest.validators.ChannelReferrerValidator">
+        class="com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMExternalChannel"/>
   </bean>
 
   <bean abstract="true" id="abstractUniqueExternalIdValidator"
-        class="com.coremedia.blueprint.studio.rest.validators.UniqueInSiteStringValidator">
+        class="com.coremedia.blueprint.base.rest.validators.UniqueInSiteStringValidator">
     <constructor-arg index="0" name="contentRepository" ref="contentRepository"/>
     <constructor-arg index="2" name="property" value="externalId"/>
     <constructor-arg index="4" name="sitesService" ref="sitesService"/>
@@ -76,14 +76,14 @@
 
   <bean id="externalPageUniqueExternalIdValidator"
         parent="abstractUniqueExternalIdValidator"
-        class="com.coremedia.blueprint.studio.rest.validators.UniqueInSiteStringValidator">
+        class="com.coremedia.blueprint.base.rest.validators.UniqueInSiteStringValidator">
     <constructor-arg index="1" name="contentType" value="CMExternalPage"/>
     <constructor-arg index="3" name="lookupFunction" value="#{catalogExternalPageIndex.createContentsByValueFunction()}"/>
   </bean>
 
   <bean id="externalChannelUniqueExternalIdValidator"
         parent="abstractUniqueExternalIdValidator"
-        class="com.coremedia.blueprint.studio.rest.validators.UniqueInSiteStringValidator">
+        class="com.coremedia.blueprint.base.rest.validators.UniqueInSiteStringValidator">
     <constructor-arg index="1" name="contentType" value="CMExternalChannel"/>
     <constructor-arg index="3" name="lookupFunction" value="#{catalogExternalChannelIndex.createContentsByValueFunction()}"/>
   </bean>
@@ -95,7 +95,7 @@
     <property name="cache" ref="cache"/>
     <property name="capacities">
       <map>
-        <entry key="com.coremedia.lc.studio.lib.validators.AbstractExternalCatalogObjectValidator" value="200"/>
+        <entry key="com.coremedia.lc.studio.lib.com.coremedia.blueprint.base.rest.validators.AbstractExternalCatalogObjectValidator" value="200"/>
       </map>
     </property>
   </bean>

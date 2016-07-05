@@ -327,6 +327,17 @@ public class CatalogHelper {
     });
   }
 
+  public function getStoreForContent(content:Content, callback:Function):void {
+    if (!content) {
+      callback.call(null, undefined);
+    }
+    getStoreForContentExpression(ValueExpressionFactory.createFromValue(content)).loadValue(
+            function (store:Store):void {
+              callback.call(null, store);
+            }
+    );
+  }
+
   private static function remoteErrorHandler(error:RemoteError, source:Object):void {
     var catalogObject:CatalogObject = source as CatalogObject;
     if (catalogObject) {

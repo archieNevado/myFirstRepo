@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Navigation/Categories/02_In%20The%20Kitchen/Pans%20Teaser.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/02_In%20The%20Kitchen/Pans%20Teaser"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <linkedSettings>
@@ -30,5 +29,6 @@
 <related>
 </related>
 <target>
+<link href="../../../Augmentation/PC_InTheKitchen/PC_Pans/PC_Pans.xml" path="/Sites/PerfectChef/Germany/German/Augmentation/PC_InTheKitchen/PC_Pans/PC_Pans"/>
 </target>
 </CMTeaser>

@@ -1,5 +1,5 @@
 package com.coremedia.ecommerce.studio.model {
-
+import com.coremedia.ui.data.RemoteBean;
 
 [Event(name="childrenByName", type="com.coremedia.ui.data.PropertyChangeEvent")]
 
@@ -38,6 +38,8 @@ public interface Store extends CatalogObject {
   function getVendorVersion():String;
 
   function getWcsTimeZone():Object;
+
+  function resolveShopUrlForPbe(url:String):RemoteBean;
 
 }
 }

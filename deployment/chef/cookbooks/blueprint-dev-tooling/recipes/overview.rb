@@ -17,6 +17,12 @@ template "#{www_dir.path}/index.html" do
   group node['blueprint']['group']
 end
 
+template "#{www_dir.path}/jmx-java-mission-control.xml" do
+  source 'jmx-jmc.xml.erb'
+  owner node['blueprint']['user']
+  group node['blueprint']['group']
+end
+
 web_app '_overview' do
   application_name 'overview'
   server_name "overview.#{node['blueprint']['hostname']}"

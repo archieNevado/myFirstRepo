@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Pictures/Recipes/Spring%20Recipes/Prosciutto%20with%20Melon%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Recipes/Spring%20Recipes/Prosciutto%20with%20Melon%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>4000</width>
 <height>2551</height>
-<data md5="9a1af2dc11ab0effc0a7ae07f19fe105" href="../../../../../../../__blob/9a1af2dc11ab0effc0a7ae07f19fe105.blob" mimetype="image/jpeg"/>
+<data md5="9a1af2dc11ab0effc0a7ae07f19fe105" size="540269" href="../../../../../../../__blob/9a1af2dc11ab0effc0a7ae07f19fe105.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

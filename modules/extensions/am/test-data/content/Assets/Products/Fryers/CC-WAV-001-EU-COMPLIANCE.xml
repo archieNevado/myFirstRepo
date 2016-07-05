@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMDocumentAsset folder="/Assets/Products/Fryers" name="CC-WAV-001-EU-COMPLIANCE" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<original md5="957bfd69e68082c3ba5abdd7cdfbacf6" href="../../../__blob/957bfd69e68082c3ba5abdd7cdfbacf6.blob" mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
-<thumbnail md5="58d669869d2dc729e6b69d16c22fd875" href="../../../__blob/58d669869d2dc729e6b69d16c22fd875.blob" mimetype="image/jpeg"/>
+<original md5="957bfd69e68082c3ba5abdd7cdfbacf6" size="473649" href="../../../__blob/957bfd69e68082c3ba5abdd7cdfbacf6.blob" mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+<thumbnail md5="58d669869d2dc729e6b69d16c22fd875" size="369938" href="../../../__blob/58d669869d2dc729e6b69d16c22fd875.blob" mimetype="image/jpeg"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="original">
@@ -67,5 +67,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Fryer.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Fryer"/>
 </assetTaxonomy>
-<download md5="aa41c121cf5d17830e2bbdcf1e7f89ea" href="../../../__blob/aa41c121cf5d17830e2bbdcf1e7f89ea.blob" mimetype="application/pdf"/>
+<download md5="aa41c121cf5d17830e2bbdcf1e7f89ea" size="232962" href="../../../__blob/aa41c121cf5d17830e2bbdcf1e7f89ea.blob" mimetype="application/pdf"/>
 </AMDocumentAsset>

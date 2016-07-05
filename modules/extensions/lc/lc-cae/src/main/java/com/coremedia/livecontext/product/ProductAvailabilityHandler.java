@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.product;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -10,7 +11,6 @@ import com.coremedia.livecontext.context.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -28,10 +28,10 @@ import org.springframework.web.util.UriTemplate;
 import java.util.Map;
 import java.util.Set;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * This handler generates and handles URLs to retrieve the availability of {@link Product} and {@link ProductVariant}

@@ -57,7 +57,7 @@
         <ui:fields>
           <ui:dataField name="thumbnailUrl"
                         mapping=""
-                        ifUnreadable="" convert="{editorContext.getThumbnailUri}"/>
+                        ifUnreadable="" />
         </ui:fields>
       </ui:bindListPlugin>
       <editor:linkListBindListPlugin bindTo="{config.bindTo.extendBy(config.propertyName)}"
@@ -65,7 +65,7 @@
         <editor:additionalFields>
           <ui:dataField name="thumbnailUrl"
                         mapping=""
-                        ifUnreadable="" convert="{editorContext.getThumbnailUri}"/>
+                        ifUnreadable=""/>
         </editor:additionalFields>
       </editor:linkListBindListPlugin>
       <editor:bindReadOnlyStyleClassPlugin bindTo="{config.bindTo}"

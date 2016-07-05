@@ -11,7 +11,6 @@
   <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
   <context:component-scan base-package="com.coremedia.livecontext.web"/>
 
-  <import resource="livecontext-urlprefixes.xml"/>
   <import resource="livecontext-handlers.xml"/>
   <import resource="livecontext-cae-services.xml"/>
   <import resource="livecontext-fragment.xml"/>
@@ -23,5 +22,9 @@
   <import resource="livecontext-hybrid.xml"/>
   <import resource="livecontext-resolver.xml"/>
   <import resource="livecontext-validation.xml"/>
+
+  <import resource="classpath:META-INF/coremedia/livecontext-contentbeans-settings.xml"/>
+  <import resource="classpath:META-INF/coremedia/livecontext-contentbeans.xml"/>
+  <import resource="classpath:META-INF/coremedia/livecontext-navigation.xml"/>
 
 </beans>

@@ -34,11 +34,11 @@ import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_WORD;
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_NAVIGATION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ACTION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handles authentication (login/logout) actions. This handler is currently used for rendering the initial form only.

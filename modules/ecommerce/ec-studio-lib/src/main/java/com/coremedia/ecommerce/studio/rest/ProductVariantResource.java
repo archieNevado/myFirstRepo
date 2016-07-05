@@ -1,11 +1,8 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;
 
 import javax.inject.Inject;
@@ -13,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
 
@@ -35,40 +31,36 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
   }
 
   private void fillRepresentation(ProductVariantRepresentation representation) {
-    try {
-      super.fillRepresentation(representation);
-      ProductVariant entity = getEntity();
-      if (entity == null) {
-        throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load sku bean");
-      }
-      representation.setId(entity.getId());
-      representation.setName(entity.getName());
-      representation.setExternalId(entity.getExternalId());
-      representation.setExternalTechId(entity.getExternalTechId());
-      String shortDescription = entity.getShortDescription().asXml();
-      representation.setShortDescription(shortDescription);
-      String longDescription = entity.getLongDescription().asXml();
-      representation.setLongDescription(longDescription);
-      String thumbnailUrl = entity.getThumbnailUrl();
-      representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, contentRepositoryResource.getEntity()));
-      representation.setParent(entity.getParent());
-      representation.setCategory(entity.getCategory());
-      representation.setStore((new Store(entity.getContext())));
-      representation.setOfferPrice(entity.getOfferPrice());
-      representation.setListPrice(entity.getListPrice());
-      representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
-      // get visuals directly via AssetService to avoid fallback to default picture
-      AssetService assetService = getConnection().getAssetService();
-      if(null != assetService) {
-        representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
-      }
-      representation.setPictures(entity.getPictures());
-      representation.setDownloads(entity.getDownloads());
-      representation.setDefiningAttributes(entity.getDefiningAttributes());
-      representation.setDescribingAttributes(entity.getDescribingAttributes());
-    } catch (CommerceException ex) {
-      CommerceStudioErrorHandler.handleCommerceException(ex);
+    super.fillRepresentation(representation);
+    ProductVariant entity = getEntity();
+    if (entity == null) {
+      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load sku bean");
     }
+    representation.setId(entity.getId());
+    representation.setName(entity.getName());
+    representation.setExternalId(entity.getExternalId());
+    representation.setExternalTechId(entity.getExternalTechId());
+    String shortDescription = entity.getShortDescription().asXml();
+    representation.setShortDescription(shortDescription);
+    String longDescription = entity.getLongDescription().asXml();
+    representation.setLongDescription(longDescription);
+    String thumbnailUrl = entity.getThumbnailUrl();
+    representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, contentRepositoryResource.getEntity()));
+    representation.setParent(entity.getParent());
+    representation.setCategory(entity.getCategory());
+    representation.setStore((new Store(entity.getContext())));
+    representation.setOfferPrice(entity.getOfferPrice());
+    representation.setListPrice(entity.getListPrice());
+    representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
+    // get visuals directly via AssetService to avoid fallback to default picture
+    AssetService assetService = getConnection().getAssetService();
+    if(null != assetService) {
+      representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
+    }
+    representation.setPictures(entity.getPictures());
+    representation.setDownloads(entity.getDownloads());
+    representation.setDefiningAttributes(entity.getDefiningAttributes());
+    representation.setDescribingAttributes(entity.getDescribingAttributes());
   }
 
   @Override

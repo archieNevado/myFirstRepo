@@ -1,16 +1,18 @@
 module.exports = function (grunt) {
   'use strict';
 
-  // Force use of Unix newlines
-  grunt.util.linefeed = '\n';
-
   // These plugins provide necessary tasks.
   require('load-grunt-tasks')(grunt, {scope: 'devDependencies'});
   require('time-grunt')(grunt);
 
-  //global variables
+  //global configuration, used in tasks
   var globalConfig = {
-    distDir: "target/resources/themes/basic"
+    distDir: "target/resources/themes/basic",
+    supportedBrowsers: [
+      "last 2 versions", //see https://github.com/ai/browserslist#major-browsers
+      "Firefox ESR",
+      "Explorer >= 9"
+    ]
   };
 
   // --- Project configuration ---
@@ -35,6 +37,60 @@ module.exports = function (grunt) {
           src: ['css/**', 'fonts/**', 'img/**', 'js/**', 'vendor/**'],
           dest: '<%=  globalConfig.distDir %>/'
         }]
+      },
+      imagesloaded: {
+        files: [{
+          expand: true,
+          cwd: 'node_modules/imagesloaded',
+          src: 'imagesloaded.pkgd.js',
+          dest: '<%= globalConfig.distDir %>/vendor/'
+        }]
+      },
+      normalize: {
+        files: [{
+          expand: true,
+          cwd: 'node_modules/normalize.css',
+          src: 'normalize.css',
+          dest: '<%= globalConfig.distDir %>/vendor/'
+        }]
+      },
+      jquery: {
+        files: [{
+          expand: true,
+          cwd: 'node_modules/jquery/dist',
+          src: 'jquery.js',
+          dest: '<%= globalConfig.distDir %>/vendor/'
+        }]
+      },
+      magnificpopup: {
+        files: [{
+          expand: true,
+          cwd: 'node_modules/magnific-popup/dist',
+          src: '*',
+          dest: '<%= globalConfig.distDir %>/vendor/'
+        }]
+      },
+      mediaelement: {
+        files: [{
+          expand: true,
+          cwd: 'node_modules/mediaelement/build',
+          src: '*',
+          dest: '<%= globalConfig.distDir %>/vendor/mediaelement'
+        }]
+      }
+    },
+    // and add browser prefixes (just to own css)
+    postcss: {
+      options: {
+        map: true,
+        processors: [
+          require('autoprefixer')({browsers: globalConfig.supportedBrowsers})
+        ]
+      },
+      dist: {
+        src: [
+          '<%= globalConfig.distDir %>/css/*.css'
+        ]
       }
     },
     compress: {
@@ -81,7 +137,7 @@ module.exports = function (grunt) {
   // --- Tasks ---
 
   // Full distribution task without templates.
-  grunt.registerTask('build', ['clean', 'copy']);
+  grunt.registerTask('build', ['clean', 'copy', 'postcss']);
 
   // Full distribution task with templates.
   grunt.registerTask('buildWithTemplates', ['build', 'compress:templates']);

@@ -1,14 +1,11 @@
 module.exports = function (grunt) {
   'use strict';
 
-  // Force use of Unix newlines
-  grunt.util.linefeed = '\n';
-
   // These plugins provide necessary tasks.
   require('load-grunt-tasks')(grunt, {scope: 'devDependencies'});
   require('time-grunt')(grunt);
 
-  //global variables
+  //global configuration, used in tasks
   var globalConfig = {
     distDir: 'target/resources/themes/corporate',
     imports: {
@@ -20,7 +17,12 @@ module.exports = function (grunt) {
       magnificpopup: 'magnific-popup/dist',
       svg4everybody: 'svg4everybody/dist',
       imagesloaded: 'imagesloaded'
-    }
+    },
+    supportedBrowsers: [
+      "last 2 versions", //see https://github.com/ai/browserslist#major-browsers
+      "Firefox ESR",
+      "Explorer >= 9"
+    ]
   };
 
   // --- Project configuration ---
@@ -29,12 +31,6 @@ module.exports = function (grunt) {
     // --- Properties ---
     pkg: grunt.file.readJSON('package.json'),
     globalConfig: globalConfig,
-    autoprefixerBrowsers: [
-      "last 2 versions",
-      "Firefox >= 38", //last esr version
-      "Explorer >= 9",
-      "Safari >= 8"
-    ],
 
     // --- Task configuration ---
     clean: {
@@ -58,13 +54,18 @@ module.exports = function (grunt) {
       }
     },
     // and add browser prefixes (just to own css)
-    autoprefixer: {
+    postcss: {
       options: {
-        browsers: '<%= autoprefixerBrowsers %>',
-        map: true
+        map: true,
+        processors: [
+          require('autoprefixer')({browsers: globalConfig.supportedBrowsers})
+        ]
       },
-      build: {
-        src: '<%= globalConfig.distDir %>/css/corporate.css'
+      dist: {
+        src: [
+          '<%= globalConfig.distDir %>/css/corporate.css',
+          '<%= globalConfig.distDir %>/css/preview.css'
+        ]
       }
     },
     watch: {
@@ -157,7 +158,7 @@ module.exports = function (grunt) {
   // --- Tasks ---
 
   // Full distribution task without templates.
-  grunt.registerTask('build', ['clean', 'copy', 'sass', 'autoprefixer']);
+  grunt.registerTask('build', ['clean', 'copy', 'sass', 'postcss']);
 
   // Full distribution task with templates.
   grunt.registerTask('buildWithTemplates', ['build', 'compress:templates']);

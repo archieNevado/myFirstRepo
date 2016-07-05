@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.elastic.social.cae.services.impl;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.elastic.social.cae.flows.LoginForm;
 import com.coremedia.blueprint.elastic.social.cae.flows.LoginHelper;
 import com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper;
@@ -11,7 +12,7 @@ import com.coremedia.elastic.core.api.users.User;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -84,8 +85,9 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
   public boolean resetPassword(LiveContextPasswordReset passwordReset, RequestContext context) {
     try {
       CommunityUser user = communityUserService.getUserByEmail(passwordReset.getEmailAddress());
-      if (user != null) {
-        getCommerceUserService().resetPassword(user.getName(), null);
+      UserService commerceUserService = getCommerceUserService();
+      if (user!=null && commerceUserService!=null) {
+        commerceUserService.resetPassword(user.getName(), null);
         return true;
       }
     } catch (CommerceException e) {
@@ -120,13 +122,15 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
       UserContext userContext = getUserContextProvider().createContext(user.getName());
       getUserContextProvider().setCurrentContext(userContext);
 
-      //update password
-      String currentPassword = passwordReset.getCurrentPassword();
-      String newPassword = passwordReset.getPassword();
-      String confirmNewPassword = passwordReset.getConfirmPassword();
-      getCommerceUserService().updateCurrentUserPassword(currentPassword, newPassword, confirmNewPassword);
-
-      return true;
+      UserService commerceUserService = getCommerceUserService();
+      if (commerceUserService!=null) {
+        //update password
+        String currentPassword = passwordReset.getCurrentPassword();
+        String newPassword = passwordReset.getPassword();
+        String confirmNewPassword = passwordReset.getConfirmPassword();
+        commerceUserService.updateCurrentUserPassword(currentPassword, newPassword, confirmNewPassword);
+        return true;
+      }
     } catch (CommerceRemoteException e) {
       addErrorMessage(context, LiveContextUserServiceUtil.resolveErrorMessage(e));
       LOG.info("Failed to set password for user {}: {}", user.getName(), e.getMessage());
@@ -219,7 +223,8 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
   @Override
   public boolean isLoggedIn(HttpServletRequest request) {
     try {
-      return getCommerceUserSessionService().isLoggedIn();
+      UserSessionService userSessionService = getCommerceUserSessionService();
+      return userSessionService!=null && userSessionService.isLoggedIn();
     } catch (CredentialExpiredException e) {
       LOG.trace("Login Credential exipired: {}", e.getMessage());
       return false;
@@ -247,7 +252,8 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
   public boolean logoutUser(HttpServletRequest request, HttpServletResponse response, RequestContext context) {
     try {
       securityContextLogoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-      return getCommerceUserSessionService().logoutUser(request, response);
+      UserSessionService userSessionService = getCommerceUserSessionService();
+      return userSessionService!=null && userSessionService.logoutUser(request, response);
     } catch (GeneralSecurityException e) {
       addErrorMessage(context, WebflowMessageKeys.LOGIN_GENERAL_ERROR);
       LOG.debug("Security Exception caught: " + e.getMessage());
@@ -291,7 +297,8 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
   }
 
   private void localLogin() {
-    com.coremedia.livecontext.ecommerce.user.User shopUser = getCommerceUserService().findCurrentUser();
+    UserService userService = getCommerceUserService();
+    com.coremedia.livecontext.ecommerce.user.User shopUser = userService!=null ? userService.findCurrentUser() : null;
 
     if (shopUser != null) {
       //get community user
@@ -331,11 +338,13 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
       String password = registration.getPassword();
       String email = registration.getEmailAddress();
 
-      com.coremedia.livecontext.ecommerce.user.User commerceUser = getCommerceUserService().registerUser(username, password, email);
-      userMapper.applyRegistrationToPerson(commerceUser, (LiveContextRegistration) registration);
-      saveCommerceUser(commerceUser);
-
-      return true;
+      UserService userService = getCommerceUserService();
+      if (userService!=null) {
+        com.coremedia.livecontext.ecommerce.user.User commerceUser = userService.registerUser(username, password, email);
+        userMapper.applyRegistrationToPerson(commerceUser, (LiveContextRegistration) registration);
+        saveCommerceUser(commerceUser);
+        return true;
+      }
     } catch (Exception e) {
       LOG.warn("Error registering user: {}", e.getMessage(), e);
       handleRegistrationError(registration, context, e);
@@ -351,8 +360,14 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
    */
   private void saveCommerceUser(com.coremedia.livecontext.ecommerce.user.User commerceUser) {
     // ATTENTIONE, ATTENTIONE, ATTENTIONE: user context is being changed.
-    getUserContextProvider().setCurrentContext(getUserContextProvider().createContext(commerceUser.getLogonId()));
-    getCommerceUserService().updateCurrentUser(commerceUser);
+    UserContextProvider userContextProvider = getUserContextProvider();
+    if (userContextProvider!=null) {
+      userContextProvider.setCurrentContext(userContextProvider.createContext(commerceUser.getLogonId()));
+    }
+    UserService userService = getCommerceUserService();
+    if (userService!=null) {
+      userService.updateCurrentUser(commerceUser);
+    }
   }
 
   /**
@@ -362,7 +377,8 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
    */
   @VisibleForTesting
   protected com.coremedia.livecontext.ecommerce.user.User getCommerceUser(String username) {
-    return getCommerceUserService().findCurrentUser();
+    UserService userService = getCommerceUserService();
+    return userService!=null ? userService.findCurrentUser() : null;
   }
 
   /**
@@ -424,14 +440,17 @@ public class LiveContextUserServiceImpl implements LiveContextUserService, Sessi
   }
 
   public UserContextProvider getUserContextProvider() {
-    return Commerce.getCurrentConnection().getUserContextProvider();
+    CommerceConnection connection = Commerce.getCurrentConnection();
+    return connection!=null ? connection.getUserContextProvider() : null;
   }
 
   public UserSessionService getCommerceUserSessionService() {
-    return Commerce.getCurrentConnection().getUserSessionService();
+    CommerceConnection connection = Commerce.getCurrentConnection();
+    return connection!=null ? connection.getUserSessionService() : null;
   }
 
   public UserService getCommerceUserService() {
-    return Commerce.getCurrentConnection().getUserService();
+    CommerceConnection connection = Commerce.getCurrentConnection();
+    return connection!=null ? connection.getUserService() : null;
   }
 }

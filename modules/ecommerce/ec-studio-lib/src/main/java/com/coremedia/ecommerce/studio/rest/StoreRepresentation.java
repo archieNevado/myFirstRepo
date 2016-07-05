@@ -5,9 +5,8 @@ import com.coremedia.ecommerce.studio.rest.model.Contracts;
 import com.coremedia.ecommerce.studio.rest.model.Marketing;
 import com.coremedia.ecommerce.studio.rest.model.Segments;
 import com.coremedia.ecommerce.studio.rest.model.Workspaces;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.rest.linking.RemoteBeanLink;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
   private String vendorName;
 
   private boolean marketingEnabled = false;
-  private Category rootCategory;
+  private RemoteBeanLink rootCategory;
 
   public void setContext(StoreContext context) {
     this.context = context;
@@ -43,14 +42,24 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
     return context.getStoreId();
   }
 
-  public List<CommerceObject> getTopLevel() {
-    List<CommerceObject> topLevel = new ArrayList<>();
-    if(isMarketingEnabled()) {
+  // The entries correspond to those of #getChildrenByName()
+  public List<Object> getTopLevel() {
+    List<Object> topLevel = new ArrayList<>();
+    if (isMarketingEnabled()) {
       topLevel.add(getMarketing());
     }
-
-    topLevel.add(getRootCategory());
+    topLevel.add(rootCategory);
     return topLevel;
+  }
+
+  // The entries correspond to those of #getTopLevel()
+  public Map<String, ChildRepresentation> getChildrenByName() {
+    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
+    if (isMarketingEnabled()) {
+      result.put("store-marketing", new ChildRepresentation("store-marketing", getMarketing()));
+    }
+    result.put("root-category", new ChildRepresentation("root-category", rootCategory));
+    return result;
   }
 
   public Marketing getMarketing() {
@@ -67,25 +76,6 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
 
   public Workspaces getWorkspaces() {
     return new Workspaces(context);
-  }
-
-  public Map<String, ChildRepresentation> getChildrenByName() {
-    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
-
-    if(isMarketingEnabled()) {
-      Marketing marketing = getMarketing();
-      ChildRepresentation child = new ChildRepresentation();
-      child.setDisplayName("store-marketing");
-      child.setChild(marketing);
-      result.put("store-marketing", child);
-    }
-
-    Category rootCategory = getRootCategory();
-    ChildRepresentation child = new ChildRepresentation();
-    child.setChild(rootCategory);
-    child.setDisplayName("root-category");
-    result.put("root-category", child);
-    return result;
   }
 
   public String getVendorUrl() {
@@ -125,11 +115,11 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
     return (Map<String, String>) context.get("wcsTimeZone");
   }
 
-  public void setRootCategory(Category rootCategory) {
+  public void setRootCategory(RemoteBeanLink rootCategory) {
     this.rootCategory = rootCategory;
   }
 
-  public Category getRootCategory() {
+  public RemoteBeanLink getRootCategory() {
     return rootCategory;
   }
 }

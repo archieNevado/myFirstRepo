@@ -1,0 +1,4 @@
+# JDK-8144430
+# enable all algorithms (so that betamax is happy)
+jdk.certpath.disabledAlgorithms=
+jdk.tls.disabledAlgorithms=

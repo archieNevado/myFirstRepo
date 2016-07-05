@@ -6,13 +6,13 @@ import com.coremedia.blueprint.base.cae.web.taglib.SettingsFunction;
 import com.coremedia.blueprint.base.cae.web.taglib.UniqueIdGenerator;
 import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
 import com.coremedia.blueprint.base.cae.web.taglib.WordAbbreviator;
-import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMImageMap;
+import com.coremedia.blueprint.common.contentbeans.CMLocalized;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -21,9 +21,11 @@ import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.navigation.HasViewTypeName;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
+import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.transform.Transformation;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
@@ -36,11 +38,13 @@ import com.coremedia.xml.MarkupUtil;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.activation.MimeType;
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -65,7 +69,13 @@ public class BlueprintFreemarkerFacade {
   private static final String RESPONSIVE_SETTINGS_KEY = "responsiveImageSettings";
 
   public static final String DEFAULT_DIRECTION = "ltr";
-  public static final String DEFAULT_LANGUAGE = Locale.ENGLISH.getLanguage();
+  public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+  /**
+   * @deprecated Use {@link #DEFAULT_LOCALE} and {@code getLanguage()} instead.
+   */
+  @SuppressWarnings("unused")
+  @Deprecated
+  public static final String DEFAULT_LANGUAGE = DEFAULT_LOCALE.getLanguage();
 
   private static final int DISPLAYABLE_IMAGE_MAX_SIZE = 10485760; // 10 MB
   private static final int DISPLAYABLE_VIDEO_MAX_SIZE = 1073741824; // 1 GB
@@ -82,6 +92,7 @@ public class BlueprintFreemarkerFacade {
   private DataViewFactory dataViewFactory;
   private SettingsService settingsService;
   private ImageDimensionsExtractor imageDimensionsExtractor;
+  private Map<String, Transformation> transformationsByName;
   private WordAbbreviator abbreviator;
   private DataRenderer dataRenderer;
   private MimeTypeService mimeTypeService;
@@ -90,39 +101,51 @@ public class BlueprintFreemarkerFacade {
 
   // --- spring config -------------------------------------------------------------------------------------------------
 
-  @Required
+  @Autowired
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
+  @Autowired
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
 
-  @Required
+  @Autowired
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
+  @Autowired
   public void setImageDimensionsExtractor(ImageDimensionsExtractor imageDimensionsExtractor) {
     this.imageDimensionsExtractor = imageDimensionsExtractor;
   }
 
-  @Required
+  @Autowired
   public void setStringAbbreviator(WordAbbreviator abbreviator) {
     this.abbreviator = abbreviator;
   }
 
-  @Required
+  @Autowired
   public void setDataRenderer(DataRenderer dataRenderer) {
     this.dataRenderer = dataRenderer;
   }
 
-  @Required
+  @Autowired
   public void setMimeTypeService(MimeTypeService mimeTypeService) {
     this.mimeTypeService = mimeTypeService;
+  }
+
+  /**
+   * Informs the repsonsive image framework about the available image transformations
+   * @param transformations the available image transformations
+   */
+  @Autowired
+  public void setTransformations(List<Transformation> transformations) {
+    transformationsByName = new HashMap<>(transformations.size());
+    for (Transformation transformation : transformations) {
+      transformationsByName.put(transformation.getName(), transformation);
+    }
   }
 
   // --- functionality -------------------------------------------------------------------------------------------------
@@ -186,18 +209,18 @@ public class BlueprintFreemarkerFacade {
   }
 
   /**
-   * Returns a String representation of a JSON object with a list of aspect ratios with image links for different sizes.
+   * Returns a String representation of an array of JSON objects with a list of aspect ratios with image links for different sizes.
    * @param picture the image
    * @param page the root page
    * @param aspectRatios list of aspect ratios to use for this image
    * @return Json Object with a list of aspect ratios with image links for different sizes
    * @throws IOException
    */
-  public Map responsiveImageLinksData(CMPicture picture, Page page, List<String> aspectRatios) throws IOException {
-
+  public List<TransformationLinks> responsiveImageLinksData(CMPicture picture, Page page, List<String> aspectRatios) throws IOException {
     if (picture == null) {
       throw new IllegalArgumentException("Error creating responsive image links: picture must not be null");
     }
+
     // get responsive image settings
     Map<String, Map> responsiveImageSettings = getResponsiveImageSettings(page);
     List<String> aspectRatiosToUse = aspectRatios;
@@ -208,23 +231,30 @@ public class BlueprintFreemarkerFacade {
 
     HttpServletRequest currentRequest = FreemarkerUtils.getCurrentRequest();
     HttpServletResponse currentResponse = FreemarkerUtils.getCurrentResponse();
-    Map<String, Map<Integer, String>> result = new HashMap<>();
-    // get aspect ratios
-    for (Map.Entry<String, Map> entry : responsiveImageSettings.entrySet()) {
-      String aspectRatioName = entry.getKey();
-
-      if (aspectRatiosToUse.contains(aspectRatioName)) {
-        @SuppressWarnings("unchecked")
-        Map<String, Map> aspectRatioSizes = entry.getValue();
+    List<TransformationLinks> result = new ArrayList<>();
+    for (String aspectRatioName : aspectRatiosToUse) {
+      @SuppressWarnings("unchecked")
+      Map<String, Map> aspectRatioSizes = responsiveImageSettings.get(aspectRatioName);
+      if (aspectRatioSizes != null) {
         Blob blob = picture.getTransformedData(aspectRatioName);
         Map<Integer, String> links = ImageFunctions.getImageLinksForAspectRatios(blob, aspectRatioName, aspectRatioSizes, currentRequest, currentResponse);
 
         if (!isEmpty(links)) {
-          result.put(aspectRatioName, links);
+          // only the "transformations" bean from the application context holds the actual crop ratio in proper values
+          Transformation transformation = transformationsByName.get(aspectRatioName);
+          if(transformation == null) {
+            throw new IllegalArgumentException("Could not find image variant for name " + aspectRatioName);
+          }
+          TransformationLinks transformationLinks = new TransformationLinks(
+                  aspectRatioName, transformation.getWidthRatio(), transformation.getHeightRatio(), links
+          );
+          result.add(transformationLinks);
+
         } else {
           LOG.info("No responsive image links found for CMPicture {} with transformationName {}", picture, aspectRatioName);
         }
       }
+
     }
 
     if (isEmpty(result)) {
@@ -233,6 +263,7 @@ public class BlueprintFreemarkerFacade {
 
     return result;
   }
+
 
   public String getLinkForBiggestImageWithRatio(CMPicture picture, Page page, String aspectRatio) {
     if (picture == null) {
@@ -346,7 +377,7 @@ public class BlueprintFreemarkerFacade {
 
   public boolean isWebflowRequest() {
     HttpServletRequest currentRequest = FreemarkerUtils.getCurrentRequest();
-    return currentRequest.getRequestURL().toString().contains(UriConstants.Prefixes.PREFIX_DYNAMIC)
+    return currentRequest.getRequestURL().toString().contains(BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC)
             && currentRequest.getParameterMap().containsKey(BlueprintFlowUrlHandler.FLOW_EXECUTION_KEY_PARAMETER);
   }
 
@@ -493,12 +524,54 @@ public class BlueprintFreemarkerFacade {
     return page.getPageGrid().getPlacementForName(name);
   }
 
+  /**
+   * <p>
+   * Returns the ISO 639 language code for the given object.
+   * </p>
+   * <dl>
+   * <dt><strong>Note:</strong></dt>
+   * <dd>
+   * ISO 639 is not a stable standard and most likely not the code you want to use in your HTML code as
+   * W3C specifies to use IETF BCP 47 language tags. To retrieve a IETF BCP 47 language tag use
+   * {@link #getLanguageTag(Object)}.
+   * </dd>
+   * </dl>
+   *
+   * @param object object to determine the locale from
+   * @return ISO 639 language code
+   * @see #getLanguageTag(Object)
+   */
   public static String getLanguage(Object object) {
+    return getLocale(object).getLanguage();
+  }
+
+  /**
+   * <p>
+   * Returns the IETF BCP 47 language code for the given object. IETF BCP 47 is the specified standard for
+   * the {@code lang} attribute of HTML elements.
+   * </p>
+   *
+   * @param object object to determine the locale from
+   * @return IETF BCP 47 language code
+   * @see <a href="https://www.w3.org/International/questions/qa-html-language-declarations" target="_blank">w3.org: Declaring language in HTML</a>
+   * @see #getLanguage(Object)
+   */
+  public static String getLanguageTag(Object object) {
+    return getLocale(object).toLanguageTag();
+  }
+
+  @Nonnull
+  private static Locale getLocale(Object object) {
+    Locale locale = DEFAULT_LOCALE;
     if (object instanceof AbstractPage) {
       AbstractPage abstractPage = (AbstractPage) object;
-      return abstractPage.getLocale().getLanguage();
+      locale = abstractPage.getLocale();
     }
-    return DEFAULT_LANGUAGE;
+    if (object instanceof CMLocalized) {
+      CMLocalized localized = (CMLocalized) object;
+      locale = localized.getLocale();
+    }
+    return locale;
   }
 
   public static String getDirection(Object object) {
@@ -559,5 +632,42 @@ public class BlueprintFreemarkerFacade {
     public List<Object> getFlattenedItems() {
       return ContainerFlattener.flatten(this, Object.class);
     }
+  }
+
+  /**
+   * Combines the information about the transformation with the given "name" in a simple bean that can be easily
+   * serialized into a JSON object. This resulting JSON object is processed by the JavaScript that handles the
+   * responsive image handling (see "jquery.coremedia.responsiveimages.js").
+   * Consequently every change to this data structure is likely to require changes to the JavaScript.
+   */
+  private static final class TransformationLinks {
+    private String name = StringUtils.EMPTY;
+    private Integer ratioWidth = 1;
+    private Integer ratioHeight = 1;
+    private Map<Integer, String> linksForWidth = Collections.emptyMap();
+
+    public TransformationLinks(String name, Integer ratioWidth, Integer ratioHeight, Map<Integer, String> linksForWidth) {
+      this.name = name;
+      this.ratioWidth = ratioWidth;
+      this.ratioHeight = ratioHeight;
+      this.linksForWidth = linksForWidth;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public Integer getRatioWidth() {
+      return ratioWidth;
+    }
+
+    public Integer getRatioHeight() {
+      return ratioHeight;
+    }
+
+    public Map<Integer, String> getLinksForWidth() {
+      return linksForWidth;
+    }
+
   }
 }

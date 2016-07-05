@@ -3,8 +3,8 @@ package com.coremedia.blueprint.common.importfilter;
 import com.coremedia.publisher.importer.AbstractTransformer;
 import com.coremedia.publisher.importer.MultiResult;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -28,7 +28,7 @@ import static java.util.Locale.ENGLISH;
  */
 @Deprecated
 public class FindRequiredFilesTransformer extends AbstractTransformer {
-  private static final Log LOG = LogFactory.getLog(FindRequiredFilesTransformer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(FindRequiredFilesTransformer.class);
   private static final Pattern URL_PATTERN = Pattern.compile("url\\([\"\']?([^)\"\']*)[\"\']?\\)");
 
   @Override

@@ -277,8 +277,7 @@ public class UserSessionServiceImplTest {
   private void verifyCookies(String uri, int countCookies) throws GeneralSecurityException {
     //noinspection unchecked
     verify(storefrontConnector).executeGet(eq(STOREFRONT_SECURE_URL + uri), any(Map.class), eq(sourceRequest));
-    verify(storeFrontResponse).getCookies();
-    verify(sourceResponse, times(countCookies)).addHeader(any(String.class), any(String.class));
+    verify(sourceResponse, times(countCookies)).addCookie(any(javax.servlet.http.Cookie.class));
     verify(sourceResponse, never()).setHeader(any(String.class), any(String.class));
   }
 

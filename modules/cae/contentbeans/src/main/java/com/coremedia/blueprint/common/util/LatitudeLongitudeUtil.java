@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.common.util;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.regex.Pattern;
 
@@ -28,7 +28,7 @@ public final class LatitudeLongitudeUtil {
   private static final String SEPERATOR = ",";
   private static final String PATTERN = "(\\+|-)?\\d+(\\.\\d+)?" + SEPERATOR + "(\\+|-)?\\d+(\\.\\d+)?";
 
-  private static final Log LOG = LogFactory.getLog(LatitudeLongitudeUtil.class);
+  private static final Logger LOG = LoggerFactory.getLogger(LatitudeLongitudeUtil.class);
 
   public enum Result {
     VALID, INVALID_LATITUDE, INVALID_LONGITUDE, INVALID_NUMBER_FORMAT, INVALID_FORMAT

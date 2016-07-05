@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Personalization/Profiles/Zach%20Goldman%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Personalization/Profiles/Zach%20Goldman%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -102,7 +101,7 @@
 <dataUrl></dataUrl>
 <width>431</width>
 <height>431</height>
-<data md5="38f2d711f3bfe26dcda59c37b6f0c0f8" href="../../../../../../../__blob/38f2d711f3bfe26dcda59c37b6f0c0f8.blob" mimetype="image/jpeg"/>
+<data md5="38f2d711f3bfe26dcda59c37b6f0c0f8" size="34721" href="../../../../../../../__blob/38f2d711f3bfe26dcda59c37b6f0c0f8.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

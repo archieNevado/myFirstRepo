@@ -23,6 +23,8 @@
         </div>
       </div>
     </div>
+    <%- host = node['blueprint']['hostname'] -%>
+    <%- wcs_host = node['blueprint']['wcs']['host'] -%>
     <div id="main" class="maintenance">
       <div id="col3" style="margin:auto;width:65%">
         <div id="col3_content" class="clearfix">
@@ -35,18 +37,18 @@
                 <ul style="list-style: square; margin: 1em 0; padding-left:40px;">
 
                   <li><a
-                  href="//helios.<%= node['blueprint']['hostname'] %>"
+                  href="//helios.<%= host %>"
                   target="_blank">Perfect Chef (Content-Led Scenario) </a></li>
                   <li><a
-                  href="//shop-helios.<%= node['blueprint']['hostname'] %>"
+                  href="//shop-helios.<%= host %>"
                   target="_blank">Aurora ESite (Commerce-Led Scenario)</a></li>
                   <li><a
-                  href="//shop-helios.<%= node['blueprint']['hostname'] %>/webapp/wcs/stores/servlet/en/aurorab2besite"
+                  href="//shop-helios.<%= host %>/webapp/wcs/stores/servlet/en/aurorab2besite"
                   target="_blank">Aurora B2B ESite</a></li>
                   <li>
-                    <a href="//corporate.<%= node['blueprint']['hostname'] %>/corporate"
+                    <a href="//corporate.<%= host %>/corporate"
                        target="_blank">Chef Corp. Corporate Site (English)</a> /
-                    <a href="//corporate.<%= node['blueprint']['hostname'] %>/corporate-de-de"
+                    <a href="//corporate.<%= host %>/corporate-de-de"
                        target="_blank">(German)</a>
                   </li>
                 </ul>
@@ -54,23 +56,23 @@
                 <h2>The management interfaces are available at</h2>
                 <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
                   <li>
-                    <a href="//studio.<%= node['blueprint']['hostname'] %>"
+                    <a href="//studio.<%= host %>"
                        target="_blank">CoreMedia Studio</a>
                   </li>
                   <li>
-                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8000/lobtools/cmc/ManagementCenterMain?locale=en_US"
+                    <a href="https://<%= wcs_host %>:8000/lobtools/cmc/ManagementCenterMain?locale=en_US"
                        target="_blank">IBM WCS Management Center</a>
                   </li>
                   <li>
-                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8000/webapp/wcs/tools/servlet/ToolsLogon?XMLFile=common.mcLogon"
-                       target="_blank">IBM WCS Accellerator</a>
+                    <a href="https://<%= wcs_host %>:8000/webapp/wcs/tools/servlet/ToolsLogon?XMLFile=common.mcLogon"
+                       target="_blank">IBM WCS Accelerator</a>
                   </li>
                   <li>
-                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8002/webapp/wcs/admin/servlet/ToolsLogon?XMLFile=adminconsole.AdminConsoleLogon"
+                    <a href="https://<%= wcs_host %>:8002/webapp/wcs/admin/servlet/ToolsLogon?XMLFile=adminconsole.AdminConsoleLogon"
                        target="_blank">IBM WCS Administration Console</a>
                   </li>
                   <li>
-                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:8004/webapp/wcs/orgadmin/servlet/ToolsLogon?XMLFile=buyerconsole.BuyAdminConsoleLogon&storeId=0"
+                    <a href="https://<%= wcs_host %>:8004/webapp/wcs/orgadmin/servlet/ToolsLogon?XMLFile=buyerconsole.BuyAdminConsoleLogon&storeId=0"
                        target="_blank">IBM WCS Organization Administration Console</a>
                   </li>
                 </ul>
@@ -79,37 +81,37 @@
                 <h2>Other Links</h2>
                 <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
                   <li>
-                    <a href="//sitemanager.<%= node['blueprint']['hostname'] %>"
+                    <a href="//sitemanager.<%= host %>"
                        target="_blank">CoreMedia SiteManager</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="http://<%= node['blueprint']['hostname'] %>:40080/solr"
+                    <a href="http://<%= host %>:40080/solr"
                        target="_blank">Solr Manager</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="//drive.<%= node['blueprint']['hostname'] %>"
+                    <a href="//drive.<%= host %>"
                        target="_blank">Adobe Drive REST Backend</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="//corporate.<%= node['blueprint']['hostname'] %>/blueprint/servlet/corporate/company/asset-download-portal"
+                    <a href="//corporate.<%= host %>/blueprint/servlet/corporate/company/asset-download-portal"
                        target="_blank">LIVE Asset-Download-Portal</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:9104/ibm/console/"
+                    <a href="https://<%= wcs_host %>:9104/ibm/console/"
                        target="_blank">IBM WCS Websphere Console | Login: configadmin/configadmin01</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="https://<%= node['blueprint']['wcs']['host'] %>:9043/ibm/console/"
+                    <a href="https://<%= wcs_host %>:9043/ibm/console/"
                        target="_blank">IBM WCS Solr Websphere Console | Login: no login</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="http://<%= node['blueprint']['wcs']['host'] %>:8008/"
+                    <a href="http://<%= wcs_host %>:8008/"
                        target="_blank">IBM IHS Admin Control Server | Login: ihsadmin/ihsadmin</a>
                     <p></p>
                   </li>
@@ -119,22 +121,22 @@
                 <h2>Repository IORs</h2>
                 <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
                   <li>
-                    <a href="http://<%= node['blueprint']['hostname'] %>:40180/coremedia/ior"
+                    <a href="http://<%= host %>:40180/coremedia/ior"
                        target="_blank">Content Management Server IOR</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="http://<%= node['blueprint']['hostname'] %>:40280/coremedia/ior"
+                    <a href="http://<%= host %>:40280/coremedia/ior"
                        target="_blank">Master Live Server IOR</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="http://<%= node['blueprint']['hostname'] %>:40380/workflow/ior"
+                    <a href="http://<%= host %>:40380/workflow/ior"
                        target="_blank">Workflow Server IOR</a>
                     <p></p>
                   </li>
                   <li>
-                    <a href="http://<%= node['blueprint']['hostname'] %>:42180/coremedia/ior"
+                    <a href="http://<%= host %>:42180/coremedia/ior"
                        target="_blank">Replication Live Server IOR</a>
                     <p></p>
                   </li>
@@ -142,52 +144,42 @@
                 <p><br/></p>
 
                 <h2>JMX Service Addresses</h2>
+                <p>
+                  Import <a href="./jmx-java-mission-control.xml">jmx-java-mission-control.xml</a> in Java Mission Control
+                  (JMC), or use the connections below. To start JMC, just call jmc on your console.
+                </p>
                 <ul style="list-style: square; margin: 1em 0; padding-left: 40px;">
-                  <li>solr - <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                    :40098/jndi/rmi://<%= node['blueprint']['hostname'] %>:40099/jmxrmi</code>
+                  <li>solr - <code>service:jmx:rmi://<%= host %>:40098/jndi/rmi://<%= host %>:40099/jmxrmi</code>
                   </li>
                   <li>content-management-server -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40198/jndi/rmi://<%= node['blueprint']['hostname'] %>:40199/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40198/jndi/rmi://<%= host %>:40199/jmxrmi</code></li>
                   <li>master-live-server -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40298/jndi/rmi://<%= node['blueprint']['hostname'] %>:40299/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40298/jndi/rmi://<%= host %>:40299/jmxrmi</code></li>
                   <li>workflow-server -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40398/jndi/rmi://<%= node['blueprint']['hostname'] %>:40399/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40398/jndi/rmi://<%= host %>:40399/jmxrmi</code></li>
                   <li>content-feeder -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40498/jndi/rmi://<%= node['blueprint']['hostname'] %>:40499/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40498/jndi/rmi://<%= host %>:40499/jmxrmi</code></li>
                   <li>user-changes -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40598/jndi/rmi://<%= node['blueprint']['hostname'] %>:40599/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40598/jndi/rmi://<%= host %>:40599/jmxrmi</code></li>
                   <li>elastic-worker -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40698/jndi/rmi://<%= node['blueprint']['hostname'] %>:40699/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40698/jndi/rmi://<%= host %>:40699/jmxrmi</code></li>
                   <li>caefeeder-preview -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40798/jndi/rmi://<%= node['blueprint']['hostname'] %>:40799/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40798/jndi/rmi://<%= host %>:40799/jmxrmi</code></li>
                   <li>caefeeder-live -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40898/jndi/rmi://<%= node['blueprint']['hostname'] %>:40899/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40898/jndi/rmi://<%= host %>:40899/jmxrmi</code></li>
                   <li>cae-preview -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :40998/jndi/rmi://<%= node['blueprint']['hostname'] %>:40999/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:40998/jndi/rmi://<%= host %>:40999/jmxrmi</code></li>
                   <li>studio -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :41098/jndi/rmi://<%= node['blueprint']['hostname'] %>:41099/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:41098/jndi/rmi://<%= host %>:41099/jmxrmi</code></li>
                   <li>adobe-drive-server -
                     <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
                       :41198/jndi/rmi://<%= node['blueprint']['hostname'] %>:41199/jmxrmi</code></li>
                   <li>sitemanager -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :41398/jndi/rmi://<%= node['blueprint']['hostname'] %>:41399/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:41398/jndi/rmi://<%= host %>:41399/jmxrmi</code></li>
                   <li>replication-live-server -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :42098/jndi/rmi://<%= node['blueprint']['hostname'] %>:42099/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:42098/jndi/rmi://<%= host %>:42099/jmxrmi</code></li>
                   <li>cae-live -
-                    <code>service:jmx:rmi://<%= node['blueprint']['hostname'] %>
-                      :42198/jndi/rmi://<%= node['blueprint']['hostname'] %>:42199/jmxrmi</code></li>
+                    <code>service:jmx:rmi://<%= host %>:42198/jndi/rmi://<%= host %>:42199/jmxrmi</code></li>
                 </ul>
                 <p><br/></p>
 

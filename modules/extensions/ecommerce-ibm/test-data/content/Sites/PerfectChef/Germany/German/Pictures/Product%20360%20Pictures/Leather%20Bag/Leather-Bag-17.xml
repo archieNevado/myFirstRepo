@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product 360 Pictures/Leather Bag" name="Leather-Bag-17" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product 360 Pictures/Leather Bag" name="Leather-Bag-17" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20360%20Pictures/Leather%20Bag/Leather-Bag-17.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20360%20Pictures/Leather%20Bag/Leather-Bag-17"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -49,7 +48,7 @@
 <dataUrl></dataUrl>
 <width>2800</width>
 <height>2000</height>
-<data md5="12388088118065b7192ff97a71be3258" href="../../../../../../../__blob/12388088118065b7192ff97a71be3258.blob" mimetype="image/jpeg"/>
+<data md5="12388088118065b7192ff97a71be3258" size="146091" href="../../../../../../../__blob/12388088118065b7192ff97a71be3258.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

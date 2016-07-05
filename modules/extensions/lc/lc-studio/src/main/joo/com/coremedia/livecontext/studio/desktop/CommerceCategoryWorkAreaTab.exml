@@ -28,7 +28,8 @@
                                                      showLocal="true"
                                                      forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
                                                      bindTo="{augmentedCategoryExpression}"
-                                                     pageGridPropertyName="pdpPagegrid"/>
+                                                     pageGridPropertyName="pdpPagegrid"
+                                                     fallbackPageGridPropertyName="placement"/>
         </items>
       </editor:documentForm>
       <livecontext:commerceSystemForm autoHide="true"/>

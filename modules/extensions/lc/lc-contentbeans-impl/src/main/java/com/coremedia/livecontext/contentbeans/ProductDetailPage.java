@@ -5,6 +5,7 @@ import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.livecontext.context.LiveContextNavigation;
 
 /**
  * Custom page that renders the PDP page grid instead of the regular page grid.
@@ -17,19 +18,19 @@ public class ProductDetailPage extends PageImpl {
   }
 
   /**
-   * Better use setExternalChannel for type safety.
+   * Better use setLiveContextNavigation for type safety.
    *
-   * @param navigation must be a LiveContextExternalChannel
+   * @param navigation must be a LiveContextNavigation
    */
   @Override
   public final void setNavigation(Navigation navigation) {
-    if (!(navigation instanceof LiveContextExternalChannel)) {
-      throw new IllegalArgumentException("Navigation " + navigation + " is no LiveContextExternalChannel.  Use setExternalChannel in order to avoid this kind of mismatch.");
+    if (!(navigation instanceof LiveContextNavigation)) {
+      throw new IllegalArgumentException("Navigation " + navigation + " is no LiveContextNavigation.  Use setLiveContextNavigation in order to avoid this kind of mismatch.");
     }
-    setExternalChannel((LiveContextExternalChannel)navigation);
+    setLiveContextNavigation((LiveContextNavigation)navigation);
   }
 
-  public void setExternalChannel(LiveContextExternalChannel navigation) {
+  public void setLiveContextNavigation(LiveContextNavigation navigation) {
     super.setNavigation(navigation);
   }
 

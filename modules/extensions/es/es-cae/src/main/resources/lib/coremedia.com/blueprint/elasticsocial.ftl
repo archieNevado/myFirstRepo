@@ -38,6 +38,10 @@
   <#return elasticSocialFreemarkerFacade.getReviewsResult(target)>
 </#function>
 
+<#function getNumberOfComments target>
+  <#return elasticSocialFreemarkerFacade.getNumberOfComments(target)>
+</#function>
+
 <#function hasUserWrittenReview target>
   <#return elasticSocialFreemarkerFacade.hasUserWrittenReview(target)>
 </#function>

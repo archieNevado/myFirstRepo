@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AMVideoAsset folder="/Assets/Products/Lighting" name="Unboxing the Chef Corp. RGB LED Strips" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<thumbnail md5="858a05aaf8d79f19d08338227361ffc2" href="../../../__blob/858a05aaf8d79f19d08338227361ffc2.blob" mimetype="image/png"/>
+<thumbnail md5="858a05aaf8d79f19d08338227361ffc2" size="532471" href="../../../__blob/858a05aaf8d79f19d08338227361ffc2.blob" mimetype="image/png"/>
 <state>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="web">
@@ -60,5 +60,5 @@
 <assetTaxonomy>
 <link href="../../../Settings/Taxonomies/Asset%20Download%20Portal/Lighting.xml" path="/Settings/Taxonomies/Asset%20Download%20Portal/Lighting"/>
 </assetTaxonomy>
-<web md5="b5cd3278fa63c8f001e31bd4c36b84f3" href="../../../__blob/b5cd3278fa63c8f001e31bd4c36b84f3.blob" mimetype="video/mp4"/>
+<web md5="b5cd3278fa63c8f001e31bd4c36b84f3" size="13761604" href="../../../__blob/b5cd3278fa63c8f001e31bd4c36b84f3.blob" mimetype="video/mp4"/>
 </AMVideoAsset>

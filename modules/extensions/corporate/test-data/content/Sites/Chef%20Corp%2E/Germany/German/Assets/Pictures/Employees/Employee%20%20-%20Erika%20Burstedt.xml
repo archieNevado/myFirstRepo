@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Employees" name="Employee  - Erika Burstedt" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/Chef Corp./Germany/German/Assets/Pictures/Employees" name="Employee  - Erika Burstedt" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Employees/Employee%2021132593573%20-%20Sally%20White.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Employees/Employee%2021132593573%20-%20Sally%20White"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -101,7 +100,7 @@
 <dataUrl></dataUrl>
 <width>800</width>
 <height>800</height>
-<data md5="be140a58a75515301435cc84faedd1ae" href="../../../../../../../__blob/be140a58a75515301435cc84faedd1ae.blob" mimetype="image/jpeg"/>
+<data md5="be140a58a75515301435cc84faedd1ae" size="454870" href="../../../../../../../__blob/be140a58a75515301435cc84faedd1ae.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

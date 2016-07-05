@@ -3,8 +3,8 @@ package com.coremedia.blueprint.cae.filter;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.cap.content.ContentRepository;
 import com.google.common.annotations.VisibleForTesting;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,7 +21,7 @@ import java.io.IOException;
  * A view is preview specific iff it contains "Preview".
  */
 public class PreviewViewFilter extends OncePerRequestFilter implements InitializingBean {
-  private static final Log LOG = LogFactory.getLog(PreviewViewFilter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PreviewViewFilter.class);
   private static final String PREVIEW = "Preview";
 
   private ContentRepository contentRepository;

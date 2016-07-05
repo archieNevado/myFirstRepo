@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.persistentcache.PersistentCache2;
+import com.coremedia.cap.persistentcache.PersistentCache;
 import com.coremedia.cap.persistentcache.PersistentCacheKey;
 import com.coremedia.cap.persistentcache.PersistentCacheKeyFactory;
 
@@ -16,12 +16,12 @@ import com.coremedia.cap.persistentcache.PersistentCacheKeyFactory;
  */
 public class TreePathKeyFactory implements PersistentCacheKeyFactory {
 
-  private PersistentCache2 persistentCache;
+  private PersistentCache persistentCache;
   private ContentRepository contentRepository;
   private TreeRelation<Content> treeRelation;
   private String keyPrefix;
 
-  public void setPersistentCache(PersistentCache2 persistentCache) {
+  public void setPersistentCache(PersistentCache persistentCache) {
     this.persistentCache = persistentCache;
   }
 

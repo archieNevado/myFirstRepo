@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/02_In The Kitchen/Pans, Skillets" name="PC_CAST_IRON_PAN_ROUND Actionshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/02_In The Kitchen/Pans, Skillets" name="PC_CAST_IRON_PAN_ROUND Actionshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Pans%2C%20Skillets/PC_CAST_IRO5d291b18.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/02_In%20The%20Kitchen/Pans%2C%20Skillets/PC_CAST_IRON_PAN_ROUND%20Actionshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -107,7 +106,7 @@
 <alt>Runde Pfanne aus Gusseisen</alt>
 <copyright>Delmas Lehman / shutterstock 98333399</copyright>
 <dataUrl></dataUrl>
-<data md5="dc78cfdb9e18d193eb07b3338df1fada" href="../../../../../../../../__blob/dc78cfdb9e18d193eb07b3338df1fada.blob" mimetype="image/jpeg"/>
+<data md5="dc78cfdb9e18d193eb07b3338df1fada" size="579267" href="../../../../../../../../__blob/dc78cfdb9e18d193eb07b3338df1fada.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

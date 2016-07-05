@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Category Pictures/In The Kitchen" name="Pots Category Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Category Pictures/In The Kitchen" name="Pots Category Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Pictures/Product%20Category%20Pictures/In%20The%20Kitchen/Pots%20Category%20Picture.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Category%20Pictures/In%20The%20Kitchen/Pots%20Category%20Picture"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -106,7 +105,7 @@
 <alt>Töpfe</alt>
 <copyright>Subbotina Anna / Shutterstock 80571715</copyright>
 <dataUrl></dataUrl>
-<data md5="31dc72e5cad98b5017649736b5fd7692" href="../../../../../../../__blob/31dc72e5cad98b5017649736b5fd7692.blob" mimetype="image/jpeg"/>
+<data md5="31dc72e5cad98b5017649736b5fd7692" size="490904" href="../../../../../../../__blob/31dc72e5cad98b5017649736b5fd7692.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

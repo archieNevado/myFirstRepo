@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.product;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -9,7 +10,6 @@ import com.coremedia.livecontext.context.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -23,8 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;

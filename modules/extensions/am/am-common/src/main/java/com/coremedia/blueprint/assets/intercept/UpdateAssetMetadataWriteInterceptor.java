@@ -76,11 +76,9 @@ public class UpdateAssetMetadataWriteInterceptor extends ContentWriteInterceptor
     Content entity = request.getEntity();
 
     // The content is currently being created.
-    if (entity == null) {
-      return;
+    if (entity != null) {
+      updateMetadata(entity, properties);
     }
-
-    updateMetadata(entity, properties);
   }
 
   private void updateMetadata(@Nonnull CapObject entity,

@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMPlaceholder/productlist-categories.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMPlaceholder/productlist-categories"/>
 </master>
-<masterVersion>1</masterVersion>
 <description></description>
 <icon href="productlist-categories.icon.png" mimetype="image/png"/>
 <layout>productlist-categories</layout>

@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.common.datevalidation;
 
 import com.google.common.base.Function;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +20,7 @@ class ContentToEarliestValidationDateFunction implements Function<ValidityPeriod
   /**
    * The logger
    */
-  private static final Log LOG = LogFactory.getLog(ContentToEarliestValidationDateFunction.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ContentToEarliestValidationDateFunction.class);
 
   /**
    * Constructor

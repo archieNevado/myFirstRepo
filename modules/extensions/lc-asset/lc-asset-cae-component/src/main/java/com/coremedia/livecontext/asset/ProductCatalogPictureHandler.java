@@ -7,9 +7,9 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
@@ -33,10 +33,11 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
 
   @RequestMapping(value = IMAGE_URI_PATTERN)
   public ModelAndView handleRequestWidthHeightForProduct(@PathVariable(STORE_ID) String storeId,
-                                               @PathVariable(LOCALE) String locale,
-                                               @PathVariable(FORMAT_NAME) String formatName,
-                                               @PathVariable(PART_NUMBER) String partNumber,
-                                               HttpServletRequest request) throws IOException {
+                                                         @PathVariable(LOCALE) String locale,
+                                                         @PathVariable(FORMAT_NAME) String formatName,
+                                                         @PathVariable(PART_NUMBER) String partNumber,
+                                                         @PathVariable(SEGMENT_EXTENSION) String extension,
+                                                         WebRequest request) throws IOException {
     //the given partnumber can be of a product or of a sku but we need the correct reference id
     //so ask catalog service we will give us a sku instance if the partnumber belongs to a sku
     Product productOrSkuByPartNumber = Commerce.getCurrentConnection().getCatalogService().findProductById(
@@ -45,6 +46,6 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
       return HandlerHelper.notFound();
     }
 
-    return handleRequestWidthHeight(storeId, locale, formatName, productOrSkuByPartNumber.getReference(), request);
+    return handleRequestWidthHeight(storeId, locale, formatName, productOrSkuByPartNumber.getReference(), extension, request);
   }
 }

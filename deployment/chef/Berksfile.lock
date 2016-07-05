@@ -47,8 +47,8 @@ DEPENDENCIES
     path: thirdparty-cookbooks/fpm-tng
   gpg
     path: thirdparty-cookbooks/gpg
-  mongodb
-    path: thirdparty-cookbooks/mongodb
+  mongodb3
+    path: thirdparty-cookbooks/mongodb3
   mysql
     path: thirdparty-cookbooks/mysql
   nginx
@@ -61,8 +61,6 @@ DEPENDENCIES
     path: thirdparty-cookbooks/packagecloud
   postgresql
     path: thirdparty-cookbooks/postgresql
-  python
-    path: thirdparty-cookbooks/python
   rbac
     path: thirdparty-cookbooks/rbac
   repository
@@ -81,6 +79,8 @@ DEPENDENCIES
     path: thirdparty-cookbooks/sysctl
   ulimit
     path: thirdparty-cookbooks/ulimit
+  user
+    path: thirdparty-cookbooks/user
   windows
     path: thirdparty-cookbooks/windows
   yum
@@ -119,9 +119,9 @@ GRAPH
     chef-sugar (~> 3.0)
     coremedia-proxy (>= 0.0.0)
     fpm-tng (~> 0.1.7)
-  blueprint-mongodb (1.0.0)
-    blueprint-yum (>= 0.0.0)
-    mongodb (~> 0.16.2)
+  blueprint-mongodb (1.0.3)
+    mongodb3 (~> 5.2.0)
+    ulimit (~> 0.3.0)
   blueprint-mysql (1.0.0)
     blueprint-base (>= 0.0.0)
     mysql (~> 6.1.0)
@@ -155,7 +155,7 @@ GRAPH
   coremedia-tools (1.0.3)
     coremedia_maven (~> 2.0)
   coremedia_maven (2.0.4)
-  coremedia_tomcat (2.0.9)
+  coremedia_tomcat (2.0.11)
     coremedia_maven (~> 2.0)
     ulimit (~> 0.3)
   fpm-tng (0.1.7)
@@ -163,11 +163,11 @@ GRAPH
     reprepro (>= 0.0.0)
     ruby_installer (>= 0.0.0)
   gpg (0.2.2)
-  mongodb (0.16.2)
-    apt (>= 1.8.2)
-    python (>= 0.0.0)
-    runit (>= 1.5.0)
-    yum (>= 3.0)
+  mongodb3 (5.2.0)
+    apt (>= 0.0.0)
+    runit (~> 1.7.0)
+    user (>= 0.0.0)
+    yum (>= 0.0.0)
   mysql (6.1.2)
     smf (>= 0.0.0)
     yum-mysql-community (>= 0.0.0)
@@ -186,9 +186,6 @@ GRAPH
     apt (>= 1.9.0)
     build-essential (>= 0.0.0)
     openssl (~> 4.0)
-  python (1.4.6)
-    build-essential (>= 0.0.0)
-    yum-epel (>= 0.0.0)
   rbac (1.0.3)
   repository (0.1.8)
     apache2 (>= 0.0.0)
@@ -211,6 +208,7 @@ GRAPH
   sysctl (0.6.2)
     ohai (>= 0.0.0)
   ulimit (0.3.3)
+  user (0.4.2)
   windows (1.39.2)
     chef_handler (>= 0.0.0)
   yum (3.10.0)

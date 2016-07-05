@@ -39,7 +39,26 @@
   padding: 0;
 }
 
+#page .contentRecommendationWidget .button a {
+  color: #fff;
+}
+
 /* hide ibm breadcrumb, use our own instead */
 #page #widget_breadcrumb {
   display: none;
+}
+
+/* websphere commcere changes */
+#articleListing li.item h1,
+#articleListing li.item h2 {
+  margin: 0;
+}
+
+#articleListing li.item .content {
+  padding: 5px 20px 15px 65px;
+}
+
+/* CMS-5980: misaligned legend in AuroraESite */
+.spanacce {
+  display: block;
 }

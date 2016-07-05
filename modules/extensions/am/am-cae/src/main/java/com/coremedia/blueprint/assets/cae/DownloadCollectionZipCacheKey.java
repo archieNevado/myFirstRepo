@@ -1,13 +1,13 @@
 package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAssetRendition;
-import com.coremedia.blueprint.base.links.BlobHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.transform.BlobHelper;
 import com.coremedia.cotopaxi.common.CacheFactory;
 import com.coremedia.cotopaxi.content.AbstractContentRepository;
 import com.coremedia.mimetype.MimeTypeService;

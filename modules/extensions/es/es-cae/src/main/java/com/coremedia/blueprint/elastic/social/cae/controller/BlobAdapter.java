@@ -70,4 +70,8 @@ public class BlobAdapter implements com.coremedia.cap.common.Blob {
     }
   }
 
+  @Override
+  public void dispose() {
+    // Elastic blobs are not disposed.
+  }
 }

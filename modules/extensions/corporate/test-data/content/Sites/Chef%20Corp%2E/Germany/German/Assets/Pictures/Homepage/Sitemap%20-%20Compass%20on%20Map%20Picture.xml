@@ -4,7 +4,6 @@
 <master>
 <link href="../../../../../United%20States/English/Assets/Pictures/Homepage/Sitemap%20-%20Compass%20on%20Map%20Picture.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Assets/Pictures/Homepage/Sitemap%20-%20Compass%20on%20Map%20Picture"/>
 </master>
-<masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -103,7 +102,7 @@
 <dataUrl></dataUrl>
 <width>4000</width>
 <height>2667</height>
-<data md5="3841c1f5aa7facdef26914899414fc74" href="../../../../../../../__blob/3841c1f5aa7facdef26914899414fc74.blob" mimetype="image/jpeg"/>
+<data md5="3841c1f5aa7facdef26914899414fc74" size="1077112" href="../../../../../../../__blob/3841c1f5aa7facdef26914899414fc74.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

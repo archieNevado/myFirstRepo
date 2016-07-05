@@ -1,11 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
@@ -27,9 +23,5 @@
       Strategy for mapping a e-Commerce product to a CoreMedia channel.
     </description>
   </bean>
-
-  <bean id="liveContextNavigationFinder" class="com.coremedia.livecontext.navigation.LiveContextNavigationFinder"/>
-
-  <customize:replace id="navigationContextFinderCustomizer" bean="navigationContextFinder" custom-ref="liveContextNavigationFinder"/>
 
 </beans>

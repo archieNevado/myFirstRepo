@@ -109,8 +109,6 @@
     <property name="dataViewFactory" ref="dataViewFactory"/>
   </bean>
 
-  <bean id="fragmentContextProvider" class="com.coremedia.livecontext.fragment.FragmentContextProvider" />
-
   <customize:append id="liveContextCrossDomainWhiteList" bean="crossDomainEnabler" property="crossDomainWhitelist"
                     custom-value="${livecontext.crossdomain.whitelist}"/>
 

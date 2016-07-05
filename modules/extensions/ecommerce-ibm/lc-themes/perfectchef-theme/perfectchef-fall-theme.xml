@@ -5,18 +5,16 @@
 
   <javaScripts>
     <!-- Vendor Basic JavaScripts -->
-    <javaScript>../basic/vendor/html5shiv-3.7.0.min.js</javaScript>
-    <javaScript>../basic/vendor/respond-1.3.0.min.js</javaScript>
-    <javaScript>../basic/vendor/jquery-1.11.1.min.js</javaScript>
-    <javaScript>../basic/vendor/jquery.magnific-popup-0.9.7/jquery.magnific-popup.min.js</javaScript>
+    <javaScript>../basic/vendor/jquery.js</javaScript>
     <javaScript>../basic/vendor/jquery.cycle2.js</javaScript>
     <javaScript>../basic/vendor/jquery.cycle2.swipe.js</javaScript>
     <javaScript>../basic/vendor/jquery.cycle2.carousel.patched.js</javaScript>
+    <javaScript>../basic/vendor/jquery.magnific-popup.js</javaScript>
     <javaScript>../basic/vendor/imagesloaded.pkgd.js</javaScript>
-    <javaScript>../basic/vendor/mediaelement/mediaelement-and-player.min.js</javaScript>
+    <javaScript>../basic/vendor/mediaelement/mediaelement-and-player.js</javaScript>
+    <javaScript>../basic/vendor/jquery.elevatezoom.js</javaScript>
     <!-- Additional Vendor JavaScripts for PerfectChef -->
-    <javaScript>../perfectchef/vendor/masonry.min.js</javaScript>
-    <javaScript>../vendor/jquery.elevateZoom.min.js</javaScript>
+    <javaScript>../perfectchef/vendor/masonry.pkgd.js</javaScript>
     <!-- CoreMedia Basic JavaScripts -->
     <javaScript>../basic/js/noconflict.js</javaScript>
     <javaScript>../basic/js/jquery.coremedia.utils.js</javaScript>
@@ -38,6 +36,7 @@
     <javaScript>../elastic/js/com.coremedia.blueprint.basic.timezone.js</javaScript>
     <javaScript>../elastic/js/com.coremedia.blueprint.es.js</javaScript>
     <!-- CoreMedia PerfectChef JavaScripts -->
+    <javaScript>../perfectchef/js/com.coremedia.jquery.equalheight.js</javaScript>
     <javaScript>../perfectchef/js/com.coremedia.blueprint.perfectchef.js</javaScript>
     <javaScript>../perfectchef/js/com.coremedia.blueprint.perfectchef.deviceSettings.js</javaScript>
   </javaScripts>
@@ -46,8 +45,8 @@
     <!-- CoreMedia Basic CSS -->
     <css>../basic/vendor/normalize.css</css>
     <css>../basic/css/helpers.css</css>
-    <css>../basic/vendor/jquery.magnific-popup-0.9.7/magnific-popup.css</css>
-    <css>../basic/vendor/mediaelement/mediaelementplayer.min.css</css>
+    <css>../basic/vendor/magnific-popup.css</css>
+    <css>../basic/vendor/mediaelement/mediaelementplayer.css</css>
     <css>../basic/css/coremedia-richtext-1.0.css</css>
     <css>../basic/css/basic-icons.css</css>
     <css>../basic/css/main.css</css>
@@ -57,7 +56,7 @@
     <!-- CoreMedia Elastic Social -->
     <css>../elastic/css/es.css</css>
     <css>../elastic/css/es-form.css</css>
-    <!-- PerfectChef Styles -->
+    <!-- CoreMedia PerfectChef -->
     <css>../perfectchef/css/font.css</css>
     <css>../perfectchef/css/layout.css</css>
     <css>../perfectchef/css/teaser.css</css>

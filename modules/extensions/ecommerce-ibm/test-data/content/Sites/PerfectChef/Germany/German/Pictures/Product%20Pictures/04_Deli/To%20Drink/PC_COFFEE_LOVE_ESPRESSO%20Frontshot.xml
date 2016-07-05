@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/04_Deli/To Drink" name="PC_COFFEE_LOVE_ESPRESSO Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMPicture folder="/Sites/PerfectChef/Germany/German/Pictures/Product Pictures/04_Deli/To Drink" name="PC_COFFEE_LOVE_ESPRESSO Frontshot" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Pictures/04_Deli/To%20Drink/PC_COFFEE_LOVE_ESPRESSO%20Frontshot.xml" path="/Sites/PerfectChef/United%20States/English/Pictures/Product%20Pictures/04_Deli/To%20Drink/PC_COFFEE_LOVE_ESPRESSO%20Frontshot"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <localSettings>
@@ -109,7 +108,7 @@
 <alt>Coffee Espresso Box</alt>
 <copyright>jmarkow / Shutterstock 173854745</copyright>
 <dataUrl></dataUrl>
-<data md5="7ba1cd70d5dbd6bc5f2dc22f90463442" href="../../../../../../../../__blob/7ba1cd70d5dbd6bc5f2dc22f90463442.blob" mimetype="image/jpeg"/>
+<data md5="7ba1cd70d5dbd6bc5f2dc22f90463442" size="353994" href="../../../../../../../../__blob/7ba1cd70d5dbd6bc5f2dc22f90463442.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

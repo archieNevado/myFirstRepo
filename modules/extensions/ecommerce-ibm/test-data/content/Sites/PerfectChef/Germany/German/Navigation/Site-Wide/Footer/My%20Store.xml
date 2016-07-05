@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer" name="My Store" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-up-to-date">
+<CMCollection folder="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer" name="My Store" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Navigation/Site-Wide/Footer/My%20Store.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Site-Wide/Footer/My%20Store"/>
 </master>
-<masterVersion>1</masterVersion>
 <viewtype>
 </viewtype>
 <linkedSettings>
