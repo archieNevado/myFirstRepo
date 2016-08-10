@@ -60,7 +60,7 @@ if node['blueprint']['nexus_url']
   node.default['blueprint']['tools']['content-management-server']['version'] = 'RELEASE'
   node.default['blueprint']['tools']['master-live-server']['version'] = 'RELEASE'
   node.default['blueprint']['tools']['workflow-server']['version'] = 'RELEASE'
-  node.default['blueprint']['tools']['css-importer']['version'] = 'RELEASE'
+  node.default['blueprint']['tools']['theme-importer']['version'] = 'RELEASE'
   node.default['blueprint']['tools']['replication-live-server']['version'] = 'RELEASE'
   node.default['blueprint']['common_libs']['coremedia-tomcat.jar']['version'] = 'RELEASE'
 else
@@ -85,6 +85,6 @@ else
   node.default['blueprint']['tools']['content-management-server']['version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['tools']['master-live-server']['version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['tools']['workflow-server']['version'] = 'ENTER CONCRETE VERSION HERE'
-  node.default['blueprint']['tools']['css-importer']['version'] = 'ENTER CONCRETE VERSION HERE'
+  node.default['blueprint']['tools']['theme-importer']['version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['tools']['replication-live-server']['version'] = 'ENTER CONCRETE VERSION HERE'
 end

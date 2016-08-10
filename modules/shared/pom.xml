@@ -14,18 +14,20 @@
   <description>Shared Library Module</description>
 
   <modules>
+    <module>doctypes</module>
     <module>content-services</module>
     <module>link-services</module>
+    <module>image-transformation</module>
     <module>taxonomies</module>
     <module>test-util</module>
     <module>search-api</module>
-    <module>image-transformation</module>
     <module>solr-search</module>
     <module>database-drivers</module>
     <module>workflow-lib</module>
     <module>coremedia-tomcat</module>
     <module>tomcat-common-libs</module>
     <module>tomcat-server-libs</module>
+    <module>theme-importer</module>
   </modules>
 </project>
 

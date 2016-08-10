@@ -148,6 +148,7 @@
               <bpforms:cmPictureForm itemId="CMPicture"/>
               <bpforms:cmPlaceholderForm itemId="CMPlaceholder"/>
               <bpforms:cmQueryListForm itemId="CMQueryList"/>
+              <bpforms:cmResourceBundleForm itemId="CMResourceBundle"/>
               <bpforms:cmSettingsForm itemId="CMSettings"/>
               <bpforms:cmSiteForm itemId="CMSite"/>
               <bpforms:cmSitemapForm itemId="CMSitemap"/>
@@ -156,6 +157,7 @@
               <bpforms:cmTaxonomyForm itemId="CMTaxonomy"/>
               <bpforms:cmTemplateSetForm itemId="CMTemplateSet"/>
               <bpforms:cmTeaserForm itemId="CMTeaser"/>
+              <bpforms:cmThemeForm itemId="CMTheme"/>
               <bpforms:cmVideoForm itemId="CMVideo"/>
               <bpforms:cmViewtypeForm itemId="CMViewtype"/>
             </editor:documentTabPanels>
@@ -205,7 +207,7 @@
 
       <!-- there is no preview available for these DocTypes -->
       <editor:configureDocumentTypes names="CMAction,CMCSS,CMExternalLink,CMFolderProperties,CMImage,CMJavaScript,
-                                            CMPlaceholder,CMSettings,CMSite,CMSymbol,EditorPreferences,
+                                            CMPlaceholder,CMResourceBundle,CMSettings,CMSite,CMSymbol,EditorPreferences,
                                             CMTemplateSet,CMViewtype,CMTaxonomy,CMLocTaxonomy"
                                      preview="false"/>
 
@@ -214,6 +216,13 @@
         <editor:previewUrlTransformers>
           <editor:addParameterPreviewUrlTransformer name="view"
                                                     value="fragmentPreview"/>
+        </editor:previewUrlTransformers>
+      </editor:configureDocumentTypes>
+
+      <editor:configureDocumentTypes names="CMTheme">
+        <editor:previewUrlTransformers>
+          <editor:addParameterPreviewUrlTransformer name="view"
+                                                    value="asPreview"/>
         </editor:previewUrlTransformers>
       </editor:configureDocumentTypes>
 

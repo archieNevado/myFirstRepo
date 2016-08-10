@@ -144,6 +144,13 @@
     </dependency>
 
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>image-struct-adapter-component</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-rest</artifactId>
       <scope>runtime</scope>
@@ -267,5 +274,14 @@
         <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/controlroom-memory</development-properties.dir>
       </properties>
     </profile>
+
+    <profile>
+      <id>apache-box</id>
+      <properties>
+        <proxy.host>192.168.252.100.xip.io</proxy.host>
+        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/apache-box</development-properties.dir>
+      </properties>
+    </profile>
   </profiles>
+
 </project>

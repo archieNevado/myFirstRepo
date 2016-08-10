@@ -1,12 +1,13 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.slf4j.Logger;
@@ -18,7 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.*;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCatalogId;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static java.util.Arrays.asList;
 
 /**
@@ -28,13 +33,13 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WcSegmentWrapperService.class);
 
-  private static final WcRestConnector.WcRestServiceMethod<HashMap, Void>
+  private static final WcRestServiceMethod<HashMap, Void>
     FIND_ALL_SEGMENTS = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/segment", true, true, HashMap.class);
 
-  private static final WcRestConnector.WcRestServiceMethod<HashMap, Void>
+  private static final WcRestServiceMethod<HashMap, Void>
     FIND_SEGMENT_BY_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/segment/{id}", true, true, HashMap.class);
 
-  private static final WcRestConnector.WcRestServiceMethod<HashMap, Void>
+  private static final WcRestServiceMethod<HashMap, Void>
     FIND_SEGMENTS_BY_USER = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/segment?q=byUserId&qUserId={id}", true, true, HashMap.class);
 
   /**
@@ -47,11 +52,11 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
   @SuppressWarnings("unchecked")
   public Map<String, Object> findAllSegments(final StoreContext storeContext, final UserContext userContext) {
     try {
-      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_7) {
+      if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
         return Collections.emptyMap();
       }
       return getRestConnector().callService(
-        FIND_ALL_SEGMENTS, asList(getStoreId(storeContext)),
+              FIND_ALL_SEGMENTS, Collections.singletonList(getStoreId(storeContext)),
         createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext)),
         null, storeContext, userContext);
 
@@ -74,7 +79,7 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
   @SuppressWarnings("unchecked")
   public Map<String, Object> findSegmentByTechId(final String externalId, final StoreContext storeContext, final UserContext userContext) throws CommerceException {
     try {
-      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_7) {
+      if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
         return null;
       }
       Map<String, Object> data = getRestConnector().callService(
@@ -83,7 +88,7 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
         null, storeContext, userContext);
       if (data != null) {
         List<Map<String, Object>> memberGroups = DataMapHelper.getValueForPath(data, "MemberGroup", List.class);
-        if (memberGroups != null && memberGroups.size() > 0) {
+        if (memberGroups != null && !memberGroups.isEmpty()) {
           Map<String, Object> firstSegment = memberGroups.get(0);
           String segmentId = DataMapHelper.getValueForPath(firstSegment, "id", String.class);
           if (segmentId != null && !segmentId.isEmpty()) {
@@ -134,7 +139,7 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
   @SuppressWarnings("unchecked")
   public Map<String, Object> findSegmentsByUser(StoreContext storeContext, UserContext userContext) {
     try {
-      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_7) {
+      if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
         return Collections.emptyMap();
       }
       Integer forUserId = UserContextHelper.getForUserId(userContext);

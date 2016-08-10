@@ -25,6 +25,13 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>doctypes</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>server-extension-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>

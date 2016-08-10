@@ -18,13 +18,35 @@
 </StructProperty>
 <StructListProperty Name="image-map">
 <Struct>
-<StringProperty Name="id">map-area-1</StringProperty>
-<StringProperty Name="coords">1187,870,2123,1600</StringProperty>
+<StringProperty Name="id">map-area-3</StringProperty>
+<StringProperty Name="coords">228,1087,976,2134</StringProperty>
 <StringProperty Name="alt"/>
 <StringProperty Name="rotation"/>
 <StringProperty Name="shape">rect</StringProperty>
 <StringProperty Name="target">_blank</StringProperty>
-<BooleanProperty Name="displayAsInlineOverlay">true</BooleanProperty>
+<BooleanProperty Name="displayAsInlineOverlay">false</BooleanProperty>
+<StringProperty Name="inlineOverlayTheme">dark-on-light</StringProperty>
+<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../Products/Aurora%20B2B/Lighting/Chef%20Corp%20RGB%20LED5ed0ab2.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Products/Aurora%20B2B/Lighting/Chef%20Corp%20RGB%20LED%20Strip%20Product%20Teaser"/>
+</Struct>
+<Struct>
+<StringProperty Name="id">map-area-2</StringProperty>
+<StringProperty Name="coords">2496,181,3512,1567</StringProperty>
+<StringProperty Name="alt"/>
+<StringProperty Name="rotation"/>
+<StringProperty Name="shape">rect</StringProperty>
+<StringProperty Name="target">_blank</StringProperty>
+<BooleanProperty Name="displayAsInlineOverlay">false</BooleanProperty>
+<StringProperty Name="inlineOverlayTheme">dark-on-light</StringProperty>
+<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../Products/Aurora%20B2B/Lighting/Chef%20Corp%20RGB%20LED5ed0ab2.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Products/Aurora%20B2B/Lighting/Chef%20Corp%20RGB%20LED%20Strip%20Product%20Teaser"/>
+</Struct>
+<Struct>
+<StringProperty Name="id">map-area-1</StringProperty>
+<StringProperty Name="coords">1093,1461,2029,2191</StringProperty>
+<StringProperty Name="alt"/>
+<StringProperty Name="rotation"/>
+<StringProperty Name="shape">rect</StringProperty>
+<StringProperty Name="target">_blank</StringProperty>
+<BooleanProperty Name="displayAsInlineOverlay">false</BooleanProperty>
 <StringProperty Name="inlineOverlayTheme">dark-on-light</StringProperty>
 <LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../Products/Aurora%20B2B/Lighting/Chef%20Corp%20RGB%20LED5ed0ab2.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Products/Aurora%20B2B/Lighting/Chef%20Corp%20RGB%20LED%20Strip%20Product%20Teaser"/>
 </Struct>
@@ -33,8 +55,8 @@
 </localSettings>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment></segment>
 <title></title>
 <htmlTitle></htmlTitle>

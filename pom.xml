@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!--
@@ -21,8 +22,8 @@
     <coremedia.enforcer.fail>true</coremedia.enforcer.fail>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <compile.source.jdk>1.7</compile.source.jdk>
-    <compile.target.jdk>1.7</compile.target.jdk>
+    <compile.source.jdk>1.8</compile.source.jdk>
+    <compile.target.jdk>1.8</compile.target.jdk>
 
     <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.client.version>1.19.0</google.api.client.version>
@@ -35,13 +36,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1604.2-55</blueprint-base.version>
-    <cms.version>1604.2-55</cms.version>
-    <personalization.version>1604.2-55</personalization.version>
-    <elastic.version>1604.2-55</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1604.2-55</studio.version>
-    <caetoolbox.version>1604.2-55</caetoolbox.version>
-    <livecontext.version>1604.2-55</livecontext.version>
+    <blueprint-base.version>1604.3-6</blueprint-base.version>
+    <cms.version>1604.3-6</cms.version>
+    <personalization.version>1604.3-6</personalization.version>
+    <elastic.version>1604.3-6</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1604.3-6</studio.version>
+    <caetoolbox.version>1604.3-6</caetoolbox.version>
+    <livecontext.version>1604.3-6</livecontext.version>
     <jangaroo.version>2.0.17</jangaroo.version>
     <jangaroo.libs.version>2.0.17</jangaroo.libs.version>
 
@@ -70,16 +71,9 @@
     <wcs.host>${installation.host}</wcs.host>
     <proxy.host>${installation.host}</proxy.host>
 
-    <!--
-    | "build" is the default grunt task to generate webresources in themes without templates jars.
-    | change it to "buildWithTemplates" to include templates into content.
-    -->
-    <cae.themes.grunt.task.build>build</cae.themes.grunt.task.build>
-
-    <!--
-    | "test" is the default grunt task to test webresources in themes.
-    -->
-    <cae.themes.grunt.task.test>test</cae.themes.grunt.task.test>
+    <!-- logback appender for maven tomcat plugin start -->
+    <!-- possible values: console, file, logstash-tcp, logstash-file -->
+    <log.appender>file</log.appender>
 
     <!-- configure the control room persistence extensions here -->
     <controlroom.persistence.extension>es</controlroom.persistence.extension>
@@ -89,12 +83,6 @@
   </properties>
 
   <profiles>
-    <profile>
-      <id>withTemplates</id>
-      <properties>
-        <cae.themes.grunt.task.build>buildWithTemplates</cae.themes.grunt.task.build>
-      </properties>
-    </profile>
     <profile>
       <!--TODO: CUSTOMER DOES NOT KNOW TOKO ????-->
       <id>cae-and-studio-with-es-toko-component</id>
@@ -401,6 +389,13 @@
         <scope>import</scope>
       </dependency>
 
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>logging-bom</artifactId>
+        <version>1-SNAPSHOT</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
       <!-- end of extension imports -->
 
       <dependency>
@@ -602,6 +597,7 @@
         <version>2.2.1</version>
         <classifier>indy</classifier>
       </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -665,54 +661,9 @@
           <artifactId>frontend-maven-plugin</artifactId>
           <version>1.0</version>
           <configuration>
-            <nodeVersion>v4.4.3</nodeVersion> <!-- LTS -->
-            <npmVersion>3.8.6</npmVersion>
-            <!-- install nodejs and npm just once for all themes -->
-            <installDirectory>${blueprint.rootdir}</installDirectory>
+            <nodeVersion>v4.4.7</nodeVersion> <!-- LTS -->
+            <npmVersion>3.10.2</npmVersion>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>com.coremedia.maven</groupId>
-          <artifactId>coremedia-webresource-content-maven-plugin</artifactId>
-          <version>0.19</version>
-          <!-- Provide doctypes to create web resources as content-->
-          <dependencies>
-            <dependency>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>contentserver-blueprint-component</artifactId>
-              <version>${project.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>css-importer-lib</artifactId>
-              <version>${project.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.cms</groupId>
-              <artifactId>cap-importer</artifactId>
-              <version>${cms.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.cms</groupId>
-              <artifactId>cap-unified-api</artifactId>
-              <version>${cms.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.cms</groupId>
-              <artifactId>serverimportexport</artifactId>
-              <version>${cms.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.cms</groupId>
-              <artifactId>cap-client-embedded</artifactId>
-              <version>${cms.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.cms</groupId>
-              <artifactId>coremedia-xml</artifactId>
-              <version>${cms.version}</version>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -764,6 +715,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>2.10.3</version>
+          <configuration>
+            <additionalparam>-Xdoclint:none</additionalparam>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -856,6 +810,25 @@
         </plugin>
 
         <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.5.0</version>
+          <configuration>
+            <executable>${env.JAVA_HOME}/bin/java</executable>
+            <arguments>
+              <argument>-Dthemes_folder=${project.build.directory}/themes</argument>
+              <argument>-Dexport_path=${project.build.directory}/content</argument>
+              <argument>-classpath</argument>
+              <!-- automatically creates the classpath using all project dependencies,
+                   also adding the project build directory -->
+              <classpath/>
+              <argument>com.coremedia.blueprint.themeimporter.client.ThemeImporterRunner</argument>
+            </arguments>
+            <includePluginDependencies>true</includePluginDependencies>
+          </configuration>
+        </plugin>
+
+        <plugin>
           <groupId>com.coremedia.maven</groupId>
           <artifactId>coremedia-application-maven-plugin</artifactId>
           <version>${application-plugin.version}</version>
@@ -889,6 +862,7 @@
               <mongoDb.host>${mongoDb.host}</mongoDb.host>
               <wcs.host>${wcs.host}</wcs.host>
               <proxy.host>${proxy.host}</proxy.host>
+              <log.appender>${log.appender}</log.appender>
             </systemProperties>
           </configuration>
           <dependencies>
@@ -1142,9 +1116,9 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>[1.7,)</version>
+                  <version>[1.8,)</version>
                 </requireJavaVersion>
-                <DependencyConvergence />
+                <DependencyConvergence/>
                 <bannedDependencies>
                   <excludes>
                     <!-- excluded because of conflict with logback -->

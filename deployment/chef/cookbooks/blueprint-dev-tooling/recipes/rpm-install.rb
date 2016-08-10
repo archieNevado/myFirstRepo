@@ -10,7 +10,7 @@ include_recipe 'blueprint-yum::default'
 include_recipe 'blueprint-yum::local'
 
 # tools to be installed
-%w(content-management-server-tools css-importer-tools master-live-server-tools replication-live-server-tools workflow-server-tools caefeeder-preview-tools caefeeder-live-tools).each do |tool|
+%w(content-management-server-tools theme-importer-tools master-live-server-tools replication-live-server-tools workflow-server-tools caefeeder-preview-tools caefeeder-live-tools).each do |tool|
   package "#{node['blueprint']['dev']['rpm']['package_prefix']}#{tool}"
 end
 

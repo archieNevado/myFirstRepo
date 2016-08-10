@@ -108,7 +108,7 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
     } else {
       ve = resolvedUrl.ve;
     }
-    if(undefined === resolvedUrls[shopUrl] || resolvedUrl.at < new Date() - 5000) {
+    if(undefined === resolvedUrls[shopUrl] || resolvedUrl.at < new Date().getTime() - 5000) {
       resolvedUrls[shopUrl] = resolvedUrl;
       remoteServiceMethod.request({shopUrl: shopUrl, siteId: getSiteId()},
               function (response:RemoteServiceMethodResponse):void {

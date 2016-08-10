@@ -4,6 +4,7 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMCSS;
 import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
@@ -106,6 +107,15 @@ public abstract class CMNavigationBase extends CMTeasableImpl implements CMNavig
   public List<? extends CMCSS> getCss() {
     List<Content> contents = getContent().getLinks(CSS);
     return createBeansFor(contents, CMCSS.class);
+  }
+
+  /**
+   * Returns the value of the document property {@link #THEME}.
+   *
+   * @return the value of the document property {@link #THEME}
+   */
+  public CMTheme getTheme() {
+    return createBeanFor(getContent().getLink(THEME), CMTheme.class);
   }
 
   /**

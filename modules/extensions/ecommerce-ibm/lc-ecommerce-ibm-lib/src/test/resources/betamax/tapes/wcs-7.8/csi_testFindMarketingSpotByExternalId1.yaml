@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000QOJouIXhIWPuJcvv6-VCHWl:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -52,6 +53,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000zjkmUGJWpM97rU4siT-Y4vO:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
 - recorded: 2016-05-19T09:27:41.640Z
   request:
@@ -74,9 +76,34 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:42 GMT
       Set-Cookie: JSESSIONID=0000IAQW3teMAYn57x-GP649DKJ:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"MarketingSpotData":[{"baseMarketingSpotActivityData":[{"baseMarketingSpotActivityID":"10439","contentStoreId":"10151","contentName":"ApparelHeroImage","contentClickAction":"None","marketingContentDescription":[{"marketingText":"<link rel=\"stylesheet\"
       href=\"[imagePath]rwdWebAssets\/deptMainESpot\/styles.css\" \/> <div id=\"deptMainESpot\" class=\"container\">    <div id=\"deptMainESpot-bkgrd\">       <div id=\"deptMainESpot-bkgrd-couple\">          <div><\/div>       <\/div>       <div id=\"deptMainESpot-container\"
       class=\"espotCont\">          <div id=\"deptMainESpot-girl2\">    <!--[if IE 8]>       <img src=\"[imagePath]rwdWebAssets\/deptMainESpot\/female.png\"\/>    <![endif]-->    <!--[if gte IE 9]><!-->          <div><\/div>    <!--<![endif]-->          <\/div>          <div
       id=\"deptMainESpot-titleCont\">             <div class=\"title\">Fashionable <\/div>             <div class=\"title2\">Evening Wear<\/div>             <div class=\"title4\">Save on women''s dresses <br\/>and men''s suits<\/div>          <\/div>          <div
       id=\"deptMainESpot-multiImgCont\">             <div id=\"deptMainESpot-couple\">                <!--[if IE 8]>      <img src=\"[imagePath]rwdWebAssets\/deptMainESpot\/couple.png\"\/>     <![endif]-->     <!--[if gte IE 9]><!-->           <div><\/div>     <!--<![endif]-->             <\/div>             <div
       id=\"deptMainESpot-male\">                <div><\/div>             <\/div>          <\/div>       <\/div>    <\/div> <\/div>","language":"-1"}],"MarketingContentDescription":[{}],"contentFormatId":"2","baseMarketingSpotActivityName":"ApparelHeroImage","activityPriority":"1","activityIdentifierID":"0","properties":[{"baseMarketingKey":"mktActivityDescription"},{"baseMarketingKey":"displaySequence","baseMarketingValue":"1.0"}],"contentId":"10439","contentFormatName":"Text","baseMarketingSpotDataType":"MarketingContent"}],"marketingSpotIdentifier":"12438","eSpotName":"ApparelRow1_Content","behavior":"0","nextTimeLimit":"-1","defaultContentDisplaySequence":[{"displaySequence":"1.0","resultFormat":"MarketingContent","resultId":"10439"}]}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/espot\/ApparelRow1_Content?catalogId=10152&currency=USD&langId=-1","resourceName":"espot"}'
+- recorded: 2016-07-22T14:34:40.519Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:40 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000jq8tjfMesKjcpzRD5rjC5hK:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CxaLKBwRwFfvrzSIb%2FEsbZbBQ3JsvHOv8NR%2FAPYupf4yt%2BFUbGR4DIIBRDikExm8qy5bfLhlKArOFA4Y6skQx%2FMwexzMem97Cx0gNcyLUD5bcHcSbOYoza0I6sRRnGxE5%2FB9YhEzGVki4vtyHFsDG%2Fri7FPskBtjowHhU2NrTWtU9cywI0rbcsVngLLz%2F%2Bqe4RsMG3aOjgoBUSc7bsdNiXw%3D%3D","WCTrustedToken":"2%2CkLDnUkyh3YPgr9QgwyPYdygD2PQ%3D","personalizationID":"1469173833154-2"}'

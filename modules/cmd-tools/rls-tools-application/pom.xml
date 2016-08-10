@@ -41,6 +41,13 @@
       <type>pom</type>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>cmd-tools-extension-dependencies</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <build>
     <finalName>rls-tools</finalName>

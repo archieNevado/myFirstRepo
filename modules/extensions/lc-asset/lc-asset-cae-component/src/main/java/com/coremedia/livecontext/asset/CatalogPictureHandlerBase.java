@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.asset;
 
+import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.blueprint.cae.handlers.HandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.common.Blob;
@@ -11,7 +12,6 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.transform.TransformedBlob;
-import org.apache.commons.lang3.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CatalogPictureHandlerBase extends HandlerBase {
@@ -56,7 +57,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
                                                 String id,
                                                 String extension,
                                                 WebRequest request) throws IOException {
-    Site site = siteResolver.findSiteFor(storeId, LocaleUtils.toLocale(locale));
+    Site site = siteResolver.findSiteFor(storeId, LocaleHelper.getLocaleFromString(locale));
     if (site == null) {
       //Site not found
       return HandlerHelper.notFound();

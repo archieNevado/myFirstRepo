@@ -15,6 +15,7 @@
 
   <modules>
     <module>taxonomies-rest-extension</module>
+    <module>image-struct-adapter-component</module>
   </modules>
 
 </project>

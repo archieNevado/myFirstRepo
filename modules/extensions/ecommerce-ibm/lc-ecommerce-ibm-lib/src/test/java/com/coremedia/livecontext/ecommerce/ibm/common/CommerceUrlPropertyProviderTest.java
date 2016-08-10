@@ -146,6 +146,7 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
     Map<String, Object> params = new HashMap<>();
     params.put(CommerceUrlPropertyProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
     params.put(CommerceUrlPropertyProvider.SEO_SEGMENT, "simsalabim");
+
     String providedUrl = testling.provideValue(params).toString();
     assertThat("Remaining tokens in the URL are kept.",
             providedUrl,
@@ -160,14 +161,16 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
   public void testNonSeoProductUrl() {
     Map<String, Object> params = new HashMap<>();
     params.put(CommerceUrlPropertyProvider.SEO_SEGMENT, "");
-    Map queryParams = new HashMap<>();
+
+    Map<String, Object> queryParams = new HashMap<>();
     queryParams.put(CommerceUrlPropertyProvider.PRODUCT_ID, PRODUCT_ID);
     params.put(CommerceUrlPropertyProvider.QUERY_PARAMS, queryParams);
     StoreContext storeContext = testConfig.getStoreContext();
     params.put(CommerceUrlPropertyProvider.STORE_CONTEXT, storeContext);
     String providedUrl = testling.provideValue(params).toString();
     String expectedUrl = UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + "/" + PRODUCT_NON_SEO_URL).build().toString();
-    Map parametersMap = new HashMap<>();
+
+    Map<String, Object> parametersMap = new HashMap<>();
     parametersMap.put(CommerceUrlPropertyProvider.PRODUCT_ID, PRODUCT_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
     if (locale != null) {
@@ -176,6 +179,7 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
       parametersMap.put(CommerceUrlPropertyProvider.PARAM_LANG_ID, languageId);
     }
     parametersMap.put(CommerceUrlPropertyProvider.PARAM_STORE_ID, storeContext.getStoreId());
+
     expectedUrl = TokenResolverHelper.replaceTokens(expectedUrl, parametersMap, false, false);
     assertEquals(expectedUrl, providedUrl);
   }
@@ -184,14 +188,16 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
   public void testNonSeoCategoryUrl() {
     Map<String, Object> params = new HashMap<>();
     params.put(CommerceUrlPropertyProvider.SEO_SEGMENT, "");
-    Map queryParams = new HashMap<>();
+
+    Map<String, Object> queryParams = new HashMap<>();
     queryParams.put(CommerceUrlPropertyProvider.CATEGORY_ID, CATEGORY_ID);
     params.put(CommerceUrlPropertyProvider.QUERY_PARAMS, queryParams);
     StoreContext storeContext = testConfig.getStoreContext();
     params.put(CommerceUrlPropertyProvider.STORE_CONTEXT, storeContext);
     String providedUrl = testling.provideValue(params).toString();
     String expectedUrl = UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + "/" + CATEGORY_NON_SEO_URL).build().toString();
-    Map parametersMap = new HashMap<>();
+
+    Map<String, Object> parametersMap = new HashMap<>();
     parametersMap.put(CommerceUrlPropertyProvider.CATEGORY_ID, CATEGORY_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
     if (locale != null) {
@@ -200,8 +206,8 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
       parametersMap.put(CommerceUrlPropertyProvider.PARAM_LANG_ID, languageId);
     }
     parametersMap.put(CommerceUrlPropertyProvider.PARAM_STORE_ID, storeContext.getStoreId());
+
     expectedUrl = TokenResolverHelper.replaceTokens(expectedUrl, parametersMap, false, false);
     assertEquals(expectedUrl, providedUrl);
   }
-
 }

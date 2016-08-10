@@ -1,9 +1,9 @@
 package com.coremedia.livecontext.product;
 
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.coremedia.livecontext.context.CategoryInSite;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.context.LiveContextNavigation;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import org.apache.commons.collections.CollectionUtils;

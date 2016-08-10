@@ -27,6 +27,11 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
+        <artifactId>nuggad-templates</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
         <artifactId>nuggad-studio</artifactId>
         <version>${project.version}</version>
       </dependency>

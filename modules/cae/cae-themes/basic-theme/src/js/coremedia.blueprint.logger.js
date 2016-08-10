@@ -1,7 +1,11 @@
+/**
+ *  CoreMedia Namespace
+ */
 var coremedia = (function (module) {
   return module;
 }(coremedia || {}));
 coremedia.blueprint = (function (module) {
+  module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
 

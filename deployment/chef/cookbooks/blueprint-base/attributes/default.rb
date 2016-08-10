@@ -133,9 +133,9 @@ default['blueprint']['tools']['replication-live-server']['group_id'] = 'com.core
 default['blueprint']['tools']['replication-live-server']['artifact_id'] = 'rls-tools-application'
 default['blueprint']['tools']['replication-live-server']['version'] = node['blueprint']['default_version']
 
-default['blueprint']['tools']['css-importer']['group_id'] = 'com.coremedia.blueprint'
-default['blueprint']['tools']['css-importer']['artifact_id'] = 'css-importer-application'
-default['blueprint']['tools']['css-importer']['version'] = node['blueprint']['default_version']
+default['blueprint']['tools']['theme-importer']['group_id'] = 'com.coremedia.blueprint'
+default['blueprint']['tools']['theme-importer']['artifact_id'] = 'theme-importer-application'
+default['blueprint']['tools']['theme-importer']['version'] = node['blueprint']['default_version']
 
 # common libs
 default['blueprint']['common_libs']['coremedia-tomcat.jar']['group_id'] = 'com.coremedia.blueprint'

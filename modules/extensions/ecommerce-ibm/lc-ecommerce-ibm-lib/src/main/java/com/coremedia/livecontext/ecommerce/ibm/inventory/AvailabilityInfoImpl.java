@@ -4,10 +4,11 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 
 import java.util.Map;
+import java.util.Objects;
 
 
 public class AvailabilityInfoImpl implements AvailabilityInfo {
-  Map<String, Object> delegate;
+  private final Map<String, Object> delegate;
 
   public AvailabilityInfoImpl(Map<String, Object> delegate) {
     this.delegate = delegate;
@@ -15,18 +16,16 @@ public class AvailabilityInfoImpl implements AvailabilityInfo {
 
   @Override
   public float getQuantity() {
-    return Float.parseFloat(DataMapHelper.getValueForKey(delegate, "availableQuantity", String.class));
+    return DataMapHelper.getValueForKey(delegate, "availableQuantity", 0.0f);
   }
 
   @Override
   public String getInventoryStatus() {
-    //TODO: translate and make use of interface constants
     return DataMapHelper.getValueForKey(delegate, "inventoryStatus", String.class);
   }
 
   @Override
   public String getUnitOfMeasure() {
-    //TODO: translate result codes
     return DataMapHelper.getValueForKey(delegate, "unitOfMeasure", String.class);
   }
 
@@ -41,13 +40,12 @@ public class AvailabilityInfoImpl implements AvailabilityInfo {
 
     AvailabilityInfoImpl that = (AvailabilityInfoImpl) o;
 
-    return !(delegate != null ? !DataMapHelper.getValueForKey(delegate, "productId", String.class).
-            equals(DataMapHelper.getValueForKey(that.delegate, "productId", String.class)) : that.delegate != null);
+    return !(delegate != null ? !java.util.Objects.equals(DataMapHelper.getValueForKey(delegate, "productId", String.class), DataMapHelper.getValueForKey(that.delegate, "productId", String.class)) : that.delegate != null);
 
   }
 
   @Override
   public int hashCode() {
-    return delegate != null ?DataMapHelper.getValueForKey(delegate, "productId", String.class).hashCode() : 0;
+    return delegate != null ? Objects.hash(DataMapHelper.getValueForKey(delegate, "productId", String.class)) : 0;
   }
 }

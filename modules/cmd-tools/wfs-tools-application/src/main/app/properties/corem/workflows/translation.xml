@@ -31,6 +31,10 @@
     <AggregationVariable name="derivedContents" type="Resource"/>
     <!-- list of derived contents that did not exist before the workflow was started -->
     <AggregationVariable name="createdContents" type="Resource"/>
+    <!-- list of checked-in versions of the derived contents before the actual translation started -->
+    <AggregationVariable name="rollbackVersions" type="Resource"/>
+    <!-- list of contents that were changed both in the derived and in the master site at conflicting places -->
+    <AggregationVariable name="autoMergeConflicts" type="Resource"/>
 
     <InitialAssignment>
       <Writes variable="subject"/>
@@ -108,11 +112,21 @@
 
       <EntryAction class="com.coremedia.translate.workflow.ExtractPerformerAction"
                    performerVariable="performer"/>
+      <EntryAction class="com.coremedia.translate.workflow.GetCheckedInVersionsAction"
+                   contentsVariable="derivedContents"
+                   resultVariable="rollbackVersions"
+                   performerVariable="performer"/>
+      <EntryAction class="com.coremedia.translate.workflow.AutoMergeTranslationAction"
+                   derivedContentsVariable="derivedContents"
+                   masterContentObjectsVariable="masterContentObjects"
+                   resultVariable="autoMergeConflicts"
+                   performerVariable="performer"/>
 
       <Assignment>
         <Reads variable="subject"/>
         <Reads variable="targetSiteId"/>
         <Reads variable="masterContentObjects"/>
+        <Reads variable="autoMergeConflicts"/>
         <Writes variable="comment"/>
         <Writes variable="derivedContents"/>
         <Writes variable="createdContents"/>
@@ -135,11 +149,21 @@
 
       <EntryAction class="com.coremedia.translate.workflow.ExtractPerformerAction"
                    performerVariable="performer"/>
+      <EntryAction class="com.coremedia.translate.workflow.GetCheckedInVersionsAction"
+                   contentsVariable="derivedContents"
+                   resultVariable="rollbackVersions"
+                   performerVariable="performer"/>
+      <EntryAction class="com.coremedia.translate.workflow.AutoMergeTranslationAction"
+                   derivedContentsVariable="derivedContents"
+                   masterContentObjectsVariable="masterContentObjects"
+                   resultVariable="autoMergeConflicts"
+                   performerVariable="performer"/>
 
       <Assignment>
         <Reads variable="subject"/>
         <Reads variable="targetSiteId"/>
         <Reads variable="masterContentObjects"/>
+        <Reads variable="autoMergeConflicts"/>
         <Writes variable="comment"/>
         <Writes variable="derivedContents"/>
         <Writes variable="createdContents"/>
@@ -178,7 +202,12 @@
     </AutomatedTask>
 
     <AutomatedTask name="Rollback" successor="Finish">
+      <Action class="com.coremedia.translate.workflow.RollbackVersionsAction"
+              rollbackVersionsVariable="rollbackVersions"
+              performerVariable="performer"/>
       <Action class="com.coremedia.translate.workflow.RollbackTranslationAction"
+              derivedContentsVariable="derivedContents"
+              masterContentObjectsVariable="masterContentObjects"
               contentsVariable="createdContents"/>
     </AutomatedTask>
 

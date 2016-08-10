@@ -2,6 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.rest.linking.RemoteBeanLink;
 
 import javax.ws.rs.Path;
@@ -27,19 +28,25 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     Store entity = getEntity();
 
     if (entity == null) {
-      LOG.warn("Error loading store bean");
+      LOG.debug("Error loading store bean: store context is null (site: {})", getSiteId());
       throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load store bean");
     }
 
-    CommerceConnection connection = getConnection();
-    representation.setMarketingEnabled(connection.getMarketingSpotService() != null &&
-            !connection.getMarketingSpotService().findMarketingSpots().isEmpty());
-    representation.setId(entity.getId());
-    representation.setVendorUrl(entity.getVendorUrl());
-    representation.setVendorName(entity.getVendorName());
-    representation.setVendorVersion(entity.getVendorVersion());
-    representation.setContext(getStoreContext());
-    representation.setRootCategory(RemoteBeanLink.create(rootCategoryUri(connection)));
+    try {
+      CommerceConnection connection = getConnection();
+      representation.setMarketingEnabled(connection.getMarketingSpotService() != null &&
+              !connection.getMarketingSpotService().findMarketingSpots().isEmpty());
+      representation.setId(entity.getId());
+      representation.setVendorUrl(entity.getVendorUrl());
+      representation.setVendorName(entity.getVendorName());
+      representation.setVendorVersion(entity.getVendorVersion());
+      representation.setContext(getStoreContext());
+      representation.setRootCategory(RemoteBeanLink.create(rootCategoryUri(connection)));
+    }
+    catch (CommerceException e) {
+      LOG.warn("Error loading store bean: {} (site: {})", e.getMessage(), getSiteId());
+      throw e;
+    }
   }
 
   private String rootCategoryUri(CommerceConnection connection) {

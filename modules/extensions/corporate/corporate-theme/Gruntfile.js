@@ -2,7 +2,7 @@ module.exports = function (grunt) {
   'use strict';
 
   // These plugins provide necessary tasks.
-  require('load-grunt-tasks')(grunt, {scope: 'devDependencies'});
+  require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
 
   //global configuration, used in tasks
@@ -138,6 +138,20 @@ module.exports = function (grunt) {
           ],
           dest: '<%= globalConfig.distDir %>/vendor/'
         }]
+      },
+      themedescriptor: {
+        files: [{
+          expand: true,
+          src: '*-theme.xml',
+          dest: 'target/resources/themes/THEME-METADATA/'
+        }]
+      },
+      localizations: {
+        expand: true,
+        flatten: true,
+        filter: 'isFile',
+        src: ['src/*.properties'],
+        dest: '<%= globalConfig.distDir %>/'
       }
     },
     // generate template archive
@@ -151,17 +165,24 @@ module.exports = function (grunt) {
         dot: true,
         cwd: 'src/main/resources/',
         src: ['**']
+      },
+      theme: {
+        options: {
+          archive: 'target/corporate-theme.zip',
+          mode: 'zip'
+        },
+        expand: true,
+        dot: true,
+        cwd: 'target/resources/themes',
+        src: ['**']
       }
     }
   });
 
   // --- Tasks ---
 
-  // Full distribution task without templates.
-  grunt.registerTask('build', ['clean', 'copy', 'sass', 'postcss']);
-
   // Full distribution task with templates.
-  grunt.registerTask('buildWithTemplates', ['build', 'compress:templates']);
+  grunt.registerTask('build', ['clean', 'copy', 'sass', 'postcss', 'compress']);
 
   // Default task = distribution.
   grunt.registerTask('default', ['build']);

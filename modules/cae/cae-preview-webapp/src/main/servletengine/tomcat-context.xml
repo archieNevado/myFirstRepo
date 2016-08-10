@@ -46,14 +46,10 @@
     Lib:          /=${project.basedir}/../../extensions/es/es-cae/src/main/resources
 
     LiveContext Elastic Social
-    Templates:    /=${project.basedir}/../../extensions/lc-es/lc-es-templates/src/main/resources/META-INF/resources
-    Lib:          /=${project.basedir}/../../extensions/lc-es/lc-cae/src/main/resources
+    /=${project.basedir}/../../extensions/lc-es/lc-cae/src/main/resources
 
     Analytics
     /=${project.basedir}/../../extensions/alx/alx-cae/src/main/resources/META-INF/resources
-
-    Elastic Social ALX
-    /=${project.basedir}/../../extensions/es-alx/es-alx-templates/src/main/resources/META-INF/resources
 
     Personalization
     /=${project.basedir}/../../extensions/p13n/p13n-preview-cae/src/main/resources/META-INF/resources
@@ -67,7 +63,7 @@
     Lib:          /=${project.basedir}/../../extensions/am/am-cae/src/main/resources
   -->
   <Resources className="org.apache.naming.resources.VirtualDirContext"
-             extraResourcePaths="/=${project.basedir}/src/main/webapp,/=${project.basedir}/../cae-base-lib/src/main/resources,/=${project.basedir}/../cae-base-lib/src/main/resources/META-INF/resources,/=${project.basedir}/../cae-themes/basic-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../cae-themes/basic-theme/target/resources,/=${project.basedir}/../../extensions/corporate/corporate-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/corporate/corporate-theme/target/resources,/=${project.basedir}/../../extensions/corporate/corporate-cae/src/main/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-themes/perfectchef-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-themes/perfectchef-theme/target/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-themes/aurora-theme/target/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/es/es-cae/src/main/resources,/=${project.basedir}/../../extensions/es/es-theme/target/resources,/=${project.basedir}/../../extensions/es/es-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/alx/alx-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/es-alx/es-alx-templates/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-es/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/lc-es/lc-es-templates/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/p13n/p13n-preview-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-asset/lc-asset-cae-component/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/am/am-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/am/am-theme/target/resources,/=${project.basedir}/../../extensions/am/am-cae/src/main/resources" />
+             extraResourcePaths="/=${project.basedir}/src/main/webapp,/=${project.basedir}/../cae-base-lib/src/main/resources,/=${project.basedir}/../cae-base-lib/src/main/resources/META-INF/resources,/=${project.basedir}/../cae-themes/basic-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../cae-themes/basic-theme/target/resources,/=${project.basedir}/../../extensions/corporate/corporate-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/corporate/corporate-theme/target/resources,/=${project.basedir}/../../extensions/corporate/corporate-cae/src/main/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-themes/perfectchef-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-themes/perfectchef-theme/target/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-themes/aurora-theme/target/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/es/es-cae/src/main/resources,/=${project.basedir}/../../extensions/es/es-theme/target/resources,/=${project.basedir}/../../extensions/es/es-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/alx/alx-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-es/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/p13n/p13n-preview-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-asset/lc-asset-cae-component/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/am/am-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/am/am-theme/target/resources,/=${project.basedir}/../../extensions/am/am-cae/src/main/resources" />
 
   <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="x-forwarded-proto" />
 </Context>

@@ -19,11 +19,4 @@
     </fileSet>
   </fileSets>
 
-  <files>
-    <file>
-      <!-- theme definition -->
-      <source>${project.artifactId}.xml</source>
-      <outputDirectory>THEME-METADATA</outputDirectory>
-    </file>
-  </files>
 </assembly>

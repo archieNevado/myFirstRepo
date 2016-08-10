@@ -6,6 +6,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static java.util.Arrays.asList;
 
 
@@ -28,10 +30,10 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WcContractWrapperService.class);
 
-  private static final WcRestConnector.WcRestServiceMethod<HashMap, Void>
+  private static final WcRestServiceMethod<HashMap, Void>
           FIND_CONTRACT_BY_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/contract/{id}?profileName=IBM_Contract_Usage", true, true, HashMap.class);
 
-  private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
           FIND_CONTRACTS_FOR_USER = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/contract?q=eligible", false, true, false, true, Void.class, Map.class);
 
 
@@ -44,7 +46,7 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
    */
   public Map<String, Object> findContractsForUser(final UserContext userContext, final StoreContext storeContext) throws CommerceException {
     try {
-      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_8) {
+      if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_8)) {
         return Collections.emptyMap();
       }
       //noinspection unchecked
@@ -74,7 +76,7 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
   @SuppressWarnings("unchecked")
   public Map<String, Object> findContractByTechId(final String externalId, final StoreContext storeContext, final UserContext userContext) throws CommerceException {
     try {
-      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_8) {
+      if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_8)) {
         return Collections.emptyMap();
       }
       Map<String, Object> data = getRestConnector().callService(
@@ -83,7 +85,7 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
               null, storeContext, userContext);
       if (data != null) {
         List<Map<String, Object>> resultList = DataMapHelper.getValueForPath(data, "resultList", List.class);
-        if (resultList != null && resultList.size() > 0) {
+        if (resultList != null && !resultList.isEmpty()) {
           return resultList.get(0);
         }
       }

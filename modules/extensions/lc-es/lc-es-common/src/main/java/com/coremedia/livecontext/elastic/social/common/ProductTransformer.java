@@ -4,7 +4,7 @@ package com.coremedia.livecontext.elastic.social.common;
 import com.coremedia.blueprint.elastic.social.common.ContributionTargetTransformer;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;

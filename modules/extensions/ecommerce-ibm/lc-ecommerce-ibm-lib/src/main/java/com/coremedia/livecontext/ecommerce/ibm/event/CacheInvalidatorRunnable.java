@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.event.CommerceCacheInvalidation;
+import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.TaskScheduler;
@@ -79,6 +80,7 @@ class CacheInvalidatorRunnable implements Runnable {
       if (null != error) {
         delay = errorInterval;
         LOG.warn("Exception while polling commerce system, delaying next request for " + delay + " ms", error.getMessage());
+        StoreContextHelper.setCommerceSystemIsUnavailable(commerceConnection.getStoreContext(), false);
       }
       scheduledFuture = taskScheduler.schedule(this, new Date(System.currentTimeMillis() + delay));
     }

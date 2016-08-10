@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSettings folder="/Settings/Options/Bundles" name="Elastic Social_de" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<CMResourceBundle folder="/Settings/Options/Bundles" name="Elastic Social_de" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale></locale>
 <master>
 </master>
 <masterVersion>0</masterVersion>
-<settings>
+<localizations>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StringProperty Name="activateRegistration_failure_title">Registrierungsfehler</StringProperty>
 <StringProperty Name="activateRegistration_registrationKey_expired">Ihr Registrierungsschlüssel ist abgelaufen.</StringProperty>
@@ -225,6 +225,5 @@
 </Struct>
 </StructProperty>
 </Struct>
-</settings>
-<identifier></identifier>
-</CMSettings>
+</localizations>
+</CMResourceBundle>

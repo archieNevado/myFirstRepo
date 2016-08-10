@@ -5,17 +5,10 @@
 </master>
 <viewtype>
 </viewtype>
-<localSettings>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<StringListProperty Name="viewRepositoryNames">
-<String>perfectchef</String>
-</StringListProperty>
-</Struct>
-</localSettings>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment>autumn-dishes</segment>
 <title>Autumn Dishes</title>
 <htmlTitle></htmlTitle>
@@ -36,11 +29,12 @@
 </children>
 <hidden>0</hidden>
 <javaScript>
-<link href="../../../../../../../../Themes/perfectchef-fall/perfectchef-fall%2Ejs.xml" path="/Themes/perfectchef-fall/perfectchef-fall%2Ejs"/>
 </javaScript>
 <css>
-<link href="../../../../../../../../Themes/perfectchef-fall/perfectchef-fall%2Ecss.xml" path="/Themes/perfectchef-fall/perfectchef-fall%2Ecss"/>
 </css>
+<theme>
+<link href="../../../../../../../Themes/perfectchef-fall/Perfectchef-fall%20Theme.xml" path="/Themes/perfectchef-fall/Perfectchef-fall%20Theme"/>
+</theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">

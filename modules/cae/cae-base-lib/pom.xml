@@ -19,6 +19,10 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-multisite</artifactId>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>search-api</artifactId>
       <version>${project.version}</version>
@@ -32,7 +36,6 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>content-services</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
@@ -80,7 +83,6 @@
       <artifactId>bpbase-navigation-impl</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-handlerservices-impl</artifactId>
@@ -111,10 +113,6 @@
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-contentbeanservices-impl</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-multisite</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>

@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=00001to2rwaeo58Miw8U39pYXWu:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -53,5 +54,30 @@ interactions:
       Set-Cookie: JSESSIONID=0000oil_6yBkBBxdeAtKlk_bHrX:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":3,"MemberGroup":[{"usage":["GeneralPurpose"],"id":"8000000000000000551","description":{"value":"Customers who have registered with the store","language":"-1"},"displayName":{"value":"Registered Customers","language":"-1"}},{"usage":["GeneralPurpose"],"id":"8000000000000000554","description":{"value":"Male
       Customers","language":"-1"},"displayName":{"value":"Male Customers","language":"-1"}},{"usage":["GeneralPurpose"],"id":"8000000000000000751","description":{"value":"Frequent Buyer","language":"-1"},"displayName":{"value":"Frequent Buyer","language":"-1"}}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/segment?q=byUserId&qUserId=4&catalogId=10152&currency=USD&langId=-1","resourceName":"segment","recordSetComplete":true,"recordSetStartNumber":0,"recordSetCount":3}'
+- recorded: 2016-07-22T14:34:46.797Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:46 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000iY4XioHSIHfHA6RcECs1DF5:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CTAgXNBYB0InI2AjfFw5%2BdvVZGvra8boq3%2B%2BlA%2FJ9QbTYiB7ckpC3Z5vCn1TCvU6%2Flu%2BePcZ1rSdkSFVeKO2ok3gCfjO7FWJY5TbcXUZZ%2FTD%2FL%2Fz5rtV28gfwa48ZgNtpHVmO7djoQ0D%2FQQBWzgaQYRR%2FL%2BBj%2FrtmqiF5Dj8sMxwBnmy0oYiUU0mkPr3HwEPVnkKUunw1%2B4QzNJXFTjEzJw%3D%3D","WCTrustedToken":"2%2CxtNqYy11ppOW6AvU%2B7rpEPQ%2Fxws%3D","personalizationID":"1469173833154-2"}'

@@ -4,14 +4,14 @@ import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import co.freeside.betamax.Recorder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.event.CommerceCacheInvalidation;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.BetamaxTestHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -66,13 +67,12 @@ public class CommerceCacheInvalidationListenerIT {
     when(connection.getStoreContext()).thenReturn(storeContext);
   }
 
-
   @Betamax(tape = "commercecache_testPollCacheInvalidations", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testPollCacheInvalidations() throws Exception {
     List<CommerceCacheInvalidation> commerceCacheInvalidations = commerceCacheInvalidationListener.pollCacheInvalidations(storeContext);
     assertNotNull(commerceCacheInvalidations);
-    assertTrue(commerceCacheInvalidations.size() == 0);
+    assertTrue(commerceCacheInvalidations.isEmpty());
   }
 
   @Betamax(tape = "commercecache_testPollCacheInvalidationsWithEntries", match = {MatchRule.path})
@@ -83,25 +83,27 @@ public class CommerceCacheInvalidationListenerIT {
     List<CommerceCacheInvalidation> commerceCacheInvalidations = commerceCacheInvalidationListener.pollCacheInvalidations(storeContext);
 
     assertNotNull(commerceCacheInvalidations);
-    assertTrue(commerceCacheInvalidations.size() > 0);
+    assertFalse(commerceCacheInvalidations.isEmpty());
+
     CommerceCacheInvalidation commerceCacheInvalidation = commerceCacheInvalidations.get(0);
     assertNotNull(commerceCacheInvalidation.getContentType());
     assertNotNull(commerceCacheInvalidation.getTechId());
+
     if (!commerceCacheInvalidation.getContentType().equals(CommerceCacheInvalidation.EVENT_CLEAR_ALL_EVENT_ID)) {
       assertNotNull(commerceCacheInvalidation.getId());
     }
+
     assertTrue(commerceCacheInvalidationListener.lastInvalidationTimestamp > TEST_TIMESTAMP ||
             commerceCacheInvalidationListener.lastInvalidationTimestamp <= 0);
   }
 
-
   @Test(expected = CommerceException.class)
   public void testPollCacheInvalidationsError() throws Exception {
-    String origServiceEndpoint = restConnector.getServiceEndpoint();
+    String origServiceEndpoint = restConnector.getServiceEndpoint(StoreContextHelper.getCurrentContext());
     try {
       restConnector.setServiceEndpoint("http://does.not.exists/blub");
       commerceCacheInvalidationListener.pollCacheInvalidations(storeContext);
-    }finally {
+    } finally {
       restConnector.setServiceEndpoint(origServiceEndpoint);
     }
   }
@@ -147,7 +149,6 @@ public class CommerceCacheInvalidationListenerIT {
     commerceCacheInvalidationListener.convertEvent(productInvalidation.getDelegate());
     assertNull(productInvalidation.getId());
   }
-
 
   @Configuration
   @ImportResource(value = {

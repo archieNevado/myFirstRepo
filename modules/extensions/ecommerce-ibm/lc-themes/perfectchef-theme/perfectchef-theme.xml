@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <themeDefinition modelVersion="1">
+
   <name>perfectchef</name>
-  <description>PerfectChef Theme</description>
+  <description>The Perfectchef Theme provides a modern, appealing, highly visual theme. It demonstrates the capability
+    to build localizable, multi-national, experience-driven e-Commerce websites. Integration with IBM WebSphere Commerce
+    ships out of the box.
+
+    Based on a fully responsive, mobile-first design paradigm, it leverages the Masonry dynamic grid framework. It
+    scales from mobile via tablet to desktop viewport sizes and uses the CoreMedia Adaptive and Responsive Image
+    Framework to dynamically deliver the right image sizes in the right aspect ratios and crops for each viewport.
+  </description>
+  <thumbnail>img/theme-preview.jpg</thumbnail>
 
   <javaScripts>
     <!-- Vendor Basic JavaScripts -->
@@ -16,7 +25,7 @@
     <!-- Additional Vendor JavaScripts for PerfectChef -->
     <javaScript>vendor/masonry.pkgd.js</javaScript>
     <!-- CoreMedia Basic JavaScripts -->
-    <javaScript>../basic/js/noconflict.js</javaScript>
+    <javaScript>js/coremedia.blueprint.noconflict.js</javaScript>
     <javaScript>../basic/js/jquery.coremedia.utils.js</javaScript>
     <javaScript>../basic/js/jquery.coremedia.smartresize.js</javaScript>
     <javaScript>../basic/js/jquery.coremedia.responsiveimages.js</javaScript>
@@ -33,12 +42,12 @@
     <javaScript>../basic/js/coremedia.blueprint.imagemap.init.js</javaScript>
     <javaScript>../basic/js/coremedia.blueprint.hashBasedFragment.js</javaScript>
     <!-- Elastic Social JavaScripts -->
-    <javaScript>../elastic/js/com.coremedia.blueprint.basic.timezone.js</javaScript>
-    <javaScript>../elastic/js/com.coremedia.blueprint.es.js</javaScript>
+    <javaScript>../es/js/coremedia.blueprint.basic.timezone.js</javaScript>
+    <javaScript>../es/js/coremedia.blueprint.es.js</javaScript>
     <!-- CoreMedia PerfectChef JavaScripts -->
-    <javaScript>js/com.coremedia.jquery.equalheight.js</javaScript>
-    <javaScript>js/com.coremedia.blueprint.perfectchef.js</javaScript>
-    <javaScript>js/com.coremedia.blueprint.perfectchef.deviceSettings.js</javaScript>
+    <javaScript>js/jquery.coremedia.equalheight.js</javaScript>
+    <javaScript>js/coremedia.blueprint.perfectchef.js</javaScript>
+    <javaScript>js/coremedia.blueprint.perfectchef.deviceSettings.js</javaScript>
   </javaScripts>
 
   <styleSheets>
@@ -54,8 +63,8 @@
     <css>../basic/css/imagemap.css</css>
     <css>../basic/css/print.css</css>
     <!-- CoreMedia Elastic Social -->
-    <css>../elastic/css/es.css</css>
-    <css>../elastic/css/es-form.css</css>
+    <css>../es/css/es.css</css>
+    <css>../es/css/es-form.css</css>
     <!-- CoreMedia PerfectChef -->
     <css>css/font.css</css>
     <css>css/layout.css</css>
@@ -75,4 +84,14 @@
     <css>css/perfectchef-es.css</css>
     <css>css/perfectchef-es-form.css</css>
   </styleSheets>
+
+  <viewRepositoryName>perfectchef</viewRepositoryName>
+
+  <resourceBundles>
+    <resourceBundle>../basic/Bundle_en.properties</resourceBundle>
+    <resourceBundle master="../basic/Bundle_en.properties" linkIntoTheme="false">../basic/Bundle_de.properties</resourceBundle>
+    <resourceBundle>Livecontext_en.properties</resourceBundle>
+    <resourceBundle master="Livecontext_en.properties" linkIntoTheme="false">Livecontext_de.properties</resourceBundle>
+  </resourceBundles>
+
 </themeDefinition>

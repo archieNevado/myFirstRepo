@@ -1,13 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.CommerceRemoteError;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.common.UnknownUserException;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
@@ -15,6 +14,7 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcPreviewToken;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.util.Base64;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.http.HttpEntity;
@@ -40,6 +40,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -53,6 +55,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static java.lang.String.format;
 import static org.apache.http.client.utils.HttpClientUtils.closeQuietly;
 
@@ -149,16 +154,16 @@ public class WcRestConnector {
    * @param storeContext       the store context that should be used for this call
    * @param userContext        credentials for services which require authentication
    */
-  public <T, P> T callService(WcRestServiceMethod<T, P> serviceMethod,
-                              List<String> variableValues,
-                              final Map<String, String[]> optionalParameters,
-                              P bodyData,
-                              StoreContext storeContext,
-                              UserContext userContext) throws CommerceException {
+  public <T, P> T callService(@Nonnull WcRestServiceMethod<T, P> serviceMethod,
+                              @Nonnull List<String> variableValues,
+                              @Nonnull Map<String, String[]> optionalParameters,
+                              @Nullable P bodyData,
+                              @Nullable StoreContext storeContext,
+                              @Nullable UserContext userContext) throws CommerceException {
 
     StoreContext myStoreContext = storeContext != null ? storeContext : StoreContextHelper.getCurrentContext();
     if (myStoreContext == null){
-      throw new NoStoreContextAvailable("No store context available in Rest Connector while calling " + serviceMethod.uriTemplate);
+      throw new NoStoreContextAvailable("No store context available in Rest Connector while calling " + serviceMethod.getUriTemplate());
     }
 
     try {
@@ -166,19 +171,15 @@ public class WcRestConnector {
       return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
 
     } catch (UnauthorizedException e) {
-      if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_8) {
-        LOG.info("Commerce connector responded with 'Unauthorized'. Will renew the session and retry.");
-        StoreContextHelper.setCurrentContext(myStoreContext);
-        loginService.renewServiceIdentityLogin();
-        if (myStoreContext.getContractIdsForPreview() != null) {
-          LOG.debug("invalidating preview user...");
-          commerceCache.getCache().invalidate(PreviewUserCacheKey.class.getName());
-        }
-        // make the service call the second time
-        return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
-      } else {
-        throw e;
+      LOG.info("Commerce connector responded with 'Unauthorized'. Will renew the session and retry.");
+      StoreContextHelper.setCurrentContext(myStoreContext);
+      loginService.renewServiceIdentityLogin();
+      if (myStoreContext.getContractIdsForPreview() != null) {
+        LOG.debug("invalidating preview user...");
+        commerceCache.getCache().invalidate(PreviewUserCacheKey.class.getName());
       }
+      // make the service call the second time
+      return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
     }
   }
 
@@ -194,14 +195,13 @@ public class WcRestConnector {
    * @param storeContext       the store context that should be used for this call
    * @param userContext        credentials for services which require authentication
    */
-  public <T, P> T callServiceInternal(WcRestServiceMethod<T, P> serviceMethod,
-                                      List<String> variableValues,
-                                      final Map<String, String[]> optionalParameters,
-                                      P bodyData,
-                                      StoreContext storeContext,
-                                      UserContext userContext) throws CommerceException {
-
-    setUnsecureIfBetamaxWriteEnabled(serviceMethod);
+  @Nullable
+  public <T, P> T callServiceInternal(@Nonnull WcRestServiceMethod<T, P> serviceMethod,
+                                      @Nonnull List<String> variableValues,
+                                      @Nonnull Map<String, String[]> optionalParameters,
+                                      @Nullable P bodyData,
+                                      @Nullable StoreContext storeContext,
+                                      @Nullable UserContext userContext) {
 
     T result = null;
 
@@ -209,19 +209,23 @@ public class WcRestConnector {
 
     Map<String, String> additionalHeaders = getRequiredHeaders(serviceMethod, mustBeSecured, storeContext, userContext);
 
-    if (serviceMethod.contractsSupport && storeContext != null && storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0) {
+    if (serviceMethod.isContractsSupport() && storeContext != null && storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0) {
       String[] contractIdsForPreview = storeContext.getContractIdsForPreview();
       LOG.debug("using contractIdsForPreview: "+ Arrays.toString(contractIdsForPreview));
       optionalParameters.put("contractId", contractIdsForPreview);
     }
     URI uri;
     try {
-      uri = buildRequestUri(serviceMethod.uriTemplate, mustBeSecured, serviceMethod.search, variableValues, optionalParameters);
-      if (!isCommerceAvailable(serviceMethod.method, uri, storeContext)) {
+      uri = buildRequestUri(serviceMethod.getUriTemplate(), mustBeSecured, serviceMethod.isSearch(), variableValues, optionalParameters, storeContext);
+      if (!isCommerceAvailable(serviceMethod.getMethod(), uri, storeContext)) {
         return null;
       }
     } catch (IllegalArgumentException e) {
-      LOG.warn("unable to derive REST URI components for method {} with vars {} and optional params {}", serviceMethod, variableValues, optionalParameters);
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("unable to derive REST URI components for method {} with vars {} and optional params {}", serviceMethod, variableValues, optionalParameters, e);
+      } else {
+        LOG.warn("unable to derive REST URI components for method {} with vars {} and optional params {}", serviceMethod, variableValues, optionalParameters);
+      }
       return null;
     }
 
@@ -241,12 +245,12 @@ public class WcRestConnector {
 
       if (LOG.isTraceEnabled()) {
         long time = System.currentTimeMillis() - start;
-        LOG.trace(serviceMethod.method + " " + uri + ": " + statusCode + " took " + time + " ms");
+        LOG.trace(serviceMethod.getMethod() + " " + uri + ": " + statusCode + " took " + time + " ms");
       }
 
       try {
         HttpEntity entity;
-        CommerceRemoteError remoteError = null;
+        WcServiceError remoteError = null;
 
         //Handle success here
         if (statusCode >= 200 && statusCode != 204 && statusCode < 300) {
@@ -256,40 +260,38 @@ public class WcRestConnector {
                     new InputStreamReader(response.getEntity().getContent()));
             GsonBuilder builder = new GsonBuilder();
             Gson gson = builder.create();
-            result = gson.fromJson(rd, serviceMethod.returnType);
+            result = gson.fromJson(rd, serviceMethod.getReturnType());
           } else {
             LOG.trace("response entity is null");
           }
         } else {
 
           // Parse Remote-Errors
-          List<CommerceRemoteError> commerceRemoteErrors = parseServiceErrors(response);
-          if (!commerceRemoteErrors.isEmpty()) {
-            remoteError = commerceRemoteErrors.get(0);
+          List<WcServiceError> remoteErrors = parseServiceErrors(response);
+          if (!remoteErrors.isEmpty()) {
+            remoteError = remoteErrors.get(0);
           }
 
           // Handle Authentication Error
-          if (statusCode == 401 || (statusCode == 400 && serviceMethod.requiresAuthentication && isAuthenticationError(remoteError))) {
-            throw new UnauthorizedException(remoteError);
+          if (statusCode == 401 || (statusCode == 400 && serviceMethod.isRequiresAuthentication() && isAuthenticationError(remoteError))) {
+            throw new UnauthorizedException(remoteError != null ? remoteError.getErrorMessage() : "401", statusCode);
           }
 
           String user = null;
-          if (optionalParameters != null) {
-            String[] values = optionalParameters.get("forUser");
+          String[] values = optionalParameters.get("forUser");
+          if (values != null && values.length > 0) {
+            user = values[0];
+          }
+          if (user == null) {
+            values = optionalParameters.get("forUserId");
             if (values != null && values.length > 0) {
               user = values[0];
-            }
-            if (user == null) {
-              values = optionalParameters.get("forUserId");
-              if (values != null && values.length > 0) {
-                user = values[0];
-              }
             }
           }
 
           // Handle Unknown User
           if (statusCode == 400 && user != null && isUnknownUserError(remoteError)) {
-            throw new UnknownUserException(user, remoteError);
+            throw new UnknownUserException(user, statusCode);
           }
 
           // Handle not found...and return null
@@ -300,13 +302,13 @@ public class WcRestConnector {
                     statusCode + " (" + statusLine.getReasonPhrase() + ")");
 
           } else if (remoteError != null) {
+            LOG.trace("Remote Error occurred: {} (Error Key: {}, Error Code: {}",
+                    remoteError.getErrorMessage(), remoteError.getErrorKey(), remoteError.getErrorCode());
             throw new CommerceRemoteException(
-                    format("Remote Error occurred: %s (Error Key: %s, Error Code: %s",
-                            remoteError.getErrorMessage(),
-                            remoteError.getErrorKey(),
-                            remoteError.getErrorCode()),
+                    remoteError.getErrorMessage(),
                     statusCode,
-                    remoteError);
+                    remoteError.getErrorCode(),
+                    remoteError.getErrorKey());
           }
 
           //all other result codes (e.g. 500, 502)
@@ -336,25 +338,14 @@ public class WcRestConnector {
     return result;
   }
 
-  /**
-   * it repairs a shortcomming of betamax that cannot record calls that use https
-   */
-  private <T, P> void setUnsecureIfBetamaxWriteEnabled(WcRestServiceMethod<T, P> serviceMethod) {
-    String betamaxMode = System.getProperty("betamax.defaultMode");
-    String betamaxIgnoreHosts = System.getProperty("betamax.ignoreHosts");
-    if (!"*".equals(betamaxIgnoreHosts) && ("READ_WRITE".equals(betamaxMode) || "WRITE_ONLY".equals(betamaxMode))) {
-      serviceMethod.secure = false;
-    }
-  }
-
   private <T, P> boolean mustBeSecured(WcRestServiceMethod<T, P> serviceMethod, StoreContext storeContext, UserContext userContext) {
-    if (serviceMethod.secure) {
+    if (serviceMethod.isSecure()) {
       return true;
     }
     if (storeContext != null && storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length>0) {
       return true;
     }
-    if (serviceMethod.previewSupport && storeContext != null && storeContext.hasPreviewContext()) {
+    if (serviceMethod.isPreviewSupport() && storeContext != null && storeContext.hasPreviewContext()) {
       WcPreviewToken previewToken = loginService.getPreviewToken();
       if (previewToken != null) {
         return true;
@@ -367,7 +358,7 @@ public class WcRestConnector {
   /**
    * Parses ibm remote errors from JSON-Response.
    */
-  private List<CommerceRemoteError> parseServiceErrors(HttpResponse response) {
+  private static List<WcServiceError> parseServiceErrors(HttpResponse response) {
     if (response.getEntity() == null) {
       return Collections.emptyList();
     }
@@ -380,7 +371,7 @@ public class WcRestConnector {
       if (errors == null || errors.getErrors() == null || errors.getErrors().isEmpty()) {
         return Collections.emptyList();
       }
-      List<CommerceRemoteError> result = new ArrayList<>(errors.getErrors().size());
+      List<WcServiceError> result = new ArrayList<>(errors.getErrors().size());
       for (WcServiceError wcServiceError : errors.getErrors()) {
         result.add(wcServiceError);
       }
@@ -406,7 +397,7 @@ public class WcRestConnector {
     return true;
   }
 
-  private boolean isAuthenticationError(CommerceRemoteError remoteError) {
+  private boolean isAuthenticationError(WcServiceError remoteError) {
     return remoteError != null && remoteError.getErrorKey() != null &&
             (ERROR_KEY_AUTHENTICATION.equals(remoteError.getErrorKey()) ||
                     ERROR_KEY_INVALID_COOKIE.equals(remoteError.getErrorKey()) ||
@@ -420,7 +411,7 @@ public class WcRestConnector {
             );
   }
 
-  private boolean isUnknownUserError(CommerceRemoteError remoteError) {
+  private static boolean isUnknownUserError(WcServiceError remoteError) {
     return remoteError != null && remoteError.getErrorKey() != null &&
             (remoteError.getErrorKey().contains("ObjectNotFoundException"));
   }
@@ -433,7 +424,7 @@ public class WcRestConnector {
       return headers;
     }
 
-    if (serviceMethod.previewSupport && storeContext.hasPreviewContext()) {
+    if (serviceMethod.isPreviewSupport() && storeContext.hasPreviewContext()) {
       WcPreviewToken previewToken = loginService.getPreviewToken();
       if (previewToken != null) {
         headers.put(HEADER_WC_PREVIEW_TOKEN, previewToken.getPreviewToken());
@@ -441,24 +432,24 @@ public class WcRestConnector {
     }
 
     // use case: personalized info, like prices
-    if (serviceMethod.userCookiesSupport &&
-            StoreContextHelper.getWcsVersion(storeContext) > StoreContextHelper.WCS_VERSION_7_6) {
+    if (serviceMethod.isUserCookiesSupport() &&
+            WCS_VERSION_7_6.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
       if (userContext != null && userContext.getCookieHeader() != null) {
         headers.put(HEADER_COOKIE, userContext.getCookieHeader());
       }
     }
 
     // use case: contract based info, like prices and/or the selection of categories
-    if (!headers.containsKey(HEADER_COOKIE) && serviceMethod.contractsSupport && storeContext.getContractIds() != null
-            && StoreContextHelper.getWcsVersion(storeContext) >= StoreContextHelper.WCS_VERSION_7_8
-            && Commerce.getCurrentConnection().getUserContext().getCookieHeader() != null) {
+    if (!headers.containsKey(HEADER_COOKIE) && serviceMethod.isContractsSupport() && storeContext.getContractIds() != null
+            && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))
+            && null != userContext && userContext.getCookieHeader() != null) {
 
-        headers.put(HEADER_COOKIE, Commerce.getCurrentConnection().getUserContext().getCookieHeader());
+      headers.put(HEADER_COOKIE, userContext.getCookieHeader());
     }
 
     // if contract preview, do not send user cookies but login our preview user, instead
-    if (serviceMethod.contractsSupport && storeContext.getContractIdsForPreview() != null &&
-            StoreContextHelper.getWcsVersion(storeContext) >= StoreContextHelper.WCS_VERSION_7_8) {
+    if (serviceMethod.isContractsSupport() && storeContext.getContractIdsForPreview() != null &&
+            WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
       LOG.debug("contractIdsForPreview found: "+Arrays.toString(storeContext.getContractIdsForPreview()) + " - using preview user: " + contractPreviewUserName);
       headers.remove(HEADER_COOKIE);
       String previewUser = CommercePropertyHelper.replaceTokens(contractPreviewUserName, storeContext);
@@ -475,46 +466,62 @@ public class WcRestConnector {
       } else {
         LOG.warn("could not get preview credentials from cache");
       }
-    }
-    else if (!headers.containsKey(HEADER_COOKIE)) {
-      boolean mustBeAuthenticated = serviceMethod.requiresAuthentication || (userContext != null && userContext.getUserId() != null)
-              || (userContext != null && userContext.getUserName() != null)
-              || (storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0);
+    } else if (!headers.containsKey(HEADER_COOKIE)) {
+      boolean mustBeAuthenticated = mustBeAuthenticated(serviceMethod, storeContext, userContext);
 
-      if (mustBeAuthenticated && StoreContextHelper.getWcsVersion(storeContext) >= StoreContextHelper.WCS_VERSION_7_8) {
-        //use basic authentication for wcs > 7.8
-        String user = CommercePropertyHelper.replaceTokens(serviceUser, storeContext);
-        String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
-        String credentials = Base64.encode((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
-        headers.put("Authorization", "Basic " + credentials);
+      if (mustBeAuthenticated && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
+        if (serviceMethod.isSearch()) {
+          //use basic authentication for wcs >= 7.8
+          String user = CommercePropertyHelper.replaceTokens(serviceUser, storeContext);
+          String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
+          String credentials = Base64.encode((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
+          headers.put("Authorization", "Basic " + credentials);
+        } else {
+          // [CMS-6123] for bod based services basic authentication is buggy
+          applyWCTokens(headers, mustBeSecured, mustBeAuthenticated);
+        }
       } else if (mustBeAuthenticated || mustBeSecured) {
         //use WCToken for wcsVersion < 7.8
-        WcCredentials credentials = loginService.loginServiceIdentity();
-        if (credentials != null) {
-          WcSession session = credentials.getSession();
-          if (session != null) {
-            if (mustBeAuthenticated) {
-              headers.put(HEADER_WC_TOKEN, session.getWCToken());
-            }
-            if (mustBeSecured) {
-              headers.put(HEADER_WC_TRUSTED_TOKEN, session.getWCTrustedToken());
-            }
-          }
-        }
+        applyWCTokens(headers, mustBeSecured, mustBeAuthenticated);
       }
     }
 
     return headers;
   }
 
-  URI buildRequestUri(String relativeUrl, boolean secure, boolean search, List<String> variableValues, Map<String, String[]> optionalParameters) {
+  private void applyWCTokens(@Nonnull Map<String, String> headers, boolean mustBeSecured, boolean mustBeAuthenticated) {
+    WcCredentials credentials = loginService.loginServiceIdentity();
+    if (credentials != null) {
+      WcSession session = credentials.getSession();
+      if (session != null) {
+        if (mustBeAuthenticated) {
+          headers.put(HEADER_WC_TOKEN, session.getWCToken());
+        }
+        if (mustBeSecured) {
+          headers.put(HEADER_WC_TRUSTED_TOKEN, session.getWCTrustedToken());
+        }
+      }
+    }
+  }
+
+  private static boolean mustBeAuthenticated(@Nonnull WcRestServiceMethod serviceMethod, @Nonnull StoreContext storeContext, @Nullable UserContext userContext) {
+    boolean hasUserIdOrName = (userContext != null && userContext.getUserId() != null)
+            || (userContext != null && userContext.getUserName() != null);
+    boolean hasContractIdForPreview = storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0;
+    return serviceMethod.isRequiresAuthentication() || hasUserIdOrName
+            || hasContractIdForPreview;
+  }
+
+  @Nonnull
+  @VisibleForTesting
+  URI buildRequestUri(String relativeUrl, boolean secure, boolean search, @Nonnull List<String> variableValues, @Nonnull Map<String, String[]> optionalParameters, @Nullable StoreContext storeContext) {
     String uri = relativeUrl;
 
     String endpoint;
     if (search) {
-      endpoint = secure ? getSearchServiceSslEndpoint() : getSearchServiceEndpoint();
+      endpoint = secure ? getSearchServiceSslEndpoint(storeContext) : getSearchServiceEndpoint(storeContext);
     } else {
-      endpoint = secure ? getServiceSslEndpoint() : getServiceEndpoint();
+      endpoint = secure ? getServiceSslEndpoint(storeContext) : getServiceEndpoint(storeContext);
     }
 
     if (!endpoint.endsWith("/")) {
@@ -523,19 +530,19 @@ public class WcRestConnector {
     uri = endpoint + uri;
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(uri);
 
-    if (optionalParameters != null && !optionalParameters.isEmpty()) {
+    List<String> myVariableValues = new ArrayList<>(variableValues);
+    if (!optionalParameters.isEmpty()) {
       // ok, it would have be better to use named uri template variables in the first place, but...
-      variableValues = new ArrayList<>(variableValues);
       for (Map.Entry<String, String[]> parameter : optionalParameters.entrySet()) {
         // within the optional parameter values, we do not want any variable replacement, so we need this indirection:
         String[] values = parameter.getValue();
         for (String value : values) {
           uriBuilder.queryParam(parameter.getKey(), POSITION_RELATIVE_TEMPLATE_VARIABLE);
-          variableValues.add(value);
+          myVariableValues.add(value);
         }
       }
     }
-    Object[] vars = variableValues.toArray(new Object[variableValues.size()]);
+    Object[] vars = myVariableValues.toArray(new Object[myVariableValues.size()]);
     UriComponents uriComponents = uriBuilder.buildAndExpand(vars);
     return uriComponents.encode().toUri();
   }
@@ -553,13 +560,13 @@ public class WcRestConnector {
 
     HttpUriRequest request = null;
 
-    if (serviceMethod.method == HttpMethod.POST) {
+    if (serviceMethod.getMethod() == HttpMethod.POST) {
       request = new HttpPost(uri);
-    } else if (serviceMethod.method == HttpMethod.GET) {
+    } else if (serviceMethod.getMethod() == HttpMethod.GET) {
       request = new HttpGet(uri);
-    } else if (serviceMethod.method == HttpMethod.DELETE) {
+    } else if (serviceMethod.getMethod() == HttpMethod.DELETE) {
       request = new HttpDelete(uri);
-    } else if (serviceMethod.method == HttpMethod.PUT) {
+    } else if (serviceMethod.getMethod() == HttpMethod.PUT) {
       request = new HttpPut(uri);
     }
 
@@ -596,7 +603,7 @@ public class WcRestConnector {
    * @return string(JSON) representation of model
    * @throws java.io.IOException
    */
-  private String toJson(Object model) throws IOException {
+  private static String toJson(Object model) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
     mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
@@ -617,8 +624,8 @@ public class WcRestConnector {
   }
 
   @SuppressWarnings("unused")
-  public String getServiceSslEndpoint() {
-    return CommercePropertyHelper.replaceTokens(serviceSslEndpoint, StoreContextHelper.getCurrentContext());
+  public String getServiceSslEndpoint(@Nullable StoreContext storeContext) {
+    return CommercePropertyHelper.replaceTokens(serviceSslEndpoint, storeContext);
   }
 
   @Required
@@ -626,13 +633,13 @@ public class WcRestConnector {
     this.serviceEndpoint = serviceEndpoint;
   }
 
-  public String getServiceEndpoint() {
-    return CommercePropertyHelper.replaceTokens(serviceEndpoint, StoreContextHelper.getCurrentContext());
+  public String getServiceEndpoint(@Nullable StoreContext storeContext) {
+    return CommercePropertyHelper.replaceTokens(serviceEndpoint, storeContext);
   }
 
   @SuppressWarnings("unused")
-  public String getSearchServiceEndpoint() {
-    return CommercePropertyHelper.replaceTokens(searchServiceEndpoint, StoreContextHelper.getCurrentContext());
+  public String getSearchServiceEndpoint(@Nullable StoreContext storeContext) {
+    return CommercePropertyHelper.replaceTokens(searchServiceEndpoint, storeContext);
   }
 
   @Required
@@ -641,8 +648,8 @@ public class WcRestConnector {
   }
 
   @SuppressWarnings("unused")
-  public String getSearchServiceSslEndpoint() {
-    return CommercePropertyHelper.replaceTokens(searchServiceSslEndpoint, StoreContextHelper.getCurrentContext());
+  public String getSearchServiceSslEndpoint(@Nullable StoreContext storeContext) {
+    return CommercePropertyHelper.replaceTokens(searchServiceSslEndpoint, storeContext);
   }
 
   @Required
@@ -722,49 +729,6 @@ public class WcRestConnector {
   @SuppressWarnings("unused")
   public void setConnectionRequestTimeout(int connectionRequestTimeout) {
     this.connectionRequestTimeout = connectionRequestTimeout;
-  }
-
-  public static class WcRestServiceMethod<T, P> {
-    private HttpMethod method;
-    private String uriTemplate;
-    private boolean secure;
-    private boolean requiresAuthentication;
-    private boolean search;
-    private boolean previewSupport;
-    private boolean userCookiesSupport;
-    private boolean contractsSupport;
-    private Class<P> parameterType;
-    private Class<T> returnType;
-
-    private WcRestServiceMethod(HttpMethod method,
-                                String uriTemplate,
-                                boolean secure,
-                                boolean requiresAuthentication,
-                                boolean search,
-                                boolean previewSupport,
-                                boolean userCookiesSupport,
-                                boolean contractsSupport,
-                                Class<P> parameterType, Class<T> returnType) {
-      this.method = method;
-      this.uriTemplate = uriTemplate;
-      this.secure = secure;
-      this.requiresAuthentication = requiresAuthentication;
-      this.search = search;
-      this.previewSupport = previewSupport;
-      this.userCookiesSupport = userCookiesSupport;
-      this.contractsSupport = contractsSupport;
-      this.parameterType = parameterType;
-      this.returnType = returnType;
-    }
-  }
-
-  public static class UnauthorizedException extends CommerceException {
-    CommerceRemoteError remoteError;
-
-    public UnauthorizedException(CommerceRemoteError remoteError) {
-      super("401");
-      this.remoteError = remoteError;
-    }
   }
 
 }

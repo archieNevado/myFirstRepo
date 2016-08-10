@@ -9,14 +9,12 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
-<BooleanProperty Name="inherit">true</BooleanProperty>
+<BooleanProperty Name="inherit">false</BooleanProperty>
 <StringListProperty Name="originReferences">
 <String>ibm:///catalog/product/ChefSupply_RGB_LED_Strip</String>
 <String>ibm:///catalog/sku/ChefSupply_RGB_LED_Strip_SKU</String>
 </StringListProperty>
 <StringListProperty Name="references">
-<String>ibm:///catalog/product/ChefSupply_RGB_LED_Strip</String>
-<String>ibm:///catalog/sku/ChefSupply_RGB_LED_Strip_SKU</String>
 </StringListProperty>
 </Struct>
 </StructProperty>
@@ -89,8 +87,8 @@
 </localSettings>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment></segment>
 <title>ChefSupply RGB LED Strip 01</title>
 <htmlTitle></htmlTitle>

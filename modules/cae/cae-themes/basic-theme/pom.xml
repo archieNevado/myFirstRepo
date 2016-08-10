@@ -11,20 +11,11 @@
   </parent>
 
   <artifactId>basic-theme</artifactId>
-  <description>Theme "Basic", required for other themes. Includes webresources and templates.</description>
+  <packaging>pom</packaging>
 
-  <!-- dependencies needed for code-completion in IDEs -->
+  <!-- dependencies needed for code-completion in IDEs only -->
   <dependencies>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cae-viewservices-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
+    <!-- cae module includes all dependencies to spring, freemarker, javascript and coremedia taglibs -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>cae-base-lib</artifactId>
@@ -49,60 +40,68 @@
             <groupId>com.github.eirslett</groupId>
             <artifactId>frontend-maven-plugin</artifactId>
             <configuration>
-              <!-- install nodejs and npm just once for all themes -->
               <!--
-               | you cannot set this property in the root pom, there is no root pom property in multimodule
-               | builds in maven
-              -->
+              | you cannot set this property in the root pom, there is no root pom property in multimodule
+              | builds in maven
+             -->
               <installDirectory>${project.basedir}/../../../../</installDirectory>
             </configuration>
             <executions>
-              <!-- install node, npm and node_modules in local workspace -->
               <execution>
-                <id>install node, npm and dependencies</id>
+                <id>build theme</id>
                 <goals>
+                  <!-- install node -->
                   <goal>install-node-and-npm</goal>
+                  <!-- install modules and build theme via postinstall -->
                   <goal>npm</goal>
                 </goals>
               </execution>
-              <!-- run grunt build -->
+              <!-- run tests -->
               <execution>
-                <id>grunt build</id>
+                <id>test theme</id>
                 <goals>
-                  <goal>grunt</goal>
-                </goals>
-                <configuration>
-                  <arguments>${cae.themes.grunt.task.build}</arguments>
-                </configuration>
-              </execution>
-              <!-- run grunt test -->
-              <execution>
-                <id>grunt test</id>
-                <goals>
-                  <goal>grunt</goal>
+                  <goal>npm</goal>
                 </goals>
                 <phase>test</phase>
                 <configuration>
-                  <arguments>${cae.themes.grunt.task.test}</arguments>
+                  <arguments>test</arguments>
                 </configuration>
               </execution>
             </executions>
           </plugin>
-
           <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
+            <artifactId>maven-install-plugin</artifactId>
             <executions>
               <execution>
-                <!-- Provide the resources artifact for the coremedia-webresource-content-maven-plugin. -->
-                <id>theme</id>
+                <!-- Provide the resources artifact as zip for the theme importer runner. -->
+                <id>include-theme-zip</id>
                 <goals>
-                  <goal>single</goal>
+                  <goal>install-file</goal>
                 </goals>
                 <phase>package</phase>
                 <configuration>
-                  <descriptors>
-                    <descriptor>assembly/resources-assembly-descriptor.xml</descriptor>
-                  </descriptors>
+                  <file>${project.build.directory}/${project.artifactId}.zip</file>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <packaging>zip</packaging>
+                  <classifier>theme</classifier>
+                  <pomFile>./pom.xml</pomFile>
+                </configuration>
+              </execution>
+              <execution>
+                <id>include-template-jar</id>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <file>
+                    ${project.build.directory}/resources/themes/basic/templates/basic-templates.jar
+                  </file>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <packaging>jar</packaging>
+                  <pomFile>./pom.xml</pomFile>
                 </configuration>
               </execution>
             </executions>

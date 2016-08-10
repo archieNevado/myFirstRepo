@@ -1,5 +1,9 @@
-#!/bin/bash -ex
-DIR=$(dirname $BASH_SOURCE)
+#!/usr/bin/env bash
+set -ex
+
+# determine were we are
+# use $BASH_SOURCE[0] to be safe when script is insource
+DIR=$(dirname "${BASH_SOURCE[0]}")
 # generate executables to the installed gems in .bin of the workspace (--binstubs) with the correct ruby
 # for jenkins slaves that have more than one executor we need to separate the bundle paths, otherwise there will be race conditions
 
@@ -38,5 +42,7 @@ else
   echo "faking vagrant installation for testkitchen"
   echo "echo Vagrant 1.8.1" > /tmp/vagrant
   chmod u+x /tmp/vagrant
-  sudo mv /tmp/vagrant /usr/bin/vagrant
+  # should exists
+  sudo mkdir -p /usr/local/bin
+  sudo mv /tmp/vagrant /usr/local/bin/vagrant
 fi

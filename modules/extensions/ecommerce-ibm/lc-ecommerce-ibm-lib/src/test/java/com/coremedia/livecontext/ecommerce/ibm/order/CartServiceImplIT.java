@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.order;
 
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
@@ -22,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -42,13 +44,14 @@ public class CartServiceImplIT extends AbstractServiceTest {
 
   @Test
   public void testGetCart() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) {
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
       return;
     }
 
-    if (StoreContextHelper.getWcsVersion(testConfig.getStoreContext()) < StoreContextHelper.WCS_VERSION_7_7) {
+    if (StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
       return;
     }
+
     prefillCart();
 
     testLoginUser();
@@ -82,8 +85,8 @@ public class CartServiceImplIT extends AbstractServiceTest {
 
   @Test
   public void testUpdateCartWithAnonymousUser() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts")) ||
-            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()) < StoreContextHelper.WCS_VERSION_7_7) {
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts()) ||
+            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
       return;
     }
 
@@ -100,8 +103,10 @@ public class CartServiceImplIT extends AbstractServiceTest {
     Cart cart = testling.getCart();
     assertNotNull(cart);
     assertTrue(cart.getOrderItems().isEmpty());
+
     String orderItemId = getOrderItemId(SKU_CODE);
     assertNotNull(orderItemId);
+
     List<CartService.OrderItemParam> addToParams = new ArrayList<>();
     addToParams.add(new CartService.OrderItemParam(
             orderItemId,
@@ -109,8 +114,10 @@ public class CartServiceImplIT extends AbstractServiceTest {
     testling.addToCart(addToParams);
     cart = testling.getCart();
     assertNotNull(cart);
+
     Cart.OrderItem orderItem = cart.getOrderItems().get(0);
     assertEquals("1.0", orderItem.getQuantity().toPlainString());
+
     List<CartService.OrderItemParam> updateParams = new ArrayList<>();
     updateParams.add(new CartService.OrderItemParam(
             orderItem.getExternalId(),
@@ -119,6 +126,7 @@ public class CartServiceImplIT extends AbstractServiceTest {
     cart = testling.getCart();
     orderItem = cart.getOrderItems().get(0);
     assertEquals("2.0", orderItem.getQuantity().toPlainString());
+
     testling.cancelCart();
   }
 
@@ -127,8 +135,10 @@ public class CartServiceImplIT extends AbstractServiceTest {
 
     Cart cart = testling.getCart();
     assertNotNull(cart);
+
     String orderItemId = getOrderItemId(SKU_CODE);
     assertNotNull(orderItemId);
+
     List<CartService.OrderItemParam> updateParams = new ArrayList<>();
     updateParams.add(new CartService.OrderItemParam(
             orderItemId,

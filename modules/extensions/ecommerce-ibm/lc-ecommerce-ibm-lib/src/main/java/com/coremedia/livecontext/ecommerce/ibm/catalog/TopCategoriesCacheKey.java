@@ -1,9 +1,11 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,15 +16,16 @@ public class TopCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
   private WcCatalogWrapperService wrapperService;
 
   public TopCategoriesCacheKey(StoreContext storeContext,
+                               UserContext userContext,
                                WcCatalogWrapperService wrapperService,
                                CommerceCache commerceCache) {
-    super("root", storeContext, CONFIG_KEY_TOP_CATEGORIES, commerceCache);
+    super("root", storeContext, userContext, CONFIG_KEY_TOP_CATEGORIES, commerceCache);
     this.wrapperService = wrapperService;
   }
 
   @Override
   public List<Map<String, Object>> computeValue(Cache cache) {
-    return wrapperService.findTopCategories(storeContext);
+    return wrapperService.findTopCategories(storeContext, userContext);
   }
 
   @Override

@@ -58,6 +58,11 @@ public class CatalogHelper {
   private static const PREFERENCES_COMMERCE_STRUCT:String = 'commerce';
   public static const COMMERCE_STRUCT_WORKSPACE:String = 'workspace';
 
+  // lc rest error, see CatalogRestErrorCodes.java
+  public static const LC_ERROR_CODE_CATALOG_UNAVAILABLE = "LC-01001";
+  public static const LC_ERROR_CODE_CATALOG_INTERNAL_ERROR = "LC-01002";
+  public static const LC_ERROR_CODE_UNAUTHORIZED = "LC-01003";
+
   private var storeExpression:ValueExpression;
 
   {
@@ -264,11 +269,11 @@ public class CatalogHelper {
   }
 
   public static function isMarketingSpot(catalogObjectId:String):Boolean {
-    return catalogObjectId.indexOf("/marketingspot/") !== -1
+    return catalogObjectId.indexOf("/marketingspot/") !== -1;
   }
 
   public static function isMarketing(catalogObjectId:String):Boolean {
-    return catalogObjectId.indexOf("/marketing/") !== -1
+    return catalogObjectId.indexOf("/marketing/") !== -1;
   }
 
   public function getActiveStoreExpression():ValueExpression {
@@ -341,19 +346,29 @@ public class CatalogHelper {
   private static function remoteErrorHandler(error:RemoteError, source:Object):void {
     var catalogObject:CatalogObject = source as CatalogObject;
     if (catalogObject) {
-      var status:uint = error.status;
       var errorCode:String = error.errorCode;
-      // only process server errors (known 4xx codes are handled by RemoteBeanImpl itself)
-      if (status === 503 /*&& errorCode === "LC-01001"*/) {
+      var errorMsg:String = error.message;
+      // only process livecontext errors
+      if (errorCode === LC_ERROR_CODE_CATALOG_UNAVAILABLE) {
         MessageBoxUtil.showError(ECommerceStudioPlugin_properties.INSTANCE.commerceConnectionError_title,
-                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceConnectionError_message, errorCode));
-        error.setHandled(true); //dont process the error further
-      } else if (status === 500 /*&& errorCode === "LC-01002"*/) {
+                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceConnectionError_message, errorMsg));
+        doHandleError(error, source);
+      } else if (errorCode === LC_ERROR_CODE_CATALOG_INTERNAL_ERROR) {
         MessageBoxUtil.showError(ECommerceStudioPlugin_properties.INSTANCE.commerceCatalogError_title,
-                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceCatalogError_message, errorCode));
-        error.setHandled(true); //don't process the error further
+                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceCatalogError_message, errorMsg));
+        doHandleError(error, source);
+      } else if (errorCode === LC_ERROR_CODE_UNAUTHORIZED) {
+        MessageBoxUtil.showError(ECommerceStudioPlugin_properties.INSTANCE.commerceUnauthorizedError_title,
+                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceUnauthorizedError_message, errorMsg));
+        doHandleError(error, source);
       }
     }
+  }
+
+  private static function doHandleError(error:RemoteError, source:Object):void {
+    // do not call error.setHandled(true) to allow the RemoteBeanImpl to clean up
+    // if we would do the library freezes
+    trace('[DEBUG]', 'Handled commerce error ' + error + ' raised by ' + source);
   }
 
   public function getChildren(catalogObject:CatalogObject):Array {
@@ -385,9 +400,9 @@ public class CatalogHelper {
     if (definingAttributes) {
       for each (var attribute:ProductAttribute in  definingAttributes) {
         if (!attributesStr) {
-          attributesStr = '('
+          attributesStr = '(';
         } else {
-          attributesStr += ', '
+          attributesStr += ', ';
         }
         attributesStr +=attribute.value;
       }
@@ -421,7 +436,7 @@ public class CatalogHelper {
       var priceWithCurrency:String = undefined;
       var product:Product = bindTo.getValue() as Product;
       if (product && product.get(priceProperty)) {
-          priceWithCurrency = product.get(priceProperty) + ' ' + product.getCurrency()
+          priceWithCurrency = product.get(priceProperty) + ' ' + product.getCurrency();
       }
       return priceWithCurrency;
     });
@@ -577,5 +592,6 @@ public class CatalogHelper {
   private static function getCollectionViewModel():CollectionViewModel {
     return EditorContextImpl(editorContext).getCollectionViewModel();
   }
+
 }
 }

@@ -1,17 +1,18 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Currency;
+import java.util.Locale;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CONFIG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CURRENCY;
@@ -80,7 +81,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
   }
 
 
-  private StoreContext createContext(String configId, String storeId, String storeName, String catalogId, String locale, String currency)
+  private StoreContext createContext(String configId, String storeId, String storeName, String catalogId, String localeStr, String currency)
           throws InvalidContextException {
 
     StoreContext context = StoreContextBuilder.create().build();
@@ -102,12 +103,12 @@ public class StoreContextProviderMock implements StoreContextProvider {
       }
       context.put(STORE_NAME, storeName);
     }
-    if (locale != null) {
-      try {
-        context.put(LOCALE, LocaleUtils.toLocale(locale));
-      } catch (IllegalArgumentException e) {
-        throw new InvalidContextException(e);
+    if (localeStr != null) {
+      Locale locale = LocaleHelper.getLocaleFromString(localeStr);
+      if (null == locale) {
+        throw new InvalidContextException("Locale " + localeStr + " is not valid.");
       }
+      context.put(LOCALE, locale);
     }
     if (currency != null) {
       try {

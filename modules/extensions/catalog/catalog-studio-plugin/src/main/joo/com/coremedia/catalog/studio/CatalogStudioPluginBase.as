@@ -251,7 +251,7 @@ public class CatalogStudioPluginBase extends StudioPlugin {
           }
         });
       }
-    }
+    };
   }
 
   /**

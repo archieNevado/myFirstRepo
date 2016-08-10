@@ -13,7 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
+import static org.junit.Assert.assertFalse;
 
 @ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
 @ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
@@ -30,10 +31,10 @@ public class SearchServiceImplIT extends AbstractServiceTest {
   @Test
   @Betamax(tape = "ssi_testGetAutocompleteSuggestions", match = {MatchRule.path, MatchRule.query})
   public void testGetAutocompleteSuggestions() {
-    if (StoreContextHelper.getWcsVersion(StoreContextHelper.getCurrentContext()) < StoreContextHelper.WCS_VERSION_7_7) {
+    if (StoreContextHelper.getWcsVersion(StoreContextHelper.getCurrentContext()).lessThan(WCS_VERSION_7_7)) {
       return;
     }
     List<SuggestionResult> suggestions = testling.getAutocompleteSuggestions("dres");
-    assertTrue(!suggestions.isEmpty());
+    assertFalse(suggestions.isEmpty());
   }
 }

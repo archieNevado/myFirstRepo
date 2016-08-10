@@ -10,9 +10,9 @@ public class LiveContextUserServiceUtil {
    * @param e The remote exception that contains the error details.
    */
   public static String resolveErrorMessage(CommerceRemoteException e) {
-    String code = e.getRemoteError().getErrorCode();
+    String code = e.getErrorCode();
     if(StringUtils.isEmpty(code)) {
-      code = e.getRemoteError().getErrorKey();
+      code = e.getErrorKey();
     }
 
     int id = 0;

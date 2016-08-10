@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
@@ -11,9 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
-
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -29,15 +31,10 @@ public class WebCommerceContextInterceptorTest {
   private Site site;
 
   @Mock
-  private HttpServletRequest request;
-
-  @Mock
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Mock
   private CommerceConnection connection;
-
-  private StoreContext storeContext;
 
   private WebCommerceContextInterceptor testling = new WebCommerceContextInterceptor();
 
@@ -60,18 +57,22 @@ public class WebCommerceContextInterceptorTest {
   @Test
   public void testPreHandle() {
     String path = "/helios";
-    when(request.getPathInfo()).thenReturn(path);
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.setPathInfo(path);
     when(testling.getSite(request, path)).thenReturn(site);
     testling.preHandle(request, null, null);
     verify(commerceConnectionInitializer).init(any(Site.class));
+    assertNotNull(SiteHelper.getSiteFromRequest(request));
   }
 
   @Test
   public void testNoopPreHandle() {
     String path = "/nosite";
-    when(request.getPathInfo()).thenReturn(path);
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.setPathInfo(path);
     when(testling.getSite(request, path)).thenReturn(null);
     testling.preHandle(request, null, null);
     verify(connection.getStoreContextProvider(), never()).setCurrentContext(any(StoreContext.class));
+    assertNull(SiteHelper.getSiteFromRequest(request));
   }
 }

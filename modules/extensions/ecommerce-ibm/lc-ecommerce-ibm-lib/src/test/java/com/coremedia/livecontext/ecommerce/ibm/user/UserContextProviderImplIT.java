@@ -2,11 +2,12 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextBuilder;
+import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextBuilder;
+import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
 
 @ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
 @ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
@@ -35,7 +35,7 @@ public class UserContextProviderImplIT extends AbstractServiceTest {
 
   @After
   public void tearDown() throws Exception {
-    ((LoginServiceImpl)loginService).destroy();
+    ((LoginServiceImpl) loginService).destroy();
   }
 
   @Test
@@ -47,15 +47,14 @@ public class UserContextProviderImplIT extends AbstractServiceTest {
 
   @Test
   public void testCurrentUserContext() {
+    Map<String, Object> userContextContent = ImmutableMap.<String, Object>builder()
+            .put(UserContextHelper.FOR_USER_NAME, "currentUser")
+            .build();
 
-    HashMap userContextContent = new HashMap();
-    userContextContent.put(UserContextHelper.FOR_USER_NAME, "currentUser");
     UserContext userContext = (UserContext) UserContextBuilder.create().withValues(userContextContent).build();
 
     testling.setCurrentContext(userContext);
     assertNotNull(testling.getCurrentContext());
     assertEquals("currentUser", UserContextHelper.getForUserName(testling.getCurrentContext()));
   }
-
-
 }

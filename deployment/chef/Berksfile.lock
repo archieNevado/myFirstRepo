@@ -1,12 +1,8 @@
 DEPENDENCIES
-  7-zip
-    path: thirdparty-cookbooks/7-zip
   apache2
     path: thirdparty-cookbooks/apache2
   apt
     path: thirdparty-cookbooks/apt
-  bluepill
-    path: thirdparty-cookbooks/bluepill
   blueprint
     path: cookbooks/blueprint
   blueprint-base
@@ -37,8 +33,6 @@ DEPENDENCIES
     path: thirdparty-cookbooks/compat_resource
   coremedia-proxy
     path: coremedia-cookbooks/coremedia-proxy
-  coremedia-tools
-    path: coremedia-cookbooks/coremedia-tools
   coremedia_maven
     path: coremedia-cookbooks/coremedia_maven
   coremedia_tomcat
@@ -47,6 +41,8 @@ DEPENDENCIES
     path: thirdparty-cookbooks/fpm-tng
   gpg
     path: thirdparty-cookbooks/gpg
+  mingw
+    path: thirdparty-cookbooks/mingw
   mongodb3
     path: thirdparty-cookbooks/mongodb3
   mysql
@@ -67,12 +63,12 @@ DEPENDENCIES
     path: thirdparty-cookbooks/repository
   reprepro
     path: thirdparty-cookbooks/reprepro
-  rsyslog
-    path: thirdparty-cookbooks/rsyslog
   ruby_installer
     path: thirdparty-cookbooks/ruby_installer
   runit
     path: thirdparty-cookbooks/runit
+  seven_zip
+    path: thirdparty-cookbooks/seven_zip
   smf
     path: thirdparty-cookbooks/smf
   sysctl
@@ -87,20 +83,15 @@ DEPENDENCIES
     path: thirdparty-cookbooks/yum
   yum-centos
     path: thirdparty-cookbooks/yum-centos
-  yum-epel
-    path: thirdparty-cookbooks/yum-epel
   yum-mysql-community
     path: thirdparty-cookbooks/yum-mysql-community
   yum-pgdg
     path: thirdparty-cookbooks/yum-pgdg
 
 GRAPH
-  7-zip (1.0.2)
-    windows (>= 1.2.2)
   apache2 (3.1.0)
-  apt (2.9.2)
-  bluepill (2.4.2)
-    rsyslog (>= 2.0)
+  apt (4.0.1)
+    compat_resource (>= 12.10)
   blueprint (1.0.0)
   blueprint-base (1.0.0)
     chef_handler (~> 1.2.0)
@@ -140,20 +131,20 @@ GRAPH
     coremedia_tomcat (~> 2.0)
   blueprint-tools (1.0.0)
     blueprint-base (>= 0.0.0)
-    coremedia-tools (~> 1.0)
+    coremedia_maven (~> 2.0)
   blueprint-yum (1.0.0)
     yum (~> 3.8)
     yum-centos (~> 0.4.5)
-  build-essential (2.3.1)
-    7-zip (>= 0.0.0)
+  build-essential (6.0.0)
+    compat_resource (>= 12.10)
+    mingw (>= 1.1)
+    seven_zip (>= 0.0.0)
   chef-sugar (3.3.0)
   chef_handler (1.2.0)
-  compat_resource (12.8.0)
+  compat_resource (12.10.6)
   coremedia-proxy (0.2.6)
     apache2 (~> 3.1.0)
     chef-sugar (~> 3.0)
-  coremedia-tools (1.0.3)
-    coremedia_maven (~> 2.0)
   coremedia_maven (2.0.4)
   coremedia_tomcat (2.0.11)
     coremedia_maven (~> 2.0)
@@ -163,26 +154,29 @@ GRAPH
     reprepro (>= 0.0.0)
     ruby_installer (>= 0.0.0)
   gpg (0.2.2)
+  mingw (1.2.2)
+    compat_resource (>= 0.0.0)
+    seven_zip (>= 0.0.0)
   mongodb3 (5.2.0)
     apt (>= 0.0.0)
     runit (~> 1.7.0)
     user (>= 0.0.0)
     yum (>= 0.0.0)
-  mysql (6.1.2)
+  mysql (6.1.3)
     smf (>= 0.0.0)
     yum-mysql-community (>= 0.0.0)
-  nginx (2.7.6)
-    apt (~> 2.2)
-    bluepill (~> 2.3)
-    build-essential (~> 2.0)
-    ohai (~> 2.0)
-    runit (~> 1.2)
-    yum-epel (~> 0.3)
-  ohai (2.1.0)
+  nginx (1.8.0)
+    apt (>= 0.0.0)
+    build-essential (>= 0.0.0)
+    ohai (>= 1.1.4)
+    runit (>= 0.0.0)
+    yum (>= 0.0.0)
+  ohai (4.1.1)
+    compat_resource (>= 12.10)
   openssl (4.4.0)
     chef-sugar (>= 3.1.1)
-  packagecloud (0.2.0)
-  postgresql (4.0.2)
+  packagecloud (0.2.4)
+  postgresql (4.0.6)
     apt (>= 1.9.0)
     build-essential (>= 0.0.0)
     openssl (~> 4.0)
@@ -197,26 +191,24 @@ GRAPH
     build-essential (>= 0.0.0)
     gpg (>= 0.0.0)
     nginx (>= 0.0.0)
-  rsyslog (4.0.0)
-    compat_resource (>= 0.0.0)
   ruby_installer (0.1.3)
     build-essential (>= 0.0.0)
-  runit (1.7.6)
+  runit (1.7.8)
     packagecloud (>= 0.0.0)
+  seven_zip (2.0.1)
+    windows (>= 1.2.2)
   smf (2.2.8)
     rbac (>= 1.0.1)
   sysctl (0.6.2)
     ohai (>= 0.0.0)
   ulimit (0.3.3)
   user (0.4.2)
-  windows (1.39.2)
+  windows (1.44.1)
     chef_handler (>= 0.0.0)
-  yum (3.10.0)
-  yum-centos (0.4.12)
-    yum (~> 3.10.0)
-  yum-epel (0.6.6)
-    yum (~> 3.10.0)
-  yum-mysql-community (0.1.21)
+  yum (3.11.0)
+  yum-centos (0.4.11)
+    yum (~> 3.2)
+  yum-mysql-community (0.2.0)
     yum (>= 3.2)
   yum-pgdg (0.2.7)
     yum (~> 3.2)

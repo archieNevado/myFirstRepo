@@ -7,6 +7,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
 
@@ -44,11 +45,8 @@ public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
 
   @Override
   public boolean isDefaultContract() {
-    Double usageType = DataMapHelper.getValueForKey(getDelegate(), "usage", Double.class);
-    if (usageType != null){
-      return DEFAULT_CATALOG_IDENTIFIER == usageType.intValue();
-    }
-    return false;
+    Integer usageType = DataMapHelper.getValueForKey(getDelegate(), "usage", Integer.class);
+    return Objects.equals(DEFAULT_CATALOG_IDENTIFIER, usageType);
   }
 
   @Override

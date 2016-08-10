@@ -26,5 +26,6 @@
     <module>cae-preview-webapp</module>
     <module>cae-performance-test</module>
     <module>cae-themes</module>
+    <module>cae-integration-test</module>
   </modules>
 </project>

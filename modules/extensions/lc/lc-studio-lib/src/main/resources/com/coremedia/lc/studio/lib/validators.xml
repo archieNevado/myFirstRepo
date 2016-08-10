@@ -88,15 +88,4 @@
     <constructor-arg index="3" name="lookupFunction" value="#{catalogExternalChannelIndex.createContentsByValueFunction()}"/>
   </bean>
 
-
-  <bean id="liveContextCacheCapacities"
-        class="com.coremedia.cache.CacheCapacityConfigurer"
-        init-method="init">
-    <property name="cache" ref="cache"/>
-    <property name="capacities">
-      <map>
-        <entry key="com.coremedia.lc.studio.lib.com.coremedia.blueprint.base.rest.validators.AbstractExternalCatalogObjectValidator" value="200"/>
-      </map>
-    </property>
-  </bean>
 </beans>

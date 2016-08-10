@@ -58,7 +58,7 @@ public class AvailabilityServiceImplIT extends AbstractServiceTest {
 
     //test single AvailabilityInfo
     assertEquals(AvailabilityInfo.STATUS_AVAILABLE, availabilityInfo.getInventoryStatus());
-    assertTrue(availabilityInfo.getQuantity() >= 1.0f);
+    assertTrue(availabilityInfo.getQuantity() >= 1.0F);
 
     //test identity of Availability
     assertEquals(availabilityInfo, testling.getAvailabilityInfo(productVariant2));

@@ -2,6 +2,7 @@ package com.coremedia.blueprint.common.navigation;
 
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.cae.aspect.provider.AspectsProvider;
 
 import java.util.List;
@@ -25,6 +26,12 @@ public interface Navigation extends Linkable {
    * @return
    */
   Navigation getParentNavigation();
+
+  /**
+   * Returns the theme of this navigation instance or its parent.
+   * @return the theme of this navigation instance or its parent
+   */
+  CMTheme getTheme();
 
   /**
    * Returns the root {@link Navigation} object (=Site) for this navigation item.

@@ -7,13 +7,13 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,8 +28,6 @@ import java.util.List;
 
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
 import static com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImplSearchBasedIT.LocalConfig.PROFILE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -127,7 +125,7 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
 
   @Test
   public void testFindProductVariantByExternalIdWithContractSupport() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))){
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
       return;
     }
 
@@ -214,7 +212,7 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
 
   @Test
   public void testFindTopCategoriesWithContractSupport() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))){
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
       return;
     }
 
@@ -236,7 +234,6 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testFindSubCategories();
   }
 
-  @Betamax(tape = "csi_testFindSubCategoriesWithContract_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
   public void testFindSubCategoriesWithContract() throws Exception {

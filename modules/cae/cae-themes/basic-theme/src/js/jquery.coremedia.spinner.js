@@ -6,7 +6,7 @@
  * Copyright (c) 2012 Róbert Pataki heartcode@robertpataki.com
  *
  * Version 1.1
- * Copyright (c) 2015 CoreMedia AG
+ * Copyright (c) CoreMedia AG
  *
  * Usage: $(".cm-spinner").threeSixtySpinner();
  *
@@ -20,7 +20,7 @@
  *
  */
 
-/*! 360° Spinner Plugin | Copyright (c) 2015 CoreMedia AG */
+/*! 360° Spinner Plugin | Copyright (c) CoreMedia AG */
 ;(function ($) {
   "use strict";
 
@@ -286,4 +286,4 @@
       }
     });
   };
-})(coremedia.blueprint.$ || jQuery);
+})(jQuery || coremedia.blueprint.$);

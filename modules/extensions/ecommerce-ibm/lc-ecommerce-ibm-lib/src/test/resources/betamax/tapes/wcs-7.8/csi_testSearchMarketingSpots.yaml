@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000sUSKO-rvrrNLWke-pTKAtMp:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -52,6 +53,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000xk6_b8aWSKhtFW8v0LGdala:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
 - recorded: 2016-05-19T09:27:43.682Z
   request:
@@ -75,6 +77,31 @@ interactions:
       Set-Cookie: JSESSIONID=0000iMpojAol-FS55taXvAIcqvm:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":4,"MarketingSpot":[{"uiDisplayable":1,"type":"MARKETING","description":"Product Recommendation in Shirts for Men","spotName":"MenShirtsProductRight_CatEntries","spotId":"12455"},{"uiDisplayable":1,"type":"MARKETING","description":"Display
       ads on Shirts category page","spotName":"MenShirtsRow2_Content","spotId":"12509"},{"uiDisplayable":1,"type":"MARKETING","description":"Product Recommendation in Shirts and Blouses for Women","spotName":"WomenShirtsBlousesProductRight_CatEntries","spotId":"12444"},{"uiDisplayable":1,"type":"MARKETING","description":"Display
       ads on Shirts and Blouses category page","spotName":"WomenShirtsBlousesRow2_Content","spotId":"12517"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/spot?q=byTypeAndName&qType=MARKETING&qName=Shirts&catalogId=10152&currency=USD&langId=-1","resourceName":"spot","recordSetComplete":true,"recordSetStartNumber":0,"recordSetCount":4}'
+- recorded: 2016-07-22T14:34:42.537Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:42 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000BzifuXYTw6Tp_pD_edLxd8n:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CZpHs7x8LfK7T92tiYUCiZrKZVwFjuSXiNDn53kscTFCFWMLzl9DJ7sYW50VlOuqhd5F3EDlf6QZxqiUEFnvDVCeLCi2zAUpQWXuLFdW0hTbpq2%2BCzm2zwozyEySBYI372Qr7VYn9kMD9XFLF7P8OCYd%2BMrb4VY6hAtYOoSDwQmuRv1gRKTJK3b1QhYtPhMhP8RrepXc78FQN5xp4MUJgug%3D%3D","WCTrustedToken":"2%2CawkK%2FQcYtAV9Rw6YAJmQW%2BqEIEY%3D","personalizationID":"1469173833154-2"}'

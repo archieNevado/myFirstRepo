@@ -62,7 +62,7 @@
   <!-- register view repository for templates below WEB-INF/templates/assets/ -->
   <customize:prepend id="addAssetsViewRepository" bean="viewRepositories">
     <list>
-      <value>assets</value>
+      <value>am</value>
     </list>
   </customize:prepend>
 

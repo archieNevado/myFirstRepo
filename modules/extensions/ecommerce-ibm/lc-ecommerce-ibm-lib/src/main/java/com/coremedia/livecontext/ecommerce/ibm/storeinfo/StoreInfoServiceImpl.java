@@ -17,19 +17,19 @@ public class StoreInfoServiceImpl implements StoreInfoService {
   @Override
   public String getStoreId(String storeName) {
     Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache));
-    return (String) DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".storeId");
+    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".storeId", String.class);
   }
 
   @Override
   public String getDefaultCatalogId(String storeName) {
     Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache));
-    return (String) DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".defaultCatalogId");
+    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".defaultCatalogId", String.class);
   }
 
   @Override
   public String getCatalogId(String storeName, String catalogName) {
     Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache));
-    return (String) DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".catalogs."+catalogName);
+    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".catalogs."+catalogName, String.class);
   }
 
   @Override

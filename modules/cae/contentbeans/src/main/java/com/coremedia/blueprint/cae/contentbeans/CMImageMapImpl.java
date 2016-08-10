@@ -22,8 +22,7 @@ public class CMImageMapImpl extends CMImageMapBase {
 
   private List<ImageMapAreaFilterable> imageMapAreaFilters;
 
-  @Override
-  public List<Map<String, Object>> getImageMapAreas() {
+  public List<Map<String, Object>> getImageMapAreasUnfiltered() {
     List<Map<String, Object>> result = new ArrayList<>();
     final SettingsService settingsService = getSettingsService();
 
@@ -54,6 +53,12 @@ public class CMImageMapImpl extends CMImageMapBase {
         }
       }
     }
+    return result;
+  }
+
+  @Override
+  public List<Map<String, Object>> getImageMapAreas() {
+    List<Map<String, Object>> result = getImageMapAreasUnfiltered();
     for (ImageMapAreaFilterable areaFilter : imageMapAreaFilters) {
       result = areaFilter.filter(result, this);
     }

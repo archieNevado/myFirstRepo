@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <dataviews xmlns="http://www.coremedia.com/2004/objectserver/dataviewfactory">
-  <dataview appliesTo="com.coremedia.livecontext.contentbeans.LiveContextExternalChannel">
+  <dataview appliesTo="com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl">
     <property name="site"/>
     <property name="aspectByName" associationType="composition"/>
     <property name="localSettings"/>

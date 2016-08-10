@@ -147,13 +147,13 @@ resources.
 - builtin_workflows: An array of workflow names from the builtin workflows to upload. Defaults to <code>[]</code>.
 - custom_workflows: An array of paths to custom workflow definitions to upload. Defaults to <code>[]</code>.
 - cms_ior: The ior of the content management server. Only necessary if publishall_content is being used. Defaults to <code>"http://localhost:40180/coremedia/ior"</code>.
-- cms_tools_dir: The path of the directory, where the server tools of the content management server are installed. Defaults to <code>#<Chef::DelayedEvaluator:0x007f92a2f77628@/Users/fsimmend/dev/git/cms-7.5/blueprint/deployment/chef/cookbooks/blueprint-dev-tooling/resources/content.rb:72></code>.
+- cms_tools_dir: The path of the directory, where the server tools of the content management server are installed. 
 - mls_ior: The ior of the master live server. Only necessary if publishall_content is being used. Defaults to <code>"http://localhost:40280/coremedia/ior"</code>.
-- mls_tools_dir: The path of the directory, where the server tools of the master live server are installed. Defaults to <code>#<Chef::DelayedEvaluator:0x007f92a2f75990@/Users/fsimmend/dev/git/cms-7.5/blueprint/deployment/chef/cookbooks/blueprint-dev-tooling/resources/content.rb:78></code>.
-- wfs_tools_dir: The path of the directory, where the server tools of the workflow server are installed. Defaults to <code>#<Chef::DelayedEvaluator:0x007f92a2f74b30@/Users/fsimmend/dev/git/cms-7.5/blueprint/deployment/chef/cookbooks/blueprint-dev-tooling/resources/content.rb:81></code>.
-- user: The username to use for execute and filesystem resources. Defaults to <code>#<Chef::DelayedEvaluator:0x007f92a2f7fc88@/Users/fsimmend/dev/git/cms-7.5/blueprint/deployment/chef/cookbooks/blueprint-dev-tooling/resources/content.rb:84></code>.
-- group: The group to use for execute and filesystem resources. Defaults to <code>#<Chef::DelayedEvaluator:0x007f92a2f7ee78@/Users/fsimmend/dev/git/cms-7.5/blueprint/deployment/chef/cookbooks/blueprint-dev-tooling/resources/content.rb:87></code>.
-- timeout: The timeout for all execute resource blocks. Defaults to <code>1200</code>.
+- mls_tools_dir: The path of the directory, where the server tools of the master live server are installed. 
+- wfs_tools_dir: The path of the directory, where the server tools of the workflow server are installed. 
+- user: The username to use for execute and filesystem resources. 
+- group: The group to use for execute and filesystem resources. 
+- timeout: The timeout for all execute resource blocks. Defaults to <code>1800</code>.
 - publishall_contentquery: The contentquery to determine which content should not be published. Only effective on publishall_content action. Defaults to <code>"NOT BELOW PATH '/Home'"</code>.
 
 ### Content User Directory Layoyt

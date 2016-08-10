@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000SPteenF32MtqT0kTftv3Nol:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -52,6 +53,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000ayfbBTXJlaNr18BsjEidccE:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
 - recorded: 2016-05-19T09:27:46.050Z
   request:
@@ -74,6 +76,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:46 GMT
       Set-Cookie: JSESSIONID=0000DmAPt1Eb-8PH1R3KhlGSbcy:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"MarketingSpotData":[{"baseMarketingSpotActivityData":[{"baseMarketingSpotActivityID":"10439","contentStoreId":"10151","contentName":"ApparelHeroImage","contentClickAction":"None","marketingContentDescription":[{"marketingText":"<link rel=\"stylesheet\"
       href=\"[imagePath]rwdWebAssets\/deptMainESpot\/styles.css\" \/> <div id=\"deptMainESpot\" class=\"container\">    <div id=\"deptMainESpot-bkgrd\">       <div id=\"deptMainESpot-bkgrd-couple\">          <div><\/div>       <\/div>       <div id=\"deptMainESpot-container\"
       class=\"espotCont\">          <div id=\"deptMainESpot-girl2\">    <!--[if IE 8]>       <img src=\"[imagePath]rwdWebAssets\/deptMainESpot\/female.png\"\/>    <![endif]-->    <!--[if gte IE 9]><!-->          <div><\/div>    <!--<![endif]-->          <\/div>          <div
@@ -102,4 +105,29 @@ interactions:
       Set-Cookie: JSESSIONID=0000diBqSu6rVezwSt2wKh7JaVe:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":1,"MarketingSpot":[{"uiDisplayable":1,"type":"MARKETING","description":"Display the main ad on Apparel department page","spotName":"ApparelRow1_Content","spotId":"12438"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/spot\/12438?catalogId=10152&currency=USD&langId=-1","resourceName":"spot","recordSetComplete":true,"recordSetStartNumber":0,"recordSetCount":1}'
+- recorded: 2016-07-22T14:34:44.980Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:44 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000-tPqwx61T90kXYJoYjg0BiI:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CEfyvIUGrcehgCy35hUIHAUGEFphi%2FQ9HqMAMKrvk4iWvbvccUHt0eJ0GC7IdTDkZK6k5YgCFzAOClbTt1Zp7nvqPBFb6wx43wGAUcYmVWQ%2FaztGQkNjSuOG05%2ByZ4jVAfVdGLPnlBOjIAPsDJd204f5DfqkNekrmgdatiEYaZQDDO9A20bx19mFozBfw4z5e1ly8MHYFu5c4j4o%2BLiiS7A%3D%3D","WCTrustedToken":"2%2CB9bTvJRjOdaPPKHDwOhZLmBuCGA%3D","personalizationID":"1469173833154-2"}'

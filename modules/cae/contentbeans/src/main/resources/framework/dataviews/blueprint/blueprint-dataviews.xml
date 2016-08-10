@@ -72,13 +72,15 @@
     <property name="contexts" associationType="static"/>
     <property name="viewtype" associationType="aggregation"/>
     <property name="transformMap" />
+    <property name="transformations" />
     <property name="disableCropping" />
   </dataview>
 
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMImageMapImpl">
     <property name="aspectByName" associationType="composition"/>
     <property name="localSettings"/>
-    <property name="imageMapAreas" associationType="static"/>
+    <property name="imageMapAreasUnfiltered" associationType="static"/>
+    <property name="imageMapAreas" associationType="dynamic"/>
   </dataview>
 
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMSiteImpl">

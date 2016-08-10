@@ -1,4 +1,6 @@
-(function ($) {
+/*! Utils Plugin | Copyright (c) CoreMedia AG */
+;(function ($) {
+  "use strict";
 
   /**
    * Same as jQuery.find but also includes the target(s) on which findAndSelf was called.
@@ -99,4 +101,4 @@
     return this.removeClass(getBEMModifierClassName(bemBlock, bemModifier));
   };
 
-})(coremedia.blueprint.$);
+})(jQuery || coremedia.blueprint.$);

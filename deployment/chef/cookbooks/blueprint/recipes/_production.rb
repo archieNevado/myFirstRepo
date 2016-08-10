@@ -57,5 +57,5 @@ node.default['blueprint']['tools']['caefeeder-live']['version'] = 'ENTER CONCRET
 node.default['blueprint']['tools']['content-management-server']['version'] = 'ENTER CONCRETE VERSION HERE'
 node.default['blueprint']['tools']['master-live-server']['version'] = 'ENTER CONCRETE VERSION HERE'
 node.default['blueprint']['tools']['workflow-server']['version'] = 'ENTER CONCRETE VERSION HERE'
-node.default['blueprint']['tools']['css-importer']['version'] = 'ENTER CONCRETE VERSION HERE'
+node.default['blueprint']['tools']['theme-importer']['version'] = 'ENTER CONCRETE VERSION HERE'
 node.default['blueprint']['tools']['replication-live-server']['version'] = 'ENTER CONCRETE VERSION HERE'

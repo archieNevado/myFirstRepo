@@ -28,6 +28,11 @@
   <#return blueprintFreemarkerFacade.setting(self, key, default)>
 </#function>
 
+<#-- TransformationsFunction -->
+<#function transformations self>
+  <#return blueprintFreemarkerFacade.getTransformations(self)>
+</#function>
+
 <#-- GenerateUniqueId -->
 <#function generateId prefix="">
   <#return blueprintFreemarkerFacade.generateId(prefix)>

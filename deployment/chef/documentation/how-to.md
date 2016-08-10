@@ -214,7 +214,3 @@ Now start the test system from this shell like usually.
 ```
 
 > Remember, you need to use virtualbox to stop and start the database box. Kitchen has no commands to start and stop existing images.
-
-## Apache Development
-
-Please use the kitchen setup below [blueprint-proxy](cookbooks/blueprint-proxy/DEVELOPMENT.md)

@@ -128,7 +128,7 @@
               </perso:selectionRulesField>
             </items>
           </editor:collapsibleFormPanel>
-          <bpforms:viewTypeSelectorForm/>
+          <bpforms:viewTypeSelectorForm paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}" collapsed="false"/>
           <bpforms:validityDocumentForm/>
         </items>
       </editor:documentForm>

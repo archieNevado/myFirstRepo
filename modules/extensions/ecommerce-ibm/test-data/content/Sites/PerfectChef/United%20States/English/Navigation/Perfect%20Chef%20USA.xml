@@ -8,11 +8,6 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<StructProperty Name="livecontext.catalog">
-<Struct>
-<LinkProperty Name="root" LinkType="coremedia:///cap/contenttype/CMExternalChannel" xlink:href="coremedia:///cap/resources/../Augmentation/Perfect%20Chef%20USA%20Catalog%20Root.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Augmentation/Perfect%20Chef%20USA%20Catalog%20Root"/>
-</Struct>
-</StructProperty>
 <IntProperty Name="publicationHistoryInterval">60</IntProperty>
 <BooleanProperty Name="displayPdf">true</BooleanProperty>
 <LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf"/>
@@ -37,11 +32,9 @@
 <link href="../Options/Settings/CMChannel/Responsive%20Image%20Settings.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/>
 <link href="../Options/Settings/Preview.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/Preview"/>
 </linkedSettings>
-<resourceBundles>
-<link href="../../../../../Settings/Options/Bundles/Bundle_en.xml" path="/Settings/Options/Bundles/Bundle_en"/>
+<resourceBundles2>
 <link href="../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
-<link href="../../../../../Settings/Options/Bundles/Livecontext_en.xml" path="/Settings/Options/Bundles/Livecontext_en"/>
-</resourceBundles>
+</resourceBundles2>
 <segment>perfectchef</segment>
 <title>Perfect Chef</title>
 <htmlTitle></htmlTitle>
@@ -72,11 +65,12 @@
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
 <javaScript>
-<link href="../../../../../Themes/perfectchef/perfectchef%2Ejs.xml" path="/Themes/perfectchef/perfectchef%2Ejs"/>
 </javaScript>
 <css>
-<link href="../../../../../Themes/perfectchef/perfectchef%2Ecss.xml" path="/Themes/perfectchef/perfectchef%2Ecss"/>
 </css>
+<theme>
+<link href="../../../../../Themes/perfectchef/Perfectchef%20Theme.xml" path="/Themes/perfectchef/Perfectchef%20Theme"/>
+</theme>
 <favicon md5="643239844b449a09c19441abc0d9f805" size="1150" href="../../../../../__blob/643239844b449a09c19441abc0d9f805.blob" mimetype="image/x-icon"/>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

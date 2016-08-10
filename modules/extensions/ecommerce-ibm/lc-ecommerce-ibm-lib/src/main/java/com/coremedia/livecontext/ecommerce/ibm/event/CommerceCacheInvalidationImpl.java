@@ -15,7 +15,7 @@ class CommerceCacheInvalidationImpl implements CommerceCacheInvalidation {
 
   @Override
   public long getTimestamp() {
-    return Long.parseLong(DataMapHelper.getValueForKey(delegate, "timestamp", String.class));
+    return DataMapHelper.getValueForKey(delegate, "timestamp", -1L);
   }
 
   @Override

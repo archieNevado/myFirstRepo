@@ -6,7 +6,6 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.cap.struct.Struct;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
@@ -31,7 +30,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class LiveContextExternalChannelTest extends LiveContextContentBeanTestBase {
 
-  private LiveContextExternalChannel testling;
+  private LiveContextExternalChannelImpl testling;
 
   @Inject
   private SettingsService settingsService;
@@ -66,7 +65,7 @@ public class LiveContextExternalChannelTest extends LiveContextContentBeanTestBa
 
   @Test
   public void testSettingsMechanism() throws Exception {
-    Map setting = settingsService.setting(LiveContextExternalChannel.COMMERCE_STRUCT, Map.class, testling);
+    Map setting = settingsService.setting(LiveContextExternalChannelImpl.COMMERCE_STRUCT, Map.class, testling);
     Assert.assertNotNull(setting);
     assertEquals(3, setting.size());
   }

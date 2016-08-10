@@ -11,17 +11,14 @@
   </parent>
 
   <artifactId>aurora-theme</artifactId>
+  <packaging>pom</packaging>
 
-  <properties>
-    <coremedia.project.extension.for>cae</coremedia.project.extension.for>
-  </properties>
-
-  <!-- dependencies needed for code-completion in IDEs -->
+  <!-- dependencies needed for code-completion in IDEs only -->
   <dependencies>
-    <!-- perfectchef theme includes everything -->
+    <!-- cae module includes all dependencies to spring, freemarker, javascript and coremedia taglibs -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>perfectchef-theme</artifactId>
+      <artifactId>lc-cae</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -44,47 +41,40 @@
             <artifactId>frontend-maven-plugin</artifactId>
             <configuration>
               <!--
-                            | you cannot set this property in the root pom, there is no root pom property in multimodule
-                            | builds in maven
-                           -->
+              | you cannot set this property in the root pom, there is no root pom property in multimodule
+              | builds in maven
+             -->
               <installDirectory>${project.basedir}/../../../../../</installDirectory>
             </configuration>
             <executions>
-              <!-- install node, npm and node_modules in local workspace -->
               <execution>
-                <id>install node, npm and dependencies</id>
+                <id>build theme</id>
                 <goals>
+                  <!-- install node -->
                   <goal>install-node-and-npm</goal>
+                  <!-- install modules and build theme via postinstall -->
                   <goal>npm</goal>
                 </goals>
               </execution>
-              <!-- run grunt build -->
-              <execution>
-                <id>grunt build</id>
-                <goals>
-                  <goal>grunt</goal>
-                </goals>
-                <configuration>
-                  <arguments>${cae.themes.grunt.task.build}</arguments>
-                </configuration>
-              </execution>
             </executions>
           </plugin>
-
           <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
+            <artifactId>maven-install-plugin</artifactId>
             <executions>
               <execution>
-                <!-- Provide the resources artifact for the coremedia-webresource-content-maven-plugin. -->
-                <id>theme</id>
+                <!-- Provide the resources artifact as zip for the theme importer runner. -->
+                <id>include-template-jar</id>
                 <goals>
-                  <goal>single</goal>
+                  <goal>install-file</goal>
                 </goals>
                 <phase>package</phase>
                 <configuration>
-                  <descriptors>
-                    <descriptor>assembly/resources-assembly-descriptor.xml</descriptor>
-                  </descriptors>
+                  <file>${project.build.directory}/${project.artifactId}.zip</file>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <packaging>zip</packaging>
+                  <classifier>theme</classifier>
+                  <pomFile>./pom.xml</pomFile>
                 </configuration>
               </execution>
             </executions>

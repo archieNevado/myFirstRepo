@@ -7,7 +7,7 @@
     "role[base]",
     "recipe[blueprint-tomcat::content-management-server]",
     "recipe[blueprint-tools::content-management-server-tools]",
-    "recipe[blueprint-tools::css-importer-tools]",
+    "recipe[blueprint-tools::theme-importer-tools]",
     "recipe[blueprint-tomcat::workflow-server]",
     "recipe[blueprint-tools::workflow-server-tools]",
     "recipe[blueprint-tomcat::content-feeder]",

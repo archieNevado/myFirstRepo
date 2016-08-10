@@ -2,8 +2,7 @@ package com.coremedia.livecontext.elastic.social.common;
 
 
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.context.ProductInSite;
-import org.junit.Before;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

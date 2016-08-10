@@ -5,8 +5,8 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.context.CategoryInSite;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
@@ -27,7 +27,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;

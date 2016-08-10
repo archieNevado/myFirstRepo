@@ -17,7 +17,7 @@ desc 'Regenerate README.md'
 task :doc do
   Rake::FileList['cookbooks/blueprint*'].each do |cookbook|
     puts "generating knife doc for #{cookbook}"
-    `bundle exec knife cookbook doc #{cookbook}`
+    `knife cookbook doc #{cookbook}`
   end
 end
 

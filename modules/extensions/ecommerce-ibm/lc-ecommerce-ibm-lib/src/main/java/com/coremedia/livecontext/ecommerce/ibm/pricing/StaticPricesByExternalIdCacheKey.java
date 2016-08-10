@@ -5,6 +5,7 @@ import com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import java.util.Arrays;
 
@@ -14,15 +15,16 @@ public class StaticPricesByExternalIdCacheKey extends AbstractCommerceCacheKey<W
 
   public StaticPricesByExternalIdCacheKey(String id,
                                           StoreContext storeContext,
+                                          UserContext userContext,
                                           WcCatalogWrapperService wrapperService,
                                           CommerceCache commerceCache) {
-    super(id, storeContext, CONFIG_KEY_STATIC_PRICES, commerceCache);
+    super(id, storeContext, userContext, CONFIG_KEY_STATIC_PRICES, commerceCache);
     this.wrapperService = wrapperService;
   }
 
   @Override
   public WcPrices computeValue(Cache cache) {
-    return wrapperService.findStaticProductPricesByExternalId(id, storeContext);
+    return wrapperService.findStaticProductPricesByExternalId(id, storeContext, userContext);
   }
 
   @Override

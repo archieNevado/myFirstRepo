@@ -25,7 +25,7 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
 
   private static const EXTERNAL_CHANNEL_TYPE:String = "CMExternalChannel";
 
-  public function ECommerceStudioPluginBase(config:eCommerceStudioPlugin) {
+  public function ECommerceStudioPluginBase(config:eCommerceStudioPlugin = null) {
     super(config)
   }
 
@@ -130,7 +130,7 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
     }
 
     for (var j:int = 0; j < editorContext.getDocumentTypesExcludedFromSearchResult().length; j++) {
-      if (editorContext.getDocumentTypesExcludedFromSearchResult()[i] === contentTypeName) {
+      if (editorContext.getDocumentTypesExcludedFromSearchResult()[j] === contentTypeName) {
         editorContext.getDocumentTypesExcludedFromSearchResult().splice(j, 1);
         break;
       }

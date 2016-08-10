@@ -16,41 +16,15 @@
     <coremedia.project.extension.for>cae</coremedia.project.extension.for>
   </properties>
 
+  <!-- dependencies needed for code-completion in IDEs only -->
   <dependencies>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cae-viewservices-api</artifactId>
-    </dependency>
+    <!-- cae module includes all dependencies to spring, freemarker, javascript and coremedia taglibs -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>basic-theme</artifactId>
+      <artifactId>alx-google-cae</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <!--
-        The dependency-plugin does not know about FreeMarker templates.
-        So define the used dependencies explicitly.
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <usedDependencies>
-            <usedDependency>org.springframework:spring-webmvc</usedDependency>
-            <usedDependency>com.coremedia.cms:cae-viewservices-api</usedDependency>
-          </usedDependencies>
-        </configuration>
-      </plugin>
-
-    </plugins>
-  </build>
 
 </project>

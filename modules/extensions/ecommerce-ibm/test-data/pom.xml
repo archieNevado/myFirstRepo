@@ -54,28 +54,42 @@
           <classifier>theme</classifier>
           <type>zip</type>
         </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>theme-importer-lib</artifactId>
+          <version>${project.version}</version>
+        </dependency>
       </dependencies>
       <build>
         <plugins>
-          <!-- Create Webresource content in target folder -->
           <plugin>
-            <groupId>com.coremedia.maven</groupId>
-            <artifactId>coremedia-webresource-content-maven-plugin</artifactId>
-            <!-- Provide doctypes to create web resources as content-->
-            <dependencies>
-              <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>contentserver-blueprint-component</artifactId>
-                <version>${project.version}</version>
-              </dependency>
-            </dependencies>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
             <executions>
               <execution>
-                <id>compile-resource-lc-testdata</id>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
+                <id>copy-dependencies</id>
                 <phase>compile</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/themes</outputDirectory>
+                  <includeTypes>zip</includeTypes>
+                  <includeClassifiers>theme</includeClassifiers>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>import-themes</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
               </execution>
             </executions>
           </plugin>

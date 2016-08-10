@@ -73,3 +73,23 @@
   min-width: 35px;
   min-height: 35px;
 }
+
+/* theme */
+.cm-theme {
+  max-width: 960px;
+  margin: 20px auto;
+  background: #fff;
+  font-family: 'Segoe UI', 'Trebuchet MS', 'Lucida Grande', Helvetica, sans-serif;
+  padding: 20px;
+}
+
+.cm-theme__title {
+  margin-top: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.cm-theme__screenshot {
+  height: auto;
+  width: 100%;
+}

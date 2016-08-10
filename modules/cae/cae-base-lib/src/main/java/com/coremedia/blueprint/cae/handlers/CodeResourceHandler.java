@@ -347,7 +347,8 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
 
   private CMNavigation findFirstChannelWithCode(Navigation navigation, String linkPropertyName) {
     CMContext context = navigation.getContext();
-    if (!context.getContent().getLinks(linkPropertyName).isEmpty()) {
+    Content theme = context.getContent().getLink(CMNavigation.THEME);
+    if ( theme != null || !context.getContent().getLinks(linkPropertyName).isEmpty()) {
       return context;
     }
     Navigation parentNavigation = context.getParentNavigation();

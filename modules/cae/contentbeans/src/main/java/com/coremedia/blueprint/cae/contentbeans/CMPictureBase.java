@@ -15,6 +15,8 @@ import java.util.Map;
  */
 public abstract class CMPictureBase extends CMVisualImpl implements CMPicture {
 
+  private static final String DISABLE_CROPPING = "disableCropping";
+
   /**
    * Returns the value of the document property {@link #MASTER}.
    *
@@ -51,6 +53,17 @@ public abstract class CMPictureBase extends CMVisualImpl implements CMPicture {
   @Override
   public Blob getData() {
     return getContent().getBlobRef(DATA);
+  }
+
+  @Override
+  public boolean getDisableCropping() {
+    Boolean disableCroppingBoolean = getSettingsService().setting(DISABLE_CROPPING, Boolean.class, getContent());
+    if (disableCroppingBoolean == null) {
+      Integer disableCroppingInteger = getSettingsService().setting(DISABLE_CROPPING, Integer.class, getContent());
+      return disableCroppingInteger != null && disableCroppingInteger != 0;
+    } else {
+      return disableCroppingBoolean;
+    }
   }
 }
   

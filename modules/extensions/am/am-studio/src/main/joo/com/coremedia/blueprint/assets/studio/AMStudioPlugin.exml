@@ -86,7 +86,7 @@
         <plugins>
           <ui:addItemsPlugin>
             <ui:items>
-              <am:showAssetsInEditedContentsCheckbox/>
+              <am:showAssetsInEditedContentsCheckbox itemId="includeAssetsItemId" />
             </ui:items>
           </ui:addItemsPlugin>
         </plugins>

@@ -18,6 +18,7 @@
 
   <properties>
     <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
+    <log.appender>file</log.appender>
   </properties>
 
   <dependencies>
@@ -58,7 +59,9 @@
           <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
           <contextFile>${project.basedir}/src/main/servletengine/tomcat-context.xml</contextFile>
           <systemProperties>
+            <coremedia.blueprint.project.directory>${project.basedir}/../../../</coremedia.blueprint.project.directory>
             <propertieslocations>classpath:/wcs.properties,classpath:/cae-preview.properties</propertieslocations>
+            <log.appender>${log.appender}</log.appender>
           </systemProperties>
           <additionalClasspathDirs>
             <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
@@ -92,6 +95,14 @@
           <scope>runtime</scope>
         </dependency>
       </dependencies>
+    </profile>
+
+    <profile>
+      <id>apache-box</id>
+      <properties>
+        <proxy.host>192.168.252.100.xip.io</proxy.host>
+        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/apache-box</development-properties.dir>
+      </properties>
     </profile>
   </profiles>
 

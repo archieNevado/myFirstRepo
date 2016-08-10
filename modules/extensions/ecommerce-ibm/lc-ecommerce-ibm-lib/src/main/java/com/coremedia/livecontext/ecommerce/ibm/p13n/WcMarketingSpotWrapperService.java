@@ -7,14 +7,22 @@ import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.*;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCatalogId;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
 import static java.util.Arrays.asList;
 
 /**
@@ -27,19 +35,19 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
 
     private boolean useServiceCallsForStudio = false;
 
-    private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
             FIND_MARKETING_SPOTS = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/spot?q=byType&qType=MARKETING", true, true, Map.class);
 
-    private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
             FIND_MARKETING_SPOTS_V7_6 = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/marketingspot/byall/all", false, true, Map.class);
 
-    private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
             FIND_MARKETING_SPOTS_BY_SEARCH_TERM = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/spot?q=byTypeAndName&qType=MARKETING&qName={searchTerm}", true, true, Map.class);
 
-    private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
             FIND_MARKETING_SPOT_BY_TECH_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/spot/{id}", true, true, Map.class);
 
-    private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
             FIND_MARKETING_SPOT_BY_EXTERNAL_ID_CAE = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/espot/{id}", false, true, Map.class);
 
 
@@ -100,16 +108,16 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
     public Map<String, Object> findMarketingSpots(StoreContext storeContext, UserContext userContext) {
         try {
             Map<String, Object> spotsWrapperMap;
-            if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_7) {
+          if (WCS_VERSION_7_6 == StoreContextHelper.getWcsVersion(storeContext)) {
               //noinspection unchecked
                 spotsWrapperMap = getRestConnector().callService(
-                        FIND_MARKETING_SPOTS_V7_6, asList(getStoreId(storeContext)),
+                        FIND_MARKETING_SPOTS_V7_6, Collections.singletonList(getStoreId(storeContext)),
                         createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
                         null, storeContext, userContext);
             } else {
               //noinspection unchecked
                 spotsWrapperMap = getRestConnector().callService(
-                        FIND_MARKETING_SPOTS, asList(getStoreId(storeContext)),
+                        FIND_MARKETING_SPOTS, Collections.singletonList(getStoreId(storeContext)),
                         createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null),
                         null, storeContext, userContext);
             }
@@ -215,7 +223,7 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
             return Collections.emptyMap();
         }
         try {
-            if (StoreContextHelper.getWcsVersion(storeContext) < StoreContextHelper.WCS_VERSION_7_7) {
+          if (WCS_VERSION_7_6 == StoreContextHelper.getWcsVersion(storeContext)) {
                 List<Map<String, Object>> result = Collections.emptyList();
                 Map<String, Object> allMarketingSpots = findMarketingSpots(storeContext, userContext);
                 //noinspection unchecked

@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.Locale;
 
-abstract public class AbstractIbmCommerceBean extends AbstractCommerceBean {
+public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
 
   @Override
   public Locale getLocale() {
@@ -35,7 +35,7 @@ abstract public class AbstractIbmCommerceBean extends AbstractCommerceBean {
    */
   public abstract void setDelegate(Object delegate);
 
-  public AssetUrlProvider getAssetUrlProvider() {
+  protected AssetUrlProvider getAssetUrlProvider() {
     return Commerce.getCurrentConnection().getAssetUrlProvider();
   }
 

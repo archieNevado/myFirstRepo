@@ -45,7 +45,8 @@
           <!-- enable Tomcat to reload resources (=templates) while running -->
           <contextFile>${project.basedir}/src/main/servletengine/tomcat-context.xml</contextFile>
           <systemProperties>
-            <propertieslocations>classpath:/wcs.properties,classpath:/cae-preview.properties</propertieslocations>
+            <coremedia.blueprint.project.directory>${project.basedir}/../../../</coremedia.blueprint.project.directory>
+            <propertieslocations>classpath:/wcs.properties,classpath:/cae-live.properties</propertieslocations>
           </systemProperties>
           <additionalClasspathDirs>
             <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
@@ -80,5 +81,14 @@
         </dependency>
       </dependencies>
     </profile>
+
+    <profile>
+      <id>apache-box</id>
+      <properties>
+        <proxy.host>192.168.252.100.xip.io</proxy.host>
+        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/apache-box</development-properties.dir>
+      </properties>
+    </profile>
   </profiles>
+
 </project>

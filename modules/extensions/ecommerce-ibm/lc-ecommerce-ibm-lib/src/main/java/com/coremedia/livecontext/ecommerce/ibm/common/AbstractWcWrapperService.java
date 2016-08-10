@@ -5,7 +5,12 @@ import com.google.common.annotations.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpMethod;
 
-import java.util.*;
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Currency;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class AbstractWcWrapperService {
 
@@ -19,7 +24,7 @@ public abstract class AbstractWcWrapperService {
   private static final String PARAM_FOR_USER = "forUser";
   private static final String PARAM_FOR_USER_ID = "forUserId";
 
-  private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
           GET_LANGUAGE_MAPPING = WcRestConnector.createServiceMethod(HttpMethod.GET, "coremedia/languagemap", false, false, Map.class);
 
   @Required
@@ -43,7 +48,7 @@ public abstract class AbstractWcWrapperService {
   public Map getLanguageMapping() throws CommerceException {
     if (languageMapping == null) {
       //init language mapping
-      languageMapping = restConnector.callServiceInternal(GET_LANGUAGE_MAPPING, Collections.<String>emptyList(), null, null, null, null);
+      languageMapping = restConnector.callServiceInternal(GET_LANGUAGE_MAPPING, Collections.<String>emptyList(), Collections.<String, String[]>emptyMap(), null, null, null);
     }
     return languageMapping;
   }
@@ -51,6 +56,7 @@ public abstract class AbstractWcWrapperService {
   /**
    * Adds the given parameters to a map.
    */
+  @Nonnull
   public Map<String, String[]> createParametersMap(String catalogId, Locale locale, Currency currency, Integer userId, String userName, String[] contractIds) {
     Map<String, String[]> parameters = new TreeMap<>();
     if (catalogId != null) {
@@ -65,11 +71,9 @@ public abstract class AbstractWcWrapperService {
     }
     if (userId != null) {
       parameters.put(PARAM_FOR_USER_ID, new String[]{String.valueOf(userId)});
-    }
-    else if (userName != null) {
+    } else if (userName != null) {
       parameters.put(PARAM_FOR_USER, new String[]{userName});
-    }
-    else if (contractIds != null) {
+    } else if (contractIds != null) {
       parameters.put(PARAM_CONTRACT_ID, contractIds);
     }
     return parameters;
@@ -78,6 +82,7 @@ public abstract class AbstractWcWrapperService {
   /**
    * Convenience method
    */
+  @Nonnull
   public Map<String, String[]> createParametersMap(String catalogId, Locale locale, Currency currency) {
     return createParametersMap(catalogId, locale, currency, null, null, null);
   }
@@ -85,6 +90,7 @@ public abstract class AbstractWcWrapperService {
   /**
    * Convenience method
    */
+  @Nonnull
   public Map<String, String[]> createParametersMap(String catalogId, Locale locale, Currency currency, String[] contractIds) {
     return createParametersMap(catalogId, locale, currency, null, null, contractIds);
   }
@@ -99,11 +105,11 @@ public abstract class AbstractWcWrapperService {
     String result = "-1"; //default is english
     if (locale != null) {
       String language = locale.getLanguage();
-      Map languageMapping = getLanguageMapping();
-      if (languageMapping != null) {
-        String langId = languageMapping.containsKey(locale.toString()) ?
-                (String) languageMapping.get(locale.toString()) :
-                (String) languageMapping.get(language);
+      Map mapping = getLanguageMapping();
+      if (mapping != null) {
+        String langId = mapping.containsKey(locale.toString()) ?
+                (String) mapping.get(locale.toString()) :
+                (String) mapping.get(language);
         if (langId != null) {
           result = langId;
         }

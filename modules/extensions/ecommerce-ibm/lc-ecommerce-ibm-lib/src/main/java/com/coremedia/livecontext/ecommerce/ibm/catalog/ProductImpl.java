@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
@@ -46,7 +47,7 @@ public class ProductImpl extends ProductBase {
   Map<String, Object> getDelegateFromCache() {
     //noinspection unchecked
     return (Map<String, Object>) getCommerceCache().get(
-            new ProductCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
+            new ProductCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
   }
 
   @Override
@@ -97,7 +98,7 @@ public class ProductImpl extends ProductBase {
         @SuppressWarnings("unchecked")
         Map<String, Object> wcProduct = (Map<String, Object>) getCommerceCache().get(
                 new ProductCacheKey(CommerceIdHelper.formatProductTechId(getExternalTechId()),
-                        Commerce.getCurrentConnection().getStoreContext(), getCatalogWrapperService(), getCommerceCache()));
+                        Commerce.getCurrentConnection().getStoreContext(),  UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
         if (wcProduct != null && wcProduct.containsKey("sKUs")) {
           setDelegate(wcProduct);
           //reset the fields after a new delegate is set.

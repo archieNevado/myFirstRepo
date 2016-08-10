@@ -31,20 +31,19 @@
       </div>
     </div>
     <#-- display every aspect ratio as preview item -->
-    <#assign allAspectRatios=bp.setting(cmpage, "responsiveImageSettings") />
-    <#assign maxPreviewImageWidth=bp.setting(cmpage, "maxPreviewImageWidth", "400") />
-    <#list allAspectRatios?keys as ratio>
+    <#assign transformations=bp.transformations(self.content) />
+    <#list transformations as transformation>
       <#-- id may not be generated using bp.generateId, as persisting toggle state in local storage will not work -->
-      <#assign toggleId="toggle-" + (ratio_index + 2) + "-crop-" + ratio />
+      <#assign toggleId="toggle-crop-" + transformation.name />
       <div class="toggle-item cm-preview-item" data-id="${toggleId}">
         <a href="#" class="toggle-button cm-preview-item__headline">
-          <@bp.message "Image_"+ratio />
+          <@bp.message "Image_"+transformation.name />
         </a>
         <div class="toggle-container cm-preview-item__container">
-          <div class="cm-image-box cm-image-box--preview" style="max-width: ${maxPreviewImageWidth}px;">
+          <div class="cm-image-box cm-image-box--preview" style="max-width: ${transformation.previewWidth}px;">
             <@cm.include self=self params={
-              "limitAspectRatios": [ratio],
-              "crop": ratio,
+              "limitAspectRatios": [transformation.name],
+              "crop": transformation.name,
               "classBox": "cm-image-box__image"
             }/>
           </div>

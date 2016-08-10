@@ -21,6 +21,13 @@ public class CheckboxGroupBase extends Container {
   public function CheckboxGroupBase(config:checkboxGroup = null) {
     super(config);
 
+    effectiveReadOnlyExpression = PropertyEditorUtil.createReadOnlyValueExpression(
+            config.bindTo,
+            config.forceReadOnlyValueExpression);
+    effectiveReadOnlyExpression.addChangeListener(onReadOnlyChange);
+
+    model.addPropertyChangeListener(CHECKED_PROPERTY, onModelChange);
+
     on('add', itemAdded);
     on('remove', itemRemoved);
 
@@ -28,22 +35,14 @@ public class CheckboxGroupBase extends Container {
     items.each(function (item:Checkbox, index:Number):void {
       itemAdded(that, item, index);
     });
-
-    model.addPropertyChangeListener(CHECKED_PROPERTY, onModelChange);
-
-    effectiveReadOnlyExpression = PropertyEditorUtil.createReadOnlyValueExpression(
-            config.bindTo,
-            config.forceReadOnlyValueExpression);
-    effectiveReadOnlyExpression.addChangeListener(onReadOnlyChange);
   }
-
 
   private function itemAdded(container:Container, item:Component, index:Number):void {
     if (model.get(CHECKED_PROPERTY).indexOf(item.getItemId()) !== -1) {
       Checkbox(item).setValue(true);
     }
 
-    var readOnly:Boolean = effectiveReadOnlyExpression && effectiveReadOnlyExpression.getValue();
+    var readOnly:Boolean = effectiveReadOnlyExpression.getValue();
     if (readOnly) {
       item.setDisabled(readOnly);
     }

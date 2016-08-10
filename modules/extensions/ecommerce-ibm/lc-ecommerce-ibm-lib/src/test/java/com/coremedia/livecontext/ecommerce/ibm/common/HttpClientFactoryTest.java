@@ -19,12 +19,11 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.assertEquals;
 
 public class HttpClientFactoryTest {
 
-  private static final String TEST_URL = "https://localhost:4243";
+  private static final String TEST_URL = "https://localhost:4243/";
 
   private Server server;
 
@@ -42,11 +41,15 @@ public class HttpClientFactoryTest {
   }
 
   private Connector createSecureConnector() throws URISyntaxException {
+    URL keystoreUrl = getClass().getClassLoader().getResource("testkeystore.jks");
+    String keystore = new File(keystoreUrl.toURI()).getAbsolutePath();
+
+    String keyPassword = "password";
+
     SslSocketConnector connector = new SslSocketConnector();
     connector.setPort(4243);
-    URL keystoreUrl = getClass().getClassLoader().getResource("testkeystore.jks");
-    connector.setKeystore(new File(keystoreUrl.toURI()).getAbsolutePath());
-    connector.setKeyPassword("password");
+    connector.setKeystore(keystore);
+    connector.setKeyPassword(keyPassword);
     return connector;
   }
 
@@ -54,7 +57,7 @@ public class HttpClientFactoryTest {
   public void testCreateTrustAllHttpClient() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
     HttpClient httpClient = HttpClientFactory.createHttpClient(true);
     HttpResponse httpResponse = httpClient.execute(new HttpGet(TEST_URL));
-    assertTrue(httpResponse.getStatusLine().getStatusCode() == 404);
+    assertEquals(404, httpResponse.getStatusLine().getStatusCode());
   }
 
   @Test(expected = SSLHandshakeException.class)

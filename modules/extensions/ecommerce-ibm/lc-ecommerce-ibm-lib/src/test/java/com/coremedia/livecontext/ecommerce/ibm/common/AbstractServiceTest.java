@@ -80,9 +80,7 @@ public abstract class AbstractServiceTest {
   @Before
   public void setup() {
     CommerceConnection connection = commerce.getConnection("wcs1");
-    String wcsVersion = storeInfoService.getWcsVersion();
-    if (wcsVersion != null)
-      testConfig.setWcsVersion(Float.parseFloat(wcsVersion));
+    testConfig.setWcsVersion(storeInfoService.getWcsVersion());
     connection.setStoreContext(testConfig.getStoreContext());
     Commerce.setCurrentConnection(connection);
 

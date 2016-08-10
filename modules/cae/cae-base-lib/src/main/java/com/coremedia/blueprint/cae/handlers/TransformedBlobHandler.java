@@ -8,6 +8,7 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.transform.BlobHelper;
 import com.coremedia.cap.transform.TransformImageService;
+import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
@@ -72,6 +73,11 @@ public class TransformedBlobHandler extends HandlerBase {
 
   public void setSecureHashCodeGeneratorStrategy(SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy) {
     this.secureHashCodeGeneratorStrategy = secureHashCodeGeneratorStrategy;
+  }
+
+  @Required
+  public void setTransformImageService(TransformImageService transformImageService) {
+    this.transformImageService = transformImageService;
   }
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
@@ -192,8 +198,4 @@ public class TransformedBlobHandler extends HandlerBase {
     return null;
   }
 
-  @Required
-  public void setTransformImageService(TransformImageService transformImageService) {
-    this.transformImageService = transformImageService;
-  }
 }

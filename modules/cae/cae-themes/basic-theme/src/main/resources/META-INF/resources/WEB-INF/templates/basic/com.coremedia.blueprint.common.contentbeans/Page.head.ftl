@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="js" type="com.coremedia.blueprint.common.contentbeans.CMJavaScript" -->
 
 <#assign studioExtraFilesMetadata=preview.getStudioAdditionalFilesMetadata(bp.setting(self, "studioPreviewCss"), bp.setting(self, "studioPreviewJs"))/>
-<#assign titleSuffix=bp.setting(self, "customTitleSuffixText", '')/>
+<#assign titleSuffix=bp.setting(self, "title_suffix", '')/>
 <head<@cm.metadata data=studioExtraFilesMetadata/>>
 <#-- add encoding first! -->
     <meta charset="UTF-8"/>

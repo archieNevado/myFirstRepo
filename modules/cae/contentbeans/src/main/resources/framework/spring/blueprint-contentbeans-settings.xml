@@ -17,14 +17,24 @@
     <constructor-arg ref="dataViewFactory"/>
   </bean>
 
-  <bean id="cmlinkableBeanSettingsFinder" class="com.coremedia.blueprint.cae.settings.CMLinkableBeanSettingsFinder">
+  <bean id="contentBeanSettingsFinder" class="com.coremedia.blueprint.cae.settings.ContentBeanSettingsFinder">
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
     <property name="dataViewCollections" ref="dataViewCollections"/>
   </bean>
 
   <bean id="pageSettingsFinder" class="com.coremedia.blueprint.cae.settings.PageSettingsFinder"/>
 
-  <util:list id="imageMapAreaFilters" value-type="com.coremedia.blueprint.common.imagemap.ImageMapAreaFilterable" />
+  <util:list id="imageMapAreaFilters" value-type="com.coremedia.blueprint.common.imagemap.ImageMapAreaFilterable"/>
+
+  <bean id="validityImageMapAreaFilter" class="com.coremedia.blueprint.common.imagemap.ValidityImageMapAreaFilter">
+    <property name="validationService" ref="validationService" />
+  </bean>
+
+  <customize:append id="imageMapAreaFiltersAppender" bean="imageMapAreaFilters">
+    <list>
+      <ref bean="validityImageMapAreaFilter"/>
+    </list>
+  </customize:append>
 
   <customize:append id="contentBeanSettingsFinders" bean="settingsFinders">
     <description>
@@ -33,7 +43,7 @@
       according SettingsFinders are configured. (S. settings-services.xml)
     </description>
     <map>
-      <entry key="com.coremedia.blueprint.common.contentbeans.CMLinkable" value-ref="cmlinkableBeanSettingsFinder"/>
+      <entry key="com.coremedia.objectserver.beans.ContentBean" value-ref="contentBeanSettingsFinder"/>
       <entry key="com.coremedia.blueprint.common.contentbeans.Page" value-ref="pageSettingsFinder"/>
     </map>
   </customize:append>

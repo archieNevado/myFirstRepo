@@ -6,7 +6,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
 import com.coremedia.elastic.core.base.serializer.AbstractTypeConverter;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;

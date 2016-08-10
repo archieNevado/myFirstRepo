@@ -6,6 +6,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
@@ -20,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -29,6 +31,7 @@ public class WorkspacesIT extends AbstractServiceTest {
 
   @Inject
   WorkspaceService workspaceService;
+
   @Inject
   CatalogService catalogService;
 
@@ -41,8 +44,7 @@ public class WorkspacesIT extends AbstractServiceTest {
 
   @Test
   public void testFindTestContentInWorkspace() {
-
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) {
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
       return;
     }
 
@@ -54,6 +56,7 @@ public class WorkspacesIT extends AbstractServiceTest {
 
     Category category0 = catalogService.findCategoryById(CommerceIdHelper.formatCategoryId("PC_ForTheCook"));
     assertNotNull("category \"PC_ForTheCook\" not found", category0);
+
     List<Category> subCategories = catalogService.findSubCategories(category0);
     Category category1 = null;
     for (Category c : subCategories) {
@@ -63,9 +66,11 @@ public class WorkspacesIT extends AbstractServiceTest {
       }
     }
     assertNotNull("category \"PC_Anniversary\" not found", category1);
+
     List<Product> products = catalogService.findProductsByCategory(category1);
     assertNotNull(products);
-    assertTrue(products.size() > 0);
+    assertFalse(products.isEmpty());
+
     Product product = null;
     for (Product p : products) {
       if ("PC_COOKING_HAT".equals(p.getExternalId())) {
@@ -76,14 +81,14 @@ public class WorkspacesIT extends AbstractServiceTest {
   }
 
   private Workspace findWorkspace(String name) {
-
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
 
     List<Workspace> workspaces = workspaceService.findAllWorkspaces();
     assertNotNull(workspaces);
-    assertTrue(workspaces.size() > 0);
+    assertFalse(workspaces.isEmpty());
+
     Workspace workspace = null;
     for (Workspace w : workspaces) {
       if (w.getName().startsWith(name)) {
@@ -91,7 +96,7 @@ public class WorkspacesIT extends AbstractServiceTest {
       }
     }
     assertNotNull("workspace \"" + name + "...\" not found", workspace);
+
     return workspace;
   }
-
 }

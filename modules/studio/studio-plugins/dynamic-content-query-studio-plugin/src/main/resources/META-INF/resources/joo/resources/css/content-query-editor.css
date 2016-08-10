@@ -145,6 +145,23 @@
   border: 1px solid #BCBCBC;
   background-color: #FFF;
 }
+
+/**
+  * smaller south handles
+  */
+.query-editor-types-filter .x-resizable-handle {
+  line-height: 4px;
+}
+.query-editor-types-filter .x-resizable-handle-south {
+  height: 4px;
+}
+.query-editor-types-filter .x-resizable-over .x-resizable-handle-south,
+.query-editor-types-filter .x-resizable-pinned .x-resizable-handle-south {
+  background-image: url(../../../coremedia-ext-theme/images/cm-custom/custom-ui/s-handle-small-sprite.png);
+}
+.query-editor-checkboxgroup-bottom {
+  border-bottom-color: rgba(159, 156, 156, 1);
+}
 .query-editor-checkboxgroup-top {
   border-bottom: 1px solid #CDCDCD;
   border-radius: 2px 2px 0 0;
@@ -153,7 +170,7 @@
 }
 .query-editor-checkboxgroup-bottom {
   border-top: none;
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 2px 2px;
   overflow: hidden !important;
   padding: 6px 6px 2px 6px;
 }

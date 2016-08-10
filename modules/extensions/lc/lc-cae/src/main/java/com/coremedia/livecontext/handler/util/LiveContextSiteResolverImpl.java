@@ -91,7 +91,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   private boolean localeMatchesSite(@Nonnull Site site, @Nonnull Locale locale) {
     Locale siteLocale = site.getLocale();
     return locale.equals(siteLocale) ||
-            StringUtil.isEmpty(locale.getCountry()) && locale.getLanguage().equals(siteLocale.getLanguage());
+            (StringUtil.isEmpty(siteLocale.getCountry()) && locale.getLanguage().equals(siteLocale.getLanguage()));
   }
 
   /**

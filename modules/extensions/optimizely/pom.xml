@@ -19,6 +19,7 @@
     <module>optimizely-bom</module>
     <module>optimizely-cae</module>
     <module>optimizely-studio</module>
+    <module>optimizely-templates</module>
   </modules>
 
 </project>

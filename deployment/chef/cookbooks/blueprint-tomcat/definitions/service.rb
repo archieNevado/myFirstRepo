@@ -201,9 +201,10 @@ define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name =
 
   # logback config
   logback_config_hash = Mash.new
-  logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(component_config_hash, node['blueprint']['tomcat']['logback_config']) if node.deep_fetch('blueprint', 'tomcat', 'logback_config')
-  logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(component_config_hash, node['blueprint']['tomcat'][base_service_name]['logback_config']) if base_service_name && node.deep_fetch('blueprint', 'tomcat', base_service_name, 'logback_config')
-  logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(component_config_hash, node['blueprint']['tomcat'][service_name]['logback_config']) if node.deep_fetch('blueprint', 'tomcat', service_name, 'logback_config')
+  logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, node['blueprint']['tomcat']['logback_config']) if node.deep_fetch('blueprint', 'tomcat', 'logback_config')
+  logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, node['blueprint']['tomcat'][base_service_name]['logback_config']) if base_service_name && node.deep_fetch('blueprint', 'tomcat', base_service_name, 'logback_config')
+  logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, node['blueprint']['tomcat'][service_name]['logback_config']) if node.deep_fetch('blueprint', 'tomcat', service_name, 'logback_config')
+  logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, 'properties' => { 'application.name' => service_name, 'application.version' => node['blueprint']['webapps'][service_name]['version'] }) unless logback_config_hash.empty?
   # the log directory, you may override them in rare cases using force_override
   node.default['blueprint']['tomcat'][service_name]['context_config']['env_entries']['coremedia/logging/directory']['value'] = "#{service_dir}/current/logs"
   # allow to add a logback config on tomcat level

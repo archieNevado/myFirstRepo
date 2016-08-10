@@ -39,7 +39,12 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-contentbean-aspect</artifactId>
+      <artifactId>cae-viewservices-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
     </dependency>
 
     <dependency>

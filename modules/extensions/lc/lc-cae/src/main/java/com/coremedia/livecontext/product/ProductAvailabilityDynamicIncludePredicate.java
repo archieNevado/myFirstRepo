@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.product;
 
 import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.objectserver.view.RenderNode;
 

@@ -22,9 +22,13 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['li
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.studio.helios'] = "studio-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.helios'] = "preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.corporate'] = "preview-corporate.#{node['blueprint']['hostname']}"
-node.default['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = "preview"
+node.default['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = 'preview'
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.helios'] = "//preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.corporate'] = "//preview-corporate.#{node['blueprint']['hostname']}"
+# The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
+# and all transformed blobs are saved in memory
+node.default['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"
+
 node.override['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = cache_dir
 # inject wcs configuration
 node['blueprint']['wcs']['application.properties'].each_pair do |k, v|

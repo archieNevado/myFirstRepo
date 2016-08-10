@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -81,7 +82,8 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
       userContext.put(UserContextHelper.FOR_USER_ID, newUserId);
       String mergedCookies = mergeCookies(userContext.getCookieHeader(), storeFrontResponse.getHttpClientContext());
 
-      if (StoreContextHelper.getWcsVersion(StoreContextHelper.getCurrentContext()) > StoreContextHelper.WCS_VERSION_7_7) {
+      StoreContext currentContext = StoreContextHelper.getCurrentContext();
+      if (null != currentContext && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(currentContext))) {
         //bugfix CMS-4132: call guest login url twice because guest session was broken when called only once
         final List<org.apache.http.cookie.Cookie> cookies = storeFrontResponse.getCookies();
         HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {

@@ -64,7 +64,7 @@ suites:
  # test suite for local development
 - name: development
   # add platforms to test to this array, by default only one is listed so a simple kitchen converge will run this suite
-  includes: [centos6-vagrant]
+  includes: [centos7-vagrant]
   run_list:
     - recipe[blueprint-base::reporting]
     - recipe[blueprint-proxy::default]
@@ -79,22 +79,10 @@ suites:
         virtual_host:
           shop-preview:
             headers:
-            - 'RequestHeader set X-FragmentHostDevelopment http://<%= local_system %>:40081/blueprint/servlet/service/fragment/'
+            - 'RequestHeader set X-FragmentHostDevelopment http://<%= local_system %>:40980/blueprint/servlet/service/fragment/'
           shop:
             headers:
-            - 'RequestHeader set X-FragmentHostDevelopment http://<%= local_system %>:49080/blueprint/servlet/service/fragment/'
-        # this is the legacy port scheme of the workspace maven tomcat plugin config. This will change
-        # in the next release and then this configuration is obsolete
+            - 'RequestHeader set X-FragmentHostDevelopment http://<%= local_system %>:42180/blueprint/servlet/service/fragment/'
           studio:
-            port: '40080'
             context: ''
-          preview:
-            cluster:
-              default:
-                port: '40081'
-          delivery:
-            cluster:
-              default:
-                port: '49080'
-          adobe-drive-server:
-            port: '38080'
+

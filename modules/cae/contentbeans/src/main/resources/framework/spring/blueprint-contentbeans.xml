@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <!--
   Generated content bean mappings. These are spring prototype bean definitions with a special
   naming scheme. These are called by the bean factory in .../framework/contentbeanfactory.xml.
   -->
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
+  <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
   <import resource="classpath:/framework/spring/search/solr-search.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/segments/blueprint-segments.xml"/>
-  <import resource="classpath:/com/coremedia/cap/content/wrapper/cap-unified-api-services.xml" />
   <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
 
   <import resource="classpath:/com/coremedia/cap/transform/transform-services.xml"/>
   <import resource="classpath:/framework/spring/mediatransform.xml"/>
   <import resource="blueprint-contentbeans-settings.xml"/>
   <import resource="blueprint-services.xml"/>
+
+  <context:component-scan base-package="com.coremedia.blueprint.theme.configuration"/>
+  <context:annotation-config/>
 
   <bean id="mediaTransformer" class="com.coremedia.transform.impl.ExpressionBasedBeanBlobTransformer">
     <property name="blobTransformer" ref="blobTransformer"/>
@@ -38,6 +42,10 @@
         for the bean passed to the transformer.
       </description>
     </property>
+  </bean>
+
+  <bean id="contentBeanCollections" class="com.coremedia.objectserver.beans.ContentBeanCollections">
+    <constructor-arg ref="contentBeanFactory"/>
   </bean>
 
   <bean id="aspectsProvider" class="com.coremedia.cae.aspect.provider.CompoundAspectsProvider">
@@ -57,8 +65,9 @@
 
   <bean name="abstractLocalized-blueprint-doctypes" scope="prototype" abstract="true"
         parent="abstractContentBean-blueprint-doctypes"
-        class="com.coremedia.blueprint.cae.contentbeans.CMLocalizedBase">
+        class="com.coremedia.blueprint.cae.contentbeans.CMLocalizedImpl">
     <property name="sitesService" ref="sitesService"/>
+    <property name="contentBeanCollections" ref="contentBeanCollections"/>
   </bean>
 
   <bean name="abstractLinkable-blueprint-doctypes" scope="prototype" abstract="true"
@@ -84,6 +93,7 @@
         parent="abstractTeasable-blueprint-doctypes" class="com.coremedia.blueprint.cae.contentbeans.CMChannelImpl">
     <property name="pageGridService" ref="pageGridService"/>
     <property name="treeRelation" ref="cmNavigationTreeRelation"/>
+    <property name="themeService" ref="themeService"/>
   </bean>
 
   <bean name="abstractMediaBean-blueprint-doctypes" parent="abstractTeasable-blueprint-doctypes"
@@ -112,6 +122,8 @@
         class="com.coremedia.blueprint.cae.contentbeans.CMCSSImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMJavaScript" parent="abstractLocalized-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMJavaScriptImpl" scope="prototype"/>
+  <bean name="contentBeanFactory:CMTheme" parent="abstractLocalized-blueprint-doctypes"
+        class="com.coremedia.blueprint.cae.contentbeans.CMThemeImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMViewtype" parent="abstractLocalized-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMViewtypeImpl" scope="prototype"/>
 
@@ -139,6 +151,8 @@
         class="com.coremedia.blueprint.cae.contentbeans.CMTaxonomyImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMSettings" parent="abstractLocalized-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMSettingsImpl" scope="prototype"/>
+  <bean name="contentBeanFactory:CMResourceBundle" parent="abstractLocalized-blueprint-doctypes"
+        class="com.coremedia.blueprint.cae.contentbeans.CMResourceBundleImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMFolderProperties" parent="abstractLocalized-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMFolderPropertiesImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMGallery" parent="abstractTeasable-blueprint-doctypes"

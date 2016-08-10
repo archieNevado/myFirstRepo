@@ -10,17 +10,16 @@
 <StructProperty Name="teaserOverlay">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
-<IntProperty Name="xpos">58</IntProperty>
+<IntProperty Name="xpos">0</IntProperty>
 <IntProperty Name="ypos">3</IntProperty>
-<StringProperty Name="layout">cm-overlay--theme-light-on-dark</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment></segment>
 <title>The Art of Perfect Lighting</title>
 <htmlTitle></htmlTitle>

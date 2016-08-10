@@ -160,7 +160,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
       if (input.getFacetMinCount() > 0) {
         q.setFacetMinCount(input.getFacetMinCount());
       }
-      if (input.getFacetLimit() > 0) {
+      if (input.getFacetLimit() != SearchQueryBean.DEFAULT_FACET_LIMIT) {
         q.setFacetLimit(input.getFacetLimit());
       }
 

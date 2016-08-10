@@ -81,7 +81,7 @@
           <bpforms:teaserDocumentForm/>
           <bpforms:pictureDocumentForm/>
           <bpforms:itemsForm/>
-          <bpforms:viewTypeSelectorForm paths="{['Options/Viewtypes/CMChannel/']}" collapsed="false"/>
+          <bpforms:viewTypeSelectorForm paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}" collapsed="false"/>
           <bpforms:validityDocumentForm/>
         </items>
       </editor:documentForm>

@@ -4,24 +4,13 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class StoreContextHelperTest {
-
-  private static final String STORE_CONFIG_ID = "configId";
-  private static final String STORE_NAME = "toko";
-  private static final String STORE_ID = "4711";
-  private static final String CATALOG_ID = "0815";
-  private static final String LOCALE = "en_US";
-  private static final String CURRENCY = "USD";
-  private static final String WORKSPACE = "ws42";
-  private static final float PREVIOUSLY_SET_VERSION = 7.8f;
-  private static final float VERSION_7_7 = 7.7f;
+public class StoreContextHelperTest extends StoreContextHelperTestBase {
 
   @Test
   public void testCreateContext() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+    StoreContext context = createContext();
     context.setWorkspaceId(WORKSPACE);
     assertNotNull(context);
   }
@@ -37,6 +26,11 @@ public class StoreContextHelperTest {
   @Test(expected = InvalidContextException.class)
   public void testCreateContextWithInvalidLocale() {
     StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, "xx1234XX", CURRENCY);
+  }
+
+  @Test
+  public void testCreateContextWithInternationalLocale() {
+    StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, "en-001", CURRENCY);
   }
 
   @Test(expected = InvalidContextException.class)
@@ -56,7 +50,7 @@ public class StoreContextHelperTest {
 
   @Test(expected = InvalidContextException.class)
   public void testCreateContextWithInvalidWorkspace() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+    StoreContext context = createContext();
     StoreContextHelper.setWorkspaceId(context, "    ");
   }
 
@@ -88,51 +82,5 @@ public class StoreContextHelperTest {
   public void testAccessContextWithMissingStoreName() {
     StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, null, CATALOG_ID, LOCALE, CURRENCY);
     StoreContextHelper.getStoreName(context);
-  }
-
-  @Test
-  public void testSetWcsVersion() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
-    StoreContextHelper.setWcsVersion(context, Float.toString(VERSION_7_7));
-    assertEquals(VERSION_7_7, StoreContextHelper.getWcsVersion(context), 0.0005);
-  }
-
-  @Test
-  public void testSetWcsVersionBlankWithoutDefaultSetBefore() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
-    StoreContextHelper.setWcsVersion(context, "");
-    float wcsVersion = StoreContextHelper.getWcsVersion(context);
-    assertEquals(0, wcsVersion, 0.0005);
-  }
-
-  @Test
-  public void testSetWcsVersionNullWithoutDefaultSetBefore() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
-    StoreContextHelper.setWcsVersion(context, null);
-    float wcsVersion = StoreContextHelper.getWcsVersion(context);
-    assertEquals(0, wcsVersion, 0.0005);
-  }
-
-  @Test
-  public void testSetWcsVersionDoNotModifyOnInvalidValueEmpty() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
-    StoreContextHelper.setWcsVersion(context, Float.toString(PREVIOUSLY_SET_VERSION));
-    StoreContextHelper.setWcsVersion(context, "");
-    assertEquals(PREVIOUSLY_SET_VERSION, StoreContextHelper.getWcsVersion(context), 0.0005);
-  }
-
-  @Test
-  public void testSetWcsVersionDoNotModifyOnInvalidValueNull() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
-    StoreContextHelper.setWcsVersion(context, Float.toString(PREVIOUSLY_SET_VERSION));
-    StoreContextHelper.setWcsVersion(context, null);
-    assertEquals(PREVIOUSLY_SET_VERSION, StoreContextHelper.getWcsVersion(context), 0.0005);
-  }
-
-  @Test
-  public void testGetWcsVersionWithoutAnyCall() {
-    StoreContext context = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
-    float wcsVersion = StoreContextHelper.getWcsVersion(context);
-    assertEquals(0, wcsVersion, 0.0005);
   }
 }

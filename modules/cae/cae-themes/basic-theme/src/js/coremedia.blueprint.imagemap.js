@@ -8,6 +8,7 @@ var coremedia = (function (module) {
  *  CoreMedia Blueprint Namespace
  */
 coremedia.blueprint = (function (module) {
+  module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
 /**

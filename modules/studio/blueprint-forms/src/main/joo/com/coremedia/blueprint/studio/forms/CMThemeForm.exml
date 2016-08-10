@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:component xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                xmlns:bpforms="exml:com.coremedia.blueprint.studio.config">
+
+  <exml:import class="com.coremedia.blueprint.studio.BlueprintTabs_properties"/>
+  <exml:import class="com.coremedia.blueprint.studio.CustomLabels_properties"/>
+  <exml:import class="com.coremedia.blueprint.studio.BlueprintDocumentTypes_properties"/>
+
+  <editor:documentTabPanel>
+    <items>
+      <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_content_title}">
+        <items>
+          <editor:collapsibleFormPanel
+                  title="{BlueprintDocumentTypes_properties.INSTANCE.CMTheme_javaScriptGroup_text}"
+                  itemId="cmThemeJavaScriptLibsForm">
+            <items>
+              <editor:linkListPropertyField bindTo="{config.bindTo}"
+                                            propertyName="javaScriptLibs"/>
+              <editor:linkListPropertyField bindTo="{config.bindTo}"
+                                            propertyName="javaScripts"/>
+            </items>
+          </editor:collapsibleFormPanel>
+          <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMTheme_css_text}"
+                                       itemId="cmThemeCssForm">
+            <items>
+              <editor:linkListPropertyField bindTo="{config.bindTo}"
+                                            propertyName="css"
+                                            hideLabel="true"/>
+            </items>
+          </editor:collapsibleFormPanel>
+          <bpforms:collapsibleStringPropertyForm propertyName="viewRepositoryName"
+                                                 title="{BlueprintDocumentTypes_properties.INSTANCE.CMTheme_viewRepositoryName_text}"/>
+          <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMTheme_templateSets_text}"
+                                       itemId="cmThemeTemplateSetsForm">
+            <items>
+              <editor:linkListPropertyField propertyName="templateSets" hideLabel="true"/>
+            </items>
+          </editor:collapsibleFormPanel>
+        </items>
+      </editor:documentForm>
+      <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_extras_title}">
+        <items>
+          <editor:collapsibleFormPanel title="{CustomLabels_properties.INSTANCE.PropertyGroup_Description_label}"
+                                       itemId="detailsDocumentForm"
+                                       cls="padding-bottom-5"
+                                       collapsed="false">
+            <items>
+              <editor:stringPropertyField propertyName="description"/>
+              <editor:richTextPropertyField propertyName="detailText"
+                                            initialHeight="200"/>
+              <spacer height="6"/>
+              <editor:blobPropertyField propertyName="icon"/>
+            </items>
+          </editor:collapsibleFormPanel>
+        </items>
+      </editor:documentForm>
+      <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_locale_title}">
+        <items>
+          <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMTheme_resourceBundles_text}"
+                                       itemId="cmThemeResourceBundlesForm">
+            <items>
+              <editor:linkListPropertyField propertyName="resourceBundles" hideLabel="true"/>
+            </items>
+          </editor:collapsibleFormPanel>
+        </items>
+      </editor:documentForm>
+      <bpforms:metaDataWithoutSearchableForm/>
+    </items>
+  </editor:documentTabPanel>
+
+</exml:component>

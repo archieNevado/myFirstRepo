@@ -1,5 +1,0 @@
-# CoreMedia Blueprint
-
-## Basic Theme
-
-

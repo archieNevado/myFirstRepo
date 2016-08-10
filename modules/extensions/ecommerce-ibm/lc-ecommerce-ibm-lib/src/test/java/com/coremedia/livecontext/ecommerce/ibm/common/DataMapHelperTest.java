@@ -1,86 +1,94 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 public class DataMapHelperTest {
 
   @Test
   public void testSimpleValue() throws Exception {
-    Map m = new HashMap();
-    m.put("testEntry", "testValue");
-    assertEquals("testValue", DataMapHelper.getValueForKey(m, "testEntry"));
+    Map<String, Object> map = ImmutableMap.<String, Object>builder()
+            .put("testEntry", "testValue")
+            .build();
+
+    assertEquals("testValue", DataMapHelper.getValueForKey(map, "testEntry"));
   }
 
   @Test
   public void testPathInnerMap() throws Exception {
-    Map outerMap = new HashMap(), innerMap = new HashMap();
-    innerMap.put("targetValue", "42");
-    outerMap.put("nestedMap", innerMap);
+    Map<String, Object> innerMap = ImmutableMap.<String, Object>builder()
+            .put("targetValue", "42")
+            .build();
 
-    assertEquals("42", DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "nestedMap.targetValue"), "42");
+    Map<String, Object> outerMap = ImmutableMap.<String, Object>builder()
+            .put("nestedMap", innerMap)
+            .build();
+
+    assertEquals("42", DataMapHelper.getValueForPath(outerMap, "nestedMap.targetValue"), "42");
   }
 
   @Test
   public void testPathInnerList() throws Exception {
-    Map outerMap = new HashMap();
-    List innerList = new ArrayList();
+    List<String> innerList = ImmutableList.of("zero", "one", "two");
 
-    innerList.add("zero");
-    innerList.add("one");
-    innerList.add("two");
-    outerMap.put("innerList", innerList);
+    Map<String, Object> outerMap = ImmutableMap.<String, Object>builder()
+            .put("innerList", innerList)
+            .build();
 
-    assertEquals("zero", DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "innerList[0]"));
-    assertEquals("one", DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "innerList[1]"));
-    assertEquals("two", DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "innerList[2]"));
+    assertEquals("zero", DataMapHelper.getValueForPath(outerMap, "innerList[0]"));
+    assertEquals("one", DataMapHelper.getValueForPath(outerMap, "innerList[1]"));
+    assertEquals("two", DataMapHelper.getValueForPath(outerMap, "innerList[2]"));
   }
 
   @Test
   public void testPathWithComplexInnerList() throws Exception {
-    Map outerMap = new HashMap(), mapInList = new HashMap();
-    List innerList = new ArrayList();
+    Map<String, Object> mapInList = ImmutableMap.<String, Object>builder()
+            .put("key1", "value1")
+            .put("key2", "value2")
+            .build();
 
-    mapInList.put("key1", "value1");
-    mapInList.put("key2", "value2");
-    innerList.add(Collections.emptyMap());
-    innerList.add(mapInList);
-    outerMap.put("aList", innerList);
+    List<Object> innerList = ImmutableList.<Object>of(emptyMap(), mapInList);
 
-    assertEquals(innerList, DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "aList"));
-    assertEquals(Collections.emptyMap(), DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "aList[0]"));
-    assertEquals(mapInList, DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "aList[1]"));
-    assertEquals("value2", DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "aList[1].key2"));
+    Map<String, Object> outerMap = ImmutableMap.<String, Object>builder()
+            .put("aList", innerList)
+            .build();
+
+    assertEquals(innerList, DataMapHelper.getValueForPath(outerMap, "aList"));
+    assertEquals(emptyMap(), DataMapHelper.getValueForPath(outerMap, "aList[0]"));
+    assertEquals(mapInList, DataMapHelper.getValueForPath(outerMap, "aList[1]"));
+    assertEquals("value2", DataMapHelper.getValueForPath(outerMap, "aList[1].key2"));
   }
 
   @Test
   public void testNotExistingArray() throws Exception {
-    assertNull(DataMapHelper.getValueForKey(new HashMap<String, Object>(), "MyList[0]"));
+    Map<String, Object> map = emptyMap();
+
+    assertNull(DataMapHelper.getValueForKey(map, "MyList[0]"));
   }
 
   @Test
   public void testArrayIndexOutOfBounds() throws Exception {
-    Map outerMap = new HashMap(), mapInList = new HashMap();
-    List innerList = new ArrayList();
+    Map<String, Object> mapInList = ImmutableMap.<String, Object>builder()
+            .put("key1", "value1")
+            .put("key2", "value2")
+            .build();
 
-    mapInList.put("key1", "value1");
-    mapInList.put("key2", "value2");
-    innerList.add(Collections.emptyMap());
-    innerList.add(mapInList);
-    outerMap.put("aList", innerList);
+    List<Object> innerList = ImmutableList.<Object>of(emptyMap(), mapInList);
 
-    assertEquals("value2", DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "aList[1].key2"));
-    assertNull(DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "aList[2]"));
-    assertNull(DataMapHelper.getValueForPath((Map<String, Object>) outerMap, (String) "aList[2].key2"));
+    Map<String, Object> outerMap = ImmutableMap.<String, Object>builder()
+            .put("aList", innerList)
+            .build();
 
+    assertEquals("value2", DataMapHelper.getValueForPath(outerMap, "aList[1].key2"));
+    assertNull(DataMapHelper.getValueForPath(outerMap, "aList[2]"));
+    assertNull(DataMapHelper.getValueForPath(outerMap, "aList[2].key2"));
   }
 }

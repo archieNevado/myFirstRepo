@@ -45,7 +45,7 @@ class CommerceCacheInvalidationListener {
     }
 
     Map<String, Object> cacheInvalidations = wcCacheWrapperService.getCacheInvalidations(lastInvalidationTimestamp, storeContext);
-    lastInvalidationTimestamp = getValueForKey(cacheInvalidations, "lastInvalidation", Double.class).longValue();
+    lastInvalidationTimestamp = getValueForKey(cacheInvalidations, "lastInvalidation", -1L);
     List<Map<String, Object>> invalidations = getValueForKey(cacheInvalidations, "invalidations", List.class);
 
     // the list to return using API classes

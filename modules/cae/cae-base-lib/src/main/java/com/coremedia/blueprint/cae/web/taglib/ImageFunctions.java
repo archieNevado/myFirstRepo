@@ -3,6 +3,7 @@ package com.coremedia.blueprint.cae.web.taglib;
 import com.coremedia.blueprint.common.contentbeans.CMImageMap;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.common.Blob;
+import com.coremedia.cap.transform.Dimension;
 import com.coremedia.image.ImageDimensionsExtractor;
 
 import javax.servlet.ServletRequest;
@@ -10,6 +11,7 @@ import javax.servlet.ServletResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * A adapter for {@link com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions} used in JSP Taglibs.

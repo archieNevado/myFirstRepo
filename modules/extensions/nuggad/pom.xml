@@ -32,6 +32,7 @@
     <module>nuggad-bom</module>
     <module>nuggad-cae</module>
     <module>nuggad-studio</module>
+    <module>nuggad-templates</module>
   </modules>
 
 </project>

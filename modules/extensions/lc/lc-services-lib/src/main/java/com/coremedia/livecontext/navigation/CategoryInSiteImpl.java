@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.navigation;
 
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.context.CategoryInSite;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 
 import javax.annotation.Nonnull;

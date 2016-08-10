@@ -8,10 +8,7 @@
     <version>1-SNAPSHOT</version>
   </parent>
 
-
   <artifactId>cae-base-component</artifactId>
-  <packaging>jar</packaging>
-
   <description>Configuration and templates for the CAE that is shared between preview and live CAE.</description>
 
   <dependencies>
@@ -70,6 +67,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>basic-theme</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
       <scope>runtime</scope>
     </dependency>
 

@@ -5,6 +5,7 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Test for {@link com.coremedia.livecontext.ecommerce.ibm.p13n.MarketingSpotServiceImpl}
@@ -46,21 +48,21 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
     testling.getMarketingSpotWrapperService().clearLanguageMapping();
   }
 
-
   @Betamax(tape = "csi_testFindMarketingSpots", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindMarketingSpots() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
+
     List<MarketingSpot> marketingSpots = testling.findMarketingSpots();
     assertTrue(marketingSpots.size() > 100);
+
     MarketingSpot spot = marketingSpots.get(0);
     assertNotNull(spot.getName());
     assertNotNull(spot.getId());
     assertNotNull(spot.getExternalId());
   }
-
 
   @Betamax(tape = "csi_testFindMarketingSpotByExternalId1", match = {MatchRule.path, MatchRule.query})
   @Test
@@ -68,11 +70,14 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
+
     MarketingSpotImpl spot = (MarketingSpotImpl) testling.findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1);
     assertNotNull(spot);
+
     List<CommerceObject> entities = spot.getEntities();
     assertNotNull(entities);
     assertEquals("entities should have size of 1", entities.size(), 1);
+
     CommerceObject item = entities.get(0);
     assertTrue("MarketingContent expected", item instanceof MarketingImage || item instanceof MarketingText);
   }
@@ -83,22 +88,27 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
+
     MarketingSpotImpl spot = (MarketingSpotImpl) testling.findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID2);
     assertNotNull(spot);
+
     List<CommerceObject> entities = spot.getEntities();
     assertNotNull(entities);
-    assertTrue("entities should have size > 0", entities.size() > 0);
+    assertFalse("entities should have size > 0", entities.isEmpty());
+
     int count = 0;
     for (CommerceObject item : entities) {
       count++;
       assertTrue("Product expected", item instanceof Product);
       Product product = (Product) item;
+
       if (product.getName().equals("Gusso Green Khaki Shirt")) {
         assertTrue("Found the expected product", true);
         break;
       }
+
       if (count == entities.size()) {
-        assertTrue("Can not find the expected product", false);
+        fail("Can not find the expected product");
         break;
       }
     }
@@ -110,12 +120,15 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
+
     MarketingSpotImpl spot = (MarketingSpotImpl) testling.findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3);
     assertNotNull(spot);
+
     List entities = spot.getEntities();
     assertNotNull(entities);
-    assertTrue("entities should have size > 0", entities.size() > 0);
+    assertFalse("entities should have size > 0", entities.isEmpty());
     assertTrue("Product expected", entities.get(0) instanceof MarketingText);
+
     MarketingText first = (MarketingText) entities.get(0);
     assertTrue("the other text should be there", !first.getText().isEmpty() && !first.getText().contains("Men's"));
   }
@@ -126,31 +139,38 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(testConfig.getUser2Name());
     UserContextHelper.setCurrentContext(userContext);
+
     MarketingSpotImpl spot = (MarketingSpotImpl) testling.findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3);
     assertNotNull(spot);
+
     List entities = spot.getEntities();
     assertNotNull(entities);
-    assertTrue("entities should have size > 0", entities.size() > 0);
+    assertFalse("entities should have size > 0", entities.isEmpty());
     assertTrue("MarketingText expected", entities.get(0) instanceof MarketingText);
+
     MarketingText first = (MarketingText) entities.get(0);
     assertTrue("the men's text should be there", first.getText().contains("Men's"));
   }
 
   @Test
   public void testFindMarketingSpotPersonalizedTestContext() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) {
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
       return;
     }
+
     StoreContext storeContext = testConfig.getStoreContext();
     String userSegments = testConfig.getUserSegment1Id().concat("," + testConfig.getUserSegment2Id());
     storeContext.setUserSegments(userSegments);
     StoreContextHelper.setCurrentContext(storeContext);
+
     MarketingSpotImpl spot = (MarketingSpotImpl) testling.findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3);
     assertNotNull(spot);
+
     List entities = spot.getEntities();
     assertNotNull(entities);
-    assertTrue("entities should have size > 0", entities.size() > 0);
+    assertFalse("entities should have size > 0", entities.isEmpty());
     assertTrue("MarketingText expected", entities.get(0) instanceof MarketingText);
+
     MarketingText first = (MarketingText) entities.get(0);
     assertTrue("the men's text should be there", first.getText().contains("Men's"));
   }
@@ -161,8 +181,10 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
+
     MarketingSpotImpl spot = (MarketingSpotImpl) testling.findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1);
     assertNotNull(spot);
+
     spot = (MarketingSpotImpl) testling.findMarketingSpotByExternalTechId(spot.getExternalTechId());
     assertNotNull(spot);
     assertNotNull(spot.getDescription());
@@ -192,15 +214,14 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
     }
   }
 
-
   @Betamax(tape = "csi_testSearchMarketingSpots", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testSearchMarketingSpots() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
+
     SearchResult<MarketingSpot> marketingSpots = testling.searchMarketingSpots("Shirts", null);
     assertFalse(marketingSpots.getSearchResult().isEmpty());
   }
-
 }

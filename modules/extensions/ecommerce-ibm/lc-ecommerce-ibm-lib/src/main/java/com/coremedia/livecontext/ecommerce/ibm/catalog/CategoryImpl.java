@@ -13,6 +13,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.xml.Markup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   Map<String, Object> getDelegateFromCache() {
     //noinspection unchecked
     return (Map<String, Object>) getCommerceCache().get(
-            new CategoryCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
+            new CategoryCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
   }
 
   @Override
@@ -118,12 +119,14 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
 
   @Override
   public String getThumbnailUrl() {
-    return getAssetUrlProvider().getImageUrl(DataMapHelper.getValueForKey(getDelegate(), "thumbnail", String.class), true);
+    String thumbnailUri = DataMapHelper.getValueForKey(getDelegate(), "thumbnail", String.class);
+    return null == thumbnailUri ? null : getAssetUrlProvider().getImageUrl(thumbnailUri, true);
   }
 
   @Override
   public String getDefaultImageUrl() {
-    return getAssetUrlProvider().getImageUrl(DataMapHelper.getValueForKey(getDelegate(), "fullImage", String.class));
+    String defaultImageUri = DataMapHelper.getValueForKey(getDelegate(), "fullImage", String.class);
+    return null == defaultImageUri ? null : getAssetUrlProvider().getImageUrl(defaultImageUri);
   }
 
   @Override

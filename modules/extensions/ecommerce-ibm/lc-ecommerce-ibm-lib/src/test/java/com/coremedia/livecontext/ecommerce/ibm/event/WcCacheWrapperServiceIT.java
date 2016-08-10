@@ -5,7 +5,9 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +35,7 @@ import static org.junit.Assert.assertTrue;
 public class WcCacheWrapperServiceIT extends AbstractServiceTest {
   private static long TIME_STAMP = 1399641181799L;
   static final String PROFILE = "WcCacheWrapperServiceIT";
+
   @Configuration
   static class LocalConfig {
 
@@ -43,7 +46,6 @@ public class WcCacheWrapperServiceIT extends AbstractServiceTest {
       wcCacheWrapperService.setRestConnector(wcRestConnector);
       return wcCacheWrapperService;
     }
-
   }
 
   @Inject
@@ -55,8 +57,8 @@ public class WcCacheWrapperServiceIT extends AbstractServiceTest {
   @Before
   public void setup() {
     super.setup();
-    origServiceEndpoint = testling.getRestConnector().getServiceEndpoint();
     storeContext = Commerce.getCurrentConnection().getStoreContext();
+    origServiceEndpoint = testling.getRestConnector().getServiceEndpoint(storeContext);
   }
 
   @After
@@ -66,9 +68,10 @@ public class WcCacheWrapperServiceIT extends AbstractServiceTest {
 
   @Test
   public void testGetCacheInvalidations() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) {
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
       return;
     }
+
     long latestTimestamp = testling.getLatestTimestamp(storeContext);
     Map<String, Object> cacheInvalidations = testling.getCacheInvalidations(latestTimestamp, storeContext);
     assertNotNull(cacheInvalidations);
@@ -84,7 +87,7 @@ public class WcCacheWrapperServiceIT extends AbstractServiceTest {
   @Betamax(tape = "cache_testGetCacheInvalidationsError404", match = {MatchRule.path, MatchRule.query})
   @Test(expected = CommerceException.class)
   public void testGetCacheInvalidationsError404() throws Exception {
-    testling.getRestConnector().setServiceEndpoint(testling.getRestConnector().getServiceEndpoint() + "/blub");
+    testling.getRestConnector().setServiceEndpoint(testling.getRestConnector().getServiceEndpoint(StoreContextHelper.getCurrentContext()) + "/blub");
     testling.getCacheInvalidations(TIME_STAMP, storeContext);
   }
 
@@ -105,8 +108,7 @@ public class WcCacheWrapperServiceIT extends AbstractServiceTest {
   @Betamax(tape = "cache_testRequestLatestInvalidationTimeStampError404", match = {MatchRule.path, MatchRule.query})
   @Test(expected = CommerceException.class)
   public void testRequestLatestInvalidationTimeStampError404() throws Exception {
-    testling.getRestConnector().setServiceEndpoint(testling.getRestConnector().getServiceEndpoint() + "/blub");
+    testling.getRestConnector().setServiceEndpoint(testling.getRestConnector().getServiceEndpoint(StoreContextHelper.getCurrentContext()) + "/blub");
     testling.getLatestTimestamp(storeContext);
   }
-
 }

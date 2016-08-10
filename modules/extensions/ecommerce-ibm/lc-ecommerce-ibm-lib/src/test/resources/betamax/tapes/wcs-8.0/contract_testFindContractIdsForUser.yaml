@@ -1,7 +1,7 @@
 !tape
 name: contract_testFindContractIdsForUser
 interactions:
-- recorded: 2016-05-23T15:46:37.924Z
+- recorded: 2016-07-25T15:26:01.950Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,9 +17,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:37 GMT
+      Date: Mon, 25 Jul 2016 15:26:02 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000Kll6TuSTrBMK0TbuSJDLrtV:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000Mo6HN11AJVSPPAa0WWZbaMz:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
       X-Betamax: PLAY
@@ -33,50 +33,76 @@ interactions:
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
       Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-05-23T15:46:37.955Z
+- recorded: 2016-07-25T15:26:01.989Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838085/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 25 Jul 2016 15:26:02 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00001LGf0vgsi_n0aiouFzzpH73:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"WCToken":"2%2C7w7mh%2FeYGXmO3QnlxvGAe6NpF1P1DfSDEyDYuRQBe8%2BTm6cuLvrY2Jf6yfA%2BDT08m%2BawQpRe522h16YOYdeB876usUc7vj9QnAS%2BNmlmQQd3jLtKzc%2BfCLSVspqGqx6AHFFeaiDP58U6Cb6IEk1dWJTosOMWU6yqJGhUnK78lJbogp241aHquOqrDe%2F63AfQLb4eG2m1gB4R9USfJTgDQC5uKPEFkUZi%2FU6Fx3OHK3s%3D","userId":"2","WCTrustedToken":"2%2Ciax20E8rulZW8ATU6fM8uTTSwX%2Fobht4y5u9sKckh%2F4%3D","personalizationID":"1469420030228-2"}'
+- recorded: 2016-07-25T15:26:02.036Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838085/contract?q=eligible&catalogId=3074457345616676718&currency=USD&forUser=gstevens&langId=-1
     headers:
       Accept-Encoding: text/plain
-      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
       User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      WCToken: 2%2C7w7mh%2FeYGXmO3QnlxvGAe6NpF1P1DfSDEyDYuRQBe8%2BTm6cuLvrY2Jf6yfA%2BDT08m%2BawQpRe522h16YOYdeB876usUc7vj9QnAS%2BNmlmQQd3jLtKzc%2BfCLSVspqGqx6AHFFeaiDP58U6Cb6IEk1dWJTosOMWU6yqJGhUnK78lJbogp241aHquOqrDe%2F63AfQLb4eG2m1gB4R9USfJTgDQC5uKPEFkUZi%2FU6Fx3OHK3s%3D
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:37 GMT
+      Date: Mon, 25 Jul 2016 15:26:02 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000LOa69EogMCoZpU9BfRgJt9L:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000yuLEFoNsq22M8kDPTd1MWw-:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"contracts":{"4000000000000000009":"Default Contract for AuroraB2BESite"}}'
-- recorded: 2016-05-23T15:46:38.520Z
+- recorded: 2016-07-25T15:26:02.612Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838085/contract?q=eligible&catalogId=3074457345616676718&currency=USD&forUser=preview&langId=-1
     headers:
       Accept-Encoding: text/plain
-      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
       User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      WCToken: 2%2C7w7mh%2FeYGXmO3QnlxvGAe6NpF1P1DfSDEyDYuRQBe8%2BTm6cuLvrY2Jf6yfA%2BDT08m%2BawQpRe522h16YOYdeB876usUc7vj9QnAS%2BNmlmQQd3jLtKzc%2BfCLSVspqGqx6AHFFeaiDP58U6Cb6IEk1dWJTosOMWU6yqJGhUnK78lJbogp241aHquOqrDe%2F63AfQLb4eG2m1gB4R9USfJTgDQC5uKPEFkUZi%2FU6Fx3OHK3s%3D
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:38 GMT
+      Date: Mon, 25 Jul 2016 15:26:03 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000fz-COZM1h3GWpoliIvoIzmd:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000NnlrFkIihgLzBqofQTkwbIa:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0

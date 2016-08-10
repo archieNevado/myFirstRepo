@@ -25,13 +25,13 @@ import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.cap.transform.Transformation;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import com.coremedia.objectserver.util.undoc.DataRenderer;
 import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
@@ -52,7 +52,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -92,9 +91,8 @@ public class BlueprintFreemarkerFacade {
   private DataViewFactory dataViewFactory;
   private SettingsService settingsService;
   private ImageDimensionsExtractor imageDimensionsExtractor;
-  private Map<String, Transformation> transformationsByName;
+  private TransformImageService transformImageService;
   private WordAbbreviator abbreviator;
-  private DataRenderer dataRenderer;
   private MimeTypeService mimeTypeService;
 
   private final ViewHookEventNamesFreemarker viewHookEventNames = new ViewHookEventNamesFreemarker();
@@ -127,31 +125,23 @@ public class BlueprintFreemarkerFacade {
   }
 
   @Autowired
-  public void setDataRenderer(DataRenderer dataRenderer) {
-    this.dataRenderer = dataRenderer;
-  }
-
-  @Autowired
   public void setMimeTypeService(MimeTypeService mimeTypeService) {
     this.mimeTypeService = mimeTypeService;
   }
 
-  /**
-   * Informs the repsonsive image framework about the available image transformations
-   * @param transformations the available image transformations
-   */
   @Autowired
-  public void setTransformations(List<Transformation> transformations) {
-    transformationsByName = new HashMap<>(transformations.size());
-    for (Transformation transformation : transformations) {
-      transformationsByName.put(transformation.getName(), transformation);
-    }
+  public void setTransformImageService(TransformImageService transformImageService) {
+    this.transformImageService = transformImageService;
   }
 
   // --- functionality -------------------------------------------------------------------------------------------------
 
   public ContentBean createBeanFor(Content content) {
     return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content), null);
+  }
+
+  public List<Transformation> getTransformations(Content content) {
+    return transformImageService.getTransformations(content);
   }
 
   public List createBeansFor(List<Content> contents) {
@@ -240,8 +230,8 @@ public class BlueprintFreemarkerFacade {
         Map<Integer, String> links = ImageFunctions.getImageLinksForAspectRatios(blob, aspectRatioName, aspectRatioSizes, currentRequest, currentResponse);
 
         if (!isEmpty(links)) {
-          // only the "transformations" bean from the application context holds the actual crop ratio in proper values
-          Transformation transformation = transformationsByName.get(aspectRatioName);
+          // only the "TransformImageService" holds the actual crop ratio in proper values
+          Transformation transformation = transformImageService.getTransformation(picture.getContent(), aspectRatioName);
           if(transformation == null) {
             throw new IllegalArgumentException("Could not find image variant for name " + aspectRatioName);
           }

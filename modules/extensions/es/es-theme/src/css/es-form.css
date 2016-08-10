@@ -30,6 +30,8 @@
 .cm-textarea {
   height: 10rem;
   padding: 11px;
+  /* reset line-height, so it is not inherited from parent elements */
+  line-height: normal;
 }
 
 .cm-textarea::-webkit-input-placeholder,

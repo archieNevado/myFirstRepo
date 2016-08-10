@@ -44,7 +44,7 @@ suites:
     - recipe[blueprint-tools::master-live-server-tools]
     - recipe[blueprint-tools::replication-live-server-tools]
     - recipe[blueprint-tools::workflow-server-tools]
-    - recipe[blueprint-tools::css-importer-tools]
+    - recipe[blueprint-tools::theme-importer-tools]
     - recipe[blueprint-tools::caefeeder-live-tools]
     - recipe[blueprint-tools::caefeeder-preview-tools]
   attributes:

@@ -4,7 +4,7 @@ import com.coremedia.ecommerce.studio.rest.CommerceBeanResource;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.rest.api.JsonCustomizer;
 import com.coremedia.elastic.social.rest.api.JsonProperties;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;
 import org.slf4j.Logger;

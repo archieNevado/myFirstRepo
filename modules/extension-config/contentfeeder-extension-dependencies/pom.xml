@@ -14,16 +14,25 @@
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>lc-contentfeeder-component</artifactId>
       <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>am-contentfeeder-component</artifactId>
       <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>corporate-contentfeeder-component</artifactId>
       <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>logging-config</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>

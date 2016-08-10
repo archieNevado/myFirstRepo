@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.product;
 
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.objectserver.view.RenderNode;
 import org.junit.Before;
 import org.junit.Test;

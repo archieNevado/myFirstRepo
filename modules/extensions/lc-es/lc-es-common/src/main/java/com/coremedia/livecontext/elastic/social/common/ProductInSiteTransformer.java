@@ -2,7 +2,7 @@ package com.coremedia.livecontext.elastic.social.common;
 
 import com.coremedia.blueprint.elastic.social.common.ContributionTargetTransformer;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

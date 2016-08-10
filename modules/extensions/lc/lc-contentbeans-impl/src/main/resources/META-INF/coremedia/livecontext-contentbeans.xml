@@ -29,7 +29,7 @@
         class="com.coremedia.livecontext.contentbeans.CMExternalPageImpl" scope="prototype"/>
 
   <bean name="contentBeanFactory:CMExternalChannel" parent="abstractChannel-blueprint-doctypes"
-        class="com.coremedia.livecontext.contentbeans.LiveContextExternalChannel" scope="prototype">
+        class="com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl" scope="prototype">
     <property name="treeRelation" ref="liveContextNavigationTreeRelation"/>
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
     <property name="pageGridService" ref="extCategoryPageGridService"/>

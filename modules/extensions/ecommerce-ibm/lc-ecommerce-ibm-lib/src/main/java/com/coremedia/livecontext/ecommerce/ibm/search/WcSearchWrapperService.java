@@ -1,10 +1,11 @@
 package com.coremedia.livecontext.ecommerce.ibm.search;
 
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import org.springframework.http.HttpMethod;
 
 import java.util.Collections;
@@ -23,7 +24,7 @@ import static java.util.Arrays.asList;
  */
 public class WcSearchWrapperService extends AbstractWcWrapperService {
 
-  private static final WcRestConnector.WcRestServiceMethod<WcSuggestionViews, Void>
+  private static final WcRestServiceMethod<WcSuggestionViews, Void>
           GET_KEYWORD_SUGGESTIONS = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/sitecontent/keywordSuggestionsByTerm/{term}", false, false, true, WcSuggestionViews.class);
 
 
@@ -38,7 +39,7 @@ public class WcSearchWrapperService extends AbstractWcWrapperService {
       }
       return Collections.emptyList();
     } catch (CommerceRemoteException e) {
-      if (e.getRemoteError() != null && "TODO".equals(e.getRemoteError().getErrorKey())) {  //TODO
+      if ("TODO".equals(e.getErrorKey())) {  //TODO
         return Collections.emptyList();
       } else {
         throw e;

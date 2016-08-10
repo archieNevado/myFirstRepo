@@ -86,7 +86,7 @@
                                                cls="padding-bottom-5"/>
         </items>
       </editor:documentForm>
-      <bpforms:multiLanguageDocumentForm/>
+      <bpforms:multiLangWithBundlesDocumentForm/>
       <bpforms:channelMetaDataInformationForm/>
     </items>
   </editor:documentTabPanel>

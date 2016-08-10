@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
@@ -33,9 +34,11 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
     return delegate;
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
   Map<String, Object> getDelegateFromCache() {
     return (Map<String, Object>) getCommerceCache().get(
-      new ProductCacheKey(getId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
+      new ProductCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
   }
 
   /**
@@ -73,7 +76,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
     }
     // fallback if no availability information were found.
     Map<String, Object> wcInfo = new HashMap<>(1);
-    wcInfo.put("availableQuantity", 0.0f);
+    wcInfo.put("availableQuantity", 0.0F);
     wcInfo.put("unitOfMeasure", "C62");
     wcInfo.put("inventoryStatus", "Unavailable");
     return new AvailabilityInfoImpl(wcInfo);
@@ -155,7 +158,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   @Override
   public float getTotalStockCount() {
     Product parent = getParent();
-    return parent != null ? parent.getTotalStockCount() : 0.0f;
+    return parent != null ? parent.getTotalStockCount() : 0.0F;
   }
 
   @Override
@@ -175,16 +178,19 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
     super.loadAttributes();
     Product parent = getParent();
     if (parent != null) {
-      List<ProductAttribute> myDescribingAttributes = getDescribingAttributes();
-      List<ProductAttribute> parentDescribingAttributes = parent.getDescribingAttributes();
-      if (myDescribingAttributes.isEmpty()) {
-        myDescribingAttributes.addAll(parentDescribingAttributes);
-      }
-      else {
-        for (ProductAttribute attribute : parentDescribingAttributes) {
-          if (!myDescribingAttributes.contains(attribute)) {
-            myDescribingAttributes.add(attribute);
-          }
+      mergeParentAttributes(parent);
+    }
+  }
+
+  private void mergeParentAttributes(@Nonnull Product parent) {
+    List<ProductAttribute> myDescribingAttributes = getDescribingAttributes();
+    List<ProductAttribute> parentDescribingAttributes = parent.getDescribingAttributes();
+    if (myDescribingAttributes.isEmpty()) {
+      myDescribingAttributes.addAll(parentDescribingAttributes);
+    } else {
+      for (ProductAttribute attribute : parentDescribingAttributes) {
+        if (!myDescribingAttributes.contains(attribute)) {
+          myDescribingAttributes.add(attribute);
         }
       }
     }

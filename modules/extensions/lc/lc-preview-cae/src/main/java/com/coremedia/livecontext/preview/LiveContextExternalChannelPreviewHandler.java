@@ -3,7 +3,7 @@ package com.coremedia.livecontext.preview;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
@@ -44,7 +44,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   private ExternalNavigationHandler externalNavigationHandler;
 
   @RequestMapping({PREVIEW_URI_PATTERN})
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) LiveContextExternalChannel liveContextExternalChannel,
+  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) LiveContextExternalChannelImpl liveContextExternalChannel,
                                     @PathVariable(SEGMENT_NAME) String vanityName,
                                     @PathVariable(SHOP_NAME_VARIABLE) String siteSegment,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) final String view) {
@@ -57,9 +57,9 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   }
 
   @SuppressWarnings("unused")
-  @Link(type = LiveContextExternalChannel.class)
+  @Link(type = LiveContextExternalChannelImpl.class)
   public Object buildLinkForExternalChannel(
-          final LiveContextExternalChannel navigation,
+          final LiveContextExternalChannelImpl navigation,
           final String viewName,
           final Map<String, Object> linkParameters) {
     StoreContextProvider storeContextProvider = getStoreContextProvider();
@@ -96,7 +96,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   }
 
   private UriComponents buildPreviewLinkForLiveContextExternalChannel(
-          @Nonnull final LiveContextExternalChannel navigation,
+          @Nonnull final LiveContextExternalChannelImpl navigation,
           final String viewName,
           final Map<String, Object> linkParameters) {
     Site site = navigation.getSite();

@@ -4,7 +4,7 @@
  * Picks a suitable image from a given set of images regarding given dimensions and the maximum size needed.
  *
  * Version 1.6
- * Copyright (c) 2016 CoreMedia AG
+ * Copyright (c) CoreMedia AG
  *
  * Usage: $(".cm-image--responsive").responsiveImage();
  *
@@ -31,15 +31,15 @@
  *
  */
 
-/*! Responsive Image Resizer Plugin | Copyright (c) 2016 CoreMedia AG */
+/*! Responsive Image Resizer Plugin | Copyright (c) CoreMedia AG */
 ;(function ($) {
   "use strict";
 
   $.fn.responsiveImages = function () {
-    return this.each(function () {
+    return $.each(this, function (index, item) {
 
-      var $image = $(this);
-      var logger = coremedia.blueprint.logger || {};
+      var $image = $(item);
+      var logger = coremedia.blueprint.logger || { log: function () {} };
 
       var triggerSrcChanged = function () {
         $image.trigger({
@@ -80,7 +80,7 @@
         var deviceRatio = window.devicePixelRatio;
         if (deviceRatio > 1 && $image.data("cm-retina-image")) {
           containerHeight *= deviceRatio;
-          containerWidth  *= deviceRatio;
+          containerWidth *= deviceRatio;
         }
 
         // detect best fitting aspect ratio for box
@@ -93,7 +93,7 @@
 
         // @since 1.6
         // default method to retrieve ratio from responsive images data
-        var getCandidateRatio = function(id, responsiveImages) {
+        var getCandidateRatio = function (id, responsiveImages) {
           var format = responsiveImages[id];
           var ratioWidth = format.ratioWidth;
           var ratioHeight = format.ratioHeight;
@@ -108,7 +108,7 @@
         // release
         if (!$.isArray(responsiveImages)) {
           logger.log("Using legacy data structure for responsive image setting. Please consider changing to the new format");
-          getCandidateRatio = function(id, responsiveImages) {
+          getCandidateRatio = function (id, responsiveImages) {
             var regexp = /^[a-zA-Z_]*(\d+)x(\d+)$/;
             if (!responsiveImages.hasOwnProperty(id)) {
               return null;
@@ -214,4 +214,4 @@
       }
     });
   };
-})(coremedia.blueprint.$ || jQuery);
+})(jQuery || coremedia.blueprint.$);

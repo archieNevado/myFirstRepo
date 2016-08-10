@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSettings folder="/Sites/PerfectChef/United States/English/Options/Settings/CMChannel" name="Responsive Image Settings" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<CMSettings folder="/Sites/PerfectChef/United States/English/Options/Settings/CMChannel"
+name="Responsive Image Settings" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <BooleanProperty Name="enableRetinaImages">false</BooleanProperty>
-<IntProperty Name="maxPreviewImageWidth">400</IntProperty>
 <StructProperty Name="responsiveImageSettings">
 <Struct>
 <StructProperty Name="portrait_ratio20x31">
 <Struct>
+<IntProperty Name="widthRatio">20</IntProperty>
+<IntProperty Name="heightRatio">31</IntProperty>
+<IntProperty Name="minWidth">220</IntProperty>
+<IntProperty Name="minHeight">310</IntProperty>
+<IntProperty Name="previewWidth">310</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">200</IntProperty>
@@ -39,6 +44,11 @@
 </StructProperty>
 <StructProperty Name="portrait_ratio3x4">
 <Struct>
+<IntProperty Name="widthRatio">3</IntProperty>
+<IntProperty Name="heightRatio">4</IntProperty>
+<IntProperty Name="minWidth">320</IntProperty>
+<IntProperty Name="minHeight">427</IntProperty>
+<IntProperty Name="previewWidth">320</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -61,6 +71,11 @@
 </StructProperty>
 <StructProperty Name="portrait_ratio1x1">
 <Struct>
+<IntProperty Name="widthRatio">1</IntProperty>
+<IntProperty Name="heightRatio">1</IntProperty>
+<IntProperty Name="minWidth">66</IntProperty>
+<IntProperty Name="minHeight">66</IntProperty>
+<IntProperty Name="previewWidth">66</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">66</IntProperty>
@@ -107,6 +122,11 @@
 </StructProperty>
 <StructProperty Name="landscape_ratio4x3">
 <Struct>
+<IntProperty Name="widthRatio">4</IntProperty>
+<IntProperty Name="heightRatio">3</IntProperty>
+<IntProperty Name="minWidth">236</IntProperty>
+<IntProperty Name="minHeight">177</IntProperty>
+<IntProperty Name="previewWidth">236</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">236</IntProperty>
@@ -159,6 +179,11 @@
 </StructProperty>
 <StructProperty Name="landscape_ratio16x9">
 <Struct>
+<IntProperty Name="widthRatio">16</IntProperty>
+<IntProperty Name="heightRatio">9</IntProperty>
+<IntProperty Name="minWidth">320</IntProperty>
+<IntProperty Name="minHeight">180</IntProperty>
+<IntProperty Name="previewWidth">320</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -181,6 +206,11 @@
 </StructProperty>
 <StructProperty Name="landscape_ratio2x1">
 <Struct>
+<IntProperty Name="widthRatio">2</IntProperty>
+<IntProperty Name="heightRatio">1</IntProperty>
+<IntProperty Name="minWidth">320</IntProperty>
+<IntProperty Name="minHeight">160</IntProperty>
+<IntProperty Name="previewWidth">320</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -197,6 +227,11 @@
 </StructProperty>
 <StructProperty Name="landscape_ratio5x2">
 <Struct>
+<IntProperty Name="widthRatio">5</IntProperty>
+<IntProperty Name="heightRatio">2</IntProperty>
+<IntProperty Name="minWidth">320</IntProperty>
+<IntProperty Name="minHeight">128</IntProperty>
+<IntProperty Name="previewWidth">320</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -213,6 +248,11 @@
 </StructProperty>
 <StructProperty Name="landscape_ratio8x3">
 <Struct>
+<IntProperty Name="widthRatio">8</IntProperty>
+<IntProperty Name="heightRatio">3</IntProperty>
+<IntProperty Name="minWidth">320</IntProperty>
+<IntProperty Name="minHeight">120</IntProperty>
+<IntProperty Name="previewWidth">320</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -253,6 +293,11 @@
 </StructProperty>
 <StructProperty Name="landscape_ratio4x1">
 <Struct>
+<IntProperty Name="widthRatio">4</IntProperty>
+<IntProperty Name="heightRatio">1</IntProperty>
+<IntProperty Name="minWidth">320</IntProperty>
+<IntProperty Name="minHeight">80</IntProperty>
+<IntProperty Name="previewWidth">320</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>

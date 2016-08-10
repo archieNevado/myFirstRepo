@@ -2,8 +2,8 @@ package com.coremedia.livecontext.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
-import com.coremedia.livecontext.context.CategoryInSite;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;

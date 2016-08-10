@@ -7,6 +7,7 @@ coremediaEditorPlugins.push({
 });
 
 
+joo.loadScript('joo/resources/js/jquery-1.6.2.min.js');
 joo.loadScript('joo/resources/js/raphael.js');
 // morris needs jquery. but jquery seems to be loaded already by other cm modules (image-cropping?)
 joo.loadScript('joo/resources/js/morris.js');

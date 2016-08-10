@@ -8,35 +8,25 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<BooleanProperty Name="videoConvertion">true</BooleanProperty>
 <LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../../../Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf"/>
-<StructProperty Name="elasticSocial">
-<Struct>
-<StringProperty Name="reviewType">DISABLED</StringProperty>
-<StringProperty Name="commentType">ANONYMOUS</StringProperty>
-</Struct>
-</StructProperty>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../../../Pictures/Site-Wide/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Pictures/Site-Wide/Picture%20Missing%20Product%20Picture"/>
-<StructProperty Name="livecontext.catalog">
-<Struct>
-<LinkProperty Name="root" LinkType="coremedia:///cap/contenttype/CMExternalChannel" xlink:href="coremedia:///cap/resources/../../../Augmentation/Aurora%20B2B%20Catalog%20Root.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/Aurora%20B2B%20Catalog%20Root"/>
-</Struct>
-</StructProperty>
 <StringProperty Name="shopNow">disabled</StringProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
+<link href="../../../Options/Settings/Google%20Analytics%20Settings.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Google%20Analytics%20Settings"/>
+<link href="../../../../../../../Settings/Options/Settings/AnalyticsSettings.xml" path="/Settings/Options/Settings/AnalyticsSettings"/>
 <link href="../../../Options/Settings/LiveContext.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/LiveContext"/>
-<link href="../../../Options/Settings/CAEConfig.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/CAEConfig"/>
 <link href="../../../Options/Settings/Elastic%20Social.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Elastic%20Social"/>
 <link href="../../../Options/Settings/CMChannel/Robots%2Etxt.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/CMChannel/Robots%2Etxt"/>
 <link href="../../../Options/Settings/CMChannel/Responsive%20Image%20Settings.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/>
 <link href="../../../Options/Settings/Preview.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Preview"/>
+<link href="../../../Options/Settings/ExternalLibraries.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/ExternalLibraries"/>
 </linkedSettings>
-<resourceBundles>
-<link href="../../../../../../../Settings/Options/Bundles/Bundle_en.xml" path="/Settings/Options/Bundles/Bundle_en"/>
+<resourceBundles2>
 <link href="../../../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
-<link href="../../../../../../../Settings/Options/Bundles/Livecontext_en.xml" path="/Settings/Options/Bundles/Livecontext_en"/>
-</resourceBundles>
+</resourceBundles2>
 <segment>aurorab2b</segment>
 <title>Aurora B2B Homepage</title>
 <htmlTitle></htmlTitle>
@@ -57,21 +47,23 @@
 <link href="../../../Augmentation/Aurora%20B2B%20Catalog%20Root.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/Aurora%20B2B%20Catalog%20Root"/>
 <link href="../../Microsites/Microsite%20Root%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Microsites/Microsite%20Root%20Page"/>
 <link href="../Augmented%20Pages/Augmented%20Pages%20Root%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Augmented%20Pages/Augmented%20Pages%20Root%20Page"/>
+<link href="Decoration%20Newslecdae9e8a.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20B2B%20Homepage/Decoration%20Newsletter/Decoration%20Newsletter"/>
 </children>
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
 <javaScript>
-<link href="../../../../../../../Themes/aurora/aurora%2Ejs.xml" path="/Themes/aurora/aurora%2Ejs"/>
 </javaScript>
 <css>
-<link href="../../../../../../../Themes/aurora/aurora%2Ecss.xml" path="/Themes/aurora/aurora%2Ecss"/>
 </css>
+<theme>
+<link href="../../../../../../../Themes/aurora/Aurora%20Theme.xml" path="/Themes/aurora/Aurora%20Theme"/>
+</theme>
 <favicon md5="b01ec1d815971bfb59a29dbb80c6fdcc" size="22382" href="../../../../../../../__blob/b01ec1d815971bfb59a29dbb80c6fdcc.blob" mimetype="image/x-icon"/>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/Two%20Column%20Layout.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Layouts/Two%20Column%20Layout"/>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
 <StructProperty Name="placements">
 <Struct>
 </Struct>
@@ -81,19 +73,20 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Personalization/Contract-Specific%20Hero%20Teaser.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Personalization/Contract-Specific%20Hero%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../Aurora%20B2B%20Categories/Lighting/Lighting695bbfda.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20B2B%20Categories/Lighting/Lighting%20Products%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/Guide%20to%20Exteri82fe3154.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20B2B%20Homepage/Guide%20to%20Exterior%20Lighting%20Article%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Teaser%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Teaser%20Image%20Map"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion3fc631ae.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion%20Teaser%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Decorating%20Category%20Teaser%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Decorating%20Category%20Teaser%20Image%20Map"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Decorating/Decorating%20Products%20Category%20eaa7dc7e.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Decorating/Decorating%20Products%20Category%20Promotion%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Teaser.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Personalization/Contract-Specific%20Call-To-Action%20Teaser.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Personalization/Contract-Specific%20Call-To-Action%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/Aurora%20B2B%20Homee5175176.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%20Home%20Page%20Sidebar%20Collection"/>
 </LinkListProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/sidebar.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/sidebar"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/header"/>
 </Struct>
 </StructListProperty>
 </Struct>

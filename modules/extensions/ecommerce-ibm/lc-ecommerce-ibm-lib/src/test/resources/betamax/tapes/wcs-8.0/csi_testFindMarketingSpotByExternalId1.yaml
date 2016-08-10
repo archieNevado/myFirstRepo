@@ -1,7 +1,7 @@
 !tape
 name: csi_testFindMarketingSpotByExternalId1
 interactions:
-- recorded: 2016-05-23T15:46:50.478Z
+- recorded: 2016-07-25T15:26:16.357Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,9 +17,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:50 GMT
+      Date: Mon, 25 Jul 2016 15:26:17 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000z6JffgoqB27c6IzWHcYl7bk:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000oCkbsCbJNyTEx0PayWDT2X-:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
@@ -32,7 +32,7 @@ interactions:
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
       Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-05-23T15:46:50.491Z
+- recorded: 2016-07-25T15:26:16.376Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -48,36 +48,61 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:50 GMT
+      Date: Mon, 25 Jul 2016 15:26:17 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000EqZx9K5y1S3Ye3W2xvLOAp8:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000AXXnfSZtj61y8hNAF9j9CgO:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2016-05-23T15:46:50.543Z
+- recorded: 2016-07-25T15:26:16.410Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 25 Jul 2016 15:26:17 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000YRj0vzhmrGjZ65Nm_nOg2OH:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"WCToken":"2%2CeuQ3fu7oqt5gPbFYuCCNxFhYp8MhnwF1cpsgXMODOykvq5X2eA83tTRxPRYHDuOvaWDLrn2YD2sFrXdVZv8WEKknTucRn6wDticgNg1DIh6HGdiTNXGj056tPS84Dnn9%2FM2tkrcITQ2S5obrD0UF66%2BNmGBBsv7xtj6p1VW%2FQhn4cEhBPlU2pH9dyNuJiTJxWnTn3tOyVRkIuwRWXkNyYmeN4f1GxpQkpb6W3GJ%2BhjU%3D","userId":"2","WCTrustedToken":"2%2CORm6QNIItFtQWgs6dIb1Pm0H1jOxMxpF2LmPsKNkJ6c%3D","personalizationID":"1469420030228-2"}'
+- recorded: 2016-07-25T15:26:16.443Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/espot/ApparelRow1_Content?catalogId=3074457345616676719&currency=USD&langId=-1
     headers:
       Accept-Encoding: text/plain
-      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
       User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      WCToken: 2%2CeuQ3fu7oqt5gPbFYuCCNxFhYp8MhnwF1cpsgXMODOykvq5X2eA83tTRxPRYHDuOvaWDLrn2YD2sFrXdVZv8WEKknTucRn6wDticgNg1DIh6HGdiTNXGj056tPS84Dnn9%2FM2tkrcITQ2S5obrD0UF66%2BNmGBBsv7xtj6p1VW%2FQhn4cEhBPlU2pH9dyNuJiTJxWnTn3tOyVRkIuwRWXkNyYmeN4f1GxpQkpb6W3GJ%2BhjU%3D
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:50 GMT
-      Expires: Mon, 23 May 2016 16:46:50 GMT
-      Set-Cookie: JSESSIONID=00007HBm5e9dObfUULiIkIkGqOH:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Date: Mon, 25 Jul 2016 15:26:17 GMT
+      Expires: Mon, 25 Jul 2016 16:26:17 GMT
+      Set-Cookie: JSESSIONID=0000bWfeu0bd-_prA4reOAguhux:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/espot\/ApparelRow1_Content?catalogId=3074457345616676719&currency=USD&langId=-1","MarketingSpotData":[{"marketingSpotIdentifier":"715839021","eSpotName":"ApparelRow1_Content","behavior":"0","nextTimeLimit":"-1","baseMarketingSpotActivityData":[{"activityIdentifierID":"0","MarketingContentDescription":[{}],"marketingContentDescription":[{"marketingText":"<link
+    body: '{"resourceId":"http:\/\/toko-16-01-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/espot\/ApparelRow1_Content?catalogId=3074457345616676719&currency=USD&langId=-1","MarketingSpotData":[{"marketingSpotIdentifier":"715839021","eSpotName":"ApparelRow1_Content","behavior":"0","nextTimeLimit":"-1","baseMarketingSpotActivityData":[{"activityIdentifierID":"0","MarketingContentDescription":[{}],"marketingContentDescription":[{"marketingText":"<link
       rel=\"stylesheet\" href=\"[imagePath]rwdWebAssets\/deptMainESpot\/styles.css\" \/> <div id=\"deptMainESpot\" class=\"container\">    <div id=\"deptMainESpot-bkgrd\">       <div id=\"deptMainESpot-bkgrd-couple\">          <div><\/div>       <\/div>       <div
       id=\"deptMainESpot-container\" class=\"espotCont\">          <div id=\"deptMainESpot-girl2\">    <!--[if IE 8]>       <img src=\"[imagePath]rwdWebAssets\/deptMainESpot\/female.png\"\/>    <![endif]-->    <!--[if gte IE 9]><!-->          <div><\/div>    <!--<![endif]-->          <\/div>          <div
       id=\"deptMainESpot-titleCont\">             <div class=\"title\">Fashionable <\/div>             <div class=\"title2\">Evening Wear<\/div>             <div class=\"title4\">Save on women''s dresses <br\/>and men''s suits<\/div>          <\/div>          <div

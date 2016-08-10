@@ -160,7 +160,7 @@ public class ContentSeoSegmentExternalReferenceResolverTest {
 
 
   private FragmentParameters parametersFor(Site site, Locale locale, String ref) {
-    String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;parameter=noLinkRewrite;placement=header;environment=site:site2";
+    String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;environment=site:site2";
     FragmentParameters params = FragmentParametersFactory.create(url);
     params.setExternalReference(ref);
     return params;

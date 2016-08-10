@@ -36,15 +36,15 @@ public class ProductDetailPage extends PageImpl {
 
   @Override
   public PageGrid getPageGrid() {
-    LiveContextExternalChannel externalChannel = getExternalChannel();
+    LiveContextExternalChannelImpl externalChannel = getExternalChannel();
     if (externalChannel==null) {
       throw new IllegalStateException("Must set an external channel before accessing the pagegrid.");
     }
     return externalChannel.getPdpPagegrid();
   }
 
-  protected LiveContextExternalChannel getExternalChannel() {
+  protected LiveContextExternalChannelImpl getExternalChannel() {
     // We ensured the type in the setter.  No need to check here.
-    return (LiveContextExternalChannel)getNavigation();
+    return (LiveContextExternalChannelImpl)getNavigation();
   }
 }

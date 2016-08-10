@@ -181,8 +181,8 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   }
 
   protected MarketingImage getMarketingImage(Map<String, Object> activity) {
-    String name = (String) DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentName");
-    String shortText = (String) DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentShortDescription");
+    String name = DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentName", String.class);
+    String shortText = DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentShortDescription", String.class);
     Locale currentLocale = StoreContextHelper.getLocale(StoreContextHelper.getCurrentContext());
     String currentLanguageId = "-1";
     if (currentLocale != null) {
@@ -215,10 +215,10 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   }
 
   protected MarketingText getMarketingText(Map<String, Object> activity) {
-    String text = (String) DataMapHelper.getValueForPath(activity, "marketingContentDescription.marketingText");
+    String text = DataMapHelper.getValueForPath(activity, "marketingContentDescription.marketingText", String.class);
     if (text == null) {
       //"makingText" is a typo by IBM in fep7...
-      text = (String) DataMapHelper.getValueForPath(activity, "marketingContentDescription.maketingText");
+      text = DataMapHelper.getValueForPath(activity, "marketingContentDescription.maketingText", String.class);
     }
     return new MarketingText(text);
   }

@@ -7,8 +7,8 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
-import com.coremedia.livecontext.context.CategoryInSite;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
@@ -110,9 +110,9 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return modelAndView;
   }
 
-  @Link(type = LiveContextExternalChannel.class)
+  @Link(type = LiveContextExternalChannelImpl.class)
   public Object buildLinkForExternalChannel(
-          final LiveContextExternalChannel navigation,
+          final LiveContextExternalChannelImpl navigation,
           final String viewName,
           final Map<String, Object> linkParameters) {
     // only responsible in non-preview mode
@@ -142,8 +142,8 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return buildCatalogLink(getLiveContextNavigationFactory().createNavigation(categoryInSite.getCategory(), categoryInSite.getSite()), viewName, linkParameters, false);
   }
 
-  @LinkPostProcessor(type = LiveContextExternalChannel.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
-  public Object makeAbsoluteUri(UriComponents originalUri, LiveContextExternalChannel liveContextNavigation, Map<String,Object> linkParameters, HttpServletRequest request) {
+  @LinkPostProcessor(type = LiveContextExternalChannelImpl.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
+  public Object makeAbsoluteUri(UriComponents originalUri, LiveContextExternalChannelImpl liveContextNavigation, Map<String,Object> linkParameters, HttpServletRequest request) {
     return doMakeAbsoluteUri(originalUri, liveContextNavigation, linkParameters, request);
   }
 

@@ -14,4 +14,5 @@ public interface CatalogRestErrorCodes {
 
   String CATALOG_INTERNAL_ERROR = "LC-01002";
 
+  String UNAUTHORIZED = "LC-01003";
 }

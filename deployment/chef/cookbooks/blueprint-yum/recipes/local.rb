@@ -21,6 +21,7 @@ unless local_repository_archive_url.empty?
 
   remote_file "#{Chef::Config[:file_cache_path]}/coremedia-rpm-repository.zip" do
     source local_repository_archive_url
+    backup false
     only_if { local_repository_archive_url =~ /(file|http(s)?):/ }
   end
 

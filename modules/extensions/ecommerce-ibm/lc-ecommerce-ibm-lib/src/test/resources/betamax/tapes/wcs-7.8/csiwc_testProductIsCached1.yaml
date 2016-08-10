@@ -1,12 +1,12 @@
 !tape
 name: csiwc_testProductIsCached1
 interactions:
-- recorded: 2016-05-19T09:27:16.044Z
+- recorded: 2016-07-20T12:09:45.192Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -17,9 +17,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
+      Date: Wed, 20 Jul 2016 12:09:44 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000sZFR2YEXpFSm6jja2HanIk_:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000fMCzNvIhRyta1xK1g7iEf9u:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
@@ -31,12 +31,12 @@ interactions:
       Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
       Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
       Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
-- recorded: 2016-05-19T09:27:16.056Z
+- recorded: 2016-07-20T12:09:45.480Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -47,18 +47,18 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
+      Date: Wed, 20 Jul 2016 12:09:45 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000Aawh1p8UpoTHi--u5vWzJNS:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000KpWJCHmwMXz85Ke_7kQ2HlQ:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
-- recorded: 2016-05-19T09:27:16.104Z
+- recorded: 2016-07-20T12:09:45.584Z
   request:
     method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/GFR033_3301?catalogId=10152&currency=USD&langId=-1
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/GFR033_3303?catalogId=10152&currency=USD&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -69,20 +69,20 @@ interactions:
       Cache-Control: no-transform, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
-      Expires: Thu, 19 May 2016 10:27:16 GMT
-      Set-Cookie: JSESSIONID=0000mdMoZoBi8eVPkoTBlLeD1iA:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Wed, 20 Jul 2016 12:09:45 GMT
+      Expires: Wed, 20 Jul 2016 13:09:45 GMT
+      Set-Cookie: JSESSIONID=0000mmIma5MjIFzbgsqIJ8NOjdI:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Vary: Accept
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/GFR033_3301?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"singleSKUUniqueID":"16653","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16652","productType":"ProductBean","name":"Oranges","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","manufacturer":"Sunshine","SKUs":[{"Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","identifier":"FruitBrand","comparable":"false","name":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","identifier":"FruitType","comparable":"true","name":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"SKUUniqueID":"16653","Price":[{"SKUPriceDescription":"I","SKUPriceValue":"1.6","SKUPriceUsage":"Offer"}]}],"numberOfSKUs":"1","title":"Oranges
-      | AuroraESite","partNumber":"GFR033_3301","shortDescription":"Sun drenched oranges.","buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete and balanced breakfast.","xcatentry_seoSegment":"oranges-gfr033-3301--1","parentCategoryID":"10135","metaKeyword":"
-      Sunshine","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.6"}],"xcatentry_cmSeoSegment":"10101_oranges-gfr033-3301--1","uniqueID":"16652","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"},{"usage":"Descriptive","Values":[{"values":"Large","identifier":"GFR033_3301","uniqueID":"7000000000000004633"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Size","comparable":"true","name":"Size","description":"Size","displayable":"true","uniqueID":"7000000000000000214"},{"usage":"Descriptive","Values":[{"values":"\/lb","identifier":"GFR033_3301","uniqueID":"7000000000000004655"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Price","comparable":"false","name":"Price","description":"Price","displayable":"true","uniqueID":"7000000000000000302"},{"usage":"Descriptive","Values":[{"values":"Citrus","identifier":"GFR033_3301","uniqueID":"7000000000000004666"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Type","comparable":"false","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000299"},{"usage":"Descriptive","Values":[{"values":"Fruit","identifier":"GFR033_3301","uniqueID":"7000000000000004644"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Category","comparable":"false","name":"Category","description":"Category","displayable":"true","uniqueID":"7000000000000000298"}],"metaDescription":"Sun
-      drenched oranges.","hasSingleSKU":"true","storeID":"10101","fullImageAltDescription":"Image for Oranges from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
-- recorded: 2016-05-19T09:27:16.127Z
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/GFR033_3303?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"singleSKUUniqueID":"16657","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16656","productType":"ProductBean","name":"Mangoes","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","manufacturer":"Sunshine","SKUs":[{"Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","identifier":"FruitBrand","comparable":"false","name":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Tropical","identifier":"Tropical","uniqueID":"7000000000000004624"}],"searchable":"false","identifier":"FruitType","comparable":"true","name":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"SKUUniqueID":"16657","Price":[{"SKUPriceDescription":"I","SKUPriceValue":"3.29","SKUPriceUsage":"Offer"}]}],"numberOfSKUs":"1","title":"Mangoes
+      | AuroraESite","partNumber":"GFR033_3303","shortDescription":"Succulent sweet mangoes.","buyable":"true","longDescription":"Mangoes are a delicious tropical delight. Rich in vitamins, antioxidants and minerals. Imported daily fresh from Peru.","xcatentry_seoSegment":"mangoes","parentCategoryID":"10135","metaKeyword":"
+      Sunshine","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"3.29"}],"xcatentry_cmSeoSegment":"10101_mangoes","uniqueID":"16656","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3303.jpg","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Tropical","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Tropical","uniqueID":"7000000000000004624"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"},{"usage":"Descriptive","Values":[{"values":"Medium","identifier":"GFR033_3303","uniqueID":"7000000000000004637"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Size","comparable":"true","name":"Size","description":"Size","displayable":"true","uniqueID":"7000000000000000214"},{"usage":"Descriptive","Values":[{"values":"\/lb","identifier":"GFR033_3303","uniqueID":"7000000000000004657"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Price","comparable":"false","name":"Price","description":"Price","displayable":"true","uniqueID":"7000000000000000302"},{"usage":"Descriptive","Values":[{"values":"Tropical","identifier":"GFR033_3303","uniqueID":"7000000000000004669"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Type","comparable":"false","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000299"},{"usage":"Descriptive","Values":[{"values":"Fruit","identifier":"GFR033_3303","uniqueID":"7000000000000004646"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Category","comparable":"false","name":"Category","description":"Category","displayable":"true","uniqueID":"7000000000000000298"}],"metaDescription":"Succulent
+      sweet mangoes.","hasSingleSKU":"true","storeID":"10101","fullImageAltDescription":"Image for Mangoes from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-07-20T12:09:45.821Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10135?catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -93,18 +93,18 @@ interactions:
       Cache-Control: no-transform, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
-      Expires: Thu, 19 May 2016 10:27:16 GMT
-      Set-Cookie: JSESSIONID=0000o0k5Yu0dipsSp7M3OigXrvx:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Wed, 20 Jul 2016 12:09:45 GMT
+      Expires: Wed, 20 Jul 2016 13:09:45 GMT
+      Set-Cookie: JSESSIONID=0000x9Bl7nKEStDB79HClWPqtFC:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Vary: Accept
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Fruit","metaKeyword":"Fruit","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135","identifier":"Fruit","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10135","parentCatalogGroupID":["10133"],"name":"Fruit","thumbnail":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","fullImage":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","uniqueID":"10135","xcatgroup_seoSegment":"fruit-10135--1","metaDescription":"Fruit","title":"Fruit
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Fruit","metaKeyword":"Fruit","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10135","identifier":"Fruit","productsURL":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10135","parentCatalogGroupID":["10133"],"name":"Fruit","thumbnail":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","fullImage":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","uniqueID":"10135","xcatgroup_seoSegment":"fruit-10135--1","metaDescription":"Fruit","title":"Fruit
       | AuroraESite","xcatgroup_cmSeoSegment":"10101_fruit-10135--1","fullImageAltDescription":"Image for Fruit from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
-- recorded: 2016-05-19T09:27:16.162Z
+- recorded: 2016-07-20T12:09:45.907Z
   request:
     method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byId/16653?catalogId=10152&currency=USD&langId=-1
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byId/16657?catalogId=10152&currency=USD&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -115,20 +115,20 @@ interactions:
       Cache-Control: no-transform, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
-      Expires: Thu, 19 May 2016 10:27:16 GMT
-      Set-Cookie: JSESSIONID=00004TYVkHZmckQSXgeQxpyFbNq:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Wed, 20 Jul 2016 12:09:45 GMT
+      Expires: Wed, 20 Jul 2016 13:09:45 GMT
+      Set-Cookie: JSESSIONID=0000bt8jf2WZvHFgYEN_qjnMTfD:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Vary: Accept
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16653?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"16652","shortDescription":"Sun
-      drenched oranges.","buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete and balanced breakfast.","xcatentry_seoSegment":"oranges-gfr033-330101--1","parentCategoryID":"10135","metaKeyword":"
-      Sunshine","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16653","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.6"}],"productType":"ItemBean","name":"Oranges","xcatentry_cmSeoSegment":"10101_oranges-gfr033-330101--1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","uniqueID":"16653","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","manufacturer":"Sunshine","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"metaDescription":"Sun
-      drenched oranges.","title":"Oranges | AuroraESite","partNumber":"GFR033_330101","storeID":"10101","fullImageAltDescription":"Image for Oranges from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
-- recorded: 2016-05-19T09:27:16.213Z
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16657?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"16656","shortDescription":"Succulent
+      sweet mangoes.","buyable":"true","longDescription":"Mangoes are a delicious tropical delight. Rich in vitamins, antioxidants and minerals. Imported daily fresh from Peru.","xcatentry_seoSegment":"mangoes-gfr033-330301","parentCategoryID":"10135","metaKeyword":"
+      Sunshine","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16657","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"3.29"}],"productType":"ItemBean","name":"Mangoes","xcatentry_cmSeoSegment":"10101_mangoes-gfr033-330301","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","uniqueID":"16657","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3303.jpg","manufacturer":"Sunshine","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Tropical","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Tropical","uniqueID":"7000000000000004624"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"metaDescription":"Succulent
+      sweet mangoes.","title":"Mangoes | AuroraESite","partNumber":"GFR033_330301","storeID":"10101","fullImageAltDescription":"Image for Mangoes from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-07-20T12:09:45.998Z
   request:
     method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byId/16652?catalogId=10152&currency=USD&langId=-1
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byId/16656?catalogId=10152&currency=USD&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -139,11 +139,11 @@ interactions:
       Cache-Control: no-transform, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
-      Expires: Thu, 19 May 2016 10:27:16 GMT
-      Set-Cookie: JSESSIONID=0000yXDmdkEaTM2ioviwU42EkcI:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Wed, 20 Jul 2016 12:09:45 GMT
+      Expires: Wed, 20 Jul 2016 13:09:46 GMT
+      Set-Cookie: JSESSIONID=0000FVOyCYKeOh7C-q8xjveJwCa:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Vary: Accept
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16652?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"singleSKUUniqueID":"16653","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16652","productType":"ProductBean","name":"Oranges","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","manufacturer":"Sunshine","SKUs":[{"Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","identifier":"FruitBrand","comparable":"false","name":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","identifier":"FruitType","comparable":"true","name":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"SKUUniqueID":"16653","Price":[{"SKUPriceDescription":"I","SKUPriceValue":"1.6","SKUPriceUsage":"Offer"}]}],"numberOfSKUs":"1","title":"Oranges
-      | AuroraESite","partNumber":"GFR033_3301","shortDescription":"Sun drenched oranges.","buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete and balanced breakfast.","xcatentry_seoSegment":"oranges-gfr033-3301--1","parentCategoryID":"10135","metaKeyword":"
-      Sunshine","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1.6"}],"xcatentry_cmSeoSegment":"10101_oranges-gfr033-3301--1","uniqueID":"16652","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Citrus","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Citrus","uniqueID":"7000000000000004622"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"},{"usage":"Descriptive","Values":[{"values":"Large","identifier":"GFR033_3301","uniqueID":"7000000000000004633"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Size","comparable":"true","name":"Size","description":"Size","displayable":"true","uniqueID":"7000000000000000214"},{"usage":"Descriptive","Values":[{"values":"\/lb","identifier":"GFR033_3301","uniqueID":"7000000000000004655"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Price","comparable":"false","name":"Price","description":"Price","displayable":"true","uniqueID":"7000000000000000302"},{"usage":"Descriptive","Values":[{"values":"Citrus","identifier":"GFR033_3301","uniqueID":"7000000000000004666"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Type","comparable":"false","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000299"},{"usage":"Descriptive","Values":[{"values":"Fruit","identifier":"GFR033_3301","uniqueID":"7000000000000004644"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Category","comparable":"false","name":"Category","description":"Category","displayable":"true","uniqueID":"7000000000000000298"}],"metaDescription":"Sun
-      drenched oranges.","hasSingleSKU":"true","storeID":"10101","fullImageAltDescription":"Image for Oranges from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16656?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"singleSKUUniqueID":"16657","resourceId":"http:\/\/toko-75-01-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16656","productType":"ProductBean","name":"Mangoes","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","manufacturer":"Sunshine","SKUs":[{"Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","identifier":"FruitBrand","comparable":"false","name":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Tropical","identifier":"Tropical","uniqueID":"7000000000000004624"}],"searchable":"false","identifier":"FruitType","comparable":"true","name":"Type","displayable":"true","uniqueID":"7000000000000000300"}],"SKUUniqueID":"16657","Price":[{"SKUPriceDescription":"I","SKUPriceValue":"3.29","SKUPriceUsage":"Offer"}]}],"numberOfSKUs":"1","title":"Mangoes
+      | AuroraESite","partNumber":"GFR033_3303","shortDescription":"Succulent sweet mangoes.","buyable":"true","longDescription":"Mangoes are a delicious tropical delight. Rich in vitamins, antioxidants and minerals. Imported daily fresh from Peru.","xcatentry_seoSegment":"mangoes","parentCategoryID":"10135","metaKeyword":"
+      Sunshine","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"3.29"}],"xcatentry_cmSeoSegment":"10101_mangoes","uniqueID":"16656","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3303.jpg","Attributes":[{"usage":"Defining","Values":[{"values":"Sunshine","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Sunshine","uniqueID":"7000000000000004629"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitBrand","comparable":"false","name":"Brand","description":"Brand","displayable":"true","uniqueID":"7000000000000000301"},{"usage":"Defining","Values":[{"values":"Tropical","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Tropical","uniqueID":"7000000000000004624"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"FruitType","comparable":"true","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000300"},{"usage":"Descriptive","Values":[{"values":"Medium","identifier":"GFR033_3303","uniqueID":"7000000000000004637"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Size","comparable":"true","name":"Size","description":"Size","displayable":"true","uniqueID":"7000000000000000214"},{"usage":"Descriptive","Values":[{"values":"\/lb","identifier":"GFR033_3303","uniqueID":"7000000000000004657"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Price","comparable":"false","name":"Price","description":"Price","displayable":"true","uniqueID":"7000000000000000302"},{"usage":"Descriptive","Values":[{"values":"Tropical","identifier":"GFR033_3303","uniqueID":"7000000000000004669"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Type","comparable":"false","name":"Type","description":"Type","displayable":"true","uniqueID":"7000000000000000299"},{"usage":"Descriptive","Values":[{"values":"Fruit","identifier":"GFR033_3303","uniqueID":"7000000000000004646"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"Category","comparable":"false","name":"Category","description":"Category","displayable":"true","uniqueID":"7000000000000000298"}],"metaDescription":"Succulent
+      sweet mangoes.","hasSingleSKU":"true","storeID":"10101","fullImageAltDescription":"Image for Mangoes from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

@@ -14,12 +14,12 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
@@ -66,6 +66,10 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   private Iterable<String> segments;
   private Collection<String> escapedContentTypes;
 
+  /**
+   * Constructor initializes this external reference resolver with a prefix to enable the resolver
+   * to match on a request.
+   */
   public SearchTermExternalReferenceResolver() {
     super(PREFIX);
   }
@@ -237,8 +241,8 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
       return result.get().getContent();
     }
 
-    LOG.info("No content found for site {} that matches the search term '{}'", site.getName(), searchTerm);
-    return getFallbackLinkable(site);
+    LOG.info("No content found for site {} that matches the search term '{}'. Will use the context '{}' instead.", site.getName(), searchTerm, context.getName());
+    return context;
   }
 
   /**
@@ -277,7 +281,8 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @return fallback linkable or null
    */
   @Nullable
-  protected Content getFallbackLinkable(Site site) {
+  @VisibleForTesting
+  Content getFallbackLinkable(Site site) {
     return site.getSiteRootDocument();
   }
 

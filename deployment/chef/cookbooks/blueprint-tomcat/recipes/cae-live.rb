@@ -42,7 +42,7 @@ node.default['blueprint']['webapps'][base_service_name]['application.properties'
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['livecontext.apache.live.production.wcs.host'] = "shop-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.host.helios'] = "helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.host.corporate'] = "corporate.#{node['blueprint']['hostname']}"
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['link.urlPrefixType'] = "live"
+node.default['blueprint']['webapps'][base_service_name]['application.properties']['link.urlPrefixType'] = 'live'
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.site.mapping.helios'] = "//helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.site.mapping.corporate'] = "//corporate.#{node['blueprint']['hostname']}"
 # by default disable periodic sitemap generation.
@@ -69,6 +69,10 @@ node.default['blueprint']['webapps'][base_service_name]['application.properties'
   node.default['blueprint']['proxy']['virtual_host']['delivery']['cluster'][service_name]['host'] = node['fqdn']
   node.default['blueprint']['proxy']['virtual_host']['delivery']['cluster'][service_name]['port'] = "#{port_prefix}80"
   node.override['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = cache_dir
+
+  # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
+  # and all transformed blobs are saved in memory
+  node.default['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"
 
   blueprint_tomcat_service service_name do
     base_service_name base_service_name

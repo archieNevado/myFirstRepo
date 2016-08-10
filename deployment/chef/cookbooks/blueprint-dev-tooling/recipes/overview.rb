@@ -26,8 +26,7 @@ end
 web_app '_overview' do
   application_name 'overview'
   server_name "overview.#{node['blueprint']['hostname']}"
-  template 'web_app.conf.erb'
-  cookbook 'apache2'
+  template 'overview_vhost.conf.erb'
   docroot www_dir.path
 end
 

@@ -32,6 +32,7 @@
     <module>workflow-server-extension-dependencies</module>
     <module>user-changes-extension-dependencies</module>
     <module>content-extension-dependencies</module>
+    <module>cmd-tools-extension-dependencies</module>
   </modules>
 
 </project>

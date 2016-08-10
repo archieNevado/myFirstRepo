@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.studio {
 import com.coremedia.cap.content.Content;
-import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
+import com.coremedia.cms.editor.sdk.util.ThumbnailResolverImpl;
 
 /**
  * Catalog content thumbnails not necessarily based on blobs but could be
@@ -18,7 +18,11 @@ public class CatalogTeaserThumbnailResolver extends CatalogThumbnailResolver {
   }
 
   private function renderLiveContextProductTeaserPreview(content:Content):Object {
-    var result:String = editorContext.getThumbnailUri(content, ImageLinkListRenderer.DEFAULT_CROPPING);
+    //manually build the lookup path since we can not access the editorContext which would result in a stackoverflow
+    var resolver:ThumbnailResolverImpl = new ThumbnailResolverImpl();
+    resolver.addMapping("CMProductTeaser", "pictures");
+    resolver.addMapping("CMPicture", "data");
+    var result:Object = resolver.getThumbnail(content, ImageLinkListRenderer.DEFAULT_CROPPING);
     if(result === undefined) {
       return undefined;
     }

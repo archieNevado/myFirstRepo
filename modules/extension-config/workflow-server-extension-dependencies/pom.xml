@@ -14,11 +14,19 @@
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>p13n-workflow</artifactId>
       <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>es-controlroom-workflow</artifactId>
       <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>logging-config</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>

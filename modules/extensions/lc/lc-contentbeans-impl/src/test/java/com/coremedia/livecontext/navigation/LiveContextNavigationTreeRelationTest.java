@@ -5,7 +5,7 @@ import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -60,7 +60,7 @@ public class LiveContextNavigationTreeRelationTest {
   private Content content;
 
   @Mock
-  private LiveContextExternalChannel externalChannel;
+  private LiveContextExternalChannelImpl externalChannel;
 
   @InjectMocks
   @Spy

@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000_R9GH361kFbsgMZbjyoFFWn:-1; Path=/; Domain=.toko-test-05.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -53,6 +54,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000Wn5bLVRLtKnbXuUgBbm04vW:-1; Path=/; Domain=.toko-test-05.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"contracts":{"4000000000000001007":"Exterior Architects (Preview-Contract)","4000000000000001008":"Interior Architects LLC gets 20% off lighting products and 15% off others (Preview-Contract)"}}'
 - recorded: 2016-05-23T15:28:54.187Z
   request:
@@ -76,7 +78,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000bLqHT_SBG0BeG_hSIUrWJRB:-1; Path=/; Domain=.toko-test-05.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
-      X-Betamax: PLAY
+
     body: '{"resultList":[{"usage":1,"referenceNumber":"4000000000000001007","name":"Contract for CoreMedia Preview Exterior"}]}'
 - recorded: 2016-05-23T15:28:54.234Z
   request:
@@ -100,5 +102,29 @@ interactions:
       Set-Cookie: JSESSIONID=0000peYmMCB1bhg2Bhw-K1eJ95S:-1; Path=/; Domain=.toko-test-05.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
-      X-Betamax: PLAY
+
     body: '{"resultList":[{"usage":1,"referenceNumber":"4000000000000001008","name":"Contract CoreMedia Preview Interior"}]}'
+- recorded: 2016-07-22T14:34:28.767Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:28 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000PcOz3PkdB0GmcU75kjOwJYL:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CRKKzK7PmpXdmR0pgMzKFhgUtiV%2BZ2KonCRTruHVWthpwDqNSsw519DU84Gi8rJEqWy0ZNJU2BjurnVl07YaNA%2B9d3PY9Um3mongo%2Fvo0SYPZC8EmX5cG68ai6qxS4RCWAA9Ba1pchnmHST56Lk3G3fSHAWUBz52sq4O8poMkL4EmCmY7UhsxkGYRBcqc5%2FVNtpvocXaXXsmvf7AEV6Daog%3D%3D","WCTrustedToken":"2%2CruCM3GtuWUmMmX%2F92z%2BuADC78nA%3D","personalizationID":"1469173833154-2"}'

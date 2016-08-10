@@ -21,7 +21,7 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['es
 node.default['blueprint']['webapps'][service_name]['application.properties']['es.cae.protocol'] = 'http'
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.studio.helios'] = "studio-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.corporate'] = "preview-corporate.#{node['blueprint']['hostname']}"
-node.default['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = "live"
+node.default['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = 'live'
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.helios'] = "http://preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.corporate'] = "http://preview-corporate.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.studio.corporate'] = "studio-corporate.#{node['blueprint']['hostname']}"
@@ -38,6 +38,10 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['li
 node.default['blueprint']['webapps'][service_name]['application.properties']['toolbox.jmx.url'] = 'service:jmx:rmi://localhost:40998/jndi/rmi://localhost:40999/jmxrmi'
 node.default['blueprint']['webapps'][service_name]['application.properties']['toolbox.authorized_groups'] = ''
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = '${catalina.home}/temp'
+# The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
+# and all transformed blobs are saved in memory
+node.default['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"
+
 node.override['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = cache_dir
 # inject wcs configuration
 node['blueprint']['wcs']['application.properties'].each_pair do |k, v|

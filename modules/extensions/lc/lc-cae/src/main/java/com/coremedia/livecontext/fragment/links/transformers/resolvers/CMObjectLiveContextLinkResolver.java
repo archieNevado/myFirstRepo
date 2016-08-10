@@ -4,8 +4,8 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
@@ -123,8 +123,8 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
         }
       }
       // Category in commerce are mapped by "CMExternalChannel" objects, LiveContextExternalChannel are instances of these
-      else if (bean instanceof LiveContextExternalChannel) {
-        LiveContextExternalChannel externalChannel = (LiveContextExternalChannel) bean;
+      else if (bean instanceof LiveContextExternalChannelImpl) {
+        LiveContextExternalChannelImpl externalChannel = (LiveContextExternalChannelImpl) bean;
         Category category = externalChannel.getCategory();
         if (category != null) {
           int level = category.getBreadcrumb().size();

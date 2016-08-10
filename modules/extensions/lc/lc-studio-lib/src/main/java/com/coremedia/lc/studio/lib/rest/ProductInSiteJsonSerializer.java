@@ -1,7 +1,7 @@
 package com.coremedia.lc.studio.lib.rest;
 
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.rest.linking.Linker;
 import org.codehaus.jackson.JsonGenerator;

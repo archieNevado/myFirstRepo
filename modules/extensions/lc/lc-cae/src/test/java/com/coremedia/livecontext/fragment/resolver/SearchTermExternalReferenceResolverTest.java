@@ -31,7 +31,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +49,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -257,19 +257,14 @@ public class SearchTermExternalReferenceResolverTest {
   @Test
   public void testResolveNotFound() {
     mockSearchResult();
-    assertResolve(resolver(), site.getSiteRootDocument());
+    assertResolve(resolver(), context);
   }
 
   @Test
   public void testResolveNotFoundFallback() {
     final Content fallback = mock(Content.class);
-    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver() {
-      @Nullable
-      @Override
-      protected Content getFallbackLinkable(Site site) {
-        return fallback;
-      }
-    };
+    SearchTermExternalReferenceResolver resolver = spy(new SearchTermExternalReferenceResolver());
+    doReturn(fallback).when(resolver).getFallbackLinkable(any(Site.class));
     configureResolver(resolver);
     resolver.afterPropertiesSet();
     mockSearchResult();
@@ -277,24 +272,7 @@ public class SearchTermExternalReferenceResolverTest {
     FragmentParameters params = parametersFor(site, PREFIX + SEARCH_TERM);
     LinkableAndNavigation linkableAndNavigation = resolver.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
-    assertEquals(fallback, linkableAndNavigation.getLinkable());
-  }
-
-  @Test
-  public void testResolveNotFoundWithoutFallback() {
-    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver() {
-      @Nullable
-      @Override
-      protected Content getFallbackLinkable(Site site) {
-        return null;
-      }
-    };
-    configureResolver(resolver);
-    resolver.afterPropertiesSet();
-    mockSearchResult();
-
-    FragmentParameters params = parametersFor(site, PREFIX + SEARCH_TERM);
-    assertNull(resolver.resolveExternalRef(params, site));
+    assertEquals(context, linkableAndNavigation.getLinkable());
   }
 
   // ---------------------------------------------------------------------- helper methods

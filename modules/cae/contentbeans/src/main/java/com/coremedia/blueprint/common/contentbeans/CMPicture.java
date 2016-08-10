@@ -2,6 +2,7 @@ package com.coremedia.blueprint.common.contentbeans;
 
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
+import com.coremedia.cap.transform.Transformation;
 
 import java.util.Collection;
 import java.util.List;
@@ -53,4 +54,15 @@ public interface CMPicture extends CMVisual {
    */
   @Override
   Blob getData();
+
+  /**
+   * Returns the available transformation definitions for this image.
+   * Image variants may differ if the site specific image variants are enabled.
+   */
+  List<Transformation> getTransformations();
+
+  /**
+   * Returns the transformation for the give name.
+   */
+  Transformation getTransformation(String name);
 }

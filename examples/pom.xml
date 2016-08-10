@@ -24,6 +24,7 @@
     <module>uapi-client</module>
     <module>importer-template</module>
     <module>resourcebundle-migration</module>
+    <module>resourcebundle-migration2</module>
   </modules>
 </project>
 

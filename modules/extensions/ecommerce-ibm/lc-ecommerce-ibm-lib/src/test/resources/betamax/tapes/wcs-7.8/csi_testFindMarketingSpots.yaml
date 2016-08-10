@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=00003ynbVU6yrkN3bkUup3tXpCb:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -52,6 +53,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000R-M2ESbhydWABSIx81OI_FR:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
 - recorded: 2016-05-19T09:27:44.279Z
   request:
@@ -75,6 +77,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000ai9_Ez6n_rWrjoH6WcxnGNU:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":189,"MarketingSpot":[{"uiDisplayable":1,"type":"MARKETING","description":"Display the main ad on About Dress Designer page","spotName":"AboutDressDesignerPageMainAd","spotId":"12439"},{"uiDisplayable":1,"type":"MARKETING","description":"Display
       the main ad on Apparel department page","spotName":"ApparelRow1_Content","spotId":"12438"},{"uiDisplayable":1,"type":"MARKETING","description":"Display ads on Apparel department page","spotName":"ApparelRow2_Content_Left","spotId":"12442"},{"uiDisplayable":1,"type":"MARKETING","description":"Display
       ads on Apparel department page","spotName":"ApparelRow2_Content_Right","spotId":"12443"},{"uiDisplayable":1,"type":"MARKETING","description":"Display category recommendations on Apparel department page.","spotName":"ApparelRow3_Categories","spotId":"12526"},{"uiDisplayable":1,"type":"MARKETING","description":"Display
@@ -174,3 +177,27 @@ interactions:
       Recommendation in Shoes for Women","spotName":"WomenShoesProductRight_CatEntries","spotId":"12448"},{"uiDisplayable":1,"type":"MARKETING","description":"Display ads on Shoes category page","spotName":"WomenShoesRow2_Content","spotId":"12518"},{"uiDisplayable":1,"type":"MARKETING","description":"Product
       Recommendation in Skirts for Women","spotName":"WomenSkirtsProductRight_CatEntries","spotId":"12446"},{"uiDisplayable":1,"type":"MARKETING","description":"Display ads on Skirts category page","spotName":"WomenSkirtsRow2_Content","spotId":"12519"},{"uiDisplayable":1,"type":"MARKETING","description":"Product
       Recommendation in Sweaters for Women ","spotName":"WomenSweatersProductRight_CatEntries","spotId":"12445"},{"uiDisplayable":1,"type":"MARKETING","description":"Display ads on Sweaters category page","spotName":"WomenSweatersRow2_Content","spotId":"12520"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/spot?q=byType&qType=MARKETING&catalogId=10152&currency=USD&langId=-1","resourceName":"spot","recordSetComplete":true,"recordSetStartNumber":0,"recordSetCount":189}'
+- recorded: 2016-07-22T14:34:43.136Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:43 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000GDG0YBlOZELTbxPI5g1LBUD:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CL2pnOro8S79z8hyQdyjD1uGPq16z6qTFMoTebFgGnlipanlp4uGarg1l%2Bz42jVS5LMCpEqUTCc5%2F7usrIStu7zRXVKqiyvU70pygSgmKmqAK3U2gg2ic2LK1ujzyS0%2F2RDmF5T4J0c7v07WYbylY9AZvB8b61Fs0UqxMhdLJcfmjhQoYSo3KsKqornlzepOsD4FCfRAF8x8YUEXC4%2FYVLQ%3D%3D","WCTrustedToken":"2%2ChUOhLIh1dMfpjgE%2B1rKIw1cyuu4%3D","personalizationID":"1469173833154-2"}'

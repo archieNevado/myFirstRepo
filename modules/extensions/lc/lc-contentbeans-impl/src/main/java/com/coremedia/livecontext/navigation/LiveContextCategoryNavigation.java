@@ -2,6 +2,7 @@ package com.coremedia.livecontext.navigation;
 
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cae.aspect.provider.AspectsProvider;
@@ -12,7 +13,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -73,6 +73,11 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
   public Navigation getParentNavigation() {
     Linkable parentOf = treeRelation.getParentOf(this);
     return parentOf instanceof Navigation ? (Navigation) parentOf : null;
+  }
+
+  @Override
+  public CMTheme getTheme() {
+    return getContext().getTheme();
   }
 
   @Override

@@ -3,8 +3,11 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.transform.TransformImageService;
+import com.coremedia.cap.transform.Transformation;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.Entry;
@@ -14,8 +17,6 @@ import static java.util.Map.Entry;
  */
 public class CMPictureImpl extends CMPictureBase {
   private static final String TRANSFORMS = "transforms";
-  private static final String DISABLE_CROPPING = "disableCropping";
-
 
   private TransformImageService transformImageService;
 
@@ -23,7 +24,7 @@ public class CMPictureImpl extends CMPictureBase {
    * Add additional methods here.
    * Add them to the interface {@link com.coremedia.blueprint.common.contentbeans.CMPicture} to make them public.
    */
-
+  @Required
   public void setTransformImageService(TransformImageService transformImageService) {
     this.transformImageService = transformImageService;
   }
@@ -69,7 +70,12 @@ public class CMPictureImpl extends CMPictureBase {
   }
 
   @Override
-  public boolean getDisableCropping() {
-    return getSettingsService().settingWithDefault(DISABLE_CROPPING, Boolean.class, false, getContent());
+  public List<Transformation> getTransformations() {
+    return transformImageService.getTransformations(getContent());
+  }
+
+  @Override
+  public Transformation getTransformation(String name) {
+    return transformImageService.getTransformation(this.getContent(), name);
   }
 }

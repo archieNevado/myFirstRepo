@@ -26,8 +26,13 @@
           <editor:derivedContentsList/>
         </items>
       </editor:collapsibleFormPanel>
-      <bpforms:resourceBundlesForm bindTo="{config.bindTo}"
-                                   collapsed="true"/>
+      <editor:collapsibleFormPanel title="{CustomLabels_properties.INSTANCE.PropertyGroup_ResourceBundles_label}"
+                                   cls="resource-bundle-panel"
+                                   itemId="resourceBundles">
+        <items>
+          <editor:linkListPropertyField propertyName="resourceBundles2" hideLabel="true"/>
+        </items>
+      </editor:collapsibleFormPanel>
     </items>
   </editor:documentForm>
 

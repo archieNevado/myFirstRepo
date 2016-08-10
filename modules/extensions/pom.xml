@@ -30,6 +30,7 @@
     <module>es-demodata</module>
     <module>es-p13n</module>
     <module>external-library</module>
+    <module>logging</module>
     <module>p13n</module>
     <module>nuggad</module>
     <module>shoutem</module>

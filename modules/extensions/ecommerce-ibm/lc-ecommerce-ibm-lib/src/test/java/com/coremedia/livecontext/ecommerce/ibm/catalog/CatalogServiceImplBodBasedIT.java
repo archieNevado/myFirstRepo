@@ -143,7 +143,6 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
     super.testFindSubCategories();
   }
 
-  @Betamax(tape = "csi_testFindSubCategoriesWithContract", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
   public void testFindSubCategoriesWithContract() throws Exception {

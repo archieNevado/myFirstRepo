@@ -1,11 +1,16 @@
 package com.coremedia.blueprint.elastic.social.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.elastic.core.api.templates.TemplateException;
 import com.coremedia.elastic.core.api.templates.TemplateService;
 import com.coremedia.elastic.core.api.templates.TemplateTokenException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeXml;
@@ -64,5 +69,17 @@ public class CMMailImpl extends CMMailBase implements CMMail {
       return e.getToken();
     }
     return null;
+  }
+
+  public TemplateError getTemplateError() {
+    TemplateError templateError = null;
+    try {
+      getExampleText();
+    } catch (TemplateTokenException e) {
+      templateError = new TemplateError("mailTemplate.tokenError.title", "mailTemplate.tokenError", e.getToken());
+    } catch (TemplateException e) {
+      templateError = new TemplateError("mailTemplate.syntaxError.title", "mailTemplate.syntaxError", e.getMessage());
+    }
+    return templateError;
   }
 }

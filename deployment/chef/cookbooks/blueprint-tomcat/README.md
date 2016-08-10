@@ -94,18 +94,19 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 # Attributes
 
 * `node['blueprint']['tomcat']['source']` - The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `nil`.
-* `node['blueprint']['tomcat']['source_checksum']` - The SHA-256 checksum of the tomcat installation zip. Defaults to `5835c4a06fc276dd2865d17d5fb1f0dd791f55fd0cba18824a5f0c8124284337`.
-* `node['blueprint']['tomcat']['version']` - The version of tomcat to install. Defaults to `7.0.67`.
+* `node['blueprint']['tomcat']['source_checksum']` - The SHA-256 checksum of the tomcat installation zip. Defaults to `f093d033cb84e104f9f00f120dc6f3b39471d8e12be8fc250374ac9891c257b1`.
+* `node['blueprint']['tomcat']['version']` - The version of tomcat to install. Defaults to `7.0.69`.
 * `node['blueprint']['tomcat']['java_home']` - The path to the java home for the tomcat services. Defaults to `/usr/lib/jvm/java`.
 * `node['blueprint']['tomcat']['catalina_opts']['agent']` - Global jvm agent opts. Use this to instrument the jvm for monitoring. Defaults to ``.
 * `node['blueprint']['tomcat']['catalina_opts']['gc']` - Global jvm garbage collection flags. Defaults to `-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+UseMembar`.
 * `node['blueprint']['tomcat']['catalina_opts']['network']` - Global jvm network system properties, the defaults disable IPv4 because IPv6 loopback over localhost currently does not work behind an apache. Defaults to `-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses`.
+* `node['blueprint']['tomcat']['catalina_opts']['out_of_memory']` - Global jvm option to handle OutOfMemoryError, the default stops the process using 'kill -9'. With Oracle JDK 8u92 or above, you could also use -XX:+ExitOnOutOfMemoryError. Defaults to `-XX:OnOutOfMemoryError=\'kill -9 %p\'`.
 * `node['blueprint']['tomcat']['cae-preview']['catalina_opts']['libjpeg']` -  Defaults to `-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}`.
 * `node['blueprint']['tomcat']['cae-live']['catalina_opts']['libjpeg']` -  Defaults to `-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}`.
 * `node['blueprint']['tomcat']['studio']['catalina_opts']['libjpeg']` -  Defaults to `-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}`.
 * `node['blueprint']['tomcat']['jmx_remote']` - A flag to enable/disable the jmx remote connector. Defaults to `true`.
 * `node['blueprint']['tomcat']['jmx_remote_jar_source']` - The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `nil`.
-* `node['blueprint']['tomcat']['jmx_remote_jar_source_checksum']` - The SHA-256 checksum of the catalina-jmx-remote.jar. Defaults to `c166ec1a40455717716ff7eaefb010cc20f322510098ab953bbf07f5c0642b77`.
+* `node['blueprint']['tomcat']['jmx_remote_jar_source_checksum']` - The SHA-256 checksum of the catalina-jmx-remote.jar. Defaults to `5fe0c568afe6f24998817bfb9e6a77e1b430112a52ed914d48a1f9a401f86fb1`.
 * `node['blueprint']['tomcat']['jmx_remote_authenticate']` - A flag to enable/disable remote jmx authentication. Defaults to `true`.
 * `node['blueprint']['tomcat']['jmx_remote_server_name']` - The server name under which the rmi server is registered. Set it to localhost and create a ssh tunnel(recommended) or set it to the actual hostname and open the ports and configure security and ssl. Defaults to `node['fqdn']`.
 * `node['blueprint']['tomcat']['jmx_remote_monitor_password']` - The password for the monitoring jmx role. Defaults to `monitor`.
@@ -113,8 +114,15 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['start_service']` - Start Services can be overridden using a more specific key, i.e. default['blueprint']['tomcat']['workflow-server']['start_service'] = false. Defaults to `true`.
 * `node['blueprint']['tomcat']['shutdown_force']` - This flag will force tomcat to kill the process using -KILL when shutdown_wait threshold is reached. Defaults to `true`.
 * `node['blueprint']['tomcat']['shutdown_wait']` - The time to wait for tomcat to shut down. Defaults to `40`.
+* `node['blueprint']['tomcat']['clean_log_dir_on_start']` - Set to true to delete logs before start, this only works if the log appender file is set. Defaults to `false`.
 * `node['blueprint']['tomcat']['context_config']['listener']['shutdown_listener']['className']` - The failed context shutdown listener to stop tomcat if the context failed. Defaults to `com.coremedia.tomcat.FailedContextShutdownServerListener`.
 * `node['blueprint']['tomcat']['context_config']['session_cookie_name']` - The global session cookie name. Defaults to `CM_SESSIONID`.
+* `node['blueprint']['tomcat']['logback_config']['logger']['com.coremedia']` - The default log level for all loggers beneath 'com.coremedia', you may override this on service level. Defaults to `info`.
+* `node['blueprint']['tomcat']['logback_config']['logger']['hox.corem']` - The default log level for all loggers beneath 'hox.corem', you may override this on service level. Defaults to `info`.
+* `node['blueprint']['tomcat']['logback_config']['logger']['org.springframework']` - The default log level for all loggers beneath 'org.springframework', you may override this on service level. Defaults to `warn`.
+* `node['blueprint']['tomcat']['logback_config']['includes']` - The default logback configuration to include from the classpath. Defaults to `[ ... ]`.
+* `node['blueprint']['tomcat']['logback_config']['appender']` - The default appender, possible other values depend on the includes. Defaults to `[ ... ]`.
+* `node['blueprint']['tomcat']['logback_config']['properties']['log.pattern']` - The default log pattern, because ruby escapes the backslash we need to use 4 backslashes here. Defaults to `%d{yyyy-MM-dd HH:mm:ss} %-7([%level]) %logger [%X{tenant}] - %message \\\\(%thread\\\\)%n`.
 * `node['blueprint']['tomcat']['content-management-server']['heap']` -  Defaults to `512m`.
 * `node['blueprint']['tomcat']['workflow-server']['heap']` -  Defaults to `384m`.
 * `node['blueprint']['tomcat']['master-live-server']['heap']` -  Defaults to `384m`.
@@ -122,7 +130,7 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['user-changes']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['elastic-worker']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['content-feeder']['heap']` -  Defaults to `256m`.
-* `node['blueprint']['tomcat']['studio']['heap']` -  Defaults to `384m`.
+* `node['blueprint']['tomcat']['studio']['heap']` -  Defaults to `512m`.
 * `node['blueprint']['tomcat']['adobe-drive-server']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['cae-preview']['heap']` -  Defaults to `1024m`.
 * `node['blueprint']['tomcat']['cae-live']['heap']` -  Defaults to `1024m`.

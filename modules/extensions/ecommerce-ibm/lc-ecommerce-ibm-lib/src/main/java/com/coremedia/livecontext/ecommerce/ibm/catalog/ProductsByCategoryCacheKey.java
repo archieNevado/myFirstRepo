@@ -1,10 +1,11 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import com.coremedia.cache.Cache;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,15 +17,16 @@ public class ProductsByCategoryCacheKey extends AbstractCommerceCacheKey<List<Ma
 
   public ProductsByCategoryCacheKey(String id,
                                     StoreContext storeContext,
+                                    UserContext userContext,
                                     WcCatalogWrapperService wrapperService,
                                     CommerceCache commerceCache) {
-    super(id, storeContext, CONFIG_KEY_PRODUCTS_BY_CATEGORY, commerceCache);
+    super(id, storeContext, userContext, CONFIG_KEY_PRODUCTS_BY_CATEGORY, commerceCache);
     this.wrapperService = wrapperService;
   }
 
   @Override
   public List<Map<String, Object>> computeValue(Cache cache) {
-    return wrapperService.findProductsByCategoryId(id, storeContext);
+    return wrapperService.findProductsByCategoryId(id, storeContext, userContext);
   }
 
   @Override

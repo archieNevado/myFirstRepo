@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ProductAttributeImpl implements ProductAttribute {
+class ProductAttributeImpl implements ProductAttribute {
 
   private Map<String, Object> delegate;
 
-  public ProductAttributeImpl(Map<String, Object> delegate) {
+  ProductAttributeImpl(Map<String, Object> delegate) {
     this.delegate = delegate;
   }
 

@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000xEMhJctCG5hFLDdiUJ4WDbm:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
@@ -53,6 +54,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000N-9ynP4XC_FwlGTQ05adku3:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
 - recorded: 2016-05-23T15:47:00.978Z
@@ -78,5 +80,31 @@ interactions:
       Set-Cookie: JSESSIONID=0000-93m2D7g7rFViA64qWyPIam:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
       Surrogate-Control: no-store
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"workspaces":[{"id":"10001","description":"The workspace for anniversary loyalty campaign tasks","name":"Anniversary Loyalty Campaign","identifier":"W_10001"},{"id":"10002","description":"The workspace for routine updates to catalog and marketing","name":"Maintenance","identifier":"W_10002"}],"storeId":"715838084"}'
+- recorded: 2016-07-25T15:36:27.944Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 25 Jul 2016 15:36:28 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000tU3E3zUTA0Xn24HLLE4eMOJ:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
+      Surrogate-Control: no-store
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"WCToken":"2%2C1y%2Bpz5khEgz85i8Ro6HrUgl4Brc33f0dyInbrjd4nu%2FCjexBpt3TjDhAH3RwND%2F9LAYHAq23%2B9MWvt3HLhMd57yVA%2B%2BDC2hvWGaV0ySjWHpx7mhwnxI%2B0LPER7Yf6h0Rk3MT4EW9KahLLEaaOp3I3uOlnr62%2Bh1V9eMVcoaSJPg42wZOiuA%2Bn7V3DWKLweEr98ZhEH%2BkBEKDRv7B4Wo3RbJXOWfbObYbome1LZQtcD4%3D","userId":"2","WCTrustedToken":"2%2CfTJtShUhHGFk9JCV%2BZePHSVYMnVXyTlxF%2FH20Wy1frI%3D","personalizationID":"1469420030228-2"}'

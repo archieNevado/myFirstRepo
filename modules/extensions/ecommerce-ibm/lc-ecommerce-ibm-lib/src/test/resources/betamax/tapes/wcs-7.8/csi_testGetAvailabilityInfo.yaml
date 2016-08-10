@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000zk4Lm_ScZpDp8sqcAuIxTYd:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -51,6 +52,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:39 GMT
       Set-Cookie: JSESSIONID=0000dIsK6OjBj6Z0BgVzrWpNlan:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/AuroraWMDRS-1?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"productType":"ProductBean","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13951","name":"Hermitage
       Fit and Flare Dress","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","Attachments":[{"usage":"SWATCH_IMAGE","path":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_red_s.jpg","ID":"3233","mimeType":"image\/jpg","MetaData":[{"metaKey":"identifier","metaData":"AuroraWMDRS-1_swatchcolor_Red"}]},{"usage":"SWATCH_IMAGE","path":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_teal_s.jpg","ID":"3234","mimeType":"image\/jpg","MetaData":[{"metaKey":"identifier","metaData":"AuroraWMDRS-1_swatchcolor_Teal"}]},{"usage":"SWATCH_IMAGE","path":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_blue_s.jpg","ID":"3235","mimeType":"image\/jpg","MetaData":[{"metaKey":"identifier","metaData":"AuroraWMDRS-1_swatchcolor_Blue"}]}],"manufacturer":"Hermitage
       Collection","SKUs":[{"Attributes":[{"usage":"Defining","Values":[{"values":"XS","identifier":"XS","uniqueID":"7000000000000002954"}],"searchable":"false","identifier":"swatchSize","comparable":"true","name":"Available Sizes","displayable":"true","uniqueID":"7000000000000000201"},{"usage":"Defining","Values":[{"values":"Red","identifier":"Red","uniqueID":"7000000000000002957"}],"searchable":"false","identifier":"swatchcolor","comparable":"true","name":"Color","displayable":"true","uniqueID":"7000000000000000202"}],"SKUUniqueID":"13990","Price":[{"SKUPriceDescription":"I","SKUPriceValue":"100.0","SKUPriceUsage":"Offer"}]},{"Attributes":[{"usage":"Defining","Values":[{"values":"M","identifier":"M","uniqueID":"7000000000000002952"}],"searchable":"false","identifier":"swatchSize","comparable":"true","name":"Available
@@ -294,7 +296,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:39 GMT
       Set-Cookie: JSESSIONID=0000A1ih2eNZMlJZf0RHJYeTw4D:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
-      X-Betamax: PLAY
+
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13997?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"13951","shortDescription":"Jewel-toned
       cocktail dress with fitted bodice and gently flared skirt","buyable":"true","longDescription":"Classically tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","xcatentry_seoSegment":"hermitage-fit-and-flare-dress-aurorawmdrs-008","parentCategoryID":"10106","metaKeyword":"
       Hermitage Collection","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13997","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"100.0"}],"productType":"ItemBean","name":"Hermitage Fit
@@ -323,7 +325,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:39 GMT
       Set-Cookie: JSESSIONID=000042K8Fyr2c-RlXTREAGPpMAv:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
-      X-Betamax: PLAY
+
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13998?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"13951","shortDescription":"Jewel-toned
       cocktail dress with fitted bodice and gently flared skirt","buyable":"true","longDescription":"Classically tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","xcatentry_seoSegment":"hermitage-fit-and-flare-dress-aurorawmdrs-009","parentCategoryID":"10106","metaKeyword":"
       Hermitage Collection","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13998","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"100.0"}],"productType":"ItemBean","name":"Hermitage Fit
@@ -352,7 +354,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:39 GMT
       Set-Cookie: JSESSIONID=0000OefC9TQq43LyIYhIHDvRq-p:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
-      X-Betamax: PLAY
+
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13999?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"13951","shortDescription":"Jewel-toned
       cocktail dress with fitted bodice and gently flared skirt","buyable":"true","longDescription":"Classically tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","xcatentry_seoSegment":"hermitage-fit-and-flare-dress-aurorawmdrs-010","parentCategoryID":"10106","metaKeyword":"
       Hermitage Collection","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13999","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"100.0"}],"productType":"ItemBean","name":"Hermitage Fit
@@ -381,7 +383,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:39 GMT
       Set-Cookie: JSESSIONID=0000QGwFj-jzKGqmYI5lx-Nak0y:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
-      X-Betamax: PLAY
+
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/14000?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"parentProductID":"13951","shortDescription":"Jewel-toned
       cocktail dress with fitted bodice and gently flared skirt","buyable":"true","longDescription":"Classically tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","xcatentry_seoSegment":"hermitage-fit-and-flare-dress-aurorawmdrs-011","parentCategoryID":"10106","metaKeyword":"
       Hermitage Collection","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/14000","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"100.0"}],"productType":"ItemBean","name":"Hermitage Fit
@@ -469,6 +471,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000qrBUn8XjTUHdK4KIHR7CVjo:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
 - recorded: 2016-05-19T09:27:39.061Z
   request:
@@ -492,7 +495,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000RfWgpwfwX1NUXtFZ9vM4dQk:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
-      X-Betamax: PLAY
+
     body: '{"InventoryAvailability":[{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13990","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13991","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13992","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13993","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13994","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13995","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13996","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13997","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13998","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13999","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"14000","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"14001","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"14002","inventoryStatus":"Available"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/inventoryavailability\/13990,13991,13992,13993,13994,13995,13996,13997,13998,13999,14000,14001,14002?catalogId=10152&langId=-1","resourceName":"inventoryavailability"}'
 - recorded: 2016-05-19T09:27:39.086Z
   request:
@@ -516,6 +519,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000GD6j9gqYZo-JsU9dr8WYpEP:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"InventoryAvailability":[{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13990","inventoryStatus":"Available"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/inventoryavailability\/13990?catalogId=10152&langId=-1","resourceName":"inventoryavailability"}'
 - recorded: 2016-05-19T09:27:39.147Z
   request:
@@ -537,6 +541,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:39 GMT
       Set-Cookie: JSESSIONID=0000TPYo-Qk-nGcdZ4h3g3Bmwx0:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13951?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetComplete":"true","recordSetStartNumber":"0","CatalogEntryView":[{"productType":"ProductBean","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/13951","name":"Hermitage
       Fit and Flare Dress","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","Attachments":[{"usage":"SWATCH_IMAGE","path":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_red_s.jpg","ID":"3233","mimeType":"image\/jpg","MetaData":[{"metaKey":"identifier","metaData":"AuroraWMDRS-1_swatchcolor_Red"}]},{"usage":"SWATCH_IMAGE","path":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_teal_s.jpg","ID":"3234","mimeType":"image\/jpg","MetaData":[{"metaKey":"identifier","metaData":"AuroraWMDRS-1_swatchcolor_Teal"}]},{"usage":"SWATCH_IMAGE","path":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_blue_s.jpg","ID":"3235","mimeType":"image\/jpg","MetaData":[{"metaKey":"identifier","metaData":"AuroraWMDRS-1_swatchcolor_Blue"}]}],"manufacturer":"Hermitage
       Collection","SKUs":[{"Attributes":[{"usage":"Defining","Values":[{"values":"XS","identifier":"XS","uniqueID":"7000000000000002954"}],"searchable":"false","identifier":"swatchSize","comparable":"true","name":"Available Sizes","displayable":"true","uniqueID":"7000000000000000201"},{"usage":"Defining","Values":[{"values":"Red","identifier":"Red","uniqueID":"7000000000000002957"}],"searchable":"false","identifier":"swatchcolor","comparable":"true","name":"Color","displayable":"true","uniqueID":"7000000000000000202"}],"SKUUniqueID":"13990","Price":[{"SKUPriceDescription":"I","SKUPriceValue":"100.0","SKUPriceUsage":"Offer"}]},{"Attributes":[{"usage":"Defining","Values":[{"values":"M","identifier":"M","uniqueID":"7000000000000002952"}],"searchable":"false","identifier":"swatchSize","comparable":"true","name":"Available
@@ -557,3 +562,27 @@ interactions:
       Sizes","description":"Available Sizes","displayable":"true","uniqueID":"7000000000000000201"},{"usage":"Descriptive","Values":[{"values":"Knit","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Knit","uniqueID":"7000000000000002975"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"construction","comparable":"true","name":"Construction","description":"construction","displayable":"true","uniqueID":"7000000000000000203"},{"usage":"Descriptive","Values":[{"values":"Short","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Short","uniqueID":"7000000000000002977"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"length","comparable":"true","name":"Length","description":"length","displayable":"true","uniqueID":"7000000000000000204"},{"usage":"Descriptive","Values":[{"values":"Synthetic","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Synthetic","uniqueID":"7000000000000002980"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"material","comparable":"true","name":"Material","description":"material","displayable":"true","uniqueID":"7000000000000000205"},{"usage":"Descriptive","Values":[{"values":"Cocktail
       & Evening","extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"identifier":"Cocktail & Evening","uniqueID":"7000000000000002987"}],"searchable":"false","dataType":"STRING","ExtendedValue":[{"extValue":"C62"}],"identifier":"occasion","comparable":"true","name":"Occasion","description":"occasion","displayable":"true","uniqueID":"7000000000000000206"}],"subscriptionType":"NONE","metaDescription":"Jewel-toned
       cocktail dress with fitted bodice and gently flared skirt","disallowRecOrder":"true","hasSingleSKU":"false","storeID":"10101","fullImageAltDescription":"Image for Hermitage Fit and Flare Dress from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-07-22T14:34:37.909Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:37 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00002hzB9ftXSvDUGkvC3s90DgE:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CV%2B%2FfC%2F07WRrb3j80fqGGGvkF3EPE3LMCnF7RBxNZNZE2M74NDFdnhCB5fSmVJxcUW59XGI6xLPmPPnc%2FDDm0df1zZhN3497gqNqnVdyO3mKDcyrws7GJQH2dSyVGv%2Bcci1fTFyBjaz533FZSFXswjV3l3sL1OiLRX4meVi4TKZA8b556Q2lT0Dzx6w8BkpN2w6%2F8SxrhlhCgfbZPZL%2FJ6A%3D%3D","WCTrustedToken":"2%2CLBAV43OvWMxoQcYEYQ5Uqke1Zuk%3D","personalizationID":"1469173833154-2"}'

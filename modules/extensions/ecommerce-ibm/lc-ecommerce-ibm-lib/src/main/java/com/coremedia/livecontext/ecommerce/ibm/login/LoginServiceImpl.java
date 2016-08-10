@@ -4,7 +4,9 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.security.encryption.util.EncryptionServiceUtil;
 import com.coremedia.springframework.beans.RequiredPropertyNotSetException;
@@ -37,6 +39,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
   private static final Logger LOG = LoggerFactory.getLogger(LoginServiceImpl.class);
 
   private static final String REQUEST_ATTRIB_PREVIEW_TOKEN = LoginServiceImpl.class.getName()+"#previewToken";
+  private static final String ERROR_CODE_NOT_AUTHORIZED = "2110";
 
   private String serviceUser;
   private String servicePassword;
@@ -115,9 +118,19 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
   @Override
   public WcCredentials loginIdentity(String username, String password) throws CommerceException {
     StoreContext storeContext = StoreContextHelper.getCurrentContext();
-    WcSession session = loginWrapperService.login(username, password,storeContext);
-    if (session != null) {
-      return new SimpleCommerceCredentials(StoreContextHelper.getStoreId(storeContext), session);
+    try {
+      WcSession session = loginWrapperService.login(username, password, storeContext);
+      if (session != null) {
+        return new SimpleCommerceCredentials(StoreContextHelper.getStoreId(storeContext), session);
+      }
+    }
+    catch (CommerceRemoteException e) {
+      // with fep7 a CommerceRemoteException occurs when the user cannot be authorized
+      // to have it uniformly we map it to an UnauthorizedException
+      if (ERROR_CODE_NOT_AUTHORIZED.equals(e.getErrorCode())) {
+        throw new UnauthorizedException(e.getMessage(), e.getResultCode());
+      }
+      throw e;
     }
     return null;
   }

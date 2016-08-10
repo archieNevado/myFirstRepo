@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
-   <!--obey the ordering:
-   1. imports
-   2. beans & customizer-->
+  <context:annotation-config/>
+
+  <!--obey the ordering:
+  1. imports
+  2. beans & customizer-->
 
   <!-- Import Framework Configuration -->
   <import resource="classpath:/framework/spring/workflowserver.xml"/>
@@ -24,5 +28,27 @@
     <property name="capConnection" ref="connection"/>
     <property name="siteModel" ref="siteModel"/>
   </bean>
+
+  <!--
+    Regularly clean up "in translation" states left over by aborted workflows.
+   -->
+
+  <bean id="defaultTranslationWorklowDerivedContentsStrategy" class="com.coremedia.translate.workflow.DefaultTranslationWorkflowDerivedContentsStrategy">
+    <description>
+      A strategy for extracting derived contents from the default translation.xml workflow definition.
+      You can alter this definition and/or add additional strategy beans when using a modified translation workflow.
+    </description>
+    <property name="processDefinitionName" value="Translation"/>
+    <property name="derivedContentsVariable" value="derivedContents"/>
+    <property name="masterContentObjectsVariable" value="masterContentObjects"/>
+  </bean>
+
+  <bean id="cleanInTranslation" class="com.coremedia.translate.workflow.impl.CleanInTranslation"/>
+
+  <task:scheduler id="cleanInTranslationScheduler"/>
+
+  <task:scheduled-tasks scheduler="cleanInTranslationScheduler">
+    <task:scheduled ref="cleanInTranslation" method="run" initial-delay="10000" fixed-delay="5000"/>
+  </task:scheduled-tasks>
 
 </beans>

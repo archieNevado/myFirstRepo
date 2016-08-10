@@ -6,7 +6,7 @@ import com.coremedia.blueprint.cae.sitemap.SitemapUrlGenerator;
 import com.coremedia.blueprint.cae.sitemap.UrlCollector;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.context.LiveContextNavigation;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;

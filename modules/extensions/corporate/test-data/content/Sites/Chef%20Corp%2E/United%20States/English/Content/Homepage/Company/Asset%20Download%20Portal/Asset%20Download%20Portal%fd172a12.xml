@@ -14,8 +14,8 @@
 </localSettings>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment>asset-download-portal</segment>
 <title>Asset Download Portal</title>
 <htmlTitle></htmlTitle>
@@ -38,13 +38,19 @@
 </children>
 <hidden>0</hidden>
 <javaScript>
-<link href="../../../../../../../../Themes/corporate/corporate%2Ejs.xml" path="/Themes/corporate/corporate%2Ejs"/>
-<link href="../../../../../../../../Themes/am/am%2Ejs.xml" path="/Themes/am/am%2Ejs"/>
+<link href="../../../../../../../../Themes/basic/js/jquery%2Ecoremedia%2Eutils%2Ejs.xml" path="/Themes/basic/js/jquery%2Ecoremedia%2Eutils%2Ejs"/>
+<link href="../../../../../../../../Themes/basic/js/coremedia%2Eblueprint%2EnodeDecorationService%2Ejs.xml" path="/Themes/basic/js/coremedia%2Eblueprint%2EnodeDecorationService%2Ejs"/>
+<link href="../../../../../../../../Themes/basic/js/coremedia%2Eblueprint%2Ebasic%2Ejs.xml" path="/Themes/basic/js/coremedia%2Eblueprint%2Ebasic%2Ejs"/>
+<link href="../../../../../../../../Themes/basic/js/coremedia%2Eblueprint%2EhashBasedFragment%2Ejs.xml" path="/Themes/basic/js/coremedia%2Eblueprint%2EhashBasedFragment%2Ejs"/>
+<link href="../../../../../../../../Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Ejs.xml" path="/Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Ejs"/>
+<link href="../../../../../../../../Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Einit%2Ejs.xml" path="/Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Einit%2Ejs"/>
 </javaScript>
 <css>
-<link href="../../../../../../../../Themes/corporate/corporate%2Ecss.xml" path="/Themes/corporate/corporate%2Ecss"/>
-<link href="../../../../../../../../Themes/am/am%2Ecss.xml" path="/Themes/am/am%2Ecss"/>
+<link href="../../../../../../../../Themes/basic/css/main%2Ecss.xml" path="/Themes/basic/css/main%2Ecss"/>
+<link href="../../../../../../../../Themes/am/css/am%2Ecss.xml" path="/Themes/am/css/am%2Ecss"/>
 </css>
+<theme>
+</theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">

@@ -248,7 +248,8 @@ Font files should be included in the cookbooks
 - `:install` - install a font to the system fonts directory.
 
 #### Attribute Parameters
-- `file` - The name of the font file name to install. It should exist in the files/default directory of the cookbook you're calling windows_font from. Defaults to the resource name.
+- `file` - The name of the font file name to install. The path defaults to the files/default directory of the cookbook you're calling windows_font from. Defaults to the resource name.
+- `source` - Set an alternate path to the font file.
 
 #### Examples
 
@@ -660,6 +661,7 @@ Server 2008 due to API usage.
 - `interactive_enabled` - (Allow task to run interactively or non-interactively.  Requires user and password.)
 - `day` - For monthly or weekly tasks, the day(s) on which the task runs.  (MON - SUN, *, 1 - 31)
 - `months` - The Months of the year on which the task runs. (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, *). Multiple months should be comma delimited.
+- `idle_time` - For :on_idle frequency, the time (in minutes) without user activity that must pass to trigger the task. (1 - 999)
 
 #### Examples
 
@@ -816,6 +818,7 @@ expect(chef_run).to install_windows_package('Node.js').with(
 * delete_windows_feature
 * create_windows_task
 * disable_windows_task
+* enable_windows_task
 * delete_windows_task
 * run_windows_task
 * change_windows_task

@@ -2,7 +2,7 @@ package com.coremedia.livecontext.elastic.social.rest;
 
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.rest.api.JsonProperties;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;

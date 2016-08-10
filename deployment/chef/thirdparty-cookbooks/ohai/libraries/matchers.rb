@@ -1,14 +1,7 @@
 # encoding: utf-8
 
 if defined?(ChefSpec)
-  if ChefSpec.respond_to?(:define_matcher)
-    # ChefSpec >= 4.1
-    ChefSpec.define_matcher(:ohai_hint)
-  elsif defined?(ChefSpec::Runner) &&
-        ChefSpec::Runner.respond_to?(:define_runner_method)
-    # ChefSpec < 4.1
-    ChefSpec::Runner.define_runner_method(:ohai_hint)
-  end
+  ChefSpec.define_matcher :ohai_hint
 
   def create_ohai_hint(resource)
     ChefSpec::Matchers::ResourceMatcher.new(:ohai_hint, :create, resource)
@@ -18,4 +11,11 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:ohai_hint, :delete, resource)
   end
 
+  def create_ohai_plugin(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:ohai_plugin, :create, resource)
+  end
+
+  def delete_ohai_plugin(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:ohai_plugin, :delete, resource)
+  end
 end

@@ -48,3 +48,13 @@ When the box has converged and is running use the links from the Overview page a
 [Chef Setup](./documentation/chef-setup.md)
 [Development how-to](./documentation/how-to.md)                                                                                                      
                                                                                                      
+Tutorials
+---------
+
+Below the folder `documentation` you will find several tutorials `*-tutorial.md`. 
+
+* [apache](./documentation/apache-tutorial.md) - This tutorial is for developers that need to change apache rewrite rules or need to add new virtualhost definitions.
+* [apache-box](./documentation/apache-box-tutorial.md) - This tutorial is for Studio or CAE developers to quickly setup their system.
+* [boxed-system](./documentation/boxed-system-tutorial.md) - This tutorial is for developers that want to change basics in the Chef deployment.
+* [deployment-archive](./documentation/deployment-archive-tutorial.md) - This tutorial is for developers that want to simply deploy a system with `chef-solo`.  
+                                                                                                     

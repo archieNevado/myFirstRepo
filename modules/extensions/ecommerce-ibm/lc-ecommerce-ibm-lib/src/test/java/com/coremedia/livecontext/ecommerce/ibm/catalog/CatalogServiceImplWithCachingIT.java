@@ -6,9 +6,11 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,9 +36,9 @@ import static org.mockito.Mockito.verify;
 public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
 
   //Rest response values
-  private static final String PRODUCT_CODE = "GFR033_3301";
-  private static final String PRODUCT_SEO = "oranges-gfr033-3301--1";
-  private static final String SKU_CODE = "GFR033_330101";
+  private static final String PRODUCT_CODE = "GFR033_3303";
+  private static final String PRODUCT_SEO = "mangoes";
+  private static final String SKU_CODE = "GFR033_330301";
   private static final String CATEGORY_CODE = "Fruit";
   private static final String CATEGORY_SEO = "medicine";
 
@@ -80,7 +82,10 @@ public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
    */
   @Test
   public void testProductCacheEntryIsCorrectlyTimedOut() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) return;
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+      return;
+    }
+
     testling.getCommerceCache().clear();
     Product product1 = testling.findProductByExternalId(PRODUCT_CODE);
     assertEquals(PRODUCT_CODE, product1.getExternalId());
@@ -184,18 +189,18 @@ public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
     accessCategoryBySeoSegment();
     verifyConnectorIsNotCalled(instrumentedConnector);
   }
-  
+
   private void verifyConnectorIsNotCalled(WcRestConnector connector) {
     verify(connector, times(0)).callServiceInternal(
-      any(WcRestConnector.WcRestServiceMethod.class),
-      any(List.class),
-      any(Map.class),
-      any(Object.class),
-      any(StoreContext.class),
-      any(UserContext.class)
+            any(WcRestServiceMethod.class),
+            any(List.class),
+            any(Map.class),
+            any(Object.class),
+            any(StoreContext.class),
+            any(UserContext.class)
     );
   }
-  
+
   private void accessProductByExternalId() throws Exception {
     Product product = testling.findProductByExternalId(PRODUCT_CODE);
     accessProduct(product);
@@ -319,5 +324,4 @@ public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
       Thread.currentThread().interrupt();
     }
   }
-
 }

@@ -5,8 +5,10 @@ var coremedia = (function (module) {
   return module;
 }(coremedia || {}));
 coremedia.blueprint = (function (module) {
+  module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
+
 coremedia.blueprint.hashBasedFragment = (function (module) {
 
   var $ = coremedia.blueprint.$;

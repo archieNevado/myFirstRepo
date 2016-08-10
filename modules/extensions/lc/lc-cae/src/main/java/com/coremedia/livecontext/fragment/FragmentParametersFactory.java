@@ -22,21 +22,25 @@ import java.util.Scanner;
  */
 public class FragmentParametersFactory {
 
+  private FragmentParametersFactory() {
+  }
+
   /**
    * Factory method for creating the FragmentParameters by URL parsing and reading header values as context parameters.
    * Although the fragment request itself is mapped in the {@see FragmentPageHandler} the parameters
    * are needed before, since they are already read by filters and interceptors.
    * @param requestUrl The normalized request path.
+   * @return an object containing the parameters extracted from the matrix parameters from the given url
    */
   @Nonnull
   public static FragmentParameters create(@Nonnull String requestUrl) {
-    //manual parsing matrix paramters, e.g.: http://localhost:40081/blueprint/servlet/service/fragment/10851/en-US/params;parameter=noLinkRewrite;placement=header
+    //manual parsing matrix paramters, e.g.: http://localhost:40081/blueprint/servlet/service/fragment/10851/en-US/params;placement=header
     if (!requestUrl.contains(";")) {
       throw new IllegalArgumentException("Cannot extract matrix parameters from URL " + requestUrl);
     }
 
     //e.g.: http://localhost:40081/blueprint/servlet/service/fragment/10851/en-US/params
-    String url = requestUrl.substring(0, requestUrl.indexOf(";"));
+    String url = requestUrl.substring(0, requestUrl.indexOf(';'));
     String[] segments = url.split("/");
     String localeString = segments[segments.length - 2];
 
@@ -58,7 +62,7 @@ public class FragmentParametersFactory {
    */
   private static Map<String, String> getMatrixParams(String requestUrl) {
     Map<String, String> matrixParams = new HashMap<>();
-    String matrixParamsValues = requestUrl.substring(requestUrl.indexOf(";") + 1, requestUrl.length());
+    String matrixParamsValues = requestUrl.substring(requestUrl.indexOf(';') + 1, requestUrl.length());
     List<NameValuePair> parameters = new ArrayList<>();
     Scanner scanner = new Scanner(matrixParamsValues);
     URLEncodedUtils.parse(parameters, scanner, ";", "utf-8");

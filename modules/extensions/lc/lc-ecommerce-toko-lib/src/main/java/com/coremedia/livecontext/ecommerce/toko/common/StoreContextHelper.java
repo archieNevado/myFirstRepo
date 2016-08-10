@@ -1,15 +1,16 @@
 package com.coremedia.livecontext.ecommerce.toko.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
-import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.Currency;
+import java.util.Locale;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CONFIG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CURRENCY;
@@ -71,12 +72,12 @@ public class StoreContextHelper {
    *
    * @param storeId   the store id or null
    * @param storeName the store name or null
-   * @param locale    the locale id or null
+   * @param localeStr    the locale id or null
    * @param currency  the currency id or null
    * @return the new built store context
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if locale or currency has wrong format
    */
-  public static StoreContext createContext(String configId, String storeId, String storeName, String locale, String currency)
+  public static StoreContext createContext(String configId, String storeId, String storeName, String localeStr, String currency)
           throws InvalidContextException {
 
     StoreContext context = StoreContextBuilder.create().build();
@@ -98,12 +99,12 @@ public class StoreContextHelper {
       }
       context.put(STORE_NAME, storeName);
     }
-    if (locale != null) {
-      try {
-        context.put(LOCALE, LocaleUtils.toLocale(locale));
-      } catch (IllegalArgumentException e) {
-        throw new InvalidContextException(e);
+    if (localeStr != null) {
+      Locale locale = LocaleHelper.getLocaleFromString(localeStr);
+      if (null == locale) {
+        throw new InvalidContextException("Locale " + localeStr + " is not valid.");
       }
+      context.put(LOCALE, locale);
     }
     if (currency != null) {
       try {

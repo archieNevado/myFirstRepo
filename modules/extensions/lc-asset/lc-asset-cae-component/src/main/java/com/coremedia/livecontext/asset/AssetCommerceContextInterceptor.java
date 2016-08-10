@@ -1,9 +1,9 @@
 package com.coremedia.livecontext.asset;
 
+import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
-import org.apache.commons.lang3.LocaleUtils;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nullable;
@@ -22,7 +22,7 @@ public class AssetCommerceContextInterceptor extends AbstractCommerceContextInte
     String storeId = extractStoreId(normalizedPath);
     Locale locale = extractLocale(normalizedPath);
 
-    return liveContextSiteResolver.findSiteFor(storeId, locale) ;
+    return liveContextSiteResolver.findSiteFor(storeId, locale);
   }
 
   private String extractStoreId(String path) {
@@ -32,7 +32,7 @@ public class AssetCommerceContextInterceptor extends AbstractCommerceContextInte
 
   private Locale extractLocale(String path) {
     String localeToken = extractToken(path, 4);
-    return LocaleUtils.toLocale(localeToken);
+    return LocaleHelper.getLocaleFromString(localeToken);
   }
 
   private String extractToken(String path, int index) {

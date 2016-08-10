@@ -76,11 +76,23 @@ public interface CMNavigation extends Navigation, CMTeasable, FeedSource<CMLinka
   String CSS = "css";
 
   /**
+   * Name of the document property 'theme'.
+   */
+  String THEME = "theme";
+
+  /**
    * Returns the value of the document property {@link #CSS}.
    *
    * @return a list of {@link CMCSS} objects
    */
   List<? extends CMCSS> getCss();
+
+  /**
+   * Returns the value of the document property {@link #THEME}.
+   *
+   * @return the value of the document property {@link #THEME}
+   */
+  CMTheme getTheme();
 
   /**
    * Name of the document property 'favicon'.

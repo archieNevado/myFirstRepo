@@ -196,7 +196,8 @@
       This bean provides symbolic names for each view lookup the view repositories to be queried for views.
       The Blueprint implementation takes repository names from
       1. the String list setting "viewRepositoryNames" of the current navigation
-      2. a list of common view repository names added in the property "commonViewRepositoryNames" below
+      2. the chosen viewRepository string property of a theme if attached to navigation
+      3. a list of common view repository names added in the property "commonViewRepositoryNames" below
       The resulting repository names are later matched to view repositories by a CAE ViewRespositoryProvider.
     </description>
     <property name="commonViewRepositoryNames" ref="viewRepositories"/>

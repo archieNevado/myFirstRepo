@@ -38,7 +38,6 @@ For further possibilities of defining a cookbook dependency, please review the o
 
 * [coremedia_maven](./coremedia-cookbooks/coremedia_maven/README.md)
 * [coremedia_tomcat](./coremedia-cookbooks/coremedia_tomcat/README.md)
-* [coremedia-tools](./coremedia-cookbooks/coremedia-tools/README.md)
 * [coremedia-proxy](./coremedia-cookbooks/coremedia-proxy/README.md)
 
 ### Blueprint Cookbooks

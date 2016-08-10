@@ -6,11 +6,11 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <context:component-scan base-package="com.coremedia.livecontext.elastic"/>
-  <import resource="lc-es-cae-views.xml"/>
   <import resource="livecontext-es-handlers.xml"/>
   <import resource="livecontext-es-handler-interceptors.xml"/>
   <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
   <import resource="livecontext-es-webflow.xml"/>
+  <import resource="livecontext-es-cae-views.xml"/>
 
   <bean id="productReviewsResultHandler" class="com.coremedia.livecontext.elastic.social.cae.ProductReviewsResultHandler" parent="handlerBase"/>
 

@@ -5,6 +5,7 @@ wcs_host = ENV.fetch('WCS_HOST', '192.168.252.1')
 # switch db type
 database_host  = ENV.fetch('DB_HOST', 'localhost')
 database_type  = ENV.fetch('DB_TYPE', 'mysql')
+maven_local_repo = ENV.fetch('M2_LOCAL_REPO', '~/.m2/repository')
 puts '======================================================='
 puts " WCS_HOST:                #{wcs_host}"
 puts '---------Database--------------------------------------'
@@ -16,6 +17,7 @@ puts "   * postgresql   - PostgreSQL 9.3"
 puts '======================================================='
 puts ' http://overview.192.168.252.100.xip.io '
 puts '======================================================='
+puts " MAVEN_REPO:              #{maven_local_repo}"
 %>
 ---
 driver:
@@ -29,7 +31,7 @@ driver:
     cpus: 2
   synced_folders:
     - ["./.kitchen/build", "/shared", "create: true"]
-    - ["~/.m2/repository", "/maven-repo"]
+    - ["<%= maven_local_repo %>", "/maven-repo"]
     - ["../../test-data/target", "/test-data"]
   network:
     - ['private_network',{ ip: '192.168.252.100' }]
@@ -61,7 +63,7 @@ platforms:
 suites:
 - name: default
   # add platforms to test to this array, by default only one is listed so a simple kitchen converge will run this suite
-  includes: [centos6-vagrant]
+  includes: [centos7-vagrant]
   run_list:
     # install database
     - role[<%= database_type %>]

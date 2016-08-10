@@ -5,7 +5,7 @@ import com.coremedia.blueprint.cae.contentbeans.CMTeasableImpl;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;

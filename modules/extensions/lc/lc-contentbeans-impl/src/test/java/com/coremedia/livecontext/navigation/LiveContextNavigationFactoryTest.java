@@ -6,7 +6,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
@@ -50,7 +50,7 @@ public class LiveContextNavigationFactoryTest {
   private Content content;
 
   @Mock
-  private LiveContextExternalChannel externalChannel;
+  private LiveContextExternalChannelImpl externalChannel;
 
   @Mock
   private ContentSiteAspect contentSiteAspect;
@@ -111,7 +111,7 @@ public class LiveContextNavigationFactoryTest {
     when(augmentationService.getContent(categoryToCreateFrom)).thenReturn(content);
     LiveContextNavigation actual = testling.createNavigation(categoryToCreateFrom, site);
     assertNotNull("The returned Navigation must not be null", actual);
-    assertTrue(actual instanceof LiveContextExternalChannel);
+    assertTrue(actual instanceof LiveContextExternalChannelImpl);
   }
 
   @Test

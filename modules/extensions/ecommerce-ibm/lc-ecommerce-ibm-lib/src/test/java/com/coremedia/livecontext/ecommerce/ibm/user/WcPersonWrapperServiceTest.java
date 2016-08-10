@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWrapperServiceTestCase;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
@@ -31,17 +32,19 @@ public class WcPersonWrapperServiceTest extends AbstractWrapperServiceTestCase {
   @Before
   public void setup() {
     connection = commerce.getConnection("wcs1");
-    String wcsVersion = storeInfoService.getWcsVersion();
-    if (wcsVersion != null)
-      testConfig.setWcsVersion(Float.parseFloat(wcsVersion));
+    testConfig.setWcsVersion(storeInfoService.getWcsVersion());
     connection.setStoreContext(testConfig.getStoreContext());
     Commerce.setCurrentConnection(connection);
   }
 
   @Test
   public void testRegisterUser() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) return;
-    String testUser = "testuser" + (System.currentTimeMillis()+"").hashCode();
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+      return;
+    }
+
+    String testUser = "testuser" + (System.currentTimeMillis() + "").hashCode();
+
     Map<String, Object> personMap = testling.registerPerson(testUser, "passw0rd", testUser + "@coremedia.com", testConfig.getStoreContext());
     assertNotNull(personMap);
     assertEquals("logonId should be identical", testUser, DataMapHelper.getValueForKey(personMap, "logonId", String.class));
@@ -49,17 +52,19 @@ public class WcPersonWrapperServiceTest extends AbstractWrapperServiceTestCase {
 
   @Test
   public void testRegisterUserAsAnonymous() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) return;
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+      return;
+    }
 
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     userContext.setUserId("-1002");
 
     UserContextHelper.setCurrentContext(userContext);
-    String testUser = "testuser" + (System.currentTimeMillis()+"").hashCode();
+    String testUser = "testuser" + (System.currentTimeMillis() + "").hashCode();
+
     Map<String, Object> personMap = testling.registerPerson(testUser, "passw0rd", testUser + "@coremedia.com", testConfig.getStoreContext());
     assertNotNull(personMap);
     assertEquals("logonId should be identical", testUser, DataMapHelper.getValueForKey(personMap, "logonId", String.class));
   }
-
 }

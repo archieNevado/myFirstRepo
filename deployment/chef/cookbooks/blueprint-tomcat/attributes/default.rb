@@ -12,6 +12,8 @@ default['blueprint']['tomcat']['catalina_opts']['agent'] = ''
 default['blueprint']['tomcat']['catalina_opts']['gc'] = '-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+UseMembar'
 #<> Global jvm network system properties, the defaults disable IPv4 because IPv6 loopback over localhost currently does not work behind an apache
 default['blueprint']['tomcat']['catalina_opts']['network'] = '-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses'
+#<> Global jvm option to handle OutOfMemoryError, the default stops the process using 'kill -9'. With Oracle JDK 8u92 or above, you could also use -XX:+ExitOnOutOfMemoryError
+default['blueprint']['tomcat']['catalina_opts']['out_of_memory'] = '-XX:OnOutOfMemoryError=\'kill -9 %p\''
 
 # comment the following line in to disable asynchronous spring context initialization
 #default['blueprint']['tomcat']['catalina_opts']['sprint_context_start'] = '-Dcom.coremedia.springframework.web.context.disableAsynchronousLoading=true'
@@ -45,13 +47,30 @@ default['blueprint']['tomcat']['start_service'] = true
 default['blueprint']['tomcat']['shutdown_force'] = true
 #<> The time to wait for tomcat to shut down
 default['blueprint']['tomcat']['shutdown_wait'] = 40
-#<> Set to true to delete logs before start
+#<> Set to true to delete logs before start, this only works if the log appender file is set
 default['blueprint']['tomcat']['clean_log_dir_on_start'] = false
 
 #<> The failed context shutdown listener to stop tomcat if the context failed.
 default['blueprint']['tomcat']['context_config']['listener']['shutdown_listener']['className'] = 'com.coremedia.tomcat.FailedContextShutdownServerListener'
 #<> The global session cookie name
 default['blueprint']['tomcat']['context_config']['session_cookie_name'] = 'CM_SESSIONID'
+
+# Logging
+# logback configuration, will always be configured by chef, the logback.config file in the webapp will only be
+# used if there is no logback_config hash at all
+
+#<> The default log level for all loggers beneath 'com.coremedia', you may override this on service level
+default['blueprint']['tomcat']['logback_config']['logger']['com.coremedia'] = 'info'
+#<> The default log level for all loggers beneath 'hox.corem', you may override this on service level
+default['blueprint']['tomcat']['logback_config']['logger']['hox.corem'] = 'info'
+#<> The default log level for all loggers beneath 'org.springframework', you may override this on service level
+default['blueprint']['tomcat']['logback_config']['logger']['org.springframework'] = 'warn'
+#<> The default logback configuration to include from the classpath
+default['blueprint']['tomcat']['logback_config']['includes'] = ['logging-common.xml']
+#<> The default appender, possible other values depend on the includes
+default['blueprint']['tomcat']['logback_config']['appender'] = ['file']
+#<> The default log pattern, because ruby escapes the backslash we need to use 4 backslashes here
+default['blueprint']['tomcat']['logback_config']['properties']['log.pattern'] = '%d{yyyy-MM-dd HH:mm:ss} %-7([%level]) %logger [%X{tenant}] - %message \\\\(%thread\\\\)%n'
 
 # HEAP
 default['blueprint']['tomcat']['content-management-server']['heap'] = '512m'
@@ -63,8 +82,8 @@ default['blueprint']['tomcat']['elastic-worker']['heap'] = '256m'
 default['blueprint']['tomcat']['content-feeder']['heap'] = '256m'
 default['blueprint']['tomcat']['studio']['heap'] = '512m'
 default['blueprint']['tomcat']['adobe-drive-server']['heap'] = '256m'
-default['blueprint']['tomcat']['cae-preview']['heap'] = '512m'
-default['blueprint']['tomcat']['cae-live']['heap'] = '512m'
+default['blueprint']['tomcat']['cae-preview']['heap'] = '1024m'
+default['blueprint']['tomcat']['cae-live']['heap'] = '1024m'
 default['blueprint']['tomcat']['solr']['heap'] = '256m'
 default['blueprint']['tomcat']['caefeeder-preview']['heap'] = '256m'
 default['blueprint']['tomcat']['caefeeder-live']['heap'] = '256m'

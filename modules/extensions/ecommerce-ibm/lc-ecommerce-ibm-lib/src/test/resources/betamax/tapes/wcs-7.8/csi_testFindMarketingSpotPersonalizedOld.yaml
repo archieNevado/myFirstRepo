@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=00004gPb6qeu8muJbJ7bxHB4WDQ:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -52,6 +53,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000f73LaQWMbeKJx-YQdJ_Ewok:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
 - recorded: 2016-05-19T09:27:45.481Z
   request:
@@ -74,6 +76,7 @@ interactions:
       Expires: Thu, 19 May 2016 10:27:46 GMT
       Set-Cookie: JSESSIONID=0000zxqIC5XnFBmYWbiL9UoXdg-:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"MarketingSpotData":[{"baseMarketingSpotActivityData":[{"baseMarketingSpotActivityID":"11006","activityIdentifierName":"PC_Homepage_Offer_Activity","contentStoreId":"10151","contentName":"PC_Offer_Registered_Male","contentClickAction":"None","activityFormat":"web","marketingContentDescription":[{"marketingText":"Check
       out our Sale on Men''s Summer Wear","language":"-1"}],"MarketingContentDescription":[{}],"contentFormatId":"2","baseMarketingSpotActivityName":"PC_Offer_Registered_Male","properties":[{"baseMarketingKey":"mktActivityDescription","baseMarketingValue":"Recommend
       content to a customer that satisfies the chosen target conditions."}],"activityPriority":"0","activityIdentifierID":"11601","contentId":"11006","contentFormatName":"Text","baseMarketingSpotDataType":"MarketingContent"},{"baseMarketingSpotActivityID":"11004","activityIdentifierName":"PC_Homepage_Offer_Activity","contentStoreId":"10151","contentName":"PC_Offer2","contentClickAction":"None","activityFormat":"web","marketingContentDescription":[{"marketingText":"Free
@@ -81,3 +84,27 @@ interactions:
       to a customer that satisfies the chosen target conditions."}],"activityPriority":"0","activityIdentifierID":"11601","contentId":"11004","contentFormatName":"Text","baseMarketingSpotDataType":"MarketingContent"},{"baseMarketingSpotActivityID":"11005","activityIdentifierName":"PC_Homepage_Offer_Activity","contentStoreId":"10151","contentName":"PC_Offer3","contentClickAction":"None","activityFormat":"web","marketingContentDescription":[{"marketingText":"20%
       off Women''s & Men''s Evening Attire","language":"-1"}],"MarketingContentDescription":[{}],"contentFormatId":"2","baseMarketingSpotActivityName":"PC_Offer3","properties":[{"baseMarketingKey":"mktActivityDescription","baseMarketingValue":"Recommend content
       to a customer that satisfies the chosen target conditions."}],"activityPriority":"0","activityIdentifierID":"11601","contentId":"11005","contentFormatName":"Text","baseMarketingSpotDataType":"MarketingContent"}],"marketingSpotIdentifier":"13001","eSpotName":"PC_Homepage_Offer","behavior":"1","nextTimeLimit":"-1"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/espot\/PC_Homepage_Offer?catalogId=10152&currency=USD&forUser=gstevens&langId=-1","resourceName":"espot"}'
+- recorded: 2016-07-22T14:34:44.380Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:44 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000QUHTLBNkCe6ohwPOP3bBvTB:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CvdksfjsAhG0Bpgc2JQrwahbTSmp0BqYGiju4Q7p5gWPjx0zxftNhXevXHTyv1CXZJVTReJRytu%2Fn4sb0NfPRssBrXbSbWffnUMVABKHlWcrsBaS%2BGVe8dZogQk%2Bg1%2BC%2FJU43VMo1xG%2B5KeAgEhPSmqbB4uUl8lGUs6tRnzKR7Y1LVz6C6yxpp%2F4D5NVfr%2F6Wm2wJC8uIrUDDkg3wWuBjrA%3D%3D","WCTrustedToken":"2%2CB9bTvJRjOdaPPKHDwOhZLmBuCGA%3D","personalizationID":"1469173833154-2"}'

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:/framework/spring/blueprint-contentbeans.xml"/>
   <import resource="classpath:/framework/spring/blueprint-views.xml"/>
@@ -29,12 +27,5 @@
 
   <bean name="hasPublishedRenditionsValidator"
         class="com.coremedia.blueprint.assets.validation.HasPublishedRenditionsValidator"/>
-
-  <!-- register view repository for templates below WEB-INF/templates/assets/ -->
-  <customize:prepend id="addAssetsViewRepository" bean="viewRepositories">
-    <list>
-      <value>assets</value>
-    </list>
-  </customize:prepend>
 
 </beans>

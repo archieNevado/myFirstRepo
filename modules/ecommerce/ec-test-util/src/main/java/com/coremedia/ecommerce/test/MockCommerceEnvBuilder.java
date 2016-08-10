@@ -1,15 +1,17 @@
 package com.coremedia.ecommerce.test;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextBuilder;
+import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import com.coremedia.livecontext.ecommerce.order.CartService;
@@ -18,12 +20,10 @@ import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 import com.coremedia.livecontext.ecommerce.pricing.PriceService;
 import com.coremedia.livecontext.ecommerce.search.SearchService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextBuilder;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
-import org.apache.commons.lang3.LocaleUtils;
 import org.mockito.Mock;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,7 +94,7 @@ public class MockCommerceEnvBuilder {
     storeContext.put(StoreContextBuilder.STORE_ID, "10001");
     storeContext.put(StoreContextBuilder.STORE_NAME, "aurora");
     storeContext.put(StoreContextBuilder.CATALOG_ID, "10051");
-    storeContext.put(StoreContextBuilder.LOCALE, LocaleUtils.toLocale("en_US"));
+    storeContext.put(StoreContextBuilder.LOCALE, LocaleHelper.getLocaleFromString("en_US"));
     storeContext.put(StoreContextBuilder.CURRENCY, Currency.getInstance("USD"));
 
     when(storeContextProvider.getCurrentContext()).thenReturn(storeContext);

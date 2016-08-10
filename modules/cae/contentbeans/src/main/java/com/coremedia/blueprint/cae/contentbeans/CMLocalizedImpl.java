@@ -2,19 +2,38 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMLocalized;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBeanCollections;
+import org.springframework.beans.factory.annotation.Required;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.Objects;
 
 /**
  * Generated extension class for immutable beans of document type "CMLocalized".
  */
 public abstract class CMLocalizedImpl extends CMLocalizedBase {
+  private SitesService sitesService;
+  private ContentBeanCollections contentBeanCollections;
+
+  @Required
+  public void setSitesService(SitesService sitesService) {
+    Objects.requireNonNull(sitesService);
+    this.sitesService = sitesService;
+  }
+
+  @Required
+  public void setContentBeanCollections(ContentBeanCollections contentBeanCollections) {
+    Objects.requireNonNull(sitesService);
+    this.contentBeanCollections = contentBeanCollections;
+  }
+
+  protected SitesService getSitesService() {
+    return sitesService;
+  }
+
   @Override
   public Locale getLocale() {
     return getSitesService().getContentSiteAspect(getContent()).getLocale();
@@ -42,32 +61,12 @@ public abstract class CMLocalizedImpl extends CMLocalizedBase {
   }
 
   protected <T extends CMLocalized> Map<Locale, T> getVariantsByLocale(Class<T> type) {
-    Set<Content> variants = getSitesService().getContentSiteAspect(getContent()).getVariants();
-    Map<Locale, T> variantsByLocale = new TreeMap<>(new LocaleComparator());
-    for (Content variant : variants) {
-      T variantBean = createBeanFor(variant, type);
-      if (variantBean != null) {
-        Locale locale = variantBean.getLocale();
-        if (locale != null) {
-          variantsByLocale.put(locale, variantBean);
-        }
-      }
-    }
-    return variantsByLocale;
+    Map<Locale, Content> variantsByLocale = getSitesService().getContentSiteAspect(getContent()).getVariantsByLocale();
+    return contentBeanCollections.contentBeanMap(variantsByLocale, type);
   }
 
   @Override
   public Collection<? extends CMLocalized> getLocalizations() {
     return getVariantsByLocale().values();
-  }
-
-  private static class LocaleComparator implements Comparator<Locale>, Serializable {
-
-    private static final long serialVersionUID = 5667734265087336585L;
-
-    @Override
-    public int compare(Locale l1, Locale l2) {
-      return l1.toLanguageTag().compareTo(l2.toLanguageTag());
-    }
   }
 }

@@ -23,11 +23,9 @@
 <link href="../../Options/Settings/LiveContext.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/LiveContext"/>
 <link href="../../Options/Settings/SearchConfiguration.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/SearchConfiguration"/>
 </linkedSettings>
-<resourceBundles>
-<link href="../../../../../../Settings/Options/Bundles/Bundle_en.xml" path="/Settings/Options/Bundles/Bundle_en"/>
-<link href="../../../../../../Settings/Options/Bundles/Corporate_en.xml" path="/Settings/Options/Bundles/Corporate_en"/>
+<resourceBundles2>
 <link href="../../../../../../Settings/Options/Bundles/Asset%20Management_en.xml" path="/Settings/Options/Bundles/Asset%20Management_en"/>
-</resourceBundles>
+</resourceBundles2>
 <segment>corporate</segment>
 <title>Home</title>
 <htmlTitle></htmlTitle>
@@ -60,11 +58,12 @@
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
 <javaScript>
-<link href="../../../../../../Themes/corporate/corporate%2Ejs.xml" path="/Themes/corporate/corporate%2Ejs"/>
 </javaScript>
 <css>
-<link href="../../../../../../Themes/corporate/corporate%2Ecss.xml" path="/Themes/corporate/corporate%2Ecss"/>
 </css>
+<theme>
+<link href="../../../../../../Themes/corporate/Corporate%20Theme.xml" path="/Themes/corporate/Corporate%20Theme"/>
+</theme>
 <favicon md5="4c64271dde0847de76fb877d8a5fe795" size="15086" href="../../../../../../__blob/4c64271dde0847de76fb877d8a5fe795.blob" mimetype="image/x-icon"/>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

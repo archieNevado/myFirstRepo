@@ -1,7 +1,10 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
+import com.coremedia.blueprint.common.contentbeans.CMCSS;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.contentbeans.CodeResources;
 
 import javax.annotation.Nullable;
@@ -84,10 +87,43 @@ public class CodeResourcesImpl implements CodeResources {
     }
   }
 
+  private List<? extends CMCSS> getCssIncludingThemes(CMContext context) {
+    List<CMCSS> result = new ArrayList<>();
+
+    CMTheme theme = context.getTheme();
+    if (theme != null) {
+      result.addAll(theme.getCss());
+    }
+
+    List<? extends CMCSS> cssFromNavigation = context.getCss();
+    if (cssFromNavigation != null) {
+      result.addAll(cssFromNavigation);
+    }
+
+    return result;
+  }
+
+  private List<? extends CMJavaScript> getJavaScriptIncludingThemes(CMContext context) {
+    List<CMJavaScript> result = new ArrayList<>();
+
+    CMTheme theme = context.getTheme();
+    if (theme != null) {
+      result.addAll(theme.getJavaScriptLibraries());
+      result.addAll(theme.getJavaScripts());
+    }
+
+    List<? extends CMJavaScript> jsFromNavigation = context.getJavaScript();
+    if (jsFromNavigation != null) {
+      result.addAll(jsFromNavigation);
+    }
+
+    return result;
+  }
+
   private List<? extends CMAbstractCode> getCodeResourcsFromContext() {
-    return  CMNavigationBase.CSS.equals(getCodePropertyName())
-      ? getContext().getCss()
-      : getContext().getJavaScript();
+    return CMNavigationBase.CSS.equals(getCodePropertyName())
+            ? getCssIncludingThemes(getContext())
+            : getJavaScriptIncludingThemes(getContext());
   }
 
   //=== Internal =======================================================================================================
@@ -98,16 +134,15 @@ public class CodeResourcesImpl implements CodeResources {
     return ieExcludes;
   }
 
-    private List<CMAbstractCode> getExternalLinks() {
+  private List<CMAbstractCode> getExternalLinks() {
     return externalLinks;
   }
 
   /**
    * Compute a filtered lists of {@link CMAbstractCode codes} for the given list of codes and their {@link CMAbstractCode#getInclude() includes}.
-   *
    */
   private void traverse(@Nullable List<? extends CMAbstractCode> codes, MessageDigest digest) {
-    if (codes==null) {
+    if (codes == null) {
       return;
     }
     for (CMAbstractCode code : codes) {
@@ -125,12 +160,12 @@ public class CodeResourcesImpl implements CodeResources {
           ieExcludes.add(code);
         } else if (isExternalLink) {
           externalLinks.add(code);
-        } else if(code.getCode() != null) {
+        } else if (code.getCode() != null) {
           mergeableResources.add(code);
         }
         byte[] statusFlags = new byte[]{(byte) (isIeExclude ? 1 : 0), (byte) (isExternalLink ? 1 : 0)};
         digest.update(statusFlags);
-        if(code.getCode() != null) {
+        if (code.getCode() != null) {
           digest.update(Integer.toString(code.getCode().hashCode()).getBytes());
         }
       }

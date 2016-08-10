@@ -37,7 +37,7 @@ public class MetadataToEntitiesActionAdapter extends MetadataBeanAction {
   internal const resolvedBeanValueExpression:ValueExpression = ValueExpressionFactory.createFromValue();
   private var myContextMenu:PreviewContextMenu;
 
-  public function MetadataToEntitiesActionAdapter(config:metadataToEntitiesActionAdapter) {
+  public function MetadataToEntitiesActionAdapter(config:metadataToEntitiesActionAdapter = null) {
     backingAction = config.backingAction as Action;
     var setEntities:String = config.setEntities || "setContents";
     if(!(backingAction[setEntities] is Function)) {

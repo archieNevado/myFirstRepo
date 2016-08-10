@@ -14,4 +14,4 @@ Further documentation:
 ----------------------
 
 * To get started with deployment rulesets, see the official [introduction](https://blogs.oracle.com/java-platform-group/entry/introducing_deployment_rule_sets)
-* To see how to configure this deployment ruleset, see the official [documentation](http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/security/deployment_rules.html)
+* To see how to configure this deployment ruleset, see the official [documentation](http://docs.oracle.com/javase/8/docs/technotes/guides/deploy/deployment_rules.html)

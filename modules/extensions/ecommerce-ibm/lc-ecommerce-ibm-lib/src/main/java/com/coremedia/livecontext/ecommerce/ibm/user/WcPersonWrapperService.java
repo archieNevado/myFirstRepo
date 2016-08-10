@@ -1,17 +1,22 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.*;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCatalogId;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Arrays.asList;
 
 /**
@@ -24,15 +29,15 @@ public class WcPersonWrapperService extends AbstractWcWrapperService {
   private static final String PARAM_PASSWORD_OLD = "logonPasswordOld";  // NOSONAR false positive: Credentials should not be hard-coded
   private static final String PARAM_PASSWORD_VERIFY = "logonPasswordVerify";  // NOSONAR false positive: Credentials should not be hard-coded
 
-  private static final WcRestConnector.WcRestServiceMethod<Map, Map>
+  private static final WcRestServiceMethod<Map, Map>
           FIND_PERSON_BY_SELF = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/person/@self", true, true, Map.class, Map.class),
           UPDATE_PERSON = WcRestConnector.createServiceMethod(HttpMethod.PUT, "store/{storeId}/person/@self", true, true, Map.class, Map.class);
-  private static final WcRestConnector.WcRestServiceMethod<Map, Map>
+  private static final WcRestServiceMethod<Map, Map>
           //the ibm documentation says that the registerPerson-call needs authentication, which seems to be a documentation bug. it only works without authentication.
           REGISTER_PERSON = WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/person/", true, false, Map.class, Map.class);
-  private static final WcRestConnector.WcRestServiceMethod<Void, Void>
+  private static final WcRestServiceMethod<Void, Void>
           RESET_PASSWORD = WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/resetpassword/{logonId}", true, false, Void.class, Void.class);
-  private static final WcRestConnector.WcRestServiceMethod<Void, Void>
+  private static final WcRestServiceMethod<Void, Void>
           UPDATE_PASSWORD = WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/resetpassword/{logonId}", true, true, true, true, Void.class, Void.class);
 
 
@@ -40,7 +45,7 @@ public class WcPersonWrapperService extends AbstractWcWrapperService {
     Map<String, String[]> parametersMap = createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext), UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null);
     //noinspection unchecked
     Map<String, Object> map = getRestConnector().callService(
-            FIND_PERSON_BY_SELF, asList(getStoreId(storeContext)), parametersMap, null, storeContext, userContext);
+            FIND_PERSON_BY_SELF, Collections.singletonList(getStoreId(storeContext)), parametersMap, null, storeContext, userContext);
     return map;
   }
 
@@ -49,7 +54,7 @@ public class WcPersonWrapperService extends AbstractWcWrapperService {
 
     //we ignore the return value here since we only retrieve the user id. Instead...
     getRestConnector().callService(
-      UPDATE_PERSON, asList(getStoreId(storeContext)), parametersMap, userMap, storeContext, userContext);
+            UPDATE_PERSON, Collections.singletonList(getStoreId(storeContext)), parametersMap, userMap, storeContext, userContext);
 
     //...we make a regular person lookup.
     return findPerson(userContext, storeContext);
@@ -64,7 +69,7 @@ public class WcPersonWrapperService extends AbstractWcWrapperService {
 
     //regular registration without caring about possible guest session
     Map<String, String[]> parametersMap = createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext));
-    getRestConnector().callService(REGISTER_PERSON, asList(getStoreId(storeContext)), parametersMap, person, storeContext, null);
+    getRestConnector().callService(REGISTER_PERSON, Collections.singletonList(getStoreId(storeContext)), parametersMap, person, storeContext, null);
 
     //retrieve the person for the credentials that have been returned by the registration call.
     UserContext registeredPersonContext = UserContextHelper.createContext(username, null);

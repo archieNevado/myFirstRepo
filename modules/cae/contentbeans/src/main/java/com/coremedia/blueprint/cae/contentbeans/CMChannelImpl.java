@@ -11,10 +11,12 @@ import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.blueprint.theme.ThemeService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import org.springframework.beans.factory.annotation.Required;
@@ -33,6 +35,7 @@ public class CMChannelImpl extends CMChannelBase {
   private static final SettingsBasedVanityUrlMapper EMPTY_VANITY = new SettingsBasedVanityUrlMapper();
 
   private PageGridService pageGridService;
+  private ThemeService themeService;
 
   /**
    * If the header is empty, fallback to parent channel.
@@ -104,6 +107,21 @@ public class CMChannelImpl extends CMChannelBase {
     return parent==null ? Collections.<CMJavaScript>emptyList() : parent.getJavaScript();
   }
 
+  /**
+   * Return the channel's Theme.
+   * <p>
+   * Fallback to the parent channel if the channel has no Theme.
+   */
+  public CMTheme getTheme() {
+    CMTheme theme = super.getTheme();
+    if (theme != null) {
+      return theme;
+    }
+    CMChannel parent = getParentChannel();
+    return parent==null ? null : parent.getTheme();
+  }
+
+
   // --- internal ---------------------------------------------------
 
   /**
@@ -156,6 +174,11 @@ public class CMChannelImpl extends CMChannelBase {
   @Required
   public void setPageGridService(PageGridService pageGridService) {
     this.pageGridService = pageGridService;
+  }
+
+  @Required
+  public void setThemeService(ThemeService themeService) {
+    this.themeService = themeService;
   }
 
   @Override

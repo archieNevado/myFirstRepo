@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.elastic.social.worker;
 
 import com.coremedia.elastic.core.api.serializer.TypeConverter;
-import com.coremedia.livecontext.context.ProductInSite;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 
 import javax.annotation.Nonnull;
 import javax.inject.Named;

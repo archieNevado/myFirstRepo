@@ -26,7 +26,7 @@
 
   <customize:prepend id="addElasticsocialRepositoryName" bean="viewRepositories" order="1200">
     <list>
-      <value>es-freemarker</value>
+      <value>es</value>
     </list>
   </customize:prepend>
 

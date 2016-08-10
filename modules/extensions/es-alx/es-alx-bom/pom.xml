@@ -42,11 +42,6 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>es-alx-templates</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>es-alx-google</artifactId>
         <version>${project.version}</version>
       </dependency>

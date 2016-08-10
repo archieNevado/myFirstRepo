@@ -1,11 +1,9 @@
 {
   "name": "es-theme",
   "version": "1.0.0",
-  "description": "CoreMedia 8 Blueprint - Elastic Social Theme",
   "private": true,
   "scripts": {
-    "prebuild": "npm install",
-    "build": "grunt build"
+    "postinstall": "grunt build"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

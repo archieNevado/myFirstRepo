@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000IwpL2hCo6cEDTOueuPPllhB:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -51,6 +52,7 @@ interactions:
       Expires: Mon, 23 May 2016 15:46:31 GMT
       Set-Cookie: JSESSIONID=0000ePBZvJQSMEqmcIO3E0YdA-9:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":"10","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/@top?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"longDescription":"Find
       everything to make your table special and unforgettable.","shortDescription":"On The Table","metaKeyword":"on the table, tableware","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10201","identifier":"PC_OnTheTable","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10201","name":"On
       The Table","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","uniqueID":"10201","xcatgroup_seoSegment":"pc-on-the-table","metaDescription":"On
@@ -93,6 +95,7 @@ interactions:
       Expires: Mon, 23 May 2016 15:46:31 GMT
       Set-Cookie: JSESSIONID=0000-ktXX4QiTsDJmJ7JJkHIGs5:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"recordSetTotal":"5","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byParentCategory\/10201?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Glasses","xcatgroup_seoSegment":"pc-glasses;pc-glasses-pcesite","identifier":"PC_Glasses","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10205","name":"Glasses","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10205","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Glasses.jpg","uniqueID":"10205","xcatgroup_cmSeoSegment":"10101_pc-glasses;10302_pc-glasses-pcesite"},{"shortDescription":"Cutlery","xcatgroup_seoSegment":"pc-cutlery","identifier":"PC_Cutlery","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10206","name":"Cutlery","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10206","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Cutlery.jpg","uniqueID":"10206","xcatgroup_cmSeoSegment":"10101_pc-cutlery"},{"shortDescription":"Plates
       and Tableware","xcatgroup_seoSegment":"pc-tableware","identifier":"PC_Tableware","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10207","name":"Tableware","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10207","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Tableware.jpg","uniqueID":"10207","xcatgroup_cmSeoSegment":"10101_pc-tableware"},{"shortDescription":"Decoration
       and Trinkets","xcatgroup_seoSegment":"pc-decoration","identifier":"PC_Decoration","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10208","name":"Decoration","parentCatalogGroupID":["10201"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10208","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Decoration.jpg","uniqueID":"10208","xcatgroup_cmSeoSegment":"10101_pc-decoration"},{"shortDescription":"Outdoor
@@ -117,8 +120,29 @@ interactions:
       Expires: Mon, 23 May 2016 15:46:31 GMT
       Set-Cookie: JSESSIONID=0000cfNNi8LJH5iLa3nSajNHaUx:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Vary: Accept
-      X-Betamax: PLAY
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10201?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"longDescription":"Find
       everything to make your table special and unforgettable.","shortDescription":"On The Table","metaKeyword":"on the table, tableware","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10201","identifier":"PC_OnTheTable","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10201","name":"On
       The Table","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","uniqueID":"10201","xcatgroup_seoSegment":"pc-on-the-table","metaDescription":"On
       The Table","title":"On The Table | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-on-the-table","fullImageAltDescription":"Image for On The Table from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2016-07-25T16:04:40.631Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 25 Jul 2016 16:04:41 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000zEzCVUubDHuqb2FbIe5VDCj:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'

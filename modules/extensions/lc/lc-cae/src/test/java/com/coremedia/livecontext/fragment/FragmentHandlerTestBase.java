@@ -17,7 +17,7 @@ import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.undoc.multisite.SitesService;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -239,7 +239,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   protected ContentType cmContextContentType;
 
   @Mock
-  protected LiveContextExternalChannel cmExternalChannelContext;
+  protected LiveContextExternalChannelImpl cmExternalChannelContext;
 
   @Mock
   private Content cmExternalChannelContextContent;

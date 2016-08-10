@@ -1,11 +1,14 @@
 package com.coremedia.ecommerce.studio.components.preferences {
 import com.coremedia.blueprint.studio.config.taxonomy.taxonomyPreferences;
+import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferencePanel;
 import com.coremedia.cms.editor.sdk.util.PreferencesUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 import ext.Panel;
+
+use namespace editorContext;
 
 public class CatalogPreferencesBase extends Panel implements PreferencePanel {
   public static var PREFERENCE_SHOW_CATALOG_KEY:String = "showCatalogContent";
@@ -18,11 +21,7 @@ public class CatalogPreferencesBase extends Panel implements PreferencePanel {
 
   protected function getShowCatalogValueExpression():ValueExpression {
     if(!showCatalogValueExpression) {
-      var value:Boolean = PreferencesUtil.getPreferencesProperty(PREFERENCE_SHOW_CATALOG_KEY);
-      if(value === undefined) {
-        value = false;
-      }
-      showCatalogValueExpression = ValueExpressionFactory.createFromValue(value);
+      showCatalogValueExpression = ValueExpressionFactory.create(PREFERENCE_SHOW_CATALOG_KEY, editorContext.getPreferences());
     }
     return showCatalogValueExpression;
   }

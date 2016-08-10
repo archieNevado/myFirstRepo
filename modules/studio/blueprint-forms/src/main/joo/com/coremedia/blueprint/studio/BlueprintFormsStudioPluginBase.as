@@ -39,6 +39,7 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
     editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMVideo", "pictures"));
     editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMPicture", "data"));
     editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSymbol", "icon"));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMTheme", "icon"));
   }
 
   /**

@@ -2,12 +2,12 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.user.User;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,12 +15,10 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.UUID;
 
-import static com.coremedia.blueprint.cae.search.Condition.is;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.runners.model.MultipleFailureException.assertEmpty;
 
 @ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
 @ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
@@ -39,6 +37,7 @@ public class UserServiceImplIT extends AbstractServiceTest {
     assertNotNull(user);
     assertNotNull(user.getLogonId());
     assertNotNull(user.getLogonId().equals(UserContextHelper.getForUserName(userContext)));
+
     user.getChallengeAnswer();
     user.getChallengeQuestion();
     assertEquals("Hamburg", user.getCity());
@@ -52,7 +51,6 @@ public class UserServiceImplIT extends AbstractServiceTest {
     assertTrue(StringUtils.isEmpty(user.getLogonPassword()));
     assertTrue(StringUtils.isEmpty(user.getLogonPasswordVerify()));
     assertEquals("2", user.getUserId());
-
   }
 
   /**
@@ -62,20 +60,18 @@ public class UserServiceImplIT extends AbstractServiceTest {
    */
   @Test
   public void testUpdatePerson() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts")) ||
-            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()) < StoreContextHelper.WCS_VERSION_7_7)
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts()) ||
+            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
       return;
+    }
+
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(testConfig.getUser1Name());
     UserContextHelper.setCurrentContext(userContext);
+
     User tester = testling.findCurrentUser();
-    String city = tester.getCity();
-    if (city.equalsIgnoreCase("Hamburg")) {
-      city = "HH";
-    } else {
-      city = "Hamburg";
-    }
-    tester.setCity(city);
+    tester.setCity(tester.getCity().equalsIgnoreCase("Hamburg") ? "HH" : "Hamburg");
+
     User user = testling.updateCurrentUser(tester);
     assertNotNull(user);
 //    assertNotNull(person.getLogonId());
@@ -84,9 +80,11 @@ public class UserServiceImplIT extends AbstractServiceTest {
 
   @Test
   public void testRegisterPerson() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts")) ||
-            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()) < StoreContextHelper.WCS_VERSION_7_7)
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts()) ||
+            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
       return;
+    }
+
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
@@ -99,7 +97,6 @@ public class UserServiceImplIT extends AbstractServiceTest {
     assertNotNull(user.getLogonId().equals(UserContextHelper.getForUserName(userContext)));
   }
 
-
   /**
    * Attention: This test is not intended to run with betamax. Technically spoken it succeeds automatically
    * if it detects a betamax proxy mode. Only if betamax.ignoreHost is set to "*" the function is tested.
@@ -108,7 +105,7 @@ public class UserServiceImplIT extends AbstractServiceTest {
 /*
   @Test
   public void testUpdatePassword() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts")) ||
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts()) ||
             StoreContextHelper.getWcsVersion(testConfig.getStoreContext()) < StoreContextHelper.WCS_VERSION_7_7)
       return;
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
@@ -127,12 +124,11 @@ public class UserServiceImplIT extends AbstractServiceTest {
 /*
   @Test
   public void testResetPasswordForUser() throws Exception {
-    if (!"*".equals(System.getProperties().get("betamax.ignoreHosts"))) return;
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) return;
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = userContextProvider.createContext(null);
     UserContextHelper.setCurrentContext(userContext);
     testling.resetPassword("userservicetest", null, testConfig.getStoreContext());
   }
 */
-
 }

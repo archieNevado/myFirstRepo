@@ -19,7 +19,7 @@ public class OpenCreateExternalPageDialogAction extends OpenQuickCreateAction {
 
   private var data:Object;
 
-  public function OpenCreateExternalPageDialogAction(config:openQuickCreateAction) {
+  public function OpenCreateExternalPageDialogAction(config:openQuickCreateAction = null) {
     super(config);
     data = undefined;
   }

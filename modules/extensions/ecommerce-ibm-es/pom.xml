@@ -21,6 +21,5 @@
   <modules>
     <module>ecommerce-ibm-es-bom</module>
     <module>lc-ecommerce-ibm-es-cae-component</module>
-    <module>lc-es-templates</module>
   </modules>
 </project>

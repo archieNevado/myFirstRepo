@@ -36,7 +36,7 @@ public class MarketingSpotCacheKey extends AbstractCommerceCacheKey<Map<String, 
         String dependencyFieldIdentifier = DataMapHelper.getValueForKey(wcMarketingSpot,
                 "espot".equals(resourceName) ? "MarketingSpotData[0].marketingSpotIdentifier" : "MarketingSpot[0].spotId", String.class);
         String valueForKey = StringUtils.isEmpty(dependencyFieldIdentifier) ?
-                null : DataMapHelper.getValueForPath(wcMarketingSpot, dependencyFieldIdentifier, String.class);
+                null : dependencyFieldIdentifier;
         if (!StringUtils.isEmpty(valueForKey)) {
           Cache.dependencyOn(valueForKey);
         }

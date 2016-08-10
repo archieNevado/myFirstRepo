@@ -10,6 +10,11 @@ import java.util.List;
 public class SearchQueryBean {
 
   /**
+   * The default value for the facet.limit parameter in Solr.
+   */
+  public static final int DEFAULT_FACET_LIMIT = 100;
+
+  /**
    * Field names in the index. Need to map Solr schema
    */
   public enum SEARCH_HANDLER {
@@ -42,7 +47,7 @@ public class SearchQueryBean {
   private List<String> facetFields = new ArrayList<>();
   private String facetPrefix = "";
   private int facetMinCount = -1;
-  private int facetLimit = -1;
+  private int facetLimit = DEFAULT_FACET_LIMIT;
 
   // spellcheck/didyoumean support
   private boolean spellcheckSuggest = false;
@@ -205,7 +210,7 @@ public class SearchQueryBean {
   }
 
   /**
-   * Returns the maximum number of facets to return. The default value is <code>-1</code> which means that there is no limit.
+   * Returns the maximum number of facets to return. The default value is {@value #DEFAULT_FACET_LIMIT}.
    *
    * @return the maximum number of facets to return
    */
@@ -214,7 +219,7 @@ public class SearchQueryBean {
   }
 
   /**
-   * Sets the maximum number of facets to return. The default value is <code>-1</code> which means that there is no limit.
+   * Sets the maximum number of facets to return. The default value is {@value #DEFAULT_FACET_LIMIT}.
    *
    * @param facetLimit the maximum number of facets to return
    */

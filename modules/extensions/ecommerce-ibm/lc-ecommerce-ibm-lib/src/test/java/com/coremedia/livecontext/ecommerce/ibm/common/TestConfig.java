@@ -1,10 +1,15 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_8_0;
 
 public class TestConfig {
 
@@ -42,14 +47,12 @@ public class TestConfig {
   private static final String USERSEGMENT1_ID_V80 = "8407790678950000502";
   private static final String USERSEGMENT2_ID_V80 = "8407790678950000505";
 
-  private Float wcsVersion = Float.parseFloat(System.getProperty("wcs.version", "7.8"));
+  private WcsVersion wcsVersion = WcsVersion.fromVersionString(System.getProperty("wcs.version", "7.8")).orNull();
 
-  public void setWcsVersion(float wcsVersion) {
-    this.wcsVersion = wcsVersion;
-  }
-
-  public String getWcsVersion() {
-    return Float.toString(wcsVersion);
+  public void setWcsVersion(@Nullable String wcsVersion) {
+    if (null != wcsVersion) {
+      this.wcsVersion = WcsVersion.fromVersionString(wcsVersion).orNull();
+    }
   }
 
   public static final StoreContext STORE_CONTEXT_WITH_WORKSPACE = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
@@ -64,19 +67,19 @@ public class TestConfig {
 
   public StoreContext getStoreContext() {
     StoreContext result = null;
-    if (StoreContextHelper.WCS_VERSION_8_0 == wcsVersion){
+    if (WCS_VERSION_8_0 == wcsVersion) {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, CURRENCY);
-    } else if (StoreContextHelper.WCS_VERSION_7_8 == wcsVersion){
+    } else if (WCS_VERSION_7_8 == wcsVersion) {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, CURRENCY);
     } else {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
     }
-    Map replacements = new HashMap<String, String>();
+    Map replacements = new HashMap<>();
     replacements.put("storeId", result.getStoreId());
     replacements.put("catalogId", result.getCatalogId());
     replacements.put("locale", result.getLocale());
     StoreContextHelper.setReplacements(result, replacements);
-    StoreContextHelper.setWcsVersion(result, Float.toString(wcsVersion));
+    result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, wcsVersion);
     return result;
   }
 
@@ -88,19 +91,19 @@ public class TestConfig {
 
   public StoreContext getB2BStoreContext() {
     StoreContext result = null;
-    if (StoreContextHelper.WCS_VERSION_8_0 == wcsVersion){
+    if (WCS_VERSION_8_0 == wcsVersion) {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
-    } else if (StoreContextHelper.WCS_VERSION_7_8 == wcsVersion){
+    } else if (WCS_VERSION_7_8 == wcsVersion) {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
     } else {
       result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
     }
-    Map replacements = new HashMap<String, String>();
+    Map replacements = new HashMap<>();
     replacements.put("storeId", result.getStoreId());
     replacements.put("catalogId", result.getCatalogId());
     replacements.put("locale", result.getLocale());
     StoreContextHelper.setReplacements(result, replacements);
-    StoreContextHelper.setWcsVersion(result, Float.toString(wcsVersion));
+    result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, wcsVersion);
     return result;
   }
 
@@ -147,10 +150,14 @@ public class TestConfig {
   }
 
   public String getUserSegment1Id() {
-    return StoreContextHelper.WCS_VERSION_8_0 == wcsVersion ? USERSEGMENT1_ID_V80 : USERSEGMENT1_ID;
+    return WCS_VERSION_8_0 == wcsVersion ? USERSEGMENT1_ID_V80 : USERSEGMENT1_ID;
   }
 
   public String getUserSegment2Id() {
-    return StoreContextHelper.WCS_VERSION_8_0 == wcsVersion ? USERSEGMENT2_ID_V80 : USERSEGMENT2_ID;
+    return WCS_VERSION_8_0 == wcsVersion ? USERSEGMENT2_ID_V80 : USERSEGMENT2_ID;
+  }
+
+  public WcsVersion getWcsVersion() {
+    return wcsVersion;
   }
 }

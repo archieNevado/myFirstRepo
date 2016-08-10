@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.view.resolver;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.view.resolver.ViewRepositoryNameProvider;
 import org.slf4j.Logger;
@@ -69,6 +70,10 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
     // 1. From current request: get the view repositories configured on the current context
     Navigation navigation = NavigationLinkSupport.getNavigation(model);
     if (navigation != null) {
+      CMTheme theme = navigation.getTheme();
+      if (theme != null) {
+        result.add(theme.getViewRepositoryName());
+      }
       List<? extends String> vrNames = settingsService.settingAsList(VIEW_REPOSITORY_NAMES, String.class, navigation);
       result.addAll(vrNames);
     }

@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Date;
+import java.util.Objects;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -21,7 +22,8 @@ public class StoreFrontServiceConvertCookiesTest {
 
   @Before
   public void beforeEachTest() {
-    testling = new StoreFrontService(){};
+    testling = new StoreFrontService() {
+    };
   }
 
   @Test
@@ -43,7 +45,8 @@ public class StoreFrontServiceConvertCookiesTest {
     assertThat(cookie, cookieMatcher);
   }
 
-  private Cookie mockApacheCookie(String name, String value, String comment, Date date, String path, String domain, boolean secure, int version) {
+  private Cookie mockApacheCookie(String name, String value, String comment, Date date, String path, String domain,
+                                  boolean secure, int version) {
     Cookie mock = mock(Cookie.class);
     when(mock.getName()).thenReturn(name);
     when(mock.getValue()).thenReturn(value);
@@ -55,6 +58,7 @@ public class StoreFrontServiceConvertCookiesTest {
     when(mock.isSecure()).thenReturn(secure);
     return mock;
   }
+
   private static class CookieMatcher extends BaseMatcher<javax.servlet.http.Cookie> {
 
     private String name;
@@ -65,7 +69,8 @@ public class StoreFrontServiceConvertCookiesTest {
     private int version;
     private boolean secure;
 
-    public CookieMatcher(String name, String value, String comment, String path, String domain, boolean secure, int version) {
+    public CookieMatcher(String name, String value, String comment, String path, String domain, boolean secure,
+                         int version) {
       this.name = name;
       this.value = value;
       this.comment = comment;
@@ -80,42 +85,36 @@ public class StoreFrontServiceConvertCookiesTest {
       if (!(object instanceof javax.servlet.http.Cookie)) {
         return false;
       }
+
       javax.servlet.http.Cookie actualCookie = (javax.servlet.http.Cookie) object;
-      if(!isSameValue(actualCookie.getName(), name)) {
+      if (!Objects.equals(actualCookie.getName(), name)) {
         return false;
       }
-      if(!isSameValue(actualCookie.getValue(), value)) {
+      if (!Objects.equals(actualCookie.getValue(), value)) {
         return false;
       }
-      if(!isSameValue(actualCookie.getComment(), comment)) {
+      if (!Objects.equals(actualCookie.getComment(), comment)) {
         return false;
       }
-      if(!isSameValue(actualCookie.getPath(), path)) {
+      if (!Objects.equals(actualCookie.getPath(), path)) {
         return false;
       }
-      if(!isSameValue(actualCookie.getDomain(), domain)) {
+      if (!Objects.equals(actualCookie.getDomain(), domain)) {
         return false;
       }
-      if(!(actualCookie.getVersion() == version)) {
+      if (actualCookie.getVersion() != version) {
         return false;
       }
-      if(!(actualCookie.getSecure() == secure)) {
+      if (actualCookie.getSecure() != secure) {
         return false;
       }
+
       return true;
-    }
-
-    private boolean isSameValue(String name, String name1) {
-      if(name != null && name1 != null) {
-        return name.equals(name1);
-      }
-
-      return name == null && name1 == null;
     }
 
     @Override
     public void describeTo(Description description) {
-      description.appendText("cookie does not match expected name (\""+name+"\") or value (\""+value+"\")");
+      description.appendText("cookie does not match expected name (\"" + name + "\") or value (\"" + value + "\")");
     }
   }
 }

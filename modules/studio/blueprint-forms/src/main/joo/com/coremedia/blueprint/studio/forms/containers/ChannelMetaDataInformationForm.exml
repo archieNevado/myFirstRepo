@@ -25,6 +25,13 @@
                                   collapsed="true"/>
       <bpforms:localSettingsForm bindTo="{config.bindTo}"
                                  collapsed="true"/>
+      <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMNavigation_theme_text}"
+                                   itemId="channelMetaDataThemeForm"
+                                   collapsed="true">
+        <items>
+          <bpforms:themeSelectorForm propertyName="theme"/>
+        </items>
+      </editor:collapsibleFormPanel>
       <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMNavigation_javaScript_text}"
                                    itemId="channelMetaDataJavaScriptForm"
                                    collapsed="true">

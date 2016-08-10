@@ -1,27 +1,30 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import com.coremedia.cache.Cache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
+import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
-public class ProductCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
+class ProductCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
 
   private  static final String UNIQUE_ID = "uniqueID";
 
   private WcCatalogWrapperService wrapperService;
 
-  public ProductCacheKey(String id,
-                         StoreContext storeContext,
-                         WcCatalogWrapperService wrapperService,
-                         CommerceCache commerceCache) {
-    super(id, storeContext, CONFIG_KEY_PRODUCT, commerceCache);
+  ProductCacheKey(String id,
+                  StoreContext storeContext,
+                  UserContext userContext,
+                  WcCatalogWrapperService wrapperService,
+                  CommerceCache commerceCache) {
+    super(id, storeContext, userContext, CONFIG_KEY_PRODUCT, commerceCache);
     this.wrapperService = wrapperService;
     if (!CommerceIdHelper.isProductId(id) && !CommerceIdHelper.isProductVariantId(id)) {
       throw new InvalidIdException(id + " (is neither a product nor sku id)");
@@ -30,8 +33,28 @@ public class ProductCacheKey extends AbstractCommerceCacheKey<Map<String, Object
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    ProductCacheKey that = (ProductCacheKey) o;
+    return Objects.equals(wrapperService, that.wrapperService);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), wrapperService);
+  }
+
+  @Override
   public Map<String, Object> computeValue(Cache cache) {
-    return wrapperService.findProductById(id, storeContext);
+    return wrapperService.findProductById(id, storeContext, userContext);
   }
 
   @Override

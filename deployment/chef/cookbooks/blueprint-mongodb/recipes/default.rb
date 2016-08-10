@@ -50,20 +50,19 @@ rewind 'execute[mongodb-systemctl-daemon-reload]' do
 end
 
 # remove original service
-unwind "service[mongod]"
+unwind 'service[mongod]'
 
 # include own service
 service 'mongod3' do
   service_name 'mongod'
   case node['platform']
-    when 'ubuntu'
-      if node['platform_version'].to_f >= 14.04
-        provider Chef::Provider::Service::Upstart
-      end
+  when 'ubuntu'
+    if node['platform_version'].to_f >= 14.04
+      provider Chef::Provider::Service::Upstart
+    end
   end
   supports :start => true, :stop => true, :restart => true, :status => true
   action [:enable, :start]
   subscribes :restart, "template[#{node['mongodb3']['mongod']['config_file']}]", :immediately
   subscribes :restart, "template[#{node['mongodb3']['config']['mongod']['security']['keyFile']}", :immediately
 end
-

@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
@@ -37,7 +38,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 /**
  * Base class for product and product variant implementation.
  */
-public abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
+abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductBase.class);
 
@@ -77,8 +78,9 @@ public abstract class ProductBase extends AbstractIbmCommerceBean implements Pro
         priceInfo = wcPrices;
       }
       if (priceInfo == null) {
+        //TODO: would be nice to delegate a priceService here
         priceInfo = (WcPrices) getCommerceCache().get(
-                new StaticPricesByExternalIdCacheKey(getExternalId(), getContext(), getCatalogWrapperService(), getCommerceCache()));
+                new StaticPricesByExternalIdCacheKey(getExternalId(), getContext(), UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
       }
     }
     return priceInfo;
@@ -263,12 +265,14 @@ public abstract class ProductBase extends AbstractIbmCommerceBean implements Pro
 
   @Override
   public String getDefaultImageUrl() {
-    return getAssetUrlProvider().getImageUrl(DataMapHelper.getValueForKey(getDelegate(), "fullImage", String.class));
+    String fullImage = DataMapHelper.getValueForKey(getDelegate(), "fullImage", String.class);
+    return null == fullImage ? null : getAssetUrlProvider().getImageUrl(fullImage);
   }
 
   @Override
   public String getThumbnailUrl() {
-    return getAssetUrlProvider().getImageUrl(DataMapHelper.getValueForKey(getDelegate(), "thumbnail", String.class));
+    String thumbnail = DataMapHelper.getValueForKey(getDelegate(), "thumbnail", String.class);
+    return null == thumbnail ? null : getAssetUrlProvider().getImageUrl(thumbnail);
   }
 
   @Override
@@ -387,7 +391,7 @@ public abstract class ProductBase extends AbstractIbmCommerceBean implements Pro
     if (wcAttributes != null && ! wcAttributes.isEmpty()) {
       for (Map<String, Object> wcAttribute : wcAttributes) {
         ProductAttribute pa = new ProductAttributeImpl(wcAttribute);
-        if (DataMapHelper.getValueForKey(wcAttribute, "usage", String.class).equals(USAGE_DEFINING)) {
+        if (USAGE_DEFINING.equals(DataMapHelper.getValueForKey(wcAttribute, "usage", String.class))) {
           definingAttributes.add(pa);
         } else {
           describingAttributes.add(pa);

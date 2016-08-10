@@ -16,9 +16,10 @@
 </Struct>
 </localSettings>
 <linkedSettings>
+<link href="../Options/Settings/Elastic%20Social%20No%20Comments%20But%20Reviews.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Elastic%20Social%20No%20Comments%20But%20Reviews"/>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment>catalog-root-page</segment>
 <title>Aurora B2B Catalog Root</title>
 <htmlTitle></htmlTitle>
@@ -77,7 +78,7 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Microsites/The%20Guide%20To%20Perfect%20Lightida7577b9.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Microsites/The%20Guide%20To%20Perfect%20Lighting/The%20Art%20of%20Perfect%20Lighting%20Article"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Personalization/Contract-Specific%20Call-To-Action%20Teaser.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Personalization/Contract-Specific%20Call-To-Action%20Teaser"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/sidebar.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/sidebar"/>

@@ -53,3 +53,34 @@
 .meta-data-view-text {
   margin-right: auto;
 }
+
+/**
+  * CMTHeme combo
+  *
+  * @see ThemeSelectorForm.exml
+  */
+.x-combo-list-item.multipath-theme-combo {
+  border-color: transparent;
+}
+.theme-header-title,
+.theme-text {
+  padding-left: 3px;
+  padding-right: 6px;
+}
+.theme-header-image {
+  margin-right: 6px;
+  width: 90px;
+}
+.theme-header-title {
+  width: 100%;
+}
+.theme-icon-warning {
+  height: 50px;
+  background: url('../images/theme_default.png') no-repeat scroll center center transparent;
+  display: block;
+  text-decoration: none;
+  cursor: default;
+  outline: none;
+  width: 82px;
+  min-height: 50px;
+}

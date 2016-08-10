@@ -72,6 +72,7 @@ public class FileContainersObservable {
   private function validate():void {
     if(isEmpty()) {
       validityExpression.setValue(true);
+      return;
     }
     for (var i:int = 0; i < containers.length; i++) {
       var fc:FileContainer = containers[i];

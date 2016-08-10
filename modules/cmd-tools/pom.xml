@@ -12,8 +12,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>css-importer-application</module>
-    <module>css-importer-lib</module>
+    <module>theme-importer-application</module>
+    <module>theme-importer-lib</module>
     <module>cae-tools-application</module>
     <module>caefeeder-tools-application</module>
     <module>cms-tools-application</module>

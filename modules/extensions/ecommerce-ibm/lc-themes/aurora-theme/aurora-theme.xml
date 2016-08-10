@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <themeDefinition modelVersion="1">
+
   <name>aurora</name>
-  <description>Aurora Theme</description>
+  <description>The Aurora Theme provides a modern, appealing, highly visual theme. It demonstrates the capability
+    to build localizable, multi-national, experience-driven e-Commerce websites. Integration with IBM WebSphere Commerce
+    ships out of the box.
+
+    Based on a fully responsive, mobile-first design paradigm, it leverages the Masonry dynamic grid framework. It
+    scales from mobile via tablet to desktop viewport sizes and uses the CoreMedia Adaptive and Responsive Image
+    Framework to dynamically deliver the right image sizes in the right aspect ratios and crops for each viewport.
+
+    This theme integrates the fragment-based approach seamless into Aurora B2C and B2B store examples.
+  </description>
+  <thumbnail>img/theme-preview.jpg</thumbnail>
 
   <javaScripts>
     <!-- Vendor Basic JavaScripts -->
@@ -16,7 +27,7 @@
     <!-- Additional Vendor JavaScripts from PerfectChef -->
     <javaScript>../perfectchef/vendor/masonry.pkgd.js</javaScript>
     <!-- CoreMedia Basic JavaScripts -->
-    <javaScript>../basic/js/noconflict.js</javaScript>
+    <javaScript>../perfectchef/js/coremedia.blueprint.noconflict.js</javaScript>
     <javaScript>../basic/js/jquery.coremedia.utils.js</javaScript>
     <javaScript>../basic/js/jquery.coremedia.smartresize.js</javaScript>
     <javaScript>../basic/js/jquery.coremedia.responsiveimages.js</javaScript>
@@ -33,12 +44,12 @@
     <javaScript>../basic/js/coremedia.blueprint.imagemap.init.js</javaScript>
     <javaScript>../basic/js/coremedia.blueprint.hashBasedFragment.js</javaScript>
     <!-- Elastic Social JavaScripts -->
-    <javaScript>../elastic/js/com.coremedia.blueprint.basic.timezone.js</javaScript>
-    <javaScript>../elastic/js/com.coremedia.blueprint.es.js</javaScript>
+    <javaScript>../es/js/coremedia.blueprint.basic.timezone.js</javaScript>
+    <javaScript>../es/js/coremedia.blueprint.es.js</javaScript>
     <!-- CoreMedia PerfectChef JavaScripts -->
-    <javaScript>../perfectchef/js/com.coremedia.jquery.equalheight.js</javaScript>
-    <javaScript>../perfectchef/js/com.coremedia.blueprint.perfectchef.js</javaScript>
-    <javaScript>../perfectchef/js/com.coremedia.blueprint.perfectchef.deviceSettings.js</javaScript>
+    <javaScript>../perfectchef/js/jquery.coremedia.equalheight.js</javaScript>
+    <javaScript>../perfectchef/js/coremedia.blueprint.perfectchef.js</javaScript>
+    <javaScript>../perfectchef/js/coremedia.blueprint.perfectchef.deviceSettings.js</javaScript>
     <!-- CoreMedia Aurora-->
     <javaScript>js/com.coremedia.blueprint.aurora.js</javaScript>
   </javaScripts>
@@ -56,8 +67,8 @@
     <css>../basic/css/imagemap.css</css>
     <css>../basic/css/print.css</css>
     <!-- CoreMedia Elastic Social -->
-    <css>../elastic/css/es.css</css>
-    <css>../elastic/css/es-form.css</css>
+    <css>../es/css/es.css</css>
+    <css>../es/css/es-form.css</css>
     <!-- CoreMedia PerfectChef -->
     <css>../perfectchef/css/font.css</css>
     <css>../perfectchef/css/layout.css</css>
@@ -79,4 +90,12 @@
     <css>css/aurora.css</css>
     <css>css/aurora-es.css</css>
   </styleSheets>
+
+  <viewRepositoryName>perfectchef</viewRepositoryName>
+
+  <resourceBundles>
+    <resourceBundle>../basic/Bundle_en.properties</resourceBundle>
+    <resourceBundle>../perfectchef/Livecontext_en.properties</resourceBundle>
+  </resourceBundles>
+
 </themeDefinition>

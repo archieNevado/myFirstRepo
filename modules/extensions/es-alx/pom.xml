@@ -23,7 +23,6 @@
     <module>es-alx-webtrends</module>
     <module>es-alx-studio-component</module>
     <module>es-alx-studio-plugin</module>
-    <module>es-alx-templates</module>
   </modules>
 
 </project>

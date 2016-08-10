@@ -3,11 +3,9 @@
  */
 var coremedia = (function (module) {
   return module;
-}(window.coremedia || {}));
-/**
- *  CoreMedia Blueprint Namespace
- */
+}(coremedia || {}));
 coremedia.blueprint = (function (module) {
+  module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
 

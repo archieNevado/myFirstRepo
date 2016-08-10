@@ -39,7 +39,7 @@ if node['blueprint']['nexus_url']
   node.default['blueprint']['tools']['content-management-server']['version'] = 'LATEST'
   node.default['blueprint']['tools']['master-live-server']['version'] = 'LATEST'
   node.default['blueprint']['tools']['workflow-server']['version'] = 'LATEST'
-  node.default['blueprint']['tools']['css-importer']['version'] = 'LATEST'
+  node.default['blueprint']['tools']['theme-importer']['version'] = 'LATEST'
   node.default['blueprint']['tools']['replication-live-server']['version'] = 'LATEST'
   node.default['blueprint']['common_libs']['coremedia-tomcat.jar']['version'] = 'LATEST'
 end

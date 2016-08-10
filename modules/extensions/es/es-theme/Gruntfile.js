@@ -1,11 +1,8 @@
 module.exports = function (grunt) {
   'use strict';
 
-  // Force use of Unix newlines
-  grunt.util.linefeed = '\n';
-
   // These plugins provide necessary tasks.
-  require('load-grunt-tasks')(grunt, {scope: 'devDependencies'});
+  require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
 
   // --- Project configuration ---
@@ -13,7 +10,7 @@ module.exports = function (grunt) {
 
     // --- Properties ---
     pkg: grunt.file.readJSON('package.json'),
-    distDir: 'target/resources/themes/elastic',
+    distDir: 'target/resources/themes/es',
 
     // --- Task configuration ---
     clean: {
@@ -57,11 +54,8 @@ module.exports = function (grunt) {
 
   // --- Tasks ---
 
-  // Full distribution task without templates.
-  grunt.registerTask('build', ['clean', 'copy']);
-
   // Full distribution task with templates.
-  grunt.registerTask('buildWithTemplates', ['build', 'compress:templates']);
+  grunt.registerTask('build', ['clean', 'copy', 'compress:templates']);
 
   // Default task = distribution.
   grunt.registerTask('default', ['build']);

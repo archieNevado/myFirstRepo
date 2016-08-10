@@ -22,6 +22,7 @@ interactions:
       Set-Cookie: JSESSIONID=0000IoCERQ2Ni7BijBY4FM46gP0:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
@@ -53,5 +54,30 @@ interactions:
       Set-Cookie: JSESSIONID=0000g77e_XYwrzqs8rP5t58pku3:-1; Path=/; Domain=.toko-test-06.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
+      X-Betamax: PLAY
     body: '{"errors":[{"errorParameters":"","errorCode":"The following finder exception has occurred during processing: \"javax.ejb.ObjectNotFoundException: forUserId mr.unknown does not exist\".","errorKey":"The following finder exception has occurred during
       processing: \"javax.ejb.ObjectNotFoundException: forUserId mr.unknown does not exist\".","errorMessage":"The following finder exception has occurred during processing: \"javax.ejb.ObjectNotFoundException: forUserId mr.unknown does not exist\"."}]}'
+- recorded: 2016-07-22T14:34:17.953Z
+  request:
+    method: POST
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/loginidentity
+    headers:
+      Accept-Encoding: text/plain
+      Content-Length: '60'
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
+  response:
+    status: 201
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 22 Jul 2016 14:34:17 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000l1xWgAg6pELT8pKH5_8ig2z:-1; Path=/; Domain=.master-75-tomcat.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"userId":"2","WCToken":"2%2CrmHkt0xzgYJ6hrVczHWlQyKd5jXErPJtDqpO8d6k3fKqqo%2F4xRsus7IlM0k4mx5BLlmnMb7i%2FpAprHaUCL3QIUXTrHq7zEnQJwfwd7Rs%2BZqQbN%2Bpn9imHXM3ZMlYKSTdnDaMLBe9Kl9R8nDCCHZ3ogF7pmNNzXou5H28nRuRyvXh0EuU%2F%2F%2FmPUWExgxbFBS8FvOjckQYD74J5pX7%2BykwWQ%3D%3D","WCTrustedToken":"2%2C8IH4nbE%2B93RlVU%2BiY09vUCH8keg%3D","personalizationID":"1469173833154-2"}'

@@ -120,7 +120,7 @@ public class DataMapTransformationHelper {
    */
   private static void unifyProductWrapperKeys(Map<String, Object> productWrapper) {
     //noinspection unchecked
-    List<Map<String, Object>> catalogEntryView = getCatalogEntryView(productWrapper);
+    List<Map<String, Object>> catalogEntryView = DataMapHelper.getValueForKey(productWrapper, "catalogEntryView", List.class);
     replaceKeys(catalogEntryView);
     replaceProductAttributeKeys(catalogEntryView);
     replaceSkus(catalogEntryView);
@@ -133,7 +133,7 @@ public class DataMapTransformationHelper {
    */
   private static void unifyCategoryWrapperKeys(Map<String, Object> categoryWrapper) {
     //noinspection unchecked
-    List<Map<String, Object>> catalogGroupView = getCatalogGroupView(categoryWrapper);
+    List<Map<String, Object>> catalogGroupView = DataMapHelper.getValueForKey(categoryWrapper, "catalogGroupView", List.class);
     replaceKeys(catalogGroupView);
     formatParentCatGroupId(catalogGroupView);
   }
@@ -227,26 +227,6 @@ public class DataMapTransformationHelper {
         }
       }
     }
-  }
-
-  /**
-   * Returns the catalog entry view section of a given map.
-   *
-   * @param productsMap The product map retrieved by the commerce server.
-   * @return The sub map containing the catalog entry view section or null if not available.
-   */
-  private static List getCatalogEntryView(Map<String, Object> productsMap) {
-    return DataMapHelper.getValueForKey(productsMap, "catalogEntryView", List.class);
-  }
-
-  /**
-   * Returns the catalog group view section of a given map.
-   *
-   * @param categoriesWrapper The categories map retrieved by the commerce server.
-   * @return The sub map containing the catalog group view section or null if not available.
-   */
-  private static List getCatalogGroupView(Map<String, Object> categoriesWrapper) {
-    return DataMapHelper.getValueForKey(categoriesWrapper, "catalogGroupView", List.class);
   }
 
 }

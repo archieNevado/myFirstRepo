@@ -208,4 +208,16 @@ public interface CMLinkable extends Linkable, CMLocalized, BelowRootNavigation, 
    * @return a list of {@link CMLocTaxonomy} objects
    */
   List<CMLocTaxonomy> getLocationTaxonomy();
+
+  /**
+   * Name of the document property 'resourceBundles2'.
+   */
+  String RESOURCE_BUNDLES2 = "resourceBundles2";
+
+  /**
+   * Returns the value of the document property {@link #RESOURCE_BUNDLES2}.
+   *
+   * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMSettings} objects
+   */
+  List<CMResourceBundle> getResourceBundles2();
 }

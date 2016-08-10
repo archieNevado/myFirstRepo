@@ -5,7 +5,7 @@
  * see: http://www.paulirish.com/2009/throttled-smartresize-jquery-event-handler/  *
  *
  * Version 1.2
- * Copyright (c) 2016 CoreMedia AG
+ * Copyright (c) CoreMedia AG
  *
  * Usage:
  * $(window).smartresize(function(){
@@ -14,11 +14,11 @@
  *
  */
 
-/*! Smart Resize Plugin | Copyright (c) 2016 CoreMedia AG */
+/*! Smart Resize Plugin | Copyright (c) CoreMedia AG */
 ;(function ($) {
   "use strict";
 
-  $.fn.smartresize = function(trigger) {
+  $.fn.smartresize = function (trigger) {
     // debouncing function from John Hann
     // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
     var debounce = function (func, threshold, execAsap) {
@@ -46,4 +46,4 @@
     };
     return trigger ? this.bind('resize', debounce(trigger)) : this.trigger('smartresize');
   };
-})(coremedia.blueprint.$ || jQuery);
+})(jQuery || coremedia.blueprint.$);

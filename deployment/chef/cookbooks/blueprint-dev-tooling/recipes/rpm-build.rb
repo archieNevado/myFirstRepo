@@ -165,7 +165,7 @@ tools = [{ :name => 'content-management-server-tools', :config_files => ['proper
          { :name => 'master-live-server-tools', :config_files => ['properties/corem/capclient.properties'] },
          { :name => 'replication-live-server-tools', :config_files => ['properties/corem/capclient.properties'] },
          { :name => 'workflow-server-tools', :config_files => ['properties/corem/capclient.properties'] },
-         { :name => 'css-importer-tools', :config_files => ['properties/corem/css-importer.properties', 'properties/corem/capclient.properties'] },
+         { :name => 'theme-importer-tools', :config_files => ['properties/corem/theme-importer.properties', 'properties/corem/capclient.properties'] },
          { :name => 'caefeeder-preview-tools', :config_files => ['properties/corem/resetcaefeeder.properties'] },
          { :name => 'caefeeder-live-tools', :config_files => ['properties/corem/resetcaefeeder.properties'] }]
 common_tools_config_files = ['bin/pre-config.jpif']

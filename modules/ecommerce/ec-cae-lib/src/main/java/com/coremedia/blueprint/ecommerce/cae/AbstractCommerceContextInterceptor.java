@@ -2,6 +2,7 @@ package com.coremedia.blueprint.ecommerce.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.links.BlueprintUriConstants;
@@ -81,6 +82,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
     // If site is null, we cannot help it here.  Silently do nothing.
     // It is up to the request handler to return 404.
     if (site != null) {
+      SiteHelper.setSiteToRequest(site, request);
       initStoreContext(site, request);
       if (initUserContext && isCommerceContextAvailable()) {
         initUserContext(request);

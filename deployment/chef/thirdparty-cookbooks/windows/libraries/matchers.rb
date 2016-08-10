@@ -1,10 +1,10 @@
 if defined?(ChefSpec)
   chefspec_version = Gem.loaded_specs['chefspec'].version
-  if chefspec_version < Gem::Version.new('4.1.0')
-    define_method = ChefSpec::Runner.method(:define_runner_method)
-  else
-    define_method = ChefSpec.method(:define_matcher)
-  end
+  define_method = if chefspec_version < Gem::Version.new('4.1.0')
+                    ChefSpec::Runner.method(:define_runner_method)
+                  else
+                    ChefSpec.method(:define_matcher)
+                  end
 
   define_method.call :windows_certificate
   define_method.call :windows_package
@@ -280,6 +280,31 @@ if defined?(ChefSpec)
   #
   def disable_windows_task(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:windows_task, :disable, resource_name)
+  end
+
+  #
+  # Assert that a +windows_task+ resource exists in the Chef run with the
+  # action +:enable+. Given a Chef Recipe that creates "mytask" as a
+  # +windows_task+:
+  #
+  #     windows_task 'mytask' do
+  #       action :enable
+  #     end
+  #
+  # The Examples section demonstrates the different ways to test a
+  # +windows_task+ resource with ChefSpec.
+  #
+  # @example Assert that a +windows_task+ was enabled
+  #   expect(chef_run).to enable_windows_task('mytask')
+  #
+  #
+  # @param [String, Regex] resource_name
+  #   the name of the resource to match
+  #
+  # @return [ChefSpec::Matchers::ResourceMatcher]
+  #
+  def enable_windows_task(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:windows_task, :enable, resource_name)
   end
 
   #

@@ -185,6 +185,8 @@
     <property name="cache" ref="cache"/>
   </bean>
 
+  <bean id="themeHandler" class="com.coremedia.blueprint.cae.handlers.ThemeHandler" parent="handlerBase"/>
+
   <bean id="staticUrlHandler" class="com.coremedia.blueprint.cae.handlers.StaticUrlHandler" parent="handlerBase">
     <description>
       Handles Strings

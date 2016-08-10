@@ -1,10 +1,9 @@
 #
 # Cookbook Name:: nginx
 # Definition:: nginx_site
-#
 # Author:: AJ Christensen <aj@junglist.gen.nz>
 #
-# Copyright 2008-2013, Chef Software, Inc.
+# Copyright 2008-2009, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,17 +20,9 @@
 
 define :nginx_site, :enable => true, :timing => :delayed do
   if params[:enable]
-
-    if params[:template]
-      template "#{node['nginx']['dir']}/sites-available/#{params[:name]}" do
-        source params[:template]
-        variables(params[:variables])
-      end
-    end
-
     execute "nxensite #{params[:name]}" do
-      command "#{node['nginx']['script_dir']}/nxensite #{params[:name]}"
-      notifies :reload, 'service[nginx]', params[:timing]
+      command "/usr/sbin/nxensite #{params[:name]}"
+      notifies :reload, "service[nginx]", params[:timing]
       not_if do
         ::File.symlink?("#{node['nginx']['dir']}/sites-enabled/#{params[:name]}") ||
           ::File.symlink?("#{node['nginx']['dir']}/sites-enabled/000-#{params[:name]}")
@@ -39,8 +30,8 @@ define :nginx_site, :enable => true, :timing => :delayed do
     end
   else
     execute "nxdissite #{params[:name]}" do
-      command "#{node['nginx']['script_dir']}/nxdissite #{params[:name]}"
-      notifies :reload, 'service[nginx]', params[:timing]
+      command "/usr/sbin/nxdissite #{params[:name]}"
+      notifies :reload, "service[nginx]", params[:timing]
       only_if do
         ::File.symlink?("#{node['nginx']['dir']}/sites-enabled/#{params[:name]}") ||
           ::File.symlink?("#{node['nginx']['dir']}/sites-enabled/000-#{params[:name]}")

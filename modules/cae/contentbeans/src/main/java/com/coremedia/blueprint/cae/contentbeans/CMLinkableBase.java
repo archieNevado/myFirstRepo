@@ -2,16 +2,17 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMLocTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMLocalized;
+import com.coremedia.blueprint.common.contentbeans.CMResourceBundle;
 import com.coremedia.blueprint.common.contentbeans.CMSettings;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMViewtype;
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
@@ -236,6 +237,11 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
   public List<CMLocTaxonomy> getLocationTaxonomy() {
     List<Content> contents = getContent().getLinks(LOCATION_TAXONOMY);
     return createBeansFor(contents, CMLocTaxonomy.class);
+  }
+
+  @Override
+  public List<CMResourceBundle> getResourceBundles2() {
+    return createBeansFor(getContent().getLinks(RESOURCE_BUNDLES2), CMResourceBundle.class);
   }
 
   protected SettingsService getSettingsService() {

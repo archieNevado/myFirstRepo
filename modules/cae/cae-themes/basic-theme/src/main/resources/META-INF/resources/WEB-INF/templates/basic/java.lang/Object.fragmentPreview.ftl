@@ -4,13 +4,15 @@
 <#assign language=bp.getPageLanguageTag(self) />
 <#assign direction=bp.getPageDirection(self) />
 <!DOCTYPE html>
-<!--[if lte IE 8]> <html class="no-js lt-ie9" lang="${language}" dir="${direction}"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="${language}" dir="${direction}"> <!--<![endif]-->
+<html class="no-js" lang="${language}" dir="${direction}">
 
 <#if cmpage?has_content>
   <@cm.include self=cmpage view="head"/>
 <#else>
   <head>
+    <meta charset="UTF-8"/>
+    <title>CoreMedia Studio Preview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <@preview.previewScripts />
   </head>
 </#if>

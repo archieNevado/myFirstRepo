@@ -10,11 +10,6 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../Pictures/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Picture%20Missing%20Product%20Picture"/>
-<StructProperty Name="livecontext.catalog">
-<Struct>
-<LinkProperty Name="root" LinkType="coremedia:///cap/contenttype/CMExternalChannel" xlink:href="coremedia:///cap/resources/../Augmentation/Aurora%20B2C%20Catalog%20Root.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Aurora%20B2C%20Catalog%20Root"/>
-</Struct>
-</StructProperty>
 <StringProperty Name="externalUriPath"/>
 <StringProperty Name="shopNow">disabled</StringProperty>
 </Struct>
@@ -22,17 +17,14 @@
 <linkedSettings>
 <link href="../../../../../Settings/Options/Settings/OpenCalais.xml" path="/Settings/Options/Settings/OpenCalais"/>
 <link href="../Options/Settings/LiveContext.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/LiveContext"/>
-<link href="../Options/Settings/CAEConfig.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CAEConfig"/>
 <link href="../Options/Settings/Elastic%20Social.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Elastic%20Social"/>
 <link href="../Options/Settings/CMChannel/Robots%2Etxt.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Robots%2Etxt"/>
 <link href="../Options/Settings/CMChannel/Responsive%20Image%20Settings.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/>
 <link href="../Options/Settings/Preview.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Preview"/>
 </linkedSettings>
-<resourceBundles>
-<link href="../../../../../Settings/Options/Bundles/Bundle_en.xml" path="/Settings/Options/Bundles/Bundle_en"/>
+<resourceBundles2>
 <link href="../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
-<link href="../../../../../Settings/Options/Bundles/Livecontext_en.xml" path="/Settings/Options/Bundles/Livecontext_en"/>
-</resourceBundles>
+</resourceBundles2>
 <segment>aurora</segment>
 <title>Home</title>
 <htmlTitle></htmlTitle>
@@ -58,11 +50,12 @@
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
 <javaScript>
-<link href="../../../../../Themes/aurora/aurora%2Ejs.xml" path="/Themes/aurora/aurora%2Ejs"/>
 </javaScript>
 <css>
-<link href="../../../../../Themes/aurora/aurora%2Ecss.xml" path="/Themes/aurora/aurora%2Ecss"/>
 </css>
+<theme>
+<link href="../../../../../Themes/aurora/Aurora%20Theme.xml" path="/Themes/aurora/Aurora%20Theme"/>
+</theme>
 <favicon md5="b01ec1d815971bfb59a29dbb80c6fdcc" size="22382" href="../../../../../__blob/b01ec1d815971bfb59a29dbb80c6fdcc.blob" mimetype="image/x-icon"/>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

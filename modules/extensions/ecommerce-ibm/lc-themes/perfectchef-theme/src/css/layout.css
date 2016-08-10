@@ -978,8 +978,10 @@ a[class*=" icon-"]:hover {
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
   background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
+  cursor: pointer;
 }
 
+.cm-imagemap__hotzone:hover.cm-imagemap__hotzone--icon,
 .cm-imagemap__hotzone--hover.cm-imagemap__hotzone--icon {
   background-color: rgba(0, 0, 0, 0.8);
 }

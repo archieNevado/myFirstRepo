@@ -12,15 +12,14 @@
 <BooleanProperty Name="enabled">true</BooleanProperty>
 <IntProperty Name="xpos">0</IntProperty>
 <IntProperty Name="ypos">0</IntProperty>
-<StringProperty Name="layout">cm-overlay--theme-dark-on-light</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment></segment>
 <title></title>
 <htmlTitle></htmlTitle>

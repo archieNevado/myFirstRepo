@@ -12,9 +12,27 @@
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-p13n-cae</artifactId>
+      <artifactId>am-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>am-theme</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>es-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>es-theme</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
@@ -25,54 +43,6 @@
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>lc-ecommerce-webapp-component</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>p13n-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>osm-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>alx-p13n-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>alx-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>am-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>am-theme</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>corporate-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>corporate-theme</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
@@ -90,13 +60,61 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>aurora-theme</artifactId>
+      <artifactId>es-p13n-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>perfectchef-theme</artifactId>
+      <artifactId>p13n-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-asset-cae-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-es-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-es-templates</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>es-alx-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>alx-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>shoutem-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>optimizely-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>alx-p13n-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
@@ -114,13 +132,25 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>nuggad-cae</artifactId>
+      <artifactId>alx-webtrends-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>alx-webtrends-cae</artifactId>
+      <artifactId>osm-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-p13n-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>corporate-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
@@ -132,57 +162,37 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-es-cae</artifactId>
+      <artifactId>nuggad-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-cae</artifactId>
+      <artifactId>logging-config</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>nuggad-templates</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>optimizely-templates</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-theme</artifactId>
+      <artifactId>perfectchef-theme</artifactId>
       <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-alx-cae</artifactId>
+      <artifactId>corporate-theme</artifactId>
       <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-alx-templates</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>shoutem-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-asset-cae-component</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-p13n-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>optimizely-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>

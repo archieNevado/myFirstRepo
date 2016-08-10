@@ -18,6 +18,7 @@
     <module>lc-es-studio</module>
     <module>lc-es-bom</module>
     <module>lc-es-worker-component</module>
+    <module>lc-es-templates</module>
   </modules>
 
   <properties>

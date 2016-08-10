@@ -11,25 +11,18 @@
   </parent>
 
   <artifactId>am-theme</artifactId>
-
   <description>Theme "Asset Management Download Portal". Includes webresources and templates.</description>
 
   <properties>
     <coremedia.project.extension.for>cae</coremedia.project.extension.for>
   </properties>
 
-  <!-- dependencies needed for code-completion in IDEs -->
+  <!-- dependencies needed for code-completion in IDEs only -->
   <dependencies>
+    <!-- cae module includes all dependencies to spring, freemarker, javascript and coremedia taglibs -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>am-cae</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- basic theme includes all dependencies to spring, freemarker, javascript and coremedia taglibs -->
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>basic-theme</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -58,43 +51,33 @@
               <installDirectory>${project.basedir}/../../../../</installDirectory>
             </configuration>
             <executions>
-              <!-- install node, npm and node_modules in local workspace -->
               <execution>
-                <id>install node, npm and dependencies</id>
+                <id>build theme</id>
                 <goals>
+                  <!-- install node -->
                   <goal>install-node-and-npm</goal>
+                  <!-- install modules and build theme via postinstall -->
                   <goal>npm</goal>
                 </goals>
               </execution>
-              <!-- run grunt build -->
+              <!-- run tests -->
               <execution>
-                <id>grunt build</id>
+                <id>test theme</id>
                 <goals>
-                  <goal>grunt</goal>
-                </goals>
-                <configuration>
-                  <arguments>${cae.themes.grunt.task.build}</arguments>
-                </configuration>
-              </execution>
-              <!-- run grunt test -->
-              <execution>
-                <id>grunt test</id>
-                <goals>
-                  <goal>grunt</goal>
+                  <goal>npm</goal>
                 </goals>
                 <phase>test</phase>
                 <configuration>
-                  <arguments>${cae.themes.grunt.task.test}</arguments>
+                  <arguments>test</arguments>
                 </configuration>
               </execution>
             </executions>
           </plugin>
-
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <!-- Provide the resources artifact for the coremedia-webresource-content-maven-plugin. -->
+                <!-- Provide the resources artifact as zip for the theme importer runner. -->
                 <id>theme</id>
                 <goals>
                   <goal>single</goal>

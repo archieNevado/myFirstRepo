@@ -11,6 +11,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.elastic.core.api.serializer.TypeConverter;
 import com.coremedia.elastic.core.api.serializer.TypeConverterRegistry;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.api.ModerationType;
@@ -429,10 +430,15 @@ public class DemoDataGenerator implements Runnable {
               if (null != productTeaser.getType().getDescriptor("externalId")) {
                 final Object externalId = productTeaser.get("externalId");
                 final ImmutableMap<String, Object> serializedProduct = ImmutableMap.of("id", externalId, "siteId", site.getId());
-                final Object target = typeConverterRegistry.getConverter("product").deserialize(serializedProduct);
-                reviewGenerator.addTarget(target, elasticSocialConfiguration.isWritingReviewsEnabled(), elasticSocialConfiguration.isAnonymousReviewingEnabled(),
-                        elasticSocialConfiguration.isComplainingEnabled(), elasticSocialConfiguration.isAnonymousReviewingEnabled(),
-                        elasticSocialConfiguration.getReviewModerationType());
+                TypeConverter<?> converter = typeConverterRegistry.getConverter("product");
+                if(null != converter) {
+                  final Object target = converter.deserialize(serializedProduct);
+                  reviewGenerator.addTarget(target, elasticSocialConfiguration.isWritingReviewsEnabled(), elasticSocialConfiguration.isAnonymousReviewingEnabled(),
+                          elasticSocialConfiguration.isComplainingEnabled(), elasticSocialConfiguration.isAnonymousReviewingEnabled(),
+                          elasticSocialConfiguration.getReviewModerationType());
+                } else {
+                  LOG.warn("no type converter for 'product' found - is LC extension active?");
+                }
               }
             }
           }

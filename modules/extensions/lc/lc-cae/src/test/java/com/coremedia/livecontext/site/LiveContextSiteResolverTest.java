@@ -94,7 +94,7 @@ public class LiveContextSiteResolverTest {
     when(storeContextProvider.findContextBySite(site1)).thenReturn(storeContext);
     when(storeContext.get("storeId")).thenReturn("10001");
 
-    String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;parameter=noLinkRewrite;placement=header;view=test";
+    String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;view=test";
     FragmentParameters params = FragmentParametersFactory.create(url);
     Site siteFor = testling.findSiteFor(params);
     assertEquals(site1, siteFor);
@@ -106,7 +106,7 @@ public class LiveContextSiteResolverTest {
     when(storeContextProvider.findContextBySite(site1)).thenReturn(storeContext);
     when(storeContext.get("storeId")).thenReturn("10001");
 
-    String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;parameter=noLinkRewrite;placement=header;environment=site:site2";
+    String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;environment=site:site2";
     FragmentParameters params = FragmentParametersFactory.create(url);
     Site siteFor = testling.findSiteFor(params);
     assertEquals(site2, siteFor);

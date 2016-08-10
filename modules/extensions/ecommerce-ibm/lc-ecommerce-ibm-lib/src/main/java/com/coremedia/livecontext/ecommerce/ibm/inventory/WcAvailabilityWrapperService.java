@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.inventory;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import org.springframework.http.HttpMethod;
 
 import java.util.Collections;
@@ -18,7 +19,7 @@ import static java.util.Arrays.asList;
  */
 public class WcAvailabilityWrapperService extends AbstractWcWrapperService {
 
-    private static final WcRestConnector.WcRestServiceMethod<Map, Void>
+  private static final WcRestServiceMethod<Map, Void>
             GET_AVAILABILITY_FOR_PRODUCT_VARIANTS = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/inventoryavailability/{productVariantList}", false, true, Map.class);
 
   public Map<String, Object> getInventoryAvailability(String skuIds, StoreContext storeContext) {
