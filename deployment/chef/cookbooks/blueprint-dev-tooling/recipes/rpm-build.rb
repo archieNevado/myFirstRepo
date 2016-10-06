@@ -40,7 +40,7 @@ package_version = node['blueprint']['dev']['rpm']['version']
 
 # delete the working dir TODO: may be obsolete
 directory node['fpm_tng']['build_dir'] do
-  action :delete
+  action [:delete, :create]
   recursive true
 end
 # we need the rpm-build tool

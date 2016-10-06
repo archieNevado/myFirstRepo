@@ -35,7 +35,7 @@ platforms:
 suites:
 - name: rpm-build
   # add platforms to test to this array, by default only one is listed so a simple kitchen converge will run this suite
-  includes: [centos6-vagrant]
+  includes: [centos7-vagrant]
   driver:
     customize:
       memory: 1024
@@ -45,7 +45,7 @@ suites:
 
 - name: rpm-install
   # add platforms to test to this array, by default only one is listed so a simple kitchen converge will run this suite
-  includes: [centos6-vagrant]
+  includes: [centos7-vagrant]
   driver:
     customize:
       memory: 8192
