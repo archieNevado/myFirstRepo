@@ -2,6 +2,29 @@
 
 This file is used to list changes made in each version of the build-essential cookbook.
 
+## 6.0.4 (2016-08-19)
+
+- Install CLTools from dmg with -allowUntrusted on old OSX
+- Switch to cookstyle for ruby linting
+- Add OS X hosts to the kitchen config
+- Remove chefdk included gems from the Gemfile
+- Better handle kitchen failures in the Rakefile
+- Perform all unit/linting in a single travis job
+
+## v6.0.3 (2016-07-26)
+
+- Fix how gcc version specified for Solaris 11
+
+## v6.0.2 (2016-07-22)
+
+- Properly warn on Solaris 10
+- Specify the verson of gcc to install on Solaris 11
+
+## v6.0.1 (2016-07-19)
+
+- Clarify that this cookbook actually required Chef 12.1 or later not 12.0 or later
+- Add chef_version metadata
+
 ## v6.0.0 (2016-06-03)
 
 This cookbook now uses the new msys2 based compiler toolchain on windows. Both 32-bit DW2 and 64-bit SEH based toolchains are available based on the gcc 5.3x series compiler. By default these are located in C:\msys2\mingw32 and C:\msys2\mingw64

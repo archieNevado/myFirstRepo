@@ -25,7 +25,7 @@ public class PasswordResetFlowExecutionTest extends AbstractXmlFlowExecutionTest
   }
 
   protected FlowDefinitionResource getResource(FlowDefinitionResourceFactory resourceFactory) {
-    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.elastic.social.cae.flows.PasswordReset.xml", PasswordResetFlowExecutionTest.class);
+    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.es.webflow.PasswordReset.xml", PasswordResetFlowExecutionTest.class);
   }
 
   protected void configureFlowBuilderContext(MockFlowBuilderContext builderContext) {
@@ -38,7 +38,7 @@ public class PasswordResetFlowExecutionTest extends AbstractXmlFlowExecutionTest
     MockExternalContext context = new MockExternalContext();
     startFlow(input, context);
 
-    assertCurrentStateEquals("passwordReset");
-    assertTrue(getRequiredFlowAttribute("passwordReset") instanceof PasswordReset);
+    assertCurrentStateEquals("bpPasswordReset");
+    assertTrue(getRequiredFlowAttribute("bpPasswordReset") instanceof PasswordReset);
   }
 }

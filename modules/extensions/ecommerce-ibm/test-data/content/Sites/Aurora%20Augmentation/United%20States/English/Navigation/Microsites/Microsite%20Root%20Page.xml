@@ -33,6 +33,7 @@
 <children>
 <link href="Meat%20Lovers/Meat%20Lovers%20Microsite%20Page.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Microsites/Meat%20Lovers/Meat%20Lovers%20Microsite%20Page"/>
 <link href="Perfect%20Dinner/Perfect%20Dinner%20Microsite.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Microsites/Perfect%20Dinner/Perfect%20Dinner%20Microsite"/>
+<link href="Editorial%20Blog/Editorial%20Blog%20Microsite.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Microsites/Editorial%20Blog/Editorial%20Blog%20Microsite"/>
 </children>
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
@@ -40,6 +41,8 @@
 </javaScript>
 <css>
 </css>
+<theme>
+</theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">

@@ -25,6 +25,11 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <!-- activate this plugin for local development to generate webresources for cae-preview-webapp -->
@@ -38,6 +43,22 @@
       </activation>
       <build>
         <plugins>
+          <!-- clean node and node_modules in all themes -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${project.basedir}</directory>
+                  <includes>
+                    <include>**/node_modules/**</include>
+                  </includes>
+                  <followSymlinks>false</followSymlinks>
+                </fileset>
+              </filesets>
+            </configuration>
+          </plugin>
           <!-- build theme and copy everything to the target folder -->
           <plugin>
             <groupId>com.github.eirslett</groupId>
@@ -51,13 +72,19 @@
             </configuration>
             <executions>
               <execution>
-                <id>build theme</id>
+                <id>install-node-and-npm</id>
                 <goals>
-                  <!-- install node -->
                   <goal>install-node-and-npm</goal>
-                  <!-- install modules and build theme via postinstall -->
+                </goals>
+              </execution>
+              <execution>
+                <id>install-node-modules</id>
+                <goals>
                   <goal>npm</goal>
                 </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
               </execution>
             </executions>
           </plugin>

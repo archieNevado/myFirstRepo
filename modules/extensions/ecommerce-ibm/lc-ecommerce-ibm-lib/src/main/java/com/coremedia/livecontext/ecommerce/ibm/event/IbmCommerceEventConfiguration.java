@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ import java.util.List;
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @ComponentScan
+@EnableScheduling
 class IbmCommerceEventConfiguration {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IbmCommerceEventConfiguration.class);

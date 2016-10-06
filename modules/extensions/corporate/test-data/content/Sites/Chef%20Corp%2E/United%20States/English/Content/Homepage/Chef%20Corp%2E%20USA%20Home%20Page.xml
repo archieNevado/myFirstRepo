@@ -22,8 +22,10 @@
 <link href="../../Options/Settings/Google%20Analytics%20Settings.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Google%20Analytics%20Settings"/>
 <link href="../../Options/Settings/LiveContext.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/LiveContext"/>
 <link href="../../Options/Settings/SearchConfiguration.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/SearchConfiguration"/>
+<link href="../../Options/Settings/Elastic%20Social.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Elastic%20Social"/>
 </linkedSettings>
 <resourceBundles2>
+<link href="../../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
 <link href="../../../../../../Settings/Options/Bundles/Asset%20Management_en.xml" path="/Settings/Options/Bundles/Asset%20Management_en"/>
 </resourceBundles2>
 <segment>corporate</segment>
@@ -54,6 +56,7 @@
 <link href="../Site-Wide/404%20Page/Custom%20404%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Site-Wide/404%20Page/Custom%20404%20Page"/>
 <link href="SearchResultPage.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/SearchResultPage"/>
 <link href="../Topic%20Pages/Topicpage.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Topic%20Pages/Topicpage"/>
+<link href="../../Options/Settings/Actions/User%20Interaction.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/User%20Interaction"/>
 </children>
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
@@ -83,6 +86,7 @@
 <Link xlink:href="coremedia:///cap/resources/../Site-Wide/External%20Links/Blog%20External%20Link.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Site-Wide/External%20Links/Blog%20External%20Link"/>
 <Link xlink:href="coremedia:///cap/resources/zAdditional%20Demo%20Content/External%20Embedding/Embedding%8cd4e1c6.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/zAdditional%20Demo%20Content/External%20Embedding/Embedding%20-%20Beginning%20of%20Page%20HTML%20Fragment"/>
 <Link xlink:href="coremedia:///cap/resources/../Site-Wide/External%20HTML%20Fragments/Optimizely%20JS%20%20HTML%20Fragment.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Site-Wide/External%20HTML%20Fragments/Optimizely%20JS%20%20HTML%20Fragment"/>
+<Link xlink:href="coremedia:///cap/resources/../../Options/Settings/Actions/Login.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/Login"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Placements/header"/>

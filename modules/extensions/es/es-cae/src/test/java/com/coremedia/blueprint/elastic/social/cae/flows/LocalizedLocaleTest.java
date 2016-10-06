@@ -39,4 +39,18 @@ public class LocalizedLocaleTest {
     assertEquals(displayLanguage, newLocalizedLocale.getDisplayLanguage());
     assertEquals(locale, newLocalizedLocale.getLocale());
   }
+
+  @Test
+  public void testCountryConversion() {
+    String displayLanguage = "Englisch";
+    Locale locale = Locale.US;
+    LocalizedLocale localizedLocale = new LocalizedLocale(locale, displayLanguage);
+    String localizedLocaleAsString = localizedLocale.toString();
+    LocalizedLocale newLocalizedLocale = new LocalizedLocale(localizedLocaleAsString);
+    assertEquals(displayLanguage, localizedLocale.getDisplayLanguage());
+    assertEquals(locale, localizedLocale.getLocale());
+    assertEquals(displayLanguage, newLocalizedLocale.getDisplayLanguage());
+    assertEquals(locale, newLocalizedLocale.getLocale());
+  }
+
 }

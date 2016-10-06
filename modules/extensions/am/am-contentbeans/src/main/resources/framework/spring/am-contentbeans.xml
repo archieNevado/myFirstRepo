@@ -4,8 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:/framework/spring/blueprint-contentbeans.xml"/>
-  <import resource="classpath:/framework/spring/blueprint-views.xml"/>
-  <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
 
   <!-- register content beans -->
   <bean name="contentBeanFactory:AMAsset"

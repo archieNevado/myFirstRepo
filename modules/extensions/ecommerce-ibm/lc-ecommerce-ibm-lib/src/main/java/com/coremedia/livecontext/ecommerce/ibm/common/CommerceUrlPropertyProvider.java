@@ -44,6 +44,7 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
   private String shoppingFlowUrlForContractPreview;
   private String productNonSeoUrl;
   private String categoryNonSeoUrl;
+
   /**
    * The URL template is not mandatory and may be passed with the
    * parameter array of the "provideValue" method.
@@ -138,14 +139,19 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
   }
 
   private void updateUrlTemplate(Map<String, Object> parameters) {
-    if (parameters != null && parameters.get(URL_TEMPLATE) == null &&
-            (parameters.get(SEO_SEGMENT) == null || StringUtils.isBlank((String) parameters.get(SEO_SEGMENT)))) {
-      if (parameters.get(QUERY_PARAMS) != null) {
-        if (((Map) parameters.get(QUERY_PARAMS)).containsKey(PRODUCT_ID)) {
-          parameters.put(URL_TEMPLATE, productNonSeoUrl);
-        } else if (((Map) parameters.get(QUERY_PARAMS)).containsKey(CATEGORY_ID)) {
-          parameters.put(URL_TEMPLATE, categoryNonSeoUrl);
-        }
+    if (parameters == null) {
+      return;
+    }
+
+    Object urlTemplate = parameters.get(URL_TEMPLATE);
+    String sepSegment = (String) parameters.get(SEO_SEGMENT);
+    Map queryParams = (Map) parameters.get(QUERY_PARAMS);
+
+    if (urlTemplate == null && StringUtils.isBlank(sepSegment) && queryParams != null) {
+      if (queryParams.containsKey(PRODUCT_ID)) {
+        parameters.put(URL_TEMPLATE, productNonSeoUrl);
+      } else if (queryParams.containsKey(CATEGORY_ID)) {
+        parameters.put(URL_TEMPLATE, categoryNonSeoUrl);
       }
     }
   }
@@ -175,15 +181,13 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
 
       //the language ID has to be transformed into the format of the commerce system
       Locale locale = StoreContextHelper.getLocale(storeContext);
-      if (locale != null) {
-        if (getCatalogService() instanceof CatalogServiceImpl) {
-          languageId = ((CatalogServiceImpl) getCatalogService()).getLanguageId(locale);
-          parametersMap.put(PARAM_LANG_ID, languageId);
-        }
-        parametersMap.put(PARAM_LANGUAGE, locale.getLanguage());
+      if (getCatalogService() instanceof CatalogServiceImpl) {
+        languageId = ((CatalogServiceImpl) getCatalogService()).getLanguageId(locale);
+        parametersMap.put(PARAM_LANG_ID, languageId);
       }
+      parametersMap.put(PARAM_LANGUAGE, locale.getLanguage());
 
-      if (storeId != null && languageId != null) {
+      if (languageId != null) {
         //The catalog id may be defaulted to the store id if the store is not an e-store.
         if (catalogId == null) {
           catalogId = storeId;
@@ -191,7 +195,6 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
 
         parametersMap.put(PARAM_STORE_ID, storeId);
         parametersMap.put(PARAM_CATALOG_ID, catalogId);
-
       }
     }
 
@@ -218,6 +221,7 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
 
       url = prefix + url;
     }
+
     return url;
   }
 

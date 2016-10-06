@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_INTERNAL;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -88,7 +89,7 @@ public class SitemapTriggerImplTest {
     doReturn(httpClient).when(sitemapTrigger).createHttpClient();
 
     CloseableHttpResponse response = mockResponse(HttpServletResponse.SC_OK, expectedResult);
-    HttpGetMatcher httpGetMatcher = new HttpGetMatcher("http://localhost:49080/blueprint/servlet/internal/" + siteSegment + "/sitemap-org");
+    HttpGetMatcher httpGetMatcher = new HttpGetMatcher("http://localhost:49080/blueprint/servlet/" + PREFIX_INTERNAL + "/" + siteSegment + "/sitemap-org");
     when(httpClient.execute(argThat(httpGetMatcher))).thenReturn(response);
 
     //action
@@ -109,7 +110,7 @@ public class SitemapTriggerImplTest {
     doReturn(httpClient).when(sitemapTrigger).createHttpClient();
 
     CloseableHttpResponse response = mockResponse(HttpServletResponse.SC_BAD_REQUEST);
-    HttpGetMatcher httpGetMatcher = new HttpGetMatcher("http://localhost:49080/blueprint/servlet/internal/" + siteSegment + "/sitemap-org");
+    HttpGetMatcher httpGetMatcher = new HttpGetMatcher("http://localhost:49080/blueprint/servlet/" + PREFIX_INTERNAL + "/" + siteSegment + "/sitemap-org");
     when(httpClient.execute(argThat(httpGetMatcher))).thenReturn(response);
 
     //action

@@ -16,7 +16,7 @@
     <ui:rules>
       <collab:projectContentContextMenu>
         <plugins>
-          <ui:addItemsPlugin index="2">
+          <ui:addItemsPlugin index="3">
             <ui:items>
               <editor:bookmarkMenuItem contentValueExpression="{projectContentContainer.selectedItemsVE}"/>
               <menuseparator/>

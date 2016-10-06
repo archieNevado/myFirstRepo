@@ -11,6 +11,7 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.store.BeanRecord;
+import com.coremedia.ui.util.EventUtil;
 
 import ext.Ext;
 import ext.config.rowselectionmodel;
@@ -189,8 +190,15 @@ public class LetterListPanelBase extends GridPanel {
       sortedContentArray.push(c);
     }
     getListValuesExpression().setValue(sortedContentArray);
+
+    scrollToTop();
   }
 
+  private function scrollToTop():void {
+    EventUtil.invokeLater(function ():void {
+      getView()['scroller']['dom'].scrollTop = -10000;
+    });
+  }
 
   /**
    * Displays each name of a taxonomy

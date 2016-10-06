@@ -34,7 +34,7 @@
               <dcqe:modificationDateConditionEditor bindTo="{config.bindTo}"
                                                     propertyName="freshness"
                                                     group="attributes"
-                                                    documentTypes="{['CMArticle', 'CMVideo', 'CMPicture']}"
+                                                    documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
                                                     forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                                     sortable="true">
                 <dcqe:timeSlots>
@@ -53,24 +53,24 @@
                                            propertyName="documents"
                                            group="attributes"
                                            contentType="CMChannel"
-                                           documentTypes="{['CMArticle', 'CMVideo', 'CMPicture']}"
+                                           documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
                                            forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               <taxonomy:taxonomyConditionEditor bindTo="{config.bindTo}"
                                                 propertyName="subjecttaxonomy"
                                                 group="attributes"
                                                 contentType="CMTaxonomy"
-                                                documentTypes="{['CMArticle', 'CMVideo', 'CMPicture']}"
+                                                documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
                                                 forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               <taxonomy:locationTaxonomyConditionEditor bindTo="{config.bindTo}"
                                                         propertyName="locationtaxonomy"
                                                         group="attributes"
                                                         contentType="CMLocTaxonomy"
-                                                        documentTypes="{['CMArticle', 'CMVideo', 'CMPicture']}"
+                                                        documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
                                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               <dcqe:linkingTaxonomyConditionEditor bindTo="{config.bindTo}"
                                                    group="attributes"
                                                    propertyName="contextTaxonomies"
-                                                   documentTypes="{['CMArticle', 'CMVideo', 'CMPicture']}"
+                                                   documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
                                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             </dcqe:conditions>
           </dcqe:contentQueryEditor>

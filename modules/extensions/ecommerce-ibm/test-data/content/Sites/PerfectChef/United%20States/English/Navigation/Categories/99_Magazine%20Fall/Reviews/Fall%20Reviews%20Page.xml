@@ -37,25 +37,37 @@
 </javaScript>
 <css>
 </css>
+<theme>
+</theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
 <StructProperty Name="placements">
 <Struct>
-<StructProperty Name="604">
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
 <Struct>
-<BooleanProperty Name="locked">false</BooleanProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
-<Link xlink:href="coremedia:///cap/resources/Fall%20Video%20Review%20Collection.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/99_Magazine%20Fall/Reviews/Fall%20Video%20Review%20Collection"/>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../../Videos/Product%20Reviews/Best%20Non%20Stick%20Skillets%20Review%20Video.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Videos/Product%20Reviews/Best%20Non%20Stick%20Skillets%20Review%20Video"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../Videos/Product%20Reviews/Best%20Traditional%20Skillets%20Review%20Video.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Videos/Product%20Reviews/Best%20Traditional%20Skillets%20Review%20Video"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../Videos/Product%20Reviews/Best%20Stand%20Mixers%20Review%20Video.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Videos/Product%20Reviews/Best%20Stand%20Mixers%20Review%20Video"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../Videos/Product%20Reviews/Best%20Baking%20Pans%20Review%20Video.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Videos/Product%20Reviews/Best%20Baking%20Pans%20Review%20Video"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../Videos/Product%20Reviews/Best%20Knives%20Review%20Video.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Videos/Product%20Reviews/Best%20Knives%20Review%20Video"/>
 </LinkListProperty>
+<BooleanProperty Name="locked">false</BooleanProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../../Options/Viewtypes/CMChannel/tiles-layout-highlight.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-highlight"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>
-</StructProperty>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/above.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/above"/>
 </Struct>
-</StructProperty>
-</Struct>
-</StructProperty>
+</StructListProperty>
 </Struct>
 </placement>
 <header>

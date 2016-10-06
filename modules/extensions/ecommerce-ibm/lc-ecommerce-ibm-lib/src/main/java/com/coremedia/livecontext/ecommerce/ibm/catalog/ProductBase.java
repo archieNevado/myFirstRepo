@@ -1,12 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
+import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
@@ -376,6 +376,10 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
     for (ProductAttribute attribute : definingAttributes) {
       if (attributeId.equals(attribute.getId())) {
         values.addAll(attribute.getValues());
+        if (values.isEmpty()) {
+          VariantFilter variantFilter = null;
+          values.addAll(getVariantAxisValues(attribute.getId(), variantFilter));
+        }
         break;
       }
     }

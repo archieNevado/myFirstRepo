@@ -6,23 +6,27 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyList;
+
 public class AssetReadSettingsHelper {
-  public static final String ORIGIN_REFERENCES = "originReferences";
-  public static final String LOCAL_SETTINGS = "localSettings";
-  public static final String REFERENCES = "references";
-  public static final String COMMERCE = "commerce";
-  public static final String INHERIT = "inherit";
+
+  public static final String NAME_ORIGIN_REFERENCES = "originReferences";
+  public static final String NAME_LOCAL_SETTINGS = "localSettings";
+  public static final String NAME_REFERENCES = "references";
+  public static final String NAME_COMMERCE = "commerce";
+  public static final String NAME_INHERIT = "inherit";
+
   private SettingsService settingsService;
 
   /**
    * Returns the commerceReferences from localSettings by using the path:
    * localSettings.commerce.references
-   *
-   * If references is not reachable (e.g. commerce struct does not exist) or does not exist, an empty list will be returned
+   * <p>
+   * If references is not reachable (e.g. commerce struct does not exist) or does not exist, an empty list will be
+   * returned.
    *
    * @param contentProperties the struct where to read the commerce references from
    * @return commerceReferences the commerce references from the given property
@@ -30,31 +34,48 @@ public class AssetReadSettingsHelper {
   @Nonnull
   public List<String> getCommerceReferences(@Nullable Map<String, Object> contentProperties) {
     AssetReferences assetReferences = readAssetReferences(contentProperties);
-    if(assetReferences == null) {
-      return new ArrayList<>();
+
+    if (assetReferences == null) {
+      return emptyList();
     }
-    return assetReferences.getReferences();
+
+    List<String> references = assetReferences.getReferences();
+
+    if (references == null) {
+      return emptyList();
+    }
+
+    return references;
   }
 
   /**
    * Return the origin references from the given contentProperties.
    *
-   * @param contentProperties a map which describes the content. In this special case a map which contains a localSettings struct
+   * @param contentProperties a map which describes the content. In this special case a map which contains a
+   *                          localSettings struct
    * @return originReferences the originReferences
    */
   @Nonnull
   public List<String> getOriginCommerceReferences(@Nullable Map<String, Object> contentProperties) {
     AssetReferences assetReferences = readAssetReferences(contentProperties);
+
     if (assetReferences == null) {
-      return new ArrayList<>();
+      return emptyList();
     }
-    return assetReferences.getOriginReferences();
+
+    List<String> originReferences = assetReferences.getOriginReferences();
+
+    if (originReferences == null) {
+      return emptyList();
+    }
+
+    return originReferences;
   }
 
   /**
    * Read the inherited field from the given localSettings Struct.
    * The path which will be used is localSettings.commerce.inherited.
-   *
+   * <p>
    * If any property in the path is null, the inherited field is defined as false.
    *
    * @param contentProperties the localSettings to resolve the inherited field from
@@ -71,7 +92,7 @@ public class AssetReadSettingsHelper {
    *
    * @param contentProperties struct with localSettings
    * @return true if the commerce struct exist in the localSettings struct, false if the
-   *              commerce struct or one property in the path do not exist.
+   * commerce struct or one property in the path do not exist.
    */
   public boolean hasCommerceStruct(@Nullable Map<String, Object> contentProperties) {
     return readAssetReferences(contentProperties) != null;
@@ -94,12 +115,13 @@ public class AssetReadSettingsHelper {
    * localSettings.commerce.references
    *
    * @param contentProperties struct with localSettings
-   * @return true if a commerceReferencesList (even if it is empty) exist below the path: localSettings.commerce.references. false otherwise.
+   * @return true if a commerceReferencesList (even if it is empty) exist below thepath: localSettings.commerce.references. false otherwise.
    */
   public boolean hasReferencesList(@Nullable Map<String, Object> contentProperties) {
     if (contentProperties == null) {
       return false;
     }
+
     AssetReferences assetReferences = readCommerceStruct(contentProperties);
     return assetReferences != null && assetReferences.getReferences() != null;
   }
@@ -109,15 +131,19 @@ public class AssetReadSettingsHelper {
     this.settingsService = settingsService;
   }
 
+  @Nullable
   private AssetReferences readAssetReferences(Map<String, Object> contentProperties) {
     if (contentProperties == null) {
       return null;
     }
-    List<String> commerce = ImmutableList.of(LOCAL_SETTINGS, COMMERCE);
+
+    List<String> commerce = ImmutableList.of(NAME_LOCAL_SETTINGS, NAME_COMMERCE);
     Object commerceStruct = settingsService.nestedSetting(commerce, Object.class, contentProperties);
+
     if (commerceStruct == null) {
       return null;
     }
+
     return settingsService.createProxy(AssetReferences.class, commerceStruct);
   }
 }

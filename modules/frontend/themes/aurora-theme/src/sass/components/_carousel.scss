@@ -1,0 +1,18 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+// Import Bricks
+@import "../../../../../lib/bricks/bootstrap/sass/carousel";
+
+.#{$cm-carousel-prefix} {
+  &-control {
+    width: 5%;
+  }
+  .cm-carousel-inner {
+    .left,
+    .right {
+      float: none;
+    }
+  }
+}

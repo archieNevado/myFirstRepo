@@ -34,7 +34,7 @@
               <editor:integerPropertyField propertyName="maxLength" hideLabel="true"/>
             </items>
           </editor:collapsibleFormPanel>
-          <bpforms:viewTypeSelectorForm/>
+          <bpforms:viewTypeSelectorForm paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}" collapsed="false"/>
         </items>
       </editor:documentForm>
       <bpforms:multiLanguageDocumentForm/>

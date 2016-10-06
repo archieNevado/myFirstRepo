@@ -8,6 +8,7 @@
 
   <import resource="livecontext-preview-handler-interceptors.xml"/>
   <import resource="livecontext-preview-links.xml"/>
+  <import resource="livecontext-fragment-highlighting.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-handlers.xml"/>
 
   <bean class="com.coremedia.livecontext.preview.LiveContextExternalChannelPreviewHandler"
@@ -15,5 +16,7 @@
     <property name="resolveContextStrategy" ref="resolveCategoryContextStrategy"/>
     <property name="externalNavigationHandler" ref="externalNavigationHandler"/>
   </bean>
+  <!-- expose initializer as bean for spring-boot integration -->
+  <bean class="com.coremedia.livecontext.preview.LcPreviewCaeWebApplicationInitializer"/>
 
 </beans>

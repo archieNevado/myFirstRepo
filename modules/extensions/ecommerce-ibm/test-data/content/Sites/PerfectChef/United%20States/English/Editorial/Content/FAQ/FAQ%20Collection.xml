@@ -4,7 +4,7 @@
 <master>
 </master>
 <viewtype>
-<link href="../../../Options/Viewtypes/CMCollection/accordion.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/accordion"/>
+<link href="../../../Options/Viewtypes/CMChannel/accordion.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/accordion"/>
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

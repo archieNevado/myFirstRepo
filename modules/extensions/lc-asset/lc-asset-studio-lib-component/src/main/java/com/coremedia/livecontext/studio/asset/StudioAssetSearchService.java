@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -57,19 +55,11 @@ public class StudioAssetSearchService implements AssetSearchService {
     /* sortCriteria */       none,
     /* folder */             site.getSiteRootFolder(), true,
     /* contentTypes */       contentTypes(contentType), true,
-    /* filterQueries */      ImmutableList.of("commerceitems:" + urlEncode(externalId, "UTF-8"), "isdeleted:false"),
+    /* filterQueries */      ImmutableList.of("commerceitems:\"" + externalId + '"', "isdeleted:false"),
     /* facetFieldCriteria */ none,
     /* facetQueries */       none
     );
     return result.getHits();
-  }
-
-  private static String urlEncode(String value, String encodingScheme) {
-    try {
-      return URLEncoder.encode(value, encodingScheme);
-    } catch (UnsupportedEncodingException e) {
-      throw new IllegalArgumentException("Cannot url encode " + value, e);
-    }
   }
 
   @Nonnull

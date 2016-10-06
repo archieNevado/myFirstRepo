@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Sites/Chef Corp./Germany/German/Options/Settings" name="Elastic Social" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../United%20States/English/Options/Settings/Elastic%20Social.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Elastic%20Social"/>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<LinkProperty Name="action.userDetailsView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Actions/UserDetails.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Actions/UserDetails"/>
+<LinkProperty Name="action.registrationActivationView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Actions/ActivateRegistration.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Actions/ActivateRegistration"/>
+<LinkProperty Name="action.confirmPasswordResetView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Actions/ConfirmPasswordReset.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Actions/ConfirmPasswordReset"/>
+<BooleanProperty Name="fileUpload">true</BooleanProperty>
+<StructProperty Name="elasticSocial">
+<Struct>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+<StringProperty Name="tenant">corporate-de-de</StringProperty>
+<IntProperty Name="userImageHeight">100</IntProperty>
+<IntProperty Name="userImageWidth">100</IntProperty>
+<IntProperty Name="userImageThumbnailHeight">60</IntProperty>
+<IntProperty Name="userImageThumbnailWidth">60</IntProperty>
+<IntProperty Name="maxImageFileSize">5242880</IntProperty>
+<StringProperty Name="commentType">ANONYMOUS</StringProperty>
+<StringProperty Name="likeType">ANONYMOUS</StringProperty>
+<StringProperty Name="ratingType">ANONYMOUS</StringProperty>
+<StringProperty Name="reviewType">ANONYMOUS</StringProperty>
+<StringProperty Name="userModerationType">NONE</StringProperty>
+<StringProperty Name="commentModerationType">PRE_MODERATION</StringProperty>
+<StringProperty Name="reviewModerationType">PRE_MODERATION</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

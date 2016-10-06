@@ -14,7 +14,6 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.ibm.order.WcCart;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -32,7 +31,7 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
-import static java.util.Arrays.asList;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
@@ -98,10 +97,15 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
 
     WcRestConnector spiedTestling = spy(testling);
 
-    Map<String, String[]> parametersMap = createParametersMap(
-            getLocale(testConfig.getStoreContext()), getCurrency(storeContext), UserContextHelper.getForUserName(userContext));
+    Locale locale = getLocale(testConfig.getStoreContext());
+    Currency currency = getCurrency(storeContext);
+    String userName = UserContextHelper.getForUserName(userContext);
 
-    spiedTestling.callService(FIND_PERSON_BY_SELF, asList(getStoreId(storeContext)), parametersMap, null, storeContext, userContext);
+    List<String> variableValues = newArrayList(getStoreId(storeContext));
+    Map<String, String[]> parametersMap = createParametersMap(locale, currency, userName);
+    Map bodyData = null;
+
+    spiedTestling.callService(FIND_PERSON_BY_SELF, variableValues, parametersMap, bodyData, storeContext, userContext);
 
     verify(spiedTestling, times(2)).callServiceInternal(
             any(WcRestServiceMethod.class),
@@ -182,11 +186,15 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
 
   @Test
   public void testGetRequestUri() throws Exception {
-    Map<String, String[]> parametersMap = createParametersMap(
-            getLocale(testConfig.getStoreContext()), Currency.getInstance(Locale.GERMANY), "mu&rk{e}l");
+    Locale locale = getLocale(testConfig.getStoreContext());
+    Currency currency = Currency.getInstance(Locale.GERMANY);
+    String userName = "mu&rk{e}l";
+
+    List<String> variableValues = newArrayList("param1value", "param & 2 {value}", "param3value");
+    Map<String, String[]> parametersMap = createParametersMap(locale, currency, userName);
+
     URI requestUri = wcRestConnector.buildRequestUri("store/{param1}/person/{param2}@self?q={param3}", true, false,
-            Lists.newArrayList("param1value", "param & 2 {value}", "param3value"),
-            parametersMap, getCurrentContext());
+            variableValues, parametersMap, getCurrentContext());
     String serviceEndpoint = System.getProperty("livecontext.ibm.wcs.secureUrl", "https://shop-ref.ecommerce.coremedia.com");
     assertEquals(serviceEndpoint + "/wcs/resources/store/param1value/person/param%20&%202%20%7Bvalue%7D@self?q=param3value&currency=EUR&forUser=mu%26rk%7Be%7Dl&langId=-1",
             requestUri.toString());
@@ -195,17 +203,21 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   /**
    * Adds the given values to a parameters map
    */
-  public Map<String, String[]> createParametersMap(Locale locale, Currency currency, String userName) {
+  private static Map<String, String[]> createParametersMap(Locale locale, Currency currency, String userName) {
     Map<String, String[]> parameters = new TreeMap<>();
+
     if (locale != null) {
       parameters.put(PARAM_LANG_ID, new String[]{"-1"});
     }
+
     if (currency != null) {
       parameters.put(PARAM_CURRENCY, new String[]{currency.toString()});
     }
+
     if (userName != null && !userName.isEmpty()) {
       parameters.put(PARAM_FOR_USER, new String[]{userName});
     }
+
     return parameters;
   }
 }

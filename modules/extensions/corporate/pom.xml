@@ -24,7 +24,6 @@
     <module>corporate-caefeeder-component</module>
     <module>corporate-contentfeeder-component</module>
     <module>corporate-server</module>
-    <module>corporate-theme</module>
     <module>test-data</module>
   </modules>
   <build>

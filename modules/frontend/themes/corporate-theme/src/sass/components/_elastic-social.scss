@@ -1,0 +1,15 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+// Set variables to configure _detail.scss from default-templates brick.
+// Have a look the _detail.scss for all available variables.
+
+$cm-user-chooser-padding-base-vertical: $padding-base-vertical;
+$cm-user-chooser-line-height: $line-height-computed;
+$cm-user-chooser-padding-base-horizontal:   $padding-base-horizontal;
+$cm-user-chooser-items-top: $logo-size;
+$cm-user-chooser-items-background-color:$header-color-bg;
+
+// Load brick scss file for detail view
+@import "../../../../../lib/bricks/elastic-social/sass/elastic-social";

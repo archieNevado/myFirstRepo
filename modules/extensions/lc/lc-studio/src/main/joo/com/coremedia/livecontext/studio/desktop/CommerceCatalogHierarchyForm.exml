@@ -11,42 +11,40 @@
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPluginBase"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
-
-  <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Category_Hierarchy_title}"
+  <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_Hierarchy_title}"
                                bwrapCfg="{{cls: 'x-panel-bwrap initial-overflow'}}"
                                itemId="catalogHierarchy">
     <plugins>
       <ui:bindPropertyPlugin componentProperty="collapsed" bindTo="{LivecontextStudioPluginBase.isContentLedValueExpression(config.bindTo)}"/>
     </plugins>
     <items>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Category_PropertyGroup_parentCategory_title}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_PropertyGroup_parentCategory_title}"
                                    itemId="parentCategory"
                                    cls="subcollapsible-commerce-catalog">
         <items>
           <livecontext:readOnlyCatalogLinkProperty
                   propertyName="{CatalogObjectPropertyNames.PARENT}"
-                  emptyText="{BUNDLE.Commerce_Category_PropertyGroup_parentCategory_emptyText}"/>
+                  emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_PropertyGroup_parentCategory_emptyText}"/>
         </items>
       </editor:collapsibleFormPanel>
 
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Category_PropertyGroup_subcategories_title}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_PropertyGroup_subcategories_title}"
                                    itemId="subcategories"
                                    cls="subcollapsible-commerce-catalog">
         <items>
           <livecontext:readOnlyCatalogLinkProperty
                   propertyName="{CatalogObjectPropertyNames.SUB_CATEGORIES}"
-                  emptyText="{BUNDLE.Commerce_Category_subcategories_emptyText}"/>
+                  emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_subcategories_emptyText}"/>
         </items>
       </editor:collapsibleFormPanel>
 
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Category_PropertyGroup_products_title}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_PropertyGroup_products_title}"
                                    itemId="products"
                                    cls="subcollapsible-commerce-catalog">
         <items>
           <livecontext:readOnlyCatalogLinkProperty
                   propertyName="{CatalogObjectPropertyNames.PRODUCTS}"
-                  emptyText="{BUNDLE.Commerce_Category_products_emptyText}"/>
+                  emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_products_emptyText}"/>
         </items>
       </editor:collapsibleFormPanel>
     </items>

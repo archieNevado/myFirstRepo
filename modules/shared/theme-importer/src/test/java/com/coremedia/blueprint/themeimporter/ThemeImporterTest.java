@@ -75,7 +75,10 @@ public class ThemeImporterTest {
       type.create(capConnection.getContentRepository().getRoot(), corporateThemePath).checkIn();
     }
 
-    themeImporter.importThemes(THEMES, corporateTheme, basicTheme, perfectChefTheme);
+    // The three themes have conflicting jquery.js declarations.
+    // basicTheme must be the last here, because its jquery.js declaration
+    // contains the disableCompress and ieExpression values asserted below.
+    themeImporter.importThemes(THEMES, corporateTheme, perfectChefTheme, basicTheme);
 
     Content corporateTheme = capConnection.getContentRepository().getChild(corporateThemePath);
     Assert.assertNotNull(corporateTheme);
@@ -95,9 +98,11 @@ public class ThemeImporterTest {
     Assert.assertNotNull(basicTheme.getProperties().get("javaScripts"));
     Assert.assertEquals(20, ((List) basicTheme.getProperties().get("javaScripts")).size());
 
+    // These jquery assertions are only valid if basicTheme is the last to be imported
     Content jquery = capConnection.getContentRepository().getChild("/Themes/basic/vendor/jquery.js");
     Assert.assertEquals(1, jquery.getInt("disableCompress"));
     Assert.assertEquals("lte IE 9", jquery.getString("ieExpression"));
+
     Content normalize = capConnection.getContentRepository().getChild("/Themes/basic/vendor/normalize.css");
     Assert.assertEquals(1, normalize.getInt("disableCompress"));
     Assert.assertEquals("", normalize.getString("ieExpression"));

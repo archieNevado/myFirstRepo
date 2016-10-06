@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themeDefinition modelVersion="1">
+
+  <name>perfectchef</name>
+  <description>The Perfectchef Theme provides a modern, appealing, highly visual theme. It demonstrates the capability
+    to build localizable, multi-national, experience-driven e-Commerce websites. Integration with IBM WebSphere Commerce
+    ships out of the box.
+
+    Based on a fully responsive, mobile-first design paradigm, it leverages the Bootstrap grid framework. It
+    scales from mobile via tablet to desktop viewport sizes and uses the CoreMedia Adaptive and Responsive Image
+    Framework to dynamically deliver the right image sizes in the right aspect ratios and crops for each viewport.
+  </description>
+  <thumbnail>img/theme-preview.jpg</thumbnail>
+
+  <javaScriptLibraries>
+    <javaScript>vendor/jquery.js</javaScript>
+    <javaScript>vendor/jquery.cycle2.js</javaScript>
+    <javaScript>vendor/jquery.cycle2.swipe.js</javaScript>
+    <javaScript>vendor/jquery.cycle2.carousel.patched.js</javaScript>
+    <javaScript>vendor/jquery.elevatezoom.js</javaScript>
+    <javaScript>vendor/jquery.magnific-popup.js</javaScript>
+    <javaScript>vendor/imagesloaded.pkgd.js</javaScript>
+    <javaScript>vendor/mediaelement-and-player.js</javaScript>
+    <javaScript>vendor/bootstrap/bootstrap.js</javaScript>
+    <javaScript>vendor/bootstrap/carousel-swipe.js</javaScript>
+  </javaScriptLibraries>
+
+  <javaScripts>
+    <!-- CoreMedia Basic JavaScripts -->
+    <javaScript>js/coremedia.blueprint.noconflict.js</javaScript>
+    <javaScript>../basic/js/jquery.coremedia.utils.js</javaScript>
+    <javaScript>../basic/js/jquery.coremedia.smartresize.js</javaScript>
+    <javaScript>js/jquery.coremedia.responsiveimages.js</javaScript>
+    <javaScript>../basic/js/jquery.coremedia.spinner.js</javaScript>
+    <javaScript>js/jquery.coremedia.equalheight.js</javaScript>
+    <javaScript>../basic/js/coremedia.blueprint.logger.js</javaScript>
+    <javaScript>../basic/js/coremedia.blueprint.nodeDecorationService.js</javaScript>
+    <javaScript>../basic/js/coremedia.blueprint.deviceDetector.js</javaScript>
+    <javaScript>../basic/js/coremedia.blueprint.hashBasedFragment.js</javaScript>
+    <javaScript>../basic/js/coremedia.blueprint.basic.js</javaScript>
+    <javaScript>js/jquery.coremedia.carousel.js</javaScript>
+    <javaScript>js/jquery.coremedia.videopopup.js</javaScript>
+    <!-- Quick Info -->
+    <javaScript>js/coremedia.blueprint.quickinfo.js</javaScript>
+    <javaScript>js/coremedia.blueprint.quickinfo.init.js</javaScript>
+    <!-- Image Maps -->
+    <javaScript>js/coremedia.blueprint.imagemap.js</javaScript>
+    <javaScript>js/coremedia.blueprint.imagemap.init.js</javaScript>
+    <!-- Elastic Social JavaScripts -->
+    <javaScript>js/coremedia.blueprint.basic.timezone.js</javaScript>
+    <javaScript>js/coremedia.blueprint.es.js</javaScript>
+    <!-- CoreMedia PerfectChef JavaScripts -->
+    <javaScript>js/coremedia.blueprint.perfectchef.deviceSettings.js</javaScript>
+    <javaScript>js/coremedia.blueprint.perfectchef.js</javaScript>
+  </javaScripts>
+
+  <styleSheets>
+    <css>css/perfectchef.css</css>
+  </styleSheets>
+
+  <viewRepositoryName>perfectchef</viewRepositoryName>
+
+  <resourceBundles>
+    <resourceBundle>l10n/Bundle_en.properties</resourceBundle>
+    <resourceBundle master="Bundle_en.properties" linkIntoTheme="false">l10n/Bundle_de.properties</resourceBundle>
+    <resourceBundle>l10n/Preview_en.properties</resourceBundle>
+    <resourceBundle master="Preview_en.properties" linkIntoTheme="false">l10n/Preview_de.properties</resourceBundle>
+    <resourceBundle>l10n/ElasticSocial_en.properties</resourceBundle>
+    <resourceBundle master="ElasticSocial_en.properties" linkIntoTheme="false">l10n/ElasticSocial_de.properties</resourceBundle>
+    <resourceBundle>l10n/Livecontext_en.properties</resourceBundle>
+    <resourceBundle master="Livecontext_en.properties" linkIntoTheme="false">l10n/Livecontext_de.properties</resourceBundle>
+  </resourceBundles>
+
+</themeDefinition>

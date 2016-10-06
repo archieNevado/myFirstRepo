@@ -1,0 +1,38 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+// Import Bricks
+@import "../../../../../lib/bricks/image-maps/sass/imagemap";
+
+.cm-imagemap {
+  position: relative; /* for quickinfo element */
+
+  &__quickinfo {
+    @include breakpoint(md) {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+    }
+
+    @include breakpoint(sm) {
+      width: 100%;
+    }
+  }
+
+  &__button-group {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  &__areas,
+  &__area,
+  &__hotzone,
+  &__quickinfo {
+    @include breakpoint(xs) {
+      display: none;
+    }
+  }
+}

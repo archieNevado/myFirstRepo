@@ -41,6 +41,10 @@
     <webflow:flow-location-pattern value="classpath*:/com/coremedia/livecontext/**/webflow/*.xml"/>
   </webflow:flow-registry>
 
+  <bean id="liveContextSubstitutions" class="com.coremedia.livecontext.elastic.social.cae.LiveContextSubstitutions">
+    <property name="settingsService" ref="settingsService"/>
+  </bean>
+
   <bean id="lcUserDetailsHelper" class="com.coremedia.livecontext.elastic.social.cae.LiveContextUserDetailsHelper">
     <property name="userService" ref="liveContextUserService" />
   </bean>

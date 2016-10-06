@@ -11,7 +11,7 @@
 <#-- content property of cmpage is CMAction -->
 <#-- @ftlvariable name="actionContent" type="com.coremedia.blueprint.common.contentbeans.CMAction" -->
 <#assign actionContent=cmpage.content />
-<#assign itemId=bp.id((actionContent.content.id)!) />
+<#assign itemId=(actionContent.contentId)! />
 
 <#assign actionHandler=self.action />
 

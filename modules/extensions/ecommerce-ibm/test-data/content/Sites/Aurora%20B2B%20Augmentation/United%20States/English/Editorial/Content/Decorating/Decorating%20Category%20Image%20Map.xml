@@ -17,6 +17,17 @@
 </StructProperty>
 <StructListProperty Name="image-map">
 <Struct>
+<StringProperty Name="id">map-area-1</StringProperty>
+<StringProperty Name="coords">1537,586,2424,1271</StringProperty>
+<StringProperty Name="alt"/>
+<StringProperty Name="rotation"/>
+<StringProperty Name="shape">rect</StringProperty>
+<StringProperty Name="target">_blank</StringProperty>
+<BooleanProperty Name="displayAsInlineOverlay">true</BooleanProperty>
+<StringProperty Name="inlineOverlayTheme">dark</StringProperty>
+<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Augmentation/B2B_Decorating/B2B_Decorating.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Decorating/B2B_Decorating"/>
+</Struct>
+<Struct>
 <StringProperty Name="id">map-area-0</StringProperty>
 <StringProperty Name="coords">52,545,1152,1511</StringProperty>
 <StringProperty Name="alt"/>
@@ -60,5 +71,6 @@
 <related>
 </related>
 <target>
+<link href="../../../Augmentation/B2B_Decorating/B2B_Decorating.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Decorating/B2B_Decorating"/>
 </target>
 </CMImageMap>

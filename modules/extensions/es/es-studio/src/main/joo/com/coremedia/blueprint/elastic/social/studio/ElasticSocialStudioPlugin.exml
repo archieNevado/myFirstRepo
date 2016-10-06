@@ -65,7 +65,7 @@
               -->
               <!-- <panel title="customStuff" layout="form" autoHeight="true"  cls="elastic-extensionTab">
                 <items>
-                  <elastic:elasticPluginLabel fieldLabel="Note"
+                  <es:elasticPluginLabel fieldLabel="Note"
                                               expression="activeContributionAdministration.displayed.note"/>
                 </items>
               </panel>-->
@@ -84,7 +84,7 @@
               -->
               <!-- <panel title="customProfileStuff" layout="form" autoHeight="true" cls="elastic-extensionTab">
                 <items>
-                  <elastic:elasticPluginLabel fieldLabel="Note"
+                  <es:elasticPluginLabel fieldLabel="Note"
                                               expression="activeContributionAdministration.displayed.note"/>
                 </items>
               </panel>-->
@@ -103,7 +103,7 @@
               -->
               <!--<container layout="form" autoHeight="true">
                 <items>
-                  <elastic:elasticPluginLabel fieldLabel="Note"
+                  <es:elasticPluginLabel fieldLabel="Note"
                                               expression="userAdministration.edited.note"/>
                 </items>
               </container>-->

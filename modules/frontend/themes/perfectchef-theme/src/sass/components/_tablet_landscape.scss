@@ -1,0 +1,54 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+/* =====================================================================================================================
+   Tablet, Landscape
+   ================================================================================================================== */
+@include breakpoint(sm, landscape) {
+
+  /* hidden flags defining screen type and orientation for javascript */
+  body:before {
+    content: 'landscape';
+  }
+
+  /* -- button ------------------------------------------------------------------------------------------------------ */
+  /* groups */
+  .cm-button-group--default .cm-button-group__button {
+    display: inline-block;
+    width: 50%;
+    width: calc(50% - 5px);
+  }
+
+  .cm-button-group--default .cm-button-group__button:nth-child(2n) {
+    margin-left: 0;
+    margin-left: calc(10px);
+  }
+
+  .cm-button-group--default .cm-button-group__button:nth-child(2n+1) {
+    margin-top: 10px;
+  }
+
+  .cm-button-group--equal .cm-button-group__button:nth-child(n+2) {
+    margin-left: 8px;
+  }
+
+  .cm-button-group--equal .cm-button-group__button:nth-child(n+2) {
+    display: none;
+  }
+
+  /* -- search ------------------------------------------------------------------------------------------------------ */
+  .cm-search-form__fieldset {
+    padding: 0;
+  }
+
+  /* --- accordion -------------------------------------------------------------------------------------------------- */
+  .cm-accordion-item__content {
+    padding-left: 73px;
+  }
+
+  .cm-rate__icon,
+  .cm-share__icon {
+    font-size: 2rem;
+  }
+}

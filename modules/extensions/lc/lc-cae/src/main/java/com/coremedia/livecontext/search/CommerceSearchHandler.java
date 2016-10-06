@@ -7,6 +7,7 @@ import com.coremedia.blueprint.cae.searchsuggestion.Suggestions;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
@@ -21,6 +22,7 @@ import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.UriComponentsHelper;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -61,8 +64,8 @@ public class CommerceSearchHandler extends PageHandlerBase {
   private LinkFormatter linkFormatter;
 
   /**
-   * e.g.: /dynamic/Helios/search?type=suggest&query=dre
-   * e.g.: /dynamic/Helios/search?query=dress
+   * e.g.: /dynamic/perfectchef/wcssearch?type=suggest&query=dre
+   * e.g.: /dynamic/perfectchef/wcssearch?query=dress
    */
   private static final String   URI_PATTERN =
                   '/' + PREFIX_DYNAMIC +
@@ -80,6 +83,9 @@ public class CommerceSearchHandler extends PageHandlerBase {
 
   /**
    * Performs shop suggestion search and provides a JSON object containing the suggestions.
+   *
+   * @param context a path segment to find resolve navigation context
+   * @param term the search term to search in commerce
    */
   @ResponseBody
   @RequestMapping(value = URI_PATTERN, params = {PARAMETER_TYPE, PARAMETER_QUERY}, method = RequestMethod.GET, produces = CONTENT_TYPE_JSON)
@@ -87,64 +93,78 @@ public class CommerceSearchHandler extends PageHandlerBase {
           @PathVariable(SEGMENT_ROOT) String context,
           @RequestParam(value = PARAMETER_QUERY) String term) {
 
-// if no context available: return "not found"
-//    StoreContext storeContext = storeContextProvider.getCurrentContext();
     Navigation navigation = getNavigation(context);
-    if (navigation instanceof CMObject ) {
-      StoreContext storeContext = getStoreContextProvider().findContextByContent(((CMObject) navigation).getContent());
-      if (storeContext != null) {
-        List<SuggestionResult> commerceSuggestions = getSearchService().getAutocompleteSuggestions(term);
-        Suggestions suggestions = new Suggestions();
-        List<Suggestion> suggestionList = new ArrayList<>();
-        for (SuggestionResult commerceSuggestion : commerceSuggestions) {
-          suggestionList.add(new Suggestion(commerceSuggestion.getSuggestTerm(), term, (long) commerceSuggestion.getResultCount()));
-        }
-        // sort suggestions by count and enforce limit
-        Collections.sort(suggestionList);
-        suggestions.addAll(suggestionList);
-
-        return suggestions.delegate();
-      }
+    if (!(navigation instanceof CMObject)) {
+      throw new IllegalArgumentException("Could not get suggestions from shop search.");
     }
 
-    throw new IllegalArgumentException("Could not get suggestions from shop search.");
+    Content content = ((CMObject) navigation).getContent();
+    StoreContext storeContext = getStoreContextProvider().findContextByContent(content);
+    if (storeContext == null) {
+      throw new IllegalArgumentException("Could not get suggestions from shop search.");
+    }
+
+    List<SuggestionResult> commerceSuggestions = getSearchService().getAutocompleteSuggestions(term);
+    Suggestions suggestions = new Suggestions();
+    List<Suggestion> suggestionList = new ArrayList<>();
+    for (SuggestionResult commerceSuggestion : commerceSuggestions) {
+      suggestionList.add(new Suggestion(commerceSuggestion.getSuggestTerm(), term, (long) commerceSuggestion.getResultCount()));
+    }
+    // sort suggestions by count and enforce limit
+    Collections.sort(suggestionList);
+    suggestions.addAll(suggestionList);
+
+    return suggestions.delegate();
   }
 
   /**
    * Redirects to shop search result page.
+   *
+   * @param context a path segment to find resolve navigation context
+   * @param term the search term to search in commerce
    */
-  @RequestMapping(value = URI_PATTERN, params = {PARAMETER_QUERY}, method = RequestMethod.POST, produces = CONTENT_TYPE_JSON)
+  @RequestMapping(value = URI_PATTERN, params = {PARAMETER_QUERY}, method = RequestMethod.GET, produces = CONTENT_TYPE_JSON)
   public ModelAndView handleSearchRequest(
           @PathVariable(SEGMENT_ROOT) String context,
           @RequestParam(value = PARAMETER_QUERY) String term, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     // if no context available: return "not found"
     Navigation navigation = getNavigation(context);
-    if (navigation instanceof CMObject ) {
-      StoreContext storeContext = getStoreContextProvider().findContextByContent(((CMObject) navigation).getContent());
-      if (storeContext != null) {
-        Map<String, Object> params = new HashMap<>();
-        params.put(LiveContextPageHandlerBase.URL_PROVIDER_STORE_CONTEXT, storeContext);
-        params.put(LiveContextPageHandlerBase.URL_PROVIDER_IS_STUDIO_PREVIEW, LiveContextPageHandlerBase.isStudioPreviewRequest());
-        params.put(LiveContextPageHandlerBase.URL_PROVIDER_SEARCH_TERM, term);
-
-        UriComponents baseUrl = (UriComponents) searchResultRedirectUrlProvider.provideValue(params);
-        UriComponents redirectUrl = UriComponentsHelper.fromUriComponents(baseUrl).scheme(request.getScheme()).build();
-        String urlStr = redirectUrl.toString();
-        if (linkFormatter != null) {
-          List<LinkTransformer> transformers = linkFormatter.getTransformers();
-          for (LinkTransformer transformer : transformers) {
-            urlStr = transformer.transform(urlStr, null, null, request, response, true);
-
-          }
-        }
-        response.sendRedirect(urlStr);
-        response.flushBuffer();
-        return null;
-      }
+    if (!(navigation instanceof CMObject)) {
+      return HandlerHelper.notFound();
     }
 
-    return HandlerHelper.notFound();
+    Content content = ((CMObject) navigation).getContent();
+    StoreContext storeContext = getStoreContextProvider().findContextByContent(content);
+    if (storeContext == null) {
+      return HandlerHelper.notFound();
+    }
+
+    Map<String, Object> params = new HashMap<>();
+    params.put(LiveContextPageHandlerBase.URL_PROVIDER_STORE_CONTEXT, storeContext);
+    params.put(LiveContextPageHandlerBase.URL_PROVIDER_IS_STUDIO_PREVIEW, LiveContextPageHandlerBase.isStudioPreviewRequest());
+
+    UriComponents baseUrl = (UriComponents) searchResultRedirectUrlProvider.provideValue(params);
+    UriComponentsBuilder uriComponentsBuilder = UriComponentsHelper.fromUriComponents(baseUrl);
+    String urlStr = getRedirectUrl(term, request, response, uriComponentsBuilder);
+    response.sendRedirect(urlStr);
+    response.flushBuffer();
+
+    return null;
+  }
+
+  @Nonnull
+  @VisibleForTesting
+  String getRedirectUrl(String term, @Nonnull HttpServletRequest request, HttpServletResponse response, @Nonnull UriComponentsBuilder uriComponentsBuilder) {
+    UriComponents redirectUrl = uriComponentsBuilder.scheme(request.getScheme()).build();
+    String urlStr = redirectUrl.toString();
+    if (linkFormatter != null) {
+      List<LinkTransformer> transformers = linkFormatter.getTransformers();
+      for (LinkTransformer transformer : transformers) {
+        urlStr = transformer.transform(urlStr, null, null, request, response, true);
+      }
+    }
+    return UriComponentsBuilder.fromHttpUrl(urlStr).replaceQueryParam(LiveContextPageHandlerBase.URL_PROVIDER_SEARCH_TERM, term).build().encode().toString();
   }
 
   @SuppressWarnings("UnusedDeclaration") // NOSONAR
@@ -160,11 +180,11 @@ public class CommerceSearchHandler extends PageHandlerBase {
     return null;
   }
 
-  public SearchService getSearchService() {
+  private SearchService getSearchService() {
     return Commerce.getCurrentConnection().getSearchService();
   }
 
-  public StoreContextProvider getStoreContextProvider() {
+  private StoreContextProvider getStoreContextProvider() {
     return Commerce.getCurrentConnection().getStoreContextProvider();
   }
 

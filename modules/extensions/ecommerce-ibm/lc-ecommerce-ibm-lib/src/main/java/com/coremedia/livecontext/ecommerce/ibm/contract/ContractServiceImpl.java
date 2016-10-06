@@ -11,7 +11,6 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.slf4j.Logger;
@@ -23,7 +22,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +47,17 @@ public class ContractServiceImpl implements ContractService {
 
   @Override
   public Collection<Contract> findContractIdsForUser(UserContext userContext, StoreContext storeContext) throws CommerceException {
+    return findContractIdsForUser(userContext, storeContext, null);
+  }
+
+  @Override
+  public Collection<Contract> findContractIdsForUser(UserContext userContext, StoreContext storeContext, String organizationId) throws CommerceException {
     if (storeContext == null)
       storeContext = StoreContextHelper.getCurrentContext();
 
     Map<String, Object> contractMap = (Map<String, Object>) commerceCache.get(new ContractsByUserCacheKey(userContext,
             storeContext,
+            organizationId,
             contractWrapperService,
             commerceCache));
 

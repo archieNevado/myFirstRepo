@@ -548,8 +548,6 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
     assertEquals("swatchcolor", definingAttributes.get(0).getId());
     assertTrue(definingAttributes.get(0).getType() == null || definingAttributes.get(0).getType().equalsIgnoreCase("string"));
     assertNull(definingAttributes.get(0).getUnit());
-    assertEquals("Red", definingAttributes.get(0).getValue());
-    assertArrayEquals(new String[]{"Red", "Teal", "Blue"}, definingAttributes.get(0).getValues().toArray());
     assertTrue(definingAttributes.get(0).isDefining());
 
     List<ProductAttribute> describingAttributes = product.getDescribingAttributes();

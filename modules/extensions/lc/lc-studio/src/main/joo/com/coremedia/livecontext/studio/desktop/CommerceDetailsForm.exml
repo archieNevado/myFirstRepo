@@ -12,16 +12,14 @@
   <exml:constant name="SHORT_DESCRIPTION_COLLAPSIBLE_ITEM_ID" value="shortDescriptionCollapsibleItemId"/>
   <exml:cfg name="titleLabel" type="String"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
-
-  <editor:collapsibleFormPanel title="{BUNDLE.Commerce_PropertyGroup_details_title}">
+  <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_PropertyGroup_details_title}">
     <items>
       <ui:textFieldContainer itemId="{CatalogObjectPropertyNames.NAME}"
                              fieldLabel="{config.titleLabel}"
                              propertyPath="{CatalogObjectPropertyNames.NAME}"
                              readOnly="true"/>
       <ui:textAreaContainer itemId="{CatalogObjectPropertyNames.LONG_DESCRIPTION}"
-                            fieldLabel="{BUNDLE.Commerce_description_label}"
+                            fieldLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_description_label}"
                             propertyValueExpression="{ValueExpressionFactory.createTransformingValueExpression(
                                                         config.bindTo.extendBy(CatalogObjectPropertyNames.LONG_DESCRIPTION),
                                                         RichTextPlainTextTransformer.convertToPlainText
@@ -29,7 +27,7 @@
                             readOnly="true"
                             initialHeight="{23*5}"/>
       <editor:collapsibleFormPanel itemId="{SHORT_DESCRIPTION_COLLAPSIBLE_ITEM_ID}"
-                                   title="{BUNDLE.Commerce_shortDescription_label}"
+                                   title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_shortDescription_label}"
                                    collapsed="true"
                                    cls="subcollapsible-commerce-catalog">
         <items>

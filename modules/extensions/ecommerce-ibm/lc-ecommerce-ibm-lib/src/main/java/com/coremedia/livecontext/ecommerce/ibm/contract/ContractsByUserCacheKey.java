@@ -15,9 +15,10 @@ public class ContractsByUserCacheKey extends AbstractCommerceCacheKey<Map<String
 
   public ContractsByUserCacheKey(UserContext userContext,
                                  StoreContext storeContext,
+                                 String organizationId,
                                  WcContractWrapperService wrapperService,
                                  CommerceCache commerceCache) {
-    super(userContext.getUserId() + "_" + userContext.getUserName(), storeContext, userContext, CONFIG_KEY_CONTRACTS_BY_USER, commerceCache);
+    super(userContext.getUserId() + "_" + userContext.getUserName() + "_" +(organizationId != null ? organizationId : ""), storeContext, userContext, CONFIG_KEY_CONTRACTS_BY_USER, commerceCache);
     this.wrapperService = wrapperService;
   }
 

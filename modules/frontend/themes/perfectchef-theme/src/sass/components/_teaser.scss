@@ -1,0 +1,97 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+// Variables
+// Set varibales to configure _teaser.scss from default-templates brick.
+// Have a look the _teaser.scss for all available variables.
+$cm-teasable-prefix: "cm-teasable";
+$cm-teasable-dimmer-display: none;
+$cm-teasable-padding-base-horizontal: 0;
+$cm-teasable-padding-large-vertical: 0;
+$cm-teasable-padding-large-horizontal: 0;
+
+@import "../../../../../lib/bricks/generic-templates/sass/teaser";
+
+/* --- headlines ---------------------------------------------------------------------------------------------------- */
+.cm-teaser--hero__headline {
+  background-color: #80a3bf;
+}
+
+.cm-teasable .cm-teasable__headline {
+  background-color: #80a3bf;
+}
+
+.cm-teasable--product .cm-teasable__headline {
+  background-color: #bf8080;
+}
+
+.cm-teasable--picture .cm-teasable__headline {
+  background-color: #bfbfbf;
+}
+
+.cm-teasable--video .cm-teasable__headline {
+  background-color: #bfb180;
+}
+
+//Customize the _teaser.scss with additional styles
+.#{$cm-teasable-prefix} {
+  &__picture-box {
+    @include aspect-ratio-box(4, 3);
+  }
+
+  &__caption {
+    @include center-absolute(true, true);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: inherit;
+    padding: 0;
+    // reset caption of CMC.css
+    background-color: transparent;
+    opacity: 1;
+
+    .cm-teaser__info {
+      right: 0;
+      bottom: 0;
+      position: absolute;
+      margin: 5px;
+    }
+
+    .#{$cm-teasable-prefix}__headline {
+      left: 0;
+      color: #fff;
+      text-align: left;
+      position: absolute;
+      display: inline-block;
+
+      padding: .433333rem .93333rem .566667rem .93333rem;
+      font-size: 2rem;
+      line-height: 2.4rem;
+      @include breakpoint(sm) {
+        padding: .36rem .54em;
+        font-size: 1.46rem;
+        line-height: 1.8rem;
+
+      }
+      @include breakpoint(xs) {
+        padding: .3rem .45rem;
+        font-size: 1.2rem;
+        line-height: 1.46rem;
+      }
+    }
+  }
+
+  &--video &__caption {
+    @include breakpoint(md) {
+      bottom: 0;
+    }
+  }
+
+  @include breakpoint(md) {
+    &:hover .cm-teaser__button-group {
+      display: block;
+    }
+  }
+}

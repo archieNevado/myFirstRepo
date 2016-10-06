@@ -33,6 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
+import static com.coremedia.livecontext.fragment.FragmentHandler.PLACEMENT_NAME_MAV_KEY;
+import static com.coremedia.livecontext.fragment.FragmentHandler.UNRESOLVABLE_PLACEMENT_VIEW_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
@@ -67,6 +69,8 @@ public class FragmentHandlerTest {
 
     HttpError error = (HttpError) result.getModel().get(HandlerHelper.MODEL_ROOT);
     assertEquals(HttpServletResponse.SC_NOT_FOUND, error.getErrorCode());
+    assertEquals(UNRESOLVABLE_PLACEMENT_VIEW_NAME, result.getViewName());
+    assertEquals("main", result.getModelMap().get(PLACEMENT_NAME_MAV_KEY));
   }
 
   @Test

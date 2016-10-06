@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSettings folder="/Sites/PerfectChef/Germany/German/Options/Settings/CMChannel" name="Responsive Image Settings"
-xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<CMSettings folder="/Sites/PerfectChef/Germany/German/Options/Settings/CMChannel" name="Responsive Image Settings" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
-<link href="../../../../../United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings.xml"
-path="/Sites/PerfectChef/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/>
+<link href="../../../../../United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/>
 </master>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StringListProperty Name="default_aspect_ratios_for_teaser">
+<String>landscape_ratio4x3</String>
+<String>landscape_ratio8x3</String>
+<String>landscape_ratio4x1</String>
+<String>portrait_ratio20x31</String>
+<String>portrait_ratio1x1</String>
+<String>portrait_ratio3x4</String>
+<String>landscape_ratio16x9</String>
+</StringListProperty>
+<StringListProperty Name="default_aspect_ratios_for_hero_teaser">
+<String>portrait_ratio3x4</String>
+<String>landscape_ratio2x1</String>
+<String>portrait_ratio1x1</String>
+<String>landscape_ratio16x9</String>
+<String>landscape_ratio5x2</String>
+</StringListProperty>
 <BooleanProperty Name="enableRetinaImages">false</BooleanProperty>
 <StructProperty Name="responsiveImageSettings">
 <Struct>

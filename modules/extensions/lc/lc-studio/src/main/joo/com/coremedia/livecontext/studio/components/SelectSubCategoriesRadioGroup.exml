@@ -11,9 +11,6 @@
 
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}"
-            type="LivecontextStudioPlugin_properties"/>
-
   <ui:boundRadioGroup width="auto"
                       columns="1"
                       hideLabel="true"
@@ -22,11 +19,11 @@
     <items>
       <radio itemId="inheritFromCatalogRadioButton"
              inputValue="false"
-             boxLabel="{BUNDLE.Commerce_Child_Categories_inherit_label}"
+             boxLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Child_Categories_inherit_label}"
              />
       <radio itemId="selectChildrenRadioButton"
              inputValue="true"
-             boxLabel="{BUNDLE.Commerce_Child_Categories_select_label}"/>
+             boxLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Child_Categories_select_label}"/>
     </items>
   </ui:boundRadioGroup>
 </exml:component>

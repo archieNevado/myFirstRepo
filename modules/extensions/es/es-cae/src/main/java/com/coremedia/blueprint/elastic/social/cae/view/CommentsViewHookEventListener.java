@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.view;
 
-import com.coremedia.blueprint.common.contentbeans.CMArticle;
+import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.elastic.social.cae.controller.CommentsResult;
 import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.events.ViewHookEvent;
@@ -15,11 +15,11 @@ import static com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNames.VIE
  * is responsible for adding the comments widget to rendered views.
  */
 @Named
-public class CommentsViewHookEventListener implements ViewHookEventListener<CMArticle> {
+public class CommentsViewHookEventListener implements ViewHookEventListener<CMTeasable> {
 
   @Override
-  public RenderNode onViewHook(ViewHookEvent<CMArticle> event) {
-    if(VIEW_HOOK_END.equals(event.getId())) {
+  public RenderNode onViewHook(ViewHookEvent<CMTeasable> event) {
+    if (VIEW_HOOK_END.equals(event.getId())) {
       return new RenderNode(getCommentsResult(event.getBean()), null);
     }
 

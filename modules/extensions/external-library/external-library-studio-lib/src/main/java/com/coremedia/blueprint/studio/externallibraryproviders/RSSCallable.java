@@ -73,7 +73,10 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     if (item.getCreatedAt() == null) {
       item.setCreatedAt(syndEntry.getUpdatedDate());
     }
-    item.setDescription(syndEntry.getDescription().getValue());
+
+    if(syndEntry.getDescription() != null) {
+      item.setDescription(syndEntry.getDescription().getValue());
+    }
     item.setDownloadUrl(syndEntry.getUri());
     item.setUserId(syndEntry.getAuthor());
 

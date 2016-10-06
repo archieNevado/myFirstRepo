@@ -39,6 +39,22 @@
       </activation>
       <build>
         <plugins>
+          <!-- clean node and node_modules in all themes -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${project.basedir}</directory>
+                  <includes>
+                    <include>**/node_modules/**</include>
+                  </includes>
+                  <followSymlinks>false</followSymlinks>
+                </fileset>
+              </filesets>
+            </configuration>
+          </plugin>
           <!-- build theme and copy everything to the target folder -->
           <plugin>
             <groupId>com.github.eirslett</groupId>
@@ -52,17 +68,22 @@
             </configuration>
             <executions>
               <execution>
-                <id>build theme</id>
+                <id>install-node-and-npm</id>
                 <goals>
-                  <!-- install node -->
                   <goal>install-node-and-npm</goal>
-                  <!-- install modules and build theme via postinstall -->
-                  <goal>npm</goal>
                 </goals>
               </execution>
-              <!-- run tests -->
               <execution>
-                <id>test theme</id>
+                <id>install-node-modules</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>run-tests</id>
                 <goals>
                   <goal>npm</goal>
                 </goals>

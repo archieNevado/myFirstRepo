@@ -8,10 +8,12 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<BooleanProperty Name="videoConvertion">true</BooleanProperty>
-<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../../../Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf"/>
+<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../../../Themes/aurora/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/aurora/vendor/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../../../Pictures/Site-Wide/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Pictures/Site-Wide/Picture%20Missing%20Product%20Picture"/>
 <StringProperty Name="shopNow">disabled</StringProperty>
+<StringListProperty Name="viewRepositoryNames">
+<String>lc-es-freemarker</String>
+</StringListProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
@@ -73,11 +75,11 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Teaser%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Teaser%20Image%20Map"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion3fc631ae.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion%20Teaser%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Decorating%20Category%20Teaser%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Decorating%20Category%20Teaser%20Image%20Map"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Decorating%20Category%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Decorating%20Category%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Decorating/Decorating%20Products%20Category%20eaa7dc7e.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Decorating/Decorating%20Products%20Category%20Promotion%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Teaser.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collf6e7eb14.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>

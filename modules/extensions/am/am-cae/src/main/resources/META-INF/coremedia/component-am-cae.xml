@@ -59,7 +59,7 @@
     <property name="capBlobHandler" ref="capBlobHandler"/>
   </bean>
 
-  <!-- register view repository for templates below WEB-INF/templates/assets/ -->
+  <!-- register view repository for templates below WEB-INF/templates/am/ -->
   <customize:prepend id="addAssetsViewRepository" bean="viewRepositories">
     <list>
       <value>am</value>

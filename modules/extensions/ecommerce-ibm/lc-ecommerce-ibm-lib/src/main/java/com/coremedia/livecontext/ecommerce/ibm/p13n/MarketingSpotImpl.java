@@ -19,20 +19,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Model class for marketing spots.
  * The marketing spot data are based on two different REST handlers providing data. Thus, this model class has to
  * distinguish between the different data formats retrieved by the handlers. The data format can be
  * identified by the property <code>resourceName</code> which is unique and provided by each REST handler.
- *
  **/
 public class MarketingSpotImpl extends AbstractIbmCommerceBean implements MarketingSpot {
 
@@ -44,6 +45,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   private Map<String, Object> delegate;
   private WcMarketingSpotWrapperService marketingSpotWrapperService;
 
+  @Nonnull
   protected Map<String, Object> getDelegate() {
     if (delegate == null) {
       //noinspection unchecked
@@ -52,11 +54,13 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
         throw new NotFoundException(getId() + " (marketing spot not found in catalog)");
       }
     }
+
     return delegate;
   }
 
   /**
    * Perform by-id-call to get detail data
+   *
    * @return detail data map
    */
   Map<String, Object> getDelegateFromCache() {
@@ -95,22 +99,30 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
     return getName();
   }
 
+  @Nullable
   @Override
   public String getName() {
     switch (getResourceName()) {
-      case "spot": return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].spotName", String.class);
-      case "espot": return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpotData[0].eSpotName", String.class);
+      case "spot":
+        return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].spotName", String.class);
+      case "espot":
+        return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpotData[0].eSpotName", String.class);
+      default:
+        return null;
     }
-    return null;
   }
 
+  @Nullable
   @Override
   public String getDescription() {
     switch (getResourceName()) {
-      case "spot": return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].description", String.class);
-      case "espot": return getName();
+      case "spot":
+        return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].description", String.class);
+      case "espot":
+        return getName();
+      default:
+        return null;
     }
-    return null;
   }
 
   @Override
@@ -122,52 +134,61 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
     return DataMapHelper.getValueForKey(getDelegate(), "resourceName", String.class);
   }
 
+  @Nonnull
   @Override
   public List<CommerceObject> getEntities() {
-    List<CommerceObject> result = new ArrayList<>();
     // noinspection unchecked
     List<Map<String, Object>> activities =
             DataMapHelper.getValueForPath(getDataMap(), "MarketingSpotData[0].baseMarketingSpotActivityData", List.class);
-    if (activities != null) {
-      for (Map<String, Object> activity : activities) {
-        String baseMarketingSpotDataType = (String) activity.get("baseMarketingSpotDataType");
-        switch (baseMarketingSpotDataType) {
-          case "CatalogEntry":
-            result.add(readCatalogEntry(activity));
-            break;
-          case "CatalogGroup":
-            result.add(readCatalogGroup(activity));
-            break;
-          case "MarketingContent":
-            CommerceObject marketingContent = readMarketingContent(activity);
-            if (marketingContent != null) {
-              result.add(marketingContent);
-            }
-            break;
-        }
-      }
+
+    if (activities == null) {
+      return emptyList();
     }
-    return result;
+
+    return activities.stream()
+            .map(this::readBaseMarketingSpotDataType)
+            .filter(commerceObject -> commerceObject != null)
+            .collect(toList());
   }
 
-  protected CommerceBean readCatalogEntry(Map<String, Object> activity) {
+  @Nullable
+  private CommerceObject readBaseMarketingSpotDataType(@Nonnull Map<String, Object> activity) {
+    String baseMarketingSpotDataType = (String) activity.get("baseMarketingSpotDataType");
+    switch (baseMarketingSpotDataType) {
+      case "CatalogEntry":
+        return readCatalogEntry(activity);
+      case "CatalogGroup":
+        return readCatalogGroup(activity);
+      case "MarketingContent":
+        CommerceObject marketingContent = readMarketingContent(activity);
+        return marketingContent != null ? marketingContent : null;
+      default:
+        return null;
+    }
+  }
+
+  @Nullable
+  protected CommerceBean readCatalogEntry(@Nonnull Map<String, Object> activity) {
     String productId = (String) activity.get("productId");
-    if (productId != null) {
-      return getCatalogService().findProductById(CommerceIdHelper.formatProductTechId(productId));
+    if (productId == null) {
+      return null;
     }
-    return null;
+
+    return getCatalogService().findProductById(CommerceIdHelper.formatProductTechId(productId));
   }
 
-  protected CommerceBean readCatalogGroup(Map<String, Object> activity) {
+  @Nullable
+  protected CommerceBean readCatalogGroup(@Nonnull Map<String, Object> activity) {
     String categoryId = (String) activity.get("categoryId");
-    if (categoryId != null) {
-
-      return getCatalogService().findCategoryById(CommerceIdHelper.formatCategoryTechId(categoryId));
+    if (categoryId == null) {
+      return null;
     }
-    return null;
+
+    return getCatalogService().findCategoryById(CommerceIdHelper.formatCategoryTechId(categoryId));
   }
 
-  protected CommerceObject readMarketingContent(Map<String, Object> activity) {
+  @Nullable
+  protected CommerceObject readMarketingContent(@Nonnull Map<String, Object> activity) {
     String contentFormatName = DataMapHelper.getValueForPath(activity, "contentFormatName", String.class);
     switch (!StringUtils.isEmpty(contentFormatName) ? contentFormatName : "") {
       case CONTENT_FORMAT_FILE:
@@ -180,17 +201,18 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
     }
   }
 
-  protected MarketingImage getMarketingImage(Map<String, Object> activity) {
+  @Nonnull
+  protected MarketingImage getMarketingImage(@Nonnull Map<String, Object> activity) {
     String name = DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentName", String.class);
     String shortText = DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentShortDescription", String.class);
     Locale currentLocale = StoreContextHelper.getLocale(StoreContextHelper.getCurrentContext());
     String currentLanguageId = "-1";
-    if (currentLocale != null) {
-      String value = ((CatalogServiceImpl) getCatalogService()).getLanguageId(currentLocale);
-      if (value != null && !value.isEmpty()) {
-        currentLanguageId = value;
-      }
+
+    String value = ((CatalogServiceImpl) getCatalogService()).getLanguageId(currentLocale);
+    if (value != null && !value.isEmpty()) {
+      currentLanguageId = value;
     }
+
     String attachmentAssetPath = null;
     List attachments = (List) activity.get("attachmentAsset");
     if (attachments != null) {
@@ -214,7 +236,8 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
     return new MarketingImage(name, shortText, thumbnailUrl);
   }
 
-  protected MarketingText getMarketingText(Map<String, Object> activity) {
+  @Nonnull
+  protected MarketingText getMarketingText(@Nonnull Map<String, Object> activity) {
     String text = DataMapHelper.getValueForPath(activity, "marketingContentDescription.marketingText", String.class);
     if (text == null) {
       //"makingText" is a typo by IBM in fep7...
@@ -223,27 +246,30 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
     return new MarketingText(text);
   }
 
-  protected String getWcsAssetUrl(String suffix) {
-    if (suffix != null && !suffix.isEmpty()) {
-      try {
-        if (suffix.startsWith("http")) {
-          URL assetUrl = new URL(suffix);
-          return assetUrl.toExternalForm();
-        } else {
-          URL baseUrl = new URL(((CatalogServiceImpl) getCatalogService()).getWcsAssetsUrl());
-          URL assetUrl = new URL(baseUrl, suffix);
-          return assetUrl.toExternalForm();
-        }
-      } catch (MalformedURLException e) {
-        LOG.warn("Cannot assemble default image url for marketing content: " + suffix + "(" + e.getMessage() + ")");
-      }
+  @Nullable
+  protected String getWcsAssetUrl(@Nullable String suffix) {
+    if (suffix == null || suffix.isEmpty()) {
+      return null;
     }
+
+    try {
+      if (suffix.startsWith("http")) {
+        URL assetUrl = new URL(suffix);
+        return assetUrl.toExternalForm();
+      } else {
+        URL baseUrl = new URL(((CatalogServiceImpl) getCatalogService()).getWcsAssetsUrl());
+        URL assetUrl = new URL(baseUrl, suffix);
+        return assetUrl.toExternalForm();
+      }
+    } catch (MalformedURLException e) {
+      LOG.warn("Cannot assemble default image url for marketing content: " + suffix + "(" + e.getMessage() + ")");
+    }
+
     return null;
   }
 
   @Nonnull
   protected Map<String, Object> getDataMap() {
-    return getDelegate() != null ? getDelegate() : Collections.<String, Object>emptyMap();
+    return getDelegate();
   }
-
 }

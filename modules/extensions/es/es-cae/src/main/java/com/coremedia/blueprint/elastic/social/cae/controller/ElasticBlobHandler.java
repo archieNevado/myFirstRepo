@@ -206,7 +206,8 @@ public class ElasticBlobHandler extends HandlerBase {
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   @RequestMapping(value = SIMPLE_URI_PATTERN)
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) String imageId,
+  public ModelAndView handleRequest(@PathVariable(SEGMENT_SITE) String rootSegment,
+                                    @PathVariable(SEGMENT_ID) String imageId,
                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                     @PathVariable(SECHASH_SEGMENT) String secHash,
                                     @PathVariable(SEGMENT_NAME) String name) {
@@ -238,6 +239,7 @@ public class ElasticBlobHandler extends HandlerBase {
               .put(SEGMENT_ID, imageId)
               .put(SEGMENT_ETAG, eTag)
               .put(SEGMENT_NAME, name)
+              .put(SEGMENT_SITE, rootSegment)
               .build();
 
       if (isValid(parameters, secHash)) {
@@ -288,6 +290,7 @@ public class ElasticBlobHandler extends HandlerBase {
               .put(WIDTH_SEGMENT, width)
               .put(HEIGHT_SEGMENT, height)
               .put(SEGMENT_NAME, name)
+              .put(SEGMENT_SITE, siteId)
               .build();
 
       if (isValid(parameters, secHash)) {

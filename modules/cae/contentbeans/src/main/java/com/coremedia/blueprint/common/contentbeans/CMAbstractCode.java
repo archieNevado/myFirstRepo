@@ -4,6 +4,7 @@ package com.coremedia.blueprint.common.contentbeans;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.xml.Markup;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -80,6 +81,7 @@ public interface CMAbstractCode extends CMLocalized {
    *
    * @return a list of {@link CMAbstractCode} objects
    */
+  @Nonnull
   List<? extends CMAbstractCode> getInclude();
 
   /**

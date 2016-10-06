@@ -8,13 +8,19 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.transform.VariantsStructResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Named;
+import java.util.Optional;
+
+import static java.util.Optional.empty;
 
 /**
  * Responsible for reading the struct with the image variants from the root channel.
  */
 @Named
 public class VariantsStructResolverImpl implements VariantsStructResolver {
+
   private static final String VARIANTS_STRUCT_NAME = "responsiveImageSettings";
   private static final String SETTINGS_PROPERTY = "settings";
   private static final String SETTINGS_DOCTYPE = "CMSettings";
@@ -27,31 +33,41 @@ public class VariantsStructResolverImpl implements VariantsStructResolver {
   @Autowired
   private ContentRepository contentRepository;
 
+  @Nullable
   @Override
-  public Struct getVariantsForSite(Site site) {
+  public Struct getVariantsForSite(@Nonnull Site site) {
     Struct setting = settingsService.setting(VARIANTS_STRUCT_NAME, Struct.class, site);
-    if(setting == null) {
-      setting = getGlobalVariants();
+
+    if (setting == null) {
+      setting = getGlobalVariants().orElse(null);
     }
+
     return setting;
   }
 
-  private Struct getGlobalVariants() {
+  @Nonnull
+  private Optional<Struct> getGlobalVariants() {
     Content settings = contentRepository.getChild(globalVariantsSettings);
-    if (settings != null) {
-      return getStruct(settings);
+
+    if (settings == null) {
+      return empty();
     }
-    return null;
+
+    return getStruct(settings);
   }
 
-  private Struct getStruct(Content setting) {
-    if(setting.getType().isSubtypeOf(SETTINGS_DOCTYPE)) {
+  @Nonnull
+  private static Optional<Struct> getStruct(@Nonnull Content setting) {
+    if (setting.getType().isSubtypeOf(SETTINGS_DOCTYPE)) {
       Struct subStruct = setting.getStruct(SETTINGS_PROPERTY);
-      //find settings document that contains the struct with the configured name
+
+      // Find settings document that contains the struct with the configured name.
       if (subStruct.toNestedMaps().containsKey(VARIANTS_STRUCT_NAME)) {
-        return subStruct.getStruct(VARIANTS_STRUCT_NAME);
+        Struct variantsStruct = subStruct.getStruct(VARIANTS_STRUCT_NAME);
+        return Optional.ofNullable(variantsStruct);
       }
     }
-    return null;
+
+    return empty();
   }
 }

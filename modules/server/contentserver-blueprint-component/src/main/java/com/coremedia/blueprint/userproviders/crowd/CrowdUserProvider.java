@@ -241,14 +241,9 @@ public class CrowdUserProvider implements MemberHelper, UserProvider2 {
       User user = crowdClient.getUser(jndiId);
       return makeUser(user, getDomain());
     } catch (UserNotFoundException e) {
-      LOG.info("Cannot find user '" + jndiId + "'");
-    } catch (OperationFailedException e) {
-      LOG.warn("OperationFailedException when trying to find user '" + jndiId + "'", e);
-    } catch (ApplicationPermissionException e) {
-      LOG.warn("ApplicationPermissionException when trying to find user '" + jndiId + "'", e);
-    } catch (InvalidAuthenticationException e) {
-      LOG.warn("InvalidAuthenticationException when trying to find user '" + jndiId + "'", e);
+      LOG.debug("Cannot find user '" + jndiId + "'", e);
     }
+    // null signals that crowd does not know the user
     return null;
   }
 
@@ -258,14 +253,9 @@ public class CrowdUserProvider implements MemberHelper, UserProvider2 {
       Group group = crowdClient.getGroup(jndiId);
       return makeGroup(group, getDomain());
     } catch (GroupNotFoundException e) {
-      LOG.info("Cannot find group '" + jndiId + "'");
-    } catch (OperationFailedException e) {
-      LOG.warn("OperationFailedException when trying to find group '" + jndiId + "'", e);
-    } catch (ApplicationPermissionException e) {
-      LOG.warn("ApplicationPermissionException when trying to find group '" + jndiId + "'", e);
-    } catch (InvalidAuthenticationException e) {
-      LOG.warn("InvalidAuthenticationException when trying to find group '" + jndiId + "'", e);
+      LOG.debug("Cannot find group '" + jndiId + "'", e);
     }
+    // null signals that crowd does not know the group
     return null;
   }
 

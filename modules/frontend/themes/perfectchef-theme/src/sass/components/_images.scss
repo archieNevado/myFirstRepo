@@ -1,0 +1,13 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+// Variables
+// Set variable to configure _images.scss from default-templates brick.
+// Have a look the _image.scss for all available variables.
+$cm-image-prefix: "cm-image";
+$cm-image-missing-background: $brand-primary;
+$cm-image-blank-background: $brand-primary;
+
+// Import Bricks
+@import "../../../../../lib/bricks/responsive-images/sass/images";

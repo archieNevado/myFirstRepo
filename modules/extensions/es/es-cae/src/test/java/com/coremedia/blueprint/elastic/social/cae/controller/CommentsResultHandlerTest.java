@@ -239,7 +239,7 @@ public class CommentsResultHandlerTest {
     assertEquals(1, resultModel.getMessages().size());
 
     verify(elasticSocialService).createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), isNull(List.class));  // NO_SONAR suppress warning
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), any(List.class));  // NO_SONAR suppress warning
     verifyMessage(ContributionMessageKeys.COMMENT_FORM_SUCCESS);
   }
 
@@ -285,7 +285,7 @@ public class CommentsResultHandlerTest {
     assertEquals(1, resultModel.getMessages().size());
     assertTrue(resultModel.isSuccess());
     verify(elasticSocialService).createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.PRE_MODERATION), isNull(String.class), isNull(List.class));  // NO_SONAR suppress warning
+            eq(text), eq(ModerationType.PRE_MODERATION), isNull(String.class), any(List.class));  // NO_SONAR suppress warning
     verifyMessage(ContributionMessageKeys.COMMENT_FORM_SUCCESS_PREMODERATION);
   }
 
@@ -293,7 +293,7 @@ public class CommentsResultHandlerTest {
   public void createCommentWithException() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(user);
     when(elasticSocialService.createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), isNull(List.class))).thenThrow(new RuntimeException("intended"));
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), any(List.class))).thenThrow(new RuntimeException("intended"));
 
     when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.POST_MODERATION);
 
@@ -306,7 +306,7 @@ public class CommentsResultHandlerTest {
     assertEquals(ERROR_MESSAGE, messages.get(0).getType());
 
     verify(elasticSocialService).createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), isNull(List.class));  // NO_SONAR suppress warning
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), any(List.class));  // NO_SONAR suppress warning
     verifyMessage(ContributionMessageKeys.COMMENT_FORM_ERROR);
   }
 

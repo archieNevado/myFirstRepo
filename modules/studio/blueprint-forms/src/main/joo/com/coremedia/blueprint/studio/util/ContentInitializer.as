@@ -86,7 +86,7 @@ public class ContentInitializer {
   }
   
   private static function initCollection(content:Content):void {
-    setProperty(content, 'teaserTitle', content.getName());
+    initializePropertyWithName(content, 'teaserTitle');
     initCMLinkable(content);
   }  
 

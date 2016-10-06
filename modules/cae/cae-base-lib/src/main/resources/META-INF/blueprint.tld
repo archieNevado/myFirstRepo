@@ -103,43 +103,6 @@
 
   <function>
     <description>
-      Created css classes based on the LoopStatus of a list item
-    </description>
-    <name>cssClassFor</name>
-    <function-class>com.coremedia.blueprint.cae.web.taglib.CssClassFor</function-class>
-    <function-signature>java.lang.String cssClassFor(javax.servlet.jsp.jstl.core.LoopTagStatus,boolean)</function-signature>
-  </function>
-
-  <function>
-    <description>
-      Created css classes based on the LoopStatus of a list item
-    </description>
-    <name>cssClassForFirstLast</name>
-    <function-class>com.coremedia.blueprint.cae.web.taglib.CssClassFor</function-class>
-    <function-signature>java.lang.String cssClassForFirstLast(javax.servlet.jsp.jstl.core.LoopTagStatus,boolean)</function-signature>
-  </function>
-
-  <function>
-    <description>
-      Created css classes based on the LoopStatus of a list item
-    </description>
-    <name>cssClassForOddEven</name>
-    <function-class>com.coremedia.blueprint.cae.web.taglib.CssClassFor</function-class>
-    <function-signature>java.lang.String cssClassForOddEven(javax.servlet.jsp.jstl.core.LoopTagStatus,boolean)</function-signature>
-  </function>
-
-  <function>
-    <description>
-      Created css classes based on the LoopStatus of a list item
-    </description>
-    <name>cssClassAppendNavigationActive</name>
-    <function-class>com.coremedia.blueprint.cae.web.taglib.CssClassFor</function-class>
-    <function-signature>java.lang.String cssClassAppendNavigationActive(java.lang.String,java.lang.String,com.coremedia.blueprint.common.contentbeans.CMNavigation,java.util.List)
-    </function-signature>
-  </function>
-
-  <function>
-    <description>
       Return list of area configurations with the 'coords' attribute being transformed according to the image map's
       picture transformations. If cropping is disabled, only the transformations for "uncropped" are returned as entries
       in the transformation map.
@@ -199,14 +162,5 @@
     <function-class>com.coremedia.blueprint.cae.web.taglib.ListUtil</function-class>
     <function-signature>boolean contains(java.util.List,java.lang.Object)
     </function-signature>
-  </function>
-
-  <function>
-    <description>
-      Checks whether the nodes contained in the Markup are empty.
-    </description>
-    <name>emptyMarkup</name>
-    <function-class>com.coremedia.xml.MarkupUtil</function-class>
-    <function-signature>boolean isEmptyRichtext(com.coremedia.xml.Markup,boolean)</function-signature>
   </function>
 </taglib>

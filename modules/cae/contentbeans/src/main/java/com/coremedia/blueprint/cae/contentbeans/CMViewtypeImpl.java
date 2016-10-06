@@ -1,21 +1,22 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import org.apache.commons.lang3.StringUtils;
+import com.coremedia.blueprint.viewtype.ViewtypeService;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Generated extension class for immutable beans of document type "CMViewtype".
  */
 public class CMViewtypeImpl extends CMViewtypeBase {
+  private ViewtypeService viewtypeService;
+
+  @Required
+  public void setViewtypeService(ViewtypeService viewtypeService) {
+    this.viewtypeService = viewtypeService;
+  }
+
   @Override
   public String getLayout() {
-    // State of the art
-    String layout = super.getLayout();
-    if (!StringUtils.isEmpty(layout)) {
-      return layout;
-    }
-
-    // Backward compatibility
-    return getName();
+    return viewtypeService.getLayout(getContent());
   }
 }
   

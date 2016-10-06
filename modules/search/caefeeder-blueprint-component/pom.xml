@@ -34,20 +34,6 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>cae-base-lib</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-      <exclusions>
-        <!-- Exclude ASM 3.3.1, which is incompatible with Tika 1.7 -->
-        <exclusion>
-          <groupId>asm</groupId>
-          <artifactId>asm</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>caefeeder-extension-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>

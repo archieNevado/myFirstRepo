@@ -12,6 +12,10 @@
 
   <artifactId>lc-ecommerce-ibm-lib</artifactId>
 
+  <properties>
+    <betamax.proxyPort>5555</betamax.proxyPort>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.coremedia.livecontext</groupId>
@@ -322,6 +326,9 @@
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <!-- override default security settings (if possible) -->
               <argLine>-Djava.security.properties=${project.build.testOutputDirectory}/java.security</argLine>
+              <systemPropertyVariables>
+                <betamax.proxyPort>${betamax.proxyPort}</betamax.proxyPort>
+              </systemPropertyVariables>
             </configuration>
             <executions>
               <execution>

@@ -10,7 +10,6 @@ import org.springframework.core.io.Resource;
 
 import javax.ws.rs.Path;
 import java.io.File;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -68,6 +67,7 @@ public class OSMResource implements InitializingBean, ApplicationContextAware {
       URL url = new URL(OPEN_LAYERS_URL);
       HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
       httpCon.setRequestMethod("GET");
+      httpCon.setReadTimeout(30000);
       httpCon.connect();
       if (httpCon.getResponseCode() == HttpURLConnection.HTTP_OK) {
         return true;
@@ -75,7 +75,7 @@ public class OSMResource implements InitializingBean, ApplicationContextAware {
 
       LOGGER.warn(httpCon.getResponseCode() + " Error in OSM response: " + httpCon.getResponseMessage());//NOSONAR
       return false;
-    } catch (IOException e) {
+    } catch (Exception e) {
       LOGGER.warn("OSM is not available: " + e.getMessage(), e);
     }
     return false;

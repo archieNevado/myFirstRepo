@@ -9,7 +9,7 @@
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <IntProperty Name="publicationHistoryInterval">60</IntProperty>
-<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf"/>
+<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/perfectchef/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/perfectchef/vendor/flashmediaelement%2Eswf"/>
 <StructProperty Name="elasticSocial">
 <Struct>
 <StringProperty Name="reviewType">REGISTERED</StringProperty>
@@ -59,6 +59,8 @@
 <link href="Fragments/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page.xml" path="/Sites/PerfectChef/Germany/German/Navigation/Fragments/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>
 <link href="Microsites/Microsites%20Root%20Page.xml" path="/Sites/PerfectChef/Germany/German/Navigation/Microsites/Microsites%20Root%20Page"/>
 <link href="../Augmentation/Perfect%20Chef%20Deutschland%20Catalog%20Root.xml" path="/Sites/PerfectChef/Germany/German/Augmentation/Perfect%20Chef%20Deutschland%20Catalog%20Root"/>
+<link href="Topic%20Pages/Topicpage.xml" path="/Sites/PerfectChef/Germany/German/Navigation/Topic%20Pages/Topicpage"/>
+<link href="../Options/Actions/User%20Actions.xml" path="/Sites/PerfectChef/Germany/German/Options/Actions/User%20Actions"/>
 </children>
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
@@ -74,7 +76,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Layouts/Hero%20Layout.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Layouts/Hero%20Layout"/>
 <StructProperty Name="placements">
 <Struct>
 </Struct>
@@ -92,13 +94,10 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Site-Wide/Header/Startpage.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Header/Startpage"/>
 <Link xlink:href="coremedia:///cap/resources/../Options/Actions/Search.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Actions/Search"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Header/Store%20Locator.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Header/Store%20Locator"/>
 <Link xlink:href="coremedia:///cap/resources/../Options/Actions/Login.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Actions/Login"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Header/Cart.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Header/Cart"/>
-<Link xlink:href="coremedia:///cap/resources/Site-Wide/Header/Navigation.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Header/Navigation"/>
-<Link xlink:href="coremedia:///cap/resources/Site-Wide/Header/Breadcrumb.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Header/Breadcrumb"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/header"/>
@@ -111,7 +110,10 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Footer%20Navigation%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Footer%20Navigation%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/My%20Store.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/My%20Store"/>
+<Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Explore%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Explore%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Customer%20Service%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Customer%20Service%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Corporate%20Info%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Corporate%20Info%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Join%20Our%20Mailing%20List.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Join%20Our%20Mailing%20List"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Follow%20Us.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Follow%20Us"/>
 </LinkListProperty>
@@ -120,13 +122,22 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Startpage/Spring%20Hero%20Banner%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Startpage/Spring%20Hero%20Banner%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/e-Marketing%20Spots/Startpage%20Offer%20Textbanner%20e-Marketing%20Spot.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/e-Marketing%20Spots/Startpage%20Offer%20Textbanner%20e-Marketing%20Spot"/>
 <Link xlink:href="coremedia:///cap/resources/Startpage/Spring%20Main%20Promo%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Startpage/Spring%20Main%20Promo%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Analytics%20Lists/Google%20Top%205%20Landscape%20Tiles%20Analytics%20List.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Analytics%20Lists/Google%20Top%205%20Landscape%20Tiles%20Analytics%20List"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/Startpage/Spring%20Picnic%20Image%20Map.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Startpage/Spring%20Picnic%20Image%20Map"/>
+<Link xlink:href="coremedia:///cap/resources/Startpage/Spring%20Glasses%20Sale%20Category%20Teaser.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Startpage/Spring%20Glasses%20Sale%20Category%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/Startpage/Spring%20Summer%20Dresses%20Landing%20Page%20Teaser.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Startpage/Spring%20Summer%20Dresses%20Landing%20Page%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/Categories/05_Recipes/Spring%20Recipes/Salads/Salads%20Spring%20Page%20Teaser.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Categories/05_Recipes/Spring%20Recipes/Salads/Salads%20Spring%20Page%20Teaser"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMChannel/carousel"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 </StructListProperty>
 </Struct>

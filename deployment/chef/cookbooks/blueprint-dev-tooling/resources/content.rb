@@ -76,6 +76,6 @@ attribute :user, :kind_of => String, :default => lazy { node['blueprint']['user'
 #<> @attribute group The group to use for execute and filesystem resources.
 attribute :group, :kind_of => String, :default => lazy { node['blueprint']['group'] }
 #<> @attribute timeout The timeout for all execute resource blocks.
-attribute :timeout, :kind_of => Integer, :default => 1_800
+attribute :timeout, :kind_of => Integer, :default => 2_400
 #<> @attribute publishall_contentquery The contentquery to determine which content should not be published. Only effective on publishall_content action.
 attribute :publishall_contentquery, :kind_of => String, :default => 'NOT BELOW PATH \'/Home\''

@@ -12,15 +12,12 @@
   <exml:import class="com.coremedia.cms.editor.sdk.config.documentForm"/>
   <exml:import class="com.coremedia.livecontext.studio.CatalogThumbnailResolver" />
 
-
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
-
-  <editor:documentForm title="{BUNDLE.Commerce_Tab_content_title}">
+  <editor:documentForm title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Tab_content_title}">
     <items>
       <livecontext:commerceDetailsForm itemId="productDetails"
                                        ctCls="{documentForm.PROPERTY_FIELD_MAX_WIDTH_CSS_CLASS}"
-                                       titleLabel="{BUNDLE.Commerce_Product_name_label}"/>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_prices_title}"
+                                       titleLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_name_label}"/>
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_prices_title}"
                                    itemId="prices">
         <defaults>
           <component itemCls="document-info-item"/>
@@ -28,20 +25,20 @@
         <items>
           <label cls="document-info-label-content"
                  itemId="listPrice"
-                 fieldLabel="{BUNDLE.Commerce_Product_listPrice_label}">
+                 fieldLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_listPrice_label}">
             <plugins>
               <ui:bindPropertyPlugin componentProperty="text"
                                      bindTo="{CatalogHelper.getInstance().getPriceWithCurrencyExpression(config.bindTo,ProductPropertyNames.LIST_PRICE)}"
-                                     ifUndefined="{BUNDLE.Commerce_Product_listPrice_emptyText}"/>
+                                     ifUndefined="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_listPrice_emptyText}"/>
             </plugins>
           </label>
           <label cls="document-info-label-content"
                  itemId="offerPrice"
-                 fieldLabel="{BUNDLE.Commerce_Product_offerPrice_label}">
+                 fieldLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_offerPrice_label}">
             <plugins>
               <ui:bindPropertyPlugin componentProperty="text"
                                      bindTo="{CatalogHelper.getInstance().getPriceWithCurrencyExpression(config.bindTo,ProductPropertyNames.OFFER_PRICE)}"
-                                     ifUndefined="{BUNDLE.Commerce_Product_offerPrice_emptyText}"/>
+                                     ifUndefined="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_offerPrice_emptyText}"/>
             </plugins>
           </label>
         </items>
@@ -49,7 +46,7 @@
           <formlayout labelSeparator=":"/>
         </layout>
       </editor:collapsibleFormPanel>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_PropertyGroup_thumbnail_title}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_PropertyGroup_thumbnail_title}"
                                    itemId="thumbnail">
         <items>
           <ui:image width="120">
@@ -60,22 +57,22 @@
           </ui:image>
         </items>
       </editor:collapsibleFormPanel>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_richMedia_title}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_richMedia_title}"
                                    itemId="richMedia">
         <items>
           <livecontext:catalogAssetsProperty
                   propertyName="{CatalogObjectPropertyNames.VISUALS}"
                   assetContentTypes="{['CMPicture', 'CMVideo', 'CMSpinner']}"
-                  emptyText="{BUNDLE.Commerce_Product_richMedia_emptyText}"/>
+                  emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_richMedia_emptyText}"/>
         </items>
       </editor:collapsibleFormPanel>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_downloads_title}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_downloads_title}"
                                    itemId="downloads">
         <items>
           <livecontext:catalogAssetsProperty
                   propertyName="{CatalogObjectPropertyNames.DOWNLOADS}"
                   assetContentTypes="{['CMDownload']}"
-                  emptyText="{BUNDLE.Commerce_Product_downloads_emptyText}"/>
+                  emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_downloads_emptyText}"/>
         </items>
       </editor:collapsibleFormPanel>
     </items>

@@ -22,6 +22,7 @@ import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
+import com.coremedia.objectserver.beans.AbstractContentBean;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
@@ -259,7 +260,7 @@ public class ElasticSocialService {
   }
 
   private Review createReview(CommunityUser author, String text, Object realTarget, String title, int rating, Navigation navigation) {
-    Content navContent = navigation instanceof CMNavigation ? ((CMNavigation) navigation).getContent() : null;
+    Content navContent = navigation instanceof AbstractContentBean ? ((AbstractContentBean) navigation).getContent() : null;
     return reviewService.createReview(author, text, realTarget, getCategories(realTarget, navContent), title, rating);
   }
 
@@ -270,7 +271,7 @@ public class ElasticSocialService {
                                 Object realTarget,
                                 Navigation navigation,
                                 String replyToCommentId) {
-    Content navContent = navigation instanceof CMNavigation ? ((CMNavigation) navigation).getContent() : null;
+    Content navContent = navigation instanceof AbstractContentBean ? ((AbstractContentBean) navigation).getContent() : null;
     Comment replyToComment = null;
     if (!Strings.isNullOrEmpty(replyToCommentId)) {
       replyToComment = commentService.getComment(replyToCommentId);

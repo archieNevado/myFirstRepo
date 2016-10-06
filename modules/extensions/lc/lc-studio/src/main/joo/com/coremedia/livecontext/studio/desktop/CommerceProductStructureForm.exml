@@ -10,18 +10,16 @@
   <exml:import class="com.coremedia.ecommerce.studio.helper.CatalogHelper"/>
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
-
-  <editor:documentForm title="{BUNDLE.Commerce_Tab_structure_title}">
+  <editor:documentForm title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Tab_structure_title}">
     <items>
 
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_category_title}" itemId="category">
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_category_title}" itemId="category">
         <items>
           <livecontext:readOnlyCatalogLinkProperty propertyName="{CatalogObjectPropertyNames.CATEGORY}"/>
         </items>
       </editor:collapsibleFormPanel>
 
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_parentProduct_title}" itemId="parentProductd">
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_parentProduct_title}" itemId="parentProductd">
         <plugins>
           <ui:bindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsVariantExpression(config.bindTo)}"/>
         </plugins>
@@ -30,7 +28,7 @@
         </items>
       </editor:collapsibleFormPanel>
 
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_productVariants_title}" itemId="variants">
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_productVariants_title}" itemId="variants">
         <plugins>
           <ui:bindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsNotVariantExpression(config.bindTo)}"/>
         </plugins>
@@ -38,7 +36,7 @@
           <livecontext:readOnlyCatalogLinkProperty
             hideLabel="true"
             propertyName="{ProductPropertyNames.VARIANTS}"
-            emptyText="{BUNDLE.Commerce_Product_productVariants_emptyText}"
+            emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_productVariants_emptyText}"
             />
         </items>
       </editor:collapsibleFormPanel>

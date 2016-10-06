@@ -29,10 +29,6 @@
             type="com.coremedia.ui.data.ValueExpression"
             value="{AugmentationUtil.getCatalogObjectExpression(config.bindTo)}"/>
 
-  <exml:var name="BUNDLE"
-            value="{LivecontextStudioPlugin_properties.INSTANCE}"
-            type="LivecontextStudioPlugin_properties"/>
-
   <editor:documentTabPanel>
     <items>
       <editor:documentForm title="{BlueprintTabs_properties.INSTANCE.Tab_content_title}">
@@ -43,7 +39,7 @@
                                            bindTo="{catalogObjectExpression}"
                                            ctCls="{documentForm.PROPERTY_FIELD_MAX_WIDTH_CSS_CLASS}"
                                            titleLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_name_label}"/>
-          <editor:collapsibleFormPanel title="{BUNDLE.Commerce_PropertyGroup_thumbnail_title}"
+          <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_PropertyGroup_thumbnail_title}"
                                        itemId="picture">
             <items>
               <ui:image width="120">
@@ -54,22 +50,22 @@
               </ui:image>
             </items>
           </editor:collapsibleFormPanel>
-          <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_richMedia_title}"
+          <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_richMedia_title}"
                                        itemId="richMedia"
                                        bindTo="{catalogObjectExpression}">
             <items>
               <livecontext:catalogAssetsProperty propertyName="{CatalogObjectPropertyNames.VISUALS}"
                                                  assetContentTypes="{['CMPicture', 'CMVideo', 'CMSpinner']}"
-                                                 emptyText="{BUNDLE.Commerce_Product_richMedia_emptyText}"/>
+                                                 emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_richMedia_emptyText}"/>
             </items>
           </editor:collapsibleFormPanel>
-          <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Product_PropertyGroup_downloads_title}"
+          <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_PropertyGroup_downloads_title}"
                                        itemId="downloads"
                                        bindTo="{catalogObjectExpression}">
             <items>
               <livecontext:catalogAssetsProperty propertyName="{CatalogObjectPropertyNames.DOWNLOADS}"
                                                  assetContentTypes="{['CMDownload']}"
-                                                 emptyText="{BUNDLE.Commerce_Product_downloads_emptyText}"/>
+                                                 emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Product_downloads_emptyText}"/>
             </items>
           </editor:collapsibleFormPanel>
           <livecontext:commerceAugmentedPageGridForm itemId="placement"

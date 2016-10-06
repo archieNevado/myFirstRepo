@@ -5,6 +5,7 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.xml.Markup;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
@@ -96,28 +97,28 @@ public interface CMTheme extends CMLocalized {
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} objects
    */
-  List<? extends CMJavaScript> getJavaScriptLibraries();
+  @Nonnull List<CMJavaScript> getJavaScriptLibraries();
 
   /**
    * Returns the value of the document property {@link #JAVA_SCRIPTS}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} objects
    */
-  List<? extends CMJavaScript> getJavaScripts();
+  @Nonnull List<CMJavaScript> getJavaScripts();
 
   /**
    * Returns the value of the document property {@link #CSS}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMCSS} objects
    */
-  List<? extends CMCSS> getCss();
+  @Nonnull List<CMCSS> getCss();
 
   /**
    * Returns the value of the document property {@link #RESOURCE_BUNDLES}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMResourceBundle} objects
    */
-  List<? extends CMResourceBundle> getResourceBundles();
+  @Nonnull List<CMResourceBundle> getResourceBundles();
 
   String getViewRepositoryName();
 }

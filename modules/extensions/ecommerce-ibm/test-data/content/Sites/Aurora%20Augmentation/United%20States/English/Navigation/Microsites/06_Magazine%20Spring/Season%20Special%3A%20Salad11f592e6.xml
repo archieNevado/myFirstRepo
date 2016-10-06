@@ -35,9 +35,9 @@
 <javaScript>
 </javaScript>
 <css>
+<link href="../../../../../../../../Themes/perfectchef/css/spring%2Ecss.xml" path="/Themes/perfectchef/css/spring%2Ecss"/>
 </css>
 <theme>
-<link href="../../../../../../../Themes/perfectchef-spring/Perfectchef-spring%20Theme.xml" path="/Themes/perfectchef-spring/Perfectchef-spring%20Theme"/>
 </theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

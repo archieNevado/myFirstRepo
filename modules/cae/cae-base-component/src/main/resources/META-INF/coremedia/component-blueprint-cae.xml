@@ -25,13 +25,8 @@
   <import resource="classpath:/framework/spring/blueprint-sitemap.xml"/>
   <import resource="classpath:/framework/spring/blueprint-testUrls.xml"/>
 
-
-
-  <customize:replace id="caeBlobtransformerCapacityCustomizer"
-                     bean="throttlingBlobTransformer"
-                     property="totalPermits"
-                     custom-value="#{ ${cae.blobtransformer.capacity} * 1024 }"/>
-  <!-- blobTransformer permits use kilobyte units  -->
+  <!-- expose initializer as bean for spring-boot integration -->
+  <bean class="com.coremedia.blueprint.component.cae.CaeComponentInitializer"/>
 
   <bean class="com.coremedia.objectserver.beans.ContentBeanPrefetcher">
     <description>

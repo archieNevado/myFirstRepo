@@ -2,10 +2,10 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Locale;
 
-import static org.apache.commons.lang3.LocaleUtils.toLocale;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class LocalizedLocale implements Serializable {
@@ -14,6 +14,7 @@ public class LocalizedLocale implements Serializable {
   private Locale locale;
 
   public LocalizedLocale() {
+    // empty constructor
   }
 
   public LocalizedLocale(String localizedLocale) {
@@ -26,12 +27,12 @@ public class LocalizedLocale implements Serializable {
           builder.append(localeItems[1]);
         }
         if (localeItems.length > 2) {
-          builder.append("_").append(localeItems[2]);
+          builder.append("-").append(localeItems[2]);
         }
         if (localeItems.length > 3) {
-          builder.append("_").append(localeItems[3]);
+          builder.append("-").append(localeItems[3]);
         }
-        locale = toLocale(builder.toString());
+        locale = Locale.forLanguageTag(builder.toString());
       }
     }
   }
@@ -57,20 +58,20 @@ public class LocalizedLocale implements Serializable {
       builder.append(displayLanguage);
     }
     if (this.locale != null) {
-      if (StringUtils.isNotBlank(locale.getLanguage())) {
-        builder.append("_").append(locale.getLanguage());
-      }
-      if (StringUtils.isNotBlank(locale.getCountry())) {
-        builder.append("_").append(locale.getCountry());
-      }
-      if (StringUtils.isNotBlank(locale.getVariant())) {
-        builder.append("_").append(locale.getVariant());
-      }
+      appendNonBlank(builder, locale.getLanguage(), locale.getCountry(), locale.getVariant());
     }
     return builder.toString();
   }
 
   public Locale getLocale() {
     return locale;
+  }
+
+  private static void appendNonBlank(@Nonnull StringBuilder builder, @Nonnull String... values) {
+    for (String value: values) {
+      if (StringUtils.isNotBlank(value)) {
+        builder.append("_").append(value);
+      }
+    }
   }
 }

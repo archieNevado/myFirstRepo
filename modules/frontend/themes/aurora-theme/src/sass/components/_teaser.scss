@@ -1,0 +1,210 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+//Variables
+// Set varibales to configure _teaser.scss from default-templates brick.
+// Have a look the _teaser.scss for all available variables.
+$cm-teasable-prefix: "cm-teasable";
+$cm-teasable-dimmer-display: none;
+$cm-teasable-padding-base-horizontal: 0;
+$cm-teasable-padding-large-vertical: 0;
+$cm-teasable-padding-large-horizontal: 0;
+
+// Import Bricks
+@import "../../../../../lib/bricks/generic-templates/sass/teaser";
+
+// Teaser
+// =====================================================================================================================
+
+// attach border to teasers and change base color of fonts
+.cm-teasable,
+.cm-teaser {
+  border: 1px solid #CCCBCB;
+}
+
+.cm-teaser__content ~ .cm-teaser__title {
+  top: auto;
+  right: 0;
+  bottom: 0;
+}
+
+.cm-teaser--product .cm-teaser__content ~ .cm-teaser__title,
+.cm-teaser--hero .cm-teaser__content ~ .cm-teaser__title {
+  top: 0;
+  right: auto;
+  bottom: auto;
+}
+
+// this fixes the caption styled by CoreMedia but is overridden by IBM
+.cm-teasable__caption {
+  height: auto;
+  font-size: inherit;
+  opacity: inherit;
+}
+
+// --- product teaser
+.cm-teaser--product .cm-heading2--boxed {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #373737;
+}
+
+.cm-product-info {
+  display: block;
+  width: 100%;
+  line-height: 1.4rem;
+
+  &__pricing {
+    margin-left: 1rem;
+  }
+
+  &__title,
+  &__pricing {
+    display: table-cell;
+  }
+
+  &__title > *,
+  &__pricing > * {
+    background: transparent;
+  }
+
+  &__offerprice {
+    position: absolute;
+    top: -2rem;
+    left: 0;
+    background-color: #f8f8f8;
+  }
+}
+
+.cm-price--teaser,
+.cm-price--quickinfo {
+  font-size: 1.2rem;
+}
+
+.cm-price--quickinfo.cm-price--special {
+  font-size: 1.46rem;
+}
+
+.cm-price--teaser.cm-price--special {
+  font-size: 1.4rem;
+}
+
+.cm-price--category-item {
+  font-size: 1.4rem;
+}
+
+.cm-price--category-item.cm-price--old {
+  font-size: 1.2rem;
+}
+
+// Add to cart button in teaser
+.cm-teaser__button-group {
+  background-color: transparent;
+  top: auto;
+  left: auto;
+  right: 3px;
+  bottom: 3px;
+  margin-top: 0;
+}
+
+.cm-button-group--overlay {
+  text-align: left;
+  width: auto;
+}
+
+// Button styling in overlay
+.cm-button-group--linked-large .cm-button--primary,
+.cm-button-group--overlay .cm-button--primary {
+  background-image: linear-gradient(#FBBB0B, #EE9505);
+  border: 1px solid #BFBFBF;
+  border-radius: 4px;
+  color: #333333;
+  display: inline-block;
+  font-size: 14px;
+  line-height: 29px;
+  min-height: 29px;
+  text-align: center;
+}
+
+.cm-button-group--linked-large .cm-button--primary:hover,
+.cm-button-group--overlay .cm-button--primary:hover {
+  background-image: linear-gradient(#FED60C, #F8AF06);
+}
+
+// --- video teaser
+.cm-teaser--video .cm-visuallyhidden {
+  height: 0;
+  margin: 0;
+}
+
+.cm-teaser--video iframe {
+  display: block;
+}
+
+// Customize the _teaser.scss with additional styles
+.#{$cm-teasable-prefix} {
+  &__picture-box {
+    @include aspect-ratio-box(4, 3);
+  }
+
+  &__caption {
+    @include center-absolute(true, true);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: inherit;
+    padding: 0;
+
+    .cm-teaser__info {
+      right: 0;
+      bottom: 0;
+      position: absolute;
+      background-color: #f8f8f8;
+      color: #010F1C;
+      font-weight: normal;
+    }
+
+    .#{$cm-teasable-prefix}__headline {
+      left: 0;
+      bottom: 0;
+      right: 0;
+      text-align: left;
+      position: absolute;
+      background-color: #f8f8f8;
+      color: #010F1C;
+      font-weight: normal;
+
+      padding: .433333rem .93333rem .566667rem .93333rem;
+      font-size: 1.2rem;
+      line-height: 1.4rem;
+
+      @include breakpoint(sm) {
+        padding: .36rem .54em;
+        line-height: 1.6rem;
+      }
+
+      @include breakpoint(xs) {
+        padding: .3rem .45rem;
+        font-size: 1.2rem;
+        line-height: 1.46rem;
+      }
+    }
+
+    &.caption {
+      background-color: transparent;
+    }
+  }
+
+  &--video &__caption {
+    @include breakpoint(md) {
+      bottom: 0;
+    }
+  }
+
+  @include breakpoint(md) {
+    &:hover .cm-teaser__button-group {
+      display: block;
+    }
+  }
+}

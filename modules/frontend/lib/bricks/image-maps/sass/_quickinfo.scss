@@ -1,0 +1,17 @@
+/**
+ * Quickinfo
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+
+/**
+ * quickinfo is not visible by default (display: none is not used due to technical reasons)
+ */
+.cm-quickinfo {
+  visibility: hidden;
+  position: absolute;
+  &--active {
+    visibility: visible;
+  }
+}

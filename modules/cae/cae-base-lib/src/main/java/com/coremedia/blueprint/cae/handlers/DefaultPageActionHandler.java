@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_NAVIGATION;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ACTION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
@@ -24,17 +25,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_R
 
 @SuppressWarnings("LocalCanBeFinal")
 public class DefaultPageActionHandler extends WebflowHandlerBase {
-
-  @Override
-  @Nonnull
-  protected ModelAndView handleRequestInternal(
-          @Nonnull ContentBean contentBean,
-          @Nonnull String context,
-          @Nonnull String action,
-          @Nonnull HttpServletRequest request,
-          @Nonnull HttpServletResponse response) {
-    return super.handleRequestInternal(contentBean, context, action, request, response);
-  }
 
   @Nullable
   protected UriComponents buildLinkInternal(
@@ -57,7 +47,7 @@ public class DefaultPageActionHandler extends WebflowHandlerBase {
 
     return result.buildAndExpand(ImmutableMap.of(
             SEGMENT_ID, getId(action),
-            SEGMENT_ROOT, getPathSegments(context).get(0),
+            SEGMENTS_NAVIGATION, joinPath(getPathSegments(context)),
             SEGMENT_ACTION, actionName
     ));
   }

@@ -1,16 +1,13 @@
 package com.coremedia.blueprint.elastic.social.cae;
 
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import com.google.common.collect.ImmutableList;
+import org.springframework.boot.context.embedded.RegistrationBean;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
+import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
-import java.util.EnumSet;
 
 /**
  * In addition to elastic social filters to gather tenant and site information,
@@ -27,8 +24,6 @@ public final class EsCaeWebComponentInitializer extends ComponentWebApplicationI
   public static final String TENANT_FILTER = "tenantFilter";
   public static final String USER_FILTER = "userFilter";
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(EsCaeWebComponentInitializer.class);
-
   private static final String ELASTIC_SOCIAL = "elastic-social";
   private static final String SERVLET_DYNAMIC = "/servlet/dynamic/*";
   private static final String SERVLET_RESOURCE_ELASTIC = "/servlet/resource/elastic/*";
@@ -39,44 +34,50 @@ public final class EsCaeWebComponentInitializer extends ComponentWebApplicationI
   }
 
   @Override
-  protected void configure(ServletContext servletContext) {
-    // These filters MUST run before all other filters, otherwise we violate the contract with Spring Security.
-    FilterRegistration springSecurityFilterChain = servletContext.getFilterRegistration(SPRING_SECURITY_FILTER_CHAIN);
-    if(null == springSecurityFilterChain) {
-      LOGGER.info("setting up spring security filter chain");
-      springSecurityFilterChain = servletContext.addFilter(SPRING_SECURITY_FILTER_CHAIN, new DelegatingFilterProxy());
-    } else {
-      LOGGER.info("spring security filter chain already set up");
-    }
-    springSecurityFilterChain.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true,  "/*");
+  protected void configure(@Nonnull ServletContext servletContext) {
+    // nothing to configure
+  }
 
-    FilterRegistration.Dynamic guidFilter = servletContext.addFilter(GUID_FILTER, new DelegatingFilterProxy());
-    guidFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, SERVLET_DYNAMIC);
+  @Nonnull
+  @Override
+  protected Iterable<RegistrationBean> createRegistrationBeans() {
+    ImmutableList.Builder<RegistrationBean> builder = ImmutableList.builder();
 
-    FilterRegistration siteFilter = servletContext.getFilterRegistration(SITE_FILTER);
-    if(null == siteFilter) {
-      siteFilter = servletContext.addFilter(SITE_FILTER, new DelegatingFilterProxy());
-    }
-    siteFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/servlet/*");
+    builder.add(RegistrationBeanBuilder
+            .forFilterProxy(SPRING_SECURITY_FILTER_CHAIN)
+            .name(SPRING_SECURITY_FILTER_CHAIN)
+            .build());
 
-    FilterRegistration.Dynamic sessionSiteFilter = servletContext.addFilter(SESSION_SITE_FILTER, new DelegatingFilterProxy());
-    sessionSiteFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, SERVLET_DYNAMIC);
+    builder.add(RegistrationBeanBuilder
+            .forFilterProxy(GUID_FILTER)
+            .name(GUID_FILTER)
+            .urlPatterns(SERVLET_DYNAMIC)
+            .build());
 
-    FilterRegistration tenantFilter = servletContext.getFilterRegistration(TENANT_FILTER);
-    if(null == tenantFilter) {
-      LOGGER.info("setting up tenant filter");
-      tenantFilter = servletContext.addFilter(TENANT_FILTER, new DelegatingFilterProxy());
-    } else {
-      LOGGER.info("tenant filter already set up");
-    }
-    tenantFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, SERVLET_DYNAMIC);
+    builder.add(RegistrationBeanBuilder
+            .forFilterProxy(SITE_FILTER)
+            .name(SITE_FILTER)
+            .urlPatterns("/servlet/*")
+            .build());
 
-    FilterRegistration.Dynamic userFilter = servletContext.addFilter(USER_FILTER, new DelegatingFilterProxy());
-    userFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, SERVLET_DYNAMIC, SERVLET_RESOURCE_ELASTIC);
+    builder.add(RegistrationBeanBuilder
+            .forFilterProxy(SESSION_SITE_FILTER)
+            .name(SESSION_SITE_FILTER)
+            .urlPatterns(SERVLET_DYNAMIC)
+            .build());
 
-    /**
-     * Publishing HTTP session events to spring's root web application context
-     */
-    servletContext.addListener(new HttpSessionEventPublisher());
+    builder.add(RegistrationBeanBuilder
+            .forFilterProxy(TENANT_FILTER)
+            .name(TENANT_FILTER)
+            .urlPatterns(SERVLET_DYNAMIC, SERVLET_RESOURCE_ELASTIC)
+            .build());
+
+    builder.add(RegistrationBeanBuilder
+            .forFilterProxy(USER_FILTER)
+            .name(USER_FILTER)
+            .urlPatterns(SERVLET_DYNAMIC, SERVLET_RESOURCE_ELASTIC)
+            .build());
+
+    return builder.build();
   }
 }

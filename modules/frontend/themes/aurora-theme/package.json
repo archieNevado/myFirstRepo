@@ -1,0 +1,28 @@
+{
+  "name": "@coremedia/aurora-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "grunt build",
+    "watch": "grunt watch"
+  },
+  "dependencies": {
+    "bootstrap-carousel-swipe": "0.0.6",
+    "bootstrap-sass": "3.3.6",
+    "imagesloaded": "4.1.0",
+    "jquery": "2.2.4",
+    "magnific-popup": "1.1.0",
+    "mediaelement": "2.22.0"
+  },
+  "theme": {
+    "name": "aurora",
+    "supportedBrowsers": [
+      "> 0.5%",
+      "Firefox ESR",
+      "Explorer >= 8",
+      "last 3 versions",
+      "last 3 Android versions",
+      "last 3 iOS versions"
+    ]
+  }
+}

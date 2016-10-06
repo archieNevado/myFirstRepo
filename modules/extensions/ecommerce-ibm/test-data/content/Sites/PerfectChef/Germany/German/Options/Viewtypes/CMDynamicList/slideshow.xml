@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<CMViewtype folder="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMDynamicList" name="slideshow" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale>de-DE</locale>
-<master>
-</master>
-<description>Displays a collection as a slideshow with hero teasers</description>
-<icon href="slideshow.icon.png" mimetype="image/png"/>
-<layout>slideshow</layout>
-</CMViewtype>

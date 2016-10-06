@@ -4,7 +4,9 @@
 
   <%- unless @config['properties'].nil? -%>
     <% @config['properties'].keys.sort.each do |name| -%>
-  <property name="<%= name %>" value="<%= @config['properties'][name] %>"/>
+      <%- unless @config['properties'][name].to_s == '' -%>
+        <property name="<%= name %>" value="<%= @config['properties'][name] %>"/>
+      <% end -%>
     <% end -%>
   <% end -%>
 

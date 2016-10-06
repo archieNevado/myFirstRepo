@@ -4,7 +4,7 @@
 <master>
 </master>
 <viewtype>
-<link href="../../../../Viewtypes/CMCollection/tiles-layout-center.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-center"/>
+<link href="../../../../Viewtypes/CMChannel/tiles-layout-center.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-center"/>
 </viewtype>
 <linkedSettings>
 </linkedSettings>

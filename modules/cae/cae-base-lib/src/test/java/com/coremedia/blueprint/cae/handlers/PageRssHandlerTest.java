@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.coremedia.blueprint.cae.handlers.PageRssHandlerTest.LocalConfig.PROFILE;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -65,8 +66,8 @@ public class PageRssHandlerTest {
   }
 
   public static final String FEED_VIEW_NAME = "asFeed";
-  public static final String FEED_URL = "/service/rss/media/124/feed.rss";
-  public static final String FEED_URL_TOPIC = "/service/rss/media/4280/4250/feed.rss";
+  public static final String FEED_URL = "/" + PREFIX_SERVICE + "/rss/media/124/feed.rss";
+  public static final String FEED_URL_TOPIC = "/" + PREFIX_SERVICE + "/rss/media/4280/4250/feed.rss";
 
   @SuppressWarnings("SpringJavaAutowiringInspection")
   @Inject

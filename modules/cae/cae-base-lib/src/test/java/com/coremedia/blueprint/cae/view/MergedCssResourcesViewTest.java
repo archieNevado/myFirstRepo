@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.cae.view;
 
-import com.coremedia.blueprint.cae.contentbeans.CodeResourcesImpl;
+import com.coremedia.blueprint.cae.contentbeans.CodeResourcesCacheKey;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CodeResources;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
@@ -77,7 +77,7 @@ public class MergedCssResourcesViewTest {
   @Before
   public void setup() {
     CMContext navigation = contentTestHelper.getContentBean(NAVIGATION_ID);
-    codeResources = new CodeResourcesImpl(navigation, "css", false);
+    codeResources = new CodeResourcesCacheKey(navigation, "css", false).evaluate(null);
   }
 
   @Test

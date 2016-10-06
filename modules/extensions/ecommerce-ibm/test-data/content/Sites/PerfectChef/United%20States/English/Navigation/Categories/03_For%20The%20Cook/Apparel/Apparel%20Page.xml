@@ -35,6 +35,8 @@
 </javaScript>
 <css>
 </css>
+<theme>
+</theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
@@ -49,12 +51,18 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../../Pictures/Magazine%20Pictures/Magazine%20Spring%20Pictures/Summer%20Dresses/Shop%4fdb1bb4.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Spring%20Pictures/Summer%20Dresses/Shop%20the%20new%20Urban%20Look%20Image%20Map"/>
 <Link xlink:href="coremedia:///cap/resources/Apparel%20Hero%20Banner%20Collection.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Apparel%20Hero%20Banner%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/Apparel%20Main%20Collection.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Apparel%20Main%20Collection"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../../Pictures/Magazine%20Pictures/Magazine%20Spring%20Pictures/Summer%20Dresses/Shop%4fdb1bb4.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Pictures/Magazine%20Pictures/Magazine%20Spring%20Pictures/Summer%20Dresses/Shop%20the%20new%20Urban%20Look%20Image%20Map"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/above.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/above"/>
 </Struct>
 </StructListProperty>
 </Struct>

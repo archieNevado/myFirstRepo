@@ -10,7 +10,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.events.ContentEvent;
 import com.coremedia.cap.content.events.ContentRepositoryListenerBase;
-import com.coremedia.cap.content.events.PropertiesChangedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
@@ -33,7 +32,7 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
           CommerceCacheInvalidationSource.INVALIDATE_CATEGORIES_URI_PATTERN,
           CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN,
           CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN));
-  static List<String> EVENT_WHITELIST = Arrays.asList(
+  static final List<String> EVENT_WHITELIST = Arrays.asList(
           ContentEvent.CONTENT_CREATED,
           ContentEvent.CONTENT_DELETED,
           ContentEvent.CONTENT_MOVED,
@@ -59,11 +58,6 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
         }
       }
     }
-  }
-
-  @Override
-  public void propertiesChanged(PropertiesChangedEvent event) {
-    super.propertiesChanged(event);
   }
 
   @Override

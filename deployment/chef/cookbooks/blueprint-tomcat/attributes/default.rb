@@ -1,9 +1,9 @@
 #<> The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute.
-default['blueprint']['tomcat']['source'] = nil
+default['blueprint']['tomcat']['source'] = 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.72/bin/apache-tomcat-7.0.72.zip'
 #<> The SHA-256 checksum of the tomcat installation zip
-default['blueprint']['tomcat']['source_checksum'] = 'f093d033cb84e104f9f00f120dc6f3b39471d8e12be8fc250374ac9891c257b1'
+default['blueprint']['tomcat']['source_checksum'] = '86ea10a9794714c5a98396d4ab7d077a524dc97c09fbb225a54a2c71d85747d7'
 #<> The version of tomcat to install
-default['blueprint']['tomcat']['version'] = '7.0.69'
+default['blueprint']['tomcat']['version'] = '7.0.72'
 #<> The path to the java home for the tomcat services
 default['blueprint']['tomcat']['java_home'] = '/usr/lib/jvm/java'
 #<> Global jvm agent opts. Use this to instrument the jvm for monitoring
@@ -28,9 +28,9 @@ end
 #<> A flag to enable/disable the jmx remote connector
 default['blueprint']['tomcat']['jmx_remote'] = true
 #<> The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute.
-default['blueprint']['tomcat']['jmx_remote_jar_source'] = nil
+default['blueprint']['tomcat']['jmx_remote_jar_source'] = 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.72/bin/extras/catalina-jmx-remote.jar'
 #<> The SHA-256 checksum of the catalina-jmx-remote.jar
-default['blueprint']['tomcat']['jmx_remote_jar_source_checksum'] = '5fe0c568afe6f24998817bfb9e6a77e1b430112a52ed914d48a1f9a401f86fb1'
+default['blueprint']['tomcat']['jmx_remote_jar_source_checksum'] = 'fbe611a1e7be0b3e79d16bf65dfa5f104de0ed08800079a2490fe788e72e58d1'
 #<> A flag to enable/disable remote jmx authentication
 default['blueprint']['tomcat']['jmx_remote_authenticate'] = true
 #<> The server name under which the rmi server is registered. Set it to localhost and create a ssh tunnel(recommended) or set it to the actual hostname and open the ports and configure security and ssl.

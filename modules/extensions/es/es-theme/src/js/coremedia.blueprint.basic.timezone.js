@@ -265,7 +265,7 @@ coremedia.blueprint.basic.timezone = (function (module) {
     if (this.is_ambiguous()) {
       this.ambiguity_check();
     }
-  }
+  };
 
   module.TimeZone.prototype.name = function () {
     return this.timezone_name;

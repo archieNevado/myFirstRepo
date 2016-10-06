@@ -162,7 +162,7 @@ public abstract class PageHandlerBaseTest<T extends PageHandlerBase> {
   protected static final Calendar DEFAULT_VALID_FROM = Calendar.getInstance();
   protected static final Calendar DEFAULT_VALID_TO = Calendar.getInstance();
   protected static final String DEFAULT_ACTION_CONTENT_TYPE = "Point of View Gun";
-  protected static final String DEFAULT_URI_TEMPLATE = "{root}/{contentId}/{action}";
+  protected static final String DEFAULT_URI_TEMPLATE = "{navigationPath}/{contentId}/{action}";
   protected static final List<String> DEFAULT_PATH_LIST = Arrays.asList(DEFAULT_CONTEXT);
   protected static final String PARAM_DOORS = "Doors";
   protected static final String PARAM_MATTER_TRANSFERENCE_BEAMS = "Matter-transference-beams";

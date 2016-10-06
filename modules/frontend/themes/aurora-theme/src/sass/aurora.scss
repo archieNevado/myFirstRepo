@@ -1,0 +1,24 @@
+/*! CoreMedia Blueprint - Theme Aurora */
+
+// Variables
+@import "base/imports";
+
+// Utils
+@import "../../../../lib/sass/utils/imports";
+
+//Vendor
+@import "vendor/magnific-popup";
+@import "vendor/media-element-player";
+@import "vendor/bootstrap";
+@import "vendor/perfectchef";
+
+//Components
+@import "components/layout";
+@import "components/teaser";
+@import "components/hero";
+@import "components/grids";
+@import "components/popup";
+@import "components/detail";
+@import "components/carousel";
+@import "components/aurora";
+@import "components/aurora-es";

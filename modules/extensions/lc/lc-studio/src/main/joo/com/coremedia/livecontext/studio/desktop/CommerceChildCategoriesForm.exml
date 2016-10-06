@@ -14,8 +14,6 @@
   <exml:constant name="INHERITED_CATEGORIES_ITEM_ID" value="inheritedCategories"/>
   <exml:constant name="SELECTED_CATEGORIES_ITEM_ID" value="selectedCategories"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}"
-            type="LivecontextStudioPlugin_properties"/>
   <exml:var name="stringToBoolean" type="Function" value="{function(value:String):Boolean { return value === 'true' }}"/>
 
   <editor:propertyFieldPanel>
@@ -32,7 +30,7 @@
       <livecontext:readOnlyCatalogLinkProperty itemId="{INHERITED_CATEGORIES_ITEM_ID}"
                                                bindTo="{getCategoryExpression(config.bindTo)}"
                                                propertyName="{CatalogObjectPropertyNames.SUB_CATEGORIES}"
-                                               emptyText="{BUNDLE.Commerce_Category_subcategories_emptyText}">
+                                               emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_subcategories_emptyText}">
         <plugins mode="append">
           <ui:bindVisibilityPlugin bindTo="{isInheritExpression(config.bindTo)}"/>
         </plugins>
@@ -46,7 +44,7 @@
                                    createStructFunction="{createStructs}"
                                    openLinkSources="{CatalogHelper.getInstance().openCatalog}"
                                    catalogObjectType="{CatalogModel.TYPE_CATEGORY}"
-                                   emptyText="{BUNDLE.Category_Link_empty_text}">
+                                   emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Category_Link_empty_text}">
         <plugins mode="append">
           <ui:bindVisibilityPlugin bindTo="{isSelectChildrenExpression(config.bindTo)}"/>
         </plugins>

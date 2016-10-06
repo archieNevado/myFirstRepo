@@ -51,9 +51,9 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
 @RequestMapping
 public class AuthenticationHandler extends WebflowHandlerBase {
 
-  public static final String LOGIN_ACTION_ID = "com.coremedia.blueprint.elastic.social.cae.flows.Login";
-  public static final String PROFILE_ACTION_ID = "com.coremedia.blueprint.elastic.social.cae.flows.UserDetails";
-  public static final String REGISTRATION_ACTION_ID = "com.coremedia.blueprint.elastic.social.cae.flows.Registration";
+  public static final String LOGIN_ACTION_ID = "com.coremedia.blueprint.es.webflow.Login";
+  public static final String PROFILE_ACTION_ID = "com.coremedia.blueprint.es.webflow.UserDetails";
+  public static final String REGISTRATION_ACTION_ID = "com.coremedia.blueprint.es.webflow.Registration";
 
   public static final String EXPIRED_PASSWORD_SETTING_ID = "flow.passwordExpired"; // NOSONAR false positive: Credentials should not be hard-coded
 

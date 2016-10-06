@@ -13,15 +13,15 @@
 <LinkListProperty Name="subjectTaxonomies" LinkType="coremedia:///cap/contenttype/CMTaxonomy">
 </LinkListProperty>
 <LinkListProperty Name="profileImage" LinkType="coremedia:///cap/contenttype/CMPicture">
-<Link xlink:href="coremedia:///cap/resources/Interior%20Designer%20-%20Jenni1860dcae.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Personalization/Profiles/Interior%20Designer%20-%20Jennifer%20Cooper%20Persona%20Picture"/>
+<Link xlink:href="coremedia:///cap/resources/Interior%20Designer%20Persona%20Picture.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Personalization/Profiles/Interior%20Designer%20Persona%20Picture"/>
 </LinkListProperty>
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="usersegments">
-<String>ibm:///catalog/segment/8407790678950001202</String>
+<String>ibm:///catalog/segment/8500000000000323451</String>
 </StringListProperty>
 <StringListProperty Name="usercontracts">
-<String>ibm:///catalog/contract/4000000000000000508</String>
+<String>ibm:///catalog/contract/4000000000000000509</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

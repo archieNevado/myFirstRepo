@@ -1,0 +1,50 @@
+@import "../../../sass/utils/imports";
+
+@import "../../../../../extensions/es/es-theme/src/css/es";
+@import "../../../../../extensions/es/es-theme/src/css/es-form";
+
+
+//default variables
+$cm-user-chooser: "cm-user-chooser" !default;
+$cm-user-chooser-padding-base-vertical: 10px !default;
+$cm-user-chooser-line-height: 24px !default;
+$cm-user-chooser-padding-base-horizontal:   15px !default;
+$cm-user-chooser-items-top: 60px !default;
+$cm-user-chooser-items-background-color: #ffffff !default;
+
+/* language chooser */
+.#{$cm-user-chooser} {
+
+  &__button {
+    cursor: pointer;
+  }
+
+  &__icon {
+    font-size: 10px;
+  }
+
+  &__items {
+    list-style: none;
+    position: absolute;
+    top: 2*$cm-user-chooser-padding-base-vertical+$cm-user-chooser-line-height;
+    left: 0;
+    right: 0;
+    padding: 0;
+    background-color: palette(white);
+  }
+
+  &__item {
+    padding: $cm-user-chooser-padding-base-vertical $cm-user-chooser-padding-base-horizontal;
+  }
+
+  @include breakpoint(sm-and-up) {
+    &__items {
+      top: $cm-user-chooser-items-top;
+      background-color: $cm-user-chooser-items-background-color;
+    }
+
+    &__item {
+      padding: 0 $cm-user-chooser-padding-base-horizontal;
+    }
+  }
+}

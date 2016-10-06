@@ -14,17 +14,16 @@ import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMImageMap;
 import com.coremedia.blueprint.common.contentbeans.CMLocalized;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
-import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.Container;
+import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.navigation.HasViewTypeName;
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
 import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.common.Blob;
-import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.cap.transform.Transformation;
 import com.coremedia.image.ImageDimensionsExtractor;
@@ -37,7 +36,6 @@ import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +49,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -66,6 +65,7 @@ public class BlueprintFreemarkerFacade {
 
   private static final Logger LOG = LoggerFactory.getLogger(BlueprintFreemarkerFacade.class);
   private static final String RESPONSIVE_SETTINGS_KEY = "responsiveImageSettings";
+  private static final String FRAGMENT_PREVIEW_KEY = "fragmentPreview";
 
   public static final String DEFAULT_DIRECTION = "ltr";
   public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
@@ -156,10 +156,6 @@ public class BlueprintFreemarkerFacade {
     return SettingsFunction.setting(settingsService, self, key, defaultValue);
   }
 
-  public Navigation findNavigationContext(Object bean) {
-    return FindNavigationContext.findNavigationContext(bean, FreemarkerUtils.getCurrentRequest());
-  }
-
   public Boolean isActiveNavigation(Object navigation, List<Object> navigationPathList) {
     return navigationPathList.contains(navigation);
   }
@@ -194,14 +190,11 @@ public class BlueprintFreemarkerFacade {
     return stringWriter.toString();
   }
 
-  public int parseContentId(String contentId) {
-    return IdHelper.parseContentId(contentId);
-  }
-
   /**
    * Returns a String representation of an array of JSON objects with a list of aspect ratios with image links for different sizes.
-   * @param picture the image
-   * @param page the root page
+   *
+   * @param picture      the image
+   * @param page         the root page
    * @param aspectRatios list of aspect ratios to use for this image
    * @return Json Object with a list of aspect ratios with image links for different sizes
    * @throws IOException
@@ -232,7 +225,7 @@ public class BlueprintFreemarkerFacade {
         if (!isEmpty(links)) {
           // only the "TransformImageService" holds the actual crop ratio in proper values
           Transformation transformation = transformImageService.getTransformation(picture.getContent(), aspectRatioName);
-          if(transformation == null) {
+          if (transformation == null) {
             throw new IllegalArgumentException("Could not find image variant for name " + aspectRatioName);
           }
           TransformationLinks transformationLinks = new TransformationLinks(
@@ -293,7 +286,30 @@ public class BlueprintFreemarkerFacade {
   }
 
   /**
+   * Retrieves the preview views of an object based on its hierachry
+   *
+   * @param self                 the object to preview
+   * @param page                 the page used to find the setting named "fragmentPreview
+   * @param defaultFragmentViews a Map defining defaults
+   * @return a List of maps of Strings defining which views should be rendered
+   */
+  public List<Map<String, Object>> getPreviewViews(ContentBean self, Page page, List<Map<String, Object>> defaultFragmentViews) {
+    ContentType contentType = self.getContent().getType();
+    List<Map<String, Object>> result = defaultFragmentViews;
+    while (contentType != null) {
+      List<Map<String, Object>> retrievedSettings = settingsService.nestedSetting(Arrays.asList(FRAGMENT_PREVIEW_KEY, contentType.toString()), List.class, page);
+      if (retrievedSettings != null) {
+        result = retrievedSettings;
+        break;
+      }
+      contentType = contentType.getParent();
+    }
+    return result;
+  }
+
+  /**
    * Returns a {@link java.lang.String} URL of the uncropped image
+   *
    * @param picture the image for which an URL should be determined
    * @return a {@link java.lang.String} URL of the uncropped image
    */
@@ -358,7 +374,7 @@ public class BlueprintFreemarkerFacade {
    * the items the original container had.
    *
    * @param baseContainer The base container the new container shall be created from
-   * @param items The items to be put inside the new container
+   * @param items         The items to be put inside the new container
    * @return a new container based on the given base container
    */
   public Container getContainer(Container baseContainer, List<Object> items) {
@@ -372,7 +388,6 @@ public class BlueprintFreemarkerFacade {
   }
 
   /**
-   *
    * @param size in bytes
    * @return a human readable size
    */
@@ -382,7 +397,7 @@ public class BlueprintFreemarkerFacade {
       return size + " Bytes";
     }
     int exp = (int) (Math.log(size) / Math.log(unit));
-    char pre = "KMGTPE".charAt(exp-1);
+    char pre = "KMGTPE".charAt(exp - 1);
     return String.format("%.1f %sB", size / Math.pow(unit, exp), pre);
   }
 
@@ -400,6 +415,7 @@ public class BlueprintFreemarkerFacade {
     }
     return DISPLAYABLE_IMAGE_SUB_MIMETYPES.contains(mimeType.getSubType());
   }
+
   public boolean isDisplayableVideo(Blob blob) {
     if (blob.getSize() > DISPLAYABLE_VIDEO_MAX_SIZE) {
       return false;
@@ -408,7 +424,7 @@ public class BlueprintFreemarkerFacade {
     return DISPLAYABLE_VIDEO_PRIMARY_MIMETYPE.equals(mimeType.getPrimaryType());
   }
 
-  public List<Map<String, Object>> responsiveImageMapAreas(CMImageMap imageMap, List<String> transformationNames){
+  public List<Map<String, Object>> responsiveImageMapAreas(CMImageMap imageMap, List<String> transformationNames) {
 
     List<Map<String, Object>> result = Collections.emptyList();
     final CMPicture picture = imageMap.getPicture();
@@ -432,21 +448,8 @@ public class BlueprintFreemarkerFacade {
     return ImageFunctions.getImageTransformationBaseWidth();
   }
 
-  public Map<String,List<CMTeasable>> filterRelated(Map<String,List<CMTeasable>> related, List<String> types) {
-    return Maps.filterKeys(related, new RelatedByTypePredicate(types));
-  }
-
   public ViewHookEventNamesFreemarker getViewHookEventNames() {
     return viewHookEventNames;
-  }
-
-  @Deprecated
-  public boolean isEmptyMarkup(Markup markup) {
-    return MarkupUtil.isEmptyRichtext(markup, true);
-  }
-
-  public boolean isEmptyRichtext(Markup richtext) {
-    return MarkupUtil.isEmptyRichtext(richtext, true);
   }
 
   /**
@@ -456,9 +459,9 @@ public class BlueprintFreemarkerFacade {
 
     String toTruncate = "";
 
-    if(text != null) {
-      if(text instanceof Markup) {
-        toTruncate = MarkupUtil.asPlainText((Markup)text, true);
+    if (text != null) {
+      if (text instanceof Markup) {
+        toTruncate = MarkupUtil.asPlainText((Markup) text, true);
       } else if (text instanceof String) {
         toTruncate = (String) text;
       } else {
@@ -477,7 +480,7 @@ public class BlueprintFreemarkerFacade {
    * about where to add it. It's hard to determine where the bold end tag should be added (after which word?
    * truncate text adds three dots...) but it's easy to say that after the truncated text no bold tag should be open.
    *
-   * @param text the highlighted text
+   * @param text      the highlighted text
    * @param maxLength the length the text will be truncated to
    * @return truncated text with closed bold tag
    */
@@ -491,10 +494,11 @@ public class BlueprintFreemarkerFacade {
    * More generic version of {@link #truncateHighlightedText(Object, int)}.
    * Instead of closing a bold tag this method gets start and end tag as input and closes the given start tag with the
    * given end tag. The tags must be
-   * @param text the highlighted text
+   *
+   * @param text      the highlighted text
    * @param maxLength the length the text will be truncated to
-   * @param startTag start tag which should be closed if it's not closed at the end
-   * @param endTag end tag - used to close the start tag if it's not closed at the end
+   * @param startTag  start tag which should be closed if it's not closed at the end
+   * @param endTag    end tag - used to close the start tag if it's not closed at the end
    * @return truncated text with closed bold tag
    */
   public String truncateHighlightedText(Object text, int maxLength, String startTag, String endTag) {
@@ -503,15 +507,15 @@ public class BlueprintFreemarkerFacade {
     //if the tag is smaller, everything is fine if none of those tags exist -1 < -1 is false, but we shouldn't add an end tag
     boolean lastStartTagHasBeenClosed = truncatedText.lastIndexOf(startTag) <= truncatedText.lastIndexOf(endTag);
 
-    if(lastStartTagHasBeenClosed) {
+    if (lastStartTagHasBeenClosed) {
       return truncatedText;
     }
 
     return truncatedText + endTag;
   }
 
-  public PageGridPlacement getPlacementByName(String name, Page page) {
-    return page.getPageGrid().getPlacementForName(name);
+  public PageGridPlacement getPlacementByName(String name, PageGrid pageGrid) {
+    return pageGrid.getPlacementForName(name);
   }
 
   /**
@@ -608,7 +612,7 @@ public class BlueprintFreemarkerFacade {
     @Override
     public String getViewTypeName() {
       if (baseContainer instanceof HasViewTypeName) {
-        return ((HasViewTypeName)baseContainer).getViewTypeName();
+        return ((HasViewTypeName) baseContainer).getViewTypeName();
       }
       return null;
     }

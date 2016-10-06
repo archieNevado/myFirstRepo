@@ -3,22 +3,33 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.blueprint.elastic.common.ImageHelper;
 import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.elastic.core.api.blobs.Blob;
+import com.coremedia.elastic.core.api.blobs.BlobService;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
@@ -31,10 +42,16 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RequestMapping
 public class CommentsResultHandler extends ElasticContentHandler<CommentsResult> {
 
-  public static final String SUCCESS_MESSAGE = "success";
-  public static final String ERROR_MESSAGE = "error";
+  private static final int maxNumberOfAttachments = 10;
+  private static final int maxFileSize = 5000000;
 
   private static final String COMMENTS_PREFIX = "comments";
+
+  @Inject
+  private BlobService blobService;
+
+  @Inject
+  private MessageUtil messageUtil;
 
   /**
    * URI pattern, for URIs like "/dynamic/fragment/comments/{segment}/{contextId}/{id}"
@@ -115,8 +132,9 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
         if (author == null) {
           author = getElasticSocialUserHelper().getAnonymousUser();
         }
+        List<Blob> blobs = extractBlobs(request, result, beans, maxFileSize, maxNumberOfAttachments);
         Comment comment = getElasticSocialService().createComment(author, authorName, contributionTarget,
-                navigation, text, moderation, replyToId, null);
+                navigation, text, moderation, replyToId, blobs);
         result.setModel(comment);
         if (moderation.equals(ModerationType.PRE_MODERATION)) {
           result.addMessage(SUCCESS_MESSAGE, null, getMessage(navigation, ContributionMessageKeys.COMMENT_FORM_SUCCESS_PREMODERATION));
@@ -169,4 +187,45 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
       addErrorMessage(handlerInfo, null, navigation, ContributionMessageKeys.COMMENT_FORM_NOT_LOGGED_IN);
     }
   }
+
+  private List<Blob> extractBlobs(HttpServletRequest request, HandlerInfo result, Object[] beans, int maxImageFileSize, int maxNumberOfAttachments) {
+    List<Blob> blobs= new ArrayList<>();
+    if (request instanceof DefaultMultipartHttpServletRequest) {
+      DefaultMultipartHttpServletRequest defaultMultipartHttpServletRequest = (DefaultMultipartHttpServletRequest) request;
+      MultiValueMap<String, MultipartFile> files = defaultMultipartHttpServletRequest.getMultiFileMap();
+      if (files.entrySet().size() > maxNumberOfAttachments) {
+          addError("commentForm-too-many-files", result, null, beans, maxNumberOfAttachments);
+          return null;
+      }
+      for (Map.Entry<String, List<MultipartFile>> fileEntry : files.entrySet()) {
+        List<MultipartFile> fileList = fileEntry.getValue();
+        for (MultipartFile file : fileList) {
+          if (file.getSize() != 0) {
+            if (file.getSize() > maxImageFileSize) {
+              addError("commentForm-file-too-large", result, null, beans, file.getOriginalFilename(), ImageHelper.getBytesAsKBString(maxImageFileSize));
+              return null;
+            }
+            if (!ImageHelper.isSupportedMimeType(file.getContentType())) {
+              addError("commentForm-file-unsupported-content-type", result, null, beans, file.getOriginalFilename(), ImageHelper.getSupportedMimeTypesString());
+              return null;
+            }
+            try {
+              blobs.add(blobService.put(file.getInputStream(), file.getContentType(), file.getOriginalFilename()));
+            } catch (IOException e) {
+              addError("commentForm-file-upload-error", result, null, beans, file.getOriginalFilename());
+              return null;
+            }
+          }
+        }
+      }
+    }
+    return blobs;
+  }
+
+  private void addError(String messageKey, HandlerInfo result, String path, Object[] beans, Object... args) {
+    String message = getMessage(messageKey, beans);
+    MessageFormat messageFormat = new MessageFormat(message);
+    result.addMessage(ERROR_MESSAGE, path, messageFormat.format(args));
+  }
+
 }

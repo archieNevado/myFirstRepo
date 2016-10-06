@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themeDefinition modelVersion="1">
+
+  <name>example</name>
+
+  <!-- optional -->
+  <description>description of this theme</description>
+
+  <!-- optional -->
+  <thumbnail>path-to-image</thumbnail>
+
+  <!-- optional -->
+  <javascriptLibs>
+    <!--<javaScript>path-to-js-lib-file</javaScript>-->
+    <!--<javaScript>http://external-cdn-js-file</javaScript>-->
+  </javascriptLibs>
+
+  <!-- optional -->
+  <javaScripts>
+    <!--<javaScript>path-to-js-file</javaScript>-->
+  </javaScripts>
+
+  <!-- optional -->
+  <styleSheets>
+    <!--<css>path-to-css-file</css>-->
+    <!--<css>http://external-cdn-css-file</css>-->
+    <css>css/example.css</css>
+  </styleSheets>
+
+  <!-- optional -->
+  <viewRepositoryName>example</viewRepositoryName>
+
+  <!-- optional -->
+  <resourceBundles>
+    <!--<resourceBundle>../basic/Bundle_en.properties</resourceBundle>-->
+  </resourceBundles>
+
+</themeDefinition>

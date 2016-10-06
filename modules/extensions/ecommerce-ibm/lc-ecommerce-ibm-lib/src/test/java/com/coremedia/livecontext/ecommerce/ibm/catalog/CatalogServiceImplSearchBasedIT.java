@@ -24,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
@@ -318,7 +319,15 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     UserContextHelper.setCurrentContext(userContext);
     Collection<Contract> contracts = contractService.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
     assertNotNull(contracts);
-    Contract contract = contracts.iterator().next();
+    Iterator<Contract> iterator  = contracts.iterator();
+    Contract contract = null;
+    while (iterator.hasNext()) {
+      contract = iterator.next();
+      String contractName = contract.getName();
+      if (contractName != null && contractName.contains("Applicances Expert")) {
+        break;
+      }
+    }
     assertNotNull(contract);
     b2BStoreContext.setContractIdsForPreview(new String[]{contract.getExternalTechId()});
   }

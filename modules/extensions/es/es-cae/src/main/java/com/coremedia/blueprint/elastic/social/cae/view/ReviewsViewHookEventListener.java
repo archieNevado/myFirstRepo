@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.view;
 
-import com.coremedia.blueprint.common.contentbeans.CMArticle;
+import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResult;
 import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.events.ViewHookEvent;
@@ -16,10 +16,10 @@ import static com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNames.VIE
  * is responsible for adding the review widget to rendered views.
  */
 @Named
-public class ReviewsViewHookEventListener implements ViewHookEventListener<CMArticle> {
+public class ReviewsViewHookEventListener implements ViewHookEventListener<CMTeasable> {
 
   @Override
-  public RenderNode onViewHook(ViewHookEvent<CMArticle> event) {
+  public RenderNode onViewHook(ViewHookEvent<CMTeasable> event) {
     if (VIEW_HOOK_END.equals(event.getId())) {
       return new RenderNode(getReviewsResult(event.getBean()), null);
     }
@@ -30,7 +30,7 @@ public class ReviewsViewHookEventListener implements ViewHookEventListener<CMArt
   //====================================================================================================================
 
   private ReviewsResult getReviewsResult(Object target) {
-    return  new ReviewsResult(target);
+    return new ReviewsResult(target);
   }
 
   @Override

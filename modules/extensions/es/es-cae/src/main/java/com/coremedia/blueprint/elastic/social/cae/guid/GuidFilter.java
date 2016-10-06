@@ -66,7 +66,7 @@ public class GuidFilter implements Filter {
       guid = createGuid();
       if (response instanceof HttpServletResponse) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        Cookie cookie = new Cookie(getCookieName(), guid);
+        Cookie cookie = new Cookie(getCookieName(), guid); // NOSONAR rule 'Cookies should be "secure"', but we need it anyway
         cookie.setPath("/");
         httpServletResponse.addCookie(cookie);
       }

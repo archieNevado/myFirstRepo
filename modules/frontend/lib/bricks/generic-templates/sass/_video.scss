@@ -1,0 +1,47 @@
+@import "../../../sass/utils/imports";
+
+$cm-play-button: "cm-play-button" !default;
+$cm-play-button-path-to-images: "../img/" !default;
+$cm-play-button-overlay-size: 90px !default;
+$cm-play-button-color: #FFFFFF !default;
+$cm-play-button-svg-color: #000000 !default;
+$cm-play-button-svg-fill: #FFFFFF;
+$cm-play-button-svg-hover-color: #000000 !default;
+$cm-play-button-svg-hover-fill: #FFFFFF !default;
+$cm-play-button-svg-focus-color: #000000 !default;
+$cm-play-button-svg-focus-fill: #FFFFFF !default;
+$cm-play-button-transition-duration: 0.35s !default;
+
+.#{$cm-play-button} {
+  width: $cm-play-button-overlay-size;
+  height: $cm-play-button-overlay-size;
+  background: none;
+  border-radius: 50%;
+  color: $cm-play-button-color;
+
+  &__svg {
+    width: 100%;
+    max-height: 100%;
+    color: $cm-play-button-svg-color; // color of inner circle
+    fill: $cm-play-button-svg-fill; // color of play button
+    transition: all $cm-play-button-transition-duration ease(in-out-quad);
+  }
+
+  &__png {
+    width: 100%;
+    height: 100%;
+    background: url("#{$cm-play-button-path-to-images}button_video_play.png") no-repeat center center;
+    background-size: contain;
+  }
+
+  // when parent is hovered or focused button changes color and fill
+  a:hover > & &__svg {
+    color: $cm-play-button-svg-hover-color;
+    fill: $cm-play-button-svg-hover-fill;
+    transition: all $cm-play-button-transition-duration ease(in-out-quad); // firefox 43 needs it twice
+  }
+  a:focus > & &__svg {
+    color: $cm-play-button-svg-focus-color;
+    fill: $cm-play-button-svg-focus-fill;
+  }
+}

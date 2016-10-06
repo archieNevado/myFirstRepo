@@ -2,15 +2,21 @@ package com.coremedia.blueprint.component.cae;
 
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
+import com.coremedia.springframework.web.context.AsyncContextLoaderListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.embedded.RegistrationBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.mobile.device.DeviceResolverRequestFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
+import javax.annotation.Nonnull;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.EnumSet;
 
 @Order(1_000)
@@ -20,6 +26,8 @@ public final class CaeComponentInitializer extends ComponentWebApplicationInitia
   public static final String DEVICE_RESOLVER_REQUEST_FILTER = "deviceResolverRequestFilter";
   public static final String SITE_FILTER = "siteFilter";
 
+  private static final Logger LOG = LoggerFactory.getLogger(CaeComponentInitializer.class);
+
   private static final String CAE = "blueprint-cae";
 
   @Override
@@ -28,7 +36,8 @@ public final class CaeComponentInitializer extends ComponentWebApplicationInitia
   }
 
   @Override
-  protected void configure(ServletContext servletContext) {
+  protected void configure(@Nonnull ServletContext servletContext) {
+    disableAsyncLoading(servletContext);
     FilterRegistration characterEncodingFilter = servletContext.getFilterRegistration(CHARACTER_ENCODING_FILTER);
     if(null == characterEncodingFilter) {
       // avoid broken umlauts in websphere
@@ -37,20 +46,30 @@ public final class CaeComponentInitializer extends ComponentWebApplicationInitia
       filter.setForceEncoding(true);
       characterEncodingFilter = servletContext.addFilter(CHARACTER_ENCODING_FILTER, filter);
     }
-    characterEncodingFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+    characterEncodingFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
 
     // This filter resolves the current device and adds it to the request
     FilterRegistration deviceResolver = servletContext.getFilterRegistration(DEVICE_RESOLVER_REQUEST_FILTER);
     if(null == deviceResolver) {
       deviceResolver = servletContext.addFilter(DEVICE_RESOLVER_REQUEST_FILTER, new DeviceResolverRequestFilter());
     }
-    deviceResolver.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+    deviceResolver.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
 
     FilterRegistration siteFilter = servletContext.getFilterRegistration(SITE_FILTER);
     if(null == siteFilter) {
       siteFilter = servletContext.addFilter(SITE_FILTER, new DelegatingFilterProxy());
     }
-    siteFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/servlet/*");
+    siteFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/servlet/*");
   }
 
+  private void disableAsyncLoading(@Nonnull ServletContext servletContext) {
+    LOG.info("disabling asynchronous loading ...");
+    servletContext.setInitParameter(AsyncContextLoaderListener.DISABLE_ASYNCHRONOUS_LOADING, String.valueOf(true));
+  }
+
+  @Nonnull
+  @Override
+  protected Iterable<RegistrationBean> createRegistrationBeans() {
+    return Collections.emptyList();
+  }
 }

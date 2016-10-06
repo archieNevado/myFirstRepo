@@ -9,6 +9,7 @@ import com.coremedia.blueprint.common.contentbeans.CMHTML;
 import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
@@ -19,8 +20,11 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.theme.ThemeService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -83,13 +87,13 @@ public class CMChannelImpl extends CMChannelBase {
    * Fallback to the parent channel if the channel has no CSS.
    */
   @Override
-  public List<? extends CMCSS> getCss() {
-    List<? extends CMCSS> css = super.getCss();
+  public List<CMCSS> getCss() {
+    List<CMCSS> css = super.getCss();
     if (!css.isEmpty()) {
       return css;
     }
     CMChannel parent = getParentChannel();
-    return parent==null ? Collections.<CMCSS>emptyList() : parent.getCss();
+    return parent==null ? Collections.emptyList() : parent.getCss();
   }
 
   /**
@@ -98,13 +102,13 @@ public class CMChannelImpl extends CMChannelBase {
    * Fallback to the parent channel if the channel has no JavaScript.
    */
   @Override
-  public List<? extends CMJavaScript> getJavaScript() {
-    List<? extends CMJavaScript> js = super.getJavaScript();
+  public List<CMJavaScript> getJavaScript() {
+    List<CMJavaScript> js = super.getJavaScript();
     if (!js.isEmpty()) {
       return js;
     }
     CMChannel parent = getParentChannel();
-    return parent==null ? Collections.<CMJavaScript>emptyList() : parent.getJavaScript();
+    return parent==null ? Collections.emptyList() : parent.getJavaScript();
   }
 
   /**
@@ -112,13 +116,16 @@ public class CMChannelImpl extends CMChannelBase {
    * <p>
    * Fallback to the parent channel if the channel has no Theme.
    */
+  @Override
   public CMTheme getTheme() {
-    CMTheme theme = super.getTheme();
-    if (theme != null) {
-      return theme;
-    }
-    CMChannel parent = getParentChannel();
-    return parent==null ? null : parent.getTheme();
+    // This would suffice for CMChannel ...
+    // return createBeanFor(themeService.theme(getContent()), CMTheme.class);
+
+    // ... but this is more convenient for developers,
+    // it works also for alternative TreeRelations and thus spares overriding:
+    List<Linkable> beans = Lists.reverse(treeRelation.pathToRoot(this));
+    List<Content> contents = Lists.transform(beans, (Linkable l) -> l instanceof CMNavigation ? ((CMNavigation) l).getContent() : null);
+    return createBeanFor(themeService.directTheme(contents), CMTheme.class);
   }
 
 

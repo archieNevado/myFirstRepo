@@ -19,14 +19,12 @@
 
   <exml:constant name="VISIBILITY_ITEM_ID" value="visibility"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
-
   <exml:var name="catalogObjectExpression" type="com.coremedia.ui.data.ValueExpression"
             value="{AugmentationUtil.getCatalogObjectExpression(config.bindTo)}"/>
 
-  <editor:documentForm title="{BUNDLE.Commerce_Tab_structure_title}">
+  <editor:documentForm title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Tab_structure_title}">
     <items>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Category_Website_Navigation}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_Website_Navigation}"
                                    itemId="websiteNavigation">
         <plugins>
           <ui:bindVisibilityPlugin bindTo="{LivecontextStudioPluginBase.isContentLedValueExpression(config.bindTo)}"/>
@@ -45,7 +43,7 @@
         </items>
       </editor:collapsibleFormPanel>
       <!-- let's have a property editor to fix legacy content (new children are stored in struct) -->
-      <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMNavigation_children_text}"
+      <editor:collapsibleFormPanel title="{BlueprintDocumentTypes_properties.INSTANCE.CMExternalChannel_legacy_children_text}"
                                    itemId="navigationChildren">
         <plugins>
           <ui:bindVisibilityPlugin bindTo="{AugmentationUtil.hasChildCategoriesExpression(config.bindTo)}"/>

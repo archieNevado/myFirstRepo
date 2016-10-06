@@ -2,6 +2,18 @@ coremedia-proxy Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia-proxy cookbook.
 
+0.3.1
+-----
+- fix virtual host template. Add `NameVirtualHost *:<PORT>` directive. With the update to `apache2` version `>=3.2.0` the `NameVirtualHost` directive
+is no longer set globally in the `/etc/httpd/ports.conf`
+
+0.3.0
+----
+- added `woff2` fonts extension to headers config.
+- added `svg` extension to headers config.
+- updated `apache2` cookbook to `~> 3.2.0`, see [apache2 changelog](https://supermarket.chef.io/cookbooks/apache2#changelog) for details.
+- updated kitchen infrastructure.
+
 0.2.6
 -----
 - add additional modules to enable gzip of content when supported (mod_deflate)

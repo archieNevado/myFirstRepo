@@ -45,6 +45,7 @@ The archive will be created at `blueprint/deployment/chef/target/deployment-arch
 |    `- studio.json
 `- deploy.sh
 ```      
+In case the directories `coremedia-cookbooks` and `thirdparty-cookbooks` should be missing, please make sure to run `vendor-cookbooks.sh` in `bin/release/` before building the workspace.
  
 You can extract the archive anywhere on a server and run the `deploy.sh` script. The
 only prerequisites are `chef` and `java`.

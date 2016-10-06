@@ -47,27 +47,40 @@
 </javaScript>
 <css>
 </css>
+<theme>
+</theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
 <StructProperty Name="placements">
 <Struct>
-<StructProperty Name="598">
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
 <Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Magazine%20Fall/Story%202%20-%20Autumn%20Dishes/Autumn%20Dished8812306.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Story%202%20-%20Autumn%20Dishes/Autumn%20Dishes%20Article"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Products/Fall%20Campaign/Evening%20Gown%20Red%20Product%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Products/Fall%20Campaign/Evening%20Gown%20Red%20Product%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../Startpage/Fall%20Cocktail%20Dress%20Mainpage%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Startpage/Fall%20Cocktail%20Dress%20Mainpage%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Products/Fall%20Campaign/Square%20Plate%20Product%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Products/Fall%20Campaign/Square%20Plate%20Product%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Products/Fall%20Campaign/Champagne%20Flutes%20Product%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Products/Fall%20Campaign/Champagne%20Flutes%20Product%20Teaser"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/tiles-layout-highlight.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-highlight"/>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Startpage/Fall%20Preparations/A%20Perfect%20Dinner%20Teaser.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Startpage/Fall%20Preparations/A%20Perfect%20Dinner%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Magazine%20Fall/Magazine%20Fall%20Collection.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Fall/Magazine%20Fall%20Collection"/>
 </LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/above.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/above"/>
 </Struct>
-</StructProperty>
-</Struct>
-</StructProperty>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
-</Struct>
-</StructProperty>
+</StructListProperty>
 </Struct>
 </placement>
 <header>

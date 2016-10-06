@@ -1,13 +1,13 @@
 package com.coremedia.blueprint.livecontext.ecommerce.filter;
 
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
+import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import org.springframework.boot.context.embedded.RegistrationBean;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
+import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
-import java.util.EnumSet;
+import java.util.Collections;
 
 /**
  * Set up filter proxy for commerce connection filter
@@ -24,11 +24,18 @@ public class LcCommonWebApplicationInitializer extends ComponentWebApplicationIn
   }
 
   @Override
-  protected void configure(ServletContext servletContext) {
-    FilterRegistration filterRegistration = servletContext.getFilterRegistration(COMMERCE_CONNECTION_FILTER);
-    if(null == filterRegistration) {
-      filterRegistration = servletContext.addFilter(COMMERCE_CONNECTION_FILTER, new DelegatingFilterProxy(COMMERCE_CONNECTION_FILTER));
-      filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-    }
+  protected void configure(@Nonnull ServletContext servletContext) {
+    // nothing to configure
+  }
+
+  @Nonnull
+  @Override
+  protected Iterable<RegistrationBean> createRegistrationBeans() {
+    RegistrationBean bean = RegistrationBeanBuilder
+            .forFilterProxy(COMMERCE_CONNECTION_FILTER)
+            .name(COMMERCE_CONNECTION_FILTER)
+            .build();
+
+    return Collections.singleton(bean);
   }
 }

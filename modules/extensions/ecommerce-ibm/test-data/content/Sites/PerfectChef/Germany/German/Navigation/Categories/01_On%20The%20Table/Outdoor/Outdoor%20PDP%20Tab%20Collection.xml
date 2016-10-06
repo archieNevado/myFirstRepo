@@ -5,7 +5,7 @@
 <link href="../../../../../../United%20States/English/Navigation/Categories/01_On%20The%20Table/Outdoor/Outdoor%20PDP%20Tab%20Collection.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/01_On%20The%20Table/Outdoor/Outdoor%20PDP%20Tab%20Collection"/>
 </master>
 <viewtype>
-<link href="../../../../Options/Viewtypes/CMCollection/slideshow.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMCollection/slideshow"/>
+<link href="../../../../Options/Viewtypes/CMChannel/carousel.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMChannel/carousel"/>
 </viewtype>
 <linkedSettings>
 </linkedSettings>

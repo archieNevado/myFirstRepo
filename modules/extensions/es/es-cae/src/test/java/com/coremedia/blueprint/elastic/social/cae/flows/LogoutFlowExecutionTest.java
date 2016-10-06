@@ -31,7 +31,7 @@ public class LogoutFlowExecutionTest extends AbstractXmlFlowExecutionTests {
   }
 
   protected FlowDefinitionResource getResource(FlowDefinitionResourceFactory resourceFactory) {
-    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.elastic.social.cae.flows.Logout.xml", LogoutFlowExecutionTest.class);
+    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.es.webflow.Logout.xml", LogoutFlowExecutionTest.class);
   }
 
   protected void configureFlowBuilderContext(MockFlowBuilderContext builderContext) {
@@ -50,7 +50,7 @@ public class LogoutFlowExecutionTest extends AbstractXmlFlowExecutionTests {
 
     startFlow(input, context);
 
-    assertCurrentStateEquals("logout");
+    assertCurrentStateEquals("bpLogout");
     assertEquals(logoutRedirectUrl, getFlowScope().get("nextUrl"));
   }
 }

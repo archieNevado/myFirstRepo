@@ -1,12 +1,12 @@
 !tape
 name: csi_testFindProductMultiSEOSegmentsByExternalTechId_search
 interactions:
-- recorded: 2016-05-19T09:27:07.412Z
+- recorded: 2016-08-25T15:06:10.622Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -17,9 +17,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:08 GMT
+      Date: Thu, 25 Aug 2016 15:06:10 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000UgE1Ozdph8FlWdXqpkVyFTe:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=00009t9-pav9zsTjQrX1r1u5KBg:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
@@ -31,12 +31,12 @@ interactions:
       Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
       Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
       Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
-- recorded: 2016-05-19T09:27:07.425Z
+- recorded: 2016-08-25T15:06:10.641Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
@@ -47,18 +47,18 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:08 GMT
+      Date: Thu, 25 Aug 2016 15:06:10 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00004T9GwiLQg25kV9XpJbk274Z:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000MF8HbPnMuJfXe_-xvrUZjh4:-1; Path=/; Domain=.toko-75-01.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
-- recorded: 2016-05-19T09:27:07.441Z
+- recorded: 2016-08-25T15:06:10.672Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/%2520?partNumber=PC_WALL_CLOCK&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
@@ -69,20 +69,19 @@ interactions:
       Cache-Control: no-transform
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:08 GMT
-      Expires: Thu, 19 May 2016 10:27:08 GMT
+      Date: Thu, 25 Aug 2016 15:06:10 GMT
+      Expires: Thu, 25 Aug 2016 16:06:10 GMT
       Vary: Accept
     body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/%2520?partNumber=PC_WALL_CLOCK&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Don\u2019t
       rush, take your time. This handsome wall clock gives the time in style.","shortDescription":"Stylish Wall Clock","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_pc-wall-clock;10301_pc-wall-clock-auroraesite;10302_pc-wall-clock-pcesite","price":[{"value":"49.99","currency":"USD","usage":"Display","description":"L"},{"value":"44.99","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17920","singleSKUCatalogEntryID":"17921","parentCatalogGroupID":["10101_10208","10152_10208"],"name":"Analog
-      Wall Clock","uniqueID":"17920","disallowRecurringOrder":"1","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_WALL_CLOCK.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_WALL_CLOCK.jpg","sKUs":[{"longDescription":"Don\u2019t
-      rush, take your time. This handsome wall clock gives the time in style.","shortDescription":"Stylish Wall Clock","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","price":[{"value":"49.99","currency":"USD","usage":"Display","description":"L"},{"value":"44.99","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17921","parentCatalogGroupID":["10101_10208","10152_10208"],"name":"Analog
-      Wall Clock","uniqueID":"17921","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_WALL_CLOCK_SKU.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_WALL_CLOCK_SKU.jpg","disallowRecurringOrder":"1","hasSingleSKU":false,"partNumber":"PC_WALL_CLOCK_SKU","storeID":"10101","parentCatalogEntryID":"17920"}],"numberOfSKUs":1,"hasSingleSKU":true,"partNumber":"PC_WALL_CLOCK","storeID":"10101","seo_token_ntk":"pc-wall-clock;pc-wall-clock-auroraesite;pc-wall-clock-pcesite"}],"metaData":{"price":"1"}}'
-- recorded: 2016-05-19T09:27:07.469Z
+      Wall Clock","uniqueID":"17920","disallowRecurringOrder":"1","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_WALL_CLOCK.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_WALL_CLOCK.jpg","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17921","name":"Analog
+      Wall Clock","hasSingleSKU":false,"partNumber":"PC_WALL_CLOCK_SKU","uniqueID":"17921","storeID":"10101"}],"numberOfSKUs":1,"hasSingleSKU":true,"partNumber":"PC_WALL_CLOCK","storeID":"10101","seo_token_ntk":"pc-wall-clock;pc-wall-clock-auroraesite;pc-wall-clock-pcesite"}],"metaData":{"price":"1"}}'
+- recorded: 2016-08-25T15:06:10.692Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/%2520?partNumber=PC_CANDELABRA&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
@@ -93,20 +92,19 @@ interactions:
       Cache-Control: no-transform
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:08 GMT
-      Expires: Thu, 19 May 2016 10:27:08 GMT
+      Date: Thu, 25 Aug 2016 15:06:10 GMT
+      Expires: Thu, 25 Aug 2016 16:06:10 GMT
       Vary: Accept
     body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/%2520?partNumber=PC_CANDELABRA&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classic
       ivory tapered candles set the mood for an intimate evening.","shortDescription":"Tall, Elegant Silver Candelabra","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_pc-candelabra;10301_pc-candelabra-auroraesite","price":[{"value":"159.99","currency":"USD","usage":"Display","description":"L"},{"value":"139.99","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17907","singleSKUCatalogEntryID":"17908","parentCatalogGroupID":["10101_10208","10152_10208"],"name":"Silver
-      Candelabra","uniqueID":"17907","disallowRecurringOrder":"1","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_CANDELABRA.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_CANDELABRA.jpg","sKUs":[{"longDescription":"Classic
-      ivory tapered candles set the mood for an intimate evening.","shortDescription":"Tall, Elegant Silver Candelabra","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","price":[{"value":"159.99","currency":"USD","usage":"Display","description":"L"},{"value":"139.99","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17908","parentCatalogGroupID":["10101_10208","10152_10208"],"name":"Silver
-      Candelabra","uniqueID":"17908","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_CANDELABRA_SKU.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_CANDELABRA_SKU.jpg","disallowRecurringOrder":"1","hasSingleSKU":false,"partNumber":"PC_CANDELABRA_SKU","storeID":"10101","parentCatalogEntryID":"17907"}],"numberOfSKUs":1,"hasSingleSKU":true,"partNumber":"PC_CANDELABRA","storeID":"10101","seo_token_ntk":"pc-candelabra;pc-candelabra-auroraesite"}],"metaData":{"price":"1"}}'
-- recorded: 2016-05-19T09:27:07.485Z
+      Candelabra","uniqueID":"17907","disallowRecurringOrder":"1","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_CANDELABRA.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_CANDELABRA.jpg","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17908","name":"Silver
+      Candelabra","hasSingleSKU":false,"partNumber":"PC_CANDELABRA_SKU","uniqueID":"17908","storeID":"10101"}],"numberOfSKUs":1,"hasSingleSKU":true,"partNumber":"PC_CANDELABRA","storeID":"10101","seo_token_ntk":"pc-candelabra;pc-candelabra-auroraesite"}],"metaData":{"price":"1"}}'
+- recorded: 2016-08-25T15:06:10.713Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/%2520?partNumber=PC_FRUITBOWL&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
@@ -117,13 +115,11 @@ interactions:
       Cache-Control: no-transform
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:08 GMT
-      Expires: Thu, 19 May 2016 10:27:08 GMT
+      Date: Thu, 25 Aug 2016 15:06:10 GMT
+      Expires: Thu, 25 Aug 2016 16:06:10 GMT
       Vary: Accept
     body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/%2520?partNumber=PC_FRUITBOWL&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"You\u2019ll
       enjoy the versatility of this lovely yet exceptionally durable melamine fruit bowl. Its lively spring color brightens any table, whether used to serve fresh strawberries in a cozy breakfast nook or a refreshing fruit salad on the patio. Virtually unbreakable,
       it\u2019s suitable for both indoors and outdoors. 7.5in diameter, 2.5in high. Dishwasher-safe. Limited lifetime warranty.","shortDescription":"Melamine Fruit Bowl","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_pc-fruitbowl;10302_pc-fruitbowl-pcesite","price":[{"value":"14.99","currency":"USD","usage":"Display","description":"L"},{"value":"11.99","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17922","singleSKUCatalogEntryID":"17923","parentCatalogGroupID":["10101_10207","10152_10207"],"name":"Fruit
-      Bowl","uniqueID":"17922","disallowRecurringOrder":"1","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_FRUITBOWL.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_FRUITBOWL.jpg","sKUs":[{"longDescription":"You\u2019ll
-      enjoy the versatility of this lovely yet exceptionally durable melamine fruit bowl. Its lively spring color brightens any table, whether used to serve fresh strawberries in a cozy breakfast nook or a refreshing fruit salad on the patio. Virtually unbreakable,
-      it\u2019s suitable for both indoors and outdoors. 7.5in diameter, 2.5in high. Dishwasher-safe. Limited lifetime warranty.","shortDescription":"Melamine Fruit Bowl","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","price":[{"value":"14.99","currency":"USD","usage":"Display","description":"L"},{"value":"11.99","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17923","parentCatalogGroupID":["10101_10207","10152_10207"],"name":"Fruit
-      Bowl","uniqueID":"17923","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_FRUITBOWL_SKU.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_FRUITBOWL_SKU.jpg","disallowRecurringOrder":"1","hasSingleSKU":false,"partNumber":"PC_FRUITBOWL_SKU","storeID":"10101","parentCatalogEntryID":"17922"}],"numberOfSKUs":1,"hasSingleSKU":true,"partNumber":"PC_FRUITBOWL","storeID":"10101","seo_token_ntk":"pc-fruitbowl;pc-fruitbowl-pcesite"}],"metaData":{"price":"1"}}'
+      Bowl","uniqueID":"17922","disallowRecurringOrder":"1","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_FRUITBOWL.jpg","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_FRUITBOWL.jpg","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17923","name":"Fruit
+      Bowl","hasSingleSKU":false,"partNumber":"PC_FRUITBOWL_SKU","uniqueID":"17923","storeID":"10101"}],"numberOfSKUs":1,"hasSingleSKU":true,"partNumber":"PC_FRUITBOWL","storeID":"10101","seo_token_ntk":"pc-fruitbowl;pc-fruitbowl-pcesite"}],"metaData":{"price":"1"}}'

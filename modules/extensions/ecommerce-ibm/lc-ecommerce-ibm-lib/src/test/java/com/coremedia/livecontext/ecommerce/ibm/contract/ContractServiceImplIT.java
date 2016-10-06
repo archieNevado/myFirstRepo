@@ -56,7 +56,7 @@ public class ContractServiceImplIT extends AbstractServiceTest {
     assertNotNull(contracts);
 
     if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {
-      assertEquals(2, contracts.size());
+      assertEquals(3, contracts.size());
 
       for (Contract contract : contracts) {
         assertTrue("contrat id has wrong format: " + contract.getId(), contract.getId().startsWith("ibm:///catalog/contract/4000"));

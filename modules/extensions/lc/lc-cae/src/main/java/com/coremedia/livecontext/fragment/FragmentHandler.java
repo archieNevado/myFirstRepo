@@ -32,6 +32,8 @@ import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
  */
 public abstract class FragmentHandler extends PageHandlerBase implements Predicate<FragmentParameters> {
 
+  static final String PLACEMENT_NAME_MAV_KEY = "placementName";
+  static final String UNRESOLVABLE_PLACEMENT_VIEW_NAME = "unresolvablePlacement";
   private PageGridPlacementResolver pageGridPlacementResolver;
   protected ValidationService<Linkable> validationService;
 
@@ -96,8 +98,7 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     }
     PageGridPlacement placement =  pageGridPlacementResolver.resolvePageGridPlacement(channel, placementName);
     if (placement == null) {
-      LOG.error("No placement named {} found for {}.", placementName, channel.getContent().getPath());
-      return notFound("No placement found for name '" + placementName + "'");
+      return createPlacementUnresolvableError(channel, placementName);
     }
     CMNavigation context = channel;
     // Take the context  of the placement for building the page . In most cases, this is the given channel.
@@ -115,6 +116,15 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     RequestAttributeConstants.setPage(modelAndView, page);
     NavigationLinkSupport.setNavigation(modelAndView, channel);
 
+    return modelAndView;
+  }
+
+  private static ModelAndView createPlacementUnresolvableError(@Nonnull CMChannel channel, @Nonnull String placementName) {
+    LOG.error("No placement named {} found for {}.", placementName, channel.getContent().getPath());
+    ModelAndView modelAndView = notFound("No placement found for name '" + placementName + "'");
+    modelAndView.setViewName(UNRESOLVABLE_PLACEMENT_VIEW_NAME);
+    NavigationLinkSupport.setNavigation(modelAndView, channel);
+    modelAndView.addObject(PLACEMENT_NAME_MAV_KEY, placementName);
     return modelAndView;
   }
 

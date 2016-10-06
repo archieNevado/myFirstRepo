@@ -44,11 +44,6 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>corporate-theme</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>corporate-test-data</artifactId>
         <version>${project.version}</version>
         <classifier>content</classifier>

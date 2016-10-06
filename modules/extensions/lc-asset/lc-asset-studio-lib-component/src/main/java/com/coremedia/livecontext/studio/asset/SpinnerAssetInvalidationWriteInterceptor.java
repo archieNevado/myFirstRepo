@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.LOCAL_SETTINGS;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 
 public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterceptorBase {
   public static final String SEQUENCE_SPINNER_PROPERTY = "sequence";
@@ -158,8 +158,8 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
 
   Struct evaluateNewSettingsFoundation(Map<String, Object> oldProperties, Map<String, Object> newProperties) {
     Struct localSettings = emptyStruct();
-    Object newLocalSettings = newProperties.get(LOCAL_SETTINGS);
-    Object oldLocalSettings = oldProperties.get(LOCAL_SETTINGS);
+    Object newLocalSettings = newProperties.get(NAME_LOCAL_SETTINGS);
+    Object oldLocalSettings = oldProperties.get(NAME_LOCAL_SETTINGS);
     if(newLocalSettings != null) {
       localSettings = (Struct) newLocalSettings;
     } else if (oldLocalSettings != null){
@@ -174,12 +174,12 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
     Struct newLocalSettingsStruct = assetWriteSettingsHelper.createNewSettingsStructWithReferences(localSettingsToMap(localSettings),
             new ArrayList<>(allReferences),
             isInherited);
-    newProperties.put(LOCAL_SETTINGS, newLocalSettingsStruct);
+    newProperties.put(NAME_LOCAL_SETTINGS, newLocalSettingsStruct);
   }
 
   private Map<String, Object> localSettingsToMap(Struct localSettings) {
     HashMap<String, Object> stringObjectHashMap = new HashMap<>();
-    stringObjectHashMap.put(LOCAL_SETTINGS, localSettings);
+    stringObjectHashMap.put(NAME_LOCAL_SETTINGS, localSettings);
     return stringObjectHashMap;
   }
   private Set<String> buildOriginalCommerceReferenceList(Set<Content> allPictures) {

@@ -38,7 +38,7 @@ public class ActivateRegistrationFlowExecutionTest extends AbstractXmlFlowExecut
   }
 
   protected FlowDefinitionResource getResource(FlowDefinitionResourceFactory resourceFactory) {
-    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.elastic.social.cae.flows.ActivateRegistration.xml",
+    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.es.webflow.ActivateRegistration.xml",
             ActivateRegistrationFlowExecutionTest.class);
   }
 
@@ -54,7 +54,7 @@ public class ActivateRegistrationFlowExecutionTest extends AbstractXmlFlowExecut
     input.put("activationKey", ACTIVATION_KEY);
     when(registrationHelper.activate(eq(ACTIVATION_KEY), Matchers.<RequestContext>any(RequestContext.class))).thenReturn(true);
 
-    startAndAssertFlowOutcome("activateRegistrationSuccess");
+    startAndAssertFlowOutcome("bpActivateRegistrationSuccess");
   }
 
   private void startAndAssertRedirection(String outcome, String externalRedirectUrl) {
@@ -77,7 +77,7 @@ public class ActivateRegistrationFlowExecutionTest extends AbstractXmlFlowExecut
     input.put("activationKey", badKey);
     when(registrationHelper.activate(badKey, requestContext)).thenReturn(false);
 
-    startAndAssertFlowOutcome("activateRegistrationFailure");
+    startAndAssertFlowOutcome("bpActivateRegistrationFailure");
   }
 
   @Test

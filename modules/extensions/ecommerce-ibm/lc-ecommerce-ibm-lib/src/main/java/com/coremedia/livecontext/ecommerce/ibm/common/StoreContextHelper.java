@@ -18,6 +18,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CATALOG_ID;
@@ -66,11 +67,13 @@ public class StoreContextHelper {
    *
    * @return the StoreContext
    */
+  @Nullable
   public static StoreContext getCurrentContext() {
     CommerceConnection currentConnection = Commerce.getCurrentConnection();
     return currentConnection != null ? currentConnection.getStoreContext() : null;
   }
 
+  @Nullable
   public static StoreContext getCurrentContextFor(@Nullable Locale locale) {
     StoreContext currentStoreContext = getCurrentContext();
 
@@ -93,6 +96,7 @@ public class StoreContextHelper {
     return currentStoreContext;
   }
 
+  @Nonnull
   public static StoreContext cloneContext(@Nonnull StoreContext context) throws InvalidContextException {
     return StoreContextBuilder.create().withValues(context).build();
   }
@@ -160,6 +164,7 @@ public class StoreContextHelper {
    * @return the store id
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
+  @Nonnull
   public static String getStoreId(@Nonnull StoreContext context) throws InvalidContextException {
     Object value = context.get(STORE_ID);
 
@@ -177,6 +182,7 @@ public class StoreContextHelper {
    * @return the store name
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
+  @Nonnull
   public static String getStoreName(@Nonnull StoreContext context) throws InvalidContextException {
     Object value = context.get(STORE_NAME);
 
@@ -194,6 +200,7 @@ public class StoreContextHelper {
    * @return the store name in low-case
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
+  @Nonnull
   public static String getStoreNameInLowerCase(@Nonnull StoreContext context) throws InvalidContextException {
     return StringUtils.lowerCase(getStoreName(context));
   }
@@ -205,6 +212,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @return the config id or null if not present
    */
+  @Nullable
   public static String getConfigId(@Nonnull StoreContext context) throws InvalidContextException {
     return (String) context.get(CONFIG_ID);
   }
@@ -216,6 +224,7 @@ public class StoreContextHelper {
    * @return the locale
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
+  @Nonnull
   public static Locale getLocale(@Nonnull StoreContext context) throws InvalidContextException {
     Object value = context.get(LOCALE);
 
@@ -248,6 +257,7 @@ public class StoreContextHelper {
    * @return the currency
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
+  @Nonnull
   public static Currency getCurrency(@Nonnull StoreContext context) throws InvalidContextException {
     Object value = context.get(CURRENCY);
 
@@ -264,6 +274,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @return the workspace id or null if no workspace was set
    */
+  @Nullable
   public static String getWorkspaceId(@Nonnull StoreContext context) {
     return (String) context.get(WORKSPACE_ID);
   }
@@ -294,6 +305,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @return the contract ids or null if no contract was set
    */
+  @Nullable
   public static String[] getContractIds(@Nonnull StoreContext context) {
     return (String[]) context.get(CONTRACT_IDS);
   }
@@ -316,6 +328,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @return the version
    */
+  @Nonnull
   public static WcsVersion getWcsVersion(@Nonnull StoreContext context) {
     WcsVersion version = (WcsVersion) context.get(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION);
 
@@ -335,7 +348,7 @@ public class StoreContextHelper {
    */
   public static void setWcsVersion(@Nonnull StoreContext context, @Nullable String wcsVersion) {
     if (wcsVersion != null) {
-      WcsVersion version = WcsVersion.fromVersionString(wcsVersion).orNull();
+      WcsVersion version = WcsVersion.fromVersionString(wcsVersion).orElse(null);
       if (version != null) {
         context.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, version);
       }
@@ -348,6 +361,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @return the catalog id or null if no workspace was set
    */
+  @Nullable
   public static String getCatalogId(@Nonnull StoreContext context) {
     return (String) context.get(CATALOG_ID);
   }
@@ -358,6 +372,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @return the preview date or null if no preview date was set
    */
+  @Nullable
   public static String getPreviewDate(@Nonnull StoreContext context) {
     return (String) context.get(PREVIEW_DATE);
   }
@@ -368,6 +383,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @return the workspace id or null if no workspace was set
    */
+  @Nullable
   public static String getUserSegments(StoreContext context) {
     return (String) context.get(USER_SEGMENTS);
   }
@@ -477,6 +493,7 @@ public class StoreContextHelper {
     getCurrency(context);
   }
 
+  @Nonnull
   private static String formatContext(@Nonnull final StoreContext context) {
     List<String> keys = ImmutableList.of(CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY, WORKSPACE_ID);
 

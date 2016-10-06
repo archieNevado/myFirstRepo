@@ -29,7 +29,7 @@ public class ValidityImageMapAreaFilter implements ImageMapAreaFilterable {
           return false;
         }
         Object linkedContent = map.get(ImageFunctions.LINKED_CONTENT);
-        return validationService.validate(linkedContent);
+        return null != linkedContent && validationService.validate(linkedContent);
       }
     });
     return Lists.newArrayList(filteredAreas);

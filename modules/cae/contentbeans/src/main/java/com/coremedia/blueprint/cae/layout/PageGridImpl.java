@@ -10,6 +10,7 @@ import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.layout.PageGridRow;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
+import com.coremedia.blueprint.viewtype.ViewtypeService;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.objectserver.dataviews.AssumesIdentity;
 
@@ -21,14 +22,19 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
 
   private ValidationService<Linkable> validationService;
   private ContentBackedPageGridService contentBackedPageGridService;
+  private ViewtypeService viewtypeService;
   private CMNavigation navigation;
 
   // --- construction -----------------------------------------------
 
-  public PageGridImpl(CMNavigation navigation, ContentBackedPageGridService contentBackedPageGridService, ValidationService<Linkable> validationService) {
+  public PageGridImpl(CMNavigation navigation,
+                      ContentBackedPageGridService contentBackedPageGridService,
+                      ValidationService<Linkable> validationService,
+                      ViewtypeService viewtypeService) {
     this.navigation = navigation;
     this.contentBackedPageGridService = contentBackedPageGridService;
     this.validationService = validationService;
+    this.viewtypeService = viewtypeService;
   }
 
   /**
@@ -45,7 +51,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
     List<PageGridRow> result = new ArrayList<>();
     int numRows = getContentBackedPageGrid().getStyleGrid().getNumRows();
     for (int row = 0; row < numRows; ++row) {
-      result.add(new PageGridRowImpl(navigation, row, contentBackedPageGridService, validationService));
+      result.add(new PageGridRowImpl(navigation, row, contentBackedPageGridService, validationService, viewtypeService));
     }
     return result;
   }
@@ -125,6 +131,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
     PageGridImpl other = (PageGridImpl) bean;
     validationService = other.validationService;
     contentBackedPageGridService = other.contentBackedPageGridService;
+    viewtypeService = other.viewtypeService;
     navigation = other.navigation;
   }
 

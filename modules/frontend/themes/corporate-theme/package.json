@@ -1,0 +1,25 @@
+{
+  "name": "@coremedia/corporate-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "grunt build",
+    "watch": "grunt watch"
+  },
+  "dependencies": {
+    "bootstrap-carousel-swipe": "0.0.6",
+    "bootstrap-sass": "3.3.6",
+    "jquery": "2.2.4",
+    "magnific-popup": "1.1.0",
+    "svg4everybody": "2.1.0",
+    "imagesloaded": "4.1.0"
+  },
+  "theme": {
+    "name": "corporate",
+    "supportedBrowsers": [
+      "last 2 versions",
+      "Firefox ESR",
+      "Explorer >= 9"
+    ]
+  }
+}

@@ -74,3 +74,8 @@
 <#function previewMetaData>
   <#return liveContextFreemarkerFacade.getPreviewMetadata()>
 </#function>
+
+<#function fragmentHighlightingMetaData placement>
+  <#return liveContextFreemarkerFacade.getFragmentHighlightingMetaData(placement)>
+</#function>
+

@@ -3,10 +3,12 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
+import com.coremedia.cap.common.CapException;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnectionIdProvider;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceConnectionImpl;
 import org.slf4j.Logger;
@@ -65,7 +67,11 @@ class IbmCommerceConnections {
       Collection<CommerceConnection> connections = new LinkedList<>();
       Set<Site> sites = sitesService.getSites();
       for (Site site : sites) {
-        addIbmConnection(connections, site);
+        try {
+          addIbmConnection(connections, site);
+        } catch (CommerceException | CapException e) {
+          LOG.warn("cannot create commerce context for site {}", site, e);
+        }
       }
       LOG.debug("detected IBM commerce connections: {}", connections);
       return connections;
@@ -76,12 +82,16 @@ class IbmCommerceConnections {
       if (connectionId != null) {
         CommerceConnection connection = commerce.getConnection(connectionId);
         if (connection instanceof CommerceConnectionImpl) {
-          StoreContext contextBySite = connection.getStoreContextProvider().findContextBySite(site);
-          if (null != contextBySite) {
-            connection.setStoreContext(contextBySite);
-            connections.add(connection);
-          }
+          addConnection(connections, site, connection);
         }
+      }
+    }
+
+    private void addConnection(Collection<CommerceConnection> connections, Site site, CommerceConnection connection) {
+      StoreContext contextBySite = connection.getStoreContextProvider().findContextBySite(site);
+      if (null != contextBySite) {
+        connection.setStoreContext(contextBySite);
+        connections.add(connection);
       }
     }
 

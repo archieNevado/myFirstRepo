@@ -48,7 +48,8 @@ public abstract class AbstractWcWrapperService {
   public Map getLanguageMapping() throws CommerceException {
     if (languageMapping == null) {
       //init language mapping
-      languageMapping = restConnector.callServiceInternal(GET_LANGUAGE_MAPPING, Collections.<String>emptyList(), Collections.<String, String[]>emptyMap(), null, null, null);
+      languageMapping = restConnector.callServiceInternal(GET_LANGUAGE_MAPPING, Collections.<String>emptyList(), Collections.<String, String[]>emptyMap(),
+              null, StoreContextHelper.getCurrentContext(), null);
     }
     return languageMapping;
   }

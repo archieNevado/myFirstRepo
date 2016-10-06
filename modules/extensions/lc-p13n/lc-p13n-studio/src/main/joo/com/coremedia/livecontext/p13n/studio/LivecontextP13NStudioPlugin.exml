@@ -14,7 +14,6 @@
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
   <exml:import class="com.coremedia.ecommerce.studio.helper.CatalogHelper"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
   <!-- Extend the standard Studio and Blueprint components for Live Context P13N-->
   <editor:studioPlugin>
     <ui:rules>
@@ -24,7 +23,7 @@
             <perso:items>
               <!-- livecontext perso commerce conditions -->
               <lc-p13n:commerceSegmentCondition
-                      conditionName="{BUNDLE.p13n_context_commerce_segment}"
+                      conditionName="{LivecontextStudioPlugin_properties.INSTANCE.p13n_context_commerce_segment}"
                       propertyPrefix="commerce"/>
             </perso:items>
           </perso:addconditionitems>
@@ -37,7 +36,7 @@
             <perso:items>
               <!-- livecontext perso commerce conditions -->
               <lc-p13n:commerceSegmentCondition
-                      conditionName="{BUNDLE.p13n_context_commerce_segment}"
+                      conditionName="{LivecontextStudioPlugin_properties.INSTANCE.p13n_context_commerce_segment}"
                       propertyPrefix="commerce"/>
             </perso:items>
           </perso:addconditionitems>

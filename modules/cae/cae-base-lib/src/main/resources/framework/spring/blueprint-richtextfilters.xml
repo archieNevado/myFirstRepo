@@ -15,14 +15,6 @@
     <property name="xmlFilterFactory" ref="richtextMarkupViewRichtextToHtmlFilterFactory"/>
   </bean>
 
-
-  <bean id="sectionsRichtextMarkupView" class="com.coremedia.objectserver.view.XmlMarkupView">
-    <description>Programmed view for markup of grammar "coremedia-richtext-1.0" wrapping elements between headlines into
-      sections
-    </description>
-    <property name="xmlFilterFactory" ref="sectionsRichtextMarkupViewRichtextToHtmlFilterFactory"/>
-  </bean>
-
   <bean id="richtextMarkupViewRichtextToHtmlFilterFactory"
         class="com.coremedia.blueprint.cae.richtext.filter.ConfigurableRichtextToHtmlFilterFactory">
     <property name="idProvider" ref="idProvider"/>
@@ -39,30 +31,6 @@
     <property name="xmlFilters">
       <list>
         <ref bean="p2TagFilter"/>
-        <ref bean="appendClassToElementFilter"/>
-        <ref bean="unsurroundFilter"/>
-      </list>
-    </property>
-  </bean>
-
-
-  <bean id="sectionsRichtextMarkupViewRichtextToHtmlFilterFactory"
-        class="com.coremedia.blueprint.cae.richtext.filter.ConfigurableRichtextToHtmlFilterFactory">
-    <property name="idProvider" ref="idProvider"/>
-    <property name="linkFormatter" ref="linkFormatter"/>
-    <property name="xmlFiltersBeforeUriFormatter">
-      <list>
-        <ref bean="linkValidationFilter"/>
-        <ref bean="cmDownloadLinkValidationFilter"/>
-        <ref bean="imgCompletionFilter"/>
-        <ref bean="linkEmbedFilter"/>
-        <ref bean="imageFilter"/>
-      </list>
-    </property>
-    <property name="xmlFilters">
-      <list>
-        <ref bean="p2TagFilter"/>
-        <ref bean="headlineToSectionFilter"/>
         <ref bean="appendClassToElementFilter"/>
         <ref bean="unsurroundFilter"/>
       </list>
@@ -146,21 +114,6 @@
     <description>
       Removes surrounding divs from coremedia-richtext-1.0.
     </description>
-  </bean>
-
-  <bean id="headlineToSectionFilter" class="com.coremedia.blueprint.cae.richtext.filter.HeadlineToSectionFilter">
-    <property name="headlines">
-      <list>
-        <value>h1</value>
-        <value>h2</value>
-        <value>h3</value>
-        <value>h4</value>
-        <value>h5</value>
-        <value>h6</value>
-        <value>h7</value>
-        <value>h8</value>
-      </list>
-    </property>
   </bean>
 
 </beans>

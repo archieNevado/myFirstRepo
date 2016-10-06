@@ -5,6 +5,7 @@
 <link href="../../../../../United%20States/English/Navigation/Site-Wide/Analytics%20Lists/Google%20Top%203%20Landscape%20Tiles%20An7f0734ae.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Site-Wide/Analytics%20Lists/Google%20Top%203%20Landscape%20Tiles%20Analytics%20List"/>
 </master>
 <viewtype>
+<link href="../../../Options/Viewtypes/CMChannel/tiles-layout-landscape.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMChannel/tiles-layout-landscape"/>
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

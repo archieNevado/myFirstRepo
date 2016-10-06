@@ -13,151 +13,130 @@
   <artifactId>test-data</artifactId>
   <packaging>pom</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>content-extension-dependencies</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <!-- Copy Content to target folder -->
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>basic-copy-content-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/content</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>content</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>basic-copy-users-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/users</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>users</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-content</id>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <includeClassifiers>content</includeClassifiers>
-              <includeTypes>zip</includeTypes>
-              <outputDirectory>${project.build.directory}/content-zips</outputDirectory>
-              <stripVersion>true</stripVersion>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>collect-test-data</id>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <phase>
-              package
-            </phase>
-            <configuration>
-              <target>
-                <zip destfile="${project.build.directory}/content-users.zip"
-                     whenempty="fail" duplicate="preserve" keepcompression="false" compress="false">
-                  <zipgroupfileset dir="${project.build.directory}/content-zips" includes="*-content.zip"/>
-                  <fileset dir="${project.build.directory}" includes="content/**,users/**"/>
-                </zip>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
+  <!-- use -DskipContent to ignore content creation -->
   <profiles>
     <profile>
-      <id>development-themes</id>
+      <id>create-test-data</id>
       <activation>
         <property>
-          <name>!skipThemes</name>
+          <name>!skipContent</name>
         </property>
       </activation>
-
       <dependencies>
         <dependency>
           <groupId>${project.groupId}</groupId>
-          <artifactId>basic-theme</artifactId>
+          <artifactId>content-extension-dependencies</artifactId>
           <version>${project.version}</version>
-          <classifier>theme</classifier>
-          <type>zip</type>
+          <type>pom</type>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>frontend</artifactId>
+          <version>${project.version}</version>
+          <type>pom</type>
         </dependency>
       </dependencies>
-
       <build>
         <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-dependency-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>copy-dependencies</id>
-                  <phase>compile</phase>
-                  <goals>
-                    <goal>copy-dependencies</goal>
-                  </goals>
-                  <configuration>
-                    <outputDirectory>${project.build.directory}/themes</outputDirectory>
-                    <includeTypes>zip</includeTypes>
-                    <includeClassifiers>theme</includeClassifiers>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>exec-maven-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>import-themes</id>
-                  <phase>compile</phase>
-                  <goals>
-                    <goal>exec</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin>
+          <!-- copy content to target folder -->
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <!-- copy default content -->
+              <execution>
+                <id>basic-copy-content-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/content</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>content</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+              <!-- copy default users -->
+              <execution>
+                <id>basic-copy-users-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/users</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>users</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+              <!-- copy themes as content -->
+              <execution>
+                <id>basic-copy-themes-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/content</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${basedir}/../modules/frontend/target/content</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- copy content zips of extensions to target folder -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-content</id>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <includeClassifiers>content</includeClassifiers>
+                  <includeTypes>zip</includeTypes>
+                  <outputDirectory>${project.build.directory}/content-zips</outputDirectory>
+                  <stripVersion>true</stripVersion>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- create a single zip of all contents for import -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>collect-test-data</id>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <phase>
+                  package
+                </phase>
+                <configuration>
+                  <target>
+                    <zip destfile="${project.build.directory}/content-users.zip"
+                         whenempty="fail" duplicate="preserve" keepcompression="false" compress="false">
+                      <zipgroupfileset dir="${project.build.directory}/content-zips" includes="*-content.zip"/>
+                      <fileset dir="${project.build.directory}" includes="content/**,users/**"/>
+                    </zip>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>

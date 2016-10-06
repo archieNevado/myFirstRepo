@@ -6,18 +6,16 @@
   <exml:import class="com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames"/>
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
-
-  <editor:documentForm title="{BUNDLE.Commerce_Tab_system_title}">
+  <editor:documentForm title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Tab_system_title}">
     <items>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_PropertyGroup_filing_title}" itemId="filing">
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_PropertyGroup_filing_title}" itemId="filing">
         <defaults>
           <component itemCls="document-info-item"/>
         </defaults>
         <items>
           <label itemId="store"
                  cls="document-info-label-content"
-                 fieldLabel="{BUNDLE.Commerce_store_label}">
+                 fieldLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_store_label}">
             <plugins>
               <ui:bindPropertyPlugin componentProperty="text"
                                      bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.STORE + '.name')}"/>
@@ -25,7 +23,7 @@
           </label>
           <label itemId="id"
                  cls="document-info-label-content"
-                 fieldLabel="{BUNDLE.Commerce_id_label}">
+                 fieldLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_id_label}">
             <plugins>
               <ui:bindPropertyPlugin componentProperty="text"
                                      bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.ID)}"/>
@@ -33,7 +31,7 @@
           </label>
           <label itemId="externalId"
                  cls="document-info-label-content"
-                 fieldLabel="{BUNDLE.Commerce_externalId_label}">
+                 fieldLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_externalId_label}">
             <plugins>
               <ui:bindPropertyPlugin componentProperty="text"
                                      bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_ID)}"/>
@@ -41,7 +39,7 @@
           </label>
           <label itemId="externalTechId"
                  cls="document-info-label-content"
-                 fieldLabel="{BUNDLE.Commerce_externalTechId_label}">
+                 fieldLabel="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_externalTechId_label}">
             <plugins>
               <ui:bindPropertyPlugin componentProperty="text"
                                      bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_TECH_ID)}"/>

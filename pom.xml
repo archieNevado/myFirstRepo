@@ -33,21 +33,23 @@
      | the correct path relative to the submodules.
     -->
     <workspace.configuration.dir>../workspace-configuration</workspace.configuration.dir>
+    <development-properties.dir>${workspace.configuration.dir}/development-properties</development-properties.dir>
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1604.3-6</blueprint-base.version>
-    <cms.version>1604.3-6</cms.version>
-    <personalization.version>1604.3-6</personalization.version>
-    <elastic.version>1604.3-6</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1604.3-6</studio.version>
-    <caetoolbox.version>1604.3-6</caetoolbox.version>
-    <livecontext.version>1604.3-6</livecontext.version>
+    <blueprint-base.version>1604.4-21</blueprint-base.version>
+    <cms.version>1604.4-21</cms.version>
+    <personalization.version>1604.4-21</personalization.version>
+    <elastic.version>1604.4-21</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1604.4-21</studio.version>
+    <caetoolbox.version>1604.4-21</caetoolbox.version>
+    <livecontext.version>1604.4-21</livecontext.version>
     <jangaroo.version>2.0.17</jangaroo.version>
     <jangaroo.libs.version>2.0.17</jangaroo.libs.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
-    <tomcat.version>7.0.59</tomcat.version>
+    <tomcat.version>7.0.72</tomcat.version>
+    <spring.boot.version>1.3.6.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -541,6 +543,33 @@
         <version>${tomcat.version}</version>
       </dependency>
 
+      <!-- for spring boot -->
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-core</artifactId>
+        <version>${tomcat.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-el</artifactId>
+        <version>${tomcat.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-logging-juli</artifactId>
+        <version>${tomcat.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-websocket</artifactId>
+        <version>${tomcat.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-jasper</artifactId>
+        <version>${tomcat.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.codehaus.janino</groupId>
         <artifactId>janino</artifactId>
@@ -635,7 +664,7 @@
                 <followSymlinks>false</followSymlinks>
               </fileset>
               <fileset>
-                <directory>node_modules</directory>
+                <directory>node</directory>
               </fileset>
             </filesets>
           </configuration>
@@ -661,8 +690,8 @@
           <artifactId>frontend-maven-plugin</artifactId>
           <version>1.0</version>
           <configuration>
-            <nodeVersion>v4.4.7</nodeVersion> <!-- LTS -->
-            <npmVersion>3.10.2</npmVersion>
+            <nodeVersion>v4.5.0</nodeVersion> <!-- LTS -->
+            <npmVersion>3.10.6</npmVersion>
           </configuration>
         </plugin>
         <plugin>
@@ -846,11 +875,6 @@
                | If however, you want to suppress them, you need to set the attribute combine.self="override" on the
                | systemProperties element, see https://maven.apache.org/pom.html for more information
               -->
-              <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
-              <!--TODO: wofuer ist diese Property-->
-              <catalina.base>${project.build.directory}</catalina.base>
-              <!--TODO: Wofuer ist diese Property-->
-              <resourcePath.base>${project.basedir}</resourcePath.base>
               <solr.host>${solr.host}</solr.host>
               <content-management-server.host>${content-management-server.host}</content-management-server.host>
               <workflow-server.host>${workflow-server.host}</workflow-server.host>
@@ -863,100 +887,118 @@
               <wcs.host>${wcs.host}</wcs.host>
               <proxy.host>${proxy.host}</proxy.host>
               <log.appender>${log.appender}</log.appender>
+              <application.name>${project.build.finalName}</application.name>
             </systemProperties>
+            <additionalClasspathDirs>
+              <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
+              <!-- Load logback.xml from workspace-config -->
+              <additionalClasspathDir>${project.basedir}/../../../workspace-configuration/logging</additionalClasspathDir>
+            </additionalClasspathDirs>
           </configuration>
           <dependencies>
             <dependency>
               <groupId>org.apache.tomcat.embed</groupId>
               <artifactId>tomcat-embed-core</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-util</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-coyote</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jdbc</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-dbcp</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-servlet-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jsp-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jasper</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jasper-el</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-el-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-catalina</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-tribes</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-catalina-ha</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-annotations-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-juli</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat.embed</groupId>
               <artifactId>tomcat-embed-logging-juli</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat.embed</groupId>
               <artifactId>tomcat-embed-logging-log4j</artifactId>
-              <version>${tomcat.version}</version>
+              <version>7.0.59</version>
             </dependency>
           </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring.boot.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>repackage</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
 
         <plugin>

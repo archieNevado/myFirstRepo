@@ -6,6 +6,8 @@ import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
+import com.coremedia.blueprint.viewtype.ViewtypeService;
+import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 
@@ -13,18 +15,26 @@ public class PageGridServiceImpl implements PageGridService {
 
   private ContentBackedPageGridService contentBackedPageGridService;
   private ValidationService<Linkable> validationService;
+  private ViewtypeService viewtypeService;
 
+  @Required
   public void setContentBackedPageGridService(ContentBackedPageGridService contentBackedPageGridService) {
     this.contentBackedPageGridService = contentBackedPageGridService;
   }
 
+  @Required
   public void setValidationService(ValidationService<Linkable> validationService) {
     this.validationService = validationService;
+  }
+
+  @Required
+  public void setViewtypeService(ViewtypeService viewtypeService) {
+    this.viewtypeService = viewtypeService;
   }
 
   @Override
   @Nonnull
   public PageGrid getContentBackedPageGrid(CMNavigation navigationContext) {
-    return new PageGridImpl(navigationContext, contentBackedPageGridService, validationService);
+    return new PageGridImpl(navigationContext, contentBackedPageGridService, validationService, viewtypeService);
   }
 }

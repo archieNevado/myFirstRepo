@@ -10,7 +10,7 @@ public interface CodeResources {
   /**
    * @return the context
    */
-  CMContext getContext();
+  CMNavigation getContext();
 
   /**
    * @return a unique hash calculated for all resources in {@link #getLinkTargetList()}

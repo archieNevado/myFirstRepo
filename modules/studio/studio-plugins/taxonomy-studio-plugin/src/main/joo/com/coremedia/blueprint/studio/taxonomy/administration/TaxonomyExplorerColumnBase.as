@@ -15,6 +15,7 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.util.EventUtil;
 
 import ext.Ext;
+import ext.IEventObject;
 import ext.KeyNav;
 import ext.config.keynav;
 import ext.config.rowselectionmodel;
@@ -58,13 +59,13 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
    */
   private function addKeyNavigation():void {
     new KeyNav(getEl(), keynav({
-      "left":function (e) {
+      "left":function (e:IEventObject):void {
         if (globalSelectedNodeExpression) {
           activeNode = parentNode;
           globalSelectedNodeExpression.setValue(parentNode);
         }
       },
-      "right":function (e) {
+      "right":function (e:IEventObject):void {
         if(activeNode.isExtendable()) {
           activeNode.loadChildren(function(list:TaxonomyNodeList):void {
             if(list.size() > 0) {
@@ -251,16 +252,16 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
         var siteName:String = editorContext.getSitesService().getSite(record.data.siteId).getName();
         displayName += ' (' + siteName + ')';
       }
-      html = '<div class="column-entry-default">' + displayName + '</div>';
+      html = '<div class="cm-column-entry column-entry-default">' + displayName + '</div>';
     }
     else if (!record.data.extendable || !record.data.selectable) {
-      html = '<div class="column-entry-not-extendable">' + name + '</div>';
+      html = '<div class="cm-column-entry column-entry-not-extendable">' + name + '</div>';
     }
     else if (record.data.leaf) {
-      html = '<div class="column-entry-leaf">' + name + '</div>';
+      html = '<div class="cm-column-entry column-entry-leaf">' + name + '</div>';
     }
     else {
-      html = '<div class="column-entry-default">' + name + '</div>';
+      html = '<div class="cm-column-entry column-entry-default">' + name + '</div>';
     }
 
     if (getExplorerPanel().isMarkedForCopying(record.data.ref)) {
@@ -299,7 +300,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
    * Returns the parent taxonomy explorer panel.
    * @return
    */
-  private function getExplorerPanel():TaxonomyExplorerPanel {
+  private static function getExplorerPanel():TaxonomyExplorerPanel {
     return Ext.getCmp('taxonomyExplorerPanel') as TaxonomyExplorerPanel;
   }
 

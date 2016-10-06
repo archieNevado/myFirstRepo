@@ -47,11 +47,11 @@ public class TestConfig {
   private static final String USERSEGMENT1_ID_V80 = "8407790678950000502";
   private static final String USERSEGMENT2_ID_V80 = "8407790678950000505";
 
-  private WcsVersion wcsVersion = WcsVersion.fromVersionString(System.getProperty("wcs.version", "7.8")).orNull();
+  private WcsVersion wcsVersion = WcsVersion.fromVersionString(System.getProperty("wcs.version", "7.8")).orElse(null);
 
   public void setWcsVersion(@Nullable String wcsVersion) {
     if (null != wcsVersion) {
-      this.wcsVersion = WcsVersion.fromVersionString(wcsVersion).orNull();
+      this.wcsVersion = WcsVersion.fromVersionString(wcsVersion).orElse(null);
     }
   }
 

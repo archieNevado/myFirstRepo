@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextHelper;
@@ -36,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
+import static com.google.common.collect.Maps.newHashMap;
 
 public class CatalogServiceImpl implements CatalogService {
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
@@ -407,7 +407,7 @@ public class CatalogServiceImpl implements CatalogService {
   public static Map<String, Object> asLazyMap(@Nullable Map<String, Object> map, @Nullable Transformer transformer) {
     if(null != map && null != transformer) {
       //noinspection unchecked
-      return LazyMap.decorate(map, transformer);
+      return LazyMap.decorate(newHashMap(map), transformer);
     }
     return map;
   }

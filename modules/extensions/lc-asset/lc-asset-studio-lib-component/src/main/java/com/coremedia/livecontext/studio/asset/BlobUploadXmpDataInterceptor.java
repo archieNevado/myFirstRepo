@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.LOCAL_SETTINGS;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 
 /**
  * Extracts product codes from XMP/IPTC Data and stores product references to struct property.
@@ -90,12 +90,12 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
         }
       }
 
-      properties.put(LOCAL_SETTINGS, assetHelper.updateCMPictureForExternalIds(request.getEntity(), productIds));
+      properties.put(NAME_LOCAL_SETTINGS, assetHelper.updateCMPictureForExternalIds(request.getEntity(), productIds));
     } else if (value == null) {
       // delete blob action
       Struct result = assetHelper.updateCMPictureOnBlobDelete(request.getEntity());
       if (result != null) {
-        properties.put(LOCAL_SETTINGS, result);
+        properties.put(NAME_LOCAL_SETTINGS, result);
       }
     }
   }

@@ -200,8 +200,8 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
           } else if (externalId.equals(DataMapHelper.getValueForKey(spot, "spotName"))) {
             marketingSpotWrappedHit.put("MarketingSpot", asList(spot));
           }
-          return marketingSpotWrappedHit;
         }
+        return marketingSpotWrappedHit;
       }
       return null;
     }

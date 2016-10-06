@@ -8,10 +8,13 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/basic/vendor/mediaelement/flashmediaelement%2Eswf"/>
+<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/aurora/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/aurora/vendor/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../Pictures/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Picture%20Missing%20Product%20Picture"/>
 <StringProperty Name="externalUriPath"/>
 <StringProperty Name="shopNow">disabled</StringProperty>
+<StringListProperty Name="viewRepositoryNames">
+<String>lc-es-freemarker</String>
+</StringListProperty>
 </Struct>
 </localSettings>
 <linkedSettings>

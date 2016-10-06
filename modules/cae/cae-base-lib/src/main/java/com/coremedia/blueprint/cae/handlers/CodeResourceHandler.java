@@ -5,7 +5,6 @@ import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CodeResources;
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapConnection;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -84,7 +82,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   private static final String PREFIX_CSS = '/' + PREFIX_RESOURCE + '/' + CSS;
   private static final String PREFIX_JS = '/' + PREFIX_RESOURCE + '/' + JS;
 
-
   /**
    * Link to a merged resource. Usually merged for a navigation node.
    * <p/>
@@ -98,6 +95,15 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
 
   public static final String CSS_PATTERN_BULK = PREFIX_CSS + URI_SUFFIX_BULK;
   public static final String JS_PATTERN_BULK = PREFIX_JS + URI_SUFFIX_BULK;
+
+  private static final Map<String, String> EXTENSION_TO_CODEPROPERTY = new ImmutableMap.Builder<String, String>()
+          .put(CSS, CMNavigation.CSS)
+          .put(JS, CMNavigation.JAVA_SCRIPT)
+          .build();
+  private static final Map<String, String> EXTENSION_TO_URLPATTERN = new ImmutableMap.Builder<String, String>()
+          .put(CSS, CSS_PATTERN_BULK)
+          .put(JS, JS_PATTERN_BULK)
+          .build();
 
   /**
    * Link to a single resource inside the local workspace with
@@ -122,6 +128,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
           "/{" + SEGMENT_PATH + ":" + PATTERN_SEGMENTS + "}" +
           "/{" + SEGMENT_NAME + "}" +
           ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
+
 
   // --- spring config -------------------------------------------------------------------------------------------------
 
@@ -168,6 +175,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     }
   }
 
+
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   /**
@@ -183,7 +191,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     @PathVariable(SEGMENT_HASH) String hash,
                                     WebRequest webRequest) {
-    CodeResources codeResources = cache.get(new CodeResourcesCacheKey(cmContext, getCodePropertyName(extension), developerModeEnabled));
+    CodeResources codeResources = cache.get(new CodeResourcesCacheKey(cmContext, codePropertyName(extension), developerModeEnabled));
     //check scripthash
     if (!hash.equals(codeResources.getETag())) {
       //hash does not match
@@ -196,12 +204,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     //everything is in order, return correct MAV
     return HandlerHelper.createModelWithView(codeResources, extension);
   }
-
-  private String getCodePropertyName(String extension) {
-    return JS.equals(extension) ? CMNavigation.JAVA_SCRIPT : CMNavigation.CSS;
-  }
-
-  //------------
 
   /**
    * Handles requests to a single file linked in a CSS file
@@ -240,6 +242,56 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     }
     return contentResource(extension, cmAbstractCode, name, version, response, webRequest);
   }
+
+
+  // === link schemes ==================================================================================================
+
+  /**
+   * Generated a link to a single resource file. Depending on resource settings,
+   * the link will either point to a local file or a file inside the repository.
+   *
+   * @param cmAbstractCode  The contentBean, should be of type {@link com.coremedia.blueprint.common.contentbeans.CMAbstractCode}
+   * @return                UriComponents of the generated link.
+   */
+  @Link(type = CMAbstractCode.class, uri = URI_PATTERN_SINGLE)
+  public UriComponents buildLink(CMAbstractCode cmAbstractCode, UriComponentsBuilder uriBuilder) {
+    String extension = getExtension(cmAbstractCode.getContentType(), DEFAULT_EXTENSION);
+    String resourceName = formatResourceName(cmAbstractCode);
+    String path = formatContentPath(cmAbstractCode);
+    if (path == null) {
+      path = extension;
+    }
+    String id = getId(cmAbstractCode);
+    String latestVersion = String.valueOf(getLatestVersion(cmAbstractCode.getContent()));
+    return uriBuilder.buildAndExpand(path, resourceName, id, latestVersion, extension);
+  }
+
+  /**
+   * Generated a link to a merged version of all resources of a page.
+   * Use {@link com.coremedia.blueprint.base.links.UriConstants.Segments#SEGMENT_EXTENSION} via cm:param in cm:link to specify
+   * the resources to use: "css" or "js" are available
+   * To support {@link HandlerHelper#redirectTo(Object, String)} the extension may also passed as view parameter.
+   *
+   * @param codeResources  The merged code resource used to build the link.
+   * @param linkParameters  Parameters, that were passed inside the cm:link tag via cm:param.
+   * @return                A Map containing the parts of the generated link.
+   */
+  @Link(type = CodeResources.class)
+  public UriComponents buildLink(CodeResources codeResources, String view, Map<String, Object> linkParameters) {
+    String extension = extension(view, linkParameters);
+    CMNavigation cmNavigation = codeResources.getContext();
+    Map<String,Object> parameters = new ImmutableMap.Builder<String, Object>()
+            .put(SEGMENT_ID, cmNavigation.getContentId())
+            .put(SEGMENT_HASH, codeResources.getETag())
+            .put(SEGMENT_NAME, cmNavigation.getSegment())
+            .put(SEGMENT_EXTENSION, extension).build();
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance();
+    uriBuilder.path(urlPattern(extension));
+    return uriBuilder.buildAndExpand(parameters);
+  }
+
+
+  // --- internal ---------------------------------------------------
 
   // creates a Markup/script model
   private ModelAndView contentResource(String extension, CMAbstractCode cmAbstractCode, String name,
@@ -283,86 +335,32 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     }
   }
 
-
-  // === link schemes ==================================================================================================
-
-  /**
-   * Generated a link to a single resource file. Depending on resource settings,
-   * the link will either point to a local file or a file inside the repository.
-   *
-   * @param cmAbstractCode  The contentBean, should be of type {@link com.coremedia.blueprint.common.contentbeans.CMAbstractCode}
-   * @return                UriComponents of the generated link.
-   */
-  @Link(type = CMAbstractCode.class, uri = URI_PATTERN_SINGLE)
-  public UriComponents buildLink(CMAbstractCode cmAbstractCode, UriComponentsBuilder uriBuilder) {
-    String extension = getExtension(cmAbstractCode.getContentType(), DEFAULT_EXTENSION);
-    String resourceName = formatResourceName(cmAbstractCode);
-    String path = formatContentPath(cmAbstractCode);
-    if (path == null) {
-      path = extension;
+  private String codePropertyName(String extension) {
+    String result = EXTENSION_TO_CODEPROPERTY.get(extension);
+    if (result==null) {
+      throw new IllegalArgumentException("There is no CMNavigation code property for " + extension);
     }
-    String id = getId(cmAbstractCode);
-    String latestVersion = String.valueOf(getLatestVersion(cmAbstractCode.getContent()));
-    return uriBuilder.buildAndExpand(path, resourceName, id, latestVersion, extension);
+    return result;
   }
 
   /**
-   * Generated a link to a merged version of all resources of a page.
-   * Use {@link com.coremedia.blueprint.base.links.UriConstants.Segments#SEGMENT_EXTENSION} via cm:param in cm:link to specify
-   * the resources to use: "css" or "js" are available
-   * To support {@link HandlerHelper#redirectTo(Object, String)} the extension may also passed as view parameter.
-   *
-   * @param codeResources  The merged code resource used to build the link.
-   * @param linkParameters  Parameters, that were passed inside the cm:link tag via cm:param.
-   * @return                A Map containing the parts of the generated link.
+   * Figure out the extension (css, js, ...) from the arguments.
    */
-  @Link(type = CodeResources.class)
-  public UriComponents buildLink(CodeResources codeResources, String view, Map<String, Object> linkParameters) {
-    // 2. get passed parameters and resolve extension
+  private String extension(String view, Map<String, Object> linkParameters) {
     Object object = linkParameters.get(SEGMENT_EXTENSION);
     if (object == null){
       object = view;
     }
-    String extension = (object instanceof String) ? ((String) object).toLowerCase() : DEFAULT_EXTENSION;
-
-    CMNavigation cmNavigation = findFirstChannelWithCode(codeResources.getContext(), getCodePropertyName(extension));
-    int navigationId = cmNavigation.getContentId();
-    String scriptHash = codeResources.getETag();
-    // 4. build link
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance();
-    if(JS.equals(extension)){
-      uriBuilder.path(JS_PATTERN_BULK);
-    } else if (CSS.equals(extension)) {
-      uriBuilder.path(CSS_PATTERN_BULK);
-    }
-
-    Map<String,Object> parameters = new ImmutableMap.Builder<String, Object>()
-            .put(SEGMENT_ID, navigationId)
-            .put(SEGMENT_HASH, scriptHash)
-            .put(SEGMENT_NAME, getNavigationName(cmNavigation))
-            .put(SEGMENT_EXTENSION, extension).build();
-
-    return uriBuilder.buildAndExpand(parameters);
+    return (object instanceof String) ? ((String) object).toLowerCase() : DEFAULT_EXTENSION;
   }
 
-  private CMNavigation findFirstChannelWithCode(Navigation navigation, String linkPropertyName) {
-    CMContext context = navigation.getContext();
-    Content theme = context.getContent().getLink(CMNavigation.THEME);
-    if ( theme != null || !context.getContent().getLinks(linkPropertyName).isEmpty()) {
-      return context;
+  private String urlPattern(String extension) {
+    String result = EXTENSION_TO_URLPATTERN.get(extension);
+    if (result==null) {
+      throw new IllegalArgumentException("There is no URL pattern for " + extension);
     }
-    Navigation parentNavigation = context.getParentNavigation();
-    if (parentNavigation == null) {
-      return context;
-    }
-    CMContext parentContext = parentNavigation.getContext();
-    if (parentContext == null) {
-      return context;
-    }
-    return findFirstChannelWithCode(parentContext, linkPropertyName);
+    return result;
   }
-
-  // === internal ======================================================================================================
 
   /**
    * Helper Method to retrieve the latest checked in version of a resource content object.
@@ -373,26 +371,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     Version v = content.isCheckedIn() ? content.getCheckedInVersion() : content.getWorkingVersion();
     return IdHelper.parseVersionId(v.getId());
   }
-
-  //------------
-
-  /**
-   * Helper Method to retrieve the readable name for a navigation object.
-   * @param navigation The navigation object.
-   * @return The readable name of the navigation.
-   */
-  private String getNavigationName(Navigation navigation) {
-    String segment = navigation.getSegment();
-
-    if (StringUtils.hasText(segment)) {
-      segment = removeSpecialCharacters(segment);
-    } else {
-      segment = removeSpecialCharacters(navigation.getTitle());
-    }
-    return segment;
-  }
-
-  //------------
 
   private static String formatContentPath(CMAbstractCode cmAbstractCode) {
     // path will contain file name as last element
@@ -425,8 +403,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     }
   }
 
-  //------------
-
   /**
    * Helper Method to check the validity of the resource name.
    * @param name The reference name to check against.
@@ -436,8 +412,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   private boolean isNameSegmentValid(String name, CMAbstractCode code) {
     return name != null && name.equals(formatResourceName(code));
   }
-
-  //------------
 
   /**
    * Helper Method to check the validity of the resource name.

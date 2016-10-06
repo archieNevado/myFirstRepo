@@ -17,65 +17,67 @@
     <coremedia.project.extension.for>content</coremedia.project.extension.for>
   </properties>
 
+  <!-- use -DskipContent to ignore content creation -->
   <profiles>
     <profile>
-      <id>development-themes</id>
+      <id>create-test-data</id>
       <activation>
         <property>
-          <name>!skipThemes</name>
+          <name>!skipContent</name>
         </property>
       </activation>
-      <dependencies>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>basic-theme</artifactId>
-          <version>${project.version}</version>
-          <classifier>theme</classifier>
-          <type>zip</type>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>corporate-theme</artifactId>
-          <version>${project.version}</version>
-          <classifier>theme</classifier>
-          <type>zip</type>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>theme-importer-lib</artifactId>
-          <version>${project.version}</version>
-        </dependency>
-      </dependencies>
       <build>
         <plugins>
+          <!-- copy content to target folder -->
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
+            <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
-                <id>copy-dependencies</id>
-                <phase>compile</phase>
+                <id>corporate-copy-content-resources</id>
+                <phase>package</phase>
                 <goals>
-                  <goal>copy-dependencies</goal>
+                  <goal>copy-resources</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${project.build.directory}/themes</outputDirectory>
-                  <includeTypes>zip</includeTypes>
-                  <includeClassifiers>theme</includeClassifiers>
+                  <outputDirectory>${basedir}/target/content</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>content</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+              <execution>
+                <id>corporate-copy-users-resources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/users</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>users</directory>
+                    </resource>
+                  </resources>
                 </configuration>
               </execution>
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
+            <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>import-themes</id>
-                <phase>compile</phase>
+                <id>create-corporate-test-data-zip</id>
                 <goals>
-                  <goal>exec</goal>
+                  <goal>single</goal>
                 </goals>
+                <phase>package</phase>
+                <configuration>
+                  <descriptors>
+                    <descriptor>src/main/assembly/test-data-assembly-descriptor.xml</descriptor>
+                  </descriptors>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -83,62 +85,4 @@
       </build>
     </profile>
   </profiles>
-
-  <build>
-    <plugins>
-      <!-- Copy Content to target folder -->
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>corporate-copy-content-resources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/content</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>content</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>corporate-copy-users-resources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/users</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>users</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-corporate-test-data-zip</id>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <descriptors>
-                <descriptor>src/main/assembly/test-data-assembly-descriptor.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 </project>

@@ -22,6 +22,7 @@ import java.util.Map;
  * </dl>
  */
 public class LinkFormatterTestHelper {
+
   @Inject
   private MockHttpServletRequest request;
 
@@ -42,16 +43,14 @@ public class LinkFormatterTestHelper {
   /**
    * Format a link with the given parameters.
    */
-  public String formatLink(@Nullable Map<String, Object> cmParams,
-                           Object bean) {
+  public String formatLink(@Nullable Map<String, Object> cmParams, Object bean) {
     return formatLink(cmParams, bean, null);
   }
 
   /**
    * Format a link with the given parameters.
    */
-  public String formatLink(@Nullable Map<String, Object> cmParams,
-                                  Object bean,
+  public String formatLink(@Nullable Map<String, Object> cmParams, Object bean,
                            @Nullable Map<String, Object> requestAttributes) {
     return formatLink(cmParams, bean, requestAttributes, null);
   }
@@ -59,13 +58,12 @@ public class LinkFormatterTestHelper {
   /**
    * Format a link with the given parameters.
    */
-  public String formatLink(@Nullable Map<String, Object> cmParams,
-                           Object bean,
-                           @Nullable Map<String, Object> requestAttributes,
-                           @Nullable String view) {
+  public String formatLink(@Nullable Map<String, Object> cmParams, Object bean,
+                           @Nullable Map<String, Object> requestAttributes, @Nullable String view) {
     if (cmParams != null) {
       request.setAttribute(ViewUtils.PARAMETERS, cmParams);
     }
+
     if (requestAttributes != null) {
       for (Map.Entry<String, Object> attribute : requestAttributes.entrySet()) {
         request.setAttribute(attribute.getKey(), attribute.getValue());
@@ -74,5 +72,4 @@ public class LinkFormatterTestHelper {
 
     return linkFormatter.formatLink(bean, view, request, response, false);
   }
-
 }

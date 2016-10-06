@@ -8,6 +8,8 @@ import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.layout.PageGridRow;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
+import com.coremedia.blueprint.viewtype.ViewtypeService;
+import com.coremedia.blueprint.viewtype.configuration.ViewtypeServiceConfiguration;
 import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
@@ -21,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -43,6 +46,8 @@ public class PageGridImplTest {
   private ContentBeanFactory contentBeanFactory;
   @Inject
   private ContentRepository contentRepository;
+  @Inject
+  private ViewtypeService viewtypeService;
 
   private PageGridImpl pageGrid;
 
@@ -52,7 +57,7 @@ public class PageGridImplTest {
   public void setUp() throws Exception {
     Content content = contentRepository.getContent(IdHelper.formatContentId(222));
     CMNavigation channel = (CMNavigation) contentBeanFactory.createBeanFor(content);
-    pageGrid = new PageGridImpl(channel, contentBackedPageGridService, validationService);
+    pageGrid = new PageGridImpl(channel, contentBackedPageGridService, validationService, viewtypeService);
   }
 
 
@@ -116,7 +121,7 @@ public class PageGridImplTest {
   public void testBrokenPageGrid() {
     Content content = contentRepository.getContent(IdHelper.formatContentId(668));
     CMNavigation brokenChannel = (CMNavigation) contentBeanFactory.createBeanFor(content);
-    PageGrid brokenGrid = new PageGridImpl(brokenChannel, contentBackedPageGridService, validationService);
+    PageGrid brokenGrid = new PageGridImpl(brokenChannel, contentBackedPageGridService, validationService, viewtypeService);
 
     //Exception will be thrown when trying to access a placement.
     PageGridPlacement pageGridPlacement = brokenGrid.getPlacementForName("wrongName");
@@ -130,6 +135,7 @@ public class PageGridImplTest {
   //====================================================================================================================
 
   @Configuration
+  @Import(ViewtypeServiceConfiguration.class)
   @ImportResource(value = {"classpath:/framework/spring/blueprint-contentbeans.xml", "classpath:/framework/spring/blueprint-services.xml"},
           reader = ResourceAwareXmlBeanDefinitionReader.class)
   public static class LocalConfig {

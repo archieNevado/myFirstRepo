@@ -44,7 +44,7 @@ public class ThemeImporterClient extends AbstractUAPIClient {
 
   @Override
   protected void fillInOptions(Options options) {
-    options.addOption(OptionBuilder.hasArgs().withDescription("Folder within CoreMedia where themes are stored. Defaults to /Themes")
+    options.addOption(OptionBuilder.hasArg().withDescription("Folder within CoreMedia where themes are stored. Defaults to /Themes")
             .withLongOpt("folder")
             .create(FOLDER_PARAMETER));
   }

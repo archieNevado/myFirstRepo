@@ -7,15 +7,6 @@
          version="3.0">
   <description>CoreMedia CMS: Preview CAE</description>
 
-  <!-- disable asynchronous loading if any of the following is configured
-    com.coremedia.springframework.web.context.AsyncContextServlet
-    com.coremedia.springframework.web.context.AsyncContextFilter
-    -->
-  <context-param>
-    <param-name>com.coremedia.springframework.web.context.disableAsynchronousLoading</param-name>
-    <param-value>true</param-value>
-  </context-param>
-
   <jsp-config>
     <jsp-property-group>
       <url-pattern>*.jsp</url-pattern>

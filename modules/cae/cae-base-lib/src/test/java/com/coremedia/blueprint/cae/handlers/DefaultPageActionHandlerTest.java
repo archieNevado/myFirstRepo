@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +37,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
   public void handleRequestInternalActionDocDoesNotMatchRequestedAction() {
     when(defaultActionBean.getSegment()).thenReturn("not-the-action");
 
-    ModelAndView result = testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTEXT, DEFAULT_ACTION, request, response);
+    ModelAndView result = testling.handleRequestInternal(defaultActionBean, navigationSegmentsUriHelper.parsePath(asList(DEFAULT_CONTEXT)), DEFAULT_ACTION, request, response);
 
     assertNotFound("Must not be found.", result);
   }
@@ -45,7 +46,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
   public void handleRequestInternalNoNavigationFound() {
     when(navigationSegmentsUriHelper.parsePath(Arrays.asList(DEFAULT_CONTEXT))).thenReturn(null);
 
-    ModelAndView result = testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTEXT, DEFAULT_ACTION, request, response);
+    ModelAndView result = testling.handleRequestInternal(defaultActionBean, navigationSegmentsUriHelper.parsePath(asList(DEFAULT_CONTEXT)), DEFAULT_ACTION, request, response);
 
     assertNotFound("Must not be found.", result);
   }
@@ -53,7 +54,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
   @Test
   public void handleRequestInternal() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn(DEFAULT_ACTION);
-    ModelAndView result = testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTEXT, DEFAULT_ACTION, request, response);
+    ModelAndView result = testling.handleRequestInternal(defaultActionBean, navigationSegmentsUriHelper.parsePath(asList(DEFAULT_CONTEXT)), DEFAULT_ACTION, request, response);
 
     assertDefaultPage(result);
   }
@@ -64,7 +65,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
     when(defaultActionBean.isWebFlow()).thenReturn(true);
     when(flowRunner.run(eq(DEFAULT_FLOW_ID), any(ModelAndView.class), eq(request), eq(response))).thenReturn(null);
 
-    assertNull(testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTEXT, DEFAULT_ACTION, request, response));
+    assertNull(testling.handleRequestInternal(defaultActionBean, navigationSegmentsUriHelper.parsePath(asList(DEFAULT_CONTEXT)), DEFAULT_ACTION, request, response));
     assertEquals(flowRunner, testling.getFlowRunner());
   }
 
@@ -73,7 +74,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn(DEFAULT_ACTION);
     when(defaultActionBean.isWebFlow()).thenReturn(true);
 
-    testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTEXT, DEFAULT_ACTION, request, response);
+    testling.handleRequestInternal(defaultActionBean, navigationSegmentsUriHelper.parsePath(asList(DEFAULT_CONTEXT)), DEFAULT_ACTION, request, response);
 
     Object substitution = SubstitutionRegistry.getSubstitution(defaultActionBean.getId(), defaultFlowOutCome);
     assertTrue(substitution instanceof WebflowActionState);
@@ -99,7 +100,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
   @Test
   public void builLinkInternalNoExtraParameters() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn(DEFAULT_ACTION);
-    UriComponents result = testling.buildLinkInternal(defaultActionBean, uriTemplate, Collections.<String, Object>emptyMap());
+    UriComponents result = testling.buildLinkInternal(defaultActionBean, uriTemplate, Collections.emptyMap());
     assertDefaultUri(result.toUriString(), Collections.<String, Object>emptyMap());
   }
 

@@ -14,6 +14,14 @@
   background-repeat: no-repeat;
   background-image: url('icons/shop-neg.png') !important;
 }
+.content-type-l.augmented-category-icon {
+  background-image: url('icons/augment-category64.png') !important;
+  background-position: center !important;
+}
+.content-type-xl.augmented-category-icon {
+  background-image: url('icons/augment-category128.png') !important;
+  background-position: center !important;
+}
 .content-type-l.category-icon {
   background-image:url('icons/category64.png') !important;
   background-position: center !important;

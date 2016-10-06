@@ -15,6 +15,8 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.util.Base64;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.http.HttpEntity;
@@ -49,16 +51,15 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
-import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
-import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static org.apache.http.client.utils.HttpClientUtils.closeQuietly;
 
 // make the service call once
@@ -70,6 +71,14 @@ public class WcRestConnector {
   private static final String ERROR_KEY_ACTIVITY_TOKEN_INVALID = "CWXBB1010E";
   private static final String ERROR_KEY_ACTIVITY_TOKEN_EXPIRED = "CWXBB1011E";
   private static final String ERROR_KEY_ACTIVITY_TOKEN_TERMINATED = "CWXBB1012E";
+
+  private static final Set<String> AUTHENTICATION_ERROR_KEYS = ImmutableSet.of(
+          ERROR_KEY_INVALID_COOKIE,
+          ERROR_KEY_AUTHENTICATION,
+          ERROR_KEY_ACTIVITY_TOKEN_INVALID,
+          ERROR_KEY_ACTIVITY_TOKEN_EXPIRED,
+          ERROR_KEY_ACTIVITY_TOKEN_TERMINATED
+  );
 
   private static final Logger LOG = LoggerFactory.getLogger(WcRestConnector.class);
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
@@ -110,66 +119,160 @@ public class WcRestConnector {
 
   // BOD based service methods
 
-  public static <T> WcRestServiceMethod<T, Void> createServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, false, true, false, false, Void.class, returnType);
+  @Nonnull
+  public static <T> WcRestServiceMethod<T, Void> createServiceMethod(@Nonnull HttpMethod method,
+                                                                     @Nonnull String url,
+                                                                     boolean secure,
+                                                                     boolean requiresAuthentication,
+                                                                     @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builder(method, url, Void.class, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(true)
+            .build();
   }
 
-  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, Class<P> parameterType, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, false, true, false, false, parameterType, returnType);
+  @Nonnull
+  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(@Nonnull HttpMethod method,
+                                                                     @Nonnull String url,
+                                                                     boolean secure,
+                                                                     boolean requiresAuthentication,
+                                                                     @Nonnull Class<P> parameterType,
+                                                                     @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builder(method, url, parameterType, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(true)
+            .build();
   }
 
-  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, boolean previewSupport, Class<P> parameterType, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, false, previewSupport, false, false, parameterType, returnType);
+  @Nonnull
+  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(@Nonnull HttpMethod method,
+                                                                     @Nonnull String url,
+                                                                     boolean secure,
+                                                                     boolean requiresAuthentication,
+                                                                     boolean previewSupport,
+                                                                     @Nullable Class<P> parameterType,
+                                                                     @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builder(method, url, parameterType, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(previewSupport)
+            .build();
   }
 
-  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, boolean previewSupport, boolean userCookieSupport, Class<P> parameterType, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, false, previewSupport, userCookieSupport, false, parameterType, returnType);
+  @Nonnull
+  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(@Nonnull HttpMethod method,
+                                                                     @Nonnull String url,
+                                                                     boolean secure,
+                                                                     boolean requiresAuthentication,
+                                                                     boolean previewSupport,
+                                                                     boolean userCookieSupport,
+                                                                     @Nullable Class<P> parameterType,
+                                                                     @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builder(method, url, parameterType, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(previewSupport)
+            .userCookiesSupport(userCookieSupport)
+            .build();
   }
 
-  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, boolean previewSupport, boolean userCookieSupport, boolean contractsSupport, Class<P> parameterType, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, false, previewSupport, userCookieSupport, contractsSupport, parameterType, returnType);
+  @Nonnull
+  public static <T, P> WcRestServiceMethod<T, P> createServiceMethod(@Nonnull HttpMethod method,
+                                                                     @Nonnull String url,
+                                                                     boolean secure,
+                                                                     boolean requiresAuthentication,
+                                                                     boolean previewSupport,
+                                                                     boolean userCookieSupport,
+                                                                     boolean contractsSupport,
+                                                                     @Nonnull Class<P> parameterType,
+                                                                     @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builder(method, url, parameterType, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(previewSupport)
+            .userCookiesSupport(userCookieSupport)
+            .contractsSupport(contractsSupport)
+            .build();
   }
 
   // Search bases service methods
 
-  public static <T> WcRestServiceMethod<T, Void> createSearchServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, boolean previewSupport, boolean userCookieSupport, boolean contractsSupport, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, true, previewSupport, userCookieSupport, contractsSupport, Void.class, returnType);
+  @Nonnull
+  public static <T> WcRestServiceMethod<T, Void> createSearchServiceMethod(@Nonnull HttpMethod method,
+                                                                           @Nonnull String url,
+                                                                           boolean secure,
+                                                                           boolean requiresAuthentication,
+                                                                           boolean previewSupport,
+                                                                           boolean userCookieSupport,
+                                                                           boolean contractsSupport,
+                                                                           @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builderForSearch(method, url, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(previewSupport)
+            .userCookiesSupport(userCookieSupport)
+            .contractsSupport(contractsSupport)
+            .build();
   }
 
-  public static <T> WcRestServiceMethod<T, Void> createSearchServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, boolean previewSupport, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, true, previewSupport, false, false, Void.class, returnType);
+  @Nonnull
+  public static <T> WcRestServiceMethod<T, Void> createSearchServiceMethod(@Nonnull HttpMethod method,
+                                                                           @Nonnull String url,
+                                                                           boolean secure,
+                                                                           boolean requiresAuthentication,
+                                                                           boolean previewSupport,
+                                                                           @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builderForSearch(method, url, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(previewSupport)
+            .build();
   }
 
-  public static <T> WcRestServiceMethod<T, Void> createSearchServiceMethod(HttpMethod method, String url, boolean secure, boolean requiresAuthentication, Class<T> returnType) {
-    return new WcRestServiceMethod<>(method, url, secure, requiresAuthentication, true, true, false, false, Void.class, returnType);
+  @Nonnull
+  public static <T> WcRestServiceMethod<T, Void> createSearchServiceMethod(@Nonnull HttpMethod method,
+                                                                           @Nonnull String url,
+                                                                           boolean secure,
+                                                                           boolean requiresAuthentication,
+                                                                           @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builderForSearch(method, url, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(true)
+            .build();
   }
 
   /**
    * Calls the service and returns the JSON response.
    *
    * @param serviceMethod      the service method to call
-   * @param variableValues     variables to replace in the {@link WcRestServiceMethod#uriTemplate URI template} of the serviceMethod
-   * @param optionalParameters parameters which are appended as query parameters (no variable replacement will be performed here!)
+   * @param variableValues     variables to replace in the {@link WcRestServiceMethod#uriTemplate URI template}
+   *                           of the serviceMethod
+   * @param optionalParameters parameters which are appended as query parameters (no variable replacement will
+   *                           be performed here!)
    * @param bodyData           model that represent body data for post, put etc.
    * @param storeContext       the store context that should be used for this call
    * @param userContext        credentials for services which require authentication
    */
+  @Nullable
   public <T, P> T callService(@Nonnull WcRestServiceMethod<T, P> serviceMethod,
                               @Nonnull List<String> variableValues,
                               @Nonnull Map<String, String[]> optionalParameters,
                               @Nullable P bodyData,
                               @Nullable StoreContext storeContext,
                               @Nullable UserContext userContext) throws CommerceException {
-
     StoreContext myStoreContext = storeContext != null ? storeContext : StoreContextHelper.getCurrentContext();
-    if (myStoreContext == null){
-      throw new NoStoreContextAvailable("No store context available in Rest Connector while calling " + serviceMethod.getUriTemplate());
+    if (myStoreContext == null) {
+      throw new NoStoreContextAvailable("No store context available in Rest Connector while calling "
+              + serviceMethod.getUriTemplate());
     }
 
     try {
       // make the service call once
-      return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
-
+      return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext,
+              userContext);
     } catch (UnauthorizedException e) {
       LOG.info("Commerce connector responded with 'Unauthorized'. Will renew the session and retry.");
       StoreContextHelper.setCurrentContext(myStoreContext);
@@ -179,7 +282,8 @@ public class WcRestConnector {
         commerceCache.getCache().invalidate(PreviewUserCacheKey.class.getName());
       }
       // make the service call the second time
-      return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext, userContext);
+      return callServiceInternal(serviceMethod, variableValues, optionalParameters, bodyData, myStoreContext,
+              userContext);
     }
   }
 
@@ -202,30 +306,37 @@ public class WcRestConnector {
                                       @Nullable P bodyData,
                                       @Nullable StoreContext storeContext,
                                       @Nullable UserContext userContext) {
-
     T result = null;
 
     boolean mustBeSecured = mustBeSecured(serviceMethod, storeContext, userContext);
 
     Map<String, String> additionalHeaders = getRequiredHeaders(serviceMethod, mustBeSecured, storeContext, userContext);
 
-    if (serviceMethod.isContractsSupport() && storeContext != null && storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0) {
+    if (serviceMethod.isContractsSupport() && storeContext != null) {
       String[] contractIdsForPreview = storeContext.getContractIdsForPreview();
-      LOG.debug("using contractIdsForPreview: "+ Arrays.toString(contractIdsForPreview));
-      optionalParameters.put("contractId", contractIdsForPreview);
+      if (isNotNullAndNotEmpty(contractIdsForPreview)) {
+        LOG.debug("using contractIdsForPreview: " + Arrays.toString(contractIdsForPreview));
+        optionalParameters.put("contractId", contractIdsForPreview);
+      }
     }
+
     URI uri;
     try {
-      uri = buildRequestUri(serviceMethod.getUriTemplate(), mustBeSecured, serviceMethod.isSearch(), variableValues, optionalParameters, storeContext);
+      uri = buildRequestUri(serviceMethod.getUriTemplate(), mustBeSecured, serviceMethod.isSearch(), variableValues,
+              optionalParameters, storeContext);
+
       if (!isCommerceAvailable(serviceMethod.getMethod(), uri, storeContext)) {
         return null;
       }
     } catch (IllegalArgumentException e) {
       if (LOG.isTraceEnabled()) {
-        LOG.trace("unable to derive REST URI components for method {} with vars {} and optional params {}", serviceMethod, variableValues, optionalParameters, e);
+        LOG.trace("unable to derive REST URI components for method {} with vars {} and optional params {}",
+                serviceMethod, variableValues, optionalParameters, e);
       } else {
-        LOG.warn("unable to derive REST URI components for method {} with vars {} and optional params {}", serviceMethod, variableValues, optionalParameters);
+        LOG.warn("unable to derive REST URI components for method {} with vars {} and optional params {}",
+                serviceMethod, variableValues, optionalParameters);
       }
+
       return null;
     }
 
@@ -256,16 +367,11 @@ public class WcRestConnector {
         if (statusCode >= 200 && statusCode != 204 && statusCode < 300) {
           entity = response.getEntity();
           if (entity != null) {
-            BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(response.getEntity().getContent()));
-            GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.create();
-            result = gson.fromJson(rd, serviceMethod.getReturnType());
+            result = parseFromJson(entity, serviceMethod.getReturnType());
           } else {
             LOG.trace("response entity is null");
           }
         } else {
-
           // Parse Remote-Errors
           List<WcServiceError> remoteErrors = parseServiceErrors(response);
           if (!remoteErrors.isEmpty()) {
@@ -273,21 +379,16 @@ public class WcRestConnector {
           }
 
           // Handle Authentication Error
-          if (statusCode == 401 || (statusCode == 400 && serviceMethod.isRequiresAuthentication() && isAuthenticationError(remoteError))) {
+          if (statusCode == 401 || (
+                  statusCode == 400
+                          && serviceMethod.isRequiresAuthentication()
+                          && isAuthenticationError(remoteError))) {
+            LOG.warn("Call to \"{}\" returns {} (\"{}\").", httpClientRequest.getURI(), statusCode,
+                    statusLine.getReasonPhrase());
             throw new UnauthorizedException(remoteError != null ? remoteError.getErrorMessage() : "401", statusCode);
           }
 
-          String user = null;
-          String[] values = optionalParameters.get("forUser");
-          if (values != null && values.length > 0) {
-            user = values[0];
-          }
-          if (user == null) {
-            values = optionalParameters.get("forUserId");
-            if (values != null && values.length > 0) {
-              user = values[0];
-            }
-          }
+          String user = extractUser(optionalParameters);
 
           // Handle Unknown User
           if (statusCode == 400 && user != null && isUnknownUserError(remoteError)) {
@@ -300,29 +401,26 @@ public class WcRestConnector {
           else if (statusCode == 404 || statusCode == 204) {
             LOG.trace("result from " + httpClientRequest.getURI() + " will be interpreted as \"no result found\": " +
                     statusCode + " (" + statusLine.getReasonPhrase() + ")");
-
           } else if (remoteError != null) {
             LOG.trace("Remote Error occurred: {} (Error Key: {}, Error Code: {}",
                     remoteError.getErrorMessage(), remoteError.getErrorKey(), remoteError.getErrorCode());
-            throw new CommerceRemoteException(
-                    remoteError.getErrorMessage(),
-                    statusCode,
-                    remoteError.getErrorCode(),
+            throw new CommerceRemoteException(remoteError.getErrorMessage(), statusCode, remoteError.getErrorCode(),
                     remoteError.getErrorKey());
           }
 
           //all other result codes (e.g. 500, 502)
           else {
             if (LOG.isWarnEnabled()) {
-              LOG.warn("call to \"" + httpClientRequest.getURI() + "\" returns " + statusCode + " (" + statusLine.getReasonPhrase() + ")");
+              LOG.warn("call to \"" + httpClientRequest.getURI() + "\" returns " + statusCode + " ("
+                      + statusLine.getReasonPhrase() + ")");
             }
-            throw new CommerceException("call to \"" + httpClientRequest.getURI() + "\" returns " + statusCode + " (" + statusLine.getReasonPhrase() + ")", statusCode);
+            throw new CommerceException("call to \"" + httpClientRequest.getURI() + "\" returns " + statusCode + " ("
+                    + statusLine.getReasonPhrase() + ")", statusCode);
           }
         }
       } finally {
         closeQuietly(response);
       }
-
     } catch (CommerceException e) {
       throw e;
     } catch (IOException e) {
@@ -335,22 +433,27 @@ public class WcRestConnector {
       LOG.trace("The corresponding stacktrace is...", e);
       throw new CommerceException(e);
     }
+
     return result;
   }
 
-  private <T, P> boolean mustBeSecured(WcRestServiceMethod<T, P> serviceMethod, StoreContext storeContext, UserContext userContext) {
+  private <T, P> boolean mustBeSecured(@Nonnull WcRestServiceMethod<T, P> serviceMethod,
+                                       @Nullable StoreContext storeContext, @Nullable UserContext userContext) {
     if (serviceMethod.isSecure()) {
       return true;
     }
-    if (storeContext != null && storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length>0) {
+
+    if (storeContext != null && isNotNullAndNotEmpty(storeContext.getContractIdsForPreview())) {
       return true;
     }
+
     if (serviceMethod.isPreviewSupport() && storeContext != null && storeContext.hasPreviewContext()) {
       WcPreviewToken previewToken = loginService.getPreviewToken();
       if (previewToken != null) {
         return true;
       }
     }
+
     String cookieHeader = userContext != null ? userContext.getCookieHeader() : null;
     return cookieHeader != null && WCS_SECURE_COOKIE_PATTERN.matcher(cookieHeader).find();
   }
@@ -358,68 +461,100 @@ public class WcRestConnector {
   /**
    * Parses ibm remote errors from JSON-Response.
    */
-  private static List<WcServiceError> parseServiceErrors(HttpResponse response) {
-    if (response.getEntity() == null) {
-      return Collections.emptyList();
+  @Nonnull
+  private static List<WcServiceError> parseServiceErrors(@Nonnull HttpResponse response) {
+    HttpEntity entity = response.getEntity();
+
+    if (entity == null) {
+      return emptyList();
     }
+
     try {
-      BufferedReader rd = new BufferedReader(
-              new InputStreamReader(response.getEntity().getContent()));
-      GsonBuilder builder = new GsonBuilder();
-      Gson gson = builder.create();
-      WcServiceErrors errors = gson.fromJson(rd, WcServiceErrors.class);
-      if (errors == null || errors.getErrors() == null || errors.getErrors().isEmpty()) {
-        return Collections.emptyList();
+      WcServiceErrors errorsContainer = parseFromJson(entity, WcServiceErrors.class);
+      if (errorsContainer == null) {
+        return emptyList();
       }
-      List<WcServiceError> result = new ArrayList<>(errors.getErrors().size());
-      for (WcServiceError wcServiceError : errors.getErrors()) {
-        result.add(wcServiceError);
+
+      List<WcServiceError> errors = errorsContainer.getErrors();
+      if (errors == null) {
+        return emptyList();
       }
-      return Collections.unmodifiableList(result);
+
+      return ImmutableList.copyOf(errors);
     } catch (Exception ex) {
       LOG.debug("Error parsing commerce remote exception", ex);
-      return Collections.emptyList();
+      return emptyList();
     }
+  }
+
+  @Nullable
+  private static <T> T parseFromJson(@Nonnull HttpEntity entity, @Nonnull Class<T> classOfT) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+
+    Gson gson = new GsonBuilder().create();
+
+    return gson.fromJson(reader, classOfT);
   }
 
   /**
    * Returns true if REST request can be executed.
    */
-  private boolean isCommerceAvailable(HttpMethod method, URI uriComponents, StoreContext storeContext) {
-
+  private boolean isCommerceAvailable(HttpMethod method, URI uriComponents, @Nullable StoreContext storeContext) {
     if (StoreContextHelper.isCommerceSystemUnavailable(storeContext)) {
       if (LOG.isWarnEnabled()) {
         LOG.warn("Dropped " + method + " " + uriComponents + " (commerce system is unavailable)");
       }
+
       return false;
     }
 
     return true;
   }
 
-  private boolean isAuthenticationError(WcServiceError remoteError) {
-    return remoteError != null && remoteError.getErrorKey() != null &&
-            (ERROR_KEY_AUTHENTICATION.equals(remoteError.getErrorKey()) ||
-                    ERROR_KEY_INVALID_COOKIE.equals(remoteError.getErrorKey()) ||
-                    ERROR_KEY_ACTIVITY_TOKEN_TERMINATED.equals(remoteError.getErrorKey()) ||
-                    ERROR_KEY_ACTIVITY_TOKEN_INVALID.equals(remoteError.getErrorKey()) ||
-                    ERROR_KEY_ACTIVITY_TOKEN_EXPIRED.equals(remoteError.getErrorKey()) ||
-                    // In some cases there are only localized messages with natural language in all parts of the
-                    // remote error (even in the error key). If there is a customer
-                    // with a spanish localization then this won't work...
-                    (remoteError.getErrorKey().contains("not authorized"))
-            );
+  private boolean isAuthenticationError(@Nullable WcServiceError remoteError) {
+    String errorKey = getErrorKey(remoteError);
+
+    return errorKey != null &&
+            (AUTHENTICATION_ERROR_KEYS.contains(errorKey) ||
+                    // In some cases there are only localized messages with natural language
+                    // in all parts of the remote error (even in the error key). If there is
+                    // a customer with a Spanish localization then this won't work...
+                    errorKey.contains("not authorized"));
   }
 
-  private static boolean isUnknownUserError(WcServiceError remoteError) {
-    return remoteError != null && remoteError.getErrorKey() != null &&
-            (remoteError.getErrorKey().contains("ObjectNotFoundException"));
+  private static boolean isUnknownUserError(@Nullable WcServiceError remoteError) {
+    String errorKey = getErrorKey(remoteError);
+    return errorKey != null && errorKey.contains("ObjectNotFoundException");
   }
 
-  Map<String, String> getRequiredHeaders(WcRestServiceMethod serviceMethod, boolean mustBeSecured, StoreContext storeContext, UserContext userContext) {
+  @Nullable
+  private static String getErrorKey(@Nullable WcServiceError remoteError) {
+    return remoteError != null ? remoteError.getErrorKey() : null;
+  }
 
+  @Nullable
+  private static String extractUser(@Nonnull Map<String, String[]> parameters) {
+    String user = findFirstValue(parameters, "forUser");
+
+    if (user == null) {
+      user = findFirstValue(parameters, "forUserId");
+    }
+
+    return user;
+  }
+
+  @Nullable
+  private static String findFirstValue(@Nonnull Map<String, String[]> parameters, @Nonnull String key) {
+    String[] values = parameters.get(key);
+    return isNotNullAndNotEmpty(values) ? values[0] : null;
+  }
+
+  @Nonnull
+  Map<String, String> getRequiredHeaders(@Nonnull WcRestServiceMethod serviceMethod, boolean mustBeSecured,
+                                         @Nullable StoreContext storeContext, @Nullable UserContext userContext) {
     Map<String, String> headers = new TreeMap<>();
     headers.put(HttpHeaders.ACCEPT_ENCODING, ACCEPT_ENCODING_TYPE);
+
     if (storeContext == null) {
       return headers;
     }
@@ -432,29 +567,34 @@ public class WcRestConnector {
     }
 
     // use case: personalized info, like prices
-    if (serviceMethod.isUserCookiesSupport() &&
-            WCS_VERSION_7_6.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
+    if (serviceMethod.isUserCookiesSupport()
+            && WCS_VERSION_7_6.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
       if (userContext != null && userContext.getCookieHeader() != null) {
         headers.put(HEADER_COOKIE, userContext.getCookieHeader());
       }
     }
 
     // use case: contract based info, like prices and/or the selection of categories
-    if (!headers.containsKey(HEADER_COOKIE) && serviceMethod.isContractsSupport() && storeContext.getContractIds() != null
+    if (!headers.containsKey(HEADER_COOKIE)
+            && serviceMethod.isContractsSupport()
+            && storeContext.getContractIds() != null
             && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))
-            && null != userContext && userContext.getCookieHeader() != null) {
+            && null != userContext
+            && userContext.getCookieHeader() != null) {
 
       headers.put(HEADER_COOKIE, userContext.getCookieHeader());
     }
 
     // if contract preview, do not send user cookies but login our preview user, instead
-    if (serviceMethod.isContractsSupport() && storeContext.getContractIdsForPreview() != null &&
+    String[] contractIdsForPreview = storeContext.getContractIdsForPreview();
+    if (serviceMethod.isContractsSupport() && contractIdsForPreview != null &&
             WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
-      LOG.debug("contractIdsForPreview found: "+Arrays.toString(storeContext.getContractIdsForPreview()) + " - using preview user: " + contractPreviewUserName);
+      LOG.debug("contractIdsForPreview found: " + Arrays.toString(contractIdsForPreview)
+              + " - using preview user: " + contractPreviewUserName);
       headers.remove(HEADER_COOKIE);
-      String previewUser = CommercePropertyHelper.replaceTokens(contractPreviewUserName, storeContext);
-      String previewPassword = CommercePropertyHelper.replaceTokens(contractPreviewUserPassword, storeContext);
-      WcCredentials previewCredentials = (WcCredentials) commerceCache.get(new PreviewUserCacheKey(previewUser, previewPassword, storeContext, commerceCache, loginService));
+
+      WcCredentials previewCredentials = getPreviewCredentials(storeContext);
+
       if (previewCredentials != null) {
         WcSession previewSession = previewCredentials.getSession();
         if (previewSession != null) {
@@ -489,6 +629,16 @@ public class WcRestConnector {
     return headers;
   }
 
+  @Nullable
+  private WcCredentials getPreviewCredentials(@Nullable StoreContext storeContext) {
+    String user = CommercePropertyHelper.replaceTokens(contractPreviewUserName, storeContext);
+    String password = CommercePropertyHelper.replaceTokens(contractPreviewUserPassword, storeContext);
+
+    PreviewUserCacheKey cacheKey = new PreviewUserCacheKey(user, password, storeContext, commerceCache, loginService);
+
+    return (WcCredentials) commerceCache.get(cacheKey);
+  }
+
   private void applyWCTokens(@Nonnull Map<String, String> headers, boolean mustBeSecured, boolean mustBeAuthenticated) {
     WcCredentials credentials = loginService.loginServiceIdentity();
     if (credentials != null) {
@@ -497,6 +647,7 @@ public class WcRestConnector {
         if (mustBeAuthenticated) {
           headers.put(HEADER_WC_TOKEN, session.getWCToken());
         }
+
         if (mustBeSecured) {
           headers.put(HEADER_WC_TRUSTED_TOKEN, session.getWCTrustedToken());
         }
@@ -504,17 +655,21 @@ public class WcRestConnector {
     }
   }
 
-  private static boolean mustBeAuthenticated(@Nonnull WcRestServiceMethod serviceMethod, @Nonnull StoreContext storeContext, @Nullable UserContext userContext) {
-    boolean hasUserIdOrName = (userContext != null && userContext.getUserId() != null)
-            || (userContext != null && userContext.getUserName() != null);
-    boolean hasContractIdForPreview = storeContext.getContractIdsForPreview() != null && storeContext.getContractIdsForPreview().length > 0;
-    return serviceMethod.isRequiresAuthentication() || hasUserIdOrName
-            || hasContractIdForPreview;
+  private static boolean mustBeAuthenticated(@Nonnull WcRestServiceMethod serviceMethod,
+                                             @Nonnull StoreContext storeContext, @Nullable UserContext userContext) {
+    boolean hasContractIdForPreview = isNotNullAndNotEmpty(storeContext.getContractIdsForPreview());
+
+    return serviceMethod.isRequiresAuthentication() || hasUserIdOrName(userContext) || hasContractIdForPreview;
+  }
+
+  private static boolean hasUserIdOrName(@Nullable UserContext userContext) {
+    return userContext != null && (userContext.getUserId() != null || userContext.getUserName() != null);
   }
 
   @Nonnull
   @VisibleForTesting
-  URI buildRequestUri(String relativeUrl, boolean secure, boolean search, @Nonnull List<String> variableValues, @Nonnull Map<String, String[]> optionalParameters, @Nullable StoreContext storeContext) {
+  URI buildRequestUri(String relativeUrl, boolean secure, boolean search, @Nonnull List<String> variableValues,
+                      @Nonnull Map<String, String[]> optionalParameters, @Nullable StoreContext storeContext) {
     String uri = relativeUrl;
 
     String endpoint;
@@ -527,6 +682,7 @@ public class WcRestConnector {
     if (!endpoint.endsWith("/")) {
       endpoint += "/";
     }
+
     uri = endpoint + uri;
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(uri);
 
@@ -542,6 +698,7 @@ public class WcRestConnector {
         }
       }
     }
+
     Object[] vars = myVariableValues.toArray(new Object[myVariableValues.size()]);
     UriComponents uriComponents = uriBuilder.buildAndExpand(vars);
     return uriComponents.encode().toUri();
@@ -556,44 +713,62 @@ public class WcRestConnector {
    * @param additionalHeaders Additional headers that are required for security and authentication
    * @return http client request object
    */
-  HttpUriRequest getRequest(URI uri, WcRestServiceMethod serviceMethod, Object bodyData, Map<String, String> additionalHeaders) {
+  @Nullable
+  HttpUriRequest getRequest(@Nonnull URI uri, @Nonnull WcRestServiceMethod serviceMethod, @Nullable Object bodyData,
+                            @Nonnull Map<String, String> additionalHeaders) {
+    HttpUriRequest request = createRequestInstance(uri, serviceMethod.getMethod());
 
-    HttpUriRequest request = null;
-
-    if (serviceMethod.getMethod() == HttpMethod.POST) {
-      request = new HttpPost(uri);
-    } else if (serviceMethod.getMethod() == HttpMethod.GET) {
-      request = new HttpGet(uri);
-    } else if (serviceMethod.getMethod() == HttpMethod.DELETE) {
-      request = new HttpDelete(uri);
-    } else if (serviceMethod.getMethod() == HttpMethod.PUT) {
-      request = new HttpPut(uri);
+    if (request == null) {
+      return null;
     }
 
-    if (request != null) {
+    addRequestHeaders(request, additionalHeaders);
 
-      request.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_JSON);
+    try {
+      //apply parameter to body
+      if (bodyData != null) {
+        String json = toJson(bodyData);
 
-      for (Map.Entry<String, String> item : additionalHeaders.entrySet()) {
-        request.addHeader(item.getKey(), item.getValue());
-      }
-
-      try {
-        //apply parameter to body
-        if (bodyData != null) {
-          String json = toJson(bodyData);
-          if (LOG.isTraceEnabled()) {
-            LOG.trace("{}\n{}", request, json);
-          }
-          StringEntity entity = new StringEntity(json);
-          ((HttpEntityEnclosingRequest) request).setEntity(entity);
+        if (LOG.isTraceEnabled()) {
+          LOG.trace("{}\n{}", request, json);
         }
-      } catch (IOException e) {
-        LOG.warn("Error while encoding body data: {}", e.getMessage(), e);
+
+        StringEntity entity = new StringEntity(json);
+        ((HttpEntityEnclosingRequest) request).setEntity(entity);
       }
+    } catch (IOException e) {
+      LOG.warn("Error while encoding body data: {}", e.getMessage(), e);
     }
 
     return request;
+  }
+
+  /**
+   * Create an HTTP request instance based on the given HTTP method.
+   */
+  @Nullable
+  private static HttpUriRequest createRequestInstance(@Nonnull URI uri, @Nonnull HttpMethod method) {
+    switch (method) {
+      case GET:
+        return new HttpGet(uri);
+      case DELETE:
+        return new HttpDelete(uri);
+      case POST:
+        return new HttpPost(uri);
+      case PUT:
+        return new HttpPut(uri);
+      default:
+        return null;
+    }
+  }
+
+  private static void addRequestHeaders(@Nonnull HttpUriRequest request,
+                                        @Nonnull Map<String, String> additionalHeaders) {
+    request.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_JSON);
+
+    for (Map.Entry<String, String> header : additionalHeaders.entrySet()) {
+      request.addHeader(header.getKey(), header.getValue());
+    }
   }
 
   /**
@@ -610,6 +785,11 @@ public class WcRestConnector {
     return mapper.writeValueAsString(model);
   }
 
+  private static boolean isNotNullAndNotEmpty(@Nullable String[] values) {
+    return values != null && values.length > 0;
+  }
+
+  @Nonnull
   protected HttpClient getHttpClient() {
     if (httpClient == null) {
       httpClient = HttpClientFactory.createHttpClient(trustAllSslCertificates, false,
@@ -623,6 +803,7 @@ public class WcRestConnector {
     this.serviceSslEndpoint = serviceSslEndpoint;
   }
 
+  @Nullable
   @SuppressWarnings("unused")
   public String getServiceSslEndpoint(@Nullable StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(serviceSslEndpoint, storeContext);
@@ -633,10 +814,12 @@ public class WcRestConnector {
     this.serviceEndpoint = serviceEndpoint;
   }
 
+  @Nullable
   public String getServiceEndpoint(@Nullable StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(serviceEndpoint, storeContext);
   }
 
+  @Nullable
   @SuppressWarnings("unused")
   public String getSearchServiceEndpoint(@Nullable StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(searchServiceEndpoint, storeContext);
@@ -647,6 +830,7 @@ public class WcRestConnector {
     this.searchServiceEndpoint = searchServiceEndpoint;
   }
 
+  @Nullable
   @SuppressWarnings("unused")
   public String getSearchServiceSslEndpoint(@Nullable StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(searchServiceSslEndpoint, storeContext);
@@ -730,5 +914,4 @@ public class WcRestConnector {
   public void setConnectionRequestTimeout(int connectionRequestTimeout) {
     this.connectionRequestTimeout = connectionRequestTimeout;
   }
-
 }

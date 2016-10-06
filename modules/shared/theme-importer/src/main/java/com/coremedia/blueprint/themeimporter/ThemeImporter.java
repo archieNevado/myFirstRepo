@@ -6,19 +6,14 @@ import com.coremedia.blueprint.themeimporter.descriptors.ResourceBundle;
 import com.coremedia.blueprint.themeimporter.descriptors.ThemeDefinition;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapConnection;
-import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.content.ContentType;
-import com.coremedia.cap.content.Version;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cap.struct.StructBuilder;
-import com.coremedia.cap.struct.StructService;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.util.PathUtil;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
 import com.coremedia.xml.XmlUtil5;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang3.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,7 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +45,8 @@ public class ThemeImporter {
   private static final Logger LOGGER = LoggerFactory.getLogger(ThemeImporter.class);
 
   private static final String DISABLE_COMPRESS_PROPERTY = "disableCompress";
+  private static final String IE_EXPRESSION_PROPERTY = "ieExpression";
+  private static final String DATA_URL_PROPERTY = "dataUrl";
   private static final String CODE_PROPERTY = "code";
   private static final String DATA_PROPERTY = "data";
   private static final String ARCHIVE_PROPERTY = "archive";
@@ -68,12 +63,22 @@ public class ThemeImporter {
   private static final String LINE_SEPARATOR = "(\r\r|\n\n|\r\n\r\n)";
   private static final String LINE_BREAK = "</p><p>";
 
-  // The pattern means                                        url  ("        protocol   :  the/path    "        )
-  private static final Pattern URL_PATTERN = Pattern.compile("url\\([\"\']?((([^)\"']*?):)?([^)\"\']*))[\"\']?\\)");
-  // Capturing groups                                                      123         3 2 4         41
+  // In this context only the "data" protocol (base 64 encoding) is relevant.
+  // Therefore we do not parse out //host:port but put all the rest into the
+  // path.
+  // The pattern means                     url  ("        protocol   :  the/path     suffix     "        )
+  private static final String URL_REGEX = "url\\([\"\']?((([^)\"']*?):)?([^)\"\'#?]*)([^)\"']*))[\"\']?\\)";
+  // Capturing groups                                   123         3 2 4           45        51
+  @VisibleForTesting static final int CG_URL = 1;
+  @VisibleForTesting static final int CG_PROTOCOL = 3;
+  @VisibleForTesting static final int CG_PATH = 4;
+  @VisibleForTesting static final int CG_SUFFIX = 5;
+
+  @VisibleForTesting static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
   private final MimeTypeService mimeTypeService;
   private final CapConnection capConnection;
+  private final ThemeImporterContentHelper contentHelper;
 
 
   // --- construct and configure ------------------------------------
@@ -81,6 +86,7 @@ public class ThemeImporter {
   public ThemeImporter(@Nonnull CapConnection capConnection, @Nonnull MimeTypeService mimeTypeService) {
     this.mimeTypeService = mimeTypeService;
     this.capConnection = capConnection;
+    contentHelper = new ThemeImporterContentHelper(capConnection);
   }
 
 
@@ -100,6 +106,8 @@ public class ThemeImporter {
 
   /**
    * Imports themes from the given zip files.
+   * <p>
+   * In case of multiple zipFiles with conflicting data the last variant wins.
    *
    * @param targetFolder the repository folder to import the theme to
    * @param zipFiles themes to import, each must be nonnull
@@ -114,12 +122,14 @@ public class ThemeImporter {
       }
       importFiles(importData, normalize(targetFolder));
     } catch (Exception e) {
-      throw new RuntimeException("Theme import failed", e);
+      throw new ThemeImporterException("Theme import failed", e);
     }
   }
 
   /**
    * Imports themes from the given input streams
+   * <p>
+   * In case of multiple zips with conflicting data the last variant wins.
    *
    * @param targetFolder the repository folder to import the theme to
    * @param zips the zipped themes to import, each must be nonnull
@@ -132,7 +142,7 @@ public class ThemeImporter {
       }
       importFiles(importData, normalize(targetFolder));
     } catch (Exception e) {
-      throw new RuntimeException("Theme import failed", e);
+      throw new ThemeImporterException("Theme import failed", e);
     }
   }
 
@@ -152,41 +162,48 @@ public class ThemeImporter {
     processTemplateFiles(importData, targetFolder);
     processJsFiles(importData, targetFolder);
     processCssFiles(importData, targetFolder);
+
+    // The theme descriptors are the last files to be processed.
+    // If you change this processing order, check whether the warning in
+    // #codeToContent is still appropriate.
     processXmlFiles(importData, targetFolder);
   }
 
   private void processImageFiles(ImportData importData, String targetFolder) {
     for (Map.Entry<String, Blob> image : importData.getImageFiles().entrySet()) {
-      createContent(CM_IMAGE_DOCTYPE, Collections.singletonMap(DATA_PROPERTY, image.getValue()), targetFolder, image.getKey());
+      contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, image.getKey(), Collections.singletonMap(DATA_PROPERTY, image.getValue()));
     }
   }
 
   private void processPropertyFiles(ImportData importData, String targetFolder) {
     for (Map.Entry<String, String> propertyFile : importData.getPropertyFiles().entrySet()) {
-      Struct localization = createStruct(propertyFile.getValue(), capConnection.getStructService());
+      Struct localization = contentHelper.propertiesToStruct(propertyFile.getValue());
       Map<String, Object> properties = new HashMap<>();
       properties.put("localizations", localization);
       String name = getName(propertyFile.getKey());
       properties.put("locale", getLocale(name).toString());
-      createContent(CM_RESOURCE_BUNDLE_DOCTYPE, properties, targetFolder, propertyFile.getKey());
+      contentHelper.updateContent(CM_RESOURCE_BUNDLE_DOCTYPE, targetFolder, propertyFile.getKey(), properties);
     }
   }
 
   private void processWebFontFiles(ImportData importData, String targetFolder) {
     for (Map.Entry<String, Blob> webFont : importData.getWebFontFiles().entrySet()) {
-      createContent(CM_IMAGE_DOCTYPE, Collections.singletonMap(DATA_PROPERTY, webFont.getValue()), targetFolder, webFont.getKey());
+      Map<String, Blob> properties = Collections.singletonMap(DATA_PROPERTY, webFont.getValue());
+      contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, webFont.getKey(), properties);
     }
   }
 
   private void processInteractiveFiles(ImportData importData, String targetFolder) {
     for (Map.Entry<String, Blob> interactive : importData.getInteractiveFiles().entrySet()) {
-      createContent(CM_INTERACTIVE_DOCTYPE, Collections.singletonMap(DATA_PROPERTY, interactive.getValue()), targetFolder, interactive.getKey());
+      Map<String, Blob> properties = Collections.singletonMap(DATA_PROPERTY, interactive.getValue());
+      contentHelper.updateContent(CM_INTERACTIVE_DOCTYPE, targetFolder, interactive.getKey(), properties);
     }
   }
 
   private void processTemplateFiles(ImportData importData, String targetFolder) {
     for (Map.Entry<String, Blob> templateSet : importData.getTemplateSetFiles().entrySet()) {
-      createContent(CM_TEMPLATE_SET_DOCTYPE, Collections.singletonMap(ARCHIVE_PROPERTY, templateSet.getValue()), targetFolder, templateSet.getKey());
+      Map<String, Blob> properties = Collections.singletonMap(ARCHIVE_PROPERTY, templateSet.getValue());
+      contentHelper.updateContent(CM_TEMPLATE_SET_DOCTYPE, targetFolder, templateSet.getKey(), properties);
     }
   }
 
@@ -194,218 +211,205 @@ public class ThemeImporter {
     for (Map.Entry<String, String> js : importData.getJsFiles().entrySet()) {
       Map<String, Object> properties = new HashMap<>();
       properties.put(CODE_PROPERTY, createMarkup(js.getValue(), js.getKey(), targetFolder));
-      if (js.getKey().endsWith(".min.js")) {
-        properties.put(DISABLE_COMPRESS_PROPERTY, 1);
-      }
-      createContent(CM_JAVA_SCRIPT_DOCTYPE, properties, targetFolder, js.getKey());
+      properties.put(DISABLE_COMPRESS_PROPERTY, js.getKey().endsWith(".min.js") ? 1 : 0);
+      contentHelper.updateContent(CM_JAVA_SCRIPT_DOCTYPE, targetFolder, js.getKey(), properties);
     }
   }
 
   private void processCssFiles(ImportData importData, String targetFolder) {
     for (Map.Entry<String, String> css : importData.getCssFiles().entrySet()) {
       Map<String, Object> properties = new HashMap<>();
-      properties.put("code", createMarkup(css.getValue(), css.getKey(), targetFolder));
-      if (css.getKey().endsWith(".min.css")) {
-        properties.put(DISABLE_COMPRESS_PROPERTY, 1);
-      }
-      createContent(CMCSS_DOCTYPE, properties, targetFolder, css.getKey());
+      properties.put(CODE_PROPERTY, createMarkup(css.getValue(), css.getKey(), targetFolder));
+      properties.put(DISABLE_COMPRESS_PROPERTY, css.getKey().endsWith(".min.css") ? 1 : 0);
+      contentHelper.updateContent(CMCSS_DOCTYPE, targetFolder, css.getKey(), properties);
     }
   }
 
   private void processXmlFiles(ImportData importData, String targetFolder) {
     for (Map.Entry<String, Document> xmlFile : importData.getXmlFiles().entrySet()) {
       if (xmlFile.getKey().contains(THEME_METADATA_DIR)) {
-        String theme = createTheme(xmlFile.getValue(), targetFolder);
-        LOGGER.info("Successfully created Theme in {}", theme);
+        ThemeDefinition themeDefinition = domToThemeDefinition(xmlFile.getValue());
+        if (themeDefinition!=null) {
+          createTheme(themeDefinition, targetFolder);
+        }
       }
     }
   }
 
-  private static String normalize(@Nonnull String targetFolder) {
-    return targetFolder.endsWith("/") ? targetFolder : targetFolder + "/";
-  }
-
-  private Content createContent(String newType, Map<String, ?> properties, String folder, String path) {
-    String absolutePath = folder+"/"+path;
+  private static ThemeDefinition domToThemeDefinition(Document document) {
     try {
-      Content newContent = getOrCreateContent(capConnection.getContentRepository(), newType, absolutePath);
-      //Only do this if the document has not been checked out by somebody else.
-      if (newContent != null) {
-        if (!properties.isEmpty()) {
-          newContent.setProperties(properties);
-        }
-        newContent.checkIn();
-      }
-      return newContent;
-    } catch (Exception e) {
-      LOGGER.error("Error creating content {} ", absolutePath, e);
+      JAXBContext jaxbContext = JAXBContext.newInstance(ThemeDefinition.class);
+      Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+      return (ThemeDefinition) jaxbUnmarshaller.unmarshal(document);
+    } catch (JAXBException e) {
+      LOGGER.error("Cannot extract theme from DOM", e);
       return null;
     }
   }
 
-  private static Content getOrCreateContent(ContentRepository repository, String newType, String absolutePath) {
-    Content newContent = repository.getChild(absolutePath);
-    if (newContent != null) {
-      //UPDATE
-      newContent = repository.getChild(absolutePath);
-      if (!newContent.getType().getName().equals(newType)) {
-        //Set to null, because the type is different
-        LOGGER.warn("Cannot update document {} since it is of type {} even though it should be of type {}", absolutePath, newContent.getType().getName(), newType);
-        newContent = null;
-      } else if (newContent.isCheckedIn()) {
-        newContent.checkOut();
-      } else if (newContent.isCheckedOut() && !newContent.isCheckedOutByCurrentSession()) {
-        //Set to null, because a checked out document, that has been checked out by someone else is hard to handle
-        newContent = null;
-        LOGGER.warn("Cannot update document {} since it has been checkout out by somebody else.", absolutePath);
+  private Content createTheme(ThemeDefinition themeDefinition, String targetFolder) {
+    String baseFolder = targetFolder + themeDefinition.getName();
+    Map<String, Object> properties = new HashMap<>();
+
+    properties.put("viewRepositoryName", themeDefinition.getViewRepositoryName());
+    properties.put("description", themeDefinition.getName());
+    properties.put("detailText", formatDescription(themeDefinition.getDescription()));
+    properties.put("icon", fetchAndDeleteThumbnail(themeDefinition.getThumbnail(), baseFolder));
+
+    List<Content> jScriptLibs = enhanceCode(themeDefinition.getJavaScriptLibraries().getJavaScripts(), baseFolder, CM_JAVA_SCRIPT_DOCTYPE, "js");
+    List<Content> jScripts = enhanceCode(themeDefinition.getJavaScripts().getJavaScripts(), baseFolder, CM_JAVA_SCRIPT_DOCTYPE, "js");
+    List<Content> csss = enhanceCode(themeDefinition.getStyleSheets().getCss(), baseFolder, CMCSS_DOCTYPE, "css");
+    List<Content> resourceBundles = enhanceResourceBundles(themeDefinition.getResourceBundles().getResourceBundles(), baseFolder);
+    List<Content> templateSets = fetchExistingResourceContents(themeDefinition.getTemplateSets().getTemplateSet(), baseFolder);
+
+    properties.put("javaScriptLibs", jScriptLibs);
+    properties.put("javaScripts", jScripts);
+    properties.put("css", csss);
+    properties.put("resourceBundles", resourceBundles);
+    properties.put("templateSets", templateSets);
+
+    String themeContentName = StringUtils.capitalize(themeDefinition.getName()) + " Theme";
+    Content themeContent = contentHelper.updateContent(CM_THEME_DOCTYPE, baseFolder, themeContentName, properties);
+    if (themeContent!=null) {
+      LOGGER.info("Created Theme in {}", themeContent.getPath());
+    } else {
+      LOGGER.error("Cannot create theme content.");
+    }
+    return themeContent;
+  }
+
+  private Markup formatDescription(String description) {
+    if (!StringUtils.hasText(description)) {
+      return null;
+    }
+    String detailText = String.format(ThemeImporter.MARKUP_TEMPLATE, description.replaceAll(LINE_SEPARATOR, LINE_BREAK));
+    return MarkupFactory.fromString(detailText);
+  }
+
+  private Blob fetchAndDeleteThumbnail(String thumbnailName, String baseFolder) {
+    if (!StringUtils.hasText(thumbnailName)) {
+      return null;
+    }
+    Content thumbnail = contentHelper.fetchContent(PathUtil.normalizePath(baseFolder + "/" + thumbnailName));
+    Blob result = null;
+    if (thumbnail!=null) {
+      result = thumbnail.getBlob(DATA_PROPERTY);
+      LOGGER.debug("Delete thumbnail {}, because it is supposed to be temporary.", thumbnail);
+      contentHelper.deleteContent(thumbnail);
+    }
+    return result;
+  }
+
+  /**
+   * Enhance code contents with data from the theme descriptor.
+   * <p>
+   * The code resources are imported before the theme descriptor, so they are
+   * supposed to exist in the content repository when this is invoked.
+   *
+   * @return the list of processed code contents
+   */
+  private List<Content> enhanceCode(List<? extends Code> resources, String baseFolder, String contentType, String codeType) {
+    List<Content> result = new ArrayList<>();
+    if (resources != null) {
+      for (Code code : resources) {
+        Content content = enhancedCodeToContent(code, baseFolder, contentType, codeType);
+        if (content != null) {
+          result.add(content);
+        }
+      }
+    }
+    return result;
+  }
+
+  private Content enhancedCodeToContent(Code code, String baseFolder, String contentType, String codeType) {
+    Map<String, Object> codeProperties = extractCodeProperties(code, codeType);
+    String link = code.getLink();
+    boolean isExternal = link.startsWith("http://") || link.startsWith("https://") || link.startsWith("//");
+    if (!isExternal) {
+      String path = PathUtil.normalizePath(baseFolder + "/" + link);
+      // Since the theme descriptor is processed at last, any content code
+      // resources must exist meanwhile.
+      if (contentHelper.fetchContent(path)==null) {
+        LOGGER.warn("Referenced code resource {} does not exist, ignore.", path);
+        return null;
+      } else {
+        return contentHelper.updateContent(contentType, path, codeProperties);
       }
     } else {
-      ContentType type = repository.getContentType(newType);
-      if (type != null) {
-        newContent = type.create(repository.getRoot(), absolutePath);
-      }
-    }
-    return newContent;
-  }
-
-  private static Struct createStruct(String text, StructService structService) {
-    StructBuilder structBuilder = structService.createStructBuilder();
-    for (StringTokenizer st = new StringTokenizer(text, "\n"); st.hasMoreTokens(); ) {
-      String line = st.nextToken();
-      if (line.trim().length() > 0 && line.split("=").length > 1) {
-        String[] splitted = line.split("=", 2);
-        structBuilder.declareString(splitted[0], Integer.MAX_VALUE, splitted[1]);
-      }
-    }
-
-    return structBuilder.build();
-  }
-
-  private String createTheme(Document document, String targetFolder) {
-    try {
-      JAXBContext jaxbContext = JAXBContext.newInstance(ThemeDefinition.class);
-      Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-      ThemeDefinition themeDefinition = (ThemeDefinition) jaxbUnmarshaller.unmarshal(document);
-      String baseFolder = targetFolder + themeDefinition.getName();
-
-      Map<String, Object> properties = new HashMap<>();
-      properties.put("viewRepositoryName", themeDefinition.getViewRepositoryName());
-      properties.put("description", themeDefinition.getName());
-
-      if (StringUtils.hasText(themeDefinition.getDescription())) {
-        String detailText = String.format(ThemeImporter.MARKUP_TEMPLATE, themeDefinition.getDescription().replaceAll(LINE_SEPARATOR, LINE_BREAK));
-        properties.put("detailText", MarkupFactory.fromString(detailText));
-      }
-      if (StringUtils.hasText(themeDefinition.getThumbnail())) {
-        Content thumbnail = fetchContent(PathUtil.normalizePath(baseFolder + "/" + themeDefinition.getThumbnail()));
-        if (thumbnail != null) {
-          properties.put("icon", thumbnail.getBlob(DATA_PROPERTY));
-          thumbnail.delete();
-        }
-      }
-
-      updateCode(baseFolder, themeDefinition.getJavaScriptLibraries().getJavaScripts(), properties, "javaScriptLibs", CM_JAVA_SCRIPT_DOCTYPE, "js");
-      updateCode(baseFolder, themeDefinition.getJavaScripts().getJavaScripts(), properties, "javaScripts", CM_JAVA_SCRIPT_DOCTYPE, "js");
-      updateCode(baseFolder, themeDefinition.getStyleSheets().getCss(), properties, "css", CMCSS_DOCTYPE, "css");
-      updateResourceBundles(baseFolder, themeDefinition.getResourceBundles().getResourceBundles(), properties, "resourceBundles");
-      updateResources(baseFolder, themeDefinition.getTemplateSets().getTemplateSet(), properties, "templateSets");
-
-      Content theme = createContent(CM_THEME_DOCTYPE, properties, baseFolder, StringUtils.capitalize(themeDefinition.getName()) + " Theme");
-      if (theme != null) {
-        return baseFolder;
-      }
-    } catch (JAXBException e) {
-      LOGGER.error("Cannot create theme", e);
-    }
-    return null;
-  }
-
-  private void updateCode(String baseFolder, List<? extends Code> resources, Map<String, Object> properties, String propertyName, String type, String extension) {
-    if (resources != null) {
-      List<Content> result = new ArrayList<>();
-      for (Code code : resources) {
-        String link = code.getLink();
-        Content content = fetchContent(PathUtil.normalizePath(baseFolder + "/" + link));
-        Map<String, Object> codeProperties = new HashMap<>();
-
-        boolean needsMinification = code.isDisableCompress() || link.endsWith(".min." + extension);
-        if (needsMinification) {
-          codeProperties.put(DISABLE_COMPRESS_PROPERTY, 1);
-        }
-        if (StringUtils.hasText(code.getIeExpression())) {
-          codeProperties.put("ieExpression", code.getIeExpression());
-        }
-
-        if (content != null && !codeProperties.isEmpty()) {
-          content.checkOut();
-          content.setProperties(codeProperties);
-          content.checkIn();
-        } else if (link.startsWith("http://") || link.startsWith("https://") || link.startsWith("//")) {
-          //This is a valid web url that is not relative, therefore there is no need to normalize it
-          String path = "external/" + getName(link) + "." + getExtension(link);
-          codeProperties.put("dataUrl", link);
-          content = createContent(type, codeProperties, normalize(baseFolder), path);
-        }
-        if (content != null) {
-          result.add(content);
-        }
-      }
-      if (!result.isEmpty()) {
-        properties.put(propertyName, result);
-      }
+      codeProperties.put(DATA_URL_PROPERTY, link);
+      String path = "external/" + getName(link) + "." + extension(link);
+      // No corresponding theme internal resource, so this content is created
+      // here when it occurs in a theme descriptor.
+      return contentHelper.updateContent(contentType, normalize(baseFolder), path, codeProperties);
     }
   }
 
-  private void updateResourceBundles(String baseFolder, List<? extends ResourceBundle> resourceBundles, Map<String, Object> properties, String propertyName) {
+  private Map<String, Object> extractCodeProperties(Code code, String codeType) {
+    Map<String, Object> codeProperties = new HashMap<>();
+    boolean disableCompress = code.isDisableCompress() || code.getLink().endsWith(".min." + codeType);
+    codeProperties.put(DISABLE_COMPRESS_PROPERTY, disableCompress ? 1 : 0);
+    String ieExpression = code.getIeExpression();
+    codeProperties.put(IE_EXPRESSION_PROPERTY, ieExpression==null ? "" : ieExpression);
+    return codeProperties;
+  }
+
+  /**
+   * Enhance resource bundles with data from the theme descriptor.
+   * <p>
+   * The resource bundles are imported before the theme descriptor, so they are
+   * supposed to exist in the content repository when this is invoked.
+   *
+   * @return the list of processed resource bundles
+   */
+  private List<Content> enhanceResourceBundles(List<? extends ResourceBundle> resourceBundles, String baseFolder) {
+    List<Content> result = new ArrayList<>();
     if (resourceBundles != null) {
-      List<Content> result = new ArrayList<>();
       for (ResourceBundle resourceBundle : resourceBundles) {
-        String link = resourceBundle.getLink();
-        Content content = fetchContent(PathUtil.normalizePath(baseFolder + "/" + link));
-        if (content != null) {
-          if (!StringUtils.isEmpty(resourceBundle.getMaster())) {
-            Content folder = content.getParent();
-            if (folder != null) {
-              Content master = fetchContent(PathUtil.normalizePath(folder.getPath() + "/" + resourceBundle.getMaster()));
-              if (master != null) {
-                content.checkOut();
-                content.set("master", Collections.singletonList(master));
-                Version version = master.getCheckedInVersion();
-                if (version == null) {
-                  version = master.getCheckedOutVersion();
-                }
-                if (version != null) {
-                  content.set("masterVersion", IdHelper.parseVersionId(version.getId()));
-                }
-                content.checkIn();
-              }
-            }
-          }
-          if (resourceBundle.isLinkIntoTheme()) {
-            result.add(content);
-          }
-        }
-      }
-      if (!result.isEmpty()) {
-        properties.put(propertyName, result);
-      }
-    }
-  }
-
-  private void updateResources(String baseFolder, List<? extends Resource> resources, Map<String, Object> properties, String propertyName) {
-    if (resources != null) {
-      List<Content> result = new ArrayList<>();
-      for (Resource resource : resources) {
-        String link = resource.getLink();
-        Content content = fetchContent(PathUtil.normalizePath(baseFolder + "/" + link));
-        if (content != null) {
+        Content content = enhancedResourceBundleToContent(resourceBundle, baseFolder);
+        if (content!=null && resourceBundle.isLinkIntoTheme()) {
           result.add(content);
         }
       }
-      if (!result.isEmpty()) {
-        properties.put(propertyName, result);
+    }
+    return result;
+  }
+
+  private Content enhancedResourceBundleToContent(ResourceBundle resourceBundle, String baseFolder) {
+    String contentPath = PathUtil.normalizePath(baseFolder + "/" + resourceBundle.getLink());
+    Content content = contentHelper.fetchContent(contentPath);
+    if (content != null) {
+      if (!StringUtils.isEmpty(resourceBundle.getMaster())) {
+        String masterPath = PathUtil.normalizePath(content.getParent().getPath() + "/" + resourceBundle.getMaster());
+        Content master = contentHelper.fetchContent(masterPath);
+        if (master != null) {
+          HashMap<String, Object> masterProperties = new HashMap<>();
+          masterProperties.put("master", Collections.singletonList(master));
+          masterProperties.put("masterVersion", contentHelper.currentVersion(master));
+          contentHelper.updateContent(content.getType().getName(), contentPath, masterProperties);
+        } else {
+          LOGGER.warn("Referenced master content {} does not exist, ignore.", masterPath);
+        }
+      }
+    } else {
+      LOGGER.warn("Referenced resource bundle content {} does not exist, ignore.", contentPath);
+    }
+    return content;
+  }
+
+  private List<Content> fetchExistingResourceContents(List<? extends Resource> resources, String baseFolder) {
+    List<Content> result = new ArrayList<>();
+    if (resources != null) {
+      for (Resource resource : resources) {
+        String path = PathUtil.normalizePath(baseFolder + "/" + resource.getLink());
+        Content content = contentHelper.fetchContent(path);
+        if (content != null) {
+          result.add(content);
+        } else {
+          LOGGER.warn("Referenced code resource {} does not exist, ignore.", path);
+        }
       }
     }
+    return result;
   }
 
   private Markup createMarkup(String text, String fileName, String targetFolder) {
@@ -414,7 +418,8 @@ public class ThemeImporter {
     return MarkupFactory.fromString(markupAsString);
   }
 
-  private String urlsToXlinks(String line, String targetDocumentPath) {
+  @VisibleForTesting
+  String urlsToXlinks(String line, String targetDocumentPath) {
     Matcher matcher = URL_PATTERN.matcher(line);
     StringBuffer appender = new StringBuffer();  // NOSONAR Matcher#appendReplacement needs a StringBuffer
     StringBuilder result = new StringBuilder();
@@ -427,12 +432,13 @@ public class ThemeImporter {
       endNoMatch = matcher.start();
       result.append(XmlUtil5.escapeOrOmit(line.substring(startNoMatch, endNoMatch)));
 
-      String uri = matcher.group(1);
-      String protocol = matcher.group(3);  // NOSONAR magic number
-      String path = matcher.group(4);  // NOSONAR magic number
+      String uri = matcher.group(CG_URL);
+      String protocol = matcher.group(CG_PROTOCOL);
+      String path = matcher.group(CG_PATH);
+      String suffix = matcher.group(CG_SUFFIX);
 
       // replace url -> RichText (incl non-matching prefix)
-      String replacement = urlReplacement(uri, protocol, path, targetDocumentPath);
+      String replacement = urlReplacement(uri, protocol, path, suffix, targetDocumentPath);
       matcher.appendReplacement(appender, replacement);
 
       // extract the actual url replacement from the appendReplacement result
@@ -448,9 +454,9 @@ public class ThemeImporter {
     return result.toString();
   }
 
-  private String urlReplacement(String uri, String protocol, String path, String targetDocumentPath) {
+  private String urlReplacement(String uri, String protocol, String path, String suffix, String targetDocumentPath) {
     if (protocol == null) {
-      return toRichtextInternalLink(path, targetDocumentPath);
+      return toRichtextInternalLink(path, targetDocumentPath, suffix);
     } else if (DATA_PROPERTY.equals(protocol)) {
       return toRichtextPlain(protocol, path);
     } else {
@@ -458,40 +464,27 @@ public class ThemeImporter {
     }
   }
 
-  private String toRichtextInternalLink(String uriMatch, String targetDocumentPath) {
+  private String toRichtextInternalLink(String uriMatch, String targetDocumentPath, String suffix) {
     try {
       String linkPath = PathUtil.concatPath(targetDocumentPath, uriMatch);
-      Content referencedContent = fetchContent(linkPath);
+      Content referencedContent = contentHelper.fetchContent(linkPath);
       if (referencedContent != null) {
-        URI linkImportId = null;
-        try {
-          linkImportId = new URI("coremedia", "", "/cap/resources/" + IdHelper.parseContentId(referencedContent.getId()), null);
-        } catch (URISyntaxException e) {
-          LOGGER.error("Cannot create uri for {}", targetDocumentPath, e);
+        URI linkImportId = new URI("coremedia", "", "/cap/resources/" + contentHelper.id(referencedContent), null);
+        if (!StringUtils.isEmpty(suffix)) {
+          LOGGER.info("Ignoring link suffix {} of {}, no reasonable way to deal with.", suffix, uriMatch);
         }
-        if (linkImportId != null) {
-          String filetype = getExtension(linkPath);
-          if ("css".equals(filetype)) {
-            return toRichtextHref(linkImportId, uriMatch);
-          } else {
-            return toRichtextImg(linkImportId);
-          }
+        if ("css".equals(extension(linkPath))) {
+          return toRichtextHref(linkImportId, uriMatch);
         } else {
-          return toRichtextPlain(null, uriMatch);
+          return toRichtextImg(linkImportId);
         }
       } else {
-        // Could not resolve link. Preserve target as ordinary text.
         LOGGER.warn("Cannot resolve {}", linkPath);
-        return toRichtextPlain(null, uriMatch);
       }
-    } catch (IllegalArgumentException e) {
+    } catch (Exception e) {
       LOGGER.error("Cannot handle {}, {}", uriMatch, targetDocumentPath, e);
-      return toRichtextPlain(null, uriMatch);
     }
-  }
-
-  private Content fetchContent(String path) {
-    return capConnection.getContentRepository().getChild(path);
+    return toRichtextPlain(null, uriMatch);
   }
 
   private String toRichtextPlain(String protocol, String uriMatch) {
@@ -511,7 +504,7 @@ public class ThemeImporter {
     return "url(<a xlink:href=\"" + href + "\">" + XmlUtil5.escapeOrOmit(linktext) + "</a>)";
   }
 
-  private static String getExtension(String uri) {
+  private static String extension(String uri) {
     int dot = uri.lastIndexOf('.');
     int slash = uri.lastIndexOf('/');
     return slash > dot || dot < 0 || dot >= uri.length() ? "" : uri.substring(dot + 1);
@@ -530,5 +523,9 @@ public class ThemeImporter {
       locale = LocaleUtils.toLocale(name.substring(name.indexOf('_') + 1, name.length()));
     }
     return locale;
+  }
+
+  private static String normalize(@Nonnull String folder) {
+    return folder.endsWith("/") ? folder : folder + "/";
   }
 }

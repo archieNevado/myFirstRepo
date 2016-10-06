@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.cae.contentbeans.CMNavigationBase;
-import com.coremedia.blueprint.cae.contentbeans.CodeResourcesImpl;
+import com.coremedia.blueprint.cae.contentbeans.CodeResourcesCacheKey;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CodeResources;
@@ -39,6 +39,7 @@ import static com.coremedia.blueprint.cae.handlers.CodeResourceHandlerTest.Local
 import static com.coremedia.blueprint.cae.handlers.HandlerTestUtil.checkError;
 import static com.coremedia.blueprint.cae.handlers.HandlerTestUtil.checkModelAndView;
 import static com.coremedia.blueprint.cae.handlers.HandlerTestUtil.checkView;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -75,18 +76,18 @@ public class CodeResourceHandlerTest {
   // unit test real frontend resources are not arranged in Java-driven
   // package directories.
 
-  private static final String LINK_TO_SINGLE_RESOURCE = "/resource/com/coremedia/blueprint/cae/handlers/coderesource/js/my-custom-40-2.js";
-  private static final String LINK_TO_NOT_LOCAL_RESOURCE = "/resource/com/coremedia/blueprint/cae/handlers/coderesource/js/not-local-42-3.js";
+  private static final String LINK_TO_SINGLE_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/my-custom-40-2.js";
+  private static final String LINK_TO_NOT_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/not-local-42-3.js";
 
-  private static final String LINK_TO_WRONG_SINGLE_CONTENT_RESOURCE_1 = "/resource/css/my-custom-40-2.css";
-  private static final String LINK_TO_WRONG_SINGLE_CONTENT_RESOURCE_2 = "/resource/js/wrong-name-40-2.js";
-  private static final String LINK_TO_SINGLE_CONTENT_RESOURCE_OLD_VERSION = "/resource/js/my-custom-40-1.js";
+  private static final String LINK_TO_WRONG_SINGLE_CONTENT_RESOURCE_1 = "/" + PREFIX_RESOURCE + "/css/my-custom-40-2.css";
+  private static final String LINK_TO_WRONG_SINGLE_CONTENT_RESOURCE_2 = "/" + PREFIX_RESOURCE + "/js/wrong-name-40-2.js";
+  private static final String LINK_TO_SINGLE_CONTENT_RESOURCE_OLD_VERSION = "/" + PREFIX_RESOURCE + "/js/my-custom-40-1.js";
 
-  private static final String LINK_TO_DELETED_LOCAL_RESOURCE = "/resource/com/coremedia/blueprint/cae/handlers/coderesource/js/deleted-50-2.js";
-  private static final String LINK_TO_WRONG_LOCAL_RESOURCE = "/resource/js/does-not-exist.js";
+  private static final String LINK_TO_DELETED_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/deleted-50-2.js";
+  private static final String LINK_TO_WRONG_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/js/does-not-exist.js";
 
-  private static final String LINK_TO_MERGED_CONTENT_RESOURCE = "/resource/js/4/500ed6f52c0117f2c5b4218ce13f4563/media.js";
-  private static final String LINK_TO_WRONG_SCRIPTHASH_MERGED_CONTENT_RESOURCE = "/resource/js/4/10/media.js";
+  private static final String LINK_TO_MERGED_CONTENT_RESOURCE = "/" + PREFIX_RESOURCE + "/js/4/500ed6f52c0117f2c5b4218ce13f4563/media.js";
+  private static final String LINK_TO_WRONG_SCRIPTHASH_MERGED_CONTENT_RESOURCE = "/" + PREFIX_RESOURCE + "/js/4/10/media.js";
 
   private static final String MERGED_JS_VIEW = "js";
   private static final String REDIRECT_VIEW_PREFIX = "redirect:";
@@ -217,7 +218,8 @@ public class CodeResourceHandlerTest {
   @Test
   public void testLinkForMergedContent() {
     Map<String,Object> cmParams = new ImmutableMap.Builder<String,Object>().put("extension","js").build();
-    String url = linkFormatterTestHelper.formatLink(cmParams, new CodeResourcesImpl(contextBean, CMNavigationBase.JAVA_SCRIPT, false), null, MERGED_JS_VIEW);
+    CodeResources codeResources = new CodeResourcesCacheKey(contextBean, CMNavigationBase.JAVA_SCRIPT, false).evaluate(null);
+    String url = linkFormatterTestHelper.formatLink(cmParams, codeResources, null, MERGED_JS_VIEW);
     assertEquals("urls do not match", LINK_TO_MERGED_CONTENT_RESOURCE , url);
   }
 

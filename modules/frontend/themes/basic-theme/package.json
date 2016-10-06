@@ -1,0 +1,13 @@
+{
+  "name": "@coremedia/basic-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "grunt build",
+    "test": "grunt test",
+    "watch": "grunt watch"
+  },
+  "theme": {
+    "name": "basic"
+  }
+}

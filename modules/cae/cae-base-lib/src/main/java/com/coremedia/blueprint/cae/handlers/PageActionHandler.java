@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.common.contentbeans.CMAction;
+import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,9 +14,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
+import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_NAVIGATION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ACTION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
@@ -37,7 +41,7 @@ public class PageActionHandler extends DefaultPageActionHandler {
   public static final String URI_PATTERN =
           '/' + PREFIX_DYNAMIC +
           '/' + SEGMENT_ACTION +
-                  "/{" + SEGMENT_ROOT + '}' +
+                  "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}" +
                   "/{" + SEGMENT_ID + ':' + PATTERN_NUMBER + '}' +
                   "/{" + SEGMENT_ACTION + '}';
 
@@ -46,11 +50,12 @@ public class PageActionHandler extends DefaultPageActionHandler {
    */
   @RequestMapping(URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
-                                    @PathVariable(SEGMENT_ROOT) String context,
+                                    @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
                                     @PathVariable(SEGMENT_ACTION) String action,
                                     HttpServletRequest request,
                                     HttpServletResponse response) {
-    return handleRequestInternal(contentBean, context, action, request, response);
+    Navigation navigationContext = getNavigation(navigationPath);
+    return handleRequestInternal(contentBean, navigationContext, action, request, response);
   }
 
   @SuppressWarnings({"TypeMayBeWeakened", "UnusedParameters"})

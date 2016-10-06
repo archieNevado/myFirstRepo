@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.LOCAL_SETTINGS;
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.ORIGIN_REFERENCES;
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.REFERENCES;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_ORIGIN_REFERENCES;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_REFERENCES;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -57,7 +57,7 @@ public class AssetWriteSettingsHelperTest {
     structBuilder = mock(StructBuilder.class, RETURNS_DEEP_STUBS);
     when(contentRepository.getConnection().getStructService()).thenReturn(structService);
     when(structService.emptyStruct()).thenReturn(emptyStruct);
-    contentProperties.put(LOCAL_SETTINGS, localSettings);
+    contentProperties.put(NAME_LOCAL_SETTINGS, localSettings);
     testling.setAssetReadSettingsHelper(assetReadSettingsHelper);
     testling.setContentRepository(contentRepository);
     productReferences = new ArrayList<>();
@@ -73,9 +73,9 @@ public class AssetWriteSettingsHelperTest {
     testling.createNewSettingsStructWithReferences(contentProperties, productReferences, false);
 
     //should not be called when the inheritance from origin is inactive
-    verify(structBuilder, times(0)).declareStrings(REFERENCES, Integer.MAX_VALUE, productReferences);
+    verify(structBuilder, times(0)).declareStrings(NAME_REFERENCES, Integer.MAX_VALUE, productReferences);
     //even if inheritance is not active the origin products must be written.
-    verify(structBuilder, times(1)).declareStrings(ORIGIN_REFERENCES, Integer.MAX_VALUE, productReferences);
+    verify(structBuilder, times(1)).declareStrings(NAME_ORIGIN_REFERENCES, Integer.MAX_VALUE, productReferences);
     //should build the struct
     verify(structBuilder, times(1)).build();
   }
@@ -86,9 +86,9 @@ public class AssetWriteSettingsHelperTest {
     testling.createNewSettingsStructWithReferences(contentProperties, productReferences, true);
 
     //must be called when inheritance is active. The products must be the same as the origin products
-    verify(structBuilder, times(1)).declareStrings(REFERENCES, Integer.MAX_VALUE, productReferences);
+    verify(structBuilder, times(1)).declareStrings(NAME_REFERENCES, Integer.MAX_VALUE, productReferences);
     //even if inheritance is not active the origin products must be written.
-    verify(structBuilder, times(1)).declareStrings(ORIGIN_REFERENCES, Integer.MAX_VALUE, productReferences);
+    verify(structBuilder, times(1)).declareStrings(NAME_ORIGIN_REFERENCES, Integer.MAX_VALUE, productReferences);
     //should build the struct
     verify(structBuilder, times(1)).build();
   }

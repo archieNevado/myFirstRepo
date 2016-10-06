@@ -29,6 +29,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 
 import javax.annotation.Nullable;
@@ -53,6 +54,7 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
   public static final String URL_PROVIDER_SEARCH_TERM = "searchTerm";
   private static final String PRODUCT_ID = "productId";
   private static final String CATEGORY_ID = "categoryId";
+  public static final String P13N_URI_PARAMETER = "p13n_test";
 
   private ResolveContextStrategy resolveContextStrategy;
   private LiveContextNavigationFactory liveContextNavigationFactory;
@@ -227,7 +229,9 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
     return isTrue(requestAttributes.getAttribute(PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW, 0))
             ||
-            isTrue(requestAttributes.getAttribute(HAS_PREVIEW_TOKEN, 0));
+            isTrue(requestAttributes.getAttribute(HAS_PREVIEW_TOKEN, 0))
+            ||
+            isTrue(((ServletRequestAttributes) requestAttributes).getRequest().getParameter(P13N_URI_PARAMETER));
   }
 
   private static boolean isTrue(Object attribute) {

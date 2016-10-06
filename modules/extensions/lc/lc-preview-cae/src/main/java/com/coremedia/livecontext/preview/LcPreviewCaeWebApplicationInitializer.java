@@ -1,12 +1,13 @@
 package com.coremedia.livecontext.preview;
 
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
+import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import com.google.common.collect.ImmutableList;
+import org.springframework.boot.context.embedded.RegistrationBean;
 import org.springframework.core.annotation.Order;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
+import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
-import java.util.EnumSet;
 
 @Order(20_100)
 public class LcPreviewCaeWebApplicationInitializer extends ComponentWebApplicationInitializer {
@@ -21,17 +22,16 @@ public class LcPreviewCaeWebApplicationInitializer extends ComponentWebApplicati
   }
 
   @Override
-  protected void configure(ServletContext servletContext) {
-    FilterRegistration filterRegistration = servletContext.getFilterRegistration(PREVIEW_TOKEN_APPENDER);
-    if(null == filterRegistration) {
-      filterRegistration = servletContext.addFilter(PREVIEW_TOKEN_APPENDER, new PreviewTokenMarkerFilter());
-      filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-    }
+  protected void configure(@Nonnull ServletContext servletContext) {
+    // nothing to configure
+  }
 
-    filterRegistration = servletContext.getFilterRegistration(WC_COOKIE_FILTER);
-    if(null == filterRegistration) {
-      filterRegistration = servletContext.addFilter(WC_COOKIE_FILTER, new WcCookieFilter());
-      filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-    }
+  @Nonnull
+  @Override
+  protected Iterable<RegistrationBean> createRegistrationBeans() {
+    return ImmutableList.of(
+            RegistrationBeanBuilder.forFilter(new PreviewTokenMarkerFilter()).name(PREVIEW_TOKEN_APPENDER).build(),
+            RegistrationBeanBuilder.forFilter(new WcCookieFilter()).name(WC_COOKIE_FILTER).build()
+    );
   }
 }

@@ -55,7 +55,7 @@ namespace :style do
     t.options = {
             # we do not want to convert our definitions into LWRP FC015
             # FC019 also does not make sense, as we sometimes do want to set attributes using force_default
-            :tags => %w(~FC019 ~FC015),
+            :tags => %w(~FC019 ~FC015 ~FC064 ~FC065),
             :fail_tags => [is_jenkins ? 'none' : 'any' ],
             :context => !is_jenkins,
             :progress => true,

@@ -2,13 +2,13 @@ package com.coremedia.livecontext.web;
 
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
+import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import com.google.common.collect.ImmutableList;
+import org.springframework.boot.context.embedded.RegistrationBean;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
+import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
-import java.util.EnumSet;
 
 @Order(20_000)
 public class LcCaeWebApplicationInitializer extends ComponentWebApplicationInitializer {
@@ -23,17 +23,16 @@ public class LcCaeWebApplicationInitializer extends ComponentWebApplicationIniti
   }
 
   @Override
-  protected void configure(ServletContext servletContext) {
-    FilterRegistration filterRegistration = servletContext.getFilterRegistration(FRAGMENT_CONTEXT_PROVIDER);
-    if(null == filterRegistration) {
-      filterRegistration = servletContext.addFilter(FRAGMENT_CONTEXT_PROVIDER, new FragmentContextProvider());
-      filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-    }
+  protected void configure(@Nonnull ServletContext servletContext) {
+    // nothing to configure
+  }
 
-    filterRegistration = servletContext.getFilterRegistration(COOKIE_LEVELER);
-    if(null == filterRegistration) {
-      filterRegistration = servletContext.addFilter(COOKIE_LEVELER, new DelegatingFilterProxy(COOKIE_LEVELER));
-      filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-    }
+  @Nonnull
+  @Override
+  protected Iterable<RegistrationBean> createRegistrationBeans() {
+    return ImmutableList.of(
+            RegistrationBeanBuilder.forFilter(new FragmentContextProvider()).name(FRAGMENT_CONTEXT_PROVIDER).build(),
+            RegistrationBeanBuilder.forFilterProxy(COOKIE_LEVELER).name(COOKIE_LEVELER).build()
+    );
   }
 }

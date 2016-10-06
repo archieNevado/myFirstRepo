@@ -4,7 +4,7 @@
 <master>
 </master>
 <viewtype>
-<link href="../../../../Viewtypes/CMCollection/tiles-layout-highlight.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMCollection/tiles-layout-highlight"/>
+<link href="../../../../Viewtypes/CMChannel/tiles-layout-highlight.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-highlight"/>
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

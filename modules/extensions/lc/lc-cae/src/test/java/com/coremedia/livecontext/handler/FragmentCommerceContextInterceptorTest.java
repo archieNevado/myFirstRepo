@@ -38,6 +38,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -105,7 +106,7 @@ public class FragmentCommerceContextInterceptorTest {
     when(contract2.getExternalTechId()).thenReturn("contract2");
     contracts.add(contract1);
     contracts.add(contract2);
-    when(contractService.findContractIdsForUser(any(UserContext.class), any(StoreContext.class)))
+    when(contractService.findContractIdsForUser(any(UserContext.class), any(StoreContext.class), anyString()))
             .thenReturn(contracts);
 
     MockHttpServletRequest request = new MockHttpServletRequest();

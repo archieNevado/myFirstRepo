@@ -23,10 +23,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.COMMERCE;
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.INHERIT;
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.ORIGIN_REFERENCES;
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.REFERENCES;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_COMMERCE;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_INHERIT;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_ORIGIN_REFERENCES;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_REFERENCES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -46,8 +46,10 @@ public class AssetHelperTest {
 
   @Inject
   private ContentRepository contentRepository;
+
   @Inject
   private StructService structService;
+
   @Inject
   private AssetReadSettingsHelper assetReadSettingsHelper;
 
@@ -58,25 +60,29 @@ public class AssetHelperTest {
 
   @Import(XmlRepoConfiguration.class)
   @Configuration
-  @ImportResource(value = {"classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
-                           "classpath:/framework/spring/lc-asset-helpers.xml"},
-          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
+  @ImportResource(
+          value = {
+                  "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
+                  "classpath:/framework/spring/lc-asset-helpers.xml"
+          },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class
+  )
   static class AssetTestConfiguration {
     @Bean
     XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig(CONTENT_XML_URI);
     }
-
   }
 
-  // --- setup ------------------------------------------------------
   @Before
   public void setup() {
     testling = new AssetHelper();
     testling.setContentRepository(contentRepository);
     testling.setAssetReadSettingsHelper(assetReadSettingsHelper);
+
     content = contentRepository.getContent("2");
     originStruct = content.getStruct("localSettings");
+
     setupOriginStruct(false, null, null);
   }
 
@@ -92,7 +98,7 @@ public class AssetHelperTest {
     resetOriginStruct();
 
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
-    Struct commerceStruct = StructUtil.getSubstruct(updatedStruct, COMMERCE);
+    Struct commerceStruct = StructUtil.getSubstruct(updatedStruct, NAME_COMMERCE);
 
     assertTrue(commerceStruct == null);
   }
@@ -104,12 +110,12 @@ public class AssetHelperTest {
     resetOriginStruct();
 
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
 
     assertNotNull(commerceStruct);
-    assertEquals(true, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(true, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
 
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
@@ -121,12 +127,12 @@ public class AssetHelperTest {
     List<String> newOriginCatalogObjects = AB_LIST;
 
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
 
     assertNotNull(commerceStruct);
-    assertEquals(true, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(true, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
 
     assertEquals(1, updatedStruct.getProperties().size());
   }
@@ -140,13 +146,13 @@ public class AssetHelperTest {
 
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
 
     assertNotNull(commerceStruct);
-    assertEquals(true, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
+    assertEquals(true, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
   }
@@ -161,7 +167,7 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = StructUtil.getSubstruct(updatedStruct, COMMERCE);
+    Struct commerceStruct = StructUtil.getSubstruct(updatedStruct, NAME_COMMERCE);
     assertTrue(commerceStruct == null);
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(7, updatedStruct.getProperties().size());
@@ -177,11 +183,11 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
     assertNotNull(commerceStruct);
-    assertEquals(false, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(oldCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(false, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(oldCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
   }
@@ -196,11 +202,11 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
     assertNotNull(commerceStruct);
-    assertEquals(false, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(oldCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(false, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(oldCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
   }
@@ -215,11 +221,11 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
     assertNotNull(commerceStruct);
-    assertEquals(true, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(true, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
   }
@@ -234,11 +240,11 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
     assertNotNull(commerceStruct);
-    assertEquals(false, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(oldCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(false, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(oldCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
   }
@@ -253,11 +259,11 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
     assertNotNull(commerceStruct);
-    assertEquals(false, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(oldCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(false, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(oldCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
   }
@@ -272,11 +278,11 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
     assertNotNull(commerceStruct);
-    assertEquals(false, commerceStruct.getBoolean(INHERIT));
-    assertEquals(EMPTY_LIST, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(EMPTY_LIST, commerceStruct.getStrings(REFERENCES));
+    assertEquals(false, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(EMPTY_LIST, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(EMPTY_LIST, commerceStruct.getStrings(NAME_REFERENCES));
     assertNotNull(StructUtil.getSubstruct(updatedStruct, "focusArea"));
     assertEquals(8, updatedStruct.getProperties().size());
   }
@@ -291,11 +297,11 @@ public class AssetHelperTest {
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureForExternalIds(content, newOriginCatalogObjects);
 
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
     assertNotNull(commerceStruct);
-    assertEquals(true, commerceStruct.getBoolean(INHERIT));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertEquals(true, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(newOriginCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertEquals(8, updatedStruct.getProperties().size());
   }
 
@@ -307,18 +313,18 @@ public class AssetHelperTest {
 
     setupOriginStruct(inherit, oldOriginCatalogObjects, oldCatalogObjects);
     Struct updatedStruct = testling.updateCMPictureOnBlobDelete(content);
-    Struct commerceStruct = updatedStruct.getStruct(COMMERCE);
+    Struct commerceStruct = updatedStruct.getStruct(NAME_COMMERCE);
 
     assertNotNull(updatedStruct);
-    assertEquals(false, commerceStruct.getBoolean(INHERIT));
-    assertEquals(Collections.<String>emptyList(), commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(Collections.<String>emptyList(), commerceStruct.getStrings(REFERENCES));
+    assertEquals(false, commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(Collections.<String>emptyList(), commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(Collections.<String>emptyList(), commerceStruct.getStrings(NAME_REFERENCES));
     assertEquals(8, updatedStruct.getProperties().size());
 
     resetOriginStruct();
 
     updatedStruct = testling.updateCMPictureOnBlobDelete(content);
-    commerceStruct = StructUtil.getSubstruct(updatedStruct, COMMERCE);
+    commerceStruct = StructUtil.getSubstruct(updatedStruct, NAME_COMMERCE);
 
     assertNull(commerceStruct);
     assertEquals(7, updatedStruct.getProperties().size());
@@ -327,37 +333,41 @@ public class AssetHelperTest {
 
     setupOriginStruct(false, oldOriginCatalogObjects, oldCatalogObjects);
     updatedStruct = testling.updateCMPictureOnBlobDelete(content);
-    commerceStruct = StructUtil.getSubstruct(updatedStruct, COMMERCE);
+    commerceStruct = StructUtil.getSubstruct(updatedStruct, NAME_COMMERCE);
 
     assertNotNull(commerceStruct);
-    assertFalse(commerceStruct.getBoolean(INHERIT));
-    assertEquals(oldOriginCatalogObjects, commerceStruct.getStrings(ORIGIN_REFERENCES));
-    assertEquals(oldCatalogObjects, commerceStruct.getStrings(REFERENCES));
+    assertFalse(commerceStruct.getBoolean(NAME_INHERIT));
+    assertEquals(oldOriginCatalogObjects, commerceStruct.getStrings(NAME_ORIGIN_REFERENCES));
+    assertEquals(oldCatalogObjects, commerceStruct.getStrings(NAME_REFERENCES));
     assertEquals(8, updatedStruct.getProperties().size());
   }
 
   /**
    * Returns a struct with an empty commerce substruct with the given parameters
-   * @param inherit The inherit value of the commerce substruct
-   * @param originCatalogObjects  The catalog object list oroginated from the picture data (XMP catalog objects) to be saved in the commerce substruct
-   * @param catalogObjects The current catalog objects parameter of the commerce substruct
+   *
+   * @param inherit              The inherit value of the commerce substruct
+   * @param originCatalogObjects The catalog object list oroginated from the picture data (XMP catalog objects) to be
+   *                             saved in the commerce substruct
+   * @param catalogObjects       The current catalog objects parameter of the commerce substruct
    */
   private void setupOriginStruct(boolean inherit, List<String> originCatalogObjects, List<String> catalogObjects) {
     StructBuilder originStructBuilder = originStruct.builder();
 
-    if (StructUtil.getSubstruct(originStruct, COMMERCE) != null) {
-      originStructBuilder = originStructBuilder.remove(COMMERCE); // step 1 of clear struct
+    if (StructUtil.getSubstruct(originStruct, NAME_COMMERCE) != null) {
+      originStructBuilder = originStructBuilder.remove(NAME_COMMERCE); // step 1 of clear struct
       originStruct = originStructBuilder.build();// step 2 of clear struct
     }
 
     Struct commerceStruct = structService.createStructBuilder().build();
     StructBuilder commerceStructBuilder = commerceStruct.builder();
-    commerceStructBuilder = commerceStructBuilder.declareBoolean(INHERIT, inherit);
-    commerceStructBuilder = commerceStructBuilder.declareStrings(ORIGIN_REFERENCES, Integer.MAX_VALUE, originCatalogObjects);
-    commerceStructBuilder = commerceStructBuilder.declareStrings(REFERENCES, Integer.MAX_VALUE, catalogObjects);
+    commerceStructBuilder = commerceStructBuilder.declareBoolean(NAME_INHERIT, inherit);
+    commerceStructBuilder = commerceStructBuilder.declareStrings(NAME_ORIGIN_REFERENCES, Integer.MAX_VALUE,
+            originCatalogObjects);
+    commerceStructBuilder = commerceStructBuilder.declareStrings(NAME_REFERENCES, Integer.MAX_VALUE, catalogObjects);
     commerceStruct = commerceStructBuilder.build();
 
-    originStruct = originStructBuilder.declareStruct(COMMERCE, commerceStruct).build();
+    originStruct = originStructBuilder.declareStruct(NAME_COMMERCE, commerceStruct).build();
+
     content.checkOut();
     content.set("localSettings", originStruct);
     content.checkIn();
@@ -369,13 +379,13 @@ public class AssetHelperTest {
   private void resetOriginStruct() {
     StructBuilder originStructBuilder = originStruct.builder();
 
-    if (StructUtil.getSubstruct(originStruct, COMMERCE) != null) {
-      originStructBuilder = originStructBuilder.remove(COMMERCE); // step 1 of clear struct
+    if (StructUtil.getSubstruct(originStruct, NAME_COMMERCE) != null) {
+      originStructBuilder = originStructBuilder.remove(NAME_COMMERCE); // step 1 of clear struct
       originStruct = originStructBuilder.build();// step 2 of clear struct
     }
+
     content.checkOut();
     content.set("localSettings", originStruct);
     content.checkIn();
   }
-
 }

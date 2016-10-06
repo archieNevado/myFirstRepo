@@ -29,6 +29,10 @@
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -54,6 +58,49 @@
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-multisite</artifactId>
       <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-el</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-logging-juli</artifactId>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -94,9 +141,34 @@
           <systemProperties>
             <propertieslocations>classpath:/content-management-server.properties</propertieslocations>
           </systemProperties>
-          <additionalClasspathDirs>
-            <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
-          </additionalClasspathDirs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <!--
+           invoke "mvn spring-boot:run" for running this webapp on http://localhost:8080/
+        -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <!--
+            build executable war that can be run like this:
+            JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
+
+            only set to 'true' if chef run won't fail on warning when unzipping the webapp
+          -->
+          <executable>false</executable>
+        </configuration>
+      </plugin>
+      <!--
+          disable dependency check for spring-web
+        -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <usedDependencies>
+            <usedDependency>org.springframework:spring-web</usedDependency>
+          </usedDependencies>
         </configuration>
       </plugin>
     </plugins>
@@ -121,6 +193,21 @@
         </dependency>
       </dependencies>
     </profile>
-
+    <profile>
+      <id>embedded</id>
+      <properties>
+        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/embedded-hsqldb</development-properties.dir>
+        <!-- embedded SQL config -->
+        <sql.store.driver>org.hsqldb.jdbc.JDBCDriver</sql.store.driver>
+        <sql.store.url>jdbc:hsqldb:mem:cmmanagement;sql.syntax_mys=true;</sql.store.url>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>org.hsqldb</groupId>
+          <artifactId>hsqldb</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
   </profiles>
 </project>

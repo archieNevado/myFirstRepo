@@ -19,11 +19,14 @@
     <property name="commerceUserSessionService" ref="commerceUserSessionService"/>
   </bean>
 
-  <customize:replace id="lcAuthenticationProviderCustomizer" bean="authenticationProvider" custom-ref="lcAuthenticationProvider"/>
+  <customize:prepend id="addLCAuthenticationProvider" bean="authenticationProviders" order="1001">
+    <list>
+      <ref bean="lcAuthenticationProvider"/>
+    </list>
+  </customize:prepend>
 
   <customize:replace id="liveContextAuthenticationHandler" bean="authenticationHandler" property="passwordExpiryPolicy">
     <bean class="com.coremedia.livecontext.elastic.social.cae.LiveContextPasswordExpiryPolicy">
-      <property name="userService" ref="commerceUserService"/>
     </bean>
   </customize:replace>
 

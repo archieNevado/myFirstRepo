@@ -1,0 +1,68 @@
+@import "../../../sass/utils/imports";
+
+.cm-imagemap__hotzone {
+  position: absolute;
+  z-index: 2;
+  border: 0;
+  padding: 0;
+  display: block;
+  transform: translate(-50%, -50%);
+}
+
+.cm-notselectable {
+  user-select: none;
+}
+
+/**
+ * Add icon as font
+ * TODO: change to svg
+ */
+@include font-face('imagemap-icons', imagemap-icons);
+
+[class^="basic-icon-"], [class*=" basic-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'imagemap-icons' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-transform: none;
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.basic-icon-imagemap:before {
+  content: "\e621";
+}
+
+.cm-imagemap__wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/**
+ * Text-Overlay (part of ImageMap feature)
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styling for each theme provided
+ */
+.cm-overlay--theme-dark {
+  color: black;
+  background-color: transparent;
+}
+
+.cm-overlay--theme-light {
+  color: white;
+  background-color: transparent;
+}
+
+.cm-overlay--theme-light-on-dark {
+  color: white;
+  background-color: black;
+}
+
+.cm-overlay--theme-dark-on-light {
+  color: black;
+  background-color: white;
+}

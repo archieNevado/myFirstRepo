@@ -93,7 +93,7 @@ public abstract class CMNavigationBase extends CMTeasableImpl implements CMNavig
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} objects
    */
   @Override
-  public List<? extends CMJavaScript> getJavaScript() {
+  public List<CMJavaScript> getJavaScript() {
     List<Content> contents = getContent().getLinks(JAVA_SCRIPT);
     return createBeansFor(contents, CMJavaScript.class);
   }
@@ -104,7 +104,7 @@ public abstract class CMNavigationBase extends CMTeasableImpl implements CMNavig
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMCSS} objects
    */
   @Override
-  public List<? extends CMCSS> getCss() {
+  public List<CMCSS> getCss() {
     List<Content> contents = getContent().getLinks(CSS);
     return createBeansFor(contents, CMCSS.class);
   }

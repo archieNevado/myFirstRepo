@@ -12,11 +12,9 @@
   <exml:import class="com.coremedia.ecommerce.studio.helper.CatalogHelper"/>
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
-
-  <editor:documentForm title="{BUNDLE.Commerce_Tab_attributes_title}">
+  <editor:documentForm title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Tab_attributes_title}">
     <items>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_PropertyGroup_definingAttributes_title}" itemId="definingAttributes">
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_PropertyGroup_definingAttributes_title}" itemId="definingAttributes">
         <plugins>
           <ui:bindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsVariantExpression(config.bindTo)}"/>
           <ui:bindComponentsPlugin valueExpression="{config.bindTo.extendBy(ProductPropertyNames.DEFINING_ATTRIBUTES)}"
@@ -31,7 +29,7 @@
           <component itemCls="document-info-item"/>
         </defaults>
         <items>
-          <label text="{BUNDLE.Commerce_definingAttributes_emptyText}">
+          <label text="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_definingAttributes_emptyText}">
             <plugins>
               <ui:bindVisibilityPlugin bindTo="{ValueExpressionFactory.createTransformingValueExpression(
                 config.bindTo.extendBy(ProductPropertyNames.DEFINING_ATTRIBUTES),
@@ -43,7 +41,7 @@
           <formlayout labelSeparator=":"/>
         </layout>
       </editor:collapsibleFormPanel>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_PropertyGroup_describingAttributes_title}" itemId="describingAttributes">
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_PropertyGroup_describingAttributes_title}" itemId="describingAttributes">
         <plugins>
           <ui:bindComponentsPlugin valueExpression="{config.bindTo.extendBy(ProductPropertyNames.DESCRIBING_ATTRIBUTES)}"
                                    configBeanParameterName="productAttribute"
@@ -57,7 +55,7 @@
           <component itemCls="document-info-item"/>
         </defaults>
         <items>
-          <label text="{BUNDLE.Commerce_describingAttributes_emptyText}">
+          <label text="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_describingAttributes_emptyText}">
             <plugins>
               <ui:bindVisibilityPlugin bindTo="{ValueExpressionFactory.createTransformingValueExpression(
                 config.bindTo.extendBy(ProductPropertyNames.DESCRIBING_ATTRIBUTES),

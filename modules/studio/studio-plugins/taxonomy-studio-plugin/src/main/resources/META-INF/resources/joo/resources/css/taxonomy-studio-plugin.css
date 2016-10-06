@@ -136,6 +136,10 @@
 /**
   * The node formatting styles
   */
+.explorerColumn .cm-column-entry {
+  white-space:pre-wrap;
+  word-wrap:break-word;
+}
 .column-entry-default {
   font-weight: bold;
 }

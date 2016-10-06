@@ -1,0 +1,29 @@
+// Grids
+// =====================================================================================================================
+
+// reset max-width, set by perfectchef
+.cm-grid {
+  max-width: inherit;
+}
+
+.cm-container {
+  * {
+    box-sizing: border-box;
+  }
+
+  &.container {
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // add gutter to collections
+  ~ .cm-carousel {
+    margin-top: 20px;
+  }
+}
+
+.rowContainer > .row {
+  margin-left: 0;
+  margin-right: 0;
+}

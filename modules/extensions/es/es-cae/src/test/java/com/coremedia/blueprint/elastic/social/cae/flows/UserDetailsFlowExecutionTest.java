@@ -39,7 +39,7 @@ public class UserDetailsFlowExecutionTest extends AbstractXmlFlowExecutionTests 
   }
 
   protected FlowDefinitionResource getResource(FlowDefinitionResourceFactory resourceFactory) {
-    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.elastic.social.cae.flows.UserDetails.xml", UserDetailsFlowExecutionTest.class);
+    return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.es.webflow.UserDetails.xml", UserDetailsFlowExecutionTest.class);
   }
 
   protected void configureFlowBuilderContext(MockFlowBuilderContext builderContext) {
@@ -56,8 +56,8 @@ public class UserDetailsFlowExecutionTest extends AbstractXmlFlowExecutionTests 
     when(userDetailsHelper.getUserDetails(Matchers.<RequestContext>any(RequestContext.class), eq(passwordPolicy), Matchers.<String>any(String.class))).thenReturn(new UserDetails());
     startFlow(input, context);
 
-    assertCurrentStateEquals("userDetails");
-    assertTrue(getRequiredFlowAttribute("userDetails") instanceof UserDetails);
+    assertCurrentStateEquals("bpUserDetails");
+    assertTrue(getRequiredFlowAttribute("bpUserDetails") instanceof UserDetails);
   }
 
   @Test
@@ -69,13 +69,13 @@ public class UserDetailsFlowExecutionTest extends AbstractXmlFlowExecutionTests 
     userDetails.setGivenname("horst");
     userDetails.setSurname("schmidt");
     userDetails.setEmailAddress("abcd@defg.hi");
-    getFlowScope().put("userDetails", userDetails);
+    getFlowScope().put("bpUserDetails", userDetails);
     getFlowScope().put("authorName", null);
     when(userDetailsHelper.save(eq(userDetails), any(RequestContext.class), Matchers.any(CommonsMultipartFile.class))).thenReturn(true);
 
     MockExternalContext context = new MockExternalContext();
     context.setEventId("saveUser");
     resumeFlow(context);
-    assertCurrentStateEquals("userDetails");
+    assertCurrentStateEquals("bpUserDetails");
   }
 }

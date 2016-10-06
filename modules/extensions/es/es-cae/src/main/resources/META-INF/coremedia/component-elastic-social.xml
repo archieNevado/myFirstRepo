@@ -22,4 +22,7 @@
 
   <context:component-scan base-package="com.coremedia.blueprint.elastic.social.cae.tenant"/>
 
+  <!-- expose initializer as bean for spring-boot integration -->
+  <bean class="com.coremedia.blueprint.elastic.social.cae.EsCaeWebComponentInitializer"/>
+
 </beans>

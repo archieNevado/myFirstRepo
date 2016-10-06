@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exml:plugin xmlns:exml="http://www.jangaroo.net/exml/0.8"
+             xmlns="exml:ext.config"
+             xmlns:livecontext="exml:com.coremedia.livecontext.studio.config"
+             xmlns:ui="exml:com.coremedia.ui.config"
+             xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+             baseClass="com.coremedia.livecontext.studio.pbe.AddFragmentHighlightButtonBase">
+  <exml:import class="com.coremedia.cms.editor.sdk.preview.zoom.DeviceTypeSliderBase"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.preview.PreviewIFrameToolbar"/>
+
+          <ui:addItemsPlugin>
+            <ui:items>
+              <livecontext:fragmentHighlightButton itemId="fragmentHighlightButton"/>
+              <tbseparator>
+                 <plugins>
+                  <ui:bindVisibilityPlugin bindTo="{getSeperatorVisibilityVE()}"/>
+                </plugins>
+              </tbseparator>
+            </ui:items>
+            <ui:before>
+              <component itemId="{PreviewIFrameToolbar.DEVICE_TYPE_SLIDER_ITEM_ID}"/>
+            </ui:before>
+          </ui:addItemsPlugin>
+
+</exml:plugin>

@@ -1,4 +1,7 @@
 <%- @params[:parent_params].keys.each { |k| @params[k] = @params[:parent_params][k] } -%>
+<% if node['apache']['version'] != '2.4' -%>
+  NameVirtualHost *:<%= @params[:port] %>
+<% end -%>
 <VirtualHost *:<%= @params[:port] || node['apache']['listen_ports'].first %> >
   ServerName <%= @params[:server_name] %>
   <% unless @params[:server_aliases].nil? || @params[:server_aliases].empty? -%>

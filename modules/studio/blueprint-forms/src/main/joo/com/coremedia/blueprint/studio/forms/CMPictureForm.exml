@@ -10,6 +10,7 @@
   <exml:import class="com.coremedia.blueprint.studio.CustomLabels_properties"/>
   <exml:import class="com.coremedia.cms.editor.sdk.config.documentForm"/>
   <exml:import class="com.coremedia.blueprint.studio.BlueprintDocumentTypes_properties"/>
+  <exml:import class="com.coremedia.cms.editor.sdk.premular.fields.BooleanPropertyField"/>
 
   <exml:constant name="IMAGE_EDITOR_ITEM_ID" value="imageEditor"/>
   <exml:constant name="COPYRIGHT_FORM_ITEM_ID" value="copyrightFormItemId"/>

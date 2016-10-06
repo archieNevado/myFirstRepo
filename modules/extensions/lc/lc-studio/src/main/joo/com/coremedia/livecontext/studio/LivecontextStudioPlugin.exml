@@ -193,12 +193,13 @@
         </plugins>
       </editor:headerToolbarUserMenu>
       <!--Reload frame when changing the workspace-->
-      <editor:previewPanel>
+      <editor:previewIFrameToolbar>
         <plugins mode="append">
           <ui:bindPlugin bindTo="{CatalogHelper.getInstance().getCommerceWorkspaceExpression()}"
                          boundValueChanged="{reloadPreview}"/>
+          <livecontext:addFragmentHighlightButton/>
         </plugins>
-      </editor:previewPanel>
+      </editor:previewIFrameToolbar>
       <!-- Register product view for the workArea-->
       <editor:workArea>
         <plugins>

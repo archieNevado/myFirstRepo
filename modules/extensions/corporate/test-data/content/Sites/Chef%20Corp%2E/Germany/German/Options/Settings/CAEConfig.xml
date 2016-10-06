@@ -14,7 +14,7 @@
 <IntProperty Name="square.max.length">140</IntProperty>
 <BooleanProperty Name="breadcrumbHideLastElement">true</BooleanProperty>
 <StringProperty Name="sitemapOrgConfiguration">corporate</StringProperty>
-<LinkProperty Name="svgSprite" LinkType="coremedia:///cap/contenttype/CMImage" xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/images/svg-sprite%2Esvg.xml" cmexport:path="/Themes/corporate/images/svg-sprite%2Esvg"/>
+<LinkProperty Name="svgSprite" LinkType="coremedia:///cap/contenttype/CMImage" xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/img/button_video_play%2Esvg.xml" cmexport:path="/Themes/corporate/img/button_video_play%2Esvg"/>
 </Struct>
 </settings>
 <identifier></identifier>

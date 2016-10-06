@@ -16,6 +16,7 @@ package com.coremedia.livecontext.elastic.social.cae.springsecurity;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.SocialAuthenticationToken;
+import com.coremedia.elastic.social.springsecurity.UserAuthenticationProvider;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import org.springframework.beans.factory.annotation.Required;
@@ -33,7 +34,7 @@ import static java.lang.String.format;
 /**
  * Spring security authentication provider that uses the commerce user service to login instead of elastic.
  */
-public class LiveContextUserAuthenticationProvider implements AuthenticationProvider {
+public class LiveContextUserAuthenticationProvider extends UserAuthenticationProvider implements AuthenticationProvider {
 
   private CommunityUserService communityUserService;
   private UserSessionService commerceUserSessionService;
@@ -77,7 +78,7 @@ public class LiveContextUserAuthenticationProvider implements AuthenticationProv
     return new UsernamePasswordAuthenticationToken(
             new UserPrincipal(communityUser.getId(), communityUser.getName()),
             credentials,
-            authentication.getAuthorities()
+            getAuthorities(communityUser)
     );
   }
 
@@ -97,7 +98,7 @@ public class LiveContextUserAuthenticationProvider implements AuthenticationProv
     return new UsernamePasswordAuthenticationToken(
             new UserPrincipal(communityUser.getId(), communityUser.getName()),
             "",
-            authentication.getAuthorities()
+            getAuthorities(communityUser)
     );
   }
 

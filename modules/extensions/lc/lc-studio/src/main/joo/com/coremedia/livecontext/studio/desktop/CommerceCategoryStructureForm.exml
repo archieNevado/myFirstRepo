@@ -15,13 +15,12 @@
   <exml:import class="com.coremedia.ecommerce.studio.helper.AugmentationUtil"/>
   <exml:import class="com.coremedia.livecontext.studio.LivecontextStudioPluginBase"/>
 
-  <exml:var name="BUNDLE" value="{LivecontextStudioPlugin_properties.INSTANCE}" type="LivecontextStudioPlugin_properties"/>
   <exml:var name="catalogObjectExpression" type="com.coremedia.ui.data.ValueExpression"
             value="{AugmentationUtil.getCatalogObjectExpression(config.bindTo)}"/>
 
-  <editor:documentForm title="{BUNDLE.Commerce_Tab_structure_title}">
+  <editor:documentForm title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Tab_structure_title}">
     <items>
-      <editor:collapsibleFormPanel title="{BUNDLE.Commerce_Category_Website_Navigation}"
+      <editor:collapsibleFormPanel title="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_Website_Navigation}"
                                    itemId="websiteNavigation">
         <plugins>
           <ui:bindVisibilityPlugin bindTo="{LivecontextStudioPluginBase.isContentLedValueExpression(config.bindTo)}"/>
@@ -33,7 +32,7 @@
           <spacer height="6"/>
           <livecontext:readOnlyCatalogLinkProperty
                   propertyName="{CatalogObjectPropertyNames.SUB_CATEGORIES}"
-                  emptyText="{BUNDLE.Commerce_Category_subcategories_emptyText}"/>
+                  emptyText="{LivecontextStudioPlugin_properties.INSTANCE.Commerce_Category_subcategories_emptyText}"/>
         </items>
       </editor:collapsibleFormPanel>
       <livecontext:commerceCatalogHierarchyForm itemId="catalogHierarchy"/>

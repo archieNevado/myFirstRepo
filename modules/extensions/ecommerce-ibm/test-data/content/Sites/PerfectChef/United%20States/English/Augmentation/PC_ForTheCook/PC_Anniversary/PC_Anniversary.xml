@@ -31,6 +31,8 @@
 </javaScript>
 <css>
 </css>
+<theme>
+</theme>
 <placement>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
@@ -44,10 +46,16 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Categories/03_For%20The%20Cook/Anniversary/Anniversary%20Header%20Article.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Anniversary/Anniversary%20Header%20Article"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Navigation/e-Marketing%20Spots/Perfect%20Chef%20Anniversary%20Product%20e-Marketb084daa3.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/e-Marketing%20Spots/Perfect%20Chef%20Anniversary%20Product%20e-Marketing%20Spot"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Categories/03_For%20The%20Cook/Anniversary/Anniversary%20Header%20Article.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Anniversary/Anniversary%20Header%20Article"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/full-details.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/full-details"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/above.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Options/Settings/Pagegrid/Placements/above"/>
 </Struct>
 </StructListProperty>
 </Struct>

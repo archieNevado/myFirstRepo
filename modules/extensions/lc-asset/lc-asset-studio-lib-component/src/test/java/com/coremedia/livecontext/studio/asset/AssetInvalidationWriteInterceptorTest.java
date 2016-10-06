@@ -6,7 +6,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.livecontext.asset.util.AssetHelper;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.LOCAL_SETTINGS;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -61,7 +60,7 @@ public class AssetInvalidationWriteInterceptorTest {
     when(contentWriteRequest.getEntity()).thenReturn(content);
     when(content.getRepository()).thenReturn(repository);
     Map<String, Object> properties = new HashMap<>();
-    properties.put(LOCAL_SETTINGS, newLocalSettings);
+    properties.put(NAME_LOCAL_SETTINGS, newLocalSettings);
     when(contentWriteRequest.getProperties()).thenReturn(properties);
   }
 

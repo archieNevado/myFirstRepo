@@ -1,0 +1,23 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+//Variables for brick
+$cm-tag-padding-base-vertical: $padding-base-vertical;
+$cm-tag-padding-base-horizontal: $padding-base-horizontal;
+$cm-tag-padding-small-vertical: $padding-small-vertical;
+$cm-tag-item-background-color: $brand-primary;
+$cm-tag-item-border-color: $brand-primary;
+$cm-tag-item-color: #ffffff;
+
+// Import Bricks
+@import "../../../../../lib/bricks/generic-templates/sass/tags";
+
+.#{$cm-tag-prefix} {
+  margin: 10px auto 0 auto;
+  width: 70%;
+
+  @include breakpoint(sm) {
+    padding: 0;
+  }
+}

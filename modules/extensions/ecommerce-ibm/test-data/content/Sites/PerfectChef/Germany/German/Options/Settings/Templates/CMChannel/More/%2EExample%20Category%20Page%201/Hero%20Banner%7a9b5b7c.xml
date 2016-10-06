@@ -5,7 +5,7 @@
 <link href="../../../../../../../../United%20States/English/Options/Settings/Templates/CMChannel/More/%2EExample%20Category%20Page%201/Hero%f6f6c157.xml" path="/Sites/PerfectChef/United%20States/English/Options/Settings/Templates/CMChannel/More/%2EExample%20Category%20Page%201/Hero%20Banner%20Collection"/>
 </master>
 <viewtype>
-<link href="../../../../../Viewtypes/CMCollection/slideshow.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMCollection/slideshow"/>
+<link href="../../../../../Viewtypes/CMChannel/carousel.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMChannel/carousel"/>
 </viewtype>
 <linkedSettings>
 </linkedSettings>

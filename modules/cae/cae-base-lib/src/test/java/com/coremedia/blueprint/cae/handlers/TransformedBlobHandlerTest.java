@@ -23,6 +23,7 @@ import javax.activation.MimeTypeParseException;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -38,7 +39,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TransformedBlobHandlerTest extends HandlerBaseTest {
 
-  private static final String URI = "/resource/image/1234/transformName/100/100/digest/So/london.jpg";
+  private static final String URI = "/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/So/london.jpg";
   public static final int CONTENT_ID = 1234;
 
   final String propertyName = "propertyName";
@@ -161,7 +162,7 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     String japaneseName = "\u8A66\u9A13\u753B\u50CF";
     String urlEncodedName = "%E8%A9%A6%E9%A8%93%E7%94%BB%E5%83%8F";
 
-    String urlWithJapaneseSegment = "/resource/image/1234/transformName/100/100/digest/aW/" + urlEncodedName + ".jpg";
+    String urlWithJapaneseSegment = "/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/aW/" + urlEncodedName + ".jpg";
 
     // for now, assume that the path formatting helper does not mangle any of the Japanese characters
     when(getUrlPathFormattingHelper().tidyUrlPath(japaneseName)).thenReturn(japaneseName);
@@ -184,14 +185,14 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     when(getIdContentBeanConverter().convert("666")).thenReturn(cmMedia);
     when(cmMedia.getContentId()).thenReturn(666);
 
-    assertNotFound("extension", handleRequest("/resource/image/1234/transformName/100/100/digest/So/london.png"));
-    assertNotFound("name", handleRequest("/resource/image/1234/transformName/100/100/digest/So/london-broken.jpg"));
-    assertNotFound("digest", handleRequest("/resource/image/1234/transformName/100/100/xxxxx/So/london.jpg"));
-    assertNotFound("width", handleRequest("/resource/image/1234/transformName/101/100/digest/So/london.jpg"));
-    assertNotFound("height", handleRequest("/resource/image/1234/transformName/100/101/digest/So/london.jpg"));
-    assertNotFound("transform", handleRequest("/resource/image/1234/transformXXX/100/100/digest/So/london.jpg"));
-    assertNotFound("id", handleRequest("/resource/image/666/transformName/100/100/digest/So/london.jpg"));
-    assertNotFound("hash", handleRequest("/resource/image/1234/transformName/100/100/digest/XXX/london.jpg"));
+    assertNotFound("extension", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/So/london.png"));
+    assertNotFound("name", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/So/london-broken.jpg"));
+    assertNotFound("digest", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/xxxxx/So/london.jpg"));
+    assertNotFound("width", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/101/100/digest/So/london.jpg"));
+    assertNotFound("height", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/101/digest/So/london.jpg"));
+    assertNotFound("transform", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformXXX/100/100/digest/So/london.jpg"));
+    assertNotFound("id", handleRequest("/" + PREFIX_RESOURCE + "/image/666/transformName/100/100/digest/So/london.jpg"));
+    assertNotFound("hash", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/XXX/london.jpg"));
 
     verify(cmMedia, never()).getTransformedData(anyString());
     verify(transformImageService, never()).transformWithDimensions(any(Content.class), any(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt());

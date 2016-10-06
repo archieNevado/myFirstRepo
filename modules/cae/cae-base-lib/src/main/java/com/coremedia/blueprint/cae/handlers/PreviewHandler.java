@@ -59,6 +59,9 @@ public class PreviewHandler extends IdRedirectHandlerBase {
     if (StringUtils.isNotEmpty(siteId)) {
       request.getSession(true).setAttribute(RequestAttributeConstants.ATTR_NAME_PAGE_SITE, siteId);
     }
+    else {
+      request.getSession(true).setAttribute(RequestAttributeConstants.ATTR_NAME_PAGE_SITE, null);
+    }
   }
 
   /**

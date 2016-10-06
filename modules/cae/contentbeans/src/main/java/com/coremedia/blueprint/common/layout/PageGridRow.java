@@ -7,5 +7,15 @@ import java.util.List;
  * without row spanning placements from upper rows.
  */
 public interface PageGridRow {
+  /**
+   * Returns the placements of this row.
+   * @return the placements of this row.
+   */
   List<PageGridPlacement> getPlacements();
+
+  /**
+   * Checks if one of the placements of this row has at least one item
+   * @return true if one of the placements of this row has at least one item
+   */
+  boolean getHasItems();
 }

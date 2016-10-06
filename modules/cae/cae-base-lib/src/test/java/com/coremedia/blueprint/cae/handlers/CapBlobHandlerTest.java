@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
 
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -28,11 +29,11 @@ import static org.mockito.Mockito.when;
  */
 public class CapBlobHandlerTest extends HandlerBaseTest {
 
-  private static final String URI_JPG = "/resource/blob/1234/567/nae-me-jpg-propertyName.jpg";
-  private static final String URI_ANY = "/resource/blob/1234/567/nae-me-jpg-propertyName.any";
-  private static final String URI_RAW = "/resource/blob/1234/567/nae-me-jpg-propertyName.raw";
-  private static final String URI_PNG = "/resource/blob/1234/567/nae-me-jpg-propertyName.png";
-  private static final String URI_PDF = "/resource/blob/1236/569/a-pdf-pdf-propertyName.pdf";
+  private static final String URI_JPG = "/" + PREFIX_RESOURCE + "/blob/1234/567/nae-me-jpg-propertyName.jpg";
+  private static final String URI_ANY = "/" + PREFIX_RESOURCE + "/blob/1234/567/nae-me-jpg-propertyName.any";
+  private static final String URI_RAW = "/" + PREFIX_RESOURCE + "/blob/1234/567/nae-me-jpg-propertyName.raw";
+  private static final String URI_PNG = "/" + PREFIX_RESOURCE + "/blob/1234/567/nae-me-jpg-propertyName.png";
+  private static final String URI_PDF = "/" + PREFIX_RESOURCE + "/blob/1236/569/a-pdf-pdf-propertyName.pdf";
   private static final String CONTENT_ID = "1234";
   private static final String ETAG = "567";
 
@@ -178,7 +179,7 @@ public class CapBlobHandlerTest extends HandlerBaseTest {
     // the segment will be encoded in UTF-8, requiring three bytes per character.
     // The UTF-8, URL encoded segment equivalent to these four characters, is "%E8%A9%A6%E9%A8%93%E7%94%BB%E5%83%8F".
     String japaneseName = "\u8A66\u9A13\u753B\u50CF.jpg";
-    String url = "/resource/blob/1234/567/" + japaneseName + "-jpg-propertyName.jpg";
+    String url = "/" + PREFIX_RESOURCE + "/blob/1234/567/" + japaneseName + "-jpg-propertyName.jpg";
 
     when(content.getName()).thenReturn(japaneseName);
 

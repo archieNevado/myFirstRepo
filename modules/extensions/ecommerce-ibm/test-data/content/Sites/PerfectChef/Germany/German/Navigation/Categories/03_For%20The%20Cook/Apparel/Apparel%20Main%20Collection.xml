@@ -5,7 +5,7 @@
 <link href="../../../../../../United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Apparel%20Main%20Collection.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Categories/03_For%20The%20Cook/Apparel/Apparel%20Main%20Collection"/>
 </master>
 <viewtype>
-<link href="../../../../Options/Viewtypes/CMCollection/tiles-layout-right.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMCollection/tiles-layout-right"/>
+<link href="../../../../Options/Viewtypes/CMChannel/tiles-layout-right.xml" path="/Sites/PerfectChef/Germany/German/Options/Viewtypes/CMChannel/tiles-layout-right"/>
 </viewtype>
 <linkedSettings>
 </linkedSettings>

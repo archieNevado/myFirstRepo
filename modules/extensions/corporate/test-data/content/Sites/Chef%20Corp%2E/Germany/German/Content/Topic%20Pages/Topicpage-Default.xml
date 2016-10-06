@@ -15,7 +15,7 @@
 <LinkListProperty Name="documents" LinkType="coremedia:///cap/contenttype/CMChannel">
 <Link xlink:href="coremedia:///cap/resources/../Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page"/>
 </LinkListProperty>
-<StringProperty Name="documenttype">CMArticle,CMVideo</StringProperty>
+<StringProperty Name="documenttype">CMArticle,CMVideo,CMGallery</StringProperty>
 </Struct>
 </StructProperty>
 <StringProperty Name="order">freshness desc</StringProperty>

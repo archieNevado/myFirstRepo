@@ -146,7 +146,6 @@
     <property name="sourceMap">
       <map>
         <entry key="com.coremedia.xml.Markup" value-ref="richtextMarkupView"/>
-        <entry key="com.coremedia.xml.Markup#sections" value-ref="sectionsRichtextMarkupView"/>
         <entry key="com.coremedia.cap.common.Blob" value-ref="blobView"/>
         <entry key="com.coremedia.objectserver.view.events.ViewHookEvent" value-ref="viewHookEventView"/>
         <entry key="java.lang.Throwable" value-ref="errorView"/>
@@ -213,7 +212,13 @@
 
   <customize:prepend id="addCommonRepositoryName" bean="viewRepositories" order="1000">
     <list>
-      <value>basic</value>
+      <value>common</value>
+    </list>
+  </customize:prepend>
+
+  <customize:prepend id="addBricksRepositoryName" bean="viewRepositories">
+    <list>
+      <value>bricks</value>
     </list>
   </customize:prepend>
 
@@ -270,11 +275,6 @@
         </property>
         <property name="predicates" ref="dynamicIncludePredicates"/>
       </bean>
-      <bean class="com.coremedia.blueprint.cae.view.viewtype.ViewTypeRenderNodeDecoratorProvider">
-        <property name="decorator">
-          <bean class="com.coremedia.blueprint.cae.view.CollectionUnboxedRenderNodeDecorator"/>
-        </property>
-      </bean>
     </list>
   </customize:append>
 
@@ -316,7 +316,6 @@
   <customize:replace id="customizeTemplateLocationPatterns" bean="templateLocationPatterns" order="0">
     <description>Register the Blueprint specific template location patterns</description>
     <list>
-      <value>/WEB-INF/templates/sites/%s</value>
       <value>/WEB-INF/templates/%s</value>
     </list>
   </customize:replace>
@@ -328,8 +327,8 @@
       the other one replaces the list (!)
     </description>
     <list>
-      <value>jar:id:contentproperty:/Themes/%1$s/templates/%1$s-templates.jar/archive!/META-INF/resources/WEB-INF/templates/sites/%1$s</value>
       <value>jar:id:contentproperty:/Themes/%1$s/templates/%1$s-templates.jar/archive!/META-INF/resources/WEB-INF/templates/%1$s</value>
+      <value>jar:id:contentproperty:/Themes/%1$s/templates/%1$s-templates.jar/archive!/META-INF/resources/WEB-INF/templates/bricks</value>
     </list>
   </customize:prepend>
 

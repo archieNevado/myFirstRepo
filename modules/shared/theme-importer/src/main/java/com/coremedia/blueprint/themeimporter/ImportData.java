@@ -4,6 +4,7 @@ import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.xml.XmlUtil5;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,12 @@ import org.xml.sax.SAXException;
 import javax.activation.MimeTypeParseException;
 import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -30,14 +34,17 @@ class ImportData {
   private final MimeTypeService mimeTypeService;
   private final CapConnection capConnection;
 
-  private Map<String, String> cssFiles = new HashMap<>();
-  private Map<String, String> jsFiles = new HashMap<>();
-  private Map<String, Document> xmlFiles = new HashMap<>();
-  private Map<String, String> propertyFiles = new HashMap<>();
-  private Map<String, Blob> webFontFiles = new HashMap<>();
-  private Map<String, Blob> imageFiles = new HashMap<>();
-  private Map<String, Blob> interactiveFiles = new HashMap<>();
-  private Map<String, Blob> templateSetFiles = new HashMap<>();
+  // LinkedHashMaps in order to preserve the put order.
+  // Necessary for deterministic behaviour of multi theme import with
+  // conflicting data.
+  private Map<String, String> cssFiles = new LinkedHashMap<>();
+  private Map<String, String> jsFiles = new LinkedHashMap<>();
+  private Map<String, Document> xmlFiles = new LinkedHashMap<>();
+  private Map<String, String> propertyFiles = new LinkedHashMap<>();
+  private Map<String, Blob> webFontFiles = new LinkedHashMap<>();
+  private Map<String, Blob> imageFiles = new LinkedHashMap<>();
+  private Map<String, Blob> interactiveFiles = new LinkedHashMap<>();
+  private Map<String, Blob> templateSetFiles = new LinkedHashMap<>();
 
 
   // --- construct and configure ------------------------------------
@@ -109,37 +116,44 @@ class ImportData {
 
   // --- internal ---------------------------------------------------
 
-  private void processZipEntry(ZipInputStream zipStream, ZipEntry entry, String mimeType) throws IOException, MimeTypeParseException, SAXException, ParserConfigurationException {
+  private void processZipEntry(InputStream stream, ZipEntry entry, String mimeType) throws IOException, MimeTypeParseException, SAXException, ParserConfigurationException {
     String mimeTypeLC = mimeType.toLowerCase(Locale.ROOT);
     if (hasType(mimeTypeLC, "css")) {
-      cssFiles.put(entry.getName(), IOUtils.toString(zipStream));
+      cssFiles.put(entry.getName(), IOUtils.toString(stream));
     } else if (hasType(mimeTypeLC, "properties")) {
-      propertyFiles.put(entry.getName(), IOUtils.toString(zipStream));
+      propertyFiles.put(entry.getName(), readProperties(stream));
     } else if (hasType(mimeTypeLC, "javascript")) {
-      jsFiles.put(entry.getName(), IOUtils.toString(zipStream));
+      jsFiles.put(entry.getName(), IOUtils.toString(stream));
     } else if (hasType(mimeTypeLC, WEBFONT_TYPES)) {
-      putBlob(zipStream, entry, mimeType, webFontFiles);
+      putBlob(stream, entry, mimeType, webFontFiles);
     } else if (hasType(mimeTypeLC, IMAGE_TYPES)) {
-      putBlob(zipStream, entry, mimeType, imageFiles);
+      putBlob(stream, entry, mimeType, imageFiles);
     } else if (hasType(mimeTypeLC, "shockwave-flash")) {
-      putBlob(zipStream, entry, mimeType, interactiveFiles);
+      putBlob(stream, entry, mimeType, interactiveFiles);
     } else if (hasType(mimeTypeLC, "java-archive")) {
-      putBlob(zipStream, entry, mimeType, templateSetFiles);
+      putBlob(stream, entry, mimeType, templateSetFiles);
     } else if (hasType(mimeTypeLC, "xml")) {
-      xmlFiles.put(entry.getName(), new XmlUtil5(false).parse(IOUtils.toBufferedInputStream(zipStream)));
+      xmlFiles.put(entry.getName(), new XmlUtil5(false).parse(IOUtils.toBufferedInputStream(stream)));
     } else if (!entry.getName().endsWith(".map")) {
       LOG.warn("Ignoring file {} with mimetype {}", entry.getName(), mimeType);
     }
   }
 
-  private void putBlob(ZipInputStream zipStream, ZipEntry entry, String mimeType, Map<String, Blob> collection) throws MimeTypeParseException, IOException {
-    Blob data = capConnection.getBlobService().fromBytes(IOUtils.toByteArray(zipStream), mimeType);
+  @VisibleForTesting
+  String readProperties(InputStream stream) throws IOException {
+    // Properties files in the Java world are latin-1 encoded, due to
+    // Properties#load(InputStream).
+    return IOUtils.toString(new BufferedReader(new InputStreamReader(stream, StandardCharsets.ISO_8859_1)));
+  }
+
+  private void putBlob(InputStream stream, ZipEntry entry, String mimeType, Map<String, Blob> collection) throws MimeTypeParseException, IOException {
+    Blob data = capConnection.getBlobService().fromBytes(IOUtils.toByteArray(stream), mimeType);
     collection.put(entry.getName(), data);
   }
 
   private String getMimeType(ZipEntry entry) {
     String entryName = entry.getName();
-    String extension = entryName.substring(entryName.lastIndexOf(".") + 1, entryName.length());
+    String extension = entryName.substring(entryName.lastIndexOf('.') + 1, entryName.length());
     return mimeTypeService.getMimeTypeForExtension(extension);
   }
 

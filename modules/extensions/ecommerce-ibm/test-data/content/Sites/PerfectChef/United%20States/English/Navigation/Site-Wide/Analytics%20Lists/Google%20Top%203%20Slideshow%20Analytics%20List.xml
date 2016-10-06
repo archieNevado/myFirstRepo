@@ -4,7 +4,7 @@
 <master>
 </master>
 <viewtype>
-<link href="../../../Options/Viewtypes/CMCollection/slideshow.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMCollection/slideshow"/>
+<link href="../../../Options/Viewtypes/CMChannel/carousel.xml" path="/Sites/PerfectChef/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

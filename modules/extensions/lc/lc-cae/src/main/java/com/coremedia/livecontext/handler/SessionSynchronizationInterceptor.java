@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.services.SessionSynchronizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,19 @@ public class SessionSynchronizationInterceptor extends HandlerInterceptorAdapter
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse
           response, Object handler) throws GeneralSecurityException {
-    if (!RequestMethod.OPTIONS.toString().equals(request.getMethod()) && Commerce.getCurrentConnection() != null) {
-      try {
-        sessionSynchronizer.synchronizeUserSession(request, response);
-      } catch (GeneralSecurityException e) {
-        LOG.error("Could not synchronize the user sessions between CAE and commerce.", e);
-      }
+    if (RequestMethod.OPTIONS.toString().equals(request.getMethod())) {
+      return true;
+    }
+
+    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    if (currentConnection == null || currentConnection.getUserSessionService() == null) {
+      return true;
+    }
+
+    try {
+      sessionSynchronizer.synchronizeUserSession(request, response);
+    } catch (GeneralSecurityException e) {
+      LOG.error("Could not synchronize the user sessions between CAE and commerce.", e);
     }
 
     return true;

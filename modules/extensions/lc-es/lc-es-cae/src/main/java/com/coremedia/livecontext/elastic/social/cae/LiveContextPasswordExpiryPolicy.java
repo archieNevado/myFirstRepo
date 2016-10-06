@@ -1,7 +1,9 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.elastic.social.cae.user.PasswordExpiryPolicy;
 import com.coremedia.elastic.social.api.users.CommunityUser;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.user.User;
 import com.coremedia.livecontext.ecommerce.user.UserService;
 import org.springframework.beans.factory.annotation.Required;
@@ -13,7 +15,6 @@ import javax.annotation.Nonnull;
  * delegates the question whether a users password is expired or not to the commerce system.
  */
 public class LiveContextPasswordExpiryPolicy implements PasswordExpiryPolicy {
-  private UserService userService;
 
   /**
    * Unfortunately the {@link com.coremedia.livecontext.ecommerce.user.UserService person service} does
@@ -25,13 +26,11 @@ public class LiveContextPasswordExpiryPolicy implements PasswordExpiryPolicy {
    */
   @Override
   public boolean isExpiredFor(@Nonnull CommunityUser user) {
-    User person = userService.findCurrentUser();
-    return person != null && person.isPasswordExpired();
+    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    if(currentConnection != null && currentConnection.getUserService() != null) {
+      User person = currentConnection.getUserService().findCurrentUser();
+      return person != null && person.isPasswordExpired();
+    }
+    return false;
   }
-
-  @Required
-  public void setUserService(UserService userService) {
-    this.userService = userService;
-  }
-
 }

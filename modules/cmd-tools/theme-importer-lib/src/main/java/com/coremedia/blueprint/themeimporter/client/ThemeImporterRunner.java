@@ -19,6 +19,9 @@ import java.util.Map;
 /**
  * The ThemeImportRunner is being used by the workspace to create serverimportable content from theme resources.
  * <p>
+ * This simplifies automated initial deployments.  They can simply serverimport
+ * the themes along with any other initial content and do not need to run the
+ * ThemeImporter explicitely as an additional step.
  * <p>
  * How to use: Add the following plugin do your workspace and configure the two system properties themes_folder and export_path
  * <plugin>
@@ -47,7 +50,6 @@ public class ThemeImporterRunner {
 
 
   private boolean parseParameters() {
-
     if (StringUtils.hasText(System.getProperties().getProperty("import_folder"))) {
       folder = System.getProperties().getProperty("import_folder").trim();
     }
@@ -68,7 +70,7 @@ public class ThemeImporterRunner {
   public void run() {
     try {
       if (parseParameters()) {
-        CapConnection capConnection = ThemeImporterRunner.getCapConnection();
+        CapConnection capConnection = ThemeImporterRunner.createTmpCapConnection();
         MimeTypeService mimeTypeService = new DefaultMimeTypeService(true);
         ThemeImporter themeImporter = new ThemeImporter(capConnection, mimeTypeService);
 
@@ -108,7 +110,7 @@ public class ThemeImporterRunner {
   }
 
 
-  private static CapConnection getCapConnection() {
+  private static CapConnection createTmpCapConnection() {
     XmlCapConnectionFactory factory = new XmlCapConnectionFactory();
     Map<String, String> parameterMap = XmlUapiConfig.builder().withContentTypes("classpath:framework/doctypes/blueprint/blueprint-doctypes.xml").build().getParameterMap();
     CapConnection xmlRepositoryConnection = factory.prepare(parameterMap);

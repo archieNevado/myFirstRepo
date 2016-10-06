@@ -274,7 +274,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
       StoreContext storeContext = commerceConnection.getStoreContext();
       if (contractService!=null && storeContext!=null) {
         UserContext userContext = commerceConnection.getUserContext();
-        Collection<String> contractIdsForUser = contractIds(contractService, storeContext, userContext);
+        Collection<String> contractIdsForUser = contractIds(contractService, storeContext, userContext, (String) fragmentContext.get("user.organization.id"));
         Collection intersection = CollectionUtils.intersection(contractIdsForUser, contractIdsFromContext);
         if (!intersection.isEmpty()) {
           storeContext.setContractIds(Arrays.copyOf(intersection.toArray(), intersection.size(), String[].class));
@@ -294,9 +294,10 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
   private Collection<String> contractIds(ContractService contractService,
                                          StoreContext storeContext,
-                                         UserContext userContext) {
+                                         UserContext userContext,
+                                         String organizationId) {
     Collection<String> contractIdsForUser = new ArrayList<>();
-    Collection<Contract> contractsForUser = contractService.findContractIdsForUser(userContext, storeContext);
+    Collection<Contract> contractsForUser = contractService.findContractIdsForUser(userContext, storeContext, organizationId);
     if (contractsForUser!=null) {
       for (Contract contract : contractsForUser) {
         contractIdsForUser.add(contract.getExternalTechId());

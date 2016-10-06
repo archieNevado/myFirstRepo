@@ -20,11 +20,7 @@
 
   <customize:append id="addLiveContextFeedablePopulators" bean="feedablePopulators">
     <list>
-      <bean class="com.coremedia.amaro.cae.feeder.ContentBeanToContentFeedablePopulatorAdapter">
-        <constructor-arg index="0" name="delegate">
-          <bean class="com.coremedia.livecontext.feeder.CommerceItemsPopulator"/>
-        </constructor-arg>
-      </bean>
+      <bean class="com.coremedia.livecontext.feeder.CommerceItemsPopulator"/>
     </list>
   </customize:append>
 

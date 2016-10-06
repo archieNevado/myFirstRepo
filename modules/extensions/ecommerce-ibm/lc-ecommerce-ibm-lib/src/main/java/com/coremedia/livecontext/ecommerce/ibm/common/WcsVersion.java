@@ -1,23 +1,22 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.google.common.base.Optional;
-
 import javax.annotation.Nonnull;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 
 /**
  * Enumeration type for WCS versions.
  */
 public enum WcsVersion {
 
-  WCS_VERSION_UNKNOWN(0.0F),
-
-  WCS_VERSION_7_6(7.6F),
-
-  WCS_VERSION_7_7(7.7F),
-
-  WCS_VERSION_7_8(7.8F),
-
-  WCS_VERSION_8_0(8.0F);
+  WCS_VERSION_UNKNOWN(0.0f),
+  WCS_VERSION_7_6(7.6f),
+  WCS_VERSION_7_7(7.7f),
+  WCS_VERSION_7_8(7.8f),
+  WCS_VERSION_8_0(8.0f);
 
   private final float version;
 
@@ -31,17 +30,25 @@ public enum WcsVersion {
    * @param wcsVersion a version String, e.g., 7.6
    * @return the optional wcversion enum instance
    */
+  @Nonnull
   public static Optional<WcsVersion> fromVersionString(@Nonnull String wcsVersion) {
+    Optional<Float> value = tryParseFloat(wcsVersion);
+    return value.isPresent() ? findWcsVersion(value.get()) : empty();
+  }
+
+  @Nonnull
+  private static Optional<Float> tryParseFloat(@Nonnull String wcsVersion) {
     try {
-      Float value = Float.parseFloat(wcsVersion);
-      for (WcsVersion version : WcsVersion.values()) {
-        if (value.compareTo(version.version) == 0) {
-          return Optional.of(version);
-        }
-      }
+      float parsed = Float.parseFloat(wcsVersion);
+      return ofNullable(parsed);
     } catch (NumberFormatException ignored) {
+      return empty();
     }
-    return Optional.absent();
+  }
+
+  @Nonnull
+  private static Optional<WcsVersion> findWcsVersion(@Nonnull Float value) {
+    return Stream.of(values()).filter(version1 -> value.compareTo(version1.version) == 0).findFirst();
   }
 
   @Nonnull

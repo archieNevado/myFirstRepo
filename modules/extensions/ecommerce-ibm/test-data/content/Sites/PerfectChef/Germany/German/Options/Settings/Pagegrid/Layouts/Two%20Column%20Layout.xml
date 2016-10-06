@@ -6,7 +6,7 @@
 </master>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<IntProperty Name="colCount">2</IntProperty>
+<IntProperty Name="colCount">12</IntProperty>
 <IntProperty Name="rowCount">5</IntProperty>
 <StringProperty Name="cssClass">lc-two-column</StringProperty>
 <StructListProperty Name="items">
@@ -16,7 +16,7 @@
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="height">10</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="colspan">2</IntProperty>
+<IntProperty Name="colspan">12</IntProperty>
 </Struct>
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/main.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
@@ -24,15 +24,15 @@
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="height">50</IntProperty>
 <IntProperty Name="width">67</IntProperty>
-<IntProperty Name="colspan">1</IntProperty>
+<IntProperty Name="colspan">8</IntProperty>
 </Struct>
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/sidebar.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/sidebar"/>
 <IntProperty Name="row">3</IntProperty>
-<IntProperty Name="col">2</IntProperty>
+<IntProperty Name="col">9</IntProperty>
 <IntProperty Name="height">50</IntProperty>
 <IntProperty Name="width">33</IntProperty>
-<IntProperty Name="colspan">1</IntProperty>
+<IntProperty Name="colspan">4</IntProperty>
 </Struct>
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/footer.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/footer"/>
@@ -40,7 +40,7 @@
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="height">10</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="colspan">2</IntProperty>
+<IntProperty Name="colspan">12</IntProperty>
 </Struct>
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/header-advertisement.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/header-advertisement"/>
@@ -48,7 +48,7 @@
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="height">10</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="colspan">2</IntProperty>
+<IntProperty Name="colspan">12</IntProperty>
 </Struct>
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/footer-advertisement.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Settings/Pagegrid/Placements/footer-advertisement"/>
@@ -56,7 +56,7 @@
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="height">10</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="colspan">2</IntProperty>
+<IntProperty Name="colspan">12</IntProperty>
 </Struct>
 </StructListProperty>
 <StringProperty Name="name">LiveContext Two Column Layout</StringProperty>

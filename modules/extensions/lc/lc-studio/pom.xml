@@ -14,6 +14,7 @@
   <properties>
     <coremedia.project.extension.for>studio</coremedia.project.extension.for>
     <skipJooUnitTests>true</skipJooUnitTests>
+    <sprites.name>lc-studio-icons</sprites.name>
   </properties>
 
   <dependencies>
@@ -131,6 +132,58 @@
         <configuration>
           <jooUnitTestExecutionTimeout>120000</jooUnitTestExecutionTimeout>
             <skipJooUnitTests>${skipJooUnitTests}</skipJooUnitTests>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>net.jangaroo</groupId>
+        <artifactId>smartsprites-maven-plugin</artifactId>
+        <configuration>
+          <rootDirPath>src/main/sprites</rootDirPath>
+          <outputDirPath>target/generated-resources/META-INF/resources/joo/resources/css/icons</outputDirPath>
+        </configuration>
+        <executions>
+          <execution>
+            <id>createSprites</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>createSprites</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.primefaces.extensions</groupId>
+        <artifactId>resources-optimizer-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>optimize</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>optimize</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <compilationLevel>ADVANCED_OPTIMIZATIONS</compilationLevel>
+          <warningLevel>VERBOSE</warningLevel>
+          <failOnWarning>true</failOnWarning>
+          <resourcesSets>
+            <resourcesSet>
+              <inputDir>target/generated-resources/META-INF/resources/joo/resources/css/icons</inputDir>
+              <includes>
+                <include>**/*.css</include>
+              </includes>
+              <aggregations>
+                <aggregation>
+                  <prependedFile>src/main/prepend/prepend.css</prependedFile>
+                  <removeIncluded>true</removeIncluded>
+                  <withoutCompress>false</withoutCompress>
+                  <outputFile>target/generated-resources/META-INF/resources/joo/resources/css/icons/${sprites.name}.css</outputFile>
+                </aggregation>
+              </aggregations>
+            </resourcesSet>
+          </resourcesSets>
         </configuration>
       </plugin>
 

@@ -1,0 +1,21 @@
+// Imports
+@import "base/imports";
+@import "../../../../lib/sass/utils/imports";
+
+/* =====================================================================================================================
+   Fall theme
+   Contains styling rules used for atoms/molecules used in perfectchef fall theme
+   ================================================================================================================== */
+
+body {
+  background: #ff953e url("#{$path-to-images}autumn.jpg") repeat-x fixed;
+}
+
+.cm-placement-footer {
+  background-color: #fbf3e0;
+}
+
+.cm-grid {
+  background: #ffffff;
+  box-shadow: 30px -30px 80px 20px rgba(255, 255, 255, 1), -30px -30px 80px 20px rgba(255, 255, 255, 1), 30px 30px 80px 20px rgba(255, 255, 255, 1), -30px 30px 80px 20px rgba(255, 255, 255, 1);
+}

@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.assets.cae.DownloadPortalContext" -->
 
 <form class="am-search" method="get" role="search" data-hash-based-fragment-form="">
-  <label for="searchterm" class="am-search__label">${bp.getMessage("search.label")}</label>
+  <label for="searchterm" class="am-search__label">${bp.getMessage("search_label")}</label>
   <div class="am-search__input">
     <input id="searchterm" type="search" class="am-input am-text-scalable" name="search" value="${self.getSearchTerm()}" placeholder="${bp.getMessage("am_search_placeholder")}" minlength="3" required=""/>
   </div>

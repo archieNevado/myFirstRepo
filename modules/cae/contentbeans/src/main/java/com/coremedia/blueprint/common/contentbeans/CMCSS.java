@@ -3,6 +3,7 @@ package com.coremedia.blueprint.common.contentbeans;
 
 import com.coremedia.cae.aspect.Aspect;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -60,5 +61,6 @@ public interface CMCSS extends CMAbstractCode {
    * @return a list of {@link CMCSS} objects
    */
   @Override
+  @Nonnull
   List<? extends CMCSS> getInclude();
 }

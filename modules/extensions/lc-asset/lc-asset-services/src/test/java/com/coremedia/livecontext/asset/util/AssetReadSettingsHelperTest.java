@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.COMMERCE;
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.LOCAL_SETTINGS;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_COMMERCE;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -29,7 +29,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class AssetReadSettingsHelperTest {
 
   private AssetReadSettingsHelper testling;
-  private List<String> PATHLIST = ImmutableList.of(LOCAL_SETTINGS, COMMERCE);
+  private List<String> PATHLIST = ImmutableList.of(NAME_LOCAL_SETTINGS, NAME_COMMERCE);
   @Mock
   private Map<String, Object> contentProperties;
 
@@ -55,7 +55,7 @@ public class AssetReadSettingsHelperTest {
     productList.add("secondProduct");
 
     contentProperties = new HashMap<>();
-    contentProperties.put(LOCAL_SETTINGS, localSettings);
+    contentProperties.put(NAME_LOCAL_SETTINGS, localSettings);
   }
 
   @Test

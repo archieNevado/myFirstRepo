@@ -14,6 +14,7 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
 import com.coremedia.blueprint.common.util.IsInProductionPredicate;
+import com.coremedia.blueprint.viewtype.ViewtypeService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
@@ -28,6 +29,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
   private static final String CONTENT_PROPERTIES_PROPERTY = "properties";
   private ValidationService<Linkable> validationService;
   private ContentBackedPageGridService contentBackedPageGridService;
+  private ViewtypeService viewtypeService;
 
   private CMNavigation navigation;
   private int row;
@@ -43,13 +45,18 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
 
   // --- construction -----------------------------------------------
 
-  public ContentBeanBackedPageGridPlacement(CMNavigation navigation, int row, int columns, int colIndex, ContentBackedPageGridService contentBackedPageGridService, ValidationService<Linkable> validationService) {
+  public ContentBeanBackedPageGridPlacement(CMNavigation navigation,
+                                            int row, int columns, int colIndex,
+                                            ContentBackedPageGridService contentBackedPageGridService,
+                                            ValidationService<Linkable> validationService,
+                                            ViewtypeService viewtypeService) {
     this.navigation = navigation;
     this.row = row;
     this.columns = columns;
     this.colIndex = colIndex;
     this.contentBackedPageGridService = contentBackedPageGridService;
     this.validationService = validationService;
+    this.viewtypeService = viewtypeService;
   }
 
   /**
@@ -75,7 +82,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
   @Override
   public String getViewTypeName() {
     Content viewType = getDelegate().getViewtype();
-    return viewType ==  null ? null : viewType.getName();
+    return viewType==null ? null : viewtypeService.getLayout(viewType);
   }
 
   @Override
@@ -164,6 +171,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
     ContentBeanBackedPageGridPlacement other = (ContentBeanBackedPageGridPlacement) bean;
     validationService = other.validationService;
     contentBackedPageGridService = other.contentBackedPageGridService;
+    viewtypeService = other.viewtypeService;
     navigation = other.navigation;
     row = other.row;
     colIndex = other.colIndex;

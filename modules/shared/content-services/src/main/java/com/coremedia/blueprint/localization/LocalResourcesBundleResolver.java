@@ -74,15 +74,22 @@ public class LocalResourcesBundleResolver implements BundleResolver {
       return null;
     }
     String name = parent.getName();
-    String path = filepath("modules", "extensions", name, name+"-theme", "src", bundle.getName());
-    File file = new File(blueprintDir, path);
-    if (!file.exists() || file.isDirectory() || !file.canRead()) {
-      // Logging may be refined.  Info, because non-existence is likely
-      // if somebody works with a partial workspace.
-      LOG.info("File {} is not suitable as local resource bundle for {}, fallback to regular resolution", path, bundle.getPath());
-      return null;
+    // bundles in frontend themes location
+    String pathInThemes = filepath("modules", "frontend", "themes", name+"-theme", "src", bundle.getName());
+    File fileInThemes = new File(blueprintDir, pathInThemes);
+    // legacy themes location in extensions
+    String pathInExtensions = filepath("modules", "extensions", name, name+"-theme", "src", bundle.getName());
+    File fileInExtensions = new File(blueprintDir, pathInExtensions);
+
+    if (fileInThemes.exists() && !fileInThemes.isDirectory() && fileInThemes.canRead()) {
+      return fileInThemes;
+    } else if (fileInExtensions.exists() && !fileInExtensions.isDirectory() && fileInExtensions.canRead()) {
+      return fileInExtensions;
     }
-    return file;
+    // Logging may be refined.  Info, because non-existence is likely
+    // if somebody works with a partial workspace.
+    LOG.info("File {} is not suitable as local resource bundle for {}, fallback to regular resolution", bundle.getName(), bundle.getPath());
+    return null;
   }
 
   private Struct fileToStruct(File bundleFile) throws IOException {

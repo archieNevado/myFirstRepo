@@ -2,6 +2,8 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.pricing.PriceService;
+import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.services.SessionSynchronizer;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +35,8 @@ public class SessionSynchronizationInterceptorTest {
 
   @Test
   public void getRequest() throws GeneralSecurityException, IOException {
-    Commerce.setCurrentConnection(mock(CommerceConnection.class));
+    when(commerceConnection.getUserSessionService()).thenReturn(userSessionService);
+    Commerce.setCurrentConnection(commerceConnection);
     testling.preHandle(request, response, null);
 
     verify(request).getMethod();
@@ -59,6 +62,12 @@ public class SessionSynchronizationInterceptorTest {
 
   @Mock
   private SessionSynchronizer sessionSynchronizer;
+
+  @Mock
+  private CommerceConnection commerceConnection;
+
+  @Mock
+  private UserSessionService userSessionService;
 
   private static final String OPTIONS = "OPTIONS";
   private static final String GET = "GET";

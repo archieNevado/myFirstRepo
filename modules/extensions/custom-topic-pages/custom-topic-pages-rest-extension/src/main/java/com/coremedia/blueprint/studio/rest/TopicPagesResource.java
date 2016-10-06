@@ -27,10 +27,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -77,6 +79,7 @@ public class TopicPagesResource {
   private SitesService sitesService;
   private String siteConfigPath;
   private String globalConfigPath;
+  private String ignoredTaxonomies;
 
   // --- construction -----------------------------------------------
 
@@ -110,9 +113,13 @@ public class TopicPagesResource {
     this.capConnection = capConnection;
   }
 
+  public void setIgnoredTaxonomies(String ignoredTaxonomies) {
+    this.ignoredTaxonomies = ignoredTaxonomies;
+  }
+
   @GET
   @Path("settings")
-  public TopicPagesSettingsRepresentation getSettings(@QueryParam(TOPIC_PAGE_SITE) String siteId) {
+  public TopicPagesSettingsRepresentation getSettings(@QueryParam(TOPIC_PAGE_SITE) String siteId) { // NOSONAR  cyclomatic complexity
     TopicPagesSettingsRepresentation representation = new TopicPagesSettingsRepresentation();
     StructConfiguration config = configurationService.getStructMaps(siteId, TOPIC_PAGES_SETTINGS, "settings");
     representation.getAdminGroups().addAll(getGroupsFromStruct(config.getGlobalStructs()));
@@ -215,7 +222,7 @@ public class TopicPagesResource {
     Collections.sort(result.getItems(), new Comparator<TopicRepresentation>() {
       @Override
       public int compare(TopicRepresentation o1, TopicRepresentation o2) {
-        return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
+        return o1.getName().toLowerCase(Locale.ROOT).compareTo(o2.getName().toLowerCase(Locale.ROOT));
       }
     });
 
@@ -280,11 +287,25 @@ public class TopicPagesResource {
       for (Content taxonomyFolder : taxonomyFolders) {
         Set<Content> keywords = taxonomyFolder.getChildrenWithType(TOPIC_PAGE_CONTENT_TYPE);
         //only non empty folder are valid
-        if (!keywords.isEmpty()) {
+        if (!keywords.isEmpty() && isValid(taxonomyFolder)) {
           taxonomies.add(taxonomyFolder);
         }
       }
     }
+  }
+
+  /**
+   * Checks if the given taxonomy folder is a valid topic page taxonomy.
+   * @param taxonomiesFolder the folder to check
+   * @return true if the folder should be shown in the list of taxonomies
+   */
+  private boolean isValid(Content taxonomiesFolder) {
+    if(ignoredTaxonomies != null) {
+      String[] taxonomyNames = ignoredTaxonomies.split(",");
+      List<String> taxonomyNameList = Arrays.asList(taxonomyNames);
+      return !taxonomyNameList.contains(taxonomiesFolder.getName());
+    }
+    return true;
   }
 
   /**

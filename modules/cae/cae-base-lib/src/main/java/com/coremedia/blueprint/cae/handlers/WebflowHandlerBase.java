@@ -44,11 +44,10 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
    * This method must be implemented by extending classes and return an instance of {@link WebflowActionState}
    * (or an extending class)
    *
-   * @param action The action that represents the webflow
+   * @param action         The action that represents the webflow
    * @param webFlowOutcome the outcome of the webflow
-   * @param flowId the flow id
-   * @param flowViewId the flow view id
-   *
+   * @param flowId         the flow id
+   * @param flowViewId     the flow view id
    * @return the {@link WebflowActionState} instance
    */
   protected abstract WebflowActionState getWebflowActionState(CMAction action, ModelAndView webFlowOutcome, String flowId, String flowViewId);
@@ -58,37 +57,14 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
   /**
    * Handle the request.
    * May be called by different handler methods with different URI patterns.
-   *
+   * <p>
    * Delegates to Webflow handling if necessary.
    *
    * @param contentBean the action document to handle the request for
-   * @param context the context of the contentbean
-   * @param action the action name
-   * @param request the servletRequest
-   * @param response the servletResponse
-   *
-   * @return a valid {@link ModelAndView}
-   */
-  protected ModelAndView handleRequestInternal(ContentBean contentBean,
-                                               String context,
-                                               String action,
-                                               HttpServletRequest request,
-                                               HttpServletResponse response) {
-    return handleRequestInternal(contentBean, getNavigation(context), action, request, response);
-
-  }
-  /**
-   * Handle the request.
-   * May be called by different handler methods with different URI patterns.
-   *
-   * Delegates to Webflow handling if necessary.
-   *
-   * @param contentBean the action document to handle the request for
-   * @param navigation the context of the contentbean
-   * @param action the action name
-   * @param request the servletRequest
-   * @param response the servletResponse
-   *
+   * @param navigation  the context of the contentbean
+   * @param action      the action name
+   * @param request     the servletRequest
+   * @param response    the servletResponse
    * @return a valid {@link ModelAndView}
    */
   protected ModelAndView handleRequestInternal(ContentBean contentBean,
@@ -96,28 +72,19 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
                                                String action,
                                                HttpServletRequest request,
                                                HttpServletResponse response) {
-
     if (contentBean instanceof CMAction) {
       CMAction actionBean = (CMAction) contentBean;
-      // if name doesn't match the action: return "not found"
-      if (action.equals(getVanityName(actionBean))) {
-
-        // if no context available: return "not found"
-        if (navigation != null) {
-
-          // create the page that holds the action
-          Page page = asPage(navigation, actionBean);
-
-          // try to handle the action
-          if (actionBean.isWebFlow()) {
-
-            // it's a webflow action
-            return handleAsWebFlow(actionBean, page, request, response);
-          } else {
-
-            // unknown action type. return the surrounding page only.
-            return createModel(page);
-          }
+      // if name doesn't match the action or if no context available: return "not found"
+      if (action.equals(getVanityName(actionBean)) && navigation != null) {
+        // create the page that holds the action
+        Page page = asPage(navigation, actionBean);
+        // try to handle the action
+        if (actionBean.isWebFlow()) {
+          // it's a webflow action
+          return handleAsWebFlow(actionBean, page, request, response);
+        } else {
+          // unknown action type. return the surrounding page only.
+          return createModel(page);
         }
       }
     }
@@ -153,8 +120,7 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
       result.getModelMap().mergeAttributes(webFlowOutcome.getModel());
       result.setViewName(webFlowOutcome.getViewName());
       return webFlowOutcome;
-    }
-    else {
+    } else {
       // the response has been handled by webflow engine directly (e.g. by sending a redirect)
       return null;
     }

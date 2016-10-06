@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
   <!-- public imports for this service -->
   <import resource="classpath:/framework/spring/blueprint-contentbeans.xml"/>
@@ -11,6 +13,8 @@
   <!-- "private" imports needed for this file's beans -->
   <import resource="classpath:/framework/spring/blueprint-page.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-navigation.xml"/>
+
+  <context:component-scan base-package="com.coremedia.blueprint.viewtype.configuration"/>
 
   <bean name="contentBeanFactory:CMMarketingSpot" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMMarketingSpotImpl" scope="prototype">
@@ -39,11 +43,13 @@
   <bean id="pdpPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="pdpContentBackedPageGridService"/>
     <property name="validationService" ref="validationService"/>
+    <property name="viewtypeService" ref="viewtypeService"/>
   </bean>
 
   <bean id="extCategoryPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="extCategoryContentBackedPageGridService"/>
     <property name="validationService" ref="validationService"/>
+    <property name="viewtypeService" ref="viewtypeService"/>
   </bean>
 
   <bean id="extCategoryContentBackedPageGridService" class="com.coremedia.livecontext.pagegrid.ContentAugmentedPageGridServiceImpl"

@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.LOCAL_SETTINGS;
+import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
@@ -56,9 +56,9 @@ public class SpinnerSequenceAssetValidatorTest {
     contentProperties2 = new HashMap<>();
     contentProperties3 = new HashMap<>();
 
-    contentProperties1.put(LOCAL_SETTINGS, settings1);
-    contentProperties2.put(LOCAL_SETTINGS, settings2);
-    contentProperties3.put(LOCAL_SETTINGS, settings3);
+    contentProperties1.put(NAME_LOCAL_SETTINGS, settings1);
+    contentProperties2.put(NAME_LOCAL_SETTINGS, settings2);
+    contentProperties3.put(NAME_LOCAL_SETTINGS, settings3);
 
     when(pic1.getProperties()).thenReturn(contentProperties1);
     when(pic2.getProperties()).thenReturn(contentProperties2);

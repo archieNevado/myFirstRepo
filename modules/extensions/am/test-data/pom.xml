@@ -19,6 +19,7 @@
   </properties>
 
   <profiles>
+    <!-- get am-theme content -->
     <profile>
       <id>development-themes</id>
       <activation>
@@ -26,15 +27,7 @@
           <name>!skipThemes</name>
         </property>
       </activation>
-
       <dependencies>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>basic-theme</artifactId>
-          <version>${project.version}</version>
-          <classifier>theme</classifier>
-          <type>zip</type>
-        </dependency>
         <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>am-theme</artifactId>
@@ -48,7 +41,6 @@
           <version>${project.version}</version>
         </dependency>
       </dependencies>
-
       <build>
         <plugins>
           <plugin>
@@ -85,66 +77,73 @@
         </plugins>
       </build>
     </profile>
+
+    <!-- use -DskipContent to ignore content creation -->
+    <profile>
+      <id>create-test-data</id>
+      <activation>
+        <property>
+          <name>!skipContent</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <!-- Copy Content to target folder -->
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>am-copy-content-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/content</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>content</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+              <execution>
+                <id>am-copy-users-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/users</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>users</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- Build testdata zip -->
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-am-test-data-zip</id>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <descriptors>
+                    <descriptor>src/main/assembly/test-data-assembly-descriptor.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
-
-  <build>
-    <plugins>
-      <!-- Copy Content to target folder -->
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>basic-copy-content-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/content</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>content</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>basic-copy-users-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/users</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>users</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Build testdata zip -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-am-test-data-zip</id>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <descriptors>
-                <descriptor>src/main/assembly/test-data-assembly-descriptor.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>

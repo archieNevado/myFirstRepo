@@ -193,6 +193,10 @@ define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name =
   component_config_path = "#{service_dir}/#{service_name}.properties"
   node.override['blueprint']['tomcat'][service_name]['context_config']['env_entries']['propertieslocations']['value'] = "file://#{component_config_path}" unless component_config_hash.empty?
 
+  # logging bootstrap
+  node.override['blueprint']['tomcat'][service_name]['catalina_opts']['logback_config_file'] = "-Dlogging.config=file://#{service_dir}/logback.xml"
+  node.override['blueprint']['tomcat'][service_name]['catalina_opts']['logging_dir'] = "-Dlog.dir=#{node['blueprint']['log_dir']}/#{service_name}"
+
   # merge catalina opts
   catalina_opts = Mash.new
   catalina_opts = Chef::Mixin::DeepMerge.hash_only_merge!(catalina_opts, node['blueprint']['tomcat']['catalina_opts']) if node.deep_fetch('blueprint', 'tomcat', 'catalina_opts')
@@ -205,10 +209,6 @@ define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name =
   logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, node['blueprint']['tomcat'][base_service_name]['logback_config']) if base_service_name && node.deep_fetch('blueprint', 'tomcat', base_service_name, 'logback_config')
   logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, node['blueprint']['tomcat'][service_name]['logback_config']) if node.deep_fetch('blueprint', 'tomcat', service_name, 'logback_config')
   logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, 'properties' => { 'application.name' => service_name, 'application.version' => node['blueprint']['webapps'][service_name]['version'] }) unless logback_config_hash.empty?
-  # the log directory, you may override them in rare cases using force_override
-  node.default['blueprint']['tomcat'][service_name]['context_config']['env_entries']['coremedia/logging/directory']['value'] = "#{service_dir}/current/logs"
-  # allow to add a logback config on tomcat level
-  node.default['blueprint']['tomcat'][service_name]['context_config']['env_entries']['coremedia/logging/configuration']['value'] = "file://#{service_dir}/logback.xml WEB-INF/logback.xml classpath:/META-INF/resources/WEB-INF/logback-default.xml" unless logback_config_hash.empty?
 
   # merge the tomcat context config
   tomcat_context_config = Mash.new

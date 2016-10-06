@@ -10,7 +10,6 @@
   <import resource="livecontext-es-handler-interceptors.xml"/>
   <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
   <import resource="livecontext-es-webflow.xml"/>
-  <import resource="livecontext-es-cae-views.xml"/>
 
   <bean id="productReviewsResultHandler" class="com.coremedia.livecontext.elastic.social.cae.ProductReviewsResultHandler" parent="handlerBase"/>
 

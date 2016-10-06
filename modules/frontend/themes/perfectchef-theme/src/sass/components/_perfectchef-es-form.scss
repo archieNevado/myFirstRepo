@@ -1,0 +1,90 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+/* =====================================================================================================================
+   Layout for LiveContext with Elastic Social functionality
+   Contains styling rules used for Elastic Social integration in theme "perfectchef"
+   ================================================================================================================== */
+
+/* mobile */
+@include breakpoint(xs) {
+
+  /* --- form ------------------------------------------------------------------------------------------------------- */
+  .cm-form__notification {
+    margin-top: 13px;
+  }
+
+  .cm-form__notification,
+  .cm-fieldset__item,
+  .cm-field__notification {
+    margin-bottom: 13px;
+  }
+}
+
+/* tablet portrait */
+@include breakpoint(sm, portrait) {
+  .cm-form__notification {
+    margin-top: 8px;
+  }
+
+  .cm-form__notification,
+  .cm-fieldset__item,
+  .cm-field__notification {
+    margin-bottom: 8px;
+  }
+}
+
+@include breakpoint(sm, landscape) {
+
+  .cm-form__notification {
+    margin-top: 13px;
+  }
+
+  .cm-form__notification,
+  .cm-fieldset__item,
+  .cm-field__notification {
+    margin-bottom: 13px;
+  }
+}
+
+/* desktop */
+@include breakpoint(md) {
+
+  /* --- form ------------------------------------------------------------------------------------------------------- */
+  .cm-form-facebook,
+  .cm-form-twitter {
+    text-align: right;
+  }
+
+  .cm-field-group {
+    font-size: 0;
+  }
+
+  .cm-field-group__item {
+    font-size: 1rem;
+    display: inline-block;
+    width: 47.5%;
+    width: calc(50% - 5px);
+  }
+
+  .cm-field-group__item:nth-child(2n) {
+    margin-left: 2.5%;
+    margin-left: calc(5px);
+  }
+
+  .cm-field-group__item:nth-child(2n + 1) {
+    margin-right: 2.5%;
+    margin-right: calc(5px);
+  }
+
+  .cm-form__notification {
+    margin-top: 13px;
+  }
+
+  .cm-form__notification,
+  .cm-fieldset__item,
+  .cm-field__notification {
+    margin-bottom: 13px;
+  }
+}
