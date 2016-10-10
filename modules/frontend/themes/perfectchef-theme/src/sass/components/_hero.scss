@@ -88,4 +88,10 @@ $cm-hero-picture-background-color: none;
       line-height: 1.46rem;
     }
   }
+
+  @include breakpoint(md) {
+    &:hover .cm-teaser__button-group {
+      display: block;
+    }
+  }
 }

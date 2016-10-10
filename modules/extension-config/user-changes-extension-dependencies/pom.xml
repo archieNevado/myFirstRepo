@@ -20,7 +20,7 @@
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-notification-elastic-user-changes</artifactId>
-      <version>1604.4-21</version>
+      <version>1604.4-22</version>
       <type>pom</type>
       <scope>compile</scope>
     </dependency>

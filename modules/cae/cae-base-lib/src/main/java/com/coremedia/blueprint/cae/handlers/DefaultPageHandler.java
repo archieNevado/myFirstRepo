@@ -173,7 +173,7 @@ public class DefaultPageHandler extends PageHandlerBase {
     return buildLink(linkable, context, viewName, linkParameters);
   }
 
-  @Nonnull
+  @Nullable
   private UriComponentsBuilder buildLink(
           @Nonnull CMLinkable linkable,
           @Nonnull Navigation navigationContext,
@@ -183,6 +183,9 @@ public class DefaultPageHandler extends PageHandlerBase {
     //todo we have to generalize the contentLinkBuilder to cope with Navigation instances if we want to link to {CM}Linkables below a LiveContextNavigation, say
     Content navigationContent = ((CMNavigation) navigationContext).getContent();
     UriComponentsBuilder uriComponentsBuilder = getContentLinkBuilder().buildLinkForPage(targetContent, navigationContent);
+    if (uriComponentsBuilder == null) {
+      return null;
+    }
 
     // add optional view query parameter
     if (viewName != null) {

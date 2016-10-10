@@ -9,17 +9,16 @@
 <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
 
 <div class="${additionalClass}"<@cm.metadata self.content />>
-  <#-- picture -->
-  <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=additionalClass displayDimmer=renderDimmer displayEmptyImage=renderEmptyImage limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_hero_teaser", [])/>
-
-  <#if self.teaserTitle?has_content>
+  <@bp.optionalLink href="${link}">
+    <#-- picture -->
+    <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=additionalClass displayDimmer=renderDimmer displayEmptyImage=renderEmptyImage limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_hero_teaser", [])/>
     <#-- with banderole -->
     <div class="${additionalClass}__banderole row">
       <div class="col-xs-10 col-xs-push-1">
         <#-- headline -->
-        <@bp.optionalLink href="${link}">
+        <#if self.teaserTitle?has_content>
           <h1 class="${additionalClass}__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
-        </@bp.optionalLink>
+        </#if>
         <#-- teaser text -->
         <#if renderTeaserText && self.teaserText?has_content>
           <p class="${additionalClass}__text"<@cm.metadata "properties.teaserText" />>
@@ -32,5 +31,5 @@
         </#if>
       </div>
     </div>
-  </#if>
+  </@bp.optionalLink>
 </div>

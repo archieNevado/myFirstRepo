@@ -81,6 +81,13 @@ Contains styling definitions for all content types as cm-grid.
       }
     }
   }
+
+  //  rows with multi column layouts, e.g. sidebar need a max width container to stay inside the grid
+  .#{$prefix}multicolumn {
+    max-width: $screen-max;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 // sticky sidebar
@@ -143,5 +150,6 @@ Contains styling definitions for all content types as cm-grid.
 
 $cm-no-js-background: palette(black);
 $cm-no-js-color: palette(white);
+
 // Load brick scss file for page
 @import "../../../../../lib/bricks/bootstrap/sass/page";

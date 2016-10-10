@@ -64,11 +64,19 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
   }
 
   private void addUserSegmentsToStoreContext(List<String> userSegmentList){
-    StoreContext currentContext = getStoreContextProvider().getCurrentContext();
+    StoreContextProvider storeContextProvider = Commerce.getStoreContextProvider();
+    CommerceIdProvider commerceIdProvider = Commerce.getCommerceIdProvider();
+
+    if (storeContextProvider == null || commerceIdProvider == null) {
+      LOG.debug("at least one of storeContextProvider {} or commerceIdProvider {} is null", storeContextProvider, commerceIdProvider);
+      return;
+    }
+
+    StoreContext currentContext = storeContextProvider.getCurrentContext();
     if (currentContext != null){
       List<String> segmentIds = new ArrayList<>();
       for (String userSegment : userSegmentList) {
-        String segmentId = getCommerceIdProvider().parseExternalIdFromId(userSegment);
+        String segmentId = commerceIdProvider.parseExternalIdFromId(userSegment);
         if (segmentId != null) {
           segmentIds.add(segmentId);
         }
@@ -89,14 +97,6 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
   @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
-  }
-
-  public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
-  }
-
-  public CommerceIdProvider getCommerceIdProvider() {
-    return Commerce.getCurrentConnection().getIdProvider();
   }
 
 }

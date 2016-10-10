@@ -60,11 +60,19 @@ public class CommerceContractIdTestContextExtractor implements TestContextExtrac
   }
 
   private void addContractIdsForPreviewToStoreContext(List<String> contractList) {
-    StoreContext currentContext = getStoreContextProvider().getCurrentContext();
+    StoreContextProvider storeContextProvider = Commerce.getStoreContextProvider();
+    CommerceIdProvider commerceIdProvider = Commerce.getCommerceIdProvider();
+
+    if (storeContextProvider == null || commerceIdProvider == null) {
+      LOG.debug("at least one of storeContextProvider {} or commerceIdProvider {} is null", storeContextProvider, commerceIdProvider);
+      return;
+    }
+
+    StoreContext currentContext = storeContextProvider.getCurrentContext();
     if (currentContext != null) {
       List<String> contractIds = new ArrayList<>();
       for (String contract : contractList) {
-        String contractId = getCommerceIdProvider().parseExternalIdFromId(contract);
+        String contractId = commerceIdProvider.parseExternalIdFromId(contract);
         if (contractId != null) {
           contractIds.add(contractId);
         }
@@ -87,11 +95,4 @@ public class CommerceContractIdTestContextExtractor implements TestContextExtrac
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
-  }
-
-  public CommerceIdProvider getCommerceIdProvider() {
-    return Commerce.getCurrentConnection().getIdProvider();
-  }
 }
