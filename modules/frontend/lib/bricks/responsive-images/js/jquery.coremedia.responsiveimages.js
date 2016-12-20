@@ -1,40 +1,64 @@
-/**
- * Responsive Image Resizer Plugin
- *
- * Picks a suitable image from a given set of images regarding given dimensions and the maximum size needed.
- *
- * Version 1.6
- * Copyright (c) CoreMedia AG
- *
- * Usage: $(".cm-image--responsive").responsiveImage();
- *
- * Example:
- *
- * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="[
- *  {
- *    "name" : "3x1",
- *    "ratioWidth" : 3,
- *    "ratioHeight" : 1,
- *    "linksForWidth" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"}
- *  },
- *  {
- *    "name" : "2x1",
- *    "ratioWidth" : 2,
- *    "ratioHeight" : 1,
- *    "linksForWidth" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}
- *  }]" />
- *
- * @Deprecated legacy format
- * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="{
- *    "3x1" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"},
- *    "2x1" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}}" />
- *
- */
-
 /*! Responsive Image Resizer Plugin | Copyright (c) CoreMedia AG */
-;(function ($) {
+/**
+ * CoreMedia namespace
+ * @namespace coremedia
+ * @ignore
+ */
+var coremedia = (function (module) {
+  return module;
+}(coremedia || {}));
+
+/**
+ * CoreMedia Blueprint namespace
+ * @namespace "coremedia.blueprint"
+ * @ignore
+ */
+coremedia.blueprint = (function (module) {
+  /*global jQuery*/
+  module.$ = module.$ || jQuery;
+  return module;
+}(coremedia.blueprint || {}));
+
+(function ($) {
   "use strict";
 
+  /**
+   * Picks a suitable image from a given set of images regarding given dimensions and the maximum size needed.
+   *
+   * @function "coremedia.blueprint.$.fn.responsiveImages"
+   * @version 1.6
+   * @copyright CoreMedia AG
+   * @summary Responsive Image Resizer jQuery Plugin
+   * @example
+   * ###### Usage
+   * ```javascript
+   * $(".cm-image--responsive").responsiveImage();
+   * ```
+   *
+   * ###### HTML
+   * ```html
+   * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="[
+   *  {
+   *    "name" : "3x1",
+   *    "ratioWidth" : 3,
+   *    "ratioHeight" : 1,
+   *    "linksForWidth" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"}
+   *  },
+   *  {
+   *    "name" : "2x1",
+   *    "ratioWidth" : 2,
+   *    "ratioHeight" : 1,
+   *    "linksForWidth" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}
+   *  }]" />
+   * ```
+   *
+   * Deprecated legacy format:
+   * ```html
+   * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="{
+   *    "3x1" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"},
+   *    "2x1" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}}" />
+   * ```
+   */
   $.fn.responsiveImages = function () {
     return $.each(this, function (index, item) {
 

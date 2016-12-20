@@ -2,7 +2,6 @@ package com.coremedia.ecommerce.studio.components.search {
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.ecommerce.studio.config.catalogSearchListContainer;
 import com.coremedia.ui.components.SwitchingContainer;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -11,7 +10,7 @@ public class CatalogSearchListContainerBase extends SwitchingContainer {
 
   private var activeViewExpression:ValueExpression;
 
-  public function CatalogSearchListContainerBase(config:catalogSearchListContainer = null) {
+  public function CatalogSearchListContainerBase(config:CatalogSearchListContainer = null) {
     super(config);
   }
 

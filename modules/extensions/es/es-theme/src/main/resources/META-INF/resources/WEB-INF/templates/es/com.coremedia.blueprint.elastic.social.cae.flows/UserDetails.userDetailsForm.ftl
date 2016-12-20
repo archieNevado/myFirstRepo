@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="flowExecutionKey" type="java.lang.String" -->
 <#-- @ftlvariable name="userDetails" type="com.coremedia.blueprint.elastic.social.cae.flows.UserDetails" -->
 <#-- @ftlvariable name="actionHandler" type="com.coremedia.blueprint.common.contentbeans.CMAction" -->
-<#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration" -->
+<#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration" -->
 <#-- @ftlvariable name="explicitInterests" type="com.coremedia.blueprint.personalization.forms.PersonalizationForm" -->
 <#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
 

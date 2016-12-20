@@ -101,10 +101,11 @@
  *
  * @param href The href attribute of the link
  * @param attr (optional) additional attributes for link tag
+ * @param render (optional) Setting this parameter to false will skip rendering the link
  * @nested (optional) nested content will be rendered inside the link
  -->
-<#macro optionalLink href attr={}>
-  <#if href?has_content><a href="${href}"<@renderAttr attr />></#if>
+<#macro optionalLink href attr={} render=true>
+  <#if render && href?has_content><a href="${href}"<@renderAttr attr />></#if>
   <#nested />
   <#if href?has_content></a></#if>
 </#macro>

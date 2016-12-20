@@ -1,16 +1,19 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.cae.contentbeans.CodeResourcesCacheKey;
+import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
+import com.coremedia.blueprint.coderesources.CodeResourcesCacheKey;
+import com.coremedia.blueprint.coderesources.CodeResourcesModel;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.blueprint.common.contentbeans.CodeResources;
+import com.coremedia.blueprint.common.contentbeans.MergeableResources;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.Version;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.xml.Markup;
@@ -33,7 +36,9 @@ import org.springframework.web.util.UriUtils;
 
 import javax.activation.MimeTypeParseException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -46,6 +51,8 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_E
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_NAME;
+import static com.coremedia.blueprint.coderesources.CodeResourcesModel.TYPE_CSS;
+import static com.coremedia.blueprint.coderesources.CodeResourcesModel.TYPE_JS;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.createModelWithView;
@@ -59,50 +66,58 @@ import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
 @Link
 @RequestMapping
 public class CodeResourceHandler extends HandlerBase implements ApplicationContextAware, InitializingBean {
-
-  // --- logging ---
   private static final Logger LOG = LoggerFactory.getLogger(CodeResourceHandler.class);
+
   // --- spring configured properties ---
   private CapConnection capConnection;
   private ApplicationContext applicationContext;
   private Cache cache;
+  private ContentBeanFactory contentBeanFactory;
+
   // --- various constants ---
   @VisibleForTesting static final String MARKUP_PROGRAMMED_VIEW_NAME = "script";
   private static final String DEFAULT_EXTENSION = "css";
+
   // --- path segments ---
+  private static final String SEGMENT_CHANNEL_WITH_THEME = "channelWithTheme";
+  private static final String SEGMENT_CHANNEL_WITH_CODE = "channelWithCode";
   private static final String SEGMENT_PATH = "path";
   private static final String SEGMENT_HASH = "hash";
+  private static final String SEGMENT_MODE = "mode";
+
   // --- settings for minification, merging and local resources ---
   private boolean localResourcesEnabled = false;
   private boolean developerModeEnabled = false;
 
-  private static final String CSS = "css";
-  private static final String JS = "js";
-
-  private static final String PREFIX_CSS = '/' + PREFIX_RESOURCE + '/' + CSS;
-  private static final String PREFIX_JS = '/' + PREFIX_RESOURCE + '/' + JS;
+  private static final String PREFIX_CSS = '/' + PREFIX_RESOURCE + '/' + TYPE_CSS;
+  private static final String PREFIX_JS = '/' + PREFIX_RESOURCE + '/' + TYPE_JS;
 
   /**
-   * Link to a merged resource. Usually merged for a navigation node.
+   * Link to a merged resource.
    * <p/>
-   * e.g. /resource/js/4/1035154981/media.js
+   * e.g. /resource/js/4/6/1035154981/body.js
+   * <p>
+   * The resources to be merged are taken from the theme of the first channel
+   * (4) and the direct code of the second channel (6).  Both channels are
+   * optional, which is denoted by 0.
    */
   private static final String URI_SUFFIX_BULK =
-          "/{" + SEGMENT_ID + ":" + PATTERN_NUMBER + "}" +
+          "/{" + SEGMENT_CHANNEL_WITH_THEME + ":" + PATTERN_NUMBER + "}" +
+          "/{" + SEGMENT_CHANNEL_WITH_CODE + ":" + PATTERN_NUMBER + "}" +
           "/{" + SEGMENT_HASH + "}" +
-          "/{" + SEGMENT_NAME + "}" +
+          "/{" + SEGMENT_MODE + "}" +
           ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
   public static final String CSS_PATTERN_BULK = PREFIX_CSS + URI_SUFFIX_BULK;
   public static final String JS_PATTERN_BULK = PREFIX_JS + URI_SUFFIX_BULK;
 
   private static final Map<String, String> EXTENSION_TO_CODEPROPERTY = new ImmutableMap.Builder<String, String>()
-          .put(CSS, CMNavigation.CSS)
-          .put(JS, CMNavigation.JAVA_SCRIPT)
+          .put(TYPE_CSS, CMNavigation.CSS)
+          .put(TYPE_JS, CMNavigation.JAVA_SCRIPT)
           .build();
   private static final Map<String, String> EXTENSION_TO_URLPATTERN = new ImmutableMap.Builder<String, String>()
-          .put(CSS, CSS_PATTERN_BULK)
-          .put(JS, JS_PATTERN_BULK)
+          .put(TYPE_CSS, CSS_PATTERN_BULK)
+          .put(TYPE_JS, JS_PATTERN_BULK)
           .build();
 
   /**
@@ -167,6 +182,11 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     this.cache = cache;
   }
 
+  @Required
+  public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
+    this.contentBeanFactory = contentBeanFactory;
+  }
+
   @Override
   public void afterPropertiesSet() {
     if(!developerModeEnabled && localResourcesEnabled) {
@@ -181,44 +201,52 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   /**
    * Handles requests for merged and minified CSS/JS.
    *
-   * @param cmContext The contentBean, should be of type {@link com.coremedia.blueprint.common.contentbeans.CMNavigation}
+   * @param channelWithTheme The {@link com.coremedia.blueprint.common.contentbeans.CMNavigation} that carries the theme
+   * @param channelWithCode The {@link com.coremedia.blueprint.common.contentbeans.CMNavigation} that carries code
    * @param extension    The file-extension that was asked for, usually "css" or "js".
    * @param webRequest   The web request
    * @return             The ModelAndView or 404 (not found).
    */
   @RequestMapping(value = {JS_PATTERN_BULK,CSS_PATTERN_BULK})
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMContext cmContext,
+  public ModelAndView handleRequest(@PathVariable(SEGMENT_CHANNEL_WITH_THEME) CMContext channelWithTheme,
+                                    @PathVariable(SEGMENT_CHANNEL_WITH_CODE) CMContext channelWithCode,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     @PathVariable(SEGMENT_HASH) String hash,
+                                    @PathVariable(SEGMENT_MODE) String mode,
                                     WebRequest webRequest) {
-    CodeResources codeResources = cache.get(new CodeResourcesCacheKey(cmContext, codePropertyName(extension), developerModeEnabled));
+    Content cwtContent = channelWithTheme==null ? null : channelWithTheme.getContent();
+    Content cwcContent = channelWithCode==null ? null : channelWithCode.getContent();
+    CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(cwtContent, cwcContent, codePropertyName(extension), developerModeEnabled);
+    CodeResourcesModel codeResourcesModel = cache.get(cacheKey).getModel(mode);
+    MergeableResources mergeableResources = new MergeableResourcesImpl(codeResourcesModel, contentBeanFactory, getDataViewFactory());
     //check scripthash
-    if (!hash.equals(codeResources.getETag())) {
+    String eTag = codeResourcesModel.getETag();
+    if (!hash.equals(eTag)) {
       //hash does not match
-      return HandlerHelper.redirectTo(codeResources, extension);
+      return HandlerHelper.redirectTo(mergeableResources, extension);
     }
-    if (webRequest.checkNotModified(codeResources.getETag())) {
+    if (webRequest.checkNotModified(eTag)) {
       // shortcut exit - no further processing necessary
       return null;
     }
     //everything is in order, return correct MAV
-    return HandlerHelper.createModelWithView(codeResources, extension);
+    return HandlerHelper.createModelWithView(mergeableResources, extension);
   }
 
   /**
    * Handles requests to a single file linked in a CSS file
    *
-   * @param name            The readable name of the code resource.
+   * @param baseName        The readable base name of the code resource, excluding the extension.
    * @param extension       The extension of the requested resource.
    * @return                The ModelAndView or 404 (not found).
    */
   @RequestMapping(value = URI_PATTERN_SINGLE_CSS_LINK)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_PATH) List<String> path,
-                                    @PathVariable(SEGMENT_NAME) String name,
+                                    @PathVariable(SEGMENT_NAME) String baseName,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     WebRequest webRequest) throws IOException, MimeTypeParseException {
     if (localResourcesEnabled) {
-      return localResource(path, name, extension, webRequest);
+      return localResource(path, baseName, extension, webRequest);
     } else {
       return notFound();
     }
@@ -228,19 +256,19 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   public ModelAndView handleRequest(@PathVariable(SEGMENT_PATH) List<String> path,
                                     @PathVariable(SEGMENT_ID) CMAbstractCode cmAbstractCode,
                                     @PathVariable(SEGMENT_ETAG) int version,
-                                    @PathVariable(SEGMENT_NAME) String name,
+                                    @PathVariable(SEGMENT_NAME) String baseName,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     WebRequest webRequest,
                                     HttpServletResponse response) throws IOException, MimeTypeParseException {
     if (localResourcesEnabled) {
-      ModelAndView mav = localResource(path, name, extension, webRequest);
+      ModelAndView mav = localResource(path, baseName, extension, webRequest);
       // null represents "not modified" and is an appropriate return value
       if (mav==null || !HandlerHelper.isNotFound(mav)) {
         return mav;
       }
       // ... else fallbackthrough to contentResource ...
     }
-    return contentResource(extension, cmAbstractCode, name, version, response, webRequest);
+    return contentResource(extension, cmAbstractCode, baseName, version, response, webRequest);
   }
 
 
@@ -272,18 +300,18 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
    * the resources to use: "css" or "js" are available
    * To support {@link HandlerHelper#redirectTo(Object, String)} the extension may also passed as view parameter.
    *
-   * @param codeResources  The merged code resource used to build the link.
-   * @param linkParameters  Parameters, that were passed inside the cm:link tag via cm:param.
-   * @return                A Map containing the parts of the generated link.
+   * @param mergeableResources The MergeableResources used to build the link.
+   * @return A UriComponents containing the parts of the generated link.
    */
-  @Link(type = CodeResources.class)
-  public UriComponents buildLink(CodeResources codeResources, String view, Map<String, Object> linkParameters) {
-    String extension = extension(view, linkParameters);
-    CMNavigation cmNavigation = codeResources.getContext();
+  @Link(type = MergeableResources.class)
+  public UriComponents buildLink(MergeableResources mergeableResources) {
+    CodeResourcesModel model = mergeableResources.getCodeResourceModel();
+    String extension = model.getCodeType();
     Map<String,Object> parameters = new ImmutableMap.Builder<String, Object>()
-            .put(SEGMENT_ID, cmNavigation.getContentId())
-            .put(SEGMENT_HASH, codeResources.getETag())
-            .put(SEGMENT_NAME, cmNavigation.getSegment())
+            .put(SEGMENT_CHANNEL_WITH_THEME, segmentForCodeResourcesLink(model.getChannelWithTheme()))
+            .put(SEGMENT_CHANNEL_WITH_CODE, segmentForCodeResourcesLink(model.getChannelWithCode()))
+            .put(SEGMENT_HASH, model.getETag())
+            .put(SEGMENT_MODE, model.getHtmlMode())
             .put(SEGMENT_EXTENSION, extension).build();
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance();
     uriBuilder.path(urlPattern(extension));
@@ -318,16 +346,20 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   }
 
   // creates a Blob/DEFAULT model
-  private ModelAndView localResource(List<String> path, String name, String extension, WebRequest webRequest) throws IOException, MimeTypeParseException {
-    String resourcePath = '/' + joinPath(path) + '/' + name + '.' + extension;
+  private ModelAndView localResource(List<String> path, String baseName, String extension, WebRequest webRequest) throws IOException, MimeTypeParseException {
+    String name = baseName + '.' + extension;
+    String resourcePath = '/' + joinPath(path) + '/' + name;
     Resource resource = applicationContext.getResource(resourcePath);
     if (resource != null && resource.isReadable()) {
       if (webRequest.checkNotModified(resource.lastModified())) {
         // shortcut exit - no further processing necessary
         return null;
       }
-      String mimeType = getMimeTypeService().getMimeTypeForExtension(extension);
-      Blob blob = capConnection.getBlobService().fromInputStream(resource.getInputStream(), mimeType);
+      // buffer resource stream to make it markable
+      @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
+      InputStream bufferedInputStream = new BufferedInputStream(resource.getInputStream());
+      String mimeType = getMimeTypeService().detectMimeType(bufferedInputStream, name, null);
+      Blob blob = capConnection.getBlobService().fromInputStream(bufferedInputStream, mimeType);
       return createModel(blob);
     } else {
       LOG.warn("File {} not found in local resources, but was linked in the content!", resourcePath);
@@ -341,17 +373,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
       throw new IllegalArgumentException("There is no CMNavigation code property for " + extension);
     }
     return result;
-  }
-
-  /**
-   * Figure out the extension (css, js, ...) from the arguments.
-   */
-  private String extension(String view, Map<String, Object> linkParameters) {
-    Object object = linkParameters.get(SEGMENT_EXTENSION);
-    if (object == null){
-      object = view;
-    }
-    return (object instanceof String) ? ((String) object).toLowerCase() : DEFAULT_EXTENSION;
   }
 
   private String urlPattern(String extension) {
@@ -399,7 +420,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     try {
       return UriUtils.encodePathSegment(name, StandardCharsets.UTF_8.name());
     } catch (UnsupportedEncodingException e) {
-      throw new Error("UTF-8 MUST be supported, according to the Java language spec!");
+      throw new Error("UTF-8 MUST be supported, according to the Java language spec!", e);
     }
   }
 
@@ -421,5 +442,9 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
    */
   private boolean isExtensionValid(String extension, CMAbstractCode code) {
     return extension != null && extension.equals(getExtension(code.getContentType(), DEFAULT_EXTENSION));
+  }
+
+  private static int segmentForCodeResourcesLink(Content content) {
+    return content==null ? 0 : IdHelper.parseContentId(content.getId());
   }
 }

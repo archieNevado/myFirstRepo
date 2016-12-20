@@ -94,6 +94,7 @@
         parent="abstractTeasable-blueprint-doctypes" class="com.coremedia.blueprint.cae.contentbeans.CMChannelImpl">
     <property name="pageGridService" ref="pageGridService"/>
     <property name="treeRelation" ref="cmNavigationTreeRelation"/>
+    <property name="codeResourcesTreeRelation" ref="navigationTreeRelation"/>
     <property name="themeService" ref="themeService"/>
   </bean>
 

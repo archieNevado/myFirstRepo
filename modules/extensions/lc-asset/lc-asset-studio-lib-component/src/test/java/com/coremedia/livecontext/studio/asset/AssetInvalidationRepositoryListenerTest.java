@@ -15,9 +15,13 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import static com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN;
+import static com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -28,14 +32,19 @@ public class AssetInvalidationRepositoryListenerTest {
 
   @InjectMocks
   private AssetInvalidationRepositoryListener testling = new AssetInvalidationRepositoryListener();
+
   @Mock
   private CommerceCacheInvalidationSource invalidationSource;
+
   @Mock
   private ContentType cmPictureType;
+
   @Mock
   private Content content;
+
   @Mock
   private ContentEvent event;
+
   @Mock
   private ContentRepository repository;
 
@@ -55,13 +64,14 @@ public class AssetInvalidationRepositoryListenerTest {
 
   @Test
   public void testHandleContentEvent() throws Exception {
-    //content has any external references
-    when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("vendor:///catalog/product/what", "vendor:///catalog/product/ever"));
+    // content has any external references
+    List<String> externalReferences = newArrayList("vendor:///catalog/product/what", "vendor:///catalog/product/ever");
+    when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(externalReferences);
+
     testling.handleContentEvent(event);
 
-    //then all products and product variants should be invalidated.
-    verify(invalidationSource).triggerDelayedInvalidation(new HashSet<>(Arrays.asList(
-            CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN,
-            CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN)));
+    // then all products and product variants should be invalidated.
+    Set<String> invalidations = newHashSet(INVALIDATE_PRODUCTS_URI_PATTERN, INVALIDATE_PRODUCTVARIANTS_URI_PATTERN);
+    verify(invalidationSource).triggerDelayedInvalidation(invalidations);
   }
 }

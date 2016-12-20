@@ -19,8 +19,6 @@
     <module>osm-bom</module>
     <module>osm-cae</module>
     <module>osm-studio</module>
-    <module>osm-studio-lib</module>
-    <module>osm-thirdparty-common</module>
   </modules>
 
 </project>

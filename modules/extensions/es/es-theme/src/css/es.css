@@ -129,19 +129,24 @@
 }
 
 .cm-rating-indicator:before {
-  content: "-";
-  font-size: 2rem;
-  color: #BABABA;
-}
-
-.cm-rating--highlighted .cm-rating-indicator:before {
-  font-size: 2.5rem;
+  content: ""; /* has to be set */
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-image: url("../img/star-red-inactive.png");
 }
 
 .cm-rating-indicator--active:before,
 .cm-rating .cm-rating-indicator--active ~ .cm-rating-indicator:before {
-  content: "+";
-  color: #E10716;
+  content: ""; /* has to be set */
+  background-image: url("../img/star-red-active.png");
+}
+
+.cm-field input[name="rating"]:checked ~ .cm-rating-indicator:before,
+.cm-field input[name="rating"] ~ .cm-rating-indicator:hover:before,
+.cm-field input[name="rating"] + .cm-rating-indicator:hover ~ .cm-rating-indicator:before {
+  content: ""; /* has to be set */
+  background-image: url("../img/star-red-active.png");
 }
 
 .cm-rating-bar {
@@ -153,11 +158,6 @@
 .cm-rating-bar__filled {
   height: 100%;
   background: #575759;
-  background: -moz-linear-gradient(left, #ededed 0%, #c7c7c7 100%);
-  background: -webkit-gradient(linear, left, right, color-stop(0%, #ededed), color-stop(100%, #c7c7c7));
-  background: -webkit-linear-gradient(left, #ededed 0%, #c7c7c7 100%);
-  background: -o-linear-gradient(left, #ededed 0%, #c7c7c7 100%);
-  background: -ms-linear-gradient(left, #ededed 0%, #c7c7c7 100%);
   background: linear-gradient(to right, #ededed 0%, #c7c7c7 100%);
   background-color: #c7c7c7;
 }
@@ -193,13 +193,6 @@
 
 .cm-field input[name="rating"] {
   display: none;
-}
-
-.cm-field input[name="rating"]:checked ~ .cm-rating-indicator:before,
-.cm-field input[name="rating"] ~ .cm-rating-indicator:hover:before,
-.cm-field input[name="rating"] + .cm-rating-indicator:hover ~ .cm-rating-indicator:before {
-  content: "+";
-  color: #E10716;
 }
 
 /* --- reviews ------------------------------------------------------------------------------------------------------ */
@@ -285,4 +278,39 @@
 
 .cm-reviews > .cm-toolbar {
   text-align: left;
+}
+
+/**
+ * Read More / Read Less functionality
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+.cm-readmore__wrapper {
+  overflow: hidden;
+}
+
+.cm-readmore__buttonbar {
+  display: none;
+  text-align: right;
+}
+
+.cm-readmore__button-more,
+.cm-readmore__button-less {
+  background: #ffffff;
+  border: none;
+  padding: 5px;
+  text-decoration: underline;
+}
+
+.cm-readmore--enabled > .cm-readmore__buttonbar {
+  display: block;
+}
+
+.cm-readmore--more > .cm-readmore__buttonbar > .cm-readmore__button-more {
+  display: none;
+}
+
+.cm-readmore--less > .cm-readmore__buttonbar > .cm-readmore__button-less {
+  display: none;
 }

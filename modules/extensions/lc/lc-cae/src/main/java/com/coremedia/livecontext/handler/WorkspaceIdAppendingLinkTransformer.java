@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
@@ -52,7 +52,7 @@ public class WorkspaceIdAppendingLinkTransformer implements LinkTransformer {
         StoreContext context = storeContextProvider.getCurrentContext();
         if (context != null) {
           String workspaceId = context.getWorkspaceId();
-          if (workspaceId != null && !workspaceId.equals(StoreContextBuilder.NO_WS_MARKER)) {
+          if (workspaceId != null && !workspaceId.equals(StoreContextImpl.NO_WS_MARKER)) {
             parameterAppender.setParameterValue(workspaceId);
             return parameterAppender.transform(source, bean, view, request, response, forRedirect);
           }

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates:IconFontTemplateBase
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:templates="com.coremedia.blueprint.studio.styleguide.templates.*"
+        ui="{StyleguideSkin.PANEL_TEMPLATE}"
+        title="{config.categoryTitle}">
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.StyleguideSkin;
+    import com.coremedia.ui.layouts.BEMLayouts;
+
+    private var config:IconFontTemplate;
+
+    public static const ICONS_SMALL_VIEW_ITEM_ID:String = "icons-small-view-item-id";
+    public static const ICONS_MEDIUM_VIEW_ITEM_ID:String = "icons-medium-view-item-id";
+    public static const ICONS_LARGE_VIEW_ITEM_ID:String = "icons-large-view-item-id";
+    public static const SLIDER_VALUE_MAPPING:Array = [
+      ICONS_SMALL_VIEW_ITEM_ID, ICONS_MEDIUM_VIEW_ITEM_ID, ICONS_LARGE_VIEW_ITEM_ID
+    ];
+
+    public static const ICONS_SMALL_BUTTON_ITEM_ID:String = "icons-small-button-item-id";
+    public static const ICONS_MEDIUM_BUTTON_ITEM_ID:String = "icons-medium-button-item-id";
+    public static const ICONS_LARGE_BUTTON_ITEM_ID:String = "icons-large-button-item-id";
+
+    public static const ICONS_GRID_ITEM_SELECTOR:String = ".sg-icon-grid__item";
+    public static const SEARCH_FIELD_ITEM_ID:String = "search-field-item-id";
+
+    public var categoryTitle:String;
+    public var description:String;
+    public var icons:Object;
+    public var iconSetName:String;
+
+    public native function IconFontTemplate(config:IconFontTemplate = null);
+    ]]>
+  </fx:Script>
+
+  <templates:tools>
+    <Slider minValue="0"
+            maxValue="2"
+            increment="1"
+            width="300"
+            constrainThumbs="false"
+            fieldLabel="Icon Scale"
+            ui="{StyleguideSkin.SLIDER_DEFAULT}">
+      <plugins>
+        <ui:BindPropertyPlugin bindTo="{getActiveScaleVE()}"
+                               componentProperty="value"
+                               bidirectional="true"
+                               transformer="{function (value:String):int { return SLIDER_VALUE_MAPPING.indexOf(value); }}"
+                               reverseTransformer="{function (value:int):String { return SLIDER_VALUE_MAPPING[value]; }}"/>
+      </plugins>
+    </Slider>
+  </templates:tools>
+
+  <templates:layout>
+    <layout_Fit/>
+  </templates:layout>
+  <templates:items>
+    <!--This inner single container is necessary due to the FIT layout-->
+    <Container>
+      <items>
+        <DisplayField ui="{StyleguideSkin.DISPLAY_FIELD_DOCUMENTATION}"
+                      fieldLabel="Description"
+                      value="{config.description}"
+                      defaultAlign="top"/>
+        <Container ui="{StyleguideSkin.CUSTOM_LINE_HORIZONTAL}"
+                   minHeight="1" />
+
+        <TextField fieldLabel="Search for icons with text"
+                   labelWidth="160"
+                   flex="1"
+                   width="90%"
+                   itemId="{SEARCH_FIELD_ITEM_ID}"/>
+        <Container ui="{StyleguideSkin.CUSTOM_LINE_HORIZONTAL}"
+                   minHeight="1" />
+        <ui:SwitchingContainer activeItemValueExpression="{getActiveScaleVE()}">
+          <ui:defaults>
+            <DataView scrollable="true"
+                      tpl="{getIconTemplate(ICONS_GRID_ITEM_SELECTOR)}"
+                      margin="10"
+                      singleSelect="true"
+                      itemSelector="{ICONS_GRID_ITEM_SELECTOR}"/>
+          </ui:defaults>
+          <ui:items>
+            <DataView itemId="{ICONS_SMALL_VIEW_ITEM_ID}"
+                      store="{getIconData(config.icons, 'small', config.iconSetName)}"/>
+            <DataView itemId="{ICONS_MEDIUM_VIEW_ITEM_ID}"
+                      store="{getIconData(config.icons, 'medium', config.iconSetName)}"/>
+            <DataView itemId="{ICONS_LARGE_VIEW_ITEM_ID}"
+                      store="{getIconData(config.icons, 'large', config.iconSetName)}"/>
+          </ui:items>
+        </ui:SwitchingContainer>
+      </items>
+      <plugins>
+        <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
+                      defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+      </plugins>
+    </Container>
+  </templates:items>
+
+  <templates:plugins>
+    <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
+                  modifier="{BEMLayouts.VERTICAL_SPACING_MODIFIER_300}"
+                  defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+  </templates:plugins>
+</templates:IconFontTemplateBase>

@@ -1,7 +1,8 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 <#-- @ftlvariable name="self.content" type="com.coremedia.blueprint.common.contentbeans.CMChannel" -->
+<#assign sliderMetadata=bp.setting(cmpage, "sliderMetaData", "")/>
 
-<body id="top" class="${(self.pageGrid.cssClassName)!""}">
+<body id="top" class="${(self.pageGrid.cssClassName)!""}" <@cm.metadata data=sliderMetadata />>
 
 <#-- Iterate over each row -->
 <#if self.pageGrid?has_content>

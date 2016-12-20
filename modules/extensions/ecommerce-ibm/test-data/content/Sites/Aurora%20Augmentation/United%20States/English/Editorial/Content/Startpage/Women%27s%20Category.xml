@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMTeaser folder="/Sites/Aurora Augmentation/United States/English/Editorial/Content/Startpage" name="Women's Category" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Women's Apparel</teaserTitle>
+<pictures>
+<link href="Fashionable%20woman%20in%20a%20hat%20Picture.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Fashionable%20woman%20in%20a%20hat%20Picture"/>
+</pictures>
+<related>
+</related>
+<target>
+<link href="../../../Augmentation/Apparel/Women/Women.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
+</target>
+</CMTeaser>

@@ -16,6 +16,11 @@
   </#if>
 </#list>
 
-<@cm.include self=self view="multiViewPreview" params={
-  "fragmentViews": fragmentViews
-}/>
+<#if (fragmentViews?size > 0)>
+  <@cm.include self=self view="multiViewPreview" params={
+    "fragmentViews": fragmentViews
+  }/>
+<#else>
+  <#-- TODO: CMS-6811 this is a message for the preview which should be localized in the language of the studio user. -->
+  <span>No renditions to preview.</span>
+</#if>

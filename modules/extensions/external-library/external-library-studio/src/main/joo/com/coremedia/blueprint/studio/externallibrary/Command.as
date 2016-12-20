@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.studio.externallibrary {
-import ext.data.Record;
+import ext.data.Model;
 
 /**
  * A history command.
  */
 public class Command {
-  public var record:Record;
+  public var record:Model;
   public var filter:String;
   public var index:int;
   public var cmdStack;
 
-  public function Command(record:Record, filter:String, index:int, commandStack:CommandStack) {
+  public function Command(record:Model, filter:String, index:int, commandStack:CommandStack) {
     this.record = record;
     this.filter = filter;
     this.index = index;

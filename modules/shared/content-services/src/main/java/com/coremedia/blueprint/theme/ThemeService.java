@@ -12,8 +12,11 @@ import java.util.List;
  * Lookup the theme for contents.
  */
 public class ThemeService {
+  private static final String CM_THEME = "CMTheme";
+  private static final String CM_THEME_TEMPLATESETS = "templateSets";
+  private static final String CM_THEME_VIEWREPOSITORYNAME = "viewRepositoryName";
   private static final String CM_NAVIGATION = "CMNavigation";
-  private static final String THEME = "theme";
+  private static final String CM_NAVIGATION_THEME = "theme";
 
   private final TreeRelation<Content> treeRelation;
 
@@ -41,7 +44,7 @@ public class ThemeService {
     // but for other types the result would depend on the content being in
     // the tree relation, which would not make sense.
     // Better make the contract obvious, and accept only CMNavigation.
-    checkIsNavigation(content);
+    checkIsA(content, CM_NAVIGATION);
     return directTheme(Lists.reverse(treeRelation.pathToRoot(content)));
   }
 
@@ -61,7 +64,7 @@ public class ThemeService {
   public Content directTheme(List<Content> contents) {
     for (Content content : contents) {
       if (content!=null && content.getType().isSubtypeOf(CM_NAVIGATION)) {
-        Content myTheme = content.getLink(THEME);
+        Content myTheme = content.getLink(CM_NAVIGATION_THEME);
         if (myTheme!=null) {
           return myTheme;
         }
@@ -70,12 +73,37 @@ public class ThemeService {
     return null;
   }
 
+  /**
+   * Returns the theme's template sets.
+   */
+  public List<Content> templateSets(Content theme) {
+    checkIsA(theme, CM_THEME);
+    return theme.getLinks(CM_THEME_TEMPLATESETS);
+  }
+
+  /**
+   * Returns the theme's view repository name.
+   * <p>
+   * This is deprecated, since it uses the theme's viewRepositoryName property,
+   * which assumes some template set to exist apart from this theme.  Nowadays,
+   * a theme should be self contained and bring its own templates in the
+   * templateSets property.
+   *
+   * @deprecated Enhance your theme with templates and use {@link #templateSets(Content)}
+   */
+  @Deprecated
+  public String viewRepositoryName(Content theme) {
+    checkIsA(theme, CM_THEME);
+    return theme.getString(CM_THEME_VIEWREPOSITORYNAME);
+  }
+
 
   // --- internal ---------------------------------------------------
 
-  private static void checkIsNavigation(Content content) {
-    if (!content.getType().isSubtypeOf(CM_NAVIGATION)) {
-      throw new IllegalArgumentException(content + " is no CMNavigation");
+  private static void checkIsA(Content content, String contentType) {
+    if (!content.getType().isSubtypeOf(contentType)) {
+      throw new IllegalArgumentException(content + " is no " + contentType);
     }
   }
+
 }

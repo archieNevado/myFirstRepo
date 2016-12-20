@@ -29,7 +29,6 @@ These modules are integrated into CoreMedia Blueprint to enhance CoreMedia CMS a
 - [Optimizely Extension](optimizely/README.md)
 - [Open Street Map Extension](osm/README.md)
 - [Adaptive Personalization Extension](p13n/README.md)
-- [shoutEm Extension](shoutem/README.md)
 - [Upload Extension] (upload/README.md)
 
 ##Documentation

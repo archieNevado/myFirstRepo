@@ -2,7 +2,7 @@ package com.coremedia.blueprint.analytics.elastic.tasks;
 
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
 import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.google.common.collect.ImmutableList;

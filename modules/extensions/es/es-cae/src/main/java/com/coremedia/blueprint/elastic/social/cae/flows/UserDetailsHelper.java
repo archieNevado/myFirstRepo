@@ -2,11 +2,11 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.common.contentbeans.Page;
-import com.coremedia.blueprint.elastic.common.ImageHelper;
+import com.coremedia.blueprint.base.elastic.common.ImageHelper;
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;

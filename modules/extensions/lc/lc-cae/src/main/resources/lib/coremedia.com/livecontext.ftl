@@ -55,14 +55,6 @@
   <#return liveContextFreemarkerFacade.createProductInSite(product)/>
 </#function>
 
-<#function getAspectRatiosForTeaser>
-  <#return ["landscape_ratio4x3", "landscape_ratio8x3", "landscape_ratio4x1", "portrait_ratio20x31", "portrait_ratio1x1", "portrait_ratio3x4", "landscape_ratio16x9"] />
-</#function>
-
-<#function getAspectRatiosForTeaserHero>
-  <#return ["portrait_ratio3x4", "landscape_ratio2x1", "portrait_ratio1x1", "landscape_ratio16x9", "landscape_ratio5x2"] />
-</#function>
-
 <#function fragmentContext>
   <#return liveContextFreemarkerFacade.fragmentContext()>
 </#function>

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.common.util;
 
+import com.coremedia.blueprint.common.contentbeans.CMGallery;
 import com.coremedia.blueprint.common.layout.Container;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
@@ -20,6 +21,8 @@ public class ContainerFlattenerTest {
   Container outerCollection;
   @Mock
   Container innerCollection;
+  @Mock
+  CMGallery gallery;
 
   @Test
   public void testEmptyCollection() {
@@ -74,6 +77,14 @@ public class ContainerFlattenerTest {
     when(innerCollection.getItems()).thenReturn(ImmutableList.of(innerCollection, 11, outerCollection, "2", "3", "1", "4", true, outerCollection, "5", innerCollection, "6"));
     List<String> result = ContainerFlattener.flatten(outerCollection, String.class);
     assertEquals(ImmutableList.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), result);
+  }
+
+  @Test
+  public void testGalleryIncluded() {
+    when(gallery.getItems()).thenReturn(ImmutableList.of(new Object(), new Object()));
+    when(outerCollection.getItems()).thenReturn(ImmutableList.of(new Object(), gallery, new Object()));
+    List<Object> result = ContainerFlattener.flatten(outerCollection, Object.class);
+    assertEquals(3, result.size());
   }
 
 }

@@ -1,17 +1,16 @@
 package com.coremedia.blueprint.studio.googleanalytics {
-import com.coremedia.blueprint.studio.config.googleanalytics.googleAnalyticsRetrievalFields;
 import com.coremedia.cap.common.CapType;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cms.editor.sdk.premular.CollapsibleFormPanel;
+import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
-public class GoogleAnalyticsRetrievalFieldsBase extends CollapsibleFormPanel {
+public class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
 
   private static const GOOGLE_ANALYTICS:String = 'googleAnalytics';
   private static const P12_FILE:String = 'p12File';
@@ -21,14 +20,12 @@ public class GoogleAnalyticsRetrievalFieldsBase extends CollapsibleFormPanel {
   private var p12FileVE:ValueExpression;
   private var localSettings:RemoteBean;
 
-  public function GoogleAnalyticsRetrievalFieldsBase(config:googleAnalyticsRetrievalFields = null) {
+  public function GoogleAnalyticsRetrievalFieldsBase(config:GoogleAnalyticsRetrievalFields = null) {
     super(config);
     updateP12FileFromStruct();
     getP12FileVE().addChangeListener(updateStruct);
     bindTo.addChangeListener(updateP12FileFromStruct);
   }
-
-  internal native function get bindTo():ValueExpression;
 
   private function updateStruct():void {
     var value:Array = getP12FileVE().getValue();
@@ -96,7 +93,7 @@ public class GoogleAnalyticsRetrievalFieldsBase extends CollapsibleFormPanel {
     struct.getType().addStructProperty(GOOGLE_ANALYTICS);
     var googleAnalytics:Struct = getStruct(struct, GOOGLE_ANALYTICS);
 
-    var capType:CapType = session.getConnection().getContentRepository().getContentType(contentType);
+    var capType:CapType = SESSION.getConnection().getContentRepository().getContentType(contentType);
     googleAnalytics.getType().addLinkProperty(structPropertyName, capType, link);
   }
 

@@ -2,7 +2,7 @@ package com.coremedia.catalog.studio.lib.validators;
 
 import com.coremedia.blueprint.base.ecommerce.catalog.CmsCategory;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -71,7 +71,7 @@ public class RootCategoryInvalidationSourceTest {
   @Before
   public void setup() {
     MockCommerceEnvBuilder.create().setupEnv();
-    Commerce.getCurrentConnection().getStoreContext().put(StoreContextBuilder.SITE, "theSiteId");
+    Commerce.getCurrentConnection().getStoreContext().put(StoreContextImpl.SITE, "theSiteId");
     cmCategory = contentRepository.getContentType("CMCategory");
     site = sitesService.getSite("theSiteId");
     initialRootDocumentVersion = site.getSiteRootDocument().getCheckedInVersion();

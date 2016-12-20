@@ -43,6 +43,8 @@ public class UploadConfigurationRepresentation {
     defaultBlobPropertyName = "data";
 
     mimeTypeMappings.put("image", "CMPicture");
+    mimeTypeMappings.put("image/svg+xml", "CMImage");
+    mimeTypeMappings.put("image/tiff", "CMDownload");
     mimeTypeMappings.put("application", "CMDownload");
     mimeTypeMappings.put("audio", "CMAudio");
     mimeTypeMappings.put("video", "CMVideo");

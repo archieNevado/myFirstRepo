@@ -1,6 +1,6 @@
 {
   "blueprint": {
-    "hostname": "192.168.252.100.xip.io",
+    "hostname": "CMS_HOST",
     "loopback_hostname": "localhost",
     "maven_repository_url": "file://localhost/tmp/maven-repo",
     "tomcat": {
@@ -9,14 +9,35 @@
     "tools": {
       "java_home": "/usr/lib/jvm/java"
     },
+    "webapps":{
+      "content-management-server": {
+        "application.properties": {
+          "cap.server.license": "properties/corem/license.zip"
+        }
+      },
+      "master-live-server": {
+        "application.properties": {
+          "cap.server.license": "properties/corem/license.zip"
+        }
+      }
+    },
     "wcs": {
       "host": "WCS_HOST",
       "application.properties": {
         "livecontext.cookie.domain": ".DOMAIN"
       }
+    },
+    "dev": {
+      "content": {
+        "content_zip": "file://localhost/tmp/content-users.zip"
+      }
     }
   },
   "run_list": [
+    ==== ACCEPT AND REMOVE  ===
+    ==== By adding java_se to a run list (recipe[java_se]) or a cookbook (include_recipe 'java_se')
+    ==== you are accepting the Oracle Binary Code License Agreement for Java SE.
+    "recipe[java_se]",
     "role[mysql]",
     "role[mongodb]",
     "role[solr-master]",
@@ -26,6 +47,7 @@
     "role[studio-proxy]",
     "role[delivery]",
     "role[delivery-proxy]",
-    "recipe[blueprint-dev-tooling::overview]"
+    "recipe[blueprint-dev-tooling::overview]",
+    "recipe[blueprint-dev-tooling::content]"
   ]
 }

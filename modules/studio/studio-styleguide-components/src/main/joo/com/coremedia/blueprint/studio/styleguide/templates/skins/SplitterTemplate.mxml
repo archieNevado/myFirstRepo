@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:SkinTemplate
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:skins="com.coremedia.blueprint.studio.styleguide.tabs.skins.*"
+        title="Splitter"
+        xmlns:local="com.coremedia.blueprint.studio.styleguide.templates.*">
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.StyleguideSkin;
+    import com.coremedia.ui.data.ValueExpressionFactory;
+
+    private var config:SplitterTemplate;
+
+    public native function SplitterTemplate(config:SplitterTemplate = null);
+    ]]></fx:Script>
+
+  <local:plugins>
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromValue(config.skinEnum.getSkin())}">
+      <ui:template>
+        <skins:SkinDescription skinEnum="{config.skinEnum}" hideExample="true"/>
+      </ui:template>
+    </ui:BindComponentsPlugin>
+
+    <ui:AddItemsPlugin>
+      <ui:items>
+        <Panel ui="{StyleguideSkin.PANEL_MEDIUM}"
+               title="Horizontal Layout"
+               margin="24 0 0 0">
+          <layout>
+            <layout_HBox/>
+          </layout>
+          <items>
+            <Container html="The splitter on the right is <b>disabled</b>."
+                       padding="10"
+                       height="30"
+                       flex="1"/>
+            <Splitter width="2px"
+                      disabled="true"
+                      ui="{config.skinEnum.getSkin()}"/>
+            <Container html="The splitter on the right is <b>enabled</b>."
+                       padding="10"
+                       height="50"
+                       flex="1"/>
+            <Splitter width="2px"
+                      ui="{config.skinEnum.getSkin()}"/>
+            <Container html="Hello World"
+                       padding="10"
+                       height="50"
+                       flex="1"/>
+          </items>
+        </Panel>
+        <Panel ui="{StyleguideSkin.PANEL_MEDIUM}"
+               title="Vertical Layout">
+          <layout>
+            <layout_VBox align="stretch"/>
+          </layout>
+          <items>
+            <Container html="The following splitter is <b>disabled</b>."
+                       padding="10"
+                       height="30"/>
+            <Splitter disabled="true"
+                      height="2px"
+                      ui="{config.skinEnum.getSkin()}"/>
+            <Container html="The following splitter is <b>enabled</b>."
+                       padding="10"
+                       height="50"/>
+            <Splitter ui="{config.skinEnum.getSkin()}"
+                      height="2px"/>
+            <Container html="Hello World"
+                       padding="10"
+                       height="50"/>
+          </items>
+        </Panel>
+      </ui:items>
+    </ui:AddItemsPlugin>
+
+  </local:plugins>
+
+  <local:defaults>
+    <Panel margin="10 0"/>
+  </local:defaults>
+</local:SkinTemplate>

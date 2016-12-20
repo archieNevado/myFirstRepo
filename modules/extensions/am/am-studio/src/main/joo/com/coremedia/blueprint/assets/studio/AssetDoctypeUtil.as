@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.assets.studio {
 
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 
@@ -42,7 +42,7 @@ public class AssetDoctypeUtil {
   }
 
   private static function getRepository():ContentRepository {
-    return session.getConnection().getContentRepository();
+    return SESSION.getConnection().getContentRepository();
   }
 }
 }

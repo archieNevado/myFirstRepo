@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +29,14 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
 
   // --- StoreContextProvider -------------------------------------
 
+  @Nullable
   @Override
   protected StoreContext internalCreateContext(@Nonnull Site site) {
     StoreContext result = null;
+
     // only create catalog context if settings were found for current site
-    Struct repositoryStoreConfig = getSettingsService().setting(CONFIG_KEY_STORE_CONFIG, Struct.class, site.getSiteRootDocument());
+    Struct repositoryStoreConfig = getSettingsService().setting(CONFIG_KEY_STORE_CONFIG, Struct.class,
+            site.getSiteRootDocument());
     if (repositoryStoreConfig != null) {
       try {
         Map<String, Object> targetConfig = new HashMap<>();
@@ -58,17 +62,16 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
         StoreContextHelper.setWcsVersion(result, (String) targetConfig.get(CONFIG_KEY_WCS_VERSION));
         StoreContextHelper.setReplacements(result, (Map<String, String>) targetConfig.get(CONFIG_KEY_REPLACEMENTS));
         StoreContextHelper.setWcsTimeZone(result, (Map<String, String>) targetConfig.get("wcsTimeZone"));
-
       } catch (NoSuchPropertyDescriptorException e) {
         throw new InvalidContextException("Missing properties in store configuration. ", e);
       }
     }
+
     return result;
   }
 
   protected void updateStoreConfigFromDynamicStoreInfo(String siteName, @Nonnull Map<String, Object> targetStoreConfig) {
     if (storeInfoService != null && storeInfoService.isAvailable()) {
-
       String storeName = (String) targetStoreConfig.get(CONFIG_KEY_STORE_NAME);
       if (StringUtils.isBlank(storeName)) {
         throw new InvalidContextException("No store name found in config (site: " + siteName + ").");
@@ -80,6 +83,7 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
         if (StringUtils.isBlank(storeId)) {
           throw new InvalidContextException("No store id found for store '" + storeName + "' in wcs (site: " + siteName + ").");
         }
+
         targetStoreConfig.put(CONFIG_KEY_STORE_ID, storeId);
       }
 
@@ -91,15 +95,16 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
           if (StringUtils.isBlank(catalogId)) {
             throw new InvalidContextException("No catalog '" + catalogName + "' found in wcs (site: " + siteName + ").");
           }
-        }
-        else {
+        } else {
           catalogId = storeInfoService.getDefaultCatalogId(storeName);
           if (StringUtils.isBlank(catalogId)) {
             throw new InvalidContextException("No default catalog id found for store '" + storeName + "' in wcs (site: " + siteName + ").");
           }
         }
+
         targetStoreConfig.put(CONFIG_KEY_CATALOG_ID, catalogId);
       }
+
       String wcsVersion = storeInfoService.getWcsVersion();
       if (StringUtils.isNoneBlank(wcsVersion)) {
         String configWcsVersion = (String) targetStoreConfig.get(CONFIG_KEY_WCS_VERSION);
@@ -112,10 +117,10 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
       } else {
         LOG.info("No dynamic wcs version. Please update the StoreInfoHandler.");
       }
+
       Map<String, String> timeZone = new HashMap<>();
       timeZone.put("id", storeInfoService.getTimeZone().getID());
       targetStoreConfig.put("wcsTimeZone", timeZone);
     }
   }
-
 }

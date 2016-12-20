@@ -79,7 +79,7 @@
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion3fc631ae.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion%20Teaser%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Decorating%20Category%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Decorating%20Category%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Decorating/Decorating%20Products%20Category%20eaa7dc7e.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Decorating/Decorating%20Products%20Category%20Promotion%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collf6e7eb14.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>

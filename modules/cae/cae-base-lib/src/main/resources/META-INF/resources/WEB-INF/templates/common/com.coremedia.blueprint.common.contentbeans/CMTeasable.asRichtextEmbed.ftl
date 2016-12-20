@@ -3,6 +3,6 @@
 
 <#assign additionalCssClasses=att_class!""/>
 
-<div class="cm-teaser--embedded ${additionalCssClasses}">
+<div class="cm-teasable--embedded ${additionalCssClasses}">
   <@cm.include self=self view="asTeaser" />
 </div>

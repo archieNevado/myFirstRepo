@@ -26,7 +26,8 @@ node.rm_default('blueprint', 'proxy', 'virtual_host', 'delivery', 'cluster', 'de
 base_service_name = 'cae-live'
 
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('master-live-server')}/ior"
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['solr.search.url'] = "#{cm_webapp_url('solr')}/live"
+node.default['blueprint']['webapps'][base_service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
+node.default['blueprint']['webapps'][base_service_name]['application.properties']['solr.collection.cae'] = 'live'
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024

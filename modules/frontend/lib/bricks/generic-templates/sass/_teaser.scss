@@ -66,6 +66,10 @@ $cm-teasable-padding-large-horizontal: 45px !default;
     text-align: center;
   }
 
+  &--video {
+    cursor: pointer;
+  }
+
   &--video &__caption {
     // set to the bottom to clear space for play-button
     top: auto;
@@ -117,7 +121,6 @@ $cm-teasable-padding-large-horizontal: 45px !default;
 
   &__play {
     @include center-absolute;
-    transform: translate(-50%, -80%); // a little higher for spacing
     z-index: 1; // move over dimmer and text
   }
 }

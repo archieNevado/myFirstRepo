@@ -1,6 +1,5 @@
 package com.coremedia.ecommerce.studio.components.link {
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.ecommerce.studio.config.categoryAndProductLinksPropertyField;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
@@ -13,9 +12,7 @@ public class CategoryAndProductLinksPropertyFieldBase extends CatalogLinkPropert
   private static const PRODUCTS_LIST_NAME:String = CatalogHelper.REFERENCES_LIST_NAME;
   public static const PROPERTY_NAME:String = LOCAL_SETTINGS_STRUCT_NAME + '.' + COMMERCE_STRUCT_NAME + '.' + PRODUCTS_LIST_NAME;
 
-  private var bindTo:ValueExpression;
-
-  public function CategoryAndProductLinksPropertyFieldBase(config:categoryAndProductLinksPropertyField = null) {
+  public function CategoryAndProductLinksPropertyFieldBase(config:CategoryAndProductLinksPropertyField = null) {
     super(config);
     bindTo = config.bindTo;
   }

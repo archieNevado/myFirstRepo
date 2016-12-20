@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.elastic.social.cae.action.AuthenticationState" -->
 <#-- @ftlvariable name="flowExecutionKey" type="java.lang.String" -->
 <#-- @ftlvariable name="nextUrl" type="java.lang.String" -->
-<#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration" -->
+<#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration" -->
 <#-- @ftlvariable name="registrationFlow" type="com.coremedia.blueprint.elastic.social.cae.flows.Registration" -->
 <#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
 

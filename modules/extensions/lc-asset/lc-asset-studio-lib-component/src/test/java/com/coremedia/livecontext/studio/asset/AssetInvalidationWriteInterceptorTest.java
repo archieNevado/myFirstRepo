@@ -1,13 +1,14 @@
 package com.coremedia.livecontext.studio.asset;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
-import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -32,30 +36,39 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class AssetInvalidationWriteInterceptorTest {
 
   @InjectMocks
-  private AssetInvalidationWriteInterceptor testling = new AssetInvalidationWriteInterceptor();
+  private AssetInvalidationWriteInterceptor testling;
 
-  private AssetInvalidationWritePostProcessor postProcessor;
+  @Mock
+  private CommerceConnectionSupplier commerceConnectionSupplier;
+
+  @Mock
+  private CommerceConnection commerceConnection;
 
   @Mock
   private CommerceCacheInvalidationSource invalidationSource;
+
   @Mock
   private ContentType cmPictureType;
+
   @Mock
   private ContentWriteRequest contentWriteRequest;
+
   @Mock
   private Content content;
+
   @Mock
   private ContentRepository repository;
+
   @Mock
   private Struct oldLocalSettings, newLocalSettings;
 
   @Before
   public void setUp() throws Exception {
     mockStatic(CommerceReferenceHelper.class);
-    postProcessor = new AssetInvalidationWritePostProcessor();
     testling.setType(cmPictureType);
-    testling.setPostProcessor(postProcessor);
     testling.afterPropertiesSet();
+
+    when(commerceConnectionSupplier.getCommerceConnectionForContent(any(Content.class))).thenReturn(commerceConnection);
 
     when(contentWriteRequest.getEntity()).thenReturn(content);
     when(content.getRepository()).thenReturn(repository);
@@ -70,10 +83,12 @@ public class AssetInvalidationWriteInterceptorTest {
     when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b", "c"));
     //the new references
     when(CommerceReferenceHelper.getExternalReferences(newLocalSettings)).thenReturn(Arrays.asList("c", "d", "e"));
+
     testling.intercept(contentWriteRequest);
+
     List<String> expected = Arrays.asList("d", "e", "b", "a");
-    List<String> actual = postProcessor.getInvalidations();
-    assertTrue(CollectionUtils.disjunction(expected, actual).isEmpty());
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)),
+            eq(commerceConnection));
   }
 
   @Test
@@ -86,6 +101,8 @@ public class AssetInvalidationWriteInterceptorTest {
 
     testling.intercept(contentWriteRequest);
 
-    assertEquals(Arrays.asList("a", "b", "c"), postProcessor.getInvalidations());
+    List<String> expected = Arrays.asList("a", "b", "c");
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)),
+            eq(commerceConnection));
   }
 }

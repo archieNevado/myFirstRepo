@@ -10,23 +10,22 @@
 <!--CM { "objectType":"page","renderType":"metadata","title":"${context.title}","description":"",
 "keywords":"${context.keywords}","pageName":"${context.title}","pbe":"${previewMetadata?html}", "slider":"${sliderMetadata?html}" } CM-->
 
-<#-- include all css (incl. with ieExpressions) -->
 <#list self.css![] as css>
   <@cm.include self=css view="asCSSLink" />
 </#list>
-
-<#-- include all javascript without ieExpressions -->
-<#list self.javaScript![] as js>
-  <#if !js.ieExpression?has_content>
-    <@cm.include self=js view="asJSLink" />
-  </#if>
+<#list self.internetExplorerCss![] as css>
+  <@cm.include self=css view="asCSSLink"/>
 </#list>
 
-<#-- include javascript with ieExpressions -->
+<#list self.headJavaScript![] as js>
+  <@cm.include self=js view="asJSLink"/>
+</#list>
+<#list self.internetExplorerJavaScript![] as js>
+  <@cm.include self=js view="asJSLink"/>
+</#list>
+<#-- include even the body js in external heads -->
 <#list self.javaScript![] as js>
-  <#if js.ieExpression?has_content>
-    <@cm.include self=js view="asHeaderJSLink" />
-  </#if>
+  <@cm.include self=js view="asJSLink"/>
 </#list>
 
 <@preview.previewScripts />

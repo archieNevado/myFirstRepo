@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
-import com.coremedia.blueprint.analytics.elastic.util.SettingsUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;

@@ -3,8 +3,7 @@ package com.coremedia.ecommerce.test;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
-import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
@@ -29,6 +28,8 @@ import org.mockito.Mock;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Currency;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextImpl.newUserContext;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
@@ -88,19 +89,19 @@ public class MockCommerceEnvBuilder {
 
   public BaseCommerceConnection setupEnv() {
     initMocks(this);
-    StoreContext storeContext = StoreContextBuilder.create().build();
+    StoreContext storeContext = newStoreContext();
 
-    storeContext.put(StoreContextBuilder.CONFIG_ID, "aurora");
-    storeContext.put(StoreContextBuilder.STORE_ID, "10001");
-    storeContext.put(StoreContextBuilder.STORE_NAME, "aurora");
-    storeContext.put(StoreContextBuilder.CATALOG_ID, "10051");
-    storeContext.put(StoreContextBuilder.LOCALE, LocaleHelper.getLocaleFromString("en_US"));
-    storeContext.put(StoreContextBuilder.CURRENCY, Currency.getInstance("USD"));
+    storeContext.put(StoreContextImpl.CONFIG_ID, "aurora");
+    storeContext.put(StoreContextImpl.STORE_ID, "10001");
+    storeContext.put(StoreContextImpl.STORE_NAME, "aurora");
+    storeContext.put(StoreContextImpl.CATALOG_ID, "10051");
+    storeContext.put(StoreContextImpl.LOCALE, LocaleHelper.getLocaleFromString("en_US"));
+    storeContext.put(StoreContextImpl.CURRENCY, Currency.getInstance("USD"));
 
     when(storeContextProvider.getCurrentContext()).thenReturn(storeContext);
     when(storeContextProvider.findContextBySite((Site) anyObject())).thenReturn(storeContext);
 
-    UserContext userContext = UserContextBuilder.create().build();
+    UserContext userContext = newUserContext();
     when(userContextProvider.getCurrentContext()).thenReturn(userContext);
     when(userContextProvider.createContext((HttpServletRequest) anyObject(), anyString())).thenReturn(userContext);
 

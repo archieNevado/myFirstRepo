@@ -23,13 +23,7 @@ public class PreviewDataItem {
    */
   private static function isExcludedDocumentTypeWithoutPreview(content:Content):Boolean {
     var exclusions:Array = editorContext.getDocumentTypesWithoutPreview();
-    for (var i:int = 0; i < exclusions.length; i++) {
-      var type:String = exclusions[i];
-      if (type === content.getType().getName()) {
-        return true;
-      }
-    }
-    return false;
+    return exclusions.length > 0 && exclusions.indexOf(content.getType().getName()) >= 0;
   }
 
   public function setActive(b:Boolean):void {

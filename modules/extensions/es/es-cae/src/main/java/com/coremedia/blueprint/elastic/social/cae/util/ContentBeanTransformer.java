@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.util;
 
 
-import com.coremedia.blueprint.elastic.social.common.ContributionTargetTransformer;
+import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetTransformer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;

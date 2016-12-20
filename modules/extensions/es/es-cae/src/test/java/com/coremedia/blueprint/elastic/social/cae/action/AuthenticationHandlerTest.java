@@ -75,7 +75,7 @@ public class AuthenticationHandlerTest extends HandlerBaseTest {
 
     registerHandler(testling);
 
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache()));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
     when(authenticationState.getAction()).thenReturn(action);
     when(navigationSegmentsUriHelper.parsePath(eq(asList(CONTEXT_NAME)))).thenReturn(rootNavigation);
     when(converter.convert(action)).thenReturn(ID);

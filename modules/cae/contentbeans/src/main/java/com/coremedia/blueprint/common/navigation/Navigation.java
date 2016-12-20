@@ -1,9 +1,11 @@
 package com.coremedia.blueprint.common.navigation;
 
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.cae.aspect.provider.AspectsProvider;
+import com.coremedia.cap.content.Content;
 
 import java.util.List;
 
@@ -103,4 +105,21 @@ public interface Navigation extends Linkable {
    * @return the list of navigations forming the path to this Navigation including this.
    */
   List<? extends Linkable> getNavigationPathList();
+
+  /**
+   * Returns the tree relation for code resources lookup (themes, css, js).
+   * <p>
+   * In the Blueprint, code resources are declared by channels
+   * (CMNavigation properties theme, css, javaScript).  Since code resources
+   * may be inherited (for details see CodeResourcesCacheKey), we need a whole
+   * tree relation for the lookup, rather than a single CMNavigation content.
+   * In a plain Blueprint content world this tree relation will usually
+   * match {@link #getParentNavigation()} and {@link #getChildren()}, whose
+   * result beans have a 1:1 relation to content objects.
+   * <p>
+   * Other implementations of Navigation must provide an arbitrary content
+   * based tree relation that enables us to lookup code resources to associate
+   * with a Navigation instance.
+   */
+  TreeRelation<Content> getCodeResourcesTreeRelation();
 }

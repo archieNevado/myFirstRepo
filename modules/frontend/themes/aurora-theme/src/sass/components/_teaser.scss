@@ -97,16 +97,6 @@ $cm-teasable-padding-large-horizontal: 0;
   font-size: 1.2rem;
 }
 
-// Add to cart button in teaser
-.cm-teaser__button-group {
-  background-color: transparent;
-  top: auto;
-  left: auto;
-  right: 3px;
-  bottom: 3px;
-  margin-top: 0;
-}
-
 .cm-button-group--overlay {
   text-align: left;
   width: auto;
@@ -156,7 +146,7 @@ $cm-teasable-padding-large-horizontal: 0;
     transform: inherit;
     padding: 0;
 
-    .cm-teaser__info {
+    .#{$cm-teasable-prefix}__info {
       right: 0;
       bottom: 0;
       position: absolute;
@@ -203,7 +193,7 @@ $cm-teasable-padding-large-horizontal: 0;
   }
 
   @include breakpoint(md) {
-    &:hover .cm-teaser__button-group {
+    &:hover .cm-button-group--shopnow {
       display: block;
     }
   }

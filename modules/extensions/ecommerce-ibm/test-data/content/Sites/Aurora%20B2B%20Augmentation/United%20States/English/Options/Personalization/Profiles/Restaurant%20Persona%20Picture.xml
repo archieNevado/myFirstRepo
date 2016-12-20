@@ -14,9 +14,7 @@
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=6;width=50;height=38</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=11;width=50;height=28</StringProperty>
-<StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=13;width=50;height=25</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=15;width=50;height=20</StringProperty>
-<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=16;width=50;height=19</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=19;width=50;height=13</StringProperty>
 </Struct>
 </StructProperty>
@@ -24,8 +22,8 @@
 </localSettings>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment></segment>
 <title>Jennifer-Cooper-129390947</title>
 <htmlTitle></htmlTitle>

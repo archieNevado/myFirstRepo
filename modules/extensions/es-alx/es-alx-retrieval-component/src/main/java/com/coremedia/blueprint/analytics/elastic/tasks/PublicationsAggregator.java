@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
-import com.coremedia.blueprint.analytics.elastic.util.DateUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.DateUtil;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.Version;

@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -136,7 +140,7 @@ public class UserGenerator {
       try {
         user = communityUserService.createUser(userName, userName, email);
         user.setProperty("state", userState);
-        user.setImage(userImageList.get(random.nextInt(userImageList.size())));
+        user.setImage(getBlobCopy(userImageList.get(random.nextInt(userImageList.size()))));
         user.setGivenName(givenNameList.get(random.nextInt(givenNameList.size())));
         user.setSurName(surNameList.get(random.nextInt(surNameList.size())));
         user.setLocale(getRandomLocale());
@@ -164,6 +168,10 @@ public class UserGenerator {
       }
     }
     return user;
+  }
+
+  private Blob getBlobCopy(Blob blob) {
+    return blob == null ? null : blobService.put(getInputStream(blob), blob.getContentType(), blob.getFileName());
   }
 
   @Nonnull
@@ -233,4 +241,21 @@ public class UserGenerator {
   public int getUserChangesPostModerationCount() {
     return userChangesPostModerationCount;
   }
+
+  public InputStream getInputStream(Blob blob) {
+    if (blob == null) {
+      return null;
+    }
+    byte[] bytes;
+    try {
+      final ByteArrayOutputStream outputStream = new ByteArrayOutputStream((int) blob.getLength());
+      blob.writeOn(outputStream);
+      // no need to close stream
+      bytes = outputStream.toByteArray();
+    } catch (IOException e) {
+      throw new IllegalArgumentException("cannot read blob", e);
+    }
+    return new ByteArrayInputStream(bytes);
+  }
+
 }

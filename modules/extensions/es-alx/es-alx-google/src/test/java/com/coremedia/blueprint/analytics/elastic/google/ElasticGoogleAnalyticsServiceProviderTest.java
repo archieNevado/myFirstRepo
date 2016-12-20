@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
@@ -37,11 +37,11 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.analytics.elastic.google.ElasticGoogleAnalyticsServiceProvider.GOOGLE_ANALYTICS_SERVICE_KEY;
 import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.KEY_PID;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_ACTION;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_CATEGORY;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_MAX_LENGTH;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.KEY_LIMIT;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_ACTION;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_CATEGORY;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_MAX_LENGTH;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.KEY_LIMIT;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;

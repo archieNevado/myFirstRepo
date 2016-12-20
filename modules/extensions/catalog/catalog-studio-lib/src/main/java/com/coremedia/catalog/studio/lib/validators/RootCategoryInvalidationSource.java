@@ -28,14 +28,19 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
 
   @Autowired
   private Cache cache;
+
   @Autowired
   Linker linker;
+
   @Autowired
   private SitesService sitesService;
+
   @Autowired
   private Commerce commerce;
+
   @Autowired
   private CommerceConnectionIdProvider commerceConnectionIdProvider;
+
   @Autowired
   private CmsCatalogService catalogService;
 
@@ -64,10 +69,13 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
       if (this == o) {
         return true;
       }
+
       if (o == null || getClass() != o.getClass()) {
         return false;
       }
+
       RootCategoriesCacheKey that = (RootCategoriesCacheKey) o;
+
       return Objects.equals(rootCategoryInvalidationSource, that.rootCategoryInvalidationSource);
     }
 
@@ -79,28 +87,36 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
     @Override
     public Collection<Category> evaluate(Cache cache) throws Exception {
       Collection<Category> rootCategories = new LinkedList<>();
+
       Set<Site> sites = sitesService.getSites();
       for (Site site : sites) {
         String connectionId = commerceConnectionIdProvider.findConnectionIdBySite(site);
         if (connectionId != null) {
           CommerceConnection connection = commerce.getConnection(connectionId);
-          if (connection!=null && "coremedia".equals(connection.getVendorName())){
+          if (connection != null && "coremedia".equals(connection.getVendorName())) {
             connection.setStoreContext(connection.getStoreContextProvider().findContextBySite(site));
+
             Commerce.setCurrentConnection(connection);
+
             try {
-              Category rootCategory = cache.get(new RootCategoryCacheKey(connection, catalogService, linker, rootCategoryInvalidationSource));
-              if (rootCategory!=null) {
+              RootCategoryCacheKey cacheKey = new RootCategoryCacheKey(connection, catalogService, linker,
+                      rootCategoryInvalidationSource);
+
+              Category rootCategory = cache.get(cacheKey);
+              if (rootCategory != null) {
                 rootCategories.add(rootCategory);
               } else {
                 LOG.debug("connection {} has no root category", connection);
               }
             } catch (Exception e) {
               LOG.debug("unable to determine root category for connection {}", connection, e);
+            } finally {
+              Commerce.clearCurrent();
             }
           }
         }
-
       }
+
       return rootCategories;
     }
 
@@ -108,7 +124,5 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
     public boolean recomputeOnInvalidation(Cache cache, Collection<Category> value, int numDependents) {
       return true;
     }
-
   }
-
 }

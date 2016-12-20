@@ -1,39 +1,52 @@
 @import "../../../sass/utils/imports";
 
-.cm-imagemap__hotzone {
-  position: absolute;
-  z-index: 2;
-  border: 0;
-  padding: 0;
-  display: block;
-  transform: translate(-50%, -50%);
+$cm-imagemap-prefix: "cm-imagemap" !default;
+$cm-imagemap-overlay-prefix: "cm-overlay" !default;
+$cm-imagemap-overlay-color-dark: #000000 !default;
+$cm-imagemap-overlay-color-light: #ffffff !default;
+
+@function imagemapicon($circle-background-color: rgba(0,0,0,0.5), $circle-color: '#FFFFFF', $color: '#FFFFFF') {
+  @return svg-url(#{'<svg viewBox="0 0 512 512"><style>.st0{fill:#{$circle-background-color};stroke:#{$circle-color};stroke-width:46;stroke-miterlimit:10;}.st1{fill:#FFFFFF;stroke:#{$color};stroke-width:50;stroke-miterlimit:10;}</style><circle cx="256" cy="256" r="233" class="st0"/><path d="M128 256h256M256 128v256" class="st1"/></svg>'});
+}
+
+
+.#{$cm-imagemap-prefix} {
+  &__hotzone {
+    position: absolute;
+    z-index: 2;
+    border: 0;
+    padding: 0;
+    display: block;
+    transform: translate(-50%, -50%);
+    &--text p {
+      margin: 0;
+      padding: 0;
+    }
+
+    &--icon {
+      padding-right: 1em;
+      font-size: 24px;
+      height: 24px;
+      background: transparent imagemapicon();
+      cursor: pointer;
+      & > i {
+        display: block;
+      }
+    }
+
+    &:hover.#{$cm-imagemap-prefix}__hotzone--icon,
+    &--hover.#{$cm-imagemap-prefix}__hotzone--icon {
+      background-image: imagemapicon(rgba(0, 0, 0, 0.8));
+    }
+
+    &--active.#{$cm-imagemap-prefix}__hotzone--icon {
+      background-image: imagemapicon(rgba(0, 0, 0, 0.9));
+    }
+  }
 }
 
 .cm-notselectable {
   user-select: none;
-}
-
-/**
- * Add icon as font
- * TODO: change to svg
- */
-@include font-face('imagemap-icons', imagemap-icons);
-
-[class^="basic-icon-"], [class*=" basic-icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'imagemap-icons' !important;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  line-height: 1;
-  text-transform: none;
-  /* Better Font Rendering */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.basic-icon-imagemap:before {
-  content: "\e621";
 }
 
 .cm-imagemap__wrapper {
@@ -47,22 +60,24 @@
  *
  * Basic styling for each theme provided
  */
-.cm-overlay--theme-dark {
-  color: black;
-  background-color: transparent;
-}
+.#{$cm-imagemap-overlay-prefix} {
+  &--theme-dark {
+    color: $cm-imagemap-overlay-color-dark;
+    background-color: transparent;
+  }
 
-.cm-overlay--theme-light {
-  color: white;
-  background-color: transparent;
-}
+  &--theme-light {
+    color: $cm-imagemap-overlay-color-light;
+    background-color: transparent;
+  }
 
-.cm-overlay--theme-light-on-dark {
-  color: white;
-  background-color: black;
-}
+  &--theme-light-on-dark {
+    color: $cm-imagemap-overlay-color-light;
+    background-color: black;
+  }
 
-.cm-overlay--theme-dark-on-light {
-  color: black;
-  background-color: white;
+  &--theme-dark-on-light {
+    color: $cm-imagemap-overlay-color-dark;
+    background-color: white;
+  }
 }

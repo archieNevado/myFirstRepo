@@ -1,9 +1,9 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 <#-- @ftlvariable name="self.content" type="com.coremedia.blueprint.common.contentbeans.CMLinkable" -->
-<#-- @ftlvariable name="js" type="com.coremedia.blueprint.common.contentbeans.CMJavaScript" -->
 
 <#assign studioExtraFilesMetadata=preview.getStudioAdditionalFilesMetadata(bp.setting(self, "studioPreviewCss"), bp.setting(self, "studioPreviewJs"))/>
 <#assign titleSuffix=bp.setting(self, "title_suffix", '')/>
+
 <head<@cm.metadata data=studioExtraFilesMetadata/>>
 <#-- add encoding first! -->
     <meta charset="UTF-8"/>
@@ -46,7 +46,12 @@
     <@cm.include self=css view="asCSSLink"/>
 </#list>
 
-<#-- include preview css -->
+<#-- include css with conditional comments for IE -->
+<#list self.internetExplorerCss![] as css>
+  <@cm.include self=css view="asCSSLink"/>
+</#list>
+
+<#-- include additional css for preview -->
 <#if preview.isPreviewCae()>
   <#assign previewCss=bp.setting(self, "previewCss", []) />
   <#list previewCss as css>
@@ -54,14 +59,17 @@
   </#list>
 </#if>
 
-<#-- include javascript with ieExpressions in head, all others in footer -->
-<#list self.javaScript![] as js>
-  <#if js.ieExpression?has_content>
-    <@cm.include self=js view="asHeaderJSLink"/>
-  </#if>
+<#-- include additional javascript -->
+<#list self.headJavaScript![] as js>
+  <@cm.include self=js view="asJSLink"/>
 </#list>
 
-<#-- include pbe -->
+<#-- include javascript with conditional comments for IE -->
+<#list self.internetExplorerJavaScript![] as js>
+  <@cm.include self=js view="asJSLink"/>
+</#list>
+
+<#-- include PDE -->
 <@preview.previewScripts/>
 
 <#-- hook for extensions in head (for e.g. css or javascripts) -->

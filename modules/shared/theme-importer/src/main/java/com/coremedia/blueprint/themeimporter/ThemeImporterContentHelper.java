@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -24,6 +26,7 @@ import java.util.StringTokenizer;
 class ThemeImporterContentHelper {
   private static final Logger LOGGER = LoggerFactory.getLogger(ThemeImporterContentHelper.class);
   private CapConnection capConnection;
+  private Collection<Content> toBeCheckedIn = new HashSet<>();
 
 
   // --- Construct and configure ------------------------------------
@@ -57,7 +60,6 @@ class ThemeImporterContentHelper {
       //Only do this if the document has not been checked out by somebody else.
       if (content != null) {
         content.setProperties(properties);
-        content.checkIn();
       }
       return content;
     } catch (Exception e) {
@@ -90,6 +92,7 @@ class ThemeImporterContentHelper {
       if (content.isCheckedOut()) {
         content.checkIn();
       }
+      toBeCheckedIn.remove(content);
       BulkOperationResult result = content.delete();
       if (!result.isSuccessful()) {
         LOGGER.warn("Cannot delete content {}, you should clean up manually afterwards.", content);
@@ -97,6 +100,14 @@ class ThemeImporterContentHelper {
     } catch (Exception e) {
       LOGGER.warn("Cannot delete content {}, you should clean up manually afterwards.", content, e);
     }
+  }
+
+  void checkInAll() {
+    toBeCheckedIn.forEach(Content::checkIn);
+  }
+
+  void revertAll() {
+    toBeCheckedIn.forEach(Content::revert);
   }
 
 
@@ -139,6 +150,7 @@ class ThemeImporterContentHelper {
         content = null;
       } else if (content.isCheckedIn()) {
         content.checkOut();
+        toBeCheckedIn.add(content);
       } else if (!content.isCheckedOutByCurrentSession()) {
         LOGGER.warn("Cannot update document {} since it has been checkout out by somebody else.", absolutePath);
         content = null;
@@ -147,6 +159,7 @@ class ThemeImporterContentHelper {
       ContentType type = repository.getContentType(contentType);
       if (type != null) {
         content = type.create(repository.getRoot(), absolutePath);
+        toBeCheckedIn.add(content);
       } else {
         LOGGER.warn("Cannot create document {} since there is no content type {}", absolutePath, contentType);
       }

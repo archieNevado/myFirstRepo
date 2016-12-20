@@ -3,7 +3,7 @@ module.exports = function (grunt, options) {
   'use strict';
 
   // add templates to theme templateset
-  var existingTemplates = grunt.config.get('compress.templates.files');
+  var existingTemplates = grunt.config.get('compress.brick_templates.files');
   existingTemplates.push({
     expand: true,
     cwd: options.brickDirectory + '/templates',
@@ -14,7 +14,7 @@ module.exports = function (grunt, options) {
   return {
     tasks: {
       compress: {
-        templates: {
+        brick_templates: {
           files: existingTemplates
         }
       },

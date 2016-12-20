@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.studio.osm {
 
-import com.coremedia.blueprint.studio.osm.config.osmPanel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.TabbedDocumentFormDispatcher;
 import com.coremedia.ui.data.ValueExpression;
 
-import ext.Panel;
+import ext.Ext;
+import ext.panel.Panel;
 
 /**
  * The open streetmap panel implementation, including marker moving
@@ -25,7 +25,7 @@ public class OSMPanelBase extends Panel {
   private var vectorLayer:*;
   private var skipCalcZoomLevel:Boolean = false;
 
-  public function OSMPanelBase(config:osmPanel = null) {
+  public function OSMPanelBase(config:OSMPanel = null) {
     config.height = 325;
     super(config);
     this.latLngExpression = config.latLngExpression;
@@ -88,7 +88,7 @@ public class OSMPanelBase extends Panel {
    */
   private function createMap():void {
     //determine the panel element where the map should be added, (could be improved via findBy?)
-    var mapId = getEl().first().first().getAttribute("id"); //nothing special, just the generated ExtJs id.
+    var mapId = getEl().first().getAttribute("id"); //nothing special, just the generated ExtJs id.
     map = new OpenLayers.Map(mapId, {
       autoUpdateSize: true,
       projection:new OpenLayers.Projection("EPSG:900913"),
@@ -122,7 +122,7 @@ public class OSMPanelBase extends Panel {
     vectorLayer = new OpenLayers['Layer'].Vector("Marker Drop Shadows", {
       styleMap:new OpenLayers['StyleMap']({
         // Set the external graphic and background graphic images.
-        externalGraphic:'osm/img/marker.png',
+        externalGraphic:Ext.getResourcePath('osm/img/marker.png', null, 'com.coremedia.blueprint__osm-studio'),
         graphicYOffset:-25,
 
         // Set the z-indexes of both graphics to make sure the background

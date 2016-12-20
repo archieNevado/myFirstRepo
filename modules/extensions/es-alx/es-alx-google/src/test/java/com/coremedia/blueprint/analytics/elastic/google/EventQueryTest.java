@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
-import com.coremedia.blueprint.analytics.elastic.util.DaysBack;
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
-import com.coremedia.blueprint.analytics.elastic.util.SettingsUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
 import com.google.common.collect.ImmutableMap;

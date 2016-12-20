@@ -1,18 +1,18 @@
 package com.coremedia.blueprint.studio.externallibrary {
 import ext.Ext;
-import ext.data.Record;
-import ext.form.ComboBox;
+import ext.data.Model;
+import ext.form.field.ComboBox;
 
 /**
  * The command stack of the third party's filter section.
  */
 public class CommandStack {
-  private var filterPanel:FilterPanelBase;
+  private var filterToolbar:FilterToolbarBase;
   private var history:Array;
   private var activeIndex:int;
 
-  public function CommandStack(filterPanel:FilterPanelBase) {
-    this.filterPanel = filterPanel;
+  public function CommandStack(filterToolbar:FilterToolbarBase) {
+    this.filterToolbar = filterToolbar;
     this.history = [];
     this.activeIndex = 0;
     this.history.push(new Command(null, null, activeIndex, this));
@@ -25,7 +25,7 @@ public class CommandStack {
    * @param dataSourceRecord The selected data source combo record.
    * @param filter The active search string.
    */
-  public function addCommand(dataSourceRecord:Record, filter:String):void {
+  public function addCommand(dataSourceRecord:Model, filter:String):void {
     if(activeIndex<(history.length-1)) {
       history = history.slice(0, (activeIndex+1));//remove forward commands.
     }
@@ -39,15 +39,15 @@ public class CommandStack {
   }
 
   private function updateButtons():void {
-    filterPanel.find('itemId', 'back')[0].setDisabled(false);
-    filterPanel.find('itemId', 'forward')[0].setDisabled(false);
+    filterToolbar.queryById('back').setDisabled(false);
+    filterToolbar.queryById('forward').setDisabled(false);
 
     if(activeIndex <= 0) {
-      filterPanel.find('itemId', 'back')[0].setDisabled(true);
+      filterToolbar.queryById('back').setDisabled(true);
     }
 
     if(activeIndex>=(history.length-1)) {
-      filterPanel.find('itemId', 'forward')[0].setDisabled(true);
+      filterToolbar.queryById('forward').setDisabled(true);
     }
   }
 
@@ -78,10 +78,10 @@ public class CommandStack {
       }
       if(value) {
         combo.setValue(value);
-        filterPanel.dataSourceValueExpression.setValue(cmd.record);
+        filterToolbar.dataSourceValueExpression.setValue(cmd.record);
       }
 
-      filterPanel.filterValueExpression.setValue(cmd.filter);
+      filterToolbar.filterValueExpression.setValue(cmd.filter);
     }
 
     updateButtons();
@@ -91,8 +91,8 @@ public class CommandStack {
    * Resets the command stack and the history buttons.
    */
   public function reset():void {
-    filterPanel.find('itemId', 'back')[0].setDisabled(true);
-    filterPanel.find('itemId', 'forward')[0].setDisabled(true);
+    filterToolbar.queryById('back').setDisabled(true);
+    filterToolbar.queryById('forward').setDisabled(true);
     this.activeIndex = 0;
     history = [];
     this.history.push(new Command(null, null, activeIndex, this));

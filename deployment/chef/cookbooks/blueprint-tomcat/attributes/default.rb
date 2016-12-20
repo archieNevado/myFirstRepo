@@ -15,9 +15,6 @@ default['blueprint']['tomcat']['catalina_opts']['network'] = '-Djava.net.preferI
 #<> Global jvm option to handle OutOfMemoryError, the default stops the process using 'kill -9'. With Oracle JDK 8u92 or above, you could also use -XX:+ExitOnOutOfMemoryError
 default['blueprint']['tomcat']['catalina_opts']['out_of_memory'] = '-XX:OnOutOfMemoryError=\'kill -9 %p\''
 
-# comment the following line in to disable asynchronous spring context initialization
-#default['blueprint']['tomcat']['catalina_opts']['sprint_context_start'] = '-Dcom.coremedia.springframework.web.context.disableAsynchronousLoading=true'
-
 # webapps rendering using libjpeg_turbo
 unless node['blueprint']['libjpeg_turbo_path'].nil?
   default['blueprint']['tomcat']['cae-preview']['catalina_opts']['libjpeg'] = "-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}"

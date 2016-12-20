@@ -10,6 +10,7 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.coremedia.rest.cap.intercept.InterceptService;
 import com.coremedia.rest.cap.intercept.RestBlobService;
+import com.coremedia.rest.intercept.WriteRequest;
 import com.coremedia.rest.linking.LinkResolver;
 import com.coremedia.rest.linking.LocationHeaderResourceFilter;
 import com.coremedia.xml.MarkupFactory;
@@ -17,9 +18,10 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
 import com.sun.jersey.spi.container.ResourceFilters;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.activation.MimeType;
@@ -31,9 +33,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
+import java.io.BufferedInputStream;
+import javax.ws.rs.core.Response;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +49,7 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("upload")
 public class UploadResource {
+  private static final Logger LOG = LoggerFactory.getLogger(UploadResource.class);
 
   private static final String SITE = "site";
 
@@ -97,23 +103,6 @@ public class UploadResource {
   }
 
   /**
-   * Uses the mime type service to guess the mime type from the given filename.
-   * If null is returned, the user has to select the mime type manually.
-   *
-   * @param filename The filename to retrieve the mime type for.
-   * @return The mime type for the given file name or null.
-   */
-  @GET
-  @Path("mimetype")
-  public String getMimeType(@QueryParam("filename") String filename) {
-    String extension = filename;
-    if (filename.contains(".")) {
-      extension = filename.substring(0, filename.lastIndexOf("."));
-    }
-    return mimeTypeService.getMimeTypeForExtension(extension);
-  }
-
-  /**
    * Creates a new document for the the browser file.
    */
   @POST
@@ -125,62 +114,92 @@ public class UploadResource {
                                   @FormDataParam("contentName") String contentName,
                                   @FormDataParam("file") InputStream inputStream,
                                   @FormDataParam("file") FormDataContentDisposition fileDetail,
-                                  @FormDataParam("file") FormDataBodyPart fileBodyPart)
-          throws MimeTypeParseException, IOException {
+                                  @FormDataParam("file") FormDataBodyPart fileBodyPart) {
+    try {
+      // Load upload configuration
+      UploadConfigurationRepresentation config = loadConfiguration(siteId);
 
-    // Load upload configuration
-    UploadConfigurationRepresentation config = loadConfiguration(siteId);
+      String fileName = fileDetail.getFileName();
 
-    String fileName = fileDetail.getFileName();
-    String mimeTypeString = null;
+      // wrap into buffered input stream so that mime type detection marks and resets it:
+      @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
+      BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+      String mimeTypeString = mimeTypeService.detectMimeType(bufferedInputStream, fileName, fileBodyPart.getMediaType().toString());
+      MimeType mimeType = new MimeType(mimeTypeString);
 
-    String ext = FilenameUtils.getExtension(fileName);
-    if (ext != null) {
-      mimeTypeString = mimeTypeService.getMimeTypeForExtension(ext);
+      Blob blob = restBlobService.fromInputStream(bufferedInputStream, mimeTypeString, fileName);
+
+      Object propertyValue = blob;
+      String propertyName = config.getMimeTypeToMarkupPropertyMapping(mimeType);
+      if (propertyName != null) {
+        // The property is configured as markup - convert blob to markup
+        String source = IOUtils.toString(blob.getInputStream());
+        source = StringEscapeUtils.escapeXml(source);
+        source = convertLineBreaks(source);
+        source = String.format(MARKUP_TEMPLATE, source);
+        propertyValue = MarkupFactory.fromString(source);
+      } else {
+        // Get property name for the blob
+        propertyName = config.getMimeTypeToBlobPropertyMapping(mimeType);
+      }
+
+      // Put blob into properties
+      Map<String,Object> properties = new HashMap<>();
+      properties.put(propertyName, propertyValue);
+
+      // Get all other information for content creation:
+      // 1. folder under which to create the content
+      // 2. Unique name for the content (derived from file name)
+      // 3. Content Type (derived from mime type)
+      Content folder = (Content) linkResolver.resolveLink(folderUri);
+      String name = (contentName == null) ? fileName : contentName;
+      String uniqueFileName = resolveUniqueFilename(folder, name);
+      String contentTypeName = config.getMimeTypeMapping(mimeType);
+      ContentType contentType = capConnection.getContentRepository().getContentType(contentTypeName);
+
+      // Create content (taking possible interceptors into consideration)
+      ContentWriteRequest writeRequest = interceptService.interceptCreate(folder, uniqueFileName, contentType, properties);
+      interceptService.handleErrorIssues(writeRequest);
+      if (!booleanWriteRequestAttribute(writeRequest, UploadControlAttributes.DO_NOTHING)) {
+        // This is the standard flow.
+        Content content = contentType.createByTemplate(folder, uniqueFileName, "{3} ({1})", writeRequest.getProperties());
+        interceptService.postProcess(content, null);
+        return content;
+      } else {
+        LOG.debug("An interceptor raised the DO_NOTHING flag.  No Download document is created for {}", writeRequest);
+        // An interceptor has handled the upload completely.
+        // Do nothing more here, just return one of the result contents suggested
+        // by the interceptor.
+        // TODO: Would be nicer to return all those contents (and have them
+        // opened as tabs), but that would change the signature of this method
+        // and is out of scope for now.
+        return uploadedDocumentFromWriteRequest(writeRequest);
+      }
+    } catch (MimeTypeParseException e) {
+      Response r = Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).entity(e.getMessage()).build();
+      throw new WebApplicationException(e, r);
+    } catch (IllegalArgumentException e) {
+      Response r = Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+      throw new WebApplicationException(e, r);
+    } catch (Exception e) {
+      Response r = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+      throw new WebApplicationException(e, r);
     }
+  }
 
-    if (mimeTypeString == null) {
-      mimeTypeString = fileBodyPart.getMediaType().toString();
+  private boolean booleanWriteRequestAttribute(WriteRequest writeRequest, String name) {
+    Object value = writeRequest.getAttribute(name);
+    return value instanceof Boolean && (boolean)value;
+  }
+
+  private Content uploadedDocumentFromWriteRequest(WriteRequest writeRequest) {
+    Object value = writeRequest.getAttribute(UploadControlAttributes.UPLOADED_DOCUMENTS);
+    if (!(value instanceof Collection)) {
+      return null;
     }
-
-    MimeType mimeType = new MimeType(mimeTypeString);
-
-    Blob blob = restBlobService.fromInputStream(inputStream, mimeTypeString, fileName);
-
-    Object propertyValue = blob;
-    String propertyName = config.getMimeTypeToMarkupPropertyMapping(mimeType);
-    if (propertyName != null) {
-      // The property is configured as markup - convert blob to markup
-      String source = IOUtils.toString(blob.getInputStream());
-      source = StringEscapeUtils.escapeXml(source);
-      source = convertLineBreaks(source);
-      source = String.format(MARKUP_TEMPLATE, source);
-      propertyValue = MarkupFactory.fromString(source);
-    } else {
-      // Get property name for the blob
-      propertyName = config.getMimeTypeToBlobPropertyMapping(mimeType);
-    }
-
-    // Put blob into properties
-    Map<String,Object> properties = new HashMap<>();
-    properties.put(propertyName, propertyValue);
-
-    // Get all other information for content creation:
-    // 1. folder under which to create the content
-    // 2. Unique name for the content (derived from file name)
-    // 3. Content Type (derived from mime type)
-    Content folder = (Content) linkResolver.resolveLink(folderUri);
-    String name = (contentName == null) ? fileName : contentName;
-    String uniqueFileName = resolveUniqueFilename(folder, name);
-    String contentTypeName = config.getMimeTypeMapping(mimeType);
-    ContentType contentType = capConnection.getContentRepository().getContentType(contentTypeName);
-
-    // Create content (taking possible interceptors into consideration)
-    ContentWriteRequest writeRequest = interceptService.interceptCreate(folder, uniqueFileName, contentType, properties);
-    interceptService.handleErrorIssues(writeRequest);
-    Content content = contentType.createByTemplate(folder, uniqueFileName, "{3} ({1})", writeRequest.getProperties());
-    interceptService.postProcess(content, null);
-    return content;
+    Collection collection = (Collection) value;
+    Object item = collection.isEmpty() ? null : collection.iterator().next();
+    return item instanceof Content ? (Content)item : null;
   }
 
   /**

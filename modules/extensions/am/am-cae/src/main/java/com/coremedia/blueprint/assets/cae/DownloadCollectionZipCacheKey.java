@@ -9,9 +9,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.transform.BlobHelper;
 import com.coremedia.cotopaxi.common.CacheFactory;
-import com.coremedia.cotopaxi.content.AbstractContentRepository;
 import com.coremedia.mimetype.MimeTypeService;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -82,11 +80,8 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
 
   @Override
   public File evaluate(Cache cache) throws Exception {
-
     String name = TEMP_FILE_PREFIX + hashCode();
-
-    final File f = ((AbstractContentRepository) contentRepository).createTempFileFor(name, new MimeType(mimeTypeService.getMimeTypeForExtension(ZIP_FILE_EXTENSION)));
-
+    File f = contentRepository.getConnection().getTempFileService().createTempFileFor(name, new MimeType(mimeTypeService.getMimeTypeForExtension(ZIP_FILE_EXTENSION)));
     boolean ok = false;
 
     try (FileOutputStream fos = new FileOutputStream(f)) {
@@ -102,7 +97,7 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
       return f;
     } finally {
       if (!ok) {
-        FileUtils.deleteQuietly(f);
+        contentRepository.getConnection().getTempFileService().release(f);
       }
 
       Cache.enableDependencies();

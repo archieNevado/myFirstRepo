@@ -1,7 +1,9 @@
 package com.coremedia.livecontext.preview;
 
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -42,6 +44,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
                   "-{" + SEGMENT_ID + ":" + PATTERN_NUMBER + "}";
 
   private ExternalNavigationHandler externalNavigationHandler;
+  private TreeRelation<Content> treeRelation;
 
   @RequestMapping({PREVIEW_URI_PATTERN})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) LiveContextExternalChannelImpl liveContextExternalChannel,
@@ -52,7 +55,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
     if (null == navigation || !vanityName.equals(getVanityName(liveContextExternalChannel))) {
       return HandlerHelper.notFound();
     }
-    Page page = asPage(navigation, liveContextExternalChannel);
+    Page page = asPage(navigation, liveContextExternalChannel, treeRelation);
     return createModelAndView(page, view);
   }
 
@@ -113,5 +116,9 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   @Required
   public void setExternalNavigationHandler(ExternalNavigationHandler externalNavigationHandler) {
     this.externalNavigationHandler = externalNavigationHandler;
+  }
+
+  public void setTreeRelation(TreeRelation<Content> treeRelation) {
+    this.treeRelation = treeRelation;
   }
 }

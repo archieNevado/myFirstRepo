@@ -1,7 +1,5 @@
 package com.coremedia.blueprint.studio.esanalytics {
-import com.coremedia.blueprint.studio.config.esanalytics.esAnalyticsChartWidget;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cms.editor.sdk.config.widgetWrapper;
 import com.coremedia.cms.editor.sdk.dashboard.WidgetWrapper;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
@@ -11,42 +9,47 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.impl.RemoteServiceMethod;
 import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 
-import ext.Container;
-import ext.Panel;
-import ext.Toolbar;
-import ext.form.Label;
+import ext.container.Container;
+import ext.panel.Panel;
+import ext.toolbar.TextItem;
+import ext.toolbar.Toolbar;
 
+[ResourceBundle('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin')]
 public class EsAnalyticsChartWidgetBase extends Container {
 
-  public native function get content():Content;
+  /**
+   * The content id of the root channel to show.
+   */
+  [Bindable]
+  public var content:Content;
 
   private var tenantVE:ValueExpression;
 
   protected var timeRangeValueExpression:ValueExpression;
 
-  public function EsAnalyticsChartWidgetBase(config:esAnalyticsChartWidget = null) {
+  public function EsAnalyticsChartWidgetBase(config:EsAnalyticsChartWidgetBase = null) {
     super(config);
 
-    mon(this, "afterlayout", function ():void {
-      var title:String = EsAnalyticsStudioPlugin_properties.INSTANCE.widget_title;
+    on("afterlayout", function ():void {
+      var title:String = resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'widget_title');
       if (config.content) {
         var content:Content = config.content;
         if (content) {
           content.load(function (cont:Content):void {
-            getWidgetLabel().setText(title + ": " + cont.getName());
+            getWidgetLabel().update(title + ": " + cont.getName());
           });
         }
       } else {
-        getWidgetLabel().setText(title + ": " + EsAnalyticsStudioPlugin_properties.INSTANCE.widget_title_channel_undefined);
+        getWidgetLabel().update(title + ": " + resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'widget_title_channel_undefined'));
       }
     }, null, {single: true});
   }
 
-  private function getWidgetLabel():Label {
-    var wrapper:WidgetWrapper = findParentByType(widgetWrapper.xtype) as WidgetWrapper;
-    var innerWrapper:Panel = wrapper.find("itemId", "innerWrapper")[0];
-    var widgetToolbar:Toolbar = innerWrapper.getTopToolbar();
-    return widgetToolbar.find("itemId", "widgetWrapperLabel")[0] as Label;
+  private function getWidgetLabel():TextItem {
+    var wrapper:WidgetWrapper = findParentByType(WidgetWrapper.xtype) as WidgetWrapper;
+    var innerWrapper:Panel = wrapper.queryById("innerWrapper") as Panel;
+    var widgetToolbar:Toolbar = innerWrapper.getDockedItems("toolbar[dock=\"top\"]")[0] as Toolbar;
+    return widgetToolbar.down("tbtext") as TextItem;
   }
 
   public function getAlxData(serviceName:String, propertyName:String):ValueExpression {

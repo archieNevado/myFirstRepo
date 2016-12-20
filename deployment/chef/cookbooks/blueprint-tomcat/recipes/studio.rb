@@ -8,7 +8,9 @@ service_name = 'studio'
 cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
 
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('content-management-server')}/ior"
-node.default['blueprint']['webapps'][service_name]['application.properties']['solr.search.url'] = "#{cm_webapp_url('solr')}/preview"
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.collection.content'] = 'studio'
 node.default['blueprint']['webapps'][service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
@@ -26,7 +28,7 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['bl
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.corporate'] = "http://preview-corporate.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.studio.corporate'] = "studio-corporate.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.host.helios'] = "preview-helios.#{node['blueprint']['hostname']}"
-node.default['blueprint']['webapps'][service_name]['application.properties']['externalpreview.restUrl'] = "http://preview-helios.#{node['blueprint']['hostname']}/blueprint/servlet/externalpreview"
+node.default['blueprint']['webapps'][service_name]['application.properties']['externalpreview.restUrl'] = "http://preview-helios.#{node['blueprint']['hostname']}/blueprint/servlet/service/externalpreview"
 node.default['blueprint']['webapps'][service_name]['application.properties']['externalpreview.previewUrl'] = "https://preview-helios.#{node['blueprint']['hostname']}/blueprint/externalpreview"
 node.default['blueprint']['webapps'][service_name]['application.properties']['externalpreview.urlPrefix'] = "https://preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['livecontext.apache.wcs.host'] = "shop-preview-production-helios.#{node['blueprint']['hostname']}"

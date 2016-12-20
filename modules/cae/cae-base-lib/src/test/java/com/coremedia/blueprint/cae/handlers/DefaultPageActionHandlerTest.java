@@ -148,7 +148,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
     );
     defaultFlowOutCome.addAllObjects(webflowOutcomeModel);
     when(flowRunner.run(eq(DEFAULT_FLOW_ID), any(ModelAndView.class), eq(request), eq(response))).thenReturn(defaultFlowOutCome);
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache()));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
 
     testling.setBeanFactory(beanFactory);
     testling.setResourceBundleInterceptor(resourceBundleInterceptor);

@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.coremedia.blueprint.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
+import static com.coremedia.blueprint.base.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
 import static org.junit.Assert.assertEquals;
 
 public class AlxDataTest {

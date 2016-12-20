@@ -34,13 +34,13 @@
     </dependency>
 
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-common</artifactId>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-studio-rest</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-rest</artifactId>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
 
     <dependency>

@@ -50,20 +50,20 @@ package 'rpm-build'
 tomcat_dir = "apache-tomcat-#{node['blueprint']['tomcat']['version']}"
 # an array of service confs. Each item is a hash with the keys name and config_files and optional recipe_name
 # the config_files key points to an array of relative paths to files that should be marked in the rpm as config files.
-services = [{ :name => 'solr', :config_files => [] },
-            { :name => 'content-management-server', :config_files => ['content-management-server.properties'] },
-            { :name => 'workflow-server', :config_files => ['workflow-server.properties'] },
-            { :name => 'content-feeder', :config_files => ['content-feeder.properties'] },
-            { :name => 'adobe-drive-server', :config_files => ['adobe-drive-server.properties'] },
-            { :name => 'user-changes', :config_files => ['user-changes.properties'] },
-            { :name => 'elastic-worker', :config_files => ['elastic-worker.properties'] },
-            { :name => 'caefeeder-preview', :config_files => ['caefeeder-preview.properties'] },
-            { :name => 'cae-preview', :config_files => ['cae-preview.properties'] },
-            { :name => 'studio', :config_files => ['studio.properties'] },
-            { :name => 'sitemanager', :config_files => %w(editor.properties capclient.properties workflowclient.properties).map { |props| "#{tomcat_dir}/webapps/editor-webstart/webstart/properties/corem/#{props}" } },
-            { :name => 'master-live-server', :config_files => ['master-live-server.properties'] },
-            { :name => 'caefeeder-live', :config_files => ['caefeeder-live.properties'] },
-            { :name => 'cae-live-1', :recipe_name => 'cae-live', :config_files => ['cae-live-1.properties'] }]
+services = [{ name: 'solr', config_files: [] },
+            { name: 'content-management-server', config_files: ['content-management-server.properties'] },
+            { name: 'workflow-server', config_files: ['workflow-server.properties'] },
+            { name: 'content-feeder', config_files: ['content-feeder.properties'] },
+            { name: 'adobe-drive-server', config_files: ['adobe-drive-server.properties'] },
+            { name: 'user-changes', config_files: ['user-changes.properties'] },
+            { name: 'elastic-worker', config_files: ['elastic-worker.properties'] },
+            { name: 'caefeeder-preview', config_files: ['caefeeder-preview.properties'] },
+            { name: 'cae-preview', config_files: ['cae-preview.properties'] },
+            { name: 'studio', config_files: ['studio.properties'] },
+            { name: 'sitemanager', config_files: %w(editor.properties capclient.properties workflowclient.properties).map { |props| "#{tomcat_dir}/webapps/editor-webstart/webstart/properties/corem/#{props}" } },
+            { name: 'master-live-server', config_files: ['master-live-server.properties'] },
+            { name: 'caefeeder-live', config_files: ['caefeeder-live.properties'] },
+            { name: 'cae-live-1', recipe_name: 'cae-live', config_files: ['cae-live-1.properties'] }]
 # config files common to all tomcat services
 common_tomcat_config_files = ['jmxremote.password',
                               'jmxremote.access',
@@ -89,21 +89,21 @@ services.each do |service_conf|
 
   preinstall = template "/tmp/preinstall-#{service_name}.sh" do
     source 'preinstall.sh.erb'
-    variables(:service_name => service_name,
-              :service_user => service_name,
-              :service_group => package_group,
-              :service_group_user => package_user,
-              :service_dir => service_dir,
-              :restart_services => [service_name],
-              :base_dir => node['blueprint']['base_dir'])
+    variables(service_name: service_name,
+              service_user: service_name,
+              service_group: package_group,
+              service_group_user: package_user,
+              service_dir: service_dir,
+              restart_services: [service_name],
+              base_dir: node['blueprint']['base_dir'])
   end
 
   postinstall = template "/tmp/postinstall-#{service_name}.sh" do
     source 'postinstall.sh.erb'
-    variables(:install_user => service_name,
-              :install_group => package_group,
-              :install_dir => service_dir,
-              :restart_services => [service_name])
+    variables(install_user: service_name,
+              install_group: package_group,
+              install_dir: service_dir,
+              restart_services: [service_name])
   end
 
   config_files = (common_tomcat_config_files + service_conf[:config_files]).map { |path| "#{service_dir}/#{path}" }
@@ -127,18 +127,18 @@ end
 solr_home_dir = "#{node['blueprint']['base_dir']}/solr-home"
 preinstall = template '/tmp/preinstall-solr_home.sh' do
   source 'preinstall.sh.erb'
-  variables(:service_group => package_group,
-            :service_group_user => package_user,
-            :base_dir => node['blueprint']['base_dir'],
-            :restart_services => ['solr'])
+  variables(service_group: package_group,
+            service_group_user: package_user,
+            base_dir: node['blueprint']['base_dir'],
+            restart_services: ['solr'])
 end
 
 postinstall = template '/tmp/postinstall-solr_home.sh' do
   source 'postinstall.sh.erb'
-  variables(:install_user => package_user,
-            :install_group => package_group,
-            :restart_services => ['solr'],
-            :install_dir => solr_home_dir)
+  variables(install_user: package_user,
+            install_group: package_group,
+            restart_services: ['solr'],
+            install_dir: solr_home_dir)
 end
 
 config_files = []
@@ -161,13 +161,13 @@ end
 # An array of tool configurations. Each item has a key mame that must match the recipe name in blueprint-tools. There must
 # also be a key config_files that maps to an array of relative paths of files that should be marked as config files for the rpm.
 # An optional key recipe name may be set to define a tool that comes from a recipe not named like the tool.
-tools = [{ :name => 'content-management-server-tools', :config_files => ['properties/corem/capclient.properties'] },
-         { :name => 'master-live-server-tools', :config_files => ['properties/corem/capclient.properties'] },
-         { :name => 'replication-live-server-tools', :config_files => ['properties/corem/capclient.properties'] },
-         { :name => 'workflow-server-tools', :config_files => ['properties/corem/capclient.properties'] },
-         { :name => 'theme-importer-tools', :config_files => ['properties/corem/theme-importer.properties', 'properties/corem/capclient.properties'] },
-         { :name => 'caefeeder-preview-tools', :config_files => ['properties/corem/resetcaefeeder.properties'] },
-         { :name => 'caefeeder-live-tools', :config_files => ['properties/corem/resetcaefeeder.properties'] }]
+tools = [{ name: 'content-management-server-tools', config_files: ['properties/corem/capclient.properties'] },
+         { name: 'master-live-server-tools', config_files: ['properties/corem/capclient.properties'] },
+         { name: 'replication-live-server-tools', config_files: ['properties/corem/capclient.properties'] },
+         { name: 'workflow-server-tools', config_files: ['properties/corem/capclient.properties'] },
+         { name: 'theme-importer-tools', config_files: ['properties/corem/theme-importer.properties', 'properties/corem/capclient.properties'] },
+         { name: 'caefeeder-preview-tools', config_files: ['properties/corem/resetcaefeeder.properties'] },
+         { name: 'caefeeder-live-tools', config_files: ['properties/corem/resetcaefeeder.properties'] }]
 common_tools_config_files = ['bin/pre-config.jpif']
 
 # Iterate over the tools map and:
@@ -181,16 +181,16 @@ tools.each do |tool_conf|
 
   preinstall = template "/tmp/preinstall-#{tool_name}.sh" do
     source 'preinstall.sh.erb'
-    variables(:service_group => package_group,
-              :service_group_user => package_user,
-              :base_dir => node['blueprint']['base_dir'])
+    variables(service_group: package_group,
+              service_group_user: package_user,
+              base_dir: node['blueprint']['base_dir'])
   end
 
   postinstall = template "/tmp/postinstall-#{tool_name}.sh" do
     source 'postinstall.sh.erb'
-    variables(:install_user => package_user,
-              :install_group => package_group,
-              :install_dir => tool_dir)
+    variables(install_user: package_user,
+              install_group: package_group,
+              install_dir: tool_dir)
   end
 
   config_files = (common_tools_config_files + tool_conf[:config_files]).map { |path| "#{tool_dir}/#{path}" }

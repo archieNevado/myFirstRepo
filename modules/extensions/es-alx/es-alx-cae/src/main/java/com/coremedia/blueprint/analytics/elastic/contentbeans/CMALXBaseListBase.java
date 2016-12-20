@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.analytics.elastic.contentbeans;
 
-import com.coremedia.blueprint.analytics.elastic.TopNReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
 import com.coremedia.blueprint.cae.contentbeans.CMDynamicListImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ public abstract class CMALXBaseListBase<V> extends CMDynamicListImpl<V> implemen
   /**
    * Reads the tracked objects for this page lists from mongo db.
    * @return list of tracked objects
-   * @see com.coremedia.blueprint.analytics.elastic.ReportModel#getReportData()
+   * @see ReportModel#getReportData()
    */
   protected final List<String> getTrackedObjects() {
     try {

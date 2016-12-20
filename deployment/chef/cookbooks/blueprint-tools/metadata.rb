@@ -8,3 +8,4 @@ version '1.0.0'
 
 depends 'blueprint-base'
 depends 'coremedia_maven', '~> 2.0'
+depends 'java_se',  '~> 8.112.0'

@@ -1,9 +1,7 @@
 package com.coremedia.ecommerce.studio.components.repository {
-import com.coremedia.cms.editor.sdk.config.collectionView;
+import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
 import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.components.AbstractCatalogList;
-import com.coremedia.ecommerce.studio.config.catalogRepositoryList;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.Marketing;
 import com.coremedia.ui.data.RemoteBean;
@@ -12,34 +10,41 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.EventUtil;
 
-import ext.grid.GridPanel;
+import ext.grid.column.Column;
+import ext.grid.header.HeaderContainer;
 
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class CatalogRepositoryListBase extends AbstractCatalogList {
 
   private var selectedNodeExpression:ValueExpression;
-  private var sortInfo:Object;
+  private var sortInfo:Object = {};
 
 
-  public function CatalogRepositoryListBase(config:catalogRepositoryList = null) {
+  public function CatalogRepositoryListBase(config:CatalogRepositoryList = null) {
     super(config);
-    mon(this, 'afterrender', bindStoreAndView);
-    mon(this, "containerclick", clearSelection);
+    on('afterrender', bindStoreAndView);
+    on("containerclick", clearSelection);
   }
 
-  private function getSelectedNodeExpression():ValueExpression {
+
+  override protected function beforeDestroy():void {
+    if (selectedNodeExpression) {
+      selectedNodeExpression.removeChangeListener(selectionChanged);
+    }
+    super.beforeDestroy();
+  }
+
+  internal function getSelectedNodeExpression():ValueExpression {
     if (!selectedNodeExpression) {
-      selectedNodeExpression = ComponentContextManager.getInstance().getContextExpression(this, collectionView.SELECTED_FOLDER_VARIABLE_NAME);
+      selectedNodeExpression = ComponentContextManager.getInstance().getContextExpression(this, CollectionView.SELECTED_FOLDER_VARIABLE_NAME);
       selectedNodeExpression.addChangeListener(selectionChanged);
-      addListener('destroy', function():void {
-        selectedNodeExpression.removeChangeListener(selectionChanged);
-      });
     }
 
     return selectedNodeExpression;
   }
 
   internal function createSelectedItemsValueExpression():ValueExpression {
-    return ComponentContextManager.getInstance().getContextExpression(this, collectionView.SELECTED_REPOSITORY_ITEMS_VARIABLE_NAME);
+    return ComponentContextManager.getInstance().getContextExpression(this, CollectionView.SELECTED_REPOSITORY_ITEMS_VARIABLE_NAME);
   }
 
   protected function clearSelection():void {
@@ -49,30 +54,32 @@ public class CatalogRepositoryListBase extends AbstractCatalogList {
   private function selectionChanged():void {
     var value:RemoteBean = selectedNodeExpression.getValue();
     if(value is Marketing) {
-      getView()['emptyText'] = ECommerceStudioPlugin_properties.INSTANCE.CatalogView_spots_selection_empty_text;
+      getView()['emptyText'] = resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_spots_selection_empty_text');
     }
     else {
-      getView()['emptyText'] = ECommerceStudioPlugin_properties.INSTANCE.CatalogView_empty_text;
+      getView()['emptyText'] = resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_empty_text');
     }
-    getView().refresh(false);
+    getView().refresh();
   }
 
   private function bindStoreAndView():void {
-    mon(this, 'sortchange', sortChanged);
+    on('sortchange', sortChanged);
     getCatalogItemsValueExpression().addChangeListener(catalogItemsChanged);
-    getStore().setDefaultSort('id', 'ASC');
-
+    // TODO Ext 6 list sorters
+    // getStore().setDefaultSort('id', 'ASC');
   }
 
-  private function sortChanged(grid:GridPanel, sortInfo:Object):void {
-    this.sortInfo = sortInfo;
+  //noinspection JSUnusedLocalSymbols
+  private function sortChanged(headerContainer:HeaderContainer, column:Column, direction:String, eOpts:Object):void {
+    sortInfo.field = column.getSortParam();
+    sortInfo.direction = direction;
     if (sortInfo.field === 'name'|| sortInfo.direction === "DESC") {
       loadCurrentBeans();
     }
   }
 
   private function catalogItemsChanged():void {
-    if (sortInfo && (sortInfo.field === "name" || sortInfo.direction === "DESC")) {
+    if (sortInfo.field === "name" || sortInfo.direction === "DESC") {
       loadCurrentBeans();
     }
   }

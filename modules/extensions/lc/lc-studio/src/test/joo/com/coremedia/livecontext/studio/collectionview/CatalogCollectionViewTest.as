@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.studio.collectionview {
 
-import com.coremedia.cap.content.impl.ContentImpl;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewContainer;
@@ -9,79 +8,66 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchArea;
-import com.coremedia.cms.editor.sdk.collectionview.tree.LibraryTree;
-import com.coremedia.cms.editor.sdk.config.collectionView;
-import com.coremedia.cms.editor.sdk.config.collectionViewContainer;
-import com.coremedia.cms.editor.sdk.config.searchArea;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryContextMenu;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryList;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryListContainer;
-import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryThumbnails;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchContextMenu;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchList;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchListContainer;
-import com.coremedia.ecommerce.studio.components.search.CatalogSearchThumbnails;
-import com.coremedia.ecommerce.studio.components.thumbnail.CatalogDefaultOverlayBase;
-import com.coremedia.ecommerce.studio.components.thumbnail.CatalogThumbDataView;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeDragDropModel;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
-import com.coremedia.ecommerce.studio.config.catalogRepositoryContextMenu;
-import com.coremedia.ecommerce.studio.config.catalogRepositoryListContainer;
-import com.coremedia.ecommerce.studio.config.catalogSearchContextMenu;
-import com.coremedia.ecommerce.studio.config.catalogSearchListContainer;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Store;
-import com.coremedia.livecontext.studio.AbstractCatalogStudioTest;
+import com.coremedia.livecontext.studio.AbstractLiveContextStudioTest;
 import com.coremedia.livecontext.studio.CatalogTeaserThumbnailResolver;
 import com.coremedia.livecontext.studio.CatalogThumbnailResolver;
-import com.coremedia.livecontext.studio.config.livecontextStudioPlugin;
+import com.coremedia.livecontext.studio.LivecontextStudioPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewActionsPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
 import com.coremedia.ui.components.SwitchingContainer;
-import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.data.test.ActionStep;
 import com.coremedia.ui.data.test.Step;
 import com.coremedia.ui.store.BeanRecord;
 import com.coremedia.ui.util.ContextMenuEventAdapter;
 import com.coremedia.ui.util.QtipUtil;
+import com.coremedia.ui.util.TableUtil;
 
-import ext.Button;
 import ext.Component;
-import ext.ComponentMgr;
-import ext.Container;
-import ext.Element;
+import ext.ComponentManager;
 import ext.Ext;
-import ext.IEventObject;
-import ext.Toolbar;
-import ext.Viewport;
-import ext.config.viewport;
-import ext.form.Label;
+import ext.button.Button;
+import ext.container.Container;
+import ext.container.Viewport;
+import ext.event.Event;
 import ext.grid.GridPanel;
-import ext.grid.RowSelectionModel;
 import ext.menu.Item;
+import ext.selection.RowSelectionModel;
+import ext.toolbar.TextItem;
+import ext.toolbar.Toolbar;
 
 import js.HTMLElement;
 
-public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
-  private static const CATALOG_REPOSITORY_CONTAINER:String = catalogRepositoryListContainer.VIEW_CONTAINER_ITEM_ID;
-  private static const CATALOG_SEARCH_LIST_CONTAINER:String = catalogSearchListContainer.VIEW_CONTAINER_ITEM_ID;
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
+public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
+  private static const CATALOG_REPOSITORY_CONTAINER:String = CatalogRepositoryListContainer.VIEW_CONTAINER_ITEM_ID;
+  private static const CATALOG_SEARCH_LIST_CONTAINER:String = CatalogSearchListContainer.VIEW_CONTAINER_ITEM_ID;
 
   private var myViewPort:Viewport;
   private var testling:CollectionView;
-  private var libraryTree:LibraryTree;
   private var searchProductVariantsContextMenuItem:Item;
-  private var searchProductPicturesContextMenuItem:Item;
 
   private var getPreferredSite:Function;
   private var preferredSiteExpression:ValueExpression;
@@ -100,11 +86,11 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     new ECommerceStudioPlugin();
     new LivecontextCollectionViewActionsPlugin();
 
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
-    editorContext.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
+    editorContext.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
 
 
     editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_CATEGORY));
@@ -115,6 +101,83 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
 
     QtipUtil.registerQtipFormatter();
   }
+
+  public function testCatalogLibrary():void {
+    chain(
+            //initialize the catalog library
+            initStore(),
+            loadContentRepository(),
+            waitForContentRepositoryLoaded(),
+            loadContentTypes(),
+            waitForContentTypesLoaded(),
+            createTestlingStep(),
+
+            //test catalog repository thumbnail view
+            selectNode("livecontext/category/HeliosSiteId/NO_WS/Women"),
+            waitUntilSwitchToListButtonIsPressed(),
+            switchToThumbnailView(),
+            waitUntilSwitchToListButtonIsUnpressed(),
+            waitUntilThumbnailViewIsActive(),
+
+            //test context menu on the repository list and thumbnail view
+            switchToListView(),
+            waitUntilListViewIsActive(),
+            selectNode("livecontext/category/HeliosSiteId/NO_WS/Dresses"),
+            waitUntilProductIsLoadedInRepositoryList(),
+            waitUntilSearchProductVariantToolbarButtonIsHidden(),
+            openContextMenuOnFirstItemOfRepositoryList(),
+            waitUntilRepositoryListContextMenuOpened(),
+            waitUntilSearchProductVariantToolbarButtonIsEnabled(),
+            waitUntilSearchProductVariantContextMenuIsEnabled(),
+            searchProductVariantsUsingContextMenu(),
+            waitUntilSearchModeIsActive(),
+            waitUntilProductVariantIsLoadedInSearchList(),
+            waitUntilCatalogSearchListIsLoadedAndNotEmpty(2, HERMITAGE_RUCHED_BODICE_COCKTAIL_DRESS),
+            //now test that the variant search is hidden on product variants themselves
+            openContextMenuOnFirstItemOfSearchList(),
+            waitUntilSearchListContextMenuOpened(),
+            waitUntilSearchProductVariantToolbarButtonIsHidden(),
+            waitUntilSearchProductVariantContextMenuIsHidden(),
+
+            // test marketing spots
+            switchToRepositoryMode(),
+            selectNode("livecontext/marketing/HeliosSiteId/NO_WS"),
+            waitUntilSwitchToListButtonIsPressed(),
+            switchToThumbnailView(),
+            waitUntilSwitchToListButtonIsUnpressed(),
+            waitUntilThumbnailViewIsActive(),
+
+            //test product search
+            selectStore(),
+            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT),
+            waitUntilSearchModeIsActive(),
+            waitUntilSwitchToListButtonIsPressed(),
+            waitUntilCatalogSearchListIsLoadedAndNotEmpty(2, ORANGES_NAME),
+            waitUntilCatalogSearchListAndLabelIsLoadedAndFooterShowsTotalHits(2),
+            switchToThumbnailView(),
+            waitUntilSwitchToListButtonIsUnpressed(),
+            waitUntilThumbnailViewIsActive(),
+
+            //test product variant search
+            switchToListView(),
+            waitUntilListViewIsActive(),
+            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT_VARIANT),
+            waitUntilCatalogSearchListIsLoadedAndNotEmpty(3, ORANGES_SKU_NAME),
+            waitUntilCatalogSearchListAndLabelIsLoadedAndFooterShowsTotalHits(3),
+            switchToThumbnailView(),
+            waitUntilSwitchToListButtonIsUnpressed(),
+            waitUntilThumbnailViewIsActive()
+  );
+  }
+
+  override public function tearDown():void {
+    super.tearDown();
+    editorContext.getSitesService().getPreferredSiteId = getPreferredSite;
+    //we have to reset the items of the side panel manager so that it creates CollectionViewContainer anew.
+    sidePanelManager['items$1'] = [];
+    myViewPort.destroy();
+  }
+
 
   private function createTestling():void {
     var collectionViewManagerInternal:CollectionViewManagerInternal =
@@ -129,98 +192,58 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     var lcExtension:CollectionViewExtension = new LivecontextCollectionViewExtension();
     editorContext.getCollectionViewExtender().addExtension(lcExtension);
 
-    var cvContainer:CollectionViewContainer = sidePanelManager.getOrCreateComponent(collectionViewContainer.ID) as CollectionViewContainer;
-    var viewportConfig:viewport = new viewport();
+    var cvContainer:CollectionViewContainer = sidePanelManager.getOrCreateComponent(CollectionViewContainer.ID) as CollectionViewContainer;
+    var viewportConfig:Viewport = Viewport({});
     viewportConfig.items = [cvContainer];
     myViewPort = new Viewport(viewportConfig);
     cvContainer.show();
-    testling = cvContainer.get(collectionView.COLLECTION_VIEW_ID) as CollectionView;
-
-    libraryTree = getTree();
+    testling = cvContainer.getComponent(CollectionView.COLLECTION_VIEW_ID) as CollectionView;
   }
 
   private function getSearchArea():SearchArea {
-    return SearchArea(testling.get(collectionView.SEARCH_AREA_ITEM_ID));
+    return SearchArea(testling.getComponent(CollectionView.SEARCH_AREA_ITEM_ID));
   }
 
 
 
   private function getSearchList():CatalogSearchList {
-    var catalogSearch:Container = Container(getCollectionModesContainer().get(CollectionViewModel.SEARCH_MODE));
-    var searchList:SwitchingContainer = SwitchingContainer(Container(catalogSearch.get("searchSwitchingContainer")));
-    var searchContainer:CatalogSearchListContainer = CatalogSearchListContainer(searchList.get(CATALOG_SEARCH_LIST_CONTAINER));
+    var catalogSearch:Container = Container(getCollectionModesContainer().getComponent(CollectionViewModel.SEARCH_MODE));
+    var searchList:SwitchingContainer = SwitchingContainer(Container(catalogSearch.getComponent("searchSwitchingContainer")));
+    var searchContainer:CatalogSearchListContainer = CatalogSearchListContainer(searchList.getComponent(CATALOG_SEARCH_LIST_CONTAINER));
     //ensure type cast!!!! there are other list views too
-    return searchContainer.get(CollectionViewConstants.LIST_VIEW) as CatalogSearchList;
+    return searchContainer.getComponent(CollectionViewConstants.LIST_VIEW) as CatalogSearchList;
   }
 
   private function getRepositoryContainer():CatalogRepositoryList {
-    var repositoryContainer:Container = Container(getCollectionModesContainer().get(CollectionViewModel.REPOSITORY_MODE));
-    var repositorySwitch:SwitchingContainer = SwitchingContainer(Container(repositoryContainer.get("listViewSwitchingContainer")));
-    var repositoryListContainer:CatalogRepositoryListContainer = CatalogRepositoryListContainer(repositorySwitch.get(CATALOG_REPOSITORY_CONTAINER));
+    var repositoryContainer:Container = Container(getCollectionModesContainer().getComponent(CollectionViewModel.REPOSITORY_MODE));
+    var repositorySwitch:SwitchingContainer = SwitchingContainer(Container(repositoryContainer.getComponent("listViewSwitchingContainer")));
+    var repositoryListContainer:CatalogRepositoryListContainer = CatalogRepositoryListContainer(repositorySwitch.getComponent(CATALOG_REPOSITORY_CONTAINER));
     //ensure type cast!!!! there are other list views too
-    return repositoryListContainer.get(CollectionViewConstants.LIST_VIEW) as CatalogRepositoryList;
+    return repositoryListContainer.getComponent(CollectionViewConstants.LIST_VIEW) as CatalogRepositoryList;
   }
-
-  private function getSearchThumbnails():CatalogSearchThumbnails {
-    var catalogSearch:Container = Container(getCollectionModesContainer().get(CollectionViewModel.SEARCH_MODE));
-    var searchList:SwitchingContainer = SwitchingContainer(Container(catalogSearch.get("searchSwitchingContainer")));
-    var catalogSearchList:SwitchingContainer = SwitchingContainer(Container(searchList.get(CATALOG_SEARCH_LIST_CONTAINER)));
-    return CatalogSearchThumbnails(catalogSearchList.get(CollectionViewConstants.THUMBNAILS_VIEW)) as CatalogSearchThumbnails;
-  }
-
 
   private function getRepositorySwitchingContainer():SwitchingContainer {
-    var myCatalogRepositoryContainer:Container = Container(getCollectionModesContainer().get(CollectionViewModel.REPOSITORY_MODE));
-    var listViewSwitchingContainer:Container = Container(myCatalogRepositoryContainer.get("listViewSwitchingContainer"));
-    var repositorySwitchingContainer:SwitchingContainer = SwitchingContainer(listViewSwitchingContainer.get(CATALOG_REPOSITORY_CONTAINER));
+    var myCatalogRepositoryContainer:Container = Container(getCollectionModesContainer().getComponent(CollectionViewModel.REPOSITORY_MODE));
+    var listViewSwitchingContainer:Container = Container(myCatalogRepositoryContainer.getComponent("listViewSwitchingContainer"));
+    var repositorySwitchingContainer:SwitchingContainer = SwitchingContainer(listViewSwitchingContainer.getComponent(CATALOG_REPOSITORY_CONTAINER));
     return repositorySwitchingContainer;
   }
 
   private function getRepositoryList():CatalogRepositoryList {
     var repositorySwitchingContainer:SwitchingContainer = getRepositorySwitchingContainer();
-    return CatalogRepositoryList(repositorySwitchingContainer.get(CollectionViewConstants.LIST_VIEW)) as CatalogRepositoryList;
-  }
-
-  private function getRepositoryThumbnails():CatalogRepositoryThumbnails {
-    var myCatalogRepositoryContainer:Container = Container(getCollectionModesContainer().get(CollectionViewModel.REPOSITORY_MODE));
-    var listViewSwitchingContainer:Container = Container(myCatalogRepositoryContainer.get("listViewSwitchingContainer"));
-    var repositorySwitchingContainer:Container = Container(listViewSwitchingContainer.get(CATALOG_REPOSITORY_CONTAINER));
-    return CatalogRepositoryThumbnails(repositorySwitchingContainer.get(CollectionViewConstants.THUMBNAILS_VIEW)) as CatalogRepositoryThumbnails;
-  }
-
-  private function getSearchThumbDataView():CatalogThumbDataView {
-    return Container(getSearchThumbnails().get(CatalogSearchThumbnails.THUMB_DATA_VIEW_PANEL_ITEM_ID))
-                    .get(CatalogSearchThumbnails.THUMB_DATA_VIEW_ITEM_ID) as CatalogThumbDataView;
-  }
-
-  private function getRepositoryThumbDataView():CatalogThumbDataView {
-    return Container(getRepositoryThumbnails().get(CatalogRepositoryThumbnails.THUMB_DATA_VIEW_PANEL_ITEM_ID))
-                    .get(CatalogRepositoryThumbnails.THUMB_DATA_VIEW_ITEM_ID) as CatalogThumbDataView;
+    return CatalogRepositoryList(repositorySwitchingContainer.getComponent(CollectionViewConstants.LIST_VIEW)) as CatalogRepositoryList;
   }
 
   private function getCollectionModesContainer():SwitchingContainer {
-    return SwitchingContainer(testling.get(collectionView.COLLECTION_MODES_CONTAINER_ITEM_ID));
+    return SwitchingContainer(testling.getComponent(CollectionView.COLLECTION_MODES_CONTAINER_ITEM_ID));
   }
 
-  private function getTree():LibraryTree {
-    var myCatalogRepositoryContainer:Container = Container(getCollectionModesContainer().get(CollectionViewModel.REPOSITORY_MODE));
-    return myCatalogRepositoryContainer.get(collectionView.TREE_ITEM_ID) as LibraryTree;
+  private function getFooter():Toolbar {
+    return Toolbar(testling.getComponent(CollectionView.FOOTER_INFO_ITEM_ID));
   }
 
-  private function getFooter():SwitchingContainer {
-    return SwitchingContainer(testling.get(collectionView.FOOTER_INFO_ITEM_ID));
-  }
-
-  private function getFooterTotalHitsLabel():Label {
-    return Label(getFooter().get("totalHitsLabel"));
-  }
-
-  override public function tearDown():void {
-    super.tearDown();
-    editorContext.getSitesService().getPreferredSiteId = getPreferredSite;
-    //we have to reset the items of the side panel manager so that it creates CollectionViewContainer anew.
-    sidePanelManager['items$1'] = [];
-    myViewPort.destroy();
+  private function getFooterTotalHitsLabel():TextItem {
+    return TextItem(getFooter().getComponent("totalHitsLabel"));
   }
 
   private function createTestlingStep():Step {
@@ -252,301 +275,10 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     );
   }
 
-
-  public function testCategoryRepositoryThumbnail():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            waitUntilStoreIsSelected(),
-            selectNextCatalogTreeNode(),
-            waitUntilMarketingSpotsAreSelected(),
-            selectNextCatalogTreeNode(),
-            waitUntilProductCatalogIsSelected(),
-            //wait for the product catalog node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //wait for the Apparel node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //wait for the women node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-
-            waitUntilSwitchToListButtonIsPressed(),
-            switchToThumbnailView(),
-            waitUntilSwitchToListButtonIsUnpressed(),
-            waitUntilThumbnailViewIsActive(),
-            waitUntilCategoriesAreLoadedAsThumbnails(),
-            triggerMouseEnterOnRepositoryThumbnailNode(0),
-            waitUntilFirstRepositoryCategoryThumbnailOverlayIsLoaded(),
-            triggerMouseEnterOnRepositoryThumbnailNode(1),
-            waitUntilSecondRepositoryCategoryThumbnailOverlayIsLoaded()
-    );
-  }
-
-  public function testMarketingSpotRepositoryThumbnail():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            waitUntilStoreIsSelected(),
-            selectNextCatalogTreeNode(),
-            waitUntilMarketingSpotsAreSelected(),
-            selectNextCatalogTreeNode(),
-            waitUntilProductCatalogIsSelected(),
-            //wait for the product catalog node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //wait for the Apparel node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-
-            waitUntilSwitchToListButtonIsPressed(),
-            switchToThumbnailView(),
-            waitUntilSwitchToListButtonIsUnpressed(),
-            waitUntilThumbnailViewIsActive(),
-            waitUntilMarketingSpotsAreLoadedAsThumbnails(),
-            triggerMouseEnterOnRepositoryThumbnailNode(0),
-            waitUntilFirstRepositoryMarketingSpotThumbnailOverlayIsLoaded(),
-            triggerMouseEnterOnRepositoryThumbnailNode(1),
-            waitUntilSecondRepositoryMarketingSpotThumbnailOverlayIsLoaded()
-    );
-  }
-
-
-  /**
-   * Test the 'search product variants' toolbar button and context menu item
-   */
-  public function testProductVariantSearchFromProduct():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            waitUntilStoreIsSelected(),
-            selectNextCatalogTreeNode(),
-            waitUntilMarketingSpotsAreSelected(),
-            selectNextCatalogTreeNode(),
-            waitUntilProductCatalogIsSelected(),
-            //wait for the product catalog node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //wait for the Apparel node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //wait for the women node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //wait for the women node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //wait for the women node to be expanded
-            waitUntilSelectedTreeNodeIsExpanded(),
-            selectNextCatalogTreeNode(),
-            //now the Dresses node is selected
-            waitUntilProductIsLoadedInRepositoryList(),
-            waitUntilSearchProductVariantToolbarButtonIsHidden(),
-            openContextMenuOnFirstItemOfRepositoryList(),
-            waitUntilRepositoryListContextMenuOpened(),
-            waitUntilSearchProductVariantToolbarButtonIsEnabled(),
-            waitUntilSearchProductVariantContextMenuIsEnabled(),
-            searchProductVariantsUsingContextMenu(),
-            waitUntilSearchModeIsActive(),
-            waitUntilProductVariantIsLoadedInSearchList(),
-            waitUntilCatalogSearchListIsLoadedAndNotEmpty(2, HERMITAGE_RUCHED_BODICE_COCKTAIL_DRESS),
-            //now test that the variant search is hidden on product variants themselves
-            openContextMenuOnFirstItemOfSearchList(),
-            waitUntilSearchListContextMenuOpened(),
-            waitUntilSearchProductVariantToolbarButtonIsHidden(),
-            waitUntilSearchProductVariantContextMenuIsHidden()
-    );
-  }
-
-  public function testProductVariantFooterTotalHits():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT_VARIANT),
-            waitUntilCatalogSearchListAndLabelIsLoadedAndFooterShowsTotalHits(3)
-    );
-  }
-
-
-  public function testCatalogSearchListLoaded():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT),
-            waitUntilSearchModeIsActive(),
-            waitUntilCatalogSearchListIsLoadedAndNotEmpty(2, ORANGES_NAME)
-    );
-  }
-
-  public function testProductFooterTotalHits():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT),
-            waitUntilCatalogSearchListAndLabelIsLoadedAndFooterShowsTotalHits(2)
-    );
-  }
-
-  public function testSimpleProductVariantSearch():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT_VARIANT),
-            waitUntilSearchModeIsActive(),
-            waitUntilCatalogSearchListIsLoadedAndNotEmpty(3, ORANGES_SKU_NAME)
-    );
-  }
-
-  public function testProductSearchThumbnail():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT),
-            waitUntilSearchModeIsActive(),
-            waitUntilSwitchToListButtonIsPressed(),
-            switchToThumbnailView(),
-            waitUntilSwitchToListButtonIsUnpressed(),
-            waitUntilThumbnailViewIsActive(),
-            waitUntilProductSearchResultIsLoadedAsThumbnails(),
-            triggerMouseEnterOnSearchThumbnailNode(0),
-            waitUntilFirstProductSearchThumbnailOverlayIsLoaded(),
-            triggerMouseEnterOnSearchThumbnailNode(1),
-            waitUntilSecondProductSearchThumbnailOverlayIsLoaded()
-    );
-  }
-
-  public function testProductVariantSearchThumbnail():void {
-    chain(
-            initStore(),
-            loadContentRepository(),
-            waitForContentRepositoryLoaded(),
-            loadContentTypes(),
-            waitForContentTypesLoaded(),
-            createTestlingStep(),
-            selectStore(),
-            triggerSearch("Oranges", CatalogModel.TYPE_PRODUCT_VARIANT),
-            waitUntilSearchModeIsActive(),
-            waitUntilSwitchToListButtonIsPressed(),
-            switchToThumbnailView(),
-            waitUntilSwitchToListButtonIsUnpressed(),
-            waitUntilThumbnailViewIsActive(),
-            waitUntilProductVariantSearchResultIsLoadedAsThumbnails(),
-            triggerMouseEnterOnSearchThumbnailNode(0),
-            waitUntilFirstProductVariantSearchThumbnailOverlayIsLoaded(),
-            triggerMouseEnterOnSearchThumbnailNode(1),
-            waitUntilSecondProductVariantSearchThumbnailOverlayIsLoaded(),
-            triggerMouseEnterOnSearchThumbnailNode(2),
-            waitUntilThirdProductVariantSearchThumbnailOverlayIsLoaded()
-    );
-  }
-
-  private function waitUntilCatalogSearchListIsLoaded():Step {
-    return new Step("catalog search list should be loaded",
-            function ():Boolean {
-              return getSearchList() && getSearchList().rendered && getSearchList().getStore();
-            },
+  private function selectNode(path:String):Step {
+    return new ActionStep("selecting '" + path +"' tree node",
             function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilStoreIsSelected():Step {
-    return new Step("catalog tree should select the store",
-            function ():Boolean {
-              return libraryTree.getSelectionModel().getSelectedNode() &&
-                      "PerfectChefESite" === libraryTree.getSelectionModel().getSelectedNode().text;
-            },
-            function ():void {
-              var button:Button = getSearchArea().find("itemId", searchArea.SWITCH_BUTTON_CONTAINER_ITEM_ID)[0].find("itemId", searchArea.SWITCH_TO_REPOSITORY_BUTTON_ITEM_ID)[0];
-              button.initialConfig.handler();
-            });
-  }
-
-  private function selectRepositoryMode():Step {
-    return new Step("selecting repository mode",
-            function ():Boolean {
-              var button:Button = getSearchArea().find("itemId", searchArea.SWITCH_BUTTON_CONTAINER_ITEM_ID)[0].find("itemId", searchArea.SWITCH_TO_REPOSITORY_BUTTON_ITEM_ID)[0];
-              button.initialConfig.handler();
-              return true;
-
-            },
-            function ():void {
-
-            });
-  }
-
-  private function selectNextCatalogTreeNode():Step {
-    return new Step("selecting next catalog tree node",
-            function ():Boolean {
-              return true;
-
-            },
-            function ():void {
-              libraryTree.getSelectionModel().selectNext();
-            });
-  }
-
-  private function waitUntilMarketingSpotsAreSelected():Step {
-    return new Step("catalog tree should select the marketing root",
-            function ():Boolean {
-              return libraryTree.getSelectionModel().getSelectedNode() &&
-                      ECommerceStudioPlugin_properties.INSTANCE.StoreTree_marketing_root === libraryTree.getSelectionModel().getSelectedNode().text;
-
-            },
-            function ():void {
-
-            });
-  }
-
-  private function waitUntilProductCatalogIsSelected():Step {
-    return new Step("catalog tree should select the product catalog",
-            function ():Boolean {
-              return libraryTree.getSelectionModel().getSelectedNode() &&
-                      ("Product Catalog" === libraryTree.getSelectionModel().getSelectedNode().text ||
-                      "Produktkatalog" === libraryTree.getSelectionModel().getSelectedNode().text);
-
-            },
-            function ():void {
-              libraryTree.getSelectionModel().selectNext();
+              testling.setOpenPath(beanFactory.getRemoteBean(path));
             });
   }
 
@@ -557,28 +289,6 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
             },
             function ():void {
               setSearchStateAndTriggerSearch(searchTerm, searchType);
-            });
-  }
-
-  private function triggerMouseEnterOnSearchThumbnailNode(nodeIndex:Number):Step {
-    return new Step("trigger mouse enter on the search thumbnail node " + nodeIndex,
-            function ():Boolean {
-              return true;
-            },
-            function ():void {
-              getSearchThumbDataView().fireEvent('mouseenter', getSearchThumbDataView(), nodeIndex,
-                      getSearchThumbDataView().getNode(nodeIndex));
-            });
-  }
-
-  private function triggerMouseEnterOnRepositoryThumbnailNode(nodeIndex:Number):Step {
-    return new Step("trigger mouse enter on the repository thumbnail node " + nodeIndex,
-            function ():Boolean {
-              return true;
-            },
-            function ():void {
-              getRepositoryThumbDataView().fireEvent('mouseenter', getRepositoryThumbDataView(), nodeIndex,
-                      getRepositoryThumbDataView().getNode(nodeIndex));
             });
   }
 
@@ -605,44 +315,44 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     );
   }
 
-  private function getSwitchToSearchModeButton():Button {
-    return Button(getSearchArea().find("itemId", searchArea.SWITCH_TO_SEARCH_BUTTON_ITEM_ID)[0]);
+  private function getSwitchToRepositoryModeButton():Button {
+    return Button(getSearchArea().queryById(SearchArea.SWITCH_TO_REPOSITORY_BUTTON_ITEM_ID));
   }
 
   private function getSwitchToListViewButton():Button {
-    return Button(getActiveToolbarViewSwitch().find("itemId", "list")[0]);
+    return Button(getActiveToolbarViewSwitch().queryById("list"));
   }
 
   private function getSwitchToThumbnailViewButton():Button {
-    return Button(getActiveToolbarViewSwitch().find("itemId", "thumb")[0]);
+    return Button(getActiveToolbarViewSwitch().queryById("thumb"));
   }
 
   private function getProductVariantSearchButton():Button {
-    return Button(getActiveToolbar().find("itemId", livecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID)[0]);
+    return Button(getActiveToolbar().queryById(LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID));
   }
 
   private function getActiveToolbarViewSwitch():Container {
     var itemId:String = getCollectionModesContainer().getActiveItem().getItemId();
     var container:Container = undefined;
     if(itemId === "repository") {
-      container = testling.find("itemId", "toolbarSwitchingContainer")[0].find("itemId", "catalogRepositoryToolbar")[0];
+      container = Container(testling.queryById("toolbarSwitchingContainer")).queryById("catalogRepositoryToolbar") as Container;
     }
     else {
-      container = testling.find("itemId", "searchToolbar")[0].find("itemId", "searchToolbarSwitchingContainer")[0];
+      container = Container(testling.queryById("searchToolbar")).queryById("searchToolbarSwitchingContainer") as Container;
     }
 
-    return container.find("itemId", "switchButtonsContainer")[0];
+    return container.queryById("switchButtonsContainer") as Container;
   }
 
   private function getActiveToolbar():Toolbar {
     var itemId:String = getCollectionModesContainer().getActiveItem().getItemId();
     if(itemId === "repository") {
-      var repoContainer:Container = testling.find("itemId", "toolbarSwitchingContainer")[0].find("itemId", "catalogRepositoryToolbar")[0];
-      return repoContainer.find("itemId", "commerceToolbar")[0] as Toolbar;
+      var repoContainer:Container = Container(testling.queryById("toolbarSwitchingContainer")).queryById("catalogRepositoryToolbar") as Container;
+      return repoContainer.queryById("commerceToolbar") as Toolbar;
     }
 
-    var searchContainer:Container = testling.find("itemId", "searchToolbar")[0].find("itemId", "searchToolbarSwitchingContainer")[0];
-    return searchContainer.find("itemId", "commerceToolbar")[0] as Toolbar;
+    var searchContainer:Container = Container(testling.queryById("searchToolbar")).queryById("searchToolbarSwitchingContainer") as Container;
+    return searchContainer.queryById("commerceToolbar") as Toolbar;
   }
 
   private function waitUntilSwitchToListButtonIsUnpressed():Step {
@@ -655,13 +365,17 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
             });
   }
 
+  private function waitUntilListViewIsActive():Step {
+    return new Step("List View should be active",
+            function ():Boolean {
+              return getRepositorySwitchingContainer().getActiveItemValue() === CollectionViewConstants.LIST_VIEW;
+            });
+  }
+
   private function waitUntilThumbnailViewIsActive():Step {
     return new Step("Thumbnail View should be active",
             function ():Boolean {
               return getRepositorySwitchingContainer().getActiveItemValue() === CollectionViewConstants.THUMBNAILS_VIEW;
-            },
-            function ():void {
-              //nothing to do
             });
   }
 
@@ -673,39 +387,11 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     );
   }
 
-  private function waitUntilSearchTextIsPartnumber():Step {
-    return new Step("Search Text should be the part number of the product",
-            function ():Boolean {
-              var mainStateBean:Bean = testling.getCollectionViewModel().getMainStateBean();
-              return mainStateBean.get(CollectionViewModel.SEARCH_TEXT_PROPERTY) === "AuroraWMDRS-1";
-            }
-    );
-  }
-
-  private function waitUntilSearchTypeIsPicture():Step {
-    return new Step("Search Type should be CMPicture",
-            function ():Boolean {
-              var mainStateBean:Bean = testling.getCollectionViewModel().getMainStateBean();
-              return mainStateBean.get(CollectionViewModel.CONTENT_TYPE_PROPERTY) === "CMPicture";
-            }
-    );
-  }
-
-  private function waitUntilSearchFolderIsRoot():Step {
-    return new Step("Search Folder should be root",
-            function ():Boolean {
-              var mainStateBean:Bean = testling.getCollectionViewModel().getMainStateBean();
-              var folder:ContentImpl = mainStateBean.get(CollectionViewModel.FOLDER_PROPERTY);
-              return folder.getNumericId() == 0;
-            }
-    );
-  }
-
   private function waitUntilProductIsLoadedInRepositoryList():Step {
     return new Step("Wait for the repository list to be loaded with products",
             function ():Boolean {
               return getRepositoryList().getStore().getCount() > 0 &&
-                      getRepositoryList().getView().getCell(0,0)['textContent'] === ECommerceStudioPlugin_properties.INSTANCE.Product_label;
+                      TableUtil.getCellAsDom(getRepositoryList(), 0,0)['textContent'] === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label');
             }
     );
   }
@@ -714,250 +400,9 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     return new Step("Wait for the search list to be loaded with product variants",
             function ():Boolean {
               return getSearchList().getStore().getCount() > 0 &&
-                      getSearchList().getView().getCell(0,0)['textContent'] === ECommerceStudioPlugin_properties.INSTANCE.ProductVariant_label;
+                      TableUtil.getCellAsDom(getSearchList(), 0,0)['textContent'] === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'ProductVariant_label');
             }
     );
-  }
-
-  private function waitUntilProductSearchResultIsLoadedAsThumbnails():Step {
-    return new Step("Product search results should be loaded as thumbnails",
-            function ():Boolean {
-              var html0:String = getSearchThumbDataView().getNodes().length === 2 &&
-                      getSearchThumbDataView().getNode(0).innerHTML;
-              var html1:String = getSearchThumbDataView().getNodes().length === 2 &&
-                      getSearchThumbDataView().getNode(1).innerHTML;
-              return html0 && html1 &&
-                      html0.indexOf(ORANGES_EXTERNAL_ID) > 0 &&
-                        //the first node has a image
-                      html0.indexOf("src=\"" + ORANGES_IMAGE_URI + "\"") > 0 &&
-                      html1.indexOf('BSH016_1605') > 0 &&
-                        //the second node has no image - a icon defined in css should be shown
-                      html1.indexOf("class=\"content-type-l product-icon\"") > 0;
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilProductPicturesAreLoadedInSearchList():Step {
-    return new Step("Wait for the search list to be loaded with product pictures",
-            function ():Boolean {
-              return getSearchList().getStore().getCount() > 0 &&
-                      getSearchList().getView().getCell(0,0)['textContent'] === ECommerceStudioPlugin_properties.INSTANCE.ProductVariant_label;
-            }
-    );
-  }
-
-  private function waitUntilSelectedTreeNodeIsExpanded():Step {
-    return new Step("Wait for the selected node of the catalog tree to be expanded",
-            function ():Boolean {
-              return libraryTree.getSelectionModel().getSelectedNode().isExpanded();
-            }
-    );
-  }
-
-  private function waitUntilProductVariantSearchResultIsLoadedAsThumbnails():Step {
-    return new Step("Product Variant search results should be loaded as thumbnails",
-            function ():Boolean {
-              var html0:String = getSearchThumbDataView().getNodes().length === 3 &&
-                      getSearchThumbDataView().getNode(0).innerHTML;
-              var html1:String = getSearchThumbDataView().getNodes().length === 3 &&
-                      getSearchThumbDataView().getNode(1).innerHTML;
-              var html2:String = getSearchThumbDataView().getNodes().length === 3 &&
-                      getSearchThumbDataView().getNode(2).innerHTML;
-              return html0 && html1 && html2 &&
-                      html0.indexOf(ORANGES_SKU_EXTERNAL_ID) > 0 &&
-                        //the first and the second node have a image
-                      html0.indexOf("src=\"" + ORANGES_IMAGE_URI + "\"") > 0 &&
-                      html1.indexOf(ORANGES_EXTERNAL_ID + "02") > 0 &&
-                      html1.indexOf("src=\"" + ORANGES_IMAGE_URI + "\"") > 0 &&
-                      html2.indexOf(ORANGES_EXTERNAL_ID + "03") > 0 &&
-                        //the third node has no image - a icon defined in css should be shown
-                      html2.indexOf("class=\"content-type-l sku-icon\"") > 0;
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilCategoriesAreLoadedAsThumbnails():Step {
-    return new Step("Categories should be loaded as thumbnails",
-            function ():Boolean {
-              var html0:String = getRepositoryThumbDataView().getNodes().length === 3 &&
-                      getRepositoryThumbDataView().getNode(0).innerHTML;
-              var html1:String = getRepositoryThumbDataView().getNodes().length === 3 &&
-                      getRepositoryThumbDataView().getNode(1).innerHTML;
-              var html2:String = getRepositoryThumbDataView().getNodes().length === 3 &&
-                      getRepositoryThumbDataView().getNode(2).innerHTML;
-              return html0 && html1 && html2 &&
-                      html0.indexOf('Apparel') > 0 && html1.indexOf('Grocery') > 0 &&
-                        //categories have no images - a icon defined in css should be shown
-                      html0.indexOf("class=\"content-type-l category-icon\"") > 0 &&
-                      html1.indexOf("class=\"content-type-l category-icon\"") > 0 &&
-                      html2.indexOf("class=\"content-type-l category-icon\"") > 0;
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilFirstProductSearchThumbnailOverlayIsLoaded():Step {
-    return new Step("First product search thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getSearchThumbDataView().getDetailView().getActiveOverlay();
-              var html:String = getHtml(activeOverlay);
-              return html && html.indexOf(ORANGES_EXTERNAL_ID) > 0 &&
-                      html.indexOf(ORANGES_NAME) > 0 &&
-                        //the first node has a image
-                      html.indexOf("src=\"" + ORANGES_IMAGE_URI + "\"") > 0
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilMarketingSpotsAreLoadedAsThumbnails():Step {
-    return new Step("Spots should be loaded as thumbnails",
-            function ():Boolean {
-              var html0:String = getRepositoryThumbDataView().getNodes().length === 3 &&
-                      getRepositoryThumbDataView().getNode(0).innerHTML;
-              var html1:String = getRepositoryThumbDataView().getNodes().length === 3 &&
-                      getRepositoryThumbDataView().getNode(1).innerHTML;
-              var html2:String = getRepositoryThumbDataView().getNodes().length === 3 &&
-                      getRepositoryThumbDataView().getNode(2).innerHTML;
-              return html0 && html1 && html2 &&
-                        //categories have no images - a icon defined in css should be shown
-                      html0.indexOf("class=\"content-type-l marketingspot-icon\"") > 0 &&
-                      html1.indexOf("class=\"content-type-l marketingspot-icon\"") > 0 &&
-                      html2.indexOf("class=\"content-type-l marketingspot-icon\"") > 0;
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilSecondProductSearchThumbnailOverlayIsLoaded():Step {
-    return new Step("Second product search thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getSearchThumbDataView().getDetailView().getActiveOverlay();
-              return domContainsText(activeOverlay, 'BSH016_1605', 'Borsati Orange') &&
-                      domContainsImgWithCls(activeOverlay, 'content-type-xl', 'product-icon');
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilFirstProductVariantSearchThumbnailOverlayIsLoaded():Step {
-    return new Step("First product variant search thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getSearchThumbDataView().getDetailView().getActiveOverlay();
-              var html:String = getHtml(activeOverlay);
-              return html && html.indexOf(ORANGES_SKU_EXTERNAL_ID) > 0 &&
-                      html.indexOf(ORANGES_NAME) > 0 &&
-                      html.indexOf("src=\"" + ORANGES_IMAGE_URI + "\"") > 0
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilSecondProductVariantSearchThumbnailOverlayIsLoaded():Step {
-    return new Step("Second product variant search thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getSearchThumbDataView().getDetailView().getActiveOverlay();
-              var html:String = getHtml(activeOverlay);
-              return html && html.indexOf(ORANGES_EXTERNAL_ID + "02") > 0 &&
-                      html.indexOf(ORANGES_NAME) > 0 &&
-                      html.indexOf("src=\"" + ORANGES_IMAGE_URI + "\"") > 0
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilThirdProductVariantSearchThumbnailOverlayIsLoaded():Step {
-    return new Step("Third product variant search thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getSearchThumbDataView().getDetailView().getActiveOverlay();
-              return domContainsText(activeOverlay, ORANGES_EXTERNAL_ID + "03", ORANGES_NAME) &&
-                      domContainsImgWithCls(activeOverlay, 'content-type-xl', 'sku-icon');
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilFirstRepositoryCategoryThumbnailOverlayIsLoaded():Step {
-    return new Step("First Repository thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getRepositoryThumbDataView().getDetailView().getActiveOverlay();
-              return domContainsText(activeOverlay, 'Apparel') &&
-                      domContainsImgWithCls(activeOverlay, 'content-type-xl', 'category-icon');
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilFirstRepositoryMarketingSpotThumbnailOverlayIsLoaded():Step {
-    return new Step("First Repository thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getRepositoryThumbDataView().getDetailView().getActiveOverlay();
-              return domContainsImgWithCls(activeOverlay, 'content-type-xl', 'marketingspot-icon');
-            },
-            function ():void {
-              //nothing to do
-            });
-  }
-
-  private function waitUntilSecondRepositoryCategoryThumbnailOverlayIsLoaded():Step {
-    return new Step("Second Repository thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getRepositoryThumbDataView().getDetailView().getActiveOverlay();
-              return domContainsText(activeOverlay, 'Grocery') &&
-                      domContainsImgWithCls(activeOverlay, 'content-type-xl', 'category-icon');
-            });
-  }
-
-  private function waitUntilSecondRepositoryMarketingSpotThumbnailOverlayIsLoaded():Step {
-    return new Step("Second Repository thumbnail overlay should be loaded",
-            function ():Boolean {
-              var activeOverlay:CatalogDefaultOverlayBase = getRepositoryThumbDataView().getDetailView().getActiveOverlay();
-              return domContainsImgWithCls(activeOverlay, 'content-type-xl', 'marketingspot-icon');
-            });
-  }
-
-  private static function domContainsText(comp:Component, ...text):Boolean {
-    var el:Element = comp && comp.getEl();
-    if (!el) {
-      return false;
-    }
-
-    for (var i:int = 0; i < text.length; i++) {
-      var currentText:String = text[i];
-      if (el.dom['textContent'].indexOf(currentText) === -1) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private static function domContainsImgWithCls(comp:Component, ...cls):Boolean {
-    var el:Element = comp && comp.getEl();
-    if (!el) {
-      return false;
-    }
-
-    for (var i:int = 0; i < cls.length; i++) {
-      var currentCls:String = cls[i];
-      if (!el.child('img').hasClass(currentCls)) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   private function waitUntilSearchProductVariantToolbarButtonIsHidden():Step {
@@ -992,39 +437,24 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     )
   }
 
-  private function waitUntilSearchProductPicturesContextMenuIsEnabled():Step {
-    return new Step("Wait for the product pictures search context menu item is enabled",
-            function ():Boolean {
-              return !searchProductPicturesContextMenuItem.disabled;
-            }
-    )
-  }
-
-  private function waitUntilSearchProductPicturesContextMenuIsDisabled():Step {
-    return new Step("Wait for the product pictures search context menu item is disabled",
-            function ():Boolean {
-              return searchProductPicturesContextMenuItem.disabled;
-            }
-    )
+  private function switchToListView():Step {
+    return new ActionStep("Switch to list view",
+            function ():void {
+              getSwitchToListViewButton().initialConfig.handler();
+            });
   }
 
   private function switchToThumbnailView():Step {
-    return new Step("Switch to thumbnail view",
-            function ():Boolean {
-              return true;
-            },
+    return new ActionStep("Switch to thumbnail view",
             function ():void {
               getSwitchToThumbnailViewButton().initialConfig.handler();
             });
   }
 
-  private function switchToSearchMode():Step {
-    return new Step("Switch to search mode",
-            function ():Boolean {
-              return true;
-            },
+  private function switchToRepositoryMode():Step {
+    return new ActionStep("Switch to repository mode",
             function ():void {
-              getSwitchToSearchModeButton().initialConfig.handler();
+              getSwitchToRepositoryModeButton().initialConfig.handler();
             });
   }
 
@@ -1044,10 +474,10 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
   private function waitUntilCatalogSearchListAndLabelIsLoadedAndFooterShowsTotalHits(expectedResultCount:int):Step {
     return new Step("footer and catalog search list should be loaded and must not be empty",
             function ():Boolean {
-              var footerTotalHitsLabel:Label = getFooterTotalHitsLabel();
+              var footerTotalHitsLabel:TextItem = getFooterTotalHitsLabel();
               var searchList:CatalogSearchList = getSearchList();
               return footerTotalHitsLabel && searchList.getStore() && searchList.getStore().getCount() > 0 &&
-                      footerTotalHitsLabel.text && footerTotalHitsLabel.text.indexOf(String(expectedResultCount)) === 0;
+                      footerTotalHitsLabel.html && footerTotalHitsLabel.html.indexOf(String(expectedResultCount)) === 0;
 
             },
             function ():void {
@@ -1091,20 +521,8 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
 
   }
 
-  private function searchProductPicturesUsingContextMenu():Step {
-    return new Step("Search Product Pictures using the context menu",
-            function ():Boolean {
-              return true;
-            },
-            function ():void {
-              searchProductPicturesContextMenuItem.initialConfig.handler();
-            }
-    );
-
-  }
-
   private function openContextMenu(grid:GridPanel, row:Number):void {
-    var event:IEventObject = {
+    var event:Event = Event({
       getXY: function():Array {
         return Ext.fly(event.getTarget()).getXY();
       },
@@ -1112,32 +530,32 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
         //do nothing
       },
       getTarget: function():HTMLElement {
-        return grid.getView().getCell(row, 1);
+        return TableUtil.getCellAsDom(grid, row, 1);
       },
       type: ContextMenuEventAdapter.EVENT_NAME
-    };
+    });
     var sm:RowSelectionModel = grid.getSelectionModel() as RowSelectionModel;
-    sm.selectRow(row);
-    grid.fireEvent("rowcontextmenu", grid, row, event);
+    sm.select(row);
+    grid.fireEvent("rowcontextmenu", grid, null, null, row, event);
   }
 
   private function findCatalogRepositoryContextMenu():CatalogRepositoryContextMenu {
-    var contextMenu:CatalogRepositoryContextMenu = ComponentMgr.all.find(function (component:Component):Boolean {
-              return !component.ownerCt && !component.hidden && component.isXType(catalogRepositoryContextMenu.xtype);
-            }) as CatalogRepositoryContextMenu;
+    var contextMenu:CatalogRepositoryContextMenu = ComponentManager.getAll().filter(function (component:Component):Boolean {
+              return !component.up() && !component.hidden && component.isXType(CatalogRepositoryContextMenu.xtype);
+            })[0] as CatalogRepositoryContextMenu;
     if (contextMenu) {
-      searchProductVariantsContextMenuItem = contextMenu.getComponent(livecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID) as Item;
+      searchProductVariantsContextMenuItem = contextMenu.getComponent(LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID) as Item;
     }
 
     return contextMenu;
   }
 
   private function findCatalogSearchListContextMenu():CatalogSearchContextMenu {
-    var contextMenu:CatalogSearchContextMenu = ComponentMgr.all.find(function (component:Component):Boolean {
-              return !component.ownerCt && !component.hidden && component.isXType(catalogSearchContextMenu.xtype);
-            }) as CatalogSearchContextMenu;
+    var contextMenu:CatalogSearchContextMenu = ComponentManager.getAll().filter(function (component:Component):Boolean {
+              return !component.up() && !component.hidden && component.isXType(CatalogSearchContextMenu.xtype);
+            })[0] as CatalogSearchContextMenu;
     if (contextMenu) {
-      searchProductVariantsContextMenuItem = contextMenu.getComponent(livecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID) as Item;
+      searchProductVariantsContextMenuItem = contextMenu.getComponent(LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID) as Item;
     }
 
     return  contextMenu;
@@ -1152,10 +570,5 @@ public class CatalogCollectionViewTest extends AbstractCatalogStudioTest {
     editorContext.getCollectionViewManager().openSearch(searchState, true, CollectionViewConstants.LIST_VIEW);
   }
 
-  private function getHtml(component:Component):String {
-    return component && component.getEl() && component.getEl().dom &&
-            component.getEl().dom.innerHTML;
-
-  }
 }
 }

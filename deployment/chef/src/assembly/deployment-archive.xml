@@ -12,6 +12,13 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
+      <directory>${project.basedir}/../../test-data/target</directory>
+      <includes>
+        <include>content-users.zip</include>
+      </includes>
+      <outputDirectory></outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>${project.build.directory}/maven-repo</directory>
       <outputDirectory>maven-repo</outputDirectory>
       <excludes>

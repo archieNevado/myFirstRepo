@@ -3,31 +3,52 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "node ./lib/scripts/postinstall.js",
-    "test": "node ./lib/scripts/test.js"
+    "postinstall": "node ./lib/grunt/utils/run-for-themes.js install",
+    "test": "grunt test && node ./lib/grunt/utils/run-for-themes.js test",
+    "production": "node ./lib/grunt/utils/run-for-themes.js production",
+    "apidoc": "grunt apidoc"
   },
   "devDependencies": {
     "@coremedia/utils": "file:lib/grunt/utils",
-    "autoprefixer": "^6.3.6",
+    "autoprefixer": "^6.5.3",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-runtime": "^6.18.0",
+    "chai": "^3.5.0",
+    "eslint-loader": "^1.6.1",
     "grunt": "^1.0.1",
     "grunt-available-tasks": "^0.6.3",
+    "grunt-babel": "^6.0.0",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-compress": "^1.3.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jasmine": "^1.0.3",
-    "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-eslint": "^19.0.0",
+    "grunt-jsdoc-to-markdown": "^2.0.0",
+    "grunt-mocha-test": "^0.13.2",
     "grunt-postcss": "^0.8.0",
     "grunt-sass": "^1.2.1",
+    "grunt-shell": "^2.1.0",
+    "grunt-webpack": "^1.0.18",
     "jasmine-jquery": "^2.1.1",
-    "shelljs": "^0.7.3"
+    "mocha": "^3.2.0",
+    "shelljs": "^0.7.5",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
     "bootstrap-carousel-swipe": "0.0.6",
-    "bootstrap-sass": "3.3.6",
-    "jquery": "2.2.4"
+    "bootstrap-sass": "3.3.7",
+    "console-polyfill": "^0.2.3",
+    "imagesloaded": "4.1.1",
+    "jquery": "3.1.1"
   }
 }

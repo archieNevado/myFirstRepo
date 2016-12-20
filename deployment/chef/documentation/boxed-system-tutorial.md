@@ -1,7 +1,7 @@
 Configure the deployment
 ------------------------
     
-* configure blobstore urls and extra serverimport args (alternative to downlowd blobs).
+* Configure blobstore URLs and extra serverimport args (alternative to downlowd blobs).
   In your `blueprint/deployment/chef/.kitchen.local.yml` add the following yaml config:
 
 ```yaml
@@ -17,7 +17,7 @@ suites:
 Using the blobstore and the blobreferences flag, keeps the blobs in the blobstore and lets the cae dowload them 
 only on request. This saves time and space on the disk.
 
-* configure repo mirrors (optional). In your `blueprint/deployment/chef/.kitchen.local.yml` merge the following yaml snippet:
+* Configure repo mirrors (optional). In your `blueprint/deployment/chef/.kitchen.local.yml` merge the following yaml snippet:
 
 ```yaml
 suites:
@@ -40,7 +40,7 @@ suites:
           mirrorlist: https://s3-eu-west-1.amazonaws.com/mirrors.coremedia.com/repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/$basearch/mirror
 ```
   
-* configure the shared WCS instance. In your `blueprint/deployment/chef/.kitchen.local.yml` change the default value of the wcs ip to
+* Configure the shared WCS instance. In your `blueprint/deployment/chef/.kitchen.local.yml` change the default value of the wcs ip to
 `wcs.example.com`. i.e. :
   
 ```yaml
@@ -59,8 +59,8 @@ export WCS_HOST=wcs.example.com
 Launch the box  
 --------------
     
-* change to dir `blueprint/deployment/chef`
-* run:
+* Change to dir `blueprint/deployment/chef`
+* Run:
     
 ```bash
 kitchen converge
@@ -71,7 +71,7 @@ Only include what ypu need
 --------------------------
 
 To save time, you should always reduce the set of applications to deploy to the minimum you need for your setup. 
-You can controll this, by changing the runlist in your kitchen file.
+You can control this, by changing the runlist in your kitchen file.
 
 ```yaml
   run_list:
@@ -91,17 +91,17 @@ You can controll this, by changing the runlist in your kitchen file.
 ```
 
 The roles are defined in the `roles/<role>.json`. 
-> the roles are defined as json files, because chef-server can only handle json roles.
+> the roles are defined as JSON files, because chef-server can only handle JSON roles.
 
 Work with the box
 -----------------
 
 ### Change JVM and Tomcat Options
 
-To change tomcat or jvm options, the `blueprint-tomcat` cookbook is your friend. To see what possible attributes can be set, visit 
+To change Tomcat or JVM options, the `blueprint-tomcat` cookbook is your friend. To see what possible attributes can be set, visit 
 the cookbooks [documentation](./../chef/cookbooks/blueprint-tomcat/README.md). 
 
-Lets say we want to change the memory settings, in the  [blueprint-tomcat attributes](./../chef/cookbooks/blueprint-tomcat/attributes/default.rb),
+Let's say we want to change the memory settings, in the  [blueprint-tomcat attributes](./../chef/cookbooks/blueprint-tomcat/attributes/default.rb),
 you will find entries like: 
 
 ```
@@ -124,12 +124,12 @@ default['blueprint']['tomcat']['sitemanager']['heap'] = '92m'
 
 These are the default values for the attributes. If you want to evolve this cookbook, you can set your values there right away.
 If you want to set values specific to an environment, i.e. :
-* the kitchen (virtualbox) environment
-* the development (jenkins) environment
-* the staging environment
-* the production environment
+* The kitchen (virtualbox) environment
+* The development (jenkins) environment
+* The staging environment
+* The production environment
 
-you can set these in the recipes of the [environment cookbook](./../chef/cookbooks/blueprint/README.md), i.e. in the
+You can set these in the recipes of the [environment cookbook](./../chef/cookbooks/blueprint/README.md), i.e. in the
 `blueprint/deployment/chef/cookbooks/blueprint/recipes/_kitchen.rb`. 
 
 > If you wonder why these recipes are prefixed with an underscore. They are not intended to be listed in any runlist directly.
@@ -144,7 +144,7 @@ default['blueprint']['tomcat']['catalina_opts']['superfast_opts'] = '-XX:superFa
 
 where `superfast_opts` is here an arbitrary key to make the hash entry not anonymous.
 
-> In chef you should be careful with using arrays as the structure to define multiple values. Arrays can only be overridden but not extended
+> In Chef you should be careful with using arrays as the structure to define multiple values. Arrays can only be overridden but not extended
 
 To set service specific options, here for the `content-management-server`, write your attributes like:
 
@@ -160,7 +160,7 @@ Change the heap memory for one service and rerun the converge. As you can see on
 Change Tomcat Version
 ---------------------
 
-To change the tomcat version, you need to set at least three attributes. I.e. if we want to update to `7.0.70` set the following attributes.
+To change the Tomcat version, you need to set at least three attributes. I.e. if we want to update to `7.0.70` set the following attributes.
 
 ```
 default['blueprint']['tomcat']['source'] = 'http://mirror.coremedia.vm/archive.apache.org/dist/tomcat/tomcat-7/v7.0.70/bin/apache-tomcat-7.0.70.zip'
@@ -170,7 +170,7 @@ default['blueprint']['tomcat']['version'] = '7.0.70'
 
 > The checksum is a `sha256`. 
 
-In addition to the tomcat zip, if we want to use remote jmx, we should also always change the version of the `catalina_jmx_remote` jar too.
+In addition to the Tomcat Zip file, if we want to use remote jmx, we should also always change the version of the `catalina_jmx_remote` jar too.
 
 ```
 default['blueprint']['tomcat']['jmx_remote_jar_source'] = 'http://mirror.coremedia.vm/archive.apache.org/dist/tomcat/tomcat-7/v7.0.70/bin/extras/catalina-jmx-remote.jar'
@@ -219,7 +219,7 @@ Change Application Properties
 To change any application property, you need to set them as hash entries below
 
 ```                                           
-default['blueprint']['webapps']['<SEFVICE_NAME>']['application.properties']['<PROPERTY_KEY>'] = '<PROPERTY_VALUE>'
+default['blueprint']['webapps']['<SERVICE_NAME>']['application.properties']['<PROPERTY_KEY>'] = '<PROPERTY_VALUE>'
 ```
 
 Any property set here will override its default from the webapps `WEB-INF/application.properties` file or any other loaded Spring property.
@@ -240,13 +240,13 @@ rerun `converge` , you will see the run will fail and the old webapp will still 
 
 Now lets change the version of that artifact. 
 
-1. replace all `${project.version}` usages in the `blueprint/modules/studio/studio-webapp/pom.xml` with `${project.parent.version}`
-2. add a `<version>1604.5-11</version>` below the `<artifactId>` element. 
-3. build the studio war
+1. Replace all `${project.version}` usages in the `blueprint/modules/studio/studio-webapp/pom.xml` with `${project.parent.version}`
+2. Add a `<version>1604.5-11</version>` below the `<artifactId>` element. 
+3. Build the Studio WAR file
 
 now rerun `converge`. 
 
-> To make this individual version setup work, i had to replace all `${project.version}` usages in the dependency management of the root pom with `1-SNAPSHOT` 
+> To make this individual version setup work, i had to replace all `${project.version}` usages in the dependency management of the root pom with `1-SNAPSHOT`
 > It is no good idea to use `${project.version}` in dependency management entries at all. 
 > I will fix it in future releases. 
 

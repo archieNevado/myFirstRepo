@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, AssumesIdentity {
   private static final String CONTENT_PROPERTIES_PROPERTY = "properties";
@@ -130,6 +131,10 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
     return getLayout().getWidth();
   }
 
+  @Override
+  public Map<String, Object> getAdditionalProperties() {
+    return getContentBackedStyle().getAdditionalProperties();
+  }
 
   // --- Dataviews --------------------------------------------------
 

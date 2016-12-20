@@ -8,14 +8,17 @@ import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMVideo;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.events.ContentEvent;
 import com.coremedia.cap.content.events.ContentRepositoryListenerBase;
+import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
-import java.util.Arrays;
+import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -28,17 +31,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase implements SmartLifecycle {
 
-  static final HashSet<String> INVALIDATION_ALL = new HashSet<>(Arrays.asList(
+  private static final Set<String> INVALIDATION_ALL = ImmutableSet.of(
           CommerceCacheInvalidationSource.INVALIDATE_CATEGORIES_URI_PATTERN,
           CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN,
-          CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN));
-  static final List<String> EVENT_WHITELIST = Arrays.asList(
+          CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN
+  );
+
+  private static final Set<String> EVENT_WHITELIST = ImmutableSet.of(
           ContentEvent.CONTENT_CREATED,
           ContentEvent.CONTENT_DELETED,
           ContentEvent.CONTENT_MOVED,
           ContentEvent.CONTENT_RENAMED,
           ContentEvent.CONTENT_REVERTED,
-          ContentEvent.CONTENT_UNDELETED);
+          ContentEvent.CONTENT_UNDELETED
+  );
 
   private final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -46,17 +52,15 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
   private ContentRepository repository;
 
   @Override
-  protected void handleContentEvent(ContentEvent event) {
+  protected void handleContentEvent(@Nonnull ContentEvent event) {
+    if (!EVENT_WHITELIST.contains(event.getType())) {
+      return;
+    }
 
-    if (EVENT_WHITELIST.contains(event.getType())) {
-      Content content = event.getContent();
-      if (content != null && !content.isDestroyed() && isRelevantType(content)){
-        HashSet<String> invalidations = getInvalidations(event);
-        if(!invalidations.isEmpty()) {
-          commerceCacheInvalidationSource.triggerDelayedInvalidation(
-                  invalidations);
-        }
-      }
+    Content content = event.getContent();
+    if (content != null && !content.isDestroyed() && isRelevantType(content)) {
+      Set<String> invalidations = getInvalidations(event);
+      commerceCacheInvalidationSource.triggerDelayedInvalidation(invalidations);
     }
   }
 
@@ -73,14 +77,14 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
 
   @Override
   public void start() {
-    if(!running.getAndSet(true)) {
+    if (!running.getAndSet(true)) {
       repository.addContentRepositoryListener(this);
     }
   }
 
   @Override
   public void stop() {
-    if(running.getAndSet(false)) {
+    if (running.getAndSet(false)) {
       repository.removeContentRepositoryListener(this);
     }
   }
@@ -105,14 +109,16 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
     this.repository = repository;
   }
 
-  private HashSet<String> getInvalidations(ContentEvent event) {
+  @Nonnull
+  private static Set<String> getInvalidations(@Nonnull ContentEvent event) {
     if (event.getType().equals(ContentEvent.CONTENT_REVERTED)) {
       //when a content ist reverted we don't know the old external references.
       // So we have to invalidate all relevant catalog types
       return INVALIDATION_ALL;
     }
 
-    HashSet<String> invalidations = new HashSet<>();
+    Set<String> invalidations = new HashSet<>();
+
     List<String> externalReferences = CommerceReferenceHelper.getExternalReferences(event.getContent());
     for (String externalReference : externalReferences) {
       if (BaseCommerceIdHelper.isCategoryId(externalReference)) {
@@ -125,17 +131,19 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
         invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN);
       }
     }
+
     return invalidations;
   }
 
   /**
-   *
    * @param content
    * @return true if the content is a picture, video or a download or one of their subtypes.
    */
-  private boolean isRelevantType(Content content) {
-    return content.getType().isSubtypeOf(CMPicture.NAME) ||
-           content.getType().isSubtypeOf(CMVideo.NAME) ||
-           content.getType().isSubtypeOf(CMDownload.NAME);
+  private static boolean isRelevantType(@Nonnull Content content) {
+    ContentType contentType = content.getType();
+
+    return contentType.isSubtypeOf(CMPicture.NAME) ||
+            contentType.isSubtypeOf(CMVideo.NAME) ||
+            contentType.isSubtypeOf(CMDownload.NAME);
   }
 }

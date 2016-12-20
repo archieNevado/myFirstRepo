@@ -1,20 +1,21 @@
 package com.coremedia.blueprint.studio.esanalytics {
 
-import com.coremedia.blueprint.studio.config.esanalytics.esAnalyticsChartWidgetEditor;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.SiteImpl;
 import com.coremedia.cms.editor.sdk.sites.SitesService;
+import com.coremedia.ui.components.LocalComboBox;
 import com.coremedia.ui.data.Locale;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.util.createComponentSelector;
 
-import ext.ComponentMgr;
-import ext.data.Store;
-import ext.form.ComboBox;
+import ext.ComponentManager;
+import ext.Ext;
+import ext.data.AbstractStore;
+import ext.form.field.ComboBox;
 
 import flexunit.framework.TestCase;
-
 
 public class EsAnalyticsChartWidgetEditorTest extends TestCase {
   private static const FIELD_LABEL:String = "Site";
@@ -36,16 +37,16 @@ public class EsAnalyticsChartWidgetEditorTest extends TestCase {
 
   public function testWidgetEditMode():void {
 
-    // create widget instance rendered to div 'test'
+    // create widget instance rendered to document body
     // rendering is necessary because bindPlugins load stores only when component is rendered
-    var editorCfg:esAnalyticsChartWidgetEditor = new esAnalyticsChartWidgetEditor();
-    editorCfg.renderTo = 'test';
-    var esAlxWidgetEditor:EsAnalyticsChartWidgetEditor = ComponentMgr.create(editorCfg) as EsAnalyticsChartWidgetEditor;
+    var editorCfg:EsAnalyticsChartWidgetEditor = EsAnalyticsChartWidgetEditor({});
+    editorCfg.renderTo = Ext.getBody();
+    var esAlxWidgetEditor:EsAnalyticsChartWidgetEditor = ComponentManager.create(editorCfg) as EsAnalyticsChartWidgetEditor;
 
     // the combobox provides the selection of root channels aka Sites
-    var combo:ComboBox = esAlxWidgetEditor.find("xtype", "com.coremedia.ui.config.localComboBox")[0];
+    var combo:ComboBox = esAlxWidgetEditor.down(createComponentSelector()._xtype(LocalComboBox.xtype).build()) as ComboBox;
     var comboFieldLabel:String = combo.fieldLabel;
-    var comboStore:Store = combo.getStore();
+    var comboStore:AbstractStore = combo.getStore();
 
 
     // assertion of the ALX widget editor, combobox and fields

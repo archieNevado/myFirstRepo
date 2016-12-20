@@ -1,5 +1,4 @@
 package com.coremedia.ecommerce.studio.model {
-import com.coremedia.ecommerce.studio.AbstractCatalogTest;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.beanFactory;
 

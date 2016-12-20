@@ -34,8 +34,8 @@
   </bean>
 
   <bean id="blueprintSolrSearchEngineFactory" class="com.coremedia.cap.search.solr.SolrSearchEngineFactory">
-    <property name="solrServerUrlsAsArray" value="${solr.search.url}"/>
-    <property name="collection" value="${solr.search.collection}"/>
+    <property name="solrBaseUrlsAsArray" value="${solr.url}"/>
+    <property name="collection" value="${solr.collection.cae}"/>
     <property name="connectionTimeout" value="${solr.connectionTimeout}"/>
     <property name="socketTimeout" value="${solr.socketTimeout}"/>
   </bean>

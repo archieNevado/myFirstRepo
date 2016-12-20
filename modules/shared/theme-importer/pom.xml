@@ -12,6 +12,12 @@
 
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>content-services</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-client</artifactId>
       <scope>runtime</scope>

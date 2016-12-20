@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<componentPackage>
+  <component class="com.coremedia.blueprint.studio.UploadCollectionViewPlugin"/>
+  <component class="com.coremedia.blueprint.studio.UploadStudioPlugin"/>
+  <component class="com.coremedia.blueprint.studio.upload.FileDropPlugin"/>
+  <component class="com.coremedia.blueprint.studio.upload.OpenUploadDialogAction"/>
+  <component class="com.coremedia.blueprint.studio.upload.UploadMenuItem"/>
+  <component class="com.coremedia.blueprint.studio.upload.dialog.FileContainer"/>
+  <component class="com.coremedia.blueprint.studio.upload.dialog.UploadDialog"/>
+  <component class="com.coremedia.blueprint.studio.upload.dialog.UploadProgressDialog"/>
+  <component class="com.coremedia.blueprint.studio.upload.dialog.UploadProgressContainer"/>
+  <component class="com.coremedia.blueprint.studio.upload.dialog.XliffImportResultWindow"/>
+</componentPackage>

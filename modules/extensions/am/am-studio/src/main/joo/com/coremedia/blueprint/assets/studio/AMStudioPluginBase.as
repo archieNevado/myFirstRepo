@@ -1,8 +1,6 @@
 package com.coremedia.blueprint.assets.studio {
 
-import com.coremedia.blueprint.assets.studio.config.amStudioPlugin;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.ContentTypeNames;
@@ -17,8 +15,10 @@ import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
-import com.coremedia.ui.data.Blob;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.blueprint.assets.studio.AMStudioPlugin')]
 public class AMStudioPluginBase extends StudioPlugin {
   private static const SHOW_PROPERTY:String = "show";
 
@@ -27,7 +27,7 @@ public class AMStudioPluginBase extends StudioPlugin {
   //noinspection JSFieldCanBeLocal
   private static const DEFAULT_SHOW_VALUE:Boolean = false;
 
-  public function AMStudioPluginBase(config:amStudioPlugin = null) {
+  public function AMStudioPluginBase(config:AMStudioPlugin = null) {
     super(config);
   }
 
@@ -48,7 +48,7 @@ public class AMStudioPluginBase extends StudioPlugin {
                     var collectionViewManager:CollectionViewManagerInternal =
                             CollectionViewManagerInternal(editorContext.getCollectionViewManager());
                     collectionViewManager.addRepositoryTreeRoot(assetsFolder,
-                            AMStudioPlugin_properties.INSTANCE.CollectionView_assetRootFolder_icon);
+                            ResourceManager.getInstance().getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'CollectionView_assetRootFolder_icon'));
                   }
                 });
               }

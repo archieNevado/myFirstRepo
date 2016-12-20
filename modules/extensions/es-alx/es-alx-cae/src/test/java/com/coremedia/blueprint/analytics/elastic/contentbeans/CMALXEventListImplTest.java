@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.analytics.elastic.contentbeans;
 
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
-import com.coremedia.blueprint.analytics.elastic.TopNReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;

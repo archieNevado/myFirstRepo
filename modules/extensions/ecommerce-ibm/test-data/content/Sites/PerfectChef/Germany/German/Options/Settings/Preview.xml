@@ -12,54 +12,46 @@
 <Struct>
 <StructProperty Name="mobile_portrait">
 <Struct>
-<IntProperty Name="width">320</IntProperty>
-<IntProperty Name="height">480</IntProperty>
+<IntProperty Name="width">375</IntProperty>
+<IntProperty Name="height">667</IntProperty>
 <IntProperty Name="order">1</IntProperty>
 <BooleanProperty Name="isDefault">true</BooleanProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="mobile_landscape">
 <Struct>
-<IntProperty Name="width">480</IntProperty>
-<IntProperty Name="height">320</IntProperty>
+<IntProperty Name="width">667</IntProperty>
+<IntProperty Name="height">375</IntProperty>
 <IntProperty Name="order">2</IntProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="tablet_portrait">
 <Struct>
-<IntProperty Name="width">600</IntProperty>
-<IntProperty Name="height">800</IntProperty>
+<IntProperty Name="width">768</IntProperty>
+<IntProperty Name="height">1024</IntProperty>
 <IntProperty Name="order">3</IntProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="tablet_landscape">
 <Struct>
-<IntProperty Name="width">960</IntProperty>
-<IntProperty Name="height">540</IntProperty>
-<IntProperty Name="order">4</IntProperty>
-</Struct>
-</StructProperty>
-<StructProperty Name="hybrid_app_portrait">
-<Struct>
-<IntProperty Name="width">768</IntProperty>
-<IntProperty Name="height">1024</IntProperty>
+<IntProperty Name="width">1024</IntProperty>
+<IntProperty Name="height">768</IntProperty>
 <IntProperty Name="order">5</IntProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="hybrid_app_landscape">
-<Struct>
-<IntProperty Name="width">1024</IntProperty>
-<IntProperty Name="new property">768</IntProperty>
-<IntProperty Name="order">6</IntProperty>
 </Struct>
 </StructProperty>
-</Struct>
-</StructProperty>
-<IntProperty Name="cm_preferredWidth">1281</IntProperty>
+<IntProperty Name="cm_preferredWidth">1280</IntProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="fragmentPreview">
 <Struct>
+<StructListProperty Name="CMSpinner">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+</StructListProperty>
 <StructListProperty Name="CMTeasable">
 <Struct>
 <StringProperty Name="titleKey">preview_label_default</StringProperty>

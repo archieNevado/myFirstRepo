@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.studio.rest;
 
 import com.coremedia.cap.content.Content;
-import com.coremedia.util.StringUtil;
+import com.google.common.base.Strings;
 
 /**
  * Representation of a topic page.
@@ -31,7 +31,7 @@ public class TopicRepresentation {
   public TopicRepresentation(Content content) {
     this.topic = content;
     this.name = content.getName();
-    if(!StringUtil.isEmpty(content.getString("value"))) {
+    if(!Strings.isNullOrEmpty(content.getString("value"))) {
       this.name = content.getString("value");
     }
   }

@@ -386,9 +386,9 @@ public abstract class AbstractPageImpl implements AbstractPage, AssumesIdentity 
 
   @Override
   public String toString() {
-    return "AbstractPageImpl{" +
+    return getClass().getName() + "[" +
             "navigation=" + navigation +
             ", content=" + content +
-            '}';
+            ']';
   }
 }

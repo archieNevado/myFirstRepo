@@ -14,7 +14,7 @@
   <import resource="classpath:/META-INF/coremedia/es-common-contentbeans.xml"/>
   <import resource="classpath:/framework/spring/blueprint-i18n.xml"/>
 
-  <bean name="categoryExtractor" class="com.coremedia.blueprint.elastic.common.SegmentNameCategoryExtractor"/>
+  <bean name="categoryExtractor" class="com.coremedia.blueprint.base.elastic.common.SegmentNameCategoryExtractor"/>
 
   <bean name="userFilter" class="com.coremedia.blueprint.elastic.social.cae.user.UserFilter"/>
 

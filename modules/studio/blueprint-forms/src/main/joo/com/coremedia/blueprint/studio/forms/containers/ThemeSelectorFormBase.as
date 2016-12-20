@@ -1,12 +1,8 @@
 package com.coremedia.blueprint.studio.forms.containers {
 import com.coremedia.blueprint.base.components.localization.ContentLocalizationUtil;
 import com.coremedia.blueprint.base.components.util.ContentLookupUtil;
-import com.coremedia.blueprint.base.components.viewtypes.Viewtypes_properties;
-import com.coremedia.blueprint.studio.ThemeSelector_properties;
-import com.coremedia.blueprint.studio.config.themeSelectorForm;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.fields.ComboBoxLinkPropertyField;
@@ -18,12 +14,16 @@ import com.coremedia.ui.util.ObjectUtils;
 
 import ext.Ext;
 
+import mx.resources.ResourceManager;
+
 use namespace editorContext;
 
 use namespace Ext;
 
-use namespace session;
+use namespace SESSION;
 
+[ResourceBundle('com.coremedia.blueprint.studio.ThemeSelector')]
+[ResourceBundle('com.coremedia.blueprint.base.components.viewtypes.Viewtypes')]
 public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
 
   public static const DEFAULT_PATHS:Array = ['/Themes/'];
@@ -34,12 +34,12 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
   // Caution: The display field must not be encoded. Make sure to encode it when using it in a template.
   internal static const FULL_LAYOUTS_INFO_TEMPLATE:Array = [
     '<tpl for=".">',
-    '<div class="x-menu-item x-combo-list-item multipath-theme-combo">',
+    '<div class="x-menu-item x-combo-list-item x-boundlist-item multipath-theme-combo">',
     '<table border="0" class="text-normal-60">',
     '<tr>',
     '<th class="theme-header-image" rowspan="2">',
     '<tpl if="iconUri"><img src="{iconUri}"/></tpl>',
-    '<tpl if="!iconUri"><img src="', Ext.BLANK_IMAGE_URL, '" class="theme-icon-warning" ext:qtip="' + EncodingUtil.encodeForHTML(Viewtypes_properties.INSTANCE.no_image) + '"/></tpl>',
+    '<tpl if="!iconUri"><img src="', Ext.BLANK_IMAGE_URL, '" class="theme-icon-warning" ext:qtip="' + EncodingUtil.encodeForHTML(ResourceManager.getInstance().getString('com.coremedia.blueprint.base.components.viewtypes.Viewtypes', 'no_image')) + '"/></tpl>',
     '</th>',
     '<th align="left" valign="top" class="theme-header-title">',
     '<span class="text-bold">{displayName}</span>',
@@ -54,19 +54,19 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
     '</tpl>'
   ];
 
-  public function ThemeSelectorFormBase(config:themeSelectorForm = null) {
+  public function ThemeSelectorFormBase(config:ThemeSelectorForm = null) {
     super(config);
   }
 
-  internal static function createAvailableThemesValueExpression(config:themeSelectorForm):ValueExpression {
+  internal static function createAvailableThemesValueExpression(config:ThemeSelectorForm):ValueExpression {
     return ValueExpressionFactory.createFromFunction(computeAvailableLayouts, config);
   }
 
-  private static function computeAvailableLayouts(config:themeSelectorForm):Array {
+  private static function computeAvailableLayouts(config:ThemeSelectorForm):Array {
     var paths:Array = config.themesFolderPaths;
     var themeFolders:Array = [];
     for each(var path:String in paths) {
-      var baseFolder:Content = session.getConnection().getContentRepository().getChild(path);
+      var baseFolder:Content = SESSION.getConnection().getContentRepository().getChild(path);
       if (baseFolder === undefined) {
         themeFolders = undefined;
       }
@@ -104,7 +104,7 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
    * @return the formatted display name
    */
   public static function localizeText(content:Content):String {
-    return ContentLocalizationUtil.localize(content, 'ThemeSelector_default_text', ThemeSelector_properties.INSTANCE, getName);
+    return ContentLocalizationUtil.localize(content, 'ThemeSelector_default_text', ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.ThemeSelector').content, getName);
   }
 
   private static function getName(content:Content):String {
@@ -120,7 +120,7 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
    * @return the formatted description
    */
   public static function localizeDescription(content:Content):String {
-    return ContentLocalizationUtil.localize(content, 'ThemeSelector_default_description', ThemeSelector_properties.INSTANCE, null, getContentDescription);
+    return ContentLocalizationUtil.localize(content, 'ThemeSelector_default_description', ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.ThemeSelector').content, null, getContentDescription);
   }
 
   private static function getContentDescription(content:Content):Object {

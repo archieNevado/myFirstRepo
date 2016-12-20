@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -226,7 +227,6 @@ public class KalturaVideoProvider implements ExternalLibraryProvider { // NOSONA
           ExternalLibraryDataItemRepresentation item = new ExternalLibraryDataItemRepresentation(asset.description);
           item.setWidth(asset.width);
           item.setHeight(asset.height);
-          item.setType(asset.fileExt);
           String url = client.getThumbAssetService().getUrl(asset.id);
           item.setValue(url);
           video.getRawDataList().add(item);
@@ -274,17 +274,17 @@ public class KalturaVideoProvider implements ExternalLibraryProvider { // NOSONA
         String folder = content.getParent().getPath();
         String pictureName = videoItem.getName() + " (Image " + index + ")";
 
+        // buffer stream to make it markable
+        @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
+        InputStream bufferedInputStream = new BufferedInputStream(in);
+
         CapConnection connection = content.getRepository().getConnection();
         BlobService blobService = connection.getBlobService();
         ContentType contentType = connection.getContentRepository().getContentType("CMPicture");
         Content newImageContent = contentType.createByTemplate(connection.getContentRepository().getChild(folder), pictureName, "{3} ({1})", new HashMap<String, Object>());
-        String mimeTypeString = mimeTypeService.getMimeTypeForExtension(item.getType());
-        if (mimeTypeString == null) {
-          mimeTypeString = "image/jpeg";
-        }
+        String mimeTypeString = mimeTypeService.detectMimeType(bufferedInputStream, imageUrl, con.getContentType());
         MimeType mimeType = new MimeType(mimeTypeString);
-        newImageContent.set("data", blobService.fromInputStream(in, mimeType));
-        in.close();
+        newImageContent.set("data", blobService.fromInputStream(bufferedInputStream, mimeType));
 
         newImageContent.checkIn();
         imageList.add(newImageContent);

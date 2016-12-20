@@ -173,7 +173,7 @@ public class PageSearchActionHandlerTest {
   public void setUp() throws Exception {
     CMChannel navigation = contentTestHelper.getContentBean(ROOT_NAVIGATION_ID);
     action = contentTestHelper.getContentBean(ACTION_ID);
-    page = new PageImpl(navigation, action, true, sitesService, null);
+    page = new PageImpl(navigation, action, true, sitesService, null, null, null, null);
 
     //create SearchActionState for linkscheme test
     searchActionState = testling.createActionState(action, null);

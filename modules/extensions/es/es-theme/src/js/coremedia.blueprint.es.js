@@ -5,6 +5,7 @@ var coremedia = (function (module) {
   return module;
 }(coremedia || {}));
 coremedia.blueprint = (function (module) {
+  /*global jQuery*/
   module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
@@ -113,8 +114,7 @@ coremedia.blueprint.es = function (module) {
     return result;
   };
 
-  // TODO refactor
-  $("#timezone").val(coremedia.blueprint.basic.timezone.determine_timezone().name());
+  $("#timezone").val(coremedia.blueprint.es.timezone.determine_timezone().name());
 
   var ES_AJAX_FORM_IDENTIFIER = "cm-es-ajax-form";
 

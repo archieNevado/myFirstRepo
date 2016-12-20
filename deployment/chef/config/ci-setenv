@@ -4,32 +4,15 @@ set -ex
 # determine were we are
 # use $BASH_SOURCE[0] to be safe when script is insource
 DIR=$(dirname "${BASH_SOURCE[0]}")
-# generate executables to the installed gems in .bin of the workspace (--binstubs) with the correct ruby
-# for jenkins slaves that have more than one executor we need to separate the bundle paths, otherwise there will be race conditions
 
 if [[ -e /opt/chefdk/bin/chef ]]; then
   echo "Found chefdk:"
   /opt/chefdk/bin/chef --version
   eval "$(/opt/chefdk/bin/chef shell-init bash)"
   cp ${DIR}/chefdk/Gemfile* ./
-  bundle install
-elif [[ -d /opt/chef/embedded/bin ]]; then
-  echo "Found chef-client:"
-  /opt/chef/embedded/bin/chef-client --version
-  CHEF_RUBY_PATH=/opt/chef/embedded/bin
-  ##########################################################
-  if [[ `rpm -q gecode` ]]; then
-    export USE_SYSTEM_GECODE=1
-  else
-    echo "you should better install gecode package, otherwise bundle install will take plenty of time the first time."
-  fi
-  test -f ${CHEF_RUBY_PATH}/bundle || echo "you need to install bundler, execute ${CHEF_RUBY_PATH}/gem install bundler"
-  cp ${DIR}/chef-client/Gemfile* ./
-  ${CHEF_RUBY_PATH}/bundle install --binstubs --deployment --path=${HOME}/.bundle${EXECUTOR_NUMBER} --jobs 2 --retry 3 --shebang=${CHEF_RUBY_PATH}/ruby
-  # add the binstubs to the path
-  export PATH=${CHEF_RUBY_PATH}:$(pwd)/bin:$PATH
+  chef gem install -g -N --minimal-deps --conservative --lock
 else
-  echo "you need to install either chef-dk or chef first"
+  echo "you need to install chef-dk first, see prerequisites"
   exit 1
 fi
 

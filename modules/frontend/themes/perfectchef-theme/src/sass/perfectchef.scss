@@ -8,41 +8,58 @@
 
 //Vendor
 @import "vendor/normalize";
+@import "vendor/bootstrap";
 @import "vendor/magnific-popup";
 @import "vendor/media-element-player";
-@import "vendor/bootstrap";
+
+//Bricks
+@import "../../../../lib/bricks/fragment-scenario/sass/fragments";
+@import "../../../../lib/bricks/responsive-images/sass/non-adaptive-content";
+@import "../../../../lib/bricks/livecontext/sass/notification";
+@import "../../../../lib/bricks/livecontext/sass/device-selector";
+@import "../../../../lib/bricks/livecontext/sass/button";
+@import "../../../../lib/bricks/generic-templates/sass/popup";
+@import "../../../../lib/bricks/generic-templates/sass/video";
+@import "../../../../lib/bricks/livecontext/sass/imagemap";
+@import "../../../../lib/bricks/livecontext/sass/quickinfo";
+@import "../../../../lib/bricks/livecontext/sass/price";
+@import "../../../../lib/bricks/livecontext/sass/coremedia-richtext-1.0";
+@import "../../../../lib/bricks/livecontext/sass/helpers";
+@import "../../../../lib/bricks/livecontext/sass/detail";
+@import "../../../../lib/bricks/livecontext/sass/marketingspots";
+@import "../../../../lib/bricks/livecontext/sass/spinner";
+@import "../../../../lib/bricks/pdp-augmentation/sass/pdp-asset-widget";
+@import "../../../../lib/bricks/livecontext/sass/product-info";
+@import "../../../../lib/bricks/livecontext/sass/accordion";
+@import "../../../../lib/bricks/livecontext/sass/icon";
+@import "../../../../lib/bricks/livecontext/sass/teaser";
+@import "../../../../lib/bricks/livecontext/sass/headings";
+@import "../../../../lib/bricks/bootstrap/sass/page";
 
 // Components
-@import "components/main";
 @import "components/font";
-@import "components/layout";
 @import "components/hero";
 @import "components/teaser";
-@import "components/notification";
 @import "components/navigation";
-@import "components/button";
-@import "components/mobile";
-@import "components/tablet";
-@import "components/tablet_portrait";
-@import "components/tablet_landscape";
-@import "components/desktop";
 @import "components/fragment";
 @import "components/carousel";
-@import "components/grids";
-@import "components/popup";
-@import "components/detail";
 @import "components/tags";
 @import "components/images";
-@import "components/imagemap";
-@import "components/quickinfo";
-@import "components/coremedia-richtext-1.0";
-@import "components/helpers";
-@import "components/price";
+@import "components/shoppable-video";
 @import "components/category";
+@import "components/header";
+@import "components/footer";
+@import "components/search";
+@import "components/social-sharing";
+@import "components/cart";
+@import "components/sidebar";
+@import "components/sitemap";
+@import "components/grids";
 
 // ES
 @import "components/perfectchef-es";
-@import "components/perfectchef-es-form";
+@import "components/box";
+@import "components/headline";
 
 // Print
 @import "components/print";

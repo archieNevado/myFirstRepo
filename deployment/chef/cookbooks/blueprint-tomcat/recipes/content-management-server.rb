@@ -13,7 +13,8 @@ cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
 # we cannot directly use the helper method in a definitions body, otherwise it gets evaluated too early
 start_service = cm_tomcat_default(service_name, 'start_service')
 
-node.default['blueprint']['webapps'][service_name]['application.properties']['search.solr.urls'] = "#{cm_webapp_url('solr')}/studio"
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.collection.content'] = 'studio'
 node.default['blueprint']['webapps'][service_name]['application.properties']['publisher.target.ior.url'] = "#{cm_webapp_url('master-live-server')}/ior"
 node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.http.port'] = "#{node['blueprint']['tomcat'][service_name]['port_prefix']}80"
 node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ORBServerHost'] = node['blueprint']['hostname']
@@ -25,17 +26,17 @@ if node.deep_fetch('blueprint', 'jaas', 'crowd', 'enabled')
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = 'com.coremedia.blueprint.userproviders.crowd.CrowdUserProvider'
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = "#{service_dir}/jndi-crowd.properties"
   crowd_config = node['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties']
-  jaas_conf = { :crowd => { :config_file => crowd_config, :domain => 'crowd' } }
+  jaas_conf = { crowd: { config_file: crowd_config, domain: 'crowd' } }
 elsif node.deep_fetch('blueprint', 'jaas', 'ldap', 'enabled')
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = ''
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = ''
-  jaas_conf = { :ldap => { :host => node['blueprint']['jaas']['ldap']['host'], :port => node['blueprint']['jaas']['ldap']['port'], :domain => node['blueprint']['jaas']['ldap']['domain'] } }
+  jaas_conf = { ldap: { host: node['blueprint']['jaas']['ldap']['host'], port: node['blueprint']['jaas']['ldap']['port'], domain: node['blueprint']['jaas']['ldap']['domain'] } }
 elsif node.deep_fetch('blueprint', 'jaas', 'cas', 'enabled')
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = ''
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = ''
-  jaas_conf = { :cas => { :validator_url => node['blueprint']['jaas']['cas']['validator_url'], :cap_service_url => node['blueprint']['jaas']['cas']['cap_service_url'] } }
+  jaas_conf = { cas: { validator_url: node['blueprint']['jaas']['cas']['validator_url'], cap_service_url: node['blueprint']['jaas']['cas']['cap_service_url'] } }
 else
-  #disable any of the above TODO: if we disable crowd in the blueprint workspace we can remove this.
+  # disable any of the above TODO: if we disable crowd in the blueprint workspace we can remove this.
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = ''
   node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = ''
 end
@@ -62,7 +63,7 @@ template "#{service_name} - crowd_config" do
   mode 0700
   sensitive true
   source 'properties.erb'
-  variables :props => node['blueprint']['jaas']['crowd']['properties']
+  variables props: node['blueprint']['jaas']['crowd']['properties']
   not_if { crowd_config.nil? }
   notifies :update, tomcat, :immediately if !crowd_config.nil? && ::File.exist?(crowd_config)
 end

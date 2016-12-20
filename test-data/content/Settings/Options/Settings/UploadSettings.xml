@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMSettings folder="/Settings/Options/Settings" name="UploadSettings" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale>en-US</locale>
+<locale></locale>
 <master>
 </master>
 <settings>
@@ -108,6 +108,8 @@
 <StructProperty Name="mimeTypeMappings">
 <Struct>
 <StringProperty Name="image">CMPicture</StringProperty>
+<StringProperty Name="image/tiff">CMDownload</StringProperty>
+<StringProperty Name="image/svg+xml">CMImage</StringProperty>
 <StringProperty Name="application">CMDownload</StringProperty>
 <StringProperty Name="audio">CMAudio</StringProperty>
 <StringProperty Name="video">CMVideo</StringProperty>

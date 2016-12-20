@@ -5,7 +5,6 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.impl.ContentImpl;
 import com.coremedia.cap.content.search.SearchParameters;
-import com.coremedia.catalog.studio.*;
 import com.coremedia.catalog.studio.repository.RepositoryCatalogSearchListContainer;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.cms.editor.sdk.collectionview.RepositoryCollectionViewExtension;
@@ -14,6 +13,9 @@ import com.coremedia.cms.editor.sdk.collectionview.sort.RepositoryListSorter;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.catalog.studio.CatalogStudioPlugin')]
 public class CatalogCollectionViewExtension extends RepositoryCollectionViewExtension {
   public static const CATALOG_FOLDER_CONTAINER_ITEM_ID:String = "catalogFolderContent";
 
@@ -26,20 +28,20 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
 
   protected static const ALL_TYPE_RECORD:Object = {
     name: ContentTypeNames.DOCUMENT,
-    label: CatalogStudioPlugin_properties.INSTANCE.Catalog_show_all,
-    icon: CatalogStudioPlugin_properties.INSTANCE.All_icon
+    label: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Catalog_show_all'),
+    icon: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'All_icon')
   };
 
   protected static const PRODUCT_TYPE_RECORD:Object = {
     name: CatalogTreeRelation.CONTENT_TYPE_PRODUCT,
-    label: CatalogStudioPlugin_properties.INSTANCE.CMProduct_text,
-    icon: CatalogStudioPlugin_properties.INSTANCE.CMProduct_icon
+    label: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMProduct_text'),
+    icon: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMProduct_icon')
   };
 
   protected static const CATEGORY_TYPE_RECORD:Object = {
     name: CatalogTreeRelation.CONTENT_TYPE_CATEGORY,
-    label: CatalogStudioPlugin_properties.INSTANCE.CMCategory_text,
-    icon: CatalogStudioPlugin_properties.INSTANCE.CMCategory_icon
+    label: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMCategory_text'),
+    icon: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMCategory_icon')
   };
 
   override public function isApplicable(model:Object):Boolean {

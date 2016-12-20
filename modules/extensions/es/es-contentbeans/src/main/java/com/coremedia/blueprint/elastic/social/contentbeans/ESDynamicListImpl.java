@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.elastic.social.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
-import com.coremedia.blueprint.elastic.common.AggregationType;
+import com.coremedia.blueprint.base.elastic.common.AggregationType;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.elastic.core.api.counters.AverageCounter;
 import com.coremedia.elastic.core.api.counters.Counter;
@@ -24,13 +24,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.coremedia.blueprint.elastic.common.AggregationType.MOST_COMMENTED;
-import static com.coremedia.blueprint.elastic.common.AggregationType.MOST_LIKED;
-import static com.coremedia.blueprint.elastic.common.AggregationType.MOST_RATED;
-import static com.coremedia.blueprint.elastic.common.AggregationType.MOST_REVIEWED;
-import static com.coremedia.blueprint.elastic.common.AggregationType.MOST_SHARED;
-import static com.coremedia.blueprint.elastic.common.AggregationType.TOP_RATED;
-import static com.coremedia.blueprint.elastic.common.AggregationType.TOP_REVIEWED;
+import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_COMMENTED;
+import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_LIKED;
+import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_RATED;
+import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_REVIEWED;
+import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_SHARED;
+import static com.coremedia.blueprint.base.elastic.common.AggregationType.TOP_RATED;
+import static com.coremedia.blueprint.base.elastic.common.AggregationType.TOP_REVIEWED;
 import static com.coremedia.elastic.core.api.counters.Interval.INFINITY;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;

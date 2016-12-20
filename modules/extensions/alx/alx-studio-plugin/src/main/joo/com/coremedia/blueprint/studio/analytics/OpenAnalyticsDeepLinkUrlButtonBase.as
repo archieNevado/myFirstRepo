@@ -8,23 +8,23 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
-import ext.config.button;
+import ext.button.Button;
 
 public class OpenAnalyticsDeepLinkUrlButtonBase extends OpenAnalyticsUrlButtonBase {
 
-  internal static const noPreviewTypes:Array = editorContext.getDocumentTypesWithoutPreview();
+  internal static const NO_PREVIEW_TYPES:Array = editorContext.getDocumentTypesWithoutPreview();
 
   internal var contentExpression:ValueExpression;
   private var uriExpression:ValueExpression;
 
-  public function OpenAnalyticsDeepLinkUrlButtonBase(config:button = null) {
+  public function OpenAnalyticsDeepLinkUrlButtonBase(config:Button = null) {
     const localBean:Bean = beanFactory.createLocalBean();
-    contentExpression =  ValueExpressionFactory.create('content', localBean);
+    uriExpression = ValueExpressionFactory.create('serviceUrl', localBean);
+
+    contentExpression = ValueExpressionFactory.create('content', localBean);
     contentExpression.addChangeListener(getAlxServiceBean);
 
-    uriExpression =  ValueExpressionFactory.create('serviceUrl', localBean);
-
-    addEvents('serviceSettingsUri');
+    /* EXT6_GONE:ext.util.Observable#addEvents addEvents('serviceSettingsUri');*/
     super(config);
   }
 
@@ -42,14 +42,14 @@ public class OpenAnalyticsDeepLinkUrlButtonBase extends OpenAnalyticsUrlButtonBa
   }
 
   private function getAlxServiceBean():void {
-    const content:Content = contentExpression.getValue();
-    if (content) {
+    if (contentExpression && contentExpression.getValue()) {
+      const content:Content = contentExpression.getValue();
       // if content has no preview, it cannot be rendered by CAE and thus has no report URL link either
       const nameValueExpression:ValueExpression = ValueExpressionFactory.create("type.name", content);
-      nameValueExpression.loadValue(function(typeName:String):void {
-        if(noPreviewTypes.indexOf(typeName) < 0) {
+      nameValueExpression.loadValue(function (typeName:String):void {
+        if (NO_PREVIEW_TYPES.indexOf(typeName) < 0) {
           var id:int = IdHelper.parseContentId(content);
-          uriExpression.setValue("alxservice/"+id);
+          uriExpression.setValue("alxservice/" + id);
         }
       });
     }
@@ -57,8 +57,8 @@ public class OpenAnalyticsDeepLinkUrlButtonBase extends OpenAnalyticsUrlButtonBa
 
   protected function getAlxReportUrl():ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():String {
-      const uri:String = uriExpression.getValue();
-      if (typeof(uri) == "string") {
+      const uri:String = uriExpression && uriExpression.getValue(); // uriExpression maybe null
+      if (typeof(uri) === "string") {
         const remoteBean:RemoteBean = beanFactory.getRemoteBean(uri);
         if (remoteBean) {
           return ValueExpressionFactory.create(serviceName, remoteBean).getValue();

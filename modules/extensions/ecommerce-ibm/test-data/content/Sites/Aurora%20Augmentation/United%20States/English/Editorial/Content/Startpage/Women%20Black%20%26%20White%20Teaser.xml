@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMTeaser folder="/Sites/Aurora Augmentation/United States/English/Editorial/Content/Startpage" name="Women Black &amp; White Teaser" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles>
+</resourceBundles>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Simple is the New Elegant</teaserTitle>
+<pictures>
+<link href="Black-and-white%20portrait%20of%20a%20stund1866bc4.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Black-and-white%20portrait%20of%20a%20stunning%20fashionable%20model%20Picture"/>
+</pictures>
+<related>
+</related>
+<target>
+<link href="../../../Augmentation/Apparel/Women/Women.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
+</target>
+</CMTeaser>

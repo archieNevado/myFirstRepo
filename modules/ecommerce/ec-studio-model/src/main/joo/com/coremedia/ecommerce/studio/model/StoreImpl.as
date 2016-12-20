@@ -10,7 +10,6 @@ import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 public class StoreImpl extends CatalogObjectImpl implements Store {
   private var siteId:String;
   private var workspaceId:String;
-  private var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod("livecontext/urlService", "POST", true, true);
 
   private const resolvedUrls:Object = {};
 
@@ -36,10 +35,8 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
     return get("topLevel");
   }
 
-
   public function getMarketing():Marketing {
     return get("marketing");
-
   }
 
   public function getSegments():Segments {
@@ -53,7 +50,6 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
   public function getWorkspaces():Workspaces {
     return get(CatalogObjectPropertyNames.WORKSPACES);
   }
-
 
   public function getCurrentWorkspace():Workspace {
     if (!workspaceId || workspaceId === CatalogModel.NO_WS) {
@@ -102,20 +98,23 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
   public function resolveShopUrlForPbe(shopUrl:String):RemoteBean {
     var resolvedUrl:Object = resolvedUrls[shopUrl];
     var ve:ValueExpression;
-    if(undefined === resolvedUrl) {
+    if (undefined === resolvedUrl) {
       ve = ValueExpressionFactory.createFromValue();
       resolvedUrl = {at : new Date(), ve : ve};
     } else {
       ve = resolvedUrl.ve;
     }
-    if(undefined === resolvedUrls[shopUrl] || resolvedUrl.at < new Date().getTime() - 5000) {
+
+    if (undefined === resolvedUrls[shopUrl] || resolvedUrl.at < new Date().getTime() - 5000) {
       resolvedUrls[shopUrl] = resolvedUrl;
-      remoteServiceMethod.request({shopUrl: shopUrl, siteId: getSiteId()},
+      var urlResolveUri:String = this.getUriPath() + "/urlService";
+      var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod(urlResolveUri, "POST", true, true);
+      remoteServiceMethod.request({shopUrl: shopUrl},
               function (response:RemoteServiceMethodResponse):void {
-                var bean:* = response.getResponseJSON().bean;
-                ve.setValue(bean);
+                ve.setValue(response.getResponseJSON());
               });
     }
+
     return ve.getValue();
   }
 }

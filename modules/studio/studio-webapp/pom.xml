@@ -15,9 +15,16 @@
 
   <properties>
     <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
+    <logging-properties.dir>${project.basedir}/../../../workspace-configuration/logging</logging-properties.dir>
+    <propertieslocations>classpath:/wcs.properties,classpath:/studio.properties</propertieslocations>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>base-component</artifactId>
@@ -25,10 +32,15 @@
     </dependency>
 
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-client</artifactId>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>studio-app</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>editor-resources</artifactId>
       <scope>runtime</scope>
     </dependency>
 
@@ -90,12 +102,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.coremedia.cae</groupId>
-      <artifactId>cae-toolbox-studio-component</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
       <scope>runtime</scope>
@@ -120,18 +126,11 @@
     </dependency>
 
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>taxonomies-rest-extension</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-studio-image-struct-adapter</artifactId>
       <scope>runtime</scope>
     </dependency>
 
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>image-struct-adapter-component</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
 
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
@@ -163,22 +162,6 @@
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-spring</artifactId>
-    </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
@@ -206,11 +189,6 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -221,7 +199,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-el</artifactId>
+      <artifactId>tomcat-embed-jasper</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -229,32 +207,11 @@
       <artifactId>tomcat-embed-logging-juli</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-jasper</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
     <finalName>studio</finalName>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-          <webResources>
-            <resource>
-              <directory>target/jangaroo-output</directory>
-            </resource>
-          </webResources>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
@@ -265,7 +222,7 @@
           <contextFile>${project.basedir}/tomcat-context.xml</contextFile>
           <path>/</path>
           <systemProperties>
-            <propertieslocations>classpath:/wcs.properties,classpath:/studio.properties</propertieslocations>
+            <propertieslocations>${propertieslocations}</propertieslocations>
           </systemProperties>
         </configuration>
       </plugin>
@@ -276,27 +233,49 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <!--
-            build executable war that can be run like this:
-            JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
+          <requiresUnpack>
+            <!--
+ Due to https://java.net/jira/browse/JERSEY-2085 libraries that contain packages that are scanned for root resource
+ and provider classes must be configured here.
 
-            only set to 'true' if chef run won't fail on warning when unzipping the webapp
-          -->
-          <executable>false</executable>
+
+see http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-extract-specific-libraries-when-an-executable-jar-runs
+see https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes#jersey-classpath-scanning-limitations
+            -->
+            <dependency>
+              <groupId>com.coremedia.blueprint</groupId>
+              <artifactId>ec-studio-lib</artifactId>
+            </dependency>
+            <dependency>
+              <groupId>com.coremedia.cms</groupId>
+              <artifactId>coremedia-transform</artifactId>
+            </dependency>
+            <dependency>
+              <groupId>com.coremedia.elastic</groupId>
+              <artifactId>core-rest-impl-component</artifactId>
+            </dependency>
+            <dependency>
+              <groupId>com.coremedia.ui</groupId>
+              <artifactId>coremedia-rest-core</artifactId>
+            </dependency>
+            <dependency>
+              <groupId>com.coremedia.ui</groupId>
+              <artifactId>cap-rest-service</artifactId>
+            </dependency>
+            <dependency>
+              <groupId>com.sun.jersey</groupId>
+              <artifactId>jersey-server</artifactId>
+            </dependency>
+            <dependency>
+              <groupId>com.sun.jersey</groupId>
+              <artifactId>jersey-core</artifactId>
+            </dependency>
+            <dependency>
+              <groupId>com.sun.jersey</groupId>
+              <artifactId>jersey-servlet</artifactId>
+            </dependency>
+          </requiresUnpack>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>net.jangaroo</groupId>
-        <artifactId>jangaroo-maven-plugin</artifactId>
-        <extensions>true</extensions>
-        <version>${jangaroo.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>war-package</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

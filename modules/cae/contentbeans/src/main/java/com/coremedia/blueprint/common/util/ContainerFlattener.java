@@ -21,7 +21,7 @@ public final class ContainerFlattener {
    */
   public static <T> List<T> flatten(Container container, Class<T> expectedType) {
     ArrayList<T> result = new ArrayList<>();
-    recFlatten(container, result, new HashSet<Container>(), expectedType, false, false);
+    recFlatten(container, result, new HashSet<>(), expectedType, false, false);
     return result;
   }
 
@@ -38,7 +38,8 @@ public final class ContainerFlattener {
       visited.add(container);
       List<?> items = container.getItems();
       for (Object item : items) {
-        if (item instanceof Container) {
+        //Only flatten item where the marker interface Flatless has not been set
+        if (item instanceof Container && !(item instanceof Flatless)) {
           recFlatten(((Container)item), result, visited, expectedType, allowDuplicates, failOnError);
         } else {
           T typedItem = expectedType.isAssignableFrom(item.getClass()) ? expectedType.cast(item) : null;

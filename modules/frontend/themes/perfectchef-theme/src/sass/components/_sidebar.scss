@@ -1,0 +1,25 @@
+@include breakpoint(xs) {
+
+  /* --- sidebar ---------------------------------------------------------------------------------------------------- */
+  .cm-placement-sidebar {
+    font-size: 0;
+    vertical-align: top;
+  }
+
+  .cm-placement-sidebar > * {
+    display: block;
+    font-size: 1rem;
+  }
+}
+
+.cm-placement-sidebar > :not(:last-child) {
+  @include breakpoint(md) {
+    margin-bottom: 10px;
+  }
+
+  @include breakpoint(xs) {
+    .cm-placement-sidebar > :not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+}

@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
-import com.coremedia.blueprint.analytics.elastic.TopNReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
-import com.coremedia.blueprint.analytics.elastic.util.SettingsUtil;
-import com.coremedia.blueprint.analytics.elastic.validation.ResultItemValidationService;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
+import com.coremedia.blueprint.base.analytics.elastic.validation.ResultItemValidationService;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -25,9 +25,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.KEY_INTERVAL;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.needsUpdate;
-import static com.coremedia.blueprint.analytics.elastic.util.SettingsUtil.createProxy;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.KEY_INTERVAL;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.needsUpdate;
+import static com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil.createProxy;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.math.NumberUtils.isDigits;

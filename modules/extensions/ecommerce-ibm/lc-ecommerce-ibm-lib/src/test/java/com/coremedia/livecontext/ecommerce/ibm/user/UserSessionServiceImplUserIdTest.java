@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreFrontService.IBM_WC_USERACTIVITY_COOKIE_NAME;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreFrontService.IBM_WCP_USERACTIVITY_COOKIE_NAME;
+import static com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService.IBM_WC_USERACTIVITY_COOKIE_NAME;
+import static com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService.IBM_WCP_USERACTIVITY_COOKIE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

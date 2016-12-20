@@ -10,7 +10,6 @@ import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ecommerce.studio.model.Contracts;
 import com.coremedia.ecommerce.studio.model.Segments;
 import com.coremedia.ecommerce.studio.model.Store;
-import com.coremedia.livecontext.p13n.studio.config.livecontextP13NStudioPlugin;
 import com.coremedia.ui.data.ValueExpression;
 
 public class LivecontextP13NStudioPluginBase extends StudioPlugin {
@@ -18,7 +17,7 @@ public class LivecontextP13NStudioPluginBase extends StudioPlugin {
   internal static const USER_SEGMENTS:String = 'usersegments';
   internal static const USER_CONTRACTS:String = 'usercontracts';
 
-  public function LivecontextP13NStudioPluginBase(config:livecontextP13NStudioPlugin = null) {
+  public function LivecontextP13NStudioPluginBase(config:LivecontextP13NStudioPlugin = null) {
     super(config);
   }
 

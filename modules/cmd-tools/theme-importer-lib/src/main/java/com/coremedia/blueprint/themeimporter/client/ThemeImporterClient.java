@@ -1,19 +1,14 @@
 package com.coremedia.blueprint.themeimporter.client;
 
-import com.coremedia.blueprint.themeimporter.ThemeImporter;
-import com.coremedia.cmdline.AbstractUAPIClient;
-import com.coremedia.cmdline.base.Client;
-import com.coremedia.mimetype.DefaultMimeTypeService;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.coremedia.blueprint.themeimporter.configuration.ThemeImporterConfiguration;
+import com.coremedia.cmdline.CommandLineClient;
+import com.coremedia.cmdline.Credentials;
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import javax.annotation.Nonnull;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Imports Themes into the ContentRepository.
@@ -27,74 +22,41 @@ import java.util.Collection;
  * <b>Options:</b>
  * <table>
  * <tr><td>-f, --folder</td><td>Folder within CoreMedia where themes are stored. Defaults to /Themes</td></tr>
- * <tr><td>-v, --verbose</td><td>verbose output</td></tr>
  * <tr><td>-u, --user &lt;user name&gt;</td><td>the name of the CoreMedia user</td></tr>
  * <tr><td>-d, --domain &lt;domain&gt;</td><td>the domain of the user</td></tr>
  * <tr><td>-p, --password &lt;password&gt;</td><td>the users password</td></tr>
  * <tr><td>-url &lt;ior url&gt;</td><td>Content Server IOR URL to connect to</td></tr>
  * </table>
  */
-public class ThemeImporterClient extends AbstractUAPIClient {
-  private static final Logger LOG = LoggerFactory.getLogger(ThemeImporterClient.class);
+@Configuration
+@Import(ThemeImporterConfiguration.class)
+public class ThemeImporterClient extends AbstractThemeImporterClient {
+  private static final ThemeImporterCommandLineParser CMD_LINE_PARSER = new ThemeImporterCommandLineParser();
 
-  private static final String FOLDER_PARAMETER = "f";
-  private String folder = "/Themes";
-  private String[] themes;
-  private Boolean warnings = false;
 
-  @Override
-  protected void fillInOptions(Options options) {
-    options.addOption(OptionBuilder.hasArg().withDescription("Folder within CoreMedia where themes are stored. Defaults to /Themes")
-            .withLongOpt("folder")
-            .create(FOLDER_PARAMETER));
-  }
-
-  @Override
-  @Nonnull
-  protected String getUsage() {
-    return "cm import-themes -u <user> [other options] <theme.zip> ...";
-  }
-
-  @Override
-  protected boolean parseCommandLine(CommandLine commandLine) {
-    if (commandLine.hasOption(FOLDER_PARAMETER)) {
-      folder = commandLine.getOptionValue(FOLDER_PARAMETER);
-    }
-    themes = commandLine.getArgs();
-    if (themes == null || themes.length == 0) {
-      getLogger().trace("Wrong argument for parameter t. Command line parsing marked as failure.");
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  protected void run() {
-    ThemeImporter themeImporter = new ThemeImporter(connection, new DefaultMimeTypeService(true));
-    themeImporter.importThemes(folder, collectThemeFiles());
-    if (warnings) {
-      LOG.warn("Done, with errors.");
-    } else {
-      LOG.info("Done.");
-    }
-  }
-
-  private Collection<File> collectThemeFiles() {
-    Collection<File> files = new ArrayList<>();
-    for (String theme : themes) {
-      File file = new File(theme);
-      if (file.exists() && !file.isDirectory() && file.canRead()) {
-        files.add(file);
-      } else {
-        LOG.warn("Cannot read theme {}, skipped.", theme);
-        warnings = true;
-      }
-    }
-    return files;
-  }
-
+  // --- main -------------------------------------------------------
 
   public static void main(String[] args) {
-    Client.main(new ThemeImporterClient(), args);
+    AtomicInteger exitCodeCallback = new AtomicInteger(CommandLineClient.ERROR_NONE);
+    SpringApplication springApplication = createSpringApplication(args, exitCodeCallback);
+    if (springApplication != null) {
+      runSpringApplication(springApplication, exitCodeCallback);
+    }
+    System.exit(exitCodeCallback.get());
+  }
+
+  private static SpringApplication createSpringApplication(String[] args, AtomicInteger exitCodeCallback) {
+    int commandLineExitCode = CMD_LINE_PARSER.parseCommandLine(args);
+    if (commandLineExitCode != CommandLineClient.ERROR_NONE) {
+      exitCodeCallback.set(commandLineExitCode);
+      return null;
+    }
+    Credentials cred = CMD_LINE_PARSER.getCredentials();
+    LoginInitializer loginInitializer = new LoginInitializer(cred.getIorUrl(), cred.getUser(), cred.getDomain(), cred.getPassword());
+    ThemeImporterInitializer themeImporterInitializer = new ThemeImporterInitializer(CMD_LINE_PARSER.folder, CMD_LINE_PARSER.themes, null, exitCodeCallback);
+    SpringApplication springApplication = new SpringApplication(ThemeImporterClient.class);
+    springApplication.addInitializers(loginInitializer, themeImporterInitializer);
+    springApplication.setBannerMode(Banner.Mode.OFF);
+    return springApplication;
   }
 }

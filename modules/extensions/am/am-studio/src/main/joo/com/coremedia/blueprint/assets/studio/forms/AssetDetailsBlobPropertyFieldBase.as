@@ -1,13 +1,13 @@
 package com.coremedia.blueprint.assets.studio.forms {
 
-import com.coremedia.blueprint.assets.studio.config.assetDetailsBlobPropertyField;
 import com.coremedia.cms.editor.sdk.premular.fields.BlobPropertyField;
+import com.coremedia.cms.editor.sdk.util.ImageUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 import ext.Component;
-import ext.Container;
-import ext.form.Checkbox;
+import ext.container.Container;
+import ext.form.field.Checkbox;
 
 public class AssetDetailsBlobPropertyFieldBase  extends BlobPropertyField {
 
@@ -17,7 +17,7 @@ public class AssetDetailsBlobPropertyFieldBase  extends BlobPropertyField {
 
   protected const CHECKBOX_ITEM_ID:String = "checkBoxItemId";
 
-  public function AssetDetailsBlobPropertyFieldBase(config:assetDetailsBlobPropertyField = null) {
+  public function AssetDetailsBlobPropertyFieldBase(config:AssetDetailsBlobPropertyField = null) {
     super(config);
 
     getBlobPropertyVE(config.bindTo, config.propertyName).addChangeListener(updateCheckbox);
@@ -63,11 +63,11 @@ public class AssetDetailsBlobPropertyFieldBase  extends BlobPropertyField {
   }
 
   protected static function findBlobDetailsContainer(container:Container):Component {
-    return container.find('itemId', BlobPropertyField.BLOB_DETAILS_ITEM_ID)[0];
+    return container.queryById(BlobPropertyField.BLOB_DETAILS_ITEM_ID);
   }
 
   private function findCheckBox():Checkbox {
-    var checkbox:Checkbox = find("itemId", CHECKBOX_ITEM_ID)[0] as Checkbox;
+    var checkbox:Checkbox = queryById(CHECKBOX_ITEM_ID) as Checkbox;
     return (checkbox) ? checkbox : null;
   }
 
@@ -75,6 +75,10 @@ public class AssetDetailsBlobPropertyFieldBase  extends BlobPropertyField {
     blobPropertyVE.removeChangeListener(updateCheckbox);
 
     super.onDestroy();
+  }
+
+  override protected function blobImageTransformer(uri:String):String {
+    return ImageUtil.getCroppingUri(uri, 122, 122);
   }
 
 }

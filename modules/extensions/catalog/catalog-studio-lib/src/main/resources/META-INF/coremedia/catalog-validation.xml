@@ -7,7 +7,7 @@
        http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
   <import resource="classpath:com/coremedia/rest/cap/cap-rest-service.xml"/>
-  <import resource="classpath:META-INF/coremedia/component-bpbase-studio-rest.xml"/>
+  <import resource="classpath:META-INF/coremedia/bpbase-studio-rest.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"/>
 
   <bean id="catalogProductValidator" parent="contentTypeValidator" class="com.coremedia.catalog.studio.lib.validators.CatalogProductValidator">

@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.login;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ public class PreviewTokenProvider implements CommercePropertyProvider {
   private LoginService loginService;
 
   @Override
-  public Object provideValue(Map<String, Object> parameters) {
+  public Object provideValue(@Nonnull Map<String, Object> parameters) {
     String result = null;
     WcPreviewToken previewToken = loginService.getPreviewToken();
     if (previewToken != null) {

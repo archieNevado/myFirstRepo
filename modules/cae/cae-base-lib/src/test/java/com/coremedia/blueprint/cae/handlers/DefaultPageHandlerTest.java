@@ -190,7 +190,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
 
     UriComponentsBuilder defaultUriComponentsBuilder = UriComponentsBuilder.newInstance();
 
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache()));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
     when(defaultNavigation.getVanityUrlMapper()).thenReturn(vanityUrlMapper);
     when(vanityUrlMapper.forPattern(ADDITIONAL_SEGMENT)).thenReturn(defaultNavigation);
     when(contextHelper.findAndSelectContextFor(defaultNavigation, defaultNavigation)).thenReturn(defaultNavigation);

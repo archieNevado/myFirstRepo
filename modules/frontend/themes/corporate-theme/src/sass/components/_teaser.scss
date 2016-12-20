@@ -210,6 +210,6 @@ Contains styling definitions for all content types as cm-teasable.
   }
 
   &__play {
-    @include center-absolute;
+    transform: translate(-50%, -80%); // a little higher for spacing
   }
 }

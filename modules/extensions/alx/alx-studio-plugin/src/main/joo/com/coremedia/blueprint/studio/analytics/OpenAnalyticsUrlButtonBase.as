@@ -1,10 +1,9 @@
 package com.coremedia.blueprint.studio.analytics {
 import com.coremedia.ui.data.ValueExpression;
 
-import ext.Button;
 import ext.Component;
-import ext.config.button;
-import ext.form.VTypes;
+import ext.button.Button;
+import ext.form.field.VTypes;
 
 import joo.debug;
 
@@ -18,10 +17,10 @@ public class OpenAnalyticsUrlButtonBase extends Button {
   internal native function get windowName():String;
   internal native function get urlValueExpression():ValueExpression;
 
-  public function OpenAnalyticsUrlButtonBase(config:button = null) {
+  public function OpenAnalyticsUrlButtonBase(config:Button = null) {
     super(config);
-    setHandler(handler);
-    mon(this, 'afterrender', onAfterRender);
+    setHandler(_handler);
+    on('afterrender', onAfterRender);
   }
 
   private function onAfterRender():void {
@@ -30,13 +29,18 @@ public class OpenAnalyticsUrlButtonBase extends Button {
   }
 
   internal static function bindDisable(valueExpression:ValueExpression, component:Component):void {
-    valueExpression.addChangeListener(function (ve:ValueExpression):void {
-      component.setDisabled(isNotUrlValue(ve.getValue()));
+    function updateDisabled():void {
+      component.setDisabled(isNotUrlValue(valueExpression.getValue()));
+    }
+
+    valueExpression.addChangeListener(updateDisabled);
+    component.on("destroy", function():void {
+      valueExpression.removeChangeListener(updateDisabled);
     });
-    component.setDisabled(isNotUrlValue(valueExpression.getValue()));
+    updateDisabled();
   }
 
-  private function handler():void {
+  private function _handler():void {
     window.open(urlValueExpression.getValue(), windowName, WINDOW_FEATURES);
   }
 

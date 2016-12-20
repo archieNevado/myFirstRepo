@@ -4,9 +4,8 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextBuilder;
 
-import javax.annotation.Nonnull;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextImpl.newUserContext;
 
 /**
  * Helper class to build an "IBM WCS conform" user context.
@@ -32,10 +31,6 @@ public class UserContextHelper {
     }
   }
 
-  public static UserContext cloneContext(@Nonnull UserContext context) throws InvalidContextException {
-    return UserContextBuilder.create().withValues(context).build();
-  }
-
   /**
    * Gets the default user context within the current request (thread).
    * Set the default context with #setCurrentContext();
@@ -45,15 +40,15 @@ public class UserContextHelper {
     CommerceConnection currentConnection = Commerce.getCurrentConnection();
     if (currentConnection != null) {
       UserContext userContext = currentConnection.getUserContext();
-      userContext = userContext == null ? UserContextBuilder.create().build()  :userContext;
+      userContext = userContext == null ? newUserContext() :userContext;
       return userContext;
     } else {
-      return UserContextBuilder.create().build();
+      return newUserContext();
     }
   }
 
   public static UserContext createContext(String forUser, String userId) throws InvalidContextException {
-    UserContext context = UserContextBuilder.create().build();
+    UserContext context = newUserContext();
     context.put(FOR_USER_ID, userId);
     context.put(FOR_USER_NAME, forUser);
     return context;

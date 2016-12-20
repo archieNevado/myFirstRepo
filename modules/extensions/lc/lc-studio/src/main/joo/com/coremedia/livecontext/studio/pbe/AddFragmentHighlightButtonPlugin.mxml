@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:AddItemsPlugin
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:livecontext="exml:com.coremedia.livecontext.studio.config"
+        xmlns:ui="exml:com.coremedia.ui.config">
+  <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.preview.PreviewIFrameToolbar;
+
+    private var config:AddFragmentHighlightButtonPlugin;
+
+    public native function AddFragmentHighlightButtonPlugin(config:AddFragmentHighlightButtonPlugin = null);
+    ]]></fx:Script>
+
+            <ui:items>
+              <livecontext:FragmentHighlightButton itemId="fragmentHighlightButton"/>
+              <TbSeparator/>
+              <TbSpacer width="4"/>
+            </ui:items>
+            <ui:before>
+              <Component itemId="{PreviewIFrameToolbar.DEVICE_TYPE_SLIDER_ITEM_ID}"/>
+            </ui:before>
+          
+</ui:AddItemsPlugin>

@@ -23,9 +23,7 @@
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=644;y=0;width=1080;height=1080</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=481;y=0;width=1439;height=1080</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=0;width=1920;height=1080</StringProperty>
-<StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=55;width=1920;height=962</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=233;width=1920;height=769</StringProperty>
-<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=252;width=1920;height=721</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=348;width=1920;height=481</StringProperty>
 </Struct>
 </StructProperty>
@@ -36,9 +34,7 @@
 <StringProperty Name="portrait_ratio1x1">position;x1=0.3352601156069364;y1=0;x2=0.8978805394990366;y2=1</StringProperty>
 <StringProperty Name="landscape_ratio4x3">position;x1=0.2504816955684008;y1=0;x2=1;y2=1</StringProperty>
 <StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0;x2=1;y2=1</StringProperty>
-<StringProperty Name="landscape_ratio2x1">position;x1=0;y1=0.05136986301369863;x2=1;y2=0.9417808219178082</StringProperty>
 <StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.21575342465753425;x2=1;y2=0.928082191780822</StringProperty>
-<StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.2328767123287671;x2=1;y2=0.9006849315068494</StringProperty>
 <StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.3219178082191781;x2=1;y2=0.7671232876712328</StringProperty>
 </Struct>
 </StructProperty>
@@ -49,9 +45,7 @@
 <StringProperty Name="portrait_ratio1x1">false</StringProperty>
 <StringProperty Name="landscape_ratio4x3">false</StringProperty>
 <StringProperty Name="landscape_ratio16x9">true</StringProperty>
-<StringProperty Name="landscape_ratio2x1">false</StringProperty>
 <StringProperty Name="landscape_ratio5x2">false</StringProperty>
-<StringProperty Name="landscape_ratio8x3">false</StringProperty>
 <StringProperty Name="landscape_ratio4x1">false</StringProperty>
 </Struct>
 </StructProperty>

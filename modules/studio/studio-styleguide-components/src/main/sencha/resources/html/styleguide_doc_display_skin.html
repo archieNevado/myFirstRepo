@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div data-content="title">
+  Display category/skin in this Styleguide?
+</div>
+<div data-content="body">
+  To add a new skin category:
+  <ul>
+    <li>
+      Create a new Enum under <code>/ui/ui-toolkit/ui-components/src/main/joo/com/coremedia/ui/skins/</code>,
+      e.g. <code>BoxSkin.as</code>
+    </li>
+    <li>
+      Create new documentation HTML-file in <code>/blueprint/modules/studio/studio-styleguide-components/src/main/sencha/resources/html</code>.
+      The file begins with the <code>SKIN_GROUP</code> name as defined within the new skin enum file.
+    </li>
+    <li>
+      Add a new template in <code>/blueprint/modules/studio/studio-styleguide-components/src/main/joo/com/coremedia/blueprint/studio/styleguide/templates</code>
+    </li>
+    <li>
+      Add category to <code>/blueprint/modules/studio/studio-styleguide-components/src/main/joo/com/coremedia/blueprint/studio/styleguide/tabs/skins/SkinsTreeStructure.as</code>
+    </li>
+    <li>
+      Add title property to <code>/blueprint/modules/studio/studio-styleguide-components/src/main/joo/com/coremedia/blueprint/studio/styleguide/Styleguide.properties</code>
+    </li>
+  </ul>
+
+  To add a new skin:
+  <ul>
+    <li>Simply add new Enum in the respective <code>/ui/ui-toolkit/ui-components/src/main/joo/com/coremedia/ui/skins/*Skin.as</code>
+      file
+    </li>
+    <li>e.g.: <code>public static const NEW_SKIN:CategorySkin = new CategorySkin("new-skin", "This skin is
+      awesome.");</code></li>
+  </ul>
+
+  Extend a skin category:
+  <ul>
+    <li>Your new skin category extends an existing skin enum. E.g. LabelableSkin.as</li>
+    <li>e.g.: <code>public class NewCategorySkin extends LabelableSkin</code></li>
+    <li>The new skin enums either define custom skins</li>
+    <li>e.g.: <code>public static const SPECIAL:NewCategorySkin = new NewCategorySkin('special');</code></li>
+    <li>or inherit skins from the extended skin category enum</li>
+    <li>e.g.: <code>public static const DEFAULT:NewCategorySkin = new
+      NewCategorySkin(LabelableSkin.DEFAULT.getSkin());</code></li>
+  </ul>
+</div>
+</body>
+</html>

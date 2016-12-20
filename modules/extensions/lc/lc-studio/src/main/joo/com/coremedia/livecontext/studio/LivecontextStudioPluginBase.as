@@ -10,20 +10,17 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
-import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.preview.PreviewURI;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ecommerce.studio.CatalogModel;
-import com.coremedia.ecommerce.studio.components.link.QuickCreateCatalogLink;
-import com.coremedia.ecommerce.studio.config.quickCreateCatalogLink;
+import com.coremedia.ecommerce.studio.components.link.CatalogLinkField;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Store;
-import com.coremedia.livecontext.studio.config.livecontextStudioPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
 import com.coremedia.livecontext.studio.library.ShowInCatalogTreeHelper;
 import com.coremedia.livecontext.studio.pbe.StoreNodeRenderer;
@@ -32,15 +29,18 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.UrlUtil;
 
 import ext.Component;
-import ext.ComponentMgr;
-import ext.config.container;
+import ext.ComponentManager;
+import ext.form.FieldContainer;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class LivecontextStudioPluginBase extends StudioPlugin {
 
   internal static const CONTENT_LED_PROPERTY:String = 'livecontext.contentLed';
   internal static const EXTERNAL_ID_PROPERTY:String = 'externalId';
 
-  public function LivecontextStudioPluginBase(config:livecontextStudioPlugin = null) {
+  public function LivecontextStudioPluginBase(config:LivecontextStudioPlugin = null) {
     if (UrlUtil.getHashParam('livecontext') === 'false') {
       delete config['rules'];
       delete config['configuration'];
@@ -52,8 +52,6 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   override public function init(editorContext:IEditorContext):void {
     super.init(editorContext);
 
-    var collectionViewManagerInternal:CollectionViewManagerInternal =
-            ((editorContext.getCollectionViewManager()) as CollectionViewManagerInternal);
     editorContext.getCollectionViewExtender().addExtension(new LivecontextCollectionViewExtension());
 
     //forward the workspaceId (configured by the hash param) to the preview url.
@@ -68,11 +66,12 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     /**
      * Apply image link list preview
      */
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, "pictures"));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
-    editorContext.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, "pictures"));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver("CatalogObject"));
+    editorContext.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER));
+    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
 
 
     editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_CATEGORY));
@@ -84,54 +83,56 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     /**
      * Register Content initializer
      */
-    editorContext.registerContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, initMarketingSpot);
-    editorContext.registerContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, initProductTeaser);
-    editorContext.registerContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL, initExternalChannel);
-    editorContext.registerContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, initExternalPage);
+    editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, initMarketingSpot);
+    editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, initProductTeaser);
+    editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL, initExternalChannel);
+    editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, initExternalPage);
 
     editorContext['getMetadataNodeRendererRegistry']().register(new StoreNodeRenderer());
 
     /**
      * Extend Content initializer
      */
-    editorContext.extendContentInitializer(livecontextStudioPlugin.CONTENT_TYPE_IMAGE_MAP, extendImageMap);
+    editorContext.extendContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_IMAGE_MAP, extendImageMap);
 
     /**
      * apply the marketing spot link field to CMMarketingSpot quick create dialog
      */
-    QuickCreate.addQuickCreateDialogProperty(livecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, EXTERNAL_ID_PROPERTY,
+    QuickCreate.addQuickCreateDialogProperty(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, EXTERNAL_ID_PROPERTY,
             function (data:ProcessingData, properties:Object):Component {
-              properties.openLinkSources = CatalogHelper.getInstance().openMarketingSpots;
-              properties.catalogObjectType = CatalogModel.TYPE_MARKETING_SPOT;
-              properties.emptyText = LivecontextStudioPlugin_properties.INSTANCE.MarketingSpot_Link_empty_text;
-              var myCatalogLink:QuickCreateCatalogLink = new QuickCreateCatalogLink(quickCreateCatalogLink(properties));
-              var containerCfg:container = new container();
-              containerCfg.cls = 'link-list-wrapper-hbox-layout';
+              var config:CatalogLinkField = CatalogLinkField(properties);
+              config.ddGroup = "ContentDD";
+              config.openLinkSources = CatalogHelper.getInstance().openMarketingSpots;
+              config.catalogObjectType = CatalogModel.TYPE_MARKETING_SPOT;
+              config.emptyText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text');
+              config.hideRemove = true;
+              var myCatalogLink:CatalogLinkField = new CatalogLinkField(config);
+              var containerCfg:FieldContainer = FieldContainer({});
               containerCfg.fieldLabel = properties.label;
-              containerCfg.autoWidth = true;
               containerCfg.items = [myCatalogLink];
-              return ComponentMgr.create(containerCfg);
+              return ComponentManager.create(containerCfg);
             });
 
 
     /**
      * apply the product link field to CMProductTeaser quick create dialog
      */
-    QuickCreate.addQuickCreateDialogProperty(livecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, EXTERNAL_ID_PROPERTY,
+    QuickCreate.addQuickCreateDialogProperty(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, EXTERNAL_ID_PROPERTY,
             function (data:ProcessingData, properties:Object):Component {
-              properties.openLinkSources = CatalogHelper.getInstance().openCatalog;
-              properties.catalogObjectType = CatalogModel.TYPE_PRODUCT;
-              properties.emptyText = LivecontextStudioPlugin_properties.INSTANCE.Product_Link_empty_text;
-              var myCatalogLink:QuickCreateCatalogLink = new QuickCreateCatalogLink(quickCreateCatalogLink(properties));
-              var containerCfg:container = new container();
-              containerCfg.cls = 'link-list-wrapper-hbox-layout';
+              var config:CatalogLinkField = CatalogLinkField(properties);
+              config.ddGroup = "ContentDD";
+              config.openLinkSources = CatalogHelper.getInstance().openCatalog;
+              config.catalogObjectType = CatalogModel.TYPE_PRODUCT;
+              config.emptyText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Product_Link_empty_text');
+              config.hideRemove = true;
+              var myCatalogLink:CatalogLinkField = new CatalogLinkField(config);
+              var containerCfg:FieldContainer = FieldContainer({});
               containerCfg.fieldLabel = properties.label;
-              containerCfg.autoWidth = true;
               containerCfg.items = [myCatalogLink];
-              return ComponentMgr.create(containerCfg);
+              return ComponentManager.create(containerCfg);
             });
 
-    CMChannelExtension.register(livecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE);
+    CMChannelExtension.register(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE);
   }
 
   private static function initProductTeaser(content:Content):void {
@@ -171,19 +172,6 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     return ValueExpressionFactory.createFromFunction(function ():String {
       var store:Store = Store(CatalogHelper.getInstance().getActiveStoreExpression().getValue());
       return store && store.getName();
-    });
-  }
-
-  internal function isWorkspaceEnabledExpression():ValueExpression {
-    return ValueExpressionFactory.createFromFunction(function ():Boolean {
-      var workspaces:Array;
-      var activeStore:Store = CatalogHelper.getInstance().getActiveStoreExpression().getValue();
-      if (activeStore) {
-        if (activeStore.getWorkspaces()) {
-          workspaces = activeStore.getWorkspaces().getWorkspaces();
-        }
-      }
-      return workspaces && workspaces.length > 0;
     });
   }
 

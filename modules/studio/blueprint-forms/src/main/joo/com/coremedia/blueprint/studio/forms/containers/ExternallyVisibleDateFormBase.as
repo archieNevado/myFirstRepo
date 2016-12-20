@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.studio.forms.containers {
-import com.coremedia.blueprint.studio.config.externallyVisibleDateForm;
-import com.coremedia.cms.editor.sdk.premular.CollapsibleFormPanel;
+import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.Calendar;
 import com.coremedia.ui.data.PropertyChangeEvent;
@@ -8,14 +7,14 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
-public class ExternallyVisibleDateFormBase extends CollapsibleFormPanel {
+public class ExternallyVisibleDateFormBase extends PropertyFieldGroup {
 
   internal var model:Bean;
 
   internal var modelValueExpression:ValueExpression;
 
-  public function ExternallyVisibleDateFormBase(config:externallyVisibleDateForm = null) {
-    addEvents("externallyDisplayedDateChanged");
+  public function ExternallyVisibleDateFormBase(config:ExternallyVisibleDateForm = null) {
+    /* EXT6_GONE:ext.util.Observable#addEvents addEvents("externallyDisplayedDateChanged");*/
     super(config);
 
     getModel().addPropertyChangeListener("externallyDisplayDate", externallyDisplayDateChangeListener);

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<icons:InformationAreaBase
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:icons="com.coremedia.blueprint.studio.styleguide.tabs.icons.*"
+        activeItemValueExpression="{getActiveVE()}">
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.StyleguideSkin;
+
+    public static const START_INFORMATION_ITEM_ID:String = "sg-icons-startInformation-itemId";
+    public static const ICON_INFORMATION_ITEM_ID:String = "sg-icons-icon-information-itemId";
+
+
+    private var config:InformationArea;
+
+    public native function InformationArea(config:InformationArea = null);
+    ]]></fx:Script>
+
+  <!-- SWITCHING CONTENTS -->
+  <icons:items>
+    <!--1. Container with default start message -->
+    <Container itemId="{START_INFORMATION_ITEM_ID}"
+               layout="fit" padding="18"
+               ui="{StyleguideSkin.CONTAINER_BACKGROUND_BLUE}">
+      <items>
+        <DisplayField value="No information available..."
+                      ui="{StyleguideSkin.DISPLAY_FIELD_TEXT_INVERTED}"/>
+      </items>
+    </Container>
+    <!-- Displays information about selected icon -->
+    <icons:IconInformation itemId="{ICON_INFORMATION_ITEM_ID}"/>
+  </icons:items>
+
+</icons:InformationAreaBase>

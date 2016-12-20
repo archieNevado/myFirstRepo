@@ -3,12 +3,18 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.rest.linking.LocationHeaderResourceFilter;
 import com.coremedia.rest.linking.RemoteBeanLink;
+import com.sun.jersey.spi.container.ResourceFilters;
 
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 /**
  * A store {@link com.coremedia.ecommerce.studio.rest.model.Store} object as a RESTful resource.
@@ -16,6 +22,20 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("livecontext/store/{siteId:[^/]+}/{workspaceId:[^/]+}")
 public class StoreResource extends AbstractCatalogResource<Store> {
+
+  private static final String SHOP_URL_PBE_PARAM = "shopUrl";
+
+  @Inject
+  private PbeShopUrlTargetResolver pbeShopUrlTargetResolver;
+
+  @POST
+  @Path("urlService")
+  public Object handlePost(@Nonnull Map<String, Object> rawJson) {
+    String shopUrlStr = (String) rawJson.get(SHOP_URL_PBE_PARAM);
+    String siteId = getSiteId();
+
+    return pbeShopUrlTargetResolver.resolveUrl(shopUrlStr, siteId);
+  }
 
   @Override
   public StoreRepresentation getRepresentation() {
@@ -42,8 +62,7 @@ public class StoreResource extends AbstractCatalogResource<Store> {
       representation.setVendorVersion(entity.getVendorVersion());
       representation.setContext(getStoreContext());
       representation.setRootCategory(RemoteBeanLink.create(rootCategoryUri(connection)));
-    }
-    catch (CommerceException e) {
+    } catch (CommerceException e) {
       LOG.warn("Error loading store bean: {} (site: {})", e.getMessage(), getSiteId());
       throw e;
     }

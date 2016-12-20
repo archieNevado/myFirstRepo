@@ -1,20 +1,28 @@
 package com.coremedia.blueprint.themeimporter.client;
 
-import com.coremedia.blueprint.themeimporter.ThemeImporter;
-import com.coremedia.cap.common.CapConnection;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.server.legacy.exporter.ServerXmlExport;
+import com.coremedia.blueprint.themeimporter.configuration.ThemeImporterConfiguration;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.cap.xmlrepo.XmlCapConnectionFactory;
-import com.coremedia.mimetype.DefaultMimeTypeService;
-import com.coremedia.mimetype.MimeTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.toList;
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 /**
  * The ThemeImportRunner is being used by the workspace to create serverimportable content from theme resources.
@@ -41,87 +49,94 @@ import java.util.Map;
  * </configuration>
  * </plugin>
  */
-public class ThemeImporterRunner {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ThemeImporterRunner.class);
-
-  private String folder = "/Themes";
-  private String themeFolder;
-  private String exportPath;
+@Configuration
+@Import({XmlRepoConfiguration.class, ThemeImporterConfiguration.class})
+public class ThemeImporterRunner extends AbstractThemeImporterClient {
+  private static final Logger LOG = LoggerFactory.getLogger(ThemeImporterRunner.class);
 
 
-  private boolean parseParameters() {
-    if (StringUtils.hasText(System.getProperties().getProperty("import_folder"))) {
-      folder = System.getProperties().getProperty("import_folder").trim();
-    }
-    themeFolder = System.getProperties().getProperty("themes_folder").trim();
+  // --- Spring -----------------------------------------------------
 
-    if (StringUtils.isEmpty(themeFolder)) {
-      LOGGER.warn("Wrong argument for parameter themes_folder.");
-      return false;
-    }
-    exportPath = System.getProperties().getProperty("export_path").trim();
-    if (StringUtils.isEmpty(exportPath)) {
-      LOGGER.trace("Wrong argument for parameter export_path.");
-      return false;
-    }
-    return true;
-  }
-
-  public void run() {
-    try {
-      if (parseParameters()) {
-        CapConnection capConnection = ThemeImporterRunner.createTmpCapConnection();
-        MimeTypeService mimeTypeService = new DefaultMimeTypeService(true);
-        ThemeImporter themeImporter = new ThemeImporter(capConnection, mimeTypeService);
-
-        FilenameFilter zipFilter = new FilenameFilter() {
-          public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".zip");
-          }
-        };
-
-        File themeFolderAsFile = new File(themeFolder.trim());
-        File[] zipFiles = themeFolderAsFile.listFiles(zipFilter);
-        if (themeFolderAsFile.isDirectory() && zipFiles != null) {
-          themeImporter.importThemes(folder, zipFiles);
-        }
-        export(capConnection, folder);
-      }
-
-    } catch (Exception e) {
-      LOGGER.error("Something went wrong", e);
-    }
-  }
-
-  private void export(CapConnection capConnection, String themeRoot) {
-    Content contentThemeRoot = capConnection.getContentRepository().getChild(themeRoot);
-    if (contentThemeRoot == null) {
-      throw new IllegalStateException("Can not find theme for export: " + themeRoot);
-    }
-    ServerXmlExport export = new ServerXmlExport(capConnection, null);
-    export.setContentIds(contentThemeRoot.getId());
-    export.setBaseDir(new File(exportPath.trim()));
-    export.setPrettyPrint(true);
-    export.setRecursive(true);
-    export.setLog(LOGGER);
-    export.setCutOff(0);
-    export.init();
-    export.doExport();
+  @Bean
+  @Scope(SCOPE_SINGLETON)
+  public static XmlUapiConfig xmlUapiConfig() {
+    return XmlUapiConfig.builder().withContentTypes("classpath:framework/doctypes/blueprint/blueprint-doctypes.xml").build();
   }
 
 
-  private static CapConnection createTmpCapConnection() {
-    XmlCapConnectionFactory factory = new XmlCapConnectionFactory();
-    Map<String, String> parameterMap = XmlUapiConfig.builder().withContentTypes("classpath:framework/doctypes/blueprint/blueprint-doctypes.xml").build().getParameterMap();
-    CapConnection xmlRepositoryConnection = factory.prepare(parameterMap);
-    xmlRepositoryConnection.open();
-    return xmlRepositoryConnection;
-  }
+  // --- main -------------------------------------------------------
 
   public static void main(String[] args) {
-    ThemeImporterRunner themeImporterRunner = new ThemeImporterRunner();
-    themeImporterRunner.run();
-    LOGGER.info("Done importing and exporting themeFolder");
-    System.exit(0);
+    AtomicInteger exitCodeCallback = new AtomicInteger(0);
+    SpringApplication springApplication = createSpringApplication(exitCodeCallback);
+    if (springApplication != null) {
+      springApplication.setBannerMode(Banner.Mode.OFF);
+      runSpringApplication(springApplication, exitCodeCallback);
+    }
+    System.exit(exitCodeCallback.get());
+  }
+
+  private static SpringApplication createSpringApplication(AtomicInteger exitCodeCallback) {
+    ThemeImporterRunnerParameters params = parseParameters();
+    if (params == null) {
+      exitCodeCallback.set(10);
+      return null;
+    }
+    ThemeImporterInitializer themeImporterInitializer =
+            new ThemeImporterInitializer(params.repositoryFolder, themeFiles(params.themeFolder), params.exportPath, exitCodeCallback);
+    SpringApplication springApplication = new SpringApplication(ThemeImporterRunner.class);
+    springApplication.setBannerMode(Banner.Mode.OFF);
+    springApplication.addInitializers(themeImporterInitializer);
+    return springApplication;
+  }
+
+
+  // --- internal ---------------------------------------------------
+
+  private static ThemeImporterRunnerParameters parseParameters() {
+    ThemeImporterRunnerParameters parameters = new ThemeImporterRunnerParameters();
+
+    if (StringUtils.hasText(System.getProperties().getProperty("import_folder"))) {
+      parameters.repositoryFolder = System.getProperties().getProperty("import_folder").trim();
+    }
+
+    parameters.themeFolder = System.getProperties().getProperty("themes_folder").trim();
+    if (StringUtils.isEmpty(parameters.themeFolder)) {
+      LOG.warn("Wrong argument for parameter themes_folder.");
+      return null;
+    }
+
+    parameters.exportPath = System.getProperties().getProperty("export_path").trim();
+    if (StringUtils.isEmpty(parameters.exportPath)) {
+      LOG.warn("Wrong argument for parameter export_path.");
+      return null;
+    }
+
+    return parameters;
+  }
+
+  private static List<String> themeFiles(String themeFolder) {
+    File themeFolderAsFile = new File(themeFolder);  // NOSONAR Yes, as a matter of fact, we do read files, like it or not.
+    File[] zipFiles = themeFolderAsFile.listFiles(new ZipFilenameFilter());
+    if (zipFiles == null) {
+      return Collections.emptyList();
+    }
+    return Arrays.stream(zipFiles).map(File::getAbsolutePath).collect(toList());
+  }
+
+
+  // --- inner classes ----------------------------------------------
+
+  private static class ThemeImporterRunnerParameters {
+    String repositoryFolder = ThemeImporterInitializer.REPOSITORY_FOLDER;
+    String themeFolder;
+    String exportPath;
+  }
+
+  private static class ZipFilenameFilter implements FilenameFilter {
+    @Override
+    public boolean accept(File dir, String name) {
+      return name.toLowerCase(Locale.ROOT).endsWith(".zip");
+    }
   }
 }

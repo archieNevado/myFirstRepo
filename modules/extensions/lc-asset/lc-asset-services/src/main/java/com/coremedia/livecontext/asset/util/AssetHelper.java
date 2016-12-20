@@ -192,6 +192,7 @@ public class AssetHelper {
     return contentRepository.getConnection().getStructService().createStructBuilder().build();
   }
 
+  @Nullable
   public static Content getDefaultPicture(@Nonnull Site site, @Nonnull SettingsService settingsService) {
     return settingsService.setting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site.getSiteRootDocument());
   }

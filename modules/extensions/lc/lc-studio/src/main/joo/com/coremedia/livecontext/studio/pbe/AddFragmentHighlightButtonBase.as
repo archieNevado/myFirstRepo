@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.studio.pbe {
 import com.coremedia.cms.editor.sdk.preview.PreviewIFrameToolbar;
-import com.coremedia.livecontext.studio.config.addFragmentHighlightButton;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.ValueHolder;
@@ -12,7 +11,7 @@ public class AddFragmentHighlightButtonBase extends AddItemsPlugin implements Va
 
   private var toolbar:PreviewIFrameToolbar;
 
-  public function AddFragmentHighlightButtonBase(config:addFragmentHighlightButton) {
+  public function AddFragmentHighlightButtonBase(config:AddFragmentHighlightButtonPlugin = null) {
     super(config);
   }
 
@@ -33,7 +32,7 @@ public class AddFragmentHighlightButtonBase extends AddItemsPlugin implements Va
   public function setValue(value:*):Boolean {
     if (toolbar !== value) {
       toolbar = value;
-      if (toolbar.items.getCount() > 1) {
+      if (toolbar.itemCollection.getCount() > 1) {
         return true;
       }
     }

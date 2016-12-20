@@ -45,11 +45,9 @@
                   <directory>${project.basedir}</directory>
                   <includes>
                     <include>**/node_modules/**</include>
+                    <include>node/**</include>
                   </includes>
                   <followSymlinks>false</followSymlinks>
-                </fileset>
-                <fileset>
-                  <directory>node</directory>
                 </fileset>
               </filesets>
             </configuration>
@@ -64,10 +62,6 @@
                 <goals>
                   <goal>install-node-and-npm</goal>
                 </goals>
-                <configuration>
-                  <!-- versions still defined in blueprint pom -->
-                  <installDirectory>${project.basedir}</installDirectory>
-                </configuration>
               </execution>
               <execution>
                 <id>install-node-modules</id>
@@ -75,7 +69,17 @@
                   <goal>npm</goal>
                 </goals>
                 <configuration>
-                  <arguments>install</arguments>
+                  <arguments>install --cache-min=Infinity --loglevel=error --no-progress</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>build-themes</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <phase>install</phase>
+                <configuration>
+                  <arguments>run production</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -107,6 +111,8 @@
           <groupId>${project.groupId}</groupId>
           <artifactId>theme-importer-lib</artifactId>
           <version>${project.version}</version>
+          <!-- Why optional? Otherwise the logback.xml which is part of the theme-importer-lib will screw up logging of the cae-preview-webapp -->
+          <optional>true</optional>
         </dependency>
       </dependencies>
       <build>
@@ -117,10 +123,22 @@
             <executions>
               <execution>
                 <id>import-themes</id>
-                <phase>compile</phase>
+                <phase>install</phase>
                 <goals>
                   <goal>exec</goal>
                 </goals>
+                <configuration>
+                  <executable>${env.JAVA_HOME}/bin/java</executable>
+                  <arguments>
+                    <argument>${theme-importer.argument.folder}</argument>
+                    <argument>${theme-importer.argument.export-path}</argument>
+                    <argument>-classpath</argument>
+                    <!-- automatically creates the classpath using all project dependencies,
+                         also adding the project build directory -->
+                    <classpath/>
+                    <argument>${theme-importer.argument.runner}</argument>
+                  </arguments>
+                </configuration>
               </execution>
             </executions>
           </plugin>

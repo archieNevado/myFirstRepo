@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.assets.studio.search {
 
-import com.coremedia.blueprint.assets.studio.config.expirationDateFilterFieldset;
 import com.coremedia.cms.editor.sdk.collectionview.search.*;
 import com.coremedia.cms.editor.sdk.util.FormatUtil;
 
@@ -9,7 +8,7 @@ public class ExpirationDateFilterFieldsetBase extends FilterFieldset {
   public static const DATE:String = 'date';
   private static const SOLR_FIELD:String = 'expirationDate';
 
-  public function ExpirationDateFilterFieldsetBase(config:expirationDateFilterFieldset = null) {
+  public function ExpirationDateFilterFieldsetBase(config:ExpirationDateFilterFieldset = null) {
     super(config);
   }
 

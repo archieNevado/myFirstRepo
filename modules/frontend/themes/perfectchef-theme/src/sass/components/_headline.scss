@@ -1,0 +1,70 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+// Only used for elastic social
+
+/* headline */
+.cm-headline {
+  position: relative;
+
+  &__title {
+    display: inline-block;
+  }
+
+  /* special case, improvement needed */
+  &__slides ~ .cm-headline__title,
+  &__image ~ .cm-headline__title {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  @include breakpoint(md) {
+    .cm-teaser--hero .cm-aspect-ratio-box,
+    .cm-aspect-ratio-box {
+      @include aspect-ratio-box(5, 2);
+    }
+
+    &--small .cm-teaser--hero .cm-aspect-ratio-box,
+    &--small .cm-aspect-ratio-box {
+      @include aspect-ratio-box(4, 1);
+    }
+
+    .cm-teaser--hero .cm-teaser__title {
+      display: none;
+    }
+  }
+
+  @include breakpoint(sm) {
+    .cm-teaser--hero .cm-aspect-ratio-box,
+    .cm-aspect-ratio-box {
+      @include aspect-ratio-box(5, 2);
+    }
+
+    &--small .cm-teaser--hero .cm-aspect-ratio-box,
+    &--small .cm-aspect-ratio-box {
+      @include aspect-ratio-box(4, 1);
+    }
+
+    .cm-teaser--hero .cm-teaser__title {
+      display: none;
+    }
+  }
+
+  @include breakpoint(xs) {
+    .cm-teaser--hero .cm-aspect-ratio-box,
+    .cm-aspect-ratio-box {
+      @include aspect-ratio-box(5, 2);
+    }
+
+    .cm-teaser--hero .cm-teaser__title {
+      display: none;
+    }
+
+    &--small {
+      display: none;
+    }
+  }
+
+}

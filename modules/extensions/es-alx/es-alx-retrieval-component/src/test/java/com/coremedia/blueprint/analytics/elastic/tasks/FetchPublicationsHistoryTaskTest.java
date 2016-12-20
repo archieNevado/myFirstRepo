@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
-import com.coremedia.blueprint.analytics.elastic.PublicationReportModelService;
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
-import com.coremedia.blueprint.analytics.elastic.util.DaysBack;
+import com.coremedia.blueprint.base.analytics.elastic.PublicationReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
@@ -41,13 +41,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static com.coremedia.blueprint.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
+import static com.coremedia.blueprint.base.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
 import static com.coremedia.blueprint.analytics.elastic.tasks.FetchPublicationsHistoryTask.PUBLICATION_HISTORY_DOCUMENT_TYPE;
 import static com.coremedia.blueprint.analytics.elastic.tasks.FetchPublicationsHistoryTask.PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY;
 import static com.coremedia.blueprint.analytics.elastic.tasks.FetchPublicationsHistoryTask.PUBLICATION_HISTORY_INTERVAL;
 import static com.coremedia.blueprint.analytics.elastic.tasks.FetchPublicationsHistoryTask.PUBLICATION_HISTORY_INTERVAL_KEY;
 import static com.coremedia.blueprint.analytics.elastic.tasks.PublicationsAggregator.QUERY_SERVICE_EXPRESSION_TEMPLATE;
-import static com.coremedia.blueprint.analytics.elastic.util.DateUtil.getDateWithoutTime;
+import static com.coremedia.blueprint.base.analytics.elastic.util.DateUtil.getDateWithoutTime;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;

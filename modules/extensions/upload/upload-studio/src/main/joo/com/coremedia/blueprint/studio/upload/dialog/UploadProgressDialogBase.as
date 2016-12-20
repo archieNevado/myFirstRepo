@@ -1,125 +1,112 @@
 package com.coremedia.blueprint.studio.upload.dialog {
 
-import com.coremedia.blueprint.studio.config.upload.uploadProgressDialog;
-import com.coremedia.blueprint.studio.config.upload.uploadProgressPanel;
 import com.coremedia.blueprint.studio.upload.FileWrapper;
 import com.coremedia.blueprint.studio.upload.UploadSettings;
 import com.coremedia.cap.content.Content;
 import com.coremedia.ui.util.EventUtil;
 
-import ext.Container;
-import ext.Ext;
-import ext.Window;
-import ext.config.menuseparator;
+import ext.container.Container;
+import ext.window.Window;
 
 /**
- * Base class of the upload dialog, contains the current
- * items marked for uploading
+ * Base class of the upload dialog, contains the
+ * items marked for uploading.
  */
+[ResourceBundle('com.coremedia.blueprint.studio.UploadStudioPlugin')]
 public class UploadProgressDialogBase extends Window {
 
-  public static const NORTH_CONTAINER_HEIGHT:Number = 21;
-  public static const SOUTH_CONTAINER_HEIGHT:Number = 21;
+  /**
+   * The file array of file wrapper instances.
+   */
+  [Bindable]
+  public var files:Array;
 
-  private var files:Array;
-  private var folder:Content;
-  private var uploadPanels:Array = [];
+  /**
+   * The directory the files will be uploaded too.
+   */
+  [Bindable]
+  public var folder:Content;
+
+  private var uploadContainers:Array = [];
   private var activeUploadIndex:int = 0;
-  private var settings:UploadSettings;
 
-  public function UploadProgressDialogBase(config:uploadProgressDialog = null) {
+  /**
+   * The settings used for this dialog.
+   */
+  [Bindable]
+  public var settings:UploadSettings;
+
+  public function UploadProgressDialogBase(config:UploadProgressDialogBase = null) {
     super(config);
-    this.settings = config.settings;
-    this.files = config.files;
-    this.folder = config.folder;
-    addListener('afterlayout', addPanels);
+    addListener('render', addUploads);
   }
 
   /**
    * Add the file panels after render
    */
-  private function addPanels():void {
-    removeListener('afterlayout', addPanels);
+  private function addUploads():void {
+    removeListener('render', addUploads);
     addUploadItems();
-    EventUtil.invokeLater(function():void {
-       startPanelUpload();
+    EventUtil.invokeLater(function ():void {
+      uploadActiveItem();
     });
   }
 
   /**
-   * prevent miscalculating height with many items
-   */
-  public static function calculateWindowHeight(w:Window):void {
-    var workArea:*,calcHeight:Number,windowHeight:Number,offsetY:Number;
-    offsetY = 160;
-    workArea = Ext.getCmp('workarea');
-    calcHeight = workArea.getHeight();
-    windowHeight = w.getHeight();
-    if (windowHeight >= calcHeight) {
-      w.setHeight(calcHeight - offsetY);
-    }
-  }
-
-  /**
    * Creates the upload status panels and adds
-   * then to the dialog.
+   * them to the dialog.
    */
   private function addUploadItems():void {
-    var uploadPanel:Container = find('itemId', 'upload-progress-list')[0];
+    var uploadContainer:Container = queryById(UploadProgressDialog.PROGRESS_LIST) as Container;
     for (var i:int = 0; i < files.length; i++) {
-      var progressPanel:UploadProgressPanel = new UploadProgressPanel(uploadProgressPanel({
-        file:files[i],
-        folder:folder,
-        settings:settings,
-        callback:startPanelUpload
+      var progressContainer:UploadProgressContainer = new UploadProgressContainer(UploadProgressContainer({
+        file: files[i],
+        folder: folder,
+        settings: settings,
+        callback: uploadActiveItem
       }));
-      uploadPanel.add(progressPanel);
-      uploadPanel.doLayout(false, true);
-      uploadPanels.push(progressPanel);
-      var menuSeparatorCfg:menuseparator = new menuseparator();
-      menuSeparatorCfg.cls = 'upload-progress-dialog-separator';
-      uploadPanel.add(menuSeparatorCfg);
+      uploadContainer.add(progressContainer);
+      uploadContainers.push(progressContainer);
     }
-    uploadPanel.doLayout(false, true);
   }
 
   /**
-   * Starts the upload for the current panel.
+   * Starts the upload for the current active item.
    * Once the callback is called, the next upload is triggered
-   * until the all uploads finished. The dialog is closed then afterwards.
+   * until all uploads have finished and the dialog is closed.
    */
-  public function startPanelUpload():void {
-    if (uploadPanels.length > activeUploadIndex) {
-      var uploadPanel:UploadProgressPanel = uploadPanels[activeUploadIndex];
-      uploadPanel.startUpload();
+  public function uploadActiveItem():void {
+    if (uploadContainers.length > activeUploadIndex) {
+      var uploadContainer:UploadProgressContainer = uploadContainers[activeUploadIndex];
+      uploadContainer.startUpload();
       activeUploadIndex++;
     }
     else {
       //all files processed, check error state afterwards
       var close:Boolean = true;
       for (var i:int = 0; i < files.length; i++) {
-        if(files[i].getStatus() === FileWrapper.STATUS_ERROR) {
+        if (files[i].getStatus() === FileWrapper.STATUS_ERROR) {
           close = false;
+          setTitle(resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'UploadProgressDialog_upload_failed'));
           break;
         }
       }
-      if(close) {
+      if (close) {
         this.close();
       }
     }
   }
 
-
   override public function close():void {
     var closeable:Boolean = true;
     for (var i:int = 0; i < files.length; i++) {
       var file:FileWrapper = files[i];
-      if(file.getStatus() === FileWrapper.STATUS_WAITING || file.getStatus() === FileWrapper.STATUS_UPLOADING) {
+      if (file.getStatus() === FileWrapper.STATUS_WAITING || file.getStatus() === FileWrapper.STATUS_UPLOADING) {
         closeable = false;
         break;
       }
     }
-    if(closeable) {
+    if (closeable) {
       super.close();
     }
   }

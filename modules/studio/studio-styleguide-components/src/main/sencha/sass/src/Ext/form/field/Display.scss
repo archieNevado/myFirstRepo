@@ -1,0 +1,55 @@
+@include extjs-display-field-ui(
+  $ui: 'sg-documentation',
+  $ui-field-height: $cm-font-size-medium,
+  $ui-font-size: $cm-font-size-medium,
+  $ui-font-family: $cm-font-family,
+  $ui-font-weight: $cm-font-weight,
+  $ui-line-height: 1
+);
+
+@include extjs-display-field-ui(
+  $ui: 'sg-code',
+  $ui-font-family: "Courier New", Courier, monospace,
+  $ui-field-height: $cm-font-size-medium,
+  $ui-font-size: $cm-font-size-medium,
+  $ui-font-weight: $cm-font-weight,
+  $ui-line-height: 1
+);
+
+@include extjs-label-ui(
+  $ui: 'sg-documentation',
+  $ui-height: $cm-font-size-medium,
+  $ui-font-color: $cm-grey-7,
+  $ui-font-size: $cm-font-size-medium,
+  $ui-font-family: $cm-font-family,
+  $ui-font-weight: $cm-font-weight,
+  $ui-line-height: 1
+);
+
+@include extjs-display-field-ui(
+  $ui: 'sg-text-normal',
+  $ui-field-height: $cm-font-size-medium,
+  $ui-font-size: $cm-font-size-medium,
+  $ui-font-family: $cm-font-family,
+  $ui-font-weight: $cm-font-weight,
+  $ui-line-height: 1
+);
+
+@include extjs-display-field-ui(
+  $ui: 'sg-text-inverted',
+  $ui-color: $cm-white,
+  $ui-field-height: $cm-font-size-medium,
+  $ui-font-size: $cm-font-size-medium,
+  $ui-font-family: $cm-font-family,
+  $ui-font-weight: $cm-font-weight,
+  $ui-line-height: 1
+);
+
+@include extjs-display-field-ui(
+  $ui: 'sg-text-huge',
+  $ui-field-height: $cm-font-size-medium * 3,
+  $ui-font-size: $cm-font-size-medium * 3,
+  $ui-font-family: $cm-font-family,
+  $ui-font-weight: $cm-font-weight,
+  $ui-line-height: 1
+);

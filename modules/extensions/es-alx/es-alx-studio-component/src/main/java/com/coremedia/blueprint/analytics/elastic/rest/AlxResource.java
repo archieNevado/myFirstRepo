@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.analytics.elastic.rest;
 
-import com.coremedia.blueprint.analytics.elastic.PageViewReportModelService;
-import com.coremedia.blueprint.analytics.elastic.PageViewResult;
-import com.coremedia.blueprint.analytics.elastic.PublicationReportModelService;
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewResult;
+import com.coremedia.blueprint.base.analytics.elastic.PublicationReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import org.apache.commons.lang3.time.DateUtils;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.coremedia.blueprint.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
+import static com.coremedia.blueprint.base.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
 import static com.coremedia.blueprint.analytics.elastic.rest.AlxRestConstants.ALX_REST_PREFIX;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 

@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
-import com.coremedia.blueprint.analytics.elastic.util.DaysBack;
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public abstract class GoogleAnalyticsQuery {
    *                   "look back two weeks") Maps to the corresponding document type
    *                   property of 'CMALXBaseList'
    * @param maxResults The number of results this query will be limited to. Maps to the 'CMALXBaseList' document's settings
-   *                   property 'limit'. If the property is not set, it defaults to {@link com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil#DEFAULT_LIMIT}
+   *                   property 'limit'. If the property is not set, it defaults to {@link com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil#DEFAULT_LIMIT}
    */
   protected GoogleAnalyticsQuery(int profileId, int timeRange, int maxResults) {
     assertGreaterThanZero(profileId, "profileId");

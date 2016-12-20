@@ -5,21 +5,22 @@ import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ecommerce.studio.model.Workspace;
-import com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties;
-import com.coremedia.livecontext.studio.config.commerceWorkspaceSelector;
 import com.coremedia.ui.components.LocalComboBox;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-import ext.util.StringUtil;
+import ext.StringUtil;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class CommerceWorkspaceSelectorBase extends LocalComboBox{
 
   private static const NO_WORKSPACE:String = 'no-workspace';
   private static const NO_WORKSPACE_ENTRY:Object = {id: NO_WORKSPACE,
-                                                    name: LivecontextStudioPlugin_properties.INSTANCE.commerce_workspace_no_workspace};
+                                                    name: ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'commerce_workspace_no_workspace')};
 
-  public function CommerceWorkspaceSelectorBase(config:commerceWorkspaceSelector = null) {
+  public function CommerceWorkspaceSelectorBase(config:CommerceWorkspaceSelector = null) {
     super(config);
     var activeSiteExpression:ValueExpression = ValueExpressionFactory.createFromFunction(function():Site {
       return editorContext.getSitesService().getPreferredSite();
@@ -73,7 +74,7 @@ public class CommerceWorkspaceSelectorBase extends LocalComboBox{
   //noinspection JSMethodCanBeStatic
   private function getErrorMessage(workspaceId:String):String {
     var extractedWorkspaceId:String = workspaceId.substr(workspaceId.lastIndexOf('/') + 1, workspaceId.length);
-    var errorMessage:String = StringUtil.format(LivecontextStudioPlugin_properties.INSTANCE.commerce_workspace_invalid, extractedWorkspaceId);
+    var errorMessage:String = StringUtil.format(resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'commerce_workspace_invalid'), extractedWorkspaceId);
     return errorMessage;
   }
 

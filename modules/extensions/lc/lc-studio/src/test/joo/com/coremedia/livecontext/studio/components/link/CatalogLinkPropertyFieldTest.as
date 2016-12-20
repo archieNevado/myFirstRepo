@@ -1,20 +1,17 @@
 package com.coremedia.livecontext.studio.components.link {
+import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkContextMenu;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkField;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
-import com.coremedia.ecommerce.studio.config.catalogLinkContextMenu;
-import com.coremedia.ecommerce.studio.config.catalogLinkPropertyField;
-import com.coremedia.ecommerce.studio.config.eCommerceStudioPlugin;
 import com.coremedia.livecontext.studio.AbstractProductTeaserComponentsTest;
-import com.coremedia.livecontext.studio.testhelper.config.catalogLinkPropertyFieldTestView;
 import com.coremedia.ui.data.test.Step;
 import com.coremedia.ui.util.QtipUtil;
+import com.coremedia.ui.util.TableUtil;
 
-import ext.Button;
 import ext.Component;
-import ext.ComponentMgr;
-import ext.Ext;
-import ext.Viewport;
+import ext.ComponentManager;
+import ext.button.Button;
+import ext.container.Viewport;
 import ext.menu.Item;
 
 import js.HTMLElement;
@@ -29,11 +26,8 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
   override public function setUp():void {
     super.setUp();
     QtipUtil.registerQtipFormatter();
-    var conf:catalogLinkPropertyField = new catalogLinkPropertyField();
-    conf.bindTo = getBindTo();
-    conf.forceReadOnlyValueExpression = getForceReadOnlyValueExpression();
 
-    createTestling(conf);
+    createTestling();
   }
 
   override public function tearDown():void {
@@ -102,19 +96,19 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
           type: "contextmenu",
 
           getXY: function():Array {
-            return empty ? link.getView().mainBody.getXY() : Ext.fly(link.getView().getCell(0, 1)).getXY();
+            return (empty ? TableUtil.getMainBody(link) : TableUtil.getCell(link, 0, 1)).getXY();
           },
           preventDefault : function():void{
             //do nothing
           },
           getTarget: function():HTMLElement {
-            return link.getView().getCell(0, 1);
+            return TableUtil.getCellAsDom(link, 0, 1);
           }
         };
         if (empty) {
           link.fireEvent("contextmenu", event);
         } else {
-          link.fireEvent("rowcontextmenu", link, 0, event);
+          link.fireEvent("rowcontextmenu", link, null, null, 0, event);
         }
       }
     );
@@ -124,8 +118,8 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
     return new Step("check if product is linked and data is displayed",
       function ():Boolean {
         return link.getStore().getCount() === 1 &&
-          ORANGES_EXTERNAL_ID === link.getView().getCell(0, 2)['textContent'] &&
-          value === link.getView().getCell(0, 3)['textContent'];
+          ORANGES_EXTERNAL_ID === TableUtil.getCellAsDom(link, 0, 2)['textContent'] &&
+          value === TableUtil.getCellAsDom(link, 0, 3)['textContent'];
       }
     );
   }
@@ -134,8 +128,8 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
     return new Step("check if sku is linked and data is displayed",
       function ():Boolean {
         return link.getStore().getCount() === 1 &&
-          ORANGES_SKU_EXTERNAL_ID === link.getView().getCell(0, 2)['textContent'] &&
-          value === link.getView().getCell(0, 3)['textContent'];
+          ORANGES_SKU_EXTERNAL_ID === TableUtil.getCellAsDom(link, 0, 2)['textContent'] &&
+          value === TableUtil.getCellAsDom(link, 0, 3)['textContent'];
       }
     );
   }
@@ -144,7 +138,7 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
     return new Step("check if broken product is linked and fallback data '" + value + "' is displayed",
       function ():Boolean {
         return link.getStore().getCount() === 1 &&
-          value === link.getView().getCell(0, 2)['textContent'];
+          value === TableUtil.getCellAsDom(link, 0, 2)['textContent'];
       }
     );
   }
@@ -200,27 +194,31 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
   /**
    * private helper method to create the container for tests
    */
-  private function createTestling(config:catalogLinkPropertyField):void {
-    viewPort = new CatalogLinkPropertyFieldTestView(new catalogLinkPropertyFieldTestView(config));
-    var testling:CatalogLinkPropertyField =
-            viewPort.get(catalogLinkPropertyFieldTestView.CATALOG_LINK_PROPERTY_FIELD_ITEM_ID) as CatalogLinkPropertyField;
-    link = testling.find('itemId', catalogLinkPropertyField.CATALOG_LINK_FIELD_ITEM_ID)[0] as CatalogLinkField;
+  private function createTestling():void {
+    var config:CatalogLinkPropertyFieldTestView = CatalogLinkPropertyFieldTestView({});
+    config.bindTo = getBindTo();
+    config.forceReadOnlyValueExpression = getForceReadOnlyValueExpression();
 
-    var openInTabButton:Button = link.getTopToolbar().find('itemId', eCommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID)[0];
+    viewPort = new CatalogLinkPropertyFieldTestView(config);
+    var testling:CatalogLinkPropertyField =
+            viewPort.getComponent(CatalogLinkPropertyFieldTestView.CATALOG_LINK_PROPERTY_FIELD_ITEM_ID) as CatalogLinkPropertyField;
+    link = testling.queryById(CatalogLinkPropertyField.CATALOG_LINK_FIELD_ITEM_ID) as CatalogLinkField;
+
+    var openInTabButton:Button = Button(link.getTopToolbar().queryById(ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID));
     //we cannot and don't want test the open in tab action as it needs the workarea.
     link.getTopToolbar().remove(openInTabButton);
-    removeButton = link.getTopToolbar().find('itemId', eCommerceStudioPlugin.REMOVE_LINK_BUTTON_ITEM_ID)[0];
+    removeButton = Button(link.getTopToolbar().queryById(ECommerceStudioPlugin.REMOVE_LINK_BUTTON_ITEM_ID));
   }
 
   private function findCatalogLinkContextMenu():CatalogLinkContextMenu {
-    var contextMenu:CatalogLinkContextMenu = ComponentMgr.all.find(function (component:Component):Boolean {
-      return !component.ownerCt && !component.hidden && component.isXType(catalogLinkContextMenu.xtype);
-    }) as CatalogLinkContextMenu;
+    var contextMenu:CatalogLinkContextMenu = ComponentManager.getAll().filter(function (component:Component):Boolean {
+      return !component.up() && !component.hidden && component.isXType(CatalogLinkContextMenu.xtype);
+    })[0] as CatalogLinkContextMenu;
     if (contextMenu) {
-      openInTabMenuItem = contextMenu.getComponent(eCommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID) as Item;
+      openInTabMenuItem = contextMenu.getComponent(ECommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID) as Item;
       //we cannot and don't want test the open in tab action as it needs the workarea.
       contextMenu.remove(openInTabMenuItem);
-      removeMenuItem = contextMenu.getComponent(eCommerceStudioPlugin.REMOVE_LINK_MENU_ITEM_ID) as Item;
+      removeMenuItem = contextMenu.getComponent(ECommerceStudioPlugin.REMOVE_LINK_MENU_ITEM_ID) as Item;
     }
 
     return  contextMenu;

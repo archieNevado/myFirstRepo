@@ -1,0 +1,48 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+.cm-social-share-bar {
+  border-top: 1px solid #919191;
+  padding: 1rem 1rem 0 1rem;
+}
+
+.cm-share {
+  float: right;
+
+  @include breakpoint(xs) {
+    float: none;
+  }
+
+  &__title {
+    display: inline-block;
+    font-size: 1.25rem;
+    color: #373737;
+    font-weight: normal;
+    margin: 0 1rem 0 0;
+  }
+
+  &__icon {
+    color: #373737;
+    margin-right: 10px;
+    font-size: 1.4rem;
+    vertical-align: middle;
+    display: inline-block;
+
+    @include breakpoint(xs) {
+      font-size: 2rem;
+    }
+
+    @include breakpoint(sm, landscape) {
+      font-size: 2rem;
+    }
+
+    &:hover {
+      color: #E10716;
+      text-decoration: none;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

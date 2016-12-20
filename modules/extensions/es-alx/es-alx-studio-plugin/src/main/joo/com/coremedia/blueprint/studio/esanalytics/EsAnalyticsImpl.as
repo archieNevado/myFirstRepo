@@ -3,7 +3,6 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
-
 public class EsAnalyticsImpl {
   public static const TENANT_URI_SEGMENT:String = "tenant";
 

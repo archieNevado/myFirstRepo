@@ -6,8 +6,7 @@
 <masterVersion>0</masterVersion>
 <viewtype>
 </viewtype>
-<localSettings>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<localSettings><Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/aurora/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/aurora/vendor/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../Pictures/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Picture%20Missing%20Product%20Picture"/>
 <StringProperty Name="externalUriPath"/>
@@ -15,19 +14,9 @@
 <StringListProperty Name="viewRepositoryNames">
 <String>lc-es-freemarker</String>
 </StringListProperty>
-</Struct>
-</localSettings>
-<linkedSettings>
-<link href="../../../../../Settings/Options/Settings/OpenCalais.xml" path="/Settings/Options/Settings/OpenCalais"/>
-<link href="../Options/Settings/LiveContext.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/LiveContext"/>
-<link href="../Options/Settings/Elastic%20Social.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Elastic%20Social"/>
-<link href="../Options/Settings/CMChannel/Robots%2Etxt.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Robots%2Etxt"/>
-<link href="../Options/Settings/CMChannel/Responsive%20Image%20Settings.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/>
-<link href="../Options/Settings/Preview.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Preview"/>
-</linkedSettings>
-<resourceBundles2>
-<link href="../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
-</resourceBundles2>
+</Struct></localSettings>
+<linkedSettings><link href="../../../../../Settings/Options/Settings/OpenCalais.xml" path="/Settings/Options/Settings/OpenCalais"/><link href="../Options/Settings/LiveContext.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/LiveContext"/><link href="../Options/Settings/Elastic%20Social.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Elastic%20Social"/><link href="../Options/Settings/CMChannel/Robots%2Etxt.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Robots%2Etxt"/><link href="../Options/Settings/CMChannel/Responsive%20Image%20Settings.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/><link href="../Options/Settings/Preview.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Preview"/></linkedSettings>
+<resourceBundles2><link href="../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/></resourceBundles2>
 <segment>aurora</segment>
 <title>Home</title>
 <htmlTitle></htmlTitle>
@@ -60,43 +49,61 @@
 <link href="../../../../../Themes/aurora/Aurora%20Theme.xml" path="/Themes/aurora/Aurora%20Theme"/>
 </theme>
 <favicon md5="b01ec1d815971bfb59a29dbb80c6fdcc" size="22382" href="../../../../../__blob/b01ec1d815971bfb59a29dbb80c6fdcc.blob" mimetype="image/x-icon"/>
-<placement>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<placement><Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Layouts/Hero%20Layout.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Layouts/Hero%20Layout"/>
 <StructProperty Name="placements">
 <Struct>
-<StructProperty Name="4502">
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
 <Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+</LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/header"/>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
-</LinkListProperty>
 </Struct>
-</StructProperty>
-<StructProperty Name="3832">
 <Struct>
-<BooleanProperty Name="locked">false</BooleanProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 </LinkListProperty>
-</Struct>
-</StructProperty>
-<StructProperty Name="4504">
-<Struct>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/footer"/>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Black%20%26%20White%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Women%20Black%20%26%20White%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Men%20Black%20%26%20White%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Men%20Black%20%26%20White%20Teaser"/>
 </LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
-</StructProperty>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%27s%20Category.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Women%27s%20Category"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Men%27s%20Category.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Men%27s%20Category"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement1.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement1"/>
 </Struct>
-</StructProperty>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Accessories.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Women%20Accessories"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Handbags.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Women%20Handbags"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>
-</StructProperty>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Our%20Latest%20Products.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Our%20Latest%20Products"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement3"/>
 </Struct>
-</placement>
+</StructListProperty>
+</Struct></placement>
 <header>
 </header>
 <footer>

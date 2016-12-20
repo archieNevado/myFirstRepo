@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMPicture" -->
 
+<div<@cm.metadata self.content />>
 <#if self.data?has_content>
   <#-- display the image uncropped in original size -->
   <#if self.disableCropping>
@@ -10,7 +11,24 @@
         <@bp.message "preview_image_originalSize" />
       </a>
       <div class="toggle-container cm-preview-item__container">
-        <@cm.include self=self view="details" />
+        <div class="cm-image-box cm-image-box--details"<@cm.metadata self.content/>>
+        <#-- image -->
+          <@cm.include self=self params={
+          "limitAspectRatios": limitAspectRatios![],
+          "classBox": "cm-image-box__image"
+          }/>
+
+          <div class="cm-image-box__infos">
+          <#-- copyright -->
+            <#if self.copyright?has_content>
+              <div<@cm.metadata "properties.copyright"/> class="cm-image-box__copyright">${self.copyright}</div>
+            </#if>
+          <#-- description -->
+            <#if self.detailText?has_content>
+              <div<@cm.metadata "properties.detailText"/> class="cm-image-box__description"><@cm.include self=self.detailText /></div>
+            </#if>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -53,3 +71,4 @@
     </#list>
   </#if>
 </#if>
+</div>

@@ -1,19 +1,23 @@
 
 package com.coremedia.ecommerce.studio {
+import com.coremedia.cap.common.CapSession;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.common.descriptors.impl.CapPropertyDescriptorUtil;
-import com.coremedia.cap.common.session;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.authorization.Right;
 import com.coremedia.cap.content.impl.ContentImpl;
 import com.coremedia.cap.content.impl.ContentRepositoryImpl;
+import com.coremedia.cap.content.impl.ContentStructRemoteBeanImpl;
+import com.coremedia.cap.content.impl.ContentTypeImpl;
 import com.coremedia.cap.user.Group;
 import com.coremedia.cap.user.User;
 import com.coremedia.cap.workflow.WorkflowContentService;
 import com.coremedia.cap.workflow.WorkflowRepository;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ui.data.Locale;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
@@ -52,7 +56,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
   private var preferredSiteExpression:ValueExpression;
 
   {
-    getQualifiedObject("com.coremedia.cms.editor.sdk.EditorContextImpl").initEditorContext();
+    EditorContextImpl.initEditorContext();
   }
 
   protected function resetCatalogHelper():void {
@@ -79,6 +83,12 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
       },
       getLocale: function ():Locale {
         return new Locale({'displayName':'English'});
+      },
+      getMasterSite: function ():Site {
+        return null;
+      },
+      getDerivedSites: function ():Array {
+        return [];
       }
     };
 
@@ -111,10 +121,10 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         isWritable: function (content:Content):* {
           return true;
         }
-      }
+      };
     };
 
-    session = {
+    SESSION = CapSession({
       getConnection: function ():Object {
         return {
           getContentRepository: function ():ContentRepository {
@@ -127,11 +137,11 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
                   isLockedForUser: function(content:Content):Boolean {
                     return false;
                   }
-                }
+                };
               }
-            }
+            };
           }
-        }
+        };
       },
       getUser:function ():User {
         //noinspection JSUnusedGlobalSymbols
@@ -148,9 +158,9 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           isAdministrative: function():Boolean {
             return true;
           }
-        }
+        };
       }
-    };
+    });
     preferredSiteExpression = ValueExpressionFactory.createFromValue('HeliosSiteId'); //HELIOS
 
     editorContext['getSitesService'] = function ():Object {
@@ -184,7 +194,9 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
 
 
     var workArea:Object = {};
-    workArea['getEntityTabTypes'] = function():Array { return [];};
+    workArea['getEntityTabTypes'] = function():Array {
+      return [];
+    };
     editorContext['getWorkArea'] = function():* {
       return workArea;
     };
@@ -244,7 +256,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
             function ():void {
               contentRepository.getContentTypes().forEach(function (contentType:RemoteBean):void {
                 contentType.load();
-              })
+              });
             });
   }
 
@@ -255,10 +267,10 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
                         return contentType.isLoaded();
                       }
               );
-            })
+            });
   }
 
-  public static var MOCK_RESPONSES:Array = [
+  public static const MOCK_RESPONSES:Array = [
     {
       "request": { "uri": "livecontext/store/HeliosSiteId/NO_WS", "method": "GET" },
       "response": { "body": {
@@ -306,7 +318,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           },
           {
             "$Ref": "livecontext/marketingspot/HeliosSiteId/NO_WS/spot3"
-          },
+          }
         ],
         "childrenByName": {
           "spot1": {"displayName":"Spot1", "child": {"$Ref": "livecontext/marketingspot/HeliosSiteId/NO_WS/spot1"}},
@@ -838,7 +850,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=Product&siteId=HeliosSiteId&workspaceId=NO_WS&limit=-1&includeSubfolders=true&includeSubtypes=true", "method": "GET" },
+      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=Product&siteId=HeliosSiteId&workspaceId=NO_WS&limit=-1", "method": "GET" },
       "response": { "body": {
         "hits": [
           {
@@ -854,7 +866,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request":{ "uri":"livecontext/search/HeliosSiteId?workspaceId=NO_WS&siteId=HeliosSiteId&category=10006&query=AuroraWMDRS-1&searchType=ProductVariant&limit=-1&includeSubfolders=true&includeSubtypes=true", "method":"GET" },
+      "request":{ "uri":"livecontext/search/HeliosSiteId?workspaceId=NO_WS&siteId=HeliosSiteId&category=10006&query=AuroraWMDRS-1&searchType=ProductVariant&limit=-1", "method":"GET" },
       "response":{ "body":{
         "hits": [
           {
@@ -870,7 +882,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=ProductVariant&siteId=HeliosSiteId&workspaceId=NO_WS&limit=-1&includeSubfolders=true&includeSubtypes=true", "method": "GET" },
+      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=ProductVariant&siteId=HeliosSiteId&workspaceId=NO_WS&limit=-1", "method": "GET" },
       "response": { "body": {
         "hits": [
           {
@@ -1487,7 +1499,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
             },
             "abstract": false,
             "$Bean": "content/type/Folder_"
-          },
+          }
         ],
         "contentContentType": {
           "$Ref": "content/type/Content_"

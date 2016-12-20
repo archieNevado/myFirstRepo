@@ -1,11 +1,8 @@
 package com.coremedia.ecommerce.studio.forms {
 import com.coremedia.cap.content.Content;
-import com.coremedia.cms.editor.sdk.config.documentTabPanel;
-import com.coremedia.cms.editor.sdk.config.premular;
 import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
-import com.coremedia.cms.editor.sdk.premular.CollapsibleFormPanel;
+import com.coremedia.cms.editor.sdk.premular.Premular;
 import com.coremedia.ecommerce.studio.components.CommerceObjectSelector;
-import com.coremedia.ecommerce.studio.config.commerceCatalogObjectsSelectForm;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Store;
@@ -14,15 +11,21 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.dependencies.DependencyTracker;
 
 import ext.Component;
-import ext.Container;
+import ext.container.Container;
+import ext.form.FieldContainer;
 
-public class CommerceCatalogObjectsSelectFormBase extends CollapsibleFormPanel{
+public class CommerceCatalogObjectsSelectFormBase extends FieldContainer{
+
+  [Bindable]
+  public var bindTo:ValueExpression;
+  [Bindable]
+  public var forceReadOnlyValueExpression:ValueExpression;
 
   private var storeForContentExpression:ValueExpression;
   private var contentExpression:ValueExpression;
   private var catalogObjectsExpression:ValueExpression;
 
-  public function CommerceCatalogObjectsSelectFormBase(config:commerceCatalogObjectsSelectForm = null) {
+  public function CommerceCatalogObjectsSelectFormBase(config:CommerceCatalogObjectsSelectForm = null) {
     super(config);
     contentExpression = config.bindTo;
     getStoreForContentExpression().addChangeListener(adjustLabel);
@@ -35,25 +38,25 @@ public class CommerceCatalogObjectsSelectFormBase extends CollapsibleFormPanel{
 
   override protected function afterRender():void {
     super.afterRender();
-    mon(this, "add", adjustLabel);
-    mon(this, "remove", adjustLabel);
+    on("add", adjustLabel);
+    on("remove", adjustLabel);
     adjustLabel();
   }
 
   internal function getContentExpression():ValueExpression {
     if (!contentExpression) {
-      contentExpression = ComponentContextManager.getInstance().getContextExpression(this, premular.CONTENT_VARIABLE_NAME);
+      contentExpression = ComponentContextManager.getInstance().getContextExpression(this, Premular.CONTENT_VARIABLE_NAME);
     }
     return contentExpression;
   }
 
   [ProvideToExtChildren]
   public function getContent():Content {
-    DependencyTracker.dependOnObservable(this, premular.CONTENT_VARIABLE_NAME);
+    DependencyTracker.dependOnObservable(this, Premular.CONTENT_VARIABLE_NAME);
     return getContentExpression().getValue();
   }
 
-  internal function getCatalogObjectsExpression(config:commerceCatalogObjectsSelectForm):ValueExpression {
+  internal function getCatalogObjectsExpression(config:CommerceCatalogObjectsSelectForm):ValueExpression {
     if (!catalogObjectsExpression) {
       catalogObjectsExpression = CatalogHelper.getCatalogObjectsExpression(getContentExpression(),
               config.catalogObjectIdListName,
@@ -63,7 +66,7 @@ public class CommerceCatalogObjectsSelectFormBase extends CollapsibleFormPanel{
     return catalogObjectsExpression;
   }
 
-  internal function getHandleSelectFunction(config:commerceCatalogObjectsSelectForm):Function {
+  internal function getHandleSelectFunction(config:CommerceCatalogObjectsSelectForm):Function {
     return function (selector:CommerceObjectSelector, startValue:String, newValue:String):void {
       if(!newValue) return;
       CatalogHelper.addCatalogObject(getContentExpression(), config.catalogObjectIdListName, newValue, config.catalogObjectIdsExpression);
@@ -91,12 +94,12 @@ public class CommerceCatalogObjectsSelectFormBase extends CollapsibleFormPanel{
   //////////custom functions to remove/add catalog object fields without touching the catalog object selector
 
   internal function removeCommerceObjectFields(container:Container):void {
-    if (!container.items || container.items.length === 0) return;
+    if (!container.itemCollection || container.itemCollection.length === 0) return;
 
-    container.items.each(function(item:Component):void{
+    container.itemCollection.each(function(item:Component):void{
       //don't remove the selector and the error label
-      if (item.getItemId() === commerceCatalogObjectsSelectForm.SELECTOR_CONTAINER_ITEM_ID ||
-              item.getItemId() === commerceCatalogObjectsSelectForm.NO_STORE_LABEL) {
+      if (item.getItemId() === CommerceCatalogObjectsSelectForm.SELECTOR_ITEM_ID ||
+              item.getItemId() === CommerceCatalogObjectsSelectForm.NO_STORE_LABEL) {
         return;
       }
       container.remove(item, true);
@@ -107,7 +110,7 @@ public class CommerceCatalogObjectsSelectFormBase extends CollapsibleFormPanel{
     if (!components || components.length === 0) return;
     components.forEach(function(item:Component):void{
       // the index of the selector must be computed every time
-      var selectorIndex:Number = container.items.indexOf(container.getComponent(commerceCatalogObjectsSelectForm.SELECTOR_CONTAINER_ITEM_ID));
+      var selectorIndex:Number = container.itemCollection.indexOf(container.getComponent(CommerceCatalogObjectsSelectForm.SELECTOR_ITEM_ID));
       // add the item just before the selector
       container.insert(selectorIndex, item);
     });
@@ -123,13 +126,13 @@ public class CommerceCatalogObjectsSelectFormBase extends CollapsibleFormPanel{
 
   private function doAdjustLabel(store:Store):void {
     //show 'no store' label if no store available
-    items.each(function (item:Component, index:Number):void {
+    itemCollection.each(function (item:Component, index:Number):void {
       var container:Container = item as Container;
       if (container) {
         container.setVisible(store);
       }
     });
-    getComponent(commerceCatalogObjectsSelectForm.NO_STORE_LABEL).setVisible(!store);
+    getComponent(CommerceCatalogObjectsSelectForm.NO_STORE_LABEL).setVisible(!store);
   }
 
 }

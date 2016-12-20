@@ -1,17 +1,13 @@
 package com.coremedia.blueprint.studio.googleanalytics {
-import com.coremedia.blueprint.studio.config.googleanalytics.googleAnalyticsReportPreviewButton;
+import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
+import com.coremedia.ui.util.createComponentSelector;
 
-import ext.Viewport;
+import ext.container.Viewport;
 
-import joo.getQualifiedObject; // don't remove this import
+import joo.getOrCreatePackage;
 
 public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
-
-  // static initializer
-  {
-    joo.getQualifiedObject("com.coremedia.cms.editor.sdk.EditorContextImpl").initEditorContext();
-  }
 
   private var viewPort:Viewport;
 
@@ -20,6 +16,10 @@ public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
 
   override public function setUp():void {
     super.setUp();
+
+    delete getOrCreatePackage("com.coremedia.cms.editor.sdk")['editorContext'];
+    EditorContextImpl.initEditorContext();
+
     viewPort = new GoogleAnalyticsStudioButtonTestView();
   }
 
@@ -28,7 +28,8 @@ public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
   }
 
   public function testButtonDisabled():void {
-    var button:GoogleAnalyticsReportPreviewButton = viewPort.findByType(googleAnalyticsReportPreviewButton.xtype)[0];
+    var button:GoogleAnalyticsReportPreviewButton =
+            viewPort.down(createComponentSelector()._xtype(GoogleAnalyticsReportPreviewButton.xtype).build()) as GoogleAnalyticsReportPreviewButton;
     assertTrue(button.disabled);
   }
 
@@ -36,7 +37,8 @@ public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
     var args:Object = undefined;
     window.open = function (... myArgs) : void { args = myArgs;};
 
-    var button:GoogleAnalyticsReportPreviewButton = viewPort.findByType(googleAnalyticsReportPreviewButton.xtype)[0];
+    var button:GoogleAnalyticsReportPreviewButton =
+            viewPort.down(createComponentSelector()._xtype(GoogleAnalyticsReportPreviewButton.xtype).build()) as GoogleAnalyticsReportPreviewButton;
     button.setContent({
       getNumericId : function():int {return 42;},
       type : {name : 'typeWithPreview'}

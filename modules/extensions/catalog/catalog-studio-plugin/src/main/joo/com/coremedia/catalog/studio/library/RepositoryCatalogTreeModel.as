@@ -11,6 +11,9 @@ import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.beanFactory;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.icons.CoreIcons')]
 public class RepositoryCatalogTreeModel extends ContentTreeModel {
   public static const REPOSITORY_CATALOG_TREE_ID:String = "repositoryCatalogTreeId";
 
@@ -90,7 +93,7 @@ public class RepositoryCatalogTreeModel extends ContentTreeModel {
   override public function getIconCls(nodeId:String):String {
     var nodeModel:Content = getNodeModel(nodeId) as Content;
     if (nodeModel === getCatalogRoot()) {
-      return "store-icon";
+      return ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'commerce_catalog');
     }
     return super.getIconCls(nodeId);
   }
@@ -99,7 +102,9 @@ public class RepositoryCatalogTreeModel extends ContentTreeModel {
     return [getCatalogRoot()];
   }
 
-  private static function getCatalogRoot():Content {
+  // To avoid a static cycle while doing MAKE: the modifier 'static' has ben removed
+  //noinspection JSMethodCanBeStatic
+  private function getCatalogRoot():Content {
     var storeExpression:ValueExpression = catalogHelper.getActiveStoreExpression();
     return CatalogStudioPluginBase.getCatalogRootForStore(storeExpression);
   }

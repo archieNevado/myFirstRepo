@@ -1,11 +1,13 @@
 package com.coremedia.livecontext.navigation;
 
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cae.aspect.provider.AspectsProvider;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.context.LiveContextNavigation;
@@ -179,6 +181,11 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
   @Override
   public String getExternalId() {
     return getCategory().getExternalId();
+  }
+
+  @Override
+  public TreeRelation<Content> getCodeResourcesTreeRelation() {
+    return treeRelation.getContentTreeRelation();
   }
 
   @Override

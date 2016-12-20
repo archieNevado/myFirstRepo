@@ -33,6 +33,10 @@
       <artifactId>coremedia-spring</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.livecontext</groupId>
+      <artifactId>lc-ecommerce-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>

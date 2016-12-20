@@ -11,7 +11,7 @@
                            http://www.springframework.org/schema/util/spring-util.xsd">
 
   <!-- import beans "contentRepository", "index", "contentFeederRepositoryListeners", "contentFeederOperations",
-                    "contentFeederBackgroundFeeds", "partialUpdateAspects" -->
+                    "contentFeederBackgroundFeeds" -->
   <import resource="classpath:/framework/spring/feeder/feeder.xml"/>
   <!-- import bean "childrenTreeRelation" -->
   <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
@@ -49,13 +49,6 @@
   <customize:append id="addAssetTaxonomyIdsBackgroundFeed" bean="contentFeederBackgroundFeeds">
     <list>
       <ref bean="assetTaxonomyIdsBackgroundFeed"/>
-    </list>
-  </customize:append>
-
-  <customize:append id="addAssetTaxonomyIdsPartialUpdateAspect" bean="partialUpdateAspects">
-    <description>Asset taxonomy IDs get updated with partial update.</description>
-    <list>
-      <value>#{assetTaxonomyAspect.id}</value>
     </list>
   </customize:append>
 

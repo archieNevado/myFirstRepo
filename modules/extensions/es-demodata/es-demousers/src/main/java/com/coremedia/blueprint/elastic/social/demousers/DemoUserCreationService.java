@@ -15,7 +15,9 @@ import org.springframework.core.io.ResourceLoader;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -125,12 +127,12 @@ public class DemoUserCreationService {
       Resource imageResource = resourceLoader.getResource(imageLocation);
       if (imageResource.exists() && imageResource.isReadable()) {
         final String filename = imageResource.getFilename();
-        String mimeType = null;
-        if(filename != null && filename.contains(".")) {
-          mimeType = mimeTypeService.getMimeTypeForExtension(filename.split("\\.")[1]);
-        }
         try {
-          return blobService.put(imageResource.getInputStream(), mimeType, filename);
+          // buffer stream to make it markable
+          @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
+          InputStream bufferedInputStream = new BufferedInputStream(imageResource.getInputStream());
+          String mimeType = mimeTypeService.detectMimeType(bufferedInputStream, filename, null);
+          return blobService.put(bufferedInputStream, mimeType, filename);
         } catch (IOException e) {
           LOG.warn("cannot create blob from configured image {}: {}", imageResource, e.getMessage());
         }

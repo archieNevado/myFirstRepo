@@ -17,8 +17,23 @@ module.exports = function (grunt) {
   // load all available default configs
   utils.loadGruntConfigs(grunt);
 
+  // generate webpack configs for JavaScript modules in lib/js directory
+  utils.generateJSLibWebpackConfigs(grunt);
+
   // load bricks to extend theme
-  utils.loadBricks(grunt, ["preview", "responsive-images", "bootstrap", "generic-templates", "cta", "image-maps", "elastic-social", "fragment-scenario", "livecontext"]);
+  utils.loadBricks(grunt, [
+    "preview",
+    "responsive-images",
+    "bootstrap",
+    "generic-templates",
+    "cta",
+    "image-maps",
+    "elastic-social",
+    "fragment-scenario",
+    "livecontext",
+    "shoppable-video",
+    "pdp-augmentation"
+  ]);
 
   // --- theme configuration -------------------------------------------------------------------------------------------
 
@@ -39,21 +54,14 @@ module.exports = function (grunt) {
         }
       }
     },
+    // copy js and vendor files
     copy: {
-      imagesloaded: {
+      basic: {
         files: [{
           expand: true,
-          cwd: 'node_modules/imagesloaded',
-          src: 'imagesloaded.pkgd.js',
-          dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
-        }]
-      },
-      jquery: {
-        files: [{
-          expand: true,
-          cwd: 'node_modules/jquery/dist',
-          src: 'jquery.js',
-          dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
+          cwd: '../../lib/js/legacy',
+          src: ['*.js'],
+          dest: '../../target/resources/themes/<%= themeConfig.name %>/js'
         }]
       },
       magnificpopup: {
@@ -84,10 +92,11 @@ module.exports = function (grunt) {
 
 // --- theme tasks ---------------------------------------------------------------------------------------------------
 
-// Full distribution task with templates.
-  grunt.registerTask('build', ['clean', 'copy', 'sass', 'postcss', 'compress']);
+  // Local Development Task.
+  grunt.registerTask('development', ['clean', 'copy', 'sass', 'webpack:jslib']);
+  // Full distribution task with templates.
+  grunt.registerTask('production', ['development', 'postcss', 'compress']);
 
-// Default task = distribution.
-  grunt.registerTask('default', ['build']);
-}
-;
+  // Default task = distribution.
+  grunt.registerTask('default', ['production']);
+};

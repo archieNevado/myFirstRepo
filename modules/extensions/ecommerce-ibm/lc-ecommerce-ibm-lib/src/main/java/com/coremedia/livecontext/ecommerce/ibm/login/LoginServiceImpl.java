@@ -2,14 +2,13 @@ package com.coremedia.livecontext.ecommerce.ibm.login;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.security.encryption.util.EncryptionServiceUtil;
-import com.coremedia.springframework.beans.RequiredPropertyNotSetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -28,6 +27,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -93,10 +93,10 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
 
   @Override
   public void afterPropertiesSet() throws Exception {
-    RequiredPropertyNotSetException.ifNull("loginWrapperService", loginWrapperService);
-    RequiredPropertyNotSetException.ifNull("serviceUser", serviceUser);
-    RequiredPropertyNotSetException.ifNull("servicePassword", servicePassword);
-    RequiredPropertyNotSetException.ifNull("commerceCache", commerceCache);
+    checkRequiredPropertyNotNull("loginWrapperService", loginWrapperService);
+    checkRequiredPropertyNotNull("serviceUser", serviceUser);
+    checkRequiredPropertyNotNull("servicePassword", servicePassword);
+    checkRequiredPropertyNotNull("commerceCache", commerceCache);
 
     long cacheDurationInSeconds = commerceCache.getCacheDurationInSeconds(PreviewTokenCacheKey.CONFIG_KEY_PREVIEW_TOKEN);
     //uapi cache key shall always expire before commerce previewToken expires
@@ -104,6 +104,10 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
       previewTokenLifeTimeInSeconds = cacheDurationInSeconds * 2;
       LOG.info("increasing previewTokenLifeTimeInSeconds to (cacheDurationInSeconds * 2) = "+previewTokenLifeTimeInSeconds);
     }
+  }
+
+  private static void checkRequiredPropertyNotNull(String propertyName, Object propertyValue) {
+    Objects.requireNonNull(propertyValue, "Required property not set: " + propertyName);
   }
 
   @Override
@@ -162,7 +166,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
       if (result == null) {
         try {
           String workspaceId = StoreContextHelper.getWorkspaceId(storeContext);
-          workspaceId = StoreContextBuilder.NO_WS_MARKER.equals(workspaceId) ? null : workspaceId;
+          workspaceId = StoreContextImpl.NO_WS_MARKER.equals(workspaceId) ? null : workspaceId;
           String cmFormattedPreviewDate = StoreContextHelper.getPreviewDate(storeContext);
           String ibmFormmattedPreviewDate = null;
           String timezone = null;

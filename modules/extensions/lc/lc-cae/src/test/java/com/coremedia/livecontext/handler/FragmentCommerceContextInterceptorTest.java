@@ -1,13 +1,13 @@
 package com.coremedia.livecontext.handler;
 
-
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
@@ -16,12 +16,14 @@ import com.coremedia.livecontext.fragment.links.context.Context;
 import com.coremedia.livecontext.fragment.links.context.ContextBuilder;
 import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
+import com.google.common.base.Strings;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.context.SecurityContext;
 
+import javax.annotation.Nullable;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,10 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -45,7 +44,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class FragmentCommerceContextInterceptorTest {
 
-  FragmentCommerceContextInterceptor testling;
+  private FragmentCommerceContextInterceptor testling;
 
   @Mock
   private LiveContextSiteResolver siteLinkHelper;
@@ -70,8 +69,9 @@ public class FragmentCommerceContextInterceptorTest {
     initMocks(this);
 
     connection = MockCommerceEnvBuilder.create().setupEnv();
-    connection.getStoreContext().put(StoreContextBuilder.SITE, "siteId");
+    connection.getStoreContext().put(StoreContextImpl.SITE, "siteId");
     connection.setContractService(contractService);
+    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(connection);
 
     testling = new FragmentCommerceContextInterceptor();
     testling.setSiteResolver(siteLinkHelper);
@@ -81,24 +81,22 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Test
   public void testInitUserContextProvider() {
-    testling.afterPropertiesSet();
     MockHttpServletRequest request = new MockHttpServletRequest();
     Context fragmentContext = ContextBuilder.create().build();
     fragmentContext.put("wc.user.id", "userId");
     fragmentContext.put("wc.user.loginid", "loginId");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    testling.initUserContext(request);
-    assertTrue("UserContext must have been initialized yet", testling.isUserContextInitialized(request));
+    testling.initUserContext(connection, request);
+
     UserContext userContext = Commerce.getCurrentConnection().getUserContext();
-    assertEquals("userId", userContext.getUserId());
-    assertEquals("loginId", userContext.getUserName());
+    assertThat(userContext.getUserId()).isEqualTo("userId");
+    assertThat(userContext.getUserName()).isEqualTo("loginId");
   }
 
   @Test
   public void testInitStoreContextWithContractIds() {
     testling.setPreview(true);
-    testling.afterPropertiesSet();
     Collection<Contract> contracts = new ArrayList<>();
     Contract contract1 = mock(Contract.class);
     Contract contract2 = mock(Contract.class);
@@ -116,21 +114,20 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.contractIds", "contract1 contract2");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    testling.initStoreContext(site, request);
-    testling.initUserContext(request);
+    testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    testling.initUserContext(connection, request);
     String[] contractIdsInStoreContext = Commerce.getCurrentConnection().getStoreContext().getContractIds();
     List storeContextList = Arrays.asList(contractIdsInStoreContext);
     Collections.sort(storeContextList);
     List expected = Arrays.asList("contract1", "contract2");
     Collections.sort(storeContextList);
 
-    assertArrayEquals(expected.toArray(), storeContextList.toArray());
+    assertThat(storeContextList.toArray()).isEqualTo(expected.toArray());
   }
 
   @Test
   public void testInitStoreContextWithContractIdsButDisabledProcessing() {
     testling.setPreview(true);
-    testling.afterPropertiesSet();
     testling.setContractsProcessingEnabled(false);
     Collection<Contract> contracts = new ArrayList<>();
     Contract contract1 = mock(Contract.class);
@@ -149,16 +146,15 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.contractIds", "contract1 contract2");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    testling.initStoreContext(site, request);
-    testling.initUserContext(request);
+    testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    testling.initUserContext(connection, request);
     String[] contractIdsInStoreContext = Commerce.getCurrentConnection().getStoreContext().getContractIds();
-    assertNull(contractIdsInStoreContext);
+    assertThat(contractIdsInStoreContext).isNull();
   }
 
   @Test
   public void testInitStoreContextProviderInPreview() {
     testling.setPreview(true);
-    testling.afterPropertiesSet();
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo("/helios");
 
@@ -171,26 +167,26 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.workspaceId", "4711");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    testling.initStoreContext(site, request);
+    CommerceConnection commerceConnection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(commerceConnection).isNotNull();
 
-    assertTrue("UserContext must have been initialized yet", testling.isStoreContextInitialized(request));
+    StoreContext storeContext = commerceConnection.getStoreContext();
+    assertThat(storeContext).isNotNull();
 
-    StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
-    assertEquals("memberGroup1, memberGroup2", storeContext.getUserSegments());
-    assertEquals("4711", storeContext.getWorkspaceId());
+    assertThat(storeContext.getUserSegments()).isEqualTo("memberGroup1, memberGroup2");
+    assertThat(storeContext.getWorkspaceId()).isEqualTo("4711");
 
-    assertEquals("02-07-2014 17:57 Europe/Berlin", storeContext.getPreviewDate());
+    assertThat(storeContext.getPreviewDate()).isEqualTo("02-07-2014 17:57 Europe/Berlin");
 
     Calendar calendar = parsePreviewDateIntoCalendar(storeContext.getPreviewDate());
     SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-    assertEquals(sdb.format(calendar.getTime()) + " Europe/Berlin", storeContext.getPreviewDate());
-    assertEquals(calendar, request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE));
+    assertThat(storeContext.getPreviewDate()).isEqualTo(sdb.format(calendar.getTime()) + " Europe/Berlin");
+    assertThat(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE)).isEqualTo(calendar);
   }
 
   @Test
   public void testInitStoreContextProviderWithTimeShift() {
     testling.setPreview(true);
-    testling.afterPropertiesSet();
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo("/helios");
 
@@ -201,21 +197,20 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.timezone", "US/Pacific");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    testling.initStoreContext(site, request);
+    testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
     StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
-    assertEquals("02-07-2014 17:57 US/Pacific", storeContext.getPreviewDate());
+    assertThat(storeContext.getPreviewDate()).isEqualTo("02-07-2014 17:57 US/Pacific");
 
     Calendar calendar = parsePreviewDateIntoCalendar(storeContext.getPreviewDate());
     String requestParam = FragmentCommerceContextInterceptor.convertToPreviewDateRequestParameterFormat(calendar);
-    assertEquals(requestParam, storeContext.getPreviewDate());
-    assertEquals(calendar, request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE));
+    assertThat(storeContext.getPreviewDate()).isEqualTo(requestParam);
+    assertThat(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE)).isEqualTo(calendar);
   }
 
   @Test
   public void testConvertPreviewDate() {
     testling.setPreview(true);
-    testling.afterPropertiesSet();
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo("/helios");
 
@@ -228,25 +223,25 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.workspaceId", "4711");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    testling.initStoreContext(site, request);
+    CommerceConnection connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(connection).isNotNull();
 
-    assertTrue("UserContext must have been initialized yet", testling.isStoreContextInitialized(request));
+    StoreContext storeContext = connection.getStoreContext();
+    assertThat(storeContext).isNotNull();
 
-    StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
-    assertEquals("memberGroup1, memberGroup2", storeContext.getUserSegments());
-    assertEquals("4711", storeContext.getWorkspaceId());
+    assertThat(storeContext.getUserSegments()).isEqualTo("memberGroup1, memberGroup2");
+    assertThat(storeContext.getWorkspaceId()).isEqualTo("4711");
 
     SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
-    assertEquals("02-07-2014 17:57 Europe/Berlin", storeContext.getPreviewDate());
+    assertThat(storeContext.getPreviewDate()).isEqualTo("02-07-2014 17:57 Europe/Berlin");
 
     Calendar calendar = parsePreviewDateIntoCalendar(storeContext.getPreviewDate());
-    assertEquals(sdb.format(calendar.getTime()) + " Europe/Berlin", storeContext.getPreviewDate());
+    assertThat(storeContext.getPreviewDate()).isEqualTo(sdb.format(calendar.getTime()) + " Europe/Berlin");
   }
 
   @Test
   public void testInitStoreContextProviderInLive() {
-    testling.afterPropertiesSet();
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo("/helios");
     Context fragmentContext = ContextBuilder.create().build();
@@ -255,29 +250,35 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.timestamp", ts.toString());
     fragmentContext.put("wc.preview.workspaceId", "4711");
 
-    testling.initStoreContext(site, request);
+    CommerceConnection connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(connection).isNotNull();
 
-    assertTrue("UserContext must have been initialized yet", testling.isStoreContextInitialized(request));
-    StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
-    assertNull(storeContext.getUserSegments());
-    assertNull(storeContext.getPreviewDate());
-    assertNull(storeContext.getWorkspaceId());
-    assertNull(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE));
+    StoreContext storeContext = connection.getStoreContext();
+    assertThat(storeContext).isNotNull();
+
+    assertThat(storeContext.getUserSegments()).isNull();
+    assertThat(storeContext.getPreviewDate()).isNull();
+    assertThat(storeContext.getWorkspaceId()).isNull();
+    assertThat(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE)).isNull();
   }
 
-  private static Calendar parsePreviewDateIntoCalendar(String previewDate) {
-    Calendar calendar = null;
-    if (previewDate != null && previewDate.length() > 0) {
-      try {
-        calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        calendar.setTime(sdf.parse(previewDate.substring(0, previewDate.lastIndexOf(' '))));
-        calendar.setTimeZone(TimeZone.getTimeZone(previewDate.substring(previewDate.lastIndexOf(' ') + 1)));
-      } catch (ParseException e) {
-        // do nothing
-      }
+  @Nullable
+  private static Calendar parsePreviewDateIntoCalendar(@Nullable String previewDate) {
+    if (Strings.isNullOrEmpty(previewDate)) {
+      return null;
     }
+
+    Calendar calendar = null;
+
+    try {
+      calendar = Calendar.getInstance();
+      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+      calendar.setTime(sdf.parse(previewDate.substring(0, previewDate.lastIndexOf(' '))));
+      calendar.setTimeZone(TimeZone.getTimeZone(previewDate.substring(previewDate.lastIndexOf(' ') + 1)));
+    } catch (ParseException ignored) {
+      // do nothing
+    }
+
     return calendar;
   }
-
 }

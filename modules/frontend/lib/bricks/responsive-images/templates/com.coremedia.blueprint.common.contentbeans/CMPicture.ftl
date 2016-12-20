@@ -7,6 +7,10 @@
 <#-- @ftlvariable name="crop" type="java.lang.String" -->
 <#-- @ftlvariable name="additionalAttr" type="java.util.Map" -->
 
+<#assign background=cm.localParameters().background!false />
+<#assign classBox=cm.localParameters().classBox!"" />
+<#assign classImage=cm.localParameters().classImage!"" />
+
 <div class="${classBox!""}"<@cm.metadata (metadata![]) + [self.content]/>>
   <#if self.data?has_content>
     <#assign imageLink="" />
@@ -18,6 +22,10 @@
     <#if self.disableCropping || disableCropping!false>
       <#-- A) Cropping disabled, display image in full size -->
       <#assign imageLink=bp.uncroppedImageLink(self) />
+      <#-- add all attributes to the map -->
+      <#if imageLink?has_content && background>
+        <#assign attributes={"style": "background-image: url(${imageLink})"} />
+      </#if>
     <#else>
       <#-- B) display responsive image -->
       <#assign classResponsive="cm-image--responsive" />
@@ -44,10 +52,17 @@
     </#if>
 
     <#-- add all attributes to the map -->
-    <#assign attributes += {"src": imageLink, "alt": alt, "title": title} />
-
-    <img class="cm-image cm-image--loading ${classImage!""} ${classResponsive!""}" <@bp.renderAttr attributes />
-      <@cm.metadata data=["properties.data" + crop?has_content?then(".", "") + crop!""] />
-    />
+    <#assign attributes += {"alt": alt, "title": title} />
+    <#assign classImage += " cm-image" />
+    <#if background>
+      <div class="cm-image--background ${classImage!""} ${classResponsive!""}" <@bp.renderAttr attributes />
+        <@cm.metadata data=["properties.data"] />>
+      </div>
+    <#else >
+      <#assign attributes += {"src": imageLink} />
+      <img class="cm-image--loading ${classImage!""} ${classResponsive!""}" <@bp.renderAttr attributes />
+        <@cm.metadata data=["properties.data" + crop?has_content?then(".", "") + crop!""] />
+      />
+    </#if>
   </#if>
 </div>

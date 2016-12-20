@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.DOCTYPE_EVENTLIST;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.DOCTYPE_PAGELIST;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCTYPE_EVENTLIST;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCTYPE_PAGELIST;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
 import static com.coremedia.blueprint.analytics.elastic.webtrends.ElasticWebtrendsServiceProvider.WEBTRENDS_SERVICE_KEY;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;

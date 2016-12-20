@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.studio.analytics {
 
-import com.coremedia.blueprint.studio.config.analytics.analyticsStudioPlugin;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
@@ -18,7 +17,7 @@ public class AnalyticsStudioPluginBase extends StudioPlugin {
 
   private static const ALX_SETTINGS_DOCUMENT:String = '/Settings/Options/Settings/AnalyticsSettings';
 
-  public function AnalyticsStudioPluginBase(config:analyticsStudioPlugin = null) {
+  public function AnalyticsStudioPluginBase(config:AnalyticsStudioPlugin = null) {
     super(config);
   }
 
@@ -28,7 +27,7 @@ public class AnalyticsStudioPluginBase extends StudioPlugin {
   }
 
   internal static function fetchAnalyticsSettings():void {
-    session.getConnection().getContentRepository().getChild(ALX_SETTINGS_DOCUMENT, receiveAnalyticsSettings);
+    SESSION.getConnection().getContentRepository().getChild(ALX_SETTINGS_DOCUMENT, receiveAnalyticsSettings);
   }
 
   internal static function receiveAnalyticsSettings(content:Content, absPath:String, error:RemoteError):void{

@@ -5,6 +5,7 @@
 
 // Utils
 @import "../../../../lib/sass/utils/imports";
+@import "../../../../lib/bricks/preview/sass/preview";
 
 // Components
-@import "components/preview";
+@import "../../../../lib/bricks/livecontext/sass/preview";

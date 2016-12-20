@@ -46,12 +46,12 @@ $container-tablet:             ($screen-sm-min + $grid-gutter-width);
 // $container-sm:                 $container-tablet;
 
 // Medium screen / desktop
- $container-desktop:            ($screen-md-min + $grid-gutter-width);
+$container-desktop:            ($screen-md-min + $grid-gutter-width);
 //** For `$screen-md-min` and up.
 // $container-md:                 $container-desktop;
 
 // Large screen / wide desktop
- $container-large-desktop:      ($screen-lg-min + $grid-gutter-width);
+$container-large-desktop:      ($screen-lg-min + $grid-gutter-width);
 //** For `$screen-lg-min` and up.
 // $container-lg:                 $container-large-desktop;
 

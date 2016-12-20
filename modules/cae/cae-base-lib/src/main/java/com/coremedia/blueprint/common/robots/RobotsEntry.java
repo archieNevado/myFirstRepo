@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.common.robots;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.coremedia.util.StringUtil;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +106,7 @@ public class RobotsEntry {
   }
 
   private void addCustom(String entry) {
-    if (!StringUtil.isEmpty(entry)) {
+    if (!Strings.isNullOrEmpty(entry)) {
       custom.add(entry);
     }
   }

@@ -1,22 +1,24 @@
 package com.coremedia.ecommerce.studio.library {
 import com.coremedia.cap.undoc.content.Content;
-import com.coremedia.cms.editor.Editor_properties;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
 import com.coremedia.cms.editor.sdk.collectionview.tree.CompoundChildTreeModel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferenceWindow;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.EventUtil;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
+[ResourceBundle('com.coremedia.cms.editor.Editor')]
 public class ShowInLibraryHelper {
 
-  protected static const RESOURCE_BUNDLE:ECommerceStudioPlugin_properties = ECommerceStudioPlugin_properties.INSTANCE;
-  private static const HIDE_EVENT_NAME:String = 'hide';
+  protected static const RESOURCE_BUNDLE:Object = ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin').content;
+  private static const HIDE_EVENT_NAME:String = 'close';
 
   private var entities:Array;
   private var catalogTreeModel:CompoundChildTreeModel;
@@ -96,15 +98,15 @@ public class ShowInLibraryHelper {
     return false;
   }
 
-  private static function showInRepositoryMode(entity:Object, treeModelId:String):void {
+  private static function showInRepositoryMode(entity:*, treeModelId:String):void {
     // ignoring type of entity (show in repository doesn't really care if it's of type Content)
-    editorContext.getCollectionViewManager().showInRepository(Content(entity), null, treeModelId);
+    editorContext.getCollectionViewManager().showInRepository(entity, null, treeModelId);
   }
 
   protected function adjustSettings(entity:Object, callback:Function, msg:String):void {
     var buttons:Object = {
       no: RESOURCE_BUNDLE.Catalog_show_preferences_button_text,
-      cancel: Editor_properties.INSTANCE.dialog_defaultCancelButton_text,
+      cancel: ResourceManager.getInstance().getString('com.coremedia.cms.editor.Editor', 'dialog_defaultCancelButton_text'),
       yes: RESOURCE_BUNDLE.Catalog_show_switch_site_button_text
     };
     openDialog(msg, buttons, entity, callback);

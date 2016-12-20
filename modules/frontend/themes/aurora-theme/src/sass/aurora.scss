@@ -7,10 +7,34 @@
 @import "../../../../lib/sass/utils/imports";
 
 //Vendor
+@import "vendor/bootstrap";
 @import "vendor/magnific-popup";
 @import "vendor/media-element-player";
-@import "vendor/bootstrap";
-@import "vendor/perfectchef";
+
+//Bricks
+@import "../../../../lib/bricks/fragment-scenario/sass/fragments";
+@import "../../../../lib/bricks/livecontext/sass/font";
+@import "../../../../lib/bricks/livecontext/sass/notification";
+@import "../../../../lib/bricks/livecontext/sass/device-selector";
+@import "../../../../lib/bricks/livecontext/sass/button";
+@import "../../../../lib/bricks/livecontext/sass/grids";
+@import "../../../../lib/bricks/generic-templates/sass/popup";
+@import "../../../../lib/bricks/responsive-images/sass/images";
+@import "../../../../lib/bricks/responsive-images/sass/non-adaptive-content";
+@import "../../../../lib/bricks/generic-templates/sass/video";
+@import "../../../../lib/bricks/livecontext/sass/imagemap";
+@import "../../../../lib/bricks/livecontext/sass/quickinfo";
+@import "../../../../lib/bricks/livecontext/sass/price";
+@import "../../../../lib/bricks/livecontext/sass/coremedia-richtext-1.0";
+@import "../../../../lib/bricks/livecontext/sass/helpers";
+@import "../../../../lib/bricks/livecontext/sass/marketingspots";
+@import "../../../../lib/bricks/livecontext/sass/spinner";
+@import "../../../../lib/bricks/pdp-augmentation/sass/pdp-asset-widget";
+@import "../../../../lib/bricks/livecontext/sass/product-info";
+@import "../../../../lib/bricks/livecontext/sass/accordion";
+@import "../../../../lib/bricks/livecontext/sass/icon";
+@import "../../../../lib/bricks/livecontext/sass/teaser";
+@import "../../../../lib/bricks/livecontext/sass/headings";
 
 //Components
 @import "components/layout";
@@ -20,5 +44,7 @@
 @import "components/popup";
 @import "components/detail";
 @import "components/carousel";
+@import "components/shoppable-video";
 @import "components/aurora";
 @import "components/aurora-es";
+@import "components/sidebar";

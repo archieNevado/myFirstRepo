@@ -49,7 +49,7 @@
     Additional information about the document such as error messages.
     This field is required for the Content Feeder.
   -->
-  <field name="feederinfo" type="string" indexed="true" stored="true"/>
+  <field name="feederinfo" type="string" indexed="false" stored="true"/>
 
   <!--
     The time when the document was created or updated by the Feeder.

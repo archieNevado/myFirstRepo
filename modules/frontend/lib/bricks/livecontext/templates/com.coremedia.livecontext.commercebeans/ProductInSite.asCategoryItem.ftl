@@ -1,5 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.commercebeans.ProductInSite" -->
 
+<#assign limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_teaser", [])/>
+
 <#if self.product?has_content && (cmpage.navigation.rootNavigation)?has_content>
   <#if self.product.listPrice?has_content && self.product.currency?has_content && self.product.locale?has_content>
     <#assign listPriceFormatted=lc.formatPrice(self.product.listPrice, self.product.currency, self.product.locale)/>
@@ -7,7 +9,7 @@
   <div class="cm-category-item">
     <@bp.optionalLink href="${cm.getLink(self)}">
       <@cm.include self=self.product.catalogPicture!cm.UNDEFINED params={
-        "limitAspectRatios": lc.getAspectRatiosForTeaser(),
+        "limitAspectRatios": limitAspectRatios,
         "classBox": "cm-category-item__image cm-aspect-ratio-box",
         "classImage": "cm-aspect-ratio-box__content"
       } />

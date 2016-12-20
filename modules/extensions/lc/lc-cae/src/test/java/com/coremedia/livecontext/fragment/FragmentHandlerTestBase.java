@@ -57,7 +57,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     testling.setContentBeanFactory(contentBeanFactory);
     testling.setValidationService(validationService);
     testling.setBeanFactory(beanFactory);
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache()));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
 
     siteResolver.setSitesService(sitesService);
 

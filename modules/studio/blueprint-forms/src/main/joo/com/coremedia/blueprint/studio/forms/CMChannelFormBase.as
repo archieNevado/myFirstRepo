@@ -1,5 +1,4 @@
 package com.coremedia.blueprint.studio.forms {
-import com.coremedia.blueprint.studio.config.cmChannelForm;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
@@ -17,7 +16,7 @@ public class CMChannelFormBase extends DocumentTabPanel {
    */
   private static var rootChannelsExpression:ValueExpression;
 
-  public function CMChannelFormBase(config:cmChannelForm = null) {
+  public function CMChannelFormBase(config:CMChannelForm = null) {
     super(config);
   }
 

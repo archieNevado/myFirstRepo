@@ -1,21 +1,16 @@
 package com.coremedia.blueprint.studio.analytics {
+import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
-import ext.Viewport;
+import ext.container.Viewport;
 
-// don't remove this import
-import joo.getQualifiedObject;
+import joo.getOrCreatePackage;
 
 public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
 
   private static const DRILLDOWN_URL:String = "http://host.domain.net/my/drilldown";
   private static const MY_ID:Number = 4711;
-
-  // static initializer
-  {
-    joo.getQualifiedObject("com.coremedia.cms.editor.sdk.EditorContextImpl").initEditorContext();
-  }
 
   private var button:OpenAnalyticsDeepLinkUrlButton;
   private var window_open:Function;
@@ -26,6 +21,9 @@ public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
     window_open = window.open;
     window.open = function (... myArgs) : void { args = myArgs;};
 
+    delete getOrCreatePackage("com.coremedia.cms.editor.sdk")['editorContext'];
+    EditorContextImpl.initEditorContext();
+
     // Make sure that a new context manager is instantiated for each test.
     new ComponentContextManager();
 
@@ -33,7 +31,6 @@ public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
       serviceName: "googleAnalytics"
     });
     new Viewport({
-      id : new Date().toDateString(),
       items: [button]
     });
   }

@@ -1,14 +1,12 @@
 package com.coremedia.blueprint.studio.analytics {
 import com.coremedia.ui.data.util.PropertyChangeEventUtil;
 
-import ext.Container;
-
-import ext.config.container;
+import ext.container.Container;
 
 public class ContentProvidingTestContainerBase extends Container {
 
   private var content:Object;
-  public function ContentProvidingTestContainerBase(config:container = null) {
+  public function ContentProvidingTestContainerBase(config:Container = null) {
     super(config);
   }
 

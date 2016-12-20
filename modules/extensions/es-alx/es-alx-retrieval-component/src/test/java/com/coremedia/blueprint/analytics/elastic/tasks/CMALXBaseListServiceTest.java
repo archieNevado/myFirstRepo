@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;

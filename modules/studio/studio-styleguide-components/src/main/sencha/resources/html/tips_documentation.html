@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div data-content="description">
+  n/a
+</div>
+<div data-content="usage">
+  <p>As QuickTip:</p>
+  <pre>
+    &lt;Button handler="{function ():void {
+      var quickTipCfg:QuickTip = QuickTip({});
+      quickTipCfg.ui = TipSkin.DEFAULT.getSkin();
+      quickTipCfg.title = 'QuickTip text';
+      var quickTip:QuickTip = new QuickTip(quickTipCfg);
+      quickTip.show();
+      }}" /&gt;
+  </pre>
+  <p>As ToolTip:</p>
+  <pre>
+    &lt;Button text="Hover to show tooltip"&gt;
+      &lt;tooltip&gt;
+        &lt;ToolTip ui="{TooltipSkin.DEFAULT.getSkin()}"
+                 title="Tool tip text"/&gt;
+      &lt;/tooltip&gt;
+    &lt;/Button&gt;
+  </pre>
+
+</div>
+<div data-content="related">
+  n/a
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:NestedRulesPlugin
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:upload="exml:com.coremedia.blueprint.studio.config.upload"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.blueprint.studio.UploadStudioPlugin')]
+    [ResourceBundle('com.coremedia.icons.CoreIcons')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.upload.UploadHelper;
+    import com.coremedia.cms.editor.sdk.collectionview.ICollectionView;
+
+    import mx.resources.ResourceManager;
+
+    private var config:UploadCollectionViewPlugin;
+    private var myCollectionView:ICollectionView;
+
+    // called by generated constructor code
+    private function __initialize__(config:UploadCollectionViewPlugin):void {
+      myCollectionView = config.cmp as ICollectionView;
+    }
+
+    public native function UploadCollectionViewPlugin(config:UploadCollectionViewPlugin = null);
+    ]]></fx:Script>
+
+    <ui:rules>
+
+      <!-- Add the upload button -->
+      <editor:RepositoryToolbar>
+        <editor:plugins>
+          <ui:AddItemsPlugin>
+            <ui:items>
+              <ui:IconButton itemId="openUpload"
+                             text="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'UploadFileAction_menu_item_text')}"
+                             iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'upload')}"
+                             tooltip="{UploadHelper.resolveTooltip()}">
+                <ui:baseAction>
+                  <upload:OpenUploadDialogAction contentValueExpression="{myCollectionView.getSelectedFolderValueExpression()}"/>
+                </ui:baseAction>
+              </ui:IconButton>
+            </ui:items>
+            <ui:after>
+              <Component itemId="createDocument"/>
+            </ui:after>
+          </ui:AddItemsPlugin>
+        </editor:plugins>
+      </editor:RepositoryToolbar>
+
+    </ui:rules>
+  
+</ui:NestedRulesPlugin>

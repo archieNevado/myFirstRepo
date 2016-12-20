@@ -14,7 +14,7 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.util.StringUtil;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -135,11 +135,11 @@ public class TopicPagesResource {
     }
 
     String folder = getFolderFromStruct(config.getLocalStructs());
-    if (StringUtil.isEmpty(folder)) {
+    if (Strings.isNullOrEmpty(folder)) {
       folder = getFolderFromStruct(config.getGlobalStructs());
     }
-    if (StringUtil.isEmpty(folder)) {
-      LOG.info("No default topic page folder found in local or global TopicPage settings. Use default path: " + DEFAULT_SITESPECIFIC_CUSTOM_TOPIC_PAGES_FOLDER);
+    if (Strings.isNullOrEmpty(folder)) {
+      LOG.debug("No default topic page folder found in local or global TopicPage settings. Use default path: {}", DEFAULT_SITESPECIFIC_CUSTOM_TOPIC_PAGES_FOLDER);
       folder = DEFAULT_SITESPECIFIC_CUSTOM_TOPIC_PAGES_FOLDER;
     }
 
@@ -149,16 +149,17 @@ public class TopicPagesResource {
     }
     if (topicPageChannel == null) {
       String siteName = siteId;
-      if(!StringUtil.isEmpty(siteId)) {
+      if(!Strings.isNullOrEmpty(siteId)) {
         Site site = sitesService.getSite(siteId);
         if(site != null) {
           siteName = site.getName() + "/" + site.getLocale();
         }
       }
 
-      if(!StringUtil.isEmpty(siteId)) {
-        LOG.info("No topic page channel found in local or global TopicPage settings for site " + siteName + ". It is recommended to " +
-              "create a site specific '" + TOPIC_PAGES_SETTINGS + "' settings document with a custom topic page channel.");
+      if(!Strings.isNullOrEmpty(siteId)) {
+        LOG.debug("No topic page channel found in local or global TopicPage settings for site " + siteName + ". It is recommended to " +
+              "create a site specific '" + TOPIC_PAGES_SETTINGS + "' settings document with a custom topic page channel.",
+                siteName, TOPIC_PAGES_SETTINGS);
       }
     }
     representation.setTopicPageChannel(topicPageChannel);
@@ -197,7 +198,7 @@ public class TopicPagesResource {
     List<TaxonomyNode> keywords;
     if (taxonomyStrategy == null) {
       keywords = Collections.emptyList();
-    } else if (StringUtil.isEmpty(term)) {
+    } else if (Strings.isNullOrEmpty(term)) {
       keywords = taxonomyStrategy.getAllChildren();
     } else {
       keywords = taxonomyStrategy.find(term).getNodes();
@@ -467,7 +468,7 @@ public class TopicPagesResource {
     for (Content child : rep.getTopicPagesFolder().getChildDocuments()) {
       String title = child.getString("title");
       if (child.getName().contains(topic.getName()) ||
-              (!StringUtil.isEmpty(title) && title.equals(topic.getName()))) {
+              (!Strings.isNullOrEmpty(title) && title.equals(topic.getName()))) {
         return child;
       }
     }
@@ -561,12 +562,12 @@ public class TopicPagesResource {
   }
 
   private Content resolveSiteConfigurationFolder(String siteId, String siteConfigurationPath) {
-    if (!StringUtil.isEmpty(siteId)) {
+    if (!Strings.isNullOrEmpty(siteId)) {
       Site site = requireNonNull(sitesService.getSite(siteId), format("Site %s does not exist", siteId));
       Content root = site.getSiteRootFolder();
       Content configPath = root.getChild(siteConfigurationPath);
       if (configPath == null) {
-        LOG.info("Could not resolve relative site config path '" + siteConfigurationPath + "' for site " + site.getName() + ", creating folder.");
+        LOG.debug("Could not resolve relative site config path '" + siteConfigurationPath + "' for site " + site.getName() + ", creating folder.");
         return capConnection.getContentRepository().createSubfolders(root, siteConfigurationPath);
       }
       return configPath;

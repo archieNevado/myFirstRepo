@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
-import com.coremedia.blueprint.analytics.elastic.PublicationReportModelService;
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
-import com.coremedia.blueprint.analytics.elastic.util.DaysBack;
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.PublicationReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static com.coremedia.blueprint.analytics.elastic.util.DateUtil.getDateWithoutTime;
+import static com.coremedia.blueprint.base.analytics.elastic.util.DateUtil.getDateWithoutTime;
 import static com.google.common.collect.Maps.newHashMap;
 
 /**

@@ -6,11 +6,11 @@ Bricks are reusable frontend modules for your theme. Mostly they include templat
 
 ### Available bricks
 
-- `bootstrap`: Bootstrap 3 based on sass with carousel swipe plugin
-- `cta`: simple Call-To-Action button
-- `elastic-social`: CoreMedia Elastic Social Extension
-- [generic-templates](generic-templates/README.md): basic templates for teaser, hero teaser and detailview
+- [bootstrap](bootstrap/README.md): Bootstrap 3 based on sass with carousel swipe plugin
+- [cta](cta/README.md): simple Call-To-Action button
+- [elastic-social](elastic-social/README.md): CoreMedia Elastic Social Extension
 - [fragment-scenario](fragment-scenario/README.md): templates rendering externally requested fragment. e.g. used for the IBM blended hybrid or augmentation scenario
+- [generic-templates](generic-templates/README.md): This brick adds support for rendering items in various occurrences, like detail, hero and teaser view.
 - `image-maps`: Image Maps
 - `preview`: templates for Studio preview
 - `responsive-images`: CoreMedia Adaptive and Responsive Image Framework
@@ -32,3 +32,6 @@ descriptor.
 ```
 
 If a brick has sass files, you need to import them to your themes sass file explicitly.
+
+**Notice:** _Don't forget to add Javascript files and templates of the used bricks to the [theme descriptor file](../../themes/DESCRIPTOR.md) 
+of your theme. See bricks description in README files._

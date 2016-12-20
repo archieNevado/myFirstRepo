@@ -62,6 +62,7 @@ public class ExternalPreviewResource {
   @POST
   @Path(METHOD_UPDATE_PATH)
   public boolean updatePreviewData(MultivaluedMap<String, String> form) {
+    String url = null;
     try {
       String json = form.getFirst(PARAM_DATA);
       String token = form.getFirst(PARAM_TOKEN);
@@ -69,13 +70,13 @@ public class ExternalPreviewResource {
       json = URLEncoder.encode(json, URL_ENCODING);
 
       String previewUrl = form.getFirst(PARAM_PREVIEW_URL);
-      String url = previewUrl + "?token=" + token + "&method=" + method;
+      url = previewUrl + "?token=" + token + "&method=" + method;
       if(json != null && !json.isEmpty()) {
         url+="&data=" + json;
       }
       return sendRequest(url);
     } catch (Exception e) {//NOSONAR
-      LOGGER.error("Error applying preview data: " + e.getMessage(), e); //NOSONAR
+      LOGGER.error("Error applying preview data to " + url + ": " + e.getMessage(), e); //NOSONAR
     }
     return false;
   }
@@ -103,6 +104,7 @@ public class ExternalPreviewResource {
     httpCon.setRequestMethod(REQUEST_METHOD);
     httpCon.connect();
     if (httpCon.getResponseCode() == HttpURLConnection.HTTP_OK) {
+      LOGGER.info("Written preview token " + urlString);//NOSONAR
       return true;
     }
 

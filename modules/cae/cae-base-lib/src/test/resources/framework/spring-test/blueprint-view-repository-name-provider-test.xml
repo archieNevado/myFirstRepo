@@ -15,6 +15,7 @@
   <import resource="classpath:/framework/spring/blueprint-richtextfilters.xml"/>
   <import resource="classpath:/framework/spring/blueprint-services.xml"/>
   <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
+  <import resource="classpath:/framework/spring/blueprint-views.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
 
   <bean id="blueprintViewRepositoryNameProvider"
@@ -28,6 +29,7 @@
     </description>
     <property name="commonViewRepositoryNames" ref="viewRepositories"/>
     <property name="settingsService" ref="settingsService"/>
+    <property name="themeTemplateViewRepositoryProvider" ref="themeTemplateViewRepositoryProvider"/>
   </bean>
   <util:list id="viewRepositories">
     <description>

@@ -2,13 +2,12 @@ package com.coremedia.livecontext.studio.components.product {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.livecontext.studio.LivecontextStudioPlugin_properties;
-import com.coremedia.livecontext.studio.config.viewSettingsRadioGroup;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 import ext.form.RadioGroup;
 
+[ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class ViewSettingsRadioGroupBase extends RadioGroup {
   private static var radioButtonFormName:int = 0;
   private static const LOCAL_SETTINGS_PROPERTY:String = "localSettings";
@@ -21,7 +20,7 @@ public class ViewSettingsRadioGroupBase extends RadioGroup {
   private var rootChannel:Boolean;
   private var bindTo:ValueExpression;
 
-  public function ViewSettingsRadioGroupBase(config:viewSettingsRadioGroup = null) {
+  public function ViewSettingsRadioGroupBase(config:ViewSettingsRadioGroup = null) {
     super(config);
     bindTo = config.bindTo;
     defaultSetting = ViewSettingsRadioGroup.INHERITED_SETTING;
@@ -37,15 +36,12 @@ public class ViewSettingsRadioGroupBase extends RadioGroup {
         var content:Content = config.bindTo.getValue();
         var localSettings:Struct = content.getProperties().get(LOCAL_SETTINGS_PROPERTY);
         if (!localSettings) {
-          return undefined;
+          return defaultSetting;
         }
 
         var shopNowProperty:String = localSettings.get(SHOP_NOW_PROPERTY);
         if (!shopNowProperty) {
-          if (rootChannel) {
-            return ViewSettingsRadioGroup.ENABLED_SETTING;
-          }
-          return ViewSettingsRadioGroup.INHERITED_SETTING;
+          return defaultSetting;
         }
 
         return shopNowProperty;
@@ -55,22 +51,13 @@ public class ViewSettingsRadioGroupBase extends RadioGroup {
     });
   }
 
-
-  override protected function afterRender():void {
-    super.afterRender();
-    var group:* = this;
-    getInheritLabelExpression(bindTo).loadValue(function(label:String):void {
-      group.items.items[0].wrap.child('.x-form-cb-label').update(label);
-    });
-  }
-
   /**
    * Since we have to load a lot of stuff initially via FunctionValueExpression, we apply
    * the listeners after we have set the defaults.
    */
   private function applyListeners(defaultValue:String):void {
-    getRadioGroupValueExpression().setValue(defaultValue);
     getRadioGroupValueExpression().addChangeListener(radioGroupChanged);
+    getRadioGroupValueExpression().setValue(defaultValue);
     propertyValueExpression.addChangeListener(propertyValueChanged);
   }
 
@@ -99,28 +86,15 @@ public class ViewSettingsRadioGroupBase extends RadioGroup {
     return radioGroupExpression;
   }
 
-  protected function getInheritLabelExpression(bindTo:ValueExpression):ValueExpression {
-    return ValueExpressionFactory.createFromFunction(function():String {
-      var content:Content = bindTo.getValue();
-      var contentType:ContentType = content.getType();
-      if(contentType === undefined) {
-        return undefined;
-      }
-      // contenttype's name is an immediate property
-      if(contentType.getName() === "CMChannel") {
-        return LivecontextStudioPlugin_properties.INSTANCE.CMChannel_settings_inherit;
-      }
-      return LivecontextStudioPlugin_properties.INSTANCE.CMProductTeaser_settings_inherit;
-    });
-  }
-
   private function radioGroupChanged(ve:ValueExpression):void {
     var value:String = ve.getValue();
 
     if (value == defaultSetting) {
       var content:Content = bindTo.getValue();
       var localSettings:Struct = content.getProperties().get(LOCAL_SETTINGS_PROPERTY);
-      localSettings.getType().removeProperty(SHOP_NOW_PROPERTY);
+      if (localSettings) {
+        localSettings.getType().removeProperty(SHOP_NOW_PROPERTY);
+      }
     }
     else {
       propertyValueExpression.setValue(value);

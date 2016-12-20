@@ -54,7 +54,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2011, 1, 1);
     setupValidTo(content, 2011, 2, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -75,7 +75,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2011, 1, 1);
     setupValidTo(content, 2011, 2, 1);
-    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null);
+    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null, null, null, null);
     page.setValidFrom(content.getValidFrom());
     page.setValidTo(content.getValidTo());
     ModelAndView modelAndView = HandlerHelper.createModel(page);
@@ -99,7 +99,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 2, 1);
     setupValidTo(content, 2010, 4, 1);
-    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null);
+    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null, null, null, null);
     page.setValidFrom(content.getValidFrom());
     page.setValidTo(content.getValidTo());
     ModelAndView modelAndView = HandlerHelper.createModel(page);
@@ -123,7 +123,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 2, 1);
     setupValidTo(content, 2010, 4, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -144,7 +144,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     setupValidTo(navigation, 2010, 13, 1);
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 2, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -163,7 +163,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     setupValidFrom(navigation, 2010, 1, 1);
     setupValidTo(navigation, 2010, 13, 1);
     CMLinkable content = Mockito.mock(CMLinkable.class);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -184,7 +184,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 2, 1);
     setupValidTo(content, 2010, 4, 1);
-    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null);
+    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null, null, null, null);
     page.setValidFrom(content.getValidFrom());
     page.setValidTo(content.getValidTo());
     ModelAndView modelAndView = HandlerHelper.createModel(page);
@@ -207,7 +207,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 2, 1);
     setupValidTo(content, 2010, 4, 1);
-    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null);
+    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null, null, null, null);
     page.setValidFrom(content.getValidFrom());
     page.setValidTo(content.getValidTo());
     ModelAndView modelAndView = HandlerHelper.createModel(page);
@@ -229,7 +229,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMNavigation navigation = Mockito.mock(CMNavigation.class);
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 2, 1);
-    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null);
+    PageImpl page = new PageImpl(navigation, content, true, getSitesService(), null, null, null, null);
     page.setValidFrom(content.getValidFrom());
     page.setValidTo(content.getValidTo());
     ModelAndView modelAndView = HandlerHelper.createModel(page);
@@ -250,7 +250,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     MockHttpServletResponse response = new MockHttpServletResponse();
     CMNavigation navigation = Mockito.mock(CMNavigation.class);
     CMLinkable content = Mockito.mock(CMLinkable.class);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -272,7 +272,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 3, 1);
     setupValidTo(content, 2011, 3, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -292,7 +292,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 3, 1);
     setupValidTo(content, 2011, 3, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -312,7 +312,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     setupValidTo(navigation, 2011, 1, 1);
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 3, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -332,7 +332,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     setupValidFrom(navigation, 2010, 1, 1);
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 3, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -353,7 +353,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidFrom(content, 2010, 3, 1);
     setupValidTo(content, 2011, 3, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -374,7 +374,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     setupValidTo(navigation, 2011, 1, 1);
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidTo(content, 2011, 3, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 
@@ -393,7 +393,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
     setupValidTo(navigation, 2011, 1, 1);
     CMLinkable content = Mockito.mock(CMLinkable.class);
     setupValidTo(content, 2011, 3, 1);
-    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null));
+    ModelAndView modelAndView = HandlerHelper.createModel(new PageImpl(navigation, content, true, getSitesService(), null, null, null, null));
     interceptor.postHandle(request, response, null, modelAndView);
   }
 

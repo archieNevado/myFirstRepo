@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.studio.externalpreview {
 
-import com.coremedia.blueprint.studio.externalpreview.config.externalPreviewStudioPlugin;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.ui.data.RemoteBean;
@@ -16,7 +15,7 @@ public class ExternalPreviewStudioPluginBase extends StudioPlugin {
   public static var PREVIEW_URL:String;
   public static var CONTENT_PREVIEW_URL_PREFIX:String;
 
-  public function ExternalPreviewStudioPluginBase(config:externalPreviewStudioPlugin = null) {
+  public function ExternalPreviewStudioPluginBase(config:ExternalPreviewStudioPlugin = null) {
     super(config);
   }
 

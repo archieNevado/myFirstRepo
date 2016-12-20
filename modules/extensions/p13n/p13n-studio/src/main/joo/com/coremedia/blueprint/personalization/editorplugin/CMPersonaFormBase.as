@@ -1,8 +1,7 @@
 package com.coremedia.blueprint.personalization.editorplugin {
 
-import com.coremedia.blueprint.personalization.editorplugin.config.cmPersonaForm;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.common.impl.StructRemoteBeanImpl;
-import com.coremedia.cap.common.session;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
@@ -19,7 +18,7 @@ public class CMPersonaFormBase extends DocumentTabPanel {
   private static const CONTENT_TYPE:String = 'CMTaxonomy';
   private static const PICTURE_TYPE:String = 'CMPicture';
 
-  public function CMPersonaFormBase(config:cmPersonaForm = null) {
+  public function CMPersonaFormBase(config:CMPersonaForm = null) {
     super(config);
 
     var remoteValue:ValueExpression = config.bindTo.extendBy('properties.profileExtensions');
@@ -42,8 +41,8 @@ public class CMPersonaFormBase extends DocumentTabPanel {
    */
   private static function createPropertiesIfNecessary(structRemoteBean:StructRemoteBeanImpl):void {
     var properties:Struct = structRemoteBean.get(PROPERTY_PREFIX_PATH);
-    var taxonomyContentType:ContentType = session.getConnection().getContentRepository().getContentType(CONTENT_TYPE);
-    var pictureContentType:ContentType = session.getConnection().getContentRepository().getContentType(PICTURE_TYPE);
+    var taxonomyContentType:ContentType = SESSION.getConnection().getContentRepository().getContentType(CONTENT_TYPE);
+    var pictureContentType:ContentType = SESSION.getConnection().getContentRepository().getContentType(PICTURE_TYPE);
 
     if (!properties) {
       structRemoteBean.getType().addStructProperty(PROPERTY_PREFIX_PATH);

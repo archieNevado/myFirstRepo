@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>external-library-studio</artifactId>
-  <packaging>jangaroo</packaging>
+  <packaging>jangaroo-pkg</packaging>
 
   <properties>
     <coremedia.project.extension.for>studio</coremedia.project.extension.for>
@@ -19,9 +19,13 @@
   <dependencies>
 
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>blueprint-components</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-studio-components</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>core-icons</artifactId>
     </dependency>
 
     <dependency>
@@ -39,59 +43,36 @@
       <artifactId>ext-as</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>studio-remote-packages</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 
   <build>
-    <sourceDirectory>src/main/joo</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>META-INF/resources/joo/${project.artifactId}.module.js</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <excludes>
-          <exclude>META-INF/resources/joo/${project.artifactId}.module.js</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>target/generated-resources</directory>
-      </resource>
-    </resources>
-
     <plugins>
-      <!--
-        The dependency-plugin is not compatible with jangaroo.
-        So define the used dependencies explicitly.
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <usedDependencies>
-            <usedDependency>${project.groupId}:blueprint-components</usedDependency>
-            <usedDependency>com.coremedia.ui.toolkit:ui-components</usedDependency>
-            <usedDependency>com.coremedia.ui.sdk:editor-components</usedDependency>
-            <usedDependency>net.jangaroo:ext-as</usedDependency>
-          </usedDependencies>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>net.jangaroo</groupId>
-        <artifactId>exml-maven-plugin</artifactId>
+        <artifactId>jangaroo-maven-plugin</artifactId>
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <configClassPackage>com.coremedia.blueprint.studio.config.externallibrary</configClassPackage>
+          <production>
+            <requiredClasses>
+              <entry>com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin</entry>
+            </requiredClasses>
+          </production>
+          <namespaces>
+            <namespace>
+              <uri>exml:com.coremedia.blueprint.studio.config.externallibrary</uri>
+            </namespace>
+          </namespaces>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 

@@ -3,12 +3,11 @@ import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
-import com.coremedia.livecontext.studio.config.commerceFormToolbar;
-import com.coremedia.ui.components.IconLabel;
+import com.coremedia.ui.components.IconDisplayField;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-import ext.Toolbar;
+import ext.toolbar.Toolbar;
 
 public class CommerceFormToolbarBase extends Toolbar {
 
@@ -18,11 +17,15 @@ public class CommerceFormToolbarBase extends Toolbar {
   /**
    * Create a new instance.
    */
-  public function CommerceFormToolbarBase(config:commerceFormToolbar = null) {
+  public function CommerceFormToolbarBase(config:CommerceFormToolbar = null) {
     super(config);
   }
 
-  public native function get bindTo():ValueExpression;
+  /**
+   * a value expression to the Commerce Object to create this toolbar for
+   */
+  [Bindable]
+  public var bindTo:ValueExpression;
 
   protected function getCatalogObject():CatalogObject {
     return bindTo.getValue() as CatalogObject;
@@ -48,27 +51,27 @@ public class CommerceFormToolbarBase extends Toolbar {
     return localeNameValueExpression;
   }
 
-  public static function changeLabel(component:IconLabel, valueExpression:ValueExpression):void {
+  public static function changeLabel(component:IconDisplayField, valueExpression:ValueExpression):void {
     var model:Object = valueExpression.getValue();
 
     if (model) {
       var text:String = model.text;
 
       component.setVisible(model.visible);
-      component.setText(text);
-      component.setTooltip(model.help);
+      component.value = text;
+      component.tooltip = model.help;
     }
   }
 
-  public static function changeType(label:IconLabel, valueExpression:ValueExpression):void {
+  public static function changeType(iconDisplayField:IconDisplayField, valueExpression:ValueExpression):void {
     var catalogObject:CatalogObject = valueExpression.getValue();
     if (!catalogObject) {
       return;
     }
     var iconStyleClass:String = AugmentationUtil.getTypeCls(catalogObject);
     var text:String = AugmentationUtil.getTypeLabel(catalogObject);
-    label.setIconClass("content-type-transparent content-type-xs " + iconStyleClass);
-    label.setText(text);
+    iconDisplayField.iconCls = iconStyleClass;
+    iconDisplayField.value = text;
   }
 }
 }

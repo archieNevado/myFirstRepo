@@ -70,7 +70,7 @@
 
 
   <!--The CM taxonomy node strategy beans working on folders with parent and child properties on the CMTaxonomy content type. -->
-  <bean id="strategyResolver" class="com.coremedia.blueprint.taxonomies.strategy.CMTaxonomyResolver" scope="prototype">
+  <bean id="strategyResolver" class="com.coremedia.blueprint.taxonomies.strategy.TaxonomyResolverImpl" scope="prototype">
     <property name="contentRepository" ref="contentRepository"/>
     <property name="solrSearchService" ref="solrSearchService"/>
     <property name="sitesService" ref="sitesService"/>

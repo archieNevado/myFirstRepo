@@ -12,6 +12,7 @@
       <map>
         <entry key="type=CapConnection" value-ref="capConnectionManager"/>
         <entry key="type=Cache" value-ref="cacheManagement"/>
+        <entry key="type=Cache.Entries" value-ref="cacheBrowserManagement"/>
       </map>
     </property>
   </bean>

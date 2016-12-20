@@ -16,7 +16,7 @@
   ]]></description>
 
   <util:properties id="siteModelProps"
-                   location="file:#{T(hox.corem.Corem).getHome()}/properties/corem/commandline-tools-sitemodel.properties"/>
+                   location="file:${corem.home}/properties/corem/commandline-tools-sitemodel.properties"/>
 
   <context:property-placeholder ignore-unresolvable="true" properties-ref="siteModelProps"/>
 

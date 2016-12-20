@@ -1,12 +1,12 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
-import com.coremedia.blueprint.analytics.elastic.PageViewReportModelService;
-import com.coremedia.blueprint.analytics.elastic.PageViewTaskReportModelService;
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewTaskReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
-import com.coremedia.blueprint.analytics.elastic.validation.ResultItemValidationService;
+import com.coremedia.blueprint.base.analytics.elastic.validation.ResultItemValidationService;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.coremedia.blueprint.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
+import static com.coremedia.blueprint.base.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
 import static java.util.Arrays.asList;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollectionOf;

@@ -1,19 +1,28 @@
 /**
- *  CoreMedia Namespace
+ * CoreMedia namespace
+ * @namespace coremedia
+ * @ignore
  */
 var coremedia = (function (module) {
   return module;
 }(coremedia || {}));
+
 /**
- *  CoreMedia Blueprint Namespace
+ * CoreMedia Blueprint namespace
+ * @namespace coremedia.blueprint
+ * @ignore
  */
 coremedia.blueprint = (function (module) {
+  /*global jQuery*/
   module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
 
-// --- DOCUMENT READY --------------------------------------------------------------------------------------------------
+/**
+ * --- DOCUMENT READY ---
+ */
 coremedia.blueprint.$(function () {
+  "use strict";
 
   // handle quickinfos
   coremedia.blueprint.nodeDecorationService.addNodeDecoratorBySelector(".cm-quickinfo", function ($target) {

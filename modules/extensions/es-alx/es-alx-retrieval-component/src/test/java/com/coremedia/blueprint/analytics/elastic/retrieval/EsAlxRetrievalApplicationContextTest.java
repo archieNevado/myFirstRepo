@@ -1,13 +1,13 @@
 package com.coremedia.blueprint.analytics.elastic.retrieval;
 
-import com.coremedia.blueprint.analytics.elastic.AbstractReportModelService;
-import com.coremedia.blueprint.analytics.elastic.PageViewReportModelService;
-import com.coremedia.blueprint.analytics.elastic.PageViewTaskReportModelService;
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
-import com.coremedia.blueprint.analytics.elastic.TopNReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewTaskReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
 import com.coremedia.blueprint.analytics.elastic.tasks.FetchPageViewHistoryTask;
 import com.coremedia.blueprint.analytics.elastic.tasks.FetchReportsTask;
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.coremedia.blueprint.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
+import static com.coremedia.blueprint.base.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
@@ -125,7 +125,7 @@ public class EsAlxRetrievalApplicationContextTest {
     removeModels(pageViewTaskReportModelService);
   }
 
-  private void removeModels(AbstractReportModelService service) {
+  private void removeModels(ReportModelService service) {
     for(Model model : service.query().fetch()){
       try {
         model.remove();

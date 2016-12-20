@@ -1,26 +1,32 @@
 package com.coremedia.livecontext.elastic.social.studio {
 
-import com.coremedia.elastic.social.studio.config.contentInformationContainer;
 import com.coremedia.elastic.social.studio.model.Contribution;
 import com.coremedia.elastic.social.studio.model.ContributionAdministrationPropertyNames;
 import com.coremedia.elastic.social.studio.model.impl.AbstractContributionAdministration;
-import com.coremedia.ui.components.IconLabel;
+import com.coremedia.elastic.social.studio.moderation.shared.details.base.ContentInformationContainer;
+import com.coremedia.ui.components.IconDisplayField;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-import ext.Container;
+import ext.container.Container;
 import ext.form.Label;
+import ext.form.field.DisplayField;
+import ext.panel.Panel;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.icons.CoreIcons')]
 public class ProductInformationContainerBase extends Container {
   protected static const TARGET_LABEL_ID:String = "cm-elastic-social-target-label";
   protected static const TARGET_BUTTON_ICON_ITEM_ID:String = "cm-elastic-social-target-icon";
+  private static const ICON_CLS:String = ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'type_product');
 
   private var moderationContributionAdministrationImpl:AbstractContributionAdministration;
-  private var targetIconLabel:IconLabel;
-  private var targetLabel:Label;
+  private var targetIconDisplayField:IconDisplayField;
+  private var targetLabel:DisplayField;
   private var displayedContributionValueExpression:ValueExpression;
 
-  public function ProductInformationContainerBase(config:contentInformationContainer = null) {
+  public function ProductInformationContainerBase(config:ContentInformationContainer = null) {
     moderationContributionAdministrationImpl = config.contributionAdministration as AbstractContributionAdministration;
 
     displayedContributionValueExpression = ValueExpressionFactory.create(
@@ -46,33 +52,32 @@ public class ProductInformationContainerBase extends Container {
       getTargetIcon().hide();
       getTargetLabel().hide();
     }
-    this.doLayout();
+    this.updateLayout();
   }
 
   private function setContentTypeIconCssClass():void {
-    getTargetIcon().setIconClass("");
-
     if (moderationContributionAdministrationImpl) {
       var displayed:Contribution = moderationContributionAdministrationImpl.getDisplayed();
       if (displayed && displayed.getTarget) {
-        displayed.getTarget(function (target:*):void {
-          getTargetIcon().setIconClass("content-type-xs product-icon");
-        });
+          displayed.getTarget(function (target:*):void {
+            //
+          });
       }
+      getTargetIcon().iconCls = ICON_CLS;
     }
   }
 
-  private function getTargetIcon():IconLabel {
-    if (!targetIconLabel) {
-      targetIconLabel = get(TARGET_BUTTON_ICON_ITEM_ID) as IconLabel;
+  private function getTargetIcon():IconDisplayField {
+    if (!targetIconDisplayField) {
+      targetIconDisplayField = queryById(TARGET_BUTTON_ICON_ITEM_ID) as IconDisplayField;
     }
 
-    return targetIconLabel;
+    return targetIconDisplayField;
   }
 
-  private function getTargetLabel():Label {
+  private function getTargetLabel():DisplayField {
     if (!targetLabel) {
-      targetLabel = get(TARGET_LABEL_ID) as Label;
+      targetLabel = queryById(TARGET_LABEL_ID) as DisplayField;
     }
 
     return targetLabel;

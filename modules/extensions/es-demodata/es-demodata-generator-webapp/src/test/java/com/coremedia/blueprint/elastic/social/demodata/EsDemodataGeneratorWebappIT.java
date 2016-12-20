@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -34,7 +33,6 @@ import static org.junit.Assert.assertTrue;
         randomPort = true,
         value = {
                 "components.disabled=es-p13n-cae", // this extension doesn't go with core-memory
-                "com.coremedia.springframework.web.context.AsyncContextLoaderListener.disableAsynchronousLoading=true",
                 "tenant.default=media",
                 "models.createIndexes=false",
                 "elastic.solr.lazyIndexCreation=true"
@@ -75,7 +73,7 @@ public class EsDemodataGeneratorWebappIT {
   }
 
   @Configuration
-  static class DemoDataGeneratorConfiguration extends SpringBootServletInitializer {
+  static class DemoDataGeneratorConfiguration {
 
     @Bean
     EmbeddedServletContainerFactory tomcat() {

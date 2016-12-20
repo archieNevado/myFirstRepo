@@ -2,13 +2,14 @@ package com.coremedia.blueprint.livecontext.ecommerce.filter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nonnull;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -32,17 +33,18 @@ public class CommerceConnectionFilter implements Filter {
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
-
+    // Do nothing.
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+          throws IOException, ServletException {
     Site site = SiteHelper.getSiteFromRequest(request);
-    try {
-      commerceConnectionInitializer.init(site);
-    } catch (NoCommerceConnectionAvailable noCommerceConnectionAvailable) {
-      LOG.debug("no commerce connection available for site {}", site);
+
+    if (site != null) {
+      setCommerceConnection(site);
     }
+
     try {
       chain.doFilter(request, response);
     } finally {
@@ -50,9 +52,19 @@ public class CommerceConnectionFilter implements Filter {
     }
   }
 
-  @Override
-  public void destroy() {
-
+  private void setCommerceConnection(@Nonnull Site site) {
+    try {
+      CommerceConnection connection = commerceConnectionInitializer.getCommerceConnectionForSite(site);
+      Commerce.setCurrentConnection(connection);
+    } catch (Exception e) {
+      LOG.debug("Unable to set commerce connection for site '{}' (locale: '{}').", site.getName(), site.getLocale(),
+              e);
+      Commerce.clearCurrent();
+    }
   }
 
+  @Override
+  public void destroy() {
+    // Do nothing.
+  }
 }

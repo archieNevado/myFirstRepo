@@ -12,7 +12,6 @@ import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeDragDropModel;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
-import com.coremedia.ecommerce.studio.config.eCommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.helper.StoreUtil;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
@@ -25,7 +24,7 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
 
   private static const EXTERNAL_CHANNEL_TYPE:String = "CMExternalChannel";
 
-  public function ECommerceStudioPluginBase(config:eCommerceStudioPlugin = null) {
+  public function ECommerceStudioPluginBase(config:ECommerceStudioPlugin = null) {
     super(config)
   }
 
@@ -143,7 +142,10 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
    * null. That means the default method is called.
    */
   private static function getDefaultLayoutFromCatalogRoot(content:Content, pagegridProperty:String):Content {
-    // only content of CMExternalChannel (Augmented Pages) is affected
+    // only content of CMExternalChannel (Augmented Categories) is affected
+    if (!content) {
+      return undefined;
+    }
     var ct:ContentType = content.getType();
     if (ct === undefined) {
       return undefined;

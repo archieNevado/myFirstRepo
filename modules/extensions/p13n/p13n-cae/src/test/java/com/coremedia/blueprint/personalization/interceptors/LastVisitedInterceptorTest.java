@@ -77,7 +77,7 @@ public final class LastVisitedInterceptorTest {
     article = getContentBean(26);
     article2 = getContentBean(28);
     article3 = getContentBean(30);
-    page = new PageImpl(channel, article, true, mock(SitesService.class), null);
+    page = new PageImpl(channel, article, true, mock(SitesService.class), null, null, null, null);
     context = contextCollection.getContext(CONTEXT_NAME, PropertyProfile.class);
 
   }
@@ -123,12 +123,12 @@ public final class LastVisitedInterceptorTest {
 
     interceptor.postHandle(null, null, null, modelAndView);
 
-    page = new PageImpl(channel, article2, true, mock(SitesService.class), null);
+    page = new PageImpl(channel, article2, true, mock(SitesService.class), null, null, null, null);
     modelAndView.clear();
     modelAndView.addObject("self", page);
     interceptor.postHandle(null, null, null, modelAndView);
 
-    page = new PageImpl(channel, article3, true, mock(SitesService.class), null);
+    page = new PageImpl(channel, article3, true, mock(SitesService.class), null, null, null, null);
     modelAndView.clear();
     modelAndView.addObject("self", page);
     interceptor.postHandle(null, null, null, modelAndView);

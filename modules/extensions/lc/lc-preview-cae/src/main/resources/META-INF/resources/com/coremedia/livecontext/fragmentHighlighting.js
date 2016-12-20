@@ -17,25 +17,25 @@ coremedia.preview.livecontext = (function (module) {
   var $ = coremedia.preview.$;
   $(window).on('message', postMessageHandler);
 
-  const PLACEMENT_EMPTY_CSS = 'cm-lc-fragment-highlighting-green';
-  const PLACEMENT_NOT_IN_LAYOUT_CSS = 'cm-lc-fragment-highlighting-orange';
-  const PLACEMENT_HAS_ITEMS_CSS = 'cm-lc-fragment-highlighting-blue';
-  const PLACEMENT_EMPTY_CSS_TEXT = 'cm-lc-fragment-highlighting-green-text';
-  const PLACEMENT_NOT_IN_LAYOUT_CSS_TEXT = 'cm-lc-fragment-highlighting-orange-text';
-  const PLACEMENT_EMPTY_CSS_OVERLAY = 'cm-lc-fragment-highlighting-green-overlay';
-  const PLACEMENT_NOT_IN_LAYOUT_CSS_OVERLAY = 'cm-lc-fragment-highlighting-orange-overlay';
-  const PLACEMENT_HAS_ITEMS_CSS_OVERLAY = 'cm-lc-fragment-highlighting-blue-overlay';
-  const BORDER_LEFT_CSS = 'cm-lc-fragment-border-left';
-  const BORDER_RIGHT_CSS = 'cm-lc-fragment-border-right';
-  const BORDER_TOP_CSS = 'cm-lc-fragment-border-top';
-  const BORDER_BOTTOM_CSS = 'cm-lc-fragment-border-bottom';
+  var PLACEMENT_EMPTY_CSS = 'cm-lc-fragment-highlighting-green';
+  var PLACEMENT_NOT_IN_LAYOUT_CSS = 'cm-lc-fragment-highlighting-orange';
+  var PLACEMENT_HAS_ITEMS_CSS = 'cm-lc-fragment-highlighting-blue';
+  var PLACEMENT_EMPTY_CSS_TEXT = 'cm-lc-fragment-highlighting-green-text';
+  var PLACEMENT_NOT_IN_LAYOUT_CSS_TEXT = 'cm-lc-fragment-highlighting-orange-text';
+  var PLACEMENT_EMPTY_CSS_OVERLAY = 'cm-lc-fragment-highlighting-green-overlay';
+  var PLACEMENT_NOT_IN_LAYOUT_CSS_OVERLAY = 'cm-lc-fragment-highlighting-orange-overlay';
+  var PLACEMENT_HAS_ITEMS_CSS_OVERLAY = 'cm-lc-fragment-highlighting-blue-overlay';
+  var BORDER_LEFT_CSS = 'cm-lc-fragment-border-left';
+  var BORDER_RIGHT_CSS = 'cm-lc-fragment-border-right';
+  var BORDER_TOP_CSS = 'cm-lc-fragment-border-top';
+  var BORDER_BOTTOM_CSS = 'cm-lc-fragment-border-bottom';
 
-  const ADD_HIGHLIGHT_MESSAGE_TYPE = 'lc.fragments.addHighlight';
-  const REMOVE_HIGHLIGHT_MESSAGE_TYPE = 'lc.fragments.removeHighlight';
+  var ADD_HIGHLIGHT_MESSAGE_TYPE = 'lc.fragments.addHighlight';
+  var REMOVE_HIGHLIGHT_MESSAGE_TYPE = 'lc.fragments.removeHighlight';
 
-  const EMPTY_PLACEMENT_LOCALIZER = 'FragmentHighlighting_emptyPlacement';
-  const NOTINLAYOUT_LOCALIZER = 'FragmentHighlighting_notInLayout';
-  const PLACEMENTNAME_REPLACER = '(PLACEMENTNAME)';
+  var EMPTY_PLACEMENT_LOCALIZER = 'FragmentHighlighting_emptyPlacement';
+  var NOTINLAYOUT_LOCALIZER = 'FragmentHighlighting_notInLayout';
+  var PLACEMENTNAME_REPLACER = '(PLACEMENTNAME)';
 
   function postMessageHandler(event) {
     var msg = event.originalEvent.data;

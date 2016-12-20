@@ -21,7 +21,7 @@ module.exports = {
     tasks: ['copy:templates']
   },
   bundles: {
-    files: 'src/*.properties',
+    files: 'src/**/*.properties',
     tasks: ['copy:main']
   },
   css: {

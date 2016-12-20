@@ -1,7 +1,6 @@
 package com.coremedia.catalog.studio.collectionview.search {
 import com.coremedia.catalog.studio.CatalogStudioPluginBase;
-import com.coremedia.cms.editor.sdk.collectionview.search.*;
-import com.coremedia.cms.editor.sdk.config.conditionalFilterFieldset;
+import com.coremedia.cms.editor.sdk.collectionview.search.ConditionalFilterFieldset;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ecommerce.studio.helper.StoreUtil;
@@ -23,7 +22,7 @@ public class LostandfoundFilterFieldsetBase extends ConditionalFilterFieldset {
   private var catalogRootExclusions:String = "";
 
 
-  public function LostandfoundFilterFieldsetBase(config:conditionalFilterFieldset = null) {
+  public function LostandfoundFilterFieldsetBase(config:ConditionalFilterFieldset = null) {
     super(config);
     initCatalogRootExclusions();
   }

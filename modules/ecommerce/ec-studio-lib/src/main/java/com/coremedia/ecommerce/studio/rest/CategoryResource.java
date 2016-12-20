@@ -11,11 +11,14 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.rest.linking.LocationHeaderResourceFilter;
+import com.sun.jersey.spi.container.ResourceFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nullable;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -28,8 +31,9 @@ import java.util.Map;
  * A catalog {@link Category} object as a RESTful resource.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path("livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{id:.+}")
+@Path("livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{id:.+?}")
 public class CategoryResource extends CommerceBeanResource<Category> {
+
   /**
    * The Studio internal logical ID of the root category.
    */
@@ -37,6 +41,21 @@ public class CategoryResource extends CommerceBeanResource<Category> {
 
   private AugmentationService augmentationService;
   private SitesService sitesService;
+
+  private CategoryAugmentationHelper categoryAugmentationHelper;
+
+  @POST
+  @Path("augment")
+  @ResourceFilters(value = {LocationHeaderResourceFilter.class})
+  public Content handlePost() {
+    Category entity = getEntity();
+
+    if (entity == null) {
+      return null;
+    }
+
+    return categoryAugmentationHelper.augment(entity);
+  }
 
   @Override
   public CategoryRepresentation getRepresentation() {
@@ -66,7 +85,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setChildren(children);
     // get visuals directly via AssetService to avoid fallback to default picture
     AssetService assetService = getConnection().getAssetService();
-    if(null != assetService) {
+    if (null != assetService) {
       representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
     }
     representation.setPictures(entity.getPictures());
@@ -76,10 +95,9 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     for (CommerceBean child : children) {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
-      if(child instanceof Category) {
-        childRepresentation.setDisplayName(((Category)child).getDisplayName());
-      }
-      else {
+      if (child instanceof Category) {
+        childRepresentation.setDisplayName(((Category) child).getDisplayName());
+      } else {
         childRepresentation.setDisplayName(child.getExternalId());
       }
 
@@ -97,6 +115,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     if (ROOT_CATEGORY_ROLE_ID.equals(id)) {
       return commerceConnection.getCatalogService().findRootCategory();
     }
+
     String categoryId = commerceConnection.getIdProvider().formatCategoryId(id);
     return commerceConnection.getCatalogService().findCategoryById(categoryId);
   }
@@ -115,9 +134,14 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     this.augmentationService = augmentationService;
   }
 
-  @Required
+  @Autowired
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
+  }
+
+  @Autowired
+  public void setCategoryAugmentationHelper(CategoryAugmentationHelper categoryAugmentationHelper) {
+    this.categoryAugmentationHelper = categoryAugmentationHelper;
   }
 
   /**
@@ -125,7 +149,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
    */
   @Nullable
   private Content getContent() {
-    if(augmentationService == null) {
+    if (augmentationService == null) {
       return null;
     }
 
@@ -136,5 +160,4 @@ public class CategoryResource extends CommerceBeanResource<Category> {
 
     return augmentationService.getContent(getEntity());
   }
-
 }

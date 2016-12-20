@@ -42,6 +42,10 @@ $(function() {
     });
   });
 
+  $(window).click(function() {
+    $("#loginError").hide();
+    });
+
   $("#previewToken").keypress(function(event) {
     // look for window.event in case event isn't passed in
     if (event == undefined && window.event !== undefined) {

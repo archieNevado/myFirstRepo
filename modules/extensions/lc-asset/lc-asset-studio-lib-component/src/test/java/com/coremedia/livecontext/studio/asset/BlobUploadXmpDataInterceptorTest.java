@@ -1,8 +1,6 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -24,13 +22,14 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import javax.activation.MimeType;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -43,9 +42,6 @@ public class BlobUploadXmpDataInterceptorTest {
 
   @Mock
   private ContentRepository contentRepository;
-
-  @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Mock
   private CommerceConnection commerceConnection;
@@ -63,6 +59,12 @@ public class BlobUploadXmpDataInterceptorTest {
   private Blob blob;
 
   @Mock
+  private InputStream blobInputStream;
+
+  @Mock
+  private MimeType blobMimeType;
+
+  @Mock
   private AssetHelper assetHelper;
 
   @Mock
@@ -73,9 +75,13 @@ public class BlobUploadXmpDataInterceptorTest {
   @Before
   public void setup() {
     testling = new BlobUploadXmpDataInterceptor();
-    testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
     testling.setBlobProperty("data");
     testling.setAssetHelper(assetHelper);
+
+    when(blobMimeType.getPrimaryType()).thenReturn("image/jpeg");
+    when(blob.getContentType()).thenReturn(blobMimeType);
+    when(blob.getInputStream()).thenReturn(blobInputStream);
+
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
   }
 
@@ -85,7 +91,7 @@ public class BlobUploadXmpDataInterceptorTest {
     testling.intercept(contentWriteRequest);
 
     PowerMockito.verifyStatic(times(0));
-    ProductIdExtractor.extractProductIds(Matchers.any(Blob.class));
+    ProductIdExtractor.extractProductIds(blob);
   }
 
   @Test
@@ -94,12 +100,11 @@ public class BlobUploadXmpDataInterceptorTest {
     properties.put("data", blob);
     when(contentWriteRequest.getProperties()).thenReturn(properties);
     when(contentWriteRequest.getParent()).thenReturn(parentFolder);
-    doThrow(NoCommerceConnectionAvailable.class).when(commerceConnectionInitializer).init(parentFolder);
 
     testling.intercept(contentWriteRequest);
 
     PowerMockito.verifyStatic(times(0));
-    ProductIdExtractor.extractProductIds(Matchers.any(Blob.class));
+    ProductIdExtractor.extractProductIds(blob);
   }
 
   @Test
@@ -140,7 +145,7 @@ public class BlobUploadXmpDataInterceptorTest {
   }
 
   @Test
-  public void testRetrieveProductOrVariant(){
+  public void testRetrieveProductOrVariant() {
     String aProductExtId = "PC_EVENING_DRESS";
     String aSkuExtId = "PC_EVENING_DRESS-RED-M";
     String unknown = "unknown";

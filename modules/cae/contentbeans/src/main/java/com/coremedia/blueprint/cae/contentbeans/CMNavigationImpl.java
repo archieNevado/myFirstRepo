@@ -5,6 +5,7 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.feeds.FeedFormat;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
@@ -20,6 +21,7 @@ import java.util.List;
 public abstract class CMNavigationImpl extends CMNavigationBase {
 
   protected TreeRelation<Linkable> treeRelation;
+  private TreeRelation<Content> codeResourcesTreeRelation;
   private DataViewFactory dataViewFactory;
 
   //TODO used to add live context navi items
@@ -30,6 +32,11 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
   @Required
   public void setTreeRelation(TreeRelation<Linkable> treeRelation) {
     this.treeRelation = treeRelation;
+  }
+
+  @Required
+  public void setCodeResourcesTreeRelation(TreeRelation<Content> codeResourcesTreeRelation) {
+    this.codeResourcesTreeRelation = codeResourcesTreeRelation;
   }
 
   @Required
@@ -120,6 +127,12 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
   public Navigation getParentNavigation() {
     return (Navigation) treeRelation.getParentOf(this);
   }
+
+  @Override
+  public TreeRelation<Content> getCodeResourcesTreeRelation() {
+    return codeResourcesTreeRelation;
+  }
+
 
   // --- FeedSource -------------------------------------------------
 

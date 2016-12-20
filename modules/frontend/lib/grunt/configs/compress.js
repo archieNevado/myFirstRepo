@@ -17,6 +17,15 @@ module.exports = {
       }
     ]
   },
+  brick_templates: {
+    options: {
+      archive: '../../target/resources/themes/<%= themeConfig.name %>/templates/bricks-templates.jar',
+      mode: 'zip'
+    },
+    files: [
+      //config is set by bricks
+    ]
+  },
   // create theme zip
   theme: {
     options: {

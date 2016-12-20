@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Provide access to LiveContext
  * Call openAccessToContext to make context available via @link{LiveContextContextHelper}
- *
+ * <p>
  * Extracted to make available to Servlet Filters (required for Elastic Social)
  */
 public class LiveContextContextAccessor {
@@ -22,6 +22,7 @@ public class LiveContextContextAccessor {
   /**
    * Extract the context and make it available via LC1ContextHelper
    * Operation is idemPotent, i.e. can be called several times
+   *
    * @return the context
    */
   public Context openAccessToContext(HttpServletRequest request) {
@@ -40,8 +41,7 @@ public class LiveContextContextAccessor {
         }
       }
       return context;
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       LOG.error("Error retrieving LiveContext context", e);
       return null;
     }

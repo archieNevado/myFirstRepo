@@ -4,7 +4,7 @@ Test System Setup
 This is the starting point for setting up a local system with Chef Development Kit, Kitchen, Vagrant and Virtual Box.
 
 Refer to the CoreMedia Deployment Guide for a detailed description
-(e.g. [pdf for the current release](https://documentation.coremedia.com/dxp/current/manuals/deployment-en/deployment-en.pdf)).
+([pdf for the current release](https://documentation.coremedia.com/dxp/current/manuals/deployment-en/deployment-en.pdf)).
 
 Prerequisites
 -------------

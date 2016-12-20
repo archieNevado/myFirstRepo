@@ -1,36 +1,32 @@
 package com.coremedia.blueprint.studio.analytics {
 
-import com.coremedia.blueprint.studio.config.analytics.openAnalyticsDeepLinkUrlButton;
-import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
+import com.coremedia.ui.skins.ButtonSkin;
 
-import ext.Button;
-import ext.Container;
 import ext.Ext;
-import ext.config.button;
-import ext.config.container;
-import ext.config.menu;
-import ext.config.menuitem;
+import ext.button.Button;
+import ext.container.Container;
 import ext.menu.Item;
 import ext.menu.Menu;
 
+[ResourceBundle('com.coremedia.icons.CoreIcons')]
+[ResourceBundle('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin')]
 internal class AnalyticsDeepLinkButtonContainerBase extends Container {
-  public function AnalyticsDeepLinkButtonContainerBase(config:container = null) {
+  public function AnalyticsDeepLinkButtonContainerBase(config:Container = null) {
     super(config);
     addListener('beforerender', onBeforeRender);
   }
 
   private function onBeforeRender():void {
-    if (items && items.length > 1) {
+    if (itemCollection && itemCollection.length > 1) {
       renderButtonMenu();
     }
   }
 
   private function renderButtonMenu():void {
-    const originalItems:Array = this.removeAll();
     const menuItemsFromButtons:Array = [];
 
     // iterate through all buttons and create new menuItems out of them
-    originalItems.forEach(function (item:OpenAnalyticsDeepLinkUrlButton):void {
+    itemCollection.each(function (item:OpenAnalyticsDeepLinkUrlButton):void {
       var config:Object = item.initialConfig;
       delete config.iconCls;
       var menuItem:Item = createMenuItem(item);
@@ -40,35 +36,33 @@ internal class AnalyticsDeepLinkButtonContainerBase extends Container {
       menuItemsFromButtons.push(menuItem);
     });
 
+    // remove original items
+    this.removeAll();
+
     // add menuItems to button menu
-    var menuCfg:ext.config.menu = new menu();
-    menuCfg.cls = 'analytics-menu';
+    var menuCfg:Menu = Menu({});
     menuCfg.items = menuItemsFromButtons;
     menuCfg['allowFunctions'] = true;
     menuCfg.width = 233;
-    menuCfg.defaultOffsets = [-190, 1];
     var buttonMenu:Menu = new Menu(menuCfg);
 
     // create menu button that holds the above menu
-    var buttonCfg:button = new button();
-    buttonCfg.iconCls = 'btn-analytics-report';
+    var buttonCfg:Button = Button({});
+    buttonCfg.iconCls = resourceManager.getString('com.coremedia.icons.CoreIcons', 'analytics');
+    buttonCfg.ui = ButtonSkin.WORKAREA.getSkin();
     buttonCfg.scale = 'medium';
     buttonCfg.itemId = 'analyticsReportButton';
-    buttonCfg.tooltip = AnalyticsStudioPlugin_properties.INSTANCE.multi_analytics_button_tooltip;
+    buttonCfg.tooltip = resourceManager.getString('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin', 'multi_analytics_button_tooltip');
     buttonCfg.disabled = true;
     buttonCfg.menu = buttonMenu;
     var newButton:Button = new Button(buttonCfg);
 
-    newButton.addListener('menushow', addPressedIndicator);
-    newButton.addListener('menuhide', removePressedIndicator);
-
     add(newButton);
-    doLayout();
   }
 
   internal function updateAnalyticsReportButton():void {
     var component:Button = this.getComponent('analyticsReportButton') as Button;
-    var allMenuItemsDisabled:Boolean = component.menu.items.getRange().every(function (item:Item):Boolean {
+    var allMenuItemsDisabled:Boolean = component.menu.itemCollection.getRange().every(function (item:Item):Boolean {
       return item.disabled;
     });
     component.setDisabled(allMenuItemsDisabled);
@@ -81,9 +75,9 @@ internal class AnalyticsDeepLinkButtonContainerBase extends Container {
     }
 
     // copy config - except 'xtype'!
-    var buttonConfig:openAnalyticsDeepLinkUrlButton = openAnalyticsDeepLinkUrlButton(item.initialConfig);
+    var buttonConfig:OpenAnalyticsDeepLinkUrlButton = OpenAnalyticsDeepLinkUrlButton(item.initialConfig);
     var menuConfig:Object = {
-      iconCls: "analytics-icon",
+      iconCls: resourceManager.getString('com.coremedia.icons.CoreIcons', 'analytics'),
       handler: OpenAnalyticsUrlButtonBase.openInBrowser(item.urlValueExpression, buttonConfig.windowName),
       text: buttonConfig.tooltip,
       urlValueExpression: item.urlValueExpression,
@@ -91,23 +85,13 @@ internal class AnalyticsDeepLinkButtonContainerBase extends Container {
     };
     Ext.apply(menuConfig, buttonConfig);
     delete menuConfig.xtype;
+    delete menuConfig.xclass;
 
-    // init IOC
-    ComponentContextManager.configOwnerCt(menuConfig, this);
-
-    var result:OpenAnalyticsUrlMenuItemBase = new OpenAnalyticsUrlMenuItemBase(menuitem(menuConfig));
+    var result:OpenAnalyticsUrlMenuItemBase = new OpenAnalyticsUrlMenuItemBase(Item(menuConfig));
     OpenAnalyticsUrlButtonBase.bindDisable(item.urlValueExpression, result);
 
     item.destroy();
     return result;
-  }
-
-  private static function addPressedIndicator(button:Button):void {
-    button.addClass('preview-panel-button-pressed')
-  }
-
-  private static function removePressedIndicator(button:Button):void {
-    button.removeClass('preview-panel-button-pressed')
   }
 }
 }

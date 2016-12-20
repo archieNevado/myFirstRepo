@@ -1,54 +1,62 @@
 package com.coremedia.blueprint.studio.upload.dialog {
 
 import com.coremedia.blueprint.base.components.util.ContentCreationUtil;
-import com.coremedia.blueprint.studio.UploadStudioPlugin_properties;
-import com.coremedia.blueprint.studio.config.upload.fileContainer;
-import com.coremedia.blueprint.studio.config.upload.uploadDialog;
-import com.coremedia.blueprint.studio.config.upload.uploadProgressDialog;
 import com.coremedia.blueprint.studio.upload.FileWrapper;
 import com.coremedia.blueprint.studio.upload.UploadSettings;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.components.folderprompt.FolderCreationResultImpl;
 import com.coremedia.cms.editor.sdk.components.html5.BrowsePlugin;
-import com.coremedia.cms.editor.sdk.config.browsePlugin;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.cms.editor.sdk.util.PathFormatter;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.util.EventUtil;
 
-import ext.Component;
-
-import ext.Container;
 import ext.Ext;
 import ext.MessageBox;
-import ext.Window;
-import ext.form.Checkbox;
-import ext.form.ComboBox;
-import ext.util.StringUtil;
+import ext.StringUtil;
+import ext.container.Container;
+import ext.form.field.Checkbox;
+import ext.form.field.ComboBox;
+import ext.window.Window;
 
 /**
  * Base class of the upload dialog, contains the current
  * items marked for uploading
  */
+[ResourceBundle('com.coremedia.blueprint.studio.UploadStudioPlugin')]
 public class UploadDialogBase extends Window {
-  protected static const UPLOAD_AREA_HEIGHT:int = 378;
-  public static const UPLOAD_AREA_COLLAPSED_HEIGHT:int = 77;
-  protected static const UPLOAD_WINDOW_HEIGHT:int = 513;
-  protected static const UPLOAD_WINDOW_WIDTH:int = 540;
+  protected static const UPLOAD_AREA_HEIGHT:int = 30;
+  protected static const UPLOAD_AREA_COLLAPSED_HEIGHT:int = 25;
+  protected static const UPLOAD_WINDOW_HEIGHT:int = 453;
+  protected static const UPLOAD_WINDOW_WIDTH:int = 430;
 
   private static const DROP_ZONE_COLLAPSED_CSS:String = 'dialog-upload-helptext-collapsed';
 
+  /**
+   * The selected content if dialog opened from library or null
+   */
+  [Bindable]
+  public var content:Content;
+
+  /**
+   * The selected content if dialog opened from library or null
+   */
+  [Bindable]
+  public var file:FileWrapper;
+
   private var fileContainers:FileContainersObservable;
   private var dropAreaCollapsed:Boolean = false;
-  private var folder:Content;
   private var pathCombo:ComboBox;
-  private var settings:UploadSettings;
 
-  public function UploadDialogBase(config:uploadDialog = null) {
+  /**
+   * The settings used for this dialog.
+   */
+  [Bindable]
+  public var settings:UploadSettings;
+
+  public function UploadDialogBase(config:UploadDialogBase = null) {
     super(config);
-    this.settings = config.settings;
-    this.folder = config.content;
   }
 
   /**
@@ -57,23 +65,29 @@ public class UploadDialogBase extends Window {
   override protected function afterRender():void {
     super.afterRender();
 
-    var openInTabCheckbox:Checkbox = Ext.getCmp('openInTabCheckbox') as Checkbox;
-    openInTabCheckbox.setValue(settings.get(UploadSettings.OPEN_IN_TAB_PROPERTY));
+    var openInTabCheckbox:Checkbox = Ext.getCmp(UploadDialog.OPEN_IN_TAB_CHECKBOX) as Checkbox;
+    openInTabCheckbox.setValue(settings.getOpenInTab());
 
-    //apply the default settings upload folder to the folder combo
-    pathCombo = Ext.getCmp('upload-folder-combo') as ComboBox;
+    pathCombo = Ext.getCmp(UploadDialog.FOLDER_COMBOBOX) as ComboBox;
+  }
 
-    if (folder) {
-      folder.load(function ():void {
-        var path:String = folder.getPath();
-        pathCombo.setValue(path);
-      });
+  protected function getFolders():Array {
+    var baseFolder:String = baseFolderCalculation();
+    if (baseFolder) {
+      return [baseFolder];
+    }
+    return [];
+  }
+
+  private function baseFolderCalculation():String {
+    var path:String;
+    if (content) {
+      path = content.getPath();
     }
     else {
-      var path:String = settings.getDefaultUploadPath();
-      path = PathFormatter.formatSitePath(path);
-      pathCombo.setValue(path);
+      path = PathFormatter.formatSitePath(settings.getDefaultUploadPath());
     }
+    return path;
   }
 
   /**
@@ -82,7 +96,6 @@ public class UploadDialogBase extends Window {
    */
   public function removeFileContainer(fileContainer:FileContainer):void {
     fileContainers.remove(fileContainer);
-    this.doLayout(false, true);
     //expand drop zone again?
     if (fileContainers.isEmpty()) {
       toggleDropZoneStatus();
@@ -96,7 +109,7 @@ public class UploadDialogBase extends Window {
   protected function uploadButtonHandler(browsePlugin:BrowsePlugin):void {
     var fileWrappers:Array = [];
     var fileList:* = browsePlugin.getFileList();
-    for(var i:int = 0; i<fileList.length; i++) {
+    for (var i:int = 0; i < fileList.length; i++) {
       fileWrappers.push(new FileWrapper(fileList.item(i)));
     }
     handleDrop(fileWrappers);
@@ -109,16 +122,15 @@ public class UploadDialogBase extends Window {
    */
   protected function handleDrop(files:Array):void {
     MessageBox.show({
-      title:UploadStudioPlugin_properties.INSTANCE.Upload_progress_title,
-      msg:UploadStudioPlugin_properties.INSTANCE.Upload_progress_msg,
-      closable:false,
-      width:300
+      title: resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_progress_title'),
+      msg: resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_progress_msg'),
+      closable: false,
+      width: 300
     });
     EventUtil.invokeLater(function ():void {//otherwise the progress bar does not appear :(
       for (var i:int = 0; i < files.length; i++) {
-        var file:FileWrapper = files[i];
-        var fc:fileContainer = new com.coremedia.blueprint.studio.config.upload.fileContainer();
-        fc.file = file;
+        var fc:FileContainer = FileContainer({});
+        fc.file = files[i];
         fc.uploadSettings = settings;
         fc.removeFileHandler = removeFileContainer;
         var fileContainer:FileContainer = new FileContainer(fc);
@@ -149,7 +161,7 @@ public class UploadDialogBase extends Window {
    * @param checked
    */
   protected function openInTabHandler(checkbox:Checkbox, checked:Boolean):void {
-    settings.set(UploadSettings.OPEN_IN_TAB_PROPERTY, checked);
+    settings.setOpenInTab(checked);
   }
 
   /**
@@ -162,18 +174,11 @@ public class UploadDialogBase extends Window {
     }
 
     //clear and add list of upload containers
-    var list:Container = Ext.getCmp('upload-list') as Container;
+    var list:Container = Ext.getCmp(UploadDialog.UPLOAD_LIST) as Container;
     var fileContainer:FileContainer = null;
     for (var i:int = 0; i < fileContainers.size(); i++) {
       fileContainer = fileContainers.getAt(i);
       list.add(fileContainer);
-      doLayout(false, true);
-    }
-
-    doLayout(false, true);
-
-    if(fileContainer) {
-      fileContainer.getEl().dom.scrollIntoView(false);
     }
   }
 
@@ -181,16 +186,16 @@ public class UploadDialogBase extends Window {
    * Expands or collapses the drop zone status.
    */
   private function toggleDropZoneStatus():void {
-    var dropArea:Container = Ext.getCmp('upload-dropBox') as Container;
+    var dropArea:Container = Ext.getCmp(UploadDialog.DROP_BOX) as Container;
     if (!dropAreaCollapsed) {
       dropAreaCollapsed = true;
       dropArea.setHeight(UPLOAD_AREA_COLLAPSED_HEIGHT);
-      Ext.getCmp('upload-button-container').addClass(DROP_ZONE_COLLAPSED_CSS);
+      Ext.getCmp(UploadDialog.DROP_LABEL).addCls(DROP_ZONE_COLLAPSED_CSS);
     }
     else {
       dropAreaCollapsed = false;
       dropArea.setHeight(UPLOAD_AREA_HEIGHT);
-      Ext.getCmp('upload-button-container').removeClass(DROP_ZONE_COLLAPSED_CSS);
+      Ext.getCmp(UploadDialog.DROP_LABEL).removeCls(DROP_ZONE_COLLAPSED_CSS);
     }
   }
 
@@ -209,37 +214,41 @@ public class UploadDialogBase extends Window {
     }
 
     if (!needsUpload) {
-      var progressDialog:UploadProgressDialog = new UploadProgressDialog(uploadProgressDialog({files: fileContainers.getFiles(),
+      var progressDialog:UploadProgressDialog = new UploadProgressDialog(UploadProgressDialog({
+        files: fileContainers.getFiles(),
         settings: settings,
-        folder: null}));
+        folder: null
+      }));
       progressDialog.show();
       close();
     } else {
       var uploadDirectory:String = pathCombo.getValue();
       if (uploadDirectory) {
-        session.getConnection().getContentRepository().getChild(uploadDirectory, function (folder:Content):void {
+        SESSION.getConnection().getContentRepository().getChild(uploadDirectory, function (folder:Content):void {
           if (folder) { //ensure loading to display path information
             folder.load(function ():void {
-              var progressDialog:UploadProgressDialog = new UploadProgressDialog(uploadProgressDialog({files: fileContainers.getFiles(),
+              var progressDialog:UploadProgressDialog = new UploadProgressDialog(UploadProgressDialog({
+                files: fileContainers.getFiles(),
                 settings: settings,
-                folder: folder}));
+                folder: folder
+              }));
               progressDialog.show();
               close();
             });
           }
           else {
             ContentCreationUtil.createRequiredSubfolders(uploadDirectory,
-              function (result:FolderCreationResultImpl):void {
-                if (result.success) {
-                  okPressed();
-                }
-                else if (result.remoteError) {
-                  var msg:String = StringUtil.format(UploadStudioPlugin_properties.INSTANCE.Upload_folder_error,
-                          uploadDirectory,
-                          result.remoteError.errorName);
-                  MessageBoxUtil.showError(UploadStudioPlugin_properties.INSTANCE.Upload_error, msg);
-                }
-              }, true);
+                    function (result:FolderCreationResultImpl):void {
+                      if (result.success) {
+                        okPressed();
+                      }
+                      else if (result.remoteError) {
+                        var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_folder_error'),
+                                uploadDirectory,
+                                result.remoteError.errorName);
+                        MessageBoxUtil.showError(resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_error'), msg);
+                      }
+                    }, true);
           }
         });
       }

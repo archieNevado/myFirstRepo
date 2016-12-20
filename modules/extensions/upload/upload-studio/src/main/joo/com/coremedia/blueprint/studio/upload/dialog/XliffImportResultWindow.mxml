@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor:BulkResultWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+                         xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                         xmlns="exml:ext.config"
+                         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                         title="{config.successful ?
+                                    resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'bulkResult_success_window_title') :
+                                    resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'bulkResult_error_window_title')}"
+                         bulkResultItems="{config.bulkResultItems}"
+                         resourceBundle="{resourceManager.getResourceBundle(null, 'com.coremedia.blueprint.studio.UploadStudioPlugin').content}"
+                         errorCodes="{[
+                                        XliffImportResultCodes.FAILED,
+                                        XliffImportResultCodes.DOES_NOT_EXIST,
+                                        XliffImportResultCodes.MASTER_CHANGED,
+                                        XliffImportResultCodes.MASTER_VERSION_OUTDATED,
+                                        XliffImportResultCodes.INVALID_XLIFF,
+                                        XliffImportResultCodes.INVALID_CONTENT_ID,
+                                        XliffImportResultCodes.NO_SUCH_PROPERTY,
+                                        XliffImportResultCodes.ALREADY_CHECKED_OUT,
+                                        XliffImportResultCodes.STRING_TOO_LONG,
+                                        XliffImportResultCodes.STRING_LIST_TOO_LONG,
+                                        XliffImportResultCodes.INVALID_MARKUP,
+                                        XliffImportResultCodes.DUPLICATE_NAME,
+                                        XliffImportResultCodes.INVALID_INTERNAL_LINK,
+                                        XliffImportResultCodes.INVALID_LOCALE,
+                                        XliffImportResultCodes.EMPTY_TRANSUNIT_TARGET,
+                                        XliffImportResultCodes.EMPTY_TRANSUNIT_TARGET_FOR_WHITESPACE_SOURCE]}">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.blueprint.studio.UploadStudioPlugin')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.upload.XliffImportResultCodes;
+
+    public static const xtype:String = "com.coremedia.blueprint.studio.config.upload.xliffImportResultWindow";
+
+    private var config:XliffImportResultWindow;
+
+    public native function XliffImportResultWindow(config:XliffImportResultWindow = null);
+    ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Boolean id="successful"/>
+  </fx:Declarations>
+  <editor:layout>
+    <layout_Anchor/>
+  </editor:layout>
+</editor:BulkResultWindow>

@@ -17,6 +17,7 @@
     LinkSchemes and Controllers
   </description>
 
+  <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/handler-services.xml"/>
@@ -183,6 +184,7 @@
     <property name="capConnection" ref="connection"/>
     <property name="localResourcesEnabled" value="${cae.use.local.resources:false}"/>
     <property name="cache" ref="cache"/>
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
 
   <bean id="themeHandler" class="com.coremedia.blueprint.cae.handlers.ThemeHandler" parent="handlerBase"/>

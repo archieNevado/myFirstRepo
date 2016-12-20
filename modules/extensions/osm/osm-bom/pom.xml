@@ -35,11 +35,6 @@
         <artifactId>osm-studio</artifactId>
         <version>${project.version}</version>
       </dependency>
-	  <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>osm-studio-lib</artifactId>
-        <version>${project.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 </project>

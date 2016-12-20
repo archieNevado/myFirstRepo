@@ -65,7 +65,7 @@ class CommerceCacheInvalidationLifecycle extends AbstractSmartLifecyle {
 
   synchronized void manageRunnables(Collection<CommerceConnection> connections) {
     if (!isRunning()) {
-      LOG.info("Cache invalidations are disabled, ignoring connections {}", connections);
+      LOG.debug("Cache invalidations are disabled, ignoring connections {}", connections);
       return;
     }
 
@@ -103,7 +103,7 @@ class CommerceCacheInvalidationLifecycle extends AbstractSmartLifecyle {
     if (runnablesByEndpoint.isEmpty()) {
       LOG.warn("No endpoints for commerce cache invalidations found, make sure commerce contexts are properly configured.");
     } else {
-      LOG.info("Polling commerce cache invalidations on endpoints: {}", runnablesByEndpoint.keySet());
+      LOG.trace("Polling commerce cache invalidations on endpoints: {}", runnablesByEndpoint.keySet());
     }
   }
 

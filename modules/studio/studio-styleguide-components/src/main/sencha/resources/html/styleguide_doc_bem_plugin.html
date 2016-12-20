@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div data-content="title">
+  Use case for <code>BEM Plugin</code>?
+</div>
+<div data-content="body">
+
+  <h1>The BEM
+    <small>Block Element Modifier</small>
+    Pattern
+  </h1>
+
+  The BEM-Pattern is a CSS naming convention and pattern to structure code via css class names
+  <ul>
+    <li><code>Block</code> correlates to <code>components</code></li>
+    <li><code>Element</code> correlates to <code>items</code></li>
+    <li><code>Modifier</code> correlates to <code>states</code></li>
+  </ul>
+
+  Based on this,
+  the <code>BEM Plugin</code> adds special CSS classes to components following a special rules. <br>
+  The <code>BEM Layouts</code> provide predefined CSS classes following this rule.<br><br>
+
+  With the help of the <code>BEM Plugin</code> and these predefined classes, you can customize space(s) between
+  components.
+  <br>
+  To add space between components
+  <br>
+  <div>
+
+    <!--PLAIN-->
+
+    <div class="box box--left">
+      1. You should first apply the <code>BEM Plugin</code> to the outmost container, e.g. to the <code>Panel</code><br>
+<pre style="white-space: pre-wrap;">
+<span style="color: #0000EE;font-weight: bold;">&lt;Panel&gt;</span>
+  &lt;layout&gt;
+    &lt;layout_HBox/&gt;
+  &lt;/layout&gt;
+  &lt;items&gt;
+    &lt;Container width="25%"/&gt;
+    &lt;Container width="25%"/&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/items&gt;
+  <span style="color: #0000EE;font-weight: bold;">&lt;plugins&gt;
+    &lt;ui:BEMPlugin block="{BEMLayouts.HORIZONTAL_SPACING_BLOCK}"/&gt;
+  &lt;/plugins&gt;</span>
+  &lt;dockedItems&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/dockedItems&gt;
+<span style="color: #0000EE;font-weight: bold;">&lt;/Panel&gt;</span>
+</pre>
+      But this has <span style="color: #0000EE;font-weight: bold;">&lt;no visible effect&gt;</span>. It
+      <span style="color: #0000EE;font-weight: bold;">&lt;only attaches a certain class&gt;</span>, here
+      <code>{BEMLayouts.HORIZONTAL_SPACING_BLOCK}</code> to the <code>Panel</code>.
+    </div>
+
+    <!--FIRST-->
+
+    <div class="box box--right">
+      2. Now, there are three different ways to get space between your components. I.e. to attach another CSS class
+      which causes the spacing<br>
+      <span style="color: coral;font-weight: bold">The first approach</span> applies space only between these <code>items</code>
+      which are directly targeted:
+<pre style="white-space: pre-wrap;">
+<span style="color: #0000EE;font-weight: bold;">&lt;Panel&gt;</span>
+  &lt;layout&gt;
+    &lt;layout_HBox/&gt;
+  &lt;/layout&gt;
+  &lt;items&gt;
+    &lt;Container width="25%"&gt;
+      <span style="color: coral;font-weight: bold;">&lt;mixins&gt;
+        &lt;ui:BEMMixin bemElement="{BEMLayouts.HORIZONTAL_SPACING_ELEMENT_ITEM}"/&gt;
+      &lt;/mixins&gt;</span>
+    &lt;/Container&gt;
+    &lt;Container width="25%"&gt;
+      <span style="color: coral;font-weight: bold;">&lt;mixins&gt;
+        &lt;ui:BEMMixin bemElement="{BEMLayouts.HORIZONTAL_SPACING_ELEMENT_ITEM}"/&gt;
+      &lt;/mixins&gt;</span>
+    &lt;/Container&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/items&gt;
+  <span style="color: #0000EE;font-weight: bold;">&lt;plugins&gt;
+    &lt;ui:BEMPlugin block="{BEMLayouts.HORIZONTAL_SPACING_BLOCK}"/&gt;
+  &lt;/plugins&gt;</span>
+  &lt;dockedItems&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/dockedItems&gt;
+<span style="color: #0000EE;font-weight: bold;">&lt;/Panel&gt;</span>
+</pre>
+      And yes! <span style="color: coral;font-weight: bold">Both</span> containers have to be extended.
+    </div>
+
+    <br>
+
+    <!--SECOND-->
+
+    <div class="box box--left">
+      <span style="color: mediumorchid;font-weight: bold">The second approach</span> is to apply space
+      to <span style="color: mediumorchid;"><b>all
+      <code>items</code></b> and only <code>items</code></span>! This is done via the following directive:
+
+<pre style="white-space: pre-wrap;">
+<span style="color: #0000EE;font-weight: bold;">&lt;Panel&gt;</span>
+  &lt;layout&gt;
+    &lt;layout_HBox/&gt;
+  &lt;/layout&gt;
+  &lt;items&gt;
+    &lt;Container width="25%"/&gt;
+    &lt;Container width="25%"/&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/items&gt;
+  <span style="color: #0000EE;font-weight: bold;">&lt;plugins&gt;
+    &lt;ui:BEMPlugin block="{BEMLayouts.HORIZONTAL_SPACING_BLOCK}"/&gt;
+  &lt;/plugins&gt;</span>
+  &lt;dockedItems&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/dockedItems&gt;
+  <span style="color: mediumorchid;font-weight: bold">&lt;defaults&gt;
+    &lt;Component&gt;
+      &lt;mixins&gt;
+        &lt;ui:BEMMixin bemElement="{BEMLayouts.HORIZONTAL_SPACING_ELEMENT_ITEM}"/&gt;
+      &lt;/mixins&gt;
+    &lt;/Component&gt;
+  &lt;/defaults&gt;</span>
+<span style="color: #0000EE;font-weight: bold;">&lt;/Panel&gt;</span>
+</pre>
+    </div>
+
+    <!--THIRD -->
+
+    <div class="box box--right">
+      <span style="color: palevioletred;font-weight: bold">The third approach</span> is to apply space
+      to <span style="color: palevioletred">all
+      <code>items</code>, including <code>dockedItems</code></span>. This is done via the attribute
+      <code>defaultElement</code>:
+<pre style="white-space: pre-wrap;">
+<span style="color: #0000EE;font-weight: bold;">&lt;Panel&gt;</span>
+  &lt;layout&gt;
+    &lt;layout_HBox/&gt;
+  &lt;/layout&gt;
+  &lt;items&gt;
+    &lt;Container width="25%"/&gt;
+    &lt;Container width="25%"/&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/items&gt;
+  <span style="color: #0000EE;font-weight: bold;">&lt;plugins&gt;
+  &lt;ui:BEMPlugin block="{BEMLayouts. HORIZONTAL_SPACING_BLOCK}"
+                <span style="color: palevioletred;font-weight: bold;">defaultElement="{BEMLayouts.HORIZONTAL_SPACING_ELEMENT_ITEM}"</span>/&gt;
+  &lt;/plugins&gt;</span>
+  &lt;dockedItems&gt;
+    &lt;Container width="25%"/&gt;
+  &lt;/dockedItems&gt;
+<span style="color: #0000EE;font-weight: bold;">&lt;/Panel&gt;</span>
+</pre>
+    </div>
+
+    <!--NEW LINE -->
+    <br>
+    <div class="box">
+    The three approaches result in the following:
+    </div>
+    <br>
+    <div>
+      <!--PLAIN-->
+      <div class="box box--left">
+
+        <span style="color: #7D9F51;font-weight: bold;display: block;float: left;width: 100%;">No <code>BEM
+          Plugin</code> applied resp.
+          no element is set for the <code>BEM Plugin</code>.</span>
+
+        <div style="width: 25%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;">
+          Item 1
+        </div>
+        <div style="width: 25%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;">
+          Item 2
+        </div>
+        <div style="width: 25%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;">
+          Item 3
+        </div>
+        <div style="width: 25%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;">
+          Docked Item
+        </div>
+
+      </div>
+      <!--FIRST-->
+      <div class="box box--right">
+        <span style="color: coral;font-weight: bold;display: block;float: left;width: 100%;">The first approach</span>
+
+        <div style="width: 24%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin-right: 1%;">
+          Item 1
+        </div>
+        <div style="width: 24%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin-left: 1%;">
+          Item 2
+        </div>
+        <div style="width: 25%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;">
+          Item 3
+        </div>
+        <div style="width: 25%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;">
+          Docked Item
+        </div>
+
+      </div>
+      <!--SECOND-->
+      <div class="box box--left">
+        <span style="color:mediumorchid;font-weight: bold;display: block;float: left;width: 100%;">The second approach</span>
+
+        <div style="width: 24%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin-right: 1%;">
+          Item 1
+        </div>
+        <div style="width: 23%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin: 0 1%;">
+          Item 2
+        </div>
+        <div style="width: 24%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin-left: 1%;">
+          Item 3
+        </div>
+        <div style="width: 24%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;">
+          Docked Item
+        </div>
+
+      </div>
+      <!--THIRD-->
+      <div class="box box--right">
+        <span style="color: palevioletred;font-weight: bold;display: block;float: left;width: 100%;">The third approach</span>
+
+        <div style="width: 24%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin-right: 1%;">
+          Item 1
+        </div>
+        <div style="width: 23%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin: 0 1%;">
+          Item 2
+        </div>
+        <div style="width: 23%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin: 0 1%;">
+          Item 3
+        </div>
+        <div style="width: 24%;height: 32px;padding: 6px;background-color: darkorange;border:1px gray dashed;float:left;margin-left: 1%;">
+          Docked Item
+        </div>
+
+      </div>
+    </div>
+
+    <br>
+
+    <div>
+      <ul>
+        <li>The examples demonstrate the usage of the <b><code>HORIZONTAL</code></b> spacing. You could also space
+          <b><code>VERTICAL</code></b>.
+        </li>
+        <li>You can add much more space by adding the attribute <code>modifier="{BEMLayouts.HORIZONTAL_SPACING_MODIFIER_200}</code><br>
+          or <code>modifier="{BEMLayouts.HORIZONTAL_SPACING_MODIFIER_300}</code> to the <code>ui:BEMPlugin</code>.
+          I.e.
+<pre style="white-space: pre-wrap;">
+&lt;plugins&gt;
+  &lt;ui:BEMPlugin block="{BEMLayouts.HORIZONTAL_SPACING_BLOCK}"
+                <span style="color: #0000EE;font-weight: bold;">modifier="{BEMLayouts.HORIZONTAL_SPACING_MODIFIER_200}"</span>/&gt;
+&lt;/plugins&gt;
+</pre>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>

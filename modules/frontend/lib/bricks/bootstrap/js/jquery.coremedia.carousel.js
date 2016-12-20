@@ -1,6 +1,55 @@
-;(function ($) {
+/**
+ * CoreMedia namespace
+ * @namespace
+ * @ignore
+ */
+var coremedia = (function (module) {
+  return module;
+}(coremedia || {}));
+/**
+ * CoreMedia Blueprint namespace
+ * @namespace
+ * @ignore
+ */
+coremedia.blueprint = (function (module) {
+  /*global jQuery*/
+  module.$ = module.$ || jQuery;
+  return module;
+}(coremedia.blueprint || {}));
+
+(function ($) {
   "use strict";
 
+  /**
+   * jQuery Plugin that hooks into Bootstrap carousel functionality via the `slid.bs.carousel` to add
+   * Responsive Image Resizer Plugin and pagination.
+   *
+   * @function "coremedia.blueprint.$.fn.cmCarousel"
+   * @summary jQuery Plugin that hooks for Bootstrap carousel
+   * @example
+   * CoreMedia carousels can be automatically initialized simply by adding the data attribute `data-cm-carousel`
+   * to your carousel container element.
+   * ```html
+   * <div class="cm-carousel carousel slide" data-cm-carousel='{"interval":"6000"}' ...
+   * ```
+   * CoreMedia will automatically find and initialize a carousel for any element that contains this data attribute.
+   * If you do not want this behavior then do not add the data attribute to your carousel and instead initalize the
+   * carousel programmatically by invoking the method on the carousel container element:
+   * ```javascript
+   * $('[data-cm-carousel]').cmCarousel();
+   * ```
+   * Auto-initialization is not supported for carousels that are added to the DOM after jQuery's ready event has
+   * fired. In this case you will need to programatically initialize your carousel by invoking the method as shown
+   * above.
+   *
+   * The carousel can be configured by assigning an object with the following properties to the `data-cm-carousel`
+   * attribute.
+   *
+   * | Name | Type | Default | Description |
+   * | --- | --- | --- | --- |
+   * | pause | <code>boolean</code> | <code>false</code> | Pause the carousel from sliding, if needed. |
+   * | interval | <code>number</code> | <code>5000</code> | Interval used for each sliding. |
+   */
   $.fn.cmCarousel = function () {
 
     return this.each(function () {
@@ -8,7 +57,7 @@
       var $carousel = $(this);
 
       var data = $carousel.data('cm-carousel');
-      // pause the carousel form sliding if needed.
+      // pause the carousel from sliding if needed.
       var pause = Boolean(data.pause) || false;
 
       $carousel.carousel({
@@ -35,10 +84,9 @@
     });
   };
 
-
-  $(document).ready(function () {
+  // --- DOCUMENT READY ---
+  $(function () {
     $('[data-cm-carousel]').cmCarousel();
   });
-
 
 })(jQuery || coremedia.blueprint.$);

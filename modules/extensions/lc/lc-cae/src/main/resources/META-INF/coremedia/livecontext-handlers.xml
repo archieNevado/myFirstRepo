@@ -16,6 +16,7 @@
   <import resource="livecontext-site-services.xml"/>
   <import resource="livecontext-fragment.xml"/>
   <import resource="livecontext-cae-vendor-placeholders.xml"/>
+  <import resource="classpath:META-INF/coremedia/lc-services.xml"/>
 
   <bean id="ecommerceHandlerBase" abstract="true" parent="pageHandlerBase" class="com.coremedia.livecontext.handler.LiveContextPageHandlerBase">
     <property name="developerModeEnabled" value="${cae.developer.mode}"/>
@@ -34,6 +35,7 @@
   <bean id="externalNavigationHandler" class="com.coremedia.livecontext.handler.ExternalNavigationHandler" parent="ecommerceHandlerBase">
     <property name="resolveContextStrategy" ref="resolveCategoryContextStrategy"/>
     <property name="productListSubstitutionService" ref="productListSubstitutionService"/>
+    <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
   </bean>
 
   <bean id="productPageHandler" class="com.coremedia.livecontext.product.ProductPageHandler" parent="ecommerceHandlerBase">

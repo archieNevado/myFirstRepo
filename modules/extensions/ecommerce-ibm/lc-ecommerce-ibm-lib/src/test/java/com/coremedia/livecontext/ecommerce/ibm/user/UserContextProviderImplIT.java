@@ -2,12 +2,10 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
-import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextImpl.newUserContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -47,11 +45,8 @@ public class UserContextProviderImplIT extends AbstractServiceTest {
 
   @Test
   public void testCurrentUserContext() {
-    Map<String, Object> userContextContent = ImmutableMap.<String, Object>builder()
-            .put(UserContextHelper.FOR_USER_NAME, "currentUser")
-            .build();
-
-    UserContext userContext = (UserContext) UserContextBuilder.create().withValues(userContextContent).build();
+    UserContext userContext = newUserContext();
+    userContext.put(UserContextHelper.FOR_USER_NAME, "currentUser");
 
     testling.setCurrentContext(userContext);
     assertNotNull(testling.getCurrentContext());

@@ -1,28 +1,26 @@
 package com.coremedia.livecontext.studio.pbe {
 
-import com.coremedia.blueprint.studio.BlueprintDocumentTypes_properties;
-import com.coremedia.cms.editor.sdk.config.premular;
-import com.coremedia.cms.editor.sdk.config.previewIFrame;
-import com.coremedia.cms.editor.sdk.config.previewPanel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.messageService;
+import com.coremedia.cms.editor.sdk.premular.Premular;
+import com.coremedia.cms.editor.sdk.preview.PreviewIFrame;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.preview.metadata.IMetadataService;
 import com.coremedia.cms.editor.sdk.preview.metadata.MetadataTree;
 import com.coremedia.cms.editor.sdk.preview.metadata.MetadataTreeNode;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
-import com.coremedia.livecontext.studio.config.commerceWorkAreaTab;
-import com.coremedia.livecontext.studio.config.fragmentHighlightButton;
+import com.coremedia.livecontext.studio.desktop.CommerceWorkAreaTab;
 import com.coremedia.ui.components.IconButton;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.LocalStorageUtil;
 
 import ext.Ext;
-import ext.Panel;
+import ext.panel.Panel;
 
 import js.Window;
 
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
+[ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
 public class FragmentHighlightButtonBase extends IconButton {
 
   private var metadataService:IMetadataService;
@@ -33,11 +31,11 @@ public class FragmentHighlightButtonBase extends IconButton {
 
   internal static const PLACEMENT_LOCAL_IDENTIFIER:String = "CMChannel_placement-";
   internal static const PLACEMENT_LOCAL_TEXT:String = "_text";
-  internal static const FRAGMENTHIGHLIGHTING_LOCAL_IDENTIFIER = "FragmentHighlighting_";
+  internal static const FRAGMENTHIGHLIGHTING_LOCAL_IDENTIFIER:String = "FragmentHighlighting_";
   internal static const LOCAL_STARAGE_FRAGMENTHIGHLIGHTED:String = 'preview.fragmentHighlighted';
 
 
-  public function FragmentHighlightButtonBase(config:fragmentHighlightButton = null) {
+  public function FragmentHighlightButtonBase(config:FragmentHighlightButton = null) {
     super(config);
     showFragments = readButtonSelection();
     toggle(showFragments);
@@ -52,10 +50,11 @@ public class FragmentHighlightButtonBase extends IconButton {
   }
 
   private function sendHighlightEvent():void {
-    var targetWindow:Window = getPreviewPanel().findByType(previewIFrame)[0].getContentWindow();
+    var frame:PreviewIFrame = getPreviewPanel().findByType(PreviewIFrame)[0] as PreviewIFrame;
+    var targetWindow:Window = frame.getContentWindow();
     if (showFragments) {
-      var returnMap =  buildPlacementsMap(BlueprintDocumentTypes_properties.INSTANCE);
-      Ext.apply(returnMap, buildPlacementDescriptionMap(ECommerceStudioPlugin_properties.INSTANCE));
+      var returnMap =  buildPlacementsMap(resourceManager.getResourceBundle(null, 'com.coremedia.blueprint.studio.BlueprintDocumentTypes').content);
+      Ext.apply(returnMap, buildPlacementDescriptionMap(resourceManager.getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin').content));
       messageService.sendMessage(targetWindow, LcMessageTypes.TO_HIGHLIGHT_MODE, returnMap);
     }
     else {
@@ -89,13 +88,21 @@ public class FragmentHighlightButtonBase extends IconButton {
   private function initButton():void {
     var metadataLoadedVE:ValueExpression;
     metadataLoadedVE = ValueExpressionFactory.createFromFunction(function ():Boolean {
-      var metadataTree:MetadataTree = getMetadataService().getMetadataTree();
+      var ms:IMetadataService = getMetadataService();
+      if(!ms) {
+        return undefined;
+      }
+      var metadataTree:MetadataTree = ms.getMetadataTree();
       return metadataTree.getRoot() ? true : false;
     });
 
     var metadataPreviousLoadedRootVE:ValueExpression;
     metadataPreviousLoadedRootVE = ValueExpressionFactory.createFromFunction(function ():MetadataTreeNode {
-      var metadataTree:MetadataTree = getMetadataService().getMetadataTree();
+      var ms:IMetadataService = getMetadataService();
+      if(!ms) {
+        return undefined;
+      }
+      var metadataTree:MetadataTree = ms.getMetadataTree();
       return metadataTree.getRoot();
     });
 
@@ -136,9 +143,9 @@ public class FragmentHighlightButtonBase extends IconButton {
 
   private function getPreviewPanel():PreviewPanel {
     if (!previewPanelField) {
-      var activeTab:Panel = editorContext.getWorkArea().getActiveTab();
-      if (activeTab.isXType(premular.xtype) || activeTab.isXType(commerceWorkAreaTab.xtype)) {
-        previewPanelField = activeTab.findByType(previewPanel.xtype)[0] as PreviewPanel;
+      var activeTab:Panel = editorContext.getWorkArea().getActiveTab() as Panel;
+      if (activeTab && (activeTab.isXType(Premular.xtype) || activeTab.isXType(CommerceWorkAreaTab.xtype))) {
+        previewPanelField = activeTab.findByType(PreviewPanel.xtype)[0] as PreviewPanel;
         if (previewPanelField) {
           previewPanelField.addListener('previewUrl', sendHighlightEvent);
         }
@@ -150,7 +157,9 @@ public class FragmentHighlightButtonBase extends IconButton {
   public function getMetadataService():IMetadataService {
     if (!metadataService) {
       var previewPanel:PreviewPanel = getPreviewPanel();
-      metadataService = previewPanel.getMetadataService();
+      if(previewPanel) {
+        metadataService = previewPanel.getMetadataService();
+      }
     }
     return metadataService;
   }

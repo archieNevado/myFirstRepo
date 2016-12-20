@@ -1,0 +1,149 @@
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+.cm-placement-footer {
+
+  position: relative;
+  background-color: #FFFFFF;
+  padding: 50px 20px 20px;
+  box-sizing: border-box;
+  border-top: 1px solid #919191;
+
+  /* apply hover effect to links even if the are empty */
+  .cm-dropdown .cm-dropdown-item {
+    & > a:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    &--min-level2 {
+      background-color: #e5e5e5;
+      &:nth-child(2n) {
+        background-color: #ffffff;
+      }
+    }
+
+    &--min-level1.cm-dropdown-menu--opened {
+      background-color: #ffffff;
+    }
+  }
+
+  .cm-navigation--footer {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    text-align: left;
+  }
+}
+
+.cm-followus {
+  &__title {
+    font-weight: normal;
+    margin: 0 0 1rem;
+    padding: 0;
+    color: #373737;
+
+    @include breakpoint(md) {
+      font-size: 1.25rem;
+    }
+
+    @include breakpoint(sm) {
+      font-size: 1.375rem;
+    }
+
+    @include breakpoint(xs) {
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+  }
+
+  &__icon {
+    display: inline-block;
+    a {
+      padding: 0;
+    }
+  }
+}
+
+/* --- footer ------------------------------------------------------------------------------------------------------- */
+
+@include breakpoint(md) {
+  .cm-placement-footer {
+    &:before,
+    &:after {
+      display: table;
+      content: " ";
+    }
+
+    &:after {
+      clear: both;
+    }
+
+    .cm-navigation--footer {
+      ul {
+        li {
+          margin-bottom: 10px;
+        }
+      }
+
+      & > li {
+        float: left;
+        width: 20%;
+        & > a {
+          margin-top: 0;
+          font-size: 1.25rem;
+          display: block;
+          margin-bottom: 16px;
+          color: #373737;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint(sm) {
+
+  .cm-placement-footer {
+    &:before,
+    &:after {
+      display: table;
+      content: " ";
+    }
+
+    &:after {
+      clear: both;
+    }
+
+    .cm-navigation--footer > li {
+      float: left;
+      margin-bottom: 30px;
+      width: 50%;
+
+      & > a {
+        font-size: 1.375rem;
+        display: block;
+        margin-bottom: 16px;
+        color: #373737;
+      }
+    }
+
+    /* hide dropdown buttons in footer */
+    & .cm-dropdown-button {
+      display: none !important; /* must be overridden due to use of pseudo elements for icons */
+    }
+  }
+}
+
+@include breakpoint(xs) {
+
+  .cm-placement-footer {
+    padding: 0;
+
+    .cm-followus {
+      margin-right: 10px;
+      margin-bottom: 20px;
+      margin-left: 10px;
+    }
+  }
+}

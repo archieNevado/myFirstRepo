@@ -1,16 +1,25 @@
 package com.coremedia.livecontext.studio.asset;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * {@link com.coremedia.rest.cap.intercept.ContentWriteInterceptor}
@@ -20,34 +29,50 @@ import java.util.Map;
  * The difference is only accessible before the write operation.
  */
 public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBase {
-  public static final String STRUCT_PROPERTY_NAME = "localSettings";
 
-  private AssetInvalidationWritePostProcessor postProcessor;
+  @VisibleForTesting
+  static final String STRUCT_PROPERTY_NAME = "localSettings";
+
+  @Inject
+  private CommerceConnectionSupplier commerceConnectionSupplier;
+
+  private CommerceCacheInvalidationSource commerceCacheInvalidationSource;
 
   @Override
   public void intercept(ContentWriteRequest request) {
     Content content = request.getEntity();
     Map<String, Object> properties = request.getProperties();
 
-    if (content != null && properties != null
-            && properties.containsKey(STRUCT_PROPERTY_NAME)) {
-      Struct localSettings = (Struct) properties.get(STRUCT_PROPERTY_NAME);
-
-      Collection<String> references = getInvalidReferences(content, localSettings);
-
-      //we delegate the invaliations to the write post processor
-      //as the write interceptor has too old sequence number
-      postProcessor.addInvalidations(references);
+    if (content != null && properties != null) {
+      invalidate(content, properties);
     }
   }
 
-  private Collection<String> getInvalidReferences(Content content, Struct localSettings) {
+  private void invalidate(@Nonnull Content content, @Nonnull Map<String, Object> properties) {
+    if (!properties.containsKey(STRUCT_PROPERTY_NAME)) {
+      return;
+    }
+
+    Struct localSettings = (Struct) properties.get(STRUCT_PROPERTY_NAME);
+
+    Set<String> references = getInvalidReferences(content, localSettings);
+
+    CommerceConnection commerceConnection = commerceConnectionSupplier.getCommerceConnectionForContent(content);
+
+    //we delegate the invaliations to the write post processor
+    //as the write interceptor has too old sequence number
+    commerceCacheInvalidationSource.invalidateReferences(references, commerceConnection);
+  }
+
+  @Nonnull
+  private static Set<String> getInvalidReferences(Content content, Struct localSettings) {
     //the list of references to the catalog objects might have been changed
     //let's calculate the diff between the old and new lists
     List<String> newIds = CommerceReferenceHelper.getExternalReferences(localSettings);
     List<String> oldIds = CommerceReferenceHelper.getExternalReferences(content);
 
-    Collection<String> invalidations = (Collection<String>) CollectionUtils.disjunction(newIds, oldIds);  // NOSONAR  non generic legacy library
+    Collection<String> invalidationsCollection = (Collection<String>) CollectionUtils.disjunction(newIds, oldIds);  // NOSONAR  non generic legacy library
+    Set<String> invalidations = newHashSet(invalidationsCollection);
 
     //if the references aren't changed...
     if (invalidations.isEmpty()) {
@@ -62,7 +87,7 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
   }
 
   @Required
-  public void setPostProcessor(AssetInvalidationWritePostProcessor postProcessor) {
-    this.postProcessor = postProcessor;
+  public void setCommerceCacheInvalidationSource(CommerceCacheInvalidationSource commerceCacheInvalidationSource) {
+    this.commerceCacheInvalidationSource = commerceCacheInvalidationSource;
   }
 }

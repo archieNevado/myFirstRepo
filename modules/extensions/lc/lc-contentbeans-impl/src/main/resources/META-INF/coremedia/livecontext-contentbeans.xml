@@ -13,6 +13,7 @@
   <!-- "private" imports needed for this file's beans -->
   <import resource="classpath:/framework/spring/blueprint-page.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-navigation.xml"/>
+  <import resource="classpath:/META-INF/coremedia/lc-services.xml"/>
 
   <context:component-scan base-package="com.coremedia.blueprint.viewtype.configuration"/>
 
@@ -35,6 +36,7 @@
   <bean name="contentBeanFactory:CMExternalChannel" parent="abstractChannel-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl" scope="prototype">
     <property name="treeRelation" ref="liveContextNavigationTreeRelation"/>
+    <property name="codeResourcesTreeRelation" ref="externalChannelContentTreeRelation"/>
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
     <property name="pageGridService" ref="extCategoryPageGridService"/>
     <property name="pdpPageGridService" ref="pdpPageGridService"/>

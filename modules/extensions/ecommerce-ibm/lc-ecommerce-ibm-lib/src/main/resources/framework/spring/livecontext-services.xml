@@ -10,6 +10,7 @@
   <import resource="classpath:/framework/spring/livecontext-ibm-cache.xml"/>
   <import resource="classpath:/framework/spring/livecontext-storeconfig.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-beanfactory.xml"/>
+  <import resource="classpath:/framework/spring/lc-ecommerce-service.xml"/>
 
   <context:annotation-config/>
 
@@ -30,7 +31,7 @@
     <property name="commerceCache" ref="commerceCache"/>
   </bean>
 
-  <bean id="storefrontConnector" class="com.coremedia.livecontext.ecommerce.ibm.common.WcStorefrontConnector">
+  <bean id="storeFrontConnector" class="com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector">
     <property name="connectionPoolSize" value="${livecontext.storefront.connector.connectionPoolSize}"/>
     <property name="connectionTimeout" value="${livecontext.storefront.connector.connectionTimeout}"/>
     <property name="socketTimeout" value="${livecontext.storefront.connector.socketTimeout}"/>
@@ -140,11 +141,12 @@
     <property name="workspaceWrapperService" ref="workspaceWrapperService"/>
   </bean>
 
-  <bean id="storeFrontService" class="com.coremedia.livecontext.ecommerce.ibm.common.StoreFrontService"
+  <bean id="storeFrontService" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService"
         abstract="true">
-    <property name="storefrontConnector" ref="storefrontConnector"/>
+    <property name="storeFrontConnector" ref="storeFrontConnector"/>
     <property name="storeContextProvider" ref="storeContextProvider"/>
     <property name="urlProvider" ref="wcsPageHandlerUrlProvider"/>
+    <property name="cookieService" ref="cookieService"/>
   </bean>
 
   <bean id="commerceUserService" class="com.coremedia.livecontext.ecommerce.ibm.user.UserServiceImpl">

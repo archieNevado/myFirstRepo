@@ -8,7 +8,6 @@ import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,13 +20,14 @@ import java.util.Map;
 
 import static com.coremedia.livecontext.elastic.social.common.ProductInSiteConverter.ID;
 import static com.coremedia.livecontext.elastic.social.common.ProductInSiteConverter.SITE_ID;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductInSiteConverterTest {
+
   private String productId = "1234";
   private String productReferenceId = "vendor:///catalog/product/" + productId;
   private String siteId = "5678";
@@ -42,7 +42,7 @@ public class ProductInSiteConverterTest {
   private ProductInSite productInSite;
 
   @Mock
-  private CommerceConnectionInitializer connectionInitializer;
+  private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Mock
   private Site site;
@@ -53,9 +53,11 @@ public class ProductInSiteConverterTest {
   private BaseCommerceConnection commerceConnection;
 
   @Before
-  public void setup(){
-
+  public void setup() {
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+
+    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(commerceConnection);
+
     commerceConnection.getStoreContext().put("site", siteId);
     when(commerceConnection.getCatalogService().findProductById(anyString())).thenReturn(product);
 
@@ -73,7 +75,7 @@ public class ProductInSiteConverterTest {
 
   @Test
   public void getType() {
-    assertEquals(ProductInSite.class, converter.getType());
+    assertThat(converter.getType()).isEqualTo(ProductInSite.class);
   }
 
   @Test
@@ -82,9 +84,9 @@ public class ProductInSiteConverterTest {
 
     converter.serialize(productInSite, serializedObject);
 
-    assertEquals(2, serializedObject.entrySet().size());
-    assertEquals(productReferenceId, serializedObject.get(ID));
-    assertEquals(siteId, serializedObject.get(SITE_ID));
+    assertThat(serializedObject.entrySet()).hasSize(2);
+    assertThat(serializedObject.get(ID)).isEqualTo(productReferenceId);
+    assertThat(serializedObject.get(SITE_ID)).isEqualTo(siteId);
 
     verify(product).getExternalId();
   }
@@ -97,8 +99,8 @@ public class ProductInSiteConverterTest {
 
     ProductInSite result = converter.deserialize(serializedObject);
 
-    Assert.assertSame(product, result.getProduct());
-    Assert.assertSame(site, result.getSite());
+    assertThat(result.getProduct()).isSameAs(product);
+    assertThat(result.getSite()).isSameAs(site);
   }
 
   @Test(expected = UnresolvableReferenceException.class)

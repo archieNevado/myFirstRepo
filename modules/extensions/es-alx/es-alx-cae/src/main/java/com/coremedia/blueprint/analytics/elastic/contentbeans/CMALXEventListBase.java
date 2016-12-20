@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.analytics.elastic.contentbeans;
 
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 
 /**

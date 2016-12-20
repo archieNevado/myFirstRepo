@@ -26,13 +26,13 @@
  * @param quickInfoIdPrefix (optional) String
 -->
 <#function initializeImageMap quickInfoModal=false quickInfoGroup="" imageMapIdPrefix="cm-map-" quickInfoMainIdSuffix="-quickinfo--main" quickInfoIdPrefix="cm-quickinfo-">
-<#-- generate unique id for imagemap -->
+  <#-- generate unique id for imagemap -->
   <#assign imageMapId=bp.generateId(imageMapIdPrefix)/>
 
-<#-- generate quick info id for main teaser -->
+  <#-- generate quick info id for main teaser -->
   <#assign quickInfoMainId=imageMapId + quickInfoMainIdSuffix />
 
-<#-- generate quick info ids list and forward the list to the templates areas map and areas quickinfo-->
+  <#-- generate quick info ids list and forward the list to the templates areas map and areas quickinfo-->
   <#assign quickInfoData={} />
   <#if quickInfoModal?has_content && quickInfoModal?is_boolean>
     <#assign quickInfoData=quickInfoData + {"modal": quickInfoModal!false} />
@@ -41,7 +41,7 @@
     <#assign quickInfoData=quickInfoData + {"group": quickInfoGroup!""} />
   </#if>
 
-<#-- generate quick info ids list and forward the list to the templates areas map and areas quickinfo-->
+  <#-- generate quick info ids list and forward the list to the templates areas map and areas quickinfo-->
   <#assign imageMapAreas=bp.responsiveImageMapAreas(self) />
   <#assign quickInfoIdList = [] />
   <#if imageMapAreas?has_content>

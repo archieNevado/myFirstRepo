@@ -15,7 +15,7 @@ node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.
 node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.startup.configuration'] = "#{cm_webapp_url(service_name, node['blueprint']['hostname'])}/webstart/properties/corem/editor-startup.xml"
 node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.display.embedded.view'] = 'true'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['usermanager.searchResultSize'] = '490'
-node.default['blueprint']['webapps'][service_name]['editor.properties']['user.manual.url'] = 'https://documentation.coremedia.com/editor-user/16-SNAPSHOT/editor-user-{0}.pdf'
+node.default['blueprint']['webapps'][service_name]['editor.properties']['user.manual.url'] = 'https://documentation.coremedia.com/editor-user/1701.0-8/editor-user-{0}.pdf'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['editor.richtext.model.traditional'] = 'false'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['show.content.change.popups'] = 'true'
 node.default['blueprint']['webapps'][service_name]['editor.properties']['login.username'] = ''
@@ -52,7 +52,7 @@ end
     source 'properties.erb'
     owner webapp.owner
     group webapp.group
-    variables :props => node['blueprint']['webapps'][service_name]["#{res}.properties"]
+    variables props: node['blueprint']['webapps'][service_name]["#{res}.properties"]
     notifies :update, webapp, :immediately
   end
 end

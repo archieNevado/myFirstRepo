@@ -1,17 +1,27 @@
 /**
- *  CoreMedia Namespace
+ * CoreMedia namespace
+ * @namespace
+ * @ignore
  */
 var coremedia = (function (module) {
   return module;
 }(coremedia || {}));
+
+/**
+ * CoreMedia Blueprint namespace
+ * @namespace "coremedia.blueprint"
+ * @ignore
+ */
 coremedia.blueprint = (function (module) {
+  /*global jQuery*/
   module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
 
-
 /**
  * Imagemap functionality
+ *
+ * @module {object} "coremedia.blueprint.imagemap"
  */
 coremedia.blueprint.imagemap = function (module) {
   "use strict";
@@ -24,6 +34,7 @@ coremedia.blueprint.imagemap = function (module) {
    *
    * @param {string} coords
    * @return {Array}
+   * @ignore
    */
   var coordsToRect = function (coords) {
     // coords = left,top,right,bottom
@@ -50,6 +61,7 @@ coremedia.blueprint.imagemap = function (module) {
    *
    * @param {Array} points
    * @returns {string}
+   * @ignore
    */
   var rectToCoords = function (points) {
     // rect is a polygon with 4 edges, so first and third edge will define the rect
@@ -64,6 +76,7 @@ coremedia.blueprint.imagemap = function (module) {
    * Placeholder - not implemented yet
    *
    * @returns {Array}
+   * @ignore
    */
   var coordsToCircle = function () {
     return [];
@@ -73,6 +86,7 @@ coremedia.blueprint.imagemap = function (module) {
    * Placeholder - not implemented yet
    *
    * @returns {string}
+   * @ignore
    */
   var circleToCoords = function () {
     return "";
@@ -82,6 +96,7 @@ coremedia.blueprint.imagemap = function (module) {
    * Placeholder - not implemented yet
    *
    * @returns {Array}
+   * @ignore
    */
   var coordsToPoly = function () {
     return [];
@@ -93,6 +108,7 @@ coremedia.blueprint.imagemap = function (module) {
    *
    * @param {Array} points
    * @returns {string}
+   * @ignore
    */
   var polyToCoords = function (points) {
     var result = [];
@@ -108,6 +124,7 @@ coremedia.blueprint.imagemap = function (module) {
    * Introduced for consistency. The given param is ignored, function will always return an empty array.
    *
    * @returns {Array}
+   * @ignore
    */
   var coordsToDefault = function () {
     // shape default has no coords
@@ -119,13 +136,31 @@ coremedia.blueprint.imagemap = function (module) {
    * Introduced for consistency. The given param is ignored, function will always return an empty String.
    *
    * @returns {string}
+   * @ignore
    */
   var defaultToCoords = function () {
     // shape default has no coords
     return "";
   };
 
-  // maps possible values for the attribute shape of the HTML map element to converter functions (both directions)
+  /**
+   * @typedef {object} converterMap
+   * @prop {function} rect
+   * @prop {function} circle
+   * @prop {function} poly
+   * @prop {function} rectangle
+   * @prop {function} circ
+   * @prop {function} polygon
+   * @prop {function} default
+   */
+
+  /**
+   * Maps possible values for the attribute shape of the HTML map element to converter functions (both directions).
+   *
+   * @member {object} coordsConverter
+   * @prop {converterMap} coordsTo
+   * @prop {converterMap} toCoords
+   */
   module.coordsConverter = {
     coordsTo: {
       // W3C
@@ -153,10 +188,12 @@ coremedia.blueprint.imagemap = function (module) {
   };
 
   /**
-   * calculates a bounding box for given points
+   * Calculates a bounding box for given points.
    * Points are objects with 2 properties: x and y representing the point.
    *
+   * @function calculateBoundingBox
    * @param {Array} coordsAsPoints
+   * @return {object}
    */
   module.calculateBoundingBox = function (coordsAsPoints) {
     var result = {
@@ -178,10 +215,11 @@ coremedia.blueprint.imagemap = function (module) {
   };
 
   /**
-   * recalculates all areas of the imagemap for the actual dimensions the imagemap has
+   * Recalculates all areas of the imagemap for the actual dimensions the imagemap has.
    *
-   * @param $imagemap the imagemap to update
-   * @param newRatio (optional) if there was an aspect ratio switch this is the new ratio to be used
+   * @function update
+   * @param {jQuery} $imagemap - The imagemap element to update.
+   * @param {number} [newRatio] - If there was an aspect ratio switch, this is the new ratio to be used.
    */
   module.update = function ($imagemap, newRatio) {
     // get configuration of imagemap
@@ -297,6 +335,12 @@ coremedia.blueprint.imagemap = function (module) {
     });
   };
 
+  /**
+   * Initializes an imagemap element.
+   *
+   * @function init
+   * @param {jQuery} $imagemap - The imagemap element to initialize.
+   */
   module.init = function ($imagemap) {
     // get configuration of imagemap
     var $areas = $imagemap.find(".cm-imagemap__areas");

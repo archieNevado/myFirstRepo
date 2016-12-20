@@ -93,7 +93,9 @@ public class BlueprintViewRepositoryNameProviderTest {
     Assert.assertEquals("media", repositoryNames.get(0));
     Assert.assertEquals("notMedia", repositoryNames.get(1));
     Assert.assertEquals("againNotMedia", repositoryNames.get(2));
-    Assert.assertEquals("basic", repositoryNames.get(3));
-    Assert.assertEquals("error", repositoryNames.get(4));
+    // bricks comes in from blueprint-views.xml. Not actually part of the test.
+    Assert.assertEquals("bricks", repositoryNames.get(3));
+    Assert.assertEquals("basic", repositoryNames.get(4));
+    Assert.assertEquals("error", repositoryNames.get(5));
   }
 }

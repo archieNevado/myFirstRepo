@@ -10,7 +10,7 @@ import com.coremedia.blueprint.common.robots.RobotsEntry;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.coremedia.util.StringUtil;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -69,7 +69,7 @@ public class RobotsView implements TextView {
   private void renderRobotsNode(RobotsBean robotsBean, Writer writer,
                                 HttpServletRequest request, HttpServletResponse response) throws IOException {
     for (RobotsEntry robotsEntry : robotsBean.getRobotsEntries()) {
-      if (!StringUtil.isEmpty(robotsEntry.getUserAgent())) {
+      if (!Strings.isNullOrEmpty(robotsEntry.getUserAgent())) {
         LOG.debug("Generating robots.txt user agent node for [{}]", robotsEntry.getUserAgent());
         writeUserAgentNode(writer, robotsEntry, request, response);
       }
@@ -110,7 +110,7 @@ public class RobotsView implements TextView {
     // writing custom lines:
     for (String custom : robotsEntry.getCustom()) {
 
-      if (!StringUtil.isEmpty(custom)) {
+      if (!Strings.isNullOrEmpty(custom)) {
         sb = new StringBuilder().append(custom).append(NEWLINE);
         writer.write(sb.toString());
       }

@@ -1,28 +1,16 @@
 package com.coremedia.blueprint.studio.analytics {
+import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.data.impl.BeanFactoryImpl;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
-import ext.Viewport;
+import ext.container.Viewport;
 
-// don't remove this import
+import joo.getOrCreatePackage;
 import joo.getQualifiedObject;
 
 public class OpenAnalyticsHomeUrlButtonTest extends AbstractRemoteTest {
-
-  // static initializer
-  {
-    joo.getQualifiedObject("com.coremedia.cms.editor.sdk.EditorContextImpl").initEditorContext();
-    joo.getQualifiedObject("com.coremedia.ui.data.impl.BeanFactoryImpl").initBeanFactory();
-    AnalyticsStudioPluginBase['SETTINGS'] = ValueExpressionFactory.create('testSettings');
-    AnalyticsStudioPluginBase.SETTINGS.setValue(beanFactory.createLocalBean({
-      properties: {
-        settings: {
-          testService: {}
-        }
-      }
-    }))
-  }
 
   private var button:OpenAnalyticsHomeUrlButton;
   private var args:Object;
@@ -38,7 +26,22 @@ public class OpenAnalyticsHomeUrlButtonTest extends AbstractRemoteTest {
 
   override public function setUp():void {
     super.setUp();
-    beanImplPrototype = joo.getQualifiedObject("com.coremedia.ui.data.impl.BeanImpl").$class.Public.prototype;
+
+    BeanFactoryImpl.initBeanFactory();
+
+    delete getOrCreatePackage("com.coremedia.cms.editor.sdk")['editorContext'];
+    EditorContextImpl.initEditorContext();
+
+    AnalyticsStudioPluginBase['SETTINGS'] = ValueExpressionFactory.create('testSettings');
+    AnalyticsStudioPluginBase.SETTINGS.setValue(beanFactory.createLocalBean({
+      properties: {
+        settings: {
+          testService: {}
+        }
+      }
+    }));
+
+    beanImplPrototype = getQualifiedObject("com.coremedia.ui.data.impl.BeanImpl")['prototype'];
     is_sub_object = beanImplPrototype.isSubObject;
     beanImplPrototype.isSubObject = isSubObject;
     window_open = window.open;
@@ -46,7 +49,6 @@ public class OpenAnalyticsHomeUrlButtonTest extends AbstractRemoteTest {
     button = new OpenAnalyticsHomeUrlButton({ serviceName: 'testService'});
     // show buttons
     new Viewport({
-      id : new Date().toDateString(),
       items: [ button ]
     });
   }

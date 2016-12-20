@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.assets.studio {
 
-import com.coremedia.blueprint.assets.studio.config.assetRepositoryListContainer;
-import com.coremedia.blueprint.assets.studio.config.assetSearchListContainer;
+import com.coremedia.blueprint.assets.studio.repository.AssetRepositoryListContainer;
+import com.coremedia.blueprint.assets.studio.repository.AssetSearchListContainer;
 import com.coremedia.blueprint.assets.studio.search.ExpirationDateFilterFieldset;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.ContentTypeNames;
@@ -86,15 +86,15 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
   }
 
   override public function getFolderContainerItemId():String {
-    return assetRepositoryListContainer.ITEM_ID;
+    return AssetRepositoryListContainer.ITEM_ID;
   }
 
   override public function getSearchViewItemId():String {
-    return assetSearchListContainer.ITEM_ID;
+    return AssetSearchListContainer.ITEM_ID;
   }
 
   private static function computeAvailableSearchTypes():Array {
-    var assetDocTypes:Array = session.getConnection().getContentRepository().getDocumentTypes().filter(
+    var assetDocTypes:Array = SESSION.getConnection().getContentRepository().getDocumentTypes().filter(
             function (contentType:ContentType):Boolean {
               return contentType.getName() === ContentTypeNames.DOCUMENT ||
                       contentType.isSubtypeOf(AssetConstants.DOCTYPE_ASSET);

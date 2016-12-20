@@ -16,11 +16,12 @@
 
   <modules>
     <module>blueprint-forms</module>
-    <module>blueprint-components</module>
-    <module>studio-client</module>
+    <module>controlroom-studio-plugin</module>
+    <module>studio-app</module>
     <module>studio-webapp</module>
-    <module>rest-extensions</module>
-    <module>studio-plugins</module>
+    <module>studio-styleguide-components</module>
+    <module>studio-styleguide-app</module>
+    <module>studio-remote-packages</module>
   </modules>
 
 </project>

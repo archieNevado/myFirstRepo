@@ -5,7 +5,6 @@ import com.coremedia.cms.editor.sdk.util.ThumbnailResolver;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
-import com.coremedia.livecontext.studio.config.livecontextStudioPlugin;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
@@ -43,7 +42,7 @@ public class CatalogThumbnailResolver implements ThumbnailResolver {
   protected function renderLiveContextPreview(content:Content):Object {
     var blob:String = undefined;
     var contentExpression:ValueExpression = ValueExpressionFactory.createFromValue(content);
-    var externalIdExpression:ValueExpression = contentExpression.extendBy('properties.' + livecontextStudioPlugin.EXTERNAL_ID_PROPERTY);
+    var externalIdExpression:ValueExpression = contentExpression.extendBy('properties.' + LivecontextStudioPlugin.EXTERNAL_ID_PROPERTY);
     catalogHelper.getStoreForContentExpression(contentExpression).loadValue(function():void{
       var catalogObject:CatalogObject = catalogHelper.getCatalogObject(externalIdExpression.getValue(), contentExpression) as CatalogObject;
       var urlString = catalogHelper.getImageUrl(catalogObject);

@@ -2,7 +2,6 @@ package com.coremedia.livecontext.p13n.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -19,6 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.when;
 
@@ -51,7 +51,7 @@ public class CommerceContractIdTestContextExtractorTest {
   public void setUp() throws Exception {
     testling = new CommerceContractIdTestContextExtractor();
     testling.setContentBeanFactory(contentBeanFactory);
-    storeContext = StoreContextBuilder.create().build();
+    storeContext = newStoreContext();
 
     Commerce.setCurrentConnection(commerceConnection);
 

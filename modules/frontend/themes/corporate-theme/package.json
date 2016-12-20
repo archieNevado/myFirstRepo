@@ -3,16 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "grunt build",
+    "production": "grunt production",
     "watch": "grunt watch"
   },
   "dependencies": {
-    "bootstrap-carousel-swipe": "0.0.6",
-    "bootstrap-sass": "3.3.6",
-    "jquery": "2.2.4",
     "magnific-popup": "1.1.0",
-    "svg4everybody": "2.1.0",
-    "imagesloaded": "4.1.0"
+    "svg4everybody": "2.1.3"
   },
   "theme": {
     "name": "corporate",

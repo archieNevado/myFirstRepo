@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div data-content="description">
+  n/a
+</div>
+<div data-content="usage">
+  <pre>
+    &lt;Button text="Show window"
+            itemId="{WindowSkin.DEFAULT.getId()}"&gt;
+      &lt;baseAction&gt;
+        &lt;ui:OpenDialogAction&gt;
+          &lt;ui:dialog&gt;
+            &lt;Window height="300"
+                    title="Window Title"
+                    width="300"
+                    ui="{WindowSkin.DEFAULT.getSkin()}"&gt;
+              &lt;items&gt;
+                &lt;Container width="100%"
+                           height="100%"&gt;
+                  &lt;html&gt;Hello World&lt;/html&gt;
+                &lt;/Container&gt;
+              &lt;/items&gt;
+            &lt;/Window&gt;
+          &lt;/ui:dialog&gt;
+        &lt;/ui:OpenDialogAction&gt;
+      &lt;/baseAction&gt;
+    &lt;/Button&gt;
+  </pre>
+</div>
+<div data-content="related">
+  n/a
+</div>
+</body>
+</html>

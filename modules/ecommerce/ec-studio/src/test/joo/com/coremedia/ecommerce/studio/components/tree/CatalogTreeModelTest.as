@@ -1,11 +1,13 @@
 package com.coremedia.ecommerce.studio.components.tree {
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.ecommerce.studio.AbstractCatalogStudioTest;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ui.models.NodeChildren;
 import com.coremedia.ui.models.TreeModel;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class CatalogTreeModelTest extends AbstractCatalogStudioTest {
 
   private var catalogTreeModel:TreeModel;
@@ -129,7 +131,7 @@ public class CatalogTreeModelTest extends AbstractCatalogStudioTest {
         return catalogTreeModel.getText(MARKETING_ID);
       },
       function():void {
-        assertEquals(catalogTreeModel.getText(MARKETING_ID), ECommerceStudioPlugin_properties.INSTANCE.StoreTree_marketing_root);
+        assertEquals(catalogTreeModel.getText(MARKETING_ID), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_marketing_root'));
       }
     );
   }

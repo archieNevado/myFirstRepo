@@ -3,11 +3,12 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
+import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreFrontResponse;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreFrontService;
 import com.coremedia.livecontext.ecommerce.ibm.login.CommerceUserIsLoggedInCacheKey;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcLoginWrapperService;
 import com.coremedia.livecontext.ecommerce.user.User;
@@ -16,7 +17,6 @@ import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -42,7 +42,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-public class UserSessionServiceImpl extends StoreFrontService implements UserSessionService {
+public class UserSessionServiceImpl extends IbmStoreFrontService implements UserSessionService {
 
   private final static Logger LOG = LoggerFactory.getLogger(UserSessionServiceImpl.class);
 
@@ -80,28 +80,15 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
       String newUserId = resolveUserId(storeFrontResponse, resolveStoreId(), true);
       UserContext userContext = UserContextHelper.getCurrentContext();
       userContext.put(UserContextHelper.FOR_USER_ID, newUserId);
-      String mergedCookies = mergeCookies(userContext.getCookieHeader(), storeFrontResponse.getHttpClientContext());
+      String mergedCookies = getCookieService().addCookiesToCookieHeader(userContext.getCookieHeader(), getCookies(storeFrontResponse));
 
       StoreContext currentContext = StoreContextHelper.getCurrentContext();
       if (null != currentContext && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(currentContext))) {
         //bugfix CMS-4132: call guest login url twice because guest session was broken when called only once
         final List<org.apache.http.cookie.Cookie> cookies = storeFrontResponse.getCookies();
-        HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
-          @Override
-          public String getHeader(String name) {
-            if ("Cookie".equals(name) && !isEmpty(cookies)) {
-              StringBuilder sb = new StringBuilder();
-              for (org.apache.http.cookie.Cookie cookie : cookies) {
-                sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
-              }
-              return sb.toString();
-            }
-            return super.getHeader(name);
-          }
-
-        };
+        HttpServletRequest requestWrapper = createRequestWrapper(request, cookies);
         StoreFrontResponse storeFrontResponse2 = handleStorefrontCall(GUEST_LOGIN_URL_2, uriTemplateParameters, requestWrapper, response);
-        mergedCookies = mergeCookies(mergedCookies, storeFrontResponse2.getHttpClientContext());
+        mergedCookies = getCookieService().addCookiesToCookieHeader(mergedCookies, storeFrontResponse2.getCookies());
       }
 
       userContext.setCookieHeader(WcCookieHelper.rewritePreviewCookies(mergedCookies));
@@ -114,21 +101,24 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
     return false;
   }
 
-  private String mergeCookies(String cookieHeader, HttpClientContext httpClientContext) {
-    List<org.apache.http.cookie.Cookie> cookies = httpClientContext.getCookieStore().getCookies();
-    if (cookies.isEmpty()) {
-      return cookieHeader;
-    }
-    StringBuilder sb = new StringBuilder(cookieHeader == null ? "" : cookieHeader);
-    for (org.apache.http.cookie.Cookie cookie : cookies) {
-      String name = cookie.getName();
-      String value = cookie.getValue();
-      if (sb.length() > 0) {
-        sb.append("; ");
+  private HttpServletRequest createRequestWrapper(HttpServletRequest request, final List<org.apache.http.cookie.Cookie> cookies) {
+    return new HttpServletRequestWrapper(request) {
+      @Override
+      public String getHeader(String name) {
+        if ("Cookie".equals(name) && !isEmpty(cookies)) {
+          StringBuilder sb = new StringBuilder();
+          for (org.apache.http.cookie.Cookie cookie : cookies) {
+            sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+          }
+          return sb.toString();
+        }
+        return super.getHeader(name);
       }
-      sb.append(name).append('=').append(value);
-    }
-    return sb.toString();
+    };
+  }
+
+  private List<org.apache.http.cookie.Cookie> getCookies(StoreFrontResponse storeFrontResponse) {
+    return storeFrontResponse.getCookies();
   }
 
   @Override
@@ -144,7 +134,7 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
       UriComponents pingUrl = (UriComponents) getUrlProvider().provideValue(params);
       handleStorefrontCall(pingUrl.toUriString(), Collections.<String, String>emptyMap(), request, response);
     } catch (GeneralSecurityException e) {
-      e.printStackTrace();
+      LOG.warn("Security exception occurred.", e);
     }
   }
 
@@ -189,7 +179,6 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
         continue;
       }
 
-
       String userId = resolveUserIdFromCookieData(name, value, currentStoreId, ignoreAnonymous);
       if (userId != null) {
         return userId;
@@ -200,39 +189,36 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
 
   @VisibleForTesting
   String resolveUserIdFromCookieData(String cookieName, String cookieValue, String currentStoreId, boolean ignoreAnonymous) {
+
     boolean isWcUserActivityCookie = cookieName.startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME);
     boolean isPreviewWcUserActivityCookie = cookieName.startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME);
     boolean isNotDeleted = !cookieValue.contains("DEL");
-
     boolean isUserContainingCookie = (isWcUserActivityCookie || isPreviewWcUserActivityCookie) && isNotDeleted;
 
-    if (!isUserContainingCookie) {
-      return null;
+    if (isUserContainingCookie) {
+      String[] tokens = splitCookie(cookieValue, ignoreAnonymous);
+      if (tokens != null && tokens[1].equals(currentStoreId)) {
+        return tokens[0];
+      }
     }
 
+    return null;
+  }
+
+  private String[] splitCookie(String cookieValue, boolean ignoreAnonymous) {
     String[] values = cookieValue.split(",");
-
-    if (values.length < 2) {
-      return null;
-    }
-
-    int userId;
-    try {
-      userId = Integer.parseInt(values[0]);
-    }
-    catch (NumberFormatException nfe) {
-      return null;
-    }
-
-    if (userId < 0 && ignoreAnonymous) {
-      return null;
-    }
-
-    String storeId = values[1];
-    //extract only the user id of the cookie that matches the store, commerce may have generated several
-    //WC_USERACTIVITY_* cookies, one for each store.
-    if (currentStoreId.equals(storeId)) {
-      return values[0];
+    if (values.length > 1) {
+      try {
+        int userId = Integer.parseInt(values[0]);
+        if (!ignoreAnonymous || userId >= 0) {
+          return values;
+        }
+      }
+      catch (NumberFormatException nfe) {
+        if (LOG.isTraceEnabled()) {
+          LOG.trace("Cannot parse user id from cookie: " + cookieValue, nfe);
+        }
+      }
     }
     return null;
   }
@@ -257,6 +243,7 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
         return isKnownUser(storeFrontResponse);
       } catch (GeneralSecurityException e) {
         LOG.warn("Error executing login for user '{}': {}", username, e.getMessage());
+        LOG.trace("For debugging purpose...", e);
         return false;
       }
     }
@@ -327,8 +314,9 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
       for (Cookie cookie : cookies) {
         if (cookie.getName().startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME)
                 || cookie.getName().startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME)) {
-          if (Commerce.getCurrentConnection() != null && Commerce.getCurrentConnection().getStoreContext() != null) {
-            String storeId = Commerce.getCurrentConnection().getStoreContext().getStoreId();
+          CommerceConnection currentCommerceConnection = Commerce.getCurrentConnection();
+          if (currentCommerceConnection != null && currentCommerceConnection.getStoreContext() != null) {
+            String storeId = currentCommerceConnection.getStoreContext().getStoreId();
             if (storeId != null && cookie.getValue() != null && cookie.getValue().contains("%2c" + storeId)) {
               cookie.setValue(null);
               cookie.setMaxAge(0);
@@ -345,7 +333,7 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
     UserContext userContext = UserContextHelper.getCurrentContext();
     if (userContext != null) {
       userContext.setUserId(resolveUserId(storeFrontResponse, resolveStoreId(), false));
-      String mergeCookies = mergeCookies(userContext.getCookieHeader(), storeFrontResponse.getHttpClientContext());
+      String mergeCookies = getCookieService().addCookiesToCookieHeader(userContext.getCookieHeader(), getCookies(storeFrontResponse));
       userContext.setCookieHeader(mergeCookies);
     }
   }
@@ -404,6 +392,7 @@ public class UserSessionServiceImpl extends StoreFrontService implements UserSes
       throw new InternalError(msg);
     } catch (IllegalArgumentException iae) {
       LOG.warn("Cookie " + encodedValue + " can not be URL-decoded");
+      LOG.trace("For debugging purpose...", iae);
       return null;
     }
   }

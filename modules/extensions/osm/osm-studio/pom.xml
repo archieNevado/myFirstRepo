@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>osm-studio</artifactId>
-  <packaging>jangaroo</packaging>
+  <packaging>jangaroo-pkg</packaging>
 
   <description>OSM Studio Plugin for the CoreMedia Studio</description>
 
@@ -21,21 +21,8 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>blueprint-components</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>osm-thirdparty-common</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -53,65 +40,71 @@
       <artifactId>ext-as</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>studio-remote-packages</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 
   <build>
-    <sourceDirectory>src/main/joo</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>META-INF/resources/joo/${project.artifactId}.module.js</include>
-        </includes>
-      </resource>
-      <resource>
-        <targetPath>META-INF/joo-api</targetPath>
-        <directory>src/main/joo-api</directory>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <excludes>
-          <exclude>META-INF/resources/joo/${project.artifactId}.module.js</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>target/generated-resources</directory>
-      </resource>
-    </resources>
-
     <plugins>
-      <!--
-        The dependency-plugin is not compatible with jangaroo.
-        So define the used dependencies explicitly.
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <usedDependencies>
-            <usedDependency>${project.groupId}:blueprint-components</usedDependency>
-            <usedDependency>${project.groupId}:blueprint-forms</usedDependency>
-            <usedDependency>${project.groupId}:osm-thirdparty-common</usedDependency>
-            <usedDependency>com.coremedia.ui.toolkit:ui-components</usedDependency>
-            <usedDependency>com.coremedia.ui.sdk:editor-components</usedDependency>
-            <usedDependency>net.jangaroo:ext-as</usedDependency>
-          </usedDependencies>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>net.jangaroo</groupId>
-        <artifactId>exml-maven-plugin</artifactId>
+        <artifactId>jangaroo-maven-plugin</artifactId>
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <configClassPackage>com.coremedia.blueprint.studio.osm.config</configClassPackage>
+          <production>
+            <requiredClasses>
+              <entry>com.coremedia.blueprint.studio.osm.OSMStudioPlugin</entry>
+            </requiredClasses>
+          </production>
+            <additionalCssNonBundle>
+              <value>resources/css/osm-ui.css</value>
+            </additionalCssNonBundle>
+            <additionalJsNonBundle>
+              <value>resources/osm/OpenLayers.js</value>
+              <value>resources/osm/OpenStreetMap.js</value>
+            </additionalJsNonBundle>
+          <namespaces>
+            <namespace>
+              <uri>exml:com.coremedia.blueprint.studio.osm.config</uri>
+            </namespace>
+          </namespaces>
         </configuration>
       </plugin>
-
+      <!--//TODO wrong execution phase, too late -->
+      <!-- this converts absolute (http://) URLs in the OSM libraries to schema-less ones -->
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <executions>
+          <execution>
+            <!--//TODO change me-->
+            <phase>package</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <basedir>${project.build.directory}</basedir>
+          <includes>
+            <include>**/OpenLayers.js</include>
+            <include>**/OpenStreetMap.js</include>
+          </includes>
+          <replacements>
+            <replacement>
+              <token>http:\/\/([a-c])\.tile</token>
+              <value>//$1.tile</value>
+            </replacement>
+          </replacements>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 

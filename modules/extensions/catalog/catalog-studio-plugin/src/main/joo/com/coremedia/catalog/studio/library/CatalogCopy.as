@@ -1,11 +1,13 @@
 package com.coremedia.catalog.studio.library {
 import com.coremedia.cap.content.Content;
-import com.coremedia.catalog.studio.*;
-import com.coremedia.cms.editor.Editor_properties;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
 
-import ext.util.StringUtil;
+import ext.StringUtil;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.cms.editor.Editor')]
+[ResourceBundle('com.coremedia.catalog.studio.CatalogStudioPlugin')]
 public class CatalogCopy {
   private var treeRelation:CatalogTreeRelation;
   private var sources:Array;
@@ -34,11 +36,11 @@ public class CatalogCopy {
     }
     //the products are copied into in another category, so we ask the user what to do: create a copy or the linking?
     else {
-      var msg:String = StringUtil.format(CatalogStudioPlugin_properties.INSTANCE.catalog_copy_or_link_message, newParent.getName());
-      MessageBoxUtilInternal.show(CatalogStudioPlugin_properties.INSTANCE.catalog_copy_or_link_title, msg, null, {
-                yes: CatalogStudioPlugin_properties.INSTANCE.catalog_copy_btn_text,
-                no: CatalogStudioPlugin_properties.INSTANCE.catalog_link_btn_text,
-                cancel: Editor_properties.INSTANCE.dialog_defaultCancelButton_text
+      var msg:String = StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_copy_or_link_message'), newParent.getName());
+      MessageBoxUtilInternal.show(ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_copy_or_link_title'), msg, null, {
+                yes: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_copy_btn_text'),
+                no: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_link_btn_text'),
+                cancel: ResourceManager.getInstance().getString('com.coremedia.cms.editor.Editor', 'dialog_defaultCancelButton_text')
               },
               function (btn:String):void {
                 if (btn === 'cancel') {

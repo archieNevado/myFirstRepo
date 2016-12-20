@@ -1,33 +1,60 @@
 package com.coremedia.blueprint.assets.studio.forms {
 
-import com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties;
-import com.coremedia.blueprint.assets.studio.config.stringListCheckboxPropertyField;
-import com.coremedia.cms.editor.sdk.config.propertyFieldPlugin;
-import com.coremedia.cms.editor.sdk.config.showIssuesPlugin;
+import com.coremedia.cms.editor.sdk.premular.PropertyFieldPlugin;
+import com.coremedia.cms.editor.sdk.validation.ShowIssuesPlugin;
+import com.coremedia.ui.components.StatefulCheckbox;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.mixins.IValidationStateMixin;
+import com.coremedia.ui.mixins.ValidationState;
 
-import ext.Container;
-import ext.config.checkbox;
+import ext.form.FieldContainer;
+import ext.form.field.Checkbox;
 
-public class StringListCheckboxPropertyFieldBase extends Container {
+[ResourceBundle('com.coremedia.blueprint.assets.studio.AMStudioPlugin')]
+public class StringListCheckboxPropertyFieldBase extends FieldContainer implements IValidationStateMixin {
   private var propertyValueExpression:ValueExpression;
   private var structValueExpression:ValueExpression;
 
-  private var checkboxGroup:CheckboxGroup;
 
-  public function StringListCheckboxPropertyFieldBase(config:stringListCheckboxPropertyField = null) {
+  /** @inheritDoc */
+  [Bindable]
+  public native function validationInit(validationState:ValidationState = undefined):void;
+
+  /** @private */
+  [Bindable]
+  public native function set validationState(validationState:ValidationState):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get validationState():ValidationState;
+
+  /** @private */
+  [Bindable]
+  public native function set validationStateVE(validationStateVE:ValueExpression):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get validationStateVE():ValueExpression;
+
+  public function StringListCheckboxPropertyFieldBase(config:StringListCheckboxPropertyField = null) {
     super(config);
-
-    checkboxGroup = getComponent('checkboxGroup') as CheckboxGroup;
-    checkboxGroup.on('change', onComponentChange);
-    getPropertyValueExpression().addChangeListener(onStructChange);
+    validationInit();
   }
 
-  internal native function get bindTo():ValueExpression;
   internal native function get structName():String;
+
   internal native function get propertyName():String;
-  internal native function get availableValuesValueExpression():ValueExpression;
+
+  /**
+   * A value expression evaluating to a list of strings. For each string one checkbox is rendered.
+   * The checkbox label is localized in the file AMStudioPlugin.properties with the following pattern:
+   * 'Asset_[structName]_[propertyName]_[value]_text'.
+   */
+  [Bindable]
+  public var availableValuesValueExpression:ValueExpression;
+  [Bindable]
+  public var bindTo:ValueExpression;
 
   internal native function get hideIssues():Boolean;
 
@@ -66,19 +93,24 @@ public class StringListCheckboxPropertyFieldBase extends Container {
       });
       availableValues = availableValues.concat(valuesOnlyStoredInContent);
     }
+    availableValues = availableValues.filter(function (value:String):Boolean {
+      return !!value;
+    });
 
-    var checkboxConfigs:Array = availableValues.map(function (availableValue:String):checkbox {
+    var checkboxConfigs:Array = availableValues.map(function (availableValue:String):Checkbox {
       var propertyKey:String = 'Asset_' + structName + '_' + propertyName + '_' + availableValue + '_text';
       var checked:Boolean = valuesStoredInContent && valuesStoredInContent.indexOf(availableValue) !== -1;
 
-      var checkboxConfig:checkbox = new checkbox();
-      checkboxConfig.boxLabel = AMStudioPlugin_properties.INSTANCE[propertyKey] || availableValue;
-      checkboxConfig.name = availableValue;
+      var checkboxConfig:StatefulCheckbox = StatefulCheckbox({});
+      checkboxConfig.boxLabel = resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', propertyKey) || availableValue;
+      checkboxConfig.name = propertyName;
+      checkboxConfig.inputValue = availableValue;
       checkboxConfig.itemId = availableValue;
+      checkboxConfig.hideLabel = true;
       checkboxConfig.checked = checked;
-      var propertyFieldPluginConfig:propertyFieldPlugin = new propertyFieldPlugin();
+      var propertyFieldPluginConfig:PropertyFieldPlugin = PropertyFieldPlugin({});
       propertyFieldPluginConfig.propertyName = structName + '.' + propertyName + '.' + availableValue;
-      var showIssuesPluginConfig:showIssuesPlugin = new showIssuesPlugin();
+      var showIssuesPluginConfig:ShowIssuesPlugin = ShowIssuesPlugin({});
       showIssuesPluginConfig.bindTo = bindTo;
       showIssuesPluginConfig.hideIssues = hideIssues;
       showIssuesPluginConfig.propertyName = structName + '.' + propertyName + '.' + availableValue;
@@ -92,16 +124,22 @@ public class StringListCheckboxPropertyFieldBase extends Container {
     return checkboxConfigs;
   }
 
-  private function onComponentChange():void {
-    getPropertyValueExpression().removeChangeListener(onStructChange);
-    getPropertyValueExpression().setValue(checkboxGroup.getValue());
-    getPropertyValueExpression().addChangeListener(onStructChange);
+  internal function transformer(strings:Array):Object {
+    var valueObject:Object = {};
+
+    if (strings.length == 1 && strings[0]) {
+      valueObject[propertyName] = strings[0];
+    } else {
+      valueObject[propertyName] = strings;
+    }
+    return valueObject;
   }
 
-  private function onStructChange():void {
-    checkboxGroup.un('change', onComponentChange);
-    checkboxGroup.setValue(getPropertyValueExpression().getValue());
-    checkboxGroup.on('change', onComponentChange);
+  internal function reverseTransformer(selectedCheckboxes:Object):Array {
+    if (selectedCheckboxes[propertyName]) {
+      return [].concat(selectedCheckboxes[propertyName]);
+    }
+    return [];
   }
 
 }

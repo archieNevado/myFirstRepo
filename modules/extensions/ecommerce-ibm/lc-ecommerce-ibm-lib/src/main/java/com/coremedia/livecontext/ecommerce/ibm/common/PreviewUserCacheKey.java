@@ -10,11 +10,13 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
 import javax.annotation.Nonnull;
 
 class PreviewUserCacheKey extends AbstractCommerceCacheKey<WcCredentials> {
-  private String username = "preview";
-  private String password = "passw0rd";
+
+  private final String username;
+  private final String password;
   private final LoginService loginService;
 
-  public PreviewUserCacheKey(String username, String password, StoreContext storeContext, CommerceCache commerceCache, @Nonnull LoginService loginService) {
+  PreviewUserCacheKey(String username, String password, StoreContext storeContext, CommerceCache commerceCache,
+                      @Nonnull LoginService loginService) {
     super(username, storeContext, CONFIG_KEY_PREVIEW_USER_CREDENTIALS, commerceCache);
     this.username = username;
     this.password = password;

@@ -1,11 +1,14 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMGallery" -->
-<#assign additionalClass=cm.localParameters().additionalClass!"cm-details" />
+
+<#assign additionalClass=cm.localParameter("additionalClass", "cm-details") />
+<#assign itemsClass=cm.localParameter("itemsClass", "") />
 <#assign relatedView=cm.localParameters().relatedView!"related" />
 <#assign carouselParams=cm.localParameters().carouselParams!{} />
-
+<#assign viewItems=cm.localParameters().viewItems!"asTeaser" />
 <#assign renderDate=cm.localParameter("renderDate", true) />
 <#assign renderTags=cm.localParameter("renderTags", true) />
 <#assign renderRelated=cm.localParameter("renderRelated", true) />
+
 <#assign carouselParams=carouselParams + {"additionalClass": "${additionalClass}__medias", "viewItems": "_header", "modifier": "details"}/>
 
 <article class="${additionalClass}"<@cm.metadata self.content />>
@@ -13,9 +16,8 @@
   <#-- title -->
   <h1 class="${additionalClass}__headline"<@cm.metadata "properties.title"/>>${self.title!""}</h1>
 
-
   <#-- media -->
-  <@cm.include self=bp.getContainer(self.items) view="asGrid" params={"itemsPerRow": 3, "additionalClass": "cm-collection--tiles-landscape"} />
+  <@cm.include self=bp.getContainer(self.items) view="asGrid" params={"itemsPerRow": 3, "viewItems": "${viewItems}", "additionalClass": "cm_details__media ${itemsClass}"} />
 
   <#-- text -->
   <#if self.detailText?has_content>

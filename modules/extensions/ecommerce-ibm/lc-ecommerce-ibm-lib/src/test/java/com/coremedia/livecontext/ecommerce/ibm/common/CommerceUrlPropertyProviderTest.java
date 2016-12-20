@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -108,16 +109,16 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
   }
 
   @Test
-  public void testUrlNullParam() throws UnsupportedEncodingException {
+  public void testUrlEmptyParameterMap() throws UnsupportedEncodingException {
     assertEquals(UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + URL_TEMPLATE).build().toString(),
-            testling.provideValue(null).toString());
+            testling.provideValue(new HashMap<String, Object>()).toString());
   }
 
   @Test
   public void testUrlTemplateIsEmpty(){
     Map<String, Object> params = new HashMap<>();
     params.put(CommerceUrlPropertyProvider.URL_TEMPLATE, "");
-    assertEquals("", testling.provideValue(params));
+    assertNull(testling.provideValue(params));
 
     params.put(CommerceUrlPropertyProvider.URL_TEMPLATE, null);
     assertEquals(UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + URL_TEMPLATE).build().toString(),

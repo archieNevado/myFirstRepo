@@ -5,8 +5,8 @@ import com.coremedia.elastic.core.api.blobs.BlobService;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
-import com.coremedia.mimetype.DefaultMimeTypeService;
 import com.coremedia.mimetype.MimeTypeService;
+import com.coremedia.mimetype.TikaMimeTypeService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,15 +15,12 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import java.io.InputStream;
-import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -87,9 +84,9 @@ public class DemoUserCreationServiceTest {
 
   @Bean
   public MimeTypeService mimeTypeService() {
-    final DefaultMimeTypeService defaultMimeTypeService = new DefaultMimeTypeService();
-    defaultMimeTypeService.setMappings(Collections.singletonMap(".png", "image/png"));
-    return defaultMimeTypeService;
+    TikaMimeTypeService mimeTypeService = new TikaMimeTypeService();
+    mimeTypeService.init();
+    return mimeTypeService;
   }
 
 }

@@ -39,6 +39,8 @@
           <groupId>${project.groupId}</groupId>
           <artifactId>theme-importer-lib</artifactId>
           <version>${project.version}</version>
+          <!-- Why optional? Otherwise the logback.xml which is part of the theme-importer-lib will screw up logging of the cae-preview-webapp -->
+          <optional>true</optional>
         </dependency>
       </dependencies>
       <build>
@@ -71,6 +73,18 @@
                 <goals>
                   <goal>exec</goal>
                 </goals>
+                <configuration>
+                  <executable>${env.JAVA_HOME}/bin/java</executable>
+                  <arguments>
+                    <argument>${theme-importer.argument.folder}</argument>
+                    <argument>${theme-importer.argument.export-path}</argument>
+                    <argument>-classpath</argument>
+                    <!-- automatically creates the classpath using all project dependencies,
+                         also adding the project build directory -->
+                    <classpath/>
+                    <argument>${theme-importer.argument.runner}</argument>
+                  </arguments>
+                </configuration>
               </execution>
             </executions>
           </plugin>

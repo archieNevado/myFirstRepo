@@ -18,41 +18,23 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=460;y=0;width=2061;height=3190</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=604;y=422;width=1821;height=2433</StringProperty>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=604;y=709;width=1821;height=1820</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=249;y=623;width=2540;height=1906</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=757;width=2981;height=1676</StringProperty>
-<StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=987;width=2981;height=1494</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=1303;width=2981;height=1188</StringProperty>
-<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=1360;width=2981;height=1121</StringProperty>
-<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=1724;width=2981;height=747</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">position;x1=0.15434083601286175;y1=0;x2=0.8456591639871383;y2=1</StringProperty>
-<StringProperty Name="portrait_ratio3x4">position;x1=0.20257234726688103;y1=0.13213213213213212;x2=0.8135048231511254;y2=0.8948948948948949</StringProperty>
 <StringProperty Name="portrait_ratio1x1">position;x1=0.20257234726688103;y1=0.2222222222222222;x2=0.8135048231511254;y2=0.7927927927927928</StringProperty>
 <StringProperty Name="landscape_ratio4x3">position;x1=0.08360128617363344;y1=0.19519519519519518;x2=0.9356913183279743;y2=0.7927927927927928</StringProperty>
 <StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0.23723723723723725;x2=1;y2=0.7627627627627628</StringProperty>
-<StringProperty Name="landscape_ratio2x1">position;x1=0;y1=0.30930930930930933;x2=1;y2=0.7777777777777778</StringProperty>
-<StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.4084084084084084;x2=1;y2=0.7807807807807807</StringProperty>
-<StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.4264264264264264;x2=1;y2=0.7777777777777778</StringProperty>
-<StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.5405405405405406;x2=1;y2=0.7747747747747747</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="isDefault">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">true</StringProperty>
-<StringProperty Name="portrait_ratio3x4">false</StringProperty>
 <StringProperty Name="portrait_ratio1x1">false</StringProperty>
 <StringProperty Name="landscape_ratio4x3">false</StringProperty>
 <StringProperty Name="landscape_ratio16x9">true</StringProperty>
-<StringProperty Name="landscape_ratio2x1">false</StringProperty>
-<StringProperty Name="landscape_ratio5x2">false</StringProperty>
-<StringProperty Name="landscape_ratio8x3">false</StringProperty>
-<StringProperty Name="landscape_ratio4x1">false</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="reflection">

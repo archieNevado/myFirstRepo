@@ -2,18 +2,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd
-                           http://www.springframework.org/schema/util
-                           http://www.springframework.org/schema/util/spring-util.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
   <description>
     Blueprint specific definitions of the CAE View layer.
   </description>
 
+  <context:component-scan base-package="com.coremedia.cap.util.configuration" />
+  <context:component-scan base-package="com.coremedia.blueprint.theme.configuration" />
+
+  <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/view-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/view-error-services.xml"/>
@@ -83,7 +86,7 @@
     <property name="cache" ref="cache"/>
   </bean>
 
-  <bean id="mergedJavaScriptResourcesView" class="com.coremedia.blueprint.cae.view.CodeResourcesView" parent="mergedCodeResourcesViewBase">
+  <bean id="mergedJavaScriptResourcesView" class="com.coremedia.blueprint.cae.view.MergeableResourcesView" parent="mergedCodeResourcesViewBase">
     <description>
       A view for merging the JavaScript of a page into one file.
     </description>
@@ -91,7 +94,7 @@
     <property name="contentType" value="text/javascript"/>
   </bean>
 
-  <bean id="mergedCssResourcesView" class="com.coremedia.blueprint.cae.view.CodeResourcesView" parent="mergedCodeResourcesViewBase">
+  <bean id="mergedCssResourcesView" class="com.coremedia.blueprint.cae.view.MergeableResourcesView" parent="mergedCodeResourcesViewBase">
     <description>
       A view for merging the CSS of a page into one file.
     </description>
@@ -150,8 +153,8 @@
         <entry key="com.coremedia.objectserver.view.events.ViewHookEvent" value-ref="viewHookEventView"/>
         <entry key="java.lang.Throwable" value-ref="errorView"/>
         <entry key="com.coremedia.xml.Markup#script" value-ref="scriptView"/>
-        <entry key="com.coremedia.blueprint.common.contentbeans.CodeResources#js" value-ref="mergedJavaScriptResourcesView"/>
-        <entry key="com.coremedia.blueprint.common.contentbeans.CodeResources#css" value-ref="mergedCssResourcesView"/>
+        <entry key="com.coremedia.blueprint.common.contentbeans.MergeableResources#js" value-ref="mergedJavaScriptResourcesView"/>
+        <entry key="com.coremedia.blueprint.common.contentbeans.MergeableResources#css" value-ref="mergedCssResourcesView"/>
         <entry key="com.coremedia.xml.Markup#plain" value-ref="plainView"/>
         <entry key="com.coremedia.objectserver.web.HttpError" value-ref="blueprintHttpErrorView"/>
         <entry key="com.coremedia.blueprint.cae.web.HttpHead" value-ref="httpHeadView"/>
@@ -201,6 +204,7 @@
     </description>
     <property name="commonViewRepositoryNames" ref="viewRepositories"/>
     <property name="settingsService" ref="settingsService"/>
+    <property name="themeTemplateViewRepositoryProvider" ref="themeTemplateViewRepositoryProvider"/>
   </bean>
 
   <util:list id="viewRepositories">
@@ -216,7 +220,7 @@
     </list>
   </customize:prepend>
 
-  <customize:prepend id="addBricksRepositoryName" bean="viewRepositories">
+  <customize:prepend id="addBricksRepositoryName" bean="viewRepositories" enabled="#{ !'${cae.use.local.resources:false}' }">
     <list>
       <value>bricks</value>
     </list>
@@ -314,7 +318,7 @@
   </customize:append>
   
   <customize:replace id="customizeTemplateLocationPatterns" bean="templateLocationPatterns" order="0">
-    <description>Register the Blueprint specific template location patterns</description>
+    <description>Register the template location patterns of this module.</description>
     <list>
       <value>/WEB-INF/templates/%s</value>
     </list>
@@ -329,6 +333,22 @@
     <list>
       <value>jar:id:contentproperty:/Themes/%1$s/templates/%1$s-templates.jar/archive!/META-INF/resources/WEB-INF/templates/%1$s</value>
       <value>jar:id:contentproperty:/Themes/%1$s/templates/%1$s-templates.jar/archive!/META-INF/resources/WEB-INF/templates/bricks</value>
+    </list>
+  </customize:prepend>
+
+  <bean id="themeTemplateViewRepositoryProvider"
+        class="com.coremedia.blueprint.cae.view.resolver.ThemeTemplateViewRepositoryProvider"
+        parent="abstractTemplateViewRepositoryProvider">
+    <property name="cache" ref="cache"/>
+    <property name="themeService" ref="themeService"/>
+    <property name="contentRepository" ref="contentRepository"/>
+    <property name="jarBlobResourceLoader" ref="jarBlobResourceLoader"/>
+    <property name="useLocalResources" value="${cae.use.local.resources:false}"/>
+  </bean>
+
+  <customize:prepend id="addThemeViewRepositoryProvider" bean="viewRepositoryProviders">
+    <list>
+      <ref bean="themeTemplateViewRepositoryProvider"/>
     </list>
   </customize:prepend>
 

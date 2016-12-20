@@ -24,6 +24,7 @@
 }
 
 @mixin aspect-ratio-box($x, $y, $overflow: hidden, $includeGutter: false) {
+  //@debug(x: $x, y: $y);
   position: relative;
   overflow: $overflow;
 

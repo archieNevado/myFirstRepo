@@ -9,23 +9,12 @@ then
 fi
 
 set -eu
-BASE_PATH=${SCRIPTPATH}/../../
-NEW_VERSION=$1
-OLD_VERSION=16-BP-SNAPSHOT
+BASE_PATH=${SCRIPTPATH}/../..
+export OLD_VERSION=${BLUEPRINT_DEFAULT_VERSION:-1-SNAPSHOT}
+export NEW_VERSION=$1
 
-echo "set version in:"
-# by using the version> within the pattern we make sure all version properties set to OLD_VERSION are not affected.
-for i in `find ${BASE_PATH} -name pom.xml`; do
-  if [ $(grep -c "<version>${OLD_VERSION}<" $i) -gt 0 ]; then
-    echo "$i"
-    sed -i "s#<version>${OLD_VERSION}<#<version>${NEW_VERSION}<#g" "$i"
-    sed -i "s#<version>\[${OLD_VERSION}\]<#<version>\[${NEW_VERSION}\]<#g" "$i"
-  fi
-done
-echo "set versions for cookbooks"
-for i in `find ${BASE_PATH} -name "*.rb" -o -name "*.md" -name "*.json"`; do
-  if [ $(grep -c "${OLD_VERSION}" $i) -gt 0 ]; then
-    echo "$i"
-    sed -i "s/${OLD_VERSION}/${NEW_VERSION}/g" "$i"
-  fi
-done
+# grep -l "${OLD_VERSION}" "$0"
+echo "replacing $OLD_VERSION with $NEW_VERSION in:"
+find ${BASE_PATH} -type f \( -name pom.xml -o -name "*.rb" -o -name "*.md" -o -name "*.json" \) -not -path "*/node_modules/*" -exec sh -c '
+ grep -l "${OLD_VERSION}" "$0" && sed -i "s#${OLD_VERSION}#${NEW_VERSION}#g" "$0"
+' {} ';'

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor:PropertyFieldGroup
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns:livecontext="exml:com.coremedia.livecontext.studio.config" xmlns:ui="exml:com.coremedia.ui.config"
+        title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_ProductDetails_label')}"
+        itemId="productDetailsDocumentForm"
+        collapsed="true">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
+    [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+    import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
+
+    public static const xtype:String = "com.coremedia.livecontext.studio.config.productDetailsDocumentForm";
+
+    public static const PRODUCT_NAME_FIELD_ITEM_ID:String = "productNameField";
+
+    public static const PRODUCT_DESCRIPTION_FIELD_ITEM_ID:String = "productDescriptionField";
+
+    private var config:ProductDetailsDocumentForm;
+
+    public native function ProductDetailsDocumentForm(config:ProductDetailsDocumentForm = null);
+    ]]></fx:Script>
+
+  <editor:items>
+    <ui:TextFieldContainer bindTo="{CatalogHelper.getInstance().getCatalogExpression(config.bindTo)}"
+                           itemId="{PRODUCT_NAME_FIELD_ITEM_ID}"
+                           readOnly="true"
+                           fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductTeaser_productName_text')}"
+                           labelAlign="top"
+                           propertyPath="{CatalogObjectPropertyNames.NAME}" />
+
+    <livecontext:ProductDescriptionTextArea itemId="{PRODUCT_DESCRIPTION_FIELD_ITEM_ID}"
+                                            fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductTeaser_productShortDescription_text')}"
+                                            labelAlign="top"
+                                            bindTo="{config.bindTo}" />
+  </editor:items>
+
+</editor:PropertyFieldGroup>

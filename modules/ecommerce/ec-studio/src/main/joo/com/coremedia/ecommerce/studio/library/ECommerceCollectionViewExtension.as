@@ -1,5 +1,4 @@
 package com.coremedia.ecommerce.studio.library {
-import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
@@ -25,12 +24,15 @@ import com.coremedia.ui.data.impl.RemoteServiceMethod;
 import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 import com.coremedia.ui.util.ObjectUtils;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class ECommerceCollectionViewExtension implements CollectionViewExtension {
 
   protected static const DEFAULT_TYPE_PRODUCT_RECORD:Object = {
     name: ContentTypeNames.DOCUMENT,
-    label: ECommerceStudioPlugin_properties.INSTANCE.Product_label,
-    icon: ECommerceStudioPlugin_properties.INSTANCE.Product_icon
+    label: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label'),
+    icon: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_icon')
   };
 
   /**
@@ -73,7 +75,9 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     var searchText:String = mainStateBean.get(CollectionViewModel.SEARCH_TEXT_PROPERTY);
     var catalogType:String = mainStateBean.get(CollectionViewModel.CONTENT_TYPE_PROPERTY);
 
-    var searchParameters:SearchParameters = new SearchParameters();
+    var searchParameters:SearchParameters = SearchParameters({});
+    delete searchParameters['xclass'];
+
     var catalogObject:CatalogObject = mainStateBean.get(CollectionViewModel.FOLDER_PROPERTY);
 
     if (catalogObject is Category) {
@@ -139,7 +143,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     var store:Store = catalogObject.getStore();
     while (catalogObject) {
       namePath.push(catalogObject is Category && categoryTreeRelation.isRoot(catalogObject) ?
-              ECommerceStudioPlugin_properties.INSTANCE.StoreTree_root_category : catalogObject.getName());
+              ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_root_category') : catalogObject.getName());
       if (catalogObject is Product) {
         catalogObject = (catalogObject as Product).getCategory();
       } else if (catalogObject is Category) {
@@ -152,10 +156,6 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     }
     namePath.push(store.getName());
     return '/' + namePath.reverse().join('/');
-  }
-
-  public function applySearchParameters(folder:Content, filterQueryFragments:Array, searchParameters:SearchParameters):SearchParameters {
-    return null;
   }
 }
 }

@@ -115,7 +115,7 @@ public class SearchServiceTest {
     CMArticle article = contentTestHelper.getContentBean(ARTICLE_ID);
     navigation = contentTestHelper.getContentBean(ROOT_NAVIGATION_ID);
 
-    page = new PageImpl(navigation, article, true, sitesService, null);
+    page = new PageImpl(navigation, article, true, sitesService, null, null, null, null);
   }
 
   @Test

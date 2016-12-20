@@ -14,6 +14,7 @@
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
   <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/framework/spring/search/solr-search.xml"/>
+  <import resource="classpath:/framework/spring/lc-ecommerce-service.xml"/>
 
   <context:property-placeholder
           ignore-unresolvable="true"
@@ -134,16 +135,17 @@
     <property name="restConnector" ref="restConnector"/>
   </bean>
 
-  <bean id="storefrontConnector" class="com.coremedia.livecontext.ecommerce.ibm.common.WcStorefrontConnector"/>
+  <bean id="storeFrontConnector" class="com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector"/>
 
   <bean id="userContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.user.UserContextProviderImpl">
     <property name="userSessionService" ref="commerceUserSessionService"/>
   </bean>
 
-  <bean id="storeFrontService" class="com.coremedia.livecontext.ecommerce.ibm.common.StoreFrontService" abstract="true">
-    <property name="storefrontConnector" ref="storefrontConnector"/>
+  <bean id="storeFrontService" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService" abstract="true">
+    <property name="storeFrontConnector" ref="storeFrontConnector"/>
     <property name="storeContextProvider" ref="storeContextProvider"/>
     <property name="urlProvider" ref="pageHandlerUrlProvider"/>
+    <property name="cookieService" ref="cookieService"/>
   </bean>
 
   <bean id="pageHandlerUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider">

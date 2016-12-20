@@ -7,7 +7,7 @@
        http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
   <!-- import beans "contentRepository", "index", "contentFeederRepositoryListeners", "contentFeederOperations",
-                    "contentFeederBackgroundFeeds", "partialUpdateAspects" -->
+                    "contentFeederBackgroundFeeds" -->
   <import resource="classpath:/framework/spring/feeder/feeder.xml"/>
   <!-- import beans "taxonomyTreeRelation", "locationTaxonomyTreeRelation" -->
   <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
@@ -40,14 +40,6 @@
     <list>
       <ref bean="subjectTaxonomyIdsBackgroundFeed"/>
       <ref bean="locationTaxonomyIdsBackgroundFeed"/>
-    </list>
-  </customize:append>
-
-  <customize:append id="addTaxonomyIdsPartialUpdateAspect" bean="partialUpdateAspects">
-    <description>Taxonomy IDs get updated with partial update.</description>
-    <list>
-      <value>#{subjectTaxonomyAspect.id}</value>
-      <value>#{locationTaxonomyAspect.id}</value>
     </list>
   </customize:append>
 

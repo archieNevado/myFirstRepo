@@ -1,22 +1,22 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.cap.common.Blob;
-import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.ecommerce.common.ProductIdExtractor;
 import com.coremedia.livecontext.asset.util.AssetHelper;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
+import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,38 +32,27 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
   private static final String ASSET_PRODUCT_IDS_ATTRIBUTE_NAME = "defaultProductIds";
 
   private String blobProperty;
-  private CommerceConnectionInitializer commerceConnectionInitializer;
   private AssetHelper assetHelper;
 
   @Override
-  public void intercept(ContentWriteRequest request) {
+  public void intercept(@Nonnull ContentWriteRequest request) {
     Map<String, Object> properties = request.getProperties();
+
     if (!properties.containsKey(blobProperty)) {
       //not my turf
       return;
     }
 
-    Content parent = request.getParent();
-    if (parent != null) {
-      try {
-        commerceConnectionInitializer.init(parent);
-      } catch (NoCommerceConnectionAvailable ex){
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("No Commerce Connection. The product metadata will not be extracted");
-        }
-        return;
-      }
-    }
-
-    if(Commerce.getCurrentConnection() == null) {
+    CommerceConnection commerceConnection = Commerce.getCurrentConnection();
+    if (commerceConnection == null) {
       return;
     }
 
-    CommerceIdProvider idProvider = Commerce.getCurrentConnection().getIdProvider();
-    CatalogService catalogService = Commerce.getCurrentConnection().getCatalogService();
+    CommerceIdProvider idProvider = commerceConnection.getIdProvider();
+    CatalogService catalogService = commerceConnection.getCatalogService();
     if (idProvider == null || catalogService == null) {
       if (LOG.isDebugEnabled()) {
-        LOG.debug("No id provider/catalog service for the commerce connection " + Commerce.getCurrentConnection() +
+        LOG.debug("No id provider/catalog service for the commerce connection " + commerceConnection +
                 " The product metadata will not be extracted");
       }
       return;
@@ -72,34 +61,47 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
     Object value = properties.get(blobProperty);
     if (value instanceof Blob) {
       Blob blob = (Blob) value;
-
-      List<String> productIds = new ArrayList<>();
-      Iterable<String> xmpIds;
-      Object assetProductIds = request.getAttribute(ASSET_PRODUCT_IDS_ATTRIBUTE_NAME);
-      if (assetProductIds != null) {
-        xmpIds = (Iterable) assetProductIds;
-      } else {
-        xmpIds = ProductIdExtractor.extractProductIds(blob);
-      }
-      for (String externalId : xmpIds) {
-        Product product = retrieveProductOrVariant(externalId);
-        if (product != null) {
-          productIds.add(product.getId());
-        } else if (LOG.isDebugEnabled()) {
-          LOG.debug("Product id " + externalId + " could not be found in catalog. XMP data not persisted.");
-        }
-      }
+      List<String> productIds = getProductIds(request, blob);
 
       properties.put(NAME_LOCAL_SETTINGS, assetHelper.updateCMPictureForExternalIds(request.getEntity(), productIds));
     } else if (value == null) {
       // delete blob action
       Struct result = assetHelper.updateCMPictureOnBlobDelete(request.getEntity());
+
       if (result != null) {
         properties.put(NAME_LOCAL_SETTINGS, result);
       }
     }
   }
 
+  private List<String> getProductIds(@Nonnull ContentWriteRequest request, @Nonnull Blob blob) {
+    List<String> productIds = new ArrayList<>();
+
+    Iterable<String> xmpIds = getXmpIds(request, blob);
+    for (String externalId : xmpIds) {
+      Product product = retrieveProductOrVariant(externalId);
+      if (product != null) {
+        productIds.add(product.getId());
+      } else if (LOG.isDebugEnabled()) {
+        LOG.debug("Product id " + externalId + " could not be found in catalog. XMP data not persisted.");
+      }
+    }
+
+    return productIds;
+  }
+
+  @Nonnull
+  private Iterable<String> getXmpIds(@Nonnull ContentWriteRequest request, @Nonnull Blob blob) {
+    Object assetProductIds = request.getAttribute(ASSET_PRODUCT_IDS_ATTRIBUTE_NAME);
+
+    if (assetProductIds != null) {
+      return (Iterable) assetProductIds;
+    } else {
+      return ProductIdExtractor.extractProductIds(blob);
+    }
+  }
+
+  @VisibleForTesting
   Product retrieveProductOrVariant(String externalId) {
     CommerceIdProvider idProvider = Commerce.getCurrentConnection().getIdProvider();
     CatalogService catalogService = Commerce.getCurrentConnection().getCatalogService();
@@ -120,11 +122,6 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
   @Required
   public void setBlobProperty(String blobProperty) {
     this.blobProperty = blobProperty;
-  }
-
-  @Required
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
   }
 
   @Required

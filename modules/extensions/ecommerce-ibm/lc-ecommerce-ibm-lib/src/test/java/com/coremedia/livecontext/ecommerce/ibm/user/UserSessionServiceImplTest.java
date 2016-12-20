@@ -1,20 +1,19 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
+import com.coremedia.blueprint.base.livecontext.service.CookieService;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreFrontResponse;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcStorefrontConnector;
+import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcLoginWrapperService;
 import com.coremedia.livecontext.ecommerce.user.User;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserService;
-import com.coremedia.objectserver.web.links.TokenResolverHelper;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.cookie.Cookie;
@@ -33,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +51,7 @@ public class UserSessionServiceImplTest {
 
   @Test
   public void loginUserNoStoreId() {
-    commerceConnection.getStoreContext().put(StoreContextBuilder.STORE_ID, null);
+    commerceConnection.getStoreContext().put(StoreContextImpl.STORE_ID, null);
     assertFalse(testling.loginUser(sourceRequest, sourceResponse, USERNAME, PASSWORD));
     verifyNoCookiesAtAll();
   }
@@ -61,7 +59,7 @@ public class UserSessionServiceImplTest {
   @SuppressWarnings("unchecked")
   @Test(expected = AuthenticationServiceException.class)
   public void loginUserAuthenticationException() throws GeneralSecurityException {
-    when(storefrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenThrow(AuthenticationServiceException.class);
+    when(storeFrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenThrow(AuthenticationServiceException.class);
     try {
       testling.loginUser(sourceRequest, sourceResponse, USERNAME, PASSWORD);
     } finally {
@@ -72,7 +70,6 @@ public class UserSessionServiceImplTest {
   @Test
   public void loginUserNoCookiesFromWCS() throws GeneralSecurityException {
     when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
-    when(wcsResponse.getHeaders("Set-Cookie")).thenReturn(null);
     when(storeFrontResponse.getCookies()).thenReturn(Collections.<Cookie>emptyList());
     boolean loggedIn = testling.loginUser(sourceRequest, sourceResponse, USERNAME, PASSWORD);
 
@@ -83,7 +80,7 @@ public class UserSessionServiceImplTest {
   @SuppressWarnings("unchecked")
   @Test
   public void loginUserGenericSecurityException() throws GeneralSecurityException {
-    when(storefrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenThrow(GeneralSecurityException.class);
+    when(storeFrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenThrow(GeneralSecurityException.class);
     assertFalse(testling.loginUser(sourceRequest, sourceResponse, USERNAME, PASSWORD));
     verifyNoCookiesAtAll();
   }
@@ -141,7 +138,7 @@ public class UserSessionServiceImplTest {
   @Test
   public void logoutUserNoStoreId() throws GeneralSecurityException {
     when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGOUT_URL).build());
-    commerceConnection.getStoreContext().put(StoreContextBuilder.STORE_ID, null);
+    commerceConnection.getStoreContext().put(StoreContextImpl.STORE_ID, null);
     assertTrue(testling.logoutUser(sourceRequest, sourceResponse));
     verifyNoCookiesAtAll();
   }
@@ -215,17 +212,17 @@ public class UserSessionServiceImplTest {
     testling = new UserSessionServiceImpl();
     testling.setStoreContextProvider(commerceConnection.getStoreContextProvider());
     testling.setUrlProvider(urlProvider);
-    testling.setStorefrontConnector(storefrontConnector);
+    testling.setStoreFrontConnector(storeFrontConnector);
+    testling.setCookieService(new CookieService());
     CommerceCache commerceCache = new CommerceCache();
     commerceCache.setEnabled(false);
     commerceCache.setCacheTimesInSeconds(Collections.EMPTY_MAP);
     testling.setCommerceCache(commerceCache);
     testling.setLoginWrapperService(wcLoginWrapperService);
 
-    when(storefrontConnector.executeGet(Matchers.contains("Logon"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
-    when(storefrontConnector.executeGet(Matchers.contains("Logoff"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
+    when(storeFrontConnector.executeGet(Matchers.contains("Logon"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
+    when(storeFrontConnector.executeGet(Matchers.contains("Logoff"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
 
-    when(storeFrontResponse.getOriginalResponse()).thenReturn(wcsResponse);
     when(userActivityCookie.getName()).thenReturn(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID);
     when(userActivityCookie.getValue()).thenReturn("irrelevant");
 
@@ -249,19 +246,16 @@ public class UserSessionServiceImplTest {
     when(anonymousUser.getLogonId()).thenReturn(null);
     when(registeredUser.getLogonId()).thenReturn("yes");
 
-    wcsResponseCookies = null;
     storeFrontCookies = null;
   }
 
   private void initializeCookies(String[] names, String[] values) {
     if (names.length > 0) {
-      wcsResponseCookies = new Header[names.length];
       storeFrontCookies = new ArrayList<>();
       for (int i = 0; i < names.length; i++) {
         Header header = mock(Header.class);
         when(header.getName()).thenReturn(names[i]);
         when(header.getValue()).thenReturn(values[i]);
-        wcsResponseCookies[i] = header;
 
         Cookie cookie = mock(Cookie.class);
         when(cookie.getName()).thenReturn(names[i]);
@@ -270,13 +264,12 @@ public class UserSessionServiceImplTest {
       }
     }
 
-    when(wcsResponse.getHeaders("Set-Cookie")).thenReturn(wcsResponseCookies);
     when(storeFrontResponse.getCookies()).thenReturn(storeFrontCookies);
   }
 
   private void verifyCookies(String uri, int countCookies) throws GeneralSecurityException {
     //noinspection unchecked
-    verify(storefrontConnector).executeGet(eq(STOREFRONT_SECURE_URL + uri), any(Map.class), eq(sourceRequest));
+    verify(storeFrontConnector).executeGet(eq(STOREFRONT_SECURE_URL + uri), any(Map.class), eq(sourceRequest));
     verify(sourceResponse, times(countCookies)).addCookie(any(javax.servlet.http.Cookie.class));
     verify(sourceResponse, never()).setHeader(any(String.class), any(String.class));
   }
@@ -287,7 +280,7 @@ public class UserSessionServiceImplTest {
   }
 
   @Mock
-  private WcStorefrontConnector storefrontConnector;
+  private StoreFrontConnector storeFrontConnector;
 
   @Mock
   private StoreFrontResponse storeFrontResponse;
@@ -297,9 +290,6 @@ public class UserSessionServiceImplTest {
 
   @Mock
   private User registeredUser;
-
-  @Mock
-  private HttpResponse wcsResponse;
 
   @Mock
   private Cookie userActivityCookie;
@@ -327,9 +317,6 @@ public class UserSessionServiceImplTest {
   private BaseCommerceConnection commerceConnection;
 
   private UserSessionServiceImpl testling;
-
-  // The list of all "Set-Cookie" header returned in the wcsResponse
-  private Header[] wcsResponseCookies;
 
   // The list of all store front response cookies matching the wcsResponseCookies
   private List<Cookie> storeFrontCookies;

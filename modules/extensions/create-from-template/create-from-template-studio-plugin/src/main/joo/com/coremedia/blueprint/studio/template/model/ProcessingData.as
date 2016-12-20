@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.studio.template.model {
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.undoc.content.ContentUtil;
 import com.coremedia.ui.data.impl.BeanImpl;
 
 /**

@@ -1,24 +1,25 @@
 package com.coremedia.catalog.studio.library {
 import com.coremedia.cap.common.IdHelper;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentCreateResult;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.publication.PublicationService;
-import com.coremedia.cms.editor.EditorErrors_properties;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.logging.Logger;
 
-import ext.MessageBox;
+import ext.StringUtil;
+import ext.window.MessageBoxWindow;
 
-import ext.util.StringUtil;
+import mx.resources.ResourceManager;
 
 /**
  * Intercepts the new content creation and updates the calculateDisabled/hidden state for catalog document types.
  */
+[ResourceBundle('com.coremedia.cms.editor.EditorErrors')]
 public class CatalogTreeRelation implements ContentTreeRelation {
 
   public static const PROPERTY_CONTEXTS:String = "contexts";
@@ -52,7 +53,7 @@ public class CatalogTreeRelation implements ContentTreeRelation {
    */
   private static function typeIs(content:Content, typeName:String):Boolean {
     var contentType:ContentType = content.getType();
-    if (contentType == undefined) {
+    if (contentType === undefined) {
       return undefined;
     }
     return contentType.getName() && contentType.getName() === typeName;
@@ -208,7 +209,7 @@ public class CatalogTreeRelation implements ContentTreeRelation {
       return undefined;
     }
 
-    var isCatalogType:Boolean = contentType.getName() == CONTENT_TYPE_CATEGORY || contentType.getName() === CONTENT_TYPE_PRODUCT;
+    var isCatalogType:Boolean = contentType.getName() === CONTENT_TYPE_CATEGORY || contentType.getName() === CONTENT_TYPE_PRODUCT;
     return folder.getType().getName() === CONTENT_TYPE_CATEGORY && isCatalogType;
   }
 
@@ -287,7 +288,7 @@ public class CatalogTreeRelation implements ContentTreeRelation {
 
 
   public function provideRepositoryFolderFor(contentType:ContentType, folderNode:Content, childNodeName:String, callback:Function):void {
-    var repository:ContentRepository = session.getConnection().getContentRepository();
+    var repository:ContentRepository = SESSION.getConnection().getContentRepository();
     if (contentType.isSubtypeOf(CONTENT_TYPE_CATEGORY)) {
       repository.getFolderContentType().create(folderNode.getParent(), childNodeName, function (result:ContentCreateResult):void {
         if (result.error) {
@@ -305,17 +306,17 @@ public class CatalogTreeRelation implements ContentTreeRelation {
   }
 
   public function rename(content:Content, newName:String, callback:Function = null):void {
-    content.getParent().getParent().getChild(newName, function(duplicateChild:Content, absolutePath:String = null):void {
-      if(duplicateChild == null) {
+    content.getParent().getParent().getChild(newName, function (duplicateChild:Content, absolutePath:String = null):void {
+      if (duplicateChild === null) {
         if (isFolderNode(content)) {
           content.getParent().rename(newName);
         }
         content.rename(newName, callback);
       }
       else {
-        MessageBoxUtilInternal.show(EditorErrors_properties.INSTANCE.duplicateName_title,
-                StringUtil.format(EditorErrors_properties.INSTANCE.duplicateName_message, content.getName()),
-                MessageBox.ERROR, MessageBox.OK, callback, true, true);
+        MessageBoxUtilInternal.show(ResourceManager.getInstance().getString('com.coremedia.cms.editor.EditorErrors', 'duplicateName_title'),
+                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.cms.editor.EditorErrors', 'duplicateName_message'), content.getName()),
+                MessageBoxWindow.ERROR, MessageBoxWindow.OK, callback, true, true);
       }
     });
   }
@@ -353,7 +354,7 @@ public class CatalogTreeRelation implements ContentTreeRelation {
   }
 
   public function withdraw(contents:Array, publicationService:PublicationService, callback:Function):void {
-    var repository:ContentRepository = session.getConnection().getContentRepository();
+    var repository:ContentRepository = SESSION.getConnection().getContentRepository();
     repository.getPublicationService().withdrawAllFromTree(contents, CONTENT_TYPE_CATEGORY, PROPERTY_CHILDREN, callback);
   }
 

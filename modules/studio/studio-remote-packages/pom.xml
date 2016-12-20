@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>studio</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>studio-remote-packages</artifactId>
+  <packaging>pom</packaging>
+
+  <dependencies>
+    <!-- These dependencies are/will be generated automatically -->
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>net.jangaroo</groupId>
+        <artifactId>jangaroo-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-core-remote-packages</id>
+            <goals>
+              <goal>extract-remote-packages</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

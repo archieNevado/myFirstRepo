@@ -50,6 +50,6 @@ end
 services.each do |tomcat|
   service tomcat do
     action [:enable, :start]
-    supports :restart => true, :status => true
+    supports restart: true, status: true
   end
 end

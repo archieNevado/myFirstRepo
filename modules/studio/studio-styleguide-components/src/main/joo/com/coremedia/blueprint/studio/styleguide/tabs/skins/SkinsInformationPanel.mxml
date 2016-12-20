@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+       xmlns="exml:ext.config"
+       xmlns:ui="exml:com.coremedia.ui.config"
+       xmlns:skins="com.coremedia.blueprint.studio.styleguide.tabs.skins.*"
+       padding="5">
+  <fx:Script><![CDATA[
+    import com.coremedia.ui.data.ValueExpressionFactory;
+    import com.coremedia.ui.skins.BaseSkin;
+
+    private var config:SkinsInformationPanel;
+
+    public native function SkinsInformationPanel(config:SkinsInformationPanel = null);
+
+    public var skinsEnum:Array;
+    public var skinCategoryItemId:String;
+    public var skinGroup:String;
+
+    public function getSkins(skinsEnum:Array, skinCategoryItemId:String):Array {
+      var configs:Array = [];
+      skinsEnum.forEach(function (skin:BaseSkin):void {
+        configs.push(getSkin(skin, skinCategoryItemId));
+      });
+      return configs;
+    }
+
+    private function getSkin(skinEnum:BaseSkin, skinCategoryItemId:String):Object {
+      return {
+        skinId: skinEnum.getId(),
+        skinGroup: skinEnum.getSkinGroup(),
+        skinCategoryItemId: skinCategoryItemId,
+        ui: skinEnum.getClassName() + '.' + skinEnum.name + '.getSkin()',
+        getId: function ():String {
+          return skinEnum.getId()
+        }
+      }
+    }
+    ]]></fx:Script>
+
+  <items>
+    <Container html="Click to scroll to ui..."/>
+  </items>
+
+  <plugins>
+
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromFunction(getSkins, config.skinsEnum, config.skinCategoryItemId)}"
+            configBeanParameterName="skin">
+      <ui:template>
+        <skins:SkinsList/>
+      </ui:template>
+    </ui:BindComponentsPlugin>
+  </plugins>
+
+</Panel>

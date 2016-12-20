@@ -17,11 +17,33 @@ public interface Page extends AbstractPage {
   List<?> getCss();
 
   /**
+   * Returns the ie specific css contents for this page.
+   *
+   * @return the css contents for this page
+   */
+  List<?> getInternetExplorerCss();
+
+  /**
    * Returns the JavaScript contents for this page.
    *
    * @return the JavaScript contents for this page
    */
   List<?> getJavaScript();
+
+  /**
+   * Returns the JavaScript contents for this page that are to be included in
+   * the HTML head.
+   *
+   * @return the JavaScript contents for the head of this page
+   */
+  List<?> getHeadJavaScript();
+
+  /**
+   * Returns the ie specific JavaScript contents for this page.
+   *
+   * @return the ie specific JavaScript contents for this page
+   */
+  List<?> getInternetExplorerJavaScript();
 
   /**
    * Returns a favicon for this page. May be null.

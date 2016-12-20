@@ -4,6 +4,8 @@ SCRIPTPATH=`dirname $SCRIPT`
 
 test -d ${SCRIPTPATH}/maven-repo || (echo "maven repo missing at ${SCRIPTPATH}/maven-repo" && exit 1)
 test -d /tmp/maven-repo || ln -s $SCRIPTPATH/maven-repo /tmp/maven-repo
+test -f ${SCRIPTPATH}/content-users.zip || echo "content-users.zip missing in deployment archive, recipe blueprint-dev-tooling::content won't work"
+test -f /tmp/content-users.zip || ln -s $SCRIPTPATH/content-users.zip /tmp/content-users.zip
 
 CHEF_CMD="chef-solo --config ${SCRIPTPATH}/chef-repo/.chef/solo.rb"
 
@@ -36,4 +38,5 @@ CHEF_CMD+=" --json-attributes ${SCRIPTPATH}/chef-repo/nodes/${CHEF_NODE_CONFIG}.
 
 echo "Starting Chef Solo with environment ${CHEF_ENV} from node configuration ${CHEF_NODE_CONFIG}"
 ${CHEF_CMD}
+rm -f /tmp/maven-repo /tmp/content-users.zip
 echo "Open http://overview.${HOSTNAME} in your browser to visit the overview"

@@ -197,6 +197,13 @@
       <artifactId>log4j</artifactId>
       <version>1.2.17</version>
     </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>test-data</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
   </dependencies>
 
   <build>
@@ -231,6 +238,8 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
+        <!--Maven assembly plugin 2.5.3 has heap problems if content is included-->
+        <version>2.6</version>
         <executions>
           <execution>
             <id>create-deployment-archive</id>

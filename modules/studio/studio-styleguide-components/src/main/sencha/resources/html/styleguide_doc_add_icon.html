@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div data-content="title">
+  How to add an icon?
+</div>
+<div data-content="body">
+  <ol>
+    <li>Checkout <code>cms-icons</code></li>
+    <li>Add a new folder beneath <code>src/main/icons</code> of <code>core-icons</code> or <code>collaboration-icons</code>. The folder name is the <code>identifier</code> for the icon.</li>
+    <li>Add the 16x16 version of the icon named using the <code>identifier</code> followed by &lt;_16.svg&gt;<sup>*</sup></li>
+    <li>(Optional) add the 24x24 version of the icon named using the <code>identifier</code> followed by &lt;_24.svg&gt;<sup>*</sup></li>
+    <li>(Optional) add the 32x32 version of the icon named using the <code>identifier</code> followed by &lt;_32.svg&gt;<sup>*</sup></li>
+    <li>Commit and push</li>
+    <li>Open the <code>cms-thirdparty-bom/pom.xml</code> in your CMX workspace and increment the version number for <code>cms.icons.version</code></li>
+    <li>Open release job: https://cm7-ci.coremedia.com/job/cmx/view/releasejobs/job/release-cms-icons-1.0/, login, and
+      trigger the build process while providing the incremented <code>cms.icons.version</code> number</li>
+    <li>If build is successful, commit and push the adapted <code>cms-thirdparty-bom/pom.xml</code></li>
+  </ol>
+  <p><sup>*</sup> - Although we use SVGs that can be scaled for different dimensions we decided to have specialized versions of each icon that are optimized for the different dimensions. Otherwise the icon would look blurry or important details are missing in most cases.</p>
+</div>
+</body>
+</html>

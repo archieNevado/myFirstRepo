@@ -10,9 +10,8 @@ import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
-import com.coremedia.objectserver.util.undoc.CMMetadataRenderer;
-import com.coremedia.objectserver.util.undoc.MetadataInfo;
 import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
+import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -30,7 +29,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 /**
  * A Facade for LiveContext utility functions used by FreeMarker templates.
  */
-public class LiveContextFreemarkerFacade {
+public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   private static final String CATALOG_ID = "catalogId";
   private static final String LANG_ID = "langId";
   private static final String SITE_ID = "siteId";
@@ -41,9 +40,8 @@ public class LiveContextFreemarkerFacade {
   private static final String STORE_REF = "storeRef";
   static final String IS_IN_LAYOUT = "isInLayout";
 
-  private LiveContextNavigationFactory liveContextNavigationFactory;
+  private transient LiveContextNavigationFactory liveContextNavigationFactory;
   private String secureScheme;
-  private MetadataInfo metadataInfo;
 
   public String formatPrice(Object amount, Currency currency, Locale locale) {
     return FormatFunctions.formatPrice(amount, currency, locale);
@@ -62,14 +60,15 @@ public class LiveContextFreemarkerFacade {
   }
 
   /**
-   * Values generated here are copied by coremedia-pbe.js (WCS workspace) into property node
-   * {@link com.coremedia.objectserver.util.undoc.CMMetadataRenderer#DEFAULT_METADATA_PROPERTY}
-   * with property "properties.shopUrl"
+   * This method returns a {@link Map} which contains information for the preview.<br>
+   * The map contains the following keys: {@link #CATALOG_ID}, {@link #LANG_ID}, {@link #SITE_ID} and {@link #STORE_ID}.<br>
+   *
+   * @return a map containing informations for preview of fragments
    * @throws IOException
    */
   @Nonnull
   public Map<String, Object> getPreviewMetadata() throws IOException {
-    if (!metadataInfo.isMetadataEnabled()) {
+    if (!isMetadataEnabled()) {
       return Collections.emptyMap();
     }
 
@@ -97,14 +96,12 @@ public class LiveContextFreemarkerFacade {
   }
 
   /**
-   * This method returns a JSON String which contains information about the state of the fragment.<br>
-   * The JSON is rendered by a {@link CMMetadataRenderer}. <br>
-   * The {@link CMMetadataRenderer} gets invoked with the following datastructure: List<Map>.<br>
+   * This method returns a {@link Map} which contains information about the state of the fragment.<br>
    * The map contains the following keys: {@link #PLACEMENT_NAME}, {@link #IS_IN_LAYOUT} and {@link #HAS_ITEMS}.<br>
    * The values of those keys are of type boolean.
    *
    * @param placementObject a PageGridPlacement
-   * @return json representation of necessary flags for highlighting fragments in preview mode
+   * @return a map containing informations for fragment highlighting
    * @throws IOException
    */
   @Nonnull
@@ -112,7 +109,7 @@ public class LiveContextFreemarkerFacade {
     PageGridPlacement placement = asPageGridPlacement(placementObject);
     String placementName = placement != null ? placement.getName() : asPageGridPlacementName(placementObject);
 
-    if (!metadataInfo.isMetadataEnabled()) {
+    if (!isMetadataEnabled()) {
       return Collections.emptyMap();
     }
 
@@ -159,14 +156,14 @@ public class LiveContextFreemarkerFacade {
     return Commerce.getCurrentConnection().getStoreContextProvider();
   }
 
-  @Required
-  public void setLiveContextNavigationFactory(@Nonnull LiveContextNavigationFactory liveContextNavigationFactory) {
-    this.liveContextNavigationFactory = liveContextNavigationFactory;
+  @Override //Overriden for mocking in test.
+  protected boolean isMetadataEnabled() {
+    return super.isMetadataEnabled();
   }
 
   @Required
-  public void setMetadataInfo(MetadataInfo metadataInfo) {
-    this.metadataInfo = metadataInfo;
+  public void setLiveContextNavigationFactory(@Nonnull LiveContextNavigationFactory liveContextNavigationFactory) {
+    this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
 
   public void setSecureScheme(String secureScheme) {

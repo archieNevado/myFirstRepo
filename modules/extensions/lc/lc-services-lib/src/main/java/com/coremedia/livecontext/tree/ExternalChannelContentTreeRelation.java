@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.tree;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cap.content.Content;
@@ -9,7 +8,8 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
-import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,7 @@ import java.util.List;
  * Since CMExternalChannel does not reference any contents as children #getChildrenOf is not implemented.
  */
 public class ExternalChannelContentTreeRelation implements TreeRelation<Content> {
+
   //local variables to avoid contentbean dependency
   private static final String EXTERNAL_ID = "externalId";
   private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
@@ -51,13 +52,17 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
     if (!isApplicable(child)) {
       return null;
     }
+
     Site site = sitesService.getContentSiteAspect(child).getSite();
     String externalId = child.getString(EXTERNAL_ID);
     if (!StringUtils.isEmpty(externalId) && site != null) {
-      commerceConnectionInitializer.init(site);
-      CommerceBean childCategory = getCommerceBeanFactory().createBeanFor(
-              Commerce.getCurrentConnection().getIdProvider().formatCategoryId(externalId),
-              Commerce.getCurrentConnection().getStoreContext());
+      CommerceConnection commerceConnection = commerceConnectionInitializer.getCommerceConnectionForSite(site);
+
+      String categoryId = commerceConnection.getIdProvider().formatCategoryId(externalId);
+      StoreContext storeContext = commerceConnection.getStoreContext();
+
+      CommerceBean childCategory = commerceConnection.getCommerceBeanFactory().createBeanFor(categoryId, storeContext);
+
       if (childCategory instanceof Category) {
         Category parentCategory = commerceTreeRelation.getParentOf((Category) childCategory);
         if (parentCategory != null) {
@@ -74,24 +79,30 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
         }
       }
     }
+
     return null;
   }
 
   @Nullable
   public Content getNearestContentForCategory(@Nullable Category category, @Nullable Site site) {
-    if (category != null && site != null) {
-      Content augmentingContent = null;
-      if(augmentationService != null) {
-        augmentingContent = augmentationService.getContent(category);
-      }
-      if (null != augmentingContent) {
-        return augmentingContent;
-      }
-      Category parentCategory = commerceTreeRelation.getParentOf(category);
-      if (null != parentCategory) {
-        return getNearestContentForCategory(parentCategory, site);
-      }
+    if (category == null || site == null) {
+      return null;
     }
+
+    Content augmentingContent = null;
+    if (augmentationService != null) {
+      augmentingContent = augmentationService.getContent(category);
+    }
+
+    if (null != augmentingContent) {
+      return augmentingContent;
+    }
+
+    Category parentCategory = commerceTreeRelation.getParentOf(category);
+    if (null != parentCategory) {
+      return getNearestContentForCategory(parentCategory, site);
+    }
+
     return null;
   }
 
@@ -121,10 +132,6 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   @Override
   public boolean isApplicable(Content item) {
     return item != null && item.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL);
-  }
-
-  public CommerceBeanFactory getCommerceBeanFactory() {
-    return Commerce.getCurrentConnection().getCommerceBeanFactory();
   }
 
   @Autowired(required = false)

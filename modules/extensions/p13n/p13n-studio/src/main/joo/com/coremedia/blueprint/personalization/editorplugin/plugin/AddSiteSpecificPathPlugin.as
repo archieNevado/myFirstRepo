@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.personalization.editorplugin.plugin {
 
-import com.coremedia.blueprint.personalization.editorplugin.config.addsitespecificpath;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cms.editor.sdk.util.PathFormatter;
@@ -31,7 +30,7 @@ public class AddSiteSpecificPathPlugin implements Plugin {
    *
    * @param config the config object
    */
-  public function AddSiteSpecificPathPlugin(config:addsitespecificpath = null) {
+  public function AddSiteSpecificPathPlugin(config:Addsitespecificpath = null) {
     groupHeaderLabel = config.groupHeaderLabel;
     entityExpression = config.activeContentValueExpression;
     path = config.path;
@@ -66,18 +65,18 @@ public class AddSiteSpecificPathPlugin implements Plugin {
 
   private function doLoadPersonas(selectedSitePath:String):void {
     if (selectedSitePath) {
-      session.getConnection().getContentRepository().getRoot().getChild(selectedSitePath, function (content:Content, cPath:String):void {
+      SESSION.getConnection().getContentRepository().getRoot().getChild(selectedSitePath, function (content:Content, cPath:String):void {
         if (content) {
           personaSelector.addPath(selectedSitePath, groupHeaderLabel);
           if (debug) {
-            trace("added persona lookup path", selectedSitePath, "with label", groupHeaderLabel);
+            trace("[INFO]", "added persona lookup path", selectedSitePath, "with label", groupHeaderLabel);
           }
         } else if (debug) {
-          trace("no folder available at path", selectedSitePath);
+          trace("[INFO]", "no lookup path for persona added. no folder available at path", selectedSitePath);
         }
       });
     } else if (debug) {
-      trace("selected site path is null");
+      trace("[INFO]", "no lookup path for persona added. selected site path is null");
     }
   }
 

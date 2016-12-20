@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.elastic.social.rest;
 
-import com.coremedia.blueprint.elastic.common.BlobConverter;
-import com.coremedia.blueprint.elastic.common.ImageHelper;
+import com.coremedia.blueprint.base.elastic.common.BlobConverter;
+import com.coremedia.blueprint.base.elastic.common.ImageHelper;
 import com.coremedia.blueprint.elastic.social.util.BbCodeToCoreMediaRichtextTransformer;
 import com.coremedia.blueprint.elastic.social.util.RepositoryFileNameHelper;
 import com.coremedia.cap.common.IdHelper;

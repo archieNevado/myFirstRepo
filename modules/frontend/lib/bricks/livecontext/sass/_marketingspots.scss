@@ -1,0 +1,30 @@
+
+.cm-collection--marketingspot {
+  display: block;
+  font-size: 0;
+  text-align: center;
+  color: #ffffff;
+
+  .cm-teasable {
+    display: inline-block;
+    background-color: #80A3BF;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 1.1rem;
+    vertical-align: middle;
+    width: 100%;
+
+    &.cm-teasable--text .cm-teasable__content {
+      padding: 0 10px;
+      min-height: 50px;
+      color: #FFF;
+      font-size: 1.6rem;
+
+      @include breakpoint(xs) {
+        padding-bottom: 10px;
+        padding-top: 10px;
+        min-height: 30px;
+      }
+    }
+  }
+}

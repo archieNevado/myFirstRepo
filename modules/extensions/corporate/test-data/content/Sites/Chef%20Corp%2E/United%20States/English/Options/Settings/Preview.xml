@@ -45,6 +45,12 @@
 </StructProperty>
 <StructProperty Name="fragmentPreview">
 <Struct>
+<StructListProperty Name="CMSpinner">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+</StructListProperty>
 <StructListProperty Name="CMTeasable">
 <Struct>
 <StringProperty Name="titleKey">preview_label_default</StringProperty>

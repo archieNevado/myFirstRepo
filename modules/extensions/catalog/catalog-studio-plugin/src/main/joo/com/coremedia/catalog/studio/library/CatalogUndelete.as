@@ -5,14 +5,16 @@ import com.coremedia.cap.content.results.BulkOperationResult;
 import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.cap.content.search.SearchResult;
 import com.coremedia.cap.content.search.SearchService;
-import com.coremedia.catalog.studio.*;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-import ext.util.StringUtil;
+import ext.StringUtil;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.catalog.studio.CatalogStudioPlugin')]
 public class CatalogUndelete {
 
   private var treeRelation:CatalogTreeRelation;
@@ -97,8 +99,8 @@ public class CatalogUndelete {
    */
   private function executeErrorHandling(content:Content):void {
     editorContext.getContentTabManager().openDocument(content);
-    var title:String = CatalogStudioPlugin_properties.INSTANCE.catalog_undelete_err_title;
-    var message:String = StringUtil.format(CatalogStudioPlugin_properties.INSTANCE.catalog_undelete_err_message, content.getName());
+    var title:String = ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_undelete_err_title');
+    var message:String = StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_undelete_err_message'), content.getName());
     MessageBoxUtil.showInfo(title, message);
   }
 
@@ -111,7 +113,7 @@ public class CatalogUndelete {
   private function findDeletedParent(catalogItem:Content, matchingPath:String, callback:Function):void {
     var site:Site = editorContext.getSitesService().getSiteFor(catalogItem);
     //http://localhost:40080/api/content/search?query=&contentType=Document_&folder=content%2F1&orderBy=type%20desc&orderBy=name%20desc&includeSubfolders=true&filterQuery=(status%3A3)&limit=-1&includeSubtypes=true&_dc=1442318843685
-    var params:SearchParameters = new SearchParameters();
+    var params:SearchParameters = SearchParameters({});
     params.folder = site.getSiteRootFolder().getUriPath();
     params.includeSubfolders = true;
     params.contentType = [CatalogTreeRelation.CONTENT_TYPE_CATEGORY];

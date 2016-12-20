@@ -5,6 +5,10 @@
 <#assign renderDimmer=cm.localParameter("renderDimmer", true) />
 <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
 <#assign limitAspectRatios=cm.localParameter("limitAspectRatios", []) />
+<#assign imageMapId=cm.localParameter("imageMapId", "") />
+<#assign quickInfoMainId=cm.localParameter("quickInfoMainId", "") />
+<#assign quickInfoIdList=cm.localParameter("quickInfoIdList", "") />
+<#assign useQuickinfo=cm.localParameter("useQuickinfo", true) />
 
 <#if self.picture?has_content>
 <div class="cm-imagemap__wrapper">
@@ -18,12 +22,12 @@
     "additionalAttr": {"useMap": "#" + imageMapId!"", "unselectable": "on"}
     }/>
     </a>
-<#-- include imagemap -->
-  <@cm.include self=self view="areasMap" params={"imageMapId": imageMapId, "quickInfoMainId": quickInfoMainId, "quickInfoIdList": quickInfoIdList}/>
+  <#-- include imagemap -->
+  <@cm.include self=self view="_areasMap" params={"imageMapId": imageMapId, "quickInfoMainId": quickInfoMainId, "quickInfoIdList": quickInfoIdList, "useQuickinfo": useQuickinfo}/>
 </div>
-  <#if renderDimmer>
+<#if renderDimmer>
   <div class="${additionalClass}__dimmer"></div>
-  </#if>
+</#if>
 <#elseif renderEmptyImage>
 <div class="${additionalClass}__picture-box" <@cm.metadata "properties.pictures" />>
     <div class="${additionalClass}__picture"></div>

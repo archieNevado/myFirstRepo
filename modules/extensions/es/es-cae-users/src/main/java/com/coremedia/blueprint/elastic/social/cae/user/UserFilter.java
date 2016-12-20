@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.elastic.social.cae.user;
 
 import com.coremedia.blueprint.base.multisite.SiteHelper;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;

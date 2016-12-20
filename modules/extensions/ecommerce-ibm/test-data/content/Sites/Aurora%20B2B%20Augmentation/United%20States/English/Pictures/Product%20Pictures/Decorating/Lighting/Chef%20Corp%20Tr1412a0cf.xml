@@ -22,9 +22,7 @@
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=0;width=1876;height=1875</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=21;width=1876;height=1408</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=725;width=1876;height=1054</StringProperty>
-<StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=783;width=1876;height=938</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=875;width=1876;height=750</StringProperty>
-<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=900;width=1876;height=704</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=1017;width=1876;height=471</StringProperty>
 </Struct>
 </StructProperty>
@@ -35,9 +33,7 @@
 <StringProperty Name="portrait_ratio1x1">position;x1=0;y1=0;x2=1;y2=0.75</StringProperty>
 <StringProperty Name="landscape_ratio4x3">position;x1=0;y1=0.008333333333333333;x2=1;y2=0.5716666666666667</StringProperty>
 <StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0.29;x2=1;y2=0.7116666666666667</StringProperty>
-<StringProperty Name="landscape_ratio2x1">position;x1=0;y1=0.31333333333333335;x2=1;y2=0.6883333333333334</StringProperty>
 <StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.35;x2=1;y2=0.65</StringProperty>
-<StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.36;x2=1;y2=0.6416666666666667</StringProperty>
 <StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.4066666666666667;x2=1;y2=0.595</StringProperty>
 </Struct>
 </StructProperty>
@@ -48,9 +44,7 @@
 <StringProperty Name="portrait_ratio1x1">false</StringProperty>
 <StringProperty Name="landscape_ratio4x3">false</StringProperty>
 <StringProperty Name="landscape_ratio16x9">true</StringProperty>
-<StringProperty Name="landscape_ratio2x1">true</StringProperty>
 <StringProperty Name="landscape_ratio5x2">true</StringProperty>
-<StringProperty Name="landscape_ratio8x3">true</StringProperty>
 <StringProperty Name="landscape_ratio4x1">true</StringProperty>
 </Struct>
 </StructProperty>

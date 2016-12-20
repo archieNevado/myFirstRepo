@@ -3,17 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "grunt build",
+    "production": "grunt production",
     "watch": "grunt watch"
   },
   "dependencies": {
-    "bootstrap-carousel-swipe": "0.0.6",
-    "bootstrap-sass": "3.3.6",
-    "imagesloaded": "4.1.0",
-    "jquery": "2.2.4",
     "magnific-popup": "1.1.0",
-    "mediaelement": "2.22.0",
-    "normalize-scss": "5.0.3"
+    "mediaelement": "2.23.4",
+    "normalize-scss": "6.0.0"
   },
   "theme": {
     "name": "perfectchef",

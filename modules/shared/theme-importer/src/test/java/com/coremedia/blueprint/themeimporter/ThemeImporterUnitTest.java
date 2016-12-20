@@ -118,8 +118,8 @@ public class ThemeImporterUnitTest {
             "    position: absolute;\n" +
             "  }\n" +
             "}\n";
-    ThemeImporter testling = new ThemeImporter(null, null);  // NOSONAR nulls are sufficient for this test
-    String actual = testling.urlsToXlinks(css, null);
+    ThemeImporter testling = new ThemeImporter(null, null, null);  // NOSONAR nulls are sufficient for this test
+    String actual = testling.urlsToXlinks(css, null, null);
     assertEquals(expected, actual);
   }
 

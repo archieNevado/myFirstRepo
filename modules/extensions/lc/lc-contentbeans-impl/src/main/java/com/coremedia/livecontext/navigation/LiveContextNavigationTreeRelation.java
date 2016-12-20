@@ -87,6 +87,10 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
     return null;
   }
 
+  TreeRelation<Content> getContentTreeRelation() {
+    return delegate;
+  }
+
   @Override
   public Linkable getParentUnchecked(Linkable child) {
     return getParentOf(child);

@@ -1,13 +1,12 @@
 package com.coremedia.livecontext.studio.forms {
 import com.coremedia.livecontext.studio.AbstractProductTeaserComponentsTest;
 import com.coremedia.livecontext.studio.components.product.ViewSettingsRadioGroup;
-import com.coremedia.livecontext.studio.config.productTeaserSettingsFormTestView;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.test.Step;
 
-import ext.QuickTips;
-import ext.Viewport;
-import ext.form.Radio;
+import ext.Ext;
+import ext.container.Viewport;
+import ext.tip.QuickTipManager;
 
 public class ProductTeaserSettingsFormTest extends AbstractProductTeaserComponentsTest {
   private var viewPort:Viewport;
@@ -15,7 +14,7 @@ public class ProductTeaserSettingsFormTest extends AbstractProductTeaserComponen
 
   override public function setUp():void {
     super.setUp();
-    QuickTips.init(true);
+    QuickTipManager.init(true);
   }
 
   override public function tearDown():void {
@@ -33,8 +32,7 @@ public class ProductTeaserSettingsFormTest extends AbstractProductTeaserComponen
             loadProductTeaser(),
             waitForProductTeaserToBeLoaded(),
             createTestlingStep(),
-
-            checkRadio(ViewSettingsRadioGroup.INHERITED_SETTING),
+            //inherit is the default
             waitForRadioToBeChecked(ViewSettingsRadioGroup.INHERITED_SETTING),
             checkRadio(ViewSettingsRadioGroup.ENABLED_SETTING),
             waitForRadioToBeChecked(ViewSettingsRadioGroup.ENABLED_SETTING),
@@ -49,8 +47,9 @@ public class ProductTeaserSettingsFormTest extends AbstractProductTeaserComponen
     return new Step("change view settings to " + value,
             function ():Boolean {return true;},
             function ():void {
-              viewSettings.setValue(value);
-              viewSettings.fireEvent('change');
+              var valueObject:Object = {};
+              valueObject[viewSettings.radioButtonFormName] = value;
+              viewSettings.setValue(valueObject);
             }
     );
   }
@@ -58,8 +57,8 @@ public class ProductTeaserSettingsFormTest extends AbstractProductTeaserComponen
   private function waitForRadioToBeChecked(itemId:String):Step {
     return new Step("Wait for radio button " + itemId + " to be checked",
             function ():Boolean {
-              var value:Radio = viewSettings.getValue();
-              return value && value.getItemId() === itemId;
+              var value:Object = viewSettings.getValue();
+              return value[viewSettings.radioButtonFormName] === itemId;
             }
     );
   }
@@ -70,10 +69,10 @@ public class ProductTeaserSettingsFormTest extends AbstractProductTeaserComponen
             function ():Boolean {
               if(!viewPort) {
                 // create only once
-                var config:productTeaserSettingsFormTestView = new productTeaserSettingsFormTestView();
+                var config:ProductTeaserSettingsFormTestView = ProductTeaserSettingsFormTestView({});
                 config.bindTo = getBindTo();
-                viewPort = new ProductTeaserSettingsFormTestView(new productTeaserSettingsFormTestView(config));
-                viewSettings = viewPort.find('itemId', 'viewSettingsPropertyField')[0] as ViewSettingsRadioGroup;
+                viewPort = new ProductTeaserSettingsFormTestView(ProductTeaserSettingsFormTestView(Ext.apply({}, config)));
+                viewSettings = viewPort.queryById('viewSettingsPropertyField') as ViewSettingsRadioGroup;
                 ve = Object(viewSettings).getInheritOptionVisibleExpression(config.bindTo);
               }
               // but wait for inherit option to initialize

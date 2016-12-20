@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <import resource="classpath:META-INF/coremedia/component-bpbase-studio-rest.xml"/>
+  <import resource="classpath:META-INF/coremedia/bpbase-studio-rest.xml"/>
   <import resource="classpath:com/coremedia/cap/common/uapi-services.xml"/>
 
   <!--

@@ -95,7 +95,6 @@
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 <Link xlink:href="coremedia:///cap/resources/../Options/Actions/Search.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Actions/Search"/>
-<Link xlink:href="coremedia:///cap/resources/Site-Wide/Header/Store%20Locator.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Header/Store%20Locator"/>
 <Link xlink:href="coremedia:///cap/resources/../Options/Actions/Login.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Options/Actions/Login"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Header/Cart.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Header/Cart"/>
 </LinkListProperty>
@@ -114,7 +113,6 @@
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Explore%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Explore%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Customer%20Service%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Customer%20Service%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Corporate%20Info%20Collection.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Corporate%20Info%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Join%20Our%20Mailing%20List.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Join%20Our%20Mailing%20List"/>
 <Link xlink:href="coremedia:///cap/resources/Site-Wide/Footer/Follow%20Us.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Footer/Follow%20Us"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>

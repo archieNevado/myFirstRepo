@@ -10,11 +10,13 @@
   <import resource="livecontext-preview-links.xml"/>
   <import resource="livecontext-fragment-highlighting.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-handlers.xml"/>
+  <import resource="classpath:META-INF/coremedia/lc-services.xml"/>
 
   <bean class="com.coremedia.livecontext.preview.LiveContextExternalChannelPreviewHandler"
         parent="ecommerceHandlerBase">
     <property name="resolveContextStrategy" ref="resolveCategoryContextStrategy"/>
     <property name="externalNavigationHandler" ref="externalNavigationHandler"/>
+    <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
   </bean>
   <!-- expose initializer as bean for spring-boot integration -->
   <bean class="com.coremedia.livecontext.preview.LcPreviewCaeWebApplicationInitializer"/>

@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.studio.forms {
 import com.coremedia.blueprint.base.components.timeline.TimelineEditorBase;
-import com.coremedia.blueprint.studio.config.cmVideoForm;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cap.content.ContentType;
@@ -12,11 +11,11 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 
 use namespace editorContext;
 
-use namespace session;
+use namespace SESSION;
 
 public class CMVideoFormBase extends DocumentTabPanel {
 
-  public function CMVideoFormBase(config:cmVideoForm = null) {
+  public function CMVideoFormBase(config:CMVideoForm = null) {
     super(config);
   }
 

@@ -1,29 +1,31 @@
 package com.coremedia.blueprint.studio.topicpages.administration {
 
-import com.coremedia.blueprint.studio.topicpages.config.topicPreviewPanel;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ui.data.ValueExpression;
 
-import ext.Panel;
-import ext.data.Record;
+import ext.data.Model;
 import ext.form.Label;
+import ext.panel.Panel;
 
 /**
  * Base class of the topic pages preview panel that access an iframe for applying the preview URL.
  */
 public class TopicPreviewPanelBase extends Panel {
+  /**
+   * The value expression that contains the selected topic record.
+   */
+  [Bindable]
+  public var selectionExpression:ValueExpression;
+
   protected static const PREVIEW_FRAME:String = "topicPagesPreviewFrame";
 
   private var frameLabel:Label;
-  private var selectionExpression:ValueExpression;
   private var lastUrl:String;
 
-  public function TopicPreviewPanelBase(config:topicPreviewPanel = null) {
+  public function TopicPreviewPanelBase(config:TopicPreviewPanelBase = null) {
     super(config);
     frameLabel = this.getComponent(PREVIEW_FRAME) as Label;
-
-    this.selectionExpression = config.selectionExpression;
     selectionExpression.addChangeListener(selectionChanged);
   }
 
@@ -32,7 +34,7 @@ public class TopicPreviewPanelBase extends Panel {
    * The url is only updated when the selection has not changed for 2 seconds.
    */
   private function selectionChanged():void {
-    var record:Record = selectionExpression.getValue();
+    var record:Model = selectionExpression.getValue();
     if(record) {
       var topic:Content = record.data.topic;
       topic.load(function():void {

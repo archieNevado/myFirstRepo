@@ -1,5 +1,7 @@
 package com.coremedia.livecontext.fragment.links.context;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -18,18 +20,15 @@ public final class LiveContextContextHelper {
   /**
    * Stores a context in the request and makes it available.
    */
-  public static void setContext(HttpServletRequest request, Context context) {
+  public static void setContext(@Nonnull HttpServletRequest request, Context context) {
     request.setAttribute(CONTEXT_ATTRIBUTE, context);
   }
 
   /**
    * Retrieve the context. Will NOT create a context if it does not exist
    */
-  public static Context fetchContext(HttpServletRequest request) {
-    if (request != null) {
-      return (Context) request.getAttribute(CONTEXT_ATTRIBUTE);
-    }
-    return null;
+  @Nullable
+  public static Context fetchContext(@Nonnull HttpServletRequest request) {
+    return (Context) request.getAttribute(CONTEXT_ATTRIBUTE);
   }
-
 }

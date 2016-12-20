@@ -29,14 +29,14 @@
               </p>
           </#if>
           <@cm.include self=self.product!cm.UNDEFINED view="info" params={
-          "classBox": "cm-teaser__info",
+          "classBox": "${additionalClass}__info",
           "classPrice": "cm-price--teaser"
           } />
         <#-- custom call-to-action button -->
           <#if self.isShopNowEnabled(cmpage.context)>
             <#assign quickInfoId=bp.generateId("cm-quickinfo-") />
           <#-- button -->
-              <div class="cm-teaser__button-group cm-button-group cm-button-group--overlay">
+              <div class="cm-button-group--shopnow cm-button-group cm-button-group--overlay">
                 <@bp.button text=bp.getMessage("button_shop_now") attr={
                 "classes": ["cm-button-group__button", "cm-button--primary", "cm-button--shadow"],
                 "data-cm-button--quickinfo": '{"target": "${quickInfoId!""}"}'
@@ -47,7 +47,7 @@
             "quickInfoId": quickInfoId!"",
             "quickInfoGroup": "product-teasers",
             "quickInfoModal": true,
-            "classQuickInfo": "cm-teaser__quickinfo",
+            "classQuickInfo": "cm-teasable__quickinfo",
             "metadata": ["properties.target"],
             "overlay": {
               "displayTitle": true,

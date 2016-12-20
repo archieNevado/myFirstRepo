@@ -8,7 +8,8 @@ service_name = 'cae-preview'
 cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
 
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('content-management-server')}/ior"
-node.default['blueprint']['webapps'][service_name]['application.properties']['solr.search.url'] = "#{cm_webapp_url('solr')}/preview"
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
 node.default['blueprint']['webapps'][service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024

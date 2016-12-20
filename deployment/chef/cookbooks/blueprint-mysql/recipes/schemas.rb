@@ -4,8 +4,10 @@ This recipe installs and configures mysql client and creates schemas.
 #>
 =end
 include_recipe 'blueprint-base::default'
+include_recipe 'blueprint-mysql::_base'
 
-mysql_client 'default' do
+mysql_client_installation_package 'default' do
+  version node['blueprint']['mysql']['version']
   action :create
 end
 

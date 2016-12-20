@@ -1,11 +1,10 @@
 package com.coremedia.blueprint.elastic.social.studio.plugin {
-import com.coremedia.blueprint.elastic.social.studio.config.elasticPluginPropertyField;
 import com.coremedia.elastic.social.studio.model.impl.ModerationImpl;
 
-import ext.form.TextField;
+import ext.form.field.TextField;
 
 public class ElasticPluginPropertyFieldBase extends TextField {
-  public function ElasticPluginPropertyFieldBase(config:elasticPluginPropertyField = null) {
+  public function ElasticPluginPropertyFieldBase(config:ElasticPluginPropertyField = null) {
     super(config);
 
     var expressionSegments:Array = config.expression.split(".");

@@ -25,19 +25,19 @@ public class ExternalLibraryItemRepresentationComparator implements Comparator<E
         if (o2.getPublicationDate() != null && o1.getPublicationDate() != null) {
           return o2.getPublicationDate().compareTo(o1.getPublicationDate());
         }
-        return 0;
+        return 1;
       }
       case SORT_NAME: {
         if (o2.getName() != null && o1.getName() != null) {
           return o2.getName().compareTo(o1.getName());
         }
-        return 0;
+        return 1;
       }
       default:
         if (o2.getName() != null && o1.getName() != null) {
           return o2.getName().compareTo(o1.getName());
         }
-        return 0;
+        return 1;
     }
   }
 

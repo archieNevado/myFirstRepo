@@ -2,14 +2,13 @@ package com.coremedia.blueprint.studio.analytics {
 import com.coremedia.cap.content.Content;
 import com.coremedia.ui.data.ValueExpression;
 
-import ext.config.menuitem;
 import ext.menu.Item;
 
 internal class OpenAnalyticsUrlMenuItemBase extends Item {
 
   internal native function get contentExpression():ValueExpression;
 
-  public function OpenAnalyticsUrlMenuItemBase(config:menuitem = null) {
+  public function OpenAnalyticsUrlMenuItemBase(config:Item = null) {
     super(config);
   }
 

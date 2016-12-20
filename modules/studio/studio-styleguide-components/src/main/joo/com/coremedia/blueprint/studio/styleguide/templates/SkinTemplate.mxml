@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates:SkinTemplateBase
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:templates="com.coremedia.blueprint.studio.styleguide.templates.*"
+        ui="{StyleguideSkin.PANEL_BASE}"
+        collapsible="true"
+        titleCollapse="true"
+        id_="SKIN-TEMPLATE-{config.skinEnum.getId()}"
+        margin="0 0 12 0">
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.StyleguideSkin;
+    import com.coremedia.ui.skins.BaseSkin;
+
+    private var config:SkinTemplate;
+    public var skinGroup:String;
+    public var skinEnum:BaseSkin;
+    public var variants:Array;
+
+    public native function SkinTemplate(config:SkinTemplate = null);
+    ]]></fx:Script>
+
+  <templates:header>
+    <Header titlePosition="1">
+      <title>
+        <Title text="{'Skin: ' + config.skinEnum.getSkin()}"/>
+      </title>
+    </Header>
+  </templates:header>
+
+</templates:SkinTemplateBase>

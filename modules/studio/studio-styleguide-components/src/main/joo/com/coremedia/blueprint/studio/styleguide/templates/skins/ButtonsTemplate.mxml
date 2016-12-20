@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:SkinTemplate
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:skins="com.coremedia.blueprint.studio.styleguide.tabs.skins.*"
+        title="Buttons"
+        xmlns:local="com.coremedia.blueprint.studio.styleguide.templates.*"
+        xmlns:skinsTemplates="com.coremedia.blueprint.studio.styleguide.templates.skins.*">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.icons.CoreIcons')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.StyleguideSkin;
+    import com.coremedia.blueprint.studio.styleguide.tabs.skins.SkinsHelper;
+    import com.coremedia.ui.data.ValueExpressionFactory;
+    import com.coremedia.ui.skins.BaseSkin;
+
+    private var config:ButtonsTemplate;
+
+    public native function ButtonsTemplate(config:ButtonsTemplate = null);
+    ]]>
+
+    public function getButtonScaleConfigs(skinEnum:BaseSkin):Array {
+      var configs:Array = [];
+      if (SkinsHelper.hasButtonScale(skinEnum, SkinsHelper.SCALE_SMALL)) {
+        configs.push(getButtonConfig('Enabled', SkinsHelper.SCALE_SMALL, skinEnum));
+        configs.push(getButtonConfig('Disabled', SkinsHelper.SCALE_SMALL, skinEnum));
+      }
+      if (SkinsHelper.hasButtonScale(skinEnum, SkinsHelper.SCALE_MEDIUM)) {
+        configs.push(getButtonConfig('Enabled', SkinsHelper.SCALE_MEDIUM, skinEnum));
+        configs.push(getButtonConfig('Disabled', SkinsHelper.SCALE_MEDIUM, skinEnum));
+      }
+      if (SkinsHelper.hasButtonScale(skinEnum, SkinsHelper.SCALE_LARGE)) {
+        configs.push(getButtonConfig('Enabled', SkinsHelper.SCALE_LARGE, skinEnum));
+        configs.push(getButtonConfig('Disabled', SkinsHelper.SCALE_LARGE, skinEnum));
+      }
+      return configs;
+    }
+
+    private function getButtonConfig(state:String, scale:String, skinEnum:BaseSkin):Object {
+      return {
+        buttonsState: state,
+        scale: scale,
+        disabled: state === 'Disabled',
+        skinEnum: skinEnum,
+        getId: function ():String {
+          return skinEnum.getId()
+        }
+      }
+    }
+
+    private static function getAvailableButtonScales(skinEnum:BaseSkin):String {
+      var scales:String;
+      if (SkinsHelper.hasButtonScale(skinEnum, SkinsHelper.SCALE_SMALL)) {
+        scales = SkinsHelper.SCALE_SMALL;
+      }
+      if (SkinsHelper.hasButtonScale(skinEnum, SkinsHelper.SCALE_MEDIUM)) {
+        scales = !scales ? '' : scales + ',';
+        scales += SkinsHelper.SCALE_MEDIUM;
+      }
+      if (SkinsHelper.hasButtonScale(skinEnum, SkinsHelper.SCALE_LARGE)) {
+        scales = !scales ? '' : scales + ',';
+        scales += SkinsHelper.SCALE_LARGE;
+      }
+      return scales;
+    }
+  </fx:Script>
+
+  <local:plugins>
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromValue(config.skinEnum)}">
+      <ui:template>
+        <skins:SkinDescription skinEnum="{config.skinEnum}">
+          <skins:example>
+            <Container>
+              <layout>
+                <layout_VBox/>
+              </layout>
+              <items>
+                <Container html="Small"
+                           style="{SkinsHelper.hasButtonScale(config.skinEnum, SkinsHelper.SCALE_SMALL) ? '' : 'text-decoration:line-through'}"
+                           margin="3 0"/>
+                <Container ui="{SkinsHelper.getContainerUi(config.skinEnum)}"
+                           margin="3 0">
+                  <items>
+                    <Button ui="{config.skinEnum.getSkin()}"
+                            hidden="{!SkinsHelper.hasButtonScale(config.skinEnum, SkinsHelper.SCALE_SMALL)}"
+                            text="Small Example"
+                            iconAlign="left"
+                            scale="small"
+                            iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+                  </items>
+                </Container>
+                <Container html="Medium"
+                           style="{SkinsHelper.hasButtonScale(config.skinEnum, SkinsHelper.SCALE_MEDIUM) ? '' : 'text-decoration:line-through'}"
+                           margin="3 0"/>
+                <Container ui="{SkinsHelper.getContainerUi(config.skinEnum)}"
+                           margin="3 0">
+                  <items>
+                    <Button ui="{config.skinEnum.getSkin()}"
+                            hidden="{!SkinsHelper.hasButtonScale(config.skinEnum, SkinsHelper.SCALE_MEDIUM)}"
+                            text="Medium Example"
+                            iconAlign="left"
+                            scale="medium"
+                            iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+                  </items>
+                </Container>
+                <Container html="Large"
+                           style="{SkinsHelper.hasButtonScale(config.skinEnum, SkinsHelper.SCALE_LARGE) ? '' : 'text-decoration:line-through'}"
+                           margin="3 0"/>
+                <Container ui="{SkinsHelper.getContainerUi(config.skinEnum)}"
+                           margin="3 0">
+                  <items>
+                    <Button ui="{config.skinEnum.getSkin()}"
+                            hidden="{!SkinsHelper.hasButtonScale(config.skinEnum, SkinsHelper.SCALE_LARGE)}"
+                            text="Large Example"
+                            iconAlign="left"
+                            scale="large"
+                            iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+                  </items>
+                </Container>
+              </items>
+            </Container>
+          </skins:example>
+        </skins:SkinDescription>
+      </ui:template>
+    </ui:BindComponentsPlugin>
+
+    <ui:AddItemsPlugin>
+      <ui:items>
+        <Panel margin="0 0 6 0">
+          <items>
+            <Container html="<b>Available scales are </b> {getAvailableButtonScales(config.skinEnum)}"/>
+          </items>
+        </Panel>
+        <Panel title="Button states"
+               collapsible="true"
+               collapsed="true"
+               ui="{StyleguideSkin.PANEL_SIMPLE}"
+               titleCollapse="true"
+               animCollapse="false">
+          <header>
+            <Header titlePosition="2" />
+          </header>
+          <plugins>
+            <ui:BindComponentsPlugin
+                    valueExpression="{ValueExpressionFactory.createFromFunction(getButtonScaleConfigs, config.skinEnum)}"
+                    configBeanParameterName="buttonConfig">
+              <ui:template>
+                <skinsTemplates:ButtonsStateTemplate/>
+              </ui:template>
+            </ui:BindComponentsPlugin>
+          </plugins>
+        </Panel>
+      </ui:items>
+    </ui:AddItemsPlugin>
+  </local:plugins>
+
+  <local:defaults>
+    <Panel margin="10 0"/>
+  </local:defaults>
+</local:SkinTemplate>

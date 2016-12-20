@@ -1,16 +1,27 @@
 /**
- *  CoreMedia Namespace
+ * CoreMedia namespace
+ * @namespace coremedia
+ * @ignore
  */
 var coremedia = (function (module) {
   return module;
 }(coremedia || {}));
+
+/**
+ * CoreMedia Blueprint namespace
+ * @namespace "coremedia.blueprint"
+ * @ignore
+ */
 coremedia.blueprint = (function (module) {
+  /*global jQuery*/
   module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
 
 /**
  * Quickinfo functionality
+ *
+ * @module {object} "coremedia.blueprint.quickInfo"
  */
 coremedia.blueprint.quickInfo = function (module) {
 
@@ -26,14 +37,15 @@ coremedia.blueprint.quickInfo = function (module) {
   var EVENT_PREFIX = "coremedia.blueprint.quickinfo.";
 
   /**
-   * @type {string} name of the event to be triggered if quick info has changed
+   * @member {string} EVENT_QUICKINFO_CHANGED - name of the event to be triggered if quick info has changed
    */
   module.EVENT_QUICKINFO_CHANGED = EVENT_PREFIX + "quickInfoChanged";
 
   /**
-   * Return the configuration of the given quickinfo
-   * @param {jQuery} $quickinfo quickinfo
-   * @returns {object} configuration configuration of the quickinfo
+   * Return the configuration of the given quickinfo.
+   * @param {jQuery} $quickinfo - quickinfo
+   * @returns {object} configuration of the quickinfo
+   * @ignore
    */
   var getConfig = function ($quickinfo) {
     return $.extend({modal: false, group: undefined}, $quickinfo.data(identifier));
@@ -43,8 +55,10 @@ coremedia.blueprint.quickInfo = function (module) {
   };
 
   /**
-   * Opens a quickinfo
-   * @param $quickinfo the quickinfo to be opened
+   * Opens a quickinfo.
+   *
+   * @function show
+   * @param {jQuery} $quickinfo - The quickinfo to be opened.
    */
   module.show = function ($quickinfo) {
     if (!isActive($quickinfo)) {
@@ -76,8 +90,10 @@ coremedia.blueprint.quickInfo = function (module) {
   };
 
   /**
-   * Hides a quickinfo
-   * @param $quickinfo the quickinfo to be hidden
+   * Hides a quickinfo.
+   *
+   * @function hide
+   * @param {jQuery} $quickinfo - The quickinfo to be hidden.
    */
   module.hide = function ($quickinfo) {
     if (isActive($quickinfo)) {
@@ -109,8 +125,10 @@ coremedia.blueprint.quickInfo = function (module) {
   };
 
   /**
-   * Opens a quickinfo if it is hidden or hides a quickinfo if it is shown
-   * @param $quickinfo the quickinfo to be toggled
+   * Opens a quickinfo, if it is hidden or hides a quickinfo, if it is shown.
+   *
+   * @function toggle
+   * @param {jQuery} $quickinfo - The quickinfo to be toggled.
    */
   module.toggle = function ($quickinfo) {
     if (isActive($quickinfo)) {
@@ -121,10 +139,11 @@ coremedia.blueprint.quickInfo = function (module) {
   };
 
   /**
-   * Hides a quickinfo if it is in the given group
+   * Hides a quickinfo, if it is in the given group.
    *
-   * @param $quickinfo the quickinfo to be hidden if it is in the given group
-   * @param group the given group
+   * @function groupHide
+   * @param {jQuery} $quickinfo - The quickinfo to be hidden, if it is in the given group.
+   * @param {string} group - The given group.
    */
   module.groupHide = function ($quickinfo, group) {
     if (group === getConfig($quickinfo).group) {
@@ -132,12 +151,25 @@ coremedia.blueprint.quickInfo = function (module) {
     }
   };
 
-  module.closeQuickInfo = function ($quickInfo) {
-    $quickInfo.find(prefixcss + "quickinfo__close").click(function () {
-      module.hide($quickInfo);
+  /**
+   * Hides a quickinfo, if user clicked close button.
+   *
+   * @function closeQuickInfo
+   * @param {jQuery} $quickinfo - The quickinfo to be hidden.
+   */
+  module.closeQuickInfo = function ($quickinfo) {
+    $quickinfo.find(prefixcss + "quickinfo__close").click(function () {
+      module.hide($quickinfo);
     });
   };
 
+  /**
+   * Opens a quickinfo, if it is hidden or hides a quickinfo, if it is shown.
+   *
+   * @function toggleQuickInfo
+   * @param {jQuery} $button - The button clicked to toggle the quickinfo.
+   * @param {jQuery} $config - The given config.
+   */
   module.toggleQuickInfo = function ($button, $config) {
     $button.click(function () {
       var $quickInfo = $("#" + $config.target);

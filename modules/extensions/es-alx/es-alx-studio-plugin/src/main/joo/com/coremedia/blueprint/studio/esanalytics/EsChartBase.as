@@ -1,20 +1,29 @@
 package com.coremedia.blueprint.studio.esanalytics {
-import com.coremedia.blueprint.studio.config.esanalytics.esChart;
 import com.coremedia.ui.components.SwitchingContainer;
 import com.coremedia.ui.exml.ValueExpression;
 
 import ext.Ext;
-import ext.Panel;
-import ext.form.Label;
+import ext.form.FieldContainer;
+import ext.panel.Panel;
 import ext.util.Format;
 
-public class EsChartBase extends Panel {
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin')]
+public class EsChartBase extends FieldContainer {
+
+  [Bindable]
+  public var bindTo:ValueExpression;
+
+  [Bindable]
+  public var color:String;
+
+  [Bindable]
+  public var chartLabelName:String;
 
   private var lineChart:Object;
   private var lineChartData:Array;
-  private var chartLabelName:String;
   private var chartPanel:Panel;
-  private var color:String;
   private var switchContainer:SwitchingContainer;
   private static const MIN_Y_VALUE:Number = 10;
   private var addedListener:Boolean = false;
@@ -22,36 +31,17 @@ public class EsChartBase extends Panel {
   private const CHART_X_AXIS_PROPERTY_NAME:String = "key";
   private const DEFAULT_COLOR:String = "#4189DD";
   private const CHART_VALUE_NAMES:Array = ['value'];
-  private const CHART_LABEL_NAMES:Array = [EsAnalyticsStudioPlugin_properties.INSTANCE.chart_label_page_views];
+  private const CHART_LABEL_NAMES:Array = [resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_label_page_views')];
 
-  public native function get bindTo():ValueExpression;
   public native function get chartHeight():Number;
-  public native function get emptyChartHeight():Number;
 
-  public function EsChartBase(config:esChart = null) {
+  public function EsChartBase(config:EsChartBase = null) {
     super(config);
-    color = config.color;
-    chartLabelName = config.chartLabelName;
-    mon(this, "resize", initChartWhenAvailable);
-
-    getSwitchContainer().mon(switchContainer, "afterlayout", setHeightAccordingToInnerItem);
-    bindTo.addChangeListener(setHeightAccordingToInnerItem);
-  }
-
-  override protected function onDestroy():void {
-    bindTo.removeChangeListener(setHeightAccordingToInnerItem);
-  }
-
-  private function setHeightAccordingToInnerItem():void {
-    if (getSwitchContainer().getActiveItem() is Panel) {
-      ownerCt.setHeight(chartHeight + 80);
-    } else if (getSwitchContainer().getActiveItem() is Label) {
-      ownerCt.setHeight(emptyChartHeight);
-    }
+    on("resize", initChartWhenAvailable);
   }
 
   protected static function getActiveItemId(data:Array):String {
-    return ((data && data.length > 0) ? esChart.CHART_PANEL_ITEM_ID : esChart.NO_DATA_FIELD_ITEM_ID);
+    return ((data && data.length > 0) ? EsChart.CHART_PANEL_ITEM_ID : EsChart.NO_DATA_FIELD_ITEM_ID);
   }
 
   /**
@@ -70,7 +60,7 @@ public class EsChartBase extends Panel {
       };
       const date:Date = new Date(dateProperties.year, dateProperties.month - 1, dateProperties.day);
       return {
-        key:Format.dateRenderer(EsAnalyticsStudioPlugin_properties.INSTANCE.shortDateFormat)(date),
+        key:Format.dateRenderer(resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'shortDateFormat'))(date),
         value:rawDataEntry[CHART_VALUE_NAMES[0]]
       };
     });
@@ -111,7 +101,7 @@ public class EsChartBase extends Panel {
       };
 
       setLineChart(new Morris.Line(lineChartConfig));
-      getSwitchContainer().doLayout();
+      getSwitchContainer().updateLayout();
     }
   }
 
@@ -124,14 +114,14 @@ public class EsChartBase extends Panel {
 
   private function getChartPanel():Panel {
     if (!chartPanel) {
-      chartPanel = this.find('itemId', esChart.CHART_PANEL_ITEM_ID)[0] as Panel
+      chartPanel = queryById(EsChart.CHART_PANEL_ITEM_ID) as Panel
     }
     return chartPanel;
   }
 
   private function getSwitchContainer():SwitchingContainer {
     if (!switchContainer) {
-      switchContainer = this.find('itemId', esChart.ES_CHART_SWITCHER_ITEM_ID)[0] as SwitchingContainer
+      switchContainer = queryById(EsChart.ES_CHART_SWITCHER_ITEM_ID) as SwitchingContainer
     }
     return switchContainer;
   }
@@ -177,9 +167,9 @@ public class EsChartBase extends Panel {
 
   protected static function transformTime(timeStamp:Date):String {
     if (timeStamp) {
-      return Format.dateRenderer(EsAnalyticsStudioPlugin_properties.INSTANCE.dateFormat)(timeStamp);
+      return Format.dateRenderer(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'dateFormat'))(timeStamp);
     } else {
-      return EsAnalyticsStudioPlugin_properties.INSTANCE.chart_time_stamp_unavailable;
+      return ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_time_stamp_unavailable');
     }
   }
 }

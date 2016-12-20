@@ -36,7 +36,7 @@
   }
 
   &__image.#{$prefix}aspect-ratio-box {
-    @include aspect-ratio-box(8, 3);
+    @include aspect-ratio-box(16, 9);
   }
 }
 

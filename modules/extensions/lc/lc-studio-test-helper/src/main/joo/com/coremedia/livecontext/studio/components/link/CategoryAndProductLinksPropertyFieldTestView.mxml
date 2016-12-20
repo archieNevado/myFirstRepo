@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Viewport xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:exml="http://www.jangaroo.net/exml/0.8"
+          xmlns="exml:ext.config"
+          xmlns:ec="exml:com.coremedia.ecommerce.studio.config">
+  <fx:Script><![CDATA[
+    import com.coremedia.ui.data.ValueExpression;
+
+    public static const xtype:String = "com.coremedia.livecontext.studio.testhelper.config.categoryAndProductLinksPropertyFieldTestView";
+
+    public static const TESTLING_ITEM_ID:String = "testling";
+
+    private var config:CategoryAndProductLinksPropertyFieldTestView;
+
+    [Bindable]
+    public var bindTo:ValueExpression;
+
+    [Bindable]
+    public var forceReadOnlyValueExpression:ValueExpression;
+
+    public native function CategoryAndProductLinksPropertyFieldTestView(config:CategoryAndProductLinksPropertyFieldTestView = null);
+    ]]></fx:Script>
+
+    <items>
+      <ec:CategoryAndProductLinksPropertyField itemId="{TESTLING_ITEM_ID}"
+                                               bindTo="{config.bindTo}"
+                                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+    </items>
+  
+</Viewport>

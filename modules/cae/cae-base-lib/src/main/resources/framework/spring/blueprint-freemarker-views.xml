@@ -26,7 +26,6 @@
 
   <bean id="stringAbbreviator" class="com.coremedia.blueprint.base.cae.web.taglib.WordAbbreviator">
     <property name="appendToEnd" value="..."/>
-    <property name="relativeLowerLimit" value="10"/>
   </bean>
 
   <bean name="blueprintFreemarkerFacade" class="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" />

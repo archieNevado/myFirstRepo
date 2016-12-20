@@ -3,10 +3,10 @@ package com.coremedia.blueprint.elastic.social.demodata;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
-import com.coremedia.blueprint.elastic.common.CategoryExtractor;
-import com.coremedia.blueprint.elastic.social.common.ContributionTargetHelper;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.elastic.common.CategoryExtractor;
+import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.query.QueryService;
@@ -223,8 +223,6 @@ public class DemoDataGenerator implements Runnable {
 
       } catch (Exception e) {
         LOG.warn("Cannot generate demo data", e);
-      } finally {
-        count++;
       }
       LOG.trace("Finished {}. iteration", getCount());
     }
@@ -429,8 +427,8 @@ public class DemoDataGenerator implements Runnable {
               // products are simply Strings - as defined in helios-doctypes.xml
               if (null != productTeaser.getType().getDescriptor("externalId")) {
                 final Object externalId = productTeaser.get("externalId");
-                final ImmutableMap<String, Object> serializedProduct = ImmutableMap.of("id", externalId, "siteId", site.getId());
-                TypeConverter<?> converter = typeConverterRegistry.getConverter("product");
+                final ImmutableMap<String, Object> serializedProduct = ImmutableMap.of("id", externalId, "site", site.getId());
+                TypeConverter<?> converter = typeConverterRegistry.getConverter("productInSite");
                 if(null != converter) {
                   final Object target = converter.deserialize(serializedProduct);
                   reviewGenerator.addTarget(target, elasticSocialConfiguration.isWritingReviewsEnabled(), elasticSocialConfiguration.isAnonymousReviewingEnabled(),

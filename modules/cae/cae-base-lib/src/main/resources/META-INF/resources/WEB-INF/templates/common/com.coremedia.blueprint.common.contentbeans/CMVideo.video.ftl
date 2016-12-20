@@ -4,6 +4,7 @@
 <#-- @ftlvariable name="autoplay" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="loop" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="muted" type="java.lang.Boolean" -->
+<#-- @ftlvariable name="adaptive" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="youtube" type="java.lang.String" -->
 <#-- @ftlvariable name="vimeo" type="java.lang.String" -->
 
@@ -13,6 +14,7 @@
     "loop":loop!false,
     "hideControls":hideControls!false,
     "muted":muted!false,
+    "adaptive": adaptive!false,
     "youtube":youtube!"",
     "vimeo":vimeo!""
 } />

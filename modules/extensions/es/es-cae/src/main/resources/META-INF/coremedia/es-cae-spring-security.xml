@@ -9,7 +9,7 @@
                            http://www.springframework.org/schema/security
                            http://www.springframework.org/schema/security/spring-security.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-  <bean id="logoutRedirectStrategy" class="com.coremedia.blueprint.elastic.social.flows.SimpleRedirectStrategy"/>
+  <bean id="logoutRedirectStrategy" class="com.coremedia.blueprint.base.elastic.social.flows.SimpleRedirectStrategy"/>
 
   <bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
     <property name="targetUrlParameter" value="spring-security-redirect"/>

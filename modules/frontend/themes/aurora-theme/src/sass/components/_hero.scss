@@ -3,7 +3,7 @@
 @import "../../../../../lib/sass/utils/imports";
 
 // Variables
-// Set varibales to configure _hero.scss from default-templates brick.
+// Set variables to configure _hero.scss from default-templates brick.
 // Have a look the _hero.scss for all available variables.
 $cm-hero-prefix: "cm-teaser--hero";
 $cm-hero-dimmer-display: none;
@@ -21,19 +21,16 @@ $cm-hero-picture-background-color: none;
   &__picture-box {
     @include aspect-ratio-box(5, 2);
 
+    @include breakpoint(xs, portrait) {
+      @include aspect-ratio-box(3, 4);
+    }
+
     @include breakpoint(sm, landscape) {
       @include aspect-ratio-box(16, 9);
     }
 
     @include breakpoint(sm, portrait) {
       @include aspect-ratio-box(1, 1);
-    }
-
-    @include breakpoint(xs, landscape) {
-      @include aspect-ratio-box(2, 1);
-    }
-    @include breakpoint(xs, portrait) {
-      @include aspect-ratio-box(3, 4);
     }
   }
 
@@ -75,16 +72,23 @@ $cm-hero-picture-background-color: none;
     font-size: 1.2rem;
     line-height: 1.4rem;
     position: absolute;
+
     @include breakpoint(sm) {
       padding: .36rem .54em;
       font-size: 1.46rem;
       line-height: 1.8rem;
-
     }
+
     @include breakpoint(xs) {
       padding: .3rem .45rem;
       font-size: 1.2rem;
       line-height: 1.46rem;
+    }
+  }
+
+  @include breakpoint(md) {
+    &:hover .cm-button-group--shopnow {
+      display: block;
     }
   }
 }

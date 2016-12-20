@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.studio.forms {
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
-import com.coremedia.livecontext.studio.config.cmProductTeaserForm;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
@@ -12,7 +11,7 @@ public class CMProductTeaserFormBase extends DocumentTabPanel {
 
   private var viewSettingsExpression:ValueExpression;
 
-  public function CMProductTeaserFormBase(config:cmProductTeaserForm = null) {
+  public function CMProductTeaserFormBase(config:CMProductTeaserForm = null) {
     super(config);
   }
 

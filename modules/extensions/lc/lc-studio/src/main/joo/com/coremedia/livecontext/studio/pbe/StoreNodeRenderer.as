@@ -5,11 +5,13 @@ import com.coremedia.cms.editor.sdk.preview.metadata.ContentMetadataNodeRenderer
 import com.coremedia.cms.editor.sdk.preview.metadata.MetadataNodeRenderer;
 import com.coremedia.cms.editor.sdk.preview.metadata.MetadataTreeNode;
 import com.coremedia.ecommerce.studio.model.Store;
-import com.coremedia.livecontext.studio.*;
 import com.coremedia.ui.data.RemoteBean;
 
 import ext.Ext;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class StoreNodeRenderer implements MetadataNodeRenderer {
   private static const PROPERTY_NODE_ICON_CLASS:String = "preview-breadcrumb-arrow";
 
@@ -23,7 +25,7 @@ public class StoreNodeRenderer implements MetadataNodeRenderer {
 
   public function renderText(metadataNode:MetadataTreeNode):String {
     if (MetadataHelper.isPropertyMetadataNode(metadataNode)){
-      return LivecontextStudioPlugin_properties.INSTANCE.Commerce_shopUrl;
+      return ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_shopUrl');
     }
     var store:Store = Store(MetadataHelper.getBeanMetadataValue(metadataNode));
 
@@ -62,7 +64,7 @@ public class StoreNodeRenderer implements MetadataNodeRenderer {
         }
       }
     }
-    return LivecontextStudioPlugin_properties.INSTANCE.CMExternalPage_icon;
+    return ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMExternalPage_icon');
   }
 }
 }

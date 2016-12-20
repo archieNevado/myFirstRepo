@@ -2,7 +2,7 @@ package com.coremedia.blueprint.elastic.social.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
-import com.coremedia.blueprint.elastic.common.AggregationType;
+import com.coremedia.blueprint.base.elastic.common.AggregationType;
 import com.coremedia.cap.common.CapType;
 import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.core.api.counters.AverageCounter;

@@ -4,6 +4,7 @@ import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.impl.BeanImpl;
+import com.coremedia.ui.util.LocalStorageUtil;
 
 import ext.Ext;
 
@@ -14,10 +15,9 @@ import ext.Ext;
 public class UploadSettings extends BeanImpl {
   private static const DEFAULT_FOLDER_PROPERTY:String = 'defaultFolder';
   private static const DEFAULT_CONTENT_TYPE_PROPERTY:String = 'defaultContentType';
-  private static const MIME_TYPE_MAPPINGS:Object = 'mimeTypeMappings';
+  private static const MIME_TYPE_MAPPINGS:String = 'mimeTypeMappings';
 
-  public static const CHECKIN_PROPERTY:String = 'checkIn';
-  public static const OPEN_IN_TAB_PROPERTY:String = 'openInTab';
+  public static const OPEN_IN_TAB_PROPERTY:String = 'openUploadsInTab';
   public static const TIMEOUT_PROPERTY:String = 'timeout';
 
   private var configBean:RemoteBean;
@@ -30,7 +30,6 @@ public class UploadSettings extends BeanImpl {
       url+='?' + Ext.urlEncode({site: editorContext.getSitesService().getPreferredSiteId()});
     }
     configBean = beanFactory.getRemoteBean(url);
-    set(UploadSettings.OPEN_IN_TAB_PROPERTY, true);
   }
 
   public function ensureLoaded():UploadSettings {
@@ -67,12 +66,13 @@ public class UploadSettings extends BeanImpl {
     return get(DEFAULT_CONTENT_TYPE_PROPERTY);
   }
 
-  public function getCheckIn():Boolean {
-    return get(CHECKIN_PROPERTY);
+  public function getOpenInTab():Boolean {
+    var value:String = LocalStorageUtil.getItem(OPEN_IN_TAB_PROPERTY);
+    return value && value === "true";
   }
 
-  public function getOpenInTab():Boolean {
-    return get(OPEN_IN_TAB_PROPERTY);
+  public function setOpenInTab(b:Boolean):Boolean {
+    LocalStorageUtil.setItem(OPEN_IN_TAB_PROPERTY, ""+b);
   }
 
   public function getMimeTypeMappings():Object {

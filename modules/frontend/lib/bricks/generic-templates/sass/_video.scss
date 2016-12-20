@@ -3,45 +3,40 @@
 $cm-play-button: "cm-play-button" !default;
 $cm-play-button-path-to-images: "../img/" !default;
 $cm-play-button-overlay-size: 90px !default;
-$cm-play-button-color: #FFFFFF !default;
-$cm-play-button-svg-color: #000000 !default;
-$cm-play-button-svg-fill: #FFFFFF;
-$cm-play-button-svg-hover-color: #000000 !default;
-$cm-play-button-svg-hover-fill: #FFFFFF !default;
-$cm-play-button-svg-focus-color: #000000 !default;
-$cm-play-button-svg-focus-fill: #FFFFFF !default;
+$cm-play-button-overlay-size-desktop: 120px !default;
+$cm-play-button-color: rgba(0,0,0,0.5) !default;
+$cm-play-button-fill: #FFFFFF;
+$cm-play-button-hover-color: rgba(0,0,0,0.6) !default;
+$cm-play-button-hover-fill: #FFFFFF !default;
+$cm-play-button-focus-color: rgba(0,0,0,0.6) !default;
+$cm-play-button-focus-fill: #FFFFFF !default;
 $cm-play-button-transition-duration: 0.35s !default;
+
+@function playicon($circle-background-color: rgba(0,0,0,0.5), $circle-color: '#FFFFFF', $color: '#FFFFFF') {
+  @return svg-url(#{'<svg viewBox="0 0 512 512"><style>.st0{fill:#{$circle-background-color};stroke:#{$circle-color};stroke-width:30;stroke-miterlimit:10;}.st1{fill:#{$color};}</style><circle cx="256" cy="256" r="231" class="st0"/><path d="M348.1 245.6l-134-78.2c-12.2-7.1-22.1-1.4-22 12.7l.7 155.2c.1 14.1 10 19.9 22.3 12.8l133-76.8c12.2-7.1 12.3-18.6 0-25.7z" class="st1"/></svg>'});
+}
 
 .#{$cm-play-button} {
   width: $cm-play-button-overlay-size;
   height: $cm-play-button-overlay-size;
-  background: none;
-  border-radius: 50%;
-  color: $cm-play-button-color;
-
-  &__svg {
-    width: 100%;
-    max-height: 100%;
-    color: $cm-play-button-svg-color; // color of inner circle
-    fill: $cm-play-button-svg-fill; // color of play button
-    transition: all $cm-play-button-transition-duration ease(in-out-quad);
-  }
-
-  &__png {
-    width: 100%;
-    height: 100%;
-    background: url("#{$cm-play-button-path-to-images}button_video_play.png") no-repeat center center;
-    background-size: contain;
-  }
+  background: transparent playicon($cm-play-button-color, $cm-play-button-fill, $cm-play-button-fill);
+  transition: all $cm-play-button-transition-duration ease(in-out-quad);
 
   // when parent is hovered or focused button changes color and fill
-  a:hover > & &__svg {
-    color: $cm-play-button-svg-hover-color;
-    fill: $cm-play-button-svg-hover-fill;
+  a:hover > & {
+    background: transparent playicon($cm-play-button-hover-color, $cm-play-button-hover-fill, $cm-play-button-hover-fill);
     transition: all $cm-play-button-transition-duration ease(in-out-quad); // firefox 43 needs it twice
   }
-  a:focus > & &__svg {
-    color: $cm-play-button-svg-focus-color;
-    fill: $cm-play-button-svg-focus-fill;
+  a:focus > & {
+    background: transparent playicon($cm-play-button-focus-color, $cm-play-button-focus-fill, $cm-play-button-focus-fill);
   }
+
+  @include breakpoint(md){
+    width: $cm-play-button-overlay-size-desktop;
+    height: $cm-play-button-overlay-size-desktop;
+  }
+}
+
+.cm-video--vimeo {
+  display: inline-block;
 }

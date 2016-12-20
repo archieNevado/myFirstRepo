@@ -15,6 +15,7 @@
     <property name="connection" ref="connection"/>
     <property name="validatingSubtypes" value="true"/>
     <property name="propertyName" value="externalId"/>
+    <property name="sitesService" ref="sitesService"/>
     <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
   </bean>
 
@@ -31,7 +32,6 @@
   </bean>
 
   <bean id="externalPageExternalIdValidator" parent="catalogLinkValidator" class="com.coremedia.lc.studio.lib.validators.ExternalPageValidator">
-    <property name="sitesService" ref="sitesService" />
     <property name="contentType" value="CMExternalPage"/>
   </bean>
 

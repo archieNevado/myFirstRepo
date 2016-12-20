@@ -1,8 +1,7 @@
 package com.coremedia.blueprint.studio.template {
 import com.coremedia.blueprint.base.components.localization.ContentLocalizationUtil;
 import com.coremedia.blueprint.base.components.util.UserUtil;
-import com.coremedia.blueprint.studio.template.config.templateBeanListChooser;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -15,6 +14,8 @@ import com.coremedia.ui.data.Blob;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.logging.Logger;
+import com.coremedia.ui.models.bem.BEMBlock;
+import com.coremedia.ui.models.bem.BEMElement;
 
 import ext.Ext;
 import ext.XTemplate;
@@ -25,27 +26,38 @@ import ext.XTemplate;
  */
 public class TemplateBeanListChooserBase extends BeanListChooser {
 
-  private static const CONTENT_ITEM_SELECTOR_EXPRESSION:String = "div.bean-list-chooser-item-wrap";
-  private static const SHORT_NAME_MAX_LENGTH:int = 15;
+  public static const TEMPLATE_BEAN_LIST_CHOOSER_BLOCK:BEMBlock = new BEMBlock("cm-template-bean-list-chooser");
+  public static const TEMPLATE_BEAN_LIST_CHOOSER_ELEMENT_ITEM:BEMElement = TEMPLATE_BEAN_LIST_CHOOSER_BLOCK.createElement("item");
 
-  private var configPaths:String;
+  public static const TEMPLATE_BEAN_LIST_CHOOSER_ITEM_BLOCK:BEMBlock = new BEMBlock("cm-template-bean-list-chooser-item");
+  public static const TEMPLATE_BEAN_LIST_CHOOSER_ITEM_ELEMENT_TEXT:BEMElement = TEMPLATE_BEAN_LIST_CHOOSER_ITEM_BLOCK.createElement("text");
 
-  private static var xTemplate:XTemplate = new XTemplate('<tpl for=".">',
-          '<div class="bean-list-chooser-item-wrap {mergedItemClass}">',
-          '<div class="bean-list-chooser-item-border">',
-          '<div class="bean-list-chooser-item" ext:qtip="{description}">',
-          '<div class="large">',
-          '<img width="100%" height="100%" src="{iconUri}"/>',
-          '</div>',
-          '</div>',
-          '<p ext:qtip="{description}">{descriptionShort}</p>',
-          '</div>',
+  private static const CONTENT_ITEM_SELECTOR_EXPRESSION:String = TEMPLATE_BEAN_LIST_CHOOSER_ITEM_BLOCK.getCSSSelector();
+
+  /**
+   * The paths to look for page templates. Typically a global path, a site specific path and the users home folder.
+   */
+  public var configPaths:String;
+
+  /**
+   * Points to function, which validates this editor. This could be a no empty selection validation.
+   */
+  public var validate:Function;
+
+  private static var xTemplate:XTemplate = new XTemplate(
+          '<tpl for=".">',
+          '<div class="' + TEMPLATE_BEAN_LIST_CHOOSER_ITEM_BLOCK + ' ' + TEMPLATE_BEAN_LIST_CHOOSER_ELEMENT_ITEM +
+          '" data-qtip="{description}">',
+          '<img src="{iconUri}"/>',
+          '<p class="' + TEMPLATE_BEAN_LIST_CHOOSER_ITEM_ELEMENT_TEXT + '">{description}</p>',
           '</div>',
           '</tpl>');
 
-  public function TemplateBeanListChooserBase(config:templateBeanListChooser = null) {
-    configPaths = config.configPaths;
-
+  public function TemplateBeanListChooserBase(config:TemplateBeanListChooserBase = null) {
+    config.template = getXTemplateForRendering();
+    config.itemSelector = getContentItemSelector();
+    config.beanList = getTemplates();
+    config.cls = TEMPLATE_BEAN_LIST_CHOOSER_BLOCK.getCSSClass();
     super(config);
   }
 
@@ -56,16 +68,16 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
    */
   internal function getTemplates():ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():Array { // the inner function for
-                                                                         // the FunctionValueExpression
+      // the FunctionValueExpression
 
       // build up an array with all paths including the user home directory
       var paths:Array = configPaths.split(",");
       paths = paths.concat(UserUtil.getHome().getPath() + '/' +
-              CreateFromTemplateStudioPluginSettings_properties.INSTANCE.template_folder_fragment +
-              "/" + CreateFromTemplateStudioPluginSettings_properties.INSTANCE.doctype );
+              resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_folder_fragment') +
+              "/" + resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype') );
 
       var contentListResult:Array = [];
-      var contentRepo:ContentRepository = session.getConnection().getContentRepository();
+      var contentRepo:ContentRepository = SESSION.getConnection().getContentRepository();
 
       // Method returns undefined until this flag is true at the end of the function.
       var ready:Boolean = true;
@@ -73,7 +85,7 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
       // iterate over each path
       paths.forEach(function (path:String):void {
         path = PathFormatter.formatSitePath(path);
-        if(!path) { //maybe null if the active site is not set
+        if (!path) { //maybe null if the active site is not set
           return;
         }
 
@@ -103,7 +115,7 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
           if (currentNode && currentNode.getChildrenByName()) { // currentNode is loaded
             var children:Array = currentNode.getChildren();
             //this is the type of channel to be found in a template folder so that the folder is used as template.
-            var templateChannelDocType:ContentType = session.getConnection().getContentRepository().getContentType(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.doctype);
+            var templateChannelDocType:ContentType = SESSION.getConnection().getContentRepository().getContentType(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype'));
 
             // Iterator over each children of the folder
             children.forEach(function (templateFolder:Content):void {
@@ -112,15 +124,15 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
 
                   // Check, if there is a content (CMSymbol) with the predefined descriptor name
                   var c:Content = templateFolder.getChildrenByName()
-                                 [CreateFromTemplateStudioPluginSettings_properties.INSTANCE.template_descriptor_name];
+                          [resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_descriptor_name')];
                   if (c) {
                     c.load(); // load content asychronously, but ignore callback
                     if (c.getProperties()) { // but get a dependency on properties to force reevaluation of this
-                                             // ValueExpression
+                      // ValueExpression
                       // verify that there is a template page next to the descriptor, otherwise ignore this descriptor
                       var pageFound:Boolean = false;
                       var templateFolderChildren:Array = templateFolder.getChildDocuments();
-                      templateFolderChildren.forEach(function(folderChild:Content) {
+                      templateFolderChildren.forEach(function (folderChild:Content):void {
                         folderChild.load();
                         if (folderChild.getProperties()) {
                           if (folderChild.getType().isSubtypeOf(templateChannelDocType)) {
@@ -154,7 +166,7 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
             ready = false;
           }
         } else {
-          Logger.info(TemplateBeanListChooserBase + ": No valid documents are found in configured path '" + path + "'.");
+          Logger.debug(TemplateBeanListChooserBase + ": No valid documents are found in configured path '" + path + "'.");
         }
       });
       if (ready) {
@@ -170,11 +182,11 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
   /////////////////////////////////////////////////////////////////////////////////////
   // Functions for evaluate values for dataview store converters
   /////////////////////////////////////////////////////////////////////////////////////
-  internal function getXTemplateForRendering():XTemplate {
+  internal static function getXTemplateForRendering():XTemplate {
     return xTemplate;
   }
 
-  public function computeIconURL(name:String, content:Content):String {
+  internal function computeIconURL(name:String, content:Content):String {
     if (content && content.getProperties()) {
       var imageBlob:Blob = content.getProperties().get('icon');
       if (imageBlob) {
@@ -185,7 +197,7 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
     return Ext.BLANK_IMAGE_URL;
   }
 
-  public function getDescription(name:String, content:Content):String {
+  internal function getDescription(name:String, content:Content):String {
     if (content && content.getProperties()) {
 
       var description:String = content.getProperties().get('description');
@@ -195,18 +207,6 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
       return description;
     }
     return "";
-  }
-
-  public function getDescriptionCurtailed(name:String, content:Content):String {
-    return curtail(getDescription(name, content));
-  }
-
-  internal static function curtail(s:String):String {
-    if (!s) return '';
-    if (s.length > SHORT_NAME_MAX_LENGTH) {
-      return s.substr(0, SHORT_NAME_MAX_LENGTH - 3) + '...';
-    }
-    return s;
   }
 
   /**
@@ -224,7 +224,7 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
    *
    * @return default itemSelector value
    */
-  public static function getContentItemSelector():String {
+  internal static function getContentItemSelector():String {
     return CONTENT_ITEM_SELECTOR_EXPRESSION;
   }
 

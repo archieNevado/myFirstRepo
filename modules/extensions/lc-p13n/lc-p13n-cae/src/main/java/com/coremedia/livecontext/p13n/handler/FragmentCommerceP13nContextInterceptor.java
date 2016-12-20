@@ -1,9 +1,8 @@
 package com.coremedia.livecontext.p13n.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.links.context.Context;
@@ -13,6 +12,7 @@ import com.coremedia.personalization.preview.PreviewPersonalizationHandlerInterc
 import com.coremedia.personalization.preview.TestContextSource;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,25 +29,24 @@ public class FragmentCommerceP13nContextInterceptor extends AbstractCommerceCont
     this.liveContextSiteResolver = liveContextSiteResolver;
   }
 
+  @Nonnull
   @Override
-  protected void initStoreContext(Site site, HttpServletRequest request) {
-    super.initStoreContext(site, request);
-    if (isCommerceContextAvailable()) {
-      StoreContext currentContext = Commerce.getCurrentConnection().getStoreContext();
-      if (currentContext != null) {
-        Context context = LiveContextContextHelper.fetchContext(request);
-        if (context != null) {
-          if (isPreview()) {
-            String testContextFlag = (String) context.get(PreviewPersonalizationHandlerInterceptor.QUERY_PARAMETER_TESTCONTEXT);
-            String testContextId = (String) context.get(TestContextSource.QUERY_PARAMETER_TESTCONTEXTID);
-            if ("true".equals(testContextFlag) && testContextId != null && !testContextId.equals("0")) {
-              request.setAttribute(PreviewPersonalizationHandlerInterceptor.QUERY_PARAMETER_TESTCONTEXT, testContextFlag);
-              request.setAttribute(TestContextSource.QUERY_PARAMETER_TESTCONTEXTID, testContextId);
-            }
-          }
-        }
+  protected CommerceConnection getCommerceConnectionWithConfiguredStoreContext(@Nonnull Site site,
+                                                                               @Nonnull HttpServletRequest request) {
+    CommerceConnection commerceConnection = super.getCommerceConnectionWithConfiguredStoreContext(site, request);
+
+    Context context = LiveContextContextHelper.fetchContext(request);
+    if (context != null && isPreview()) {
+      String testContextFlag = (String) context.get(PreviewPersonalizationHandlerInterceptor.QUERY_PARAMETER_TESTCONTEXT);
+      String testContextId = (String) context.get(TestContextSource.QUERY_PARAMETER_TESTCONTEXTID);
+
+      if ("true".equals(testContextFlag) && testContextId != null && !testContextId.equals("0")) {
+        request.setAttribute(PreviewPersonalizationHandlerInterceptor.QUERY_PARAMETER_TESTCONTEXT, testContextFlag);
+        request.setAttribute(TestContextSource.QUERY_PARAMETER_TESTCONTEXTID, testContextId);
       }
     }
+
+    return commerceConnection;
   }
 
   @Override

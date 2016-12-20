@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.ecommerce.toko.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -12,11 +12,12 @@ import javax.annotation.Nullable;
 import java.util.Currency;
 import java.util.Locale;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CONFIG_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CURRENCY;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.LOCALE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.STORE_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.STORE_NAME;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONFIG_ID;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_NAME;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 
 /**
  * Todo toko
@@ -80,7 +81,7 @@ public class StoreContextHelper {
   public static StoreContext createContext(String configId, String storeId, String storeName, String localeStr, String currency)
           throws InvalidContextException {
 
-    StoreContext context = StoreContextBuilder.create().build();
+    StoreContext context = newStoreContext();
     if (configId != null) {
       if (StringUtils.isBlank(configId)) {
         throw new InvalidContextException("configId has wrong format: \"" + storeId + "\"");
@@ -131,7 +132,7 @@ public class StoreContextHelper {
 
   public static void setSiteId(@Nullable StoreContext context, String siteId) {
     if (context != null) {
-      context.put(StoreContextBuilder.SITE, siteId);
+      context.put(StoreContextImpl.SITE, siteId);
     }
   }
 

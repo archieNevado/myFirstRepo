@@ -34,3 +34,11 @@ $cm-image-blank-background: #ffffff !default;
     background-size: 50%;
   }
 }
+
+.cm-aspect-ratio-box {
+  @include aspect-ratio-box(1, 1);
+}
+
+.cm-aspect-ratio-box__content {
+  @include stretch-absolute();
+}

@@ -34,7 +34,7 @@
     <property name="cache" ref="cache"/>
   </bean>
 
-  <bean id="mergedCssResourcesView" class="com.coremedia.blueprint.cae.view.CodeResourcesView" parent="mergedCodeResourcesViewBase">
+  <bean id="mergedCssResourcesView" class="com.coremedia.blueprint.cae.view.MergeableResourcesView" parent="mergedCodeResourcesViewBase">
     <description>
       A view for merging the CSS of a page into one file.
     </description>

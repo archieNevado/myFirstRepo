@@ -1,19 +1,23 @@
 package com.coremedia.livecontext.studio.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWritePostprocessorBase;
 import com.coremedia.rest.intercept.WriteReport;
+import com.google.common.annotations.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * {@link com.coremedia.rest.cap.intercept.ContentWritePostprocessor}
@@ -24,54 +28,36 @@ import java.util.Map;
  */
 public class AssetInvalidationWritePostProcessor extends ContentWritePostprocessorBase {
 
+  @VisibleForTesting
   static final String STRUCT_PROPERTY_NAME = "localSettings";
 
-  private CommerceCacheInvalidationSource commerceCacheInvalidationSource;
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  @Inject
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
-  private List<String> invalidations = new ArrayList<>();
+  private CommerceCacheInvalidationSource commerceCacheInvalidationSource;
 
   @Override
   public void postProcess(WriteReport<Content> report) {
     Content content = report.getEntity();
-    if (content != null) {
-      initCommerceConnection(content);
-    }
-
-    commerceCacheInvalidationSource.invalidateReferences(invalidations);
-    invalidations.clear();
-
     Map<String, Object> properties = report.getOverwrittenProperties();
 
     if (content != null && properties != null && properties.containsKey(CMPicture.DATA)) {
-
-      Struct localSettings = (Struct) content.get(STRUCT_PROPERTY_NAME);
-      List<String> productReferences = CommerceReferenceHelper.getExternalReferences(localSettings);
-
-      commerceCacheInvalidationSource.invalidateReferences(productReferences);
+      invalidate(content);
     }
   }
 
-  public void addInvalidations(Collection<String> invalidations) {
-    this.invalidations.addAll(invalidations);
-  }
+  private void invalidate(@Nonnull Content content) {
+    Struct localSettings = (Struct) content.get(STRUCT_PROPERTY_NAME);
 
-  List<String> getInvalidations() {
-    return invalidations;
-  }
+    Set<String> productReferences = newHashSet(CommerceReferenceHelper.getExternalReferences(localSettings));
 
-  protected void initCommerceConnection(Content content) {
-    commerceConnectionInitializer.init(content);
+    CommerceConnection commerceConnection = commerceConnectionSupplier.getCommerceConnectionForContent(content);
+
+    commerceCacheInvalidationSource.invalidateReferences(productReferences, commerceConnection);
   }
 
   @Required
   public void setCommerceCacheInvalidationSource(CommerceCacheInvalidationSource commerceCacheInvalidationSource) {
     this.commerceCacheInvalidationSource = commerceCacheInvalidationSource;
   }
-
-  @Required
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
-  }
 }
-

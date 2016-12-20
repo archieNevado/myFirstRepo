@@ -13,12 +13,13 @@ video {
   max-width: 100%; // restrict video to fit in grid
 }
 
-$cm-play-button-svg-hover-fill: $brand-primary;
-$cm-play-button-svg-focus-color: $brand-primary;
+$cm-play-button-hover-fill: $brand-primary;
+$cm-play-button-focus-color: $brand-primary;
+$cm-play-button-overlay-size-desktop: 90px;
 @import "../../../../../lib/bricks/generic-templates/sass/video";
 
 .#{$prefix}superhero--video {
-  .#{$prefix}superhero__image {
+  .#{$prefix}superhero__picture-box {
     // hide on desktop, only if video exist
     @include breakpoint(md) {
       display: none;

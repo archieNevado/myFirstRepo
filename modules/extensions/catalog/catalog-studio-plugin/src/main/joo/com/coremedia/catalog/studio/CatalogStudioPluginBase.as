@@ -1,7 +1,6 @@
 package com.coremedia.catalog.studio {
 
 import com.coremedia.blueprint.base.components.util.UserUtil;
-import com.coremedia.blueprint.studio.config.catalog.catalogStudioPlugin;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -10,7 +9,6 @@ import com.coremedia.catalog.studio.collectionview.search.LostandfoundFilterFiel
 import com.coremedia.catalog.studio.library.CatalogCollectionViewExtension;
 import com.coremedia.catalog.studio.library.CatalogTreeRelation;
 import com.coremedia.catalog.studio.library.RepositoryCatalogTreeModel;
-import com.coremedia.cms.editor.Editor_properties;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.IEditorContext;
@@ -20,12 +18,11 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.collectionview.tree.RepositoryTreeDragDropModel;
-import com.coremedia.cms.editor.sdk.config.referrerListPanel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferenceWindow;
+import com.coremedia.cms.editor.sdk.premular.ReferrerListPanel;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
@@ -37,9 +34,14 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.util.EventUtil;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
+[ResourceBundle('com.coremedia.cms.editor.Editor')]
+[ResourceBundle('com.coremedia.catalog.studio.CatalogStudioPlugin')]
 public class CatalogStudioPluginBase extends StudioPlugin {
 
-  public function CatalogStudioPluginBase(config:catalogStudioPlugin = null) {
+  public function CatalogStudioPluginBase(config:CatalogStudioPlugin = null) {
     super(config)
   }
 
@@ -152,7 +154,7 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     }
   }
 
-  public static function getShopExpression(config:referrerListPanel):ValueExpression {
+  public static function getShopExpression(config:ReferrerListPanel):ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():String {
       var store:Store = Store(CatalogHelper.getInstance().getStoreForContentExpression(config.bindTo).getValue());
       return store && store.getName() && CatalogHelper.getInstance().isCoreMediaStore(store);
@@ -183,19 +185,19 @@ public class CatalogStudioPluginBase extends StudioPlugin {
       openSearch(contentSite, searchType, false);
     }
     else {
-      var msg:String = CatalogStudioPlugin_properties.INSTANCE.Catalog_show_search_fails_for_Content;
+      var msg:String = ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Catalog_show_search_fails_for_Content');
       var buttons:Object = {
-        no: ECommerceStudioPlugin_properties.INSTANCE.Catalog_show_preferences_button_text,
-        yes: ECommerceStudioPlugin_properties.INSTANCE.Catalog_show_switch_site_button_text,
-        cancel: Editor_properties.INSTANCE.dialog_defaultCancelButton_text
+        no: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Catalog_show_preferences_button_text'),
+        yes: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Catalog_show_switch_site_button_text'),
+        cancel: ResourceManager.getInstance().getString('com.coremedia.cms.editor.Editor', 'dialog_defaultCancelButton_text')
       };
 
-      MessageBoxUtilInternal.show(ECommerceStudioPlugin_properties.INSTANCE.Catalog_show_in_tree_fails_title, msg, null, buttons, getButtonCallback(searchType, contentSite));
+      MessageBoxUtilInternal.show(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Catalog_show_in_tree_fails_title'), msg, null, buttons, getButtonCallback(searchType, contentSite));
     }
   }
 
   /**
-   * This is all very creepy. Somehow the open in search mode for the CollectionView does not work properly
+   * Somehow the open in search mode for the CollectionView does not work properly
    * when it has never been opened before. The only working solution is to set the search state and search
    * afterwards.
    * //TODO fix the library search and change this to 'editorContext.getCollectionViewManager().openSearchForType(searchType, null, catalogRoot);'
@@ -243,7 +245,7 @@ public class CatalogStudioPluginBase extends StudioPlugin {
         var prefWindow:PreferenceWindow = new PreferenceWindow({selectedTabItemId: 'contentCatalogPreferences'});
         prefWindow.show();
         //open the content in library if the user enable the show as content contentCatalogPreferences
-        prefWindow.on('hide', function ():void {
+        prefWindow.on('close', function ():void {
           var preferencesVE:ValueExpression = ValueExpressionFactory.create(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext.getPreferences());
           var showCatalogContent:Boolean = preferencesVE.getValue();
           if (showCatalogContent) {

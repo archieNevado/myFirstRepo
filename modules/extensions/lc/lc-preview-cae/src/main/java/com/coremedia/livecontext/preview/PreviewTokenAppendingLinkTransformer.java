@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -77,7 +79,7 @@ public class PreviewTokenAppendingLinkTransformer implements LinkTransformer {
               (source != null && (source.startsWith(SCHEME_RELATIVE) || source.startsWith(HTTP_SCHEME) || source.startsWith(HTTPS_SCHEME))))
               && isStoreContextAvailable() && isStudioPreviewRequest(request)) {
         if (includePattern == null || includePattern.matcher(source).matches()) {
-          String previewToken = (String) previewTokenProvider.provideValue(null);
+          String previewToken = (String) previewTokenProvider.provideValue(new HashMap<String, Object>());
           if (previewToken != null) {
             parameterAppender.setParameterValue(previewToken);
             return parameterAppender.transform(source, bean, view, request, response, forRedirect);

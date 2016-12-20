@@ -1,11 +1,14 @@
 package com.coremedia.blueprint.localization;
 
 import com.coremedia.blueprint.base.util.StructUtil;
+import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.Version;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructService;
+import com.coremedia.common.graph.DirectedGraph;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.Nonnull;
@@ -13,10 +16,15 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 
 /**
  * Coordinates CMResourceBundle fallback strategies.
@@ -39,6 +47,11 @@ import java.util.Map;
 public class LocalizationService {
   private static final String CM_RESOURCE_BUNDLE = "CMResourceBundle";
   private static final String MASTER = "master";
+  private static final String MASTER_VERSION = "masterVersion";
+
+  private static final String RESOURCE_BUNDLE_NAME_SUFFIX = ".properties";
+  private static final String RESOURCE_BUNDLE_NAME_ENDSWITH_PATTERN = "(_.*)?\\.properties";
+
   private static final Locale GLOBAL = new Locale("");
 
   private final SitesService sitesService;
@@ -90,6 +103,48 @@ public class LocalizationService {
   @Nonnull
   public final Struct resources(@Nonnull Content bundle, @Nullable Locale locale) {
     return resources(Collections.singletonList(bundle), locale);
+  }
+
+  /**
+   * Set the master links in a set of resource bundles.
+   * <p>
+   * The set of bundles is determined by naming conventions:
+   * <ul>
+   *   <li>All bundles must reside in the same folder.</li>
+   *   <li>The bundle names are:
+   *   &lt;commonBaseName&gt;&lt;_optional_locale&gt;.properties</li>
+   * </ul>
+   * The naming convention (esp. the .properties suffix) is motivated by our
+   * frontend workflow.
+   * <p>
+   * The hierarchy is derived from the locales in the names.  The dedicated
+   * root bundle is handled explicitely, so that you can make
+   * mybundle_en.properties master of mybundle_de.properties (and even of
+   * mybundle.properties, which would be confusing, though).
+   * <p>
+   * Be aware, that this is a persistent operation, so you need WRITE access
+   * to all the bundles.  The operation fails completely if one bundle is not
+   * writable.
+   *
+   * @param rootBundle the root bundle
+   */
+  public void hierarchizeResourceBundles(Content rootBundle) {
+    checkIsA(rootBundle, CM_RESOURCE_BUNDLE);
+    String name = resourceBundleBaseName(rootBundle.getName());
+    String pattern = name + RESOURCE_BUNDLE_NAME_ENDSWITH_PATTERN;
+    //noinspection ConstantConditions
+    Set<Content> bundles = rootBundle.getParent().getChildDocumentsMatching(pattern);  // NOSONAR parent ensured by checkIsA
+    if (!bundles.contains(rootBundle)) {
+      throw new IllegalArgumentException("Cannot derive the set of bundles of " + rootBundle + ", does not follow our naming conventions.");
+    }
+    checkAreBundles(bundles);
+    Collection<Content> toBeCheckedIn = emptySet();
+    try {
+      toBeCheckedIn = checkOut(bundles);
+      masterizeBundles(rootBundle, bundles);
+    } finally {
+      toBeCheckedIn.forEach(Content::checkIn);
+    }
   }
 
 
@@ -159,15 +214,78 @@ public class LocalizationService {
     return locales;
   }
 
-  private static void checkAreBundles(Collection<Content> contents) {
-    for (Content content : contents) {
-      checkIsBundle(content);
+  private static String resourceBundleBaseName(String name) {
+    if (!name.endsWith(RESOURCE_BUNDLE_NAME_SUFFIX)) {
+      throw new IllegalArgumentException("Unexpected resource bundle name \"" + name +"\", don't know how to extract base name.");
+    }
+    name = name.substring(0, name.length() - RESOURCE_BUNDLE_NAME_SUFFIX.length());
+    int index = name.indexOf('_');
+    return index<0 ? name : name.substring(0, index);
+  }
+
+  private void masterizeBundles(Content rootBundle, Set<Content> bundles) {
+    DirectedGraph<Content> localeGraph = new DirectedGraph<>(new LocaleComparator(rootBundle), bundles);
+    for (Content bundle : localeGraph) {
+      List<Content> masters = localeGraph.heads(bundle);
+      assert masters.size() <= 1 : "Multiple master locales, bug in LocaleComparator or in DirectedGraph!";
+      Content master = masters.isEmpty() ? null : masters.get(0);
+      HashMap<String, Object> masterProperties = new HashMap<>();
+      masterProperties.put(MASTER, master != null ? Collections.singletonList(master) : Collections.emptyList());
+      masterProperties.put(MASTER_VERSION, master != null ? currentVersion(master) : Integer.MIN_VALUE);
+      bundle.setProperties(masterProperties);
     }
   }
 
-  private static void checkIsBundle(Content bundle) {
-    if (!bundle.getType().isSubtypeOf(CM_RESOURCE_BUNDLE)) {
-      throw new IllegalArgumentException(bundle + " is no CMResourceBundle");
+  private static void checkAreBundles(Collection<Content> contents) {
+    for (Content content : contents) {
+      checkIsA(content, CM_RESOURCE_BUNDLE);
     }
+  }
+
+  private static void checkIsA(Content content, String typeName) {
+    if (content==null || !content.getType().isSubtypeOf(typeName) || !content.isInProduction()) {
+      throw new IllegalArgumentException(content + " is no " + typeName + " or deleted.");
+    }
+  }
+
+  private int currentVersion(Content content) {
+    return IdHelper.parseVersionId(getExistingVersion(content).getId());
+  }
+
+  private Version getExistingVersion(Content content) {
+    Version version = content.getCheckedInVersion();
+    if (version == null) {
+      version = content.getWorkingVersion();
+    }
+    return version;
+  }
+
+  /**
+   * Ensure that all the contents are checked out by the current user.
+   * <p>
+   * Returns only those contents that are checked out by this method and thus
+   * enables the invoker to preserve or restore the previous document state.
+   *
+   * @return the contents that have been checked out in this method (a subset of the incoming contents)
+   * @throws IllegalStateException if a content neither is nor can be checked out by the current user
+   */
+  @Nonnull
+  private static Collection<Content> checkOut(@Nonnull Collection<Content> contents) {
+    Collection<Content> toBeCheckedIn = new HashSet<>();
+    for (Content content : contents) {
+      if (content.isCheckedIn()) {
+        try {
+          content.checkOut();
+          toBeCheckedIn.add(content);
+        } catch (Exception e) {
+          toBeCheckedIn.forEach(Content::revert);
+          throw new IllegalStateException("Cannot checkout " + content + ", probably due to a concurrent modification", e);
+        }
+      } else if (!content.isCheckedOutByCurrentSession()) {
+        toBeCheckedIn.forEach(Content::revert);
+        throw new IllegalStateException("Cannot checkout " + content + ", already checked out by other user");
+      }
+    }
+    return toBeCheckedIn;
   }
 }

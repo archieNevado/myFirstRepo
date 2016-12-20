@@ -67,11 +67,11 @@ body {
   -moz-border-radius: 0 2px 2px 0;
   border-radius: 0 2px 2px 0;
   border-left: none;
-  background: #FFF url(../img/url-reload-trigger-btn.png) no-repeat right 0;
+  background: #FFF url(../images/url-reload-trigger-btn.png) no-repeat right 0;
   cursor: pointer;
 }
 .preview-button button:active {
-  background: #FFF url(../img/url-reload-trigger-btn.png) no-repeat right 1px;
+  background: #FFF url(../images/url-reload-trigger-btn.png) no-repeat right 1px;
 }
 .preview-button button span {
   display: none;

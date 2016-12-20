@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
@@ -19,12 +20,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.PREVIEW_DATE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.WORKSPACE_ID;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.PREVIEW_DATE;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,12 +42,13 @@ public class AbstractCommerceContextInterceptorTest {
 
   private AbstractCommerceContextInterceptor testling;
 
-
   // --- setup ------------------------------------------------------
 
   @Before
   public void setup() {
-    MockCommerceEnvBuilder.create().setupEnv();
+    BaseCommerceConnection connection = MockCommerceEnvBuilder.create().setupEnv();
+    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(connection);
+
     testling = new NonAbstractTestling();
 
     // Set all @Required properties to make it afterPropertiesSet safe.
@@ -58,32 +57,44 @@ public class AbstractCommerceContextInterceptorTest {
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
   }
 
-
   // --- tests ------------------------------------------------------
 
   @Test
   public void testNormalizePath() {
     String path = "/helios";
+
     String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(path);
-    assertEquals("changed path", path, normalizedPath);
+
+    assertThat(normalizedPath).as("changed path").isEqualTo(path);
   }
 
   @Test
   public void testNormalizeDynamicFragmentPath() {
     String path = "/cart/helios/action/cart";
-    String dynpath = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + path;
-    String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(dynpath);
-    assertEquals("path not normalized", path, normalizedPath);
+    String dynamicPath = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + path;
+
+    String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(dynamicPath);
+
+    assertThat(normalizedPath).as("path not normalized").isEqualTo(path);
+  }
+
+  @Test
+  public void testNormalizePathWithNull() {
+    String path = null;
+
+    String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(path);
+
+    assertThat(normalizedPath).isNull();
   }
 
   @Test
   public void testInitStoreContextProvider() {
     // This does not work with the @Mock request.
     MockHttpServletRequest request = new MockHttpServletRequest();
-    testling.afterPropertiesSet();
-    assertFalse("StoreContext must not have been initialized yet", testling.isStoreContextInitialized(request));
-    testling.initStoreContext(site, request);
-    assertTrue("StoreContext must have been initialized", testling.isStoreContextInitialized(request));
+
+    CommerceConnection connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(connection).isNotNull();
+    assertThat(connection.getStoreContext()).isNotNull();
   }
 
   @Test
@@ -91,22 +102,22 @@ public class AbstractCommerceContextInterceptorTest {
     when(request.getParameter(ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE)).thenReturn("12-06-2014 13:00 Europe/Berlin");
     when(request.getParameter(AbstractCommerceContextInterceptor.QUERY_PARAMETER_WORKSPACE_ID)).thenReturn("aWorkspaceId");
     testling.setPreview(true);
-    testling.afterPropertiesSet();
 
-    testling.initStoreContext(site, request);
+    testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
     CommerceConnection currentConnection = Commerce.getCurrentConnection();
-    assertNotNull(currentConnection);
-    StoreContext context = currentConnection.getStoreContext();
-    assertNotNull(context);
-    assertNotNull(context.get(PREVIEW_DATE));
-    assertNotNull(context.get(WORKSPACE_ID));
-  }
+    assertThat(currentConnection).isNotNull();
 
+    StoreContext context = currentConnection.getStoreContext();
+    assertThat(context).isNotNull();
+    assertThat(context.get(PREVIEW_DATE)).isNotNull();
+    assertThat(context.get(WORKSPACE_ID)).isNotNull();
+  }
 
   // --- internal ---------------------------------------------------
 
   private class NonAbstractTestling extends AbstractCommerceContextInterceptor {
+
     @Nullable
     @Override
     protected Site getSite(HttpServletRequest request, String normalizedPath) {

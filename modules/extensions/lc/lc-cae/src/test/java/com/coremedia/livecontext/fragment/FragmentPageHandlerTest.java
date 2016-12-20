@@ -99,7 +99,7 @@ public class FragmentPageHandlerTest {
 
     when(site.getSiteRootDocument()).thenReturn(rootChannel);
     when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache()));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
     when(validationService.validate(any())).thenReturn(true);
 
     FragmentContext context = new FragmentContext();

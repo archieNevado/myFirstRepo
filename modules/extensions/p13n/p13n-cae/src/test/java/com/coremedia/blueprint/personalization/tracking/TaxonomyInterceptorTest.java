@@ -85,7 +85,7 @@ public class TaxonomyInterceptorTest {
   public void testTaxonomyIncrement() throws Exception {
 
     final ModelAndView modelAndView = new ModelAndView();
-    modelAndView.addObject("self", new PageImpl(contextBean, linkable, true, sitesService, null));
+    modelAndView.addObject("self", new PageImpl(contextBean, linkable, true, sitesService, null, null, null, null));
 
     interceptor.postHandle(null, null, null, modelAndView);
 
@@ -104,7 +104,7 @@ public class TaxonomyInterceptorTest {
   @Test
   public void testOtherProperty() throws Exception {
     final ModelAndView modelAndView = new ModelAndView();
-    modelAndView.addObject("self", new PageImpl(contextBean, linkable, true, sitesService, null));
+    modelAndView.addObject("self", new PageImpl(contextBean, linkable, true, sitesService, null, null, null, null));
 
     TaxonomyInterceptor locationInterceptor = new TaxonomyInterceptor();
     locationInterceptor.setPropertyToContextMap(Collections.singletonMap("locationTaxonomy", LOCATION_CONTEXT_NAME));
@@ -118,7 +118,7 @@ public class TaxonomyInterceptorTest {
     Assert.assertEquals(1.0, context.getProperty(IdHelper.formatContentId("6")));
     Assert.assertEquals(1.0, context.getProperty(IdHelper.formatContentId("40")));
 
-    modelAndView.addObject("self", new PageImpl(contextBean, linkable2, true, sitesService, null));
+    modelAndView.addObject("self", new PageImpl(contextBean, linkable2, true, sitesService, null, null, null, null));
     locationInterceptor.postHandle(null, null, null, modelAndView);
     Assert.assertEquals(3 + 2, context.getPropertyNames().size());
     Assert.assertEquals(1.0, context.getProperty(IdHelper.formatContentId("10")));
@@ -129,7 +129,7 @@ public class TaxonomyInterceptorTest {
   @Test
   public void testUnknownKeywordProperty() throws Exception {
     final ModelAndView modelAndView = new ModelAndView();
-    modelAndView.addObject("self", new PageImpl(contextBean, linkable, true, sitesService, null));
+    modelAndView.addObject("self", new PageImpl(contextBean, linkable, true, sitesService, null, null, null, null));
 
     interceptor = new TaxonomyInterceptor();
     interceptor.setPropertyToContextMap(Collections.singletonMap("someInvalidProperty", SUBJECT_CONTEXT_NAME));

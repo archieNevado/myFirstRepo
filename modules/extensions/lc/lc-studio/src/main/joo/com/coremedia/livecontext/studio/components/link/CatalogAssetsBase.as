@@ -4,17 +4,15 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.dragdrop.DragInfo;
 import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
-import com.coremedia.livecontext.studio.config.catalogAssets;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.util.PropertyChangeEventUtil;
 import com.coremedia.ui.util.ArrayUtils;
 
 import ext.Ext;
-import ext.IEventObject;
-import ext.config.droptarget;
 import ext.dd.DragSource;
 import ext.dd.DropTarget;
+import ext.event.Event;
 import ext.grid.GridPanel;
 
 public class CatalogAssetsBase extends GridPanel {
@@ -27,7 +25,7 @@ public class CatalogAssetsBase extends GridPanel {
   /**
    * @param config the config object
    */
-  public function CatalogAssetsBase(config:catalogAssets = null) {
+  public function CatalogAssetsBase(config:CatalogAssets = null) {
     super(config);
 
     bindTo = config.bindTo;
@@ -44,11 +42,11 @@ public class CatalogAssetsBase extends GridPanel {
   public function setSelectedItems(value:Array):void {
     var oldValue:* = selectedItems;
     selectedItems = value;
-    PropertyChangeEventUtil.fireEvent(this, catalogAssets.SELECTED_ITEMS_VARIABLE_NAME, oldValue, value);
+    PropertyChangeEventUtil.fireEvent(this, CatalogAssets.SELECTED_ITEMS_VARIABLE_NAME, oldValue, value);
   }
 
   internal function getSelectedValuesExpression():ValueExpression {
-    return ValueExpressionFactory.create(catalogAssets.SELECTED_ITEMS_VARIABLE_NAME, this);
+    return ValueExpressionFactory.create(CatalogAssets.SELECTED_ITEMS_VARIABLE_NAME, this);
   }
 
   internal static function transformToArray(data:*):Array {
@@ -57,7 +55,7 @@ public class CatalogAssetsBase extends GridPanel {
 
   private function onRender():void {
     //noinspection JSUnusedGlobalSymbols
-    var dropTargetCfg:droptarget = new droptarget();
+    var dropTargetCfg:DropTarget = DropTarget({});
     dropTargetCfg.ddGroup = 'ContentLinkDD';
     dropTargetCfg['gridDropTarget'] = this;
     dropTargetCfg['notifyDrop'] = notifyDrop;
@@ -69,7 +67,7 @@ public class CatalogAssetsBase extends GridPanel {
     dropTarget.addToGroup('ContentDD');
   }
 
-  private function notifyDrop(d:DragSource, e:IEventObject, data:Object):Boolean {
+  private function notifyDrop(d:DragSource, e:Event, data:Object):Boolean {
     if (notifyOver(d, e, data) !== dropTarget.dropAllowed) {
       return false;
     }
@@ -89,7 +87,7 @@ public class CatalogAssetsBase extends GridPanel {
     return true;
   }
 
-  private function notifyOver(d:DragSource, e:IEventObject, data:Object):String {
+  private function notifyOver(d:DragSource, e:Event, data:Object):String {
     var dragInfo:DragInfo = DragInfo.makeDragInfo(d, data, this);
     if (!dragInfo) {
       return dropTarget.dropNotAllowed;

@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.cae.web.HttpHead;
@@ -13,6 +14,7 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cache.Cache;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -121,13 +123,17 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
   }
 
   protected Page asPage(Navigation context, Linkable content) {
+    return asPage(context, content, null);
+  }
+
+  protected Page asPage(Navigation context, Linkable content, TreeRelation<Content> treeRelation) {
     PageImpl page = createPageImpl(content, context);
     page.setTitle(content.getTitle());
-
-    //todo this is the original blueprint semantic for descriptions - do we really want the title as description?
     page.setDescription(page.getTitle());
-
     page.setKeywords(content.getKeywords());
+    if (treeRelation!=null) {
+      page.setContentTreeRelation(treeRelation);
+    }
     if (content instanceof CMLinkable) {
       CMLinkable cmLinkable = (CMLinkable) content;
       page.setContentId(String.valueOf(cmLinkable.getContentId()));

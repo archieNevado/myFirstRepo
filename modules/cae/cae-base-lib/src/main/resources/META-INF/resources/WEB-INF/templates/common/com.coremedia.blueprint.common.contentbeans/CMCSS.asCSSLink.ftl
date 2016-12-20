@@ -1,12 +1,16 @@
-<#-- This template is used if cae.use.local.resources or cae.developer.mode are set to true or ieExpression is set. -->
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMCSS" -->
 
-<#assign cssLink=self.dataUrl/>
-<#if !cssLink?has_content>
-    <#assign cssLink=cm.getLink(self)/>
-</#if>
+<#-- This template is used for CSS files if
+  - ieExpression (conditional comments for IE) is set
+  - css includes an external css file
+  - cae.use.local.resources and/or cae.developer.mode are set to true
+  Otherwise MergableResources.asCSSLink.ftl is used.
+-->
+
+<#assign cssLink=self.dataUrl?has_content?then(self.dataUrl,cm.getLink(self))/>
+
 <#if self.ieExpression?has_content>
-    <!--[if ${self.ieExpression}]><link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />/><![endif]-->
+  <!--[if ${self.ieExpression}]><link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />/><![endif]-->
 <#else>
-    <link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />/>
+  <link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />/>
 </#if>

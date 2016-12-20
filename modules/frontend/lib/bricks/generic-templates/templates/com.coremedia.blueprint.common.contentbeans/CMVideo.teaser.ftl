@@ -5,19 +5,23 @@
 <#assign additionalClass=cm.localParameters().additionalClass!"cm-teasable" />
 <#assign link=bp.getVideoLink(self) />
 
+<#assign renderLink=cm.localParameter("renderLink", true) />
+<#assign renderTeaserTitle=cm.localParameter("renderTeaserTitle", true) />
 <#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
 <#assign renderDimmer=cm.localParameter("renderDimmer", false) />
 <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
+<#assign limitAspectRatiosKey="default_aspect_ratios_for_" + cm.localParameter("limitAspectRatiosKey", "teaser") />
+<#assign limitAspectRatios=cm.localParameter("limitAspectRatios", bp.setting(cmpage.navigation, limitAspectRatiosKey, [])) />
 
 <div class="${additionalClass} ${additionalClass}--video  ${cssClasses}"<@cm.metadata self.content />>
     <div class="${additionalClass}__wrapper">
-    <@bp.optionalLink href="${link}" attr={"data-cm-popup": "", "class":"${additionalClass}__popup-opener"}>
+    <@bp.optionalLink href="${link}" attr={"data-cm-popup": "", "class":"${additionalClass}__popup-opener"} render=renderLink>
     <#-- picture -->
-    <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=additionalClass displayEmptyImage=renderEmptyImage displayDimmer=renderDimmer limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_teaser", [])/>
-
-    <#-- play overlay icon-->
+    <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=additionalClass displayEmptyImage=renderEmptyImage displayDimmer=renderDimmer limitAspectRatios=limitAspectRatios/>
+      <#-- play overlay icon-->
       <@cm.include self=self view="_playButton" params={"additionalClass": "${additionalClass}"}/>
 
+      <#if renderTeaserTitle || renderTeaserText>
         <div class="${additionalClass}__caption caption">
         <#-- teaser title -->
           <#if self.teaserTitle?has_content>
@@ -32,6 +36,7 @@
               </p>
           </#if>
         </div>
+      </#if>
     </@bp.optionalLink>
     </div>
 </div>

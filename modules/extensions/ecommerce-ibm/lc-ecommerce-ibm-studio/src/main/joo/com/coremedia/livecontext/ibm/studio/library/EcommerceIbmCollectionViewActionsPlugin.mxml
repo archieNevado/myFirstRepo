@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+  <!-- Extend the standard Studio and Blueprint components for Live Context -->
+<editor:StudioPlugin
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns:livecontext="exml:com.coremedia.livecontext.ibm.studio.config"
+        xmlns:ec="exml:com.coremedia.ecommerce.studio.config">
+  <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
+    import com.coremedia.cms.editor.sdk.collectionview.tree.TreeViewContextMenu;
+    import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
+    import com.coremedia.livecontext.ibm.studio.EcommerceIbmStudioPlugin;
+
+    private var config:EcommerceIbmCollectionViewActionsPlugin;
+
+    public native function EcommerceIbmCollectionViewActionsPlugin(config:EcommerceIbmCollectionViewActionsPlugin = null);
+    ]]></fx:Script>
+
+    <editor:rules>
+      <ec:CatalogRepositoryToolbar>
+        <ec:plugins>
+          <ui:AddItemsPlugin>
+            <ui:items>
+              <ui:IconButton itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_BUTTON_ITEM_ID}">
+                <ui:baseAction>
+                  <livecontext:OpenInManagementCenterAction catalogObjectVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
+                </ui:baseAction>
+              </ui:IconButton>
+            </ui:items>
+            <ui:after>
+              <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}"/>
+            </ui:after>
+          </ui:AddItemsPlugin>
+        </ec:plugins>
+      </ec:CatalogRepositoryToolbar>
+
+      <ec:CatalogRepositoryContextMenu>
+        <ec:plugins>
+          <ui:AddItemsPlugin>
+            <ui:items>
+              <MenuSeparator/>
+              <MenuItem itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_MENU_ITEM_ID}">
+                <baseAction>
+                  <livecontext:OpenInManagementCenterAction catalogObjectVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
+                </baseAction>
+              </MenuItem>
+            </ui:items>
+            <ui:after>
+              <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID}"/>
+            </ui:after>
+          </ui:AddItemsPlugin>
+        </ec:plugins>
+      </ec:CatalogRepositoryContextMenu>
+
+      <ec:CatalogSearchToolbar>
+        <ec:plugins>
+          <ui:AddItemsPlugin>
+            <ui:items>
+              <TbSeparator/>
+              <ui:IconButton itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_BUTTON_ITEM_ID}">
+                <ui:baseAction>
+                  <livecontext:OpenInManagementCenterAction catalogObjectVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
+                </ui:baseAction>
+              </ui:IconButton>
+            </ui:items>
+            <ui:after>
+              <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID}"/>
+            </ui:after>
+          </ui:AddItemsPlugin>
+        </ec:plugins>
+      </ec:CatalogSearchToolbar>
+
+      <ec:CatalogSearchContextMenu>
+        <ec:plugins>
+          <ui:AddItemsPlugin>
+            <ui:items>
+              <MenuItem itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_MENU_ITEM_ID}">
+                <baseAction>
+                  <livecontext:OpenInManagementCenterAction catalogObjectVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
+                </baseAction>
+              </MenuItem>
+              <MenuSeparator/>
+            </ui:items>
+            <ui:after>
+              <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID}"/>
+            </ui:after>
+          </ui:AddItemsPlugin>
+        </ec:plugins>
+      </ec:CatalogSearchContextMenu>
+
+      <editor:TreeViewContextMenu>
+        <editor:plugins>
+          <ui:AddItemsPlugin>
+            <ui:items>
+              <MenuItem itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_MENU_ITEM_ID}">
+                <baseAction>
+                  <livecontext:OpenInManagementCenterAction catalogObjectVariableName="{CollectionView.SELECTED_FOLDER_VARIABLE_NAME}"/>
+                </baseAction>
+              </MenuItem>
+              <MenuSeparator/>
+            </ui:items>
+            <ui:after>
+              <Component itemId="{TreeViewContextMenu.OPEN_IN_TAB_MENU_ITEM_ID}"/>
+            </ui:after>
+          </ui:AddItemsPlugin>
+        </editor:plugins>
+      </editor:TreeViewContextMenu>
+
+      <ec:CatalogLink>
+        <ec:plugins>
+          <livecontext:AddCatalogLinkActionsPlugin/>
+        </ec:plugins>
+      </ec:CatalogLink>
+    </editor:rules>
+
+</editor:StudioPlugin>

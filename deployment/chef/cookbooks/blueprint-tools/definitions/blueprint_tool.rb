@@ -34,8 +34,8 @@ end
 #>
 =end
 
-define :blueprint_tool, :sensitive => true do
-  tool_name = params[:name] 
+define :blueprint_tool, sensitive: true do
+  tool_name = params[:name]
   params[:path] ||= node['blueprint']['tools'][tool_name]['dir']
   params[:user] ||= node['blueprint']['user']
   params[:group] ||= node['blueprint']['group']
@@ -67,8 +67,7 @@ define :blueprint_tool, :sensitive => true do
   # noinspection RubyStringKeysInHashInspection
   default_logback_config = { 'properties' => { 'application.name' => "#{tool_name}-tools",
                                                'application.version' => node['blueprint']['tools'][tool_name]['version'],
-                                               'log.dir' => params[:log_dir]}
-  }
+                                               'log.dir' => params[:log_dir] } }
   logback_config_hash = Mash.new
   logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, node['blueprint']['tools']['logback_config']) if node.deep_fetch('blueprint', 'tools', 'logback_config')
   logback_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(logback_config_hash, node['blueprint']['tools'][tool_name]['logback_config']) if node.deep_fetch('blueprint', 'tools', tool_name, 'logback_config')
@@ -140,7 +139,7 @@ define :blueprint_tool, :sensitive => true do
         cookbook 'blueprint-tools'
         owner params[:user]
         group params[:group]
-        variables(:props => params[:property_files][properties_file])
+        variables(props: params[:property_files][properties_file])
         sensitive params[:senstive]
       end
     end
@@ -149,8 +148,8 @@ define :blueprint_tool, :sensitive => true do
   template "#{params[:path]}/bin/pre-config.jpif" do
     source 'pre-config.jpif.erb'
     cookbook 'blueprint-tools'
-    variables(:java_home => params[:java_home],
-              :jvm_args => params[:jvm_args])
+    variables(java_home: params[:java_home],
+              jvm_args: params[:jvm_args])
     owner params[:user]
     group params[:group]
   end
@@ -161,7 +160,7 @@ define :blueprint_tool, :sensitive => true do
     owner params[:user]
     group params[:group]
     source 'logback.xml.erb'
-    variables :config => logback_config_hash
+    variables config: logback_config_hash
     not_if { logback_config_hash.empty? }
   end
 end

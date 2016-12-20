@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!--
@@ -34,18 +33,19 @@
     -->
     <workspace.configuration.dir>../workspace-configuration</workspace.configuration.dir>
     <development-properties.dir>${workspace.configuration.dir}/development-properties</development-properties.dir>
+    <logging-properties.dir>${workspace.configuration.dir}/logging</logging-properties.dir>
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1604.4-22</blueprint-base.version>
-    <cms.version>1604.4-22</cms.version>
-    <personalization.version>1604.4-22</personalization.version>
-    <elastic.version>1604.4-22</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1604.4-22</studio.version>
-    <caetoolbox.version>1604.4-22</caetoolbox.version>
-    <livecontext.version>1604.4-22</livecontext.version>
-    <jangaroo.version>2.0.17</jangaroo.version>
-    <jangaroo.libs.version>2.0.17</jangaroo.libs.version>
+    <blueprint-base.version>1701.0-8</blueprint-base.version>
+    <cms.version>1701.0-8</cms.version>
+    <personalization.version>1701.0-8</personalization.version>
+    <elastic.version>1701.0-8</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1701.0-8</studio.version>
+    <caetoolbox.version>1701.0-8</caetoolbox.version>
+    <livecontext.version>1701.0-8</livecontext.version>
+    <jangaroo.version>4.0.38</jangaroo.version>
+    <jangaroo.libs.version>4.0.37</jangaroo.libs.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
     <tomcat.version>7.0.72</tomcat.version>
@@ -82,6 +82,10 @@
     <notification.persistence.extension>elastic</notification.persistence.extension>
     <caplist>com.coremedia.cotopaxi.list.elastic.mongodb.MongoCapListConnectorFactory</caplist>
 
+    <!-- Some values for the ThemeImporter exec-maven-plugin configuration -->
+    <theme-importer.argument.folder>-Dthemes_folder=${project.build.directory}/themes</theme-importer.argument.folder>
+    <theme-importer.argument.export-path>-Dexport_path=${project.build.directory}/content</theme-importer.argument.export-path>
+    <theme-importer.argument.runner>com.coremedia.blueprint.themeimporter.client.ThemeImporterRunner</theme-importer.argument.runner>
   </properties>
 
   <profiles>
@@ -290,14 +294,6 @@
 
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>shoutem-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>custom-topic-pages-bom</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
@@ -329,6 +325,22 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>osm-bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>taxonomy-bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>validators-bom</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -426,14 +438,6 @@
         <groupId>com.coremedia.ui</groupId>
         <artifactId>studio-bom</artifactId>
         <version>${studio.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-
-      <dependency>
-        <groupId>com.coremedia.cae</groupId>
-        <artifactId>cae-developer-tools-bom</artifactId>
-        <version>${caetoolbox.version}</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -663,6 +667,7 @@
                 </includes>
                 <followSymlinks>false</followSymlinks>
               </fileset>
+              <!-- node is created by frontend-maven-plugin -->
               <fileset>
                 <directory>node</directory>
               </fileset>
@@ -688,10 +693,9 @@
         <plugin>
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.0</version>
+          <version>1.3</version>
           <configuration>
-            <nodeVersion>v4.5.0</nodeVersion> <!-- LTS -->
-            <npmVersion>3.10.6</npmVersion>
+            <nodeVersion>v6.9.1</nodeVersion><!-- LTS -->
           </configuration>
         </plugin>
         <plugin>
@@ -842,19 +846,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.5.0</version>
-          <configuration>
-            <executable>${env.JAVA_HOME}/bin/java</executable>
-            <arguments>
-              <argument>-Dthemes_folder=${project.build.directory}/themes</argument>
-              <argument>-Dexport_path=${project.build.directory}/content</argument>
-              <argument>-classpath</argument>
-              <!-- automatically creates the classpath using all project dependencies,
-                   also adding the project build directory -->
-              <classpath/>
-              <argument>com.coremedia.blueprint.themeimporter.client.ThemeImporterRunner</argument>
-            </arguments>
-            <includePluginDependencies>true</includePluginDependencies>
-          </configuration>
         </plugin>
 
         <plugin>
@@ -892,7 +883,7 @@
             <additionalClasspathDirs>
               <additionalClasspathDir>${development-properties.dir}</additionalClasspathDir>
               <!-- Load logback.xml from workspace-config -->
-              <additionalClasspathDir>${project.basedir}/../../../workspace-configuration/logging</additionalClasspathDir>
+              <additionalClasspathDir>${logging-properties.dir}</additionalClasspathDir>
             </additionalClasspathDirs>
           </configuration>
           <dependencies>
@@ -999,6 +990,20 @@
               </goals>
             </execution>
           </executions>
+          <configuration>
+            <!--
+              build executable war that can be run like this:
+              JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
+
+              only set to 'true' if chef run won't fail on warning when unzipping the webapp
+            -->
+            <executable>false</executable>
+            <!--
+              common main class
+            -->
+            <mainClass>com.coremedia.springframework.web.SpringBootWebappConfiguration</mainClass>
+            <addResources>true</addResources>
+          </configuration>
         </plugin>
 
         <plugin>
@@ -1049,19 +1054,13 @@
           <artifactId>replacer</artifactId>
           <version>1.5.2</version>
         </plugin>
-
-        <plugin>
-          <groupId>net.jangaroo</groupId>
-          <artifactId>exml-maven-plugin</artifactId>
-          <version>${jangaroo.version}</version>
-          <configuration>
-            <validationMode>error</validationMode>
-          </configuration>
-        </plugin>
         <plugin>
           <groupId>net.jangaroo</groupId>
           <artifactId>jangaroo-maven-plugin</artifactId>
           <version>${jangaroo.version}</version>
+          <configuration>
+            <remotePackagesArtifact>${project.groupId}:studio-remote-packages</remotePackagesArtifact>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>net.jangaroo</groupId>
@@ -1120,9 +1119,17 @@
               <failOnWarning>${failOnWarning}</failOnWarning>
               <ignoreNonCompile>true</ignoreNonCompile>
               <outputXML>true</outputXML>
+              <analyzer>skipJangarooAnalyzer</analyzer>
             </configuration>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>net.jangaroo</groupId>
+            <artifactId>jangaroo-maven-plugin</artifactId>
+            <version>${jangaroo.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
 
       <plugin>

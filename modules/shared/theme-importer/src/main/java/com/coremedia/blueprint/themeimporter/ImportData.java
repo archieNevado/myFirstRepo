@@ -67,11 +67,7 @@ class ImportData {
       for (ZipEntry entry=zipStream.getNextEntry(); entry!=null; entry=zipStream.getNextEntry()) {
         if (!entry.isDirectory()) {
           String mimeType = getMimeType(entry);
-          if (mimeType == null) {
-            LOG.warn("Ignoring file due to unknown filetype: {}", entry.getName());
-          } else {
-            processZipEntry(zipStream, entry, mimeType);
-          }
+          processZipEntry(zipStream, entry, mimeType);
         }
         zipStream.closeEntry();
       }
@@ -152,9 +148,7 @@ class ImportData {
   }
 
   private String getMimeType(ZipEntry entry) {
-    String entryName = entry.getName();
-    String extension = entryName.substring(entryName.lastIndexOf('.') + 1, entryName.length());
-    return mimeTypeService.getMimeTypeForExtension(extension);
+    return mimeTypeService.getMimeTypeForResourceName(entry.getName());
   }
 
   private static boolean hasType(String canonicalMimeType, String... types) {

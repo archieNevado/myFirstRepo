@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.common.contentbeans;
 
+import com.coremedia.blueprint.common.util.Flatless;
 import com.coremedia.cae.aspect.Aspect;
 
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.Map;
  *
  * <p>Represents the document type {@link #NAME CMCollection}.</p>
  */
-public interface CMGallery<T extends CMMedia> extends CMCollection<T> {
+public interface CMGallery<T extends CMMedia> extends CMCollection<T>, Flatless {
   /**
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMCollection'.
    */

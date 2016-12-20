@@ -17,8 +17,23 @@ module.exports = function (grunt) {
   // load all available default configs
   utils.loadGruntConfigs(grunt);
 
+  // generate webpack configs for JavaScript modules in lib/js directory
+  utils.generateJSLibWebpackConfigs(grunt);
+
   // load bricks to extend theme
-  utils.loadBricks(grunt, ["preview", "responsive-images", "bootstrap", "generic-templates", "cta", "image-maps", "elastic-social", "fragment-scenario", "livecontext"]);
+  utils.loadBricks(grunt, [
+    "preview",
+    "responsive-images",
+    "bootstrap",
+    "generic-templates",
+    "cta",
+    "image-maps",
+    "elastic-social",
+    "fragment-scenario",
+    "livecontext",
+    "shoppable-video",
+    "pdp-augmentation"
+  ]);
 
   // --- theme configuration -------------------------------------------------------------------------------------------
 
@@ -28,22 +43,23 @@ module.exports = function (grunt) {
       options: {
         outputStyle: "expanded",
         sourceMap: true,
-        sourceMapRoot: 'file://' + process.cwd()+'target/resources/themes/../<%= themeConfig.name %>/css'
+        sourceMapRoot: 'file://' + process.cwd() + 'target/resources/themes/../<%= themeConfig.name %>/css'
       },
       build: {
         files: {
-          '../../target/resources/themes/<%= themeConfig.name %>/css/aurora.css': 'src/sass/aurora.scss'
+          '../../target/resources/themes/<%= themeConfig.name %>/css/aurora.css': 'src/sass/aurora.scss',
+          '../../target/resources/themes/<%= themeConfig.name %>/css/preview.css': 'src/sass/preview.scss'
         }
       }
     },
-    // copy sources to target folder
+    // copy js and vendor files
     copy: {
-      perfectchef: {
+      basic: {
         files: [{
           expand: true,
-          cwd: '../perfectchef-theme/src',
-          src: ['css/**', 'fonts/**', 'img/**', 'images/**', 'js/**', 'vendor/**', 'l10n/**'],
-          dest: '../../target/resources/themes/<%= themeConfig.name %>'
+          cwd: '../../lib/js/legacy',
+          src: ['*.js'],
+          dest: '../../target/resources/themes/<%= themeConfig.name %>/js'
         }]
       },
       imagesloaded: {
@@ -58,7 +74,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: 'node_modules/jquery/dist',
-          src: 'jquery.js',
+          src: 'jquery.min.js',
           dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
         }]
       },
@@ -88,11 +104,13 @@ module.exports = function (grunt) {
     }
   });
 
-  // --- theme tasks ---------------------------------------------------------------------------------------------------
+// --- theme tasks ---------------------------------------------------------------------------------------------------
 
-  // Full distribution task (no templates available in this theme).
-  grunt.registerTask('build', ['clean', 'copy', 'sass', 'postcss', 'compress:theme']);
+  // Local Development Task.
+  grunt.registerTask('development', ['clean', 'copy', 'sass', 'webpack:jslib']);
+  // Full distribution task with templates.
+  grunt.registerTask('production', ['development', 'postcss', 'compress']);
 
   // Default task = distribution.
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('default', ['production']);
 };

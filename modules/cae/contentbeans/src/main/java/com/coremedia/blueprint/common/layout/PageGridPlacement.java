@@ -4,6 +4,7 @@ import com.coremedia.blueprint.common.navigation.HasViewTypeName;
 import com.coremedia.blueprint.common.navigation.Linkable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A PageGridPlacement is a part of a whole PageGrid representing for example the sidebar or main column
@@ -48,9 +49,13 @@ public interface PageGridPlacement extends HasViewTypeName, Container<Linkable> 
 
   /**
    * Returns the number of the row of this placement.
-   * @return
    */
   int getNumCols();
+
+  /**
+   * Returns additional properties stored in the pagegrid config
+   */
+  Map<String, Object> getAdditionalProperties();
 
 }
 

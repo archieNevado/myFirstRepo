@@ -8,7 +8,6 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.ecommerce.studio.CatalogModel;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
@@ -27,8 +26,11 @@ import com.coremedia.ui.data.error.NotExistsError;
 import com.coremedia.ui.data.error.RemoteError;
 import com.coremedia.ui.data.impl.RemoteErrorHandlerRegistryImpl;
 
-import ext.util.StringUtil;
+import ext.StringUtil;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class CatalogHelper {
 
   private static const PROFILE_EXTENSIONS:String = 'profileExtensions';
@@ -227,6 +229,23 @@ public class CatalogHelper {
    * @param bindTo value expression pointing to a document of which 'externalId' property as the product id
    * @param productPropertyName
    */
+  public function getCatalogExpression(bindTo:ValueExpression):ValueExpression {
+    return ValueExpressionFactory.createFromFunction(function ():* {
+      var product:Product;
+      var catalogObjectId:String = bindTo.extendBy('properties').extendBy('externalId').getValue();
+      if (!catalogObjectId || catalogObjectId.length === 0) {
+        return null;
+      } else {
+        return getCatalogObject(catalogObjectId, bindTo) as Product;
+      }
+    });
+  }
+
+  /**
+   *
+   * @param bindTo value expression pointing to a document of which 'externalId' property as the product id
+   * @param productPropertyName
+   */
   public function getProductPropertyExpression(bindTo:ValueExpression, productPropertyName:String):ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():* {
       var product:Product;
@@ -350,16 +369,16 @@ public class CatalogHelper {
       var errorMsg:String = error.message;
       // only process livecontext errors
       if (errorCode === LC_ERROR_CODE_CATALOG_UNAVAILABLE) {
-        MessageBoxUtil.showError(ECommerceStudioPlugin_properties.INSTANCE.commerceConnectionError_title,
-                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceConnectionError_message, errorMsg));
+        MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceConnectionError_title'),
+                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceConnectionError_message'), errorMsg));
         doHandleError(error, source);
       } else if (errorCode === LC_ERROR_CODE_CATALOG_INTERNAL_ERROR) {
-        MessageBoxUtil.showError(ECommerceStudioPlugin_properties.INSTANCE.commerceCatalogError_title,
-                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceCatalogError_message, errorMsg));
+        MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogError_title'),
+                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogError_message'), errorMsg));
         doHandleError(error, source);
       } else if (errorCode === LC_ERROR_CODE_UNAUTHORIZED) {
-        MessageBoxUtil.showError(ECommerceStudioPlugin_properties.INSTANCE.commerceUnauthorizedError_title,
-                StringUtil.format(ECommerceStudioPlugin_properties.INSTANCE.commerceUnauthorizedError_message, errorMsg));
+        MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceUnauthorizedError_title'),
+                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceUnauthorizedError_message'), errorMsg));
         doHandleError(error, source);
       }
     }

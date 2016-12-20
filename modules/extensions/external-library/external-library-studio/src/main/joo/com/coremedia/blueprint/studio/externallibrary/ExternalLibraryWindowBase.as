@@ -1,24 +1,50 @@
 package com.coremedia.blueprint.studio.externallibrary {
 
-import com.coremedia.blueprint.studio.config.externallibrary.externalLibraryWindow;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.util.EventUtil;
 
-import ext.Window;
+import ext.LoadMask;
+import ext.window.Window;
 
 /**
  * The base class of the external content library window, creates all value
  * expression for event handling between the panels.
  */
+[ResourceBundle('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin')]
 public class ExternalLibraryWindowBase extends Window {
 
   private var filterValueExpression:ValueExpression;
   private var dataSourceValueExpression:ValueExpression;
   private var selectedValueExpression:ValueExpression;
+  private var loadMask:LoadMask;
 
-  public function ExternalLibraryWindowBase(config:externalLibraryWindow = null) {
+  public function ExternalLibraryWindowBase(config:ExternalLibraryWindow = null) {
     super(config);
+  }
+
+
+  override protected function afterRender():void {
+    super.afterRender();
+
+    var loadMaskCfg:LoadMask = LoadMask({
+      target: this
+    });
+    loadMaskCfg.msg = resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_list_loading');
+    loadMask = new LoadMask(loadMaskCfg);
+    loadMask.disable();
+  }
+
+  public function setBusy(busy:Boolean):void {
+    if(busy) {
+      loadMask.show();
+    }
+    else {
+      EventUtil.invokeLater(function():void {
+        loadMask.hide();
+      });
+    }
   }
 
   /**

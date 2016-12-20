@@ -1,8 +1,6 @@
 package com.coremedia.livecontext.studio {
-import com.coremedia.blueprint.base.components.config.navigationLinkFieldWrapper;
 import com.coremedia.blueprint.base.components.navigationlink.NavigationLinkFieldWrapper;
 import com.coremedia.blueprint.base.components.quickcreate.QuickCreate;
-import com.coremedia.blueprint.base.components.quickcreate.QuickCreate_properties;
 import com.coremedia.blueprint.base.components.quickcreate.processing.ProcessingData;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
@@ -10,10 +8,13 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 
 import ext.Component;
 
+import mx.resources.ResourceManager;
+
 /**
  * Extension, the enhances the QuickCreateDialog for CMExternalPage with the parent navigation, externalId and
  * externalUri editors
  */
+[ResourceBundle('com.coremedia.blueprint.base.components.quickcreate.QuickCreate')]
 public class CMExternalPageExtension {
   //content and custom properties for quick create dialog
   public static const PARENT_PROPERTY:String = "parentChannel";
@@ -55,9 +56,9 @@ public class CMExternalPageExtension {
         data.set(ProcessingData.FOLDER_PROPERTY, path);
       });
     }
-    properties.label = QuickCreate_properties.INSTANCE.parent_label;
+    properties.label = ResourceManager.getInstance().getString('com.coremedia.blueprint.base.components.quickcreate.QuickCreate', 'parent_label');
     properties.doctype = CONTENT_TYPE_PAGE;
-    return new NavigationLinkFieldWrapper(navigationLinkFieldWrapper(properties));
+    return new NavigationLinkFieldWrapper(NavigationLinkFieldWrapper(properties));
   }
 
   /**

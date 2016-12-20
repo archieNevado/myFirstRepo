@@ -1,13 +1,14 @@
 package com.coremedia.blueprint.assets.cae;
 
-import com.coremedia.blueprint.assets.cae.DownloadCollectionZipCacheKey;
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMAssetRendition;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.CapBlobRef;
+import com.coremedia.cap.common.CapConnection;
+import com.coremedia.cap.common.TempFileService;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cotopaxi.common.CacheFactory;
-import com.coremedia.cotopaxi.content.AbstractContentRepository;
 import com.coremedia.mimetype.MimeTypeService;
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
@@ -52,10 +53,16 @@ public class DownloadCollectionZipCacheKeyTest {
   private Cache cache;
 
   @Mock
-  private AbstractContentRepository contentRepository;
+  private CapConnection capConnection;
 
   @Mock
-  private AbstractContentRepository contentRepositoryAnother;
+  private TempFileService tempFileService;
+
+  @Mock
+  private ContentRepository contentRepository;
+
+  @Mock
+  private ContentRepository contentRepositoryAnother;
 
   @Mock
   private MimeTypeService mimeTypeService;
@@ -107,7 +114,9 @@ public class DownloadCollectionZipCacheKeyTest {
 
     when(mimeTypeService.getMimeTypeForExtension(any(String.class))).thenReturn("application/zip");
     when(mimeTypeService.getExtensionForMimeType(anyString())).thenReturn(JPG);
-    when(contentRepository.createTempFileFor(any(String.class), any(MimeType.class))).thenReturn(zipFile);
+    when(contentRepository.getConnection()).thenReturn(capConnection);
+    when(capConnection.getTempFileService()).thenReturn(tempFileService);
+    when(tempFileService.createTempFileFor(any(String.class), any(MimeType.class))).thenReturn(zipFile);
 
     when(renditionBlob.getContentType()).thenReturn(new MimeType("image/jpeg"));
     when(renditionBlob.getInputStream()).thenReturn(IOUtils.toInputStream("some test data for my input stream"));

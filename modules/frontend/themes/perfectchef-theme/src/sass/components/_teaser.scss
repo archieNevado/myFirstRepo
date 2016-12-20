@@ -52,7 +52,7 @@ $cm-teasable-padding-large-horizontal: 0;
     background-color: transparent;
     opacity: 1;
 
-    .cm-teaser__info {
+    .#{$cm-teasable-prefix}__info {
       right: 0;
       bottom: 0;
       position: absolute;
@@ -90,7 +90,7 @@ $cm-teasable-padding-large-horizontal: 0;
   }
 
   @include breakpoint(md) {
-    &:hover .cm-teaser__button-group {
+    &:hover .cm-button-group--shopnow {
       display: block;
     }
   }

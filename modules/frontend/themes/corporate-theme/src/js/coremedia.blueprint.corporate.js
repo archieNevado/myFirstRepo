@@ -45,6 +45,7 @@ var coremedia = (function (module) {
   return module;
 }(coremedia || {}));
 coremedia.blueprint = (function (module) {
+  /*global jQuery*/
   module.$ = module.$ || jQuery;
   return module;
 }(coremedia.blueprint || {}));
@@ -67,11 +68,11 @@ coremedia.blueprint.corporate = function (module) {
   var isTouchDevice = (deviceAgent.match(/(iphone|ipod|ipad)/) || deviceAgent.match(/(android)/)  || deviceAgent.match(/(iemobile)/) || deviceAgent.match(/iphone/i) || deviceAgent.match(/ipad/i) || deviceAgent.match(/ipod/i) || deviceAgent.match(/blackberry/i) || deviceAgent.match(/bada/i));
 
   /* --- media querie constance --- */
-  var XS       = "screen and (max-width: 767px)";
+  // var XS       = "screen and (max-width: 767px)";
   var PORTABLE = "screen and (max-width: 1024px)";
-  var SM       = "screen and (min-width: 768px) and (max-width: 1024px)";
-  var SMANDUP  = "screen and (min-width: 1024px)";
-  var MD       = "screen and (min-width: 1025px)";
+  // var SM       = "screen and (min-width: 768px) and (max-width: 1024px)";
+  // var SMANDUP  = "screen and (min-width: 1024px)";
+  // var MD       = "screen and (min-width: 1025px)";
 
   /* --- Private Functions --- */
 
@@ -103,9 +104,7 @@ coremedia.blueprint.corporate = function (module) {
     subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });
 
     if (superClass) {
-      /* jshint ignore:start */
       subClass.__proto__ = superClass;
-      /* jshint ignore:end */
     }
   }
 
@@ -144,7 +143,7 @@ coremedia.blueprint.corporate = function (module) {
       coremedia.blueprint.logger.log("[" + this.constructor.name + "] uid: " + this.uid + " scroll position: ", y);
     };
 
-    ScrollEvent.prototype.resize = function(evt) {
+    ScrollEvent.prototype.resize = function() {
       coremedia.blueprint.logger.log("[" + this.constructor.name + "] uid: " + this.uid + " resize:");
     };
 
@@ -258,7 +257,7 @@ coremedia.blueprint.corporate = function (module) {
       //module.prototype.scroll.call(this, evt, y);
     };
 
-    Superhero.prototype.resize = function(evt) {
+    Superhero.prototype.resize = function() {
       this.ele.closest(".cm-carousel").css({
         'height': $window.height(),
         'width': $window.width()
@@ -333,7 +332,7 @@ coremedia.blueprint.corporate = function (module) {
       //module.prototype.scroll.call(this, evt, y);
     };
 
-    Gap.prototype.resize = function(evt) {
+    Gap.prototype.resize = function(/*evt*/) {
       //module.prototype.resize.call(this, evt);
     };
 
@@ -407,6 +406,7 @@ coremedia.blueprint.corporate = function (module) {
 
     function _requestTick() {
       if (!ticking) {
+        /*global requestAnimFrame*/
         requestAnimFrame(_update);
       }
       ticking = true;
@@ -489,6 +489,7 @@ coremedia.blueprint.corporate = function (module) {
 
                 window.onYouTubeIframeAPIReady = function () {
                   //mute video
+                  /*global YT*/
                   var cmYoutubePlayer = new YT.Player(superHeroVideoPlayerId, {
                     events: {
                       'onReady': function () {
@@ -511,6 +512,7 @@ coremedia.blueprint.corporate = function (module) {
 
                 // register load event
                 vTag.onload = vTag.onreadystatechange = function () {
+                  /*global $f*/
                   // get the player and set volume to 0 (mute)
                   var iframe = $('#' + superHeroVideoPlayerId)[0], player = $f(iframe);
                   // mute vimeo
@@ -638,6 +640,7 @@ coremedia.blueprint.$(function () {
   // fallack for svgs in old browsers, used for play overlay icon
   try {
     coremedia.blueprint.logger.log("Enable svg4everybody");
+    /*global svg4everybody*/
     svg4everybody();
   }
   catch(err) {
@@ -655,7 +658,6 @@ coremedia.blueprint.$(function () {
   $window.smartresize(function () {
     $document.trigger(coremedia.blueprint.corporate.EVENT_LAYOUT_CHANGED);
   });
-  /* jshint ignore:end */
 
   // --- EVENTS --------------------------------------------------------------------------------------------------------
 

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:SkinTemplate
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:skins="com.coremedia.blueprint.studio.styleguide.tabs.skins.*"
+        title="Panels"
+        xmlns:local="com.coremedia.blueprint.studio.styleguide.templates.*">
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.StyleguideSkin;
+    import com.coremedia.blueprint.studio.styleguide.tabs.skins.SkinsHelper;
+    import com.coremedia.ui.data.ValueExpressionFactory;
+
+    private static const HEIGHT:int = 200;
+
+    private var config:PanelsTemplate;
+
+    public native function PanelsTemplate(config:PanelsTemplate = null);
+    ]]></fx:Script>
+
+  <local:plugins>
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromValue(config.skinEnum.getSkin())}">
+      <ui:template>
+        <skins:SkinDescription skinEnum="{config.skinEnum}"
+                               hideExample="true"/>
+      </ui:template>
+    </ui:BindComponentsPlugin>
+    <ui:AddItemsPlugin>
+      <ui:items>
+        <Panel ui="{StyleguideSkin.PANEL_PLACEHOLDER}">
+          <items>
+            <Container ui="{SkinsHelper.getContainerUi(config.skinEnum)}"
+                       width="100%">
+              <items>
+                <Panel title="Non collapsed"
+                       ui="{config.skinEnum.getSkin()}"
+                       height="{HEIGHT}"
+                       margin="0 6"
+                       columnWidth="0.33">
+                  <header/>
+                  <items>
+                    <Container cls="pattern-container"
+                               width="100%"
+                               height="100%"
+                               html="With title and empty header tag."/>
+                  </items>
+
+                </Panel>
+                <Panel title="Collapsible"
+                       collapsed="false"
+                       titleCollapse="true"
+                       collapsible="true"
+                       ui="{config.skinEnum.getSkin()}"
+                       height="{HEIGHT}"
+                       margin="0 6"
+                       columnWidth="0.33">
+                  <header/>
+                  <items>
+                    <Container cls="pattern-container"
+                               width="100%"
+                               height="100%"
+                               html="With title and empty header tag."/>
+                  </items>
+
+                </Panel>
+                <Container height="{HEIGHT}"
+                           layout="border"
+                           margin="0 6"
+                           columnWidth="0.33">
+                  <items>
+                    <Panel title="Non-collapsible"
+                           ui="{config.skinEnum.getSkin()}"
+                           margin="0 6"
+                           height="{HEIGHT}"
+                           region="center">
+                      <header/>
+                      <items>
+                        <Container html="With title and empty header tag in border container."/>
+                      </items>
+                    </Panel>
+                    <Panel title="Collapsible"
+                           ui="{config.skinEnum.getSkin()}"
+                           width="100"
+                           height="{HEIGHT}"
+                           region="east"
+                           margin="0 6"
+                           collapsed="true"
+                           titleCollapse="true"
+                           collapsible="true">
+                      <header/>
+                      <items>
+                        <Container html="With title and empty header tag in border container."/>
+                      </items>
+                    </Panel>
+                  </items>
+                </Container>
+
+              </items>
+              <layout>
+                <layout_Column/>
+              </layout>
+            </Container>
+          </items>
+        </Panel>
+      </ui:items>
+    </ui:AddItemsPlugin>
+  </local:plugins>
+  <local:defaults>
+    <Panel margin="10 0"/>
+  </local:defaults>
+</local:SkinTemplate>

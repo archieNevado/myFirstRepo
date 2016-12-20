@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
@@ -21,19 +21,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CATALOG_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.COMMERCE_SYSTEM_IS_UNAVAILABLE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CONFIG_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CONTRACT_IDS;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.CURRENCY;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.LOCALE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.NO_WS_MARKER;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.PREVIEW_DATE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.REPLACEMENTS;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.STORE_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.STORE_NAME;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.USER_SEGMENTS;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder.WORKSPACE_ID;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.COMMERCE_SYSTEM_IS_UNAVAILABLE;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONFIG_ID;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONTRACT_IDS;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.NO_WS_MARKER;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.PREVIEW_DATE;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.REPLACEMENTS;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_NAME;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.USER_SEGMENTS;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 
 /**
  * Helper class to build an "IBM WCS conform" store context.
@@ -96,11 +97,6 @@ public class StoreContextHelper {
     return currentStoreContext;
   }
 
-  @Nonnull
-  public static StoreContext cloneContext(@Nonnull StoreContext context) throws InvalidContextException {
-    return StoreContextBuilder.create().withValues(context).build();
-  }
-
   /**
    * Adds the given values to a store context.
    * All potential values are possible. You can use a "null" value to omit single values.
@@ -118,7 +114,7 @@ public class StoreContextHelper {
                                            @Nullable String storeName, @Nullable String catalogId,
                                            @Nullable String localeStr, @Nullable String currency)
           throws InvalidContextException {
-    StoreContext context = StoreContextBuilder.create().build();
+    StoreContext context = newStoreContext();
 
     addContextParameterIfNotBlank(context, CONFIG_ID, configId);
     addContextParameterIfNotBlank(context, STORE_ID, storeId);
@@ -441,7 +437,7 @@ public class StoreContextHelper {
 
   public static void setSiteId(@Nullable StoreContext context, String siteId) {
     if (context != null) {
-      context.put(StoreContextBuilder.SITE, siteId);
+      context.put(StoreContextImpl.SITE, siteId);
     }
   }
 

@@ -5,7 +5,9 @@
 <@cm.include self=self view="_richMedia" params={
 "limitAspectRatios": ["landscape_ratio16x9", "landscape_ratio5x2"],
 "classBox": "cm-details__media-box",
-"classImage": "cm-details__media"
+"classImage": "cm-details__media",
+"classPrefix": "cm-details",
+"classSuffix": "media"
 }/>
 
 <#if renderTitle || renderText>

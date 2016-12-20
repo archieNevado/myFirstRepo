@@ -6,7 +6,6 @@
 
   <import resource="classpath:com/coremedia/cap/common/uapi-services.xml"/>
 
-  <import resource="lc-asset-views.xml"/>
   <import resource="lc-asset-handlers.xml"/>
   <import resource="classpath:/framework/spring/search/solr-search.xml"/>
   <import resource="classpath:/framework/spring/lc-asset-services.xml"/>

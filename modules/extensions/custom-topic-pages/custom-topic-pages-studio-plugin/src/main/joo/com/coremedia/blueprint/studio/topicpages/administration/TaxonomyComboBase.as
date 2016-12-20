@@ -1,7 +1,5 @@
 package com.coremedia.blueprint.studio.topicpages.administration {
-import com.coremedia.blueprint.studio.topicpages.config.taxonomyCombo;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cap.undoc.content.ContentUtil;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ui.components.LocalComboBox;
@@ -10,37 +8,63 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
-import ext.data.Record;
-import ext.form.ComboBox;
+import ext.data.Model;
+import ext.data.Store;
+import ext.form.field.ComboBox;
 
 /**
  * The base class of the taxonomy combo.
  * The taxonomy combo displays all available taxonomies, global and site depending ones.
  */
 public class TaxonomyComboBase extends LocalComboBox {
+  /**
+   * Contains the selected taxonomy
+   */
+  [Bindable]
+  public var selectionExpression:ValueExpression;
+
+  [Bindable]
+  public var filterExpression:ValueExpression;
+
   private var taxonomiesExpression:ValueExpression;
-  private var selectionExpression:ValueExpression;
 
-  public function TaxonomyComboBase(config:taxonomyCombo = null) {
+  public function TaxonomyComboBase(config:TaxonomyComboBase = null) {
     super(config);
-    this.selectionExpression = config.selectionExpression;
   }
-
 
   override protected function afterRender():void {
     super.afterRender();
-    addListener('select', valueSelected);
+    on('select', valueSelected);
+    getStore().on('load', storeLoaded);
   }
 
   /**
    * The selection listener method for the combo box.
-   * @param combo
-   * @param record
+   * @param combo the combo box
+   * @param record the selected record
    */
-  private function valueSelected(combo:ComboBox, record:Record):void {
+  private function valueSelected(combo:ComboBox, record:Model):void {
     var id:String = record.data.id;
     var content:Content = ContentUtil.getContent(id);
-    selectValue(content);
+    filterExpression.setValue('');
+    selectionExpression.setValue(content);
+  }
+
+  /**
+   * Selects the first record in the combo box and propagates the selection.
+   *
+   * @param store the store of the combo box
+   * @param records the store records
+   * @param successful if loading was successful
+   */
+  private function storeLoaded(store:Store, records:Array, successful:Boolean):void {
+    if (successful && records.length > 0) {
+      var r1:Model = records[0];
+      // set the value in the combo box
+      setValue(r1.data.id);
+      // propagate selection
+      valueSelected(this, r1);
+    }
   }
 
   /**
@@ -49,40 +73,35 @@ public class TaxonomyComboBase extends LocalComboBox {
    */
   protected function getTaxonomiesExpression():ValueExpression {
     if(!taxonomiesExpression) {
-      taxonomiesExpression = ValueExpressionFactory.create('items', beanFactory.createLocalBean());
-      var remoteBean:RemoteBean = beanFactory.getRemoteBean('topicpages/taxonomies');
-      remoteBean.invalidate(function():void {
-        var values:Array = remoteBean.get('items');
-        taxonomiesExpression.setValue(values);
-        if(values.length > 0) {
-          var taxonomyFolder:Content = values[0];
-          taxonomyFolder.load(function():void {
-            ValueExpressionFactory.create(ContentPropertyNames.PATH, taxonomyFolder).loadValue(function():void {
-              selectValue(taxonomyFolder);
-            });
-          });
-
+      taxonomiesExpression = ValueExpressionFactory.createFromFunction(function():Array {
+        var records:Array = [];
+        var remoteBean:RemoteBean = beanFactory.getRemoteBean('topicpages/taxonomies');
+        if(!remoteBean.isLoaded()) {
+          remoteBean.load();
+          return undefined;
         }
+
+        var values:Array = remoteBean.get('items');
+        for each(var value:Content in values) {
+          if(!value.isLoaded()) {
+            value.load();
+            return undefined;
+          }
+
+          if(value.getPath() == undefined) {
+            return undefined;
+          }
+
+          records.push({id:value.getId(), path:formatDisplayName(value)});
+        }
+
+        return records;
       });
     }
     return taxonomiesExpression;
   }
 
-  /**
-   * Applies the given content as selection.
-   * @param content
-   */
-  private function selectValue(content:Content):void {
-
-    selectionExpression.setValue(content);
-    setValue(formatDisplayNameInternal(content));
-  }
-
-  protected static function formatDisplayName(ignored:String, content:Content):String {
-    return formatDisplayNameInternal(content);
-  }
-
-  protected static function formatDisplayNameInternal(content:Content):String {
+  protected static function formatDisplayName(content:Content):String {
     var site:String = editorContext.getSitesService().getSiteNameFor(content);
     if(site) {
       return content.getName() + ' (' + site + ')';

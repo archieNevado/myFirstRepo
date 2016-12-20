@@ -9,7 +9,7 @@
   <import resource="classpath:com/coremedia/cap/common/uapi-services.xml"/>
   <import resource="classpath:com/coremedia/mimetype/mimetype-service.xml"/>
   <import resource="classpath:com/coremedia/rest/cap/cap-rest-service.xml"/>
-  <import resource="classpath:/META-INF/coremedia/component-bpbase-studio-rest.xml"/>
+  <import resource="classpath:META-INF/coremedia/bpbase-studio-rest.xml"/>
 
   <context:component-scan base-package="com.coremedia.blueprint.themeimporter.configuration" />
 
@@ -31,7 +31,7 @@
     <property name="extractor" ref="imageDimensionsExtractor"/>
   </bean>
 
-  <bean id="zipUploadInterceptor" class="com.coremedia.blueprint.studio.rest.intercept.ZipUploadInterceptor">
+  <bean id="themeUploadInterceptor" class="com.coremedia.blueprint.studio.rest.intercept.ThemeUploadInterceptor">
     <property name="type" value="CMDownload"/>
     <property name="dataProperty" value="data"/>
     <property name="themeImporter" ref="themeImporter"/>

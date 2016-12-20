@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:SkinTemplate
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:skins="com.coremedia.blueprint.studio.styleguide.tabs.skins.*"
+        xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
+        title="{resourceManager.getString('com.coremedia.blueprint.studio.styleguide.Styleguide', 'fieldsets_title')}"
+        xmlns:local="com.coremedia.blueprint.studio.styleguide.templates.*">
+  <fx:Script><![CDATA[
+    import com.coremedia.icons.CoreIcons_properties;
+    import com.coremedia.ui.data.ValueExpressionFactory;
+
+    import ext.Ext;
+    import ext.data.Store;
+
+    use namespace Ext;
+
+    private static const HEIGHT:int = 200;
+
+    private var config:FieldSetsTemplate;
+
+    public native function FieldSetsTemplate(config:FieldSetsTemplate = null);
+
+    private static const store:Store = Ext.create('Ext.data.Store', {
+      fields: ['id', 'name'],
+      data: [
+        {"id": "1", "name": "Awesome"},
+        {"id": "2", "name": "ComboBox"},
+        {"id": "3", "name": "Magic"}
+      ]
+    });
+    ]]>
+  </fx:Script>
+
+
+  <local:plugins>
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromValue(config.skinEnum.getSkin())}">
+      <ui:template>
+        <skins:SkinDescription skinEnum="{config.skinEnum}"
+                               width="100%"
+                               hideExample="true"/>
+      </ui:template>
+    </ui:BindComponentsPlugin>
+    <ui:AddItemsPlugin>
+      <ui:items>
+        <FieldSet title="Checkboxes"
+                  collapsible="true"
+                  collapsed="true">
+          <items>
+            <Checkbox flex="1"
+                      boxLabel="Awesome"
+                      hideLabel="true"/>
+            <Checkbox flex="1"
+                      boxLabel="Checkbox"
+                      hideLabel="true"/>
+            <Checkbox flex="1"
+                      boxLabel="Magic"
+                      hideLabel="true"/>
+          </items>
+        </FieldSet>
+
+        <FieldSet title="DropDown"
+                  collapsible="true"
+                  collapsed="true">
+          <items>
+            <ComboBox displayField="name"
+                      hideLabel="true"
+                      valueField="id"
+                      width="100"
+                      store="{store}"/>
+          </items>
+        </FieldSet>
+
+        <FieldSet title="SearchField"
+                  collapsible="true"
+                  collapsed="true">
+          <items>
+            <TextField value="Awesome Textfield Magic"/>
+            <ui:IconButton iconCls="{CoreIcons_properties.INSTANCE.search}"
+                           tooltip="Choose tag"/>
+          </items>
+          <layout>
+            <layout_HBox/>
+          </layout>
+        </FieldSet>
+
+        <FieldSet title="RadioButton"
+                  collapsible="true"
+                  collapsed="true">
+          <items>
+            <RadioGroup columns="1">
+              <items>
+                <Radio hideLabel="true"
+                       boxLabel="Awesome"/>
+                <Radio hideLabel="true"
+                       boxLabel="Radio Buttons"/>
+              </items>
+            </RadioGroup>
+          </items>
+        </FieldSet>
+      </ui:items>
+    </ui:AddItemsPlugin>
+  </local:plugins>
+</local:SkinTemplate>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Container xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns="exml:ext.config">
+  <fx:Script><![CDATA[
+    import com.coremedia.ui.skins.ButtonSkin;
+
+    import ext.Ext;
+
+    private var config:SkinsList;
+    public var skin:Object;
+
+    public native function SkinsList(config:SkinsList = null);
+
+    public static function scrollSkinIntoView(skin:Object):void {
+      Ext.get('SKIN-TEMPLATE-' + skin.skinId).dom.scrollIntoView(false);
+      Ext.get('SKIN-TEMPLATE-' + skin.skinId).highlight('#D8E7F8');
+    }
+    ]]></fx:Script>
+
+  <layout>
+    <layout_VBox align="stretchmax"/>
+  </layout>
+  <items>
+    <Button text="{config.skin.ui}" onClick="{scrollSkinIntoView(skin)}"
+            ui="{ButtonSkin.LINK.getSkin()}"/>
+  </items>
+
+</Container>

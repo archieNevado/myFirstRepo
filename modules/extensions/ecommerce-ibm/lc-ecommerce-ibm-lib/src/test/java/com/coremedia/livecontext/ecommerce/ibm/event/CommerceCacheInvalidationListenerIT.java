@@ -4,7 +4,6 @@ import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import co.freeside.betamax.Recorder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -31,6 +30,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -63,7 +63,7 @@ public class CommerceCacheInvalidationListenerIT {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     Commerce.setCurrentConnection(connection);
-    storeContext = StoreContextBuilder.create().build();
+    storeContext = newStoreContext();
     when(connection.getStoreContext()).thenReturn(storeContext);
   }
 

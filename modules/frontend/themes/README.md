@@ -14,7 +14,7 @@ A CoreMedia Blueprint Theme should also include following files, as they depend 
 
 - [package.json](https://docs.npmjs.com/getting-started/using-a-package.json)
 - [Gruntfile.js](http://gruntjs.com/getting-started#the-gruntfile)
-- Theme descriptor (CoreMedia xml file used by theme-importer)
+- [Theme descriptor (CoreMedia xml file used by theme-importer)](DESCRIPTOR.md)
 
 ### Available Themes
 
@@ -24,19 +24,28 @@ A CoreMedia Blueprint Theme should also include following files, as they depend 
 
 An empty example-theme is located in [examples/frontend/example-theme](../../../examples/frontend/example-theme/README.md)
 
+### Default Grunt Tasks
+
+All available themes include three registered tasks to be run via grunt. Every theme should include at least the task `production`.
+This task is called via `npm postinstall`.
+
+- `development`: Copy and generate all sources files into the target folder for local development.
+- `production`: Run `development`, postprocessing like `eslint`, `postcss` and create templates.jar and theme.zip for deployment.
+- `import`: Run `production` and import the theme to your CMS.
+
+
 ### Availabe Grunt Tasks
 
 Following grunt tasks are predefined and globally available. 
 
-- `clean`: Cleans target folder for a theme
-- `copy`: Copy all files to target folder
-    - `copy:main`
-    - `copy:templates`
-- `compress`: Generates and copy templates.jar and theme.zip to target folder
+- `clean`: Clean target folder for a theme
+- `compress`: Generate and copy templates.jar and theme.zip to target folder
     - `compress:templates`
     - `compress:theme`
-- `jshint`: Calls [jshint](http://jshint.com/) for all javascript files 
-- `postcss`: Calls [autoprefixer](https://github.com/postcss/autoprefixer) for all CSS files and generates sourcemaps
+- `copy`: Copy all files to target folder including enabled bricks
+- `eslint`: Call [eslint](http://eslint.org/) for all javascript files 
+- `postcss`: Call [autoprefixer](https://github.com/postcss/autoprefixer) for all CSS files and generates sourcemaps
+- `shell:import_themes`: Import Themes via ThemeImporter to your CMS
 - `watch`: Watch Task with livereload for development
 
 Just add following lines to your Gruntfile.js to make them avaialbe for your tasks.

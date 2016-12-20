@@ -127,10 +127,6 @@
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-cache</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-client-base</artifactId>
-    </dependency>
 
     <!-- test dependencies -->
     <dependency>

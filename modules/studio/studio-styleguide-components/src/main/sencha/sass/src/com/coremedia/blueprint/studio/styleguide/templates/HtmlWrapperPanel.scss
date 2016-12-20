@@ -1,0 +1,29 @@
+.sg-documentation-text {
+  padding: 12px 18px;
+  min-height: 14px;
+  font: 400 14px/1 'Segoe UI', 'Trebuchet MS', 'Lucida Grande', 'Helvetica', sans-serif;
+  color: #000;
+  line-height: 30px;
+
+  code {
+    font: 400 14px/1 "Courier New";
+  }
+
+  .box {
+    padding:6px;
+    border:1px solid gray;
+
+    &--left {
+      vertical-align: top;
+      display: inline-block;
+      width: 49%;
+    }
+
+    &--right {
+      vertical-align: top;
+      margin-left: 1%;
+      display: inline-block;
+      width: 49%;
+    }
+  }
+}

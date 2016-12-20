@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:CatalogLinkPropertyFieldBase
+                xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:local="com.coremedia.ecommerce.studio.components.link.*"
+                xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                xmlns:ui="exml:com.coremedia.ui.config"
+                xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
+                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
+  <fx:Script><![CDATA[
+    import com.coremedia.ui.data.ValueExpression;
+    import com.coremedia.ui.skins.IconDisplayFieldSkin;
+
+    public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogLinkPropertyField";
+
+    /**
+     * The itemId of the drop area
+     */
+    public static const DROPAREA_ITEM_ID:String = "dropArea";
+
+    public static const CATALOG_LINK_FIELD_ITEM_ID:String = "catalogLinkField";
+
+    private var config:CatalogLinkPropertyField;
+
+    public native function CatalogLinkPropertyField(config:CatalogLinkPropertyField = null);
+
+    /**
+     * A property path expression leading to the Bean whose property is edited.
+     * This property editor assumes that this bean has a property 'properties'.
+     */
+    [Bindable]
+    public var bindTo:ValueExpression;
+
+    /**
+     * An optional ValueExpression which makes the component read-only if it is evaluated to true.
+     */
+    [Bindable]
+    public var forceReadOnlyValueExpression:ValueExpression;
+    ]]></fx:Script>
+  <fx:Declarations>
+    <!---
+     Set to false to hide the thumbnail of the entries. Default is true
+    -->
+    <fx:Boolean id="showThumbnails"/>
+
+    <!--- Optional. The maximum cardinality that the link list property should hold.
+     If not specified the maximum cardinality of the property descriptor of the link list property will be applied.
+     -->
+    <fx:int id="maxCardinality"/>
+
+    <!--- Don't show any validation issues on this property field. -->
+    <fx:Boolean id="hideIssues"/>
+
+    <!--- 
+      Set to true for multiple links. Default is false, i.e. single link.
+    -->
+    <fx:Boolean id="multiple"/>
+
+    <!---
+     The name of the sting property of the Bean to bind in this field.
+     The string property holds the id of the catalog product
+    -->
+    <fx:String id="propertyName"/>
+
+    <!---
+       The name under which to register this property field.
+       Defaults to propertyName.
+     -->
+    <fx:String id="propertyFieldName"/>
+
+    <!--- 
+       Function to perform when clicking on the empty link field.
+       It e.g. opens the collection view e.g.
+     -->
+    <fx:Function id="openLinkSources"/>
+
+    <!--- 
+       The type of the catalog item that can be dropped here.
+     -->
+    <fx:String id="catalogObjectType"/>
+
+    <!--- 
+       An array of catalog object types, which are allowed as drag source
+     -->
+    <fx:Array id="catalogObjectTypes"/>
+
+    <!--- 
+       Optional: The function to create necessary structs before storing the links
+     -->
+    <fx:Function id="createStructFunction"/>
+
+    <!--- 
+       Set to true if the open in tab menu item and action should be hidden. Default is false
+     -->
+    <fx:Boolean id="hideOpenInTab"/>
+
+    <fx:Array id="additionalToolbarItems"/>
+
+    <!--- The DD group this link container belongs to. -->
+    <fx:String id="ddGroup"/>
+
+    <!---
+     Text shown when the property is empty
+    -->
+    <fx:String id="emptyText"/>
+
+
+  </fx:Declarations>
+
+    <local:plugins exml:mode="append">
+      <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
+                                     propertyName="{config.propertyName}"/>
+      <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
+                               propertyName="{config.propertyName}"
+                               hideIssues="{config.hideIssues}"/>
+      <editor:PropertyFieldPlugin propertyName="{config.propertyName}"/>
+    </local:plugins>
+    <local:items>
+      <ec:CatalogLinkField itemId="{CATALOG_LINK_FIELD_ITEM_ID}"
+                           bindTo="{config.bindTo}"
+                           propertyName="{config.propertyName}"
+                           showThumbnails="{config.showThumbnails}"
+                           ddGroup="{config.ddGroup}"
+                           autoScroll="false"
+                           hideOnEmpty="{true}"
+                           multiple="{config.multiple}"
+                           createStructFunction="{config.createStructFunction}"
+                           openLinkSources="{config.openLinkSources}"
+                           catalogObjectType="{config.catalogObjectType}"
+                           catalogObjectTypes="{config.catalogObjectTypes}"
+                           readOnlyValueExpression="{getReadOnlyExpression(config)}"
+                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                           additionalToolbarItems="{config.additionalToolbarItems}"
+                           hideOpenInTab="{config.hideOpenInTab}">
+      </ec:CatalogLinkField>
+
+      <ec:CatalogLinkPropertyFieldDropArea itemId="{DROPAREA_ITEM_ID}"
+                                           bindTo="{config.bindTo}"
+                                           propertyName="{config.propertyName}"
+                                           propertyFieldName="{config.propertyFieldName}"
+                                           catalogObjectType="{config.catalogObjectType}"
+                                           catalogObjectTypes="{config.catalogObjectTypes}"
+                                           multiple="{config.multiple}"
+                                           createStructFunction="{config.createStructFunction}"
+                                           maxCardinality="{config.maxCardinality}"
+                                           forceReadOnlyValueExpression="{getReadOnlyExpression(config)}"
+                                           openLinkSources="{config.openLinkSources}"
+                                           value="{config.emptyText}">
+        <ec:plugins exml:mode="append">
+          <editor:BindDisablePlugin forceReadOnlyValueExpression="{getReadOnlyExpression(config)}"
+                                    bindTo="{config.bindTo}"/>
+          <ui:BindVisibilityPlugin bindTo="{getHasFreeCapacityExpression(config)}"/>
+        </ec:plugins>
+      </ec:CatalogLinkPropertyFieldDropArea>
+
+    </local:items>
+  <local:layout>
+    <layout_VBox align="stretch"/>
+  </local:layout>
+  
+</local:CatalogLinkPropertyFieldBase>

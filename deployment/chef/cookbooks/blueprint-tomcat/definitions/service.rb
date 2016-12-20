@@ -116,7 +116,7 @@ end
 #>
 =end
 
-define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name => nil do
+define :blueprint_tomcat_service, skip_lifecycle: false, base_service_name: nil do
   # include base recipe to make sure all dirs are set up
   include_recipe 'blueprint-tomcat::_base'
   service_name = params[:name]
@@ -291,7 +291,7 @@ define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name =
     path component_config_path
     source 'properties.erb'
     cookbook 'blueprint-tomcat'
-    variables :props => component_config_hash
+    variables props: component_config_hash
     owner service_user
     group service_group
     sensitive true
@@ -308,7 +308,7 @@ define :blueprint_tomcat_service, :skip_lifecycle => false, :base_service_name =
     owner service_user
     group service_group
     source 'logback.xml.erb'
-    variables :config => logback_config_hash
+    variables config: logback_config_hash
     not_if { logback_config_hash.empty? }
   end
 

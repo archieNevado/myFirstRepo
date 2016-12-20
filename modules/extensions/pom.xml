@@ -33,7 +33,6 @@
     <module>logging</module>
     <module>p13n</module>
     <module>nuggad</module>
-    <module>shoutem</module>
     <module>osm</module>
     <module>upload</module>
     <module>optimizely</module>
@@ -47,6 +46,8 @@
     <module>lc-asset</module>
     <module>ecommerce-ibm</module>
     <module>ecommerce-ibm-es</module>
+    <module>taxonomy</module>
+    <module>validators</module>
   </modules>
 
 </project>

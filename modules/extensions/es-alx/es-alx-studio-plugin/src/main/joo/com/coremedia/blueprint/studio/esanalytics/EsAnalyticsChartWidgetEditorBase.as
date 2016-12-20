@@ -1,5 +1,4 @@
 package com.coremedia.blueprint.studio.esanalytics {
-import com.coremedia.blueprint.studio.config.esanalytics.esAnalyticsChartWidgetEditor;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.undoc.content.ContentUtil;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -9,13 +8,13 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.store.BeanRecord;
 
-import ext.form.ComboBox;
+import ext.form.field.ComboBox;
 
 public class EsAnalyticsChartWidgetEditorBase extends StatefulContainer {
 
   private var rootChannelValueExpr:ValueExpression;
 
-  public function EsAnalyticsChartWidgetEditorBase(config:esAnalyticsChartWidgetEditor = null) {
+  public function EsAnalyticsChartWidgetEditorBase(config:EsAnalyticsChartWidgetEditor = null) {
     super(config);
 
     getRootChannelValueExpression().addChangeListener(rootChannelChanged);
@@ -29,7 +28,7 @@ public class EsAnalyticsChartWidgetEditorBase extends StatefulContainer {
     return ValueExpressionFactory.create("content", getModel());
   }
 
-  protected function getRootChannelValueExpression() {
+  protected function getRootChannelValueExpression():ValueExpression {
     if (!rootChannelValueExpr) {
       rootChannelValueExpr = ValueExpressionFactory.createFromFunction(function():Array {
         var siteRootDocs:Array = [];
@@ -54,7 +53,7 @@ public class EsAnalyticsChartWidgetEditorBase extends StatefulContainer {
   }
 
   private function rootChannelChanged():void {
-    var comboBox:ComboBox = findByType("combo")[0] as ComboBox;
+    var comboBox:ComboBox = down("combo") as ComboBox;
     if (comboBox) {
       mon(comboBox.getStore(), "load", function ():void {
         storeLoaded(comboBox);

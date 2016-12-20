@@ -13,7 +13,7 @@
     <artifactId>logging-config</artifactId>
 
     <properties>
-      <coremedia.project.extension.for>adobe-drive-server,cae,caefeeder,contentfeeder,elastic-worker,server,studio,user-changes,workflow-server,cmd-tools</coremedia.project.extension.for>
+      <coremedia.project.extension.for>adobe-drive-server,cae,caefeeder,contentfeeder,elastic-worker,server,studio-lib,user-changes,workflow-server,cmd-tools</coremedia.project.extension.for>
     </properties>
 
 

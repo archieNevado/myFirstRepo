@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -458,8 +459,11 @@ public abstract class BaseTestsCatalogServiceImpl extends AbstractServiceTest {
     StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
     assertNotEquals(Locale.GERMAN, storeContext.getLocale());
 
-    StoreContext tempStoreContext = StoreContextHelper.cloneContext(storeContext);
-    tempStoreContext.put(StoreContextBuilder.LOCALE, Locale.GERMAN);
+    StoreContext tempStoreContext = newStoreContext();
+    for (String name : storeContext.getContextNames()) {
+      tempStoreContext.put(name, storeContext.get(name));
+    }
+    tempStoreContext.put(StoreContextImpl.LOCALE, Locale.GERMAN);
 
     CatalogService catalogServiceWithTempStoreContext = testling.withStoreContext(tempStoreContext);
     Product product = catalogServiceWithTempStoreContext.findProductById(CommerceIdHelper.formatProductId(PRODUCT_CODE));

@@ -1,19 +1,21 @@
 package com.coremedia.catalog.studio.library {
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.results.BulkOperationResult;
 import com.coremedia.cap.content.results.CopyResult;
-import com.coremedia.catalog.studio.*;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
 import com.coremedia.ui.logging.Logger;
 
 import ext.MessageBox;
-import ext.util.StringUtil;
+import ext.StringUtil;
+
+import mx.resources.ResourceManager;
 
 /**
  * Contains some catalog content actions and helper methods.
  */
+[ResourceBundle('com.coremedia.catalog.studio.CatalogStudioPlugin')]
 public class CatalogTreeRelationHelper {
   public static const PROPERTY_CONTEXTS:String = CatalogTreeRelation.PROPERTY_CONTEXTS;
   public static const PROPERTY_CHILDREN:String = CatalogTreeRelation.PROPERTY_CHILDREN;
@@ -24,8 +26,8 @@ public class CatalogTreeRelationHelper {
 
   public static function showCheckoutError(target:Content):void {
     var docType:String = ContentLocalizationUtil.localizeDocumentTypeName(target.getType().getName());
-    var msg:String = StringUtil.format(CatalogStudioPlugin_properties.INSTANCE.catalog_checkout_error_message, docType, target.getName());
-    MessageBox.alert(CatalogStudioPlugin_properties.INSTANCE.catalog_checkout_error_title, msg);
+    var msg:String = StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_checkout_error_message'), docType, target.getName());
+    MessageBox.alert(ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'catalog_checkout_error_title'), msg);
   }
 
   /**
@@ -35,7 +37,7 @@ public class CatalogTreeRelationHelper {
    * @param callback the callback called once the process is finished.
    */
   public static function copyAndLinkProducts(sources:Array, newParent:Content, callback:Function):void {
-    var contentRepository:ContentRepository = session.getConnection().getContentRepository();
+    var contentRepository:ContentRepository = SESSION.getConnection().getContentRepository();
     contentRepository.copyRecursivelyTo(sources, newParent.getParent(), function(result:CopyResult):void {
       if(result.successful) {
         for each(var item in result.results) {
@@ -174,7 +176,7 @@ public class CatalogTreeRelationHelper {
    * @param target the target categories the sources have been dropped to
    */
   public static function updateLocation(sources:Array, target:Content, callback:Function = undefined):void {
-    var repository:ContentRepository = session.getConnection().getContentRepository();
+    var repository:ContentRepository = SESSION.getConnection().getContentRepository();
     repository.moveTo(sources, target.getParent(), function (result:BulkOperationResult):void {
       if (result.error) {
         Logger.error('Error copying products or categories to folder ' + target.getParent().getPath() + ": "

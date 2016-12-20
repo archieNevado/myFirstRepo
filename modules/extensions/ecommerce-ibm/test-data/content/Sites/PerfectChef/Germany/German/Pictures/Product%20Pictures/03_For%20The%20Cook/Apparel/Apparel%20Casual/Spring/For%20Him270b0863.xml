@@ -23,9 +23,7 @@
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=625;width=2048;height=2048</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=614;width=2048;height=1536</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=1275;width=2048;height=1152</StringProperty>
-<StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=1295;width=2048;height=1024</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=1300;width=2048;height=819</StringProperty>
-<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=1295;width=2048;height=768</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=1316;width=2048;height=512</StringProperty>
 </Struct>
 </StructProperty>
@@ -36,9 +34,7 @@
 <StringProperty Name="portrait_ratio1x1">position;x1=0;y1=0.20333333333333334;x2=1;y2=0.87</StringProperty>
 <StringProperty Name="landscape_ratio4x3">position;x1=0;y1=0.2;x2=1;y2=0.7</StringProperty>
 <StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0.415;x2=1;y2=0.79</StringProperty>
-<StringProperty Name="landscape_ratio2x1">position;x1=0;y1=0.4216666666666667;x2=1;y2=0.755</StringProperty>
 <StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.42333333333333334;x2=1;y2=0.69</StringProperty>
-<StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.4216666666666667;x2=1;y2=0.6716666666666666</StringProperty>
 <StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.42833333333333334;x2=1;y2=0.595</StringProperty>
 </Struct>
 </StructProperty>
@@ -49,9 +45,7 @@
 <StringProperty Name="portrait_ratio1x1">false</StringProperty>
 <StringProperty Name="landscape_ratio4x3">false</StringProperty>
 <StringProperty Name="landscape_ratio16x9">false</StringProperty>
-<StringProperty Name="landscape_ratio2x1">false</StringProperty>
 <StringProperty Name="landscape_ratio5x2">false</StringProperty>
-<StringProperty Name="landscape_ratio8x3">false</StringProperty>
 <StringProperty Name="landscape_ratio4x1">false</StringProperty>
 </Struct>
 </StructProperty>

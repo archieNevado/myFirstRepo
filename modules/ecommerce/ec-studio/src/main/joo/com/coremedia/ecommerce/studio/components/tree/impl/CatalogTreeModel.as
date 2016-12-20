@@ -1,6 +1,5 @@
 package com.coremedia.ecommerce.studio.components.tree.impl {
 import com.coremedia.cms.editor.sdk.collectionview.tree.CompoundChildTreeModel;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -14,6 +13,9 @@ import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.models.NodeChildren;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class CatalogTreeModel implements CompoundChildTreeModel {
 
   private var enabled:Boolean = true;
@@ -69,7 +71,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
         return Product(node).getName();
       }
       else if (node is Marketing) {
-        return ECommerceStudioPlugin_properties.INSTANCE.StoreTree_marketing_root;
+        return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_marketing_root');
       }
       else if (node is MarketingSpot) {
         return MarketingSpot(node).getName();
@@ -80,7 +82,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
   }
 
   private function getCategoryName(node:RemoteBean):String {
-    return categoryTreeRelation.isRoot(node) ? ECommerceStudioPlugin_properties.INSTANCE.StoreTree_root_category :
+    return categoryTreeRelation.isRoot(node) ? ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_root_category') :
             Category(node).getDisplayName();
   }
 
@@ -95,7 +97,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
 
     if (CatalogHelper.getInstance().isStoreId(nodeId)) {
       var store:Store = getNodeModel(nodeId) as Store;
-      return getChildrenFor(store.getTopLevel(), store.getChildrenByName(), ECommerceStudioPlugin_properties.INSTANCE.Category_icon);
+      return getChildrenFor(store.getTopLevel(), store.getChildrenByName(), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon'));
     }
     if (CatalogHelper.isMarketingSpot(nodeId)) {
       return new NodeChildren([], {}, {});
@@ -128,7 +130,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
               });
     }
 
-    return getChildrenFor(subCategories, category.getChildrenByName(), ECommerceStudioPlugin_properties.INSTANCE.Category_icon);
+    return getChildrenFor(subCategories, category.getChildrenByName(), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon'));
   }
 
   /**
@@ -169,15 +171,15 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
 
   private function computeIconCls(childId:String, defaultIconCls:String):String {
     if(CatalogHelper.isMarketing(childId)) {
-      return ECommerceStudioPlugin_properties.INSTANCE.Marketing_icon;
+      return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Marketing_icon');
     }
     if(childId == getRootId()) {
-      return ECommerceStudioPlugin_properties.INSTANCE.Store_icon;
+      return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Store_icon');
     }
     var child:RemoteBean = beanFactory.getRemoteBean(childId);
     //is the child an augmented category?
     if (child is Category && augmentationService.getContent(Category(child))) {
-      return ECommerceStudioPlugin_properties.INSTANCE.AugmentedCategory_icon;
+      return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedCategory_icon');
     }
     return defaultIconCls;
   }
@@ -187,7 +189,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
     for (var childId:String in childrenByIds) {
       var child:CatalogObject = childrenByIds[childId].child as CatalogObject;
       if(child is Marketing) {
-        nameByUriPath[getNodeId(child)] = ECommerceStudioPlugin_properties.INSTANCE.StoreTree_marketing_root;
+        nameByUriPath[getNodeId(child)] = ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_marketing_root');
       }
       else if (child is Category) {
         nameByUriPath[getNodeId(child)] = getCategoryName(child);

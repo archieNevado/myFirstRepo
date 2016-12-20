@@ -1,10 +1,8 @@
 package com.coremedia.blueprint.studio.template {
-import com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField_properties;
 import com.coremedia.blueprint.base.components.util.ContentCreationUtil;
 import com.coremedia.blueprint.base.components.util.StudioConfigurationUtil;
-import com.coremedia.blueprint.studio.template.config.createFromTemplateDialog;
 import com.coremedia.blueprint.studio.template.model.ProcessingData;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.user.User;
@@ -12,18 +10,27 @@ import com.coremedia.cms.editor.sdk.components.folderprompt.FolderCreationResult
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
+import com.coremedia.ui.components.StatefulQuickTip;
+import com.coremedia.ui.components.StatefulTextField;
+import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.mixins.IValidationStateMixin;
+import com.coremedia.ui.mixins.ValidationState;
 
-import ext.QuickTips;
-import ext.Window;
-import ext.config.quicktip;
-import ext.util.StringUtil;
+import ext.StringUtil;
+import ext.tip.QuickTipManager;
+import ext.window.Window;
+
+import mx.resources.ResourceManager;
 
 /**
  * The base class of the create from template dialog creates.
  */
+[ResourceBundle('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin')]
+[ResourceBundle('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings')]
+[ResourceBundle('com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField')]
 public class CreateFromTemplateDialogBase extends Window {
   private var disabledExpression:ValueExpression;
   private var model:ProcessingData;
@@ -32,6 +39,7 @@ public class CreateFromTemplateDialogBase extends Window {
 
   private var baseFolderEditorial:ValueExpression;
   private var baseFolderNavigation:ValueExpression;
+  private var pageFolderChangeExpression:ValueExpression;
 
   public static const TEMPLATE_CHOOSER_FIELD_ID:String = "templateChooserField";
   public static const PAGE_FOLDER_COMBO_ID:String = 'folderCombo';
@@ -39,12 +47,14 @@ public class CreateFromTemplateDialogBase extends Window {
   public static const EDITORIAL_FOLDER_COMBO_ID:String = 'editorialFolderCombo';
   public static const NAME_FIELD_ID:String = 'nameField';
 
-  public function CreateFromTemplateDialogBase(config:createFromTemplateDialog = null) {
+  private var nameField:StatefulTextField;
+
+  public function CreateFromTemplateDialogBase(config:CreateFromTemplateDialog = null) {
     super(config);
 
-    errorMessages[NAME_FIELD_ID] = CreateFromTemplateStudioPlugin_properties.INSTANCE.name_not_valid_value;
-    errorMessages[TEMPLATE_CHOOSER_FIELD_ID] = CreateFromTemplateStudioPlugin_properties.INSTANCE.template_chooser_not_empty_value;
-    errorMessages[PAGE_FOLDER_COMBO_ID] = CreateFromTemplateStudioPlugin_properties.INSTANCE.page_folder_combo_validation_message;
+    errorMessages[NAME_FIELD_ID] = resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_not_valid_value');
+    errorMessages[TEMPLATE_CHOOSER_FIELD_ID] = resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'template_chooser_empty_text');
+    errorMessages[PAGE_FOLDER_COMBO_ID] = resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'page_folder_combo_validation_message');
   }
 
   /**
@@ -53,18 +63,22 @@ public class CreateFromTemplateDialogBase extends Window {
   override protected function afterRender():void {
     super.afterRender();
 
+    nameField = queryById(NAME_FIELD_ID) as StatefulTextField;
+    nameField.on('blur', validateForm);
+
     getBaseFolderNavigation().loadValue(function(path:String):void {
       getModel().set(ProcessingData.FOLDER_PROPERTY, path);
       getBaseFolderNavigation().addChangeListener(navigationFolderListener)
     });
 
     getBaseFolderEditorial().loadValue(function(path:String):void {
-      getModel().set(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.editorial_folder_property, path);
+      getModel().set(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'), path);
       getBaseFolderEditorial().addChangeListener(editorialFolderListener)
     });
 
-    var pageFolderChangeExpression:ValueExpression = ValueExpressionFactory.create(ProcessingData.FOLDER_PROPERTY, getModel());
+    pageFolderChangeExpression = ValueExpressionFactory.create(ProcessingData.FOLDER_PROPERTY, getModel());
     pageFolderChangeExpression.addChangeListener(validateForm);
+    validateForm();
   }
 
   private function navigationFolderListener():void {
@@ -75,7 +89,7 @@ public class CreateFromTemplateDialogBase extends Window {
 
   private function editorialFolderListener():void {
     getBaseFolderEditorial().loadValue(function(path:String):void {
-      getModel().set(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.editorial_folder_property, path);
+      getModel().set(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'), path);
     });
   }
 
@@ -84,6 +98,7 @@ public class CreateFromTemplateDialogBase extends Window {
     model.removeValueChangeListener(validateForm);
     getBaseFolderNavigation().removeChangeListener(navigationFolderListener);
     getBaseFolderEditorial().removeChangeListener(editorialFolderListener);
+    pageFolderChangeExpression && pageFolderChangeExpression.removeChangeListener(validateForm);
   }
 
   /**
@@ -102,15 +117,14 @@ public class CreateFromTemplateDialogBase extends Window {
     getDisabledExpression().setValue(false);
 
     //we can use the field validator since after the field becomes invalid, no event is fired to correct the value of the bound value expression
-    var nameField:* = find('itemId', NAME_FIELD_ID)[0];
     if(nameField) {
       var result:Boolean = nameValidator();
       applyValidationResult(nameField, result);
     }
 
-    validate(find('itemId', EDITORIAL_FOLDER_COMBO_ID)[0]);
-    validateAsync(find('itemId', PAGE_FOLDER_COMBO_ID)[0], folderValidator);
-    validate(find('itemId', TEMPLATE_CHOOSER_FIELD_ID)[0]);
+    validate(queryById(EDITORIAL_FOLDER_COMBO_ID));
+    validateAsync(queryById(PAGE_FOLDER_COMBO_ID), folderValidator);
+    validate(queryById(TEMPLATE_CHOOSER_FIELD_ID));
   }
 
   private function validate(editor:*):void {
@@ -134,16 +148,19 @@ public class CreateFromTemplateDialogBase extends Window {
   }
 
   private function applyValidationResult(editor:*, result:Boolean):void {
+    var statefulEditor:IValidationStateMixin = editor as IValidationStateMixin;
     var errorMsg:String = errorMessages[editor.itemId];
     if (!errorMsg) {
-      errorMsg = CreateFromTemplateStudioPlugin_properties.INSTANCE.template_create_missing_value;
+      errorMsg = resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'template_create_missing_value');
     }
     if (!result) {
+      if (statefulEditor) {
+        statefulEditor.validationState = ValidationState.ERROR;
+      }
       getDisabledExpression().setValue(true);
-      editor.addClass("issue-error");
-      QuickTips.register(quicktip({
+      QuickTipManager.register(StatefulQuickTip({
         target: editor.getId(),
-        id: 'quick-create-error-tt',
+        validationState: ValidationState.ERROR,
         text: errorMsg,
         trackMouse: false,
         autoHide: true,
@@ -151,9 +168,11 @@ public class CreateFromTemplateDialogBase extends Window {
       }));
     }
     else {
-      editor.removeClass("issue-error");
-      QuickTips.unregister(editor.el);
-      QuickTips.getQuickTip().hide();
+      if (statefulEditor) {
+        statefulEditor.validationState = undefined;
+      }
+      QuickTipManager.unregister(editor.el);
+      QuickTipManager.getQuickTip().hide();
     }
   }
 
@@ -163,12 +182,12 @@ public class CreateFromTemplateDialogBase extends Window {
   protected function handleSubmit():void {
     var data:ProcessingData = getModel();
     var path:String = data.get(ProcessingData.FOLDER_PROPERTY);
-    var parent:Content = data.get(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.parent_property);
+    var parent:Content = data.get(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property'));
 
     if (!parent) {
-      MessageBoxUtil.showConfirmation(CreateFromTemplateStudioPlugin_properties.INSTANCE.text,
-              CreateFromTemplateStudioPlugin_properties.INSTANCE.no_parent_page_selected_warning,
-              CreateFromTemplateStudioPlugin_properties.INSTANCE.no_parent_page_selected_warning_buttonText,
+      MessageBoxUtil.showConfirmation(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text'),
+              resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'no_parent_page_selected_warning'),
+              resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'no_parent_page_selected_warning_buttonText'),
               function (buttonId:String):void {
                 if (buttonId === "ok") {
                   doCreation(path);
@@ -178,8 +197,8 @@ public class CreateFromTemplateDialogBase extends Window {
       parent.invalidate(function():void {
         if (parent.isCheckedOutByOther()) {
           parent.getEditor().load(function(user:User):void {
-            var msg:String = StringUtil.format(NavigationLinkField_properties.INSTANCE.layout_error_msg, user.getName());
-            MessageBoxUtil.showError(NavigationLinkField_properties.INSTANCE.layout_error, msg);
+            var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField', 'layout_error_msg'), user.getName());
+            MessageBoxUtil.showError(resourceManager.getString('com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField', 'layout_error'), msg);
           })
         } else {
           doCreation(path);
@@ -197,7 +216,7 @@ public class CreateFromTemplateDialogBase extends Window {
     //first ensure that all folders exist
     var data:ProcessingData = getModel();
 
-    var editorialFolderName:String = data.get(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.editorial_folder_property);
+    var editorialFolderName:String = data.get(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'));
     ContentCreationUtil.createRequiredSubfolders(path, function (result:FolderCreationResult):void {
       if (result.success) {
         var navigationFolder:Content = result.baseFolder;
@@ -215,7 +234,7 @@ public class CreateFromTemplateDialogBase extends Window {
                 initializer(content);
               }
 
-              var parent:Content = data.get(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.parent_property);
+              var parent:Content = data.get(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property'));
               if (parent) {
                 parent.invalidate(function ():void {
                   editorContext.getContentTabManager().openDocument(parent);
@@ -226,14 +245,14 @@ public class CreateFromTemplateDialogBase extends Window {
               }
             });
           } else {
-            MessageBoxUtil.showError(CreateFromTemplateStudioPlugin_properties.INSTANCE.text,
-                    CreateFromTemplateStudioPlugin_properties.INSTANCE.editor_folder_could_not_create_message);
+            MessageBoxUtil.showError(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text'),
+                    resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'editor_folder_could_not_create_message'));
             editorialResult.remoteError.setHandled(true);
           }
         });
       } else {
-        MessageBoxUtil.showError(CreateFromTemplateStudioPlugin_properties.INSTANCE.text,
-                CreateFromTemplateStudioPlugin_properties.INSTANCE.page_folder_could_not_create_message);
+        MessageBoxUtil.showError(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text'),
+                resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'page_folder_could_not_create_message'));
         result.remoteError.setHandled(true);
       }
     });
@@ -259,7 +278,7 @@ public class CreateFromTemplateDialogBase extends Window {
   }
 
   protected function nameValidator():Boolean {
-    var repository:ContentRepository = session.getConnection().getContentRepository();
+    var repository:ContentRepository = SESSION.getConnection().getContentRepository();
     return getModel().get(ProcessingData.NAME_PROPERTY) && repository.isValidName(getModel().get(ProcessingData.NAME_PROPERTY));
   }
 
@@ -267,7 +286,7 @@ public class CreateFromTemplateDialogBase extends Window {
     var ve:ValueExpression = ValueExpressionFactory.create(ProcessingData.FOLDER_PROPERTY, getModel());
     if (ve && ve.getValue() && (ve.getValue() as String).length > 0) {
       var folder:String = ve.getValue();
-      session.getConnection().getContentRepository().getChild(folder, function(c:Content):void {
+      SESSION.getConnection().getContentRepository().getChild(folder, function(c:Content):void {
         if (c) {
           callback(false);
         } else {
@@ -281,7 +300,7 @@ public class CreateFromTemplateDialogBase extends Window {
 
   protected function templateChooserNonEmptyValidator():Boolean {
     var ve:ValueExpression = ValueExpressionFactory.create(
-            CreateFromTemplateStudioPluginSettings_properties.INSTANCE.template_property, getModel());
+            resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_property'), getModel());
     return ve && ve.getValue() && (ve.getValue() as Array).length > 0;
   }
 
@@ -302,6 +321,22 @@ public class CreateFromTemplateDialogBase extends Window {
       baseFolderNavigation = ValueExpressionFactory.createFromFunction(baseFolderNavigationCalculation);
     }
     return baseFolderNavigation;
+  }
+
+  protected function getNavigationFolders():Array {
+    var baseFolder:String = baseFolderNavigationCalculation();
+    if(baseFolder) {
+      return [baseFolder];
+    }
+    return [];
+  }
+
+  protected function getEditorialFolders():Array {
+    var baseFolder:String = baseFolderEditorialCalculation();
+    if(baseFolder) {
+      return [baseFolder];
+    }
+    return [];
   }
 
   private function baseFolderNavigationCalculation():String {
@@ -353,7 +388,7 @@ public class CreateFromTemplateDialogBase extends Window {
     if (folderNavigation === undefined) {
       return undefined;
     }
-    var parent:Content = getModel().get(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.parent_property);
+    var parent:Content = getModel().get(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property'));
     if (!parent) {
       return null;
     }
@@ -377,7 +412,7 @@ public class CreateFromTemplateDialogBase extends Window {
   }
 
   protected static function getNavigationFolderFallback():String {
-    return getFolderFallback(CreateFromTemplateStudioPluginSettings_properties.INSTANCE.doctype);
+    return getFolderFallback(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype'));
   }
 
   protected static function getEditorialFolderFallback():String {
@@ -387,7 +422,7 @@ public class CreateFromTemplateDialogBase extends Window {
   protected static function getFolderFallback(docType:String):String {
     var siteId:String = editorContext.getSitesService().getPreferredSiteId();
     var site:Site = editorContext.getSitesService().getSite(siteId);
-    var docTypeDefault:String = CreateFromTemplateStudioPluginSettings_properties.INSTANCE[docType + '_home_folder'];
+    var docTypeDefault:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', docType + '_home_folder');
     var path:String = site.getSiteRootFolder().getPath();
     if (path === undefined) {
       return undefined;
@@ -406,6 +441,27 @@ public class CreateFromTemplateDialogBase extends Window {
     return null;
   }
 
+  public static function getDescription(name:String, content:Content):String {
+    if (content && content.getProperties()) {
+
+      var description:String = content.getProperties().get('description');
+      if (!description || description.length === 0) {
+        description = name;
+      }
+      return description;
+    }
+    return "";
+  }
+
+  /**
+   * Comparator to sort the result list of templates, when this list is completely built
+   * @param val1 one Bean
+   * @param val2 another Bean
+   * @return the compare result
+   */
+  private static function comparator(val1:Bean, val2:Bean):Number {
+    return getDescription(val1.get('name'), val1 as Content).localeCompare(getDescription(val2.get('name'), val2 as Content));
+  }
 
 }
 }

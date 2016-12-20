@@ -64,7 +64,7 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
           @Nonnull CMChannel rootChannel) {
     CMContext context = navigation.getContext();
     if (context != null) {
-      return createModelAndView(asPage(context, context), view);
+      return createModelAndView(asPage(context, context, navigation.getCodeResourcesTreeRelation()), view);
     }
 
     LOG.info("Could not find a content based context for category '{}'. Will use the root channel instead.", navigation.getTitle());

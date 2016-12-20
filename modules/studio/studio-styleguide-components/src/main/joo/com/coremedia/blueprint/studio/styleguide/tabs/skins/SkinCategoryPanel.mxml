@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+       xmlns:exml="http://www.jangaroo.net/exml/0.8"
+       xmlns="exml:ext.config" xmlns:ui="com.coremedia.ui.plugins.*"
+       xmlns:templates="com.coremedia.blueprint.studio.styleguide.templates.*"
+       title="{config.categoryTitle}"
+       ui="{StyleguideSkin.PANEL_TEMPLATE}"
+       scrollable="true">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.icons.CoreIcons')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.StyleguideSkin;
+    import com.coremedia.blueprint.studio.styleguide.templates.SkinTemplate;
+    import com.coremedia.ui.data.ValueExpressionFactory;
+
+    private var config:SkinCategoryPanel;
+    public var skinsEnum:Array;
+    public var skinGroup:String;
+    public var example:SkinTemplate;
+    public var hideToggleButton:Boolean = true;
+    public var categoryTitle:String = 'Untitled';
+
+    public native function SkinCategoryPanel(config:SkinCategoryPanel = null);
+    ]]></fx:Script>
+
+  <tbar>
+    <Toolbar hidden="{config.hideToggleButton}">
+      <items>
+        <Button iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'view_menu')}"
+                text="Toggle Background"
+                scale="medium"
+                onClick="{SkinsHelper.toggleBackground(this)}"/>
+      </items>
+    </Toolbar>
+  </tbar>
+
+  <items>
+    <templates:HtmlWrapperPanel path="{config.skinGroup}_documentation"
+                                renderAsType="{HtmlWrapperPanel.PANEL_SKINS_DOCUMENTATION}"/>
+  </items>
+
+  <plugins>
+    <!-- The VE is an array of BaseSkins (the ui enums) -->
+    <!-- The config.example is the template for the skin group, e.g. ButtonsTemplate({}) which extends the SkinTemplate({selectedSkin:''}) -->
+    <!-- For every skin in the conf.skinGroup (VE), the skin is applied to selectedSkin -->
+    <!-- This works the class BaseSkins has the method getId() -->
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromFunction(function ():Array { return config.skinsEnum; })}"
+            configBeanParameterName="skinEnum"
+            template="{config.example}"/>
+  </plugins>
+</Panel>

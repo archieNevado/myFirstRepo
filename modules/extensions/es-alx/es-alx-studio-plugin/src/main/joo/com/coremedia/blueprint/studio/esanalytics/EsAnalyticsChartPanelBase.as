@@ -1,11 +1,10 @@
 package com.coremedia.blueprint.studio.esanalytics {
 
-import com.coremedia.blueprint.studio.config.esanalytics.esAnalyticsChartPanel;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cms.editor.sdk.config.workArea;
+import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.premular.CollapsibleFormPanel;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
+import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
@@ -14,18 +13,18 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.impl.RemoteServiceMethod;
 import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 
-import ext.Panel;
-import ext.data.Record;
-import ext.list.ListView;
+import ext.data.Model;
+import ext.grid.GridPanel;
+import ext.panel.Panel;
 
-public class EsAnalyticsChartPanelBase extends CollapsibleFormPanel {
+public class EsAnalyticsChartPanelBase extends PropertyFieldGroup {
 
   protected var timeRangeValueExpression:ValueExpression;
 
   private var esChart:EsChart;
   private var tenantVE:ValueExpression;
 
-  public function EsAnalyticsChartPanelBase(config:esAnalyticsChartPanel = null) {
+  public function EsAnalyticsChartPanelBase(config:EsAnalyticsChartPanel = null) {
     super(config);
   }
 
@@ -40,15 +39,15 @@ public class EsAnalyticsChartPanelBase extends CollapsibleFormPanel {
     super.afterRender();
 
     var systemTabPanel:Panel = this.findParentByType(DocumentTabPanel) as Panel;
-    var versionHistoryListView:ListView = systemTabPanel.find('itemId', 'versionHistory')[0];
+    var versionHistoryListView:GridPanel = systemTabPanel.queryById('versionHistory') as GridPanel;
     if(versionHistoryListView) {
       mon(versionHistoryListView, 'mouseenter', markEventInChartPanel);
     }
   }
 
-  private function markEventInChartPanel(historyPanel:ListView, index:Number):void {
+  private function markEventInChartPanel(historyPanel:GridPanel, index:Number):void {
     if (getEsChart().getLineChart()) {
-      var record:Record = historyPanel.getStore().getAt(index);
+      var record:Model = historyPanel.getStore().getAt(index);
       var lifecycleStatus:String = record.data.lifecycleStatus as String;
       if ("published" === lifecycleStatus) {
         var date:Date = record.data.editionDate as Date;
@@ -65,12 +64,12 @@ public class EsAnalyticsChartPanelBase extends CollapsibleFormPanel {
   }
 
   protected static function getCurrentContent():Content {
-    return workArea.ACTIVE_CONTENT_VALUE_EXPRESSION.getValue() as Content;
+    return WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.getValue() as Content;
   }
 
   private function getEsChart():EsChart {
     if (!esChart) {
-      esChart = this.find("itemId", EsAnalyticsChart.ES_CHART_ITEM_ID)[0] as EsChart;
+      esChart = this.queryById(EsAnalyticsChart.ES_CHART_ITEM_ID) as EsChart;
     }
     return esChart;
   }
@@ -84,13 +83,14 @@ public class EsAnalyticsChartPanelBase extends CollapsibleFormPanel {
           return alxPageViewsVE.getValue();
         }
       }
+      // must not be undefined to trigger the BindPropertyPlugin in ExChart
       return null;
     }, serviceName, propertyName);
 
   }
 
   private static function validContent(content:Content):Boolean {
-    return content && "CMArticle" === content.getType().getName();
+    return content && "CMArticle" === content.getType().getName() && content.getPath();
   }
 
   private function getTenantVE():ValueExpression {
@@ -98,7 +98,7 @@ public class EsAnalyticsChartPanelBase extends CollapsibleFormPanel {
       tenantVE = ValueExpressionFactory.createFromValue(undefined);
 
       if (getCurrentContent()) {
-      var site:Site = editorContext.getSitesService().getSiteFor(getCurrentContent());
+        var site:Site = editorContext.getSitesService().getSiteFor(getCurrentContent());
         if (site) {
           var siteId:String = site.getId();
 

@@ -272,7 +272,7 @@ public abstract class HandlerBaseTest {
   }
 
   protected Page createPage(CMNavigation navigation, CMLinkable content) {
-    return new PageImpl(navigation, content, true, sitesService, null);
+    return new PageImpl(navigation, content, true, sitesService, null, null, null, null);
   }
 
   protected CMChannel mockChannel(CMNavigation parent, String segment, NavigationSegmentsUriHelper navigationHelperMock) {

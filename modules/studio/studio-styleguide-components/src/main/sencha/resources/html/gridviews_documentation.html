@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div data-content="description">
+  n/a
+</div>
+<div data-content="usage">
+<pre>
+&lt;Grid itemId="gridPanelItemId"&gt;
+  &lt;columns&gt;
+    &lt;GridColumn text="Name"
+                dataIndex="name"/&gt;
+    &lt;GridColumn text="Email"
+                dataIndex="email"/&gt;
+    &lt;GridColumn text="Phone"
+                dataIndex="phone"/&gt;
+  &lt;/columns&gt;
+  &lt;store&gt;
+    &lt;store_Store data="{getTmpData()}"
+                 fields="{['name', 'email', 'phone']}"/&gt;
+  &lt;/store&gt;
+  &lt;view&gt;
+    &lt;TableView stripeRows="true"
+                 ui="{TableViewSkin.DEFAULT.getSkin()}"/&gt;
+  &lt;/view&gt;
+&lt;/Grid&gt;
+</pre>
+</div>
+<div data-content="related">
+  n/a
+</div>
+</body>
+</html>

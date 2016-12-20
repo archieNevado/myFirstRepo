@@ -1,7 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -12,9 +11,9 @@ import com.coremedia.rest.cap.common.represent.SuggestionRepresentation;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
 import com.coremedia.rest.cap.content.SearchParameterNames;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,6 +32,7 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("livecontext")
 public class CatalogServiceResource {
+
   private static final String DEFAULT_SUGGESTIONS_LIMIT = "10";
   private static final String DEFAULT_SEARCH_LIMIT = "-1";
 
@@ -47,18 +47,19 @@ public class CatalogServiceResource {
   public static final String SEARCH_TYPE_PRODUCT_VARIANT = "ProductVariant";
   private static final String SEARCH_TYPE_MARKETING_SPOTS = "MarketingSpot";
 
-  private CommerceConnectionInitializer commerceConnectionInitializer;
-
+  @Nullable
   public CatalogService getCatalogService() {
     return Commerce.getCurrentConnection().getCatalogService();
   }
 
+  @Nullable
   public MarketingSpotService getMarketingSpotService() {
     return Commerce.getCurrentConnection().getMarketingSpotService();
   }
 
   @GET
   @Path("search/{siteId:[^/]+}")
+  @Nullable
   public CatalogSearchResultRepresentation search(@PathParam(SEARCH_PARAM_SITE_ID) String siteId,
                                                   @QueryParam(SEARCH_PARAM_QUERY) String query,
                                                   @QueryParam(SEARCH_PARAM_LIMIT) @DefaultValue(DEFAULT_SEARCH_LIMIT) int limit,
@@ -66,7 +67,6 @@ public class CatalogServiceResource {
                                                   @QueryParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
                                                   @QueryParam(SEARCH_PARAM_CATEGORY) String category,
                                                   @QueryParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId) {
-
     StoreContext newStoreContextForSite = getStoreContext(siteId, workspaceId);
     if (newStoreContextForSite == null) {
       return null;
@@ -74,30 +74,24 @@ public class CatalogServiceResource {
 
     newStoreContextForSite.setWorkspaceId(workspaceId);
 
-    Map<String, String> searchParams = new HashMap<>();
-    if (!StringUtils.isEmpty(category) && !isRootCategory(category)) {
-      searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category);
-    }
-    if (limit > 0) {
-      searchParams.put(CatalogService.SEARCH_PARAM_PAGESIZE, String.valueOf(limit));
-    }
-
-    SearchResult<? extends CommerceBean> searchResult;
-    if (searchType != null && searchType.equals(SEARCH_TYPE_PRODUCT_VARIANT)) {
-      searchResult = getCatalogService().withStoreContext(newStoreContextForSite).searchProductVariants(query, searchParams);
-    } else if (searchType != null && searchType.equals(SEARCH_TYPE_MARKETING_SPOTS)) {
-      if (getMarketingSpotService() == null) {
-        searchResult = new SearchResult<>();
-        searchResult.setSearchResult(Collections.EMPTY_LIST);
-        searchResult.setTotalCount(0);
-      } else {
-        searchResult = getMarketingSpotService().searchMarketingSpots(query, searchParams); //TODO switch store context check
-      }
-    } else {// default: Product
-      searchResult = getCatalogService().withStoreContext(newStoreContextForSite).searchProducts(query, searchParams);
-    }
+    Map<String, String> params = getParams(category, limit);
+    SearchResult<? extends CommerceBean> searchResult = search(query, searchType, newStoreContextForSite, params);
 
     return new CatalogSearchResultRepresentation(searchResult.getSearchResult(), searchResult.getTotalCount());
+  }
+
+  private Map<String, String> getParams(String category, int limit) {
+    Map<String, String> params = new HashMap<>();
+
+    if (!StringUtils.isEmpty(category) && !isRootCategory(category)) {
+      params.put(CatalogService.SEARCH_PARAM_CATEGORYID, category);
+    }
+
+    if (limit > 0) {
+      params.put(CatalogService.SEARCH_PARAM_PAGESIZE, String.valueOf(limit));
+    }
+
+    return params;
   }
 
   private boolean isRootCategory(@Nonnull String categoryParam) {
@@ -106,16 +100,36 @@ public class CatalogServiceResource {
     if (CategoryResource.ROOT_CATEGORY_ROLE_ID.equals(categoryParam)) {
       return true;
     }
+
     // check if it is the actual id of the root category
     // (depends on the commerce implementation)
     return categoryParam.equals(getCatalogService().findRootCategory().getId());
   }
 
+  private SearchResult<? extends CommerceBean> search(String query, String searchType,
+                                                      StoreContext newStoreContextForSite, Map<String, String> params) {
+    if (searchType != null && searchType.equals(SEARCH_TYPE_PRODUCT_VARIANT)) {
+      return getCatalogService().withStoreContext(newStoreContextForSite).searchProductVariants(query, params);
+    } else if (searchType != null && searchType.equals(SEARCH_TYPE_MARKETING_SPOTS)) {
+      if (getMarketingSpotService() == null) {
+        SearchResult<? extends CommerceBean> searchResult = new SearchResult<>();
+        searchResult.setSearchResult(Collections.EMPTY_LIST);
+        searchResult.setTotalCount(0);
+        return searchResult;
+      } else {
+        return getMarketingSpotService().searchMarketingSpots(query, params); //TODO switch store context check
+      }
+    } else {// default: Product
+      return getCatalogService().withStoreContext(newStoreContextForSite).searchProducts(query, params);
+    }
+  }
+
   @GET
   @Path("suggestions")
-  public SuggestionResultRepresentation searchSuggestions(@QueryParam(SearchParameterNames.QUERY) final String query,
-                                                          @QueryParam(SearchParameterNames.LIMIT) @DefaultValue(DEFAULT_SUGGESTIONS_LIMIT) final int limit,
-                                                          @QueryParam(SEARCH_PARAM_SEARCH_TYPE) final String searchType,
+  @Nonnull
+  public SuggestionResultRepresentation searchSuggestions(@QueryParam(SearchParameterNames.QUERY) String query,
+                                                          @QueryParam(SearchParameterNames.LIMIT) @DefaultValue(DEFAULT_SUGGESTIONS_LIMIT) int limit,
+                                                          @QueryParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
                                                           @QueryParam(SEARCH_PARAM_SITE_ID) String siteId,
                                                           @QueryParam(SEARCH_PARAM_CATEGORY) String category,
                                                           @QueryParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId) {
@@ -123,25 +137,24 @@ public class CatalogServiceResource {
     return new SuggestionResultRepresentation(new ArrayList<SuggestionRepresentation>());
   }
 
+  @Nullable
   protected StoreContext getStoreContext(String siteId, String workspaceId) {
     CommerceConnection connection = getConnection(siteId);
-    if (connection != null) {
-      StoreContext storeContext = connection.getStoreContext();
-      if (storeContext != null) {
-        storeContext.setWorkspaceId(workspaceId);
-        return storeContext;
-      }
+    if (connection == null) {
+      return null;
     }
-    return null;
+
+    StoreContext storeContext = connection.getStoreContext();
+    if (storeContext == null) {
+      return null;
+    }
+
+    storeContext.setWorkspaceId(workspaceId);
+    return storeContext;
   }
 
+  @Nullable
   protected CommerceConnection getConnection(String siteId) {
-    commerceConnectionInitializer.init(siteId);
     return Commerce.getCurrentConnection();
-  }
-
-  @Required
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
   }
 }

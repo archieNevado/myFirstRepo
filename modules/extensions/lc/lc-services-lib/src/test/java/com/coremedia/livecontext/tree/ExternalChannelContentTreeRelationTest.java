@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.tree;
 
-
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.cap.content.Content;
@@ -24,8 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.endsWith;
 import static org.mockito.Matchers.eq;
@@ -34,23 +33,30 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExternalChannelContentTreeRelationTest {
+
   private static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT_CATEGORY_ID";
 
   @Mock
   private Category testCategory;
+
   @Mock
   private CommerceTreeRelation commerceTreeRelation;
+
   @Mock
   private SitesService sitesService;
+
   @Mock
   private AugmentationService augmentationService;
+
   @Mock
   private Site site;
+
   @Mock
   private Content siteRootChannel;
 
   @Mock
   Category rootCategory;
+
   @Mock
   private Content catalogRootContent;
 
@@ -64,6 +70,7 @@ public class ExternalChannelContentTreeRelationTest {
 
   @Mock
   Category leafCategory;
+
   @Mock
   private Content leafContent;
 
@@ -75,7 +82,8 @@ public class ExternalChannelContentTreeRelationTest {
 
   @Before
   public void setup() {
-    MockCommerceEnvBuilder.create().setupEnv();
+    BaseCommerceConnection commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(commerceConnection);
 
     initContentMock();
     initCategoryTreeMock();
@@ -83,41 +91,43 @@ public class ExternalChannelContentTreeRelationTest {
 
   @Test
   public void testGetParentOf() throws Exception {
-    //direct parent
-    assertEquals(childContent, testling.getParentOf(leafContent));
-    //direct parent missing
-    assertEquals(catalogRootContent, testling.getParentOf(childContent));
-    //fallback for root category
-    assertEquals(siteRootChannel, testling.getParentOf(catalogRootContent));
-  }
+    // direct parent
+    assertThat(testling.getParentOf(leafContent)).isEqualTo(childContent);
 
+    // direct parent missing
+    assertThat(testling.getParentOf(childContent)).isEqualTo(catalogRootContent);
+
+    // fallback for root category
+    assertThat(testling.getParentOf(catalogRootContent)).isEqualTo(siteRootChannel);
+  }
 
   @Test
   public void testPathToRoot() {
     List<Content> path = testling.pathToRoot(leafContent);
-    assertEquals(4, path.size());
-    assertEquals(siteRootChannel, path.get(0));
-    assertEquals(catalogRootContent, path.get(1));
-    assertEquals(childContent, path.get(2));
-    assertEquals(leafContent, path.get(3));
+    assertThat(path).hasSize(4);
+    assertThat(path.get(0)).isEqualTo(siteRootChannel);
+    assertThat(path.get(1)).isEqualTo(catalogRootContent);
+    assertThat(path.get(2)).isEqualTo(childContent);
+    assertThat(path.get(3)).isEqualTo(leafContent);
 
     List<Content> catalogRootPath = testling.pathToRoot(catalogRootContent);
-    assertEquals(2, catalogRootPath.size());
-    assertEquals(siteRootChannel, catalogRootPath.get(0));
-    assertEquals(catalogRootContent, catalogRootPath.get(1));
+    assertThat(catalogRootPath).hasSize(2);
+    assertThat(catalogRootPath.get(0)).isEqualTo(siteRootChannel);
+    assertThat(catalogRootPath.get(1)).isEqualTo(catalogRootContent);
 
     List<Content> siteRootPath = testling.pathToRoot(siteRootChannel);
-    assertEquals(1, siteRootPath.size());
-    assertEquals(siteRootChannel, catalogRootPath.get(0));
+    assertThat(siteRootPath).hasSize(1);
+    assertThat(catalogRootPath.get(0)).isEqualTo(siteRootChannel);
   }
 
   @Test
   public void testGetNearestContentForCategory() {
-    assertEquals(childContent, testling.getNearestContentForCategory(childCategory, site));
-    assertEquals(catalogRootContent, testling.getNearestContentForCategory(topCategory, site));
+    assertThat(testling.getNearestContentForCategory(childCategory, site)).isEqualTo(childContent);
+    assertThat(testling.getNearestContentForCategory(topCategory, site)).isEqualTo(catalogRootContent);
+
     Category category = mock(Category.class);
     when(category.getExternalId()).thenReturn("bluzb");
-    assertNull(testling.getNearestContentForCategory(category, site));
+    assertThat(testling.getNearestContentForCategory(category, site)).isNull();
   }
 
   private void initCategoryTreeMock() {
@@ -141,7 +151,7 @@ public class ExternalChannelContentTreeRelationTest {
     when(commerceTreeRelation.getParentOf(leafCategory)).thenReturn(childCategory);
     when(getCommerceBeanFactory().createBeanFor(endsWith("leafCategory"), any(StoreContext.class))).thenReturn(leafCategory);
 
-    //augmentation is not defined for topCategory
+    // augmentation is not defined for topCategory
     when(augmentationService.getContent(eq(rootCategory))).thenReturn(catalogRootContent);
     when(augmentationService.getContent(eq(topCategory))).thenReturn(null);
     when(augmentationService.getContent(eq(childCategory))).thenReturn(childContent);
@@ -155,19 +165,19 @@ public class ExternalChannelContentTreeRelationTest {
     when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
     when(contentSiteAspect.getSite()).thenReturn(site);
 
-    //siteRootChannel
+    // siteRootChannel
     when(site.getSiteRootDocument()).thenReturn(siteRootChannel);
     when(siteRootChannel.getType()).thenReturn(type);
 
-    //catalogRootContent
+    // catalogRootContent
     when(catalogRootContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(EXTERNAL_ID_ROOT_CATEGORY);
     when(catalogRootContent.getType()).thenReturn(type);
 
-    //childContent
+    // childContent
     when(childContent.getType()).thenReturn(type);
     when(childContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn("childCategory");
 
-    //leafContent
+    // leafContent
     when(leafContent.getType()).thenReturn(type);
     when(leafContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn("leafCategory");
   }

@@ -13,6 +13,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -52,7 +55,7 @@ public class LocalResourcesBundleResolver implements BundleResolver {
   @Override
   public Struct resolveBundle(@Nonnull Content bundle) {
     File bundleFile = localFileFor(bundle);
-    if (bundleFile!=null) {
+    if (bundleFile != null) {
       try {
         return fileToStruct(bundleFile);
       } catch (IOException e) {
@@ -69,22 +72,18 @@ public class LocalResourcesBundleResolver implements BundleResolver {
 
   private File localFileFor(Content bundle) {
     Content parent = bundle.getParent();
-    if (parent==null) {
+    if (parent == null) {
       LOG.warn("Cannot derive a local resource bundle from {}, fallback to regular resolution", bundle.getPath());
       return null;
     }
-    String name = parent.getName();
-    // bundles in frontend themes location
-    String pathInThemes = filepath("modules", "frontend", "themes", name+"-theme", "src", bundle.getName());
-    File fileInThemes = new File(blueprintDir, pathInThemes);
-    // legacy themes location in extensions
-    String pathInExtensions = filepath("modules", "extensions", name, name+"-theme", "src", bundle.getName());
-    File fileInExtensions = new File(blueprintDir, pathInExtensions);
+
+    List<String> pathArcs = new ArrayList<>();
+    pathArcs.addAll(Arrays.asList("modules", "frontend", "target", "resources"));
+    pathArcs.addAll(bundle.getPathArcs());
+    File fileInThemes = new File(blueprintDir, filepath(pathArcs));
 
     if (fileInThemes.exists() && !fileInThemes.isDirectory() && fileInThemes.canRead()) {
       return fileInThemes;
-    } else if (fileInExtensions.exists() && !fileInExtensions.isDirectory() && fileInExtensions.canRead()) {
-      return fileInExtensions;
     }
     // Logging may be refined.  Info, because non-existence is likely
     // if somebody works with a partial workspace.
@@ -104,13 +103,17 @@ public class LocalResourcesBundleResolver implements BundleResolver {
     return structBuilder.build();
   }
 
-  private static String filepath(String... tokens) {
+  private static String filepath(List<String> pathArcs) {
     StringBuilder sb = new StringBuilder();
-    for (int i=0; i<tokens.length; ++i) {
-      if (i>0) {
+    for (int i = 0; i < pathArcs.size(); ++i) {
+      if (i > 0) {
         sb.append(File.separator);
       }
-      sb.append(tokens[i]);
+      String pathArc = pathArcs.get(i);
+      if(pathArc.equals("Themes")){
+        pathArc = pathArc.toLowerCase();
+      }
+      sb.append(pathArc);
     }
     return sb.toString();
   }

@@ -8,6 +8,8 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanIdConverter;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +20,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.links.UriConstants.PATH_JOINER;
-import static com.coremedia.blueprint.base.links.UriConstants.PATH_SPLITTER;
 import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Base implementation for resources that are represented by request handler and link schemes
  */
 public abstract class HandlerBase {
+
+  private static final Splitter PATH_SPLITTER = Splitter.on('/').omitEmptyStrings();
+  private static final Joiner PATH_JOINER = Joiner.on('/');
 
   protected static final Logger LOG = LoggerFactory.getLogger(HandlerBase.class);
   protected ContentLinkBuilder contentLinkBuilder;

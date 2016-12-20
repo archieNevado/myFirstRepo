@@ -1,15 +1,16 @@
 package com.coremedia.ecommerce.studio.components.repository {
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
 import com.coremedia.ecommerce.studio.AbstractCatalogStudioTest;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Product;
-import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.beanFactory;
 
-import ext.Viewport;
+import ext.container.Viewport;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class CatalogRepositoryListTest extends AbstractCatalogStudioTest {
   private var category:Category;
   private var product:Product;
@@ -29,15 +30,15 @@ public class CatalogRepositoryListTest extends AbstractCatalogStudioTest {
   }
 
   public function testCatalogListType():void {
-    var catalogList:CatalogRepositoryList = viewport.get(CollectionViewConstants.LIST_VIEW) as CatalogRepositoryList;
-    assertEquals(AugmentationUtil.getTypeLabel(category), ECommerceStudioPlugin_properties.INSTANCE.Category_label);
-    assertEquals(AugmentationUtil.getTypeLabel(product), ECommerceStudioPlugin_properties.INSTANCE.Product_label);
+    var catalogList:CatalogRepositoryList = viewport.getComponent(CollectionViewConstants.LIST_VIEW) as CatalogRepositoryList;
+    assertEquals(AugmentationUtil.getTypeLabel(category), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_label'));
+    assertEquals(AugmentationUtil.getTypeLabel(product), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label'));
   }
 
   public function testCatalogListTypeCls():void {
-    var catalogList:CatalogRepositoryList = viewport.get(CollectionViewConstants.LIST_VIEW) as CatalogRepositoryList;
-    assertEquals(AugmentationUtil.getTypeCls(category), ECommerceStudioPlugin_properties.INSTANCE.Category_icon);
-    assertEquals(AugmentationUtil.getTypeCls(product), ECommerceStudioPlugin_properties.INSTANCE.Product_icon);
+    var catalogList:CatalogRepositoryList = viewport.getComponent(CollectionViewConstants.LIST_VIEW) as CatalogRepositoryList;
+    assertEquals(AugmentationUtil.getTypeCls(category), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon'));
+    assertEquals(AugmentationUtil.getTypeCls(product), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_icon'));
   }
 }
 }

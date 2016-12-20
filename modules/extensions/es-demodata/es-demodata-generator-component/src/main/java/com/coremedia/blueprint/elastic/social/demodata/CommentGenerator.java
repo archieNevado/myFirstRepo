@@ -33,7 +33,7 @@ public class CommentGenerator {
   private static final Logger LOG = LoggerFactory.getLogger(CommentGenerator.class);
 
   private static final int DEFAULT_COMMENT_COMPLAINT_MAXIMUM = 20;
-  protected static final int DEFAULT_ATTACHMENT_MAXIMUM = 1;
+  protected static final int DEFAULT_ATTACHMENT_MAXIMUM = 5;
 
   private static final String DEFAULT_CATEGORY = "default";
   private static final String PRODUCTS_CATEGORY = "products";

@@ -1,13 +1,12 @@
 package com.coremedia.blueprint.studio.analytics {
-import com.coremedia.blueprint.studio.config.analytics.openAnalyticsDeepLinkUrlButton;
+import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
-import ext.Button;
+import ext.button.Button;
 import ext.menu.Item;
 
-// don't remove this import
-import joo.getQualifiedObject;
+import joo.getOrCreatePackage;
 
 public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
 
@@ -26,11 +25,6 @@ public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
       name: 'typeWithPreview'}
   };
 
-  // static initializer
-  {
-    joo.getQualifiedObject("com.coremedia.cms.editor.sdk.EditorContextImpl").initEditorContext();
-  }
-
   private var window_open:Function;
   private var args:Object;
 
@@ -38,6 +32,9 @@ public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
     super.setUp();
     window_open = window.open;
     window.open = function (... myArgs) : void { args = myArgs;};
+
+    delete getOrCreatePackage("com.coremedia.cms.editor.sdk")['editorContext'];
+    EditorContextImpl.initEditorContext();
 
     // Make sure that a new context manager is instantiated for each test.
     new ComponentContextManager();
@@ -52,11 +49,11 @@ public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
   public function testAnalyticsDeepLinkButtonContainerSingleView():void {
     var testView:SingleAnalyticsUrlButtonTestView = new SingleAnalyticsUrlButtonTestView();
 
-    var contentContainer:ContentProvidingTestContainerBase = ContentProvidingTestContainerBase(testView.get("contentContainer"));
-    var container:AnalyticsDeepLinkButtonContainer = AnalyticsDeepLinkButtonContainer(contentContainer.get("alxDeepLinkButtonContainer"));
-    var item:Button = Button(container.items.get(0));
+    var contentContainer:ContentProvidingTestContainerBase = ContentProvidingTestContainerBase(testView.getComponent("contentContainer"));
+    var container:AnalyticsDeepLinkButtonContainer = AnalyticsDeepLinkButtonContainer(contentContainer.getComponent("alxDeepLinkButtonContainer"));
+    var item:Button = Button(container.itemCollection.get(0));
 
-    assertEquals(openAnalyticsDeepLinkUrlButton.xtype, item.xtype);
+    assertEquals(OpenAnalyticsDeepLinkUrlButton.xtype, item.xtype);
     assertTrue(item.disabled);
 
     contentContainer.setContent(content);
@@ -77,16 +74,16 @@ public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
 
   public function testAnalyticsDeepLinkButtonContainerMultiView():void {
     var testView:MultipleAnalyticsUrlButtonsTestView = new MultipleAnalyticsUrlButtonsTestView();
-    var contentContainer:ContentProvidingTestContainerBase = ContentProvidingTestContainerBase(testView.get("contentContainer"));
-    var container:AnalyticsDeepLinkButtonContainer = AnalyticsDeepLinkButtonContainer(contentContainer.get("alxDeepLinkButtonContainer"));
+    var contentContainer:ContentProvidingTestContainerBase = ContentProvidingTestContainerBase(testView.getComponent("contentContainer"));
+    var container:AnalyticsDeepLinkButtonContainer = AnalyticsDeepLinkButtonContainer(contentContainer.getComponent("alxDeepLinkButtonContainer"));
 
     // the menu button should be disabled initially
-    var item:Button = Button(container.items.get(0));
+    var item:Button = Button(container.itemCollection.get(0));
     assertEquals('button', item.xtype);
     assertNotNull(item.menu);
     assertTrue("menu button should be initially disabled", item.disabled);
 
-    var items:Array = item.menu.items.getRange();
+    var items:Array = item.menu.itemCollection.getRange();
     assertEquals(3, items.length);
     items.forEach(function (item:Item, index:int):void {
       assertTrue("item " + index + " should be disabled",item.disabled);

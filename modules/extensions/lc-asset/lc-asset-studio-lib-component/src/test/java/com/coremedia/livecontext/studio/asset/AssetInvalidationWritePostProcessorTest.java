@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.studio.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
@@ -9,6 +9,7 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.asset.util.AssetHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.intercept.WriteReport;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Sets.newHashSet;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -30,23 +33,33 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CommerceReferenceHelper.class})
 public class AssetInvalidationWritePostProcessorTest {
+
   @InjectMocks
   private AssetInvalidationWritePostProcessor testling = new AssetInvalidationWritePostProcessor();
 
   @Mock
+  private CommerceConnectionSupplier commerceConnectionSupplier;
+
+  @Mock
+  private CommerceConnection commerceConnection;
+
+  @Mock
   private CommerceCacheInvalidationSource invalidationSource;
+
   @Mock
   private ContentType cmPictureType;
+
   @Mock
   private WriteReport<Content> report;
+
   @Mock
   private Content content;
+
   @Mock
   private ContentRepository repository;
+
   @Mock()
   private Struct localSettings;
-  @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Before
   public void setUp() throws Exception {
@@ -54,22 +67,29 @@ public class AssetInvalidationWritePostProcessorTest {
 
     testling.setType(cmPictureType);
     testling.setCommerceCacheInvalidationSource(invalidationSource);
-    testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
+
+    when(commerceConnectionSupplier.getCommerceConnectionForContent(any(Content.class))).thenReturn(commerceConnection);
 
     when(report.getEntity()).thenReturn(content);
+
     Map<String, Object> properties = new HashMap<>();
     properties.put(CMPicture.DATA, new Object());
     when(report.getOverwrittenProperties()).thenReturn(properties);
+
     when(content.getRepository()).thenReturn(repository);
     when(content.get(AssetInvalidationWritePostProcessor.STRUCT_PROPERTY_NAME)).thenReturn(localSettings);
+
     mockStatic(AssetHelper.class);
   }
 
   @Test
   public void testPostProcess() throws Exception {
     List<String> references = Arrays.asList("a", "b", "c");
+
     when(CommerceReferenceHelper.getExternalReferences(localSettings)).thenReturn(references);
+
     testling.postProcess(report);
-    verify(invalidationSource).invalidateReferences(references);
+
+    verify(invalidationSource).invalidateReferences(newHashSet(references), commerceConnection);
   }
 }

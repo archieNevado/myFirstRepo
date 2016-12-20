@@ -3,8 +3,6 @@ package com.coremedia.blueprint.themeimporter.descriptors;
 import javax.xml.bind.annotation.XmlAttribute;
 
 public abstract class Code extends Resource {
-
-
   private String ieExpression;
   private boolean disableCompress;
 

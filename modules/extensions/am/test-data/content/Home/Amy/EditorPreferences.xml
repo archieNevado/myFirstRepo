@@ -78,14 +78,10 @@
 </StructProperty>
 <StructProperty Name="rightsChannels">
 <Struct>
-<LinkListProperty Name="rightsChannels" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="rightsRegions">
 <Struct>
-<LinkListProperty Name="rightsRegions" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="expirationDate">
@@ -174,14 +170,10 @@
 </StructProperty>
 <StructProperty Name="rightsChannels">
 <Struct>
-<LinkListProperty Name="rightsChannels" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="rightsRegions">
 <Struct>
-<LinkListProperty Name="rightsRegions" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="expirationDate">
@@ -360,14 +352,10 @@
 </StructProperty>
 <StructProperty Name="rightsChannels">
 <Struct>
-<LinkListProperty Name="rightsChannels" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="rightsRegions">
 <Struct>
-<LinkListProperty Name="rightsRegions" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="expirationDate">
@@ -463,14 +451,10 @@
 </StructProperty>
 <StructProperty Name="rightsChannels">
 <Struct>
-<LinkListProperty Name="rightsChannels" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="rightsRegions">
 <Struct>
-<LinkListProperty Name="rightsRegions" LinkType="coremedia:///cap/contenttype/Content_">
-</LinkListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="expirationDate">

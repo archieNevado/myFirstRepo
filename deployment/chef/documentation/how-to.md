@@ -21,8 +21,8 @@ provisioner:
 
 ## Use local maven artifacts
 
-To use local artifacts, make sure you've installed the artifacts into your maven repository and the path of this repository 
-is matched by the `synced_folders` settings in your kitchen file, i.e. if your maven repository is located at `C:/myMavenRepo` the 
+To use local artifacts, make sure you've installed the artifacts into your Maven repository and the path of this repository 
+is matched by the `synced_folders` settings in your kitchen file, that is, if your Maven repository is located at `C:/myMavenRepo` the 
 kitchen file should look like this:
 
 ```yaml
@@ -30,11 +30,11 @@ synced_folders:
   - ["C:/myMavenRepo", "/maven-repo"]
 ```   
 
-The default should work fine for all users that keep their maven repo at the default location `~/.m2/repository`.
+The default should work fine for all users that keep their Maven repo at the default location `~/.m2/repository`.
       
 ## Use remote maven artifacts
 
-To use remote maven artifacts, you need to set the attribute `node['blueprint']['maven_repository_url']` and set the version attributes
+To use remote Maven artifacts, you need to set the attribute `node['blueprint']['maven_repository_url']` and set the version attributes
 correctly. To set the version for all artifacts, use the convenience attribute `node['blueprint']['default_version']`.
      
 ```yaml
@@ -50,18 +50,18 @@ suites:
 
 ## Use Nexus artifacts
 
-One caveat of using chefs remote_file resource to retrieve artifacts is using metaversions. Metaversions are versions where 
+One caveat of using Chefs remote_file resource to retrieve artifacts is using metaversions. Metaversions are versions where 
 a part or the hole version string needs to be resolved to produce the final version. There are three different metaversions in
-maven:
+Maven:
  
 * `X-SNAPSHOT` where `SNAPSHOT` gets resolved to the latest timestamp the artifact was deployed to.
 * `LATEST` will be resolved to the latest deployed artifact. This can be either a `SNAPSHOT` or a fix release version.
 * `RELEASE` will be resolved to the latest deployed fix release version. 
 
-To use these metaversions, you need a nexus and its REST API. Configure `node['blueprint']['nexus_url']` to your nexus url and
+To use these metaversions, you need a Nexus and its REST API. Configure `node['blueprint']['nexus_url']` to your Nexus URL and
 `node['blueprint']['nexus_repo']` to the repo name from which all artifacts are to be retrieved from. When you retrieve a mix of
-snapshot and release version within the same chef run, you need to configure a group repo in nexus that groups your snapshot, your release
-and your mirrors under one umbrella url. If you do not want to do so, you need to set the repo name on each chef resource that retrieves
+snapshot and release version within the same Chef run, you need to configure a group repo in Nexus that groups your snapshot, your release
+and your mirrors under one umbrella URL. If you do not want to do so, you need to set the repo name on each Chef resource that retrieves
 an artifact using the `coremedia_maven` resource.
  
 For convenience, each webapp, tool, common_lib or shared_lib attribute hash allows to override the global repo name using the `nexus_repo` key.
@@ -115,8 +115,8 @@ suites:
     
 ## Set log level
 
-You can overwrite the log configuration provided by the artifact using chef. For development purposes, you can set the 
-level in the `.kitchen.yml` file. You can set it globally or for each webapps i.e. :
+You can overwrite the log configuration provided by the artifact using Chef. For development purposes, you can set the 
+level in the `.kitchen.yml` file. You can set it globally or for each webapp i.e. :
 
 ```yaml
 suites:
@@ -175,11 +175,11 @@ Please use the kitchen setup below [blueprint-dev-tooling](cookbooks/blueprint-d
 
 ## Working with an external database box
 
-Because CoreMedia Blueprint content is quite huge, it can be usefull to import content only once and still be able to destroy the
+Because CoreMedia Blueprint content is quite huge, it can be useful to import content only once and still be able to destroy the
 applications box. You can achieve this, by first starting a database box and then the test system box. Configured correctly, the
 content will then be only on the database box. This is how its done:
 
-1. open a new shell 
+1. Open a new shell 
 
 ```bash
 cd cookbooks/blueprint-mysql 
@@ -187,8 +187,8 @@ cd cookbooks/blueprint-mysql
 kitchen converge
 ```
 
-2. open another shell
-The ip of the database box is 192.168.252.110 so we need to set the attribute `node['blueprint']['dev']['db']['host']`. Edit the `.kitchen.yml` and configure the attribute.
+2. Open another shell
+The IP of the database box is 192.168.252.110 so we need to set the attribute `node['blueprint']['dev']['db']['host']`. Edit the `.kitchen.yml` and configure the attribute.
 
 ```yaml
   attributes:

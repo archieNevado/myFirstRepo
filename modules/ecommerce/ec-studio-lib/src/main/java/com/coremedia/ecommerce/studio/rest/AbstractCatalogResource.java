@@ -1,8 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -11,8 +10,9 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.rest.linking.EntityResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.io.UnsupportedEncodingException;
@@ -24,15 +24,14 @@ import java.net.URLDecoder;
 public abstract class AbstractCatalogResource<Entity extends CommerceObject> implements EntityResource<Entity> {
 
   protected static final Logger LOG = LoggerFactory.getLogger(AbstractCatalogResource.class);
+
   private static final String ID = "id";
   private static final String SITE_ID = "siteId";
   private static final String WORKSPACE_ID = "workspaceId";
 
-  private CommerceConnectionInitializer commerceConnectionInitializer;
-
   private String id;
   private String siteId;
-  private String workspaceId = StoreContextBuilder.NO_WS_MARKER;
+  private String workspaceId = StoreContextImpl.NO_WS_MARKER;
 
   public String getId() {
     return id;
@@ -46,7 +45,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
   protected abstract AbstractCatalogRepresentation getRepresentation();
 
   @PathParam(ID)
-  public void setId(final String id) {
+  public void setId(@Nullable String id) {
     if (id != null) {
       try {
         this.id = URLDecoder.decode(id, "UTF-8");
@@ -64,32 +63,36 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
   }
 
   @PathParam(WORKSPACE_ID)
-  public void setWorkspaceId(String workspaceId) {
-    this.workspaceId = workspaceId == null ? StoreContextBuilder.NO_WS_MARKER : workspaceId;
-  }
-
-  public String getWorkspaceId() {
-    return workspaceId;
+  public void setWorkspaceId(@Nullable String workspaceId) {
+    this.workspaceId = workspaceId == null ? StoreContextImpl.NO_WS_MARKER : workspaceId;
   }
 
   public String getSiteId() {
     return siteId;
   }
 
-  protected StoreContext getStoreContext() {
-    CommerceConnection connection = getConnection();
-    if (connection != null) {
-      StoreContext storeContext = connection.getStoreContext();
-      if (storeContext != null) {
-        storeContext.setWorkspaceId(workspaceId);
-        return storeContext;
-      }
-    }
-    return null;
+  public String getWorkspaceId() {
+    return workspaceId;
   }
 
+  @Nullable
+  protected StoreContext getStoreContext() {
+    CommerceConnection connection = getConnection();
+    if (connection == null) {
+      return null;
+    }
+
+    StoreContext storeContext = connection.getStoreContext();
+    if (storeContext == null) {
+      return null;
+    }
+
+    storeContext.setWorkspaceId(workspaceId);
+    return storeContext;
+  }
+
+  @Nullable
   protected CommerceConnection getConnection() {
-    commerceConnectionInitializer.init(getSiteId());
     return Commerce.getCurrentConnection();
   }
 
@@ -97,27 +100,26 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     return getConnection().getUserContext();
   }
 
-  protected String getExternalIdFromId(String remoteBeanId) {
-    //we assume that the substring after the last '/' is the external id
+  @Nonnull
+  protected String getExternalIdFromId(@Nonnull String remoteBeanId) {
+    // we assume that the substring after the last '/' is the external id
     return remoteBeanId.substring(remoteBeanId.lastIndexOf('/') + 1);
   }
 
+  @Nullable
   public MarketingSpotService getMarketingSpotService() {
     return getConnection().getMarketingSpotService();
   }
 
+  @Nullable
   @Override
   public Entity getEntity() {
     if (getStoreContext() == null) {
       return null;
-    } else {
-      return doGetEntity();
     }
-  }
-  abstract protected Entity doGetEntity();
 
-  @Required
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+    return doGetEntity();
   }
+
+  protected abstract Entity doGetEntity();
 }

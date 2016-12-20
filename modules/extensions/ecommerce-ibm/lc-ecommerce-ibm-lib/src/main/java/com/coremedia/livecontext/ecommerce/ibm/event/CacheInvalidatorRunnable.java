@@ -44,8 +44,8 @@ class CacheInvalidatorRunnable implements Runnable {
   @Override
   public void run() {
     try {
-      Commerce.setCurrentConnection(commerceConnection.getClone());
-      List<CommerceCacheInvalidation> invalidations = cacheInvalidator.pollCacheInvalidations(commerceConnection.getStoreContext());
+      CommerceConnection connection = this.commerceConnection.getClone();
+      List<CommerceCacheInvalidation> invalidations = cacheInvalidator.pollCacheInvalidations(connection.getStoreContext());
       if (null != error) {
         // after former errors we now seem to work again...
         LOG.info("Recovered from error situation, polling for cache invalidation is working again. Invalidating all cached commerce data...");
@@ -55,8 +55,11 @@ class CacheInvalidatorRunnable implements Runnable {
         syntheticClearAll.setContentType(CommerceCacheInvalidationImpl.EVENT_CLEAR_ALL_EVENT_ID);
         syntheticClearAll.setTechId(TECH_ID);
 
-        invalidations = Collections.singletonList((CommerceCacheInvalidation) syntheticClearAll);
+        invalidations = Collections.singletonList(syntheticClearAll);
       }
+
+      // set commerce connection thread local only for invalidating commerce cache entries
+      Commerce.setCurrentConnection(connection);
       cacheInvalidator.invalidateCacheEntries(invalidations);
 
     } catch (Exception throwable) {

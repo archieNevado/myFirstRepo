@@ -7,7 +7,7 @@ import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ecommerce.studio.library.ShowInLibraryHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 
-import ext.util.StringUtil;
+import ext.StringUtil;
 
 public class ShowInCatalogTreeHelper extends ShowInLibraryHelper {
 

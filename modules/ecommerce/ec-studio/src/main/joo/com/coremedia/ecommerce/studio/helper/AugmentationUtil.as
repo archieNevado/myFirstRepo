@@ -1,7 +1,6 @@
 package com.coremedia.ecommerce.studio.helper {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
-import com.coremedia.ecommerce.studio.ECommerceStudioPlugin_properties;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -9,6 +8,9 @@ import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
+import mx.resources.ResourceManager;
+
+[ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class AugmentationUtil {
   /**
    * Checks if a given category has child categories.
@@ -64,16 +66,16 @@ public class AugmentationUtil {
       return ContentLocalizationUtil.localizeDocumentTypeName(categoryContent.getType().getName());
     }
     var catalogType:String = catalogHelper.getType(catalogObject);
-    return ECommerceStudioPlugin_properties.INSTANCE[catalogType + '_label'];
+    return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', catalogType + '_label');
   }
 
   public static function getTypeCls(catalogObject:CatalogObject):String {
     var catalogType:String = catalogHelper.getType(catalogObject);
     //if a category is augmented show a different icon
     if (augmentationService.getContent(catalogObject)) {
-      return ECommerceStudioPlugin_properties.INSTANCE.AugmentedCategory_icon;
+      return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedCategory_icon');
     }
-    return ECommerceStudioPlugin_properties.INSTANCE[catalogType + '_icon'];
+    return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', catalogType + '_icon');
   }
 }
 }

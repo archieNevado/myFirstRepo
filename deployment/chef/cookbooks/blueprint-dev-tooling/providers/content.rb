@@ -126,7 +126,7 @@ action :upload_workflows do
     subscribes :create, workflows_builtin, :immediately
   end
 
-  #custom workflows
+  # custom workflows
   new_resource.custom_workflows.each do |workflow_definition|
     raise "Cannot upload workflow from #{workflow_definition}, file does not exist" unless ::File.exist?(workflow_definition)
     custom_marker_file = "#{new_resource.content_dir}/#{::File.basename(workflow_definition)}_#{CUSTOM_WORKFLOW_UPLOADED}"

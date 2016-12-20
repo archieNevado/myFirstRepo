@@ -53,29 +53,29 @@ end
 actions :import_content, :publishall_content, :bulkpublish_content, :import_users, :upload_workflows
 default_action :nothing
 
-#<> @attribute content_dir The directory containing the content. See above description about the expected layout.
-attribute :content_dir, :kind_of => String, :name_attribute => true
-#<> @attribute serverimport_extra_args An array of extra args passed to the contentimport call.
-attribute :serverimport_extra_args, :kind_of => Array, :default => []
-#<> @attribute builtin_workflows An array of workflow names from the builtin workflows to upload.
-attribute :builtin_workflows, :kind_of => Array, :default => []
-#<> @attribute custom_workflows An array of paths to custom workflow definitions to upload.
-attribute :custom_workflows, :kind_of => Array, :default => []
-#<> @attribute cms_ior The ior of the content management server. Only necessary if publishall_content is being used.
-attribute :cms_ior, :kind_of => String, :default => 'http://localhost:40180/coremedia/ior'
-#<> @attribute cms_tools_dir The path of the directory, where the server tools of the content management server are installed.
-attribute :cms_tools_dir, :kind_of => String, :default => lazy { node['blueprint']['tools']['content-management-server']['dir'] }
-#<> @attribute mls_ior The ior of the master live server. Only necessary if publishall_content is being used.
-attribute :mls_ior, :kind_of => String, :default => 'http://localhost:40280/coremedia/ior'
-#<> @attribute mls_tools_dir The path of the directory, where the server tools of the master live server are installed.
-attribute :mls_tools_dir, :kind_of => String, :default => lazy { node['blueprint']['tools']['master-live-server']['dir'] }
-#<> @attribute wfs_tools_dir The path of the directory, where the server tools of the workflow server are installed.
-attribute :wfs_tools_dir, :kind_of => String, :default => lazy { node['blueprint']['tools']['workflow-server']['dir'] }
-#<> @attribute user The username to use for execute and filesystem resources.
-attribute :user, :kind_of => String, :default => lazy { node['blueprint']['user'] }
-#<> @attribute group The group to use for execute and filesystem resources.
-attribute :group, :kind_of => String, :default => lazy { node['blueprint']['group'] }
-#<> @attribute timeout The timeout for all execute resource blocks.
-attribute :timeout, :kind_of => Integer, :default => 2_400
-#<> @attribute publishall_contentquery The contentquery to determine which content should not be published. Only effective on publishall_content action.
-attribute :publishall_contentquery, :kind_of => String, :default => 'NOT BELOW PATH \'/Home\''
+# <> @attribute content_dir The directory containing the content. See above description about the expected layout.
+attribute :content_dir, kind_of: String, name_attribute: true
+# <> @attribute serverimport_extra_args An array of extra args passed to the contentimport call.
+attribute :serverimport_extra_args, kind_of: Array, default: []
+# <> @attribute builtin_workflows An array of workflow names from the builtin workflows to upload.
+attribute :builtin_workflows, kind_of: Array, default: []
+# <> @attribute custom_workflows An array of paths to custom workflow definitions to upload.
+attribute :custom_workflows, kind_of: Array, default: []
+# <> @attribute cms_ior The ior of the content management server. Only necessary if publishall_content is being used.
+attribute :cms_ior, kind_of: String, default: 'http://localhost:40180/coremedia/ior'
+# <> @attribute cms_tools_dir The path of the directory, where the server tools of the content management server are installed.
+attribute :cms_tools_dir, kind_of: String, default: lazy { node['blueprint']['tools']['content-management-server']['dir'] }
+# <> @attribute mls_ior The ior of the master live server. Only necessary if publishall_content is being used.
+attribute :mls_ior, kind_of: String, default: 'http://localhost:40280/coremedia/ior'
+# <> @attribute mls_tools_dir The path of the directory, where the server tools of the master live server are installed.
+attribute :mls_tools_dir, kind_of: String, default: lazy { node['blueprint']['tools']['master-live-server']['dir'] }
+# <> @attribute wfs_tools_dir The path of the directory, where the server tools of the workflow server are installed.
+attribute :wfs_tools_dir, kind_of: String, default: lazy { node['blueprint']['tools']['workflow-server']['dir'] }
+# <> @attribute user The username to use for execute and filesystem resources.
+attribute :user, kind_of: String, default: lazy { node['blueprint']['user'] }
+# <> @attribute group The group to use for execute and filesystem resources.
+attribute :group, kind_of: String, default: lazy { node['blueprint']['group'] }
+# <> @attribute timeout The timeout for all execute resource blocks.
+attribute :timeout, kind_of: Integer, default: 2_400
+# <> @attribute publishall_contentquery The contentquery to determine which content should not be published. Only effective on publishall_content action.
+attribute :publishall_contentquery, kind_of: String, default: 'NOT BELOW PATH \'/Home\''

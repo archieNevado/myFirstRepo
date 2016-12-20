@@ -79,7 +79,7 @@
                   <goal>npm</goal>
                 </goals>
                 <configuration>
-                  <arguments>install</arguments>
+                  <arguments>install --cache-min=Infinity</arguments>
                 </configuration>
               </execution>
               <execution>

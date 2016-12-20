@@ -1,21 +1,19 @@
 package com.coremedia.blueprint.assets.studio.search {
 
-import com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties;
 import com.coremedia.blueprint.assets.studio.AssetConstants;
-import com.coremedia.blueprint.assets.studio.config.stringListCheckboxFilterFieldset;
 import com.coremedia.cms.editor.sdk.collectionview.search.*;
 import com.coremedia.cms.editor.sdk.util.FormatUtil;
 import com.coremedia.ui.data.ValueExpression;
 
-import ext.Container;
-import ext.config.checkbox;
-import ext.config.checkboxgroup;
-import ext.form.Checkbox;
+import ext.container.Container;
+import ext.form.CheckboxGroup;
+import ext.form.field.Checkbox;
 
+[ResourceBundle('com.coremedia.blueprint.assets.studio.AMStudioPlugin')]
 public class StringListCheckboxFilterFieldsetBase extends FilterFieldset {
   private var checkboxContainer:Container;
 
-  public function StringListCheckboxFilterFieldsetBase(config:stringListCheckboxFilterFieldset = null) {
+  public function StringListCheckboxFilterFieldsetBase(config:StringListCheckboxFilterFieldset = null) {
     super(config);
 
     checkboxContainer = getComponent('checkboxContainer') as Container;
@@ -23,8 +21,16 @@ public class StringListCheckboxFilterFieldsetBase extends FilterFieldset {
     createCheckboxes();
   }
 
-  internal native function get availableValuesValueExpression():ValueExpression;
+  /**
+   * A value expression evaluating to a list of strings. For each string one checkbox is rendered.
+   * The checkbox label is localized in the file AMStudioPlugin.properties with the following pattern:
+   * 'Asset_metadata_[propertyName]_[value]_text'.
+   */
+  [Bindable]
+  public var availableValuesValueExpression:ValueExpression;
+
   internal native function get solrField():String;
+
   internal native function get propertyName():String;
 
   override public function buildQuery():String {
@@ -38,7 +44,7 @@ public class StringListCheckboxFilterFieldsetBase extends FilterFieldset {
 
   override public function getDefaultState():Object {
     var state:Object = {};
-    state[getFilterId()] = [];
+    state[getFilterId()] = undefined;
     return state;
   }
 
@@ -48,47 +54,42 @@ public class StringListCheckboxFilterFieldsetBase extends FilterFieldset {
       return;
     }
 
-    var checkboxConfigs:Array = availableValues.map(function (availableValue:String):checkbox {
-      var propertyKey:String = 'Asset_' + AssetConstants.PROPERTY_ASSET_METADATA  + '_'+ (propertyName || getFilterId()) + '_' + availableValue + '_text';
-      var checkboxConfig:checkbox = new checkbox();
-      checkboxConfig.boxLabel = AMStudioPlugin_properties.INSTANCE[propertyKey] || availableValue;
-      checkboxConfig.name = availableValue;
+    var checkboxConfigs:Array = availableValues.map(function (availableValue:String):Checkbox {
+      var propertyKey:String = 'Asset_' + AssetConstants.PROPERTY_ASSET_METADATA + '_' + (propertyName || getFilterId()) + '_' + availableValue + '_text';
+      var checkboxConfig:Checkbox = Checkbox({});
+      checkboxConfig.boxLabel = resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', propertyKey) || availableValue;
+      checkboxConfig.name = getFilterId();
+      checkboxConfig.inputValue = availableValue;
       checkboxConfig.itemId = availableValue;
       checkboxConfig.hideLabel = true;
       return checkboxConfig;
     });
 
-    var checkboxGroupConfig:checkboxgroup = new checkboxgroup();
+    var checkboxGroupConfig:CheckboxGroup = CheckboxGroup({});
     checkboxGroupConfig.items = checkboxConfigs;
 
     checkboxContainer.removeAll();
     checkboxContainer.add(checkboxGroupConfig);
 
-    doLayout();
+    updateLayout();
   }
 
   internal function transformer(strings:Array):Object {
     var valueObject:Object = {};
-    var i:int;
 
-    for (i = 0; i < strings.length; i++) {
-      valueObject[strings[i]] = true;
+    if (strings.length == 1 && strings[0]) {
+      valueObject[getFilterId()] = strings[0];
+    } else {
+      valueObject[getFilterId()] = strings;
     }
-
-    var toBeUnchecked:Array = availableValuesValueExpression.getValue().filter(function (availableValue:String):Boolean {
-      return strings.indexOf(availableValue) === -1;
-    });
-    for (i = 0; i < toBeUnchecked.length; i++) {
-      valueObject[toBeUnchecked[i]] = false;
-    }
-
     return valueObject;
   }
 
-  internal function reverseTransformer(selectedCheckboxes:Array):Array {
-    return selectedCheckboxes.map(function (component:Checkbox):String {
-      return component.getName();
-    });
+  internal function reverseTransformer(selectedCheckboxes:Object):Array {
+    if (selectedCheckboxes[getFilterId()]) {
+      return [].concat(selectedCheckboxes[getFilterId()]);
+    }
+    return undefined;
   }
 }
 }

@@ -2,7 +2,6 @@ package com.coremedia.blueprint.component.cae;
 
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
-import com.coremedia.springframework.web.context.AsyncContextLoaderListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.embedded.RegistrationBean;
@@ -37,7 +36,6 @@ public final class CaeComponentInitializer extends ComponentWebApplicationInitia
 
   @Override
   protected void configure(@Nonnull ServletContext servletContext) {
-    disableAsyncLoading(servletContext);
     FilterRegistration characterEncodingFilter = servletContext.getFilterRegistration(CHARACTER_ENCODING_FILTER);
     if(null == characterEncodingFilter) {
       // avoid broken umlauts in websphere
@@ -60,11 +58,6 @@ public final class CaeComponentInitializer extends ComponentWebApplicationInitia
       siteFilter = servletContext.addFilter(SITE_FILTER, new DelegatingFilterProxy());
     }
     siteFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/servlet/*");
-  }
-
-  private void disableAsyncLoading(@Nonnull ServletContext servletContext) {
-    LOG.info("disabling asynchronous loading ...");
-    servletContext.setInitParameter(AsyncContextLoaderListener.DISABLE_ASYNCHRONOUS_LOADING, String.valueOf(true));
   }
 
   @Nonnull

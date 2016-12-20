@@ -2,7 +2,7 @@ package com.coremedia.ecommerce.studio.components.link {
 
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
-import com.coremedia.ecommerce.studio.config.catalogLink;
+import com.coremedia.ecommerce.studio.dragdrop.CatalogDragDropVisualFeedback;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -12,12 +12,14 @@ import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.util.PropertyChangeEventUtil;
+import com.coremedia.ui.logging.Logger;
 import com.coremedia.ui.store.BeanRecord;
 
 import ext.grid.GridPanel;
+import ext.grid.plugin.GridViewDragDropPlugin;
 
 /**
- * The read-only version of the catalog link field
+ * a link field to a catalog object. It's read-only.
  */
 public class CatalogLinkBase extends GridPanel {
 
@@ -29,20 +31,41 @@ public class CatalogLinkBase extends GridPanel {
 
   private var propertyExpression:ValueExpression;
 
-  public native function get bindTo():ValueExpression;
+  public native function get readOnlyValueExpression():ValueExpression;
+  private var ddPlugin:GridViewDragDropPlugin;
 
   /**
    * @param config the config object
    */
-  public function CatalogLinkBase(config:catalogLink = null) {
+  public function CatalogLinkBase(config:CatalogLink = null) {
     super(config);
-    if (config.readOnlyValueExpression) {
-      config.readOnlyValueExpression.addChangeListener(function(source:ValueExpression):void {
-        setForceReadOnly(source.getValue());
-      });
-      setForceReadOnly(config.readOnlyValueExpression.getValue());
+    if (readOnlyValueExpression) {
+      readOnlyValueExpression.addChangeListener(updateForceReadOnly);
+      updateForceReadOnly();
     }
 
+    on("afterrender", onAfterRender);
+
+  }
+
+  override protected function onDestroy():void {
+    if (readOnlyValueExpression) {
+      readOnlyValueExpression.removeChangeListener(updateForceReadOnly);
+    }
+    super.onDestroy();
+  }
+  private function updateForceReadOnly():void {
+    setForceReadOnly(readOnlyValueExpression.getValue());
+  }
+
+  private function onAfterRender():void {
+    //configure drag & drop
+    ddPlugin = getView().getPlugin("dragdrop") as GridViewDragDropPlugin;
+    ddPlugin.dragZone['getDragText'] = getDragText;
+  }
+
+  private function getDragText():String {
+    return CatalogDragDropVisualFeedback.getHtmlFeedback(ddPlugin.dragZone.dragData.records);
   }
 
   // fire event as a context provider when context value is changed
@@ -50,7 +73,7 @@ public class CatalogLinkBase extends GridPanel {
     var oldValue:Boolean = forceReadOnly;
     forceReadOnly = readOnly;
 
-    PropertyChangeEventUtil.fireEvent(this, catalogLink.FORCE_READ_ONLY_VARIABLE_NAME, oldValue, readOnly);
+    PropertyChangeEventUtil.fireEvent(this, CatalogLink.FORCE_READ_ONLY_VARIABLE_NAME, oldValue, readOnly);
   }
 
   [ProvideToExtChildren]
@@ -66,7 +89,7 @@ public class CatalogLinkBase extends GridPanel {
   public function setSelectedItems(value:Array):void {
     var oldValue:* = selectedItems;
     selectedItems = value;
-    PropertyChangeEventUtil.fireEvent(this, catalogLink.SELECTED_ITEMS_VARIABLE_NAME, oldValue, value);
+    PropertyChangeEventUtil.fireEvent(this, CatalogLink.SELECTED_ITEMS_VARIABLE_NAME, oldValue, value);
   }
 
   [ProvideToExtChildren]
@@ -77,10 +100,10 @@ public class CatalogLinkBase extends GridPanel {
   public function setSelectedPositions(value:*):void {
     var oldValue:* = selectedPositions;
     selectedPositions = value;
-    PropertyChangeEventUtil.fireEvent(this, catalogLink.SELECTED_POSITIONS_VARIABLE_NAME, oldValue, value);
+    PropertyChangeEventUtil.fireEvent(this, CatalogLink.SELECTED_POSITIONS_VARIABLE_NAME, oldValue, value);
   }
 
-  internal function getCatalogListFunction(config:catalogLink):Function {
+  internal function getCatalogListFunction(config:CatalogLink):Function {
     return function ():Array {
       var valuesArray:Array = [];
       var values:* = getPropertyExpression(config).getValue();
@@ -104,7 +127,7 @@ public class CatalogLinkBase extends GridPanel {
         } else if (value is String) {
           catalogObject = CatalogHelper.getInstance().getCatalogObject(value, config.bindTo) as CatalogObject;
         } else {
-          trace("[ERROR]", "CatalogLink does not accept the value: " + value);
+          Logger.error("CatalogLink does not accept the value: " + value);
         }
 
         if (catalogObject === undefined) {
@@ -137,14 +160,14 @@ public class CatalogLinkBase extends GridPanel {
   }
 
   protected function getSelectedValuesExpression():ValueExpression {
-    return ValueExpressionFactory.create(catalogLink.SELECTED_ITEMS_VARIABLE_NAME, this);
+    return ValueExpressionFactory.create(CatalogLink.SELECTED_ITEMS_VARIABLE_NAME, this);
   }
 
   protected function getSelectedPositionsExpression():ValueExpression {
-    return ValueExpressionFactory.create(catalogLink.SELECTED_POSITIONS_VARIABLE_NAME, this);
+    return ValueExpressionFactory.create(CatalogLink.SELECTED_POSITIONS_VARIABLE_NAME, this);
   }
 
-  protected function getPropertyExpression(config:catalogLink):ValueExpression {
+  protected function getPropertyExpression(config:CatalogLink):ValueExpression {
     if (!propertyExpression) {
       if (config.bindTo) {
         if (config.bindTo.getValue() is Content) {
@@ -200,6 +223,10 @@ public class CatalogLinkBase extends GridPanel {
       name = CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
     }
     return name;
+  }
+
+  protected function thumbColRenderer(value:Object, metaData:Object, record:BeanRecord):String {
+    return ImageLinkListRenderer.thumbColRenderer(value, metaData, record, "CatalogObject");
   }
 }
 }

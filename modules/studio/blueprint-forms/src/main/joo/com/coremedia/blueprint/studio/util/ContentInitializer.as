@@ -2,18 +2,18 @@ package com.coremedia.blueprint.studio.util {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cms.editor.sdk.actions.Actions_properties;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.sites.SitesService;
-import com.coremedia.ui.data.FlushResult;
 
-import joo.ResourceBundleAwareClassLoader;
+import joo.localeSupport;
+
+import mx.resources.ResourceManager;
 
 /**
  * Initializer settings for the blueprint project.
  */
+[ResourceBundle('com.coremedia.cms.editor.sdk.actions.Actions')]
 public class ContentInitializer {
 
   /**
@@ -115,7 +115,7 @@ public class ContentInitializer {
     if (site) {
       locale = site.getLocale().getLanguageTag();
     } else {
-      locale = ResourceBundleAwareClassLoader.INSTANCE.getLocale();
+      locale = localeSupport.getLocale();
     }
     setProperty(content, 'locale', locale);
   }
@@ -134,7 +134,7 @@ public class ContentInitializer {
 
   public static function initializePropertyWithName(content:Content, property:String):void{
     //Only initialize if the name of the content is not "New content item"
-    if(content.getName() != Actions_properties.INSTANCE.Action_newContent_newDocumentName_text) {
+    if(content.getName() != ResourceManager.getInstance().getString('com.coremedia.cms.editor.sdk.actions.Actions', 'Action_newContent_newDocumentName_text')) {
       setProperty(content, property, content.getName());
     }
   }

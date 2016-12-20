@@ -14,8 +14,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -40,14 +39,13 @@ public class WebCommerceContextInterceptorTest {
 
   @Before
   public void setup() {
-
     connection = MockCommerceEnvBuilder.create().setupEnv();
+    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(connection);
 
     testling.setSiteResolver(siteLinkHelper);
     testling.setInitUserContext(false);
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
     testling.setPreview(false);
-    testling.afterPropertiesSet();
 
     when(siteLinkHelper.findSiteBySegment("helios")).thenReturn(site);
   }
@@ -60,9 +58,11 @@ public class WebCommerceContextInterceptorTest {
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(path);
     when(testling.getSite(request, path)).thenReturn(site);
+
     testling.preHandle(request, null, null);
-    verify(commerceConnectionInitializer).init(any(Site.class));
-    assertNotNull(SiteHelper.getSiteFromRequest(request));
+
+    verify(commerceConnectionInitializer).getCommerceConnectionForSite(any(Site.class));
+    assertThat(SiteHelper.getSiteFromRequest(request)).isNotNull();
   }
 
   @Test
@@ -71,8 +71,10 @@ public class WebCommerceContextInterceptorTest {
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(path);
     when(testling.getSite(request, path)).thenReturn(null);
+
     testling.preHandle(request, null, null);
+
     verify(connection.getStoreContextProvider(), never()).setCurrentContext(any(StoreContext.class));
-    assertNull(SiteHelper.getSiteFromRequest(request));
+    assertThat(SiteHelper.getSiteFromRequest(request)).isNull();
   }
 }

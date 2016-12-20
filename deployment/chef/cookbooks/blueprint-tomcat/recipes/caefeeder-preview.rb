@@ -1,6 +1,6 @@
 =begin
 #<
-This recipe installs and configures the CoreMedia Blueprint Preview CAEFeeder.
+This recipe installs and configures the CoreMedia Blueprint Preview CAE Feeder.
 #>
 =end
 
@@ -8,7 +8,8 @@ service_name = 'caefeeder-preview'
 cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
 
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('content-management-server')}/ior"
-node.default['blueprint']['webapps'][service_name]['application.properties']['feeder.solr.url'] = "#{cm_webapp_url('solr')}/preview"
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
+node.default['blueprint']['webapps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
 node.override['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = cache_dir
 
 blueprint_tomcat_service service_name

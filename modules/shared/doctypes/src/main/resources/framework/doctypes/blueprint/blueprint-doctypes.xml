@@ -382,6 +382,7 @@
 
   <DocType Name="CMJavaScript" Parent="CMAbstractCode">
     <LinkListProperty Name="master" Max="1" LinkType="CMJavaScript" Override="true" extensions:weakLink="true"/>
+    <IntProperty Name="inHead"/>
     <LinkListProperty Name="include" LinkType="CMJavaScript" Override="true"/>
   </DocType>
 
@@ -510,7 +511,7 @@
   -->
   <DocType Name="CMTemplateSet">
     <StringProperty Name="description" Length="512" extensions:translatable="true"/>
-    <BlobProperty Name="archive" MimeType="*/*"/>
+    <BlobProperty Name="archive" MimeType="application/java-archive"/>
   </DocType>
 
 </DocumentTypeModel>

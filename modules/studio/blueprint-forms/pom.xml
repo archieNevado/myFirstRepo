@@ -8,43 +8,25 @@
   </parent>
 
   <artifactId>blueprint-forms</artifactId>
-  <packaging>jangaroo</packaging>
+  <packaging>jangaroo-pkg</packaging>
 
   <description>CoreMedia Studio Forms</description>
 
   <dependencies>
 
     <dependency>
-      <groupId>com.coremedia.ui.toolkit</groupId>
-      <artifactId>ext-ux</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>blueprint-components</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>taxonomy-studio-plugin</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-contentchooser-studio-plugin</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dynamic-content-query-studio-plugin</artifactId>
-      <version>${project.version}</version>
+      <artifactId>bpbase-studio-dynamic-query-list</artifactId>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-pagegrid-studio-plugin</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>core-icons</artifactId>
     </dependency>
 
     <dependency>
@@ -72,74 +54,48 @@
       <artifactId>ext-as</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>studio-remote-packages</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui</groupId>
+      <artifactId>studio-theme</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
-
   <build>
-    <sourceDirectory>src/main/joo</sourceDirectory>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>META-INF/resources/joo/${project.artifactId}.module.js</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <excludes>
-          <exclude>META-INF/resources/joo/${project.artifactId}.module.js</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>target/generated-resources</directory>
+        <directory>src/main/sencha</directory>
+        <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
       </resource>
     </resources>
-
     <plugins>
       <plugin>
         <groupId>net.jangaroo</groupId>
         <artifactId>jangaroo-maven-plugin</artifactId>
-        <extensions>false</extensions>
+        <extensions>true</extensions>
         <version>${jangaroo.version}</version>
         <configuration>
+          <production>
+            <requiredClasses>
+              <entry>com.coremedia.blueprint.studio.BlueprintFormsStudioPlugin</entry>
+            </requiredClasses>
+          </production>
           <publicApiViolations>warn</publicApiViolations>
+          <namespaces>
+            <namespace>
+              <uri>exml:com.coremedia.blueprint.studio.config</uri>
+            </namespace>
+          </namespaces>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>net.jangaroo</groupId>
-        <artifactId>exml-maven-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <configClassPackage>com.coremedia.blueprint.studio.config</configClassPackage>
-        </configuration>
-      </plugin>
-      <!--
-        The dependency-plugin is not compatible with jangaroo.
-        So define the used dependencies explicitly.
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <usedDependencies>
-            <usedDependency>${project.groupId}:blueprint-components</usedDependency>
-            <usedDependency>${project.groupId}:taxonomy-studio-plugin</usedDependency>
-            <usedDependency>${project.groupId}:dynamic-content-query-studio-plugin</usedDependency>
-            <usedDependency>com.coremedia.blueprint.base:bpbase-pagegrid-studio-plugin</usedDependency>
-            <usedDependency>com.coremedia.blueprint.base:bpbase-contentchooser-studio-plugin</usedDependency>
-            <usedDependency>com.coremedia.ui.toolkit:ui-components</usedDependency>
-            <usedDependency>com.coremedia.ui.toolkit:ext-ux</usedDependency>
-            <usedDependency>com.coremedia.ui.sdk:editor-components</usedDependency>
-            <usedDependency>com.coremedia.ui.sdk:image-editor-components</usedDependency>
-            <usedDependency>com.coremedia.ui.sdk:image-map-editor-components</usedDependency>
-            <usedDependency>net.jangaroo:ext-as</usedDependency>
-          </usedDependencies>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 

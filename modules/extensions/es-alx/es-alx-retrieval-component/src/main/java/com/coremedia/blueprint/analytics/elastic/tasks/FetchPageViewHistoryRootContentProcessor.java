@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
-import com.coremedia.blueprint.analytics.elastic.PageViewReportModelService;
-import com.coremedia.blueprint.analytics.elastic.PageViewTaskReportModelService;
-import com.coremedia.blueprint.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.PageViewTaskReportModelService;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
-import com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil;
-import com.coremedia.blueprint.analytics.elastic.validation.ResultItemValidationService;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.analytics.elastic.validation.ResultItemValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.google.common.collect.Lists;
@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.Map;
 
 import static com.coremedia.blueprint.analytics.elastic.tasks.FetchPublicationsHistoryTask.PUBLICATION_HISTORY_DOCUMENT_TYPE;
-import static com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil.needsUpdate;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.needsUpdate;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.collect.ImmutableSet.copyOf;
 import static java.lang.String.format;

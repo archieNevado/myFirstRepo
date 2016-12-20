@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Container xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns="exml:ext.config">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.icons.CoreIcons')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.tabs.skins.SkinsHelper;
+
+    private var config:ButtonsStateTemplate;
+    public var buttonConfig:Object;
+
+    public native function ButtonsStateTemplate(config:ButtonsStateTemplate = null);
+    ]]></fx:Script>
+
+  <layout>
+    <layout_Column/>
+  </layout>
+  <items>
+    <Container width="200"
+               height="50"
+               html="<b>{config.buttonConfig.buttonsState}</b> for scale <b>{config.buttonConfig.scale}</b>"
+               padding="12 0 0 6"/>
+    <Container columnWidth="1">
+      <layout>
+        <layout_Column/>
+      </layout>
+      <items>
+        <Container ui="{SkinsHelper.getContainerUi(config.buttonConfig.skinEnum)}"
+                   margin="5 0 0 5">
+          <items>
+            <Button disabled="{config.buttonConfig.disabled}"
+                    scale="{config.buttonConfig.scale}"
+                    ui="{config.buttonConfig.skinEnum.getSkin()}"
+                    width="50"
+                    iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+          </items>
+        </Container>
+        <Container ui="{SkinsHelper.getContainerUi(config.buttonConfig.skinEnum)}"
+                   margin="5 0 0 5">
+          <items>
+            <Button disabled="{config.buttonConfig.disabled}"
+                    scale="{config.buttonConfig.scale}"
+                    ui="{config.buttonConfig.skinEnum.getSkin()}"
+                    width="80"
+                    text="Example"
+                    iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+          </items>
+        </Container>
+        <Container ui="{SkinsHelper.getContainerUi(config.buttonConfig.skinEnum)}"
+                   margin="5 0 0 5">
+          <items>
+            <Button disabled="{config.buttonConfig.disabled}"
+                    scale="{config.buttonConfig.scale}"
+                    ui="{config.buttonConfig.skinEnum.getSkin()}"
+                    width="105"
+                    text="Example"
+                    iconAlign="left"
+                    iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+          </items>
+        </Container>
+        <Container ui="{SkinsHelper.getContainerUi(config.buttonConfig.skinEnum)}"
+                   margin="5 0 0 5">
+          <items>
+            <Button disabled="{config.buttonConfig.disabled}"
+                    scale="{config.buttonConfig.scale}"
+                    ui="{config.buttonConfig.skinEnum.getSkin()}"
+                    width="105"
+                    text="Example"
+                    iconAlign="right"
+                    iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+          </items>
+        </Container>
+        <Container ui="{SkinsHelper.getContainerUi(config.buttonConfig.skinEnum)}"
+                   margin="5 0 0 5">
+          <items>
+            <Button disabled="{config.buttonConfig.disabled}"
+                    scale="{config.buttonConfig.scale}"
+                    ui="{config.buttonConfig.skinEnum.getSkin()}"
+                    width="105"
+                    text="Example"
+                    iconAlign="top"
+                    iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+          </items>
+        </Container>
+        <Container ui="{SkinsHelper.getContainerUi(config.buttonConfig.skinEnum)}"
+                   margin="5 0 0 5">
+          <items>
+            <Button disabled="{config.buttonConfig.disabled}"
+                    scale="{config.buttonConfig.scale}"
+                    ui="{config.buttonConfig.skinEnum.getSkin()}"
+                    width="105"
+                    text="Example"
+                    iconAlign="bottom"
+                    iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'star')}"/>
+          </items>
+        </Container>
+        <Container ui="{SkinsHelper.getContainerUi(config.buttonConfig.skinEnum)}"
+                   margin="5 0 0 5">
+          <items>
+            <Button disabled="{config.buttonConfig.disabled}"
+                    scale="{config.buttonConfig.scale}"
+                    ui="{config.buttonConfig.skinEnum.getSkin()}"
+                    width="80"
+                    text="Toggle"
+                    enableToggle="true"/>
+          </items>
+        </Container>
+      </items>
+    </Container>
+  </items>
+</Container>

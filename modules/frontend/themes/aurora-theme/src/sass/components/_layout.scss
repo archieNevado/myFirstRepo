@@ -5,15 +5,6 @@
 // Basic Layouts
 // =====================================================================================================================
 
-html,
-body,
-button,
-input,
-select,
-textarea {
-  font-family: sans-serif;
-}
-
 .cm-heading2 {
   font-size: 1.2rem;
   line-height: 1.4rem;
@@ -30,11 +21,6 @@ textarea {
   background-color: #F8F8F8;
 }
 
-.cm-headline {
-  border: 1px solid #CCCBCB;
-}
-
-.cm-headline__title,
 .cm-teaser--hero .cm-teaser__title {
   color: #4D4D4D;
   background-color: rgba(255, 255, 255, 0.8);

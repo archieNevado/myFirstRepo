@@ -19,7 +19,7 @@ end
 # log 'start service'
 service 'disable-transparent-hugepages' do
   action [:enable, :start]
-  supports :restart => false, :reload => false, :status => false
+  supports restart: false, reload: false, status: false
 end
 
 # log 'set local limits for mongod'
@@ -61,7 +61,7 @@ service 'mongod3' do
       provider Chef::Provider::Service::Upstart
     end
   end
-  supports :start => true, :stop => true, :restart => true, :status => true
+  supports start: true, stop: true, restart: true, status: true
   action [:enable, :start]
   subscribes :restart, "template[#{node['mongodb3']['mongod']['config_file']}]", :immediately
   subscribes :restart, "template[#{node['mongodb3']['config']['mongod']['security']['keyFile']}", :immediately

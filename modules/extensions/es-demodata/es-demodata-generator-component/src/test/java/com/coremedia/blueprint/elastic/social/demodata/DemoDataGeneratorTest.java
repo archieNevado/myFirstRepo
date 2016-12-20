@@ -2,10 +2,10 @@ package com.coremedia.blueprint.elastic.social.demodata;
 
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.elastic.common.CategoryExtractor;
-import com.coremedia.blueprint.elastic.social.common.ContributionTargetHelper;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.elastic.common.CategoryExtractor;
+import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.query.QueryService;

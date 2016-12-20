@@ -1,14 +1,15 @@
 package com.coremedia.livecontext.studio.desktop {
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cms.editor.sdk.premular.PropertyFieldPanel;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.model.Category;
-import com.coremedia.livecontext.studio.config.commerceChildCategoriesForm;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-public class CommerceChildCategoriesFormBase extends PropertyFieldPanel{
+import ext.container.Container;
+
+
+public class CommerceChildCategoriesFormBase extends Container{
 
   private static const PROPERTIES:String = 'properties';
   private static const LOCAL_SETTINGS_STRUCT_NAME:String = 'localSettings';
@@ -17,14 +18,14 @@ public class CommerceChildCategoriesFormBase extends PropertyFieldPanel{
   private static const SELECT_CHILDREN_NAME:String = 'selectChildren';
   public static const CHILDREN_PROPERTY_NAME:String = LOCAL_SETTINGS_STRUCT_NAME + '.' + COMMERCE_STRUCT_NAME + '.' + CHILDREN_LIST_NAME;
   public static const SELECT_CHILDREN_PROPERTY_NAME:String = LOCAL_SETTINGS_STRUCT_NAME + '.' + COMMERCE_STRUCT_NAME + '.' + SELECT_CHILDREN_NAME;
+  [Bindable]
+  public var bindTo:ValueExpression;
 
-  private var bindTo:ValueExpression;
   private var selectChildrenExpression:ValueExpression;
   private var categoryExpression:ValueExpression;
 
-  public function CommerceChildCategoriesFormBase(config:commerceChildCategoriesForm = null) {
+  public function CommerceChildCategoriesFormBase(config:CommerceChildCategoriesForm = null) {
     super(config);
-    bindTo = config.bindTo;
   }
 
   override protected function onDestroy():void {

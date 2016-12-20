@@ -1,26 +1,33 @@
 package com.coremedia.blueprint.assets.studio.search {
 
-import com.coremedia.blueprint.assets.studio.AMStudioPlugin_properties;
-import com.coremedia.blueprint.assets.studio.config.expirationDateSelector;
+import com.coremedia.ui.components.StatefulDateField;
 import com.coremedia.ui.data.ValueExpression;
 
-import ext.Container;
-import ext.form.DateField;
+import ext.container.Container;
 
+[ResourceBundle('com.coremedia.blueprint.assets.studio.AMStudioPlugin')]
 public class ExpirationDateSelectorBase extends Container {
-  public function ExpirationDateSelectorBase(config:expirationDateSelector = null) {
+  public function ExpirationDateSelectorBase(config:ExpirationDateSelector = null) {
     super(config);
 
-    var dateField:DateField = findByType('datefield')[0];
+    var dateField:StatefulDateField = StatefulDateField(down('datefield'));
     dateField.on('select', doChange);
     dateField.on('afterrender', datefieldRendered);
 
     selectedKeyValueExpression.addChangeListener(onSelectedKeyChange);
   }
 
-  internal native function get selectedKeyValueExpression():ValueExpression;
+  /**
+   * A value expression that will be bound to the selected combo box entry.
+   */
+  [Bindable]
+  public var selectedKeyValueExpression:ValueExpression;
 
-  internal native function get selectedDateValueExpression():ValueExpression;
+  /**
+   * A value expression that will be bound to the selected date or null if no datefield is displayed.
+   */
+  [Bindable]
+  public var selectedDateValueExpression:ValueExpression;
 
   internal native function get dateKey():ValueExpression;
 
@@ -34,13 +41,13 @@ public class ExpirationDateSelectorBase extends Container {
     }
   }
 
-  private static function doChange(dateField:DateField):void {
+  private static function doChange(dateField:StatefulDateField):void {
     var value:* = dateField.getValue();
-    dateField.fireEvent('change', dateField, value, dateField.startValue);
-    dateField.startValue = value;
+    dateField.fireEvent('change', dateField, value, dateField.originalValue);
+    dateField.originalValue = value;
   }
 
-  private static function datefieldRendered(dateField:DateField):void {
+  private static function datefieldRendered(dateField:StatefulDateField):void {
     dateField.getEl().on('blur', function():void {
       doChange(dateField);
     });
@@ -50,7 +57,7 @@ public class ExpirationDateSelectorBase extends Container {
     return keys.map(function (key:String):Object {
       return {
         id: key,
-        name: AMStudioPlugin_properties.INSTANCE['Filter_ExpirationDate_' + key + '_text'] || key
+        name: resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Filter_ExpirationDate_' + key + '_text') || key
       };
     });
   }

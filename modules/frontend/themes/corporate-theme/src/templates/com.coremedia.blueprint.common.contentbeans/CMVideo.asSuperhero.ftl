@@ -21,17 +21,7 @@
       } />
   </#if>
   <#-- picture -->
-  <#if self.picture?has_content>
-    <@cm.include self=self.picture view="asBackgroundImage"
-    params={
-    "classBox": "cm-superhero__image",
-    "classImage": "cm-image--superhero",
-    "metadata": ["properties.pictures"]
-    }/>
-    <div class="cm-superhero__dimmer"></div>
-  <#else>
-    <div class="cm-superhero__image"></div>
-  </#if>
+  <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix="cm-superhero" background=true/>
 
   <#if (self.teaserTitle?has_content || self.teaserText?has_content)>
   <#-- with banderole -->

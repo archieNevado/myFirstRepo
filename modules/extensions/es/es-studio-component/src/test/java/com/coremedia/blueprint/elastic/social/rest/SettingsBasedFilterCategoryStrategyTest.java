@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.elastic.social.rest;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.core.api.tenant.TenantService;

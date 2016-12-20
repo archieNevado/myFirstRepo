@@ -1,15 +1,14 @@
 package com.coremedia.livecontext.site;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl;
@@ -22,16 +21,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LiveContextSiteResolverTest {
-  protected static final Locale LOCALE = Locale.forLanguageTag("en-US");
 
-  protected static final String SITE_NAME_1 = "site1";
-  protected static final String SITE_NAME_2 = "site2";
-  
+  private static final Locale LOCALE = Locale.forLanguageTag("en-US");
+
+  private static final String SITE_NAME_1 = "site1";
+  private static final String SITE_NAME_2 = "site2";
 
   @Mock
   private SitesService sitesService;
@@ -55,9 +54,6 @@ public class LiveContextSiteResolverTest {
   private StoreContext storeContext;
 
   @Mock
-  private StoreContextProvider storeContextProvider;
-
-  @Mock
   private ContentRepository contentRepository;
 
   private LiveContextSiteResolverImpl testling = new LiveContextSiteResolverImpl();
@@ -69,7 +65,6 @@ public class LiveContextSiteResolverTest {
 
   @Before
   public void setup() {
-
     connection = MockCommerceEnvBuilder.create().setupEnv();
 
     testling.setSitesService(sitesService);
@@ -90,26 +85,24 @@ public class LiveContextSiteResolverTest {
 
   @Test
   public void handleFragmentSiteResolving() {
+    when(commerceConnectionInitializer.getCommerceConnectionForSite(site1)).thenReturn(connection);
     when(sitesService.getSites()).thenReturn(ImmutableSet.of(site1));
-    when(storeContextProvider.findContextBySite(site1)).thenReturn(storeContext);
     when(storeContext.get("storeId")).thenReturn("10001");
 
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;view=test";
     FragmentParameters params = FragmentParametersFactory.create(url);
     Site siteFor = testling.findSiteFor(params);
-    assertEquals(site1, siteFor);
+    assertThat(siteFor).isEqualTo(site1);
   }
 
   @Test
   public void handleFragmentSiteResolvingWithEnvironment() {
     when(sitesService.getSites()).thenReturn(ImmutableSet.of(site1, site2));
-    when(storeContextProvider.findContextBySite(site1)).thenReturn(storeContext);
     when(storeContext.get("storeId")).thenReturn("10001");
 
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;environment=site:site2";
     FragmentParameters params = FragmentParametersFactory.create(url);
     Site siteFor = testling.findSiteFor(params);
-    assertEquals(site2, siteFor);
+    assertThat(siteFor).isEqualTo(site2);
   }
-
 }

@@ -1,12 +1,17 @@
 package com.coremedia.blueprint.cae.view;
 
-import com.coremedia.blueprint.cae.contentbeans.CodeResourcesCacheKey;
-import com.coremedia.blueprint.common.contentbeans.CMContext;
-import com.coremedia.blueprint.common.contentbeans.CodeResources;
+import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
+import com.coremedia.blueprint.coderesources.CodeResources;
+import com.coremedia.blueprint.coderesources.CodeResourcesCacheKey;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.MergeableResources;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.io.UnsupportedEncodingException;
 
@@ -33,7 +39,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 /**
- * Tests {@link com.coremedia.blueprint.cae.view.CodeResourcesView}
+ * Tests {@link MergeableResourcesView}
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -47,6 +53,7 @@ public class MergedCssResourcesViewTest {
                   "classpath:/framework/spring/blueprint-contentbeans.xml",
                   "classpath:/com/coremedia/cache/cache-services.xml",
                   "classpath:spring/test/dummy-views.xml",
+                  "classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml",
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
@@ -72,23 +79,25 @@ public class MergedCssResourcesViewTest {
   @Inject
   private ContentTestHelper contentTestHelper;
   @Inject
-  private CodeResourcesView testling;
+  private MergeableResourcesView testling;
+  @Inject
+  private ContentBeanFactory contentBeanFactory;
+  @Resource(name="navigationTreeRelation")
+  private TreeRelation<Content> treeRelation;
 
   @Before
   public void setup() {
-    CMContext navigation = contentTestHelper.getContentBean(NAVIGATION_ID);
-    codeResources = new CodeResourcesCacheKey(navigation, "css", false).evaluate(null);
+    CMNavigation navigation = contentTestHelper.getContentBean(NAVIGATION_ID);
+    codeResources = new CodeResourcesCacheKey(navigation.getContent(), "css", false, treeRelation).evaluate(null);
   }
 
   @Test
-  public void testManagedResources() throws UnsupportedEncodingException {
-    testling.render(codeResources, "css", request, response);
-
+  public void testMergedResources() throws UnsupportedEncodingException {
+    MergeableResources mergeableResources = new MergeableResourcesImpl(codeResources.getModel("body"), contentBeanFactory, null);
+    testling.render(mergeableResources, null, request, response);
     String expected = ".my-custom-class-34{content:css code id 34}\n" +
             ".my-custom-class-32{content:css code id 32}\n" +
             ".my-custom-class-30{content:css code id 30}\n";
-
     assertEquals("Output does not match", expected, response.getContentAsString());
-
   }
 }

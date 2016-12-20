@@ -1,13 +1,18 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.contentbeans.CMNavigationBase;
-import com.coremedia.blueprint.cae.contentbeans.CodeResourcesCacheKey;
+import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
+import com.coremedia.blueprint.coderesources.CodeResources;
+import com.coremedia.blueprint.coderesources.CodeResourcesCacheKey;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
-import com.coremedia.blueprint.common.contentbeans.CMContext;
-import com.coremedia.blueprint.common.contentbeans.CodeResources;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.MergeableResources;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.xml.Markup;
@@ -19,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.test.annotation.DirtiesContext;
@@ -29,6 +35,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.HashMap;
@@ -59,6 +66,12 @@ public class CodeResourceHandlerTest {
 
   @Configuration
   @Import(HandlerTestConfiguration.class)
+  @ImportResource(
+          value = {
+                  "classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml",
+          },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class
+  )
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "CodeResourceHandlerTest";
@@ -86,8 +99,8 @@ public class CodeResourceHandlerTest {
   private static final String LINK_TO_DELETED_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/deleted-50-2.js";
   private static final String LINK_TO_WRONG_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/js/does-not-exist.js";
 
-  private static final String LINK_TO_MERGED_CONTENT_RESOURCE = "/" + PREFIX_RESOURCE + "/js/4/500ed6f52c0117f2c5b4218ce13f4563/media.js";
-  private static final String LINK_TO_WRONG_SCRIPTHASH_MERGED_CONTENT_RESOURCE = "/" + PREFIX_RESOURCE + "/js/4/10/media.js";
+  private static final String LINK_TO_MERGED_CONTENT_RESOURCE = "/" + PREFIX_RESOURCE + "/js/0/4/500ed6f52c0117f2c5b4218ce13f4563/body.js";
+  private static final String LINK_TO_WRONG_SCRIPTHASH_MERGED_CONTENT_RESOURCE = "/" + PREFIX_RESOURCE + "/js/0/4/deadbeef/body.js";
 
   private static final String MERGED_JS_VIEW = "js";
   private static final String REDIRECT_VIEW_PREFIX = "redirect:";
@@ -97,7 +110,7 @@ public class CodeResourceHandlerTest {
   @Inject
   private CodeResourceHandler testling;
 
-  private CMContext contextBean;
+  private CMNavigation codeCarryingBean;
   private CMAbstractCode abstractCodeBean;
   private Map<String, Object> requestAttributes = new HashMap<>();
 
@@ -110,11 +123,18 @@ public class CodeResourceHandlerTest {
   @Inject
   private RequestTestHelper requestTestHelper;
 
+  @Inject
+  private ContentBeanFactory contentBeanFactory;
+
+  @Resource(name="navigationTreeRelation")
+  private TreeRelation<Content> treeRelation;
+
+
   // --- Setup ------------------------------------------------------
 
   @Before
   public void setup() {
-    contextBean = contentTestHelper.getContentBean(6);
+    codeCarryingBean = contentTestHelper.getContentBean(4);
     abstractCodeBean = contentTestHelper.getContentBean(40);
 
     // Reset to default, some of these tests change this.
@@ -132,7 +152,7 @@ public class CodeResourceHandlerTest {
   public void testHandleMergedLink() throws Exception {
     ModelAndView mav = requestTestHelper.request(LINK_TO_MERGED_CONTENT_RESOURCE, null);
 
-    checkCodeResources(mav);
+    checkMergeableResources(mav);
     checkView(mav, MERGED_JS_VIEW);
   }
 
@@ -144,7 +164,7 @@ public class CodeResourceHandlerTest {
   public void testHandleMergedWrongScriptHashLinkRedirect() throws Exception {
     ModelAndView mav = requestTestHelper.request(LINK_TO_WRONG_SCRIPTHASH_MERGED_CONTENT_RESOURCE, null);
 
-    checkCodeResources(mav);
+    checkMergeableResources(mav);
     checkView(mav, REDIRECT_MERGED_JS_VIEW);
   }
 
@@ -218,8 +238,9 @@ public class CodeResourceHandlerTest {
   @Test
   public void testLinkForMergedContent() {
     Map<String,Object> cmParams = new ImmutableMap.Builder<String,Object>().put("extension","js").build();
-    CodeResources codeResources = new CodeResourcesCacheKey(contextBean, CMNavigationBase.JAVA_SCRIPT, false).evaluate(null);
-    String url = linkFormatterTestHelper.formatLink(cmParams, codeResources, null, MERGED_JS_VIEW);
+    CodeResources codeResources = new CodeResourcesCacheKey(codeCarryingBean.getContent(), CMNavigationBase.JAVA_SCRIPT, false, treeRelation).evaluate(null);
+    MergeableResources mergeableResources = new MergeableResourcesImpl(codeResources.getModel("body"), contentBeanFactory, null);
+    String url = linkFormatterTestHelper.formatLink(cmParams, mergeableResources, null, MERGED_JS_VIEW);
     assertEquals("urls do not match", LINK_TO_MERGED_CONTENT_RESOURCE , url);
   }
 
@@ -261,7 +282,7 @@ public class CodeResourceHandlerTest {
     Blob blob = (Blob) HandlerHelper.getRootModel(mav);
 
     MimeType mimetype = blob.getContentType();
-    String expectedMimetype = "text/javascript";
+    String expectedMimetype = "application/javascript";
     assertEquals("mimetype does not match", expectedMimetype, mimetype.toString());
 
     String expected = "//this file is for testing purposes";
@@ -272,9 +293,9 @@ public class CodeResourceHandlerTest {
   /**
    * Check if the model represents the expected Navigation.
    */
-  public static void checkCodeResources(ModelAndView mav) {
+  public static void checkMergeableResources(ModelAndView mav) {
     Object self = HandlerHelper.getRootModel(mav);
     assertNotNull("null self", self);
-    assertTrue("not a CodeResources", self instanceof CodeResources);
+    assertTrue("not a CodeResourcesModel", self instanceof MergeableResources);
   }
 }

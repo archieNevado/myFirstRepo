@@ -30,7 +30,6 @@ public class WebtrendsPageAspect extends AnalyticsProvider {
    */
   public static final String WEBTRENDS_SERVICE_KEY = "webtrends";
   static final String DCSID = "dcsid";
-  private static final String WEBTRENDS_MIN_JS = "webtrends.min.js";
 
   public WebtrendsPageAspect(Page page, SettingsService settingsService) {
     super(WEBTRENDS_SERVICE_KEY, page, settingsService);

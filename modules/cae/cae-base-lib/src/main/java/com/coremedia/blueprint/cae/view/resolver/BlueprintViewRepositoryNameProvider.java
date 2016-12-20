@@ -45,6 +45,7 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
   private List<String> commonViewRepositoryNames;
 
   private SettingsService settingsService;
+  private ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider;
 
   @Override
   public List<String> getViewRepositoryNames(String viewName, Map model, Locale locale, HttpServletRequest request) {
@@ -72,7 +73,7 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
     if (navigation != null) {
       CMTheme theme = navigation.getTheme();
       if (theme != null) {
-        result.add(theme.getViewRepositoryName());
+        result.addAll(themeTemplateViewRepositoryProvider.viewRepositoryNames(theme.getContent()));
       }
       List<? extends String> vrNames = settingsService.settingAsList(VIEW_REPOSITORY_NAMES, String.class, navigation);
       result.addAll(vrNames);
@@ -96,5 +97,10 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
   @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
+  }
+
+  @Required
+  public void setThemeTemplateViewRepositoryProvider(ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider) {
+    this.themeTemplateViewRepositoryProvider = themeTemplateViewRepositoryProvider;
   }
 }

@@ -14,8 +14,8 @@ import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.fragment.resolver.LinkableAndNavigation;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
-import com.coremedia.util.StringUtil;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -41,7 +41,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
 
   @Override
   public boolean include(FragmentParameters params) {
-    return !StringUtil.isEmpty(params.getExternalRef());
+    return !Strings.isNullOrEmpty(params.getExternalRef());
   }
 
   @Override

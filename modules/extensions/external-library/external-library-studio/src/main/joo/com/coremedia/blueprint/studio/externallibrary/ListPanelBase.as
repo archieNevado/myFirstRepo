@@ -1,7 +1,5 @@
 package com.coremedia.blueprint.studio.externallibrary {
 
-import com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin_properties;
-import com.coremedia.blueprint.studio.config.externallibrary.listPanel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.TimeUtil;
 import com.coremedia.ui.data.ValueExpression;
@@ -10,16 +8,16 @@ import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 import com.coremedia.ui.store.BeanRecord;
 import com.coremedia.ui.util.EventUtil;
 
-import ext.config.arraystore;
 import ext.data.ArrayStore;
-import ext.data.Record;
+import ext.data.Model;
 import ext.grid.GridPanel;
-import ext.grid.RowSelectionModel;
+import ext.selection.RowSelectionModel;
 
 /**
  * Displays a list of available videos from the externallibrary platform.
  * Filter will be applied here when set.
  */
+[ResourceBundle('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin')]
 public class ListPanelBase extends GridPanel {
   private static const READ_MARKER:Array = [];
 
@@ -30,7 +28,7 @@ public class ListPanelBase extends GridPanel {
   private var listStore:ArrayStore;
   private var dataModel:Array;
 
-  public function ListPanelBase(config:listPanel = null) {
+  public function ListPanelBase(config:ListPanel = null) {
     this.dataSourceValueExpression = config.dataSourceValueExpression;
     this.filterValueExpression = config.filterValueExpression;
     this.selectedValueExpression = config.selectedValueExpression;
@@ -47,7 +45,8 @@ public class ListPanelBase extends GridPanel {
    */
   private function addListeners():void {
     removeListener('afterlayout', addListeners);
-    (getSelectionModel() as RowSelectionModel).addListener('rowselect', onSelect);
+    var selectionModel:RowSelectionModel = getSelectionModel() as RowSelectionModel;
+    selectionModel.addListener('selectionchange', onSelect);
   }
 
   /**
@@ -58,7 +57,7 @@ public class ListPanelBase extends GridPanel {
    * @param ve The data source value expression, contains the active external data selection.
    */
   private function dataSourceChanged(ve:ValueExpression):void {
-    var record:Record = ve.getValue();
+    var record:Model = ve.getValue();
     if (record) {
       var index:int = record.data.index;
       reload(index, null);
@@ -73,7 +72,7 @@ public class ListPanelBase extends GridPanel {
    * @param ve
    */
   private function filterChanged(ve:ValueExpression):void {
-    var record:Record = dataSourceValueExpression.getValue();
+    var record:Model = dataSourceValueExpression.getValue();
     var filter:String = ve.getValue();
     if (record) {
       var index:int = record.data.index;
@@ -86,14 +85,21 @@ public class ListPanelBase extends GridPanel {
    * the selected record to the selection value expression.
    */
   private function onSelect():void {
-    var record:Record = (getSelectionModel() as RowSelectionModel).getSelected();
-    READ_MARKER.push(record.data.id);
-    record.data.index = listStore.indexOf(record);
-    if ((listStore.getCount() - 1) === record.data.index) {
-      record.data.index = -1;
+    var rowSelectionModel:RowSelectionModel = getSelectionModel() as RowSelectionModel;
+    var selection:Array = rowSelectionModel.getSelection();
+    if(selection && selection.length > 0) {
+      var record:Model = selection[0];
+      READ_MARKER.push(record.data.id);
+      record.data.index = listStore.indexOf(record);
+      if ((listStore.getCount() - 1) === record.data.index) {
+        record.data.index = -1;
+      }
+      record.commit(false);
+      selectedValueExpression.setValue(record);
     }
-    record.commit(false);
-    selectedValueExpression.setValue(record);
+    else {
+      selectedValueExpression.setValue(null);
+    }
   }
 
   /**
@@ -102,10 +108,16 @@ public class ListPanelBase extends GridPanel {
    * @param filter The filter string or null if not set.
    */
   protected function reload(index:int, filter:String):void {
-    getView()['emptyText'] = ExternalLibraryStudioPlugin_properties.INSTANCE.ExternalLibraryWindow_list_loading;
-      dataLoaded(null);
-      var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod("externallibrary/items", 'GET');
-      remoteServiceMethod.request(makeRequestParameters(index, editorContext.getSitesService().getPreferredSiteId(), filter), dataLoaded, null);
+    setBusy(true);
+    getView()['emptyText'] = resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_list_loading');
+    dataLoaded(null);
+    var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod("externallibrary/items", 'GET');
+    remoteServiceMethod.request(makeRequestParameters(index, editorContext.getSitesService().getPreferredSiteId(), filter), dataLoaded, null);
+  }
+
+  private function setBusy(b:Boolean):void {
+    var parent:ExternalLibraryWindow = findParentByType(ExternalLibraryWindow.xtype) as ExternalLibraryWindow;
+    parent.setBusy(b);
   }
 
   /**
@@ -136,14 +148,14 @@ public class ListPanelBase extends GridPanel {
       records = response.getResponseJSON()["items"];
     }
     if (response && records.length === 0) {
-      getView()['emptyText'] = ExternalLibraryStudioPlugin_properties.INSTANCE.ExternalLibraryWindow_list_empty;
+      getView()['emptyText'] = resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_list_empty');
     }
     if (response && response.getResponseJSON()["errorMessage"]) {
-      var msg:String = ExternalLibraryStudioPlugin_properties.INSTANCE.ExternalLibraryWindow_list_error + ' ' + response.getResponseJSON()["errorMessage"];
+      var msg:String = resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_list_error') + ' ' + response.getResponseJSON()["errorMessage"];
       getView()['emptyText'] = msg;
     }
 
-    var dataSourceRecord:Record = dataSourceValueExpression.getValue();
+    var dataSourceRecord:Model = dataSourceValueExpression.getValue();
     dataModel = [];
     records.forEach(function (record:*):void {
       var dataRecord:Array = [];
@@ -185,9 +197,15 @@ public class ListPanelBase extends GridPanel {
     //pre-select first item after loading.
     EventUtil.invokeLater(function ():void {
       if (records.length > 0) {
-        (getSelectionModel() as RowSelectionModel).selectFirstRow();
+        var selectionModel:RowSelectionModel = getSelectionModel() as RowSelectionModel;
+        var record:Model = selectionModel.getStore().getAt(0);
+        if(record) {
+          selectionModel.select(record);
+        }
       }
     });
+
+    setBusy(false);
   }
 
   /**
@@ -197,7 +215,7 @@ public class ListPanelBase extends GridPanel {
   protected function getExternalDataStore():ArrayStore {
     if (!listStore) {
       // create the actual data store...
-      listStore = new ArrayStore(arraystore({
+      listStore = new ArrayStore(ArrayStore({
         fields:[
           {name:'adminTags'},
           {name:'categories'},

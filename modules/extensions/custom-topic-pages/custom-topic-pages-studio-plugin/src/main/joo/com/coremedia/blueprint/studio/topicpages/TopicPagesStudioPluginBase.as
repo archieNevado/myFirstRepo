@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.studio.topicpages {
 
-import com.coremedia.blueprint.studio.topicpages.config.topicPagesStudioPlugin;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 
 /**
@@ -8,7 +7,7 @@ import com.coremedia.cms.editor.configuration.StudioPlugin;
  */
 public class TopicPagesStudioPluginBase extends StudioPlugin {
 
-  public function TopicPagesStudioPluginBase(config:topicPagesStudioPlugin = null) {
+  public function TopicPagesStudioPluginBase(config:TopicPagesStudioPlugin = null) {
     super(config);
   }
 

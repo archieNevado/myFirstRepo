@@ -1,12 +1,11 @@
 package com.coremedia.ecommerce.studio.components.preferences {
-import com.coremedia.blueprint.studio.config.taxonomy.taxonomyPreferences;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferencePanel;
 import com.coremedia.cms.editor.sdk.util.PreferencesUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-import ext.Panel;
+import ext.panel.Panel;
 
 use namespace editorContext;
 
@@ -15,7 +14,7 @@ public class CatalogPreferencesBase extends Panel implements PreferencePanel {
 
   internal var showCatalogValueExpression:ValueExpression;
 
-  public function CatalogPreferencesBase(config:taxonomyPreferences = null) {
+  public function CatalogPreferencesBase(config:CatalogPreferences = null) {
     super(config);
   }
 

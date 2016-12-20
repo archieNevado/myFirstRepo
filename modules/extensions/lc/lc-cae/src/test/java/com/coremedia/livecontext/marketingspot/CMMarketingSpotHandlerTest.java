@@ -70,7 +70,7 @@ public class CMMarketingSpotHandlerTest {
     testling.setContextHelper(contextHelper);
     testling.setContentLinkBuilder(contentLinkBuilder);
 
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache()));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
   }
 
   @Test

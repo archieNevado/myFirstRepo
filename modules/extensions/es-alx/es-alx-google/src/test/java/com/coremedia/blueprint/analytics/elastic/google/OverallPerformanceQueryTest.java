@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
-import com.coremedia.cap.undoc.content.Content;
+import com.coremedia.cap.content.Content;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
 import org.junit.Before;

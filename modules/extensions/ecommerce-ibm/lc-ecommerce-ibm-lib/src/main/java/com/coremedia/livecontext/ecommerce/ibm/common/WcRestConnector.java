@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.HttpClientFactory;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;

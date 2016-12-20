@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.studio.topicpages.administration {
 
 import com.coremedia.blueprint.studio.TopicsHelper;
-import com.coremedia.blueprint.studio.topicpages.TopicPages_properties;
-import com.coremedia.blueprint.studio.topicpages.config.topicsPanel;
 import com.coremedia.cap.common.IdHelper;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cap.undoc.content.ContentUtil;
-import com.coremedia.cms.editor.sdk.desktop.TabChangePlugin;
+import com.coremedia.cms.editor.sdk.columns.grid.IconColumnBase;
+import com.coremedia.cms.editor.sdk.desktop.TabChangePluginBase;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
+import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.PropertyChangeEvent;
 import com.coremedia.ui.data.ValueExpression;
@@ -21,42 +21,47 @@ import com.coremedia.ui.util.QtipUtil;
 
 import ext.EventManager;
 import ext.Ext;
-import ext.IEventObject;
 import ext.MessageBox;
-import ext.Panel;
-import ext.data.Record;
-import ext.grid.Column;
+import ext.StringUtil;
+import ext.data.Model;
+import ext.event.Event;
 import ext.grid.GridPanel;
-import ext.grid.RowSelectionModel;
-import ext.util.StringUtil;
+import ext.panel.Panel;
+import ext.selection.RowSelectionModel;
+import ext.view.TableView;
 
 /**
  * Base class of the taxonomy administration tab.
  */
+[ResourceBundle('com.coremedia.icons.CoreIcons')]
+[ResourceBundle('com.coremedia.blueprint.studio.topicpages.TopicPages')]
 public class TopicsPanelBase extends Panel {
-  private const COMPONENT_ID:String = "topicsPanel";
+  /**
+   * The value expression that contains the selected topic record.
+   */
+  [Bindable]
+  public var selectionExpression:ValueExpression;
+
+  private static const COMPONENT_ID:String = "topicsPanel";
 
   private var topicsExpression:ValueExpression;
   private var filterValueExpression:ValueExpression;
-  private var selectionExpression:ValueExpression;
   private var taxonomyExpression:ValueExpression;
   private var isFilteredExpression:ValueExpression;
 
   private var selectionString:String;
 
-  public function TopicsPanelBase(config:topicsPanel = null) {
+  public function TopicsPanelBase(config:TopicsPanelBase = null) {
     config.id = COMPONENT_ID;
     super(config);
-
-    this.selectionExpression = config.selectionExpression;
   }
 
   override protected function afterRender():void {
     super.afterRender();
-    getSelectionModel().addListener('rowselect', onSelect);
+    getSelectionModel().addListener('selectionchange', onSelect);
     getGrid().addListener('afterlayout', addKeyMap);
     editorContext.getSitesService().getPreferredSiteIdExpression().addChangeListener(siteSelectionChanged);
-    TabChangePlugin.getWorkAreaTabChangeExpression().addChangeListener(workAreaTabChanged);
+    TabChangePluginBase.getWorkAreaTabChangeExpression().addChangeListener(workAreaTabChanged);
   }
 
   private function workAreaTabChanged(ve:ValueExpression):void {
@@ -79,7 +84,7 @@ public class TopicsPanelBase extends Panel {
    */
   private function addKeyMap():void {
     getGrid().removeListener('afterlayout', addKeyMap);
-    EventManager.on(getGrid().getEl(), 'keyup', function (evt:IEventObject, t:*, o:*):void {
+    EventManager.on(getGrid().getEl(), 'keyup', function (evt:Event, t:*, o:*):void {
       if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
         var code:Number = evt.getCharCode();
         var character:String = String.fromCharCode(code).toLowerCase();
@@ -94,10 +99,10 @@ public class TopicsPanelBase extends Panel {
 
   private function selectRecordForInput(value:String):Boolean {
     for (var i:int = 0; i < getGrid().getStore().getCount(); i++) {
-      var record:Record = getGrid().getStore().getAt(i);
+      var record:Model = getGrid().getStore().getAt(i);
       var name:String = record.data.name;
       if (name.toLowerCase().indexOf(value) === 0) {
-        getSelectionModel().selectRow(i, false);
+        getSelectionModel().select(i, false);
         return true;
       }
     }
@@ -112,7 +117,7 @@ public class TopicsPanelBase extends Panel {
    * The selection listener for the grid, will trigger the preview reload for a topic selection.
    */
   private function onSelect():void {
-    var record:Record = getSelectionModel().getSelected();
+    var record:Model = getSelectionModel().getSelection()[0];
     selectionExpression.setValue(record);
   }
 
@@ -163,7 +168,6 @@ public class TopicsPanelBase extends Panel {
   protected function getFilterValueExpression():ValueExpression {
     if (!filterValueExpression) {
       filterValueExpression = ValueExpressionFactory.create('topics', beanFactory.createLocalBean());
-      filterValueExpression.addChangeListener(reload);
     }
     return filterValueExpression;
   }
@@ -172,7 +176,8 @@ public class TopicsPanelBase extends Panel {
    * Reloads the list of topics, fired after a search or a taxonomy selection.
    */
   protected function reload():void {
-    OpenTopicPagesEditorAction.isAdministrationEnabled(function(enabled:Boolean):void {
+    removePropertyChangeListeners();
+    OpenTopicPagesEditorActionBase.isAdministrationEnabled(function(enabled:Boolean):void {
       if(!enabled) {
         return;
       }
@@ -187,8 +192,7 @@ public class TopicsPanelBase extends Panel {
       TopicsHelper.loadTopics(taxonomy, siteId, term, function (items:Array, filtered:Boolean):void {
         var initCall:Function = function ():void {
           getGrid().getStore().removeListener('load', initCall);
-          getGrid().focus(false, 1000);
-          getSelectionModel().selectFirstRow();
+          getSelectionModel().select(0);
           getIsFilteredExpression().setValue(filtered);
         };
         getGrid().getStore().addListener('load', initCall);
@@ -202,28 +206,20 @@ public class TopicsPanelBase extends Panel {
    * @return
    */
   private function getGrid():GridPanel {
-    return find('itemId', 'topicsGrid')[0];
+    return queryById('topicsGrid') as GridPanel;
   }
 
   /**
    * Displays the name of the topic page.
-   * @param value
-   * @param metaData
-   * @param record
-   * @return
    */
-  protected static function nameRenderer(value:*, metaData:*, record:Record):String {
+  protected static function nameRenderer(value:*, metaData:*, record:Model):String {
     return record.data.name;
   }
 
   /**
    * Displays the page the topic page is linked to.
-   * @param value
-   * @param metaData
-   * @param record
-   * @return
    */
-  protected function pageRenderer(value:*, metaData:*, record:Record):String {
+  protected function pageRenderer(value:*, metaData:*, record:Model):String {
     var id:Number = record.data.topic.getNumericId();
     var pageContent:Content = record.data.page;
     if (pageContent) {
@@ -239,27 +235,26 @@ public class TopicsPanelBase extends Panel {
         pageContent.addPropertyChangeListener(ContentPropertyNames.LIFECYCLE_STATUS, customPageChanged);
         var iconCls:String = ContentLocalizationUtil.getIconStyleClassForContentTypeName(pageContent.getType().getName());
         var tooltipText:String = pageContent.getName();
-        var html:String = '<div><img width="16" height="16" class="' + iconCls + ' content-type-xs cm-before-text-icon" src="'
-                + Ext.BLANK_IMAGE_URL
-                + '" />'
-                + '<a '+ QtipUtil.formatUnsafeQtip(tooltipText) +' href="#" data-topic-action="open">'
-                + TopicPages_properties.INSTANCE.TopicPages_name + '</a>'
-                + '<img id="topicpage-delete-' + id + '" width="16" height="16" class="delete-icon" style="margin-bottom: -3px;margin-left: 5px;" src="'
-                + Ext.BLANK_IMAGE_URL
-                + '" title="' + TopicPages_properties.INSTANCE.TopicPages_deletion_tooltip + '" data-topic-action="delete"/><br />'
-                + '</div>';
+        var html:String = '<span class="' + IconColumnBase.BLOCK + '">'
+                + '<span class="' + IconColumnBase.ELEMENT_ICON + ' ' + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_page_icon') + '"></span>'
+                + '<a class="' + IconColumnBase.ELEMENT_TEXT + '" '+ QtipUtil.formatUnsafeQtip(tooltipText) +' href="#" data-topic-action="open">'
+                + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_name')
+                + '</a>'
+                + '<span class="' + IconColumnBase.BLOCK + '">'
+                + '<a id="topicpage-delete-' + id + '" class="' + IconColumnBase.ELEMENT_ICON + ' ' + resourceManager.getString('com.coremedia.icons.CoreIcons', 'trash_bin') + '" style="text-decoration:none;" href="#" title="' + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_deletion_tooltip') + '" data-topic-action="delete"/></span>'
+                + '</a>';
         return html;
       }
     }
 
     if(editorContext.getSitesService().getPreferredSite()) {
-      return '<div><a href="#" id="topicpage-create-' + id + '" data-topic-action="create">'
-              + TopicPages_properties.INSTANCE.TopicPages_create_link + '</a></div>';
+      return '<div><a href="#" id="topicpage-create-' + id + '"  class="' + IconColumnBase.ELEMENT_TEXT + '" data-topic-action="create">'
+              + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_create_link') + '</a></div>';
     }
-    return TopicPages_properties.INSTANCE.TopicPages_no_preferred_site;
+    return resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_no_preferred_site');
   }
 
-  protected function onPageColumnClick(column:Column, grid:GridPanel, rowIndex:Number, event:IEventObject):void {
+  protected function onPageColumnClick(grid:TableView, source:*, rowIndex:Number, someIndex:Number, event:Event):void {
     var data:Object = grid.getStore().getAt(rowIndex).data;
     var id:Number = data.topic.getNumericId();
     var pageContent:Content = data.page;
@@ -283,7 +278,7 @@ public class TopicsPanelBase extends Panel {
 
   /**
    * Called from the page rendered.
-   * @param id
+   * @param id the content id to open
    */
   public function openPage(id:Number):void {
     var page:Content = ContentUtil.getContent('' + id);
@@ -297,11 +292,10 @@ public class TopicsPanelBase extends Panel {
    */
   public function deletePage(id:Number, pageId:Number):void {
     var page:Content = ContentUtil.getContent('' + pageId);
-    MessageBox.show({
-      title:TopicPages_properties.INSTANCE.TopicPages_deletion_title,
-      msg:StringUtil.format(TopicPages_properties.INSTANCE.TopicPages_deletion_text, page.getName()),
-      buttons:MessageBox.OKCANCEL,
-      fn:function (btn:*):void {
+    MessageBoxUtil.showPrompt(
+      resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_deletion_title'),
+      StringUtil.format(resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_deletion_text'), page.getName()),
+      function (btn:*):void {
         if (btn === 'ok') {
           if (page.isCheckedOutByCurrentSession()) {
             page.checkIn(function ():void {
@@ -310,8 +304,7 @@ public class TopicsPanelBase extends Panel {
           }
           updatePage(id, false);
         }
-      }
-    });
+      });
   }
 
   /**
@@ -324,24 +317,24 @@ public class TopicsPanelBase extends Panel {
       var topicPageChannel:Content = settings.get('topicPageChannel');
       if(!topicPageChannel) {
         var siteName:String = editorContext.getSitesService().getPreferredSiteName();
-        var msg:String = StringUtil.format(TopicPages_properties.INSTANCE.TopicPages_no_channel_configured, siteName);
-        MessageBox.alert(TopicPages_properties.INSTANCE.TopicPages_no_channel_configured_title, msg);
+        var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_no_channel_configured'), siteName);
+        MessageBox.alert(resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_no_channel_configured_title'), msg);
         return;
       }
 
       topicPageChannel.invalidate(function ():void {
         if (topicPageChannel.isCheckedOutByOther()) {
-          var msg:String = StringUtil.format(TopicPages_properties.INSTANCE.TopicPages_root_channel_checked_out_msg,
+          var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_root_channel_checked_out_msg'),
                   topicPageChannel.getName());
-          MessageBox.alert(TopicPages_properties.INSTANCE.TopicPages_root_channel_checked_out_title, msg);
+          MessageBox.alert(resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_root_channel_checked_out_title'), msg);
           return;
         }
         selectionExpression.setValue(null);
-        var selectedRecord:Record = getSelectionModel().getSelected() as Record;
+        var selectedRecord:Model = getSelectionModel().getSelection()[0] as Model;
         var siteId:String = editorContext.getSitesService().getPreferredSiteId();
         TopicsHelper.updatePage(id, siteId, create, function (result:*):void {
           ValueExpressionFactory.create(ContentPropertyNames.PATH, result.topicPagesFolder).loadValue(function (path:String):void {
-            session.getConnection().getContentRepository().getChild(path, function (child:Content):void {
+            SESSION.getConnection().getContentRepository().getChild(path, function (child:Content):void {
               if (child) {
                 child.invalidate();
               }
@@ -353,15 +346,9 @@ public class TopicsPanelBase extends Panel {
 
               var root:Content = result.rootChannel;
               if (!root) {
-                var msg:String = StringUtil.format(TopicPages_properties.INSTANCE.TopicPages_root_channel_not_found_msg, editorContext.getSitesService().getPreferredSiteName());
-                MessageBox.alert(TopicPages_properties.INSTANCE.TopicPages_root_channel_not_found_title, msg);
+                var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_root_channel_not_found_msg'), editorContext.getSitesService().getPreferredSiteName());
+                MessageBox.alert(resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_root_channel_not_found_title'), msg);
               }
-//              else {
-//                root.invalidate(function ():void {
-//                  StudioUtil.openInBackground([root]);
-//                });
-//              }
-
               if (result.page) {
                 editorContext.getContentTabManager().openDocuments([result.page], true);
               }
@@ -377,9 +364,20 @@ public class TopicsPanelBase extends Panel {
    * Remove registered listeners.
    */
   override protected function onDestroy():void {
+    removePropertyChangeListeners();
     super.onDestroy();
     editorContext.getSitesService().getPreferredSiteIdExpression().removeChangeListener(siteSelectionChanged);
-    TabChangePlugin.getWorkAreaTabChangeExpression().removeChangeListener(workAreaTabChanged);
+    TabChangePluginBase.getWorkAreaTabChangeExpression().removeChangeListener(workAreaTabChanged);
+  }
+
+  private function removePropertyChangeListeners():void {
+    var topics:Array = getTopicsExpression().getValue();
+    topics && topics.forEach(function(data:Object):void {
+      var pageContent:Content = data.page;
+      if (pageContent) {
+        pageContent.removePropertyChangeListener(ContentPropertyNames.LIFECYCLE_STATUS, customPageChanged);
+      }
+    });
   }
 }
 }

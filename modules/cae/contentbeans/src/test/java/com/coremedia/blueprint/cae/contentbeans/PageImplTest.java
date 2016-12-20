@@ -74,28 +74,29 @@ public class PageImplTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testNavigationNull() {
-    new PageImpl(null, parentChannel, true, null, null);
+    new PageImpl(null, parentChannel, true, null, null, null, null, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testContentNull() {
-    new PageImpl(parentChannel, null, true, null, null);
+    new PageImpl(parentChannel, null, true, null, null, null, null, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testSitesServiceNull() {
-    new PageImpl(parentChannel, parentChannel, true, null, null);
+    new PageImpl(parentChannel, parentChannel, true, null, null, null, null, null);
   }
 
   @Test
   public void testGetInstance() throws Exception {
-    assertEquals(new PageImpl(parentChannel, parentChannel, true, sitesService, null), new PageImpl(parentChannel, parentChannel, true, sitesService, null));
+    assertEquals(new PageImpl(parentChannel, parentChannel, true, sitesService, null, null, null, null),
+                 new PageImpl(parentChannel, parentChannel, true, sitesService, null, null, null, null));
   }
 
   @Test
   public void testAssumeIdentity() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, parentChannel, true, sitesService, null);
-    PageImpl anotherPage = new PageImpl(childChannel, childChannel, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, parentChannel, true, sitesService, null, null, null, null);
+    PageImpl anotherPage = new PageImpl(childChannel, childChannel, true, sitesService, null, null, null, null);
     anotherPage.assumeIdentity(page);
 
     assertTrue(anotherPage.equals(page));
@@ -103,21 +104,21 @@ public class PageImplTest {
 
   @Test
   public void testGetNavigation() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
 
     assertEquals(parentChannel, page.getNavigation());
   }
 
   @Test
   public void testGetContent() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
 
     assertEquals(childChannel, page.getContent());
   }
 
   @Test
   public void testGetAspects() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
 
     assertEquals(0, page.getAspects().size());
 
@@ -125,15 +126,15 @@ public class PageImplTest {
 
   @Test
   public void testGetAspectByName() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
 
     assertEquals(0, page.getAspectByName().size());
   }
 
   @Test
   public void testEquals() throws Exception {
-    PageImpl page1 = new PageImpl(parentChannel, childChannel, true, sitesService, null);
-    PageImpl page2 = new PageImpl(parentChannel, childChannel, true, sitesService, null);
+    PageImpl page1 = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
+    PageImpl page2 = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
 
     assertEquals("page1#equals(page2) must be true", page1, page2);
     assertEquals("page2#equals(page1) must be true", page2, page1);
@@ -143,37 +144,37 @@ public class PageImplTest {
 
   @Test
   public void testHashCode() throws Exception {
-    PageImpl page1 = new PageImpl(parentChannel, childChannel, true, sitesService, null);
-    PageImpl page2 = new PageImpl(parentChannel, childChannel, true, sitesService, null);
+    PageImpl page1 = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
+    PageImpl page2 = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
 
     assertEquals(page1.hashCode(), page2.hashCode());
   }
 
   @Test
   public void testIsDetailView() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, article, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, article, true, sitesService, null, null, null, null);
 
     assertTrue(page.isDetailView());
 
-    page = new PageImpl(parentChannel, childChannel, true, sitesService, null);
+    page = new PageImpl(parentChannel, childChannel, true, sitesService, null, null, null, null);
 
     assertFalse(page.isDetailView());
   }
 
   @Test
   public void testGetLocale() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, article, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, article, true, sitesService, null, null, null, null);
 
     assertEquals(new Locale("de"), page.getLocale());
 
-    page = new PageImpl(parentChannel, parentChannel, true, sitesService, null);
+    page = new PageImpl(parentChannel, parentChannel, true, sitesService, null, null, null, null);
 
     assertEquals(new Locale("de"), page.getLocale());
   }
 
   @Test
   public void testGetKeywords() throws Exception {
-    PageImpl page = new PageImpl(childChannel, childChannel, true, sitesService, null);
+    PageImpl page = new PageImpl(childChannel, childChannel, true, sitesService, null, null, null, null);
     assertEquals("key,word", page.getKeywords());
 
     page.setKeywords("content-Key,content-word");
@@ -182,10 +183,10 @@ public class PageImplTest {
 
   @Test
   public void testGetFavicon() throws Exception {
-    PageImpl page = new PageImpl(parentChannel, article, true, sitesService, null);
+    PageImpl page = new PageImpl(parentChannel, article, true, sitesService, null, null, null, null);
     assertNotNull(page.getFavicon());
     Blob favicon = page.getFavicon();
-    page = new PageImpl(childChannel, childChannel, true, sitesService, null);
+    page = new PageImpl(childChannel, childChannel, true, sitesService, null, null, null, null);
     assertNotNull(page.getFavicon());
     assertEquals(favicon, page.getFavicon());
   }

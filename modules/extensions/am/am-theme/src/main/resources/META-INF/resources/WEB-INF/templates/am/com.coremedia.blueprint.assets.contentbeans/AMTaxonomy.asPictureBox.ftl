@@ -12,6 +12,7 @@
     "classBox": classBox,
     "classImage": classImage,
     "scalePicture": scalePicture,
+    "showBadge": false,
     "metadata": ["properties.assetThumbnail", self.assetThumbnail.content]
   } />
 <#else>

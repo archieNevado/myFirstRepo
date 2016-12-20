@@ -2,34 +2,38 @@ package com.coremedia.ecommerce.common;
 
 import org.junit.Test;
 
+import java.io.InputStream;
 import java.util.Collection;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductIdExtractorTest {
 
   @Test
   public void testExtractInventoryInfoWithXmp() throws Exception {
-    Collection<String> externalIds = ProductIdExtractor.extractProductIds(
-            getClass().getResourceAsStream("image-with-xmp-product-reference.jpg"));
-    assertNotNull(externalIds);
-    assertTrue(externalIds.size() == 2);
+    InputStream stream = getClass().getResourceAsStream("image-with-xmp-product-reference.jpg");
+
+    Collection<String> externalIds = ProductIdExtractor.extractProductIds(stream);
+
+    assertThat(externalIds).hasSize(2);
   }
 
   @Test
   public void testExtractInventoryInfoNoData() throws Exception {
-    Collection<String> externalIds = ProductIdExtractor.extractProductIds(
-            getClass().getResourceAsStream("image-no-xmp.jpg"));
-    assertNotNull(externalIds);
-    assertTrue(externalIds.size() == 0);
+    InputStream stream = getClass().getResourceAsStream("image-no-xmp.jpg");
+
+    Collection<String> externalIds = ProductIdExtractor.extractProductIds(stream);
+
+    assertThat(externalIds).isEmpty();
   }
 
   @Test
   public void testExtractInventoryInfoWrongFormat() throws Exception {
+    InputStream stream = getClass().getResourceAsStream("no-pic.jpg");
+
     Collection<String> externalIds = ProductIdExtractor.extractProductIds(
-            getClass().getResourceAsStream("no-pic.jpg"));
-    assertNotNull(externalIds);
-    assertTrue(externalIds.size() == 0);
+            stream);
+
+    assertThat(externalIds).isEmpty();
   }
 }

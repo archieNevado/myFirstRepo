@@ -2,10 +2,10 @@ package com.coremedia.ecommerce.common;
 
 import com.adobe.xmp.properties.XMPPropertyInfo;
 import com.coremedia.common.util.Predicate;
-import com.coremedia.util.StringUtil;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
+import com.google.common.base.Strings;
 import com.google.common.io.Resources;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -33,7 +33,7 @@ public class XmpImageMetadataExtractorTest {
     extractor = XmpImageMetadataExtractor.builder().atNameSpace(IPTC_XMP_EXT_NS).atProperty(ARTWORK_NODE).filteredBy(new Predicate<XMPPropertyInfo>() {
       @Override
       public boolean include(XMPPropertyInfo o) {
-        return !StringUtil.isEmpty(o.getValue()) && o.getPath().endsWith(INVENTORY_INFO);
+        return !Strings.isNullOrEmpty(o.getValue()) && o.getPath().endsWith(INVENTORY_INFO);
       }
     }).build();
   }

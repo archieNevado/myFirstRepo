@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:SkinTemplate
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:skins="com.coremedia.blueprint.studio.styleguide.tabs.skins.*"
+        title="Checkboxes"
+        xmlns:local="com.coremedia.blueprint.studio.styleguide.templates.*">
+  <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.styleguide.tabs.skins.SkinsHelper;
+    import com.coremedia.ui.data.ValueExpressionFactory;
+    import com.coremedia.ui.layouts.BEMLayouts;
+
+    private var config:CheckboxesTemplate;
+
+    public native function CheckboxesTemplate(config:CheckboxesTemplate = null);
+    ]]></fx:Script>
+
+  <local:plugins>
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromValue(config.skinEnum.getSkin())}">
+      <ui:template>
+        <skins:SkinDescription skinEnum="{config.skinEnum}"
+                               hideExample="true"/>
+      </ui:template>
+    </ui:BindComponentsPlugin>
+    <ui:AddItemsPlugin>
+      <ui:items>
+        <Container>
+          <layout>
+            <layout_Column/>
+          </layout>
+          <items>
+            <Container columnWidth="0.4"
+                       ui="{SkinsHelper.getContainerUi(config.skinEnum)}">
+              <defaults>
+                <Checkbox ui="{config.skinEnum.getSkin()}"
+                          margin="5 0"
+                          fieldLabel="Left align"
+                          boxLabel="Check me"
+                          checked="true"/>
+              </defaults>
+              <items>
+                <Checkbox labelAlign="left"
+                          boxLabelAlign="after"/>
+                <Checkbox labelAlign="left"
+                          boxLabelAlign="before"/>
+              </items>
+            </Container>
+            <Container columnWidth="0.2"
+                       ui="{SkinsHelper.getContainerUi(config.skinEnum)}">
+              <defaults>
+                <Checkbox ui="{config.skinEnum.getSkin()}"
+                          margin="5 0"
+                          fieldLabel="Top align"
+                          boxLabel="Check me"
+                          checked="true"/>
+              </defaults>
+              <items>
+                <Checkbox labelAlign="top"
+                          boxLabelAlign="after"/>
+                <Checkbox labelAlign="top"
+                          boxLabelAlign="before"/>
+              </items>
+            </Container>
+            <Container columnWidth="0.4"
+                       ui="{SkinsHelper.getContainerUi(config.skinEnum)}">
+              <defaults>
+                <Checkbox ui="{config.skinEnum.getSkin()}"
+                          margin="5 0"
+                          fieldLabel="Right align"
+                          boxLabel="Check me"
+                          checked="true"/>
+              </defaults>
+              <items>
+                <Checkbox labelAlign="right"
+                          boxLabelAlign="after"/>
+                <Checkbox labelAlign="right"
+                          boxLabelAlign="before"/>
+              </items>
+            </Container>
+          </items>
+          <plugins>
+            <ui:BEMPlugin block="{BEMLayouts.HORIZONTAL_SPACING_BLOCK}"
+                          defaultElement="{BEMLayouts.HORIZONTAL_SPACING_ELEMENT_ITEM}"
+                          modifier="{BEMLayouts.HORIZONTAL_SPACING_MODIFIER_200}"/>
+          </plugins>
+        </Container>
+      </ui:items>
+    </ui:AddItemsPlugin>
+  </local:plugins>
+
+</local:SkinTemplate>

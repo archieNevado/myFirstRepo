@@ -25,7 +25,7 @@ public class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, 
     return get(CatalogObjectPropertyNames.EXTERNAL_ID);
   }
 
-  public function getId():String {
+  override public function getId():String {
     return get(CatalogObjectPropertyNames.ID);
   }
 

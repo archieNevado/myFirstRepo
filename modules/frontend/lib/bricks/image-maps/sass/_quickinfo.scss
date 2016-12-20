@@ -8,7 +8,10 @@
 /**
  * quickinfo is not visible by default (display: none is not used due to technical reasons)
  */
-.cm-quickinfo {
+
+$cm-quickinfo-prefix: "cm-quickinfo" !default;
+
+.#{$cm-quickinfo-prefix} {
   visibility: hidden;
   position: absolute;
   &--active {

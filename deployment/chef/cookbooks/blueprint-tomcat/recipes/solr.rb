@@ -48,16 +48,15 @@ template "#{classes_dir.path}/log4j.properties" do
   source 'properties.erb'
   owner service_name
   group node['blueprint']['group']
-  variables(:props => { 'log4j.rootLogger' => 'WARN, file',
-                        'log4j.appender.file' => 'org.apache.log4j.RollingFileAppender',
-                        'log4j.appender.file.MaxFileSize' => '4MB',
-                        'log4j.appender.file.MaxBackupIndex' => '9',
-                        'log4j.appender.file.File' => "#{tomcat.path}/current/logs/solr.log",
-                        'log4j.appender.file.layout' => 'org.apache.log4j.PatternLayout',
-                        'log4j.appender.file.layout.ConversionPattern' => '%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5p] %C - %m%n',
-                        'log4j.logger.com.coremedia' => 'INFO',
-                        'log4j.logger.org.apache.solr.update.LoggingInfoStream' => 'OFF'
-  })
+  variables(props: { 'log4j.rootLogger' => 'WARN, file',
+                     'log4j.appender.file' => 'org.apache.log4j.RollingFileAppender',
+                     'log4j.appender.file.MaxFileSize' => '4MB',
+                     'log4j.appender.file.MaxBackupIndex' => '9',
+                     'log4j.appender.file.File' => "#{tomcat.path}/current/logs/solr.log",
+                     'log4j.appender.file.layout' => 'org.apache.log4j.PatternLayout',
+                     'log4j.appender.file.layout.ConversionPattern' => '%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5p] %C - %m%n',
+                     'log4j.logger.com.coremedia' => 'INFO',
+                     'log4j.logger.org.apache.solr.update.LoggingInfoStream' => 'OFF' })
   notifies :update, webapp, :immediately
 end
 
@@ -65,7 +64,7 @@ template "#{classes_dir.path}/logging.properties" do
   source 'properties.erb'
   owner service_name
   group node['blueprint']['group']
-  variables(:props => { 'handlers' => 'org.slf4j.bridge.SLF4JBridgeHandler' })
+  variables(props: { 'handlers' => 'org.slf4j.bridge.SLF4JBridgeHandler' })
   notifies :update, webapp, :immediately
 end
 

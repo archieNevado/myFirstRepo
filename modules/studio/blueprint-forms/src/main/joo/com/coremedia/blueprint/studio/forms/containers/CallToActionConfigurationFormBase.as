@@ -1,19 +1,18 @@
 package com.coremedia.blueprint.studio.forms.containers {
-import com.coremedia.blueprint.studio.config.callToActionConfigurationForm;
-import com.coremedia.cms.editor.sdk.premular.CollapsibleFormPanel;
+import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.PropertyChangeEvent;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
-public class CallToActionConfigurationFormBase extends CollapsibleFormPanel {
+public class CallToActionConfigurationFormBase extends PropertyFieldGroup {
   internal var model:Bean;
 
   internal var modelValueExpression:ValueExpression;
 
-  public function CallToActionConfigurationFormBase(config:callToActionConfigurationForm = null) {
-    addEvents("CTAConfigurationChanged");
+  public function CallToActionConfigurationFormBase(config:CallToActionConfigurationForm = null) {
+    /* EXT6_GONE:ext.util.Observable#addEvents addEvents("CTAConfigurationChanged");*/
     super(config);
 
     getModel().addPropertyChangeListener("callToActionDisabled", callToActionDisabledListener);

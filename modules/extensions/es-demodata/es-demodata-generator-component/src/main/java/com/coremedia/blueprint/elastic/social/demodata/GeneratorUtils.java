@@ -42,6 +42,7 @@ public final class GeneratorUtils {
     return result;
   }
 
+  @SuppressWarnings("squid:S2189") // Loops should not be infinite, suppress false positive
   public static List<Blob> loadImages(String prefix, String mimeType, String extension, BlobService blobService) {
     final List<Blob> list = new ArrayList<>();
     int imageCount = 1;

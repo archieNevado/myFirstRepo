@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!---
+    Catalog object property field. It can be assigned to a string property of a content/bean which holds the catalog object id.
+   -->
+<local:CatalogLinkFieldBase
+                xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:local="com.coremedia.ecommerce.studio.components.link.*"
+                xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                xmlns="exml:ext.config"
+                readOnlyValueExpression="{getReadOnlyExpression(config)}">
+  <fx:Script><![CDATA[
+    public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogLinkField";
+
+    private var config:CatalogLinkField;
+
+    public native function CatalogLinkField(config:CatalogLinkField = null);
+
+    ]]></fx:Script>
+  <fx:Declarations>
+    <!--- 
+       Set to true for multiple links. Default is false, i.e. single link.
+     -->
+    <fx:Boolean id="multiple"/>
+
+    <!---
+     Set to true if the links contain duplicates. Default is false, i.e. no duplicate allowed
+    -->
+    <fx:Boolean id="duplicate"/>
+
+    <!---
+      Function to perform when clicking on the empty link field.
+      It e.g. opens the collection view e.g.
+     -->
+    <fx:Function id="openLinkSources"/>
+
+    <!--- 
+      The type of the catalog item that can be dropped here.
+     -->
+    <fx:String id="catalogObjectType"/>
+
+    <!--- 
+       An array of catalog object types, which are allowed as drag source
+     -->
+    <fx:Array id="catalogObjectTypes"/>
+
+    <!--- 
+       Optional: The function to create necessary structs before storing the links
+     -->
+    <fx:Function id="createStructFunction"/>
+
+    <!--
+      Set to true to hide this link field when there is linked catalog item. Used when this field is part of a link list.
+    -->
+    <fx:Boolean id="hideOnEmpty"/>
+  </fx:Declarations>
+
+  <local:viewConfig>
+    <GridView deferEmptyText="false" emptyText="{config.emptyText}">
+      <plugins>
+        <plugin_GridViewDragDrop ddGroup="{config.ddGroup}"
+                                 pluginId="dragdrop"/>
+      </plugins>
+    </GridView>
+  </local:viewConfig>
+
+</local:CatalogLinkFieldBase>

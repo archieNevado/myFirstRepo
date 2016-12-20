@@ -1,9 +1,12 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMPlaceholder" -->
+<#-- @ftlvariable name="recursiveInclude" type="java.lang.Boolean" -->
+
+<#assign recursiveInclude=cm.localParameter("recursiveInclude", false) />
+<#assign layout=(self.viewtype.layout)!"" />
 
 <#-- use layout as view -->
-<#if (self.viewtype.layout)?has_content>
-  <#assign layout=self.viewtype.layout />
-  <@cm.include self=self view="[${layout}]" />
+<#if layout?has_content && !recursiveInclude>
+  <@cm.include self=self view="[${layout}]" params={"recursiveInclude": true} />
 <#-- @deprecated: use id, if no layout is set -->
 <#elseif self.id?has_content>
   <#assign substitution=bp.substitute(self.id!"", self)!cm.UNDEFINED />

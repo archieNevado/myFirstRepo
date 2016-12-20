@@ -27,7 +27,7 @@ public interface AnalyticsServiceProvider {
    * The returned list must be ordered according to the recorded hit count.
    *
    * @param cmalxBaseListContent the list to provide the report configuration
-   * @return a list of report data items (of maximum size {@link com.coremedia.blueprint.analytics.elastic.util.RetrievalUtil#getLimit(Map<String, Object)}
+   * @return a list of report data items (of maximum size {@link com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil#getLimit(Map<String, Object)}
    * @throws Exception may throw various kinds of exceptions
    */
   List<String> fetchDataFor(Content cmalxBaseListContent, Map<String, Object> effectiveSettings) throws Exception;

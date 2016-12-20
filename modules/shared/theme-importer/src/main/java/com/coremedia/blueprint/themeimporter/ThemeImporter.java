@@ -1,6 +1,9 @@
 package com.coremedia.blueprint.themeimporter;
 
+import com.coremedia.blueprint.localization.LocalizationService;
 import com.coremedia.blueprint.themeimporter.descriptors.Code;
+import com.coremedia.blueprint.themeimporter.descriptors.Css;
+import com.coremedia.blueprint.themeimporter.descriptors.JavaScript;
 import com.coremedia.blueprint.themeimporter.descriptors.Resource;
 import com.coremedia.blueprint.themeimporter.descriptors.ResourceBundle;
 import com.coremedia.blueprint.themeimporter.descriptors.ThemeDefinition;
@@ -19,24 +22,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
+import javax.activation.MimeTypeParseException;
 import javax.annotation.Nonnull;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * The ThemeImporter takes a zip file created by grunt and uploads it into the content repository.
@@ -46,6 +55,7 @@ public class ThemeImporter {
 
   private static final String DISABLE_COMPRESS_PROPERTY = "disableCompress";
   private static final String IE_EXPRESSION_PROPERTY = "ieExpression";
+  private static final String IN_HEAD_PROPERTY = "inHead";
   private static final String DATA_URL_PROPERTY = "dataUrl";
   private static final String CODE_PROPERTY = "code";
   private static final String DATA_PROPERTY = "data";
@@ -55,13 +65,22 @@ public class ThemeImporter {
   private static final String CM_INTERACTIVE_DOCTYPE = "CMInteractive";
   private static final String CM_TEMPLATE_SET_DOCTYPE = "CMTemplateSet";
   private static final String CM_JAVA_SCRIPT_DOCTYPE = "CMJavaScript";
-  private static final String CMCSS_DOCTYPE = "CMCSS";
+  private static final String CM_CSS_DOCTYPE = "CMCSS";
   private static final String CM_THEME_DOCTYPE = "CMTheme";
 
-  private static final String THEME_METADATA_DIR = "THEME-METADATA";
+  private static final String JAVA_SCRIPT_CODE_TYPE = "js";
+  private static final String CSS_CODE_TYPE = "css";
+
   private static final String MARKUP_TEMPLATE = "<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"><p>%s</p></div>";
   private static final String LINE_SEPARATOR = "(\r\r|\n\n|\r\n\r\n)";
   private static final String LINE_BREAK = "</p><p>";
+
+  /**
+   * Name of the metadata directory in a theme zip file.
+   * <p>
+   * The value is "THEME-METADATA".
+   */
+  public static final String THEME_METADATA_DIR = "THEME-METADATA";
 
   // In this context only the "data" protocol (base 64 encoding) is relevant.
   // Therefore we do not parse out //host:port but put all the rest into the
@@ -78,15 +97,17 @@ public class ThemeImporter {
 
   private final MimeTypeService mimeTypeService;
   private final CapConnection capConnection;
-  private final ThemeImporterContentHelper contentHelper;
+  private final LocalizationService localizationService;
 
 
   // --- construct and configure ------------------------------------
 
-  public ThemeImporter(@Nonnull CapConnection capConnection, @Nonnull MimeTypeService mimeTypeService) {
+  public ThemeImporter(@Nonnull CapConnection capConnection,
+                       @Nonnull MimeTypeService mimeTypeService,
+                       @Nonnull LocalizationService localizationService) {
     this.mimeTypeService = mimeTypeService;
     this.capConnection = capConnection;
-    contentHelper = new ThemeImporterContentHelper(capConnection);
+    this.localizationService = localizationService;
   }
 
 
@@ -100,8 +121,8 @@ public class ThemeImporter {
    * @param targetFolder the repository folder to import the theme to
    * @param zipFiles themes to import
    */
-  public final void importThemes(@Nonnull String targetFolder, @Nonnull Collection<File> zipFiles) {
-    importThemes(targetFolder, zipFiles.toArray(new File[zipFiles.size()]));
+  public final ThemeImporterResult importThemes(@Nonnull String targetFolder, @Nonnull Collection<File> zipFiles) {
+    return importThemes(targetFolder, zipFiles.toArray(new File[zipFiles.size()]));
   }
 
   /**
@@ -112,18 +133,14 @@ public class ThemeImporter {
    * @param targetFolder the repository folder to import the theme to
    * @param zipFiles themes to import, each must be nonnull
    */
-  public void importThemes(@Nonnull String targetFolder, File... zipFiles) {
+  public ThemeImporterResult importThemes(@Nonnull String targetFolder, File... zipFiles) {
+    ImportData importData;
     try {
-      ImportData importData = new ImportData(mimeTypeService, capConnection);
-      for (File file : zipFiles) {
-        try (FileInputStream is = new FileInputStream(file)) {
-          importData.collectFilesToImport(is);
-        }
-      }
-      importFiles(importData, normalize(targetFolder));
+      importData = extractImportDataFromFiles(zipFiles);
     } catch (Exception e) {
-      throw new ThemeImporterException("Theme import failed", e);
+      throw new ThemeImporterException("Theme import failed, no changes in content repository", e);
     }
+    return doImportThemes(targetFolder, importData);
   }
 
   /**
@@ -134,48 +151,83 @@ public class ThemeImporter {
    * @param targetFolder the repository folder to import the theme to
    * @param zips the zipped themes to import, each must be nonnull
    */
-  public void importThemes(@Nonnull String targetFolder, InputStream... zips) {
+  public ThemeImporterResult importThemes(@Nonnull String targetFolder, InputStream... zips) {
+    ImportData importData;
     try {
-      ImportData importData = new ImportData(mimeTypeService, capConnection);
-      for (InputStream zip : zips) {
-        importData.collectFilesToImport(zip);
-      }
-      importFiles(importData, normalize(targetFolder));
+      importData = extractImportDataFromStreams(zips);
     } catch (Exception e) {
-      throw new ThemeImporterException("Theme import failed", e);
+      throw new ThemeImporterException("Theme import failed, no changes in content repository", e);
     }
+    return doImportThemes(targetFolder, importData);
   }
 
 
   // --- internal ---------------------------------------------------
 
+  private ImportData extractImportDataFromFiles(File[] zipFiles) throws IOException, MimeTypeParseException, ParserConfigurationException, SAXException {
+    ImportData importData = new ImportData(mimeTypeService, capConnection);
+    for (File file : zipFiles) {
+      try (FileInputStream is = new FileInputStream(file)) {
+        importData.collectFilesToImport(is);
+      }
+    }
+    return importData;
+  }
+
+  private ImportData extractImportDataFromStreams(InputStream[] zips) throws IOException, MimeTypeParseException, ParserConfigurationException, SAXException {
+    ImportData importData = new ImportData(mimeTypeService, capConnection);
+    for (InputStream zip : zips) {
+      importData.collectFilesToImport(zip);
+    }
+    return importData;
+  }
+
+  private ThemeImporterResult doImportThemes(@Nonnull String targetFolder, ImportData importData) {
+    ThemeImporterContentHelper contentHelper = new ThemeImporterContentHelper(capConnection);
+    try {
+      ThemeImporterResultImpl result = new ThemeImporterResultImpl();
+      importFiles(importData, normalize(targetFolder), contentHelper, result);
+      contentHelper.checkInAll();
+      return result;
+    } catch (Exception e) {
+      contentHelper.revertAll();
+      throw new ThemeImporterException("Theme import failed", e);
+    }
+  }
+
   /**
    * Import the importData
    *
+   * @param importData the source data to be processed
    * @param targetFolder the folder to import the theme to
+   * @param result will be returned to the invoker, to be populated with information here
    */
-  private void importFiles(ImportData importData, String targetFolder) {
-    processImageFiles(importData, targetFolder);
-    processPropertyFiles(importData, targetFolder);
-    processWebFontFiles(importData, targetFolder);
-    processInteractiveFiles(importData, targetFolder);
-    processTemplateFiles(importData, targetFolder);
-    processJsFiles(importData, targetFolder);
-    processCssFiles(importData, targetFolder);
+  private void importFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper, ThemeImporterResultImpl result) {
+    // Feel free to enhance the result type and pass the result down to more of
+    // the process* methods, if they can contribute useful information for the
+    // invoker of the theme importer.
+
+    processImageFiles(importData, targetFolder, contentHelper);
+    processPropertyFiles(importData, targetFolder, contentHelper);
+    processWebFontFiles(importData, targetFolder, contentHelper);
+    processInteractiveFiles(importData, targetFolder, contentHelper);
+    processTemplateFiles(importData, targetFolder, contentHelper);
+    processJsFiles(importData, targetFolder, contentHelper);
+    processCssFiles(importData, targetFolder, contentHelper);
 
     // The theme descriptors are the last files to be processed.
     // If you change this processing order, check whether the warning in
-    // #codeToContent is still appropriate.
-    processXmlFiles(importData, targetFolder);
+    // #enhancedCodeToContent is still appropriate.
+    processXmlFiles(importData, targetFolder, contentHelper, result);
   }
 
-  private void processImageFiles(ImportData importData, String targetFolder) {
+  private void processImageFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> image : importData.getImageFiles().entrySet()) {
       contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, image.getKey(), Collections.singletonMap(DATA_PROPERTY, image.getValue()));
     }
   }
 
-  private void processPropertyFiles(ImportData importData, String targetFolder) {
+  private void processPropertyFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, String> propertyFile : importData.getPropertyFiles().entrySet()) {
       Struct localization = contentHelper.propertiesToStruct(propertyFile.getValue());
       Map<String, Object> properties = new HashMap<>();
@@ -186,54 +238,56 @@ public class ThemeImporter {
     }
   }
 
-  private void processWebFontFiles(ImportData importData, String targetFolder) {
+  private void processWebFontFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> webFont : importData.getWebFontFiles().entrySet()) {
       Map<String, Blob> properties = Collections.singletonMap(DATA_PROPERTY, webFont.getValue());
       contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, webFont.getKey(), properties);
     }
   }
 
-  private void processInteractiveFiles(ImportData importData, String targetFolder) {
+  private void processInteractiveFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> interactive : importData.getInteractiveFiles().entrySet()) {
       Map<String, Blob> properties = Collections.singletonMap(DATA_PROPERTY, interactive.getValue());
       contentHelper.updateContent(CM_INTERACTIVE_DOCTYPE, targetFolder, interactive.getKey(), properties);
     }
   }
 
-  private void processTemplateFiles(ImportData importData, String targetFolder) {
+  private void processTemplateFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> templateSet : importData.getTemplateSetFiles().entrySet()) {
       Map<String, Blob> properties = Collections.singletonMap(ARCHIVE_PROPERTY, templateSet.getValue());
       contentHelper.updateContent(CM_TEMPLATE_SET_DOCTYPE, targetFolder, templateSet.getKey(), properties);
     }
   }
 
-  private void processJsFiles(ImportData importData, String targetFolder) {
+  private void processJsFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, String> js : importData.getJsFiles().entrySet()) {
       Map<String, Object> properties = new HashMap<>();
-      properties.put(CODE_PROPERTY, createMarkup(js.getValue(), js.getKey(), targetFolder));
+      properties.put(CODE_PROPERTY, createMarkup(js.getValue(), js.getKey(), targetFolder, contentHelper));
       properties.put(DISABLE_COMPRESS_PROPERTY, js.getKey().endsWith(".min.js") ? 1 : 0);
       contentHelper.updateContent(CM_JAVA_SCRIPT_DOCTYPE, targetFolder, js.getKey(), properties);
     }
   }
 
-  private void processCssFiles(ImportData importData, String targetFolder) {
+  private void processCssFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, String> css : importData.getCssFiles().entrySet()) {
       Map<String, Object> properties = new HashMap<>();
-      properties.put(CODE_PROPERTY, createMarkup(css.getValue(), css.getKey(), targetFolder));
+      properties.put(CODE_PROPERTY, createMarkup(css.getValue(), css.getKey(), targetFolder, contentHelper));
       properties.put(DISABLE_COMPRESS_PROPERTY, css.getKey().endsWith(".min.css") ? 1 : 0);
-      contentHelper.updateContent(CMCSS_DOCTYPE, targetFolder, css.getKey(), properties);
+      contentHelper.updateContent(CM_CSS_DOCTYPE, targetFolder, css.getKey(), properties);
     }
   }
 
-  private void processXmlFiles(ImportData importData, String targetFolder) {
+  private void processXmlFiles(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper, ThemeImporterResultImpl result) {
+    Collection<Content> themeDescriptors = new HashSet<>();
     for (Map.Entry<String, Document> xmlFile : importData.getXmlFiles().entrySet()) {
       if (xmlFile.getKey().contains(THEME_METADATA_DIR)) {
         ThemeDefinition themeDefinition = domToThemeDefinition(xmlFile.getValue());
         if (themeDefinition!=null) {
-          createTheme(themeDefinition, targetFolder);
+          themeDescriptors.add(createTheme(themeDefinition, targetFolder, contentHelper));
         }
       }
     }
+    result.setThemeDescriptors(themeDescriptors);
   }
 
   private static ThemeDefinition domToThemeDefinition(Document document) {
@@ -247,20 +301,20 @@ public class ThemeImporter {
     }
   }
 
-  private Content createTheme(ThemeDefinition themeDefinition, String targetFolder) {
+  private Content createTheme(ThemeDefinition themeDefinition, String targetFolder, ThemeImporterContentHelper contentHelper) {
     String baseFolder = targetFolder + themeDefinition.getName();
     Map<String, Object> properties = new HashMap<>();
 
     properties.put("viewRepositoryName", themeDefinition.getViewRepositoryName());
     properties.put("description", themeDefinition.getName());
     properties.put("detailText", formatDescription(themeDefinition.getDescription()));
-    properties.put("icon", fetchAndDeleteThumbnail(themeDefinition.getThumbnail(), baseFolder));
+    properties.put("icon", fetchAndDeleteThumbnail(themeDefinition.getThumbnail(), baseFolder, contentHelper));
 
-    List<Content> jScriptLibs = enhanceCode(themeDefinition.getJavaScriptLibraries().getJavaScripts(), baseFolder, CM_JAVA_SCRIPT_DOCTYPE, "js");
-    List<Content> jScripts = enhanceCode(themeDefinition.getJavaScripts().getJavaScripts(), baseFolder, CM_JAVA_SCRIPT_DOCTYPE, "js");
-    List<Content> csss = enhanceCode(themeDefinition.getStyleSheets().getCss(), baseFolder, CMCSS_DOCTYPE, "css");
-    List<Content> resourceBundles = enhanceResourceBundles(themeDefinition.getResourceBundles().getResourceBundles(), baseFolder);
-    List<Content> templateSets = fetchExistingResourceContents(themeDefinition.getTemplateSets().getTemplateSet(), baseFolder);
+    List<Content> jScriptLibs = enhanceJavaScripts(themeDefinition.getJavaScriptLibraries().getJavaScripts(), baseFolder, contentHelper);
+    List<Content> jScripts = enhanceJavaScripts(themeDefinition.getJavaScripts().getJavaScripts(), baseFolder, contentHelper);
+    List<Content> csss = enhanceCsss(themeDefinition.getStyleSheets().getCss(), baseFolder, contentHelper);
+    List<Content> resourceBundles = enhanceResourceBundles(themeDefinition.getResourceBundles().getResourceBundles(), baseFolder, contentHelper);
+    List<Content> templateSets = fetchExistingResourceContents(themeDefinition.getTemplateSets().getTemplateSet(), baseFolder, contentHelper);
 
     properties.put("javaScriptLibs", jScriptLibs);
     properties.put("javaScripts", jScripts);
@@ -286,7 +340,7 @@ public class ThemeImporter {
     return MarkupFactory.fromString(detailText);
   }
 
-  private Blob fetchAndDeleteThumbnail(String thumbnailName, String baseFolder) {
+  private Blob fetchAndDeleteThumbnail(String thumbnailName, String baseFolder, ThemeImporterContentHelper contentHelper) {
     if (!StringUtils.hasText(thumbnailName)) {
       return null;
     }
@@ -308,24 +362,27 @@ public class ThemeImporter {
    *
    * @return the list of processed code contents
    */
-  private List<Content> enhanceCode(List<? extends Code> resources, String baseFolder, String contentType, String codeType) {
-    List<Content> result = new ArrayList<>();
-    if (resources != null) {
-      for (Code code : resources) {
-        Content content = enhancedCodeToContent(code, baseFolder, contentType, codeType);
-        if (content != null) {
-          result.add(content);
-        }
-      }
-    }
-    return result;
+  private List<Content> enhanceCsss(@Nonnull List<Css> resources, String baseFolder, ThemeImporterContentHelper contentHelper) {
+    return resources.stream().map(css -> enhanceCss(baseFolder, css, contentHelper)).filter(o -> o!=null).collect(Collectors.toList());
   }
 
-  private Content enhancedCodeToContent(Code code, String baseFolder, String contentType, String codeType) {
-    Map<String, Object> codeProperties = extractCodeProperties(code, codeType);
+  private List<Content> enhanceJavaScripts(@Nonnull List<JavaScript> resources, String baseFolder, ThemeImporterContentHelper contentHelper) {
+    return resources.stream().map(javaScript -> enhaceJavaScript(baseFolder, javaScript, contentHelper)).filter(o -> o!=null).collect(Collectors.toList());
+  }
+
+  private Content enhanceCss(String baseFolder, Css code, ThemeImporterContentHelper contentHelper) {
+    Map<String, Object> codeProperties = extractCssProperties(code);
+    return enhancedCodeToContent(code, baseFolder, CM_CSS_DOCTYPE, codeProperties, contentHelper);
+  }
+
+  private Content enhaceJavaScript(String baseFolder, JavaScript code, ThemeImporterContentHelper contentHelper) {
+    Map<String, Object> codeProperties = extractJavaScriptProperties(code);
+    return enhancedCodeToContent(code, baseFolder, CM_JAVA_SCRIPT_DOCTYPE, codeProperties, contentHelper);
+  }
+
+  private Content enhancedCodeToContent(Code code, String baseFolder, String contentType, Map<String, Object> codeProperties, ThemeImporterContentHelper contentHelper) {
     String link = code.getLink();
-    boolean isExternal = link.startsWith("http://") || link.startsWith("https://") || link.startsWith("//");
-    if (!isExternal) {
+    if (!isExternalLink(link)) {
       String path = PathUtil.normalizePath(baseFolder + "/" + link);
       // Since the theme descriptor is processed at last, any content code
       // resources must exist meanwhile.
@@ -336,7 +393,6 @@ public class ThemeImporter {
         return contentHelper.updateContent(contentType, path, codeProperties);
       }
     } else {
-      codeProperties.put(DATA_URL_PROPERTY, link);
       String path = "external/" + getName(link) + "." + extension(link);
       // No corresponding theme internal resource, so this content is created
       // here when it occurs in a theme descriptor.
@@ -344,12 +400,31 @@ public class ThemeImporter {
     }
   }
 
+  private Map<String, Object> extractCssProperties(Css code) {
+    return extractCodeProperties(code, CSS_CODE_TYPE);
+  }
+
+  private Map<String, Object> extractJavaScriptProperties(JavaScript code) {
+    Map<String, Object> codeProperties = extractCodeProperties(code, JAVA_SCRIPT_CODE_TYPE);
+    codeProperties.put(IN_HEAD_PROPERTY, code.isInHead() ? 1 : 0);
+    return codeProperties;
+  }
+
+  /**
+   * Extract code properties from theme descriptor entry.
+   * <p>
+   * Returns a mutable map, for further enhancements.
+   */
   private Map<String, Object> extractCodeProperties(Code code, String codeType) {
     Map<String, Object> codeProperties = new HashMap<>();
     boolean disableCompress = code.isDisableCompress() || code.getLink().endsWith(".min." + codeType);
     codeProperties.put(DISABLE_COMPRESS_PROPERTY, disableCompress ? 1 : 0);
     String ieExpression = code.getIeExpression();
     codeProperties.put(IE_EXPRESSION_PROPERTY, ieExpression==null ? "" : ieExpression);
+    String link = code.getLink();
+    if (isExternalLink(link)) {
+      codeProperties.put(DATA_URL_PROPERTY, link);
+    }
     return codeProperties;
   }
 
@@ -361,12 +436,14 @@ public class ThemeImporter {
    *
    * @return the list of processed resource bundles
    */
-  private List<Content> enhanceResourceBundles(List<? extends ResourceBundle> resourceBundles, String baseFolder) {
+  private List<Content> enhanceResourceBundles(List<? extends ResourceBundle> resourceBundles, String baseFolder, ThemeImporterContentHelper contentHelper) {
     List<Content> result = new ArrayList<>();
     if (resourceBundles != null) {
       for (ResourceBundle resourceBundle : resourceBundles) {
-        Content content = enhancedResourceBundleToContent(resourceBundle, baseFolder);
-        if (content!=null && resourceBundle.isLinkIntoTheme()) {
+        String contentPath = PathUtil.normalizePath(baseFolder + "/" + resourceBundle.getLink());
+        Content content = contentHelper.fetchContent(contentPath);
+        if (content!=null) {
+          localizationService.hierarchizeResourceBundles(content);
           result.add(content);
         }
       }
@@ -374,29 +451,7 @@ public class ThemeImporter {
     return result;
   }
 
-  private Content enhancedResourceBundleToContent(ResourceBundle resourceBundle, String baseFolder) {
-    String contentPath = PathUtil.normalizePath(baseFolder + "/" + resourceBundle.getLink());
-    Content content = contentHelper.fetchContent(contentPath);
-    if (content != null) {
-      if (!StringUtils.isEmpty(resourceBundle.getMaster())) {
-        String masterPath = PathUtil.normalizePath(content.getParent().getPath() + "/" + resourceBundle.getMaster());
-        Content master = contentHelper.fetchContent(masterPath);
-        if (master != null) {
-          HashMap<String, Object> masterProperties = new HashMap<>();
-          masterProperties.put("master", Collections.singletonList(master));
-          masterProperties.put("masterVersion", contentHelper.currentVersion(master));
-          contentHelper.updateContent(content.getType().getName(), contentPath, masterProperties);
-        } else {
-          LOGGER.warn("Referenced master content {} does not exist, ignore.", masterPath);
-        }
-      }
-    } else {
-      LOGGER.warn("Referenced resource bundle content {} does not exist, ignore.", contentPath);
-    }
-    return content;
-  }
-
-  private List<Content> fetchExistingResourceContents(List<? extends Resource> resources, String baseFolder) {
+  private List<Content> fetchExistingResourceContents(List<? extends Resource> resources, String baseFolder, ThemeImporterContentHelper contentHelper) {
     List<Content> result = new ArrayList<>();
     if (resources != null) {
       for (Resource resource : resources) {
@@ -412,14 +467,14 @@ public class ThemeImporter {
     return result;
   }
 
-  private Markup createMarkup(String text, String fileName, String targetFolder) {
+  private Markup createMarkup(String text, String fileName, String targetFolder, ThemeImporterContentHelper contentHelper) {
     String targetDocumentPath = targetFolder+fileName;
-    String markupAsString = String.format(MARKUP_TEMPLATE, urlsToXlinks(text, targetDocumentPath));
+    String markupAsString = String.format(MARKUP_TEMPLATE, urlsToXlinks(text, targetDocumentPath, contentHelper));
     return MarkupFactory.fromString(markupAsString);
   }
 
   @VisibleForTesting
-  String urlsToXlinks(String line, String targetDocumentPath) {
+  String urlsToXlinks(String line, String targetDocumentPath, ThemeImporterContentHelper contentHelper) {
     Matcher matcher = URL_PATTERN.matcher(line);
     StringBuffer appender = new StringBuffer();  // NOSONAR Matcher#appendReplacement needs a StringBuffer
     StringBuilder result = new StringBuilder();
@@ -438,7 +493,7 @@ public class ThemeImporter {
       String suffix = matcher.group(CG_SUFFIX);
 
       // replace url -> RichText (incl non-matching prefix)
-      String replacement = urlReplacement(uri, protocol, path, suffix, targetDocumentPath);
+      String replacement = urlReplacement(uri, protocol, path, suffix, targetDocumentPath, contentHelper);
       matcher.appendReplacement(appender, replacement);
 
       // extract the actual url replacement from the appendReplacement result
@@ -454,9 +509,9 @@ public class ThemeImporter {
     return result.toString();
   }
 
-  private String urlReplacement(String uri, String protocol, String path, String suffix, String targetDocumentPath) {
+  private String urlReplacement(String uri, String protocol, String path, String suffix, String targetDocumentPath, ThemeImporterContentHelper contentHelper) {
     if (protocol == null) {
-      return toRichtextInternalLink(path, targetDocumentPath, suffix);
+      return toRichtextInternalLink(path, targetDocumentPath, suffix, contentHelper);
     } else if (DATA_PROPERTY.equals(protocol)) {
       return toRichtextPlain(protocol, path);
     } else {
@@ -464,7 +519,7 @@ public class ThemeImporter {
     }
   }
 
-  private String toRichtextInternalLink(String uriMatch, String targetDocumentPath, String suffix) {
+  private String toRichtextInternalLink(String uriMatch, String targetDocumentPath, String suffix, ThemeImporterContentHelper contentHelper) {
     try {
       String linkPath = PathUtil.concatPath(targetDocumentPath, uriMatch);
       Content referencedContent = contentHelper.fetchContent(linkPath);
@@ -527,5 +582,9 @@ public class ThemeImporter {
 
   private static String normalize(@Nonnull String folder) {
     return folder.endsWith("/") ? folder : folder + "/";
+  }
+
+  private static boolean isExternalLink(String link) {
+    return link.startsWith("http://") || link.startsWith("https://") || link.startsWith("//");
   }
 }

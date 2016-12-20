@@ -1,23 +1,8 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMSpinner" -->
-<#-- @ftlvariable name="limitAspectRatios" type="java.util.List" -->
-<#-- @ftlvariable name="classBox" type="java.lang.String" -->
-<#-- @ftlvariable name="classImage" type="java.lang.String" -->
+<#assign classPrefix=cm.localParameters().classPrefix!"cm-details" />
+<#assign classSuffix=cm.localParameters().classSuffix!"media" />
+<#assign limitAspectRatios=cm.localParameters().limitAspectRatios![] />
 
-<#if (self.sequence![])?size gt 2>
-  <div class="cm-spinner__canvas">
-    <ol class="cm-spinner__images ${classBox!""}"<@cm.metadata "properties.sequence"/>>
-      <#list self.sequence as image>
-        <li class="cm-spinner__image ${classImage}">
-          <@cm.include self=image params={
-            "limitAspectRatios": limitAspectRatios![],
-            "classBox": classBox!"",
-            "classImage": classImage!""
-          }/>
-        </li>
-      </#list>
-    </ol>
-    <div class="cm-spinner__icon"></div>
-  </div>
-</#if>
+<@cm.include self=self view="_spinner" params={"spinnerCssClass": "cm-spinner__images " + classPrefix+"__"+classSuffix+"-box", "limitAspectRatios": limitAspectRatios, "imagesCssClass": classPrefix, "imagesCssClassSuffix": classSuffix}/>
 
 

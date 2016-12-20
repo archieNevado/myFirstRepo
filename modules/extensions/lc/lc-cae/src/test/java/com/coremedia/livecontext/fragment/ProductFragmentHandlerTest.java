@@ -81,7 +81,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
   @Before
   public void defaultSetup() {
     super.defaultSetup();
-    when(beanFactory.getBean("pdpPage", ProductDetailPage.class)).thenReturn(new ProductDetailPage(false, sitesService, Cache.currentCache()));
+    when(beanFactory.getBean("pdpPage", ProductDetailPage.class)).thenReturn(new ProductDetailPage(false, sitesService, Cache.currentCache(), null, null, null));
     getTestling().setContextStrategy(resolveContextStrategy);
     getTestling().setCommerceBeanFactory(commerceBeanFactory);
   }

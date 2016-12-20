@@ -4,11 +4,11 @@ import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;
-import com.coremedia.livecontext.studio.AbstractCatalogStudioTest;
+import com.coremedia.livecontext.studio.AbstractLiveContextStudioTest;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.beanFactory;
 
-public class ShowInCatalogTreeHelperTest extends AbstractCatalogStudioTest {
+public class ShowInCatalogTreeHelperTest extends AbstractLiveContextStudioTest {
 
   public static var PREFERENCE_SHOW_CATALOG_KEY:String = "showCatalogContent";
 

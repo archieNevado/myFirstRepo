@@ -1,34 +1,44 @@
 package com.coremedia.ecommerce.studio.components.link {
-import com.coremedia.ecommerce.studio.config.catalogLinkPropertyField;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
+import com.coremedia.ui.mixins.IValidationStateMixin;
+import com.coremedia.ui.mixins.ValidationState;
 
-public class CatalogLinkPropertyFieldBase extends CatalogLinkProperty {
+import ext.container.Container;
+
+public class CatalogLinkPropertyFieldBase extends Container implements IValidationStateMixin {
 
   private var readOnlyExpression:ValueExpression;
-  private var droppingRowValueExpression:ValueExpression;
-  private var multiple:Boolean;
 
-  public function CatalogLinkPropertyFieldBase(config:catalogLinkPropertyField = null) {
+  /** @inheritDoc */
+  [Bindable]
+  public native function validationInit(validationState:ValidationState = undefined):void;
+
+  /** @private */
+  [Bindable]
+  public native function set validationState(validationState:ValidationState):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get validationState():ValidationState;
+
+  /** @private */
+  [Bindable]
+  public native function set validationStateVE(validationStateVE:ValueExpression):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get validationStateVE():ValueExpression;
+
+  public function CatalogLinkPropertyFieldBase(config:CatalogLinkPropertyField = null) {
     super(config);
-    multiple = config.multiple;
-  }
-
-
-  /**
-   * Returns value expression for the row where a item will be dropped
-   */
-  public function getDroppingRowValueExpression():ValueExpression{
-    if (!droppingRowValueExpression){
-      droppingRowValueExpression = ValueExpressionFactory.createFromValue();
-    }
-    return droppingRowValueExpression;
+    validationInit();
   }
 
   /**
    * Returns value expression for if the capacity is free or can not be calculated.
    */
-  protected function getHasFreeCapacityExpression(config:catalogLinkPropertyField):ValueExpression{
+  protected function getHasFreeCapacityExpression(config:CatalogLinkPropertyField):ValueExpression{
     var hasFreeCapacityExpression:ValueExpression = ValueExpressionFactory.createFromFunction(function ():Boolean {
       if (config.multiple) {
         return true;

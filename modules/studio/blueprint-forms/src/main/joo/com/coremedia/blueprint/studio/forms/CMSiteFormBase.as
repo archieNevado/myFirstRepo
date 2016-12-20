@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.studio.forms {
 
-import com.coremedia.blueprint.studio.config.cmSiteForm;
-import com.coremedia.cap.common.session;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
@@ -9,15 +8,12 @@ import com.coremedia.cms.editor.sdk.sites.SitesService;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-
 public class CMSiteFormBase extends DocumentTabPanel {
   private var siteNameReadOnlyValueExpression:ValueExpression;
 
-  public function CMSiteFormBase(config:cmSiteForm = null) {
+  public function CMSiteFormBase(config:CMSiteForm = null) {
     super(config);
   }
-
-  internal native function get bindTo():ValueExpression;
 
   internal function getSiteNameReadOnlyValueExpression():ValueExpression {
     return siteNameReadOnlyValueExpression ||
@@ -47,7 +43,7 @@ public class CMSiteFormBase extends DocumentTabPanel {
   }
 
   protected static function isAdministrator():Boolean {
-    return session.getUser().isAdministrative();
+    return SESSION.getUser().isAdministrative();
   }
 }
 }

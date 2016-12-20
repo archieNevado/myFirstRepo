@@ -2,10 +2,9 @@ package com.coremedia.livecontext.studio.action {
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.actions.CollectionViewModelAction;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
-import com.coremedia.cms.editor.sdk.config.collectionViewModelAction;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
-import com.coremedia.livecontext.studio.AbstractCatalogStudioTest;
+import com.coremedia.livecontext.studio.AbstractLiveContextStudioTest;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -14,7 +13,7 @@ import com.coremedia.ui.data.test.Step;
 
 import ext.data.Store;
 
-public class CollectionViewModelActionTest extends AbstractCatalogStudioTest {
+public class CollectionViewModelActionTest extends AbstractLiveContextStudioTest {
   private static const MODE_PROPERTY:String = CollectionViewModel.MODE_PROPERTY;
   private static const REPOSITORY_MODE:String = CollectionViewModel.REPOSITORY_MODE;
   private static const SEARCH_MODE:String = CollectionViewModel.SEARCH_MODE;
@@ -35,17 +34,17 @@ public class CollectionViewModelActionTest extends AbstractCatalogStudioTest {
     };
 
     repositoryAction = new CollectionViewModelAction(
-      collectionViewModelAction({property: CollectionViewModel.MODE_PROPERTY,
+      CollectionViewModelAction({property: CollectionViewModel.MODE_PROPERTY,
                                  value: REPOSITORY_MODE}));
 
     searchAction = new CollectionViewModelAction(
-      collectionViewModelAction({property: MODE_PROPERTY,
+      CollectionViewModelAction({property: MODE_PROPERTY,
                                  value: SEARCH_MODE}));
   }
 
   override public function tearDown():void {
     super.tearDown();
-    CatalogHelper.getInstance().getPreferredSiteId = getPreferredSite;
+    editorContext.getSitesService().getPreferredSiteId = getPreferredSite;
   }
 
   //noinspection JSUnusedGlobalSymbols

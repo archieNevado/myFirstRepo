@@ -11,8 +11,8 @@ import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.mimetype.MimeTypeService;
-import com.coremedia.util.StringUtil;
 import com.coremedia.xml.MarkupFactory;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -21,6 +21,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -50,7 +51,6 @@ public class RSSExternalLibraryProvider implements ExternalLibraryProvider {
   private static final int TEASER_TEXT_MAX_LENGTH = 100;
   private static final String RSS_ENRICHER_INDICATOR = "This entry passed through the Full-Text RSS service";
 
-  private static final String DEFAULT_MIME_TYPE = "image/jpeg";
   private static final String PICTURE_CONTENT_TYPE = "CMPicture";
 
   private static final int MIN_IMG_WIDTH = 100;
@@ -143,7 +143,7 @@ public class RSSExternalLibraryProvider implements ExternalLibraryProvider {
   @Override
   public void postProcessNewContent(ExternalLibraryItemRepresentation item, ExternalLibraryPostProcessingRepresentation representation) {
     Content content = representation.getCreatedContent();
-    if(StringUtil.isEmpty(content.getString("title"))) {
+    if(Strings.isNullOrEmpty(content.getString("title"))) {
       content.set("title", item.getName());
     }
     content.set("locale", "de");
@@ -189,13 +189,15 @@ public class RSSExternalLibraryProvider implements ExternalLibraryProvider {
 
         ContentType contentType = connection.getContentRepository().getContentType(PICTURE_CONTENT_TYPE);
         String extension = imageUrl.substring(imageUrl.lastIndexOf('.') + 1, imageUrl.length());
-        String mimeTypeString = mimeTypeService.getMimeTypeForExtension(extension);
-        if (mimeTypeString == null) {
-          mimeTypeString = DEFAULT_MIME_TYPE;
-        }
+
+        // buffer stream to make it markable
+        @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
+        InputStream bufferedInputStream = new BufferedInputStream(in);
+
+        String mimeTypeString = mimeTypeService.detectMimeType(bufferedInputStream, imageUrl, con.getContentType());
 
         MimeType mimeType = new MimeType(mimeTypeString);
-        Blob blob = blobService.fromInputStream(in, mimeType);
+        Blob blob = blobService.fromInputStream(bufferedInputStream, mimeType);
         BufferedImage img = ImageIO.read(blob.getInputStream());
 
         if (img.getWidth() > MIN_IMG_WIDTH && img.getHeight() > MIN_IMG_HEIGHT) {

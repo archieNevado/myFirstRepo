@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MenuItem xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:exml="http://www.jangaroo.net/exml/0.8"
+          xmlns="exml:ext.config"
+          xmlns:upload="exml:com.coremedia.blueprint.studio.config.upload"
+          itemId="uploadMenuItem"
+          listeners="{{'afterrender':UploadHelper.resolveMenuItemTooltip}}"
+          text="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'UploadFileAction_menu_item_text')}"
+          iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'upload')}">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.blueprint.studio.UploadStudioPlugin')]
+    [ResourceBundle('com.coremedia.icons.CoreIcons')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    public static const xtype:String = "com.coremedia.blueprint.studio.config.upload.uploadMenuItem";
+
+    private var config:UploadMenuItem;
+
+    public native function UploadMenuItem(config:UploadMenuItem = null);
+    ]]></fx:Script>
+
+    <baseAction>
+      <upload:OpenUploadDialogAction/>
+    </baseAction>
+  
+</MenuItem>

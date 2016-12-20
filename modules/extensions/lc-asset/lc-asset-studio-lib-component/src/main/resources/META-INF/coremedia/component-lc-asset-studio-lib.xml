@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/livecontext/studio/cache.xml"/>
@@ -13,67 +10,71 @@
 
   <import resource="classpath:/com/coremedia/rest/cap/cap-rest-search-service.xml"/>
   <import resource="classpath:/framework/spring/lc-asset-services.xml"/>
-  <import resource="classpath:/framework/spring/lc-asset-helpers.xml"/>
   <import resource="validators.xml"/>
 
-  <bean id="assetPictureInvalidationWriteInterceptor" class="com.coremedia.livecontext.studio.asset.AssetInvalidationWriteInterceptor">
-     <property name="type" value="CMPicture"/>
-     <property name="interceptingSubtypes" value="true"/>
-     <property name="postProcessor" ref="assetPictureInvalidationWritePostProcessor"/>
+  <bean id="assetPictureInvalidationWriteInterceptor"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationWriteInterceptor">
+    <property name="type" value="CMPicture"/>
+    <property name="interceptingSubtypes" value="true"/>
+    <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
   </bean>
-  <bean id="assetPictureInvalidationWritePostProcessor" class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
+  <bean id="assetPictureInvalidationWritePostProcessor"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
     <property name="type" value="CMPicture"/>
     <property name="postProcessingSubtypes" value="true"/>
     <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
   </bean>
-  <bean id="assetSpinnerInvalidationWriteInterceptor" class="com.coremedia.livecontext.studio.asset.SpinnerAssetInvalidationWriteInterceptor">
-     <property name="type" value="CMSpinner"/>
-     <property name="interceptingSubtypes" value="true"/>
-     <property name="postProcessor" ref="assetSpinnerInvalidationWritePostProcessor"/>
+  <bean id="assetSpinnerInvalidationWriteInterceptor"
+        class="com.coremedia.livecontext.studio.asset.SpinnerAssetInvalidationWriteInterceptor">
+    <property name="type" value="CMSpinner"/>
+    <property name="interceptingSubtypes" value="true"/>
     <property name="assetReadSettingsHelper" ref="assetReadSettingsHelper"/>
     <property name="assetWriteSettingsHelper" ref="assetWriteSettingsHelper"/>
     <property name="contentRepository" ref="contentRepository"/>
+    <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
   </bean>
-  <bean id="assetSpinnerInvalidationWritePostProcessor" class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
+  <bean id="assetSpinnerInvalidationWritePostProcessor"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
     <property name="type" value="CMSpinner"/>
     <property name="postProcessingSubtypes" value="true"/>
     <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
   </bean>
 
-  <bean id="assetVideoInvalidationWriteInterceptor" class="com.coremedia.livecontext.studio.asset.AssetInvalidationWriteInterceptor">
-     <property name="type" value="CMVideo"/>
-     <property name="interceptingSubtypes" value="true"/>
-     <property name="postProcessor" ref="assetVideoInvalidationWritePostProcessor"/>
+  <bean id="assetVideoInvalidationWriteInterceptor"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationWriteInterceptor">
+    <property name="type" value="CMVideo"/>
+    <property name="interceptingSubtypes" value="true"/>
+    <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
   </bean>
-  <bean id="assetVideoInvalidationWritePostProcessor" class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
+  <bean id="assetVideoInvalidationWritePostProcessor"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
     <property name="type" value="CMVideo"/>
     <property name="postProcessingSubtypes" value="true"/>
     <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
   </bean>
 
-  <bean id="assetDownloadInvalidationWriteInterceptor" class="com.coremedia.livecontext.studio.asset.AssetInvalidationWriteInterceptor">
-     <property name="type" value="CMDownload"/>
-     <property name="interceptingSubtypes" value="true"/>
-     <property name="postProcessor" ref="assetDownloadInvalidationWritePostProcessor"/>
+  <bean id="assetDownloadInvalidationWriteInterceptor"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationWriteInterceptor">
+    <property name="type" value="CMDownload"/>
+    <property name="interceptingSubtypes" value="true"/>
+    <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
   </bean>
-  <bean id="assetDownloadInvalidationWritePostProcessor" class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
+  <bean id="assetDownloadInvalidationWritePostProcessor"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationWritePostProcessor">
     <property name="type" value="CMDownload"/>
     <property name="postProcessingSubtypes" value="true"/>
     <property name="commerceCacheInvalidationSource" ref="commerceInvalidationSource"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
   </bean>
 
-  <bean id="assetInvalidationRepositoryListener" class="com.coremedia.livecontext.studio.asset.AssetInvalidationRepositoryListener">
+  <bean id="assetInvalidationRepositoryListener"
+        class="com.coremedia.livecontext.studio.asset.AssetInvalidationRepositoryListener">
   </bean>
 
-  <bean id="pictureUploadXmpDataInterceptor" class="com.coremedia.livecontext.studio.asset.BlobUploadXmpDataInterceptor">
+  <bean id="pictureUploadXmpDataInterceptor"
+        class="com.coremedia.livecontext.studio.asset.BlobUploadXmpDataInterceptor">
     <property name="priority" value="1"/>
     <property name="type" value="CMPicture"/>
     <property name="blobProperty" value="data"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
     <property name="assetHelper" ref="assetHelper"/>
   </bean>
 
@@ -81,7 +82,6 @@
     <property name="priority" value="1"/>
     <property name="type" value="CMVideo"/>
     <property name="blobProperty" value="data"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
     <property name="assetHelper" ref="assetHelper"/>
   </bean>
 
@@ -100,8 +100,5 @@
       </map>
     </property>
   </bean>
-
-  <!--the asset service in Studio uses the ContentAssetSearchService -->
-  <customize:replace id="assetServiceSearchServiceCustomizer" bean="assetService" property="assetSearchService" custom-ref="studioAssetSearchService"/>
 
 </beans>

@@ -1,11 +1,10 @@
 package com.coremedia.livecontext.studio.action {
 import com.coremedia.ecommerce.studio.action.CatalogObjectAction;
-import com.coremedia.ecommerce.studio.config.catalogObjectAction;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 
 public class LiveContextCatalogObjectAction extends CatalogObjectAction {
 
-  public function LiveContextCatalogObjectAction(config:catalogObjectAction = null ) {
+  public function LiveContextCatalogObjectAction(config:CatalogObjectAction = null ) {
     super(config);
   }
 

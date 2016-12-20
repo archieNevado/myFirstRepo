@@ -1,5 +1,4 @@
 package com.coremedia.blueprint.assets.studio.forms {
-import com.coremedia.blueprint.assets.studio.config.showAssetsInEditedContentsCheckbox;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.PreferencesUtil;
@@ -8,7 +7,7 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.ObjectUtils;
 
-import ext.form.Checkbox;
+import ext.form.field.Checkbox;
 
 public class ShowAssetsInEditedContentsCheckboxBase extends Checkbox {
 
@@ -19,7 +18,7 @@ public class ShowAssetsInEditedContentsCheckboxBase extends Checkbox {
 
   private var checkedValueExpression:ValueExpression;
 
-  public function ShowAssetsInEditedContentsCheckboxBase(config:showAssetsInEditedContentsCheckbox = null) {
+  public function ShowAssetsInEditedContentsCheckboxBase(config:ShowAssetsInEditedContentsCheckbox = null) {
     super(config);
 
     CapListRepositoryImpl(CapListRepositoryImpl.getInstance()).registerEditedContentsFilterFn(filterAssets);

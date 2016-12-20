@@ -2,7 +2,7 @@ package com.coremedia.blueprint.studio.externalpreview {
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 
-import ext.util.JSON;
+import ext.JSON;
 
 /**
  * Encapsulates all data that should be passed to the preview controller
@@ -33,9 +33,9 @@ public class PreviewDataWrapper {
       data.push(item.asJSON());
     }
 
-    var dataString = JSON.encode(data);
+    var dataString:String = JSON.encode(data);
     return {
-      token : ExternalPreviewPlugin.getPreviewToken(),
+      token : ExternalPreviewPluginBase.getPreviewToken(),
       method: 'update',
       previewUrl: ExternalPreviewStudioPluginBase.REST_URL,
       data: dataString

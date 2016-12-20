@@ -1,14 +1,16 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.links.PostProcessorPrecendences;
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
-import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
@@ -61,6 +63,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   private static final String SEO_URI_PREFIX = "/{language}/{storeName}/";
 
   private ProductListSubstitutionService productListSubstitutionService;
+  private TreeRelation<Content> treeRelation;
 
   // e.g. /category/perfectchef/and/here/comes/a/category/path
   public static final String URI_PATTERN =
@@ -101,7 +104,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
                                   @RequestParam(value = PARAM_STEPS, required = false, defaultValue = DEFAULT_STEPS) Integer steps) {
     LiveContextNavigation navigation = getLiveContextNavigationFactory().createNavigationBySeoSegment(context.getContent(), categorySeoSegment);
     ProductList productList = productListSubstitutionService.getProductList(navigation, start, steps);
-    Page page = asPage(context, context);
+    Page page = asPage(context, context, treeRelation);
     ModelAndView modelAndView = HandlerHelper.createModelWithView(productList, PAGING_VIEW);
     setPage(modelAndView, page);
 
@@ -212,7 +215,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
       return HandlerHelper.notFound("No such category");
     }
 
-    Page page = asPage(context, context);
+    Page page = asPage(context, context, treeRelation);
     ModelAndView modelAndView = createModelAndView(page, view);
     modelAndView.addObject(REQUEST_ATTRIBUTE_CATEGORY, context);
     return modelAndView;
@@ -261,5 +264,9 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   @Required
   public void setProductListSubstitutionService(ProductListSubstitutionService productListSubstitutionService) {
     this.productListSubstitutionService = productListSubstitutionService;
+  }
+
+  public void setTreeRelation(TreeRelation<Content> treeRelation) {
+    this.treeRelation = treeRelation;
   }
 }
