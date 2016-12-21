@@ -19,8 +19,7 @@ overlays/
 # Emacs
 *~
 # Grunt/NPM:
-# https://docs.npmjs.com/misc/faq#should-i-check-my-node_modules-folder-into-git
-/node
+node/
 node_modules/
 **/*-theme/node
 # Logs:
