@@ -22,12 +22,13 @@
     <fx:String id="propertyName"/>
   </fx:Declarations>
 
-    <editor:plugins exml:mode="append">
-      <editor:BindDisablePlugin bindTo="{config.bindTo}"
-                                forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-    </editor:plugins>
-    <editor:items>
-      <osm:OSMPanel latLngExpression="{config.bindTo.extendBy('properties', config.propertyName)}"/>
-    </editor:items>
-  
+  <editor:items>
+    <osm:OSMPanel latLngExpression="{config.bindTo.extendBy('properties', config.propertyName)}">
+      <osm:plugins exml:mode="append">
+        <editor:BindDisablePlugin bindTo="{config.bindTo}"
+                                  forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+      </osm:plugins>
+    </osm:OSMPanel>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

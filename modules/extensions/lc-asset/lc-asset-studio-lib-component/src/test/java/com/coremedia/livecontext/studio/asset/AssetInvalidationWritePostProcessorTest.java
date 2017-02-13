@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.Matchers.any;
@@ -68,7 +69,8 @@ public class AssetInvalidationWritePostProcessorTest {
     testling.setType(cmPictureType);
     testling.setCommerceCacheInvalidationSource(invalidationSource);
 
-    when(commerceConnectionSupplier.getCommerceConnectionForContent(any(Content.class))).thenReturn(commerceConnection);
+    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
+            .thenReturn(Optional.of(commerceConnection));
 
     when(report.getEntity()).thenReturn(content);
 

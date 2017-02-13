@@ -2,8 +2,9 @@ package com.coremedia.blueprint.themeimporter.configuration;
 
 import com.coremedia.blueprint.localization.LocalizationService;
 import com.coremedia.blueprint.localization.configuration.LocalizationServiceConfiguration;
-import com.coremedia.blueprint.themeimporter.ThemeImporter;
+import com.coremedia.blueprint.themeimporter.ThemeImporterImpl;
 import com.coremedia.cap.common.CapConnection;
+import com.coremedia.cap.themeimporter.ThemeImporter;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +44,6 @@ public class ThemeImporterConfiguration {
 
   @Bean(name="themeImporter")
   public ThemeImporter themeImporter() {
-    return new ThemeImporter(capConnection, mimeTypeService, localizationService);
+    return new ThemeImporterImpl(capConnection, mimeTypeService, localizationService);
   }
 }

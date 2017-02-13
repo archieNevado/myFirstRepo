@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <local:CatalogStudioPluginBase
-                xmlns:fx="http://ns.adobe.com/mxml/2009"
-                xmlns:local="com.coremedia.catalog.studio.*"
-                xmlns:exml="http://www.jangaroo.net/exml/0.8"
-                xmlns="exml:ext.config"
-                xmlns:ui="exml:com.coremedia.ui.config"
-                xmlns:cat="exml:com.coremedia.blueprint.studio.config.catalog"
-                xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
-                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-                xmlns:u="exml:untyped">
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.catalog.studio.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:cat="exml:com.coremedia.blueprint.studio.config.catalog"
+        xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns:u="exml:untyped">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.cms.editor.ContentTypes')]
     [ResourceBundle('com.coremedia.cms.editor.sdk.validation.Validators')]
@@ -33,134 +33,134 @@
     public native function CatalogStudioPlugin(config:CatalogStudioPlugin = null);
     ]]></fx:Script>
 
-    <local:rules>
-      <editor:Startup>
-        <editor:plugins>
-          <editor:ConfigureListViewPlugin instanceName="catalog">
-            <editor:listViewDataFields>
-              <ui:DataField name="productCode"
-                            mapping="properties.productCode"/>
-            </editor:listViewDataFields>
-            <editor:repositoryListViewColumns>
-              <editor:ListViewTypeIconColumn width="75"
-                                             showTypeName="true"
-                                             sortable="true"
-                                             u:sortField="type"
-                                             u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-              <editor:ListViewNameColumn sortable="true"
-                                         u:defaultSortColumn="true"
-                                         u:defaultSortDirection="asc"/>
-              <cat:ProductCodeColumn width="126"
-                                     sortable="true"
-                                     u:sortField="productCode"/>
-              <editor:ListViewCreationDateColumn width="120"
-                                                 sortable="true"
-                                                 u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-              <editor:ListViewStatusColumn width="46"
+  <local:rules>
+    <editor:Startup>
+      <editor:plugins>
+        <editor:ConfigureListViewPlugin instanceName="catalog">
+          <editor:listViewDataFields>
+            <ui:DataField name="productCode"
+                          mapping="properties.productCode"/>
+          </editor:listViewDataFields>
+          <editor:repositoryListViewColumns>
+            <editor:ListViewTypeIconColumn width="75"
+                                           showTypeName="true"
+                                           sortable="true"
+                                           u:sortField="type"
+                                           u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+            <editor:ListViewNameColumn sortable="true"
+                                       u:defaultSortColumn="true"
+                                       u:defaultSortDirection="asc"/>
+            <cat:ProductCodeColumn width="126"
+                                   sortable="true"
+                                   u:sortField="productCode"/>
+            <editor:ListViewCreationDateColumn width="120"
+                                               sortable="true"
+                                               u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+            <editor:ListViewStatusColumn width="46"
+                                         sortable="true"
+                                         u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+            <editor:FreshnessColumn sortable="true"
+                                    hidden="true"/>
+          </editor:repositoryListViewColumns>
+          <editor:searchListViewColumns>
+            <editor:ListViewTypeIconColumn width="75"
+                                           showTypeName="true"
+                                           u:sortField="type"
                                            sortable="true"
                                            u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-              <editor:FreshnessColumn sortable="true"
-                                      hidden="true"/>
-            </editor:repositoryListViewColumns>
-            <editor:searchListViewColumns>
-              <editor:ListViewTypeIconColumn width="75"
-                                             showTypeName="true"
-                                             u:sortField="type"
-                                             sortable="true"
-                                             u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-              <editor:ListViewNameColumn sortable="true"/>
-              <cat:ProductCodeColumn width="126"
-                                     sortable="true"
-                                     u:sortField="productCode"/>
-              <editor:ListViewSiteColumn/>
-              <editor:ListViewSiteLocaleColumn/>
-              <editor:ListViewCreationDateColumn sortable="true"
-                                                 width="120"
-                                                 u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-              <editor:ListViewStatusColumn width="46"
-                                           sortable="true"
-                                           u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-              <editor:FreshnessColumn sortable="true"
-                                      hidden="true"/>
-              <editor:ScoreColumn sortable="true"
-                                  hidden="true"
-                                  hideable="false"
-                                  u:defaultSortColumn="true"
-                                  u:defaultSortDirection="desc"/>
-            </editor:searchListViewColumns>
-          </editor:ConfigureListViewPlugin>
-        </editor:plugins>
-      </editor:Startup>
+            <editor:ListViewNameColumn sortable="true"/>
+            <cat:ProductCodeColumn width="126"
+                                   sortable="true"
+                                   u:sortField="productCode"/>
+            <editor:ListViewSiteColumn sortable="false"/>
+            <editor:ListViewSiteLocaleColumn sortable="false"/>
+            <editor:ListViewCreationDateColumn sortable="true"
+                                               width="120"
+                                               u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+            <editor:ListViewStatusColumn width="46"
+                                         sortable="true"
+                                         u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+            <editor:FreshnessColumn sortable="true"
+                                    hidden="true"
+                                    u:defaultSortColumn="true"
+                                    u:defaultSortDirection="desc"/>
+          </editor:searchListViewColumns>
+        </editor:ConfigureListViewPlugin>
+      </editor:plugins>
+    </editor:Startup>
 
-      <bpforms:CMPictureForm>
-        <bpforms:plugins>
-          <ui:AddItemsPlugin recursive="true">
-            <ui:items>
-              <cat:ReferrerImageListWrapper/>
-            </ui:items>
-            <ui:after>
-              <Component itemId="{CMPictureForm.COPYRIGHT_FORM_ITEM_ID}"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </bpforms:plugins>
-      </bpforms:CMPictureForm>
+    <bpforms:CMPictureForm>
+      <bpforms:plugins>
+        <ui:AddItemsPlugin recursive="true">
+          <ui:items>
+            <cat:ReferrerImageListWrapper/>
+          </ui:items>
+          <ui:after>
+            <Component itemId="{CMPictureForm.COPYRIGHT_FORM_ITEM_ID}"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </bpforms:plugins>
+    </bpforms:CMPictureForm>
 
-      <bpforms:CMVideoForm>
-        <bpforms:plugins>
-          <ui:AddItemsPlugin recursive="true">
-            <ui:items>
-              <cat:ReferrerImageListWrapper/>
-            </ui:items>
-            <ui:after>
-              <Component itemId="{CMVideoForm.COPYRIGHT_FORM_ITEM_ID}"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </bpforms:plugins>
-      </bpforms:CMVideoForm>
+    <bpforms:CMVideoForm>
+      <bpforms:plugins>
+        <ui:AddItemsPlugin recursive="true">
+          <ui:items>
+            <cat:ReferrerImageListWrapper/>
+          </ui:items>
+          <ui:after>
+            <Component itemId="{CMVideoForm.COPYRIGHT_FORM_ITEM_ID}"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </bpforms:plugins>
+    </bpforms:CMVideoForm>
 
-      <editor:TabbedDocumentFormDispatcher>
-        <editor:plugins>
-          <editor:AddTabbedDocumentFormsPlugin>
-            <editor:documentTabPanels>
-              <cat:CMProductForm itemId="CMProduct"/>
-              <cat:CMCategoryForm itemId="CMCategory"/>
-            </editor:documentTabPanels>
-          </editor:AddTabbedDocumentFormsPlugin>
-        </editor:plugins>
-      </editor:TabbedDocumentFormDispatcher>
+    <editor:TabbedDocumentFormDispatcher>
+      <editor:plugins>
+        <editor:AddTabbedDocumentFormsPlugin>
+          <editor:documentTabPanels>
+            <cat:CMProductForm itemId="CMProduct"/>
+            <cat:CMCategoryForm itemId="CMCategory"/>
+          </editor:documentTabPanels>
+        </editor:AddTabbedDocumentFormsPlugin>
+      </editor:plugins>
+    </editor:TabbedDocumentFormDispatcher>
 
-      <editor:CollectionView>
-        <editor:plugins>
-          <cat:CatalogLibraryPlugin/>
-        </editor:plugins>
-      </editor:CollectionView>
+    <editor:CollectionView>
+      <editor:plugins>
+        <cat:CatalogLibraryPlugin/>
+      </editor:plugins>
+    </editor:CollectionView>
 
-      <editor:SearchFilters>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <cat:LostandfoundFilterFieldset/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:SearchFilters>
-    </local:rules>
+    <editor:SearchFilters>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <cat:LostandfoundFilterFieldset/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:SearchFilters>
+  </local:rules>
 
-    <local:configuration>
-      <editor:ConfigureDocumentTypes names="CMCategory,CMProduct"
-                                     mayCreate="{mayCreate}"/>
+  <local:configuration>
+    <editor:ConfigureDocumentTypes names="CMCategory,CMProduct"
+                                   mayCreate="{mayCreate}"/>
 
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.catalog.studio.CatalogStudioPlugin')}"/>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.validation.Validators')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.catalog.studio.CatalogValidator')}"/>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.actions.Actions')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.catalog.studio.actions.CatalogActions')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.catalog.studio.CatalogStudioPlugin')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.validation.Validators')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.catalog.studio.CatalogValidator')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.actions.Actions')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.catalog.studio.actions.CatalogActions')}"/>
 
-      <editor:RegisterLibraryTreeFilter filter="{new EcCatalogTreeFilter('Products')}"/>
-      <editor:RegisterLibraryTreeFilter filter="{new DeletedContentCatalogTreeFilter()}"/>
+    <editor:RegisterLibraryTreeFilter filter="{new EcCatalogTreeFilter('Products')}"/>
+    <editor:RegisterLibraryTreeFilter filter="{new DeletedContentCatalogTreeFilter()}"/>
 
-    </local:configuration>
+  </local:configuration>
 
-  
+
 </local:CatalogStudioPluginBase>

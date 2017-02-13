@@ -10,13 +10,11 @@
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-
     public static const xtype:String = "com.coremedia.blueprint.studio.config.dataDocumentForm";
 
     private var config:DataDocumentForm;
 
     public native function DataDocumentForm(config:DataDocumentForm = null);
-
     ]]></fx:Script>
   <fx:Declarations>
     <!--- The title to apply to the collapsible group -->
@@ -30,13 +28,13 @@
 
   </fx:Declarations>
 
-    <editor:items>
-      <editor:BlobPropertyField propertyName="data"
-                                hideLabel="true"
-                                helpText="{config.helpText}"/>
-      <Component height="6"/>
-      <editor:StringPropertyField propertyName="dataUrl"
-                                  fieldLabel="{config.dataUrlLabel}"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:BlobPropertyField propertyName="data"
+                              hideLabel="true"
+                              helpText="{config.helpText}"/>
+    <Component height="6"/>
+    <editor:StringPropertyField propertyName="dataUrl"
+                                fieldLabel="{config.dataUrlLabel}"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

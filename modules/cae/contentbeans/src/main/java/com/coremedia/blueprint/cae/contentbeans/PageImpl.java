@@ -11,12 +11,14 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +29,7 @@ public class PageImpl extends AbstractPageImpl implements Page {
   private TreeRelation<Content> contentTreeRelation;
   private ContentBeanFactory contentBeanFactory;
   private DataViewFactory dataViewFactory;
+  private User developer;
 
   /**
    * Do not call this constructor yourself, this is only for {@link com.coremedia.objectserver.dataviews.DataView} usage,
@@ -78,6 +81,21 @@ public class PageImpl extends AbstractPageImpl implements Page {
    */
   public void setContentTreeRelation(TreeRelation<Content> contentTreeRelation) {
     this.contentTreeRelation = contentTreeRelation;
+  }
+
+  /**
+   * Set a developer.
+   * <p>
+   * Some Blueprint features support developer's work in progress, which
+   * becomes effective by this property.
+   * <p>
+   * Should be used only in preview applications.
+   */
+  public void setDeveloper(@Nullable User developer) {
+    this.developer = developer;
+    if (developer!=null) {
+      setDeveloperMode(true);
+    }
   }
 
   @Override
@@ -133,12 +151,13 @@ public class PageImpl extends AbstractPageImpl implements Page {
       return false;
     }
     PageImpl page = (PageImpl) o;
-    return Objects.equals(contentTreeRelation, page.contentTreeRelation);
+    return Objects.equals(contentTreeRelation, page.contentTreeRelation) &&
+           Objects.equals(developer, page.developer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), contentTreeRelation);
+    return Objects.hash(super.hashCode(), contentTreeRelation, developer);
   }
 
   @Override
@@ -148,13 +167,14 @@ public class PageImpl extends AbstractPageImpl implements Page {
     contentTreeRelation = other.contentTreeRelation;
     contentBeanFactory = other.contentBeanFactory;
     dataViewFactory = other.dataViewFactory;
+    developer = other.developer;
   }
 
 
   // --- internal ---------------------------------------------------
 
   private List<?> codeResourcesAsBeans(String codePropertyName, String htmlMode) {
-    CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(getContext().getContent(), codePropertyName, isDeveloperMode(), contentTreeRelation);
+    CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(getContext().getContent(), codePropertyName, isDeveloperMode(), contentTreeRelation, developer);
     CodeResourcesModel codeResourcesModel = getCache().get(cacheKey).getModel(htmlMode);
     return codeResourcesModelToBeans(codeResourcesModel);
   }

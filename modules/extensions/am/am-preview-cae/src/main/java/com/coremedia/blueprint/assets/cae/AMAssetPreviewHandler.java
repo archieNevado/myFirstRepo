@@ -13,6 +13,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.beans.UnexpectedBeanTypeException;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
@@ -99,7 +100,7 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
       if (null != downloadPortalContent) {
         try {
           CMChannel downloadPortalChannel = contentBeanFactory.createBeanFor(downloadPortalContent, CMChannel.class);
-          return asPage(downloadPortalChannel, downloadPortalChannel);
+          return asPage(downloadPortalChannel, downloadPortalChannel, UserVariantHelper.getUser(request));
         } catch (IllegalArgumentException | UnexpectedBeanTypeException e) {
           LOG.info("Could not create Download Portal page from content with id {}.", downloadPortalContent.getId(), e);
         }
@@ -108,7 +109,7 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
       } else if (rootDocument != null) {
         try {
           CMChannel rootChannel = contentBeanFactory.createBeanFor(rootDocument, CMChannel.class);
-          return asPage(rootChannel, rootChannel);
+          return asPage(rootChannel, rootChannel, UserVariantHelper.getUser(request));
         } catch (IllegalArgumentException | UnexpectedBeanTypeException e) {
           LOG.info("Could not create root page from content with id {}.", rootDocument.getId(), e);
         }

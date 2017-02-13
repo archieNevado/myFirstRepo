@@ -21,10 +21,10 @@
     <fx:String id="title"/>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:BlobPropertyField bindTo="{config.bindTo}"
-                                hideLabel="true"
-                                propertyName="{config.propertyName}"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:BlobPropertyField bindTo="{config.bindTo}"
+                              hideLabel="true"
+                              propertyName="{config.propertyName}"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

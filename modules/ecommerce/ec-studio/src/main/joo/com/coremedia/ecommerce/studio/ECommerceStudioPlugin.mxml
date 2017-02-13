@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
-
-  <!-- Extend the standard Studio and Blueprint components for Live Context --><local:ECommerceStudioPluginBase
-                xmlns:fx="http://ns.adobe.com/mxml/2009"
-                xmlns:local="com.coremedia.ecommerce.studio.*"
-                xmlns:exml="http://www.jangaroo.net/exml/0.8"
-                xmlns="exml:ext.config"
-                xmlns:ui="exml:com.coremedia.ui.config"
-                xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
-                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
+<!-- Extend the standard Studio and Blueprint components for Live Context -->
+<local:ECommerceStudioPluginBase
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.ecommerce.studio.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.cms.editor.ContentTypes')]
     [ResourceBundle('com.coremedia.cms.editor.sdk.validation.Validators')]
@@ -79,65 +79,68 @@
     public native function ECommerceStudioPlugin(config:ECommerceStudioPlugin = null);
     ]]></fx:Script>
 
-    <local:rules>
+  <local:rules>
 
-      <editor:CollectionView>
-        <editor:plugins>
-          <ec:ECommerceLibraryPlugin/>
-        </editor:plugins>
-      </editor:CollectionView>
+    <editor:CollectionView>
+      <editor:plugins>
+        <ec:ECommerceLibraryPlugin/>
+      </editor:plugins>
+    </editor:CollectionView>
 
-      <!--Show the commerce store for the preferred site-->
-      <editor:HeaderToolbarUserMenu>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <DisplayField fieldLabel="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'HeaderToolbar_commerceStore_label')}"
-                            labelAlign="top"
-                            labelSeparator="">
-                <mixins>
-                  <ui:BEMMixin bemElement="{HeaderToolbarUserMenu.ELEMENT_FIELD}" />
-                </mixins>
-                <plugins>
-                  <ui:BindPropertyPlugin bindTo="{getShopExpression()}"/>
-                  <ui:BindVisibilityPlugin bindTo="{getShopExpression()}"/>
-                </plugins>
-              </DisplayField>
-            </ui:items>
-            <ui:after>
-              <Component itemId="{HeaderToolbarUserMenu.SITE_SELECTOR_ITEM_ID}"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:HeaderToolbarUserMenu>
+    <!--Show the commerce store for the preferred site-->
+    <editor:HeaderToolbarUserMenu>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <DisplayField
+                    fieldLabel="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'HeaderToolbar_commerceStore_label')}"
+                    labelAlign="top"
+                    labelSeparator="">
+              <mixins>
+                <ui:BEMMixin bemElement="{HeaderToolbarUserMenu.ELEMENT_FIELD}"/>
+              </mixins>
+              <plugins>
+                <ui:BindPropertyPlugin bindTo="{getShopExpression()}"/>
+                <ui:BindVisibilityPlugin bindTo="{getShopExpression()}"/>
+              </plugins>
+            </DisplayField>
+          </ui:items>
+          <ui:after>
+            <Component itemId="{HeaderToolbarUserMenu.SITE_SELECTOR_ITEM_ID}"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:HeaderToolbarUserMenu>
 
-      <editor:PreferenceWindow>
-        <editor:plugins>
-          <ec:CatalogPreferenceWindowPlugin/>
-        </editor:plugins>
-      </editor:PreferenceWindow>
+    <editor:PreferenceWindow>
+      <editor:plugins>
+        <ec:CatalogPreferenceWindowPlugin/>
+      </editor:plugins>
+    </editor:PreferenceWindow>
 
-    </local:rules>
+  </local:rules>
 
-    <local:configuration>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin')}"/>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.validation.Validators')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin')}"/>
+  <local:configuration>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.validation.Validators')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin')}"/>
 
-      <editor:RegisterRestResource beanClass="{CategoryImpl}"/>
-      <editor:RegisterRestResource beanClass="{StoreImpl}"/>
-      <editor:RegisterRestResource beanClass="{ProductImpl}"/>
-      <editor:RegisterRestResource beanClass="{ProductVariantImpl}"/>
-      <editor:RegisterRestResource beanClass="{SegmentImpl}"/>
-      <editor:RegisterRestResource beanClass="{SegmentsImpl}"/>
-      <editor:RegisterRestResource beanClass="{ContractImpl}"/>
-      <editor:RegisterRestResource beanClass="{ContractsImpl}"/>
-      <editor:RegisterRestResource beanClass="{WorkspaceImpl}"/>
-      <editor:RegisterRestResource beanClass="{WorkspacesImpl}"/>
-      <editor:RegisterRestResource beanClass="{MarketingSpotImpl}"/>
-      <editor:RegisterRestResource beanClass="{MarketingImpl}"/>
-    </local:configuration>
+    <editor:RegisterRestResource beanClass="{CategoryImpl}"/>
+    <editor:RegisterRestResource beanClass="{StoreImpl}"/>
+    <editor:RegisterRestResource beanClass="{ProductImpl}"/>
+    <editor:RegisterRestResource beanClass="{ProductVariantImpl}"/>
+    <editor:RegisterRestResource beanClass="{SegmentImpl}"/>
+    <editor:RegisterRestResource beanClass="{SegmentsImpl}"/>
+    <editor:RegisterRestResource beanClass="{ContractImpl}"/>
+    <editor:RegisterRestResource beanClass="{ContractsImpl}"/>
+    <editor:RegisterRestResource beanClass="{WorkspaceImpl}"/>
+    <editor:RegisterRestResource beanClass="{WorkspacesImpl}"/>
+    <editor:RegisterRestResource beanClass="{MarketingSpotImpl}"/>
+    <editor:RegisterRestResource beanClass="{MarketingImpl}"/>
+  </local:configuration>
 
-  
+
 </local:ECommerceStudioPluginBase>

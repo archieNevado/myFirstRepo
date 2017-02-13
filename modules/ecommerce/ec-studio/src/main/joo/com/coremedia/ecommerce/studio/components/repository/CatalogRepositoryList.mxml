@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <local:CatalogRepositoryListBase
-  xmlns:fx="http://ns.adobe.com/mxml/2009"
-  xmlns:local="com.coremedia.ecommerce.studio.components.repository.*"
-  xmlns:exml="http://www.jangaroo.net/exml/0.8"
-  xmlns="exml:ext.config"
-  xmlns:ui="exml:com.coremedia.ui.config"
-  xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
-  xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-  emptyText="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_empty_text')}"
-  selectedItemsValueExpression="{createSelectedItemsValueExpression()}"
-  header="{false}"
-  ddGroup="ContentDD">
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.ecommerce.studio.components.repository.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        emptyText="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_empty_text')}"
+        selectedItemsValueExpression="{createSelectedItemsValueExpression()}"
+        header="{false}"
+        ddGroup="ContentDD">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.cms.editor.sdk.columns.grid.GridColumns')]
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
@@ -34,55 +34,58 @@
     public native function CatalogRepositoryList(config:CatalogRepositoryList = null);
     ]]></fx:Script>
 
-    <local:plugins exml:mode="prepend">
-      <ui:BindListPlugin bindTo="{getCatalogItemsValueExpression()}">
-        <ui:fields>
-          <ui:DataField name="type"
-                        mapping=""
-                        convert_="{AugmentationUtil.getTypeLabel}"/>
-          <ui:DataField name="typeCls"
-                        mapping=""
-                        convert_="{AugmentationUtil.getTypeCls}"/>
-          <ui:DataField name="id"
-                        mapping="externalId"/>
-          <ui:DataField name="name"
-                        mapping=""
-                        convert_="{catalogHelper.getDecoratedName}"/>
-          <ui:DataField name="description"
-                        mapping="shortDescription"
-                        convert_="{function(v:String, catalogObject:CatalogObject):String {
+  <local:plugins exml:mode="prepend">
+    <ui:BindListPlugin bindTo="{getCatalogItemsValueExpression()}">
+      <ui:fields>
+        <ui:DataField name="type"
+                      mapping=""
+                      convert_="{AugmentationUtil.getTypeLabel}"/>
+        <ui:DataField name="typeCls"
+                      mapping=""
+                      convert_="{AugmentationUtil.getTypeCls}"/>
+        <ui:DataField name="id"
+                      mapping="externalId"/>
+        <ui:DataField name="name"
+                      mapping=""
+                      convert_="{catalogHelper.getDecoratedName}"/>
+        <ui:DataField name="description"
+                      mapping="shortDescription"
+                      convert_="{function(v:String, catalogObject:CatalogObject):String {
                           return RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription());}}"/>
-        </ui:fields>
-      </ui:BindListPlugin>
-      <ui:ContextMenuPlugin>
-        <ui:contextMenu>
-          <ec:CatalogRepositoryContextMenu selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
-        </ui:contextMenu>
-      </ui:ContextMenuPlugin>
-    </local:plugins>
-    <local:columns>
-      <editor:TypeIconColumn showTypeName="true"
-                             width="125"/>
-      <GridColumn header="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'id_header')}"
-                  stateId="id"
-                  dataIndex="id"
-                  sortable="true"
-                  hideable="false"
-                  menuDisabled="true"
-                  width="125"/>
-      <GridColumn header="{resourceManager.getString('com.coremedia.cms.editor.sdk.columns.grid.GridColumns', 'name_header')}"
-                  stateId="name"
-                  dataIndex="name"
-                  sortable="true"
-                  hideable="false"
-                  menuDisabled="true"
-                  width="200"/>
-      <GridColumn header="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'description_header')}"
-                  stateId="description"
-                  dataIndex="description"
-                  hideable="false"
-                  menuDisabled="true"
-                  flex="1"/>
-    </local:columns>
+      </ui:fields>
+    </ui:BindListPlugin>
+    <ui:ContextMenuPlugin>
+      <ui:contextMenu>
+        <ec:CatalogRepositoryContextMenu selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
+      </ui:contextMenu>
+    </ui:ContextMenuPlugin>
+  </local:plugins>
+  <local:columns>
+    <editor:TypeIconColumn showTypeName="true"
+                           width="125"/>
+    <GridColumn
+            header="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'id_header')}"
+            stateId="id"
+            dataIndex="id"
+            sortable="true"
+            hideable="false"
+            menuDisabled="true"
+            width="125"/>
+    <GridColumn
+            header="{resourceManager.getString('com.coremedia.cms.editor.sdk.columns.grid.GridColumns', 'name_header')}"
+            stateId="name"
+            dataIndex="name"
+            sortable="true"
+            hideable="false"
+            menuDisabled="true"
+            width="200"/>
+    <GridColumn
+            header="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'description_header')}"
+            stateId="description"
+            dataIndex="description"
+            hideable="false"
+            menuDisabled="true"
+            flex="1"/>
+  </local:columns>
 
-  </local:CatalogRepositoryListBase>
+</local:CatalogRepositoryListBase>

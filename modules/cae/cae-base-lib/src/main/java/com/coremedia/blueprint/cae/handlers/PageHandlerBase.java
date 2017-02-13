@@ -16,6 +16,7 @@ import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.beans.factory.BeanFactory;
@@ -40,7 +41,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.
  */
 public abstract class PageHandlerBase extends HandlerBase implements BeanFactoryAware {
 
-  private static final String DEFAULT_VANITY_NAME = "-";
   private static final String CMPAGE_PROTOTYPE_BEAN_NAME = "cmPage";
 
   private BeanFactory beanFactory;
@@ -50,7 +50,6 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
   private SitesService sitesService;
   private ContentBeanFactory contentBeanFactory;
 
-  private boolean developerModeEnabled;
   private Cache cache;
 
 
@@ -69,11 +68,6 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
   @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
     this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
-  }
-
-  @Required
-  public void setDeveloperModeEnabled(boolean developerModeEnabled) {
-    this.developerModeEnabled = developerModeEnabled;
   }
 
   @Required
@@ -106,10 +100,6 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
     return contentBeanFactory;
   }
 
-  protected boolean getDeveloperModeEnabled() {
-    return developerModeEnabled;
-  }
-
   protected NavigationSegmentsUriHelper getNavigationSegmentsUriHelper() {
     return navigationSegmentsUriHelper;
   }
@@ -122,12 +112,25 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
     return contentLinkBuilder;
   }
 
-  protected Page asPage(Navigation context, Linkable content) {
-    return asPage(context, content, null);
+  /**
+   * Create a page.
+   * <p>
+   * Consider the developer's work in progress for particular features.
+   */
+  protected Page asPage(Navigation context, Linkable content, @Nullable User developer) {
+    return asPage(context, content, null, developer);
   }
 
-  protected Page asPage(Navigation context, Linkable content, TreeRelation<Content> treeRelation) {
-    PageImpl page = createPageImpl(content, context);
+  /**
+   * Create a page with a non-default navigation tree relation.
+   * <p>
+   * Consider the developer's work in progress for particular features.
+   */
+  protected Page asPage(Navigation context,
+                        Linkable content,
+                        @Nullable TreeRelation<Content> treeRelation,
+                        @Nullable User developer) {
+    PageImpl page = createPageImpl(content, context, developer);
     page.setTitle(content.getTitle());
     page.setDescription(page.getTitle());
     page.setKeywords(content.getKeywords());
@@ -148,10 +151,16 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
     return page;
   }
 
-  protected PageImpl createPageImpl(Object content, Navigation context) {
+  /**
+   * Create a page.
+   * <p>
+   * Consider the developer's work in progress for particular features.
+   */
+  protected PageImpl createPageImpl(Object content, Navigation context, User developer) {
     PageImpl page = beanFactory.getBean(CMPAGE_PROTOTYPE_BEAN_NAME, PageImpl.class);
     page.setContent(content);
     page.setNavigation(context);
+    page.setDeveloper(developer);
     return page;
   }
 

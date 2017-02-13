@@ -33,33 +33,33 @@
     public var searchResultHitsValueExpression:ValueExpression;
     ]]></fx:Script>
 
-    <items>
-      <Panel itemId="{THUMB_DATA_VIEW_PANEL_ITEM_ID}"
-             bodyBorder="false"
-             scrollable="true"
-             region="center"
-             ui="{PanelSkin.EMBEDDED.getSkin()}"
-             layout="anchor">
-        <header>
-          <Header height="24px"/>
-        </header>
-        <items>
-          <ec:CatalogThumbDataView itemId="{THUMB_DATA_VIEW_ITEM_ID}"
-                                   bindTo="{config.searchResultHitsValueExpression}"
-                                   emptyText="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'CollectionView_emptySearch_text')}"
-                                   selectedItemsValueExpression="{config.selectedItemsValueExpression}"
-                                   initialViewLimit="50"
-                                   viewLimitIncrement="100">
-            <ec:plugins exml:mode="append">
-              <ui:ContextMenuPlugin>
-                <ui:contextMenu>
-                  <ec:CatalogSearchContextMenu/>
-                </ui:contextMenu>
-              </ui:ContextMenuPlugin>
-            </ec:plugins>
-          </ec:CatalogThumbDataView>
-        </items>
-      </Panel>
-    </items>
-  
+  <items>
+    <Panel itemId="{THUMB_DATA_VIEW_PANEL_ITEM_ID}"
+           bodyBorder="false"
+           scrollable="true"
+           region="center"
+           ui="{PanelSkin.EMBEDDED.getSkin()}"
+           layout="anchor">
+      <header>
+        <Header height="24px"/>
+      </header>
+      <items>
+        <ec:CatalogThumbDataView itemId="{THUMB_DATA_VIEW_ITEM_ID}"
+                                 bindTo="{config.searchResultHitsValueExpression}"
+                                 emptyText="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'CollectionView_emptySearch_text')}"
+                                 selectedItemsValueExpression="{config.selectedItemsValueExpression}"
+                                 initialViewLimit="50"
+                                 viewLimitIncrement="100">
+          <ec:plugins exml:mode="append">
+            <ui:ContextMenuPlugin>
+              <ui:contextMenu>
+                <ec:CatalogSearchContextMenu/>
+              </ui:contextMenu>
+            </ui:ContextMenuPlugin>
+          </ec:plugins>
+        </ec:CatalogThumbDataView>
+      </items>
+    </Panel>
+  </items>
+
 </Container>

@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 /**
  * Initializes the StoreContextProvider according to the current request.
@@ -95,12 +96,18 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
 
   private void prepareCommerceConnection(@Nonnull Site site, @Nonnull HttpServletRequest request) {
     try {
-      CommerceConnection commerceConnection = getCommerceConnectionWithConfiguredStoreContext(site, request);
-      Commerce.setCurrentConnection(commerceConnection);
+      Optional<CommerceConnection> commerceConnection = getCommerceConnectionWithConfiguredStoreContext(site, request);
+
+      if (!commerceConnection.isPresent()) {
+        return;
+      }
+
+      Commerce.setCurrentConnection(commerceConnection.get());
+
       request.setAttribute(STORE_CONTEXT_INITIALIZED, true);
 
       if (initUserContext) {
-        initUserContext(commerceConnection, request);
+        initUserContext(commerceConnection.get(), request);
       }
     } catch (CommerceException e) {
       LOG.debug("No commerce connection found for site '{}'.", site.getName(), e);
@@ -141,19 +148,26 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   // --- basics, suitable for most extending classes ----------------
 
   @Nonnull
-  protected CommerceConnection getCommerceConnectionWithConfiguredStoreContext(@Nonnull Site site,
-                                                                               @Nonnull HttpServletRequest request) {
-    // connection is supposed to be a prototype
-    CommerceConnection commerceConnection = commerceConnectionInitializer.getCommerceConnectionForSite(site);
+  protected Optional<CommerceConnection> getCommerceConnectionWithConfiguredStoreContext(
+          @Nonnull Site site, @Nonnull HttpServletRequest request) {
+    Optional<CommerceConnection> connection = commerceConnectionInitializer.findConnectionForSite(site);
 
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    // The commerce connection is supposed to be prototype-scoped (i.e.
+    // a new instance is created every time the bean is requested).
+    // Thus, fiddling with it here should be fine (although it would be
+    // better to avoid that).
 
-    // configure store context for preview and workspace
-    if (preview) {
-      prepareStoreContextForPreview(request, storeContext);
+    if (!connection.isPresent()) {
+      LOG.debug("Site '{}' has no commerce connection.", site.getName());
+      return Optional.empty();
     }
 
-    return commerceConnection;
+    if (preview) {
+      // configure store context for preview and workspace
+      prepareStoreContextForPreview(request, connection.get().getStoreContext());
+    }
+
+    return connection;
   }
 
   private static void prepareStoreContextForPreview(@Nonnull HttpServletRequest request,

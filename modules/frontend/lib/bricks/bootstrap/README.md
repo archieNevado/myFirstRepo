@@ -1,6 +1,6 @@
 # CoreMedia Blueprint
 
-## Twitter Bootstrap Brick for version 3.3.6
+## Twitter Bootstrap Brick for version 3.3.7
 
 This brick adds support for [Twitter Bootstrap](http://getbootstrap.com/). By loading this brick it will extend your theme with:
 
@@ -17,16 +17,16 @@ In addition, this brick comes with templates for rendering items as a:
 
 #### Loading the Brick
 
-Just add following line to your Gruntfile.js to load the brick.
+Just add following config to your Gruntfile.js to load the brick.
 
 ```
-    // Load the "bootstrap" brick
-    utils.loadBrick(grunt, "bootstrap");
-```
-
-If you want to load multiple bricks, you may also use the following syntax:
-```
-    utils.loadBricks(grunt, [..., "bootstrap", ...]);
+    // load bricks into theme
+    bricks: {
+      src: [
+        'bootstrap',
+        ...
+      ]
+    }
 ```
 
 #### Using the Carousel

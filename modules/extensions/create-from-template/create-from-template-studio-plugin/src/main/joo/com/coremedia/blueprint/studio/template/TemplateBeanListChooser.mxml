@@ -9,6 +9,7 @@
   <fx:Script><![CDATA[
     public static const xtype:String = "com.coremedia.blueprint.studio.template.TemplateBeanListChooser";
     private var config:TemplateBeanListChooser;
+
     public native function TemplateBeanListChooser(config:TemplateBeanListChooser = null);
     ]]></fx:Script>
 

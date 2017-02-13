@@ -12,7 +12,6 @@
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-
     /**
      * Workaround to eliminate the false browser calculated height.
      */
@@ -26,14 +25,14 @@
     public native function DetailsDocumentForm(config:DetailsDocumentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:StringPropertyField propertyName="title"/>
-      <editor:RichTextPropertyField bindTo="{config.bindTo}"
-                                    propertyName="detailText"
-                                    initialHeight="200"/>
-    </editor:items>
-    <editor:plugins exml:mode="append">
-      <ui:BEMPlugin block="{DetailsDocumentForm.DETAILS_DOCUMENT_FORM_BLOCK}"
-                    defaultElement="{DetailsDocumentForm.DETAILS_DOCUMENT_FORM_ELEMENT}"/>
-    </editor:plugins>
+  <editor:items>
+    <editor:StringPropertyField propertyName="title"/>
+    <editor:RichTextPropertyField bindTo="{config.bindTo}"
+                                  propertyName="detailText"
+                                  initialHeight="200"/>
+  </editor:items>
+  <editor:plugins exml:mode="append">
+    <ui:BEMPlugin block="{DetailsDocumentForm.DETAILS_DOCUMENT_FORM_BLOCK}"
+                  defaultElement="{DetailsDocumentForm.DETAILS_DOCUMENT_FORM_ELEMENT}"/>
+  </editor:plugins>
 </editor:PropertyFieldGroup>

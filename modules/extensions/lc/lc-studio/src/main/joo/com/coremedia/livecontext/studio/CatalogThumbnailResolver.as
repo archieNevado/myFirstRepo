@@ -21,7 +21,7 @@ public class CatalogThumbnailResolver implements ThumbnailResolver {
     return docType;
   }
 
-  public function getThumbnail(model:Object, operations:String):Object {
+  public function getThumbnail(model:Object, operations:String = null):Object {
     if(model as Content) {
       return renderLiveContextPreview(model as Content);
     }

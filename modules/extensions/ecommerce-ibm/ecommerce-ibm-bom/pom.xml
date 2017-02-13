@@ -48,11 +48,6 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>lc-ecommerce-ibm-es-cae-component</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>lc-test-data</artifactId>
         <version>${project.version}</version>
         <classifier>content</classifier>

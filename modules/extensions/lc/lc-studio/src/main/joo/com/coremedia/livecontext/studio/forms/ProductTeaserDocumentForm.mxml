@@ -24,22 +24,23 @@
     public native function ProductTeaserDocumentForm(config:ProductTeaserDocumentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:StringPropertyField propertyName="teaserTitle"
-                                  itemId="teaserTitle">
-        <editor:plugins exml:mode="append">
-          <editor:StringPropertyFieldDelegatePlugin delegateExpression="{CatalogHelper.getInstance().getProductPropertyExpression(config.bindTo, CatalogObjectPropertyNames.NAME)}"/>
-        </editor:plugins>
-      </editor:StringPropertyField>
-      <editor:TextAreaPropertyField propertyName="teaserText"
-                                    itemId="teaserText"
-                                    changeBuffer="1000">
-        <editor:plugins exml:mode="append">
-          <editor:TextAreaPropertyFieldDelegatePlugin delegateExpression="{ValueExpressionFactory.createTransformingValueExpression(
+  <editor:items>
+    <editor:StringPropertyField propertyName="teaserTitle"
+                                itemId="teaserTitle">
+      <editor:plugins exml:mode="append">
+        <editor:StringPropertyFieldDelegatePlugin
+                delegateExpression="{CatalogHelper.getInstance().getProductPropertyExpression(config.bindTo, CatalogObjectPropertyNames.NAME)}"/>
+      </editor:plugins>
+    </editor:StringPropertyField>
+    <editor:TextAreaPropertyField propertyName="teaserText"
+                                  itemId="teaserText"
+                                  changeBuffer="1000">
+      <editor:plugins exml:mode="append">
+        <editor:TextAreaPropertyFieldDelegatePlugin delegateExpression="{ValueExpressionFactory.createTransformingValueExpression(
           CatalogHelper.getInstance().getProductPropertyExpression(config.bindTo, ProductPropertyNames.SHORT_DESC),
           RichTextPlainTextTransformer.convertToPlainText)}"/>
-        </editor:plugins>
-      </editor:TextAreaPropertyField>
-    </editor:items>
-  
+      </editor:plugins>
+    </editor:TextAreaPropertyField>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

@@ -10,8 +10,6 @@
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
   <fx:Script><![CDATA[
-    public static const EXTERNAL_PREVIEW_TOOLBAR_SEP_ITEM_ID:String = "externalPreviewToolbarSeparator";
-
     private var config:AddExternalPreviewButtonPlugin;
 
     public native function AddExternalPreviewButtonPlugin(config:AddExternalPreviewButtonPlugin = null);
@@ -20,15 +18,12 @@
   <ui:rules>
     <editor:PreviewPanelToolbar>
       <editor:plugins>
-        <ui:AddItemsPlugin>
+        <ui:AddItemsPlugin recursive="true">
           <ui:items>
-            <TbSeparator itemId="{EXTERNAL_PREVIEW_TOOLBAR_SEP_ITEM_ID}"
-                         hidden="true"/>
             <ep:ExternalPreviewButton/>
           </ui:items>
           <ui:before>
-            <Component itemId="{PreviewPanelToolbar.SEND_LINK_BUTTON_ITEM_ID}"/>
-            <Component itemId="bookmarkPreviewToolbarSeparator"/>
+            <Component itemId="{PreviewPanelToolbar.SEND_LINK_MENU_ITEM_ID}"/>
           </ui:before>
         </ui:AddItemsPlugin>
       </editor:plugins>

@@ -73,6 +73,10 @@ public abstract class AbstractPageImpl implements AbstractPage, AssumesIdentity 
     setContent(content);
   }
 
+  void setDeveloperMode(boolean developerMode) {
+    this.developerMode = developerMode;
+  }
+
   public void setNavigation(Navigation navigation) {
     checkArgument(navigation!=null, "navigation parameter is null");
     // Make sure to not use a DataView instance here but the original bean.

@@ -1,13 +1,13 @@
 Developmnent Application Configuration
 --------------------------------------
 
-The `default` folder contains `application.properties` files for each webapp started with `mvn tomcat7:run` or `mvn tomcat7:run-war`. By
+The `default` folder contains `application.properties` files for each webapp started with `mvn tomcat7:run`. By
 default it is expected that all services and its dependencies run locally on the developers workstation. 
 
-The propertyfiles are being passed to the tomcat instances by using the `propertieslocations` system property. 
+The property files are being passed to the Tomcat instances by using the `propertieslocations` system property. 
 
 ### Virtualized Setup
-If you like to virtualize the whole or parts of your deployment, it is recommended to use testkitchen to boostrap a VirtualBox. 
+If you like to virtualize the whole or parts of your deployment, it is recommended to use Test Kitchen to boostrap a VirtualBox. 
 You'll find the setup below the `<WORKSPACE_ROOT>/deployment/chef` folder. By default, the system will be deployed with 
 an IP: `192.168.252.100` and as a hostname we use the http://xip.io dns and the generic hostname `192.168.252.100.xip.io`. 
 To start webapps like studio, preview-cae or live-cae against that virtualized system, all you need to do is set the java 

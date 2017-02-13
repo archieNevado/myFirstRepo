@@ -76,6 +76,10 @@
 </StructListProperty>
 <StructListProperty Name="CMImageMap">
 <Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
+<Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>

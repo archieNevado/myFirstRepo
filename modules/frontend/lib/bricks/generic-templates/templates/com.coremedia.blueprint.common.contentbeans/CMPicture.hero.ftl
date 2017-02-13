@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMTeasable" -->
 
+<#-- same as CMTeasable.hero.ftl but without a link. -->
 <#assign additionalClass=cm.localParameters().additionalClass!"cm-hero" />
 
 <#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />

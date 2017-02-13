@@ -16,11 +16,10 @@
 
   <modules>
     <module>blueprint-forms</module>
+    <module>blueprint-studio-theme</module>
     <module>controlroom-studio-plugin</module>
     <module>studio-app</module>
     <module>studio-webapp</module>
-    <module>studio-styleguide-components</module>
-    <module>studio-styleguide-app</module>
     <module>studio-remote-packages</module>
   </modules>
 

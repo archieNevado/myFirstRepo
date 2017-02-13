@@ -13,9 +13,9 @@ $cm-hero-picture-background-color: $brand-primary;
 
 .#{$cm-hero-prefix} {
   &__play {
-    transform: translate(-50%, -90%); // a little higher for spacing
+    transform: translate(50%, 90%); // a little higher for spacing
     @include breakpoint(xs) {
-      transform: translate(-50%, -110%);
+      transform: translate(50%, 110%);
     }
   }
 }

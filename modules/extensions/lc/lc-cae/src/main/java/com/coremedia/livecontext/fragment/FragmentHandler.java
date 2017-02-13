@@ -12,6 +12,7 @@ import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
+import com.coremedia.cap.user.User;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -53,22 +54,24 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
   @Nonnull
   protected ModelAndView createModelAndView(
           @Nonnull Navigation navigation,
-          @Nullable String view) {
-    return createModelAndView(asPage(navigation, navigation), view);
+          @Nullable String view,
+          @Nullable User developer) {
+    return createModelAndView(asPage(navigation, navigation, developer), view);
   }
 
   @Nonnull
   protected ModelAndView createFragmentModelAndView(
           @Nonnull Navigation navigation,
           @Nullable String view,
-          @Nonnull CMChannel rootChannel) {
+          @Nonnull CMChannel rootChannel,
+          @Nullable User developer) {
     CMContext context = navigation.getContext();
     if (context != null) {
-      return createModelAndView(asPage(context, context, navigation.getCodeResourcesTreeRelation()), view);
+      return createModelAndView(asPage(context, context, navigation.getCodeResourcesTreeRelation(), developer), view);
     }
 
     LOG.info("Could not find a content based context for category '{}'. Will use the root channel instead.", navigation.getTitle());
-    return createModelAndView(asPage(rootChannel, rootChannel), view);
+    return createModelAndView(asPage(rootChannel, rootChannel, developer), view);
   }
 
   @Nonnull
@@ -76,22 +79,23 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
           @Nonnull Navigation navigation,
           @Nonnull String placement,
           @Nullable String view,
-          @Nonnull CMChannel rootChannel) {
+          @Nonnull CMChannel rootChannel,
+          @Nullable User developer) {
     CMContext context = navigation.getContext();
     if (context instanceof CMChannel) {
-      return createModelAndViewForPlacementAndView((CMChannel) context, placement, view);
+      return createModelAndViewForPlacementAndView((CMChannel) context, placement, view, developer);
     }
 
     LOG.info("Could not find a content based context for category '{}'. Will use the root channel instead.", navigation.getTitle());
-    return createModelAndViewForPlacementAndView(rootChannel, placement, view);
+    return createModelAndViewForPlacementAndView(rootChannel, placement, view, developer);
   }
 
   @Nonnull
   protected ModelAndView createModelAndViewForPlacementAndView(
           @Nonnull CMChannel channel,
           @Nonnull String placementName,
-          @Nullable String view) {
-
+          @Nullable String view,
+          @Nullable User developer) {
     //noinspection unchecked
     if (!validationService.validate(channel)) {
       return handleInvalidLinkable(channel);
@@ -111,7 +115,7 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
       }
     }
 
-    Page page = asPage(context, context);
+    Page page = asPage(context, context, developer);
     ModelAndView modelAndView = HandlerHelper.createModelWithView(placement, view);
     RequestAttributeConstants.setPage(modelAndView, page);
     NavigationLinkSupport.setNavigation(modelAndView, channel);

@@ -47,14 +47,14 @@ public class FragmentHandlerTest {
   public void testPlacementFound() {
     when(channelBean.getContext()).thenReturn(channelBean);
     when(pageGridPlacementResolver.resolvePageGridPlacement(channelBean, PLACEMENT)).thenReturn(placement);
-    ModelAndView result = testling.createFragmentModelAndViewForPlacementAndView(channelBean, PLACEMENT, VIEW, channelBean);
+    ModelAndView result = testling.createFragmentModelAndViewForPlacementAndView(channelBean, PLACEMENT, VIEW, channelBean, null);
     assertNotNull(result);
   }
 
   @Test
   public void testInvalidChannel() {
     when(validationService.validate(channelBean)).thenReturn(false);
-    ModelAndView result = testling.createFragmentModelAndViewForPlacementAndView(channelBean, PLACEMENT, VIEW, channelBean);
+    ModelAndView result = testling.createFragmentModelAndViewForPlacementAndView(channelBean, PLACEMENT, VIEW, channelBean, null);
 
     HttpError error = (HttpError) result.getModel().get(HandlerHelper.MODEL_ROOT);
     assertEquals(HttpServletResponse.SC_NOT_FOUND, error.getErrorCode());
@@ -65,7 +65,7 @@ public class FragmentHandlerTest {
   public void testNoPlacementFound() {
     when(channelBean.getContext()).thenReturn(channelBean);
     when(pageGridPlacementResolver.resolvePageGridPlacement(channelBean, PLACEMENT)).thenReturn(null);
-    ModelAndView result = testling.createFragmentModelAndViewForPlacementAndView(channelBean, PLACEMENT, VIEW, channelBean);
+    ModelAndView result = testling.createFragmentModelAndViewForPlacementAndView(channelBean, PLACEMENT, VIEW, channelBean, null);
 
     HttpError error = (HttpError) result.getModel().get(HandlerHelper.MODEL_ROOT);
     assertEquals(HttpServletResponse.SC_NOT_FOUND, error.getErrorCode());
@@ -78,7 +78,7 @@ public class FragmentHandlerTest {
     when(pageGridPlacementResolver.resolvePageGridPlacement(channelBean, PLACEMENT)).
             thenReturn(contentBeanBackedPageGridPlacement);
     when(contentBeanBackedPageGridPlacement.getNavigation()).thenReturn(placementChannelBean);
-    ModelAndView modelAndView = testling.createModelAndViewForPlacementAndView(channelBean, PLACEMENT, null);
+    ModelAndView modelAndView = testling.createModelAndViewForPlacementAndView(channelBean, PLACEMENT, null, null);
     PageImpl page = (PageImpl) modelAndView.getModel().get("cmpage");
     assertEquals("The specific placement channel is taken for the page", placementChannelBean, page.getContent());
 
@@ -89,7 +89,7 @@ public class FragmentHandlerTest {
     when(pageGridPlacementResolver.resolvePageGridPlacement(channelBean, PLACEMENT)).
             thenReturn(contentBeanBackedPageGridPlacement);
     when(contentBeanBackedPageGridPlacement.getNavigation()).thenReturn(null);
-    ModelAndView modelAndView = testling.createModelAndViewForPlacementAndView(channelBean, PLACEMENT, null);
+    ModelAndView modelAndView = testling.createModelAndViewForPlacementAndView(channelBean, PLACEMENT, null, null);
     PageImpl page = (PageImpl) modelAndView.getModel().get("cmpage");
     assertEquals("The given channel is taken for the page because the placement does not provide a navigation",
             channelBean, page.getContent());

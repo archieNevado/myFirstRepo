@@ -1,10 +1,9 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
+import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontService;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import org.apache.http.cookie.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -18,7 +17,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -128,10 +126,10 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     boolean isGuestOrRegistered = false;
     boolean isAnonymous = false;
 
-    List<Cookie> cookies = storeFrontResponse.getCookies();
-    for (Cookie oneCookie : cookies) {
-      String name = oneCookie.getName();
-      String value = oneCookie.getValue();
+    Map<String, String> cookies = storeFrontResponse.getCookies();
+    for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+      String name = cookie.getKey();
+      String value = cookie.getValue();
       if (!isGuestOrRegistered) {
         isGuestOrRegistered = isGuestOrRegisteredUser(name, value);
       }

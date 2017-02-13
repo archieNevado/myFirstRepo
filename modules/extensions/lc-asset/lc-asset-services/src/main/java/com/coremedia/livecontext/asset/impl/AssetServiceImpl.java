@@ -2,34 +2,22 @@ package com.coremedia.livecontext.asset.impl;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.asset.AssetSearchService;
-import com.coremedia.livecontext.asset.AssetValidationService;
-import com.coremedia.livecontext.asset.util.AssetHelper;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,14 +29,11 @@ import static java.util.stream.Collectors.toList;
 
 public class AssetServiceImpl implements AssetService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AssetServiceImpl.class);
+  private static final String CONFIG_KEY_DEFAULT_PICTURE = "livecontext.assets.default.picture";
 
   private SitesService sitesService;
   private SettingsService settingsService;
-  private AssetChanges assetChanges;
-
-  private AssetSearchService assetSearchService;
-  private AssetValidationService assetValidationService;
+  private AssetResolvingStrategy assetResolvingStrategy;
 
   @Nonnull
   @Override
@@ -75,7 +60,7 @@ public class AssetServiceImpl implements AssetService {
       return emptyList();
     }
 
-    List<Content> references = findAssets("CMPicture", id, site);
+    List<Content> references = assetResolvingStrategy.findAssets("CMPicture", id, site);
     if (!references.isEmpty()) {
       return references;
     }
@@ -106,7 +91,7 @@ public class AssetServiceImpl implements AssetService {
       return emptyList();
     }
 
-    List<Content> visuals = findAssets("CMVisual", id, site);
+    List<Content> visuals = assetResolvingStrategy.findAssets("CMVisual", id, site);
 
     if (withDefault && visuals.isEmpty()) {
       Content defaultPicture = getDefaultPicture(site);
@@ -128,8 +113,8 @@ public class AssetServiceImpl implements AssetService {
   private static List<Content> removePicturesInSpinners(@Nonnull List<Content> allVisuals,
                                                         @Nonnull Set<Content> picturesInSpinners) {
     return allVisuals.stream()
-            .filter(visual -> !picturesInSpinners.contains(visual))
-            .collect(toList());
+                     .filter(visual -> !picturesInSpinners.contains(visual))
+                     .collect(toList());
   }
 
   @Nonnull
@@ -148,8 +133,8 @@ public class AssetServiceImpl implements AssetService {
   @Nonnull
   private static List<Content> findSpinners(@Nonnull List<Content> allVisuals) {
     return allVisuals.stream()
-            .filter(visual -> visual.getType().isSubtypeOf("CMSpinner"))
-            .collect(toList());
+                     .filter(visual -> visual.getType().isSubtypeOf("CMSpinner"))
+                     .collect(toList());
   }
 
   @Override
@@ -164,102 +149,7 @@ public class AssetServiceImpl implements AssetService {
       return emptyList();
     }
 
-    return findAssets("CMDownload", id, site);
-  }
-
-  /**
-   * find assets of the given content type, reference id and site
-   *
-   * @param contentType the given content type
-   * @param id          the reference id
-   * @param site        the given site
-   * @return the found assets
-   */
-  @Nonnull
-  List<Content> findAssets(@Nonnull String contentType, @Nonnull String id, @Nonnull Site site) {
-    if (assetSearchService == null) {
-      LOG.error("assetSearchService is not set, cannot find assets for {} in site {}", id, site.getName());
-      return emptyList();
-    }
-
-    Collection<Content> changedAssets = assetChanges.get(id, site);
-    String externalId = BaseCommerceIdHelper.getCurrentCommerceIdProvider().parseExternalIdFromId(id);
-    List<Content> indexedAssets = assetSearchService.searchAssets(contentType, externalId, site);
-
-    //merge indexed assets with changed assets
-    List<Content> assets = new ArrayList<>(indexedAssets);
-    if (changedAssets != null) {
-      for (Content changedContent : changedAssets) {
-        //filter the documents of the given contentType
-        if (!changedContent.isDestroyed()
-                && changedContent.getType().isSubtypeOf(contentType)
-                && !assets.contains(changedContent)) {
-          assets.add(changedContent);
-        }
-      }
-    }
-
-    for (int i = assets.size() - 1; i >= 0; i--) {
-      Content asset = assets.get(i);
-      //check now if the assets are up-to-date
-      if (!assetChanges.isUpToDate(asset, id, site)) {
-        assets.remove(asset);
-      } else {
-        //double-check if the assets contains the complete id in the struct
-        List<String> externalReferences = CommerceReferenceHelper.getExternalReferences(asset);
-        if (!externalReferences.contains(id)) {
-          assets.remove(asset);
-        }
-      }
-    }
-
-    if (assetValidationService != null) {
-      //filter validity
-      assets = assetValidationService.filterAssets(assets);
-    }
-
-    //sort by the name of the content
-    Collections.sort(assets, (content1, content2) -> content1.getName().compareToIgnoreCase(content2.getName()));
-
-    if (assets.isEmpty() && BaseCommerceIdHelper.isSkuId(id)) {
-      //try to load assets from parent Product, if partNumber belongs to ProductVariant
-      assets = findFallbackForProductVariant(id, site, contentType);
-    }
-
-    return assets;
-  }
-
-  /**
-   * find fallback assets of the given content type, reference id of a sku and site
-   *
-   * @param contentType the given content type
-   * @param id          the reference id of a sku
-   * @param site        the given site
-   * @return the found assets
-   */
-  @Nonnull
-  private List<Content> findFallbackForProductVariant(@Nonnull String id, @Nonnull Site site,
-                                                      @Nonnull String contentType) {
-    StoreContextProvider storeContextProvider = getCommerceConnection().getStoreContextProvider();
-    StoreContext storeContextForSite = storeContextProvider.findContextBySite(site);
-    if (storeContextForSite == null) {
-      return emptyList();
-    }
-
-    storeContextProvider.setCurrentContext(storeContextForSite);
-
-    Product product = getCatalogService().findProductById(id);
-    if (!(product instanceof ProductVariant)) {
-      return emptyList();
-    }
-
-    Product parentProduct = ((ProductVariant) product).getParent();
-    if (parentProduct == null) {
-      return emptyList();
-    }
-
-    //noinspection unchecked
-    return findAssets(contentType, parentProduct.getReference(), site);
+    return assetResolvingStrategy.findAssets("CMDownload", id, site);
   }
 
   @Nullable
@@ -277,33 +167,35 @@ public class AssetServiceImpl implements AssetService {
   @Nullable
   @Override
   public Content getDefaultPicture(@Nonnull Site site) {
-    return AssetHelper.getDefaultPicture(site, settingsService);
+    return settingsService.setting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site.getSiteRootDocument());
   }
 
   @Nullable
-  private static String getReferenceIdFromUrl(@Nullable String urlStr) {
-    if (urlStr == null || StringUtils.isBlank(urlStr)) {
+  private static String getReferenceIdFromUrl(@Nullable String url) {
+    if (url == null || StringUtils.isBlank(url)) {
       return null;
     }
 
     CommerceIdProvider commerceIdProvider = BaseCommerceIdHelper.getCurrentCommerceIdProvider();
-    String partNumber = parsePartNumberFromUrl(urlStr);
+    String partNumber = parsePartNumberFromUrl(url);
 
-    if (urlStr.contains(CATEGORY_URI_PREFIX)) {
+    if (url.contains(CATEGORY_URI_PREFIX)) {
       return commerceIdProvider.formatCategoryId(partNumber);
-    } else if (urlStr.contains(PRODUCT_URI_PREFIX)) {
-      CommerceConnection connection = getCommerceConnection();
-      if (connection != null && connection.getCatalogService() != null) {
-        Product productOrSkuByPartNumber = connection.getCatalogService().findProductById(
-                commerceIdProvider.formatProductId(partNumber));
-        return productOrSkuByPartNumber != null ? productOrSkuByPartNumber.getReference() :
-                commerceIdProvider.formatProductId(partNumber);
-      } else {
-        return commerceIdProvider.formatProductId(partNumber);
-      }
     }
 
-    return null;
+    if (!url.contains(PRODUCT_URI_PREFIX)) {
+      return null;
+    }
+
+    String productId = commerceIdProvider.formatProductId(partNumber);
+
+    CommerceConnection connection = getCommerceConnection();
+    if (connection == null || connection.getCatalogService() == null) {
+      return productId;
+    }
+
+    Product product = connection.getCatalogService().findProductById(productId);
+    return product != null ? product.getReference() : productId;
   }
 
   @Nullable
@@ -325,28 +217,14 @@ public class AssetServiceImpl implements AssetService {
     this.sitesService = sitesService;
   }
 
-  private static CatalogService getCatalogService() {
-    return getCommerceConnection().getCatalogService();
-  }
-
   @Autowired
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
   @Autowired
-  public void setAssetChanges(AssetChanges assetChanges) {
-    this.assetChanges = assetChanges;
-  }
-
-  @Autowired(required = false)
-  public void setAssetValidationService(AssetValidationService assetValidationService) {
-    this.assetValidationService = assetValidationService;
-  }
-
-  @Autowired(required = false)
-  public void setAssetSearchService(AssetSearchService assetSearchService) {
-    this.assetSearchService = assetSearchService;
+  public void setAssetResolvingStrategy(AssetResolvingStrategy assetResolvingStrategy) {
+    this.assetResolvingStrategy = assetResolvingStrategy;
   }
 
   @Nonnull

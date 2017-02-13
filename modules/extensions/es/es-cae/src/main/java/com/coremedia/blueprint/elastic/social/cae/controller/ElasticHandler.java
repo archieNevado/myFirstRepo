@@ -1,6 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
 
+import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.HandlerBase;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
@@ -9,16 +12,15 @@ import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
-import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cap.user.User;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.ArrayList;
@@ -119,13 +121,13 @@ public abstract class ElasticHandler<T extends ContributionResult> extends Handl
   protected abstract UriComponentsBuilder getUriComponentsBuilder(Site site, T result, UriTemplate uriTemplate);
 
   /**
-   * @deprecated Use #getMessage(Navigation, String)
+   * @deprecated Use {@link #getMessage(Navigation, User, String)}
    */
   @Deprecated
-  protected String getMessage(String key, Object... beans) {
+  protected String getMessage(String key, @Nullable User developer, Object... beans) {
     for (Object bean : beans) {
       if (bean instanceof Navigation) {
-        String result = doGetMessage((Navigation)bean, key, null);
+        String result = doGetMessage((Navigation)bean, developer, key, null);
         if (result!=null) {
           return result;
         }
@@ -137,8 +139,16 @@ public abstract class ElasticHandler<T extends ContributionResult> extends Handl
     return settingsService.settingWithDefault(key, String.class, key, beans);
   }
 
-  protected String getMessage(Navigation navigation, String key) {
-    return doGetMessage(navigation, key, key);
+  /**
+   * Lookup a message.
+   *
+   * @param navigation the navigation that determines the resource bundle
+   * @param developer consider the developer's variant of the resource bundle
+   * @param key the key to lookup
+   * @return the message
+   */
+  protected String getMessage(Navigation navigation, @Nullable User developer, String key) {
+    return doGetMessage(navigation, developer, key, key);
   }
 
   protected ElasticSocialConfiguration getElasticSocialConfiguration(Object... beans) {
@@ -158,21 +168,21 @@ public abstract class ElasticHandler<T extends ContributionResult> extends Handl
     return beans;
   }
 
-  protected void addErrorMessage(HandlerInfo handlerInfo, String path, Navigation navigation, String messageKey) {
-    doAddErrorMessage(handlerInfo, path, getMessage(navigation, messageKey));
+  protected void addErrorMessage(HandlerInfo handlerInfo, String path, Navigation navigation, @Nullable User developer, String messageKey) {
+    doAddErrorMessage(handlerInfo, path, getMessage(navigation, developer, messageKey));
   }
 
   /**
    * @deprecated Use #addErrorMessage(HandlerInfo, String, Navigation, String)
    */
   @Deprecated
-  protected void addErrorMessage(HandlerInfo handlerInfo, String path, String messageKey, Object... beans) {
-    doAddErrorMessage(handlerInfo, path, getMessage(messageKey, beans));
+  protected void addErrorMessage(HandlerInfo handlerInfo, String path, String messageKey, @Nullable User developer, Object... beans) {
+    doAddErrorMessage(handlerInfo, path, getMessage(messageKey, developer, beans));
   }
 
-  private String doGetMessage(Navigation navigation, String key, String defaultValue) {
+  private String doGetMessage(Navigation navigation, @Nullable User developer, String key, String defaultValue) {
     try {
-      return resourceBundleFactory.resourceBundle(navigation).getString(key);
+      return resourceBundleFactory.resourceBundle(navigation, developer).getString(key);
     } catch (MissingResourceException e) {
       return defaultValue;
     }

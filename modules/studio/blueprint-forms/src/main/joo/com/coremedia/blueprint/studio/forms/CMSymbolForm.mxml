@@ -17,22 +17,24 @@
     public native function CMSymbolForm(config:CMSymbolForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <bpforms:CollapsibleStringPropertyForm propertyName="description"
-                                                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSymbol_description_text')}"/>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSymbol_data_text')}"
-                                     itemId="cmSymbolIconForm">
-            <editor:items>
-              <editor:BlobPropertyField propertyName="icon"
-                                        hideLabel="true"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSettingsForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <bpforms:CollapsibleStringPropertyForm propertyName="description"
+                                               title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSymbol_description_text')}"/>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSymbol_data_text')}"
+                itemId="cmSymbolIconForm">
+          <editor:items>
+            <editor:BlobPropertyField propertyName="icon"
+                                      hideLabel="true"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSettingsForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

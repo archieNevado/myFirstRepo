@@ -26,16 +26,16 @@
     public native function SinglePictureDocumentForm(config:SinglePictureDocumentForm = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The content type to create, optional if the content type value expression is set. Defaults to CMPicture.
-     -->
+    <!---
+     The content type to create, optional if the content type value expression is set. Defaults to CMPicture.
+    -->
     <fx:String id="contentType">CMPicture</fx:String>
 
-    <!--- 
-       An optional handler, to open the collection view in a different state. If not set, the collection view
-       opens per default in search mode for the corresponding content type.
-       Signature: function(linkListTargetType:ContentType, sourceContent:Content):void
-     -->
+    <!---
+     An optional handler, to open the collection view in a different state. If not set, the collection view
+     opens per default in search mode for the corresponding content type.
+     Signature: function(linkListTargetType:ContentType, sourceContent:Content):void
+    -->
     <fx:Function id="openCollectionViewHandler"/>
   </fx:Declarations>
 

@@ -2,6 +2,12 @@ blueprint-mongodb Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the blueprint-mongodb cookbook.
 
+1.0.4
+-----
+- update to upstream Cookbook 5.3.0
+  fix timing issues and rewind more orginial resources
+  use disable-transparent-hugepages as seperate service and own recipe class
+
 1.0.3
 -----
 - add 'mongodb-systemctl-daemon-reload'

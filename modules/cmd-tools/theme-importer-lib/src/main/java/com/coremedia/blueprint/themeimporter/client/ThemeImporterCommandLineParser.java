@@ -9,8 +9,12 @@ import javax.annotation.Nonnull;
 
 class ThemeImporterCommandLineParser extends CommandLineClient {
   private static final String FOLDER_PARAMETER = "f";
+  private static final String CLEAN_PARAMETER = "c";
+  private static final String DEVELOPMENT_MODE_PARAMETER = "dm";
 
   String folder = ThemeImporterInitializer.REPOSITORY_FOLDER;
+  boolean clean = false;
+  boolean developmentMode = false;
   String[] themes;
 
   @SuppressWarnings({
@@ -22,15 +26,21 @@ class ThemeImporterCommandLineParser extends CommandLineClient {
   })
   @Override
   protected void fillInOptions(Options options) {
-    options.addOption(OptionBuilder.hasArg().withDescription("Folder within CoreMedia where themes are stored. Defaults to /Themes")
+    options.addOption(OptionBuilder.hasArg().withDescription("Folder within CoreMedia where themes are stored. Default is /Themes")
             .withLongOpt("folder")
             .create(FOLDER_PARAMETER));
+    options.addOption(OptionBuilder.withDescription("Delete existing theme before import in order to get rid of obsolete code resources.")
+            .withLongOpt("clean")
+            .create(CLEAN_PARAMETER));
+    options.addOption(OptionBuilder.withDescription("Development mode.  Creates a user (frontend developer) specific copy of the theme.")
+            .withLongOpt("development-mode")
+            .create(DEVELOPMENT_MODE_PARAMETER));
   }
 
   @Override
   @Nonnull
   protected String getUsage() {
-    return "cm import-themes -u <user> [other options] <theme.zip> ...";
+    return "cm import-themes -u <user> [other options] [-f <folder>] [-c] [-dm] <theme.zip> ...";
   }
 
   @Override
@@ -38,6 +48,8 @@ class ThemeImporterCommandLineParser extends CommandLineClient {
     if (commandLine.hasOption(FOLDER_PARAMETER)) {
       folder = commandLine.getOptionValue(FOLDER_PARAMETER);
     }
+    clean = commandLine.hasOption(CLEAN_PARAMETER);
+    developmentMode = commandLine.hasOption(DEVELOPMENT_MODE_PARAMETER);
     themes = commandLine.getArgs();
     if (themes == null || themes.length == 0) {
       getLogger().trace("Wrong argument for parameter t. Command line parsing marked as failure.");

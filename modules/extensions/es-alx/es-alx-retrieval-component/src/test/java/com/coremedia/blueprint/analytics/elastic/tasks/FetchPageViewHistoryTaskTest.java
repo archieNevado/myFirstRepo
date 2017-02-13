@@ -1,18 +1,17 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
+import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
 import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.PageViewTaskReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
-import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
 import com.coremedia.blueprint.base.analytics.elastic.validation.ResultItemValidationService;
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.elastic.core.api.tenant.TenantService;
-import com.google.common.collect.Multimaps;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,7 +98,7 @@ public class FetchPageViewHistoryTaskTest {
     channelContent = getContent(CHANNEL_CONTENT_ID);
     articleContent = getContent(ARTICLE_CONTENT_ID);
 
-    when(tenantSiteMappingHelper.getTenantSiteMap()).thenReturn(Multimaps.forMap(Collections.singletonMap(TENANT, channelContent)));
+    when(tenantSiteMappingHelper.getTenantSiteMap()).thenReturn(Collections.singletonMap(TENANT, Collections.singleton(channelContent)));
 
     // ALX settings for saved task model
     analyticsSettings = new HashMap<>();

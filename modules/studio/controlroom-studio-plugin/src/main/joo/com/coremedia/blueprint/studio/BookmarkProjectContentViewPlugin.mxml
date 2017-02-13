@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-  <!-- plugging into sub-extension points of <collab:projectContentContainer>: -->
+<!-- plugging into sub-extension points of <collab:projectContentContainer>: -->
 <ui:NestedRulesPlugin
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
@@ -22,17 +22,17 @@
     public native function BookmarkProjectContentViewPlugin(config:BookmarkProjectContentViewPlugin = null);
     ]]></fx:Script>
 
-    <ui:rules>
-      <collab:ProjectContentContextMenu>
-        <collab:plugins>
-          <ui:AddItemsPlugin index="3">
-            <ui:items>
-              <editor:BookmarkMenuItem contentValueExpression="{projectContentContainer.selectedItemsVE}"/>
-              <MenuSeparator/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </collab:plugins>
-      </collab:ProjectContentContextMenu>
-    </ui:rules>
-  
+  <ui:rules>
+    <collab:ProjectContentContextMenu>
+      <collab:plugins>
+        <ui:AddItemsPlugin index="3">
+          <ui:items>
+            <editor:BookmarkMenuItem contentValueExpression="{projectContentContainer.selectedItemsVE}"/>
+            <MenuSeparator/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </collab:plugins>
+    </collab:ProjectContentContextMenu>
+  </ui:rules>
+
 </ui:NestedRulesPlugin>

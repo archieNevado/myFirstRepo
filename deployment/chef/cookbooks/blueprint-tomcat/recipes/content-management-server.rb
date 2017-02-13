@@ -18,6 +18,7 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['so
 node.default['blueprint']['webapps'][service_name]['application.properties']['publisher.target.ior.url'] = "#{cm_webapp_url('master-live-server')}/ior"
 node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.http.port'] = "#{node['blueprint']['tomcat'][service_name]['port_prefix']}80"
 node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ORBServerHost'] = node['blueprint']['hostname']
+node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.ORBServerPort'] = "#{node['blueprint']['tomcat'][service_name]['port_prefix']}83"
 node.default['blueprint']['webapps'][service_name]['application.properties']['am.blobstore.rootdir'] = "#{cache_dir}/blobstore-assets"
 node.default['blueprint']['webapps'][service_name]['application.properties']['cap.server.login.authentication'] = "#{service_dir}/jaas.conf"
 

@@ -7,7 +7,6 @@ public class TestSuite {
     var suite:flexunit.framework.TestSuite = new flexunit.framework.TestSuite();
 
     suite.addTestSuite(EcommerceIbmCatalogLinkPropertyFieldTest);
-    suite.addTestSuite(EcommerceIbmCategoryAndProductLinksPropertyFieldTest);
 
     return suite;
   }

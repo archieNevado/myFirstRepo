@@ -42,7 +42,7 @@ public class ViewtypeRenderer {
       var viewTypeName:String = value.viewTypeName;
       var thumbUri:String = value.url;
       if (viewTypeName && thumbUri) {
-        return '<img '+QtipUtil.formatQtip(viewTypeName)+' src="' + thumbUri + '/s;w=32;h=22" width="32" height="22" class="viewtype-thumb"/>'
+        return '<img '+QtipUtil.formatQtip(viewTypeName)+' src="' + thumbUri + '/s;w=32;h=22" width="32" height="22" class="cm-viewtype-thumb"/>';
       }
     }
     return '<div style="width:32px;height:22px"></div>';  // spacer

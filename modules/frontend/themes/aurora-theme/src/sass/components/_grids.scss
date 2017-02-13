@@ -1,5 +1,17 @@
-// Grids
-// =====================================================================================================================
+// Imports
+@import "../base/imports";
+@import "../../../../../lib/sass/utils/imports";
+
+// Variables
+$cm-grid-gutter-width: $grid-gutter-width;
+
+// Import Bricks
+@import "../../../../../lib/bricks/livecontext/sass/grids";
+
+//fix CMS-7557
+body {
+  background-color: $page-background-color;
+}
 
 .cm-container {
   * {

@@ -8,47 +8,55 @@
         xmlns:ec="exml:com.coremedia.ecommerce.studio.config">
   <fx:Script><![CDATA[
     import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
-    import com.coremedia.ecommerce.studio.components.link.CatalogLink;
+    import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
 
     private var config:AddCatalogLinkActionsPlugin;
+    private var catalogLinkPropertyField:CatalogLinkPropertyField;
 
     public native function AddCatalogLinkActionsPlugin(config:AddCatalogLinkActionsPlugin = null);
+
+    // called by generated constructor code
+    private function __initialize__(config:AddCatalogLinkActionsPlugin):void {
+      catalogLinkPropertyField = CatalogLinkPropertyField(config.cmp);
+    }
     ]]></fx:Script>
 
-    <ui:rules>
-      <ec:CatalogLinkToolbar>
-        <ec:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <ui:IconButton itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_BUTTON_ITEM_ID}">
-                <ui:baseAction>
-                  <livecontext:OpenInManagementCenterAction catalogObjectVariableName="{CatalogLink.SELECTED_ITEMS_VARIABLE_NAME}"/>
-                </ui:baseAction>
-              </ui:IconButton>
-            </ui:items>
-            <ui:after>
-              <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </ec:plugins>
-      </ec:CatalogLinkToolbar>
+  <ui:rules>
+    <ec:CatalogLinkToolbar>
+      <ec:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <ui:IconButton itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_BUTTON_ITEM_ID}">
+              <ui:baseAction>
+                <livecontext:OpenInManagementCenterAction
+                        catalogObjectExpression="{catalogLinkPropertyField.selectedValuesExpression}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+          </ui:items>
+          <ui:after>
+            <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </ec:plugins>
+    </ec:CatalogLinkToolbar>
 
-      <ec:CatalogLinkContextMenu>
-        <ec:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <MenuItem itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_MENU_ITEM_ID}">
-                <baseAction>
-                  <livecontext:OpenInManagementCenterAction catalogObjectVariableName="{CatalogLink.SELECTED_ITEMS_VARIABLE_NAME}"/>
-                </baseAction>
-              </MenuItem>
-            </ui:items>
-            <ui:after>
-              <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID}"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </ec:plugins>
-      </ec:CatalogLinkContextMenu>
-    </ui:rules>
+    <ec:CatalogLinkContextMenu>
+      <ec:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <MenuItem itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_MENU_ITEM_ID}">
+              <baseAction>
+                <livecontext:OpenInManagementCenterAction
+                        catalogObjectExpression="{catalogLinkPropertyField.selectedValuesExpression}"/>
+              </baseAction>
+            </MenuItem>
+          </ui:items>
+          <ui:after>
+            <Component itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID}"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </ec:plugins>
+    </ec:CatalogLinkContextMenu>
+  </ui:rules>
 
 </ui:NestedRulesPlugin>

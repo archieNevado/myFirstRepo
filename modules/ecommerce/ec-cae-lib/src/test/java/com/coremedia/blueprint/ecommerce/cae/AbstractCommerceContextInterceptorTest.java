@@ -19,6 +19,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.PREVIEW_DATE;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID;
@@ -47,7 +48,7 @@ public class AbstractCommerceContextInterceptorTest {
   @Before
   public void setup() {
     BaseCommerceConnection connection = MockCommerceEnvBuilder.create().setupEnv();
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(connection);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
 
     testling = new NonAbstractTestling();
 
@@ -92,9 +93,8 @@ public class AbstractCommerceContextInterceptorTest {
     // This does not work with the @Mock request.
     MockHttpServletRequest request = new MockHttpServletRequest();
 
-    CommerceConnection connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
-    assertThat(connection).isNotNull();
-    assertThat(connection.getStoreContext()).isNotNull();
+    Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(connection).hasValueSatisfying(c -> assertThat(c.getStoreContext()).isNotNull());
   }
 
   @Test

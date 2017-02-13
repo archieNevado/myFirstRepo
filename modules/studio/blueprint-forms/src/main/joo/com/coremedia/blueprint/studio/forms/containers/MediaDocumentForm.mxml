@@ -23,31 +23,31 @@
     <!--- Maximum amount of items in the list -->
     <fx:int id="maxCardinality"/>
 
-    <!--- 
-       The content property name of the list to bind the newly created content to.
-       Defaults to pictures.
-     -->
+    <!---
+     The content property name of the list to bind the newly created content to.
+     Defaults to pictures.
+    -->
     <fx:String id="mediaPropertyName">pictures</fx:String>
 
-    <!--- 
-       The content types for the QuickCreate menu.
-       Default is CMPicture,CMVideo,CMSpinner.
-     -->
+    <!---
+     The content types for the QuickCreate menu.
+     Default is CMPicture,CMVideo,CMSpinner.
+    -->
     <fx:String id="quickCreateTypes">CMPicture,CMVideo,CMSpinner</fx:String>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:LinkListPropertyField propertyName="{config.mediaPropertyName}"
-                                    showThumbnails="true"
-                                    hideLabel="true"
-                                    maxCardinality="{config.maxCardinality}">
-        <editor:additionalToolbarItems>
-          <TbSeparator/>
-          <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
-                                                  propertyName="{config.mediaPropertyName}"
-                                                  contentTypes="{config.quickCreateTypes}"/>
-        </editor:additionalToolbarItems>
-      </editor:LinkListPropertyField>
-    </editor:items>
-  
+  <editor:items>
+    <editor:LinkListPropertyField propertyName="{config.mediaPropertyName}"
+                                  showThumbnails="true"
+                                  hideLabel="true"
+                                  maxCardinality="{config.maxCardinality}">
+      <editor:additionalToolbarItems>
+        <TbSeparator/>
+        <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
+                                                propertyName="{config.mediaPropertyName}"
+                                                contentTypes="{config.quickCreateTypes}"/>
+      </editor:additionalToolbarItems>
+    </editor:LinkListPropertyField>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

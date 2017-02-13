@@ -3,7 +3,7 @@
 This recipe installs and configures the CoreMedia Blueprint Preview CAE.
 #>
 =end
-
+include_recipe 'blueprint-tomcat::_base'
 service_name = 'cae-preview'
 cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
 
@@ -26,6 +26,7 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['bl
 node.default['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = 'preview'
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.helios'] = "//preview-helios.#{node['blueprint']['hostname']}"
 node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.site.mapping.corporate'] = "//preview-corporate.#{node['blueprint']['hostname']}"
+node.default['blueprint']['webapps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer'
 # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
 # and all transformed blobs are saved in memory
 node.default['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"

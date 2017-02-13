@@ -8,13 +8,13 @@
                            http://www.springframework.org/schema/context/spring-context.xsd">
 
   <import resource="es-cae-views.xml"/>
+  <import resource="es-cae-common.xml"/>
   <import resource="es-cae-formbinding.xml" />
   <import resource="es-cae-controller.xml"/>
   <import resource="es-cae-spring-security.xml"/>
   <import resource="classpath:/META-INF/coremedia/es-common-contentbeans.xml"/>
   <import resource="classpath:/framework/spring/blueprint-i18n.xml"/>
 
-  <bean name="categoryExtractor" class="com.coremedia.blueprint.base.elastic.common.SegmentNameCategoryExtractor"/>
 
   <bean name="userFilter" class="com.coremedia.blueprint.elastic.social.cae.user.UserFilter"/>
 

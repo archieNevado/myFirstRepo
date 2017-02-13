@@ -9,19 +9,13 @@ change or modify files here. Consider this folder as a stable library.
 
 ### Structure
 
-#### [bricks](bricks/README.md)
-All avaiable reusable modules including templates, styles  and javascript files.
-
-#### grunt
-utils module for grunt, all global grunt configs
-
-#### resourcebundle
-A global resourcebundle with common keys for buttons and error strings. Available in english and german.
-
-#### sass
-reusable sass mixins
-
-#### scripts
-scripts used by npm for postinstall of themes and tests
-
-
+- **[bricks](bricks/README.md)**: 
+  All available reusable modules including templates, styles and javascript files.
+- **resourcebundles (l10n)**: 
+  A global resourcebundle with common keys for buttons and error strings. Available in english and german.
+- **js**: 
+  Reusable javascript functionality and libraries used by bricks and themes.
+- **sass**: 
+  Reusable sass mixins used by bricks, recommended for themes.
+- **[tools](tools/grunt/tasks/README.md)**: 
+  Tools, scripts, configs and tasks used by npm and grunt for installing and testing of themes and bricks.

@@ -13,8 +13,8 @@
     public native function CatalogRepositoryListTestView(config:CatalogRepositoryListTestView = null);
     ]]></fx:Script>
 
-    <items>
-      <ec:CatalogRepositoryList itemId="{CollectionViewConstants.LIST_VIEW}"/>
-    </items>
-  
+  <items>
+    <ec:CatalogRepositoryList itemId="{CollectionViewConstants.LIST_VIEW}"/>
+  </items>
+
 </Viewport>

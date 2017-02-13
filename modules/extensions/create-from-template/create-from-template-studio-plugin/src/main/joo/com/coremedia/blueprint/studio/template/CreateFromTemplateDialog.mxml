@@ -14,6 +14,7 @@
                                     width="401"
                                     x="113"
                                     y="84"
+                                    constrainHeader="true"
                                     ui="{WindowSkin.GRID_200.getSkin()}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin')]
@@ -40,7 +41,8 @@
         <ui:StatefulTextField name="{ProcessingData.NAME_PROPERTY}"
                               itemId="{NAME_FIELD_ID}"
                               emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_empty_text')}"
-                              fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_label')}">
+                              fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_label')}"
+                              checkChangeBuffer="500">
           <ui:plugins>
             <ui:BindPropertyPlugin bidirectional="true">
               <ui:bindTo>
@@ -48,18 +50,19 @@
                                     expression="{ProcessingData.NAME_PROPERTY}"/>
               </ui:bindTo>
             </ui:BindPropertyPlugin>
-            <ui:ImmediateChangeEventsPlugin buffer="500"/>
             <ui:BlockEnterPlugin/>
           </ui:plugins>
         </ui:StatefulTextField>
-        <bpb-components:NavigationLinkFieldWrapper label="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'parent_label')}"
-                                                   doctype="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
-                                                   model="{getModel()}"
-                                                   labelAlign="top"
-                                                   itemId="{PARENT_PAGE_FIELD_ID}"
-                                                   propertyName="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property')}"/>
+        <bpb-components:NavigationLinkFieldWrapper
+                label="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'parent_label')}"
+                doctype="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
+                model="{getModel()}"
+                labelAlign="top"
+                itemId="{PARENT_PAGE_FIELD_ID}"
+                propertyName="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property')}"/>
 
-        <FieldContainer fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'choose_template_text')}">
+        <FieldContainer
+                fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'choose_template_text')}">
           <items>
             <local:TemplateBeanListChooser height="230"
                                            itemId="{TEMPLATE_CHOOSER_FIELD_ID}"

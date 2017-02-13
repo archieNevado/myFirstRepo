@@ -8,10 +8,7 @@
 
   &__quickinfo {
     @include breakpoint(md) {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include center-absolute();
       z-index: 4;
     }
 

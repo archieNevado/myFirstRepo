@@ -16,6 +16,8 @@ DEPENDENCIES
     path: ../../thirdparty-cookbooks/compat_resource
   fpm-tng
     path: ../../thirdparty-cookbooks/fpm-tng
+  gpg
+    path: ../../thirdparty-cookbooks/gpg
   java_se
     path: ../../thirdparty-cookbooks/java_se
   mingw
@@ -24,6 +26,8 @@ DEPENDENCIES
     path: ../../thirdparty-cookbooks/mongodb3
   mysql
     path: ../../thirdparty-cookbooks/mysql
+  nginx
+    path: ../../thirdparty-cookbooks/nginx
   ohai
     path: ../../thirdparty-cookbooks/ohai
   openssl
@@ -32,6 +36,12 @@ DEPENDENCIES
     path: ../../thirdparty-cookbooks/packagecloud
   postgresql
     path: ../../thirdparty-cookbooks/postgresql
+  repository
+    path: ../../thirdparty-cookbooks/repository
+  reprepro
+    path: ../../thirdparty-cookbooks/reprepro
+  ruby_installer
+    path: ../../thirdparty-cookbooks/ruby_installer
   runit
     path: ../../thirdparty-cookbooks/runit
   seven_zip
@@ -57,8 +67,8 @@ GRAPH
   apache2 (3.2.2)
   apt (4.0.2)
     compat_resource (>= 12.10)
-  blueprint-mongodb (1.0.3)
-    mongodb3 (~> 5.2.0)
+  blueprint-mongodb (1.0.4)
+    mongodb3 (~> 5.3.0)
     ulimit (~> 0.3.0)
   build-essential (6.0.4)
     compat_resource (>= 12.10)
@@ -72,11 +82,11 @@ GRAPH
     reprepro (>= 0.0.0)
     ruby_installer (>= 0.0.0)
   gpg (0.2.2)
-  java_se (8.112.0)
+  java_se (8.112.1)
   mingw (1.2.4)
     compat_resource (>= 0.0.0)
     seven_zip (>= 0.0.0)
-  mongodb3 (5.2.0)
+  mongodb3 (5.3.0)
     apt (>= 0.0.0)
     runit (~> 1.7.0)
     user (>= 0.0.0)
@@ -116,8 +126,9 @@ GRAPH
   sysctl (0.6.2)
     ohai (>= 0.0.0)
   ulimit (0.3.3)
-  user (0.5.1)
-  windows (2.0.2)
+  user (0.6.0)
+  windows (2.1.1)
+    ohai (>= 4.0.0)
   yum (3.13.0)
   yum-centos (0.4.13)
     yum (~> 3.10)

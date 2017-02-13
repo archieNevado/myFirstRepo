@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -49,11 +50,7 @@ public class LikeResultHandler extends ElasticContentHandler<LikeResult> {
 
     Navigation navigation = getNavigation(contextId);
 
-    Site site = SiteHelper.getSiteFromRequest(request);
-    if (site == null) {
-      return HandlerHelper.notFound();
-    }
-    Object contributionTarget = getContributionTarget(id, site);
+    Object contributionTarget = fetchContributionTarget(request, id);
     if (contributionTarget == null) {
       return HandlerHelper.notFound();
     }
@@ -79,36 +76,28 @@ public class LikeResultHandler extends ElasticContentHandler<LikeResult> {
 
     Navigation navigation = getNavigation(contextId);
 
-    Site site = SiteHelper.getSiteFromRequest(request);
-    if (site == null) {
-      return HandlerHelper.notFound();
-    }
-    Object contributionTarget = getContributionTarget(targetId, site);
+    Object contributionTarget = fetchContributionTarget(request, targetId);
     if( contributionTarget == null ) {
       return HandlerHelper.notFound();
     }
 
-    Object[] beans = getBeansForSettings(contributionTarget, navigation).toArray();
     // workaround to prevent creating anonymous users when no like can be written because of validation errors etc.
     CommunityUser author = getElasticSocialUserHelper().getCurrentOrAnonymousUser();
-
-    HandlerInfo result = new HandlerInfo();
-    validateEnabled(result, author, navigation, beans);
-
+    HandlerInfo result = createResult(request, navigation, author, contributionTarget);
     if (result.isSuccess()) {
-      boolean created = getElasticSocialService().updateLike(author, contributionTarget, navigation.getContext(), like);
-      // update message? result.addMessage(SUCCESS_MESSAGE, null, getMessage(COMMENT_FORM_SUCCESS, beans));
+      getElasticSocialService().updateLike(author, contributionTarget, navigation.getContext(), like);
     }
 
     return HandlerHelper.createModel(result);
   }
 
-  protected void validateEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, Object... beans) {
+  @Override
+  protected void validateEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, @Nullable User developer, Object... beans) {
     ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(beans);
     if (!elasticSocialConfiguration.isLikeEnabled()) {
-      addErrorMessage(handlerInfo, null, navigation, ContributionMessageKeys.LIKE_FORM_ERROR_NOT_ENABLED);
+      addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.LIKE_FORM_ERROR_NOT_ENABLED);
     } else if ((user == null || user.isAnonymous()) && !elasticSocialConfiguration.isAnonymousLikeEnabled()) {
-      addErrorMessage(handlerInfo, null, navigation, ContributionMessageKeys.LIKE_FORM_ERROR_NOT_LOGGED_IN);
+      addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.LIKE_FORM_ERROR_NOT_LOGGED_IN);
     }
   }
 

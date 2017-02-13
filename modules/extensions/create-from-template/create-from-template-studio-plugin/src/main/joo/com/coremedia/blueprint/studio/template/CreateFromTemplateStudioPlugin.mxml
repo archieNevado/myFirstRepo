@@ -12,19 +12,19 @@
     public native function CreateFromTemplateStudioPlugin(config:CreateFromTemplateStudioPlugin = null);
     ]]></fx:Script>
 
-    <editor:rules>
+  <editor:rules>
 
-      <editor:NewContentMenu>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <MenuSeparator itemId="createFromTemplateSeparator"/>
-              <template:CreateFromTemplateMenuItem/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:NewContentMenu>
+    <editor:NewContentMenu>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <MenuSeparator itemId="createFromTemplateSeparator"/>
+            <template:CreateFromTemplateMenuItem/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:NewContentMenu>
 
-    </editor:rules>
-  
+  </editor:rules>
+
 </editor:StudioPlugin>

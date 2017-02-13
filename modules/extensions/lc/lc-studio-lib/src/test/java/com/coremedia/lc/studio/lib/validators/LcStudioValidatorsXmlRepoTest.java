@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
@@ -123,7 +124,7 @@ public class LcStudioValidatorsXmlRepoTest {
     Commerce.clearCurrent();
 
     commerceConnectionInitializer = mock(CommerceConnectionInitializer.class);
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(commerceConnection);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
     commerceConnection.getStoreContext().put(StoreContextImpl.SITE, siteId);
   }
@@ -183,7 +184,7 @@ public class LcStudioValidatorsXmlRepoTest {
     CatalogLinkValidator validator = new CatalogLinkValidator();
     beanFactory.configureBean(validator, "marketingSpotExternalIdValidator");
 
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenThrow(CommerceException.class);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenThrow(CommerceException.class);
     validator.setCommerceConnectionInitializer(commerceConnectionInitializer);
 
     Iterable<Issue> issues = validate(validator, 20);

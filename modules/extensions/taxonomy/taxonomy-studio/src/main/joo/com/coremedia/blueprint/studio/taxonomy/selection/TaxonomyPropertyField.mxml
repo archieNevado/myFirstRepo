@@ -69,7 +69,8 @@
       </defaults>
       <items>
         <taxonomy:TaxonomySuggestionsLinkListPanel itemId="taxonomySuggestionsLinkListPanel"
-                                                   disableSuggestions="{config.disableSuggestions}" />
+                                                   maskOnDisable="false"
+                                                   disableSuggestions="{config.disableSuggestions}"/>
       </items>
       <plugins>
         <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"

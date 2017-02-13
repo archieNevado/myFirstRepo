@@ -17,33 +17,36 @@
     public native function CMJavaScriptForm(config:CMJavaScriptForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMJavaScript_text')}"
-                                     itemId="cmJavaScriptDataForm">
-            <editor:items>
-              <editor:StringPropertyField propertyName="dataUrl"/>
-              <editor:RichTextPropertyField propertyName="code"/>
-              <editor:BooleanPropertyField bindTo="{config.bindTo}"
-                                           propertyName="disableCompress"/>
-              <editor:BooleanPropertyField bindTo="{config.bindTo}"
-                                           propertyName="inHead"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMJavaScript_include_text')}"
-                                     itemId="cmJavaScriptIncludeForm">
-            <editor:items>
-              <editor:LinkListPropertyField propertyName="include"
-                                            hideLabel="true"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:CollapsibleStringPropertyForm propertyName="ieExpression"
-                                                 collapsed="true"
-                                                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAbstractCode_ieExpression_text')}"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MetaDataInformationForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMJavaScript_text')}"
+                itemId="cmJavaScriptDataForm">
+          <editor:items>
+            <editor:StringPropertyField propertyName="dataUrl"/>
+            <editor:RichTextPropertyField propertyName="code"/>
+            <editor:BooleanPropertyField bindTo="{config.bindTo}"
+                                         propertyName="disableCompress"/>
+            <editor:BooleanPropertyField bindTo="{config.bindTo}"
+                                         propertyName="inHead"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMJavaScript_include_text')}"
+                itemId="cmJavaScriptIncludeForm">
+          <editor:items>
+            <editor:LinkListPropertyField propertyName="include"
+                                          hideLabel="true"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:CollapsibleStringPropertyForm propertyName="ieExpression"
+                                               collapsed="true"
+                                               title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAbstractCode_ieExpression_text')}"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MetaDataInformationForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

@@ -24,7 +24,7 @@
     </map>
   </customize:append>
 
-  <bean id="stringAbbreviator" class="com.coremedia.blueprint.base.cae.web.taglib.WordAbbreviator">
+  <bean id="stringAbbreviator" class="com.coremedia.util.WordAbbreviator">
     <property name="appendToEnd" value="..."/>
   </bean>
 

@@ -18,26 +18,29 @@
     public native function CMPlaceholderForm(config:CMPlaceholderForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMPlaceholder_text')}"
-                                     itemId="cmPlaceholderIdForm">
-            <editor:items>
-              <bpb:ViewtypePropertyField />
-              <editor:StringPropertyField propertyName="title"/>
-              <editor:StringPropertyField propertyName="id"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-        <editor:items>
-          <bpforms:SEOForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSearchableForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMPlaceholder_text')}"
+                itemId="cmPlaceholderIdForm">
+          <editor:items>
+            <bpb:ViewtypePropertyField/>
+            <editor:StringPropertyField propertyName="title"/>
+            <editor:StringPropertyField propertyName="id"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+      <editor:items>
+        <bpforms:SEOForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSearchableForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

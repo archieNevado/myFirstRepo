@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<local:TaxonomyExplorerPanelBase
-        xmlns:fx="http://ns.adobe.com/mxml/2009"
-        xmlns:local="com.coremedia.blueprint.studio.taxonomy.administration.*"
-        xmlns:exml="http://www.jangaroo.net/exml/0.8"
-        xmlns="exml:ext.config"
-        xmlns:ui="exml:com.coremedia.ui.config"
-        xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
-        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        ui="{PanelSkin.FRAME.getSkin()}">
+<local:TaxonomyExplorerPanelBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                 xmlns:local="com.coremedia.blueprint.studio.taxonomy.administration.*"
+                                 xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                                 xmlns="exml:ext.config"
+                                 xmlns:ui="exml:com.coremedia.ui.config"
+                                 xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
+                                 xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                                 ui="{PanelSkin.FRAME.getSkin()}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.ui.data.ValueExpression;
+    import com.coremedia.ui.skins.ButtonSkin;
+    import com.coremedia.ui.skins.ContainerSkin;
     import com.coremedia.ui.skins.PanelSkin;
     import com.coremedia.ui.skins.SplitterSkin;
     import com.coremedia.ui.skins.TabBarSkin;
+    import com.coremedia.ui.skins.TextfieldSkin;
     import com.coremedia.ui.skins.ToolbarSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyExplorerPanel";
@@ -30,6 +32,8 @@
      * The itemId of the second taxonomy explorer toolbar separator.
      */
     public static const TAXONOMY_EXPLORER_SEP_SECOND_ITEM_ID:String = "taxonomyExplorerSepSecond";
+
+    public static const TAXONOMY_EXPLORER_PANEL_BLOCK:String = "cm-taxonomy-explorer-panel";
 
     private var config:TaxonomyExplorerPanel;
 
@@ -52,7 +56,7 @@
     <layout_HBox align="stretch"/>
   </local:layout>
   <local:plugins>
-    <ui:BEMPlugin block="cm-taxonomy-explorer-panel"/>
+    <ui:BEMPlugin block="{TAXONOMY_EXPLORER_PANEL_BLOCK}"/>
   </local:plugins>
   <local:items>
     <!--Tree Panel Left-->
@@ -74,6 +78,7 @@
         <Container itemId="columnsContainer"
                    id_="columnsContainer"
                    flex="1"
+                   ui="{ContainerSkin.LIGHT.getSkin()}"
                    autoScroll="true">
           <defaults>
             <taxonomy:TaxonomyExplorerColumn width="200">
@@ -123,28 +128,32 @@
     </Container>
   </local:items>
   <local:tbar>
-    <Toolbar ui="{ToolbarSkin.HEADER_GRID_100}">
+    <Toolbar ui="{ToolbarSkin.WORKAREA.getSkin()}">
       <items>
         <ui:IconButton itemId="delete"
                        disabled="true"
+                       text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_remove_button_label')}"
                        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_remove_button_label')}"
                        handler="{deleteNode}"
                        iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'trash_bin')}"/>
         <ui:IconButton itemId="add"
                        disabled="true"
+                       text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_add_button_label')}"
                        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_add_button_label')}"
                        iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'add_tag')}"
                        handler="{createChildNode}"/>
-        <TbSeparator itemId="{TAXONOMY_EXPLORER_SEP_FIRST_ITEM_ID}"/>
+        <TbSeparator itemId="{TAXONOMY_EXPLORER_SEP_FIRST_ITEM_ID}" hidden="true"/>
         <ui:IconButton itemId="reload"
                        disabled="false"
                        id_="taxonomy-reload-button"
+                       text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_reload_button_label')}"
                        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_reload_button_label')}"
                        iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'reload')}"
                        handler="{reload}"/>
-        <TbSeparator itemId="{TAXONOMY_EXPLORER_SEP_SECOND_ITEM_ID}"/>
+        <TbSeparator itemId="{TAXONOMY_EXPLORER_SEP_SECOND_ITEM_ID}" hidden="true"/>
         <ui:IconButton itemId="cut"
                        disabled="true"
+                       text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_cut_button_label')}"
                        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_cut_button_label')}"
                        iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'cut')}">
           <ui:baseAction>
@@ -154,6 +163,7 @@
         </ui:IconButton>
         <ui:IconButton itemId="paste"
                        disabled="true"
+                       text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_paste_button_label')}"
                        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_paste_button_label')}"
                        iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'paste')}">
           <ui:baseAction>
@@ -166,9 +176,14 @@
                                       siteSelectionExpression="{config.siteSelectionExpression}"
                                       resetOnBlur="true"
                                       width="300"
+                                      ui="{TextfieldSkin.DEFAULT.getSkin()}"
                                       itemId="taxonomySearchField"
                                       id_="taxonomySearchField"/>
       </items>
+      <defaults>
+        <ui:IconButton scale="medium"
+                       ui="{ButtonSkin.WORKAREA.getSkin()}"/>
+      </defaults>
     </Toolbar>
   </local:tbar>
 

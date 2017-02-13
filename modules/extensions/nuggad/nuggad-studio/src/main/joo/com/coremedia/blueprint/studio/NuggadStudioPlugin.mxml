@@ -20,60 +20,61 @@
     public native function NuggadStudioPlugin(config:NuggadStudioPlugin = null);
     ]]></fx:Script>
 
-    <editor:rules>
+  <editor:rules>
 
-      <perso:SelectionRulesField>
-        <perso:plugins>
-          <perso:Addconditionitems>
-            <perso:items>
-              <!-- nugg.ad conditions -->
-              <nuggad:NuggAdAgeCondition/>
-              <nuggad:NuggAdGenderCondition/>
-              <nuggad:NuggAdEducationCondition/>
-              <nuggad:NuggAdEmploymentStatusCondition/>
-              <nuggad:NuggAdPersonalIncomeCondition/>
-              <nuggad:NuggAdHouseholdIncomeCondition/>
-            </perso:items>
-          </perso:Addconditionitems>
-        </perso:plugins>
-      </perso:SelectionRulesField>
+    <perso:SelectionRulesField>
+      <perso:plugins>
+        <perso:Addconditionitems>
+          <perso:items>
+            <!-- nugg.ad conditions -->
+            <nuggad:NuggAdAgeCondition/>
+            <nuggad:NuggAdGenderCondition/>
+            <nuggad:NuggAdEducationCondition/>
+            <nuggad:NuggAdEmploymentStatusCondition/>
+            <nuggad:NuggAdPersonalIncomeCondition/>
+            <nuggad:NuggAdHouseholdIncomeCondition/>
+          </perso:items>
+        </perso:Addconditionitems>
+      </perso:plugins>
+    </perso:SelectionRulesField>
 
-      <perso:ConditionsField>
-        <perso:plugins>
-          <perso:Addconditionitems>
-            <perso:items>
-              <!-- nugg.ad conditions -->
-              <nuggad:NuggAdAgeCondition/>
-              <nuggad:NuggAdGenderCondition/>
-              <nuggad:NuggAdEducationCondition/>
-              <nuggad:NuggAdEmploymentStatusCondition/>
-              <nuggad:NuggAdPersonalIncomeCondition/>
-              <nuggad:NuggAdHouseholdIncomeCondition/>
-            </perso:items>
-          </perso:Addconditionitems>
-        </perso:plugins>
-      </perso:ConditionsField>
+    <perso:ConditionsField>
+      <perso:plugins>
+        <perso:Addconditionitems>
+          <perso:items>
+            <!-- nugg.ad conditions -->
+            <nuggad:NuggAdAgeCondition/>
+            <nuggad:NuggAdGenderCondition/>
+            <nuggad:NuggAdEducationCondition/>
+            <nuggad:NuggAdEmploymentStatusCondition/>
+            <nuggad:NuggAdPersonalIncomeCondition/>
+            <nuggad:NuggAdHouseholdIncomeCondition/>
+          </perso:items>
+        </perso:Addconditionitems>
+      </perso:plugins>
+    </perso:ConditionsField>
 
-      <p13n:CMPersonaForm>
-        <p13n:plugins>
-          <ui:AddItemsPlugin recursive="true">
-            <ui:items>
-              <nuggad:NuggadUserProfileFormExtensions/>
-            </ui:items>
-            <ui:before>
-              <Component itemId="geoLocation"/>
-            </ui:before>
-          </ui:AddItemsPlugin>
-        </p13n:plugins>
-      </p13n:CMPersonaForm>
+    <p13n:CMPersonaForm>
+      <p13n:plugins>
+        <ui:AddItemsPlugin recursive="true">
+          <ui:items>
+            <nuggad:NuggadUserProfileFormExtensions/>
+          </ui:items>
+          <ui:before>
+            <Component itemId="geoLocation"/>
+          </ui:before>
+        </ui:AddItemsPlugin>
+      </p13n:plugins>
+    </p13n:CMPersonaForm>
 
-    </editor:rules>
+  </editor:rules>
 
-    <editor:configuration>
+  <editor:configuration>
 
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.personalization.ui.PersonalizationContextNames')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.NuggadStudioPlugin')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.personalization.ui.PersonalizationContextNames')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.NuggadStudioPlugin')}"/>
 
-    </editor:configuration>
-  
+  </editor:configuration>
+
 </editor:StudioPlugin>

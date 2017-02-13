@@ -19,15 +19,16 @@
     public native function ShopPageShowInLibraryMenuItem(config:ShopPageShowInLibraryMenuItem = null);
     ]]></fx:Script>
 
-    <baseAction>
-      <livecontext:MetadataToEntitiesActionAdapter metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
-                                                   itemId="{LC_OPEN_IN_LIBRARY_MENU_ITEM_ID}"
-                                                   hideOnDisable="true"
-                                                   useParentNode="true">
-        <livecontext:backingAction>
-          <editor:ShowInRepositoryAction/>
-        </livecontext:backingAction>
-      </livecontext:MetadataToEntitiesActionAdapter>
-    </baseAction>
-  
+  <baseAction>
+    <livecontext:MetadataToEntitiesActionAdapter
+            metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
+            itemId="{LC_OPEN_IN_LIBRARY_MENU_ITEM_ID}"
+            hideOnDisable="true"
+            useParentNode="true">
+      <livecontext:backingAction>
+        <editor:ShowInRepositoryAction/>
+      </livecontext:backingAction>
+    </livecontext:MetadataToEntitiesActionAdapter>
+  </baseAction>
+
 </MenuItem>

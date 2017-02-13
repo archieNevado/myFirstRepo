@@ -19,15 +19,16 @@
     public native function ShopPageOpenInBackgroundMenuItem(config:ShopPageOpenInBackgroundMenuItem = null);
     ]]></fx:Script>
 
-    <baseAction>
-      <livecontext:MetadataToEntitiesActionAdapter metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
-                                                   itemId="{LC_OPEN_IN_BACKGROUND_TAB_MENU_ITEM_ID}"
-                                                   hideOnDisable="true"
-                                                   useParentNode="true">
-        <livecontext:backingAction>
-          <editor:OpenInTabAction background="true"/>
-        </livecontext:backingAction>
-      </livecontext:MetadataToEntitiesActionAdapter>
-    </baseAction>
-  
+  <baseAction>
+    <livecontext:MetadataToEntitiesActionAdapter
+            metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
+            itemId="{LC_OPEN_IN_BACKGROUND_TAB_MENU_ITEM_ID}"
+            hideOnDisable="true"
+            useParentNode="true">
+      <livecontext:backingAction>
+        <editor:OpenInTabAction background="true"/>
+      </livecontext:backingAction>
+    </livecontext:MetadataToEntitiesActionAdapter>
+  </baseAction>
+
 </MenuItem>

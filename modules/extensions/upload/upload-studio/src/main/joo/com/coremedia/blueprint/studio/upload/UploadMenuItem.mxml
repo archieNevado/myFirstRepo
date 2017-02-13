@@ -19,8 +19,8 @@
     public native function UploadMenuItem(config:UploadMenuItem = null);
     ]]></fx:Script>
 
-    <baseAction>
-      <upload:OpenUploadDialogAction/>
-    </baseAction>
-  
+  <baseAction>
+    <upload:OpenUploadDialogAction/>
+  </baseAction>
+
 </MenuItem>

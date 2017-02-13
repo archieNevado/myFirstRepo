@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<local:TopicPagesStudioPluginBase
+<editor:StudioPlugin
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:local="com.coremedia.blueprint.studio.topicpages.*"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
@@ -18,7 +18,7 @@
     public native function TopicPagesStudioPlugin(config:TopicPagesStudioPlugin = null);
     ]]></fx:Script>
 
-  <local:rules>
+  <editor:rules>
 
     <editor:ExtensionsMenuToolbar>
       <editor:plugins>
@@ -38,6 +38,6 @@
       </editor:plugins>
     </editor:ExtensionsMenuToolbar>
 
-  </local:rules>
+  </editor:rules>
 
-</local:TopicPagesStudioPluginBase>
+</editor:StudioPlugin>

@@ -167,8 +167,6 @@
 </Struct>
 </StructProperty>
 <LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/PerfectChef/Germany/German/Pictures/" cmexport:path="/Sites/PerfectChef/Germany/German/Pictures/"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/PerfectChef/Germany/German/Videos/" cmexport:path="/Sites/PerfectChef/Germany/German/Videos/"/>
 </LinkListProperty>
 </Struct>
 </data>

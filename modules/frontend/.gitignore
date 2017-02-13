@@ -1,0 +1,8 @@
+# folders
+target/
+node/
+node_modules/
+
+# logs and configs
+.cmconfig.json
+.npm-debug.log

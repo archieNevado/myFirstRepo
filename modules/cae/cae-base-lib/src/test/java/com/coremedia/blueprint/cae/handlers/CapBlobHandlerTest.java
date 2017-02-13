@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.blueprint.common.contentbeans.CMDownload;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
@@ -10,13 +11,19 @@ import com.coremedia.cap.common.InvalidPropertyValueException;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
+import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.AdditionalAnswers;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static org.junit.Assert.assertEquals;
@@ -47,6 +54,8 @@ public class CapBlobHandlerTest extends HandlerBaseTest {
   private Content content;
   private ContentType contentType;
 
+  private CapBlobHandler testling;
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
@@ -59,7 +68,7 @@ public class CapBlobHandlerTest extends HandlerBaseTest {
     when(getUrlPathFormattingHelper().tidyUrlPath("nä me.jpg")).thenReturn("nae-me-jpg");
     when(getUrlPathFormattingHelper().tidyUrlPath("a-pdf.pdf")).thenReturn("a-pdf-pdf");
 
-    CapBlobHandler testling = new CapBlobHandler();
+    testling = new CapBlobHandler();
     testling.setMimeTypeService(getMimeTypeService());
     testling.setUrlPathFormattingHelper(getUrlPathFormattingHelper());
 
@@ -156,6 +165,21 @@ public class CapBlobHandlerTest extends HandlerBaseTest {
     assertEquals("uri", expectedUrl, formatLink(capBlobRef, null, false));
   }
 
+  @Test
+  public void testLinkWithDeveloperVariant() throws MimeTypeParseException {
+    when(getUrlPathFormattingHelper().tidyUrlPath(any(String.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
+    ContentType cmImageType = mock(ContentType.class);
+    when(cmImageType.isSubtypeOf(any(String.class))).thenReturn(true);
+    Content cmImage = mockContent(cmImageType, 1238, "name");
+    CapBlobRef blobRef = mock(CapBlobRef.class);
+    when(blobRef.getContentType()).thenReturn(new MimeType("image/jpeg"));
+    when(blobRef.getPropertyName()).thenReturn("data");
+    when(blobRef.getCapObject()).thenReturn(cmImage);
+
+    String link = formatLink(blobRef, null, false);
+    assertEquals("/resource/crblob/1238/-/name-data.jpg", link);
+  }
+
   /**
    * Test bean resolution and pattern matching
    */
@@ -166,6 +190,47 @@ public class CapBlobHandlerTest extends HandlerBaseTest {
     assertModel(handleRequest(URI_JPG), capBlobRef);
     Assert.assertTrue(handleRequest(URI_ANY).getModelMap().get("self") instanceof HttpError);
     assertModel(handleRequest(URI_RAW), capBlobRef);
+  }
+
+  @Test
+  public void testHandleDeveloperVariantBlobUrlFallthrough() throws Exception {
+    when(getIdContentBeanConverter().convert(CONTENT_ID)).thenReturn(cmObject);
+
+    assertModel(handleRequest(URI_JPG.replaceFirst("/blob/", "/crblob/")), capBlobRef);
+    Assert.assertTrue(handleRequest(URI_ANY).getModelMap().get("self") instanceof HttpError);
+    assertModel(handleRequest(URI_RAW), capBlobRef);
+  }
+
+  @Test
+  public void testHandleDeveloperVariantBlobUrl() throws Exception {
+    when(getIdContentBeanConverter().convert(CONTENT_ID)).thenReturn(cmObject);
+
+    String uriJpgDeveloperVariant = URI_JPG.replaceFirst("/blob/", "/crblob/");
+    MockHttpServletRequest request = newRequest(uriJpgDeveloperVariant);
+    User dave = mock(User.class);
+    UserVariantHelper.setUser(request, dave);
+
+    ContentType cmImageType = mock(ContentType.class);
+    CapPropertyDescriptor propertyDescriptor = mock(CapPropertyDescriptor.class);
+    when(propertyDescriptor.getType()).thenReturn(CapPropertyDescriptorType.BLOB);
+    when(cmImageType.getDescriptor("propertyName")).thenReturn(propertyDescriptor);
+    Content davesVariant = mockContent(cmImageType, 1240, "davesVariant");
+    CapBlobRef davesBlobRef = mock(CapBlobRef.class);
+    when(davesBlobRef.getContentType()).thenReturn(new MimeType("image/jpeg"));
+    when(davesVariant.getBlobRef("propertyName")).thenReturn(davesBlobRef);
+
+    ThemeService themeService = mock(ThemeService.class);
+    when(themeService.developerVariant(content, dave)).thenReturn(davesVariant);
+    testling.setThemeService(themeService);
+
+    ContentBeanFactory contentBeanFactory = mock(ContentBeanFactory.class);
+    ContentBean davesBean = mock(ContentBean.class);
+    when(davesBean.getContent()).thenReturn(davesVariant);
+    when(contentBeanFactory.createBeanFor(davesVariant)).thenReturn(davesBean);
+    testling.setContentBeanFactory(contentBeanFactory);
+
+    assertModel(handleRequest(request), davesBlobRef);
+    assertModel(handleRequest(URI_JPG), capBlobRef);
   }
 
   /**
@@ -261,4 +326,16 @@ public class CapBlobHandlerTest extends HandlerBaseTest {
     assertNotFound("blob ref is null", handleRequest(URI_ANY));
   }
 
+
+  // --- internal ---------------------------------------------------
+
+  private Content mockContent(ContentType type, int id, String name) {
+    Content c = mock(Content.class);
+    when(c.isContentObject()).thenReturn(true);
+    when(c.isContent()).thenReturn(true);
+    when(c.getType()).thenReturn(type);
+    when(c.getId()).thenReturn("coremedia:///cap/content/" + id);
+    when(c.getName()).thenReturn(name);
+    return c;
+  }
 }

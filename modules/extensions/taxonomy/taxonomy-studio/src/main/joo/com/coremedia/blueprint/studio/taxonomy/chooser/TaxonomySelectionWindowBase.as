@@ -81,7 +81,7 @@ public class TaxonomySelectionWindowBase extends Window {
    */
   protected function getSelectionExpression():ValueExpression {
     if (!selectionExpression) {
-      selectionExpression = ValueExpressionFactory.create('selection', beanFactory.createLocalBean());
+      selectionExpression = ValueExpressionFactory.createFromValue([]);
     }
     return selectionExpression;
   }

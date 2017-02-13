@@ -28,6 +28,7 @@
                              overflowBehaviour="{OverflowBehaviour.ELLIPSIS}"/>
     <ui:StatefulProgressBar itemId="{PROGRESS_BAR}"
                             flex="3"/>
+    <Container width="6"/>
   </local:items>
 
 </local:UploadProgressContainerBase>

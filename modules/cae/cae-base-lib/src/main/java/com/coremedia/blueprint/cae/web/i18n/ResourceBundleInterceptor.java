@@ -2,19 +2,25 @@ package com.coremedia.blueprint.cae.web.i18n;
 
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
+import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.blueprint.common.contentbeans.CMHasContexts;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -38,14 +44,22 @@ public class ResourceBundleInterceptor extends HandlerInterceptorAdapter {
 
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    User developer = UserVariantHelper.getUser(request);
     Page page = getPage(modelAndView, request);
     if (page != null) {
-      registerResourceBundleForPage(page, request, response);
+      registerResourceBundleForPage(page, developer, request, response);
     } else {
       if (modelAndView != null) {
         Navigation navigation = NavigationLinkSupport.getNavigation(modelAndView.getModelMap());
+        if (navigation == null) {
+          Object self = HandlerHelper.getRootModel(modelAndView);
+          if (self instanceof CMHasContexts) {
+            List<CMContext> contexts = ((CMHasContexts) self).getContexts();
+            navigation = contexts != null && !contexts.isEmpty() ? contexts.get(0) : null;
+          }
+        }
         if (navigation != null) {
-          registerResourceBundle(resourceBundleFactory.resourceBundle(navigation), navigation.getLocale(), request, response);
+          registerResourceBundle(resourceBundleFactory.resourceBundle(navigation, developer), navigation.getLocale(), request, response);
         }
       }
     }
@@ -55,11 +69,14 @@ public class ResourceBundleInterceptor extends HandlerInterceptorAdapter {
   // --- features ---------------------------------------------------
 
   /**
-   * Register the resource bundle configured in the {@link Page Page's } settings for the given request / response
+   * Register the resource bundle configured in the {@link Page Page's}
+   * settings for the given request / response.
+   * <p>
+   * Considers the developer's work in progress resource bundles.
    */
-  public void registerResourceBundleForPage(Page page, HttpServletRequest request, HttpServletResponse response) {
+  public void registerResourceBundleForPage(Page page, @Nullable User developer, HttpServletRequest request, HttpServletResponse response) {
     Locale locale = page.getLocale();
-    ResourceBundle bundle = resourceBundleFactory.resourceBundle(page);
+    ResourceBundle bundle = resourceBundleFactory.resourceBundle(page, developer);
     registerResourceBundle(bundle, locale, request, response);
   }
 

@@ -14,7 +14,6 @@
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
   <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/framework/spring/search/solr-search.xml"/>
-  <import resource="classpath:/framework/spring/lc-ecommerce-service.xml"/>
 
   <context:property-placeholder
           ignore-unresolvable="true"
@@ -145,7 +144,6 @@
     <property name="storeFrontConnector" ref="storeFrontConnector"/>
     <property name="storeContextProvider" ref="storeContextProvider"/>
     <property name="urlProvider" ref="pageHandlerUrlProvider"/>
-    <property name="cookieService" ref="cookieService"/>
   </bean>
 
   <bean id="pageHandlerUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider">

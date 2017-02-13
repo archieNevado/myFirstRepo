@@ -17,6 +17,7 @@
                         resizeHandles="s"
                         scrollable="y"
                         modal="true"
+                        constrainHeader="true"
                         ui="{WindowSkin.GRID_200.getSkin()}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.UploadStudioPlugin')]
@@ -53,14 +54,15 @@
     <layout_VBox align="stretch"/>
   </local:layout>
   <local:items>
-    <bpb-components:FolderCombo fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_folder_combo_title')}"
-                                folderPathsExpression="{ValueExpressionFactory.createFromFunction(getFolders)}"
-                                id_="{FOLDER_COMBOBOX}"
-                                labelAlign="top"
-                                allowBlank="false"
-                                emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_folder_combo_emptyText')}"
-                                contentType="{config.settings.getDefaultContentType()}"
-                                bindTo="{ValueExpressionFactory.create(FileWrapper.UPLOAD_FOLDER_PROPERTY, config.file)}"/>
+    <bpb-components:FolderCombo
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_folder_combo_title')}"
+            folderPathsExpression="{ValueExpressionFactory.createFromFunction(getFolders)}"
+            id_="{FOLDER_COMBOBOX}"
+            labelAlign="top"
+            allowBlank="false"
+            emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_folder_combo_emptyText')}"
+            contentType="{config.settings.getDefaultContentType()}"
+            bindTo="{ValueExpressionFactory.create(FileWrapper.UPLOAD_FOLDER_PROPERTY, config.file)}"/>
     <Container flex="1"
                id_="{DROP_BOX}"
                minHeight="80"
@@ -80,9 +82,10 @@
                                  dropEl="{this.el}"/>
           </plugins>
         </Button>
-        <DisplayField value="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_drop_text')}"
-                      id_="{DROP_LABEL}"
-                      ui="{DisplayFieldSkin.ITALIC.getSkin()}"/>
+        <DisplayField
+                value="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_drop_text')}"
+                id_="{DROP_LABEL}"
+                ui="{DisplayFieldSkin.ITALIC.getSkin()}"/>
       </items>
       <plugins>
         <upload:FileDropPlugin dropHandler="{handleDrop}"/>

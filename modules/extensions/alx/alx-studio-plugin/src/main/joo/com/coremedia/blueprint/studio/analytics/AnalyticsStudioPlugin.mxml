@@ -28,55 +28,57 @@
     public native function AnalyticsStudioPlugin(config:AnalyticsStudioPlugin = null);
     ]]></fx:Script>
 
-    <local:rules>
-      <!-- add forms for page/event lists -->
-      <editor:TabbedDocumentFormDispatcher>
-        <editor:plugins>
-          <editor:AddTabbedDocumentFormsPlugin>
-            <editor:documentTabPanels>
-              <alx:CMALXPageListForm itemId="CMALXPageList"/>
-              <alx:CMALXEventListForm itemId="CMALXEventList"/>
-            </editor:documentTabPanels>
-          </editor:AddTabbedDocumentFormsPlugin>
-        </editor:plugins>
-      </editor:TabbedDocumentFormDispatcher>
+  <local:rules>
+    <!-- add forms for page/event lists -->
+    <editor:TabbedDocumentFormDispatcher>
+      <editor:plugins>
+        <editor:AddTabbedDocumentFormsPlugin>
+          <editor:documentTabPanels>
+            <alx:CMALXPageListForm itemId="CMALXPageList"/>
+            <alx:CMALXEventListForm itemId="CMALXEventList"/>
+          </editor:documentTabPanels>
+        </editor:AddTabbedDocumentFormsPlugin>
+      </editor:plugins>
+    </editor:TabbedDocumentFormDispatcher>
 
-      <!-- This tab has been disabled while cleaning document forms.
-           It is recommend to configure ALX using the struct editor and reduce
-           the amount for forms visible for the user. -->
-      <!-- add analytics tab to channel form -->
-      <!--
-      <bpforms:CMChannelForm>
-        <bpforms:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <local:CMChannelAnalyticsTab itemId="analytics"/>
-            </ui:items>
-            <ui:after>
-              <editor:DocumentForm itemId="locale"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </bpforms:plugins>
-      </bpforms:CMChannelForm>
-      -->
+    <!-- This tab has been disabled while cleaning document forms.
+         It is recommend to configure ALX using the struct editor and reduce
+         the amount for forms visible for the user. -->
+    <!-- add analytics tab to channel form -->
+    <!--
+    <bpforms:CMChannelForm>
+      <bpforms:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <local:CMChannelAnalyticsTab itemId="analytics"/>
+          </ui:items>
+          <ui:after>
+            <editor:DocumentForm itemId="locale"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </bpforms:plugins>
+    </bpforms:CMChannelForm>
+    -->
 
-      <editor:PreviewPanelToolbar>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <TbSeparator hidden="true" itemId="{ANALYTICS_DEEP_LINK_SEP_ITEM_ID}"/>
-              <alx:AnalyticsDeepLinkButtonContainer itemId="alxDeepLinkButtonContainer"/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:PreviewPanelToolbar>
-    </local:rules>
+    <editor:PreviewPanelToolbar>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <TbSeparator hidden="true" itemId="{ANALYTICS_DEEP_LINK_SEP_ITEM_ID}"/>
+            <alx:AnalyticsDeepLinkButtonContainer itemId="alxDeepLinkButtonContainer"/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:PreviewPanelToolbar>
+  </local:rules>
 
-    <local:configuration>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.analytics.AnalyticsStudioPluginDocTypes')}"/>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin')}"/>
-    </local:configuration>
-  
+  <local:configuration>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.analytics.AnalyticsStudioPluginDocTypes')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin')}"/>
+  </local:configuration>
+
 </local:AnalyticsStudioPluginBase>

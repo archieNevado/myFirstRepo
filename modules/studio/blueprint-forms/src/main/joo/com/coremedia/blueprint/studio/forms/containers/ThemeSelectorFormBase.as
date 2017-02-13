@@ -9,50 +9,28 @@ import com.coremedia.cms.editor.sdk.premular.fields.ComboBoxLinkPropertyField;
 import com.coremedia.cms.editor.sdk.util.ImageUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
-import com.coremedia.ui.util.EncodingUtil;
 import com.coremedia.ui.util.ObjectUtils;
 
-import ext.Ext;
+import ext.Template;
 
 import mx.resources.ResourceManager;
 
-use namespace editorContext;
-
-use namespace Ext;
-
-use namespace SESSION;
-
 [ResourceBundle('com.coremedia.blueprint.studio.ThemeSelector')]
-[ResourceBundle('com.coremedia.blueprint.base.components.viewtypes.Viewtypes')]
 public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
+
+  private static const NO_IMAGE_TOOLTIP:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.ThemeSelector', 'ThemeSelector_no_image_tooltip');
 
   public static const DEFAULT_PATHS:Array = ['/Themes/'];
 
   public static var DEFAULT_CROPPING:String = ImageUtil.getCroppingOperation(82, 50);
 
+  protected static const TITLE_FIELD_NAME:String = "title";
+  protected static const DESCRIPTION_FIELD_NAME:String = "description";
+  protected static const THUMBNAIL_URI_FIELD_NAME:String = "thumbnailUri";
+  protected static const THUMBNAIL_TOOLTIP_FIELD_NAME:String = "thumbnailTooltip";
 
-  // Caution: The display field must not be encoded. Make sure to encode it when using it in a template.
-  internal static const FULL_LAYOUTS_INFO_TEMPLATE:Array = [
-    '<tpl for=".">',
-    '<div class="x-menu-item x-combo-list-item x-boundlist-item multipath-theme-combo">',
-    '<table border="0" class="text-normal-60">',
-    '<tr>',
-    '<th class="theme-header-image" rowspan="2">',
-    '<tpl if="iconUri"><img src="{iconUri}"/></tpl>',
-    '<tpl if="!iconUri"><img src="', Ext.BLANK_IMAGE_URL, '" class="theme-icon-warning" ext:qtip="' + EncodingUtil.encodeForHTML(ResourceManager.getInstance().getString('com.coremedia.blueprint.base.components.viewtypes.Viewtypes', 'no_image')) + '"/></tpl>',
-    '</th>',
-    '<th align="left" valign="top" class="theme-header-title">',
-    '<span class="text-bold">{displayName}</span>',
-    '</th>',
-    '</tr>',
-    '<tr>',
-    '<td class="theme-text">',
-    '<span>{description}</span>',
-    '</td>',
-    '</table>',
-    '</div>',
-    '</tpl>'
-  ];
+  protected static const COMBO_BOX_TEMPLATE:Template = getExtendedComboBoxTpl(TITLE_FIELD_NAME, DESCRIPTION_FIELD_NAME, THUMBNAIL_URI_FIELD_NAME, THUMBNAIL_TOOLTIP_FIELD_NAME, null);
+  protected static const DISPLAY_TEMPLATE:Template = getExtendedDisplayTpl(TITLE_FIELD_NAME, DESCRIPTION_FIELD_NAME, THUMBNAIL_URI_FIELD_NAME, THUMBNAIL_TOOLTIP_FIELD_NAME, null);
 
   public function ThemeSelectorFormBase(config:ThemeSelectorForm = null) {
     super(config);
@@ -129,9 +107,12 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
             : null;
   }
 
-  public static function getIconUri(theme:Content):String {
-    return theme == null ? "" : editorContext.getThumbnailUri(theme, DEFAULT_CROPPING);
+  public static function getThumbnailUri(content:Content):String {
+    return content == null ? "" : editorContext.getThumbnailUri(content, DEFAULT_CROPPING);
   }
 
+  public static function getThumbnailTooltip(content:Content):String {
+    return getThumbnailUri(content) ? getName(content) : NO_IMAGE_TOOLTIP;
+  }
 }
 }

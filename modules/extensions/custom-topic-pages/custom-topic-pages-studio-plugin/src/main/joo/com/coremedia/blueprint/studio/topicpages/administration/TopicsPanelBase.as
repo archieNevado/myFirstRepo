@@ -248,7 +248,7 @@ public class TopicsPanelBase extends Panel {
     }
 
     if(editorContext.getSitesService().getPreferredSite()) {
-      return '<div><a href="#" id="topicpage-create-' + id + '"  class="' + IconColumnBase.ELEMENT_TEXT + '" data-topic-action="create">'
+      return '<div class="' + IconColumnBase.BLOCK +'"><a href="#" id="topicpage-create-' + id + '"  class="' + IconColumnBase.ELEMENT_TEXT + '" data-topic-action="create">'
               + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_create_link') + '</a></div>';
     }
     return resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_no_preferred_site');

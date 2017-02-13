@@ -147,8 +147,6 @@
 <StringProperty Name="semanticSettings">semantic</StringProperty>
 <StringProperty Name="locale">de</StringProperty>
 <LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/PerfectChef/Germany/German/Navigation/Perfect%20Chef%20Deutschland.xml" cmexport:path="/Sites/PerfectChef/Germany/German/Navigation/Perfect%20Chef%20Deutschland"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/PerfectChef/Germany/German/Editorial/Content/" cmexport:path="/Sites/PerfectChef/Germany/German/Editorial/Content/"/>
 </LinkListProperty>
 <StructProperty Name="dashboard">
 <Struct>

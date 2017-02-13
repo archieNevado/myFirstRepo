@@ -35,12 +35,14 @@
     ]]></fx:Script>
 
   <editor:items>
-    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
       <editor:items>
         <bpforms:CollapsibleStringPropertyForm propertyName="description"
                                                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTemplateSet_description_text')}"/>
-        <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTemplateSet_archive_text')}"
-                                   itemId="cmTemplateArchiveForm">
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTemplateSet_archive_text')}"
+                itemId="cmTemplateArchiveForm">
           <editor:items>
             <editor:BlobPropertyField propertyName="archive"
                                       hideLabel="true"

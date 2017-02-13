@@ -10,6 +10,8 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructService;
 import com.coremedia.common.graph.DirectedGraph;
 import com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.lang3.LocaleUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,9 +24,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-
-import static java.util.Collections.emptySet;
 
 /**
  * Coordinates CMResourceBundle fallback strategies.
@@ -48,6 +49,7 @@ public class LocalizationService {
   private static final String CM_RESOURCE_BUNDLE = "CMResourceBundle";
   private static final String MASTER = "master";
   private static final String MASTER_VERSION = "masterVersion";
+  private static final String LOCALE = "locale";
 
   private static final String RESOURCE_BUNDLE_NAME_SUFFIX = ".properties";
   private static final String RESOURCE_BUNDLE_NAME_ENDSWITH_PATTERN = "(_.*)?\\.properties";
@@ -138,13 +140,11 @@ public class LocalizationService {
       throw new IllegalArgumentException("Cannot derive the set of bundles of " + rootBundle + ", does not follow our naming conventions.");
     }
     checkAreBundles(bundles);
-    Collection<Content> toBeCheckedIn = emptySet();
-    try {
-      toBeCheckedIn = checkOut(bundles);
-      masterizeBundles(rootBundle, bundles);
-    } finally {
-      toBeCheckedIn.forEach(Content::checkIn);
-    }
+    Collection<Content> checkedOutByThis = checkOut(bundles);
+    Collection<Content> changed = new HashSet<>();
+    initializeLocales(bundles, changed);
+    masterizeBundles(rootBundle, bundles, checkedOutByThis, changed);
+    checkinOrRevert(checkedOutByThis, changed);
   }
 
 
@@ -215,25 +215,100 @@ public class LocalizationService {
   }
 
   private static String resourceBundleBaseName(String name) {
-    if (!name.endsWith(RESOURCE_BUNDLE_NAME_SUFFIX)) {
-      throw new IllegalArgumentException("Unexpected resource bundle name \"" + name +"\", don't know how to extract base name.");
-    }
-    name = name.substring(0, name.length() - RESOURCE_BUNDLE_NAME_SUFFIX.length());
+    name = resourceBundleNameWithoutSuffix(name);
     int index = name.indexOf('_');
     return index<0 ? name : name.substring(0, index);
   }
 
-  private void masterizeBundles(Content rootBundle, Set<Content> bundles) {
+  private static Locale localeFromName(String name) {
+    name = resourceBundleNameWithoutSuffix(name);
+    if (name.contains("_")) {
+      String localeStr = name.substring(name.indexOf('_') + 1, name.length());
+      return LocaleUtils.toLocale(localeStr);
+    }
+    return GLOBAL;
+  }
+
+  private static String resourceBundleNameWithoutSuffix(String name) {
+    if (!name.endsWith(RESOURCE_BUNDLE_NAME_SUFFIX)) {
+      throw new IllegalArgumentException("Unexpected resource bundle name \"" + name +"\", don't know how to extract base name.");
+    }
+    return name.substring(0, name.length() - RESOURCE_BUNDLE_NAME_SUFFIX.length());
+  }
+
+  /**
+   * Initialize locales.
+   * <p>
+   * If the bundle has no locale yet, derive it from its name.
+   * The name must follow the pattern of our frontend workflow:
+   * basename[_&lt;locale&gt;].properties
+   */
+  private static void initializeLocales(Collection<Content> bundles, Collection<Content> changed) {
+    for (Content bundle : bundles) {
+      if (StringUtils.isEmpty(bundle.getString(LOCALE))) {
+        bundle.set(LOCALE, localeFromName(bundle.getName()).toString());
+        changed.add(bundle);
+      }
+    }
+  }
+
+  /**
+   * Constitute the master hierarchy according to the bundles' locales.
+   */
+  private static void masterizeBundles(Content rootBundle, Collection<Content> bundles, Collection<Content> checkedOutByThis, Collection<Content> changed) {
     DirectedGraph<Content> localeGraph = new DirectedGraph<>(new LocaleComparator(rootBundle), bundles);
-    for (Content bundle : localeGraph) {
-      List<Content> masters = localeGraph.heads(bundle);
+    recMasterizeBundles(localeGraph.roots(), localeGraph, changed, checkedOutByThis);
+  }
+
+  /**
+   * Recursively masterize the bundles.
+   * <p>
+   * The master version of a child bundle depends on whether we change the
+   * master bundle here.  In order to know that, we must process the master
+   * first and cannot simply iterate over all bundles arbitrarily.  So we do
+   * it recursively, starting from the masters.
+   */
+  private static void recMasterizeBundles(Collection<Content> bundles, DirectedGraph<Content> localeGraph, Collection<Content> changed, Collection<Content> checkedOutByThis) {
+    for (Content bundle : bundles) {
+      Collection<Content> masters = localeGraph.heads(bundle);
       assert masters.size() <= 1 : "Multiple master locales, bug in LocaleComparator or in DirectedGraph!";
-      Content master = masters.isEmpty() ? null : masters.get(0);
-      HashMap<String, Object> masterProperties = new HashMap<>();
-      masterProperties.put(MASTER, master != null ? Collections.singletonList(master) : Collections.emptyList());
-      masterProperties.put(MASTER_VERSION, master != null ? currentVersion(master) : Integer.MIN_VALUE);
+      Content master = masters.isEmpty() ? null : masters.iterator().next();
+      Version masterVersion = null;
+      if (master!=null) {
+        // I guess this masterVersion logic needs some explanation:
+        // We have checked out all affected bundles proactively, in order to
+        // do the whole masterization kind of transactionally.  If we do not
+        // actually change the master though, we will revert it afterwards.
+        boolean willBeReverted = checkedOutByThis.contains(master) && !changed.contains(master);
+        masterVersion = willBeReverted ? revertedVersion(master) : master.getWorkingVersion();
+      }
+      if (updateMasterReference(bundle, master, masterVersion)) {
+        changed.add(bundle);
+      }
+
+      recMasterizeBundles(localeGraph.tails(bundle), localeGraph, changed, checkedOutByThis);
+    }
+  }
+
+  private static boolean updateMasterReference(Content bundle, Content master, Version masterVersion) {
+    // Update only properties that actually changed, in order to spare
+    // events, invalidations and duplicate versions.
+
+    HashMap<String, Object> masterProperties = new HashMap<>();
+    if (!Objects.equals(master, bundle.getLink(MASTER))) {
+      masterProperties.put(MASTER, master!=null ? Collections.singletonList(master) : Collections.emptyList());
+    }
+
+    int mv = masterVersion!=null ? IdHelper.parseVersionId(masterVersion.getId()) : Integer.MIN_VALUE;
+    if (mv!=bundle.getInt(MASTER_VERSION)) {
+      masterProperties.put(MASTER_VERSION, mv);
+    }
+
+    boolean hasChanged = !masterProperties.isEmpty();
+    if (hasChanged) {
       bundle.setProperties(masterProperties);
     }
+    return hasChanged;
   }
 
   private static void checkAreBundles(Collection<Content> contents) {
@@ -248,12 +323,9 @@ public class LocalizationService {
     }
   }
 
-  private int currentVersion(Content content) {
-    return IdHelper.parseVersionId(getExistingVersion(content).getId());
-  }
-
-  private Version getExistingVersion(Content content) {
-    Version version = content.getCheckedInVersion();
+  private static Version revertedVersion(Content content) {
+    assert content.isCheckedOut() : "Illegal internal usage of getRevertVersion";
+    Version version = content.getCheckedOutVersion();
     if (version == null) {
       version = content.getWorkingVersion();
     }
@@ -287,5 +359,15 @@ public class LocalizationService {
       }
     }
     return toBeCheckedIn;
+  }
+
+  private static void checkinOrRevert(Collection<Content> checkedOutByThis, Collection<Content> changed) {
+    for (Content content : checkedOutByThis) {
+      if (changed.contains(content)) {
+        content.checkIn();
+      } else {
+        content.revert();
+      }
+    }
   }
 }

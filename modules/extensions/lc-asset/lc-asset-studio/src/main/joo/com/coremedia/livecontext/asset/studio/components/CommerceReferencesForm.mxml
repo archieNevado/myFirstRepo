@@ -9,9 +9,12 @@
         itemId="commerceReferencesForm"
         title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMPicture_propertyGroup_commerce')}">
   <fx:Metadata>
+    [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
     [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ecommerce.studio.CatalogModel;
+
     public static const xtype:String = "com.coremedia.livecontext.asset.studio.config.commerceReferencesForm";
 
     private var config:CommerceReferencesForm;
@@ -22,11 +25,18 @@
     <fx:Array id="additionalToolbarItems"/>
   </fx:Declarations>
 
-    <local:plugins exml:mode="append">
-      <ui:BindVisibilityPlugin bindTo="{getShopExpression(config)}"/>
-    </local:plugins>
-    <local:items>
-      <ec:CategoryAndProductLinksPropertyField additionalToolbarItems="{config.additionalToolbarItems}"/>
-    </local:items>
-  
+  <local:plugins exml:mode="append">
+    <ui:BindVisibilityPlugin bindTo="{getShopExpression(config)}"/>
+  </local:plugins>
+  <local:items>
+    <ec:CatalogLinkPropertyField
+            readOnlyValueExpression="{getReadOnlyExpression(config)}"
+            propertyName="{PROPERTY_NAME}"
+            linkTypeNames="{[CatalogModel.TYPE_CATEGORY, CatalogModel.TYPE_PRODUCT]}"
+            createStructFunction="{createStructs}"
+            dropAreaText="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin',
+              'Categorys_Products_Link_empty_text')}"
+            additionalToolbarItems="{config.additionalToolbarItems}"/>
+  </local:items>
+
 </local:CommerceReferencesFormBase>

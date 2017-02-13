@@ -19,19 +19,22 @@
     ]]></fx:Script>
 
   <editor:items>
-    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
       <editor:items>
         <bpforms:DetailsDocumentForm/>
         <bpforms:TeaserDocumentForm collapsed="true"/>
-        <bpforms:DataDocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAudio_data_text')}"
-                                  helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAudio_data_helpText')}"/>
+        <bpforms:DataDocumentForm
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAudio_data_text')}"
+                helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAudio_data_helpText')}"/>
         <bpforms:PictureDocumentForm collapsed="true"
                                      expandOnValues="pictures"/>
         <bpforms:ViewTypeSelectorForm/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
       <editor:items>
         <bpforms:CategoryDocumentForm/>
         <bpforms:CollapsibleStringPropertyForm

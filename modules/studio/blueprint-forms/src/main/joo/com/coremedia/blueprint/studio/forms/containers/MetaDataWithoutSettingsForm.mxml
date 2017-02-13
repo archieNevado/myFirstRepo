@@ -19,11 +19,11 @@
     public native function MetaDataWithoutSettingsForm(config:MetaDataWithoutSettingsForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentInfo/>
-      <editor:VersionHistory/>
-      <editor:ReferrerListPanel/>
-      <editor:DocumentMetaDataFormDispatcher/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentInfo/>
+    <editor:VersionHistory/>
+    <editor:ReferrerListPanel/>
+    <editor:DocumentMetaDataFormDispatcher/>
+  </editor:items>
+
 </editor:DocumentForm>

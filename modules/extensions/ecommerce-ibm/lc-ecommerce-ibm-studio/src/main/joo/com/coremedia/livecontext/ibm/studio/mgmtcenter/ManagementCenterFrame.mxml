@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-    This component contains an iframe to integrate the IBM WebSphere Commerce Management Center into the Studio.
-   -->
+<!---
+ This component contains an iframe to integrate the IBM WebSphere Commerce Management Center into the Studio.
+-->
 <local:ManagementCenterFrameBase
-                xmlns:fx="http://ns.adobe.com/mxml/2009"
-                xmlns:local="com.coremedia.livecontext.ibm.studio.mgmtcenter.*"
-                xmlns:exml="http://www.jangaroo.net/exml/0.8"
-                xmlns="exml:ext.config">
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.livecontext.ibm.studio.mgmtcenter.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config">
   <fx:Script><![CDATA[
     public static const xtype:String = "com.coremedia.livecontext.ibm.studio.config.managementCenterFrame";
 

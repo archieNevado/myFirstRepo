@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -113,8 +114,9 @@ public class CMMarketingSpotHandlerTest {
     when(cmNavigationContent.getType()).thenReturn(cmNavigationContentType);
     when(cmNavigationContentType.getName()).thenReturn(CMMarketingSpot.NAME);
 
+    MockHttpServletRequest request = new MockHttpServletRequest();
     MockHttpServletResponse response = new MockHttpServletResponse();
-    ModelAndView modelAndView = testling.handleFragmentRequest(4711, "fragment", response);
+    ModelAndView modelAndView = testling.handleFragmentRequest(4711, "fragment", request, response);
     assertEquals("fragment", modelAndView.getViewName());
     assertTrue(modelAndView.getModel().get("self") instanceof CMMarketingSpot);
     assertTrue(modelAndView.getModel().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION) instanceof CMNavigation);

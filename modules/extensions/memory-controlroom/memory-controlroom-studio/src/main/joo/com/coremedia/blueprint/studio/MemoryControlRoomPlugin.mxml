@@ -8,7 +8,7 @@
     public native function MemoryControlRoomPlugin(config:MemoryControlRoomPlugin = null);
     ]]></fx:Script>
 
-    <local:rules>
-    </local:rules>
-  
+  <local:rules>
+  </local:rules>
+
 </local:MemoryControlRoomPluginBase>

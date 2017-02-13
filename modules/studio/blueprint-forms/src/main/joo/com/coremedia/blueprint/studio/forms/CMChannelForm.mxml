@@ -60,8 +60,9 @@
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_navigation_title')}"
-                         itemId="navigationTab">
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_navigation_title')}"
+            itemId="navigationTab">
       <editor:items>
         <editor:PropertyFieldGroup itemId="cmChannelChildrenForm"
                                    title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Navigation_label')}">
@@ -81,7 +82,8 @@
         <bpforms:VisibilityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
       <editor:items>
         <bpforms:CategoryDocumentForm bindTo="{config.bindTo}"/>
         <bpforms:SEOForm bindTo="{config.bindTo}"/>

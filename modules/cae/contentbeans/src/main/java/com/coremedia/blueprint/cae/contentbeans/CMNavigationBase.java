@@ -10,7 +10,9 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.cap.user.User;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -114,7 +116,8 @@ public abstract class CMNavigationBase extends CMTeasableImpl implements CMNavig
    *
    * @return the value of the document property {@link #THEME}
    */
-  public CMTheme getTheme() {
+  @Override
+  public CMTheme getTheme(@Nullable User developer) {
     return createBeanFor(getContent().getLink(THEME), CMTheme.class);
   }
 

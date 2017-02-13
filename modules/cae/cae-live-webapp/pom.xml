@@ -43,7 +43,7 @@
     <finalName>blueprint</finalName>
     <plugins>
       <!--
-         invoke "mvn tomcat7:run-war" for running this webapp on http://localhost:42180/blueprint/
+         invoke "mvn tomcat7:run" for running this webapp on http://localhost:42180/blueprint/
       -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>

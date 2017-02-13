@@ -18,33 +18,29 @@
     public native function CMInteractiveForm(config:CMInteractiveForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <bpforms:DataDocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_InteractiveData_label')}"
-                                    helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMInteractive_data_helpText')}"/>
-          <bpforms:CollapsibleStringPropertyForm propertyName="copyright"
-                                                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMMedia_copyright_text')}"/>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_WidthAndHeight')}"
-                                     itemId="cmInteractiveSizeForm">
-            <editor:items>
-              <editor:IntegerPropertyField propertyName="width"/>
-              <editor:IntegerPropertyField propertyName="height"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:PictureDocumentForm/>
-          <bpforms:RelatedDocumentForm collapsed="true"/>
-          <bpforms:ViewTypeSelectorForm collapsed="true"/>
-          <bpforms:ValidityDocumentForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-        <editor:items>
-          <bpforms:SEOForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSearchableForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <bpforms:DataDocumentForm
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_InteractiveData_label')}"
+                helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMInteractive_data_helpText')}"/>
+        <bpforms:CollapsibleStringPropertyForm propertyName="copyright"
+                                               title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMMedia_copyright_text')}"/>
+        <bpforms:PictureDocumentForm/>
+        <bpforms:RelatedDocumentForm collapsed="true"/>
+        <bpforms:ViewTypeSelectorForm collapsed="true"/>
+        <bpforms:ValidityDocumentForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+      <editor:items>
+        <bpforms:SEOForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSearchableForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

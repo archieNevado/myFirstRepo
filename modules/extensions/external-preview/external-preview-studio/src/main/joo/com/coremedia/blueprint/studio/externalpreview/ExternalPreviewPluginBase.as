@@ -9,7 +9,7 @@ import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 
 import ext.Component;
 import ext.MessageBox;
-import ext.Plugin;
+import ext.plugin.AbstractPlugin;
 import ext.tab.TabPanel;
 
 import mx.resources.ResourceManager;
@@ -18,14 +18,18 @@ import mx.resources.ResourceManager;
  * Adds the button to start a workflow.
  */
 [ResourceBundle('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin')]
-public class ExternalPreviewPluginBase implements Plugin{
+public class ExternalPreviewPluginBase extends AbstractPlugin {
   private static var token:String;
   private static var selection:Content;
   private static var dirty:Boolean;
   private static var updating:Boolean = false;
   private static var workarea:Component;
 
-  public function init(component:Component):void {
+  public function ExternalPreviewPluginBase(config:ExternalPreviewPlugin = null) {
+    super(config);
+  }
+
+  override public function init(component:Component):void {
     workarea = component;
     component.addListener('afterlayout', addTabListener);
   }

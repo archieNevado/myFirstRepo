@@ -14,6 +14,7 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcPreviewToken;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.security.encryption.util.EncryptionServiceUtil;
 import com.coremedia.util.Base64;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
@@ -130,6 +131,20 @@ public class WcRestConnector {
             .secure(secure)
             .requiresAuthentication(requiresAuthentication)
             .previewSupport(true)
+            .build();
+  }
+
+  @Nonnull
+  public static <T> WcRestServiceMethod<T, Void> createServiceMethod(@Nonnull HttpMethod method,
+                                                                     @Nonnull String url,
+                                                                     boolean secure,
+                                                                     boolean requiresAuthentication,
+                                                                     boolean previewSupport,
+                                                                     @Nonnull Class<T> returnType) {
+    return WcRestServiceMethod.builder(method, url, Void.class, returnType)
+            .secure(secure)
+            .requiresAuthentication(requiresAuthentication)
+            .previewSupport(previewSupport)
             .build();
   }
 
@@ -647,10 +662,9 @@ public class WcRestConnector {
       if (session != null) {
         if (mustBeAuthenticated) {
           headers.put(HEADER_WC_TOKEN, session.getWCToken());
-        }
-
-        if (mustBeSecured) {
-          headers.put(HEADER_WC_TRUSTED_TOKEN, session.getWCTrustedToken());
+          if (mustBeSecured) {
+            headers.put(HEADER_WC_TRUSTED_TOKEN, session.getWCTrustedToken());
+          }
         }
       }
     }
@@ -731,7 +745,7 @@ public class WcRestConnector {
         String json = toJson(bodyData);
 
         if (LOG.isTraceEnabled()) {
-          LOG.trace("{}\n{}", request, json);
+          LOG.trace("{}\n{}", request, formatJsonForLogging(json));
         }
 
         StringEntity entity = new StringEntity(json);
@@ -742,6 +756,17 @@ public class WcRestConnector {
     }
 
     return request;
+  }
+
+  /**
+   * Ensures that no passwords are logged.
+   * @param json the json that should be logged
+   */
+  protected String formatJsonForLogging(String json) {
+    if (json != null) {
+      return json.replaceAll("logonPassword\"\\s*:\\s*\"[^\"]+\"", "logonPassword\":\"***\""); // NOSONAR false positive: Credentials should not be hard-coded
+    }
+    return null;
   }
 
   /**
@@ -849,7 +874,7 @@ public class WcRestConnector {
 
   @Required
   public void setContractPreviewUserPassword(String contractPreviewUserPassword) {
-    this.contractPreviewUserPassword = contractPreviewUserPassword;
+    this.contractPreviewUserPassword = EncryptionServiceUtil.decodeEntryTransparently(contractPreviewUserPassword);
   }
 
   @Required
@@ -859,7 +884,7 @@ public class WcRestConnector {
 
   @Required
   public void setServicePassword(String servicePassword) {
-    this.servicePassword = servicePassword;
+    this.servicePassword = EncryptionServiceUtil.decodeEntryTransparently(servicePassword);
   }
 
   @Required

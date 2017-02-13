@@ -6,3 +6,7 @@
 [#import "/lib/coremedia.com/blueprint.ftl" as bp]
 [#-- additional imports for livecontext and corporate --]
 [#import "/lib/coremedia.com/livecontext.ftl" as lc]
+[#-- elastic social --]
+[#import "/lib/coremedia.com/blueprint/elasticsocial.ftl" as es]
+[#-- asset managment download portal --]
+[#import "/lib/coremedia.com/blueprint/am.ftl" as am]

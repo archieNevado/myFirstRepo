@@ -3,7 +3,7 @@ module.exports = function (grunt, options) {
   'use strict';
 
   // add templates to theme templateset
-  var existingTemplates = grunt.config.get('compress.brick_templates.files');
+  var existingTemplates = options.brickCompressFiles;
   existingTemplates.push({
     expand: true,
     cwd: options.brickDirectory + '/templates',
@@ -19,19 +19,24 @@ module.exports = function (grunt, options) {
         }
       },
       copy: {
-        brick_shoppable_video: {
-          files: [{
-            expand: true,
-            cwd: options.brickDirectory + '/templates',
-            src: '**',
-            dest: options.brickTemplatesDest
-          }]
+        brick_shoppable_video_templates: {
+          expand: true,
+          cwd: options.brickDirectory + '/templates',
+          src: '**',
+          dest: options.brickTemplatesDest
         }
       },
       watch: {
-        brick_shoppable_video: {
-          files: [options.brickDirectory + "**"],
-          tasks: ['copy:brick_shoppable_video']
+        brick_shoppable_video_templates: {
+          files: options.brickDirectory + "/templates/**",
+          tasks: ['copy:brick_shoppable_video_templates', 'compress:brick_templates']
+        },
+        brick_shoppable_video_sass: {
+          options: {
+            spawn: true
+          },
+          files: options.brickDirectory + '/sass/**/*.scss',
+          tasks: ['sass', 'postcss']
         }
       }
     }

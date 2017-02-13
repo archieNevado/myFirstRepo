@@ -3,7 +3,7 @@ module.exports = function (grunt, options) {
   'use strict';
 
   // add templates to theme templateset
-  var existingTemplates = grunt.config.get('compress.brick_templates.files');
+  var existingTemplates = options.brickCompressFiles;
   existingTemplates.push({
     expand: true,
     cwd: options.brickDirectory + '/templates',
@@ -19,30 +19,34 @@ module.exports = function (grunt, options) {
         }
       },
       copy: {
-        brick_preview: {
-          files: [
-            // copy templates
-            {
-              expand: true,
-              cwd: options.brickDirectory + '/templates',
-              src: '**',
-              dest: options.brickTemplatesDest
-            },
-            // copy resource bundles
-            {
-              expand: true,
-              isFile: true,
-              cwd: options.brickDirectory,
-              src: 'l10n/*.properties',
-              dest: '../../target/resources/themes/<%= themeConfig.name %>'
-            }
-          ]
+        brick_preview_l10n: {
+          expand: true,
+          cwd: options.brickDirectory,
+          src: 'l10n/**',
+          dest: '../../target/resources/themes/<%= themeConfig.name %>/'
+        },
+        brick_preview_templates: {
+          expand: true,
+          cwd: options.brickDirectory + '/templates',
+          src: '**',
+          dest: options.brickTemplatesDest
         }
       },
       watch: {
-        brick_preview: {
-          files: [options.brickDirectory + "**"],
-          tasks: ['copy:brick_preview']
+        brick_preview_l10n: {
+          files: options.brickDirectory + "/l10n/**",
+          tasks: ['copy:brick_preview_l10n']
+        },
+        brick_generic_templates_templates: {
+          files: options.brickDirectory + "/templates/**",
+          tasks: ['copy:brick_preview_templates', 'compress:brick_templates']
+        },
+        brick_generic_templates_sass: {
+          options: {
+            spawn: true
+          },
+          files: options.brickDirectory + '/sass/**/*.scss',
+          tasks: ['sass', 'postcss']
         }
       }
     }

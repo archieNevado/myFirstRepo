@@ -152,14 +152,22 @@ coremedia.blueprint.quickInfo = function (module) {
   };
 
   /**
-   * Hides a quickinfo, if user clicked close button.
+   * Hides a quickinfo, if user clicked close button or outside the quickinfo container.
    *
    * @function closeQuickInfo
    * @param {jQuery} $quickinfo - The quickinfo to be hidden.
    */
   module.closeQuickInfo = function ($quickinfo) {
-    $quickinfo.find(prefixcss + "quickinfo__close").click(function () {
+    // close quickinfo on X button
+    $quickinfo.find(prefixcss + "quickinfo__close").on('click touch', function () {
       module.hide($quickinfo);
+    });
+    // close quickinfo on click outside it
+    $(document).on('click touch', function(event) {
+      var $activeQuickinfo = $(prefixcss +'quickinfo--active');
+      if ($activeQuickinfo.length && !$(event.target).closest($activeQuickinfo).length) {
+        module.hide($quickinfo);
+      }
     });
   };
 

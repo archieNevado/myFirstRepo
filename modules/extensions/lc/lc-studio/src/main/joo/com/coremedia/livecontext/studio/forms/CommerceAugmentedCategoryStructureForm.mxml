@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-     The structure form of an augmented category. Content based.
-   -->
+<!---
+ The structure form of an augmented category. Content based.
+-->
 <editor:DocumentForm
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
@@ -36,31 +36,33 @@
     public native function CommerceAugmentedCategoryStructureForm(config:CommerceAugmentedCategoryStructureForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_Website_Navigation')}"
-                                   itemId="websiteNavigation">
-        <editor:plugins exml:mode="append">
-          <ui:BindVisibilityPlugin bindTo="{LivecontextStudioPluginBase.isContentLedValueExpression(config.bindTo)}"/>
-        </editor:plugins>
-        <editor:items>
-          <livecontext:CommerceChildCategoriesForm itemId="commerceChildCategories"/>
-          <Component height="6"/>
-          <bpforms:VisibilityDocumentForm itemId="{VISIBILITY_ITEM_ID}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <!-- let's have a property editor to fix legacy content (new children are stored in struct) -->
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMExternalChannel_legacy_children_text')}"
-                                   itemId="navigationChildren">
-        <editor:plugins exml:mode="append">
-          <ui:BindVisibilityPlugin bindTo="{AugmentationUtil.hasChildCategoriesExpression(config.bindTo)}"/>
-        </editor:plugins>
-        <editor:items>
-          <editor:LinkListPropertyField bindTo="{config.bindTo}"
-                                            propertyName="children"
-                                            itemId="navigationChildrenLinkList"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <livecontext:CommerceCatalogHierarchyForm bindTo="{catalogObjectExpression}"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_Website_Navigation')}"
+            itemId="websiteNavigation">
+      <editor:plugins exml:mode="append">
+        <ui:BindVisibilityPlugin bindTo="{LivecontextStudioPluginBase.isContentLedValueExpression(config.bindTo)}"/>
+      </editor:plugins>
+      <editor:items>
+        <livecontext:CommerceChildCategoriesForm itemId="commerceChildCategories"/>
+        <Component height="6"/>
+        <bpforms:VisibilityDocumentForm itemId="{VISIBILITY_ITEM_ID}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <!-- let's have a property editor to fix legacy content (new children are stored in struct) -->
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMExternalChannel_legacy_children_text')}"
+            itemId="navigationChildren">
+      <editor:plugins exml:mode="append">
+        <ui:BindVisibilityPlugin bindTo="{AugmentationUtil.hasChildCategoriesExpression(config.bindTo)}"/>
+      </editor:plugins>
+      <editor:items>
+        <editor:LinkListPropertyField bindTo="{config.bindTo}"
+                                      propertyName="children"
+                                      itemId="navigationChildrenLinkList"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <livecontext:CommerceCatalogHierarchyForm bindTo="{catalogObjectExpression}"/>
+  </editor:items>
+
 </editor:DocumentForm>

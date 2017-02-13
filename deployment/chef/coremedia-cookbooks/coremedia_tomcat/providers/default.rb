@@ -125,7 +125,7 @@ action :install do
   manage_libs(new_resource.common_libs, common_lib_dir)
 
   template "#{tomcat_dir}/conf/catalina.properties" do
-    source "#{version.major}/catalina.properties.erb"
+    source "#{version.major}.#{version.minor}/catalina.properties.erb"
     cookbook 'coremedia_tomcat'
     variables :catalina_properties => new_resource.catalina_properties
     owner new_resource.user
@@ -133,7 +133,7 @@ action :install do
   end
 
   template "#{tomcat_dir}/conf/server.xml" do
-    source "#{version.major}/server.xml.erb"
+    source "#{version.major}.#{version.minor}/server.xml.erb"
     cookbook 'coremedia_tomcat'
     owner new_resource.user
     group new_resource.group
@@ -150,7 +150,7 @@ action :install do
   end
 
   template "#{tomcat_dir}/conf/web.xml" do
-    source "#{version.major}/web.xml.erb"
+    source "#{version.major}.#{version.minor}/web.xml.erb"
     cookbook 'coremedia_tomcat'
     owner new_resource.user
     group new_resource.group

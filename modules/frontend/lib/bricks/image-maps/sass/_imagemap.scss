@@ -11,6 +11,11 @@ $cm-imagemap-overlay-color-light: #ffffff !default;
 
 
 .#{$cm-imagemap-prefix} {
+  &__wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
   &__hotzone {
     position: absolute;
     z-index: 2;
@@ -43,15 +48,18 @@ $cm-imagemap-overlay-color-light: #ffffff !default;
       background-image: imagemapicon(rgba(0, 0, 0, 0.9));
     }
   }
+
+  &__banderole {
+    pointer-events: none;
+
+    a {
+      pointer-events: auto;
+    }
+  }
 }
 
 .cm-notselectable {
   user-select: none;
-}
-
-.cm-imagemap__wrapper {
-  position: relative;
-  overflow: hidden;
 }
 
 /**

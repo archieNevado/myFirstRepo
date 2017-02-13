@@ -26,26 +26,26 @@
     <fx:String id="title"/>
   </fx:Declarations>
 
-    <ui:rules>
-      <editor:DocumentForm itemId="{config.tabItemId}">
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <editor:PropertyFieldGroup collapsed="true"
-                                         itemId="{ASSET_LINK_ITEM_ID}"
-                                         title="{config.title}"
-                                         forceReadOnlyValueExpression="{componentConfig.forceReadOnlyValueExpression}">
-                <editor:items>
-                  <editor:LinkListPropertyField propertyName="asset"
-                                                showThumbnails="true"
-                                                hideLabel="true"
-                                                openCollectionViewHandler="{AMStudioPluginBase.openAssetSearch}"/>
-                </editor:items>
-              </editor:PropertyFieldGroup>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:DocumentForm>
-    </ui:rules>
-  
+  <ui:rules>
+    <editor:DocumentForm itemId="{config.tabItemId}">
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <editor:PropertyFieldGroup collapsed="true"
+                                       itemId="{ASSET_LINK_ITEM_ID}"
+                                       title="{config.title}"
+                                       forceReadOnlyValueExpression="{componentConfig.forceReadOnlyValueExpression}">
+              <editor:items>
+                <editor:LinkListPropertyField propertyName="asset"
+                                              showThumbnails="true"
+                                              hideLabel="true"
+                                              openCollectionViewHandler="{AMStudioPluginBase.openAssetSearch}"/>
+              </editor:items>
+            </editor:PropertyFieldGroup>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:DocumentForm>
+  </ui:rules>
+
 </ui:NestedRulesPlugin>

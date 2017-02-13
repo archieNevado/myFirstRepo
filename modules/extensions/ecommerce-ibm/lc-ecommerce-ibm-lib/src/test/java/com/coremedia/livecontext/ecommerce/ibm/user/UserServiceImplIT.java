@@ -42,7 +42,7 @@ public class UserServiceImplIT extends AbstractServiceTest {
     user.getChallengeQuestion();
     assertEquals("Hamburg", user.getCity());
     assertEquals("D", user.getCountry());
-    assertEquals("development@coremedia.com", user.getEmail1());
+    assertNotNull(user.getEmail1());
     assertTrue(StringUtils.isEmpty(user.getEmail2()));
     assertTrue(StringUtils.isEmpty(user.getEmail3()));
     assertEquals("Cm", user.getFirstName());

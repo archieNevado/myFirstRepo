@@ -9,6 +9,7 @@
         title="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_title')}"
         width="950"
         height="640"
+        constrainHeader="true"
         focusOnToFront="false">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin')]

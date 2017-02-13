@@ -5,15 +5,20 @@ import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.util.ContentLinkListWrapper;
+import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.bem.LinkListBEMEntities;
 
 import ext.form.FieldContainer;
 
 [ResourceBundle('com.coremedia.cms.editor.Editor')]
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
 public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
+
+  protected static const GRID_PANEL_ITEM_ID:String = "gridPanel";
   protected static const TAXONOMY_SEARCH_FIELD_ITEM_ID:String = "taxonomySearchField";
   protected static const OPEN_TAXONOMY_CHOOSER_BUTTON_ITEM_ID:String = "openTaxonomyChooserButton";
 
@@ -54,19 +59,54 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
   [Bindable]
   public var forceReadOnlyValueExpression:ValueExpression;
 
+  private var linkListWrapper:ILinkListWrapper;
   private var searchResultExpression:ValueExpression;
   private var siteSelectionExpression:ValueExpression;
 
+  private var gridPanel:TaxonomyLinkListGridPanel;
   private var searchField:TaxonomySearchField;
   private var selectedValuesVE:ValueExpression;
   private var selectedPositionsVE:ValueExpression;
+  private var modifierVE:ValueExpression;
 
   public function TaxonomyLinkListPropertyFieldBase(config:TaxonomyLinkListPropertyFieldBase = null) {
     super(config);
 
+    gridPanel = queryById(GRID_PANEL_ITEM_ID) as TaxonomyLinkListGridPanel;
     searchField = queryById(TAXONOMY_SEARCH_FIELD_ITEM_ID) as TaxonomySearchField;
 
     getSearchResultExpression().addChangeListener(searchResultChanged);
+  }
+
+  protected function getLinkListWrapper(config:TaxonomyLinkListPropertyFieldBase):ILinkListWrapper {
+    if (!linkListWrapper) {
+      var linkListWrapperCfg:ContentLinkListWrapper = ContentLinkListWrapper({});
+      linkListWrapperCfg.bindTo = config.bindTo;
+      linkListWrapperCfg.propertyName = config.propertyName;
+      linkListWrapperCfg.linkTypeName = config.linkType;
+      linkListWrapperCfg.maxCardinality = config.maxCardinality;
+      linkListWrapper = new ContentLinkListWrapper(linkListWrapperCfg);
+    }
+    return linkListWrapper;
+  }
+
+  protected function getModifierVE(config:TaxonomyLinkListPropertyFieldBase):ValueExpression {
+    if (!modifierVE) {
+      modifierVE = ValueExpressionFactory.createFromFunction(function ():Array {
+        //noinspection JSMismatchedCollectionQueryUpdate
+        var links:Array = getLinkListWrapper(config).getLinks();
+        if (links === undefined) {
+          return undefined;
+        }
+
+        var modifiers:Array = [];
+        if (links.length === 0) {
+          modifiers.push(LinkListBEMEntities.MODIFIER_EMPTY);
+        }
+        return modifiers;
+      });
+    }
+    return modifierVE;
   }
 
   /**

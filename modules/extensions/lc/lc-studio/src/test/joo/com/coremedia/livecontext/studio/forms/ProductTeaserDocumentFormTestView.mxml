@@ -16,8 +16,8 @@
     public var bindTo:ValueExpression;
     ]]></fx:Script>
 
-    <items>
-      <livecontext:ProductTeaserDocumentForm bindTo="{config.bindTo}"/>
-    </items>
-  
+  <items>
+    <livecontext:ProductTeaserDocumentForm bindTo="{config.bindTo}"/>
+  </items>
+
 </Viewport>

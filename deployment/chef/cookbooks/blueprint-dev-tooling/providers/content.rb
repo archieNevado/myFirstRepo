@@ -44,7 +44,7 @@ action :publishall_content do
   end
 
   content_publish = execute "publish content from #{new_resource.content_dir}" do
-    command "#{new_resource.cms_tools_dir}/bin/cm publishall -a -cq \"#{new_resource.publishall_contentquery}\" #{new_resource.cms_ior} admin admin #{new_resource.mls_ior} admin admin"
+    command "#{new_resource.cms_tools_dir}/bin/cm publishall -a -cq \"#{new_resource.publishall_contentquery}\" -t #{new_resource.publishall_threads} #{new_resource.cms_ior} admin admin #{new_resource.mls_ior} admin admin"
     timeout new_resource.timeout
     user new_resource.user
     group new_resource.group

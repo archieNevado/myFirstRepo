@@ -10,6 +10,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMMarketingSpot;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
@@ -22,6 +23,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -63,6 +65,7 @@ public class CMMarketingSpotHandler extends PageHandlerBase {
   @RequestMapping(value = DYNAMIC_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = RequestMethod.GET)
   public ModelAndView handleFragmentRequest(@PathVariable(MARKETING_SPOT_ID_VARIABLE) int marketingSpotId,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
+                                            HttpServletRequest request,
                                             HttpServletResponse response) {
     CMMarketingSpot cmMarketingSpot = resolveMarketingSpot(marketingSpotId);
 
@@ -72,7 +75,7 @@ public class CMMarketingSpotHandler extends PageHandlerBase {
       CMNavigation cmNavigation = getContextHelper().contextFor(cmMarketingSpot);
       ModelAndView modelWithView = HandlerHelper.createModelWithView(cmMarketingSpot, view);
 
-      Page page = asPage(cmNavigation, cmNavigation);
+      Page page = asPage(cmNavigation, cmNavigation, UserVariantHelper.getUser(request));
       addPageModel(modelWithView, page);
       return modelWithView;
     }

@@ -91,7 +91,7 @@ end
 
 def normalize_bool(val)
   case val
-  when 'no','false',false then false
+  when nil, 'no', 'false', false then false
   else true
   end
 end
@@ -114,7 +114,7 @@ def user_resource(exec_action)
     recursive true
     action    :nothing
   end
-  r.run_action(:create) unless exec_action == :delete
+  r.run_action(:create) unless exec_action == :remove
   new_resource.updated_by_last_action(true) if r.updated_by_last_action?
 
   r = user new_resource.username do
@@ -125,7 +125,8 @@ def user_resource(exec_action)
     shell     my_shell              if my_shell
     password  new_resource.password if new_resource.password
     system    new_resource.system_user # ~FC048: Prefer Mixlib::ShellOut
-    supports  :manage_home => manage_home, :non_unique => non_unique
+    non_unique non_unique
+    manage_home true
     action    :nothing
   end
   r.run_action(exec_action)

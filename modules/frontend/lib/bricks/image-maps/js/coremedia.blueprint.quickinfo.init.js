@@ -29,6 +29,12 @@ coremedia.blueprint.$(function () {
     coremedia.blueprint.quickInfo.closeQuickInfo($target);
   });
 
+  // close quickinfo on Esc key
+  coremedia.blueprint.$('body').on("keydown", function (event) {
+    if (event.keyCode === 27) {
+      coremedia.blueprint.quickInfo.hide(coremedia.blueprint.$('.cm-quickinfo--active'));
+    }
+  });
 
   // handle quickinfo buttons
   coremedia.blueprint.nodeDecorationService.addNodeDecoratorByData({

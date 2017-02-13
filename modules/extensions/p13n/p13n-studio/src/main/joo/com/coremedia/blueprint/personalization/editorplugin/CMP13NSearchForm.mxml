@@ -21,54 +21,56 @@
     public native function CMP13NSearchForm(config:CMP13NSearchForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm itemId="personalization"
-                           title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <bpforms:TeaserDocumentForm/>
-          <editor:PropertyFieldGroup itemId="cmP13nDefaultContentForm"
-                                     title="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationDocTypes', 'CMSelectionRules_defaultContent_text')}">
-            <editor:items>
-              <editor:LinkListPropertyField linkType="CMTeasable" hideLabel="true"
-                                            showThumbnails="true"
-                                            propertyName="defaultContent"
-                                            bindTo="{config.bindTo}">
-                <editor:additionalToolbarItems>
-                  <TbSeparator/>
-                  <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
-                                                          propertyName="defaultContent"/>
-                </editor:additionalToolbarItems>
-              </editor:LinkListPropertyField>
-            </editor:items>
-          </editor:PropertyFieldGroup>
+  <editor:items>
+    <editor:DocumentForm itemId="personalization"
+                         title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <bpforms:TeaserDocumentForm/>
+        <editor:PropertyFieldGroup itemId="cmP13nDefaultContentForm"
+                                   title="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationDocTypes', 'CMSelectionRules_defaultContent_text')}">
+          <editor:items>
+            <editor:LinkListPropertyField linkType="CMTeasable" hideLabel="true"
+                                          showThumbnails="true"
+                                          propertyName="defaultContent"
+                                          bindTo="{config.bindTo}">
+              <editor:additionalToolbarItems>
+                <TbSeparator/>
+                <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
+                                                        propertyName="defaultContent"/>
+              </editor:additionalToolbarItems>
+            </editor:LinkListPropertyField>
+          </editor:items>
+        </editor:PropertyFieldGroup>
 
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Expression')}"
-                                     itemId="cmP13nSearchForm">
-            <editor:items>
-              <plugin:SearchQueryPropertyField propertyName="searchQuery"
-                                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Expression')}"
+                itemId="cmP13nSearchForm">
+          <editor:items>
+            <plugin:SearchQueryPropertyField propertyName="searchQuery"
+                                             forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
               <plugin:plugins exml:mode="append">
                 <editor:ShowIssuesPlugin propertyName="searchQuery" bindTo="{config.bindTo}"/>
               </plugin:plugins>
-              </plugin:SearchQueryPropertyField>
-              <perso:SearchQueryHelper/>
-              <editor:ContentTypeStringPropertyField bindTo="{config.bindTo}"
-                                                     propertyName="documentType"
-                                                     forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-              <editor:LinkListPropertyField propertyName="searchContext"
-                                            bindTo="{config.bindTo}"
-                                            forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-              <editor:SpinnerPropertyField propertyName="maxLength"
-                                           minValue="1"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:ViewTypeSelectorForm paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
-                                        collapsed="false"/>
-          <bpforms:ValidityDocumentForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSettingsForm/>
-    </editor:items>
-  
+            </plugin:SearchQueryPropertyField>
+            <perso:SearchQueryHelper/>
+            <editor:ContentTypeStringPropertyField bindTo="{config.bindTo}"
+                                                   propertyName="documentType"
+                                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+            <editor:LinkListPropertyField propertyName="searchContext"
+                                          bindTo="{config.bindTo}"
+                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+            <editor:SpinnerPropertyField propertyName="maxLength"
+                                         minValue="1"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:ViewTypeSelectorForm
+                paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
+                collapsed="false"/>
+        <bpforms:ValidityDocumentForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSettingsForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

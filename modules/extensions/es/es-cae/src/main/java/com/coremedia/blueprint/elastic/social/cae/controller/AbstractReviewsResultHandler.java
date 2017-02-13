@@ -1,18 +1,24 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.reviews.DuplicateReviewException;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 
 public abstract class AbstractReviewsResultHandler extends ElasticContentHandler<ReviewsResult> {
 
@@ -21,13 +27,15 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
 
   protected abstract ReviewsResult getReviewsResult(Object target, boolean enabled, ContributionType contributionType);
 
-  protected ModelAndView handleCreateReview(Site site,
-                                            String contextId,
+  protected ModelAndView handleCreateReview(String contextId,
                                             String targetId,
                                             String text,
                                             String title,
-                                            Integer rating) {
+                                            Integer rating,
+                                            HttpServletRequest request) {
     Navigation navigation = getNavigation(contextId);
+    Site site = SiteHelper.getSiteFromRequest(request);
+    User developer = UserVariantHelper.getUser(request);
 
     if (site == null) {
       return HandlerHelper.notFound();
@@ -44,7 +52,7 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
     CommunityUser author = getElasticSocialUserHelper().getCurrentUser();
 
     HandlerInfo result = new HandlerInfo();
-    validateReview(result, author, rating, title, text, navigation, beans);
+    validateReview(result, author, rating, title, text, navigation, developer, beans);
 
     if (result.isSuccess()) {
       ModerationType moderationType = elasticSocialConfiguration.getReviewModerationType();
@@ -56,17 +64,17 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
         result.setModel(newReview);
         String message;
         if (moderationType.equals(ModerationType.PRE_MODERATION)) {
-          message = getMessage(navigation, ContributionMessageKeys.REVIEW_FORM_SUCCESS_PREMODERATION);
+          message = getMessage(navigation, developer, ContributionMessageKeys.REVIEW_FORM_SUCCESS_PREMODERATION);
         } else {
-          message = getMessage(navigation, ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+          message = getMessage(navigation, developer, ContributionMessageKeys.REVIEW_FORM_SUCCESS);
         }
         result.addMessage(SUCCESS_MESSAGE, null, message);
       } catch (DuplicateReviewException e) {  // NOSONAR no need to log a stacktrace for this
         LOG.info("Could not write a review, the author {} has already written a review for the target {}", e.getAuthor(), e.getTarget());
-        addErrorMessage(result, null, navigation, ContributionMessageKeys.REVIEW_FORM_ALREADY_REVIEWED);
+        addErrorMessage(result, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_ALREADY_REVIEWED);
       } catch (Exception e) {
         LOG.error("Could not write a review", e);
-        addErrorMessage(result, null, navigation, ContributionMessageKeys.REVIEW_FORM_ERROR);
+        addErrorMessage(result, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR);
       }
     }
     return HandlerHelper.createModel(result);
@@ -98,31 +106,39 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
     return modelWithView;
   }
 
-  protected void validateEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, Object... beans) {
+  /**
+   * @param user The community user that this is all about
+   * @param developer A Blueprint developer whose work in progress may be considered by particular features
+   */
+  private void validateReviewsEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, @Nullable User developer, Object... beans) {
     ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(beans);
     // user == null was not allowed in previous versions, removed because user filter handling not fix
     if (!elasticSocialConfiguration.isWritingReviewsEnabled()) {
-      addErrorMessage(handlerInfo, null, navigation, ContributionMessageKeys.REVIEW_FORM_ERROR_NOT_ENABLED);
+      addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_NOT_ENABLED);
     } else if ((user == null || user.isAnonymous()) && !elasticSocialConfiguration.isAnonymousReviewingEnabled()) {
-      addErrorMessage(handlerInfo, null, navigation, ContributionMessageKeys.REVIEW_FORM_NOT_LOGGED_IN);
+      addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_NOT_LOGGED_IN);
     }
   }
 
-  protected void validateReview(HandlerInfo handlerInfo, CommunityUser user, Integer rating, String title, String text, Navigation navigation, Object... beans) {
+  /**
+   * @param user The community user that this is all about
+   * @param developer A Blueprint developer whose work in progress may be considered by particular features
+   */
+  protected void validateReview(HandlerInfo handlerInfo, CommunityUser user, Integer rating, String title, String text, Navigation navigation, @Nullable User developer, Object... beans) {
     // user == null was not allowed in previous versions, removed because user filter handling not fix
-    validateEnabled(handlerInfo, user, navigation, beans);
+    validateReviewsEnabled(handlerInfo, user, navigation, developer, beans);
     if (rating == null) {
-      addErrorMessage(handlerInfo, "rating", navigation, ContributionMessageKeys.REVIEW_FORM_ERROR_RATING_BLANK);
+      addErrorMessage(handlerInfo, "rating", navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_RATING_BLANK);
     }
 
     if (StringUtils.isBlank(title)) {
-      addErrorMessage(handlerInfo, "title", navigation, ContributionMessageKeys.REVIEW_FORM_ERROR_TITLE_BLANK);
+      addErrorMessage(handlerInfo, "title", navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_TITLE_BLANK);
     }
 
     if (StringUtils.isBlank(text)) {
-      addErrorMessage(handlerInfo, "text", navigation, ContributionMessageKeys.REVIEW_FORM_ERROR_TEXT_BLANK);
+      addErrorMessage(handlerInfo, "text", navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_TEXT_BLANK);
     } else if (text.length() < REVIEW_TEXT_MIN_LENGTH) {
-      addErrorMessage(handlerInfo, "text", navigation, ContributionMessageKeys.REVIEW_FORM_ERROR_TEXT_TOO_SHORT);
+      addErrorMessage(handlerInfo, "text", navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_TEXT_TOO_SHORT);
     }
   }
 }

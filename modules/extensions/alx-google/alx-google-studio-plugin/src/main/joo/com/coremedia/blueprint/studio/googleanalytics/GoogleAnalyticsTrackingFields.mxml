@@ -21,15 +21,16 @@
     public native function GoogleAnalyticsTrackingFields(config:GoogleAnalyticsTrackingFields = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:BooleanPropertyField dontTransformToInteger="true"
-                                   propertyName="localSettings.googleAnalytics.disabled"/>
-      <editor:StringPropertyField propertyName="localSettings.googleAnalytics.webPropertyId">
-        <editor:listeners>
-          <fx:Object afterrender="{function(c:Container):void {TextField(c.down('textfield')).vtype = GoogleAnalyticsWebPropertyIdValidator.WEB_PROPERTY_ID_KEY;}}"/>
-        </editor:listeners>
-      </editor:StringPropertyField>
-      <editor:StringPropertyField propertyName="localSettings.googleAnalytics.domainName"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:BooleanPropertyField dontTransformToInteger="true"
+                                 propertyName="localSettings.googleAnalytics.disabled"/>
+    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.webPropertyId">
+      <editor:listeners>
+        <fx:Object
+                afterrender="{function(c:Container):void {TextField(c.down('textfield')).vtype = GoogleAnalyticsWebPropertyIdValidator.WEB_PROPERTY_ID_KEY;}}"/>
+      </editor:listeners>
+    </editor:StringPropertyField>
+    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.domainName"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

@@ -11,27 +11,14 @@ and uses the CoreMedia Adaptive and Responsive Image Framework to dynamically de
 aspect ratios and crops. The responsive navigation visualizes 3 levels, even though the navigation structure can be 
 arbitrary deeply nested. The floating header and the footer can be configured and re-ordered in content settings.
 
-### Used tools and libraries
-
-- [Twitter Bootstrap](http://getbootstrap.com) 
-- [Sass](http://sass-lang.com/) as CSS preprocessor
-- [Freemarker](http://freemarker.org/) as template language
-- [Grunt](http://gruntjs.com/) as build tool
-
 ### Installation
 
 Navigate to this folder ```modules/frontend/themes/corporate-theme``` and install all modules using [npm](https://www.npmjs.com/):
 
-```$ npm install```
+```$ npm install && npm run production```
 
-### Available Grunt commands
+For more informations see [Themes Description](../README.md)
 
-#### ```grunt build``` (Compile CSS and JavaScript)
+### Supported Browsers
 
-Generates and copy all webresources, like compiled CSS, fonts, images, JavaScript files and templates to 
-the ```target/resources/themes/corporate``` directory for deployment and development.
-
-#### ```grunt watch``` (Watch)
-
-Watches the Sass, Javascript and Freemarker source files and automatically recompiles them whenever you save a change. 
-If you have openend a page of this theme in your browser, it will automatically reload too.
+See [browserlist configuration](package.json) in package.json (supportedBrowsers).

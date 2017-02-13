@@ -22,8 +22,6 @@
     <module>lc-caefeeder-component</module>
     <module>lc-contentfeeder-component</module>
     <module>lc-server</module>
-    <module>lc-ecommerce-toko-component</module>
-    <module>lc-ecommerce-toko-lib</module>
     <module>lc-ecommerce-webapp-component</module>
     <module>lc-feeder-lib</module>
     <module>lc-services-api</module>
@@ -31,6 +29,5 @@
     <module>lc-studio</module>
     <module>lc-studio-test-helper</module>
     <module>lc-studio-lib</module>
-    <module>lc-toko-bom</module>
   </modules>
 </project>

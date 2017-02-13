@@ -24,17 +24,17 @@
     public native function CatalogSearchFiltersPanel(config:CatalogSearchFiltersPanel = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The initial State of the view.
-     -->
+    <!---
+     The initial State of the view.
+    -->
     <fx:Object id="state"/>
   </fx:Declarations>
 
-    <items>
-      <!--<editor:searchFilters/>-->
-    </items>
-    <layout>
-      <layout_Form/>
-    </layout>
-  
+  <items>
+    <!--<editor:searchFilters/>-->
+  </items>
+  <layout>
+    <layout_Form/>
+  </layout>
+
 </Panel>

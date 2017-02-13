@@ -20,16 +20,17 @@
     public native function LcElasticSocialStudioPlugin(config:LcElasticSocialStudioPlugin = null);
     ]]></fx:Script>
 
-    <editor:rules>
-      <es:CommentMetaDataPanel>
-        <es:plugins>
-          <ui:AddLazyItemsPlugin applyTo="{function(container:Container):Component { return container.queryById(CommentMetaDataPanel.TARGET_INFORMATION_CONTAINER_ITEM_ID);}}">
-            <ui:items>
-              <lces:ProductInformationContainer itemId="com-coremedia-ecommerce-studio-model-ProductImpl" />
-            </ui:items>
-          </ui:AddLazyItemsPlugin>
-        </es:plugins>
-      </es:CommentMetaDataPanel>
-    </editor:rules>
-  
+  <editor:rules>
+    <es:CommentMetaDataPanel>
+      <es:plugins>
+        <ui:AddLazyItemsPlugin
+                applyTo="{function(container:Container):Component { return container.queryById(CommentMetaDataPanel.TARGET_INFORMATION_CONTAINER_ITEM_ID);}}">
+          <ui:items>
+            <lces:ProductInformationContainer itemId="com-coremedia-ecommerce-studio-model-ProductImpl"/>
+          </ui:items>
+        </ui:AddLazyItemsPlugin>
+      </es:plugins>
+    </es:CommentMetaDataPanel>
+  </editor:rules>
+
 </editor:StudioPlugin>

@@ -1,62 +1,78 @@
 package com.coremedia.ecommerce.studio.components.link {
+import com.coremedia.cms.editor.sdk.premular.fields.LinkListGridPanel;
+import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
+import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
+import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ui.data.ValueExpression;
-import com.coremedia.ui.data.ValueExpressionFactory;
-import com.coremedia.ui.mixins.IValidationStateMixin;
-import com.coremedia.ui.mixins.ValidationState;
+import com.coremedia.ui.store.BeanRecord;
 
-import ext.container.Container;
+public class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
 
-public class CatalogLinkPropertyFieldBase extends Container implements IValidationStateMixin {
+  private var content:*;
 
-  private var readOnlyExpression:ValueExpression;
-
-  /** @inheritDoc */
   [Bindable]
-  public native function validationInit(validationState:ValidationState = undefined):void;
+  public var bindTo:ValueExpression;
 
-  /** @private */
   [Bindable]
-  public native function set validationState(validationState:ValidationState):void;
-
-  /** @inheritDoc */
-  [Bindable]
-  public native function get validationState():ValidationState;
-
-  /** @private */
-  [Bindable]
-  public native function set validationStateVE(validationStateVE:ValueExpression):void;
-
-  /** @inheritDoc */
-  [Bindable]
-  public native function get validationStateVE():ValueExpression;
+  public var forceReadOnlyValueExpression:ValueExpression;
 
   public function CatalogLinkPropertyFieldBase(config:CatalogLinkPropertyField = null) {
     super(config);
-    validationInit();
+    bindTo = config.bindTo;
   }
 
-  /**
-   * Returns value expression for if the capacity is free or can not be calculated.
-   */
-  protected function getHasFreeCapacityExpression(config:CatalogLinkPropertyField):ValueExpression{
-    var hasFreeCapacityExpression:ValueExpression = ValueExpressionFactory.createFromFunction(function ():Boolean {
-      if (config.multiple) {
-        return true;
-      }
-      var catalogObjectsExpression:ValueExpression = config.bindTo.extendBy('properties').extendBy(config.propertyName);
-      var catalogObjects:Array = catalogObjectsExpression.getValue();
-      return !catalogObjects || catalogObjects.length === 0;
-    });
-    return hasFreeCapacityExpression;
+
+  [ProvideToExtChildren]
+  internal function getContent():* {
+    return content;
   }
 
-  protected function getReadOnlyExpression(config:*):ValueExpression {
-    if (!readOnlyExpression) {
-      readOnlyExpression = ValueExpressionFactory.createFromFunction(CatalogLinkFieldBase.getReadOnlyFunction(config));
+  internal static function convertTypeLabel(v:String, catalogObject:CatalogObject):String {
+    if (catalogObject is CatalogObject) {
+      return AugmentationUtil.getTypeLabel(catalogObject)
     }
-    return readOnlyExpression;
   }
 
-}
+  internal static function convertTypeCls(v:String, catalogObject:CatalogObject):String {
+    if (catalogObject is CatalogObject) {
+      return AugmentationUtil.getTypeCls(catalogObject)
+    }
+  }
 
+  internal static function convertIdLabel(v:String, catalogObject:CatalogObject):String {
+    if (!catalogObject) return undefined;
+    if (catalogObject is CatalogObject) {
+      try {
+        var extId:String = catalogObject.getExternalId();
+        if (extId) {
+          return extId;
+        }
+      } catch(e:Error){
+        return CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
+      }
+    }
+    return CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
+  }
+
+  internal static function convertNameLabel(v:String, catalogObject:CatalogObject):String {
+    var name:String = undefined;
+    if (!catalogObject) return name;
+    if (catalogObject is CatalogObject) {
+      try {
+        name = CatalogHelper.getInstance().getDecoratedName(catalogObject);
+      } catch(e:Error){
+        //ignore
+      }
+    }
+    if (!name) {
+      name = CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
+    }
+    return name;
+  }
+
+  protected static function thumbColRenderer(value:Object, metaData:Object, record:BeanRecord):String {
+    return ImageLinkListRenderer.thumbColRenderer(value, metaData, record, "CatalogObject");
+  }
+}
 }

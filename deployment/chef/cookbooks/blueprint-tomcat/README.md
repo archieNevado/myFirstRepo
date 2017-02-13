@@ -87,15 +87,16 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 ## Cookbooks:
 
 * blueprint-base
-* coremedia_tomcat (~> 2.0)
-* coremedia_maven (~> 2.0)
+* coremedia_tomcat (~> 2.0.11)
+* coremedia_maven (~> 2.0.4)
 * chef-sugar (~> 3.0)
+* java_se (~> 8.112.0)
 
 # Attributes
 
-* `node['blueprint']['tomcat']['source']` - The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `nil`.
-* `node['blueprint']['tomcat']['source_checksum']` - The SHA-256 checksum of the tomcat installation zip. Defaults to `f093d033cb84e104f9f00f120dc6f3b39471d8e12be8fc250374ac9891c257b1`.
-* `node['blueprint']['tomcat']['version']` - The version of tomcat to install. Defaults to `7.0.69`.
+* `node['blueprint']['tomcat']['source']` - The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.72/bin/apache-tomcat-7.0.72.zip`.
+* `node['blueprint']['tomcat']['source_checksum']` - The SHA-256 checksum of the tomcat installation zip. Defaults to `86ea10a9794714c5a98396d4ab7d077a524dc97c09fbb225a54a2c71d85747d7`.
+* `node['blueprint']['tomcat']['version']` - The version of tomcat to install. Defaults to `7.0.72`.
 * `node['blueprint']['tomcat']['java_home']` - The path to the java home for the tomcat services. Defaults to `/usr/lib/jvm/java`.
 * `node['blueprint']['tomcat']['catalina_opts']['agent']` - Global jvm agent opts. Use this to instrument the jvm for monitoring. Defaults to ``.
 * `node['blueprint']['tomcat']['catalina_opts']['gc']` - Global jvm garbage collection flags. Defaults to `-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+UseMembar`.
@@ -105,8 +106,8 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['cae-live']['catalina_opts']['libjpeg']` -  Defaults to `-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}`.
 * `node['blueprint']['tomcat']['studio']['catalina_opts']['libjpeg']` -  Defaults to `-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}`.
 * `node['blueprint']['tomcat']['jmx_remote']` - A flag to enable/disable the jmx remote connector. Defaults to `true`.
-* `node['blueprint']['tomcat']['jmx_remote_jar_source']` - The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `nil`.
-* `node['blueprint']['tomcat']['jmx_remote_jar_source_checksum']` - The SHA-256 checksum of the catalina-jmx-remote.jar. Defaults to `5fe0c568afe6f24998817bfb9e6a77e1b430112a52ed914d48a1f9a401f86fb1`.
+* `node['blueprint']['tomcat']['jmx_remote_jar_source']` - The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.72/bin/extras/catalina-jmx-remote.jar`.
+* `node['blueprint']['tomcat']['jmx_remote_jar_source_checksum']` - The SHA-256 checksum of the catalina-jmx-remote.jar. Defaults to `fbe611a1e7be0b3e79d16bf65dfa5f104de0ed08800079a2490fe788e72e58d1`.
 * `node['blueprint']['tomcat']['jmx_remote_authenticate']` - A flag to enable/disable remote jmx authentication. Defaults to `true`.
 * `node['blueprint']['tomcat']['jmx_remote_server_name']` - The server name under which the rmi server is registered. Set it to localhost and create a ssh tunnel(recommended) or set it to the actual hostname and open the ports and configure security and ssl. Defaults to `node['fqdn']`.
 * `node['blueprint']['tomcat']['jmx_remote_monitor_password']` - The password for the monitoring jmx role. Defaults to `monitor`.
@@ -198,9 +199,9 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * [blueprint-tomcat::adobe-drive-server](#blueprint-tomcatadobe-drive-server) - This recipe installs and configures the CoreMedia Blueprint Adobe Drive Server.
 * [blueprint-tomcat::cae-live](#blueprint-tomcatcae-live) - This recipe installs and configures the CoreMedia Blueprint Live CAE.
 * [blueprint-tomcat::cae-preview](#blueprint-tomcatcae-preview) - This recipe installs and configures the CoreMedia Blueprint Preview CAE.
-* [blueprint-tomcat::caefeeder-live](#blueprint-tomcatcaefeeder-live) - This recipe installs and configures the CoreMedia Blueprint Live CAEFeeder.
-* [blueprint-tomcat::caefeeder-preview](#blueprint-tomcatcaefeeder-preview) - This recipe installs and configures the CoreMedia Blueprint Preview CAEFeeder.
-* [blueprint-tomcat::content-feeder](#blueprint-tomcatcontent-feeder) - This recipe installs and configures the CoreMedia Blueprint Contentfeeder.
+* [blueprint-tomcat::caefeeder-live](#blueprint-tomcatcaefeeder-live) - This recipe installs and configures the CoreMedia Blueprint Live CAE Feeder.
+* [blueprint-tomcat::caefeeder-preview](#blueprint-tomcatcaefeeder-preview) - This recipe installs and configures the CoreMedia Blueprint Preview CAE Feeder.
+* [blueprint-tomcat::content-feeder](#blueprint-tomcatcontent-feeder) - This recipe installs and configures the CoreMedia Blueprint Content Feeder.
 * [blueprint-tomcat::content-management-server](#blueprint-tomcatcontent-management-server) - This recipe installs and configures the CoreMedia Blueprint Content Management Server.
 * [blueprint-tomcat::default](#blueprint-tomcatdefault) - This recipe installs all services.
 * [blueprint-tomcat::elastic-worker](#blueprint-tomcatelastic-worker) - This recipe installs and configures the CoreMedia Blueprint Elastic Worker.
@@ -244,15 +245,15 @@ This recipe installs and configures the CoreMedia Blueprint Preview CAE.
 
 ## blueprint-tomcat::caefeeder-live
 
-This recipe installs and configures the CoreMedia Blueprint Live CAEFeeder.
+This recipe installs and configures the CoreMedia Blueprint Live CAE Feeder.
 
 ## blueprint-tomcat::caefeeder-preview
 
-This recipe installs and configures the CoreMedia Blueprint Preview CAEFeeder.
+This recipe installs and configures the CoreMedia Blueprint Preview CAE Feeder.
 
 ## blueprint-tomcat::content-feeder
 
-This recipe installs and configures the CoreMedia Blueprint Contentfeeder.
+This recipe installs and configures the CoreMedia Blueprint Content Feeder.
 
 ## blueprint-tomcat::content-management-server
 

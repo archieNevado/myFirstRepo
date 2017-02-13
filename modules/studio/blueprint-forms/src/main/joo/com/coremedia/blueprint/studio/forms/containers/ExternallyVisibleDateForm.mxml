@@ -60,7 +60,7 @@
     </ui:BoundRadioGroup>
     <Container>
       <layout>
-        <layout_HBox />
+        <layout_HBox/>
       </layout>
       <items>
         <Component

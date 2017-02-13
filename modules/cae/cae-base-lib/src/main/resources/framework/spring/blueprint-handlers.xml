@@ -2,12 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:webflow="http://www.springframework.org/schema/webflow-config"
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.coremedia.com/2007/coremedia-spring-beans-customization
                            http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/webflow-config
                            http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd
                            http://www.springframework.org/schema/util
@@ -34,6 +37,8 @@
   <import resource="classpath:/com/coremedia/cap/transform/transform-services.xml"/>
   <import resource="blueprint-i18n.xml"/>
   <import resource="blueprint-search.xml"/>
+
+  <context:component-scan base-package="com.coremedia.blueprint.coderesources.configuration" />
 
   <!--
     "Simple Controllers" (=pre @RequestMapping handlers) are identified by their "name".
@@ -76,7 +81,6 @@
     <property name="contextHelper" ref="contextHelper"/>
     <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
     <property name="contentLinkBuilder" ref="contentLinkBuilder"/>
-    <property name="developerModeEnabled" value="${cae.developer.mode:false}"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
     <property name="sitesService" ref="sitesService"/>
     <property name="cache" ref="cache"/>
@@ -174,6 +178,8 @@
     </description>
     <property name="mimeTypeService" ref="mimeTypeService"/>
     <property name="validationService" ref="validationService"/>
+    <property name="themeService" ref="themeService"/>
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
 
   <bean id="codeResourceHandler" class="com.coremedia.blueprint.cae.handlers.CodeResourceHandler" parent="handlerBase">
@@ -328,6 +334,7 @@
   <util:map id="uriToCacheSecondsMapping" map-class="java.util.LinkedHashMap">
     <!-- time to cache blobs: 180 days -->
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.CapBlobHandler).URI_PATTERN}" value="15552000"/>
+    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CapBlobHandler).CODERESOURCEBLOB_URI_PATTERN}" value="15552000"/>
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.TransformedBlobHandler).URI_PATTERN}" value="15552000"/>
     <!-- time to cache code: 7 days -->
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).CSS_PATTERN_BULK}" value="604800"/>

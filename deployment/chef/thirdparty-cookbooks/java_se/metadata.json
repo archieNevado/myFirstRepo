@@ -41,7 +41,7 @@
   "recipes": {
 
   },
-  "version": "8.112.0",
+  "version": "8.112.1",
   "source_url": "https://github.com/dhoer/chef-java_se",
   "issues_url": "https://github.com/dhoer/chef-java_se/issues",
   "privacy": false,

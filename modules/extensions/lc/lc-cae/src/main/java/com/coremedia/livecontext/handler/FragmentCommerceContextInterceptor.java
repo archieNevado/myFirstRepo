@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
@@ -71,19 +72,19 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
   @Override
   @Nonnull
-  protected CommerceConnection getCommerceConnectionWithConfiguredStoreContext(@Nonnull Site site,
-                                                                               @Nonnull HttpServletRequest request) {
-    CommerceConnection commerceConnection = super.getCommerceConnectionWithConfiguredStoreContext(site, request);
+  protected Optional<CommerceConnection> getCommerceConnectionWithConfiguredStoreContext(
+          @Nonnull Site site, @Nonnull HttpServletRequest request) {
+    Optional<CommerceConnection> connection = super.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    if (isPreview()) {
+    if (connection.isPresent() && isPreview()) {
       Context fragmentContext = LiveContextContextHelper.fetchContext(request);
       if (fragmentContext != null) {
-        StoreContext storeContext = commerceConnection.getStoreContext();
+        StoreContext storeContext = connection.get().getStoreContext();
         initStoreContextPreview(fragmentContext, storeContext, request);
       }
     }
 
-    return commerceConnection;
+    return connection;
   }
 
   @Override

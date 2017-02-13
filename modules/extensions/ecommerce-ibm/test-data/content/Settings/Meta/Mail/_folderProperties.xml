@@ -4,8 +4,7 @@
 <master>
 </master>
 <contexts>
-<link href="../../../Sites/PerfectChef/United%20States/English/Navigation/Perfect%20Chef%20USA.xml" path="/Sites/PerfectChef/United%20States/English/Navigation/Perfect%20Chef%20USA"/>
-<link href="../../../Sites/PerfectChef/Germany/German/Navigation/Perfect%20Chef%20Deutschland.xml" path="/Sites/PerfectChef/Germany/German/Navigation/Perfect%20Chef%20Deutschland"/>
+<link href="../../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation"/>
 <link href="../../../Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page"/>
 <link href="../../../Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page"/>
 </contexts>

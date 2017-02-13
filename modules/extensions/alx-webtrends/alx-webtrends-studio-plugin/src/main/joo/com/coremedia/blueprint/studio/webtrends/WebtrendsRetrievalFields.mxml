@@ -15,17 +15,17 @@
     private var config:WebtrendsRetrievalFields;
 
     public native function WebtrendsRetrievalFields(config:WebtrendsRetrievalFields = null);
-   ]]></fx:Script>
+    ]]></fx:Script>
 
-    <editor:items>
-      <editor:StringPropertyField propertyName="localSettings.webtrends.accountName"/>
-      <editor:StringPropertyField propertyName="localSettings.webtrends.userName"/>
-      <editor:StringPropertyField propertyName="localSettings.webtrends.password"/>
-      <editor:IntegerPropertyField propertyName="localSettings.webtrends.profileId"/>
-      <editor:StringPropertyField propertyName="localSettings.webtrends.reportId"/>
-      <editor:StringPropertyField propertyName="localSettings.webtrends.sortByMeasure"/>
-      <editor:IntegerPropertyField propertyName="localSettings.webtrends.limit"/>
-      <editor:IntegerPropertyField propertyName="localSettings.webtrends.interval"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.accountName"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.userName"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.password"/>
+    <editor:IntegerPropertyField propertyName="localSettings.webtrends.profileId"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.reportId"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.sortByMeasure"/>
+    <editor:IntegerPropertyField propertyName="localSettings.webtrends.limit"/>
+    <editor:IntegerPropertyField propertyName="localSettings.webtrends.interval"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

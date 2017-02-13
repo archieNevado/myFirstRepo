@@ -24,8 +24,8 @@
     public native function ReferrerImageListWrapper(config:ReferrerImageListWrapper = null);
     ]]></fx:Script>
 
-    <editor:plugins exml:mode="append">
-      <ui:BindVisibilityPlugin bindTo="{CatalogStudioPluginBase.getShopExpression(config)}"/>
-    </editor:plugins>
-  
+  <editor:plugins exml:mode="append">
+    <ui:BindVisibilityPlugin bindTo="{CatalogStudioPluginBase.getShopExpression(config)}"/>
+  </editor:plugins>
+
 </editor:ReferrerListPanel>

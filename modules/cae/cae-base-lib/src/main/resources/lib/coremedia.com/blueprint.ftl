@@ -9,3 +9,4 @@
 <#include "blueprint/button.ftl" />
 <#include "blueprint/notification.ftl" />
 <#include "blueprint/form.ftl" />
+<#include "blueprint/errorpage.ftl" />

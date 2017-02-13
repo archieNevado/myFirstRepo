@@ -12,6 +12,7 @@
 <#assign additionalClass=cm.localParameters().additionalClass!"" />
 <#assign viewItemCssClass=cm.localParameters().viewItemCssClass!"" />
 <#assign carouselItemParams=cm.localParameters().carouselItemParams!{} />
+<#assign metadataItemsName=cm.localParameters().metadataItemsName!'items' />
 
 <#assign items=self.flattenedItems![] />
 <#if items?has_content>
@@ -33,7 +34,7 @@
   </#if>
 
 <#-- Wrapper for slides -->
-    <div class="cm-carousel-inner carousel-inner" role="listbox"<@cm.metadata "properties.items"/>>
+    <div class="cm-carousel-inner carousel-inner" role="listbox"<@cm.metadata "properties." + metadataItemsName/>>
       <#list items as item>
         <#assign itemCssClass="item"/>
         <#if item_index == 0>

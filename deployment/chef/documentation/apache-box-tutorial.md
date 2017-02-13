@@ -71,8 +71,6 @@ The WCS URLs however should work except for the CAE fragments:
    * [Studio](http://studio.192.168.252.100.xip.io)
    * [Corporate CAE Preview](http://preview-corporate.192.168.252.100.xip.io)
    * [Corporate CAE Live](http://corporate.192.168.252.100.xip.io)
-   * [Perfectchef CAE Preview](http://preview-helios.192.168.252.100.xip.io)
-   * [Perfectchef CAE Live](http://helios.192.168.252.100.xip.io)
    * [Aurora Shop Preview](http://shop-preview-production-helios.192.168.252.100.xip.io)   
    * [Aurora Shop Live](http://shop-helios.192.168.252.100.xip.io)
 

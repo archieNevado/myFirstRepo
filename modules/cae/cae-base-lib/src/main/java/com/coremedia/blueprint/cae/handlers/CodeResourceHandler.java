@@ -13,8 +13,10 @@ import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.Version;
+import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.xml.Markup;
 import com.google.common.annotations.VisibleForTesting;
@@ -35,6 +37,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
 import javax.activation.MimeTypeParseException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -121,8 +124,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
           .build();
 
   /**
-   * Link to a single resource inside the local workspace with
-   * setting 'cae.use.local.resources' set to 'true'
+   * Link to a single resource
    * <p/>
    * e.g. /resource/css/media/reset-123-0.css
    */
@@ -213,10 +215,12 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     @PathVariable(SEGMENT_HASH) String hash,
                                     @PathVariable(SEGMENT_MODE) String mode,
+                                    HttpServletRequest servletRequest,
                                     WebRequest webRequest) {
     Content cwtContent = channelWithTheme==null ? null : channelWithTheme.getContent();
     Content cwcContent = channelWithCode==null ? null : channelWithCode.getContent();
-    CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(cwtContent, cwcContent, codePropertyName(extension), developerModeEnabled);
+    User developer = UserVariantHelper.getUser(servletRequest);
+    CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(cwtContent, cwcContent, codePropertyName(extension), developerModeEnabled, developer);
     CodeResourcesModel codeResourcesModel = cache.get(cacheKey).getModel(mode);
     MergeableResources mergeableResources = new MergeableResourcesImpl(codeResourcesModel, contentBeanFactory, getDataViewFactory());
     //check scripthash
@@ -283,6 +287,10 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
    */
   @Link(type = CMAbstractCode.class, uri = URI_PATTERN_SINGLE)
   public UriComponents buildLink(CMAbstractCode cmAbstractCode, UriComponentsBuilder uriBuilder) {
+    final String dataUrl = cmAbstractCode.getDataUrl();
+    if (dataUrl != null && !dataUrl.isEmpty()) {
+      return UriComponentsBuilder.fromUriString(dataUrl).build();
+    }
     String extension = getExtension(cmAbstractCode.getContentType(), DEFAULT_EXTENSION);
     String resourceName = formatResourceName(cmAbstractCode);
     String path = formatContentPath(cmAbstractCode);

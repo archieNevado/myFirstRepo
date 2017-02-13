@@ -7,8 +7,6 @@
         <!-- Global group, no livecontext specific rules here! -->
         <members>
           <group id="global-site-manager" name="global-site-manager" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/PerfectChef" type="CMObject" rights="RMDAPS"/>
-            <rule content="/Sites/PerfectChef" type="Folder_" rights="RMDAPS"/>
             <rule content="/Sites/Aurora Augmentation" type="CMObject" rights="RMDAPS"/>
             <rule content="/Sites/Aurora Augmentation" type="Folder_" rights="RMDAPS"/>
             <rule content="/Sites/Aurora B2B Augmentation" type="CMObject" rights="RMDAPS"/>
@@ -25,16 +23,10 @@
         <members>
           <group id="local-site-manager" name="local-site-manager" contentgroup="true" livegroup="false" administrative="false">
             <!-- all local site managers can read the global master site. -->
-            <rule content="/Sites/PerfectChef/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/PerfectChef/United States/English" type="Folder_" rights="R"/>
-            <rule content="/Sites/PerfectChef/United States/English/zTest-Content" type="CMObject" rights=""/>
-            <rule content="/Sites/PerfectChef/United States/English/zTest-Content" type="Folder_" rights=""/>
             <rule content="/Sites/Aurora Augmentation/United States/English" type="CMObject" rights="R"/>
             <rule content="/Sites/Aurora Augmentation/United States/English" type="Folder_" rights="R"/>
             <members>
               <group name="manager-en-US" contentgroup="true" livegroup="false" administrative="false">
-                <rule content="/Sites/PerfectChef/United States/English" type="CMObject" rights="RMDAP"/>
-                <rule content="/Sites/PerfectChef/United States/English" type="Folder_" rights="RMDAP"/>
                 <rule content="/Sites/Aurora Augmentation/United States/English" type="CMObject" rights="RMDAP"/>
                 <rule content="/Sites/Aurora Augmentation/United States/English" type="Folder_" rights="RMDAP"/>
                 <members>
@@ -44,8 +36,6 @@
                 </members>
               </group>
               <group name="manager-de-DE" contentgroup="true" livegroup="false" administrative="false">
-                <rule content="/Sites/PerfectChef/Germany/German" type="CMObject" rights="RMDAP"/>
-                <rule content="/Sites/PerfectChef/Germany/German" type="Folder_" rights="RMDAP"/>
                 <members>
                   <user id="piet" name="Piet" home="/Home/Piet"/>
                 </members>
@@ -76,18 +66,6 @@
         <!-- Global group, no livecontext specific rules here! -->
         <members>
           <group name="online-editor-en-US" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/PerfectChef/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/PerfectChef/United States/English" type="Folder_" rights="R"/>
-            <rule content="/Sites/PerfectChef/United States/English/Editorial/Content" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Editorial/Content" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Editorial/Products" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Editorial/Products" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Pictures" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Pictures" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Videos" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/zTest-Content" type="CMObject" rights=""/>
-            <rule content="/Sites/PerfectChef/United States/English/zTest-Content" type="Folder_" rights=""/>
             <rule content="/Sites/Aurora Augmentation/United States/English" type="CMObject" rights="R"/>
             <rule content="/Sites/Aurora Augmentation/United States/English" type="Folder_" rights="R"/>
             <rule content="/Sites/Aurora Augmentation/United States/English/Editorial/Content" type="CMObject" rights="RMD"/>
@@ -113,16 +91,6 @@
             </members>
           </group> <!-- online-editor-en-US -->
           <group name="online-editor-de-DE" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/PerfectChef/Germany/German" type="CMObject" rights="R"/>
-            <rule content="/Sites/PerfectChef/Germany/German" type="Folder_" rights="R"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Editorial/Content" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Editorial/Content" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Editorial/Products" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Editorial/Products" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Pictures" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Pictures" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Videos" type="Folder_" rights="RMD"/>
             <members>
               <user id="georg" name="Georg" home="/Home/Georg"/>
             </members>
@@ -133,12 +101,6 @@
         <!-- Global group, no livecontext specific rules here! -->
         <members>
           <group name="media-editor-en-US" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/PerfectChef/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/PerfectChef/United States/English" type="Folder_" rights="R"/>
-            <rule content="/Sites/PerfectChef/United States/English/Pictures" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Pictures" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/United States/English/Videos" type="Folder_" rights="RMD"/>
             <rule content="/Sites/Aurora Augmentation/United States/English" type="CMObject" rights="R"/>
             <rule content="/Sites/Aurora Augmentation/United States/English" type="Folder_" rights="R"/>
             <rule content="/Sites/Aurora Augmentation/United States/English/Pictures" type="CMObject" rights="RMD"/>
@@ -157,12 +119,6 @@
             </members>
           </group> <!-- media-editor-en-US -->
           <group name="media-editor-de-DE" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/PerfectChef/Germany/German" type="CMObject" rights="R"/>
-            <rule content="/Sites/PerfectChef/Germany/German" type="Folder_" rights="R"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Pictures" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Pictures" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/PerfectChef/Germany/German/Videos" type="Folder_" rights="RMD"/>
             <members>
               <user id="markus" name="Markus" home="/Home/Markus"/>
               <userref id="amy"/>

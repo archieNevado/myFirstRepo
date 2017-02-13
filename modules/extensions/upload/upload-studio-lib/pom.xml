@@ -32,6 +32,17 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
+      <artifactId>theme-importer-base</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>theme-importer-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-xml</artifactId>
     </dependency>
 
@@ -66,6 +77,12 @@
     </dependency>
 
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
     </dependency>
@@ -78,11 +95,6 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
     </dependency>
 
     <dependency>
@@ -113,6 +125,12 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-common-test</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

@@ -19,35 +19,38 @@
     public native function CMDownloadForm(config:CMDownloadForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <bpforms:DetailsDocumentForm/>
-          <bpforms:TeaserDocumentForm collapsed="true"/>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMDownload_data_text')}"
-                                     itemId="cmDownloadDataForm">
-            <editor:items>
-              <editor:BlobPropertyField bindTo="{config.bindTo}"
-                                        hideLabel="true"
-                                        propertyName="data"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:PictureDocumentForm collapsed="true"
-                                       expandOnValues="pictures"/>
-          <bpforms:RelatedDocumentForm collapsed="true"
-                                       expandOnValues="related"/>
-          <bpforms:ValidityDocumentForm/>
-          <bpforms:ViewTypeSelectorForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-        <editor:items>
-          <bpforms:CategoryDocumentForm itemId="{CATEGORY_DOCUMENT_FORM_ID}"/>
-          <bpforms:SEOForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:CMDownloadSystemForm bindTo="{config.bindTo}"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <bpforms:DetailsDocumentForm/>
+        <bpforms:TeaserDocumentForm collapsed="true"/>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMDownload_data_text')}"
+                itemId="cmDownloadDataForm">
+          <editor:items>
+            <editor:BlobPropertyField bindTo="{config.bindTo}"
+                                      hideLabel="true"
+                                      propertyName="data"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:PictureDocumentForm collapsed="true"
+                                     expandOnValues="pictures"/>
+        <bpforms:RelatedDocumentForm collapsed="true"
+                                     expandOnValues="related"/>
+        <bpforms:ValidityDocumentForm/>
+        <bpforms:ViewTypeSelectorForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+      <editor:items>
+        <bpforms:CategoryDocumentForm itemId="{CATEGORY_DOCUMENT_FORM_ID}"/>
+        <bpforms:SEOForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:CMDownloadSystemForm bindTo="{config.bindTo}"/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

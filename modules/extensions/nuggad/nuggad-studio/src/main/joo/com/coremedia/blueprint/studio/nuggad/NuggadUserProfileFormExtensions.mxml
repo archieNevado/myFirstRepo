@@ -18,19 +18,21 @@
     public native function NuggadUserProfileFormExtensions(config:NuggadUserProfileFormExtensions = null);
     ]]></fx:Script>
 
-    <editor:items>
-          <p13n:CMPersonaFormComboBoxField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_gender')}"
-                                           propertyName="gender"
-                                           propertyContext="nuggad"
-                                           values="{[
+  <editor:items>
+    <p13n:CMPersonaFormComboBoxField
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_gender')}"
+            propertyName="gender"
+            propertyContext="nuggad"
+            values="{[
                                                      ['', ' '],
                                                      [1, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_gender_1')],
                                                      [2, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_gender_2')],
                                                      [9, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_gender_9')]]}"/>
-          <p13n:CMPersonaFormComboBoxField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_age')}"
-                                           propertyName="age"
-                                           propertyContext="nuggad"
-                                           values="{[
+    <p13n:CMPersonaFormComboBoxField
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_age')}"
+            propertyName="age"
+            propertyContext="nuggad"
+            values="{[
                                                      ['', ' '],
                                                      [1, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_age_1')],
                                                      [2, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_age_2')],
@@ -39,29 +41,32 @@
                                                      [5, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_age_5')],
                                                      [6, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_age_6')],
                                                      [9, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_age_9')]]}"/>
-          <p13n:CMPersonaFormComboBoxField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_education')}"
-                                           propertyName="education"
-                                           propertyContext="nuggad"
-                                           values="{[
+    <p13n:CMPersonaFormComboBoxField
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_education')}"
+            propertyName="education"
+            propertyContext="nuggad"
+            values="{[
                                                      ['', ' '],
                                                      [1, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_education_1')],
                                                      [2, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_education_2')],
                                                      [3, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_education_3')],
                                                      [9, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_education_9')]]}"/>
-          <p13n:CMPersonaFormComboBoxField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_employment_status')}"
-                                           propertyName="employmentStatus"
-                                           propertyContext="nuggad"
-                                           values="{[
+    <p13n:CMPersonaFormComboBoxField
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_employment_status')}"
+            propertyName="employmentStatus"
+            propertyContext="nuggad"
+            values="{[
                                                      ['', ' '],
                                                      [1, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_employment_status_1')],
                                                      [2, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_employment_status_2')],
                                                      [3, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_employment_status_3')],
                                                      [4, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_employment_status_4')],
                                                      [9, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_employment_status_9')]]}"/>
-          <p13n:CMPersonaFormComboBoxField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_personal_income')}"
-                                           propertyName="personalIncome"
-                                           propertyContext="nuggad"
-                                           values="{[
+    <p13n:CMPersonaFormComboBoxField
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_personal_income')}"
+            propertyName="personalIncome"
+            propertyContext="nuggad"
+            values="{[
                                                     ['', ' '],
                                                     [0, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_personal_income_0')],
                                                     [1, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_personal_income_1')],
@@ -70,10 +75,11 @@
                                                     [4, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_personal_income_4')],
                                                     [5, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_personal_income_5')],
                                                     [9, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_personal_income_9')]]}"/>
-          <p13n:CMPersonaFormComboBoxField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_household_income')}"
-                                           propertyName="householdIncome"
-                                           propertyContext="nuggad"
-                                           values="{[
+    <p13n:CMPersonaFormComboBoxField
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_household_income')}"
+            propertyName="householdIncome"
+            propertyContext="nuggad"
+            values="{[
                                                     ['', ' '],
                                                     [1, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_household_income_1')],
                                                     [2, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_household_income_2')],
@@ -81,6 +87,6 @@
                                                     [4, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_household_income_4')],
                                                     [5, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_household_income_5')],
                                                     [9, resourceManager.getString('com.coremedia.blueprint.studio.NuggadStudioPlugin', 'p13n_context_nuggad_household_income_9')]]}"/>
-        </editor:items>
-  
+  </editor:items>
+
 </editor:PropertyFieldGroup>

@@ -26,13 +26,14 @@
 @import "components/logo";
 @import "components/nav";
 @import "components/footer";
-@import "components/coremedia-richtext-1.0";
+@import "../../../../lib/bricks/generic-templates/sass/_coremedia-richtext-1.0";
 
 // Special components [a-z]
 @import "components/carousel";
 @import "components/claim";
 @import "components/detail";
 @import "components/elastic-social";
+@import "../../lib/bricks/download-portal/sass/download-portal";
 @import "components/gap";
 @import "components/helpers";
 @import "components/hero";

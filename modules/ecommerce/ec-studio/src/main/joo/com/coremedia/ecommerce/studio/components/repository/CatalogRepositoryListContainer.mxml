@@ -19,9 +19,9 @@
     public native function CatalogRepositoryListContainer(config:CatalogRepositoryListContainer = null);
     ]]></fx:Script>
 
-    <local:items>
-      <ec:CatalogRepositoryList itemId="{CollectionViewConstants.LIST_VIEW}"/>
-      <ec:CatalogRepositoryThumbnails itemId="{CollectionViewConstants.THUMBNAILS_VIEW}"/>
-    </local:items>
-  
+  <local:items>
+    <ec:CatalogRepositoryList itemId="{CollectionViewConstants.LIST_VIEW}"/>
+    <ec:CatalogRepositoryThumbnails itemId="{CollectionViewConstants.THUMBNAILS_VIEW}"/>
+  </local:items>
+
 </local:CatalogRepositoryListContainerBase>

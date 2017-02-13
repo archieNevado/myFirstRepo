@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.asset.impl;
 
-import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
@@ -9,21 +8,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.Collection;
 
+import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({CommerceReferenceHelper.class})
+@RunWith(MockitoJUnitRunner.class)
 public class AssetChangesTest {
 
+  @Spy
   private AssetChanges assetChanges;
 
   @Mock
@@ -37,8 +36,6 @@ public class AssetChangesTest {
 
   @Before
   public void setup() throws Exception {
-    mockStatic(CommerceReferenceHelper.class);
-    assetChanges = new AssetChanges();
     assetChanges.setSitesService(sitesService);
     assetChanges.afterPropertiesSet();
     when(sitesService.getContentSiteAspect(content)).thenReturn(contentSiteAspect);
@@ -48,7 +45,7 @@ public class AssetChangesTest {
   @Test
   public void test() {
     // test the assetChanges is correctly filled
-    when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b"));
+    doReturn(of("a", "b")).when(assetChanges).getExternalReferences(content);
     assetChanges.update(content);
     Collection<Content> contents = assetChanges.get("a", site);
     assertEquals(1, contents.size());
@@ -60,5 +57,20 @@ public class AssetChangesTest {
     assetChanges.update(content);
     assertTrue(assetChanges.get("a", site).isEmpty());
     assertTrue(assetChanges.get("b", site).isEmpty());
+  }
+
+  @Test
+  public void testMultipleUpdatesOnSameContent() {
+    doReturn(of("a", "b")).when(assetChanges).getExternalReferences(content);
+    assetChanges.update(content);
+    doReturn(of("a")).when(assetChanges).getExternalReferences(content);
+    assetChanges.update(content);
+    doReturn(of()).when(assetChanges).getExternalReferences(content);
+    assetChanges.update(content);
+
+    Collection<Content> a = assetChanges.get("a", site);
+    Collection<Content> b = assetChanges.get("b", site);
+    assertTrue(a.isEmpty());
+    assertTrue(b.isEmpty());
   }
 }

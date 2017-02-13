@@ -11,14 +11,10 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.rest.linking.LocationHeaderResourceFilter;
-import com.sun.jersey.spi.container.ResourceFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nullable;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -31,31 +27,17 @@ import java.util.Map;
  * A catalog {@link Category} object as a RESTful resource.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path("livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{id:.+?}")
+@Path(CategoryResource.LIVECONTEXT_CATEGORY_SITE_ID_WORKSPACE_ID_ID)
 public class CategoryResource extends CommerceBeanResource<Category> {
 
   /**
    * The Studio internal logical ID of the root category.
    */
   static final String ROOT_CATEGORY_ROLE_ID = "ROOT";
+  public static final String LIVECONTEXT_CATEGORY_SITE_ID_WORKSPACE_ID_ID = "livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
 
   private AugmentationService augmentationService;
   private SitesService sitesService;
-
-  private CategoryAugmentationHelper categoryAugmentationHelper;
-
-  @POST
-  @Path("augment")
-  @ResourceFilters(value = {LocationHeaderResourceFilter.class})
-  public Content handlePost() {
-    Category entity = getEntity();
-
-    if (entity == null) {
-      return null;
-    }
-
-    return categoryAugmentationHelper.augment(entity);
-  }
 
   @Override
   public CategoryRepresentation getRepresentation() {
@@ -137,11 +119,6 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   @Autowired
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
-  }
-
-  @Autowired
-  public void setCategoryAugmentationHelper(CategoryAugmentationHelper categoryAugmentationHelper) {
-    this.categoryAugmentationHelper = categoryAugmentationHelper;
   }
 
   /**

@@ -24,6 +24,7 @@ the `coremedia-application-maven-plugin` based on the `application-runtime` arti
 
 * blueprint-base
 * coremedia_maven (~> 2.0)
+* java_se (~> 8.112.0)
 
 # Attributes
 
@@ -54,6 +55,11 @@ the `coremedia-application-maven-plugin` based on the `application-runtime` arti
 * `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.url']` -  Defaults to `jdbc:mysql://localhost:3306/cm_caefeeder`.
 * `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.user']` -  Defaults to `cm_caefeeder`.
 * `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.password']` -  Defaults to `cm_caefeeder`.
+* `node['blueprint']['tools']['logback_config']['includes']` -  Defaults to `[ ... ]`.
+* `node['blueprint']['tools']['logback_config']['logger']['com.coremedia']` -  Defaults to `info`.
+* `node['blueprint']['tools']['logback_config']['logger']['hox.corem']` -  Defaults to `info`.
+* `node['blueprint']['tools']['logback_config']['appender']` -  Defaults to `[ ... ]`.
+* `node['blueprint']['tools']['jvm_args']['heap']` -  Defaults to `-Xmx256m`.
 
 # Recipes
 

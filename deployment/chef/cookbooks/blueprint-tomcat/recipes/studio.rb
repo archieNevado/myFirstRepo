@@ -3,9 +3,13 @@
 This recipe installs and configures the CoreMedia Blueprint Studio.
 #>
 =end
-
+include_recipe 'blueprint-tomcat::_base'
 service_name = 'studio'
 cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
+# The API key store directory and its parents should only be writable by the studio user,
+# so that other service cannot exchange the key store, if compromised. Therefore, the
+# key store should not be located in a generic directory like /var/opt/coremedia.
+api_key_store_dir = '/var/opt/coremedia-apiKeyStore'
 
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('content-management-server')}/ior"
 node.default['blueprint']['webapps'][service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
@@ -39,6 +43,8 @@ node.default['blueprint']['webapps'][service_name]['application.properties']['li
 node.default['blueprint']['webapps'][service_name]['application.properties']['livecontext.ibm.contract.preview.credentials.password'] = 'passw0rd'
 node.default['blueprint']['webapps'][service_name]['application.properties']['toolbox.jmx.url'] = 'service:jmx:rmi://localhost:40998/jndi/rmi://localhost:40999/jmxrmi'
 node.default['blueprint']['webapps'][service_name]['application.properties']['toolbox.authorized_groups'] = ''
+node.default['blueprint']['webapps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer,development@crowd'
+node.default['blueprint']['webapps'][service_name]['application.properties']['themeImporter.apiKeyStore.basePath'] = api_key_store_dir
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = '${catalina.home}/temp'
 # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
 # and all transformed blobs are saved in memory
@@ -57,4 +63,10 @@ directory cache_dir do
   owner tomcat.user
   group tomcat.group
   subscribes :create, tomcat, :immediately
+end
+
+directory api_key_store_dir do
+  owner tomcat.user
+  group tomcat.group
+  mode 0700
 end

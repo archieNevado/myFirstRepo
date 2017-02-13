@@ -20,6 +20,7 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * sysctl (~> 0.6.0)
 * ulimit (~> 0.3.2)
 * chef_handler (~> 1.2.0)
+* compat_resource (~> 12.10.7)
 
 # Attributes
 
@@ -183,9 +184,6 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora']` -  Defaults to `AuroraESite`.
 * `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora']` -  Defaults to `USD`.
 * `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora']` -  Defaults to `ibm`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.store.name.perfectchef']` -  Defaults to `PerfectChefESite`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.currency.perfectchef']` -  Defaults to `USD`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.vendor.perfectchef']` -  Defaults to `ibm`.
 * `node['blueprint']['wcs']['application.properties']['livecontext.managementtool.web.url']` -  Defaults to `https://#{node['blueprint']['wcs']['host']}:8000/lobtools/CoreMediaManagementCenterWrapper.html`.
 * `node['blueprint']['libjpeg_turbo_path']` - The path to the libjpeg turbo installation to increase image transformation performance. Defaults to `/opt/libjpeg-turbo/lib64`.
 

@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -85,7 +86,7 @@ public class LiveContextSiteResolverTest {
 
   @Test
   public void handleFragmentSiteResolving() {
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site1)).thenReturn(connection);
+    when(commerceConnectionInitializer.findConnectionForSite(site1)).thenReturn(Optional.of(connection));
     when(sitesService.getSites()).thenReturn(ImmutableSet.of(site1));
     when(storeContext.get("storeId")).thenReturn("10001");
 

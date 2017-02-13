@@ -6,7 +6,7 @@
 <#assign renderDate=cm.localParameter("renderDate", true) />
 <#assign renderTags=cm.localParameter("renderTags", true) />
 <#assign renderRelated=cm.localParameter("renderRelated", true) />
-<#assign carouselParams=carouselParams + {"additionalClass": "${additionalClass}__medias", "viewItems": "_header", "modifier": "details"}/>
+<#assign carouselParams=carouselParams + {"additionalClass": "${additionalClass}__medias", "viewItems": "_header", "modifier": "details", "metadataItemsName":"pictures"}/>
 
 <article class="${additionalClass}"<@cm.metadata self.content />>
 

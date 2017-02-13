@@ -8,10 +8,10 @@ import com.coremedia.ui.data.PropertyChangeEvent;
 import com.coremedia.ui.util.createComponentSelector;
 
 import ext.Component;
-import ext.Plugin;
 import ext.StringUtil;
 import ext.container.Container;
 import ext.form.field.Field;
+import ext.plugin.AbstractPlugin;
 
 import js.Window;
 
@@ -22,7 +22,7 @@ import mx.resources.ResourceManager;
  * its validation state and tooltip accordingly, thus providing better error feedback to the Studio user.
  */
 [ResourceBundle('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn')]
-public class SearchValidatorBase implements Plugin {
+public class SearchValidatorBase extends AbstractPlugin {
 
   // name of the data attribute used in the preview page to store the search message
   private static const P13N_SEARCHSTATUS_DATA_ATTRIBUTE:String = "cm-personalization-editorplugin-searchstatus";
@@ -34,7 +34,7 @@ public class SearchValidatorBase implements Plugin {
     super(config);
   }
 
-  public function init(component:Component):void {
+  override public function init(component:Component):void {
     field = component as Field;
     comp = component;
     comp.addListener("afterrender", onAfterrender);

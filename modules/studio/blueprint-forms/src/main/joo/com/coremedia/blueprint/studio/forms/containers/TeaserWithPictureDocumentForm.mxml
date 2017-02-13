@@ -26,26 +26,26 @@
     public native function TeaserWithPictureDocumentForm(config:TeaserWithPictureDocumentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:StringPropertyField propertyName="teaserTitle">
-        <editor:plugins exml:mode="append">
-          <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
-        </editor:plugins>
-      </editor:StringPropertyField>
-      <editor:TextAreaPropertyField propertyName="teaserText"
-                                    itemId="teaserText"
-                                    changeBuffer="1000"/>
-      <editor:LinkListPropertyField propertyName="{PICTURE_PROPERTY_NAME}"
-                                    showThumbnails="true"
-                                    maxCardinality="1">
-        <editor:additionalToolbarItems>
-          <TbSeparator/>
-          <bpb-components:QuickCreateToolbarButton contentType="CMPicture"
-                                                   propertyName="{PICTURE_PROPERTY_NAME}"
-                                                   bindTo="{config.bindTo}"/>
-        </editor:additionalToolbarItems>
-      </editor:LinkListPropertyField>
-      <bpforms:CallToActionConfigurationForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:StringPropertyField propertyName="teaserTitle">
+      <editor:plugins exml:mode="append">
+        <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
+      </editor:plugins>
+    </editor:StringPropertyField>
+    <editor:TextAreaPropertyField propertyName="teaserText"
+                                  itemId="teaserText"
+                                  changeBuffer="1000"/>
+    <editor:LinkListPropertyField propertyName="{PICTURE_PROPERTY_NAME}"
+                                  showThumbnails="true"
+                                  maxCardinality="1">
+      <editor:additionalToolbarItems>
+        <TbSeparator/>
+        <bpb-components:QuickCreateToolbarButton contentType="CMPicture"
+                                                 propertyName="{PICTURE_PROPERTY_NAME}"
+                                                 bindTo="{config.bindTo}"/>
+      </editor:additionalToolbarItems>
+    </editor:LinkListPropertyField>
+    <bpforms:CallToActionConfigurationForm/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

@@ -17,8 +17,8 @@
     public native function WebtrendsCMALXBaseListRetrievalTab(config:WebtrendsCMALXBaseListRetrievalTab = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <webtrends:WebtrendsRetrievalFields/>
-    </editor:items>
-  
+  <editor:items>
+    <webtrends:WebtrendsRetrievalFields/>
+  </editor:items>
+
 </editor:DocumentForm>

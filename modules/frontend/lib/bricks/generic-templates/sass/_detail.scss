@@ -3,7 +3,7 @@
 //default variables
 $cm-details-prefix: "cm-details" !default;
 $cm-details-padding-large-horizontal: 45px !default;
-$cm-details-spacer-color: #000000 !default;
+$cm-details-margin-large-horizontal: 45px !default;
 $cm-details-text-color: #777777 !default;
 $cm-details-padding-large-vertical: 30px !default;
 $cm-details-padding-base-vertical: 10px !default;
@@ -12,13 +12,11 @@ $cm-details-padding-base-vertical: 10px !default;
 .#{$cm-details-prefix} {
   padding-bottom: $cm-details-padding-large-horizontal;
   max-width: 1200px;
-  margin: 0 auto $cm-details-padding-large-horizontal auto;
+  margin: 0 auto $cm-details-margin-large-horizontal auto;
 
   @include breakpoint(sm-and-up) {
     padding-bottom: 0;
   }
-
-  @include spacer($cm-details-spacer-color);
 
   &__headline {
     margin-top: 0;

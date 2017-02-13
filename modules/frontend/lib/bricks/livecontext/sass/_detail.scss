@@ -1,7 +1,8 @@
 // Imports
 @import "../../../sass/utils/imports";
-// Import Bricks
-@import "../../generic-templates/sass/detail";
+
+//default variables
+$cm-details-prefix: "cm-details" !default;
 
 .#{$cm-details-prefix} {
   &__headline {
@@ -16,14 +17,25 @@
     p {
       font-size: 17px;
     }
-    & > * {
-      margin: 0 auto 30px auto;
+    & > *,
+    & > blockquote,
+    & > .rte--list {
+      margin: 15px auto 20px auto;
       width: 70%;
     }
     .cm-image-box {
       width: 80%;
       .cm-aspect-ratio-box {
         @include aspect-ratio-box(16, 9);
+      }
+    }
+
+    & > blockquote {
+      border: none;
+
+      .cm-image-box--embedded {
+        width: 100%;
+        margin: 1em 0;
       }
     }
   }

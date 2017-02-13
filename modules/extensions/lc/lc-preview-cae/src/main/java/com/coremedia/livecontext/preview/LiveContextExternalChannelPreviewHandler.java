@@ -13,6 +13,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
@@ -50,12 +52,13 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) LiveContextExternalChannelImpl liveContextExternalChannel,
                                     @PathVariable(SEGMENT_NAME) String vanityName,
                                     @PathVariable(SHOP_NAME_VARIABLE) String siteSegment,
-                                    @RequestParam(value = VIEW_PARAMETER, required = false) final String view) {
+                                    @RequestParam(value = VIEW_PARAMETER, required = false) final String view,
+                                    HttpServletRequest request) {
     Navigation navigation = getNavigation(siteSegment);
     if (null == navigation || !vanityName.equals(getVanityName(liveContextExternalChannel))) {
       return HandlerHelper.notFound();
     }
-    Page page = asPage(navigation, liveContextExternalChannel, treeRelation);
+    Page page = asPage(navigation, liveContextExternalChannel, treeRelation, UserVariantHelper.getUser(request));
     return createModelAndView(page, view);
   }
 

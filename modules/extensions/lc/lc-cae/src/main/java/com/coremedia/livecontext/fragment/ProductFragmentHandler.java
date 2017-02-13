@@ -8,6 +8,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.ProductDetailPage;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
@@ -15,11 +16,13 @@ import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -62,16 +65,16 @@ public class ProductFragmentHandler extends FragmentHandler {
       if (navigation != null) {
         Content rootChannelContent = site.getSiteRootDocument();
         CMChannel rootChannel = getContentBeanFactory().createBeanFor(rootChannelContent, CMChannel.class);
-
+        User developer = UserVariantHelper.getUser(request);
         if (StringUtils.isEmpty(placement)) {
           if (view != null && view.equals(AS_ASSETS_VIEW)) {
             String orientation = extractParameterValue(params.getParameter(), ORIENTATION_PARAM_NAME);
             String types = extractParameterValue(params.getParameter(), TYPES_PARAM_NAME);
-            return createModelAndViewForProductPage(navigation, externalTechId, view, orientation, types);
+            return createModelAndViewForProductPage(navigation, externalTechId, view, orientation, types, developer);
           }
-          return createFragmentModelAndView(navigation, view, rootChannel);
+          return createFragmentModelAndView(navigation, view, rootChannel, developer);
         }
-        return createFragmentModelAndViewForPlacementAndView(navigation, placement, view, rootChannel);
+        return createFragmentModelAndViewForPlacementAndView(navigation, placement, view, rootChannel, developer);
       }
     }
 
@@ -80,8 +83,7 @@ public class ProductFragmentHandler extends FragmentHandler {
   }
 
   @Nonnull
-  protected ModelAndView createModelAndViewForProductPage(Navigation navigation, String productId, String view, String orientation, String types) {
-
+  protected ModelAndView createModelAndViewForProductPage(Navigation navigation, String productId, String view, String orientation, String types, @Nullable User developer) {
     Product product = null;
     if (!StringUtils.isEmpty(productId)) {
       String beanId = useStableIds ? Commerce.getCurrentConnection().getIdProvider().formatProductId(productId) :
@@ -103,20 +105,21 @@ public class ProductFragmentHandler extends FragmentHandler {
       modelAndView.addObject("types", types);
     }
 
-    Page page = asPage(navigation, navigation);
+    Page page = asPage(navigation, navigation, developer);
     addPageModel(modelAndView, page);
 
     return modelAndView;
   }
 
-  protected PageImpl createPageImpl(Object content, Navigation context) {
-    return useContentPagegrid ? super.createPageImpl(content, context): createProductDetailPage(content, context);
+  protected PageImpl createPageImpl(Object content, Navigation context, @Nullable User developer) {
+    return useContentPagegrid ? super.createPageImpl(content, context, developer): createProductDetailPage(content, context, developer);
   }
 
-  private ProductDetailPage createProductDetailPage(Object content, Navigation context) {
+  private ProductDetailPage createProductDetailPage(Object content, Navigation context, User developer) {
     ProductDetailPage page = getBeanFactory().getBean(PDP_PAGE_ID, ProductDetailPage.class);
     page.setContent(content);
     page.setNavigation(context);
+    page.setDeveloper(developer);
     return page;
   }
 

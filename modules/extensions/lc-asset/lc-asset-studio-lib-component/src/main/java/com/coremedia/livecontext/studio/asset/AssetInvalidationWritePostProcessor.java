@@ -10,11 +10,14 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWritePostprocessorBase;
 import com.coremedia.rest.intercept.WriteReport;
 import com.google.common.annotations.VisibleForTesting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -27,6 +30,8 @@ import static com.google.common.collect.Sets.newHashSet;
  * The second one invalidates too early.
  */
 public class AssetInvalidationWritePostProcessor extends ContentWritePostprocessorBase {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ContentWritePostprocessorBase.class);
 
   @VisibleForTesting
   static final String STRUCT_PROPERTY_NAME = "localSettings";
@@ -51,9 +56,14 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
 
     Set<String> productReferences = newHashSet(CommerceReferenceHelper.getExternalReferences(localSettings));
 
-    CommerceConnection commerceConnection = commerceConnectionSupplier.getCommerceConnectionForContent(content);
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(content);
 
-    commerceCacheInvalidationSource.invalidateReferences(productReferences, commerceConnection);
+    if (!commerceConnection.isPresent()) {
+      LOG.debug("Commerce connection not available, will not invalidate references.");
+      return;
+    }
+
+    commerceCacheInvalidationSource.invalidateReferences(productReferences, commerceConnection.get());
   }
 
   @Required

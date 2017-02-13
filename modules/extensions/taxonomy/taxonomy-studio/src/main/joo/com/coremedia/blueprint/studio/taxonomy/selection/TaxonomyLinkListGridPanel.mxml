@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<local:TaxonomyLinkListGridPanelBase
-        xmlns:fx="http://ns.adobe.com/mxml/2009"
-        xmlns:local="com.coremedia.blueprint.studio.taxonomy.selection.*"
-        xmlns:exml="http://www.jangaroo.net/exml/0.8"
-        xmlns="exml:ext.config"
-        xmlns:ui="exml:com.coremedia.ui.config" xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        hideHeaders="true"
-        forceFit="true">
+<local:TaxonomyLinkListGridPanelBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                     xmlns:local="com.coremedia.blueprint.studio.taxonomy.selection.*"
+                                     xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                                     xmlns="exml:ext.config"
+                                     xmlns:ui="exml:com.coremedia.ui.config"
+                                     xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                                     hideHeaders="true"
+                                     forceFit="true">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
   </fx:Metadata>
@@ -20,13 +20,6 @@
     private var config:TaxonomyLinkListGridPanel;
 
     /**
-     * A ValueExpression whose value is set to the array of indexes of selected items.
-     * The array is empty if nothing is selected. The change of the value doesn't update the selection of the grid.
-     */
-    [Bindable]
-    public var selectedPositionsExpression:ValueExpression;
-
-    /**
      * A ValueExpression whose value is set to the array of selected items.
      * The array is empty if nothing is selected.
      * The selection is updated by changing the value of this expression.
@@ -38,7 +31,7 @@
     ]]></fx:Script>
 
   <local:plugins>
-    <editor:LinkListBindListPlugin bindTo="{config.linkListWrapper.getVE()}" />
+    <editor:LinkListBindListPlugin bindTo="{config.linkListWrapper.getVE()}"/>
     <ui:BindSelectionPlugin selectedPositions="{config.selectedPositionsExpression}"
                             selectedValues="{config.selectedValuesExpression}"/>
   </local:plugins>
@@ -52,14 +45,14 @@
     <selection_RowModel mode="MULTI"/>
   </local:selModel>
   <local:view>
-    <ui:StatefulTableView ui="{TableViewSkin.LIGHT.getSkin()}"
+    <ui:StatefulTableView ui="{TableViewSkin.DEFAULT.getSkin()}"
                           deferEmptyText="false"
                           stripeRows="false">
       <ui:plugins>
         <plugin_GridViewDragDrop ddGroup="ContentLinkDD"
-                                 pluginId="dragdrop"/>
+                                 enableDrop="false"/>
         <ui:BindPropertyPlugin componentProperty="readOnly"
-                               bindTo="{config.readOnlyValueExpression || ValueExpressionFactory.createFromValue(false)}" />
+                               bindTo="{config.readOnlyValueExpression || ValueExpressionFactory.createFromValue(false)}"/>
       </ui:plugins>
     </ui:StatefulTableView>
   </local:view>

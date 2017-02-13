@@ -16,11 +16,11 @@
     public native function CommerceProductWorkAreaTab(config:CommerceProductWorkAreaTab = null);
     ]]></fx:Script>
 
-    <livecontext:subTabs>
-      <livecontext:CommerceProductContentForm itemId="{CONTENT_TAB_ITEM_ID}"/>
-      <livecontext:CommerceAttributesForm/>
-      <livecontext:CommerceProductStructureForm itemId="{STRUCTURE_TAB_ITEM_ID}"/>
-      <livecontext:CommerceSystemForm autoHide="true"/>
-    </livecontext:subTabs>
-  
+  <livecontext:subTabs>
+    <livecontext:CommerceProductContentForm itemId="{CONTENT_TAB_ITEM_ID}"/>
+    <livecontext:CommerceAttributesForm/>
+    <livecontext:CommerceProductStructureForm itemId="{STRUCTURE_TAB_ITEM_ID}"/>
+    <livecontext:CommerceSystemForm autoHide="true"/>
+  </livecontext:subTabs>
+
 </livecontext:CommerceWorkAreaTab>

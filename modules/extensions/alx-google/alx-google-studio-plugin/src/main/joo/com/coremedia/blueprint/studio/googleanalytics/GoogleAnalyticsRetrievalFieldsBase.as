@@ -53,7 +53,7 @@ public class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
 
   protected function getP12FileVE():ValueExpression {
     if (!p12FileVE) {
-      p12FileVE = ValueExpressionFactory.create('linkValue', beanFactory.createLocalBean());
+      p12FileVE = ValueExpressionFactory.createFromValue([]);
     }
     return p12FileVE;
   }
@@ -88,13 +88,25 @@ public class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
     }
   }
 
-  private static function applyToStruct(content:Content, contentType:String, structPropertyName:String, link:Content):void {
+  private function applyToStruct(content:Content, contentType:String, structPropertyName:String, link:Content):void {
     var struct:Struct = content.getProperties().get(LOCAL_SETTINGS);
-    struct.getType().addStructProperty(GOOGLE_ANALYTICS);
+
+    //the substruct can be created on the fly but isn't loaded, so we trigger an invalidate in this case
     var googleAnalytics:Struct = getStruct(struct, GOOGLE_ANALYTICS);
+    if(!googleAnalytics) {
+      struct.getType().addStructProperty(GOOGLE_ANALYTICS);
+      content.invalidate(function():void {
+        applyToStruct(content, contentType, structPropertyName, link);
+      });
+      return;
+    }
 
     var capType:CapType = SESSION.getConnection().getContentRepository().getContentType(contentType);
     googleAnalytics.getType().addLinkProperty(structPropertyName, capType, link);
+
+    // apply the link again: in case the substruct had to be created previously,
+    // we need to notify the component about the missed initialization
+    getP12FileVE().setValue([link]);
   }
 
   override protected function onDestroy():void {

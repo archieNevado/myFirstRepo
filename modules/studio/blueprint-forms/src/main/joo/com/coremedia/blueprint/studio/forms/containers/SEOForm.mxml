@@ -18,28 +18,28 @@
     public native function SEOForm(config:SEOForm = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The name of the first fallback property
-     -->
+    <!---
+     The name of the first fallback property
+    -->
     <fx:String id="delegatePropertyName">title</fx:String>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:StringPropertyField bindTo="{config.bindTo}"
-                                  propertyName="segment">
-        <editor:plugins exml:mode="append">
-          <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="{config.delegatePropertyName}"/>
-        </editor:plugins>
-      </editor:StringPropertyField>
-      <editor:StringPropertyField propertyName="htmlTitle">
-        <editor:plugins exml:mode="append">
-          <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="{config.delegatePropertyName}"/>
-        </editor:plugins>
-      </editor:StringPropertyField>
-      <editor:TextAreaStringPropertyField changeBuffer="1000"
-                                          minHeight="100"
-                                          bindTo="{config.bindTo}"
-                                          propertyName="htmlDescription"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:StringPropertyField bindTo="{config.bindTo}"
+                                propertyName="segment">
+      <editor:plugins exml:mode="append">
+        <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="{config.delegatePropertyName}"/>
+      </editor:plugins>
+    </editor:StringPropertyField>
+    <editor:StringPropertyField propertyName="htmlTitle">
+      <editor:plugins exml:mode="append">
+        <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="{config.delegatePropertyName}"/>
+      </editor:plugins>
+    </editor:StringPropertyField>
+    <editor:TextAreaStringPropertyField changeBuffer="1000"
+                                        minHeight="100"
+                                        bindTo="{config.bindTo}"
+                                        propertyName="htmlDescription"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

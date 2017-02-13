@@ -16,36 +16,36 @@
     public native function StringListCheckboxFilterFieldset(config:StringListCheckboxFilterFieldset = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The filter ID for this filter. It is used as itemId and identifier in saved searches.
-     -->
+    <!---
+     The filter ID for this filter. It is used as itemId and identifier in saved searches.
+    -->
     <fx:String id="filterId"/>
 
-    <!--- 
-       The solr field to pose the query against. If not set the filterId is used.
-     -->
+    <!---
+     The solr field to pose the query against. If not set the filterId is used.
+    -->
     <fx:String id="solrField"/>
 
-    <!--- 
-       The property in the metadata struct of the Asset. If not set the filterId is used.
-     -->
+    <!---
+     The property in the metadata struct of the Asset. If not set the filterId is used.
+    -->
     <fx:String id="propertyName"/>
   </fx:Declarations>
 
-    <local:items>
-      <Container itemId="checkboxContainer">
-        <defaults>
-          <CheckboxGroup columns="1">
-            <plugins>
-              <ui:BindPropertyPlugin bindTo="{ValueExpressionFactory.create(config.filterId, getStateBean())}"
-                                     bidirectional="{true}"
-                                     transformer="{transformer}"
-                                     reverseTransformer="{reverseTransformer}"/>
-            </plugins>
-          </CheckboxGroup>
-        </defaults>
-      </Container>
-    </local:items>
+  <local:items>
+    <Container itemId="checkboxContainer">
+      <defaults>
+        <CheckboxGroup columns="1">
+          <plugins>
+            <ui:BindPropertyPlugin bindTo="{ValueExpressionFactory.create(config.filterId, getStateBean())}"
+                                   bidirectional="{true}"
+                                   transformer="{transformer}"
+                                   reverseTransformer="{reverseTransformer}"/>
+          </plugins>
+        </CheckboxGroup>
+      </defaults>
+    </Container>
+  </local:items>
 
-  
+
 </local:StringListCheckboxFilterFieldsetBase>

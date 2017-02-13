@@ -21,80 +21,86 @@
     public native function CMProductForm(config:CMProductForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
-                                     itemId="productDetailsForm">
-            <editor:items>
-              <editor:StringPropertyField propertyName="productName"/>
-              <editor:StringPropertyField propertyName="productCode"/>
-              <editor:RichTextPropertyField bindTo="{config.bindTo}"
-                                            propertyName="detailText"
-                                            initialHeight="200"/>
-              <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMProduct_shortDescription_text')}"
-                                         itemId="productShortDescriptionForm">
-                <editor:items>
-                  <editor:TextAreaPropertyField propertyName="teaserText"
-                                                hideLabel="true">
-                    <editor:plugins exml:mode="append">
-                      <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
-                    </editor:plugins>
-                  </editor:TextAreaPropertyField>
-                </editor:items>
-              </editor:PropertyFieldGroup>
-            </editor:items>
-          </editor:PropertyFieldGroup>
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
+                itemId="productDetailsForm">
+          <editor:items>
+            <editor:StringPropertyField propertyName="productName"/>
+            <editor:StringPropertyField propertyName="productCode"/>
+            <editor:RichTextPropertyField bindTo="{config.bindTo}"
+                                          propertyName="detailText"
+                                          initialHeight="200"/>
+            <editor:PropertyFieldGroup
+                    title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMProduct_shortDescription_text')}"
+                    itemId="productShortDescriptionForm">
+              <editor:items>
+                <editor:TextAreaPropertyField propertyName="teaserText"
+                                              hideLabel="true">
+                  <editor:plugins exml:mode="append">
+                    <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
+                  </editor:plugins>
+                </editor:TextAreaPropertyField>
+              </editor:items>
+            </editor:PropertyFieldGroup>
+          </editor:items>
+        </editor:PropertyFieldGroup>
 
-          <bpforms:MediaDocumentForm bindTo="{config.bindTo}"/>
+        <bpforms:MediaDocumentForm bindTo="{config.bindTo}"/>
 
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'ProductAssets_Downloads_label')}"
-                                     itemId="productDownloadsForm"
-                                     collapsed="true">
-            <editor:items>
-              <editor:LinkListPropertyField bindTo="{config.bindTo}"
-                                                propertyName="downloads">
-                <editor:additionalToolbarItems>
-                  <TbSeparator/>
-                  <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
-                                                          contentTypes="CMDownload"
-                                                          propertyName="downloads"/>
-                </editor:additionalToolbarItems>
-              </editor:LinkListPropertyField>
-            </editor:items>
-          </editor:PropertyFieldGroup>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'ProductAssets_Downloads_label')}"
+                itemId="productDownloadsForm"
+                collapsed="true">
+          <editor:items>
+            <editor:LinkListPropertyField bindTo="{config.bindTo}"
+                                          propertyName="downloads">
+              <editor:additionalToolbarItems>
+                <TbSeparator/>
+                <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
+                                                        contentTypes="CMDownload"
+                                                        propertyName="downloads"/>
+              </editor:additionalToolbarItems>
+            </editor:LinkListPropertyField>
+          </editor:items>
+        </editor:PropertyFieldGroup>
 
-          <bpforms:RelatedDocumentForm bindTo="{config.bindTo}"
-                                       title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'PropertyGroup_RelatedProducts_label')}"/>
-          <bpforms:CallToActionConfigurationForm bindTo="{config.bindTo}"/>
-          <!--<bpforms:viewTypeSelectorForm bindTo="{config.bindTo}"/>-->
-          <bpforms:ValidityDocumentForm bindTo="{config.bindTo}"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Tab_catalog_structure_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup itemId="contextsPropertyField"
-                                     title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMProduct_parentChannel_text')}">
-            <editor:items>
-              <editor:LinkListPropertyField propertyName="contexts"
-                                            showThumbnails="true"
-                                            itemId="contextsPropertyField"
-                                            openCollectionViewHandler="{CatalogStudioPluginBase.openCatalogSearch}"
-                                            bindTo="{config.bindTo}"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
-                           itemId="metadata">
-        <editor:items>
-          <bpforms:CategoryDocumentForm bindTo="{config.bindTo}"/>
-          <bpforms:SEOForm bindTo="{config.bindTo}"
-                           delegatePropertyName="productName"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSearchableForm/>
-    </editor:items>
-  
+        <bpforms:RelatedDocumentForm bindTo="{config.bindTo}"
+                                     title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'PropertyGroup_RelatedProducts_label')}"/>
+        <bpforms:CallToActionConfigurationForm bindTo="{config.bindTo}"/>
+        <!--<bpforms:viewTypeSelectorForm bindTo="{config.bindTo}"/>-->
+        <bpforms:ValidityDocumentForm bindTo="{config.bindTo}"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Tab_catalog_structure_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup itemId="contextsPropertyField"
+                                   title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMProduct_parentChannel_text')}">
+          <editor:items>
+            <editor:LinkListPropertyField propertyName="contexts"
+                                          showThumbnails="true"
+                                          itemId="contextsPropertyField"
+                                          openCollectionViewHandler="{CatalogStudioPluginBase.openCatalogSearch}"
+                                          bindTo="{config.bindTo}"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
+            itemId="metadata">
+      <editor:items>
+        <bpforms:CategoryDocumentForm bindTo="{config.bindTo}"/>
+        <bpforms:SEOForm bindTo="{config.bindTo}"
+                         delegatePropertyName="productName"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSearchableForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

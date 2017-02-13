@@ -22,6 +22,7 @@
   <import resource="livecontext-hybrid.xml"/>
   <import resource="livecontext-resolver.xml"/>
   <import resource="livecontext-validation.xml"/>
+  <import resource="livecontext-testurls.xml"/>
 
   <import resource="classpath:META-INF/coremedia/livecontext-contentbeans-settings.xml"/>
   <import resource="classpath:META-INF/coremedia/livecontext-contentbeans.xml"/>

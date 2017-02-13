@@ -38,6 +38,7 @@
             scale="medium"
             handler="{back}"
             iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'backward')}"
+            ariaLabel="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_previous_tooltip')}"
             tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_previous_tooltip')}">
     </Button>
     <Button id_="externalLibraryHistoryForward"
@@ -46,6 +47,7 @@
             scale="medium"
             handler="{forward}"
             iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'forward')}"
+            ariaLabel="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_next_tooltip')}"
             tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_next_tooltip')}">
     </Button>
     <Container flex="1">
@@ -92,6 +94,7 @@
                    scale="small"
                    ui="{ButtonSkin.INVERTED.getSkin()}"
                    iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'search')}"
+                   text="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_apply_filter')}"
                    tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_apply_filter')}">
       <ui:baseAction>
         <externallib:ApplyFilterAction filterValueExpression="{config.filterValueExpression}"

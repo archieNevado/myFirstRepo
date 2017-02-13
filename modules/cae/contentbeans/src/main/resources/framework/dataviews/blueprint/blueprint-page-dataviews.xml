@@ -12,6 +12,8 @@
   </autocomplete>
 
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.PageImpl">
+    <property name="content" associationType="static"/>
+    <property name="navigation" associationType="static"/>
     <property name="aspectByName" associationType="composition"/>
     <property name="pageGrid" associationType="static"/>
     <property name="keywords"/>

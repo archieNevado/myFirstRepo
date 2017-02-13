@@ -27,11 +27,6 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>es-theme</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>es-worker-component</artifactId>
         <version>${project.version}</version>
       </dependency>

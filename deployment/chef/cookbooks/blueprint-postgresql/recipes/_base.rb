@@ -15,6 +15,8 @@ node.default['postgresql']['client']['packages'] = ['postgresql93-devel']
 node.default['postgresql']['dir'] = '/var/lib/pgsql/data'
 node.default['postgresql']['password']['postgres'] = 'coremedia'
 node.default['postgresql']['config']['listen_addresses'] = '*'
+node.default['postgresql']['config']['log_directory'] = '/var/log/pgsql'
+node.default['postgresql']['config_pgtune']['db_type'] = 'web'
 node.default['postgresql']['pg_hba'] = [{ 'type' => 'local', 'db' => 'all', 'user' => 'postgres', 'addr' => nil, 'method' => 'ident' },
                                         { 'type' => 'local', 'db' => 'all', 'user' => 'all', 'addr' => nil, 'method' => 'ident' },
                                         { 'type' => 'host', 'db' => 'all', 'user' => 'all', 'addr' => '127.0.0.1/32', 'method' => 'md5' },

@@ -14,7 +14,7 @@
   <h1 class="${additionalClass}__headline"<@cm.metadata "properties.productName"/>>${self.productName!""}</h1>
 
   <#-- media -->
-  <@cm.include self=bp.getContainer(self.media) view="asCarousel" params={"modifier": "details", "additionalClass": "${additionalClass}__medias", "controlIcon": "triangle", "viewItems": "_header", "displayPagination": true}/>
+  <@cm.include self=bp.getContainer(self.media) view="asCarousel" params={"modifier": "details", "additionalClass": "${additionalClass}__medias", "controlIcon": "triangle", "viewItems": "_header", "displayPagination": true, "metadataItemsName":"pictures"}/>
 
 <#-- product code -->
     <div class="${additionalClass}__code"<@cm.metadata "properties.productCode"/>>

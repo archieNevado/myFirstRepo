@@ -33,17 +33,17 @@
     public var selectedItemsValueExpression:ValueExpression;
     ]]></fx:Script>
 
-    <items>
-      <ec:CatalogRepositoryToolbar createdContentValueExpression="{config.createdContentValueExpression}"
-                                   selectedItemsValueExpression="{config.selectedItemsValueExpression}">
-        <ec:items exml:mode="append">
-          <TbFill />
-          <editor:SwitchViewButtonsContainer scope="{this}"/>
-        </ec:items>
-      </ec:CatalogRepositoryToolbar>
-    </items>
-    <layout>
-      <layout_HBox/>
-    </layout>
-  
+  <items>
+    <ec:CatalogRepositoryToolbar createdContentValueExpression="{config.createdContentValueExpression}"
+                                 selectedItemsValueExpression="{config.selectedItemsValueExpression}">
+      <ec:items exml:mode="append">
+        <TbFill/>
+        <editor:SwitchViewButtonsContainer scope="{this}"/>
+      </ec:items>
+    </ec:CatalogRepositoryToolbar>
+  </items>
+  <layout>
+    <layout_HBox/>
+  </layout>
+
 </Container>

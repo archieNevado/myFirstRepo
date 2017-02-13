@@ -24,7 +24,6 @@ public class OpenAnalyticsDeepLinkUrlButtonBase extends OpenAnalyticsUrlButtonBa
     contentExpression = ValueExpressionFactory.create('content', localBean);
     contentExpression.addChangeListener(getAlxServiceBean);
 
-    /* EXT6_GONE:ext.util.Observable#addEvents addEvents('serviceSettingsUri');*/
     super(config);
   }
 

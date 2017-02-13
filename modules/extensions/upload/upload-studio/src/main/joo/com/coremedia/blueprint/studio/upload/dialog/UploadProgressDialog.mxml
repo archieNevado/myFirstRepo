@@ -34,15 +34,16 @@
     ]]></fx:Script>
 
   <local:layout>
-    <layout_Anchor/>
+    <layout_VBox align="stretch"/>
   </local:layout>
   <local:items>
     <DisplayField ui="{DisplayFieldSkin.BOLD}"
                   padding="0 0 6 0"
-                  value="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'UploadProgressDialog_header_msg')}" />
+                  value="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'UploadProgressDialog_header_msg')}"/>
     <FieldContainer itemId="{PROGRESS_LIST}"
-               anchor="100%"
-               bubbleEvents="{['add', 'remove']}">
+                    scrollable="y"
+                    maxHeight="500"
+                    bubbleEvents="{['add', 'remove']}">
       <layout>
         <layout_VBox align="stretch"/>
       </layout>

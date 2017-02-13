@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Initializes the commerce connection for the requests site (if any).
@@ -54,8 +55,14 @@ public class CommerceConnectionFilter implements Filter {
 
   private void setCommerceConnection(@Nonnull Site site) {
     try {
-      CommerceConnection connection = commerceConnectionInitializer.getCommerceConnectionForSite(site);
-      Commerce.setCurrentConnection(connection);
+      Optional<CommerceConnection> connection = commerceConnectionInitializer.findConnectionForSite(site);
+
+      if (!connection.isPresent()) {
+        LOG.debug("Site '{}' has no commerce connection.", site.getName());
+        return;
+      }
+
+      Commerce.setCurrentConnection(connection.get());
     } catch (Exception e) {
       LOG.debug("Unable to set commerce connection for site '{}' (locale: '{}').", site.getName(), site.getLocale(),
               e);

@@ -7,7 +7,7 @@
   Otherwise MergableResources.asJSLink.ftl is used.
 -->
 
-<#assign jsLink=self.dataUrl?has_content?then(self.dataUrl,cm.getLink(self))/>
+<#assign jsLink=cm.getLink(self)/>
 
 <#if self.ieExpression?has_content>
   <!--[if ${self.ieExpression}]><script src="${jsLink}"<@cm.metadata self.content />></script><![endif]-->

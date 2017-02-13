@@ -22,9 +22,9 @@ public class AugmentCategoryActionBase extends CreateCatalogObjectDocumentAction
     var catalogObject:CatalogObject = getCatalogObjects()[0];
     if (isCorrectType(catalogObject)) {
       //call CategoryAugmentationService
-      var augmentCategoryUri:String = catalogObject.getUriPath() + "/augment";
+      var augmentCategoryUri:String = catalogObject.getStore().getUriPath() + "/augment";
       var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod(augmentCategoryUri, 'POST', true);
-      remoteServiceMethod.request(null, function (response:RemoteServiceMethodResponse):void {
+      remoteServiceMethod.request({$Ref: catalogObject.getUriPath()}, function (response:RemoteServiceMethodResponse):void {
         var content:Content = Content(response.getResponseJSON());
         content.load(ContentCreationUtil.initializeAndShow);
       });

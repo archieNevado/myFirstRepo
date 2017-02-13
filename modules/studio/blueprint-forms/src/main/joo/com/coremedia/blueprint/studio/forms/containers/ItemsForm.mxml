@@ -23,17 +23,17 @@
     public native function ItemsForm(config:ItemsForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:LinkListPropertyField propertyName="{ITEMS_PROPERTY_NAME}"
-                                    showThumbnails="true"
-                                    hideLabel="true"
-                                    bindTo="{config.bindTo}">
-        <editor:additionalToolbarItems>
-          <TbSeparator/>
-          <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
-                                                  propertyName="{ITEMS_PROPERTY_NAME}"/>
-        </editor:additionalToolbarItems>
-      </editor:LinkListPropertyField>
-    </editor:items>
-  
+  <editor:items>
+    <editor:LinkListPropertyField propertyName="{ITEMS_PROPERTY_NAME}"
+                                  showThumbnails="true"
+                                  hideLabel="true"
+                                  bindTo="{config.bindTo}">
+      <editor:additionalToolbarItems>
+        <TbSeparator/>
+        <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
+                                                propertyName="{ITEMS_PROPERTY_NAME}"/>
+      </editor:additionalToolbarItems>
+    </editor:LinkListPropertyField>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

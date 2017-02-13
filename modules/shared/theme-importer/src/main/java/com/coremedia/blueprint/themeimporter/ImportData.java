@@ -3,6 +3,7 @@ package com.coremedia.blueprint.themeimporter;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.mimetype.MimeTypeService;
+import com.coremedia.util.PathUtil;
 import com.coremedia.xml.XmlUtil5;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.IOUtils;
@@ -19,9 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -34,18 +39,19 @@ class ImportData {
   private final MimeTypeService mimeTypeService;
   private final CapConnection capConnection;
 
+  private final Collection<Map<String, ?>> allFileMaps = new ArrayList<>();
+
   // LinkedHashMaps in order to preserve the put order.
   // Necessary for deterministic behaviour of multi theme import with
   // conflicting data.
-  private Map<String, String> cssFiles = new LinkedHashMap<>();
-  private Map<String, String> jsFiles = new LinkedHashMap<>();
-  private Map<String, Document> xmlFiles = new LinkedHashMap<>();
-  private Map<String, String> propertyFiles = new LinkedHashMap<>();
-  private Map<String, Blob> webFontFiles = new LinkedHashMap<>();
-  private Map<String, Blob> imageFiles = new LinkedHashMap<>();
-  private Map<String, Blob> interactiveFiles = new LinkedHashMap<>();
-  private Map<String, Blob> templateSetFiles = new LinkedHashMap<>();
-
+  private final Map<String, String> styleSheets = createPathToObjectMap();
+  private final Map<String, String> javaScripts = createPathToObjectMap();
+  private final Map<String, Document> themeDescriptors = createPathToObjectMap();
+  private final Map<String, String> resourceBundles = createPathToObjectMap();
+  private final Map<String, Blob> webFonts = createPathToObjectMap();
+  private final Map<String, Blob> images = createPathToObjectMap();
+  private final Map<String, Blob> interactiveObjects = createPathToObjectMap();
+  private final Map<String, Blob> templateSets = createPathToObjectMap();
 
   // --- construct and configure ------------------------------------
 
@@ -54,6 +60,11 @@ class ImportData {
     this.capConnection = capConnection;
   }
 
+  private <T> LinkedHashMap<String, T> createPathToObjectMap() {
+    LinkedHashMap<String, T> result = new LinkedHashMap<>();
+    allFileMaps.add(result);
+    return result;
+  }
 
   // --- build ------------------------------------------------------
 
@@ -66,8 +77,7 @@ class ImportData {
     try (ZipInputStream zipStream = new ZipInputStream(zipFile)) {
       for (ZipEntry entry=zipStream.getNextEntry(); entry!=null; entry=zipStream.getNextEntry()) {
         if (!entry.isDirectory()) {
-          String mimeType = getMimeType(entry);
-          processZipEntry(zipStream, entry, mimeType);
+          addFileToImport(zipStream, entry.getName());
         }
         zipStream.closeEntry();
       }
@@ -75,63 +85,85 @@ class ImportData {
   }
 
 
-  // --- request ----------------------------------------------------
+  // --- access -----------------------------------------------------
 
-  Map<String, String> getCssFiles() {
-    return cssFiles;
+  Map<String, String> getStyleSheets() {
+    return styleSheets;
   }
 
-  Map<String, String> getJsFiles() {
-    return jsFiles;
+  Map<String, String> getJavaScripts() {
+    return javaScripts;
   }
 
-  Map<String, Document> getXmlFiles() {
-    return xmlFiles;
+  Map<String, Document> getThemeDescriptors() {
+    return themeDescriptors;
   }
 
-  Map<String, String> getPropertyFiles() {
-    return propertyFiles;
+  Map<String, String> getResourceBundles() {
+    return resourceBundles;
   }
 
-  Map<String, Blob> getWebFontFiles() {
-    return webFontFiles;
+  Map<String, Blob> getWebFonts() {
+    return webFonts;
   }
 
-  Map<String, Blob> getImageFiles() {
-    return imageFiles;
+  Map<String, Blob> getImages() {
+    return images;
   }
 
-  Map<String, Blob> getInteractiveFiles() {
-    return interactiveFiles;
+  Map<String, Blob> getInteractiveObjects() {
+    return interactiveObjects;
   }
 
-  Map<String, Blob> getTemplateSetFiles() {
-    return templateSetFiles;
+  Map<String, Blob> getTemplateSets() {
+    return templateSets;
+  }
+
+  Set<String> getAffectedThemes() {
+    Set<String> result = new HashSet<>();
+    for (Map<String, ?> fileMap : allFileMaps) {
+      for (String path : fileMap.keySet()) {
+        String[] pathArcs = path.split("/");
+        if (pathArcs.length > 0) {
+          String theme = pathArcs[0];
+          if (!ThemeImporterImpl.THEME_METADATA_DIR.equals(theme)) {
+            result.add(theme);
+          }
+        }
+      }
+    }
+    return result;
   }
 
 
   // --- internal ---------------------------------------------------
 
-  private void processZipEntry(InputStream stream, ZipEntry entry, String mimeType) throws IOException, MimeTypeParseException, SAXException, ParserConfigurationException {
+  void addFileToImport(InputStream stream, String originalPath) throws IOException, MimeTypeParseException, SAXException, ParserConfigurationException {
+    String path = PathUtil.normalizePath(originalPath);
+    if (PathUtil.isReferringToParent(path)) {
+      throw new IllegalArgumentException("path leaving import folder not allowed for imported file");
+    }
+
+    String mimeType = getMimeType(path);
     String mimeTypeLC = mimeType.toLowerCase(Locale.ROOT);
     if (hasType(mimeTypeLC, "css")) {
-      cssFiles.put(entry.getName(), IOUtils.toString(stream));
+      styleSheets.put(path, IOUtils.toString(stream));
     } else if (hasType(mimeTypeLC, "properties")) {
-      propertyFiles.put(entry.getName(), readProperties(stream));
+      resourceBundles.put(path, readProperties(stream));
     } else if (hasType(mimeTypeLC, "javascript")) {
-      jsFiles.put(entry.getName(), IOUtils.toString(stream));
+      javaScripts.put(path, IOUtils.toString(stream));
     } else if (hasType(mimeTypeLC, WEBFONT_TYPES)) {
-      putBlob(stream, entry, mimeType, webFontFiles);
+      putBlob(stream, path, mimeType, webFonts);
     } else if (hasType(mimeTypeLC, IMAGE_TYPES)) {
-      putBlob(stream, entry, mimeType, imageFiles);
+      putBlob(stream, path, mimeType, images);
     } else if (hasType(mimeTypeLC, "shockwave-flash")) {
-      putBlob(stream, entry, mimeType, interactiveFiles);
+      putBlob(stream, path, mimeType, interactiveObjects);
     } else if (hasType(mimeTypeLC, "java-archive")) {
-      putBlob(stream, entry, mimeType, templateSetFiles);
+      putBlob(stream, path, mimeType, templateSets);
     } else if (hasType(mimeTypeLC, "xml")) {
-      xmlFiles.put(entry.getName(), new XmlUtil5(false).parse(IOUtils.toBufferedInputStream(stream)));
-    } else if (!entry.getName().endsWith(".map")) {
-      LOG.warn("Ignoring file {} with mimetype {}", entry.getName(), mimeType);
+      themeDescriptors.put(path, new XmlUtil5(false).parse(IOUtils.toBufferedInputStream(stream)));
+    } else if (!path.endsWith(".map")) {
+      LOG.warn("Ignoring file {} with mimetype {}", path, mimeType);
     }
   }
 
@@ -142,13 +174,13 @@ class ImportData {
     return IOUtils.toString(new BufferedReader(new InputStreamReader(stream, StandardCharsets.ISO_8859_1)));
   }
 
-  private void putBlob(InputStream stream, ZipEntry entry, String mimeType, Map<String, Blob> collection) throws MimeTypeParseException, IOException {
+  private void putBlob(InputStream stream, String path, String mimeType, Map<String, Blob> collection) throws MimeTypeParseException, IOException {
     Blob data = capConnection.getBlobService().fromBytes(IOUtils.toByteArray(stream), mimeType);
-    collection.put(entry.getName(), data);
+    collection.put(path, data);
   }
 
-  private String getMimeType(ZipEntry entry) {
-    return mimeTypeService.getMimeTypeForResourceName(entry.getName());
+  private String getMimeType(String path) {
+    return mimeTypeService.getMimeTypeForResourceName(path);
   }
 
   private static boolean hasType(String canonicalMimeType, String... types) {

@@ -62,5 +62,6 @@ blueprint_dev_tooling_content content_dir do
   cms_ior node['blueprint']['dev']['content']['cms_ior_url']
   mls_ior node['blueprint']['dev']['content']['mls_ior_url']
   publishall_contentquery node['blueprint']['dev']['content']['publishall_contentquery']
+  publishall_threads node['blueprint']['dev']['content']['publishall_threads']
   action :nothing
 end

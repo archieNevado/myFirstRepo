@@ -38,24 +38,24 @@
   <layout>
     <layout_HBox/>
   </layout>
-    <items>
-      <DisplayField itemId="{DISPLAYFIELD_ITEM_ID}"
-                    flex="1">
-        <plugins>
-          <ui:BindPropertyPlugin componentProperty="value"
-                                 bindTo="{ValueExpressionFactory.create(CatalogObjectPropertyNames.NAME, config.commerceObject)}"/>
-        </plugins>
-      </DisplayField>
-      <ui:IconButton itemId="{REMOVE_BUTTON_ITEM_ID}">
-        <ui:baseAction>
-          <ec:RemoveCommerceObjectAction commerceObject="{config.commerceObject}"
-                                         catalogObjectIdListName="{config.catalogObjectIdListName}"
-                                         actionName="{config.removeActionName}"
-                                         contentVariableName="{Premular.CONTENT_VARIABLE_NAME}"
-                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
-                                         catalogObjectIdsExpression="{config.catalogObjectIdsExpression}"/>
-        </ui:baseAction>
-      </ui:IconButton>
-    </items>
-  
+  <items>
+    <DisplayField itemId="{DISPLAYFIELD_ITEM_ID}"
+                  flex="1">
+      <plugins>
+        <ui:BindPropertyPlugin componentProperty="value"
+                               bindTo="{ValueExpressionFactory.create(CatalogObjectPropertyNames.NAME, config.commerceObject)}"/>
+      </plugins>
+    </DisplayField>
+    <ui:IconButton itemId="{REMOVE_BUTTON_ITEM_ID}">
+      <ui:baseAction>
+        <ec:RemoveCommerceObjectAction commerceObject="{config.commerceObject}"
+                                       catalogObjectIdListName="{config.catalogObjectIdListName}"
+                                       actionName="{config.removeActionName}"
+                                       contentVariableName="{Premular.CONTENT_VARIABLE_NAME}"
+                                       forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                       catalogObjectIdsExpression="{config.catalogObjectIdsExpression}"/>
+      </ui:baseAction>
+    </ui:IconButton>
+  </items>
+
 </Container>

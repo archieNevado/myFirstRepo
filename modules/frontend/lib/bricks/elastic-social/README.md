@@ -2,23 +2,23 @@
 
 ## Elastic Social as a Brick
 
-This brick acts as an entry point into CoreMedia Elatic Social.
+This brick acts as an entry point into CoreMedia Elastic Social.
   
 
 ### Usage
 
 #### Loading the Brick
 
-Just add following line to your Gruntfile.js to load the brick.
+Just add following config to your Gruntfile.js to load the brick.
 
 ```
-    // Load the "cta" brick
-    utils.loadBrick(grunt, "elastic-social");
-```
-
-If you want to load multiple bricks, you may also use the following syntax:
-```
-    utils.loadBricks(grunt, [..., "elastic-social", ...]);
+    // load bricks into theme
+    bricks: {
+      src: [
+        'elastic-social',
+        ...
+      ]
+    }
 ```
 
 #### Using the brick

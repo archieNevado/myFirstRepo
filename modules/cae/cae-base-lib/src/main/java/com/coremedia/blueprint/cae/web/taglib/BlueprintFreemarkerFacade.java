@@ -5,7 +5,6 @@ import com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions;
 import com.coremedia.blueprint.base.cae.web.taglib.SettingsFunction;
 import com.coremedia.blueprint.base.cae.web.taglib.UniqueIdGenerator;
 import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
-import com.coremedia.blueprint.base.cae.web.taglib.WordAbbreviator;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
@@ -32,6 +31,7 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
+import com.coremedia.util.WordAbbreviator;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
 import com.google.common.base.Predicate;
@@ -568,6 +568,11 @@ public class BlueprintFreemarkerFacade {
     return locale;
   }
 
+  /**
+   * @param object object to determine the locale direction from
+   * @return 'ltr' or 'rtl'
+   * @see <a href="https://www.w3.org/International/questions/qa-html-dir#documentlevel" target="_blank">w3.org: Structural markup and right-to-left text in HTML</a>
+   */
   public static String getDirection(Object object) {
     if (object instanceof AbstractPage) {
       AbstractPage abstractPage = (AbstractPage) object;

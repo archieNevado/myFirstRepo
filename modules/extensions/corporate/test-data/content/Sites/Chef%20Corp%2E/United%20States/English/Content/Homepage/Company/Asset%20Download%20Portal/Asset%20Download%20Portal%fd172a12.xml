@@ -38,15 +38,8 @@
 </children>
 <hidden>0</hidden>
 <javaScript>
-<link href="../../../../../../../../Themes/corporate/js/jquery%2Ecoremedia%2Eutils%2Ejs.xml" path="/Themes/corporate/js/jquery%2Ecoremedia%2Eutils%2Ejs"/>
-<link href="../../../../../../../../Themes/corporate/js/coremedia%2Eblueprint%2EnodeDecorationService%2Ejs.xml" path="/Themes/corporate/js/coremedia%2Eblueprint%2EnodeDecorationService%2Ejs"/>
-<link href="../../../../../../../../Themes/corporate/js/coremedia%2Eblueprint%2Ebasic%2Ejs.xml" path="/Themes/corporate/js/coremedia%2Eblueprint%2Ebasic%2Ejs"/>
-<link href="../../../../../../../../Themes/corporate/js/coremedia%2Eblueprint%2EhashBasedFragment%2Ejs.xml" path="/Themes/corporate/js/coremedia%2Eblueprint%2EhashBasedFragment%2Ejs"/>
-<link href="../../../../../../../../Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Ejs.xml" path="/Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Ejs"/>
-<link href="../../../../../../../../Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Einit%2Ejs.xml" path="/Themes/am/js/coremedia%2Eblueprint%2Eam%2EdownloadCollection%2Einit%2Ejs"/>
 </javaScript>
 <css>
-<link href="../../../../../../../../Themes/am/css/am%2Ecss.xml" path="/Themes/am/css/am%2Ecss"/>
 </css>
 <theme>
 </theme>

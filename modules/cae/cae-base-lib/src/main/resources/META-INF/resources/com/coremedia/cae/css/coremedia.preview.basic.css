@@ -1,31 +1,20 @@
-/* =====================================================================================================================
-   Preview classes
-   The classes are used for the preview of fragmented items in Coremedia Studio
-   ================================================================================================================== */
+/*! CoreMedia Studio - Styles for fragmented Preview */
+
 .cm-page-preview {
-  background: none #b7b7b7;
+  background: none #f1f1f1;
   margin: 0;
   padding: 0;
-}
-
-/* display developer-mode symbol on bottom left */
-.cm-preview-developer-mode {
-  position: fixed;
-  bottom: 5px;
-  left: 10px;
-  font-size: 2rem;
-  color: #ff0000;
-  cursor: default;
+  height: auto; /* reset 100% height by themes to avoid scrollbars caused by margin of items */
 }
 
 /* fragmented item */
 .cm-preview-item {
-  margin-bottom: 1px;
+  margin-top: 2px;
 }
 
 /* studio look like buttons in fragment preview */
 .cm-page-preview .toggle-button {
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADNJREFUeNpiYBgFgxPIA/F7IP6PBb+HyhME+lgMeQ8VJxogG0KyZmRD7pOreRTQCwAEGABc9hDJtWMwowAAAABJRU5ErkJggg==') 20px center no-repeat #f0f0f0;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADNJREFUeNpiYBgFgxPIA/F7IP6PBb+HyhME+lgMeQ8VJxogG0KyZmRD7pOreRTQCwAEGABc9hDJtWMwowAAAABJRU5ErkJggg==') 6px center no-repeat #C8C6C6;
 }
 
 .cm-page-preview .toggle-button.toggle-off {
@@ -39,13 +28,18 @@
 /* headline */
 .cm-preview-item__headline {
   display: block;
-  padding: 5px 38px;
-  color: #646060;
-  font-weight: bold;
-  font-size: 12px;
-  font-family: 'Segoe UI', 'Trebuchet MS', 'Lucida Grande', Helvetica, sans-serif;
-  line-height: 20px;
+  padding: 4px 6px 4px 24px;
+  font: 700 12px/32px 'Roboto', 'Segoe UI', 'Trebuchet MS', 'Lucida Grande', 'Helvetica', sans-serif;
+  color: #000;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.cm-preview-item__headline:hover,
+.cm-preview-item__headline:focus,
+.cm-preview-item__headline:active {
+  color: #000;
+  text-decoration: none;
 }
 
 /* content */
@@ -53,43 +47,48 @@
   display: block;
   max-width: 1200px;
   padding: 20px;
-  background-color: #b7b7b7;
 }
 
 .cm-preview-content {
   padding: 15px;
   background-color: #ffffff;
+  transition: box-shadow 0.25s;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.6);
 }
 
 .cm-preview-missing-key {
   font-weight: bold;
-  background-color: #ff0000;
+  background-color: #e74c3c;
 }
 
 /* images */
-.cm-image-box--preview .cm-image {
+.cm-preview__image .cm-image {
+  position: relative; /* reset responsive image */
   /* at least show the spinning icon of the background (32x32) */
   display: inline-block;
   min-width: 35px;
   min-height: 35px;
 }
 
-/* theme */
-.cm-theme {
-  max-width: 960px;
-  margin: 20px auto;
-  background: #fff;
-  font-family: 'Segoe UI', 'Trebuchet MS', 'Lucida Grande', Helvetica, sans-serif;
-  padding: 20px;
+/* display developer-mode symbol on top right */
+.cm-preview-developer-mode {
+  position: fixed;
+  top: 10px;
+  right: 0;
+  z-index: 999;
+  background-color: #e74c3c;
+  padding: 7px 9px;
+  border-radius: 5px 0 0 5px;
+  cursor: default;
 }
 
-.cm-theme__title {
-  margin-top: 0;
-  font-size: 2rem;
-  font-weight: 600;
+.cm-preview-developer-mode__icon {
+  display: block;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAABGlBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+zRnCkAAAAXXRSTlMAAQIDBAUGBwgJCgsODxgaJicoKSotLzAxMzk7PUZKTE9QUVJUVVZZXF1eYWJjZmdoaWtsbXR4eX6FiYyPlJianZ6go6aorbK0tbe8vsXK2dze5ujp6/Hz9ff5+/1wsAonAAABHUlEQVQoz42S11KbYQxEz/djegmdGNMceoeEZqrBJHQw1Qb7vP9rcGEwP0OZ6Eqj1UirXcF/RpiZILlZ9xGo1ZWiPbHO8JIcW7IcVevr2gGQXCuP8dPd0QBEw4EzTdM8wLk2gloH0akXiyXNzxWcTWUcpN3cdIAB36Jcz7H3rzsO1ZvNgyd1iISuFe0GYEqzEbTk9QdheY7kfgPw5+TJQgKgXa+3uqpEVQ8BiFQz74C/nwHpnYLFBECH3mZ7Y/JMarYGWvPaRvg9T/9eIwA59W47V1LTJHTjsUI3GTvQJo6qB4Z/Xi6X9Gr6wYVUxiE6K5IQhiNOdZzm1DsRAVi1MrdvtfyLXndGXu350qi4tUsPcWvfnmGc7u36b97lGQOvSU4gttpoAAAAAElFTkSuQmCC') left center no-repeat;
+  width: 24px;
+  height: 24px;
 }
 
-.cm-theme__screenshot {
-  height: auto;
-  width: 100%;
+.cm-preview-developer-mode__icon span {
+  display: none;
 }

@@ -10,7 +10,7 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 ## Cookbooks:
 
 * blueprint-base
-* coremedia-proxy (~> 0.2)
+* coremedia-proxy (~> 0.3.0)
 
 # Attributes
 
@@ -28,7 +28,7 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 * `node['blueprint']['proxy']['virtual_host']['preview']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['sites']['helios']['server_name']` -  Defaults to `preview-helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['sites']['helios']['server_aliases']` -  Defaults to `[ ... ]`.
-* `node['blueprint']['proxy']['virtual_host']['preview']['sites']['helios']['default_site']` -  Defaults to `perfectchef`.
+* `node['blueprint']['proxy']['virtual_host']['preview']['sites']['helios']['default_site']` -  Defaults to `corporate`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['sites']['corporate']['server_name']` -  Defaults to `preview-corporate.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['sites']['corporate']['default_site']` -  Defaults to `corporate`.
 * `node['blueprint']['proxy']['virtual_host']['delivery']['cluster']['default']['host']` -  Defaults to `node['blueprint']['proxy']['cms_host']`.
@@ -37,8 +37,8 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 * `node['blueprint']['proxy']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
 * `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['helios']['server_name']` -  Defaults to `helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['helios']['server_aliases']` -  Defaults to `[ ... ]`.
-* `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['helios']['default_site']` -  Defaults to `perfectchef`.
-* `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['helios']['sitemap_site_name']` -  Defaults to `PerfectChef`.
+* `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['helios']['default_site']` -  Defaults to `corporate`.
+* `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['helios']['sitemap_site_name']` -  Defaults to `Corporate`.
 * `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['corporate']['server_name']` -  Defaults to `corporate.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['corporate']['default_site']` -  Defaults to `corporate`.
 * `node['blueprint']['proxy']['virtual_host']['delivery']['sites']['corporate']['sitemap_site_name']` -  Defaults to `Corporate`.

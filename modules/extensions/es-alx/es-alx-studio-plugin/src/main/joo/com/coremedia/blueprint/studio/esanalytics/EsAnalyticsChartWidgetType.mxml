@@ -20,11 +20,11 @@
     public native function EsAnalyticsChartWidgetType(config:EsAnalyticsChartWidgetType = null);
     ]]></fx:Script>
 
-    <editor:widgetComponent>
-      <esalx:EsAnalyticsChartWidget/>
-    </editor:widgetComponent>
-    <editor:editorComponent>
-      <esalx:EsAnalyticsChartWidgetEditor/>
-    </editor:editorComponent>
-  
+  <editor:widgetComponent>
+    <esalx:EsAnalyticsChartWidget/>
+  </editor:widgetComponent>
+  <editor:editorComponent>
+    <esalx:EsAnalyticsChartWidgetEditor/>
+  </editor:editorComponent>
+
 </editor:ComponentBasedWidgetType>

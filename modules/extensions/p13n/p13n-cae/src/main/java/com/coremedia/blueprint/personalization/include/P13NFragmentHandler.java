@@ -13,6 +13,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
@@ -25,6 +26,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
@@ -60,7 +62,8 @@ public class P13NFragmentHandler extends PageHandlerBase {
   @RequestMapping(value = DYNAMIC_URI_PATTERN, method = RequestMethod.GET)
   public ModelAndView handleFragmentRequest(@PathVariable(SEGMENT_ROOT) String context,
                                             @PathVariable(ID_VARIABLE) int contentId,
-                                            @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view) {
+                                            @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
+                                            HttpServletRequest request) {
     Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
     ContentBean contentBean = getContentBeanFactory().createBeanFor(content);
     Navigation navigation = getNavigation(context);
@@ -72,7 +75,7 @@ public class P13NFragmentHandler extends PageHandlerBase {
       NavigationLinkSupport.setNavigation(modelWithView, navigation);
 
       // need to add compose and add page to request here in order to get settings for image transformation later on...
-      Page page = asPage(navigation, navigation);
+      Page page = asPage(navigation, navigation, UserVariantHelper.getUser(request));
       addPageModel(modelWithView, page);
 
       return modelWithView;

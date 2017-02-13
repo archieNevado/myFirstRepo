@@ -20,9 +20,15 @@ public class CatalogObjectActionBase extends DependencyTrackedAction implements 
    * @param config the config object
    */
   public function CatalogObjectActionBase(config:CatalogObjectAction = null) {
+    if (config.catalogObjectExpression)  {
+      //If the catalogObjectExpression is configured...
+      //...then take that
+      catalogObjectExpression = config.catalogObjectExpression
+    } else {
+      //...otherwise create a content value expression
+      catalogObjectExpression = ValueExpressionFactory.createFromValue();
+    }
     super(config);
-
-    catalogObjectExpression = ValueExpressionFactory.createFromValue();
   }
 
   /**

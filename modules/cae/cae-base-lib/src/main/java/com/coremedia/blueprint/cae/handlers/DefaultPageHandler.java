@@ -10,7 +10,9 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,17 +62,19 @@ public class DefaultPageHandler extends PageHandlerBase {
                                                String segmentId,
                                                @Nullable List<String> navigationPath,
                                                @Nonnull String vanity,
-                                               @Nullable String view) {
-
+                                               @Nullable String view,
+                                               HttpServletRequest servletRequest) {
     if (navigationPath == null) {
       return HandlerHelper.notFound();
     }
+
+    User developer = UserVariantHelper.getUser(servletRequest);
 
     // first check if a vanity or channel URL exists with exactly the given path (fixes CMS-352)
     List<String> fullPath = new ArrayList<>(navigationPath.size() + 1);
     fullPath.addAll(navigationPath);
     fullPath.add(vanity + '-' + segmentId);
-    ModelAndView result = createModelAndView(fullPath, view);
+    ModelAndView result = createModelAndView(fullPath, view, developer);
     if (result != null) {
       return result;
     }
@@ -83,8 +88,7 @@ public class DefaultPageHandler extends PageHandlerBase {
       return HandlerHelper.notFound();
     }
 
-    Page page = asPage(navigation, isContextBean(linkable) ? navigation : linkable);
-
+    Page page = asPage(navigation, isContextBean(linkable) ? navigation : linkable, developer);
     return createModelAndView(page, view);
   }
 
@@ -93,14 +97,24 @@ public class DefaultPageHandler extends PageHandlerBase {
    */
   @Nonnull
   protected ModelAndView handleRequestInternal(@Nullable List<String> navigationPath,
-                                               @Nullable String view) {
-    ModelAndView modelAndView = createModelAndView(navigationPath, view);
+                                               @Nullable String view,
+                                               HttpServletRequest servletRequest) {
+    ModelAndView modelAndView = createModelAndView(navigationPath, view, UserVariantHelper.getUser(servletRequest));
     return modelAndView != null ? modelAndView : HandlerHelper.notFound();
   }
 
+  /**
+   * Create the ModelAndView
+   *
+   * @param navigationPath the URL path
+   * @param view the view
+   * @param developer Consider the developer's work in progress for particular features
+   * @return the ModelAndView
+   */
   @Nullable
   protected ModelAndView createModelAndView(@Nullable List<String> navigationPath,
-                                            @Nullable String view) {
+                                            @Nullable String view,
+                                            @Nullable User developer) {
     if (navigationPath == null || navigationPath.isEmpty()) {
       return null;
     }
@@ -110,7 +124,7 @@ public class DefaultPageHandler extends PageHandlerBase {
     }
     if (navigationPath.size() == 1) {
       // The URL references the root channel
-      return createModelAndView(asPage(rootChannel, rootChannel), view);
+      return createModelAndView(asPage(rootChannel, rootChannel, developer), view);
     }
 
     // try to resolve rest of path as vanity URL: this will be null, if there is no vanity mapping
@@ -120,7 +134,7 @@ public class DefaultPageHandler extends PageHandlerBase {
       // vanity URL found: determine the context for the target in the current site
       CMContext context = getContext(rootChannel, target);
       if (context != null) {
-        Page page = asPage(context, target);
+        Page page = asPage(context, target, developer);
         return createModelAndView(page, view);
       }
     }
@@ -128,7 +142,7 @@ public class DefaultPageHandler extends PageHandlerBase {
     // no vanity URL defined, try to parse full path as navigation segment path
     Navigation navigation = getNavigation(navigationPath);
     if (navigation != null) {
-      return createModelAndView(asPage(navigation, navigation), view);
+      return createModelAndView(asPage(navigation, navigation, developer), view);
     }
 
     // give up

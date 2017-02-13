@@ -86,12 +86,12 @@
                                     expression="{NAME_PROPERTY}"/>
               </ui:bindTo>
             </ui:BindPropertyPlugin>
-            <ui:ImmediateChangeEventsPlugin/>
           </plugins>
         </TextField>
-        <DisplayField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_content_type_text')}"
-                      columnWidth="0.65"
-                      labelWidth="40">
+        <DisplayField
+                fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'Upload_content_type_text')}"
+                columnWidth="0.65"
+                labelWidth="40">
           <plugins>
             <ui:BindPropertyPlugin componentProperty="value">
               <ui:bindTo>

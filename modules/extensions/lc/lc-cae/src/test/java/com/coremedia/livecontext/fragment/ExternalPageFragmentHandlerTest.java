@@ -7,6 +7,7 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,8 +62,10 @@ public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<Ext
   protected ExternalPageFragmentHandler createTestling() {
     return new ExternalPageFragmentHandler() {
       @Override
-      protected Page asPage(Navigation context, Linkable content) {
-        return new PageImpl(context, content, false, getSitesService(), null, null, null, null);
+      protected Page asPage(Navigation context, Linkable content, User developer) {
+        PageImpl page = new PageImpl(context, content, false, getSitesService(), null, null, null, null);
+        page.setDeveloper(developer);
+        return page;
       }
     };
   }

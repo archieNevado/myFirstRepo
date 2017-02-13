@@ -182,8 +182,6 @@
 <StringProperty Name="preferredSite">99c8ef576f385bc322564d5694df6fc2</StringProperty>
 <StringProperty Name="locale">en</StringProperty>
 <LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/PerfectChef/United%20States/English/Navigation/Perfect%20Chef%20USA.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Perfect%20Chef%20USA"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Spring/Story%201%20-%20A%20Perfect%20Picnic/A%20Per94b228e4.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Editorial/Content/Magazine%20Spring/Story%201%20-%20A%20Perfect%20Picnic/A%20Perfect%20Picnic%20Article"/>
 <Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
 <Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Startpage/Spring%20Picnic%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Startpage/Spring%20Picnic%20Image%20Map"/>
 <Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses"/>

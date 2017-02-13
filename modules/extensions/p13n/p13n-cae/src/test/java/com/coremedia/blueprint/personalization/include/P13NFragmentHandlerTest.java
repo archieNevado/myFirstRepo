@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -98,7 +99,7 @@ public class P13NFragmentHandlerTest {
     when(cmNavigationContent.getType()).thenReturn(cmNavigationContentType);
     when(cmNavigationContentType.getName()).thenReturn(CMSelectionRules.NAME);
 
-    ModelAndView modelAndView = testling.handleFragmentRequest("helios", 4711, "myView");
+    ModelAndView modelAndView = testling.handleFragmentRequest("helios", 4711, "myView", new MockHttpServletRequest());
     assertEquals("myView", modelAndView.getViewName());
     assertTrue(modelAndView.getModel().get("self") instanceof CMSelectionRules);
     assertTrue(modelAndView.getModel().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION) instanceof CMNavigation);
@@ -112,7 +113,7 @@ public class P13NFragmentHandlerTest {
     CMArticle cmArticle = mock(CMArticle.class);
     when(contentBeanFactory.createBeanFor(wrongContent)).thenReturn(cmArticle);
 
-    ModelAndView modelAndView = testling.handleFragmentRequest("helios", 4711, "myView");
+    ModelAndView modelAndView = testling.handleFragmentRequest("helios", 4711, "myView", new MockHttpServletRequest());
     assertEquals(HandlerHelper.notFound().getModel(), modelAndView.getModel());
   }
 

@@ -12,8 +12,9 @@
 
 ### NOTICE :
 
-* Current version is not supporting automation and monitoring mms agent installation for Debian 7.8
-* MongoDB 3.2.4 is default version of mongodb3 cookbook
+* Current version is not supporting automation and monitoring mms agent installation for Debian 7.8.
+* MongoDB **3.2.8** is default version of mongodb3 cookbook.
+* Mongodb3 cookbook is **NO LONGER SUPPORT** Chef Client version 11.
 
 ### Contributors
 
@@ -25,15 +26,19 @@
 * Julien Pervillé - [@jperville](https://github.com/jperville)
 * Daniel Doubrov - [@dblock](https://github.com/dblock)
 * Damien Raude-Morvan - [@drazzib](https://github.com/drazzib)
-
+* Jose Olcese - [@jolcese](https://github.com/jolcese)
+* Dennis Pattmann - [@dpattmann](https://github.com/dpattmann)
+* Marcin Skurski - [@mskurski](https://github.com/mskurski)
+* Popsikle - [@popsikle](https://github.com/popsikle)
+* Amsdard - [@amsdard](https://github.com/amsdard)
 
 ## Supported Platforms
 
 The following platforms have been tested with Test Kitchen
 
-* Ubuntu 12.04, 14.04
+* Ubuntu 12.04, 14.04, 15.04, 16.04
 * Debian 7.8
-* CentOS 6.6, 7.2
+* CentOS 6.8, 7.2
 * Oralce 6.6
 * Amazon Linux
 
@@ -67,6 +72,9 @@ default['mongodb3']['mongod']['config_file'] = '/etc/mongod.conf'
 
 # Mongos config file path
 default['mongodb3']['mongos']['config_file'] = '/etc/mongos.conf'
+
+# Runit template cookbook for mongos
+default['mongodb3']['mongos']['runit_template_cookbook'] = 'mongodb3'
 
 # Key file contents
 default['mongodb3']['config']['key_file_content'] = nil
@@ -908,7 +916,7 @@ mmsBaseUrl=https://api-agents.mongodb.com
 Author:: Sunggun Yu (sunggun.dev@gmail.com)
 
 ```text
-Copyright (c) 2015, Sunggun Yu.
+Copyright (c) 2016, Sunggun Yu.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

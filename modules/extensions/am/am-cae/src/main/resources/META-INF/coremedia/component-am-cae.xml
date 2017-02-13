@@ -59,13 +59,6 @@
     <property name="capBlobHandler" ref="capBlobHandler"/>
   </bean>
 
-  <!-- register view repository for templates below WEB-INF/templates/am/ -->
-  <customize:prepend id="addAssetsViewRepository" bean="viewRepositories">
-    <list>
-      <value>am</value>
-    </list>
-  </customize:prepend>
-
   <customize:append id="addDownloadPortalPredicates" bean="dynamicIncludePredicates">
     <list>
       <bean class="com.coremedia.blueprint.assets.cae.handlers.DownloadPortalPredicate" />

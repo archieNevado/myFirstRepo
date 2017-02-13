@@ -139,22 +139,20 @@ public class JavaScriptMinifier implements Minifier {
 
     private String fileName;
 
-    public ErrorReporterWrapper(String fileName) {
+    ErrorReporterWrapper(String fileName) {
       this.fileName = fileName;
     }
 
     @Override
     public void warning(String message, String sourceName,
                         int line, String lineSource, int lineOffset) {
-
-      LOG.warn("YuiCompressor: FileName: {}, Line: {}, LineOffset: {}, LineSource: '{}': {}", fileName, line, lineOffset, lineSource, message);
+      LOG.debug("YuiCompressor: FileName: {}, Line: {}, LineOffset: {}, LineSource: '{}': {}", fileName, line, lineOffset, lineSource, message);
     }
 
     @Override
     public void error(String message, String sourceName,
                       int line, String lineSource, int lineOffset) {
-
-      LOG.error("YuiCompressor: FileName: {}, Line: {}, LineOffset: {}, LineSource: '{}': {}", fileName, line, lineOffset, lineSource, message);
+      LOG.debug("YuiCompressor: FileName: {}, Line: {}, LineOffset: {}, LineSource: '{}': {}", fileName, line, lineOffset, lineSource, message);
     }
 
     @Override

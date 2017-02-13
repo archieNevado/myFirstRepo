@@ -1,21 +1,23 @@
 package com.coremedia.blueprint.cae.web.i18n;
 
-import com.coremedia.blueprint.base.util.ObjectCacheKey;
+import com.coremedia.blueprint.base.util.PairCacheKey;
 import com.coremedia.blueprint.base.util.StructUtil;
+import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.localization.LocalizationService;
-import com.coremedia.blueprint.theme.ThemeService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.CapStructHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.cap.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -78,39 +80,44 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
   // --- PageResourceBundleFactory ----------------------------------
 
   @Override
-  public ResourceBundle resourceBundle(Page page) {
+  public ResourceBundle resourceBundle(Page page, User developer) {
     // For performance and cache size reasons this implementation supports
     // resource bundles only for the page's navigation.  If you really need
     // resource bundles at content level, you can include the page content's
     // resourceBundles here.
-    return resourceBundle(page.getNavigation());
+    return resourceBundle(page.getNavigation(), developer);
   }
 
   @Override
-  public ResourceBundle resourceBundle(Navigation navigation) {
+  public ResourceBundle resourceBundle(Navigation navigation, User developer) {
     if (useLocalresources || cache==null) {
       LOG.warn("Using " + getClass().getName() + " without cache.  Ok for testing, too expensive for production.");
-      return fetchNavigationResourceBundle(navigation);
+      return resourceBundleUncached(navigation, developer);
     } else {
-      return cache.get(new NavigationCacheKey(navigation));
+      return cache.get(new NavigationCacheKey(navigation, developer));
     }
   }
 
 
   // --- internal ---------------------------------------------------
 
-  private ResourceBundle fetchNavigationResourceBundle(Navigation navigation) {
-    Struct struct = hierarchicalMergedResourceBundles(navigation);
+  /**
+   * Returns the navigation's resource bundle.
+   * <p>
+   * Considers the developer's work in progress resource bundles.
+   */
+  private ResourceBundle resourceBundleUncached(Navigation navigation, @Nullable User developer) {
+    Struct struct = hierarchicalMergedResourceBundles(navigation, developer);
     return struct == null ? EmptyResourceBundle.emptyResourceBundle() : CapStructHelper.asResourceBundle(struct);
   }
 
-  private Struct hierarchicalMergedResourceBundles(Navigation navigation) {
+  private Struct hierarchicalMergedResourceBundles(Navigation navigation, User developer) {
     Struct bundle = null;
     for (Navigation nav = navigation; nav!=null; nav = nav.getParentNavigation()) {
       if (nav instanceof CMNavigation) {
         Content navContent = ((CMNavigation)nav).getContent();
         bundle = StructUtil.mergeStructs(bundle, mergedResourceBundles(navContent));
-        bundle = StructUtil.mergeStructs(bundle, mergedResourceBundlesFromTheme(navContent));
+        bundle = StructUtil.mergeStructs(bundle, mergedResourceBundlesFromTheme(navContent, developer));
       }
     }
     return bundle;
@@ -135,11 +142,12 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
    * In case of a translation there is no need to link one specific bundle anymore.
    *
    * @param cmNavigation the navigation containing the theme and the locale
+   * @param developer considers the developer's work in progress resource bundles
    * @return a Struct containing the localizations.
    */
-  private Struct mergedResourceBundlesFromTheme(Content cmNavigation) {
+  private Struct mergedResourceBundlesFromTheme(Content cmNavigation, @Nullable User developer) {
     List<Struct> structs = new ArrayList<>();
-    Content theme = themeService.theme(cmNavigation);
+    Content theme = themeService.theme(cmNavigation, developer);
     if (theme != null) {
       List<Content> bundles = theme.getLinks(THEME_RESOURCEBUNDLES);
       Locale locale = sitesService.getContentSiteAspect(cmNavigation).getLocale();
@@ -151,16 +159,14 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
 
   // --- caching ----------------------------------------------------
 
-  private class NavigationCacheKey extends ObjectCacheKey<Navigation, ResourceBundle> {
-    NavigationCacheKey(Navigation navigation) {
-      super(navigation);
+  private class NavigationCacheKey extends PairCacheKey<Navigation, User, ResourceBundle> {
+    NavigationCacheKey(Navigation navigation, User user) {
+      super(navigation, user);
     }
 
     @Override
-    public ResourceBundle evaluate(Cache cache) throws Exception {
-      // Do not add anything here.  Behaviour must be transparent
-      // compared to a direct invocation of fetchNavigationResourceBundle.
-      return fetchNavigationResourceBundle(getObj());
+    protected ResourceBundle evaluate(Cache cache, Navigation key1, User key2) {
+      return resourceBundleUncached(key1, key2);
     }
   }
 }

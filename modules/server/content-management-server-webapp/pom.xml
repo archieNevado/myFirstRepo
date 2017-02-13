@@ -14,7 +14,7 @@
   <packaging>war</packaging>
 
   <description>
-    To start the content-management-server-webapp run: mvn tomcat7:run-war
+    To start the content-management-server-webapp run: mvn tomcat7:run
   </description>
 
   <properties>
@@ -90,7 +90,7 @@
       </plugin>
 
       <!--
-         invoke "mvn tomcat7:run-war" for running this webapp locally
+         invoke "mvn tomcat7:run" for running this webapp locally but make sure that you run mvn:package first
       -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
@@ -100,6 +100,8 @@
           <port>40180</port>
           <systemProperties>
             <propertieslocations>classpath:/content-management-server.properties</propertieslocations>
+            <!--workaround for CMS-7024, but this workaround requires building the webapp first-->
+            <cap.server.search.context.configLocations>file:#{T(hox.corem.Corem).getHome()}/../../../../target/coremedia/WEB-INF/config/contentserver/spring/search/applicationContext.xml</cap.server.search.context.configLocations>
           </systemProperties>
         </configuration>
       </plugin>
@@ -114,24 +116,6 @@
   </build>
 
   <profiles>
-    <profile>
-      <id>internal-licenses</id>
-      <!--
-       | Please change the groupId,artifactId and version to your specific development license artifact or remove it completely
-       | if you check your development license into VCS. The repository definition for the remote repository containing the
-       | license should be added as a profile in your settings.xml.
-       -->
-      <dependencies>
-        <dependency>
-          <groupId>com.coremedia.cms.license</groupId>
-          <artifactId>development-license</artifactId>
-          <version>[17-SNAPSHOT]</version>
-          <type>war</type>
-          <classifier>production</classifier>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-    </profile>
     <profile>
       <id>embedded</id>
       <properties>

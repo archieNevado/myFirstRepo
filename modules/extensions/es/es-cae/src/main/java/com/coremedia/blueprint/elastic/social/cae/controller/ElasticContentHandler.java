@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -8,14 +9,19 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.cms.ContentWithSite;
+import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 public class ElasticContentHandler<T extends ContributionResult> extends ElasticHandler<T> {
 
@@ -102,5 +108,31 @@ public class ElasticContentHandler<T extends ContributionResult> extends Elastic
     } else {
       throw new IllegalArgumentException("Content is not navigation " + content.getId());
     }
+  }
+
+  protected Object fetchContributionTarget(HttpServletRequest request, String targetId) {
+    Site site = SiteHelper.getSiteFromRequest(request);
+    return site==null ? null : getContributionTarget(targetId, site);
+  }
+
+  protected HandlerInfo createResult(HttpServletRequest request, Navigation navigation, CommunityUser author, Object contributionTarget) {
+    Object[] beans = getBeansForSettings(contributionTarget, navigation).toArray();
+    HandlerInfo result = new HandlerInfo();
+    User developer = UserVariantHelper.getUser(request);
+    validateEnabled(result, author, navigation, developer, beans);
+    return result;
+  }
+
+  /**
+   * Hook method, invoked by
+   * {@link #createResult(HttpServletRequest, Navigation, CommunityUser, Object)}
+   * <p>
+   * Does nothing.  To be overridden if needed.
+   *
+   * @param user The community user that this is all about
+   * @param developer A Blueprint developer whose work in progress may be considered by particular features
+   */
+  protected void validateEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, @Nullable User developer, Object... beans) {
+    // To be overridden if needed.
   }
 }

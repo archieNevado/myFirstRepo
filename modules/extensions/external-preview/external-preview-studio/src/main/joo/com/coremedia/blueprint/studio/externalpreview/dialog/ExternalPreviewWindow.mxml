@@ -33,15 +33,17 @@
     ]]></fx:Script>
 
   <local:items>
-    <editor:CollapsiblePanel title="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_1')}"
-                             collapsible="{false}">
+    <editor:CollapsiblePanel
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_1')}"
+            collapsible="{false}">
       <editor:items>
-        <Component html="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_1_text')}"/>
+        <Component
+                html="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_1_text')}"/>
         <FieldContainer labelWidth="{LABEL_WITH}"
                         labelSeparator=""
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_url')}">
           <items>
-            <Label html="{getHyperlink()}" />
+            <Label html="{getHyperlink()}"/>
           </items>
         </FieldContainer>
         <Container>
@@ -65,10 +67,12 @@
                       defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
       </editor:plugins>
     </editor:CollapsiblePanel>
-    <editor:CollapsiblePanel title="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_2')}"
-                             collapsible="{false}">
+    <editor:CollapsiblePanel
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_2')}"
+            collapsible="{false}">
       <editor:items>
-        <Component html="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_2_text')}"/>
+        <Component
+                html="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_step_2_text')}"/>
         <DisplayField labelWidth="{LABEL_WITH}"
                       fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_key')}"
                       value="{ExternalPreviewPluginBase.getPreviewToken()}"/>

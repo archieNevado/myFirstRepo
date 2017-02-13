@@ -35,6 +35,8 @@ import ext.panel.Panel;
 import ext.tab.TabPanel;
 import ext.window.MessageBoxWindow;
 
+import js.HTMLElement;
+
 /**
  * Handles the adding and removing of the level columns.
  */
@@ -195,7 +197,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
             }
 
             setBusy(false);
-          })
+          });
         }
       }
     });
@@ -257,8 +259,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   private function selectNodePath(list:TaxonomyNodeList):void {
     setBusy(true);
-    var columnsContainer:Container = getColumnsContainer();
-    columnsContainer.removeAll(true);
+    var cc:Container = getColumnsContainer();
+    cc.removeAll(true);
 
     var nodes:Array = list.getNodes();
     for (var i:int = 0; i < nodes.length; i++) {
@@ -371,20 +373,18 @@ public class TaxonomyExplorerPanelBase extends Panel {
       var formDispatcher:Container = dfd.down(createComponentSelector().itemId(content.getType().getName()).build()) as Container;
       var documentForm:Container = formDispatcher.down(createComponentSelector().itemId(content.getType().getName()).build()) as Container;
       var collapsable:Panel = documentForm.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
+      if(collapsable.collapsed) {
+        collapsable.expand(false);
+      }
 
       EventUtil.invokeLater(function ():void {
         var fieldId:String = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_display_property');
         var stringPropertyFields:Array = collapsable.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
+
         for each(var field:StringPropertyField in stringPropertyFields) {
           if(field.propertyName === fieldId) {
             var nameField:TextField = field.query(createComponentSelector()._xtype("textfield").build())[0] as TextField;
-            if (collapsable) {
-              collapsable.expand(false);
-              callback(nameField);
-            }
-            else {
-              callback(nameField);
-            }
+            callback(nameField);
           }
         }
       });
@@ -393,6 +393,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
 
   private function attachBlurListener(nameField:TextField):void {
     if (nameField && nameField.getValue() === resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_default_name')) {
+      nameField.selectOnFocus = true;
       nameField.focus(true);
     }
     nameField.addListener('blur', onNameFieldBlur);
@@ -467,20 +468,20 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   public function updateColumns(node:TaxonomyNode):void {
     setBusy(true);
-    var columnsContainer:Container = getColumnsContainer();
+    var cc:Container = getColumnsContainer();
     if (node) {
       var level:int = node.getLevel();
-      if (columnsContainer.itemCollection.length > level) {
-        var columnsToBeRemoved:Array = columnsContainer.itemCollection.getRange(level);
+      if (cc.itemCollection.length > level) {
+        var columnsToBeRemoved:Array = cc.itemCollection.getRange(level);
         columnsToBeRemoved.forEach(function (column:TaxonomyExplorerColumn):void {
-          columnsContainer.remove(column, true);
+          cc.remove(column, true);
         });
       }
       if (node.isExtendable() && !node.isLeaf()) {
         addColumn(node);
       }
     } else {
-      columnsContainer.removeAll(true);
+      cc.removeAll(true);
     }
 
     setBusy(false);
@@ -491,7 +492,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
    * @param node The node the column should be created for.
    */
   private function addColumn(node:TaxonomyNode):void {
-    var columnsContainer:Container = getColumnsContainer();
+    var cc:Container = getColumnsContainer();
     var column:TaxonomyExplorerColumn = new TaxonomyExplorerColumn(TaxonomyExplorerColumn({
       parentNode: node,
       itemId: "taxonomyColumn-" + node.getLevel(),
@@ -500,7 +501,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       siteSelectionExpression: siteSelectionExpression
     }));
     column.addListener('afterrender', scrollRight);
-    columnsContainer.add(column);
+    cc.add(column);
   }
 
   private function scrollTop():void {
@@ -600,7 +601,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
    * @return The column grid panel that contains the node.
    */
   public function getColumnContainer(node:TaxonomyNode):TaxonomyExplorerColumn {
-    var columnsContainer:Container = queryById("columnsContainer") as Container;
     var position:int = node.getLevel() - 1;
     return getColumnContainerForLevel(position);
   }
@@ -614,8 +614,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
     if (position === -1) {
       return Ext.getCmp('taxonomyRootsColumn') as TaxonomyExplorerColumn;
     }
-    var columnContainer:TaxonomyExplorerColumn = columnsContainer.itemCollection.getAt(position) as TaxonomyExplorerColumn;
-    return columnContainer
+    return columnsContainer.itemCollection.getAt(position) as TaxonomyExplorerColumn;
   }
 
   /**

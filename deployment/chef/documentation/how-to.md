@@ -19,7 +19,7 @@ provisioner:
 ```
 
 
-## Use local maven artifacts
+## Use local Maven artifacts
 
 To use local artifacts, make sure you've installed the artifacts into your Maven repository and the path of this repository 
 is matched by the `synced_folders` settings in your kitchen file, that is, if your Maven repository is located at `C:/myMavenRepo` the 

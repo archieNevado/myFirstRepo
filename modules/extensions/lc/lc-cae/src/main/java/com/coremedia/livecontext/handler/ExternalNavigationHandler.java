@@ -8,6 +8,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
@@ -19,6 +20,7 @@ import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.livecontext.product.ProductList;
 import com.coremedia.livecontext.product.ProductListSubstitutionService;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import org.springframework.beans.factory.annotation.Required;
@@ -33,6 +35,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -81,7 +84,8 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   @RequestMapping({URI_PATTERN})
   public ModelAndView handleRequest(@PathVariable(SHOP_NAME_VARIABLE) final String shopSegment,
                                     @PathVariable(CATEGORY_PATH_VARIABLE) final String segment,
-                                    @RequestParam(value = VIEW_PARAMETER, required = false) final String view) {
+                                    @RequestParam(value = VIEW_PARAMETER, required = false) final String view,
+                                    HttpServletRequest request) {
     // This handler is only responsible for CAE category links.
     // If the application runs in wcsCategoryLinks mode, we render native
     // WCS links, and this kind of link cannot occur.
@@ -93,7 +97,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     hasText(shopSegment, "No shop name provided.");
     hasText(segment, "No segment provided.");
 
-    return createLiveContextPage(shopSegment, segment, view);
+    return createLiveContextPage(shopSegment, segment, view, UserVariantHelper.getUser(request));
   }
 
   @RequestMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = RequestMethod.GET)
@@ -101,10 +105,11 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   public ModelAndView getProducts(@PathVariable(SITE_CHANNEL_ID) CMNavigation context,
                                   @PathVariable(CATEGORY_SEO_SEGMENT) String categorySeoSegment,
                                   @RequestParam(value = PARAM_START, required = false, defaultValue = "0") Integer start,
-                                  @RequestParam(value = PARAM_STEPS, required = false, defaultValue = DEFAULT_STEPS) Integer steps) {
+                                  @RequestParam(value = PARAM_STEPS, required = false, defaultValue = DEFAULT_STEPS) Integer steps,
+                                  HttpServletRequest request) {
     LiveContextNavigation navigation = getLiveContextNavigationFactory().createNavigationBySeoSegment(context.getContent(), categorySeoSegment);
     ProductList productList = productListSubstitutionService.getProductList(navigation, start, steps);
-    Page page = asPage(context, context, treeRelation);
+    Page page = asPage(context, context, treeRelation, UserVariantHelper.getUser(request));
     ModelAndView modelAndView = HandlerHelper.createModelWithView(productList, PAGING_VIEW);
     setPage(modelAndView, page);
 
@@ -208,14 +213,15 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   private ModelAndView createLiveContextPage(
           @Nonnull final String shopSegment,
           @Nonnull final String segment,
-          final String view) {
+          final String view,
+          @Nullable User developer) {
     Site site = getSiteResolver().findSiteBySegment(shopSegment);
     Navigation context = getNavigationContext(site, segment);
     if (context == null) {
       return HandlerHelper.notFound("No such category");
     }
 
-    Page page = asPage(context, context, treeRelation);
+    Page page = asPage(context, context, treeRelation, developer);
     ModelAndView modelAndView = createModelAndView(page, view);
     modelAndView.addObject(REQUEST_ATTRIBUTE_CATEGORY, context);
     return modelAndView;

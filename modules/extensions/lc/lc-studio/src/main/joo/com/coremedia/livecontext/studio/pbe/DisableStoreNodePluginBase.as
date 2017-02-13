@@ -5,10 +5,15 @@ import com.coremedia.cms.editor.sdk.preview.metadata.MetadataTreeNode;
 import com.coremedia.ecommerce.studio.model.Store;
 
 import ext.Component;
-import ext.Plugin;
+import ext.plugin.AbstractPlugin;
 
-public class DisableStoreNodePluginBase implements Plugin {
-  public function init(component:Component):void {
+public class DisableStoreNodePluginBase extends AbstractPlugin {
+
+  public function DisableStoreNodePluginBase(config:DisableStoreNodePlugin = null) {
+    super(config);
+  }
+
+  override public function init(component:Component):void {
     var element:BreadcrumbElement = component as BreadcrumbElement;
     if (!element) {
       throw new Error("unsupported component type: " + component.xtype);

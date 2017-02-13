@@ -20,7 +20,6 @@
     Following modules are always enabled:
 
     - Blueprint Frontend module including all bricks and themes
-      - Basic theme
       - Corporate Theme
       - LiveContext Themes
     - Elastic Social
@@ -28,10 +27,10 @@
     - Analytics
     - Personalization
     - Asset Management
-    - Asset Management Download Portal
+
   -->
   <Resources className="org.apache.naming.resources.VirtualDirContext"
-             extraResourcePaths="/=${project.basedir}/src/main/webapp,/=${project.basedir}/../cae-base-lib/src/main/resources,/=${project.basedir}/../cae-base-lib/src/main/resources/META-INF/resources,/=${project.basedir}/../../frontend/target/resources,/=${project.basedir}/../../extensions/corporate/corporate-cae/src/main/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/es/es-cae/src/main/resources,/=${project.basedir}/../../extensions/es/es-theme/target/resources,/=${project.basedir}/../../extensions/es/es-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/alx/alx-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-es/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/p13n/p13n-preview-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-asset/lc-asset-cae-component/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/am/am-theme/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/am/am-theme/target/resources,/=${project.basedir}/../../extensions/am/am-cae/src/main/resources" />
+             extraResourcePaths="/=${project.basedir}/src/main/webapp,/=${project.basedir}/../cae-base-lib/src/main/resources,/=${project.basedir}/../cae-base-lib/src/main/resources/META-INF/resources,/=${project.basedir}/../../frontend/target/resources,/=${project.basedir}/../../extensions/corporate/corporate-cae/src/main/resources,/=${project.basedir}/../../extensions/ecommerce-ibm/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/es/es-cae/src/main/resources,/=${project.basedir}/../../extensions/alx/alx-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-es/lc-cae/src/main/resources,/=${project.basedir}/../../extensions/p13n/p13n-preview-cae/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/lc-asset/lc-asset-cae-component/src/main/resources/META-INF/resources,/=${project.basedir}/../../extensions/am/am-cae/src/main/resources" />
 
   <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="x-forwarded-proto" />
 </Context>

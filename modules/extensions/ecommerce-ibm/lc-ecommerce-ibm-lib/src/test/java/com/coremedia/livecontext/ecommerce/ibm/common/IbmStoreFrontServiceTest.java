@@ -1,26 +1,24 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
-import com.coremedia.blueprint.base.livecontext.service.CookieService;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import com.coremedia.livecontext.ecommerce.ibm.CookieNameValueMatcher;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserSessionServiceImpl;
+import com.google.common.collect.ImmutableMap;
 import org.apache.http.Header;
-import org.apache.http.cookie.Cookie;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +26,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,6 +33,37 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IbmStoreFrontServiceTest {
+
+  private static final String STORE_ID = "Sirius Cybernetics Corporation";
+  private static final String CATALOG_ID = "Total Perspective Vortex";
+  private static final String STOREFRONT_REQUEST_URL = "crash";
+  private static final Map<String, String> PARAMETERS = new HashMap<>();
+  private static final String GUEST_OR_LOGGEDIN_USER_ID = "38009";
+  private static final String ANONYMOUS_USER_ID = "-1002";
+
+  @Spy
+  private IbmStoreFrontService testling;
+
+  @Mock
+  private StoreFrontConnector storeFrontConnector;
+
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private StoreContextProvider storeContextProvider;
+
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private StoreFrontResponse storeFrontResponse;
+
+  @Mock
+  private HttpServletRequest sourceRequest;
+
+  @Mock
+  private HttpServletResponse sourceResponse;
+
+  @Mock
+  private CommerceUrlPropertyProvider urlProvider;
+
+  private javax.servlet.http.Cookie[] sourceRequestCookies;
+
   @Test(expected = GeneralSecurityException.class)
   public void testHandleStoreFrontCallGeneralSecurityException() throws GeneralSecurityException {
     //noinspection unchecked
@@ -49,21 +77,10 @@ public class IbmStoreFrontServiceTest {
 
   @Test
   public void handleStoreFrontCallEmptyCookies() throws GeneralSecurityException {
-    when(storeFrontResponse.getCookies()).thenReturn(new ArrayList<Cookie>());
     StoreFrontResponse response = testling.handleStorefrontCall(STOREFRONT_REQUEST_URL, PARAMETERS, sourceRequest, sourceResponse);
 
     assertNotNull(response);
     verifyNoCookiesAtAll();
-  }
-
-  @Test
-  public void handleStoreFrontCallMultipleCookies() throws GeneralSecurityException {
-    StoreFrontResponse response = testling.handleStorefrontCall(STOREFRONT_REQUEST_URL, PARAMETERS, sourceRequest, sourceResponse);
-
-    assertNotNull(response);
-    verify(sourceResponse).addCookie(argThat(new CookieNameValueMatcher(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME+GUEST_OR_LOGGEDIN_USER_ID,GUEST_OR_LOGGEDIN_USER_ID)));
-    verify(sourceResponse).addCookie(argThat(new CookieNameValueMatcher(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME+ANONYMOUS_USER_ID, "DEL")));
-    verify(sourceResponse, never()).setHeader(any(String.class), any(String.class));
   }
 
   @Test
@@ -75,7 +92,7 @@ public class IbmStoreFrontServiceTest {
 
   @Test
   public void isLoggedInStoreFrontEmptyCookies() {
-    when(storeFrontResponse.getCookies()).thenReturn(new ArrayList<Cookie>());
+    when(storeFrontResponse.getCookies()).thenReturn(Collections.<String, String>emptyMap());
     assertFalse(testling.isKnownUser(storeFrontResponse));
     verify(storeFrontResponse).getCookies();
   }
@@ -289,18 +306,16 @@ public class IbmStoreFrontServiceTest {
 
   @Before
   public void setup() throws GeneralSecurityException {
-    testling = new IbmStoreFrontService() {
-    };
     testling.setStoreFrontConnector(storeFrontConnector);
     testling.setStoreContextProvider(storeContextProvider);
     testling.setUrlProvider(urlProvider);
-    testling.setCookieService(new CookieService());
 
     //noinspection unchecked
     when(storeFrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
     when(storeContextProvider.getCurrentContext().getStoreId()).thenReturn(STORE_ID);
     when(storeContextProvider.getCurrentContext().getCatalogId()).thenReturn(CATALOG_ID);
 
+    when(storeFrontResponse.getCookies()).thenReturn(Collections.<String, String>emptyMap());
     initializeCookies(new String[]{
             UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID,
             UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + ANONYMOUS_USER_ID,
@@ -317,9 +332,9 @@ public class IbmStoreFrontServiceTest {
   }
 
   private void initializeCookies(String[] names, String[] values) {
+    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
     if (names.length > 0) {
-      wcsResponseCookies = new Header[names.length];
-      storeFrontCookies = new ArrayList<>();
+      Header[] wcsResponseCookies = new Header[names.length];
       sourceRequestCookies = new javax.servlet.http.Cookie[names.length];
       for (int i = 0; i < names.length; i++) {
         Header header = mock(Header.class);
@@ -327,10 +342,7 @@ public class IbmStoreFrontServiceTest {
         when(header.getValue()).thenReturn(values[i]);
         wcsResponseCookies[i] = header;
 
-        Cookie cookie = mock(Cookie.class);
-        when(cookie.getName()).thenReturn(names[i]);
-        when(cookie.getValue()).thenReturn(values[i]);
-        storeFrontCookies.add(cookie);
+        builder.put(names[i], values[i]);
 
         javax.servlet.http.Cookie servletCookie = mock(javax.servlet.http.Cookie.class);
         when(servletCookie.getName()).thenReturn(names[i]);
@@ -339,39 +351,8 @@ public class IbmStoreFrontServiceTest {
       }
     }
 
-    when(storeFrontResponse.getCookies()).thenReturn(storeFrontCookies);
+    when(storeFrontResponse.getCookies()).thenReturn(builder.build());
     when(sourceRequest.getCookies()).thenReturn(sourceRequestCookies);
   }
 
-  private IbmStoreFrontService testling;
-
-  @Mock
-  private StoreFrontConnector storeFrontConnector;
-
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private StoreContextProvider storeContextProvider;
-
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private StoreFrontResponse storeFrontResponse;
-
-  @Mock
-  private HttpServletRequest sourceRequest;
-
-  @Mock
-  private HttpServletResponse sourceResponse;
-
-  @Mock
-  private CommerceUrlPropertyProvider urlProvider;
-
-  private Header[] wcsResponseCookies;
-  private List<Cookie> storeFrontCookies;
-  private javax.servlet.http.Cookie[] sourceRequestCookies;
-
-  private static final String STORE_ID = "Sirius Cybernetics Corporation";
-  private static final String CATALOG_ID = "Total Perspective Vortex";
-  private static final String STOREFRONT_SECURE_URL = "billion-year-bunker";
-  private static final String STOREFRONT_REQUEST_URL = "crash";
-  private static final Map<String, String> PARAMETERS = new HashMap<>();
-  private static final String GUEST_OR_LOGGEDIN_USER_ID = "38009";
-  private static final String ANONYMOUS_USER_ID = "-1002";
 }

@@ -28,26 +28,27 @@
     ]]></fx:Script>
 
 
-    <editor:items>
-      <editor:Breadcrumb id_="breadcrumb"
-                         itemId="{PreviewContextMenu.BREADCRUMB_ITEM_ID}"
-                         treeModel="{new MetadataTreeModel(config.metadataTreeValueExpression)}"
-                         enableOverflow="false"
-                         disableNavigation="true"
-                         hideElementTexts="true"
-                         hideOnEmpty="false"
-                         disableElementStrategy="{this['disableBreadcrumbElementStrategy']}"
-                         selectedNodeValueExpression="{config.selectedNodeValueExpression}"/>
+  <editor:items>
+    <editor:Breadcrumb id_="breadcrumb"
+                       itemId="{PreviewContextMenu.BREADCRUMB_ITEM_ID}"
+                       treeModel="{new MetadataTreeModel(config.metadataTreeValueExpression)}"
+                       enableOverflow="false"
+                       disableNavigation="true"
+                       hideElementTexts="true"
+                       hideOnEmpty="false"
+                       disableElementStrategy="{this['disableBreadcrumbElementStrategy']}"
+                       selectedNodeValueExpression="{config.selectedNodeValueExpression}"/>
 
-      <MenuItem itemId="{PreviewContextMenu.TITLE_MENU_ITEM_ID}"
-                canActivate="false">
-        <baseAction>
-          <editor:ShowMetadataIconDisplayFieldAction metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
-                                                     hideOnDisable="true"/>
-        </baseAction>
-      </MenuItem>
-      <livecontext:OpenCreateExternalPageMenuItem/>
-      <livecontext:ShopPageShowInLibraryMenuItem/>
-    </editor:items>
-  
+    <MenuItem itemId="{PreviewContextMenu.TITLE_MENU_ITEM_ID}"
+              canActivate="false">
+      <baseAction>
+        <editor:ShowMetadataIconDisplayFieldAction
+                metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
+                hideOnDisable="true"/>
+      </baseAction>
+    </MenuItem>
+    <livecontext:OpenCreateExternalPageMenuItem/>
+    <livecontext:ShopPageShowInLibraryMenuItem/>
+  </editor:items>
+
 </editor:PreviewContextMenu>

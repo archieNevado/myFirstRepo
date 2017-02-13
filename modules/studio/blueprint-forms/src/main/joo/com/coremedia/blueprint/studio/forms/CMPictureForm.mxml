@@ -26,48 +26,50 @@
     public native function CMPictureForm(config:CMPictureForm = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The content type to fill the tree with.
-     -->
+    <!---
+     The content type to fill the tree with.
+    -->
     <fx:String id="contentType"/>
 
-    <!--- 
-       The comma separated folder values to read the content from.
-     -->
+    <!---
+     The comma separated folder values to read the content from.
+    -->
     <fx:String id="folders"/>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <ie:ImageEditorPropertyField itemId="{IMAGE_EDITOR_ITEM_ID}"
-                                       propertyName="data"
-                                       imageSettingsPropertyName="localSettings"/>
-          <bpforms:DetailsDocumentForm itemId="detailsForm"/>
-          <bpforms:ViewTypeSelectorForm/>
-          <bpforms:ValidityDocumentForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
-                           itemId="{EXTRAS_TAB_ITEM_ID}">
-        <editor:items>
-          <bpforms:CategoryDocumentForm/>
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <ie:ImageEditorPropertyField itemId="{IMAGE_EDITOR_ITEM_ID}"
+                                     propertyName="data"
+                                     imageSettingsPropertyName="localSettings"/>
+        <bpforms:DetailsDocumentForm itemId="detailsForm"/>
+        <bpforms:ViewTypeSelectorForm/>
+        <bpforms:ValidityDocumentForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
+            itemId="{EXTRAS_TAB_ITEM_ID}">
+      <editor:items>
+        <bpforms:CategoryDocumentForm/>
         <editor:PropertyFieldGroup collapsed="false"
-                                       itemId="{COPYRIGHT_FORM_ITEM_ID}"
-                                       title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Description_label')}"
+                                   itemId="{COPYRIGHT_FORM_ITEM_ID}"
+                                   title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Description_label')}"
                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
-            <editor:items>
-              <editor:StringPropertyField propertyName="alt"/>
-              <editor:StringPropertyField propertyName="copyright"/>
-            </editor:items>
+          <editor:items>
+            <editor:StringPropertyField propertyName="alt"/>
+            <editor:StringPropertyField propertyName="copyright"/>
+          </editor:items>
         </editor:PropertyFieldGroup>
         <media:MetaDataDocumentForm propertyName="data"
-                                   metadataSectionName="exif"
-                                   label="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'Meta_data_exif')}"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSearchableForm/>
-    </editor:items>
-  
+                                    metadataSectionName="exif"
+                                    label="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'Meta_data_exif')}"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSearchableForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

@@ -1,10 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService;
@@ -17,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -80,15 +79,15 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
       String newUserId = resolveUserId(storeFrontResponse, resolveStoreId(), true);
       UserContext userContext = UserContextHelper.getCurrentContext();
       userContext.put(UserContextHelper.FOR_USER_ID, newUserId);
-      String mergedCookies = getCookieService().addCookiesToCookieHeader(userContext.getCookieHeader(), getCookies(storeFrontResponse));
+      String mergedCookies = addCookiesToCookieHeader(userContext.getCookieHeader(), storeFrontResponse.getCookies());
 
       StoreContext currentContext = StoreContextHelper.getCurrentContext();
       if (null != currentContext && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(currentContext))) {
         //bugfix CMS-4132: call guest login url twice because guest session was broken when called only once
-        final List<org.apache.http.cookie.Cookie> cookies = storeFrontResponse.getCookies();
+        Map<String, String> cookies = storeFrontResponse.getCookies();
         HttpServletRequest requestWrapper = createRequestWrapper(request, cookies);
         StoreFrontResponse storeFrontResponse2 = handleStorefrontCall(GUEST_LOGIN_URL_2, uriTemplateParameters, requestWrapper, response);
-        mergedCookies = getCookieService().addCookiesToCookieHeader(mergedCookies, storeFrontResponse2.getCookies());
+        mergedCookies = addCookiesToCookieHeader(mergedCookies, storeFrontResponse2.getCookies());
       }
 
       userContext.setCookieHeader(WcCookieHelper.rewritePreviewCookies(mergedCookies));
@@ -101,14 +100,14 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     return false;
   }
 
-  private HttpServletRequest createRequestWrapper(HttpServletRequest request, final List<org.apache.http.cookie.Cookie> cookies) {
+  private HttpServletRequest createRequestWrapper(HttpServletRequest request, final Map<String, String> cookies) {
     return new HttpServletRequestWrapper(request) {
       @Override
       public String getHeader(String name) {
         if ("Cookie".equals(name) && !isEmpty(cookies)) {
           StringBuilder sb = new StringBuilder();
-          for (org.apache.http.cookie.Cookie cookie : cookies) {
-            sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+          for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+            sb.append(cookie.getKey()).append("=").append(cookie.getValue()).append("; ");
           }
           return sb.toString();
         }
@@ -117,14 +116,10 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     };
   }
 
-  private List<org.apache.http.cookie.Cookie> getCookies(StoreFrontResponse storeFrontResponse) {
-    return storeFrontResponse.getCookies();
-  }
-
   @Override
   public void pingCommerce(HttpServletRequest request, HttpServletResponse response) {
     try {
-      String baseUrl = getWcsStorefrontUrl();
+      String baseUrl = CommercePropertyHelper.replaceTokens(wcsStorefrontUrl, getStoreContextProvider().getCurrentContext());
       StoreContext currentContext = getStoreContextProvider().getCurrentContext();
 
       Map<String, Object> params = new HashMap<>();
@@ -170,9 +165,9 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     return null;
   }
 
-  private String resolveUserIdFromApacheCookies(List<org.apache.http.cookie.Cookie> cookies, String currentStoreId, boolean ignoreAnonymous) {
-    for (org.apache.http.cookie.Cookie cookie : cookies) {
-      String name = cookie.getName();
+  private String resolveUserIdFromApacheCookies(Map<String, String> cookies, String currentStoreId, boolean ignoreAnonymous) {
+    for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+      String name = cookie.getKey();
       String value = cookie.getValue();
       value = decodeCookieValue(value);
       if (value == null) {
@@ -197,7 +192,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
 
     if (isUserContainingCookie) {
       String[] tokens = splitCookie(cookieValue, ignoreAnonymous);
-      if (tokens != null && tokens[1].equals(currentStoreId)) {
+      if (tokens.length > 0 && tokens[1].equals(currentStoreId)) {
         return tokens[0];
       }
     }
@@ -205,6 +200,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     return null;
   }
 
+  @Nonnull
   private String[] splitCookie(String cookieValue, boolean ignoreAnonymous) {
     String[] values = cookieValue.split(",");
     if (values.length > 1) {
@@ -220,7 +216,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
         }
       }
     }
-    return null;
+    return new String[0];
   }
 
   @Override
@@ -308,22 +304,22 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   }
 
   @Override
-  public void clearCommerceSession(HttpServletRequest request, HttpServletResponse response) {
+  public void clearCommerceSession(@Nonnull HttpServletRequest request,@Nonnull HttpServletResponse response) {
+    StoreContext storeContext = StoreContextHelper.getCurrentContext();
+    String storeId = storeContext != null ? storeContext.getStoreId() : null;
+    if (storeId == null) {
+      LOG.debug("cannot clear commerce session, no commerce context / storeId available");
+      return;
+    }
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       for (Cookie cookie : cookies) {
-        if (cookie.getName().startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME)
-                || cookie.getName().startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME)) {
-          CommerceConnection currentCommerceConnection = Commerce.getCurrentConnection();
-          if (currentCommerceConnection != null && currentCommerceConnection.getStoreContext() != null) {
-            String storeId = currentCommerceConnection.getStoreContext().getStoreId();
-            if (storeId != null && cookie.getValue() != null && cookie.getValue().contains("%2c" + storeId)) {
-              cookie.setValue(null);
-              cookie.setMaxAge(0);
-              cookie.setPath("/");
-              response.addCookie(cookie);
-            }
-          }
+        if ((cookie.getName().startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME) || cookie.getName().startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME)) &&
+                cookie.getValue() != null && cookie.getValue().contains("%2c" + storeId)) {
+          cookie.setValue(null);
+          cookie.setMaxAge(0);
+          cookie.setPath("/");
+          response.addCookie(cookie);
         }
       }
     }
@@ -333,7 +329,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     UserContext userContext = UserContextHelper.getCurrentContext();
     if (userContext != null) {
       userContext.setUserId(resolveUserId(storeFrontResponse, resolveStoreId(), false));
-      String mergeCookies = getCookieService().addCookiesToCookieHeader(userContext.getCookieHeader(), getCookies(storeFrontResponse));
+      String mergeCookies = addCookiesToCookieHeader(userContext.getCookieHeader(), storeFrontResponse.getCookies());
       userContext.setCookieHeader(mergeCookies);
     }
   }
@@ -359,13 +355,32 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     return false;
   }
 
+  /**
+   * Add cookies from {@link HttpClientContext} to cookieHeader String.
+   * @param cookieHeader cookie header String. Value of "Set-Cookie" header.
+   * @param cookies list of cookies
+   * @return the augmented cookie header String
+   */
+  @VisibleForTesting
+  String addCookiesToCookieHeader(String cookieHeader, Map<String, String> cookies) {
+    if (null == cookies || cookies.isEmpty()) {
+      return cookieHeader;
+    }
+    StringBuilder sb = new StringBuilder(cookieHeader == null ? "" : cookieHeader);
+    for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+      String name = cookie.getKey();
+      String value = cookie.getValue();
+      if (sb.length() > 0) {
+        sb.append("; ");
+      }
+      sb.append(name).append('=').append(value);
+    }
+    return sb.toString();
+  }
+
   @Required
   public void setWcsStorefrontUrl(String wcsStorefrontUrl) {
     this.wcsStorefrontUrl = wcsStorefrontUrl;
-  }
-
-  public String getWcsStorefrontUrl() {
-    return CommercePropertyHelper.replaceTokens(wcsStorefrontUrl, getStoreContextProvider().getCurrentContext());
   }
 
   @Required
@@ -396,4 +411,5 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
       return null;
     }
   }
+
 }

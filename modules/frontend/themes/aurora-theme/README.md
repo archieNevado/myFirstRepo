@@ -15,19 +15,9 @@ This theme integrates the fragment-based approach seamless into Aurora B2C and B
 
 Navigate to this folder ```modules/frontend/themes/aurora-theme``` and install all modules using [npm](https://www.npmjs.com/):
 
-```$ npm install```
+```$ npm install && npm run production```
 
-### Available Grunt commands
-
-#### ```grunt build``` (Compile CSS and JavaScript)
-
-Generates and copy all webresources, like compiled CSS, fonts, images and JavaScript files to 
-the ```target/resources/themes/aurora``` directory for deployment and development.
-
-#### ```grunt watch``` (Watch)
-
-Watches the CSS, Javascript source files and automatically recompiles them whenever you save a change. 
-If you have openend a page of this theme in your browser, it will automatically reload too.
+For more informations see [Themes Description](../README.md)
 
 ### Supported Browsers
 

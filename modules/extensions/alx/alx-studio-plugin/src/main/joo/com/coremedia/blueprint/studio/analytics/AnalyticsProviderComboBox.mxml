@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-     A ComboBox to choose between one of the configured analytics service providers.
+<!---
+ A ComboBox to choose between one of the configured analytics service providers.
 
-     It fetches the available choices from the applicationContext (see
-     AnalyticsPlugin) and retrieves/stores the current selected value
-     from the Content's 'settings' property.
-   -->
+ It fetches the available choices from the applicationContext (see
+ AnalyticsPlugin) and retrieves/stores the current selected value
+ from the Content's 'settings' property.
+-->
 <ui:LocalComboBox
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
@@ -38,17 +38,17 @@
     <fx:String id="propertyName"/>
   </fx:Declarations>
 
-    <ui:plugins>
-      <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
-                                     propertyName="{config.propertyName}"/>
-      <editor:SetPropertyEmptyTextPlugin bindTo="{config.bindTo}"
-                                         propertyName="{config.propertyName}"/>
-      <editor:BindDisablePlugin bindTo="{config.bindTo}"
-                                forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-      <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy('properties',config.propertyName)}"
-                             ifUndefined=""
-                             bidirectional="true"
-                             componentEvent="select"/>
-    </ui:plugins>
-  
+  <ui:plugins>
+    <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
+                                   propertyName="{config.propertyName}"/>
+    <editor:SetPropertyEmptyTextPlugin bindTo="{config.bindTo}"
+                                       propertyName="{config.propertyName}"/>
+    <editor:BindDisablePlugin bindTo="{config.bindTo}"
+                              forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+    <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy('properties',config.propertyName)}"
+                           ifUndefined=""
+                           bidirectional="true"
+                           componentEvent="select"/>
+  </ui:plugins>
+
 </ui:LocalComboBox>

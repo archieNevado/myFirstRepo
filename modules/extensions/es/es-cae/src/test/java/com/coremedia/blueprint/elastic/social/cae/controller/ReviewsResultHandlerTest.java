@@ -21,6 +21,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.elastic.social.api.ModerationType;
@@ -181,7 +182,7 @@ public class ReviewsResultHandlerTest {
     when(navigationContext.getContentId()).thenReturn(Integer.parseInt(contextId));
 
     resourceBundle = new MockResourceBundle();
-    when(resourceBundleFactory.resourceBundle(any(Navigation.class))).thenReturn(resourceBundle);
+    when(resourceBundleFactory.resourceBundle(any(Navigation.class), any(User.class))).thenReturn(resourceBundle);
 
     when(elasticSocialPlugin.getElasticSocialConfiguration(anyVararg())).thenReturn(elasticSocialConfiguration);
 

@@ -16,7 +16,8 @@ public enum WcsVersion {
   WCS_VERSION_7_6(7.6f),
   WCS_VERSION_7_7(7.7f),
   WCS_VERSION_7_8(7.8f),
-  WCS_VERSION_8_0(8.0f);
+  WCS_VERSION_8_0(8.0f),
+  WCS_VERSION_8_1(8.1f);
 
   private final float version;
 

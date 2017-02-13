@@ -10,7 +10,6 @@
   <import resource="classpath:/framework/spring/livecontext-ibm-cache.xml"/>
   <import resource="classpath:/framework/spring/livecontext-storeconfig.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-beanfactory.xml"/>
-  <import resource="classpath:/framework/spring/lc-ecommerce-service.xml"/>
 
   <context:annotation-config/>
 
@@ -146,7 +145,6 @@
     <property name="storeFrontConnector" ref="storeFrontConnector"/>
     <property name="storeContextProvider" ref="storeContextProvider"/>
     <property name="urlProvider" ref="wcsPageHandlerUrlProvider"/>
-    <property name="cookieService" ref="cookieService"/>
   </bean>
 
   <bean id="commerceUserService" class="com.coremedia.livecontext.ecommerce.ibm.user.UserServiceImpl">

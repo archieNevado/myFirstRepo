@@ -12,7 +12,7 @@
   <packaging>war</packaging>
 
   <description>
-    To start the replication-live-server-webapp run: mvn tomcat7:run-war
+    To start the replication-live-server-webapp run: mvn tomcat7:run
   </description>
 
   <properties>
@@ -71,7 +71,7 @@
       </plugin>
 
       <!--
-         invoke "mvn tomcat7:run-war" for running this webapp locally
+         invoke "mvn tomcat7:run" for running this webapp locally but make sure that you run mvn:package first
       -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
@@ -102,26 +102,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>internal-licenses</id>
-      <!--
-      | Please change the groupId,artifactId and version to your specific development license artifact or remove it completely
-      | if you check your development license into VCS. The repository definition for the remote repository containing the
-      | license should be added as a profile in your settings.xml.
-      -->
-      <dependencies>
-        <dependency>
-          <groupId>com.coremedia.cms.license</groupId>
-          <artifactId>development-license</artifactId>
-          <version>[17-SNAPSHOT]</version>
-          <type>war</type>
-          <classifier>live</classifier>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
 
 </project>

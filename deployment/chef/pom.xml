@@ -207,6 +207,7 @@
   </dependencies>
 
   <build>
+    <finalName>deployment-archive</finalName>
     <plugins>
       <plugin>
         <!--We are skipping any enforcer checks here, as jars deployed to the container runtime classpath must not match-->
@@ -238,8 +239,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <!--Maven assembly plugin 2.5.3 has heap problems if content is included-->
-        <version>2.6</version>
         <executions>
           <execution>
             <id>create-deployment-archive</id>
@@ -253,7 +252,6 @@
               </descriptors>
               <attach>false</attach>
               <recompressZippedFiles>false</recompressZippedFiles>
-              <finalName>deployment-archive</finalName>
               <appendAssemblyId>false</appendAssemblyId>
               <tarLongFileMode>posix</tarLongFileMode>
             </configuration>

@@ -4,9 +4,11 @@ import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,15 +50,16 @@ public class CategoryFragmentHandler extends FragmentHandler {
 
     String placement = parameters.getPlacement();
     CMChannel rootChannel = getContentBeanFactory().createBeanFor(site.getSiteRootDocument(), CMChannel.class);
+    User developer = UserVariantHelper.getUser(request);
     ModelAndView modelAndView;
     if (StringUtils.isEmpty(placement)) {
       if (useOriginalNavigationContext) {
-        modelAndView = createModelAndView(navigation, parameters.getView());
+        modelAndView = createModelAndView(navigation, parameters.getView(), developer);
       } else {
-        modelAndView = createFragmentModelAndView(navigation, parameters.getView(), rootChannel);
+        modelAndView = createFragmentModelAndView(navigation, parameters.getView(), rootChannel, developer);
       }
     } else {
-      modelAndView = createFragmentModelAndViewForPlacementAndView(navigation, placement, parameters.getView(), rootChannel);
+      modelAndView = createFragmentModelAndViewForPlacementAndView(navigation, placement, parameters.getView(), rootChannel, developer);
     }
 
     enhanceModelAndView(modelAndView, navigation);

@@ -7,9 +7,11 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cae.webflow.FlowRunner;
 import com.coremedia.cae.webflow.ModelHelper;
+import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.view.substitution.SubstitutionRegistry;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -77,7 +79,7 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
       // if name doesn't match the action or if no context available: return "not found"
       if (action.equals(getVanityName(actionBean)) && navigation != null) {
         // create the page that holds the action
-        Page page = asPage(navigation, actionBean);
+        Page page = asPage(navigation, actionBean, UserVariantHelper.getUser(request));
         // try to handle the action
         if (actionBean.isWebFlow()) {
           // it's a webflow action
@@ -101,7 +103,8 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
   private ModelAndView handleAsWebFlow(CMAction action, Page page, HttpServletRequest request, HttpServletResponse response) {
     //the interceptor runs too late for the Webflow backing bean validators, causing errors (HTTP 500) down the road.
     //register localization context manually here so that translated strings work from within the webflow.
-    resourceBundleInterceptor.registerResourceBundleForPage(page, request, response);
+    User developer = UserVariantHelper.getUser(request);
+    resourceBundleInterceptor.registerResourceBundleForPage(page, developer, request, response);
 
     // make the page available to the webflow
     ModelAndView result = createModel(page);

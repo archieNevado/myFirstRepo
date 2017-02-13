@@ -14,60 +14,55 @@
     public native function ConfigureCollectionViewColumnsPlugin(config:ConfigureCollectionViewColumnsPlugin = null);
     ]]></fx:Script>
 
-    <editor:listViewDataFields>
-      <ui:DataField name="site"
-                    mapping=""
-                    ifUnreadable=""
-                    convert_="{SiteUtil.getSiteNameFor}"/>
-      <ui:DataField name="siteLocale"
-                    mapping=""
-                    ifUnreadable=""
-                    convert_="{SiteUtil.getSiteLocaleNameFor}"/>
-    </editor:listViewDataFields>
-    <editor:repositoryListViewColumns>
-      <editor:ListViewTypeIconColumn width="75"
-                                     showTypeName="true"
-                                     sortable="true"
-                                     u:sortField="type"
-                                     u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-      <editor:ListViewNameColumn sortable="true"
-                                 u:defaultSortColumn="true"
-                                 u:defaultSortDirection="asc"
-                                 flex="1"/>
-      <editor:ListViewStatusColumn width="46"
+  <editor:listViewDataFields>
+    <ui:DataField name="siteName"
+                  mapping=""
+                  ifUnreadable=""
+                  convert_="{SiteUtil.getSiteNameFor}"/>
+    <ui:DataField name="siteLocale"
+                  mapping=""
+                  ifUnreadable=""
+                  convert_="{SiteUtil.getSiteLocaleNameFor}"/>
+  </editor:listViewDataFields>
+  <editor:repositoryListViewColumns>
+    <editor:ListViewTypeIconColumn width="75"
+                                   showTypeName="true"
+                                   sortable="true"
+                                   u:sortField="type"
+                                   u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+    <editor:ListViewNameColumn sortable="true"
+                               u:defaultSortColumn="true"
+                               u:defaultSortDirection="asc"
+                               flex="1"/>
+    <editor:ListViewStatusColumn width="46"
+                                 sortable="true"
+                                 u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+    <editor:ListViewCreationDateColumn width="120"
+                                       sortable="true"
+                                       u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+    <editor:FreshnessColumn sortable="true"
+                            hidden="true"/>
+  </editor:repositoryListViewColumns>
+  <editor:searchListViewColumns>
+    <editor:ListViewTypeIconColumn width="75"
+                                   showTypeName="true"
+                                   u:sortField="type"
                                    sortable="true"
                                    u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-      <editor:ListViewCreationDateColumn width="120"
-                                         sortable="true"
-                                         u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-      <editor:FreshnessColumn sortable="true"
-                              hidden="true"/>
-    </editor:repositoryListViewColumns>
-    <editor:searchListViewColumns>
-      <editor:ListViewTypeIconColumn width="75"
-                                     showTypeName="true"
-                                     u:sortField="type"
-                                     sortable="true"
-                                     u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-      <editor:ListViewNameColumn sortable="true"
-                                 flex="1"/>
-      <editor:ListViewSiteColumn/>
-      <editor:ListViewSiteLocaleColumn/>
-      <editor:ListViewCreationDateColumn sortable="true"
-                                         width="120"
-                                         u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-      <editor:ListViewStatusColumn width="46"
-                                   sortable="true"
-                                   u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-      <editor:FreshnessColumn sortable="true"
-                              u:defaultSortColumn="true"
-                              u:defaultSortDirection="desc"
-                              hidden="true"/>
-      <editor:ScoreColumn sortable="true"
-                          hidden="true"
-                          hideable="false"
-                          u:defaultSortColumn="true"
-                          u:defaultSortDirection="desc"/>
-    </editor:searchListViewColumns>
-  
+    <editor:ListViewNameColumn sortable="true"
+                               flex="1"/>
+    <editor:ListViewSiteColumn sortable="false"/>
+    <editor:ListViewSiteLocaleColumn sortable="false"/>
+    <editor:ListViewCreationDateColumn sortable="true"
+                                       width="120"
+                                       u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+    <editor:ListViewStatusColumn width="46"
+                                 sortable="true"
+                                 u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+    <editor:FreshnessColumn sortable="true"
+                            u:defaultSortColumn="true"
+                            u:defaultSortDirection="desc"
+                            hidden="true"/>
+  </editor:searchListViewColumns>
+
 </editor:ConfigureListViewPlugin>

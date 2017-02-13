@@ -2,13 +2,14 @@
 <#-- @ftlvariable name="self.content" type="com.coremedia.blueprint.common.contentbeans.CMLinkable" -->
 
 <#assign studioExtraFilesMetadata=preview.getStudioAdditionalFilesMetadata(bp.setting(self, "studioPreviewCss"), bp.setting(self, "studioPreviewJs"))/>
-<#assign titleSuffix=bp.setting(self, "title_suffix", '')/>
+<#assign defaultTitleSuffix=bp.getMessage('title_suffix') />
+<#assign titleSuffix=bp.setting(self, "customTitleSuffixText", (defaultTitleSuffix!='[---title_suffix---]')?then(defaultTitleSuffix, ''))/>
 
 <head<@cm.metadata data=studioExtraFilesMetadata/>>
 <#-- add encoding first! -->
     <meta charset="UTF-8"/>
 <#-- SEO: title -->
-    <title<@cm.metadata "properties.htmlTitle" />>${self.content.htmlTitle!"CoreMedia CMS - No Page Title"} ${titleSuffix}</title>
+    <title<@cm.metadata "properties.htmlTitle" />>${self.content.htmlTitle!"CoreMedia CMS - No Page Title"}${' ' + titleSuffix}</title>
 <#-- SEO: description -->
 <#if self.content.htmlDescription?has_content>
     <meta name="description" content="${self.content.htmlDescription}" />

@@ -21,10 +21,12 @@ import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.reviews.Review;
@@ -39,6 +41,7 @@ import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -221,7 +224,7 @@ public class ProductReviewsResultHandlerTest {
     when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(true);
 
     resourceBundle = new MockResourceBundle();
-    when(resourceBundleFactory.resourceBundle(any(Navigation.class))).thenReturn(resourceBundle);
+    when(resourceBundleFactory.resourceBundle(any(Navigation.class), any(User.class))).thenReturn(resourceBundle);
 
     when(catalogService.findProductById(anyString())).thenReturn(product);
     when(storeContext.getSiteId()).thenReturn(siteId);
@@ -236,6 +239,11 @@ public class ProductReviewsResultHandlerTest {
     when(commerceConnection.getIdProvider()).thenReturn(new BaseCommerceIdProvider("vendor"));
     when(commerceConnection.getCatalogService()).thenReturn(catalogService);
     when(catalogService.withStoreContext(storeContext)).thenReturn(catalogService);
+  }
+
+  @After
+  public void cleanUp(){
+    UserContext.clear();
   }
 
   @Test

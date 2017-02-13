@@ -65,10 +65,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.elastic.social</groupId>
-      <artifactId>social-spring-security</artifactId>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
@@ -114,6 +110,10 @@
       <artifactId>cae-linkservices-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-unified-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
     </dependency>
@@ -124,10 +124,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -146,28 +142,8 @@
       <artifactId>spring-webmvc</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.webflow</groupId>
-      <artifactId>spring-webflow</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.webflow</groupId>
-      <artifactId>spring-binding</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.social</groupId>
-      <artifactId>spring-social-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.social</groupId>
-      <artifactId>spring-social-web</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
@@ -176,11 +152,6 @@
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-settings-impl</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-unified-api</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -220,10 +191,6 @@
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>

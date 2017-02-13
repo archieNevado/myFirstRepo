@@ -30,9 +30,9 @@
     <ns1:PreviewPanel id="previewPanel"/>
   </fx:Declarations>
 
-    <local:plugins>
-      <ui:BindVisibilityPlugin bindTo="{getVisibilityExpression(config)}"/>
-    </local:plugins>
+  <local:plugins>
+    <ui:BindVisibilityPlugin bindTo="{getVisibilityExpression(config)}"/>
+  </local:plugins>
 
-  
+
 </local:TimeZoneInfoIconDisplayFieldBase>

@@ -17,18 +17,19 @@
     public native function MultiLanguageDocumentForm(config:MultiLanguageDocumentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:SiteInfo/>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_locale_title')}"
-                                 itemId="localizationForm"
-                                 collapsed="false">
-        <editor:items>
-          <editor:AvailableLocalesPropertyField propertyName="locale"/>
-          <editor:LinkListPropertyField propertyName="master"/>
-          <editor:MasterVersionPropertyField propertyName="masterVersion"/>
-          <editor:DerivedContentsList/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
-  
+  <editor:items>
+    <editor:SiteInfo/>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_locale_title')}"
+            itemId="localizationForm"
+            collapsed="false">
+      <editor:items>
+        <editor:AvailableLocalesPropertyField propertyName="locale"/>
+        <editor:LinkListPropertyField propertyName="master"/>
+        <editor:MasterVersionPropertyField propertyName="masterVersion"/>
+        <editor:DerivedContentsList/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
+
 </editor:DocumentForm>

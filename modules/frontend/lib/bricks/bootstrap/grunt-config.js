@@ -3,7 +3,7 @@ module.exports = function (grunt, options) {
   'use strict';
 
   // add templates to theme templateset
-  var existingTemplates = grunt.config.get('compress.brick_templates.files');
+  var existingTemplates = options.brickCompressFiles;
   existingTemplates.push({
     expand: true,
     cwd: options.brickDirectory + '/templates',
@@ -19,18 +19,16 @@ module.exports = function (grunt, options) {
         }
       },
       copy: {
-        brick_bootstrap: {
+        brick_bootstrap_assets: {
           files: [
             // copy jquery
             {
               expand: true,
               cwd: '../../node_modules/jquery/dist/',
-              src: [
-                'jquery.min.js',
-              ],
+              src: 'jquery.min.js',
               dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
             },
-            // copy fonts (icons)
+            // copy bootstrap fonts
             {
               expand: true,
               flatten: true,
@@ -49,29 +47,37 @@ module.exports = function (grunt, options) {
                 '../../node_modules/bootstrap-carousel-swipe/carousel-swipe.js'
               ],
               dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/bootstrap/'
-            },
-            // copy extra carousel javascript
-            {
-              expand: true,
-              cwd: options.brickDirectory,
-              src: 'js/*.js',
-              dest: '../../target/resources/themes/<%= themeConfig.name %>/'
-            },
-            // templates
-            {
-              expand: true,
-              cwd: options.brickDirectory + '/templates',
-              src: '**',
-              dest: options.brickTemplatesDest
             }
-            // no task for sass. import them to your theme for customization
           ]
+        },
+        brick_bootstrap_js: {
+          expand: true,
+          cwd: options.brickDirectory,
+          src: 'js/*.js',
+          dest: '../../target/resources/themes/<%= themeConfig.name %>/'
+        },
+        brick_bootstrap_templates: {
+          expand: true,
+          cwd: options.brickDirectory + '/templates',
+          src: '**',
+          dest: options.brickTemplatesDest
         }
       },
       watch: {
-        brick_bootstrap: {
-          files: [options.brickDirectory + "**"],
-          tasks: ['copy:brick_bootstrap']
+        brick_bootstrap_js: {
+          files: options.brickDirectory + "/js/**",
+          tasks: ['copy:brick_bootstrap_js']
+        },
+        brick_bootstrap_templates: {
+          files: options.brickDirectory + "/templates/**",
+          tasks: ['copy:brick_bootstrap_templates', 'compress:brick_templates']
+        },
+        brick_bootstrap_sass: {
+          options: {
+            spawn: true
+          },
+          files: options.brickDirectory + '/sass/**/*.scss',
+          tasks: ['sass', 'postcss']
         }
       }
     }

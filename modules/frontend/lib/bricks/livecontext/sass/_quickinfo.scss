@@ -59,18 +59,17 @@
   }
 
   &__close {
-    border: none;
-    background: transparent;
-    padding: 0;
+    display: none;
 
     @include breakpoint(md) {
+      display: block;
+      border: none;
+      background: transparent;
+      padding: 0;
       position: absolute;
       right: 10px;
       top: 10px;
-    }
-
-    @include breakpoint(sm) {
-      display: none;
+      cursor: pointer;
     }
 
     .cm-icon__symbol {

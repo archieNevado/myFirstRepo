@@ -20,47 +20,47 @@
     public native function AMVideoAssetForm(config:AMVideoAssetForm = null);
     ]]></fx:Script>
 
-    <am:renditions>
-      <editor:PropertyFieldGroup itemId="web"
-                                 title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_label')}"
-                                 expandOnValues="{AssetConstants.PROPERTY_ASSET_WEB}"
-                                 collapsed="true">
-        <editor:items>
-          <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_WEB}"
-                                            hideLabel="true"
-                                            visiblePropertyName="metadata.renditions.web.show"/>
-          <Component height="20px"/>
-          <editor:ReferrerListPanel propertyName="asset"
-                                    showThumbnail="true"
-                                    contentType="CMVideo"
-                                    title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_referrers_label')}"
-                                    displayToolbarWhenEmpty="{true}">
-            <editor:plugins exml:mode="append">
-              <ui:NestedRulesPlugin>
-                <ui:rules>
-                  <Toolbar>
-                    <plugins>
-                      <ui:AddItemsPlugin>
-                        <ui:items>
-                          <TbSeparator/>
-                          <ui:IconButton itemId="createVideo">
-                            <ui:baseAction>
-                              <am:CreateVideoFromVideoAssetAction contentValueExpression="{config.bindTo}"/>
-                            </ui:baseAction>
-                          </ui:IconButton>
-                        </ui:items>
-                        <ui:after>
-                          <Component itemId="copyToClipboard"/>
-                        </ui:after>
-                      </ui:AddItemsPlugin>
-                    </plugins>
-                  </Toolbar>
-                </ui:rules>
-              </ui:NestedRulesPlugin>
-            </editor:plugins>
-          </editor:ReferrerListPanel>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </am:renditions>
-  
+  <am:renditions>
+    <editor:PropertyFieldGroup itemId="web"
+                               title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_label')}"
+                               expandOnValues="{AssetConstants.PROPERTY_ASSET_WEB}"
+                               collapsed="true">
+      <editor:items>
+        <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_WEB}"
+                                          hideLabel="true"
+                                          visiblePropertyName="metadata.renditions.web.show"/>
+        <Component height="20px"/>
+        <editor:ReferrerListPanel propertyName="asset"
+                                  showThumbnail="true"
+                                  contentType="CMVideo"
+                                  title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_referrers_label')}"
+                                  displayToolbarWhenEmpty="{true}">
+          <editor:plugins exml:mode="append">
+            <ui:NestedRulesPlugin>
+              <ui:rules>
+                <Toolbar>
+                  <plugins>
+                    <ui:AddItemsPlugin>
+                      <ui:items>
+                        <TbSeparator/>
+                        <ui:IconButton itemId="createVideo">
+                          <ui:baseAction>
+                            <am:CreateVideoFromVideoAssetAction contentValueExpression="{config.bindTo}"/>
+                          </ui:baseAction>
+                        </ui:IconButton>
+                      </ui:items>
+                      <ui:after>
+                        <Component itemId="copyToClipboard"/>
+                      </ui:after>
+                    </ui:AddItemsPlugin>
+                  </plugins>
+                </Toolbar>
+              </ui:rules>
+            </ui:NestedRulesPlugin>
+          </editor:plugins>
+        </editor:ReferrerListPanel>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </am:renditions>
+
 </am:AMAssetForm>

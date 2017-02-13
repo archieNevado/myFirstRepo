@@ -6,7 +6,9 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.cae.aspect.provider.AspectsProvider;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.user.User;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -32,8 +34,9 @@ public interface Navigation extends Linkable {
   /**
    * Returns the theme of this navigation instance or its parent.
    * @return the theme of this navigation instance or its parent
+   * @param developer Use the developer's variant rather than the production theme.
    */
-  CMTheme getTheme();
+  CMTheme getTheme(@Nullable User developer);
 
   /**
    * Returns the root {@link Navigation} object (=Site) for this navigation item.

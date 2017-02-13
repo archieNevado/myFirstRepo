@@ -14,12 +14,13 @@
   </description>
 
   <context:component-scan base-package="com.coremedia.cap.util.configuration" />
-  <context:component-scan base-package="com.coremedia.blueprint.theme.configuration" />
+  <context:component-scan base-package="com.coremedia.blueprint.coderesources.configuration" />
 
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/view-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/view-error-services.xml"/>
+  <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/framework/spring/blueprint-richtextfilters.xml"/>
@@ -250,7 +251,6 @@
       Exclude these interfaces in ViewLookups (otherwise, all Interfaces would be used).
     </description>
     <list>
-      <value>com.coremedia.blueprint.common.contentbeans.HasSettings</value>
       <value>com.coremedia.blueprint.common.contentbeans.BelowRootNavigation</value>
       <value>com.coremedia.blueprint.common.contentbeans.HasViewtype</value>
       <value>com.coremedia.blueprint.common.datevalidation.ValidityPeriod</value>
@@ -341,7 +341,7 @@
         parent="abstractTemplateViewRepositoryProvider">
     <property name="cache" ref="cache"/>
     <property name="themeService" ref="themeService"/>
-    <property name="contentRepository" ref="contentRepository"/>
+    <property name="capConnection" ref="connection"/>
     <property name="jarBlobResourceLoader" ref="jarBlobResourceLoader"/>
     <property name="useLocalResources" value="${cae.use.local.resources:false}"/>
   </bean>

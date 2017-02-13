@@ -29,18 +29,6 @@ public class FileDropPluginBase extends Observable implements Plugin {
   public function init(cmp:Component):void {
     this.blobBoxCmp = cmp as Container;
 
-    /* EXT6_GONE:ext.util.Observable#addEvents cmp.addEvents({
-     dragover : true,
-     drop : true,
-     beforeload : true,
-     load : true,
-     loadstart : true,
-     loadend : true,
-     loadabort : true,
-     loaderror : true,
-     progress : true
-     });*/
-
     cmp.mon(cmp, "afterrender", initFileDrop, this);
   }
 

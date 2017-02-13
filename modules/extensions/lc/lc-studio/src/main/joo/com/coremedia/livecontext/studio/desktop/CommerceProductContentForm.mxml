@@ -23,66 +23,70 @@
     public native function CommerceProductContentForm(config:CommerceProductContentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <livecontext:CommerceDetailsForm itemId="productDetails"
-                                       titleLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_name_label')}"/>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_prices_title')}"
-                                 itemId="prices">
-        <editor:items>
-          <DisplayField
-                 itemId="listPrice"
-                 labelAlign="left"
-                 labelSeparator=":"
-                 fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_listPrice_label')}">
-            <plugins>
-              <ui:BindPropertyPlugin componentProperty="value"
-                                     bindTo="{CatalogHelper.getInstance().getPriceWithCurrencyExpression(config.bindTo,ProductPropertyNames.LIST_PRICE)}"
-                                     ifUndefined="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_listPrice_emptyText')}"/>
-            </plugins>
-          </DisplayField>
-          <DisplayField
-                 itemId="offerPrice"
-                 labelAlign="left"
-                 labelSeparator=":"
-                 fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_offerPrice_label')}">
-            <plugins>
-              <ui:BindPropertyPlugin componentProperty="value"
-                                     bindTo="{CatalogHelper.getInstance().getPriceWithCurrencyExpression(config.bindTo,ProductPropertyNames.OFFER_PRICE)}"
-                                     ifUndefined="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_offerPrice_emptyText')}"/>
-            </plugins>
-          </DisplayField>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_thumbnail_title')}"
-                                 itemId="thumbnail">
-        <editor:items>
-          <ui:Image width="120">
-            <ui:plugins>
-              <ui:BindPropertyPlugin componentProperty="src"
-                                     bindTo="{CatalogThumbnailResolver.imageValueExpression(config.bindTo)}"/>
-            </ui:plugins>
-          </ui:Image>
-        </editor:items>
-        <editor:layout>
-          <layout_VBox/>
-        </editor:layout>
-      </editor:PropertyFieldGroup>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_richMedia_title')}"
-                                 itemId="richMedia">
-        <editor:items>
-          <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.VISUALS}"
-                                             assetContentTypes="{['CMPicture', 'CMVideo', 'CMSpinner']}"
-                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_richMedia_emptyText')}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_downloads_title')}"
-                                 itemId="downloads">
-        <editor:items>
-          <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.DOWNLOADS}"
-                                             assetContentTypes="{['CMDownload']}"
-                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_downloads_emptyText')}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
+  <editor:items>
+    <livecontext:CommerceDetailsForm itemId="productDetails"
+                                     titleLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_name_label')}"/>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_prices_title')}"
+            itemId="prices">
+      <editor:items>
+        <DisplayField
+                itemId="listPrice"
+                labelAlign="left"
+                labelSeparator=":"
+                fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_listPrice_label')}">
+          <plugins>
+            <ui:BindPropertyPlugin componentProperty="value"
+                                   bindTo="{CatalogHelper.getInstance().getPriceWithCurrencyExpression(config.bindTo,ProductPropertyNames.LIST_PRICE)}"
+                                   ifUndefined="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_listPrice_emptyText')}"/>
+          </plugins>
+        </DisplayField>
+        <DisplayField
+                itemId="offerPrice"
+                labelAlign="left"
+                labelSeparator=":"
+                fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_offerPrice_label')}">
+          <plugins>
+            <ui:BindPropertyPlugin componentProperty="value"
+                                   bindTo="{CatalogHelper.getInstance().getPriceWithCurrencyExpression(config.bindTo,ProductPropertyNames.OFFER_PRICE)}"
+                                   ifUndefined="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_offerPrice_emptyText')}"/>
+          </plugins>
+        </DisplayField>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_thumbnail_title')}"
+            itemId="thumbnail">
+      <editor:items>
+        <ui:Image width="120">
+          <ui:plugins>
+            <ui:BindPropertyPlugin componentProperty="src"
+                                   bindTo="{CatalogThumbnailResolver.imageValueExpression(config.bindTo)}"/>
+          </ui:plugins>
+        </ui:Image>
+      </editor:items>
+      <editor:layout>
+        <layout_VBox/>
+      </editor:layout>
+    </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_richMedia_title')}"
+            itemId="richMedia">
+      <editor:items>
+        <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.VISUALS}"
+                                           assetContentTypes="{['CMPicture', 'CMVideo', 'CMSpinner']}"
+                                           emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_richMedia_emptyText')}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_downloads_title')}"
+            itemId="downloads">
+      <editor:items>
+        <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.DOWNLOADS}"
+                                           assetContentTypes="{['CMDownload']}"
+                                           emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_downloads_emptyText')}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
 
 </editor:DocumentForm>

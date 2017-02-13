@@ -42,8 +42,8 @@ Contains styling definitions for all content types as cm-text.
     @include breakpoint(sm-and-up) {
       position: absolute;
       bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 50%;
+      transform: translateX(50%);
     }
   }
 }

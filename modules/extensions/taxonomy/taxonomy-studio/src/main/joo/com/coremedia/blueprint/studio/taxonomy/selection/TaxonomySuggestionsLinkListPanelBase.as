@@ -5,8 +5,6 @@ import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderFactory;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderer;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cms.editor.sdk.dragdrop.ContentDragProvider;
-import com.coremedia.cms.editor.sdk.dragdrop.DragDropVisualFeedback;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
 import com.coremedia.ui.data.ValueExpression;
@@ -15,16 +13,13 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.store.BeanRecord;
 
 import ext.LoadMask;
-import ext.dd.DragSource;
-import ext.event.Event;
 import ext.grid.GridPanel;
-import ext.grid.plugin.GridViewDragDropPlugin;
 
 /**
  *
  */
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
-public class TaxonomySuggestionsLinkListPanelBase extends GridPanel implements ContentDragProvider {
+public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
 
   private var suggestionsExpression:ValueExpression;
   private var bindTo:ValueExpression;
@@ -34,7 +29,6 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel implements C
 
   private var loadMask:LoadMask;
   private var cache:TaxonomyCache;
-  private var ddPlugin:GridViewDragDropPlugin;
 
   /**
    * @param config The configuration options. See the config class for details.
@@ -65,21 +59,7 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel implements C
     loadMask = new LoadMask(loadMaskCfg);
     loadMask.disable();
 
-    ddPlugin = getView().getPlugin("dragdrop") as GridViewDragDropPlugin;
-    //TODO: EXT6_API
-    ddPlugin.dragZone['getDragText'] = getDragText;
-    ddPlugin.dropZone.addToGroup('ContentDD');
-    ddPlugin.dropZone.onNodeOver = onNodeOver;
     updateSuggestions(true);
-  }
-
-  //noinspection JSUnusedLocalSymbols
-  private static function onNodeOver(nodeData:Object, source:DragSource, e:Event, data:Object):String {
-    return source.dropNotAllowed;
-  }
-
-  private function getDragText():String {
-    return DragDropVisualFeedback.getHtmlFeedback(ddPlugin.dragZone.dragData.records);
   }
 
   /**
@@ -230,10 +210,6 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel implements C
       propertyValueExpression.removeChangeListener(propertyChanged);
     }
     super.onDestroy();
-  }
-
-  public function isLinking():Boolean {
-    return false;
   }
 }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-    A window containing the Management Center of the IBM WebSphere Commerce Server.
-   -->
+<!---
+ A window containing the Management Center of the IBM WebSphere Commerce Server.
+-->
 <Window xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
@@ -37,14 +37,14 @@
     public native function ManagementCenterWindow(config:ManagementCenterWindow = null);
     ]]></fx:Script>
 
-    <defaults>
-      <fx:Object   stateful="true"
-                   stateEvents="{['collapse', 'expand', 'resize', 'move']}"
-                   getState="{function():Object {return {visible: this.visible, collapsed: this.collapsed, height : this.getHeight(), width : this.getWidth(), x : this.x, y : this.y}}}"/>
-    </defaults>
-    <items>
-      <mgmt:ManagementCenterFrame id_="{MANAGEMENT_CENTER_FRAME_ID}"
-                                  stateful="false"/>
-    </items>
-  
+  <defaults>
+    <fx:Object stateful="true"
+               stateEvents="{['collapse', 'expand', 'resize', 'move']}"
+               getState="{function():Object {return {visible: this.visible, collapsed: this.collapsed, height : this.getHeight(), width : this.getWidth(), x : this.x, y : this.y}}}"/>
+  </defaults>
+  <items>
+    <mgmt:ManagementCenterFrame id_="{MANAGEMENT_CENTER_FRAME_ID}"
+                                stateful="false"/>
+  </items>
+
 </Window>

@@ -7,7 +7,8 @@
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         itemId="viewTypeSelectorForm"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMLinkable_viewtype_text')}"
-        collapsed="{config.collapsed || true}">
+        collapsed="{config.collapsed || true}"
+        itemsLazyUntilEvent="beforerender">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
   </fx:Metadata>
@@ -26,14 +27,14 @@
     <fx:Boolean id="hideForSingleChoice">true</fx:Boolean>
   </fx:Declarations>
 
-    <editor:items>
-      <bpb:ViewtypePropertyField hideLabel="true"
-                                 hideForSingleChoice="{config.hideForSingleChoice || true}"
-                                 paths="{config.paths}">
-      </bpb:ViewtypePropertyField>
-    </editor:items>
-    <editor:layout>
-      <layout_Fit/>
-    </editor:layout>
-  
+  <editor:items>
+    <bpb:ViewtypePropertyField hideLabel="true"
+                               hideForSingleChoice="{config.hideForSingleChoice || true}"
+                               paths="{config.paths}">
+    </bpb:ViewtypePropertyField>
+  </editor:items>
+  <editor:layout>
+    <layout_Fit/>
+  </editor:layout>
+
 </editor:PropertyFieldGroup>

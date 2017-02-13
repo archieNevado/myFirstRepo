@@ -16,29 +16,31 @@
     public native function CMExternalLinkForm(config:CMExternalLinkForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup
-                  title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMExternalLink_url_text')}"
-                  itemId="urlForm">
-            <editor:items>
-              <editor:StringPropertyField propertyName="url" hideLabel="true"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:TeaserDocumentForm/>
-          <bpforms:PictureDocumentForm collapsed="true"
-                                       expandOnValues="pictures"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-        <editor:items>
-          <bpforms:CategoryDocumentForm/>
-          <bpforms:SEOForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSettingsForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMExternalLink_url_text')}"
+                itemId="urlForm">
+          <editor:items>
+            <editor:StringPropertyField propertyName="url" hideLabel="true"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:TeaserDocumentForm/>
+        <bpforms:PictureDocumentForm collapsed="true"
+                                     expandOnValues="pictures"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+      <editor:items>
+        <bpforms:CategoryDocumentForm/>
+        <bpforms:SEOForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSettingsForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

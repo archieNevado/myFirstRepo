@@ -25,19 +25,19 @@
     public native function CommerceWorkspaceSelector(config:CommerceWorkspaceSelector = null);
     ]]></fx:Script>
 
-    <local:plugins exml:mode="append">
-      <ui:BindVisibilityPlugin bindTo="{ValueExpressionFactory.createFromFunction(getSelectableWorkspaces)}"/>
-      <ui:BindListPlugin bindTo="{ValueExpressionFactory.createFromFunction(getSelectableWorkspaces)}">
-        <ui:fields>
-          <ui:DataField name="id"
-                        encode="false"/>
-          <ui:DataField name="name"
-                        sortType="{SortTypes.asUCString}"/>
-        </ui:fields>
-      </ui:BindListPlugin>
-      <ui:BindPropertyPlugin bindTo="{getWorkspaceIdExpression()}"
-                             bidirectional="true"
-                             componentEvent="select"/>
-    </local:plugins>
-  
+  <local:plugins exml:mode="append">
+    <ui:BindVisibilityPlugin bindTo="{ValueExpressionFactory.createFromFunction(getSelectableWorkspaces)}"/>
+    <ui:BindListPlugin bindTo="{ValueExpressionFactory.createFromFunction(getSelectableWorkspaces)}">
+      <ui:fields>
+        <ui:DataField name="id"
+                      encode="false"/>
+        <ui:DataField name="name"
+                      sortType="{SortTypes.asUCString}"/>
+      </ui:fields>
+    </ui:BindListPlugin>
+    <ui:BindPropertyPlugin bindTo="{getWorkspaceIdExpression()}"
+                           bidirectional="true"
+                           componentEvent="select"/>
+  </local:plugins>
+
 </local:CommerceWorkspaceSelectorBase>
