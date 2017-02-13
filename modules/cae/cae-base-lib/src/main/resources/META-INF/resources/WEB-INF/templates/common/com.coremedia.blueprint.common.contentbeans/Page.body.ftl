@@ -16,14 +16,6 @@
   </#list>
 </#if>
 
-<#if cmpage.developerMode>
-  <div class="cm-preview-developer-mode" data-cm-developer-mode="true">
-    <span>Development</span>
-    <#-- this js is used for a automatic reload of webrources changes, triggert by the grunt watch task -->
-    <script src="http://localhost:35729/livereload.js"></script>
-  </div>
-</#if>
-
 <@cm.include self=self view="bodyEnd"/>
 
 </body>

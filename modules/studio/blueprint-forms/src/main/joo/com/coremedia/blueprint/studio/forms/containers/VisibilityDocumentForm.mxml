@@ -25,10 +25,10 @@
                            bindTo="{CMChannelFormBase.getIsRootChannelValueExpression(config.bindTo)}"
                            componentProperty="hidden"/>
   </editor:plugins>
-    <editor:items>
-      <editor:BooleanPropertyField hideLabel="true" propertyName="hidden" />
-      <editor:BooleanPropertyField hideLabel="true" propertyName="hiddenInSitemap"/>
-      <editor:BooleanPropertyField hideLabel="true" propertyName="notSearchable"/>
-    </editor:items>
+  <editor:items>
+    <editor:BooleanPropertyField hideLabel="true" propertyName="hidden"/>
+    <editor:BooleanPropertyField hideLabel="true" propertyName="hiddenInSitemap"/>
+    <editor:BooleanPropertyField hideLabel="true" propertyName="notSearchable"/>
+  </editor:items>
 
 </editor:PropertyFieldGroup>

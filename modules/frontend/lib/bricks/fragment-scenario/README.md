@@ -7,16 +7,16 @@ led or hybrid scenario, where CoreMedia delivers fragments for an eCommerce syst
 
 ### Usage
 
-Just add following line to your Gruntfile.js to load the brick.
+Just add following config to your Gruntfile.js to load the brick.
 
 ```
-    // Load the "fragment-scenario" brick
-    utils.loadBrick(grunt, "fragment-scenario");
-```
-
-If you want to load multiple bricks, you may also use the following syntax:
-```
-    utils.loadBricks(grunt, [..., "fragment-scenario", ...]);
+    // load bricks into theme
+    bricks: {
+      src: [
+        'fragment-scenario',
+        ...
+      ]
+    }
 ```
 
 

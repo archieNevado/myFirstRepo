@@ -40,7 +40,7 @@
     "user": "This recipe is a no-op and does nothing.",
     "user::data_bag": "Processes a list of users with data drawn from a data bag."
   },
-  "version": "0.5.1",
+  "version": "0.6.0",
   "source_url": "https://github.com/fnichol/chef-user",
   "issues_url": "https://github.com/fnichol/chef-user/issues",
   "privacy": false,

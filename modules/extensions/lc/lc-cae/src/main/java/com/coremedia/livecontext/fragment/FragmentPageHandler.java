@@ -8,8 +8,10 @@ import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -90,7 +93,8 @@ public class FragmentPageHandler extends PageHandlerBase {
         return createErrorModelAndView(fragmentParameters, handler);
       }
     } else {
-      modelAndView = createDefaultModelAndView(fragmentParameters, site);
+      User developer = UserVariantHelper.getUser(request);
+      modelAndView = createDefaultModelAndView(fragmentParameters, site, developer);
     }
 
     //apply the parameter value to the request if a value was set
@@ -135,10 +139,10 @@ public class FragmentPageHandler extends PageHandlerBase {
    * If no handler has been applied we assume the default behaviour.
    * This usually happens if only the view param is passed.
    */
-  private ModelAndView createDefaultModelAndView(FragmentParameters fragmentParameters, Site site) {
+  private ModelAndView createDefaultModelAndView(FragmentParameters fragmentParameters, Site site, @Nullable User developer) {
     Content rootChannel = site.getSiteRootDocument();
     CMChannel channel = getContentBeanFactory().createBeanFor(rootChannel, CMChannel.class);
-    Page page = asPage(channel, channel);
+    Page page = asPage(channel, channel, developer);
     return createModelAndView(page, fragmentParameters.getView());
   }
 

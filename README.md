@@ -3,21 +3,20 @@
 ## Documentation
 
 Refer to the Getting Started chapter of the CoreMedia DXP Manual for a detailed description of the project workspace
-(e.g. for the [current release](https://documentation.coremedia.com/dxp/current/manuals/coremedia-en/webhelp/content/Getting_started.html)).
+(e.g. for the [current release](https://documentation.coremedia.com/livecontext-3-for-ibm-wcs/current/manuals/coremedia-en/webhelp/content/Getting_started.html)).
 
 ## Structure
 
 The workspace is separated into three major directory hierarchies:
 
 * The `modules` folder contains all library- and application-modules.
-
-* The `deployment` folder contains a solution using the configuration management framework _Chef_.
-
 * The `test-data` folder contains test content and test user definitions. Currently the test content is packaged by 
 the boxes module.  Extensions bring their own content, also in directories named 'test-data'.  The name test-data and
 the two subdirectories content and users are fix and essential for our build and deployment processes.
 
-## Test System Setup
+## Deployment
+
+The `deployment` folder contains an out-of-the-box deployment example using the configuration management framework _Chef_.
 
 Refer to [deployment/chef/README.md](./deployment/chef/README.md) for details.
 

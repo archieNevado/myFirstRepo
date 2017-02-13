@@ -36,130 +36,130 @@
     ]]></fx:Script>
 
 
-    <ui:rules>
+  <ui:rules>
 
-      <editor:FolderContentSwitchingContainer>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <editor:FolderContentContainer instanceName="catalog"
-                                             itemId="{CatalogCollectionViewExtension.CATALOG_FOLDER_CONTAINER_ITEM_ID}"
-                                             selectedRepositoryItemsValueExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"
-                                             createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:FolderContentSwitchingContainer>
+    <editor:FolderContentSwitchingContainer>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <editor:FolderContentContainer instanceName="catalog"
+                                           itemId="{CatalogCollectionViewExtension.CATALOG_FOLDER_CONTAINER_ITEM_ID}"
+                                           selectedRepositoryItemsValueExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"
+                                           createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:FolderContentSwitchingContainer>
 
-      <editor:SearchSwitchingContainer>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <cat:RepositoryCatalogSearchListContainer/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:SearchSwitchingContainer>
+    <editor:SearchSwitchingContainer>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <cat:RepositoryCatalogSearchListContainer/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:SearchSwitchingContainer>
 
-      <editor:RepositoryToolbar>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <ui:IconButton itemId="unlink">
-                <ui:baseAction>
-                  <cat:UnlinkAction folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
-                                    contentValueExpression="{selectionHolder.getSelectedItemsValueExpression()}"/>
-                </ui:baseAction>
-              </ui:IconButton>
-            </ui:items>
-            <ui:before>
-              <Component itemId="delete"/>
-            </ui:before>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:RepositoryToolbar>
+    <editor:RepositoryToolbar>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <ui:IconButton itemId="unlink">
+              <ui:baseAction>
+                <cat:UnlinkAction folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
+                                  contentValueExpression="{selectionHolder.getSelectedItemsValueExpression()}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+          </ui:items>
+          <ui:before>
+            <Component itemId="delete"/>
+          </ui:before>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:RepositoryToolbar>
 
-      <editor:CollectionRepositoryContextMenu>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <MenuSeparator/>
-              <MenuItem itemId="unlink">
-                <baseAction>
-                  <cat:UnlinkAction folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
-                                    contentValueExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"/>
-                </baseAction>
-              </MenuItem>
-            </ui:items>
-            <ui:after>
-              <Component itemId="delete"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:CollectionRepositoryContextMenu>
-
-
-      <editor:TreeViewContextMenu>
-        <editor:plugins>
-          <ui:AddItemsPlugin index="3">
-            <ui:items>
-              <MenuSeparator/>
-              <MenuItem itemId="{CREATE_CATEGORY_MENU_ITEM_ID}">
-                <baseAction>
-                  <editor:NewContentAction contentType="CMCategory"
-                                           hideWhenDisabled="true"
-                                           text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createCategory_text')}"
-                                           folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
-                                           createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
-                                           primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
-                </baseAction>
-              </MenuItem>
-              <MenuItem itemId="{CREATE_PRODUCT_MENU_ITEM_ID}">
-                <baseAction>
-                  <editor:NewContentAction contentType="CMProduct"
-                                           hideWhenDisabled="true"
-                                           text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createProduct_text')}"
-                                           folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
-                                           createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
-                                           primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
-                </baseAction>
-              </MenuItem>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:TreeViewContextMenu>
-
-      <editor:CollectionRepositoryContextMenu>
-        <editor:plugins>
-          <ui:AddItemsPlugin index="4">
-            <ui:items>
-              <MenuSeparator/>
-              <MenuItem itemId="{CREATE_CATEGORY_MENU_ITEM_ID}">
-                <baseAction>
-                  <editor:NewContentAction contentType="CMCategory"
-                                           hideWhenDisabled="true"
-                                           text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createCategory_text')}"
-                                           folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
-                                           createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
-                                           primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
-                </baseAction>
-              </MenuItem>
-              <MenuItem itemId="{CREATE_PRODUCT_MENU_ITEM_ID}">
-                <baseAction>
-                  <editor:NewContentAction contentType="CMProduct"
-                                           hideWhenDisabled="true"
-                                           text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createProduct_text')}"
-                                           folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
-                                           createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
-                                           primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
-                </baseAction>
-              </MenuItem>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:CollectionRepositoryContextMenu>
+    <editor:CollectionRepositoryContextMenu>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <MenuSeparator/>
+            <MenuItem itemId="unlink">
+              <baseAction>
+                <cat:UnlinkAction folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
+                                  contentValueExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"/>
+              </baseAction>
+            </MenuItem>
+          </ui:items>
+          <ui:after>
+            <Component itemId="delete"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:CollectionRepositoryContextMenu>
 
 
-    </ui:rules>
-  
+    <editor:TreeViewContextMenu>
+      <editor:plugins>
+        <ui:AddItemsPlugin index="3">
+          <ui:items>
+            <MenuSeparator/>
+            <MenuItem itemId="{CREATE_CATEGORY_MENU_ITEM_ID}">
+              <baseAction>
+                <editor:NewContentAction contentType="CMCategory"
+                                         hideWhenDisabled="true"
+                                         text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createCategory_text')}"
+                                         folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
+                                         createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
+                                         primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
+              </baseAction>
+            </MenuItem>
+            <MenuItem itemId="{CREATE_PRODUCT_MENU_ITEM_ID}">
+              <baseAction>
+                <editor:NewContentAction contentType="CMProduct"
+                                         hideWhenDisabled="true"
+                                         text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createProduct_text')}"
+                                         folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
+                                         createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
+                                         primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
+              </baseAction>
+            </MenuItem>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:TreeViewContextMenu>
+
+    <editor:CollectionRepositoryContextMenu>
+      <editor:plugins>
+        <ui:AddItemsPlugin index="4">
+          <ui:items>
+            <MenuSeparator/>
+            <MenuItem itemId="{CREATE_CATEGORY_MENU_ITEM_ID}">
+              <baseAction>
+                <editor:NewContentAction contentType="CMCategory"
+                                         hideWhenDisabled="true"
+                                         text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createCategory_text')}"
+                                         folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
+                                         createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
+                                         primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
+              </baseAction>
+            </MenuItem>
+            <MenuItem itemId="{CREATE_PRODUCT_MENU_ITEM_ID}">
+              <baseAction>
+                <editor:NewContentAction contentType="CMProduct"
+                                         hideWhenDisabled="true"
+                                         text="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Action_createProduct_text')}"
+                                         folderValueExpression="{selectionHolder.getSelectedFolderValueExpression()}"
+                                         createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"
+                                         primaryDisabledExpression="{selectionHolder.getNewContentActionDisabledExpression()}"/>
+              </baseAction>
+            </MenuItem>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:CollectionRepositoryContextMenu>
+
+
+  </ui:rules>
+
 </ui:NestedRulesPlugin>

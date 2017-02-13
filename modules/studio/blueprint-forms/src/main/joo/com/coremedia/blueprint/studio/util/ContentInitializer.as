@@ -6,6 +6,8 @@ import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.sites.SitesService;
 
+import ext.Ext;
+
 import joo.localeSupport;
 
 import mx.resources.ResourceManager;
@@ -37,6 +39,7 @@ public class ContentInitializer {
     editorContext.registerContentInitializer("CMViewtype", initViewType);
     editorContext.registerContentInitializer("CMVideo", initVideo);
     editorContext.registerContentInitializer("CMSpinner", initSpinner);
+    editorContext.registerContentInitializer("CMTheme", Ext.emptyFn);
   }
 
   private static function initSpinner(content:Content):void {

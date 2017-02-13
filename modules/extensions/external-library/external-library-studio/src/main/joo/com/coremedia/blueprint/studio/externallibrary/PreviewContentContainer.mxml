@@ -54,10 +54,11 @@
                 handler="{previewActionHandler}"/>
 
         <!--SOURCE-->
-        <DisplayField fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'Preview_data_source')}"
-                      style="word-break: break-all;"
-                      value="{getDataContent('name', config.combinedVE)}"
-                      htmlEncode="true"/>
+        <DisplayField
+                fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'Preview_data_source')}"
+                style="word-break: break-all;"
+                value="{getDataContent('name', config.combinedVE)}"
+                htmlEncode="true"/>
 
         <!--URL-->
         <DisplayField ui="{DisplayFieldSkin.ITALIC.getSkin()}"

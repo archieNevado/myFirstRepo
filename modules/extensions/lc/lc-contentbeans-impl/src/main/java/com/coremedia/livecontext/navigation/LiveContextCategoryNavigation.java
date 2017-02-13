@@ -9,11 +9,13 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cae.aspect.provider.AspectsProvider;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -78,8 +80,8 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
   }
 
   @Override
-  public CMTheme getTheme() {
-    return getContext().getTheme();
+  public CMTheme getTheme(@Nullable User developer) {
+    return getContext().getTheme(developer);
   }
 
   @Override

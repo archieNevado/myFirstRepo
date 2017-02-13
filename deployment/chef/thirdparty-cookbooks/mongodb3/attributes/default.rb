@@ -18,7 +18,7 @@
 #
 
 # MongoDB version to install
-default['mongodb3']['version'] = '3.2.4'
+default['mongodb3']['version'] = '3.2.8'
 
 # Please note : The default values for ['mongodb3']['package'] attributes will be set in `package_repo` recipe.
 # but, You can set custom values for yum/apt repo url, yum package version or apt related in your wrapper
@@ -65,8 +65,14 @@ default['mongodb3']['group'] = mongo_group
 # Mongod config file
 default['mongodb3']['mongod']['config_file'] = '/etc/mongod.conf'
 
+# Disable Transparent Huge Pages (THP)
+default['mongodb3']['mongod']['disable-transparent-hugepages'] = false
+
 # Mongos config file
 default['mongodb3']['mongos']['config_file'] = '/etc/mongos.conf'
+
+# Runit template cookbook for mongos
+default['mongodb3']['mongos']['runit_template_cookbook'] = 'mongodb3'
 
 # Key file contents
 default['mongodb3']['config']['key_file_content'] = nil

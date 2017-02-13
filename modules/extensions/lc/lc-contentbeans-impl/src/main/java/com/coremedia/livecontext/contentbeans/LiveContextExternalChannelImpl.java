@@ -12,6 +12,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -28,7 +29,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseComm
  * in the CMS repository.
  */
 public class LiveContextExternalChannelImpl extends CMExternalChannelBase implements LiveContextExternalChannel {
-  
+
   private static final Logger LOG = LoggerFactory.getLogger(LiveContextExternalChannelImpl.class);
 
   private LiveContextNavigationFactory liveContextNavigationFactory;
@@ -37,39 +38,46 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
 
   @Override
   public Category getCategory() {
-    Content content = this.getContent();
-    String externalId = getExternalId();
     StoreContextProvider storeContextProvider = getStoreContextProvider();
-    if(null != storeContextProvider) {
-      StoreContext storeContext = storeContextProvider.findContextByContent(content);
-      Category category = getCatalogService().withStoreContext(storeContext).findCategoryById(
-              getCurrentCommerceIdProvider().formatCategoryId(externalId));
-      if (category == null) {
-        LOG.debug("Content #{}: No category found for externalId:{} - maybe the category only exists in a Workspace?",
-                content, externalId);
-      }
-      return category;
+    if (storeContextProvider == null) {
+      return null;
     }
-    return null;
+
+    Content content = getContent();
+    String externalId = getExternalId();
+
+    StoreContext storeContext = storeContextProvider.findContextByContent(content);
+    String categoryId = getCurrentCommerceIdProvider().formatCategoryId(externalId);
+    Category category = getCatalogService().withStoreContext(storeContext).findCategoryById(categoryId);
+
+    if (category == null) {
+      LOG.debug("Content #{}: No category found for externalId:{} - maybe the category only exists in a workspace?",
+              content, externalId);
+    }
+
+    return category;
   }
 
   @Nonnull
   @Override
   public Site getSite() {
-    if(site == null) {
+    if (site == null) {
       site = getSitesService().getContentSiteAspect(getContent()).getSite();
+
       if (site == null) {
-        throw new IllegalStateException("A " + LiveContextExternalChannelImpl.class.getName() + " must belong to a site " +
-                "but content[" + getContentId() + "] does not. ");
+        throw new IllegalStateException("A " + LiveContextExternalChannelImpl.class.getName()
+                + " must belong to a site but content[" + getContentId() + "] does not. ");
       }
     }
+
     return site;
   }
-  
+
+  @Override
   @Nonnull
   public String getExternalId() {
     String externalId = getContent().getString(EXTERNAL_ID);
-    return externalId==null ? "" : externalId.trim();
+    return externalId == null ? "" : externalId.trim();
   }
 
   @Override
@@ -80,6 +88,7 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
       if (storeContext != null) {
         CatalogService catalogService = getCatalogService().withStoreContext(storeContext);
         List<Category> subCategories = new ArrayList<>();
+
         List<String> commerceChildrenIds = getCommerceChildrenIds();
         for (String commerceChildrenId : commerceChildrenIds) {
           Category category = catalogService.findCategoryById(commerceChildrenId);
@@ -87,6 +96,7 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
             subCategories.add(category);
           }
         }
+
         List<Linkable> result = new ArrayList<>();
         for (Category subCategory : subCategories) {
           result.add(liveContextNavigationFactory.createNavigation(subCategory, site));
@@ -94,21 +104,24 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
         return result;
       }
     }
+
     // in all other cases (especially in automatic mode) we ask the treeRelation...
     return new ArrayList<>(treeRelation.getChildrenOf(this));
   }
 
   @Nullable
-  private StoreContextProvider getStoreContextProvider() {
+  private static StoreContextProvider getStoreContextProvider() {
     CommerceConnection currentConnection = Commerce.getCurrentConnection();
-    return null != currentConnection ? currentConnection.getStoreContextProvider() : null;
+    return currentConnection != null ? currentConnection.getStoreContextProvider() : null;
   }
 
+  @Override
   public boolean isCatalogRoot() {
     Category category = getCategory();
-    return null != category && category.isRoot();
+    return category != null && category.isRoot();
   }
 
+  @Override
   public PageGrid getPdpPagegrid() {
     return pdpPageGridService.getContentBackedPageGrid(this);
   }
@@ -125,9 +138,9 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
 
   @Override
   public String toString() {
-    return "LiveContextExternalChannel{" +
-            "content=" + getContent().getPath() +
-            ", externalId=" + getExternalId() +
-            '}';
+    return MoreObjects.toStringHelper(LiveContextExternalChannel.class)
+            .add("contentId", getContent().getId())
+            .add("externalId", getExternalId())
+            .toString();
   }
 }

@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.assets.cae.tags;
 
 
-import com.coremedia.blueprint.assets.cae.DownloadPortal;
 import com.coremedia.blueprint.assets.cae.AMUtils;
+import com.coremedia.blueprint.assets.cae.DownloadPortal;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
@@ -18,7 +18,6 @@ import javax.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -29,9 +28,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class AMFreemarkerFacadeTest {
   @Inject
   private MockHttpServletRequest request;
-  
+
   @Test
-  public void hasDownloadPortal () {
+  public void hasDownloadPortal() {
     SettingsService settingsService = mock(SettingsService.class);
     Site site = mock(Site.class);
     Content content = mock(Content.class);
@@ -49,14 +48,12 @@ public class AMFreemarkerFacadeTest {
   }
 
   @Test
-  public void hasNoDownloadPortal () {
+  public void hasNoDownloadPortal() {
     mockStatic(SiteHelper.class);
     mockStatic(FreemarkerUtils.class);
     when(FreemarkerUtils.getCurrentRequest()).thenReturn(request);
     when(SiteHelper.getSiteFromRequest(request)).thenReturn(null);
-
     AMFreemarkerFacade facade = new AMFreemarkerFacade();
-
     assertFalse(facade.hasDownloadPortal());
   }
 
@@ -66,6 +63,5 @@ public class AMFreemarkerFacadeTest {
     AMFreemarkerFacade facade = new AMFreemarkerFacade();
     facade.setDownloadPortal(portal);
     assertEquals(portal, facade.getDownloadPortal());
-    assertNotNull(facade.getAmMessageKeys());
   }
 }

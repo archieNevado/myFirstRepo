@@ -3,7 +3,6 @@ package com.coremedia.livecontext.studio {
 import com.coremedia.livecontext.studio.action.CollectionViewModelActionTest;
 import com.coremedia.livecontext.studio.collectionview.CatalogCollectionViewTest;
 import com.coremedia.livecontext.studio.components.link.CatalogLinkPropertyFieldTest;
-import com.coremedia.livecontext.studio.components.link.CategoryAndProductLinksPropertyFieldTest;
 import com.coremedia.livecontext.studio.forms.ProductTeaserDocumentFormTest;
 import com.coremedia.livecontext.studio.forms.ProductTeaserSettingsFormTest;
 import com.coremedia.livecontext.studio.library.ShowInCatalogTreeHelperTest;
@@ -17,7 +16,6 @@ public class TestSuite {
     suite.addTestSuite(CatalogCollectionViewTest);
     suite.addTestSuite(CollectionViewModelActionTest);
     suite.addTestSuite(CatalogLinkPropertyFieldTest);
-    suite.addTestSuite(CategoryAndProductLinksPropertyFieldTest);
     suite.addTestSuite(ProductTeaserDocumentFormTest);
     suite.addTestSuite(ShowInCatalogTreeHelperTest);
     suite.addTestSuite(ProductTeaserSettingsFormTest);

@@ -11,18 +11,18 @@
     public native function MultipleAnalyticsUrlButtonsTestView(config:MultipleAnalyticsUrlButtonsTestView = null);
     ]]></fx:Script>
 
-    <items>
-      <alx:ContentProvidingTestContainer itemId="contentContainer">
-        <alx:items>
-          <alx:AnalyticsDeepLinkButtonContainer itemId="alxDeepLinkButtonContainer">
-            <alx:items>
-              <alx:OpenAnalyticsDeepLinkUrlButton serviceName="testService1"/>
-              <alx:OpenAnalyticsDeepLinkUrlButton serviceName="testService2"/>
-              <alx:OpenAnalyticsDeepLinkUrlButton serviceName="testService3"/>
-            </alx:items>
-          </alx:AnalyticsDeepLinkButtonContainer>
-        </alx:items>
-      </alx:ContentProvidingTestContainer>
-    </items>
-  
+  <items>
+    <alx:ContentProvidingTestContainer itemId="contentContainer">
+      <alx:items>
+        <alx:AnalyticsDeepLinkButtonContainer itemId="alxDeepLinkButtonContainer">
+          <alx:items>
+            <alx:OpenAnalyticsDeepLinkUrlButton serviceName="testService1"/>
+            <alx:OpenAnalyticsDeepLinkUrlButton serviceName="testService2"/>
+            <alx:OpenAnalyticsDeepLinkUrlButton serviceName="testService3"/>
+          </alx:items>
+        </alx:AnalyticsDeepLinkButtonContainer>
+      </alx:items>
+    </alx:ContentProvidingTestContainer>
+  </items>
+
 </Viewport>

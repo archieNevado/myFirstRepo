@@ -45,7 +45,6 @@
     <module>lc-p13n</module>
     <module>lc-asset</module>
     <module>ecommerce-ibm</module>
-    <module>ecommerce-ibm-es</module>
     <module>taxonomy</module>
     <module>validators</module>
   </modules>

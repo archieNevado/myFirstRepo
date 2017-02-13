@@ -10,6 +10,7 @@ import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.view.substitution.Substitution;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.google.common.collect.ImmutableMap;
@@ -170,7 +171,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
       result = handleRequestInternal(action, navigationContext, actionName, request, response);
     }
     if (result != null) {
-      addPageModel(result, asPage(navigationContext, action));
+      addPageModel(result, asPage(navigationContext, action, UserVariantHelper.getUser(request)));
     }
     return result;
   }

@@ -65,7 +65,7 @@ public class CatalogRepositoryListBase extends AbstractCatalogList {
   private function bindStoreAndView():void {
     on('sortchange', sortChanged);
     getCatalogItemsValueExpression().addChangeListener(catalogItemsChanged);
-    // TODO Ext 6 list sorters
+    // TODO Ext 6 list sorters, see CMS-7895
     // getStore().setDefaultSort('id', 'ASC');
   }
 

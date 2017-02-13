@@ -19,20 +19,20 @@
     public native function TeaserDocumentForm(config:TeaserDocumentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:StringPropertyField propertyName="teaserTitle">
-        <editor:plugins exml:mode="append">
-          <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
-        </editor:plugins>
-      </editor:StringPropertyField>
-      <editor:TextAreaPropertyField propertyName="teaserText"
-                                    itemId="teaserText"
-                                    changeBuffer="1000">
-        <editor:plugins exml:mode="append">
-          <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
-        </editor:plugins>
-      </editor:TextAreaPropertyField>
-      <bpforms:CallToActionConfigurationForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:StringPropertyField propertyName="teaserTitle">
+      <editor:plugins exml:mode="append">
+        <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
+      </editor:plugins>
+    </editor:StringPropertyField>
+    <editor:TextAreaPropertyField propertyName="teaserText"
+                                  itemId="teaserText"
+                                  changeBuffer="1000">
+      <editor:plugins exml:mode="append">
+        <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
+      </editor:plugins>
+    </editor:TextAreaPropertyField>
+    <bpforms:CallToActionConfigurationForm/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

@@ -2,9 +2,9 @@ package com.coremedia.blueprint.studio.taxonomy.selection {
 
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNode;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeList;
-import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomySearchComboRenderer;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderFactory;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderer;
+import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomySearchComboRenderer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.ui.components.StatefulComboBox;
 import com.coremedia.ui.data.ValueExpression;
@@ -14,7 +14,6 @@ import com.coremedia.ui.logging.Logger;
 
 import ext.Ext;
 import ext.XTemplate;
-import ext.container.Container;
 import ext.data.JsonStore;
 import ext.data.Model;
 import ext.data.proxy.AjaxProxy;
@@ -43,10 +42,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
 
   private var searchResultExpression:ValueExpression;
 
-  private var bindTo:ValueExpression;
-  private var propertyName:String;
-  private var multipleDrop:Boolean;
-
   private var showSelectionPath:Boolean;
   private var taxonomyId:String;
 
@@ -57,18 +52,12 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
   private var siteSelectionExpression:ValueExpression;
   private var resetOnBlur:Boolean;
 
-  private var taxonomySearchFieldDropTarget:TaxonomySearchFieldDropTarget;
-
   private var valueManuallyChanged:Boolean = false;
-  private var forceReadOnlyValueExpression:ValueExpression;
 
   private var httpProxy:AjaxProxy;
 
   public function TaxonomySearchFieldBase(config:TaxonomySearchField = null) {
     taxonomyId = config.taxonomyId;
-    bindTo = config.bindTo;
-    propertyName = config.propertyName;
-    multipleDrop = config.multipleDrop || true;
     siteSelectionExpression = config.siteSelectionExpression;
     if (siteSelectionExpression) {
       siteSelectionExpression.addChangeListener(siteSelectionChanged);
@@ -86,10 +75,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       taxonomyId = "";
     }
 
-    forceReadOnlyValueExpression = config.forceReadOnlyValueExpression;
-
-
-
     var superConfig:TaxonomySearchField = TaxonomySearchField({});
     super(TaxonomySearchField(Ext.apply(superConfig, config)));
 
@@ -102,12 +87,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       valueManuallyChanged = true;
       QuickTipManager.getQuickTip().hide();
     });
-
-    // Get reference to related grid panel component.
-    // Reference is required to recognize and handle 'internal' drag and drop operations
-    if (bindTo) {
-      addListener("afterrender", registerDropTarget);
-    }
   }
 
   internal function getSearchSuggestionsDataProxy(taxId:String):AjaxProxy {
@@ -115,6 +94,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       var reader:JsonReader = JsonReader({});
       reader.rootProperty = NODES;
 
+      //noinspection JSUnusedGlobalSymbols
       httpProxy = new AjaxProxy({
         failure: function (response:XMLHttpRequest):void {
           Logger.info('Taxonomy search request failed:' + response.responseText);
@@ -148,14 +128,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
     return null;
   }
 
-
-  /*
-   * Create drop target for this component.
-   */
-  private function registerDropTarget():void {
-    removeListener("afterrender", registerDropTarget);
-    taxonomySearchFieldDropTarget = new TaxonomySearchFieldDropTarget(this.findParentByType(Container), bindTo, propertyName, forceReadOnlyValueExpression, multipleDrop);
-  }
 
   private function isValidTagPrefix():Boolean {
     return (!getValue() || getStore().getCount() > 0);
@@ -244,11 +216,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       searchResultExpression.setValue(path);
       setValue("");
     });
-  }
-
-  override protected function onDestroy():void {
-    taxonomySearchFieldDropTarget && taxonomySearchFieldDropTarget.unreg();
-    super.onDestroy();
   }
 }
 }

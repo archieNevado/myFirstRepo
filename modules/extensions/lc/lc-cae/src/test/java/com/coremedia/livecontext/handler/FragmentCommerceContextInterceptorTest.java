@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,7 +72,7 @@ public class FragmentCommerceContextInterceptorTest {
     connection = MockCommerceEnvBuilder.create().setupEnv();
     connection.getStoreContext().put(StoreContextImpl.SITE, "siteId");
     connection.setContractService(contractService);
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(connection);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
 
     testling = new FragmentCommerceContextInterceptor();
     testling.setSiteResolver(siteLinkHelper);
@@ -167,10 +168,10 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.workspaceId", "4711");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    CommerceConnection commerceConnection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
-    assertThat(commerceConnection).isNotNull();
+    Optional<CommerceConnection> commerceConnection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(commerceConnection).isPresent();
 
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.get().getStoreContext();
     assertThat(storeContext).isNotNull();
 
     assertThat(storeContext.getUserSegments()).isEqualTo("memberGroup1, memberGroup2");
@@ -223,10 +224,10 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.workspaceId", "4711");
     LiveContextContextHelper.setContext(request, fragmentContext);
 
-    CommerceConnection connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
-    assertThat(connection).isNotNull();
+    Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(connection).isPresent();
 
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.get().getStoreContext();
     assertThat(storeContext).isNotNull();
 
     assertThat(storeContext.getUserSegments()).isEqualTo("memberGroup1, memberGroup2");
@@ -250,10 +251,10 @@ public class FragmentCommerceContextInterceptorTest {
     fragmentContext.put("wc.preview.timestamp", ts.toString());
     fragmentContext.put("wc.preview.workspaceId", "4711");
 
-    CommerceConnection connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
-    assertThat(connection).isNotNull();
+    Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    assertThat(connection).isPresent();
 
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.get().getStoreContext();
     assertThat(storeContext).isNotNull();
 
     assertThat(storeContext.getUserSegments()).isNull();

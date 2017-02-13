@@ -7,24 +7,22 @@
   &__pricing {
     display: table-cell;
     font-size: 1rem; /* reset font */
-    vertical-align: bottom;
+    vertical-align: top;
+
     & > * {
-      background-color: #ffffff;
       padding: 0.3rem 0.40rem;
+
       @include breakpoint(md) {
         padding: 0.5rem 0.933333rem;
-
       }
 
       @include breakpoint(sm) {
         padding: 0.36rem 0.50em;
-
       }
     }
   }
 
   &__title > * {
-    vertical-align: bottom;
     margin: 0;
   }
 

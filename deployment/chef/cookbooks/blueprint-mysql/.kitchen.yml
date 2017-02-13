@@ -21,12 +21,6 @@ provisioner:
     environment: kitchen
 
 platforms:
-- name: centos6-vagrant
-  driver:
-    box: coremedia/base
-    box_url: 'https://atlas.hashicorp.com/coremedia/boxes/base'
-    box_version: '1.16.0'
-
 - name: centos7-vagrant
   driver:
     box: coremedia/base7
@@ -36,7 +30,7 @@ platforms:
 suites:
 - name: default
   # add platforms to test to this array, by default only one is listed so a simple kitchen converge will run this suite
-  includes: [centos6-vagrant]
+  #includes: [centos7-vagrant]
   run_list:
     - recipe[blueprint-yum::default]
     - recipe[blueprint-mysql::server]

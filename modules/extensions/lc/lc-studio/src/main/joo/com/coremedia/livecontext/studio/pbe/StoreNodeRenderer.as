@@ -13,14 +13,15 @@ import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class StoreNodeRenderer implements MetadataNodeRenderer {
-  private static const PROPERTY_NODE_ICON_CLASS:String = "preview-breadcrumb-arrow";
+  private static const PROPERTY_NODE_ICON_CLASS:String = ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'arrow_right');
 
   public function StoreNodeRenderer() {
     super();
   }
 
   public function canRender(metadataNode:MetadataTreeNode):Boolean {
-    return MetadataHelper.getBeanMetadataValue(metadataNode) is Store;
+    // this one cares for store node and first property node.
+    return MetadataHelper.getBeanMetadataValue(metadataNode) is Store || MetadataHelper.getBeanMetadataValue(metadataNode.getParent()) is Store;
   }
 
   public function renderText(metadataNode:MetadataTreeNode):String {

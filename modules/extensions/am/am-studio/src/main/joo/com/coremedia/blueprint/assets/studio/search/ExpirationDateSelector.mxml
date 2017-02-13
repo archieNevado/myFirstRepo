@@ -56,10 +56,11 @@
                                  transformer="{datefieldVisibilityTransformer}"/>
       </plugins>
     </Component>
-    <ui:StatefulDateField format="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'ExpirationDate_dateFormat')}"
-                                  formatText=""
-                                  hideLabel="true"
-                                  width="100%">
+    <ui:StatefulDateField
+            format="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'ExpirationDate_dateFormat')}"
+            formatText=""
+            hideLabel="true"
+            width="100%">
       <ui:plugins>
         <ui:BindVisibilityPlugin bindTo="{config.selectedKeyValueExpression}"
                                  transformer="{datefieldVisibilityTransformer}"/>

@@ -4,7 +4,6 @@
 <master>
 </master>
 <viewtype>
-<link href="../../Options/Viewtypes/CMChannel/square.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Viewtypes/CMChannel/square"/>
 </viewtype>
 <linkedSettings>
 <link href="../../Options/Settings/First%20Item%20as%20Header.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/First%20Item%20as%20Header"/>
@@ -29,7 +28,6 @@
 </related>
 <items>
 <link href="Consumers/Consumers%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Consumers/Consumers%20Page"/>
-<link href="Consumers/Perfect%20Chef/Perfect%20Chef%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Consumers/Perfect%20Chef/Perfect%20Chef%20Page"/>
 <link href="Consumers/Aurora%20B2C/Aurora%20B2C%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Consumers/Aurora%20B2C/Aurora%20B2C%20Page"/>
 </items>
 </CMCollection>

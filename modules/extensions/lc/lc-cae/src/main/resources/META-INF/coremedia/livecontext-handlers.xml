@@ -19,7 +19,6 @@
   <import resource="classpath:META-INF/coremedia/lc-services.xml"/>
 
   <bean id="ecommerceHandlerBase" abstract="true" parent="pageHandlerBase" class="com.coremedia.livecontext.handler.LiveContextPageHandlerBase">
-    <property name="developerModeEnabled" value="${cae.developer.mode}"/>
     <property name="dataViewFactory" ref="dataViewFactory"/>
     <property name="urlPrefixResolver" ref="ruleUrlPrefixResolver"/>
     <property name="wcsStorefrontMaxUrlSegments" value="${livecontext.max-category-segments}" />

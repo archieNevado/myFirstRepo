@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-     The context menu for the list or thumbnail view in the catalog repository view.
-   -->
+<!---
+ The context menu for the list or thumbnail view in the catalog repository view.
+-->
 <edtior:CollectionRepositoryContextMenu
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
@@ -18,16 +18,16 @@
     public native function CatalogRepositoryContextMenu(config:CatalogRepositoryContextMenu = null);
     ]]></fx:Script>
 
-    <edtior:plugins exml:mode="append">
-      <ui:RemoveItemsPlugin>
-        <ui:items>
-          <Component itemId="{CollectionRepositoryContextMenu.CUT_TO_CLIPBOARD_ITEM_ID}"/>
-          <Component itemId="{CollectionRepositoryContextMenu.PASTE_FROM_CLIPBOARD_ITEM_ID}"/>
-          <Component itemId="{CollectionRepositoryContextMenu.RENAME_CONTENT_ITEM_MENU_ITEM_ID}"/>
-          <Component itemId="createProduct"/>
-          <Component itemId="createCategory"/>
-        </ui:items>
-      </ui:RemoveItemsPlugin>
-    </edtior:plugins>
-  
+  <edtior:plugins exml:mode="append">
+    <ui:RemoveItemsPlugin>
+      <ui:items>
+        <Component itemId="{CollectionRepositoryContextMenu.CUT_TO_CLIPBOARD_ITEM_ID}"/>
+        <Component itemId="{CollectionRepositoryContextMenu.PASTE_FROM_CLIPBOARD_ITEM_ID}"/>
+        <Component itemId="{CollectionRepositoryContextMenu.RENAME_CONTENT_ITEM_MENU_ITEM_ID}"/>
+        <Component itemId="createProduct"/>
+        <Component itemId="createCategory"/>
+      </ui:items>
+    </ui:RemoveItemsPlugin>
+  </edtior:plugins>
+
 </edtior:CollectionRepositoryContextMenu>

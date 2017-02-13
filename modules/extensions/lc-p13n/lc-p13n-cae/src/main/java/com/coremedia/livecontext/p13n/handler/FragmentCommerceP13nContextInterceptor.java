@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * Suitable for URLs whose second segment denotes the store, e.g. /fragment/10001/...
@@ -29,11 +30,11 @@ public class FragmentCommerceP13nContextInterceptor extends AbstractCommerceCont
     this.liveContextSiteResolver = liveContextSiteResolver;
   }
 
-  @Nonnull
   @Override
-  protected CommerceConnection getCommerceConnectionWithConfiguredStoreContext(@Nonnull Site site,
-                                                                               @Nonnull HttpServletRequest request) {
-    CommerceConnection commerceConnection = super.getCommerceConnectionWithConfiguredStoreContext(site, request);
+  @Nonnull
+  protected Optional<CommerceConnection> getCommerceConnectionWithConfiguredStoreContext(
+          @Nonnull Site site, @Nonnull HttpServletRequest request) {
+    Optional<CommerceConnection> connection = super.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
     Context context = LiveContextContextHelper.fetchContext(request);
     if (context != null && isPreview()) {
@@ -46,7 +47,7 @@ public class FragmentCommerceP13nContextInterceptor extends AbstractCommerceCont
       }
     }
 
-    return commerceConnection;
+    return connection;
   }
 
   @Override

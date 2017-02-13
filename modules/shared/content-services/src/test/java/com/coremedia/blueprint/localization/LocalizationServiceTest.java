@@ -25,6 +25,7 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -138,6 +139,43 @@ public class LocalizationServiceTest {
     assertEquals("right", resources.get("masterOverOrder"));
   }
 
+  @Test
+  public void testHierarchizeNatural() {
+    Content folder = contentRepository.createSubfolders(contentRepository.getRoot(), "hierachizeNatural");
+    Content foo = mkBundle(folder, "");
+    Content foo_en = mkBundle(folder, "_en");
+    Content foo_de = mkBundle(folder, "_de");
+    Content foo_de_DE = mkBundle(folder, "_de_DE");
+    testling.hierarchizeResourceBundles(foo);
+
+    assertEquals("", foo.getString("locale"));
+    assertEquals("en", foo_en.getString("locale"));
+    assertEquals("de", foo_de.getString("locale"));
+    assertEquals("de_DE", foo_de_DE.getString("locale"));
+
+    assertNull(foo.getLink("master"));
+    assertEquals(foo, foo_en.getLink("master"));
+    assertEquals(foo, foo_de.getLink("master"));
+    assertEquals(foo_de, foo_de_DE.getLink("master"));
+  }
+
+  /**
+   * Usecase: There is no actual root bundle, some concrete language is
+   * declared as root and overrules the locale logic.
+   */
+  @Test
+  public void testHierarchizeArbitrary() {
+    Content folder = contentRepository.createSubfolders(contentRepository.getRoot(), "hierachizeNArbitrary");
+    Content foo_en = mkBundle(folder, "_en");
+    Content foo_de = mkBundle(folder, "_de");
+    Content foo_de_DE = mkBundle(folder, "_de_DE");
+    testling.hierarchizeResourceBundles(foo_en);
+
+    assertNull(foo_en.getLink("master"));
+    assertEquals(foo_en, foo_de.getLink("master"));
+    assertEquals(foo_de, foo_de_DE.getLink("master"));
+  }
+
 
   // --- internal helper tests --------------------------------------
 
@@ -196,5 +234,9 @@ public class LocalizationServiceTest {
 
   private Content content(int id) {
     return contentRepository.getContent(IdHelper.formatContentId(id));
+  }
+
+  private Content mkBundle(Content folder, String locale) {
+    return contentRepository.createChild(folder, "foo"+locale+".properties", "CMResourceBundle", Collections.emptyMap());
   }
 }

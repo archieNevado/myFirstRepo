@@ -9,6 +9,7 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.CapStructHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.cap.user.User;
 import com.google.common.base.Function;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import static com.google.common.collect.Lists.transform;
  * <p>
  * Backward compatible strategy for existing projects.
  * Supports only settings of the root channel.
+ * Does not support developer features.
  *
  * @deprecated Move resource bundles to resourceBundles, and use the {@link LinklistPageResourceBundleFactory}.
  */
@@ -42,12 +44,12 @@ public class SettingsPageResourceBundleFactory implements PageResourceBundleFact
   // --- PageResourceBundleFactory ----------------------------------
 
   @Override
-  public ResourceBundle resourceBundle(Page page) {
+  public ResourceBundle resourceBundle(Page page, User developer) {
     return fetchResourceBundle(page.getNavigation());
   }
 
   @Override
-  public ResourceBundle resourceBundle(Navigation navigation) {
+  public ResourceBundle resourceBundle(Navigation navigation, User developer) {
     return fetchResourceBundle(navigation);
   }
 

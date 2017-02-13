@@ -9,6 +9,16 @@ public class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, 
     super(uri);
   }
 
+  override public function get(property:*):* {
+    try {
+      return super.get(property);
+    } catch (e:Error) {
+      // catalog objects such as marketing spots do not use stable IDs and may vanish any time :(
+      trace("[INFO] ignoring error while accesing property", property, e);
+      return null;
+    }
+  }
+
   public function getContent():Content {
     return get(CatalogObjectPropertyNames.CONTENT);
   }

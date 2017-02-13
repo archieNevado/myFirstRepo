@@ -15,7 +15,11 @@
     ]]></fx:Script>
 
   <local:items>
+    <!-- Although the base class initializes the struct (and so the linkType could also be determined by the struct)
+     make sure only the specified content type may be added to the link list. This also makes it not necessary
+     to create the empty struct before the LinkListPropertyField's constructor is called. -->
     <taxonomy:TaxonomyLinkListPropertyField bindTo="{config.bindTo}"
+                                            linkType="{config.contentType}"
                                             itemId="taxonomyLinkList"
                                             taxonomyId="Subject"
                                             forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"

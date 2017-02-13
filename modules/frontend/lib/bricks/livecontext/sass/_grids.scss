@@ -1,10 +1,10 @@
 // Imports
-@import "../../../../themes/perfectchef-theme/src/sass/base/imports";
 @import "../../../sass/utils/imports";
 
-// Grids
-// =====================================================================================================================
+//variables
+$cm-grid-gutter-width: 10px !default;
 
+//styles
 .cm-collection-- {
   &tiles- {
 
@@ -89,7 +89,7 @@
         @include breakpoint(sm-and-up) {
           &:nth-child(2),
           &:nth-child(3) {
-            padding-bottom: $grid-gutter-width;
+            padding-bottom: $cm-grid-gutter-width;
           }
         }
       }
@@ -118,7 +118,7 @@
         @include breakpoint(sm-and-up) {
           &:nth-child(1),
           &:nth-child(2) {
-            padding-bottom: $grid-gutter-width;
+            padding-bottom: $cm-grid-gutter-width;
           }
         }
       }
@@ -181,7 +181,7 @@
 
 .cm-row > div {
   &:last-child {
-    padding-bottom: $grid-gutter-width;
+    padding-bottom: $cm-grid-gutter-width;
   }
   &.cm-placement-header {
     padding-bottom: 0;
@@ -189,19 +189,19 @@
 }
 
 .cm-container {
-  padding-top: $grid-gutter-width;
+  padding-top: $cm-grid-gutter-width;
   &:first-child {
     padding-top: 0;
   }
 }
 
 .row.row-grid {
-  padding-bottom: $grid-gutter-width;
+  padding-bottom: $cm-grid-gutter-width;
   &:last-child {
     padding-bottom: 0;
   }
   & [class*="col-"] + [class*="col-"] {
-    margin-top: $grid-gutter-width;
+    margin-top: $cm-grid-gutter-width;
   }
 
   @include breakpoint(lg) {
@@ -235,10 +235,9 @@
   }
 
   &__title {
-    margin: 0;
     color: #ffffff;
     font-weight: normal;
-    margin-bottom: 8px;
+    margin: 0 0 8px;
 
     @include breakpoint(md) {
       margin-bottom: 10px;

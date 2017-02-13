@@ -14,10 +14,10 @@
 
     <fx:Class id="catalogObjectType"/>
 
-    <!--- 
-       Optional: if set to false the property editors will not be inherited from the super document types.
-       Default is true, i.e. the property editors are inherited.
-     -->
+    <!---
+     Optional: if set to false the property editors will not be inherited from the super document types.
+     Default is true, i.e. the property editors are inherited.
+    -->
     <fx:Boolean id="inheritEditors"/>
   </fx:Declarations>
 

@@ -70,7 +70,7 @@ public class ThemeTemplateViewRepositoryProviderTest {
 
   @Test
   public void testTemplatesLocations() {
-    List<String> locations = testling.templateLocations("theme:2/corporate");
+    List<String> locations = testling.templateLocations("theme::2/corporate");
     assertTrue(locations.size()==2);
     // The order matters.
     assertEquals("jar:id:contentproperty:/Themes/corporate/corporate-templates/archive!/META-INF/resources/WEB-INF/templates/corporate", locations.get(0));
@@ -80,11 +80,11 @@ public class ThemeTemplateViewRepositoryProviderTest {
   @Test
   public void testViewRepositoryNames() {
     Content theme = content(2);
-    List<String> locations = testling.viewRepositoryNames(theme);
+    List<String> locations = testling.viewRepositoryNames(theme, null);
     assertTrue(locations.size()==2);
     // The order matters.
-    assertEquals("theme:2/corporate", locations.get(0));
-    assertEquals("theme:2/bricks", locations.get(1));
+    assertEquals("theme::2/corporate", locations.get(0));
+    assertEquals("theme::2/bricks", locations.get(1));
   }
 
 

@@ -16,7 +16,7 @@ import com.coremedia.cms.editor.sdk.preview.PreviewURI;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ecommerce.studio.CatalogModel;
-import com.coremedia.ecommerce.studio.components.link.CatalogLinkField;
+import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -100,13 +100,13 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
      */
     QuickCreate.addQuickCreateDialogProperty(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, EXTERNAL_ID_PROPERTY,
             function (data:ProcessingData, properties:Object):Component {
-              var config:CatalogLinkField = CatalogLinkField(properties);
-              config.ddGroup = "ContentDD";
-              config.openLinkSources = CatalogHelper.getInstance().openMarketingSpots;
-              config.catalogObjectType = CatalogModel.TYPE_MARKETING_SPOT;
-              config.emptyText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text');
+              var config:CatalogLinkPropertyField = CatalogLinkPropertyField(properties);
+              config.dropAreaClickHandler = CatalogHelper.getInstance().openMarketingSpots;
+              config.maxCardinality = 1;
+              config.linkTypeNames = [CatalogModel.TYPE_MARKETING_SPOT];
+              config.dropAreaText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text');
               config.hideRemove = true;
-              var myCatalogLink:CatalogLinkField = new CatalogLinkField(config);
+              var myCatalogLink:CatalogLinkPropertyField = new CatalogLinkPropertyField(config);
               var containerCfg:FieldContainer = FieldContainer({});
               containerCfg.fieldLabel = properties.label;
               containerCfg.items = [myCatalogLink];
@@ -119,13 +119,12 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
      */
     QuickCreate.addQuickCreateDialogProperty(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, EXTERNAL_ID_PROPERTY,
             function (data:ProcessingData, properties:Object):Component {
-              var config:CatalogLinkField = CatalogLinkField(properties);
-              config.ddGroup = "ContentDD";
-              config.openLinkSources = CatalogHelper.getInstance().openCatalog;
-              config.catalogObjectType = CatalogModel.TYPE_PRODUCT;
-              config.emptyText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Product_Link_empty_text');
+              var config:CatalogLinkPropertyField = CatalogLinkPropertyField(properties);
+              config.maxCardinality = 1;
+              config.linkTypeNames = [CatalogModel.TYPE_PRODUCT];
+              config.dropAreaText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Product_Link_empty_text');
               config.hideRemove = true;
-              var myCatalogLink:CatalogLinkField = new CatalogLinkField(config);
+              var myCatalogLink:CatalogLinkPropertyField = new CatalogLinkPropertyField(config);
               var containerCfg:FieldContainer = FieldContainer({});
               containerCfg.fieldLabel = properties.label;
               containerCfg.items = [myCatalogLink];

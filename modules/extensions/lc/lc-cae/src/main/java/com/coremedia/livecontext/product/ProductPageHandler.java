@@ -7,12 +7,14 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.contentbeans.ProductDetailPage;
-import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +28,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -79,7 +82,8 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   @RequestMapping({URI_PATTERN})
   public ModelAndView handleRequest(@PathVariable(SHOP_NAME_VARIABLE) String shopSegment,
                                     @PathVariable(PRODUCT_PATH_VARIABLE) String seoSegment,
-                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view) {
+                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view,
+                                    HttpServletRequest request) {
     // This handler is only responsible for CAE product links.
     // If the application runs in wcsProductLinks mode, we render native
     // WCS links, and this kind of link cannot occur.
@@ -90,13 +94,14 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     if (StringUtils.isEmpty(seoSegment)) {
       return HandlerHelper.notFound("No product path found");
     }
-    return createLiveContextPage(site, seoSegment, view);
+    return createLiveContextPage(site, seoSegment, view, UserVariantHelper.getUser(request));
   }
 
   @RequestMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView getProducts(@PathVariable(SITE_CHANNEL_ID) CMNavigation context,
-                                  @PathVariable(PRODUCT_SEO_SEGMENT) String productId) {
+                                  @PathVariable(PRODUCT_SEO_SEGMENT) String productId,
+                                  HttpServletRequest request) {
     if (getCatalogService() == null) {
       throw new IllegalStateException("No Catalog Service configured for product "+productId);
     }
@@ -105,7 +110,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
     ModelAndView modelAndView = HandlerHelper.createModelWithView(productInSite, QUICKINFO_VIEW);
 
-    Page page = asPage(context, context);
+    Page page = asPage(context, context, UserVariantHelper.getUser(request));
     modelAndView.addObject("cmpage", page);
     //we need to apply the navigation here, otherwise the template lookup can't decide which context to use
     NavigationLinkSupport.setNavigation(modelAndView, page.getNavigation().getRootNavigation());
@@ -120,7 +125,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
    * In default mode (wcsProductLinks==true) buildLinkFor builds native
    * WCS links which have no handler counterpart in the CAE.
    * In !wcsProductLinks mode buildLinkFor builds CAE links
-   * which are handled by {@link #handleRequest(String, String, String)}.
+   * which are handled by {@link #handleRequest(String, String, String, HttpServletRequest)}.
    */
   @Link(type = ProductInSite.class)
   public Object buildLinkFor(ProductInSite productInSite, String viewName, Map<String, Object> linkParameters, HttpServletRequest request) {
@@ -150,14 +155,15 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   }
 
   @Override
-  protected PageImpl createPageImpl(Object content, Navigation context) {
-    return useContentPagegrid ? super.createPageImpl(content, context): createProductDetailPage(content, context);
+  protected PageImpl createPageImpl(Object content, Navigation context, @Nullable User developer) {
+    return useContentPagegrid ? super.createPageImpl(content, context, developer): createProductDetailPage(content, context, developer);
   }
 
-  private ProductDetailPage createProductDetailPage(Object content, Navigation context) {
+  private ProductDetailPage createProductDetailPage(Object content, Navigation context, User developer) {
     ProductDetailPage page = getBeanFactory().getBean(PDP_PAGE_ID, ProductDetailPage.class);
     page.setContent(content);
     page.setNavigation(context);
+    page.setDeveloper(developer);
     return page;
   }
 
@@ -167,7 +173,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     return getSettingsService().settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, true, site);
   }
 
-  private ModelAndView createLiveContextPage(@Nonnull Site site, @Nonnull String seoSegment, String view) {
+  private ModelAndView createLiveContextPage(@Nonnull Site site, @Nonnull String seoSegment, String view, @Nullable User developer) {
     if (getCatalogService() == null) {
       throw new IllegalStateException("No Catalog Service configured for seo segment \""+seoSegment+"\"");
     }
@@ -176,7 +182,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     Product product = getCatalogService().findProductById(
             getCurrentCommerceIdProvider().formatProductSeoSegment(seoSegment));
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
-    PageImpl page = createPageImpl(productInSite, context);
+    PageImpl page = createPageImpl(productInSite, context, developer);
     page.setTitle(product.getTitle());
     page.setDescription(product.getTitle());
     page.setKeywords(product.getMetaKeywords());

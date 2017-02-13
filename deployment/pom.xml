@@ -4,8 +4,9 @@
 
   <parent>
     <groupId>com.coremedia.blueprint</groupId>
-    <artifactId>blueprint</artifactId>
+    <artifactId>blueprint-parent</artifactId>
     <version>1-SNAPSHOT</version>
+    <relativePath>../blueprint-parent/pom.xml</relativePath>
   </parent>
 
   <artifactId>deployment</artifactId>

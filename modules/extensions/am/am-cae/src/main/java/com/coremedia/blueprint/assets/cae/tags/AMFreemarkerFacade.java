@@ -13,8 +13,6 @@ public class AMFreemarkerFacade {
 
   private SettingsService settingsService;
 
-  private AMMessageKeysFreemarker amMessageKeysFreemarker = new AMMessageKeysFreemarker();
-
   private DownloadPortal downloadPortal;
 
   @Required
@@ -38,9 +36,5 @@ public class AMFreemarkerFacade {
     }
     Content downloadPortalRootDocument = AMUtils.getDownloadPortalRootDocument(settingsService, siteFromRequest);
     return null != downloadPortalRootDocument;
-  }
-
-  public AMMessageKeysFreemarker getAmMessageKeys() {
-    return amMessageKeysFreemarker;
   }
 }

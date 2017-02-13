@@ -8,13 +8,16 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +31,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -39,6 +43,7 @@ import java.util.Set;
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
+import static java.lang.String.format;
 
 /**
  * Handle dynamic product asset requests.
@@ -73,6 +78,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
           "/{" + SEGMENT_PRODUCT_ID + '}' +
           "/{" + SEGMENT_ORIENTATION + '}' +
           "/{" + SEGMENT_TYPES + '}';
+  private static final String DEFAULT_ORIENTATION = "portrait";
+  private static final String DEFAULT_SEGMENT_TYPES = "all";
 
   @RequestMapping(value = DYNAMIC_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleFragment(
@@ -119,7 +126,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
 
       Content rootChannel = site.getSiteRootDocument();
       CMNavigation navigation = getContentBeanFactory().createBeanFor(rootChannel, CMChannel.class);
-      Page page = asPage(navigation, navigation);
+      Page page = asPage(navigation, navigation, UserVariantHelper.getUser(request));
       addPageModel(modelWithView, page);
 
       return modelWithView;
@@ -142,11 +149,9 @@ public class ProductAssetsHandler extends PageHandlerBase {
       if (site != null) {
         Content rootChannel = site.getSiteRootDocument();
         String vanityName = urlPathFormattingHelper.getVanityName(rootChannel);
-        // Todo: toko
-        String categoryId = product.getCategory() != null ? product.getCategory().getExternalTechId() : "42";
-        // Todo: toko
-        String orientation = request.getAttribute(SEGMENT_ORIENTATION) + "";
-        String types = request.getAttribute(SEGMENT_TYPES) + "";
+        String categoryId = getCategoryExternalTechId(product);
+        String orientation = getAttribute(SEGMENT_ORIENTATION, request, DEFAULT_ORIENTATION);
+        String types = getAttribute(SEGMENT_TYPES, request, DEFAULT_SEGMENT_TYPES);
         Map<String, String> paramMap = new HashMap<>(6);
         paramMap.put(SEGMENT_CATEGORY_ID, categoryId);
         paramMap.put(SEGMENT_PRODUCT_ID, product.getExternalTechId());
@@ -158,6 +163,20 @@ public class ProductAssetsHandler extends PageHandlerBase {
       }
     }
     return null;
+  }
+
+  @Nonnull
+  private String getAttribute(@Nonnull  String name, @Nonnull HttpServletRequest request, @Nonnull String defaultValue) {
+    Object orientation = request.getAttribute(name);
+    return orientation instanceof String ? (String) orientation : defaultValue;
+  }
+
+  private String getCategoryExternalTechId(Product product) {
+    Category category = product.getCategory();
+    if (category != null) {
+      return category.getExternalTechId();
+    }
+    throw new CommerceException(format("product '%s' has no category", product));
   }
 
   private Site getSiteByName(String siteName) {

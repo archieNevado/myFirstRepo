@@ -51,7 +51,8 @@ HOW TO STRUCTURE:
     ]]></fx:Script>
 
   <local:items>
-    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_standard_title')}">
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_standard_title')}">
       <editor:items>
         <perso:PersonaMainContainer profileSettingsExpression="{config.bindTo.extendBy('properties.profileSettings')}">
           <perso:items>

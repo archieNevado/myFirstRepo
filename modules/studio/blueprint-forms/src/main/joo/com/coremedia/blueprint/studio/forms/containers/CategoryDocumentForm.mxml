@@ -19,9 +19,9 @@
     public native function CategoryDocumentForm(config:CategoryDocumentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <!-- Taxonomy Editors will be added here-->
-    </editor:items>
+  <editor:items>
+    <!-- Taxonomy Editors will be added here-->
+  </editor:items>
   <editor:layout>
     <layout_VBox align="stretch"/>
   </editor:layout>

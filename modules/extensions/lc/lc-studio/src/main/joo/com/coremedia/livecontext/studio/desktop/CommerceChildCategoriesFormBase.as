@@ -29,7 +29,6 @@ public class CommerceChildCategoriesFormBase extends Container{
   }
 
   override protected function onDestroy():void {
-    super.onDestroy();
     selectChildrenExpression.removeChangeListener(copyChildrenFromCatalog);
     super.onDestroy();
   }

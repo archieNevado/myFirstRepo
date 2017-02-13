@@ -19,24 +19,24 @@
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
 
-    <plugins>
-      <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
-                                     propertyName="queryPubFrom"/>
-    </plugins>
-    <items>
-      <Container layout="hbox">
-        <defaults>
-          <editor:PropertyField bindTo="{config.bindTo}"
-                                forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-        </defaults>
-        <items>
-          <editor:DatePropertyField flex="1"
-                                    propertyName="queryPubFrom"/>
-          <Component width="10"/>
-          <editor:DatePropertyField flex="1"
-                                    propertyName="queryPubTo"/>
-        </items>
-      </Container>
-    </items>
-  
+  <plugins>
+    <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
+                                   propertyName="queryPubFrom"/>
+  </plugins>
+  <items>
+    <Container layout="hbox">
+      <defaults>
+        <editor:PropertyField bindTo="{config.bindTo}"
+                              forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+      </defaults>
+      <items>
+        <editor:DatePropertyField flex="1"
+                                  propertyName="queryPubFrom"/>
+        <Component width="10"/>
+        <editor:DatePropertyField flex="1"
+                                  propertyName="queryPubTo"/>
+      </items>
+    </Container>
+  </items>
+
 </Container>

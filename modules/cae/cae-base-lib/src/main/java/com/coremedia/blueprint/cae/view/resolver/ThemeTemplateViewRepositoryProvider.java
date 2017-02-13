@@ -1,11 +1,12 @@
 package com.coremedia.blueprint.cae.view.resolver;
 
-import com.coremedia.blueprint.base.util.ContentCacheKey;
-import com.coremedia.blueprint.theme.ThemeService;
+import com.coremedia.blueprint.base.util.PairCacheKey;
+import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.cache.Cache;
+import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.user.User;
 import com.coremedia.cap.util.JarBlobResourceLoader;
 import com.coremedia.objectserver.view.ViewRepository;
 import com.coremedia.objectserver.view.resolver.AbstractTemplateViewRepositoryProvider;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +33,7 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
 
   private Cache cache;
 
-  private ContentRepository contentRepository;
+  private CapConnection capConnection;
   private ThemeService themeService;
   private JarBlobResourceLoader jarBlobResourceLoader;
   private boolean useLocalResources = false;
@@ -49,8 +51,8 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
   }
 
   @Required
-  public void setContentRepository(ContentRepository contentRepository) {
-    this.contentRepository = contentRepository;
+  public void setCapConnection(CapConnection capConnection) {
+    this.capConnection = capConnection;
   }
 
   @Required
@@ -67,9 +69,6 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
 
   /**
    * Get the view repository for the given name.
-   * <p>
-   * Implementation restriction: The view repository provides all templates
-   * of the theme, which may include other view repository names.
    *
    * @return A view repository or null if this ViewRepositoryProvider is not responsible
    */
@@ -92,12 +91,12 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
   /**
    * Returns the view repository names of the theme.
    */
-  List<String> viewRepositoryNames(Content theme) {
+  List<String> viewRepositoryNames(Content theme, @Nullable User developer) {
     if (cache!=null) {
-      return cache.get(new ViewRepositoryNamesCacheKey(theme));
+      return cache.get(new ViewRepositoryNamesCacheKey(theme, developer));
     } else {
       LOG.warn("No cache. Ok for development/test, too slow for production.");
-      return viewRepositoryNamesUncached(theme);
+      return viewRepositoryNamesUncached(theme, developer);
     }
   }
 
@@ -116,20 +115,19 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
     if (!isThemeViewRepository(themeViewRepositoryName)) {
       throw new IllegalArgumentException(themeViewRepositoryName + " is not a theme backed view repository.");
     }
-    ThemeViewRepositoryName tvrn = new ThemeViewRepositoryName(themeViewRepositoryName);
-    Content theme = tvrn.theme();
+    ThemeViewRepositoryName tvrn = new ThemeViewRepositoryName(capConnection, themeViewRepositoryName);
     if (cache!=null) {
-      return cache.get(new TemplateLocationsCacheKey(theme));
+      return cache.get(new TemplateLocationsCacheKey(tvrn.theme(), tvrn.developer()));
     } else {
       LOG.warn("No cache. Ok for development/test, too slow for production.");
-      return templateLocationsUncached(theme);
+      return templateLocationsUncached(tvrn.theme(), tvrn.developer());
     }
   }
 
-  private List<String> viewRepositoryNamesUncached(Content theme) {
+  private List<String> viewRepositoryNamesUncached(Content theme, @Nullable User developer) {
     List<String> locations = new ArrayList<>();
-    for (Content templateSet : themeService.templateSets(theme)) {
-      locations.addAll(viewRepositoryNamesFromJar(templateSet).stream().map(vrn -> viewRepositoryName(theme, vrn)).collect(toList()));
+    for (Content templateSet : themeService.templateSets(theme, developer)) {
+      locations.addAll(viewRepositoryNamesFromJar(templateSet).stream().map(vrn -> viewRepositoryName(theme, developer, vrn)).collect(toList()));
     }
     if (!locations.isEmpty()) {
       return locations;
@@ -139,20 +137,26 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
     // The theme does not bring its own templates but assumes a certain
     // view repository to exist.  Leave the name as is, it won't be served by
     // #getViewRepository but hopefully by some other ViewRepositoryProvider.
-    String legacyVRN = themeService.viewRepositoryName(theme);
+    String legacyVRN = themeService.viewRepositoryName(theme, developer);
     return legacyVRN==null ? Collections.emptyList() : Collections.singletonList(legacyVRN);
   }
 
-  private String viewRepositoryName(Content theme, String vrn) {
+  private String viewRepositoryName(Content theme, @Nullable User developer, String vrn) {
     if (useLocalResources) {
       // suitable to match tomcat-contexts.xml#Resources#/=${project.basedir}/../../frontend/target/resources
       // e.g. "corporate"
       return vrn;
     } else {
       // suitable to match #templateLocations(String themeViewRepositoryName)
-      // e.g. "theme:1234/corporate"
+      // e.g. "theme::1234/corporate" or "theme:10:1234/corporate"
       int themeId = IdHelper.parseContentId(theme.getId());
-      return THEME_VIEW_REPOSITORY_NAME_PREFIX + themeId + "/" + vrn;
+      StringBuilder sb = new StringBuilder(THEME_VIEW_REPOSITORY_NAME_PREFIX);
+      if (developer != null) {
+        sb.append(IdHelper.parseUserId(developer.getId()));
+      }
+      sb.append(":");
+      sb.append(themeId).append("/").append(vrn);
+      return sb.toString();
     }
   }
 
@@ -178,9 +182,9 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
     return jarBlobResourceLoader.getChildren(location, true, false, true);
   }
 
-  private List<String> templateLocationsUncached(Content theme) {
+  private List<String> templateLocationsUncached(Content theme, @Nullable User developer) {
     List<String> locations = new ArrayList<>();
-    for (Content templateSet : themeService.templateSets(theme)) {
+    for (Content templateSet : themeService.templateSets(theme, developer)) {
       locations.addAll(templatesRoots(templateSet));
     }
     return locations;
@@ -195,15 +199,28 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
 
   // --- inner classes ----------------------------------------------
 
-  private class ThemeViewRepositoryName {
+  @VisibleForTesting
+  static class ThemeViewRepositoryName {
+    private CapConnection capConnection;
+
+    int developerId;
     int themeId;
     String viewRepositoryName;
 
-    ThemeViewRepositoryName(String themeViewRepositoryName) {
+    /**
+     * Parse a themeViewRepositoryName
+     * <p>
+     * E.g. "theme::1234/corporate" or "theme:10:1234/corporate"
+     */
+    ThemeViewRepositoryName(CapConnection capConnection, String themeViewRepositoryName) {
       try {
+        this.capConnection = capConnection;
+        int colon = themeViewRepositoryName.indexOf(':', THEME_VIEW_REPOSITORY_NAME_PREFIX.length());
         int slash = themeViewRepositoryName.indexOf('/');
-        String idSubstring = themeViewRepositoryName.substring(THEME_VIEW_REPOSITORY_NAME_PREFIX.length(), slash);
-        themeId = Integer.parseInt(idSubstring);
+        String developerIdSubstring = themeViewRepositoryName.substring(THEME_VIEW_REPOSITORY_NAME_PREFIX.length(), colon);
+        String themeIdSubstring = themeViewRepositoryName.substring(colon+1, slash);
+        developerId = developerIdSubstring.isEmpty() ? -1 : Integer.parseInt(developerIdSubstring);
+        themeId = Integer.parseInt(themeIdSubstring);
         viewRepositoryName = themeViewRepositoryName.substring(slash+1);
       } catch (NumberFormatException e) {
         throw new IllegalArgumentException("Cannot parse theme view repository name " + viewRepositoryName, e);
@@ -211,29 +228,46 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
     }
 
     Content theme() {
-      return contentRepository.getContent(IdHelper.formatContentId(themeId));
+      return capConnection.getContentRepository().getContent(IdHelper.formatContentId(themeId));
+    }
+
+    @Nullable
+    User developer() {
+      if (developerId == -1) {
+        return null;
+      }
+      if (capConnection.getUserRepository() == null) {
+        // Alternatively, we could return null here for robustness.
+        // However, this code is not supposed to be reachable if there is no
+        // UserRepository.  If it happens, we'd better get aware and have a look.
+        throw new IllegalStateException("No user repository");
+      }
+      return capConnection.getUserRepository().getUser(IdHelper.formatUserId(developerId));
     }
   }
 
-  private class TemplateLocationsCacheKey extends ContentCacheKey<List<String>> {
-    TemplateLocationsCacheKey(Content content) {
-      super(content);
+
+  // --- caching ----------------------------------------------------
+
+  private class TemplateLocationsCacheKey extends PairCacheKey<Content, User, List<String>> {
+    TemplateLocationsCacheKey(Content theme, User developer) {
+      super(theme, developer);
     }
 
     @Override
-    public List<String> evaluate(Cache cache) {
-      return templateLocationsUncached(getContent());
+    public List<String> evaluate(Cache cache, Content theme, User developer) {
+      return templateLocationsUncached(theme, developer);
     }
   }
 
-  private class ViewRepositoryNamesCacheKey extends ContentCacheKey<List<String>> {
-    ViewRepositoryNamesCacheKey(Content content) {
-      super(content);
+  private class ViewRepositoryNamesCacheKey extends PairCacheKey<Content, User, List<String>> {
+    ViewRepositoryNamesCacheKey(Content theme, User developer) {
+      super(theme, developer);
     }
 
     @Override
-    public List<String> evaluate(Cache cache) {
-      return viewRepositoryNamesUncached(getContent());
+    public List<String> evaluate(Cache cache, Content theme, User developer) {
+      return viewRepositoryNamesUncached(theme, developer);
     }
   }
 }

@@ -3,7 +3,7 @@
 This recipe installs and configures the CoreMedia Blueprint Live CAE Feeder.
 #>
 =end
-
+include_recipe 'blueprint-tomcat::_base'
 service_name = 'caefeeder-live'
 cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
 

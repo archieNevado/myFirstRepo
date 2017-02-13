@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.web;
 
 import com.coremedia.blueprint.cae.exception.InvalidContentException;
+import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -26,19 +27,27 @@ public class ContentValidityInterceptor extends HandlerInterceptorAdapter {
 
     if (modelAndView != null) {
       Object self = HandlerHelper.getRootModel(modelAndView);
-      if ((self == null) || !(self instanceof Page)) {
-        return;
+      if (self instanceof Page) {
+        Page page = (Page) self;
+
+        boolean contentValidity = validationService.validate(page.getContent());
+        boolean pageValidity = contentValidity && validationService.validate(page.getNavigation());
+
+        if (!pageValidity) {
+          final String msg = "Trying to render invalid page, returning " + SC_NOT_FOUND + ".  Page=" + page;
+          LOG.debug(msg);
+          throw new InvalidContentException(msg, page);
+        }
       }
-
-      Page page = (Page) self;
-
-      boolean contentValidity = validationService.validate(page.getContent());
-      boolean pageValidity = contentValidity && validationService.validate(page.getNavigation());
-
-      if (!pageValidity) {
-        final String msg = "Trying to render invalid content, returning " + SC_NOT_FOUND + ".  Page=" + page;
-        LOG.debug(msg);
-        throw new InvalidContentException(msg, page);
+      // Todo: it should be test to CMHasContexts because that harmonizes with the ResourceBundleInterceptor
+      // that can resolve a resource bundle from all "selfs" that has an context, the reason why we limit
+      // this to CHChannel is why we fear the consequences to other parts of the blueprint
+      else if (self instanceof CMChannel) {
+        if (!validationService.validate(self)) {
+          final String msg = "Trying to render invalid content, returning " + SC_NOT_FOUND + ".  Content=" + self;
+          LOG.debug(msg);
+          throw new InvalidContentException(msg, self);
+        }
       }
     }
   }

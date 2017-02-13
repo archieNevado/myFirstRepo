@@ -4,6 +4,7 @@ import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.fragment.resolver.LinkableAndNavigation;
 import com.coremedia.objectserver.web.HttpError;
@@ -131,7 +132,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
 
     ExternalRefFragmentHandler testlingSpied = Mockito.spy(getTestling());
     testlingSpied.createModelAndView(params, request);
-    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString());
+    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString(), (User) anyObject());
   }
 
   @Test
@@ -145,7 +146,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
 
     ExternalRefFragmentHandler testlingSpied = Mockito.spy(getTestling());
     testlingSpied.createModelAndView(params, request);
-    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString());
+    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString(), (User) anyObject());
   }
 
   @Test
@@ -156,7 +157,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
     when(contentBeanFactory.createBeanFor(linkable, Linkable.class)).thenReturn(linkableBean);
     when(contentBeanFactory.createBeanFor(rootChannel, Navigation.class)).thenReturn(channelBean);
 
-    ModelAndView result = getTestling().createModelAndViewForLinkable(rootChannel, linkable, VIEW);
+    ModelAndView result = getTestling().createModelAndViewForLinkable(rootChannel, linkable, VIEW, null);
     assertNotNull(result);
   }
 

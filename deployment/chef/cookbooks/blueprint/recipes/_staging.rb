@@ -15,9 +15,9 @@ node.default['blueprint']['webapps']['master-live-server']['application.properti
 node.default['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm_master'
 node.default['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.dbProperties'] = 'corem/mysql'
 
-node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.driver'] = node['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.driver']
-node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.url'] = node['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.url']
-node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.dbProperties'] = node['blueprint']['webapps']['master-live-server']['application.properties']['sql.store.dbProperties']
+node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.driver'] = node['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.driver']
+node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.url'] = node['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.url']
+node.default['blueprint']['webapps']['workflow-server']['application.properties']['sql.store.dbProperties'] = node['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.dbProperties']
 
 node.default['blueprint']['webapps']['replication-live-server']['application.properties']['sql.store.driver'] = 'com.mysql.jdbc.Driver'
 node.default['blueprint']['webapps']['replication-live-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm_replication'

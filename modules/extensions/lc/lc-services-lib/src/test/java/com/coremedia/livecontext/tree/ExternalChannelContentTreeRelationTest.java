@@ -23,6 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -83,7 +84,7 @@ public class ExternalChannelContentTreeRelationTest {
   @Before
   public void setup() {
     BaseCommerceConnection commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(commerceConnection);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
     initContentMock();
     initCategoryTreeMock();

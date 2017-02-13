@@ -20,6 +20,7 @@ import mx.resources.ResourceManager;
 [ResourceBundle('com.coremedia.icons.CoreIcons')]
 public class TaxonomyRenderer {
 
+  // Makes sense to extract the BEM building to a new utility class; see CMS-7947
   public static const TAXONOMY_BLOCK:BEMBlock = new BEMBlock("cm-taxonomy-node");
   public static const TAXONOMY_ELEMENT_BOX:BEMElement = TAXONOMY_BLOCK.createElement("box");
   public static const TAXONOMY_ELEMENT_NAME:BEMElement = TAXONOMY_BLOCK.createElement("name");

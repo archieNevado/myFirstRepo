@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-     A property field rendering checkboxes for a list of strings binding to a StringListProperty inside a Struct.
-   -->
+<!---
+ A property field rendering checkboxes for a list of strings binding to a StringListProperty inside a Struct.
+-->
 <local:StringListCheckboxPropertyFieldBase
-                xmlns:fx="http://ns.adobe.com/mxml/2009"
-                xmlns:local="com.coremedia.blueprint.assets.studio.forms.*"
-                xmlns:exml="http://www.jangaroo.net/exml/0.8"
-                xmlns="exml:ext.config"
-                xmlns:ui="exml:com.coremedia.ui.config"
-                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.blueprint.assets.studio.forms.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:am="exml:com.coremedia.blueprint.assets.studio.config"
         labelSeparator=""
         labelAlign="top">
@@ -28,26 +28,26 @@
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The name of the struct property.
-     -->
+    <!---
+     The name of the struct property.
+    -->
     <fx:String id="structName"/>
 
-    <!--- 
-       The name of the property inside the struct.
-     -->
+    <!---
+     The name of the property inside the struct.
+    -->
     <fx:String id="propertyName"/>
 
     <fx:Boolean id="hideIssues"/>
   </fx:Declarations>
 
-    <local:plugins>
-      <editor:PropertyFieldPlugin propertyName="{config.structName + '.' + config.propertyName}"/>
-      <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
-                                     propertyName="{config.structName + '.' + config.propertyName}"/>
-    </local:plugins>
+  <local:plugins>
+    <editor:PropertyFieldPlugin propertyName="{config.structName + '.' + config.propertyName}"/>
+    <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
+                                   propertyName="{config.structName + '.' + config.propertyName}"/>
+  </local:plugins>
 
-    <local:items>
+  <local:items>
     <ui:StatefulCheckboxGroup itemId="checkboxGroup">
       <ui:layout>
         <layout_VBox/>
@@ -59,14 +59,14 @@
                 bidirectional="{true}"
                 transformer="{transformer}"
                 reverseTransformer="{reverseTransformer}"/>
-          <ui:BindItemsPlugin valueExpression="{ValueExpressionFactory.createFromFunction(computeCheckboxConfigs)}"/>
+        <ui:BindItemsPlugin valueExpression="{ValueExpressionFactory.createFromFunction(computeCheckboxConfigs)}"/>
         <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
                                  propertyName="{config.structName + '.' + config.propertyName}"/>
         <editor:BindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                   bindTo="{config.bindTo}"/>
       </ui:plugins>
     </ui:StatefulCheckboxGroup>
-    </local:items>
+  </local:items>
   <local:layout>
     <layout_VBox/>
   </local:layout>

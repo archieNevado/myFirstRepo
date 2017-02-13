@@ -11,12 +11,12 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.elastic.social.common.ProductInSiteConverter.ID;
 import static com.coremedia.livecontext.elastic.social.common.ProductInSiteConverter.SITE_ID;
@@ -31,9 +31,6 @@ public class ProductInSiteConverterTest {
   private String productId = "1234";
   private String productReferenceId = "vendor:///catalog/product/" + productId;
   private String siteId = "5678";
-
-  @InjectMocks
-  private ProductInSiteConverter converter = new ProductInSiteConverter();
 
   @Mock
   private Product product;
@@ -52,11 +49,13 @@ public class ProductInSiteConverterTest {
 
   private BaseCommerceConnection commerceConnection;
 
+  private ProductInSiteConverter converter;
+
   @Before
   public void setup() {
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
 
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(commerceConnection);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
     commerceConnection.getStoreContext().put("site", siteId);
     when(commerceConnection.getCatalogService().findProductById(anyString())).thenReturn(product);
@@ -71,6 +70,8 @@ public class ProductInSiteConverterTest {
     when(sitesService.getSite(siteId)).thenReturn(site);
 
     when(site.getId()).thenReturn(siteId);
+
+    converter = new ProductInSiteConverter(sitesService, commerceConnectionInitializer);
   }
 
   @Test

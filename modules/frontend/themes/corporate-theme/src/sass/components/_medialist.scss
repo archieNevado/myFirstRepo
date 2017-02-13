@@ -78,8 +78,7 @@ Contains styling definitions for all content types as cm-medialist.
     max-width: 60%; // make play-button scale able and make sure it is not larger than the image
 
     @include breakpoint(sm-and-up) {
-      transform: translate(-52%, -52%);
+      transform: translate(52%, 52%);
     }
   }
-
 }

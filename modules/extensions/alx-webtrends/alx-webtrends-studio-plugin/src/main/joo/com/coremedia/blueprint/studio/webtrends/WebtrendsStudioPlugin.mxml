@@ -120,10 +120,12 @@
     </alx:AnalyticsDeepLinkButtonContainer>
   </editor:rules>
   <editor:configuration>
-    <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                         source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.webtrends.WebtrendsStudioPluginContentTypes')}"/>
-    <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
-                                         source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.webtrends.WebtrendsStudioPlugin')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.webtrends.WebtrendsStudioPluginContentTypes')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.webtrends.WebtrendsStudioPlugin')}"/>
     <alx:AnalyticsProvider providerName="webtrends"
                            localizedProviderName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.webtrends.WebtrendsStudioPlugin', 'webtrends_service_provider')}"/>
   </editor:configuration>

@@ -51,7 +51,7 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
                                    @RequestParam(value = "title", required = false) String title,
                                    @RequestParam(value = "rating", required = false) Integer rating,
                                    HttpServletRequest request ) {
-    return handleCreateReview(SiteHelper.getSiteFromRequest(request), contextId, targetId, text, title, rating);
+    return handleCreateReview(contextId, targetId, text, title, rating, request);
   }
 
   // ---------------------- building links ---------------------------------------------------------------------

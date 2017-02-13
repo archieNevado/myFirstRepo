@@ -17,18 +17,18 @@
     ]]></fx:Script>
 
 
-    <editor:items>
-      <Container>
-        <items>
-          <editor:PropertyFieldGroup bindTo="{config.bindTo}"
-                                     header="{false}"
-                                     itemId="propertyFieldGroup">
-            <editor:items>
+  <editor:items>
+    <Container>
+      <items>
+        <editor:PropertyFieldGroup bindTo="{config.bindTo}"
+                                   header="{false}"
+                                   itemId="propertyFieldGroup">
+          <editor:items>
 
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </items>
-      </Container>
-    </editor:items>
-  
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </items>
+    </Container>
+  </editor:items>
+
 </editor:DocumentForm>

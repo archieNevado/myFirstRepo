@@ -10,6 +10,8 @@ import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
@@ -17,6 +19,7 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -29,6 +32,8 @@ import static com.google.common.collect.Sets.newHashSet;
  * The difference is only accessible before the write operation.
  */
 public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBase {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ContentWriteInterceptorBase.class);
 
   @VisibleForTesting
   static final String STRUCT_PROPERTY_NAME = "localSettings";
@@ -57,11 +62,16 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
 
     Set<String> references = getInvalidReferences(content, localSettings);
 
-    CommerceConnection commerceConnection = commerceConnectionSupplier.getCommerceConnectionForContent(content);
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(content);
+
+    if (!commerceConnection.isPresent()) {
+      LOG.debug("Commerce connection not available, will not invalidate references.");
+      return;
+    }
 
     //we delegate the invaliations to the write post processor
     //as the write interceptor has too old sequence number
-    commerceCacheInvalidationSource.invalidateReferences(references, commerceConnection);
+    commerceCacheInvalidationSource.invalidateReferences(references, commerceConnection.get());
   }
 
   @Nonnull

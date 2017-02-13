@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -73,8 +75,16 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
     StoreContext storeContext;
 
     try {
-      storeContext = commerceConnectionInitializer.getCommerceConnectionForSite(site).getStoreContext();
-    } catch (CommerceException ignored) {
+      Optional<CommerceConnection> commerceConnection = commerceConnectionInitializer.findConnectionForSite(site);
+
+      if (!commerceConnection.isPresent()) {
+        LOG.debug("Site '{}' has no commerce connection.", site.getName());
+        return false;
+      }
+
+      storeContext = commerceConnection.get().getStoreContext();
+    } catch (CommerceException e) {
+      LOG.debug("Could not retrieve store context for site '{}'.", site.getName(), e);
       return false;
     }
 

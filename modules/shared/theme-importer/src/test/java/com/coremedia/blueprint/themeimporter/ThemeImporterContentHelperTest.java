@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class ThemeImporterContentHelperTest {
-  private ThemeImporterContentHelper testling = new ThemeImporterContentHelper(null);
+  private ThemeImporterContentHelper testling = new ThemeImporterContentHelper(null, null);
 
 
   // --- property parsing -------------------------------------------

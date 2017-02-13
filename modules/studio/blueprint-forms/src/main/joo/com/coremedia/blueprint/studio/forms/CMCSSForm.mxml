@@ -16,35 +16,37 @@
     public native function CMCSSForm(config:CMCSSForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup itemId="cmCssCodeForm"
-                                     expandOnValues="dataUrl,code"
-                                     title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMCSS_code_text')}">
-            <editor:items>
-              <editor:StringPropertyField propertyName="dataUrl"/>
-              <editor:RichTextPropertyField propertyName="code"/>
-              <editor:BooleanPropertyField bindTo="{config.bindTo}"
-                                           propertyName="disableCompress"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMCSS_include_text')}"
-                                     expandOnValues="include"
-                                     itemId="cmCssIncludeForm"
-                                     collapsed="true">
-            <editor:items>
-              <editor:LinkListPropertyField propertyName="include" hideLabel="true"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:CollapsibleStringPropertyForm itemId="cmCssIeExpressionForm"
-                                                 expandOnValues="ieExpression"
-                                                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAbstractCode_ieExpression_text')}"
-                                                 collapsed="true"
-                                                 propertyName="ieExpression"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MetaDataWithoutSettingsForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup itemId="cmCssCodeForm"
+                                   expandOnValues="dataUrl,code"
+                                   title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMCSS_code_text')}">
+          <editor:items>
+            <editor:StringPropertyField propertyName="dataUrl"/>
+            <editor:RichTextPropertyField propertyName="code"/>
+            <editor:BooleanPropertyField bindTo="{config.bindTo}"
+                                         propertyName="disableCompress"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMCSS_include_text')}"
+                expandOnValues="include"
+                itemId="cmCssIncludeForm"
+                collapsed="true">
+          <editor:items>
+            <editor:LinkListPropertyField propertyName="include" hideLabel="true"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:CollapsibleStringPropertyForm itemId="cmCssIeExpressionForm"
+                                               expandOnValues="ieExpression"
+                                               title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAbstractCode_ieExpression_text')}"
+                                               collapsed="true"
+                                               propertyName="ieExpression"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MetaDataWithoutSettingsForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

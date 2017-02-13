@@ -67,7 +67,7 @@ public class CommerceCatalogObjectsSelectFormBase extends FieldContainer{
   }
 
   internal function getHandleSelectFunction(config:CommerceCatalogObjectsSelectForm):Function {
-    return function (selector:CommerceObjectSelector, startValue:String, newValue:String):void {
+    return function (selector:CommerceObjectSelector, newValue:String, startValue:String):void {
       if(!newValue) return;
       CatalogHelper.addCatalogObject(getContentExpression(), config.catalogObjectIdListName, newValue, config.catalogObjectIdsExpression);
       selector.clearValue();

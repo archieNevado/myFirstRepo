@@ -17,19 +17,21 @@
     public native function EditorPreferencesForm(config:EditorPreferencesForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSettings_settings_text')}"
-                                     itemId="editorPreferencesDataForm">
-            <editor:items>
-              <editor:StructPropertyField hideLabel="true"
-                                          propertyName="data"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MetaDataWithoutSettingsForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSettings_settings_text')}"
+                itemId="editorPreferencesDataForm">
+          <editor:items>
+            <editor:StructPropertyField hideLabel="true"
+                                        propertyName="data"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MetaDataWithoutSettingsForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

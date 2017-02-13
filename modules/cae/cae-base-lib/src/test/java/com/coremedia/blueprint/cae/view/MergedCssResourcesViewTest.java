@@ -88,7 +88,7 @@ public class MergedCssResourcesViewTest {
   @Before
   public void setup() {
     CMNavigation navigation = contentTestHelper.getContentBean(NAVIGATION_ID);
-    codeResources = new CodeResourcesCacheKey(navigation.getContent(), "css", false, treeRelation).evaluate(null);
+    codeResources = new CodeResourcesCacheKey(navigation.getContent(), "css", false, treeRelation, null).evaluate(null);
   }
 
   @Test

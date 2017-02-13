@@ -27,36 +27,36 @@
     public native function CatalogRepositoryThumbnails(config:CatalogRepositoryThumbnails = null);
     ]]></fx:Script>
 
-    <local:items>
-      <Panel itemId="{THUMB_DATA_VIEW_PANEL_ITEM_ID}"
-             bodyBorder="false"
-             scrollable="true"
-             region="center"
-             ui="{PanelSkin.EMBEDDED.getSkin()}"
-             layout="anchor">
-        <listeners>
-          <fx:Object afterrender="{disableBrowserContextMenu}"/>
-        </listeners>
-        <header>
-          <Header height="24px"/>
-        </header>
-        <items>
-          <ec:CatalogThumbDataView itemId="{THUMB_DATA_VIEW_ITEM_ID}"
-                                   bindTo="{getCatalogItemsValueExpression()}"
-                                   emptyText="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_empty_text')}"
-                                   selectedItemsValueExpression="{getSelectedItemsValueExpression()}"
-                                   initialViewLimit="50"
-                                   viewLimitIncrement="100">
-            <ec:plugins exml:mode="append">
-              <ui:ContextMenuPlugin>
-                <ui:contextMenu>
-                  <ec:CatalogRepositoryContextMenu selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
-                </ui:contextMenu>
-              </ui:ContextMenuPlugin>
-            </ec:plugins>
-          </ec:CatalogThumbDataView>
-        </items>
-      </Panel>
-    </local:items>
-  
+  <local:items>
+    <Panel itemId="{THUMB_DATA_VIEW_PANEL_ITEM_ID}"
+           bodyBorder="false"
+           scrollable="true"
+           region="center"
+           ui="{PanelSkin.EMBEDDED.getSkin()}"
+           layout="anchor">
+      <listeners>
+        <fx:Object afterrender="{disableBrowserContextMenu}"/>
+      </listeners>
+      <header>
+        <Header height="24px"/>
+      </header>
+      <items>
+        <ec:CatalogThumbDataView itemId="{THUMB_DATA_VIEW_ITEM_ID}"
+                                 bindTo="{getCatalogItemsValueExpression()}"
+                                 emptyText="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_empty_text')}"
+                                 selectedItemsValueExpression="{getSelectedItemsValueExpression()}"
+                                 initialViewLimit="50"
+                                 viewLimitIncrement="100">
+          <ec:plugins exml:mode="append">
+            <ui:ContextMenuPlugin>
+              <ui:contextMenu>
+                <ec:CatalogRepositoryContextMenu selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
+              </ui:contextMenu>
+            </ui:ContextMenuPlugin>
+          </ec:plugins>
+        </ec:CatalogThumbDataView>
+      </items>
+    </Panel>
+  </local:items>
+
 </local:CatalogRepositoryThumbnailsBase>

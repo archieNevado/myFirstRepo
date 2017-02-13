@@ -1,10 +1,13 @@
 package com.coremedia.blueprint.coderesources;
 
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.util.DeveloperPaths;
+import com.coremedia.cap.user.User;
 import com.coremedia.xml.Markup;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Assembles the code resources (CSS or JS) of a channel.
@@ -37,6 +41,8 @@ class CodeResourcesImpl implements CodeResources {
   private static final String DIGEST_ALGORITHM = "MD5";
 
   private final boolean developerMode;
+  private final DeveloperPaths development;
+
   private final CodeCarriers codeCarriers;
   private final String codePropertyName;
 
@@ -45,6 +51,9 @@ class CodeResourcesImpl implements CodeResources {
   private List<Content> mergeableResources = new ArrayList<>();
   private List<Content> ieExcludes = new ArrayList<>();
   private List<Content> externalLinks = new ArrayList<>();
+
+
+  // --- construct and configure ------------------------------------
 
   /**
    * Visible only for {@link CodeResourcesCacheKey}
@@ -55,20 +64,19 @@ class CodeResourcesImpl implements CodeResources {
    * The codePropertyName refers to the CMNavigation content type and
    * determines the code type (CSS or JavaScript) for this instance
    */
-  CodeResourcesImpl(CodeCarriers codeCarriers, String codePropertyName, boolean developerMode) {
+  CodeResourcesImpl(CodeCarriers codeCarriers, String codePropertyName, boolean developerMode, @Nullable User developer) {
     checkCodePropertyName(codePropertyName);
     this.codeCarriers = codeCarriers;
     this.codePropertyName = codePropertyName;
     this.developerMode = developerMode;
+    development = new DeveloperPaths(developer);
     MessageDigest digest = createDigest();
     transitiveClosure(getCodeResourcsFromContext(), digest, new HashSet<>());
     contentHash = String.format("%01x", new BigInteger(1, digest.digest()));
   }
 
-  @Override
-  public String toString() {
-    return getClass().getName() + "[" + codePropertyName + ", " + codeCarriers + "]";
-  }
+
+  // --- features ---------------------------------------------------
 
   Content getChannelWithTheme() {
     return codeCarriers.getThemeCarrier();
@@ -80,19 +88,6 @@ class CodeResourcesImpl implements CodeResources {
 
   String getETag() {
     return contentHash;
-  }
-
-  /**
-   * Get a CodeResourcesModel for the given html mode (head, body or ie).
-   * <p>
-   * The code type (CSS or JavaScript) of the CodeResourcesModel is derived
-   * by this CodeResources' codePropertyName and thus specific for the
-   * CMNavigation content type.
-   */
-  @Override
-  public CodeResourcesModel getModel(String htmlMode) {
-    String codeType = CMNAVIGATION_CSS.equals(codePropertyName) ? CodeResourcesModel.TYPE_CSS : CodeResourcesModel.TYPE_JS;
-    return new CodeResourcesModelImpl(codeType, htmlMode, this);
   }
 
   List<Content> getMergeableResources() {
@@ -111,19 +106,66 @@ class CodeResourcesImpl implements CodeResources {
     return developerMode;
   }
 
+
+  // --- CodeResources ----------------------------------------------
+
+  /**
+   * Get a CodeResourcesModel for the given html mode (head, body or ie).
+   * <p>
+   * The code type (CSS or JavaScript) of the CodeResourcesModel is derived
+   * by this CodeResources' codePropertyName and thus specific for the
+   * CMNavigation content type.
+   */
+  @Override
+  public CodeResourcesModel getModel(String htmlMode) {
+    String codeType = CMNAVIGATION_CSS.equals(codePropertyName) ? CodeResourcesModel.TYPE_CSS : CodeResourcesModel.TYPE_JS;
+    return new CodeResourcesModelImpl(codeType, htmlMode, this);
+  }
+
+
+  // --- Object -----------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getName() + "[" + codePropertyName + ", " + codeCarriers + "]";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CodeResourcesImpl that = (CodeResourcesImpl) o;
+    return developerMode == that.developerMode &&
+            Objects.equals(development, that.development) &&
+            Objects.equals(codeCarriers, that.codeCarriers) &&
+            Objects.equals(codePropertyName, that.codePropertyName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(developerMode, development, codeCarriers, codePropertyName);
+  }
+
+
+  // --- internal ---------------------------------------------------
+
   @Nonnull
   private List<Content> getCssIncludingThemes() {
     List<Content> result = new ArrayList<>();
 
     Content themeCarrier = codeCarriers.getThemeCarrier();
-    Content theme = themeCarrier!=null ? themeCarrier.getLink(CMNAVIGATION_THEME) : null;
+    Content theme = themeCarrier!=null ? development.substitute(themeCarrier.getLink(CMNAVIGATION_THEME)) : null;
     if (theme != null) {
-      result.addAll(theme.getLinks(CMTHEME_CSS));
+      result.addAll(development.substitute(theme.getLinks(CMTHEME_CSS)));
     }
 
     Content cssCarrier = codeCarriers.getCodeCarrier();
     if (cssCarrier!=null) {
-      result.addAll(cssCarrier.getLinks(CMNAVIGATION_CSS));
+      result.addAll(development.substitute(cssCarrier.getLinks(CMNAVIGATION_CSS)));
     }
 
     return result;
@@ -134,15 +176,15 @@ class CodeResourcesImpl implements CodeResources {
     List<Content> result = new ArrayList<>();
 
     Content themeCarrier = codeCarriers.getThemeCarrier();
-    Content theme = themeCarrier!=null ? themeCarrier.getLink(CMNAVIGATION_THEME) : null;
+    Content theme = themeCarrier!=null ? development.substitute(themeCarrier.getLink(CMNAVIGATION_THEME)) : null;
     if (theme != null) {
-      result.addAll(theme.getLinks(CMTHEME_JAVASCRIPTLIBS));
-      result.addAll(theme.getLinks(CMTHEME_JAVASCRIPTS));
+      result.addAll(development.substitute(theme.getLinks(CMTHEME_JAVASCRIPTLIBS)));
+      result.addAll(development.substitute(theme.getLinks(CMTHEME_JAVASCRIPTS)));
     }
 
     Content jsCarrier = codeCarriers.getCodeCarrier();
     if (jsCarrier!=null) {
-      result.addAll(jsCarrier.getLinks(CMNAVIGATION_JAVASCRIPT));
+      result.addAll(development.substitute(jsCarrier.getLinks(CMNAVIGATION_JAVASCRIPT)));
     }
 
     return result;
@@ -164,14 +206,16 @@ class CodeResourcesImpl implements CodeResources {
   /**
    * Compute a filtered lists of CMAbstractCode codes for the given
    * list of codes and their CMAbstractCode#getInclude includes.
+   *
+   * @param devSubstitutedCodes already devSubstituted codes
    */
-  private void transitiveClosure(@Nonnull List<Content> codes, MessageDigest digest, Collection<Content> visited) {
-    for (Content code : codes) {
+  private void transitiveClosure(@Nonnull Collection<Content> devSubstitutedCodes, MessageDigest digest, Collection<Content> visited) {
+    for (Content code : devSubstitutedCodes) {
       //only traverse code if not already traversed.
       if (!visited.contains(code)) {
         visited.add(code);
         // get all included contents as well.
-        transitiveClosure(code.getLinks(CMABSTRACTCODE_INCLUDE), digest, visited);
+        transitiveClosure(development.substitute(code.getLinks(CMABSTRACTCODE_INCLUDE)), digest, visited);
         processCode(code, digest);
       }
     }

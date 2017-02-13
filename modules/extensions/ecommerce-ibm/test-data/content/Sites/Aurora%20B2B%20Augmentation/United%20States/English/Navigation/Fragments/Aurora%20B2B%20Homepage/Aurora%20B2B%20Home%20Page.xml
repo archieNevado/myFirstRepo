@@ -11,9 +11,6 @@
 <LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../../../Themes/aurora/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/aurora/vendor/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../../../Pictures/Site-Wide/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Pictures/Site-Wide/Picture%20Missing%20Product%20Picture"/>
 <StringProperty Name="shopNow">disabled</StringProperty>
-<StringListProperty Name="viewRepositoryNames">
-<String>lc-es-freemarker</String>
-</StringListProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
@@ -49,7 +46,6 @@
 <link href="../../../Augmentation/Aurora%20B2B%20Catalog%20Root.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/Aurora%20B2B%20Catalog%20Root"/>
 <link href="../../Microsites/Microsite%20Root%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Microsites/Microsite%20Root%20Page"/>
 <link href="../Augmented%20Pages/Augmented%20Pages%20Root%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Augmented%20Pages/Augmented%20Pages%20Root%20Page"/>
-<link href="Decoration%20Newslecdae9e8a.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20B2B%20Homepage/Decoration%20Newsletter/Decoration%20Newsletter"/>
 </children>
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>

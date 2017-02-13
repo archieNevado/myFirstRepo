@@ -1,6 +1,7 @@
 package com.coremedia.lc.studio.lib.validators;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
@@ -111,9 +112,9 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
 
     CommerceConnection commerceConnection;
     try {
-      commerceConnection = commerceConnectionInitializer.getCommerceConnectionForSite(site);
-    } catch (CommerceException ignored) {
-      LOG.debug("StoreContext not found for content: {}", content.getPath());
+      commerceConnection = getCommerceConnection(site);
+    } catch (CommerceException e) {
+      LOG.debug("StoreContext not found for content: {}", content.getPath(), e);
       storeContextNotFound(issues, propertyValue);
       return;
     }
@@ -157,6 +158,13 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
       LOG.debug("Catalog could not be accessed: {}", propertyValue, e);
       catalogNotAvailable(issues, propertyValue);
     }
+  }
+
+  @Nonnull
+  private CommerceConnection getCommerceConnection(@Nonnull Site site) {
+    return commerceConnectionInitializer.findConnectionForSite(site)
+            .orElseThrow(() -> new NoCommerceConnectionAvailable(
+                    String.format("No commerce connection available for site '%s'.", site.getName())));
   }
 
   private static StoreContext cloneStoreContextWithWorkspaceId(@Nonnull StoreContext source,

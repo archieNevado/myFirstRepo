@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-     An action to toggle the inherit state of the placement.
-   -->
+<!---
+ An action to toggle the inherit state of the placement.
+-->
 <local:InheritReferencesActionBase
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:local="com.coremedia.livecontext.asset.studio.action.*">

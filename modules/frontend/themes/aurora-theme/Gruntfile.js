@@ -1,47 +1,34 @@
 'use strict';
 
-// import coremedia utils to simply reuse all available grunt tasks.
-var utils = require('@coremedia/utils');
-
 module.exports = function (grunt) {
-
-  // init configuration
-  grunt.config.init({
-    // theme specific parameters, "name" is mandatory
-    themeConfig: grunt.file.readJSON('package.json').theme
-  });
-
-  // load all available tasks
-  utils.loadGruntTasks(grunt);
-
-  // load all available default configs
-  utils.loadGruntConfigs(grunt);
-
-  // generate webpack configs for JavaScript modules in lib/js directory
-  utils.generateJSLibWebpackConfigs(grunt);
-
-  // load bricks to extend theme
-  utils.loadBricks(grunt, [
-    "preview",
-    "responsive-images",
-    "bootstrap",
-    "generic-templates",
-    "cta",
-    "image-maps",
-    "elastic-social",
-    "fragment-scenario",
-    "livecontext",
-    "shoppable-video",
-    "pdp-augmentation"
-  ]);
 
   // --- theme configuration -------------------------------------------------------------------------------------------
 
-  grunt.config.merge({
+  grunt.initConfig({
+    // define development mode
+    /*monitor: {
+     target: 'local' //default: remote
+     },*/
+    // load bricks into theme
+    bricks: {
+      src: [
+        'preview',
+        'responsive-images',
+        'bootstrap',
+        'generic-templates',
+        'cta',
+        'image-maps',
+        'elastic-social',
+        'fragment-scenario',
+        'livecontext',
+        'shoppable-video',
+        'pdp-augmentation'
+      ]
+    },
     // generate css files
     sass: {
       options: {
-        outputStyle: "expanded",
+        outputStyle: 'expanded',
         sourceMap: true,
         sourceMapRoot: 'file://' + process.cwd() + 'target/resources/themes/../<%= themeConfig.name %>/css'
       },
@@ -104,12 +91,15 @@ module.exports = function (grunt) {
     }
   });
 
-// --- theme tasks ---------------------------------------------------------------------------------------------------
+  // load CoreMedia initialization
+  require('@coremedia/grunt-utils')(grunt);
+
+  // --- theme tasks ---------------------------------------------------------------------------------------------------
 
   // Local Development Task.
   grunt.registerTask('development', ['clean', 'copy', 'sass', 'webpack:jslib']);
   // Full distribution task with templates.
-  grunt.registerTask('production', ['development', 'postcss', 'compress']);
+  grunt.registerTask('production', ['development', 'postcss', 'eslint', 'compress']);
 
   // Default task = distribution.
   grunt.registerTask('default', ['production']);

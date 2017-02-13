@@ -16,9 +16,9 @@
     public var bindTo:ValueExpression;
     ]]></fx:Script>
 
-    <items>
-      <livecontext:ViewSettingsRadioGroup bindTo="{config.bindTo}"
-                                          propertyName="localSettings.shopNow"/>
-    </items>
-  
+  <items>
+    <livecontext:ViewSettingsRadioGroup bindTo="{config.bindTo}"
+                                        propertyName="localSettings.shopNow"/>
+  </items>
+
 </Viewport>

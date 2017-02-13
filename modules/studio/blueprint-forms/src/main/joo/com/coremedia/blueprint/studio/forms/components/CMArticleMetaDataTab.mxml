@@ -18,9 +18,9 @@
     public native function CMArticleMetaDataTab(config:CMArticleMetaDataTab = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <bpforms:CategoryDocumentForm bindTo="{config.bindTo}"/>
-      <bpforms:SEOForm bindTo="{config.bindTo}"/>
-    </editor:items>
-  
+  <editor:items>
+    <bpforms:CategoryDocumentForm bindTo="{config.bindTo}"/>
+    <bpforms:SEOForm bindTo="{config.bindTo}"/>
+  </editor:items>
+
 </editor:DocumentForm>

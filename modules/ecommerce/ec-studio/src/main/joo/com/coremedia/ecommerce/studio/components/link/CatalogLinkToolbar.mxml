@@ -18,12 +18,6 @@
     public native function CatalogLinkToolbar(config:CatalogLinkToolbar = null);
 
     /**
-     * A ValueExpression which makes the component read-only if it is evaluated to true.
-     */
-    [Bindable]
-    public var readOnlyValueExpression:ValueExpression;
-
-    /**
      * A property path expression leading to the Bean whose property is edited.
      * This property editor assumes that this bean has a property 'properties'.
      */
@@ -31,57 +25,76 @@
     public var bindTo:ValueExpression;
 
     /**
-     * An optional ValueExpression which makes the component read-only if it is evaluated to true.
+     * ValueExpression which makes the component read-only if it is evaluated to true.
      */
     [Bindable]
     public var forceReadOnlyValueExpression:ValueExpression;
+
+    /**
+     * ValueExpression which makes the delete button read-only if it is evaluated to true.
+     */
+    [Bindable]
+    public var readOnlyValueExpression:ValueExpression;
+
+    /**
+     * A ValueExpression whose value is set to the array of selected items.
+     */
+    [Bindable]
+    public var selectedValuesExpression:ValueExpression;
+
+    /**
+     * A ValueExpression whose value is set to the array of indexes of selected items.
+     * The array is empty if nothing is selected. The change of the value doesn't update the selection of the grid.
+     */
+    [Bindable]
+    public var selectedPositionsExpression:ValueExpression;
     ]]></fx:Script>
   <fx:Declarations>
     <!---
-      The name of the sting property of the Bean to bind in this field.
-      The string property holds the id of the catalog product
-     -->
+     The name of the sting property of the Bean to bind in this field.
+     The string property holds the id of the catalog product
+    -->
     <fx:String id="propertyName"/>
 
     <!---
-       Set to true if the open in tab button should be hidden. Default is false
-     -->
+     Set to true if the open in tab button should be hidden. Default is false
+    -->
     <fx:Boolean id="hideOpenInTab"/>
 
     <!---
-       Set to true if the remove button should be hidden. Default is false
-     -->
+     Set to true if the remove button should be hidden. Default is false
+    -->
     <fx:Boolean id="hideRemove"/>
 
     <fx:Array id="additionalToolbarItems"/>
   </fx:Declarations>
 
-    <plugins>
-      <ui:AddItemsPlugin items="{config.additionalToolbarItems}"/>
-      <ui:HideObsoleteSeparatorsPlugin/>
-    </plugins>
-    <defaults>
-      <editor:PropertyField bindTo="{config.bindTo}"
-                            u:readOnlyValueExpression="{config.readOnlyValueExpression}"
-                            forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-    </defaults>
-    <items>
-      <!-- Button for deletion -->
-      <ui:IconButton itemId="{ECommerceStudioPlugin.REMOVE_LINK_BUTTON_ITEM_ID}"
-                     hidden="{config.hideRemove}">
-        <ui:baseAction>
-          <editor:DeleteSelectedLinksAction contentVariableName="{CatalogLink.CONTENT_VARIABLE_NAME}"
-                                            propertyName="{config.propertyName}"
-                                            selectedPositionsVariableName="{CatalogLink.SELECTED_POSITIONS_VARIABLE_NAME}"
-                                            forceReadOnlyValueExpression="{config.readOnlyValueExpression}"/>
-        </ui:baseAction>
-      </ui:IconButton>
-      <ui:IconButton itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}"
-                     hidden="{config.hideOpenInTab}">
-        <ui:baseAction>
-          <editor:OpenEntitiesInTabsAction entitiesVariableName="{CatalogLink.SELECTED_ITEMS_VARIABLE_NAME}"/>
-        </ui:baseAction>
-      </ui:IconButton>
-    </items>
+  <plugins>
+    <ui:AddItemsPlugin items="{config.additionalToolbarItems}"/>
+    <ui:HideObsoleteSeparatorsPlugin/>
+  </plugins>
+  <defaults>
+    <editor:PropertyField bindTo="{config.bindTo}"
+                          u:readOnlyValueExpression="{config.readOnlyValueExpression}"
+                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+  </defaults>
+  <items>
+    <!-- Button for deletion -->
+    <ui:IconButton itemId="{ECommerceStudioPlugin.REMOVE_LINK_BUTTON_ITEM_ID}"
+                   hidden="{config.hideRemove}">
+      <ui:baseAction>
+        <editor:DeleteSelectedLinksAction contentValueExpression="{config.bindTo}"
+                                          propertyName="{config.propertyName}"
+                                          selectedPositionsExpression="{config.selectedPositionsExpression}"
+                                          forceReadOnlyValueExpression="{config.readOnlyValueExpression || config.forceReadOnlyValueExpression}"/>
+      </ui:baseAction>
+    </ui:IconButton>
+    <ui:IconButton itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}"
+                   hidden="{config.hideOpenInTab}">
+      <ui:baseAction>
+        <editor:OpenEntitiesInTabsAction entitiesValueExpression="{config.selectedValuesExpression}"/>
+      </ui:baseAction>
+    </ui:IconButton>
+  </items>
 
 </Toolbar>

@@ -28,31 +28,33 @@
     ]]></fx:Script>
 
 
-    <local:rules>
+  <local:rules>
 
-      <editor:PreviewPanel>
-        <editor:plugins>
-          <!-- Only customize previewPanel if it is contained in a premular, not when used by moderation: -->
-          <editor:OnlyIf condition="{function(component:Component):Boolean { return Boolean(component.findParentByType(Premular)); }}">
-            <editor:then>
-              <ep:AddExternalPreviewButtonPlugin/>
-            </editor:then>
-          </editor:OnlyIf>
-        </editor:plugins>
-      </editor:PreviewPanel>
+    <editor:PreviewPanel>
+      <editor:plugins>
+        <!-- Only customize previewPanel if it is contained in a premular, not when used by moderation: -->
+        <editor:OnlyIf
+                condition="{function(component:Component):Boolean { return Boolean(component.findParentByType(Premular)); }}">
+          <editor:then>
+            <ep:AddExternalPreviewButtonPlugin/>
+          </editor:then>
+        </editor:OnlyIf>
+      </editor:plugins>
+    </editor:PreviewPanel>
 
-      <editor:WorkArea>
-        <editor:plugins>
-          <ep:ExternalPreviewPlugin/>
-        </editor:plugins>
-      </editor:WorkArea>
+    <editor:WorkArea>
+      <editor:plugins>
+        <ep:ExternalPreviewPlugin/>
+      </editor:plugins>
+    </editor:WorkArea>
 
-    </local:rules>
+  </local:rules>
 
-    <local:configuration>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin')}"/>
-    </local:configuration>
+  <local:configuration>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin')}"/>
+  </local:configuration>
 
-  
+
 </local:ExternalPreviewStudioPluginBase>

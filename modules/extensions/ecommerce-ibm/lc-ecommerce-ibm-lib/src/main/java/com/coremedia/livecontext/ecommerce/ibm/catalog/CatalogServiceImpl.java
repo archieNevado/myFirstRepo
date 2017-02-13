@@ -17,6 +17,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.map.LazyMap;
 import org.slf4j.Logger;
@@ -29,15 +30,17 @@ import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.google.common.collect.Maps.newHashMap;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 
 public class CatalogServiceImpl implements CatalogService {
+
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
 
   static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT";
@@ -104,7 +107,8 @@ public class CatalogServiceImpl implements CatalogService {
    * @return the publicly known base url to the commerce system
    */
   public String getWcsUrl() {
-    return CommercePropertyHelper.replaceTokens(wcsUrl, StoreContextHelper.getCurrentContext());
+    StoreContext storeContext = getStoreContext();
+    return CommercePropertyHelper.replaceTokens(wcsUrl, storeContext);
   }
 
   @Required
@@ -113,7 +117,8 @@ public class CatalogServiceImpl implements CatalogService {
   }
 
   public String getWcsStoreUrl() {
-    return CommercePropertyHelper.replaceTokens(wcsStoreUrl, StoreContextHelper.getCurrentContext());
+    StoreContext storeContext = getStoreContext();
+    return CommercePropertyHelper.replaceTokens(wcsStoreUrl, storeContext);
   }
 
   @Required
@@ -122,7 +127,8 @@ public class CatalogServiceImpl implements CatalogService {
   }
 
   public String getWcsAssetsUrl() {
-    return CommercePropertyHelper.replaceTokens(wcsAssetsUrl, StoreContextHelper.getCurrentContext());
+    StoreContext storeContext = getStoreContext();
+    return CommercePropertyHelper.replaceTokens(wcsAssetsUrl, storeContext);
   }
 
   public void setUseExternalIdForBeanCreation(boolean useExternalIdForBeanCreation) {
@@ -130,15 +136,15 @@ public class CatalogServiceImpl implements CatalogService {
   }
 
   @PostConstruct
-  void initialize(){
-    if(null != wcsAssetsUrl) {
+  void initialize() {
+    if (null != wcsAssetsUrl) {
       if (!wcsAssetsUrl.endsWith("/")) {
         this.wcsAssetsUrl = wcsAssetsUrl + "/";
       }
       validateUrlString(this.wcsAssetsUrl, "wcsAssetsUrl");
     }
 
-    if(null != wcsStoreUrl) {
+    if (null != wcsStoreUrl) {
       if (!wcsStoreUrl.endsWith("/")) {
         this.wcsStoreUrl = wcsStoreUrl + "/";
       }
@@ -153,7 +159,8 @@ public class CatalogServiceImpl implements CatalogService {
       URL url = new URL(string);
       String path = url.getPath();
       if (path.startsWith("//")) {
-        LOG.warn("Invalid format of " + urlPropertyName + ": URL's path part starts with '//'. URL is {}", url.toExternalForm());
+        LOG.warn("Invalid format of " + urlPropertyName + ": URL's path part starts with '//'. URL is {}",
+                url.toExternalForm());
       }
     } catch (MalformedURLException e) {
       throw new IllegalStateException(urlPropertyName + " is invalid.", e);
@@ -166,80 +173,109 @@ public class CatalogServiceImpl implements CatalogService {
 
   @Override
   @Nullable
-  public Product findProductById(@Nonnull final String id) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+  public Product findProductById(@Nonnull String id) throws CommerceException {
     if (id.isEmpty()) {
       return null;
     }
+
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
     Map wcProductMap = (Map) commerceCache.get(
-            new ProductCacheKey(id, currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext, false);
+            new ProductCacheKey(id, storeContext, userContext, catalogWrapperService, commerceCache));
+
+    return createProductBeanFor(wcProductMap, storeContext, false);
   }
 
   @Nullable
-  Product findProductByExternalId(@Nonnull final String externalId) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    Map wcProductMap = (Map) commerceCache.get(
-            new ProductCacheKey(CommerceIdHelper.formatProductId(externalId), currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext, false);
+  Product findProductByExternalId(@Nonnull String externalId) throws CommerceException {
+    String id = CommerceIdHelper.formatProductId(externalId);
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
+    Map wcProductMap = (Map) commerceCache.get(new ProductCacheKey(id, storeContext, userContext,
+            catalogWrapperService, commerceCache));
+
+    return createProductBeanFor(wcProductMap, storeContext, false);
   }
 
   @Nullable
-  public Product findProductByExternalTechId(@Nonnull final String externalTechId) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    Map wcProductMap = (Map) commerceCache.get(
-            new ProductCacheKey(CommerceIdHelper.formatProductTechId(externalTechId), currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext, false);
+  public Product findProductByExternalTechId(@Nonnull String externalTechId) throws CommerceException {
+    String id = CommerceIdHelper.formatProductTechId(externalTechId);
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
+    Map wcProductMap = (Map) commerceCache.get(new ProductCacheKey(id, storeContext, userContext, catalogWrapperService,
+            commerceCache));
+
+    return createProductBeanFor(wcProductMap, storeContext, false);
   }
 
   @Override
   @Nullable
-  public Product findProductBySeoSegment(@Nonnull final String seoSegment) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    Map wcProductMap = (Map) commerceCache.get(
-            new ProductCacheKey(CommerceIdHelper.formatProductSeoId(seoSegment), currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createProductBeanFor(wcProductMap, currentContext, false);
+  public Product findProductBySeoSegment(@Nonnull String seoSegment) throws CommerceException {
+    String id = CommerceIdHelper.formatProductSeoId(seoSegment);
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
+    Map wcProductMap = (Map) commerceCache.get(new ProductCacheKey(id, storeContext, userContext, catalogWrapperService,
+            commerceCache));
+
+    return createProductBeanFor(wcProductMap, storeContext, false);
   }
 
   @Override
   @Nullable
-  public ProductVariant findProductVariantById(@Nonnull final String id) throws CommerceException {
+  public ProductVariant findProductVariantById(@Nonnull String id) throws CommerceException {
     return (ProductVariant) findProductById(id);
   }
 
   @Override
   @Nonnull
-  public List<Product> findProductsByCategory(@Nonnull final Category category) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+  public List<Product> findProductsByCategory(@Nonnull Category category) throws CommerceException {
     if (category.isRoot()) {
       // the wcs has no root category thus asking would lead to an error
-      return Collections.emptyList();
+      return emptyList();
     }
+
+    String id = category.getExternalTechId();
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
     List<Map<String, Object>> wcProductsMap = (List<Map<String, Object>>) commerceCache.get(
-            new ProductsByCategoryCacheKey(category.getExternalTechId(), currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createProductBeansFor(wcProductsMap, currentContext);
+            new ProductsByCategoryCacheKey(id, storeContext, userContext, catalogWrapperService, commerceCache));
+
+    return createProductBeansFor(wcProductsMap, storeContext);
   }
 
   @Override
   @Nullable
-  public Category findCategoryById(@Nonnull final String id) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    if (isCatalogRootId(id)){
+  public Category findCategoryById(@Nonnull String id) throws CommerceException {
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
+    if (isCatalogRootId(id)) {
       return (Category) getCommerceBeanFactory()
-              .createBeanFor(CommerceIdHelper.formatCategoryId(EXTERNAL_ID_ROOT_CATEGORY), currentContext);
+              .createBeanFor(CommerceIdHelper.formatCategoryId(EXTERNAL_ID_ROOT_CATEGORY), storeContext);
     }
-    Map<String, Object> wcCategory = (Map<String, Object>) commerceCache.get(
-            new CategoryCacheKey(id, currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createCategoryBeanFor(wcCategory, currentContext, false);
+
+    Map<String, Object> wcCategory = (Map<String, Object>) commerceCache.get(new CategoryCacheKey(id, storeContext,
+            userContext, catalogWrapperService, commerceCache));
+
+    return createCategoryBeanFor(wcCategory, storeContext, false);
   }
 
   @Override
   @Nullable
   public Category findCategoryBySeoSegment(@Nonnull String seoSegment) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    Map<String, Object> wcCategory = (Map<String, Object>) commerceCache.get(
-            new CategoryCacheKey(CommerceIdHelper.formatCategorySeoId(seoSegment), currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createCategoryBeanFor(wcCategory, currentContext, false);
+    String id = CommerceIdHelper.formatCategorySeoId(seoSegment);
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
+    Map<String, Object> wcCategory = (Map<String, Object>) commerceCache.get(new CategoryCacheKey(id, storeContext,
+            userContext, catalogWrapperService, commerceCache));
+
+    return createCategoryBeanFor(wcCategory, storeContext, false);
   }
 
   @Override
@@ -257,26 +293,35 @@ public class CatalogServiceImpl implements CatalogService {
   @Override
   @Nonnull
   public List<Category> findTopCategories(Site site) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
-    List<Map<String, Object>> wcCategories = (List<Map<String, Object>>) commerceCache.get(
-            new TopCategoriesCacheKey(currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createCategoryBeansFor(wcCategories, currentContext);
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
+    List<Map<String, Object>> wcCategories = (List<Map<String, Object>>) commerceCache.get(new TopCategoriesCacheKey(
+            storeContext, userContext, catalogWrapperService, commerceCache));
+
+    return createCategoryBeansFor(wcCategories, storeContext);
   }
 
   @Override
   @Nonnull
-  public List<Category> findSubCategories(@Nonnull final Category parentCategory) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+  public List<Category> findSubCategories(@Nonnull Category parentCategory) throws CommerceException {
     if (parentCategory.isRoot()) {
       return findTopCategories(null);
     }
-    List<Map<String, Object>> wcCategories = (List<Map<String, Object>>) commerceCache.get(
-            new SubCategoriesCacheKey(parentCategory.getExternalTechId(), currentContext, UserContextHelper.getCurrentContext(), catalogWrapperService, commerceCache));
-    return createCategoryBeansFor(wcCategories, currentContext);
+
+    String id = parentCategory.getExternalTechId();
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
+    List<Map<String, Object>> wcCategories = (List<Map<String, Object>>) commerceCache.get(new SubCategoriesCacheKey(
+            id, storeContext, userContext, catalogWrapperService, commerceCache));
+
+    return createCategoryBeansFor(wcCategories, storeContext);
   }
 
   /**
    * Search for Products
+   *
    * @param searchTerm   search keywords
    * @param searchParams map of search params:
    *                     <ul>
@@ -292,13 +337,16 @@ public class CatalogServiceImpl implements CatalogService {
    */
   @Override
   @Nonnull
-  public SearchResult<Product> searchProducts(@Nonnull final String searchTerm,
-                                              @Nullable Map<String, String> searchParams) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+  public SearchResult<Product> searchProducts(@Nonnull String searchTerm, @Nullable Map<String, String> searchParams)
+          throws CommerceException {
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
     SearchResult<Map<String, Object>> wcSearchResult = getCatalogWrapperService().searchProducts(
-            searchTerm, searchParams, currentContext, SearchType.SEARCH_TYPE_PRODUCTS, UserContextHelper.getCurrentContext());
+            searchTerm, searchParams, storeContext, SearchType.SEARCH_TYPE_PRODUCTS, userContext);
+
     SearchResult<Product> result = new SearchResult<>();
-    result.setSearchResult(createProductBeansFor(wcSearchResult.getSearchResult(), currentContext));
+    result.setSearchResult(createProductBeansFor(wcSearchResult.getSearchResult(), storeContext));
     result.setTotalCount(wcSearchResult.getTotalCount());
     result.setPageNumber(wcSearchResult.getPageNumber());
     result.setPageSize(wcSearchResult.getPageSize());
@@ -307,6 +355,7 @@ public class CatalogServiceImpl implements CatalogService {
 
   /**
    * Search for ProductVariants
+   *
    * @param searchTerm   search keywords
    * @param searchParams map of search params:
    *                     <ul>
@@ -322,13 +371,17 @@ public class CatalogServiceImpl implements CatalogService {
    */
   @Override
   @Nonnull
-  public SearchResult<ProductVariant> searchProductVariants(@Nonnull final String searchTerm,
-                                                            @Nullable Map<String, String> searchParams) throws CommerceException {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+  public SearchResult<ProductVariant> searchProductVariants(@Nonnull String searchTerm,
+                                                            @Nullable Map<String, String> searchParams)
+          throws CommerceException {
+    StoreContext storeContext = getStoreContext();
+    UserContext userContext = getUserContext();
+
     SearchResult<Map<String, Object>> wcSearchResult = getCatalogWrapperService().searchProducts(
-            searchTerm, searchParams, currentContext, SearchType.SEARCH_TYPE_PRODUCT_VARIANTS, UserContextHelper.getCurrentContext());
+            searchTerm, searchParams, storeContext, SearchType.SEARCH_TYPE_PRODUCT_VARIANTS, userContext);
+
     SearchResult<ProductVariant> result = new SearchResult<>();
-    List<ProductVariant> productBeansFor = createProductBeansFor(wcSearchResult.getSearchResult(), currentContext);
+    List<ProductVariant> productBeansFor = createProductBeansFor(wcSearchResult.getSearchResult(), storeContext);
     result.setSearchResult(productBeansFor);
     result.setTotalCount(wcSearchResult.getTotalCount());
     result.setPageNumber(wcSearchResult.getPageNumber());
@@ -340,54 +393,70 @@ public class CatalogServiceImpl implements CatalogService {
     return getCatalogWrapperService().getLanguageId(locale);
   }
 
-  protected <T extends Product> T createProductBeanFor(Map<String, Object> productWrapper, StoreContext context, boolean reloadById) {
+  protected <T extends Product> T createProductBeanFor(Map<String, Object> productWrapper, StoreContext context,
+                                                       boolean reloadById) {
     if (productWrapper != null) {
       String id;
       if ("ItemBean".equals(DataMapHelper.getValueForKey(productWrapper, "catalogEntryTypeCode", String.class))) {
         id = useExternalIdForBeanCreation ?
-                CommerceIdHelper.formatProductVariantId(DataMapHelper.getValueForKey(productWrapper, "partNumber", String.class)) :
-                CommerceIdHelper.formatProductVariantTechId(DataMapHelper.getValueForKey(productWrapper, "uniqueID", String.class));
+                CommerceIdHelper.formatProductVariantId(
+                        DataMapHelper.getValueForKey(productWrapper, "partNumber", String.class)) :
+                CommerceIdHelper.formatProductVariantTechId(
+                        DataMapHelper.getValueForKey(productWrapper, "uniqueID", String.class));
       } else {
         id = useExternalIdForBeanCreation ?
-                CommerceIdHelper.formatProductId(DataMapHelper.getValueForKey(productWrapper, "partNumber", String.class)) :
-                CommerceIdHelper.formatProductTechId(DataMapHelper.getValueForKey(productWrapper, "uniqueID", String.class));
+                CommerceIdHelper.formatProductId(
+                        DataMapHelper.getValueForKey(productWrapper, "partNumber", String.class)) :
+                CommerceIdHelper.formatProductTechId(
+                        DataMapHelper.getValueForKey(productWrapper, "uniqueID", String.class));
       }
+
       if (CommerceIdHelper.isProductId(id) || CommerceIdHelper.isProductVariantId(id)) {
-        final ProductBase product = (ProductBase) commerceBeanFactory.createBeanFor(id, context);
+        ProductBase product = (ProductBase) commerceBeanFactory.createBeanFor(id, context);
+
         // register the product wrapper with the cache, it will optimize later accesses (there are good
         // chances that the beans will be called immediately after this call
         // Todo: currently we use it only for studio calls, but check if we can do it for a cae webapp as well
-        // (it probably requires that we are able to reload beans dynamically if someone tries to read a property that is not available)
+        // (it probably requires that we are able to reload beans dynamically if someone tries to read a property
+        // that is not available)
         Transformer transformer = null;
         if (reloadById) {
           transformer = new ProductDelegateLoader(product);
         }
         product.setDelegate(asLazyMap(productWrapper, transformer));
+
         return (T) product;
       }
     }
+
     return null;
   }
 
-  protected <T extends Product> List<T> createProductBeansFor(List<Map<String, Object>> productWrappers, StoreContext context) {
+  protected <T extends Product> List<T> createProductBeansFor(List<Map<String, Object>> productWrappers,
+                                                              StoreContext context) {
     if (productWrappers == null || productWrappers.isEmpty()) {
-      return Collections.emptyList();
+      return emptyList();
     }
+
     List<T> result = new ArrayList<>(productWrappers.size());
     for (Map<String, Object> productWrapper : productWrappers) {
       T productBeanFor = createProductBeanFor(productWrapper, context, true);
       result.add(productBeanFor);
     }
-    return Collections.unmodifiableList(result);
+
+    return unmodifiableList(result);
   }
 
-  protected Category createCategoryBeanFor(@Nullable Map<String, Object> categoryWrapper, @Nonnull StoreContext context, boolean reloadById) {
+  protected Category createCategoryBeanFor(@Nullable Map<String, Object> categoryWrapper, @Nonnull StoreContext context,
+                                           boolean reloadById) {
     if (categoryWrapper != null) {
       String id = useExternalIdForBeanCreation ?
               CommerceIdHelper.formatCategoryId(DataMapHelper.getValueForKey(categoryWrapper, "identifier", String.class)) :
               CommerceIdHelper.formatCategoryTechId(DataMapHelper.getValueForKey(categoryWrapper, "uniqueID", String.class));
+
       if (CommerceIdHelper.isCategoryId(id)) {
-        final CategoryImpl category = (CategoryImpl) commerceBeanFactory.createBeanFor(id, context);
+        CategoryImpl category = (CategoryImpl) commerceBeanFactory.createBeanFor(id, context);
+
         // register the category wrapper with the cache, it will optimize later accesses (there are good
         // chances that the beans will be called immediately after this call
         // Todo: currently we use it only for studio calls, but check if we can do it for a cae webapp as well
@@ -400,32 +469,44 @@ public class CatalogServiceImpl implements CatalogService {
         return category;
       }
     }
+
     return null;
   }
 
   @Nullable
   public static Map<String, Object> asLazyMap(@Nullable Map<String, Object> map, @Nullable Transformer transformer) {
-    if(null != map && null != transformer) {
+    if (null != map && null != transformer) {
       //noinspection unchecked
       return LazyMap.decorate(newHashMap(map), transformer);
     }
+
     return map;
   }
 
   protected List<Category> createCategoryBeansFor(List<Map<String, Object>> categoryWrappers, StoreContext context) {
     if (categoryWrappers == null || categoryWrappers.isEmpty()) {
-      return Collections.emptyList();
+      return emptyList();
     }
+
     List<Category> result = new ArrayList<>(categoryWrappers.size());
     for (Map<String, Object> categoryWrapper : categoryWrappers) {
       result.add(createCategoryBeanFor(categoryWrapper, context, true));
     }
-    return Collections.unmodifiableList(result);
+
+    return unmodifiableList(result);
   }
 
   @Nonnull
   @Override
   public CatalogService withStoreContext(StoreContext storeContext) {
     return getServiceProxyForStoreContext(storeContext, this, CatalogService.class);
+  }
+
+  private static StoreContext getStoreContext() {
+    return StoreContextHelper.getCurrentContext();
+  }
+
+  private static UserContext getUserContext() {
+    return UserContextHelper.getCurrentContext();
   }
 }

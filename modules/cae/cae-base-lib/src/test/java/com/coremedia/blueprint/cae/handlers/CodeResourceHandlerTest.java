@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.cae.contentbeans.CMCSSImpl;
 import com.coremedia.blueprint.cae.contentbeans.CMNavigationBase;
 import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
 import com.coremedia.blueprint.coderesources.CodeResources;
@@ -106,6 +107,8 @@ public class CodeResourceHandlerTest {
   private static final String REDIRECT_VIEW_PREFIX = "redirect:";
   private static final String REDIRECT_DEFAULT_VIEW = REDIRECT_VIEW_PREFIX+ ViewUtils.DEFAULT_VIEW;
   private static final String REDIRECT_MERGED_JS_VIEW = REDIRECT_VIEW_PREFIX +MERGED_JS_VIEW;
+
+  private static final String LINK_TO_EXTERNAL_CODE = "http://www.somewhere.else/some.css";
 
   @Inject
   private CodeResourceHandler testling;
@@ -238,7 +241,7 @@ public class CodeResourceHandlerTest {
   @Test
   public void testLinkForMergedContent() {
     Map<String,Object> cmParams = new ImmutableMap.Builder<String,Object>().put("extension","js").build();
-    CodeResources codeResources = new CodeResourcesCacheKey(codeCarryingBean.getContent(), CMNavigationBase.JAVA_SCRIPT, false, treeRelation).evaluate(null);
+    CodeResources codeResources = new CodeResourcesCacheKey(codeCarryingBean.getContent(), CMNavigationBase.JAVA_SCRIPT, false, treeRelation, null).evaluate(null);
     MergeableResources mergeableResources = new MergeableResourcesImpl(codeResources.getModel("body"), contentBeanFactory, null);
     String url = linkFormatterTestHelper.formatLink(cmParams, mergeableResources, null, MERGED_JS_VIEW);
     assertEquals("urls do not match", LINK_TO_MERGED_CONTENT_RESOURCE , url);
@@ -269,6 +272,12 @@ public class CodeResourceHandlerTest {
     assertEquals("urls do not match", LINK_TO_DELETED_LOCAL_RESOURCE, url);
   }
 
+  @Test
+  public void testExternalResource() {
+    String url = linkFormatterTestHelper.formatLink(new CSSwithDataUrl(LINK_TO_EXTERNAL_CODE));
+    assertEquals("urls do not match", LINK_TO_EXTERNAL_CODE, url);
+  }
+
 
   // === internal ======================================================================================================
 
@@ -297,5 +306,18 @@ public class CodeResourceHandlerTest {
     Object self = HandlerHelper.getRootModel(mav);
     assertNotNull("null self", self);
     assertTrue("not a CodeResourcesModel", self instanceof MergeableResources);
+  }
+
+  private class CSSwithDataUrl extends CMCSSImpl {
+    private String dataUrl = null;
+
+    public CSSwithDataUrl(String dataUrl) {
+      this.dataUrl = dataUrl;
+    }
+
+    @Override
+    public String getDataUrl() {
+      return dataUrl;
+    }
   }
 }

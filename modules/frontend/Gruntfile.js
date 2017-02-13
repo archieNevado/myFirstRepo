@@ -1,33 +1,16 @@
 'use strict';
 
-// import coremedia utils to simply reuse all available grunt tasks.
-var utils = require('@coremedia/utils');
-
 module.exports = function (grunt) {
 
-  // init configuration
-  grunt.config.init({});
-
-  // load all available tasks
-  utils.loadGruntTasks(grunt);
-
-  // generate jsdoc configs for bricks
-  utils.generateBrickJsdocConfigs(grunt);
-
-  // generate jsdoc configs for js libs
-  utils.generateJSLibJsdocConfigs(grunt);
-
-  // generate mocha configs for js libs
-  utils.generateJSLibMochaConfigs(grunt);
-
-  // legacy jasmine tests
-  grunt.config.merge({
+  // --- grunt initialization -------------------------------------------------------------------------------------------
+  grunt.initConfig({
     jasmine: {
       src: [
         'lib/js/legacy/jquery.coremedia.utils.js',
         'lib/js/legacy/jquery.coremedia.smartresize.js',
         'lib/js/legacy/coremedia.blueprint.nodeDecorationService.js',
-        'lib/js/legacy/coremedia.blueprint.basic.js'
+        'lib/js/legacy/coremedia.blueprint.basic.js',
+        'lib/bricks/download-portal/js/coremedia.blueprint.am.downloadCollection.js'
       ],
       options: {
         vendor: [
@@ -35,11 +18,16 @@ module.exports = function (grunt) {
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
         ],
         specs: [
-          'lib/js/legacy/test/basic_test.js'
+          'lib/js/legacy/test/basic_test.js',
+          'lib/bricks/download-portal/test/coremedia.blueprint.am.downloadCollectionTest.js'
         ]
       }
     }
   });
+
+  // load CoreMedia initialization
+  require('@coremedia/grunt-utils')(grunt);
+
 
   // --- tasks ---------------------------------------------------------------------------------------------------
 

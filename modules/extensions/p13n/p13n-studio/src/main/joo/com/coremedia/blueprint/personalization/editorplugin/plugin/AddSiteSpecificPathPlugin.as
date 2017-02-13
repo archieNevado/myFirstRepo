@@ -9,13 +9,14 @@ import com.coremedia.ui.data.ValueExpression;
 
 import ext.Component;
 import ext.Plugin;
+import ext.plugin.AbstractPlugin;
 
 import joo.debug;
 
 /**
  * Plugin that adds a site specific path containing a placeholder to a {@link PersonaSelectorBase}.
  */
-public class AddSiteSpecificPathPlugin implements Plugin {
+public class AddSiteSpecificPathPlugin extends AbstractPlugin {
   private var groupHeaderLabel:String;
   private var path:String;
   private var personaSelector:PersonaSelectorBase = null;
@@ -34,13 +35,14 @@ public class AddSiteSpecificPathPlugin implements Plugin {
     groupHeaderLabel = config.groupHeaderLabel;
     entityExpression = config.activeContentValueExpression;
     path = config.path;
+    super(config);
   }
 
   public static function addSitePathFormatter(sitePathFormatter:Function):void {
     sitePathFormatters = sitePathFormatters.concat(sitePathFormatter);
   }
 
-  public function init(component:Component):void {
+  override public function init(component:Component):void {
     if (!(component is PersonaSelectorBase)) {
       throw Error("plugin is only applicable to components of type 'PersonaSelectorBase'");
     }

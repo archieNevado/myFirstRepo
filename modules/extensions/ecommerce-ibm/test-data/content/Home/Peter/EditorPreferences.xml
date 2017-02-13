@@ -3,7 +3,7 @@
 <data>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StringProperty Name="semanticSettings">nameMatching</StringProperty>
-<StringProperty Name="preferredSite">83289cc492e6e12df0b3d87d84a460bb</StringProperty>
+<StringProperty Name="preferredSite">99c8ef576f385bc322564d5694df6fc2</StringProperty>
 <StringProperty Name="locale">en</StringProperty>
 <StructProperty Name="collection">
 <Struct>
@@ -197,7 +197,6 @@
 </Struct>
 </StructProperty>
 <LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/PerfectChef/United%20States/English/Navigation/Perfect%20Chef%20USA.xml" cmexport:path="/Sites/PerfectChef/United%20States/English/Navigation/Perfect%20Chef%20USA"/>
 <Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_Deli/PC_Deli.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_Deli/PC_Deli"/>
 <Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_ForTheCook/PC_ForTheCook.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_ForTheCook/PC_ForTheCook"/>
 <Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_InTheKitchen/PC_InTheKitchen.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_InTheKitchen/PC_InTheKitchen"/>

@@ -21,9 +21,9 @@
     public native function CommerceAugmentedPageGridForm(config:CommerceAugmentedPageGridForm = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       Set true to display the inheritance information even if bindTo is considered to be the source of the local pagegrid. Default: false.
-     -->
+    <!---
+     Set true to display the inheritance information even if bindTo is considered to be the source of the local pagegrid. Default: false.
+    -->
     <fx:Boolean id="showLocal"/>
 
     <fx:String id="pageGridPropertyName"/>
@@ -31,16 +31,17 @@
     <fx:String id="fallbackPageGridPropertyName"/>
   </fx:Declarations>
 
-    <editor:plugins exml:mode="append">
-      <ui:AddQuickTipPlugin text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'AugmentedCategory_help_productpagegrid_tooltip')}"/>
-    </editor:plugins>
+  <editor:plugins exml:mode="append">
+    <ui:AddQuickTipPlugin
+            text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'AugmentedCategory_help_productpagegrid_tooltip')}"/>
+  </editor:plugins>
 
-    <editor:items>
-      <bppm:PageGridPropertyField propertyName="{config.pageGridPropertyName}"
-                                  fallbackPropertyName="{config.fallbackPageGridPropertyName}"
-                                  hideLabel="true"
-                                  showLocal="{config.showLocal}"
-                                  pageTreeRelation="{augmentedCategoryTreeRelation}"/>
-    </editor:items>
+  <editor:items>
+    <bppm:PageGridPropertyField propertyName="{config.pageGridPropertyName}"
+                                fallbackPropertyName="{config.fallbackPageGridPropertyName}"
+                                hideLabel="true"
+                                showLocal="{config.showLocal}"
+                                pageTreeRelation="{augmentedCategoryTreeRelation}"/>
+  </editor:items>
 
 </editor:PropertyFieldGroup>

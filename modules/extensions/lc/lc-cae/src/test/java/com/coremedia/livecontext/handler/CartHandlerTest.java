@@ -1,14 +1,14 @@
 package com.coremedia.livecontext.handler;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.livecontext.ecommerce.order.Cart;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.objectserver.web.HttpError;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +60,6 @@ public class CartHandlerTest {
     testling = spy(new CartHandler());
     testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
     //testling.setCartService(cartService);
-    testling.setDeveloperModeEnabled(true);
     testling.setSitesService(sitesService);
     testling.setCheckoutRedirectUrlProvider(checkoutRedirectPropertyProvider);
     testling.setContentRepository(contentRepository);

@@ -103,9 +103,9 @@ Contains styling definitions for all content types as cm-teasable.
     // only need if translation other objects, which parent object has a translate.
     @include breakpoint(sm-and-up) {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50.1%) translateY(-50.1%);
+      bottom: 50%;
+      right: 50%;
+      transform: translateX(50.1%) translateY(50.1%);
     }
   }
 
@@ -210,6 +210,10 @@ Contains styling definitions for all content types as cm-teasable.
   }
 
   &__play {
-    transform: translate(-50%, -80%); // a little higher for spacing
+    transform: translate(50%, 80%); // a little higher for spacing
+
+    &.cm-play-button{
+      @include center-absolute();
+    }
   }
 }

@@ -5,7 +5,6 @@
   <component class="com.coremedia.blueprint.studio.topicpages.administration.OpenTopicPagesEditorAction"/>
   <component class="com.coremedia.blueprint.studio.topicpages.administration.TaxonomyCombo"/>
   <component class="com.coremedia.blueprint.studio.topicpages.administration.TopicPagesEditor"/>
-  <component class="com.coremedia.blueprint.studio.topicpages.administration.TopicPagesEditorToolbar"/>
   <component class="com.coremedia.blueprint.studio.topicpages.administration.TopicPreviewPanel"/>
   <component class="com.coremedia.blueprint.studio.topicpages.administration.TopicsPanel"/>
 </componentPackage>

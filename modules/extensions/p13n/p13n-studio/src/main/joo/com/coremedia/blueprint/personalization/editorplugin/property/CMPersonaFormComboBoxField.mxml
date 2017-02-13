@@ -40,7 +40,6 @@
     <ui:BindPropertyPlugin
             bindTo="{config.bindTo.extendBy(config.propertyContext+PersonaContextHelper.CONTEXT_NAME_SEPARATOR+config.propertyName)}"
             bidirectional="true"/>
-    <ui:ImmediateChangeEventsPlugin/>
   </p13n:plugins>
 
 </p13n:CMPersonaFormComboBox>

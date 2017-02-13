@@ -7,7 +7,7 @@
   Otherwise MergableResources.asCSSLink.ftl is used.
 -->
 
-<#assign cssLink=self.dataUrl?has_content?then(self.dataUrl,cm.getLink(self))/>
+<#assign cssLink=cm.getLink(self)/>
 
 <#if self.ieExpression?has_content>
   <!--[if ${self.ieExpression}]><link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />/><![endif]-->

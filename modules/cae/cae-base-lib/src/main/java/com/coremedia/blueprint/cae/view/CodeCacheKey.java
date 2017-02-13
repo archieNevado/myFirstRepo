@@ -29,7 +29,7 @@ class CodeCacheKey extends CacheKey<String> {
    * @param name the name of the script's container document
    * @param minifier the postprocessor. can be null if and only if postProcessing is disabled.
    */
-  public CodeCacheKey(String code, String name, Minifier minifier) {
+  CodeCacheKey(String code, String name, Minifier minifier) {
     this.code = code;
     this.name = name;
     this.minifier = minifier;
@@ -42,9 +42,8 @@ class CodeCacheKey extends CacheKey<String> {
     try {
       minifier.minify(resultStringWriter, new StringReader(code), name);
       evaluation = resultStringWriter.getBuffer().toString();
-    }
-    catch (Exception e) {
-      LOG.error("Could not minify file {}. Will write unminified version.", name, e);
+    } catch (Exception e) {
+      LOG.info("Could not minify file {}. Will write unminified version. Cause: {}", name, e.getMessage());
       evaluation = code;
     }
     return evaluation;

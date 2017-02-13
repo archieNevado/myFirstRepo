@@ -28,26 +28,26 @@
     public native function AddPersonaSelectorPlugin(config:AddPersonaSelectorPlugin = null);
     ]]></fx:Script>
 
-    <ui:rules>
-      <editor:PreviewPanelToolbar>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <perso:PersonaSelector paths="/Settings/Options/Personalization/Profiles"
-                                     itemId="testProfileSelector"
-                                     defaultGroupHeaderLabel="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'group_header_label_system_specific')}"
-                                     contentValueExpression="{myPreviewPanel.getCurrentPreviewContentValueExpression()}">
-                <perso:plugins exml:mode="append">
-                  <plugin:Addsitespecificpath path="Options/Personalization/Profiles"
-                                              activeContentValueExpression="{previewPanelConfig.bindTo}"
-                                              groupHeaderLabel="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'group_header_label_site_specific')}"/>
-                </perso:plugins>
-              </perso:PersonaSelector>
-            </ui:items>
-          </ui:AddItemsPlugin>
+  <ui:rules>
+    <editor:PreviewPanelToolbar>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <perso:PersonaSelector paths="/Settings/Options/Personalization/Profiles"
+                                   itemId="testProfileSelector"
+                                   defaultGroupHeaderLabel="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'group_header_label_system_specific')}"
+                                   contentValueExpression="{myPreviewPanel.getCurrentPreviewContentValueExpression()}">
+              <perso:plugins exml:mode="append">
+                <plugin:Addsitespecificpath path="Options/Personalization/Profiles"
+                                            activeContentValueExpression="{previewPanelConfig.bindTo}"
+                                            groupHeaderLabel="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'group_header_label_site_specific')}"/>
+              </perso:plugins>
+            </perso:PersonaSelector>
+          </ui:items>
+        </ui:AddItemsPlugin>
 
-        </editor:plugins>
-      </editor:PreviewPanelToolbar>
-    </ui:rules>
-  
+      </editor:plugins>
+    </editor:PreviewPanelToolbar>
+  </ui:rules>
+
 </ui:NestedRulesPlugin>

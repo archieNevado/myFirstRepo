@@ -1,8 +1,10 @@
 package com.coremedia.blueprint.elastic.social.rest;
 
+import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.inject.Named;
@@ -17,8 +19,15 @@ public class CMChannelCategoryResolver implements CategoryResolver {
 
   @Override
   public CategoryKeyAndDisplay resolve(@Nonnull Content content) {
-    return handlesType(content.getType()) ?
-            new CategoryKeyAndDisplay(content.getString(CMCHANNEL_SEGMENT), content.getString(CMCHANNEL_TITLE)) : null;
+    if(handlesType(content.getType()) ) {
+      String key = content.getString(CMCHANNEL_SEGMENT);
+      //segment may be empty for category channels
+      if(StringUtils.isEmpty(key)) {
+        key = String.valueOf(IdHelper.parseContentId(content.getId()));
+      }
+      return new CategoryKeyAndDisplay(key, content.getString(CMCHANNEL_TITLE));
+    }
+    return null;
   }
 
   private boolean handlesType(ContentType contentType) {

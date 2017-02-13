@@ -59,8 +59,10 @@
               }}"/>
           </taxonomy:listeners>
         </taxonomy:TaxonomySearchField>
-        <ui:IconButton iconCls="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_icon')}"
-                       tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}">
+        <ui:IconButton
+                iconCls="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_icon')}"
+                text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
+                tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}">
           <ui:baseAction>
             <taxonomy:OpenTaxonomyChooserAction propertyValueExpression="{getSelectionExpression()}"
                                                 taxonomyId="{config.taxonomyId}"/>

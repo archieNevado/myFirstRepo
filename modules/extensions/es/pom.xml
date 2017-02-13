@@ -16,7 +16,6 @@
     <module>es-cae</module>
     <module>es-cae-users</module>
     <module>es-contentbeans</module>
-    <module>es-theme</module>
     <module>es-server</module>
     <module>es-studio</module>
     <module>es-studio-component</module>

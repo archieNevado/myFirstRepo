@@ -22,27 +22,12 @@ joo = {
     } else {
       scriptSrc = script.getAttribute('src', 2);
     }
-
     return scriptSrc + "/..";
   }());
 
-  // var pathToRoot = configLocationPath + "/../";
-
   var pathname = window.location.pathname;
-
-  var pathSegments = pathname.split("/").length;
-
-  var pathToRoot = "";
-  for (var i = 0; i < pathSegments - 1; i++) {
-    pathToRoot += "../";
-  }
-
-  // TODO Ext6: currently only "studio" contextPath is supported. However, application should not be aware of the deployment
-  if (pathname.match(/^\/studio\//, pathname)) {
-    pathToRoot += "studio/";
-  }
-
-  window.coremediaRemoteServiceUri = pathToRoot + "api/";
+  var isDevelopmentMode = pathname.indexOf("/target/app/") >= 0;
+  window.coremediaRemoteServiceUri = isDevelopmentMode ? "/api/" : "api/";
 
   document.write('<script type="text/javascript" src="' + window.coremediaRemoteServiceUri + 'supported-locales.js?jsonp=joo.localization.supportedLocales="></script>');
   document.write('<script type="text/javascript" src="' + window.coremediaRemoteServiceUri + 'accept-language-header.js?jsonp=joo.localization.preferredLocales="></script>');

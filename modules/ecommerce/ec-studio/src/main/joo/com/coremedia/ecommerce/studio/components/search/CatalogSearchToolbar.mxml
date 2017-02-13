@@ -19,26 +19,26 @@
     public native function CatalogSearchToolbar(config:CatalogSearchToolbar = null);
     ]]></fx:Script>
 
-    <plugins>
-      <ui:HideObsoleteSeparatorsPlugin/>
-    </plugins>
-    <items>
-      <ui:IconButton itemId="copyToClipboard">
-        <ui:baseAction>
-          <editor:CopyToClipboardAction contentVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
-        </ui:baseAction>
-      </ui:IconButton>
+  <plugins>
+    <ui:HideObsoleteSeparatorsPlugin/>
+  </plugins>
+  <items>
+    <ui:IconButton itemId="copyToClipboard">
+      <ui:baseAction>
+        <editor:CopyToClipboardAction contentVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
+      </ui:baseAction>
+    </ui:IconButton>
 
-      <TbSeparator/>
+    <TbSeparator/>
 
-      <ui:IconButton itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}">
-        <ui:baseAction>
-          <editor:OpenEntitiesInTabsAction entitiesVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
-        </ui:baseAction>
-      </ui:IconButton>
-    </items>
-    <layout>
-      <layout_HBox u:triggerWidth="26"/>
-    </layout>
-  
+    <ui:IconButton itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}">
+      <ui:baseAction>
+        <editor:OpenEntitiesInTabsAction entitiesVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
+      </ui:baseAction>
+    </ui:IconButton>
+  </items>
+  <layout>
+    <layout_HBox u:triggerWidth="26"/>
+  </layout>
+
 </Toolbar>

@@ -15,6 +15,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
@@ -26,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
@@ -33,6 +36,8 @@ import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptySet;
 
 public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterceptorBase {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ContentWriteInterceptorBase.class);
 
   @VisibleForTesting
   static final String SEQUENCE_SPINNER_PROPERTY = "sequence";
@@ -147,9 +152,14 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
       allReferences.addAll(assetReadSettingsHelper.getCommerceReferences(oldProperties));
     }
 
-    CommerceConnection commerceConnection = commerceConnectionSupplier.getCommerceConnectionForContent(content);
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(content);
 
-    commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences), commerceConnection);
+    if (!commerceConnection.isPresent()) {
+      LOG.debug("Commerce connection not available, will not invalidate references.");
+      return;
+    }
+
+    commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences), commerceConnection.get());
   }
 
   @Nonnull

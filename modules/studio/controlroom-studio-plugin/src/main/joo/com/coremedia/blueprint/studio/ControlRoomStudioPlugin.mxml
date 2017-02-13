@@ -13,7 +13,6 @@
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.controlroom.workflow.WorkflowUtils;
-    import com.coremedia.cms.editor.sdk.util.SiteUtil;
 
     import mx.resources.ResourceManager;
 
@@ -25,85 +24,76 @@
     ]]></fx:Script>
 
 
-    <editor:rules>
-      <collab:ProjectContentControlsToolbar>
-        <collab:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <TbSeparator/>
-              <project:ProjectQuickCreateLinklistMenu/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </collab:plugins>
-      </collab:ProjectContentControlsToolbar>
-      <collab:ProjectContentContainer>
-        <collab:plugins>
-          <project:BookmarkProjectContentViewPlugin/>
-        </collab:plugins>
-      </collab:ProjectContentContainer>
-    </editor:rules>
+  <editor:rules>
+    <collab:ProjectContentControlsToolbar>
+      <collab:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <TbSeparator/>
+            <project:ProjectQuickCreateLinklistMenu/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </collab:plugins>
+    </collab:ProjectContentControlsToolbar>
+    <collab:ProjectContentContainer>
+      <collab:plugins>
+        <project:BookmarkProjectContentViewPlugin/>
+      </collab:plugins>
+    </collab:ProjectContentContainer>
+  </editor:rules>
 
-    <editor:configuration>
-      <collab:ControlRoomPlugin/>
+  <editor:configuration>
+    <collab:ControlRoomPlugin/>
 
-      <collab:ConfigureProjectListViewPlugin>
-        <collab:projectListViewDataFields>
-          <ui:DataField name="siteName"
-                        mapping=""
-                        ifUnreadable=""
-                        convert_="{SiteUtil.getSiteNameFor}"/>
-          <ui:DataField name="siteLocale"
-                        mapping=""
-                        ifUnreadable=""
-                        convert_="{SiteUtil.getSiteLocaleNameFor}"/>
-        </collab:projectListViewDataFields>
-        <collab:projectListViewColumns>
-          <editor:ListViewTypeIconColumn showTypeName="true"
-                                         sortable="true"/>
-          <editor:ListViewNameColumn sortable="true"/>
-          <editor:ListViewSiteColumn sortable="true"/>
-          <editor:ListViewSiteLocaleColumn sortable="true"/>
-          <editor:ListViewCreationDateColumn sortable="true"/>
-          <editor:ListViewStatusColumn sortable="true"/>
-          <editor:FreshnessColumn hidden="true"
-                                  sortable="true"/>
-        </collab:projectListViewColumns>
-      </collab:ConfigureProjectListViewPlugin>
+    <collab:ConfigureProjectListViewPlugin>
+      <collab:projectListViewColumns>
+        <collab:ProjectListViewTypeIconColumn showTypeName="true"
+                                              sortable="true"/>
+        <editor:ListViewNameColumn sortable="true"/>
+        <editor:ListViewSiteColumn sortable="true"/>
+        <editor:ListViewSiteLocaleColumn sortable="true"/>
+        <editor:ListViewCreationDateColumn sortable="true"/>
+        <editor:ListViewStatusColumn sortable="true"/>
+        <editor:FreshnessColumn hidden="true"
+                                sortable="true"/>
+      </collab:projectListViewColumns>
+    </collab:ConfigureProjectListViewPlugin>
 
-      <!-- configure the UI for the translation workflow -->
-      <collab:AddTranslationWorkflowPlugin processDefinitionName="Translation"
-                                           listToolbarButtons="{WorkflowUtils.getTranslationToolbarButtons()}">
-        <collab:inboxPanel>
-          <collab:DefaultTranslationWorkflowDetailForm>
-            <collab:workflowStateTransitions>
-              <collab:WorkflowStateTransition task="Translate"
-                                              nextSteps="{['sendToTranslationService', 'rollbackTranslation', 'finishTranslation']}"
-                                              defaultStep="finishTranslation"/>
-              <collab:WorkflowStateTransition task="TranslateSelf"
-                                              nextSteps="{['sendToTranslationService', 'rollbackTranslation', 'finishTranslation']}"
-                                              defaultStep="finishTranslation"/>
-              <collab:WorkflowStateTransition task="Review"
-                                              nextSteps="{['translationReviewed']}"/>
-            </collab:workflowStateTransitions>
-          </collab:DefaultTranslationWorkflowDetailForm>
-        </collab:inboxPanel>
+    <!-- configure the UI for the translation workflow -->
+    <collab:AddTranslationWorkflowPlugin processDefinitionName="Translation"
+                                         listToolbarButtons="{WorkflowUtils.getTranslationToolbarButtons()}">
+      <collab:inboxPanel>
+        <collab:DefaultTranslationWorkflowDetailForm>
+          <collab:workflowStateTransitions>
+            <collab:WorkflowStateTransition task="Translate"
+                                            nextSteps="{['sendToTranslationService', 'rollbackTranslation', 'finishTranslation']}"
+                                            defaultStep="finishTranslation"/>
+            <collab:WorkflowStateTransition task="TranslateSelf"
+                                            nextSteps="{['sendToTranslationService', 'rollbackTranslation', 'finishTranslation']}"
+                                            defaultStep="finishTranslation"/>
+            <collab:WorkflowStateTransition task="Review"
+                                            nextSteps="{['translationReviewed']}"/>
+          </collab:workflowStateTransitions>
+        </collab:DefaultTranslationWorkflowDetailForm>
+      </collab:inboxPanel>
 
-        <collab:pendingPanel>
-          <collab:DefaultTranslationWorkflowInfoForm showTranslationStatus="true"/>
-        </collab:pendingPanel>
+      <collab:pendingPanel>
+        <collab:DefaultTranslationWorkflowInfoForm showTranslationStatus="true"/>
+      </collab:pendingPanel>
 
-        <collab:finishedPanel>
-          <collab:DefaultTranslationWorkflowInfoForm/>
-        </collab:finishedPanel>
+      <collab:finishedPanel>
+        <collab:DefaultTranslationWorkflowInfoForm/>
+      </collab:finishedPanel>
 
-        <collab:startPanel>
-          <collab:DefaultStartTranslationWorkflowPanel/>
-        </collab:startPanel>
-      </collab:AddTranslationWorkflowPlugin>
+      <collab:startPanel>
+        <collab:DefaultStartTranslationWorkflowPanel/>
+      </collab:startPanel>
+    </collab:AddTranslationWorkflowPlugin>
 
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ProcessDefinitions')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.BlueprintProcessDefinitions')}"/>
-    </editor:configuration>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ProcessDefinitions')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.BlueprintProcessDefinitions')}"/>
+  </editor:configuration>
 
-  
+
 </editor:StudioPlugin>

@@ -22,20 +22,21 @@
     public native function OpenCreateExternalPageMenuItem(config:OpenCreateExternalPageMenuItem = null);
     ]]></fx:Script>
 
-    <baseAction>
-      <livecontext:MetadataToEntitiesActionAdapter metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
-                                                   itemId="{AUGMENT_SHOP_PAGE_MENU_ITEM_ID}"
-                                                   hideOnDisable="true"
-                                                   useParentNode="true"
-                                                   setEntities="setData"
-                                                   text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Action_augmentShopPage_text')}">
-        <livecontext:backingAction>
-          <livecontext:OpenCreateExternalPageDialogAction contentType="CMExternalPage"
-                                                          inheritEditors="false"
-                                                          defaultProperties="{ProcessingData.NAME_PROPERTY + ','
+  <baseAction>
+    <livecontext:MetadataToEntitiesActionAdapter
+            metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
+            itemId="{AUGMENT_SHOP_PAGE_MENU_ITEM_ID}"
+            hideOnDisable="true"
+            useParentNode="true"
+            setEntities="setData"
+            text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Action_augmentShopPage_text')}">
+      <livecontext:backingAction>
+        <livecontext:OpenCreateExternalPageDialogAction contentType="CMExternalPage"
+                                                        inheritEditors="false"
+                                                        defaultProperties="{ProcessingData.NAME_PROPERTY + ','
                             + ProcessingData.FOLDER_PROPERTY}"/>
-        </livecontext:backingAction>
-      </livecontext:MetadataToEntitiesActionAdapter>
-    </baseAction>
-  
+      </livecontext:backingAction>
+    </livecontext:MetadataToEntitiesActionAdapter>
+  </baseAction>
+
 </MenuItem>

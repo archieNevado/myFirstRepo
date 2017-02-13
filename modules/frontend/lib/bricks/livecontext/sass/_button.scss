@@ -34,10 +34,7 @@
   &--with-text {
     .cm-button {
       &__icon {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
+        @include center-absolute();
       }
       &__text {
         margin-left: 2rem;
@@ -64,11 +61,13 @@
   &:hover {
     background-color: #80A3BF;
     border-color: #80A3BF;
+    color: #ffffff;
   }
 
   &:active {
     background-color: #5B7F9B;
     border-color: #5B7F9B;
+    color: #ffffff;
   }
 
   // button disabled
@@ -98,10 +97,13 @@
   &--primary {
     background-color: #b54850;
     border-color: #b54850;
+    color: #ffffff;
+
     &:hover,
     &:active {
       background-color: #e30613;
       border-color: #e30613;
+      color: #ffffff;
     }
   }
 
@@ -277,10 +279,7 @@
 
   .cm-button-group--shopnow {
     display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @include center-absolute();
   }
 
   .cm-icon--cart-add-item .cm-icon__symbol {

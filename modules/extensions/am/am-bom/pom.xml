@@ -54,11 +54,6 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>am-theme</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>am-contentbeans</artifactId>
         <version>${project.version}</version>
       </dependency>

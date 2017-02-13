@@ -2,6 +2,7 @@ package com.coremedia.livecontext.elastic.social.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
@@ -12,6 +13,8 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
@@ -22,11 +25,14 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
   protected static final String ID = "id";
   protected static final String SITE_ID = "site";
 
-  @Inject
-  private CommerceConnectionInitializer connectionInitializer;
+  private final SitesService sitesService;
+  private final CommerceConnectionInitializer connectionInitializer;
 
   @Inject
-  private SitesService sitesService;
+  public ProductInSiteConverter(SitesService sitesService, CommerceConnectionInitializer connectionInitializer) {
+    this.sitesService = sitesService;
+    this.connectionInitializer = connectionInitializer;
+  }
 
   @Override
   public Class<ProductInSite> getType() {
@@ -35,38 +41,64 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
 
   @Override
   public void serialize(ProductInSite productInSite, Map<String, Object> serializedObject) {
+    String externalProductId = productInSite.getProduct().getExternalId();
     Site site = productInSite.getSite();
 
-    CommerceConnection currentConnection = connectionInitializer.getCommerceConnectionForSite(site);
+    CommerceConnection connection = getCommerceConnectionForSerialization(site, externalProductId);
 
-    serializedObject.put(ID, currentConnection.getIdProvider().formatProductId(productInSite.getProduct().getExternalId()));
+    serializedObject.put(ID, connection.getIdProvider().formatProductId(externalProductId));
     serializedObject.put(SITE_ID, site.getId());
   }
 
+  @Nonnull
+  private CommerceConnection getCommerceConnectionForSerialization(@Nonnull Site site, String externalProductId) {
+    return connectionInitializer.findConnectionForSite(site)
+            .orElseThrow(() -> new NoCommerceConnectionAvailable(String.format(
+                    "No commerce connection available for site '%s'; not serializing product with external id '%s'.",
+                    site, externalProductId))
+            );
+  }
+
   @Override
+  @Nonnull
   public ProductInSite deserialize(Map<String, Object> serializedObject) {
-    String id = (String) serializedObject.get(ID);
+    String productId = (String) serializedObject.get(ID);
     String siteId = (String) serializedObject.get(SITE_ID);
+
+    if (productId == null) {
+      throwUnresolvable(null, siteId);
+    }
+
     Site site = sitesService.getSite(siteId);
 
     if (site == null) {
       throw new UnresolvableReferenceException(String.format("Site ID %s could not be resolved", siteId));
     }
 
+    Product product = findProduct(site, productId);
+
+    if (product == null) {
+      throwUnresolvable(productId, siteId);
+    }
+
+    return new ProductInSiteImpl(product, site);
+  }
+
+  @Nullable
+  private Product findProduct(@Nonnull Site site, @Nonnull String productId) {
     Product product = null;
 
-    // CommerceConnectionFilter does not recognize elastic social studio calls, so we have to setup the commerce connection
+    // `CommerceConnectionFilter` does not recognize Elastic Social
+    // Studio calls, so we have to setup the commerce connection.
     CommerceConnection oldConnection = Commerce.getCurrentConnection();
     try {
-      CommerceConnection myConnection = connectionInitializer.getCommerceConnectionForSite(site);
+      CommerceConnection myConnection = getCommerceConnectionForDeserialization(site, productId);
 
       Commerce.setCurrentConnection(myConnection);
-      CatalogService catalogService = myConnection.getCatalogService();
-      if (null != catalogService) {
-        product = catalogService.findProductById(id);
-      }
+
+      product = findProduct(myConnection, productId);
     } catch (RuntimeException exception) {
-      throwUnresolvable(id, siteId, exception);
+      throwUnresolvable(productId, site.getId(), exception);
     } finally {
       if (oldConnection != null) {
         Commerce.setCurrentConnection(oldConnection);
@@ -75,16 +107,34 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
       }
     }
 
-    if (product == null) {
-      throwUnresolvable(id, siteId, null);
+    return product;
+  }
+
+  @Nonnull
+  private CommerceConnection getCommerceConnectionForDeserialization(@Nonnull Site site, String productId) {
+    return connectionInitializer.findConnectionForSite(site)
+            .orElseThrow(() -> new UnresolvableReferenceException(String.format(
+                    "Cannot resolve product with ID '%s' and site '%s' (commerce connection unavailable for that site).",
+                    productId, site)));
+  }
+
+  @Nullable
+  private static Product findProduct(@Nonnull CommerceConnection connection, @Nonnull String productId) {
+    CatalogService catalogService = connection.getCatalogService();
+
+    if (catalogService == null) {
+      return null;
     }
 
-    return new ProductInSiteImpl(product, site);
+    return catalogService.findProductById(productId);
   }
 
-  private static void throwUnresolvable(String id, String siteId, Throwable exception) {
-    throw new UnresolvableReferenceException(String.format("Product with ID %s and site ID %s could not be resolved",
-            id, siteId), exception);
+  private static void throwUnresolvable(String productId, String siteId) {
+    throwUnresolvable(productId, siteId, null);
+  }
+
+  private static void throwUnresolvable(String productId, String siteId, @Nullable Throwable exception) {
+    String message = String.format("Product with ID '%s' and site ID '%s' could not be resolved.", productId, siteId);
+    throw new UnresolvableReferenceException(message, exception);
   }
 }
-

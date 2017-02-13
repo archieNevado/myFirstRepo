@@ -19,17 +19,17 @@
     public native function InheritReferencesTestView(config:InheritReferencesTestView = null);
     ]]></fx:Script>
 
-    <defaults>
-      <editor:PropertyField bindTo="{config.bindTo}"
-                            forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-    </defaults>
-    <items>
-      <asset:CommerceReferencesForm>
-        <asset:additionalToolbarItems>
-          <asset:InheritReferencesButton bindTo="{config.bindTo}"
-                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-        </asset:additionalToolbarItems>
-      </asset:CommerceReferencesForm>
-    </items>
-  
+  <defaults>
+    <editor:PropertyField bindTo="{config.bindTo}"
+                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+  </defaults>
+  <items>
+    <asset:CommerceReferencesForm>
+      <asset:additionalToolbarItems>
+        <asset:InheritReferencesButton bindTo="{config.bindTo}"
+                                       forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+      </asset:additionalToolbarItems>
+    </asset:CommerceReferencesForm>
+  </items>
+
 </Viewport>

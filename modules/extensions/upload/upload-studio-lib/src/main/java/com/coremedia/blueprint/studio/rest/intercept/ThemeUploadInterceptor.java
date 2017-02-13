@@ -1,19 +1,19 @@
 package com.coremedia.blueprint.studio.rest.intercept;
 
 import com.coremedia.blueprint.studio.rest.UploadControlAttributes;
-import com.coremedia.blueprint.themeimporter.ThemeImporter;
-import com.coremedia.blueprint.themeimporter.ThemeImporterResult;
+import com.coremedia.blueprint.themeimporter.ThemeFileUtil;
 import com.coremedia.cap.common.Blob;
+import com.coremedia.cap.content.Content;
+import com.coremedia.cap.themeimporter.ThemeImporter;
+import com.coremedia.cap.themeimporter.ThemeImporterResult;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
-import com.google.common.annotations.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.activation.MimeType;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * If the file to be uploaded is a theme, process it with the theme importer
@@ -48,9 +48,27 @@ public class ThemeUploadInterceptor extends ContentWriteInterceptorBase {
     Blob themeBlob = fetchThemeBlob(request);
     if (themeBlob!=null) {
       try (InputStream is = themeBlob.getInputStream()) {
-        ThemeImporterResult themeImporterResult = themeImporter.importThemes(request.getParent().getPath(), is);
+        Content targetFolder = request.getParent();
+        Content homeFolder = targetFolder.getRepository().getConnection().getSession().getUser().getHomeFolder();
+        boolean isProductionTheme = homeFolder == null || !targetFolder.isChildOf(homeFolder);
+
+        // Usecase/Assumption/Motivation:
+        // A production theme is checked in, versioned and ready for publication.
+        // A developer theme remains checked out for subsequent changes.
+        boolean checkInAfterImport = isProductionTheme;
+        // cleanBeforeImport is true for development themes, since we do not
+        // expect frontend developers to use Studio for uploading partial themes.
+        // We may be wrong here though, and change this again in a later version.
+        // cleanBeforeImport is false for production themes, because an existing
+        // production theme is linked and published, so that deletion would not
+        // work without further ado.
+        boolean cleanBeforeImport = !isProductionTheme;
+
+        ThemeImporterResult themeImporterResult =
+                themeImporter.importThemes(request.getParent().getPath(), Collections.singletonList(is), checkInAfterImport, cleanBeforeImport);
         request.setAttribute(UploadControlAttributes.DO_NOTHING, true);
-        request.setAttribute(UploadControlAttributes.UPLOADED_DOCUMENTS, themeImporterResult.getThemeDescriptors());
+        Set<Content> themeDescriptors = themeImporterResult.getThemeDescriptors();
+        request.setAttribute(UploadControlAttributes.UPLOADED_DOCUMENTS, themeDescriptors);
       } catch (IOException e) {
         throw new RuntimeException("Error closing blob input stream", e);
       }
@@ -69,50 +87,9 @@ public class ThemeUploadInterceptor extends ContentWriteInterceptorBase {
     Object value = request.getProperties().get(dataProperty);
     if (value instanceof Blob) {
       Blob blob = (Blob) value;
-      return isZip(blob) && isTheme(blob) ? blob : null;
+      return ThemeFileUtil.isZip(blob.getContentType()) && ThemeFileUtil.isTheme(blob.getInputStream()) ? blob : null;
     }
     return null;
   }
 
-  /**
-   * Check whether the blob is a zip.
-   */
-  @VisibleForTesting
-  static boolean isZip(Blob blob) {
-    MimeType mimeType = blob.getContentType();
-    String primaryType = mimeType.getPrimaryType();
-    String subType = mimeType.getSubType();
-    return "application".equals(primaryType) &&
-            ("zip".equals(subType) || "x-zip".equals(subType) || "x-zip-compressed".equals(subType));
-  }
-
-  /**
-   * Check whether the blob is a theme.
-   * <p>
-   * We assume that the blob is a theme if it is a zip and it contains a
-   * THEME-METADATA directory.
-   * <p>
-   * This is of course not bullet proof, but in the context of a generic file
-   * upload we cannot be absolutely sure.
-   *
-   * @param zipBlob must be a zip blob
-   */
-  @VisibleForTesting
-  static boolean isTheme(Blob zipBlob) {
-    try (InputStream is = zipBlob.getInputStream();
-         ZipInputStream zis = new ZipInputStream(is)) {
-      for (ZipEntry entry=zis.getNextEntry(); entry!=null; entry=zis.getNextEntry()) {
-        // Directories do not necessarily appear as separate zip entries, but
-        // only implicitely with a longer path.  (Observed for our corporate
-        // theme, same with "unzip -l" command.)  Therefore we check with
-        // startsWith.
-        if (entry.getName().startsWith(ThemeImporter.THEME_METADATA_DIR+"/")) {
-          return true;
-        }
-      }
-      return false;
-    } catch (IOException e) {
-      throw new RuntimeException("Error closing blob input stream", e);
-    }
-  }
 }

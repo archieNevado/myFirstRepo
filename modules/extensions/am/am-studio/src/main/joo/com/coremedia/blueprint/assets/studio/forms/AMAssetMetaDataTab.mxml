@@ -22,27 +22,29 @@
     public native function AMAssetMetaDataTab(config:AMAssetMetaDataTab = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <bpforms:CategoryDocumentForm bindTo="{config.bindTo}"/>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_categories_label')}"
-                                 bindTo="{config.bindTo}"
-                                 expandOnValues="{AssetConstants.PROPERTY_ASSET_ASSETTAXONOMY}"
-                                 itemId="assetTaxonomyForm"
-                                 collapsed="true">
-        <editor:items>
-          <taxonomy:TaxonomyPropertyField itemId="assetTaxonomyItemId"
-                                          bindTo="{config.bindTo}"
-                                          hideLabel="true"
-                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
-                                          propertyName="{AssetConstants.PROPERTY_ASSET_ASSETTAXONOMY}"
-                                          taxonomyId="{AssetConstants.ASSET_TAXONOMY_ID}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
+  <editor:items>
+    <bpforms:CategoryDocumentForm bindTo="{config.bindTo}"/>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_categories_label')}"
+            bindTo="{config.bindTo}"
+            expandOnValues="{AssetConstants.PROPERTY_ASSET_ASSETTAXONOMY}"
+            itemId="assetTaxonomyForm"
+            collapsed="true">
+      <editor:items>
+        <taxonomy:TaxonomyPropertyField itemId="assetTaxonomyItemId"
+                                        bindTo="{config.bindTo}"
+                                        hideLabel="true"
+                                        forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                        propertyName="{AssetConstants.PROPERTY_ASSET_ASSETTAXONOMY}"
+                                        taxonomyId="{AssetConstants.ASSET_TAXONOMY_ID}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
 
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_rights_label')}"
-                                 itemId="rightsForm"
-                                 propertyNames="{[]}"
-                                 expandOnValues="{AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_CHANNELS + ','
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_rights_label')}"
+            itemId="rightsForm"
+            propertyNames="{[]}"
+            expandOnValues="{AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_CHANNELS + ','
                                    + AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_REGIONS + ','
                                    + AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE + ','
                                    + AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_COPYRIGHT}">
@@ -97,20 +99,22 @@
           </items>
         </FieldContainer>
 
-          <editor:StringPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_COPYRIGHT}"
-                                      ifUndefined=""/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_product_codes_label')}"
-                                 itemId="productCodesPropertyForm">
-        <editor:items>
-          <editor:StringListPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_METADATA + '.' +
+        <editor:StringPropertyField
+                propertyName="{AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_COPYRIGHT}"
+                ifUndefined=""/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_product_codes_label')}"
+            itemId="productCodesPropertyForm">
+      <editor:items>
+        <editor:StringListPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_METADATA + '.' +
                                                      AssetConstants.PROPERTY_ASSET_METADATA_PRODUCT_CODES}"
-                                          textFieldEmptyText="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_product_codes_textfield_empty_text')}"
-                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
+                                        textFieldEmptyText="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_product_codes_textfield_empty_text')}"
+                                        forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
 
 </editor:DocumentForm>

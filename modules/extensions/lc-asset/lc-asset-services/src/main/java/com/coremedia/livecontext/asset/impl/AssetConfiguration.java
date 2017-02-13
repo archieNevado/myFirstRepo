@@ -44,6 +44,12 @@ class AssetConfiguration implements SmartLifecycle {
 
   @Bean
   @Lazy
+  AssetResolvingStrategy assetResolvingStrategy() {
+    return new AssetResolvingStrategyImpl();
+  }
+
+  @Bean
+  @Lazy
   AssetChangesRepositoryListener assetChangesRepositoryListener() {
     return new AssetChangesRepositoryListener();
   }

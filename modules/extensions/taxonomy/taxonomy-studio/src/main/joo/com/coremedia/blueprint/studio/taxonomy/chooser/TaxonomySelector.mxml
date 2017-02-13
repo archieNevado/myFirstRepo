@@ -43,11 +43,11 @@
   </local:layout>
   <local:items>
     <!--Selected tag path-->
-      <Toolbar itemId="levelSelector" ui="{ToolbarSkin.FIELD}">
-        <layout>
-          <layout_HBox overflowHandler="scroller"/>
-        </layout>
-      </Toolbar>
+    <Toolbar itemId="levelSelector" ui="{ToolbarSkin.FIELD}">
+      <layout>
+        <layout_HBox overflowHandler="scroller"/>
+      </layout>
+    </Toolbar>
     <!--Alphabetically sorted tag list-->
     <Container flex="1" cls="cm-taxonomy-selector">
       <layout>
@@ -66,8 +66,7 @@
                                   flex="1"
                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
         <!--Selectable Letter List-->
-        <Container itemId="alphabetPanel"
-                   ui="{ContainerSkin.FRAME.getSkin()}">
+        <Container itemId="alphabetPanel">
           <layout>
             <layout_HBox align="stretch"/>
           </layout>

@@ -69,7 +69,6 @@
                                emptyText="{config.emptyText}"
                                noStoreMessage="{config.noStoreMessage}">
       <ec:plugins exml:mode="append">
-        <ui:ImmediateChangeEventsPlugin/>
         <editor:BindDisablePlugin bindTo="{config.bindTo}"
                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
       </ec:plugins>

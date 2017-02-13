@@ -16,8 +16,8 @@
     public native function SearchProductImagesTestView(config:SearchProductImagesTestView = null);
     ]]></fx:Script>
 
-    <items>
-      <editor:CollectionViewContainer height="400"/>
-    </items>
-  
+  <items>
+    <editor:CollectionViewContainer height="400"/>
+  </items>
+
 </Viewport>

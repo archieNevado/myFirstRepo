@@ -41,7 +41,6 @@ define :blueprint_tool, sensitive: true do
   params[:group] ||= node['blueprint']['group']
   params[:property_files]
   params[:log_dir] ||= "#{node['blueprint']['log_dir']}/#{tool_name}-tools"
-  tools_zip = "/var/tmp/#{tool_name}-#{params[:artifact_id]}-#{params[:version]}.zip"
   params[:group_id] ||= node['blueprint']['tools'][tool_name]['group_id']
   params[:artifact_id] ||= node['blueprint']['tools'][tool_name]['artifact_id']
   params[:version] ||= node['blueprint']['tools'][tool_name]['version']
@@ -52,7 +51,8 @@ define :blueprint_tool, sensitive: true do
   params[:property_files] ||= node['blueprint']['tools'][tool_name]['property_files']
   params[:property_files] ||= {}
   params[:nexus_url] ||= node['blueprint']['nexus_url'] if node['blueprint']['nexus_url']
-  params[:nexus_repo] ||= node['blueprint']['nexus_url'] if node['blueprint']['nexus_repo']
+  params[:nexus_repo] ||= node['blueprint']['nexus_repo'] if node['blueprint']['nexus_repo']
+  tools_zip = "/var/tmp/#{tool_name}-#{params[:artifact_id]}-#{params[:version]}.zip"
 
   raise("Argument group_id missing on blueprint_tool[#{tool_name}]") unless params[:group_id]
   raise("Argument artifact_id missing on blueprint_tool[#{tool_name}]") unless params[:artifact_id]
@@ -119,6 +119,7 @@ define :blueprint_tool, sensitive: true do
       owner params[:user]
       group params[:group]
       mode 0775
+      only_if { File.exist?("#{params[:path]}/bin/#{executable_file}") }
     end
   end
 

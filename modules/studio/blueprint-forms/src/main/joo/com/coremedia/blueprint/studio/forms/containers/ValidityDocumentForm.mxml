@@ -11,28 +11,26 @@
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-
     public static const xtype:String = "com.coremedia.blueprint.studio.config.validityDocumentForm";
 
     private var config:ValidityDocumentForm;
 
     public native function ValidityDocumentForm(config:ValidityDocumentForm = null);
-
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DateTimePropertyField bindTo="{config.bindTo}"
-                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
-                                    itemId="validFrom"
-                                    labelAlign="top"
-                                    propertyName="validFrom"
-                                    timeZoneHidden="false"/>
-      <editor:DateTimePropertyField bindTo="{config.bindTo}"
-                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
-                                    itemId="validTo"
-                                    labelAlign="top"
-                                    propertyName="validTo"
-                                    timeZoneHidden="false"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DateTimePropertyField bindTo="{config.bindTo}"
+                                  forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                  itemId="validFrom"
+                                  labelAlign="top"
+                                  propertyName="validFrom"
+                                  timeZoneHidden="false"/>
+    <editor:DateTimePropertyField bindTo="{config.bindTo}"
+                                  forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                  itemId="validTo"
+                                  labelAlign="top"
+                                  propertyName="validTo"
+                                  timeZoneHidden="false"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

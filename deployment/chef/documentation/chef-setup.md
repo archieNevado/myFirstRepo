@@ -1,5 +1,5 @@
-The Cookbooks
-----------------
+The Blueprint Chef Setup
+------------------------
 The Blueprint Chef Setup consists of four different types of cookbooks:
 
 - Thirdparty cookbooks.
@@ -36,9 +36,9 @@ For further possibilities of defining a cookbook dependency, please review the o
 
 #### Documentation Links
 
-* [coremedia_maven](./coremedia-cookbooks/coremedia_maven/README.md)
-* [coremedia_tomcat](./coremedia-cookbooks/coremedia_tomcat/README.md)
-* [coremedia-proxy](./coremedia-cookbooks/coremedia-proxy/README.md)
+* [coremedia_maven](../coremedia-cookbooks/coremedia_maven/README.md)
+* [coremedia_tomcat](../coremedia-cookbooks/coremedia_tomcat/README.md)
+* [coremedia-proxy](../coremedia-cookbooks/coremedia-proxy/README.md)
 
 ### Blueprint Cookbooks
 
@@ -79,16 +79,16 @@ with chef in production is a bad idea. Idempotency is nearly impossible and impo
 
 #### Documentation Links
 
-* [blueprint](./cookbooks/blueprint/README.md)
-* [blueprint-base](./cookbooks/blueprint-base/README.md)
-* [blueprint-yum](./cookbooks/blueprint-yum/README.md)
-* [blueprint-mongodb](./cookbooks/blueprint-mongodb/README.md)
-* [blueprint-postgresql](./cookbooks/blueprint-postgresql/README.md)
-* [blueprint-mysql](./cookbooks/blueprint-mysql/README.md)
-* [blueprint-tools](./cookbooks/blueprint-tools/README.md)
-* [blueprint-tomcat](./cookbooks/blueprint-tomcat/README.md)
-* [blueprint-proxy](./cookbooks/blueprint-proxy/README.md)
-* [blueprint-dev-tooling](./cookbooks/blueprint-dev-tooling/README.md)
+* [blueprint](../cookbooks/blueprint/README.md)
+* [blueprint-base](../cookbooks/blueprint-base/README.md)
+* [blueprint-yum](../cookbooks/blueprint-yum/README.md)
+* [blueprint-mongodb](../cookbooks/blueprint-mongodb/README.md)
+* [blueprint-postgresql](../cookbooks/blueprint-postgresql/README.md)
+* [blueprint-mysql](../cookbooks/blueprint-mysql/README.md)
+* [blueprint-tools](../cookbooks/blueprint-tools/README.md)
+* [blueprint-tomcat](../cookbooks/blueprint-tomcat/README.md)
+* [blueprint-proxy](../cookbooks/blueprint-proxy/README.md)
+* [blueprint-dev-tooling](../cookbooks/blueprint-dev-tooling/README.md)
 
 The Roles
 --------------

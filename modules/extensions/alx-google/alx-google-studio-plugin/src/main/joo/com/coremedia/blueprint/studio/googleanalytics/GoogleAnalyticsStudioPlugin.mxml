@@ -101,10 +101,12 @@
   </editor:rules>
 
   <editor:configuration>
-    <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                         source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPluginContentTypes')}"/>
-    <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
-                                         source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPluginContentTypes')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin')}"/>
     <alx:AnalyticsProvider providerName="googleAnalytics"
                            localizedProviderName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin', 'googleanalytics_service_provider')}"/>
   </editor:configuration>

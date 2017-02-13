@@ -1,9 +1,6 @@
 package com.coremedia.blueprint.cae.richtext.filter;
 
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
-import com.coremedia.cap.content.Content;
 import com.coremedia.id.IdProvider;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.xml.Filter;
@@ -329,8 +326,11 @@ public class LinkEmbedFilter extends Filter implements FilterFactory {
   protected Object getBean(String id) {
     Object bean = idProvider.parseId(id);
     if (bean instanceof IdProvider.UnknownId) {
-      // should not happen since the editor should ensure valid xlinks
-      throw new IllegalStateException("There is no bean with the id: " + id);
+      // Regular case for external links, id is the foreign URL.
+      // Should not happen for internal links,
+      // indicates invalid content, misconfigured id schemes, ... .
+      LOG.debug("There is no bean with the id {}", id);
+      return null;
     }
     return dataViewFactory.loadCached(bean, null);
   }
@@ -441,7 +441,17 @@ public class LinkEmbedFilter extends Filter implements FilterFactory {
 
   private boolean mustEmbedLink(Attributes atts) {
     String show = atts.getValue(Xlink.NAMESPACE_URI, Xlink.SHOW);
-    return mappings.containsKey(show);
+    if (!mappings.containsKey(show)) {
+      return false;
+    }
+    String href = atts.getValue(Xlink.NAMESPACE_URI, Xlink.HREF);
+    Object bean = getBean(href);
+    if (bean!=null) {
+      return true;
+    } else {
+      LOG.warn("{} does not denote a CMS bean, so it cannot be rendered embedded.", href);
+      return false;
+    }
   }
 
   private void logNestedP() {

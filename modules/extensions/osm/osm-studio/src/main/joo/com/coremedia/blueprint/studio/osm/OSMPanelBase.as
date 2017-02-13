@@ -26,7 +26,6 @@ public class OSMPanelBase extends Panel {
   private var skipCalcZoomLevel:Boolean = false;
 
   public function OSMPanelBase(config:OSMPanel = null) {
-    config.height = 325;
     super(config);
     this.latLngExpression = config.latLngExpression;
     addListener('afterlayout', initMap);
@@ -88,7 +87,7 @@ public class OSMPanelBase extends Panel {
    */
   private function createMap():void {
     //determine the panel element where the map should be added, (could be improved via findBy?)
-    var mapId = getEl().first().getAttribute("id"); //nothing special, just the generated ExtJs id.
+    var mapId = body.getAttribute("id"); //nothing special, just the generated ExtJs id.
     map = new OpenLayers.Map(mapId, {
       autoUpdateSize: true,
       projection:new OpenLayers.Projection("EPSG:900913"),

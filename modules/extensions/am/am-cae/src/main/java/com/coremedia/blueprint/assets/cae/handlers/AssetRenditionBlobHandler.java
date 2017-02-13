@@ -100,7 +100,7 @@ public class AssetRenditionBlobHandler {
       throw new IllegalArgumentException("Cannot render link for asset rendition without blob");
     }
     Map<String, String> uriComponentParameters = new HashMap<>();
-    uriComponentParameters.putAll(capBlobHandler.buildLink((CapBlobRef) blob));
+    uriComponentParameters.putAll(capBlobHandler.linkParameters((CapBlobRef) blob));
 
     String segmentName = StringUtils.defaultString(uriComponentParameters.get(SEGMENT_NAME));
     // any slashes in the blob link should be replaced by the asset friendly underscores

@@ -36,9 +36,6 @@ internal class AnalyticsDeepLinkButtonContainerBase extends Container {
       menuItemsFromButtons.push(menuItem);
     });
 
-    // remove original items
-    this.removeAll();
-
     // add menuItems to button menu
     var menuCfg:Menu = Menu({});
     menuCfg.items = menuItemsFromButtons;
@@ -90,7 +87,9 @@ internal class AnalyticsDeepLinkButtonContainerBase extends Container {
     var result:OpenAnalyticsUrlMenuItemBase = new OpenAnalyticsUrlMenuItemBase(Item(menuConfig));
     OpenAnalyticsUrlButtonBase.bindDisable(item.urlValueExpression, result);
 
-    item.destroy();
+    //hide single button
+    item.setVisible(false);
+
     return result;
   }
 }

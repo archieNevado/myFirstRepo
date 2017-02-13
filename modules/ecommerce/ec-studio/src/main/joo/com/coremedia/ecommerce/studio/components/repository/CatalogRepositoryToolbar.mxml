@@ -18,26 +18,26 @@
     public native function CatalogRepositoryToolbar(config:CatalogRepositoryToolbar = null);
     ]]></fx:Script>
 
-    <editor:plugins exml:mode="append">
-      <ui:AddItemsPlugin>
-        <ui:items>
-          <ui:IconButton itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}">
-            <ui:baseAction>
-              <editor:OpenEntitiesInTabsAction entitiesVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
-            </ui:baseAction>
-          </ui:IconButton>
-        </ui:items>
-        <ui:before>
-          <Component itemId="{RepositoryToolbar.REPOSITORY_TOOLBAR_SPACER_THIRD_ITEM_ID}"/>
-        </ui:before>
-      </ui:AddItemsPlugin>
-      <ui:RemoveItemsPlugin>
-        <ui:items>
-          <Component itemId="{RepositoryToolbar.OPEN_BUTTON_ITEM_ID}"/>
-          <Component itemId="{RepositoryToolbar.CUT_BUTTON_ITEM_ID}"/>
-          <Component itemId="{RepositoryToolbar.PASTE_BUTTON_ITEM_ID}"/>
-        </ui:items>
-      </ui:RemoveItemsPlugin>
-    </editor:plugins>
-  
+  <editor:plugins exml:mode="append">
+    <ui:AddItemsPlugin>
+      <ui:items>
+        <ui:IconButton itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}">
+          <ui:baseAction>
+            <editor:OpenEntitiesInTabsAction entitiesVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
+          </ui:baseAction>
+        </ui:IconButton>
+      </ui:items>
+      <ui:before>
+        <Component itemId="{RepositoryToolbar.REPOSITORY_TOOLBAR_SPACER_THIRD_ITEM_ID}"/>
+      </ui:before>
+    </ui:AddItemsPlugin>
+    <ui:RemoveItemsPlugin>
+      <ui:items>
+        <Component itemId="{RepositoryToolbar.OPEN_BUTTON_ITEM_ID}"/>
+        <Component itemId="{RepositoryToolbar.CUT_BUTTON_ITEM_ID}"/>
+        <Component itemId="{RepositoryToolbar.PASTE_BUTTON_ITEM_ID}"/>
+      </ui:items>
+    </ui:RemoveItemsPlugin>
+  </editor:plugins>
+
 </editor:RepositoryToolbar>

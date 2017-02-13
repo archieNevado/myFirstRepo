@@ -18,21 +18,6 @@ setLevel(LEVEL.OFF);</p>
 </dd>
 </dl>
 
-## Constants
-
-<dl>
-<dt><a href="#LEVEL">LEVEL</a> : <code>enum</code></dt>
-<dd><p>Logging Levels
-The logging levels are cumulative. If you for example set the logging level to WARN all warnings, errors and fatals are logged.
-OFF - nothing is logged
-ERROR - errors are logged
-WARN - warnings are logged
-INFO - infos are logged
-LOG - log messages are logged
-ALL - everything is logged</p>
-</dd>
-</dl>
-
 ## Functions
 
 <dl>
@@ -62,37 +47,14 @@ ALL - everything is logged</p>
 <a name="module_logger"></a>
 
 ## logger
-Coremedia Logger module.
-
-The Logger is disabled by default.
-
-usage:
-1) enable logging:
-setLevel(LEVEL.ALL);
-
-2) print to log:
-log("log this");
-debug("debug this");
-info("info this");
-warn("warn this");
-error("error this");
-
-3) disable logging:
-setLevel(LEVEL.OFF);
+Coremedia Logger module.The Logger is disabled by default.usage:1) enable logging:setLevel(LEVEL.ALL);2) print to log:log("log this");debug("debug this");info("info this");warn("warn this");error("error this");3) disable logging:setLevel(LEVEL.OFF);
 
 <a name="LEVEL"></a>
 
 ## LEVEL : <code>enum</code>
-Logging Levels
-The logging levels are cumulative. If you for example set the logging level to WARN all warnings, errors and fatals are logged.
-OFF - nothing is logged
-ERROR - errors are logged
-WARN - warnings are logged
-INFO - infos are logged
-LOG - log messages are logged
-ALL - everything is logged
+Logging LevelsThe logging levels are cumulative. If you for example set the logging level to WARN all warnings, errors and fatals are logged.OFF - nothing is loggedERROR - errors are loggedWARN - warnings are loggedINFO - infos are loggedLOG - log messages are loggedALL - everything is logged
 
-**Kind**: global constant  
+**Kind**: global enum  
 **Read only**: true  
 <a name="log"></a>
 

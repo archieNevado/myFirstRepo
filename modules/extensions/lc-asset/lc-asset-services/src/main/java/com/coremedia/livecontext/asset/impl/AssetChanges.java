@@ -27,6 +27,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import static java.util.Collections.emptyList;
+
 /**
  * In-Memory-Changelog of Commerce Assets.
  * This assures that current editorial changes (e.g. Adding externalId reference from Content to a catalog object, or
@@ -98,22 +100,23 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
     ContentSiteAspect contentSiteAspect = sitesService.getContentSiteAspect(content);
     Site site = contentSiteAspect.getSite();
 
-    if (site != null) {
-      //initialize the multimap if the site is non-null
-      if (!siteToMultimap.keySet().contains(site)) {
-        siteToMultimap.put(site, HashMultimap.<Content, String>create());
-        siteToInverseMultimap.put(site, HashMultimap.<String, Content>create());
-      }
+    if (site == null) {
+      return;
+    }
+    //initialize the multimap if the site is non-null
+    if (!siteToMultimap.keySet().contains(site)) {
+      siteToMultimap.put(site, HashMultimap.<Content, String>create());
+      siteToInverseMultimap.put(site, HashMultimap.<String, Content>create());
+    }
 
-      List<String> externalIds = getExternalReferences(content);
+    List<String> externalIds = getExternalReferences(content);
 
-      if (externalIds != null) {
-        Multimap<Content, String> multimap = siteToMultimap.get(site);
-        Multimap<String, Content> inverseMultimap = siteToInverseMultimap.get(site);
-        multimap.putAll(content, externalIds);
-        for (String externalId : externalIds) {
-          inverseMultimap.put(externalId, content);
-        }
+    if (externalIds != null) {
+      Multimap<Content, String> multimap = siteToMultimap.get(site);
+      Multimap<String, Content> inverseMultimap = siteToInverseMultimap.get(site);
+      multimap.putAll(content, externalIds);
+      for (String externalId : externalIds) {
+        inverseMultimap.put(externalId, content);
       }
     }
   }
@@ -142,9 +145,10 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
     return CommerceReferenceHelper.getExternalReferences(content);
   }
 
+  @Nonnull
   public Collection<Content> get(String externalId, Site site) {
     if (site == null) {
-      return null;
+      return emptyList();
     }
     r.lock();
     try {
@@ -155,9 +159,18 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
     } finally {
       r.unlock();
     }
-    return null;
+    return emptyList();
   }
 
+  /**
+   * Check if an external id is mapped for the given site and content.
+   *
+   * @param content content which must be checked for given external ids
+   * @param externalId external id which must be checked
+   * @param site the site which contains the given content
+   * @return true if no mapping for site and content exist.
+   *         true if the external id is mapped to the site and content, otherwise false.
+   */
   public boolean isUpToDate(Content content, String externalId, Site site) {
     r.lock();
     try {

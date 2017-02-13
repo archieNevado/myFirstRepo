@@ -23,8 +23,8 @@
     <fx:String id="contentType"/>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:LinkListPropertyField propertyName="linkedSettings" hideLabel="true" />
-    </editor:items>
-  
+  <editor:items>
+    <editor:LinkListPropertyField propertyName="linkedSettings" hideLabel="true"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

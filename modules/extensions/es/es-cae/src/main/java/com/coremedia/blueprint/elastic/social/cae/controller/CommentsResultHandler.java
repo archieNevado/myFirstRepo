@@ -1,17 +1,19 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
+import com.coremedia.blueprint.base.elastic.common.ImageHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.blueprint.base.elastic.common.ImageHelper;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobService;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -124,7 +127,8 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
     CommunityUser author = getElasticSocialUserHelper().getCurrentUser();
 
     HandlerInfo result = new HandlerInfo();
-    validateInput(result, author, text, navigation, beans);
+    User developer = UserVariantHelper.getUser(request);
+    validateInput(result, author, text, navigation, developer, beans);
 
     if (result.isSuccess()) {
       ModerationType moderation = elasticSocialConfiguration.getCommentModerationType();
@@ -137,13 +141,13 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
                 navigation, text, moderation, replyToId, blobs);
         result.setModel(comment);
         if (moderation.equals(ModerationType.PRE_MODERATION)) {
-          result.addMessage(SUCCESS_MESSAGE, null, getMessage(navigation, ContributionMessageKeys.COMMENT_FORM_SUCCESS_PREMODERATION));
+          result.addMessage(SUCCESS_MESSAGE, null, getMessage(navigation, developer, ContributionMessageKeys.COMMENT_FORM_SUCCESS_PREMODERATION));
         } else {
-          result.addMessage(SUCCESS_MESSAGE, null, getMessage(navigation, ContributionMessageKeys.COMMENT_FORM_SUCCESS));
+          result.addMessage(SUCCESS_MESSAGE, null, getMessage(navigation, developer, ContributionMessageKeys.COMMENT_FORM_SUCCESS));
         }
       } catch (Exception e) {
         LOG.error("Could not write a comment", e);
-        addErrorMessage(result, null, navigation, ContributionMessageKeys.COMMENT_FORM_ERROR);
+        addErrorMessage(result, null, navigation, developer, ContributionMessageKeys.COMMENT_FORM_ERROR);
       }
     }
 
@@ -169,32 +173,33 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
 
 
 
-  private void validateInput(HandlerInfo handlerInfo, CommunityUser user, String text, Navigation navigation, Object... beans) {
+  private void validateInput(HandlerInfo handlerInfo, CommunityUser user, String text, Navigation navigation, User developer, Object... beans) {
     // user == null was not allowed in previous versions, removed because user filter handling not fix
-    validateEnabled(handlerInfo, user, navigation, beans);
+    validateCommentsEnabled(handlerInfo, user, navigation, developer, beans);
     if (isBlank(text)) {
-      addErrorMessage(handlerInfo, "comment", navigation, ContributionMessageKeys.COMMENT_FORM_ERROR_COMMENT_BLANK);
+      addErrorMessage(handlerInfo, "comment", navigation, developer, ContributionMessageKeys.COMMENT_FORM_ERROR_COMMENT_BLANK);
     }
   }
 
-  private void validateEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, Object... beans) {
+  private void validateCommentsEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, User developer, Object... beans) {
     ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(beans);
     // user == null was not allowed in previous versions, removed because user filter handling not fix
     if (!elasticSocialConfiguration.isWritingCommentsEnabled()) {
-      addErrorMessage(handlerInfo, null, navigation, ContributionMessageKeys.COMMENT_FORM_ERROR_NOT_ENABLED);
+      addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.COMMENT_FORM_ERROR_NOT_ENABLED);
     }
     if ((user == null || user.isAnonymous()) && !elasticSocialConfiguration.isAnonymousCommentingEnabled()) {
-      addErrorMessage(handlerInfo, null, navigation, ContributionMessageKeys.COMMENT_FORM_NOT_LOGGED_IN);
+      addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.COMMENT_FORM_NOT_LOGGED_IN);
     }
   }
 
   private List<Blob> extractBlobs(HttpServletRequest request, HandlerInfo result, Object[] beans, int maxImageFileSize, int maxNumberOfAttachments) {
+    User developer = UserVariantHelper.getUser(request);
     List<Blob> blobs= new ArrayList<>();
     if (request instanceof DefaultMultipartHttpServletRequest) {
       DefaultMultipartHttpServletRequest defaultMultipartHttpServletRequest = (DefaultMultipartHttpServletRequest) request;
       MultiValueMap<String, MultipartFile> files = defaultMultipartHttpServletRequest.getMultiFileMap();
       if (files.entrySet().size() > maxNumberOfAttachments) {
-          addError("commentForm-too-many-files", result, null, beans, maxNumberOfAttachments);
+          addError("commentForm-too-many-files", result, null, developer, beans, maxNumberOfAttachments);
           return null;
       }
       for (Map.Entry<String, List<MultipartFile>> fileEntry : files.entrySet()) {
@@ -202,17 +207,17 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
         for (MultipartFile file : fileList) {
           if (file.getSize() != 0) {
             if (file.getSize() > maxImageFileSize) {
-              addError("commentForm-file-too-large", result, null, beans, file.getOriginalFilename(), ImageHelper.getBytesAsKBString(maxImageFileSize));
+              addError("commentForm-file-too-large", result, null, developer, beans, file.getOriginalFilename(), ImageHelper.getBytesAsKBString(maxImageFileSize));
               return null;
             }
             if (!ImageHelper.isSupportedMimeType(file.getContentType())) {
-              addError("commentForm-file-unsupported-content-type", result, null, beans, file.getOriginalFilename(), ImageHelper.getSupportedMimeTypesString());
+              addError("commentForm-file-unsupported-content-type", result, null, developer, beans, file.getOriginalFilename(), ImageHelper.getSupportedMimeTypesString());
               return null;
             }
             try {
               blobs.add(blobService.put(file.getInputStream(), file.getContentType(), file.getOriginalFilename()));
             } catch (IOException e) {
-              addError("commentForm-file-upload-error", result, null, beans, file.getOriginalFilename());
+              addError("commentForm-file-upload-error", result, null, developer, beans, file.getOriginalFilename());
               return null;
             }
           }
@@ -222,8 +227,8 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
     return blobs;
   }
 
-  private void addError(String messageKey, HandlerInfo result, String path, Object[] beans, Object... args) {
-    String message = getMessage(messageKey, beans);
+  private void addError(String messageKey, HandlerInfo result, String path, @Nullable User developer, Object[] beans, Object... args) {
+    String message = getMessage(messageKey, developer, beans);
     MessageFormat messageFormat = new MessageFormat(message);
     result.addMessage(ERROR_MESSAGE, path, messageFormat.format(args));
   }

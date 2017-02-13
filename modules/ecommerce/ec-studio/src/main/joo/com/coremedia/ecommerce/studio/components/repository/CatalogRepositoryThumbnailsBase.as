@@ -37,7 +37,7 @@ public class CatalogRepositoryThumbnailsBase extends Container{
   }
 
   public function disableBrowserContextMenu():void {
-/* TODO Ext6
+/* TODO Ext6, see CMS-7893
     var thumbViewPanel:* = this.el.down('div.catalog-thumb-data-view-panel');
     thumbViewPanel.on("contextmenu", Ext.emptyFn, null, {
       preventDefault: true

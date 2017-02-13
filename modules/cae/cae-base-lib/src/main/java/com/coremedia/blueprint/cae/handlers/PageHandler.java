@@ -51,9 +51,9 @@ public class PageHandler extends DefaultPageHandler {
                                     @PathVariable(SEGMENT_ID) String segmentId,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
                                     @PathVariable(SEGMENT_NAME) String vanity,
-                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view) {
-
-    return handleRequestInternal(linkable, segmentId, navigationPath, vanity, view);
+                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view,
+                                    HttpServletRequest servletRequest) {
+    return handleRequestInternal(linkable, segmentId, navigationPath, vanity, view, servletRequest);
   }
 
   /**
@@ -61,8 +61,9 @@ public class PageHandler extends DefaultPageHandler {
    */
   @RequestMapping({URI_PATTERN_VANITY, URI_PATTERN_VANITY + '/'})
   public ModelAndView handleRequest(@PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
-                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view) {
-    return handleRequestInternal(navigationPath, view);
+                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view,
+                                    HttpServletRequest servletRequest) {
+    return handleRequestInternal(navigationPath, view, servletRequest);
   }
 
   @Link(type = CMDownload.class, view = "fragmentPreview")

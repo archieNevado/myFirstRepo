@@ -20,10 +20,10 @@
     <fx:String id="contentType"/>
   </fx:Declarations>
 
-    <editor:items>
-        <editor:StructPropertyField propertyName="localSettings"
-                          hideLabel="true"
-                          itemId="localSettings"/>
-    </editor:items>
+  <editor:items>
+    <editor:StructPropertyField propertyName="localSettings"
+                                hideLabel="true"
+                                itemId="localSettings"/>
+  </editor:items>
 
 </editor:PropertyFieldGroup>

@@ -29,14 +29,6 @@ public class StringListCheckboxPropertyFieldBase extends FieldContainer implemen
   [Bindable]
   public native function get validationState():ValidationState;
 
-  /** @private */
-  [Bindable]
-  public native function set validationStateVE(validationStateVE:ValueExpression):void;
-
-  /** @inheritDoc */
-  [Bindable]
-  public native function get validationStateVE():ValueExpression;
-
   public function StringListCheckboxPropertyFieldBase(config:StringListCheckboxPropertyField = null) {
     super(config);
     validationInit();

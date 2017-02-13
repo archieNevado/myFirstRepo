@@ -12,18 +12,18 @@
 @mixin center-absolute($vertical: true, $horizontal: true) {
   position: absolute;
   @if $vertical {
-    top: 50%;
+    bottom: 50%;
   }
   @if $horizontal {
-    left: 50%;
+    right: 50%;
   }
   @if $vertical and not $horizontal {
-    transform: translateY(-50%);
+    transform: translateY(50%);
   }
   @if not $vertical and $horizontal {
-    transform: translateX(-50%);
+    transform: translateX(50%);
   }
   @if $vertical and $horizontal {
-    transform: translateX(-50%) translateY(-50%);
+    transform: translate(50%, 50%);
   }
 }

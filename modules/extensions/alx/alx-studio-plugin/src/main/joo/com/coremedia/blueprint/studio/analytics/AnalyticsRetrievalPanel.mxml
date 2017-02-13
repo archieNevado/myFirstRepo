@@ -20,8 +20,8 @@
     public native function AnalyticsRetrievalPanel(config:AnalyticsRetrievalPanel = null);
     ]]></fx:Script>
 
-    <!-- extend this one with retrieval options -->
-    <editor:items>
-      <alx:AnalyticsProviderComboBox propertyName="localSettings.analyticsProvider"/>
-    </editor:items>
+  <!-- extend this one with retrieval options -->
+  <editor:items>
+    <alx:AnalyticsProviderComboBox propertyName="localSettings.analyticsProvider"/>
+  </editor:items>
 </editor:PropertyFieldGroup>

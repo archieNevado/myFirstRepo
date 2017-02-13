@@ -25,14 +25,12 @@
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
 
-    <items>
-      <ec:CatalogLinkPropertyField itemId="{CATALOG_LINK_PROPERTY_FIELD_ITEM_ID}"
-                                   bindTo="{config.bindTo}"
-                                   ddGroup="ContentDD"
-                                   propertyName="externalId"
-                                   openLinkSources="{CatalogHelper.getInstance().openCatalog}"
-                                   emptyText="irrelevant"
-                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-    </items>
-  
+  <items>
+    <ec:CatalogLinkPropertyField itemId="{CATALOG_LINK_PROPERTY_FIELD_ITEM_ID}"
+                                 bindTo="{config.bindTo}"
+                                 propertyName="externalId"
+                                 emptyText="irrelevant"
+                                 forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+  </items>
+
 </Viewport>

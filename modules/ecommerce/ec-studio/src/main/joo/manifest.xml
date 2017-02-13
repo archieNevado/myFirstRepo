@@ -6,13 +6,10 @@
   <component class="com.coremedia.ecommerce.studio.components.AbstractCatalogList"/>
   <component class="com.coremedia.ecommerce.studio.components.CommerceObjectField"/>
   <component class="com.coremedia.ecommerce.studio.components.CommerceObjectSelector"/>
-  <component class="com.coremedia.ecommerce.studio.components.link.CatalogLink"/>
   <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkContextMenu"/>
-  <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkField"/>
   <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField"/>
-  <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyFieldDropArea"/>
+  <component class="com.coremedia.ecommerce.studio.components.link.ReadOnlyCatalogLinkPropertyField"/>
   <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkToolbar"/>
-  <component class="com.coremedia.ecommerce.studio.components.link.CategoryAndProductLinksPropertyField"/>
   <component class="com.coremedia.ecommerce.studio.components.preferences.CatalogPreferenceWindowPlugin"/>
   <component class="com.coremedia.ecommerce.studio.components.preferences.CatalogPreferences"/>
   <component class="com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryContextMenu"/>
@@ -31,4 +28,5 @@
   <component class="com.coremedia.ecommerce.studio.components.thumbnail.CatalogThumbDataView"/>
   <component class="com.coremedia.ecommerce.studio.forms.CommerceCatalogObjectsSelectForm"/>
   <component class="com.coremedia.ecommerce.studio.library.ECommerceLibraryPlugin"/>
+  <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkListWrapper"/>
 </componentPackage>

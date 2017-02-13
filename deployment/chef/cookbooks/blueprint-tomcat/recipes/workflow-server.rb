@@ -3,7 +3,7 @@
 This recipe installs and configures the CoreMedia Blueprint Workflow Server.
 #>
 =end
-
+include_recipe 'blueprint-tomcat::_base'
 service_name = 'workflow-server'
 node.default['blueprint']['webapps'][service_name]['application.properties']['cap.client.server.ior.url'] = "#{cm_webapp_url('content-management-server')}/ior"
 node.default['blueprint']['webapps'][service_name]['application.properties']['workflow.server.ORBServerHost'] = node['blueprint']['hostname']

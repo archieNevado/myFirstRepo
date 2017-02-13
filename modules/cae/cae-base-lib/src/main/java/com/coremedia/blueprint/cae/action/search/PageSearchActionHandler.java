@@ -14,6 +14,7 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.view.substitution.Substitution;
 import com.coremedia.objectserver.view.substitution.SubstitutionRegistry;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
@@ -23,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -103,14 +102,14 @@ public class PageSearchActionHandler extends PageHandlerBase {
   @RequestMapping(value = URI_PATTERN, method = RequestMethod.GET)
   public ModelAndView handleSearchAction(@PathVariable(SEGMENT_ID) CMAction action,
                                    @PathVariable(SEGMENT_ROOT) String context,
-                                   @ModelAttribute() SearchFormBean searchForm) {
+                                   @ModelAttribute() SearchFormBean searchForm,
+                                   HttpServletRequest request) {
     Navigation navigation = getValidNavigation(action, context, ACTION_NAME);
     if (navigation != null) {
       CMChannel searchChannel = settingsService.setting(SEARCH_CHANNEL_SETTING, CMChannel.class, navigation);
-      Page searchResultsPage = asPage(searchChannel, searchChannel);
+      Page searchResultsPage = asPage(searchChannel, searchChannel, UserVariantHelper.getUser(request));
       //context is always accessed via the page request, so we have to apply it to the
-      RequestContextHolder.getRequestAttributes().setAttribute(ContextHelper.ATTR_NAME_PAGE, searchResultsPage, RequestAttributes.SCOPE_REQUEST);
-
+      request.setAttribute(ContextHelper.ATTR_NAME_PAGE, searchResultsPage);
 
       ModelAndView result;
       SearchActionState actionBean;

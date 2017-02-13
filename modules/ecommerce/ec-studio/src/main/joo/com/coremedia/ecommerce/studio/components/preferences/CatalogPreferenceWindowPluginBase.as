@@ -1,16 +1,16 @@
 package com.coremedia.ecommerce.studio.components.preferences {
 import ext.Component;
-import ext.Plugin;
 import ext.container.Container;
+import ext.plugin.AbstractPlugin;
 import ext.tab.TabPanel;
 
-public class CatalogPreferenceWindowPluginBase implements Plugin {
+public class CatalogPreferenceWindowPluginBase extends AbstractPlugin {
 
-  public function CatalogPreferenceWindowPluginBase() {
-    super();
+  public function CatalogPreferenceWindowPluginBase(config:CatalogPreferenceWindowPlugin = null) {
+    super(config);
   }
 
-  public function init(component:Component):void {
+  override public function init(component:Component):void {
     var prefWindow:Container = component as Container;
     var tabPanel:TabPanel = prefWindow.getComponent(0) as TabPanel;
 

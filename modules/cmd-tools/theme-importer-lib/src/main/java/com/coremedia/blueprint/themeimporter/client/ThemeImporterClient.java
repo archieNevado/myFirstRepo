@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.themeimporter.client;
 
+import com.coremedia.blueprint.coderesources.configuration.ThemeServiceConfiguration;
 import com.coremedia.blueprint.themeimporter.configuration.ThemeImporterConfiguration;
 import com.coremedia.cmdline.CommandLineClient;
 import com.coremedia.cmdline.Credentials;
@@ -29,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </table>
  */
 @Configuration
-@Import(ThemeImporterConfiguration.class)
+@Import({ThemeImporterConfiguration.class, ThemeServiceConfiguration.class})
 public class ThemeImporterClient extends AbstractThemeImporterClient {
   private static final ThemeImporterCommandLineParser CMD_LINE_PARSER = new ThemeImporterCommandLineParser();
 
@@ -53,7 +54,13 @@ public class ThemeImporterClient extends AbstractThemeImporterClient {
     }
     Credentials cred = CMD_LINE_PARSER.getCredentials();
     LoginInitializer loginInitializer = new LoginInitializer(cred.getIorUrl(), cred.getUser(), cred.getDomain(), cred.getPassword());
-    ThemeImporterInitializer themeImporterInitializer = new ThemeImporterInitializer(CMD_LINE_PARSER.folder, CMD_LINE_PARSER.themes, null, exitCodeCallback);
+    ThemeImporterInitializer themeImporterInitializer = new ThemeImporterInitializer(
+            CMD_LINE_PARSER.folder,
+            CMD_LINE_PARSER.themes,
+            null,
+            CMD_LINE_PARSER.clean,
+            CMD_LINE_PARSER.developmentMode,
+            exitCodeCallback);
     SpringApplication springApplication = new SpringApplication(ThemeImporterClient.class);
     springApplication.addInitializers(loginInitializer, themeImporterInitializer);
     springApplication.setBannerMode(Banner.Mode.OFF);

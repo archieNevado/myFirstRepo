@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The live context tree relation resolves content of type CMExternalChannel
@@ -56,7 +57,15 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
     Site site = sitesService.getContentSiteAspect(child).getSite();
     String externalId = child.getString(EXTERNAL_ID);
     if (!StringUtils.isEmpty(externalId) && site != null) {
-      CommerceConnection commerceConnection = commerceConnectionInitializer.getCommerceConnectionForSite(site);
+      Optional<CommerceConnection> commerceConnectionOpt = commerceConnectionInitializer.findConnectionForSite(site);
+
+      if (!commerceConnectionOpt.isPresent()) {
+        LOGGER.debug("Commerce connection is not available for site '{}'; not looking up parent content.",
+                site.getName());
+        return null;
+      }
+
+      CommerceConnection commerceConnection = commerceConnectionOpt.get();
 
       String categoryId = commerceConnection.getIdProvider().formatCategoryId(externalId);
       StoreContext storeContext = commerceConnection.getStoreContext();

@@ -37,42 +37,42 @@
     <fx:Number id="chartHeight">250</fx:Number>
   </fx:Declarations>
 
-    <local:items>
-      <ui:LocalComboBox itemId="{TIME_RANGE_COMBO_ITEM_ID}"
-                        displayField="value"
-                        valueField="id"
-                        encodeItems="true"
-                        fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_time_range_label')}"
-                        value="{TIME_RANGE_WEEK}">
-        <ui:plugins exml:mode="append">
-          <ui:BindPropertyPlugin bindTo="{config.timeRangeValueExpression}"
-                                 ifUndefined=""
-                                 bidirectional="true"
-                                 componentEvent="select"/>
-        </ui:plugins>
-        <ui:store>
-          <store_Json
-                     fields="{['id', 'value']}"
-                     data="{[
+  <local:items>
+    <ui:LocalComboBox itemId="{TIME_RANGE_COMBO_ITEM_ID}"
+                      displayField="value"
+                      valueField="id"
+                      encodeItems="true"
+                      fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_time_range_label')}"
+                      value="{TIME_RANGE_WEEK}">
+      <ui:plugins exml:mode="append">
+        <ui:BindPropertyPlugin bindTo="{config.timeRangeValueExpression}"
+                               ifUndefined=""
+                               bidirectional="true"
+                               componentEvent="select"/>
+      </ui:plugins>
+      <ui:store>
+        <store_Json
+                fields="{['id', 'value']}"
+                data="{[
                              { id : TIME_RANGE_WEEK, value: resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_last_7_days') },
                              { id : TIME_RANGE_MONTH, value: resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_last_30_days')}
                            ]}"/>
-        </ui:store>
-      </ui:LocalComboBox>
-      <esalx:EsChart bindTo="{config.bindTo}"
-                     fieldLabel="{config.chartTitle}"
-                     labelAlign="top"
-                     chartHeight="{config.chartHeight}"
-                     timeStampValueExpression="{config.timeStampValueExpression}"
-                     itemId="{ES_CHART_ITEM_ID}"/>
-    </local:items>
+      </ui:store>
+    </ui:LocalComboBox>
+    <esalx:EsChart bindTo="{config.bindTo}"
+                   fieldLabel="{config.chartTitle}"
+                   labelAlign="top"
+                   chartHeight="{config.chartHeight}"
+                   timeStampValueExpression="{config.timeStampValueExpression}"
+                   itemId="{ES_CHART_ITEM_ID}"/>
+  </local:items>
 
-    <local:layout>
-      <layout_VBox align="stretch"/>
-    </local:layout>
-    <local:plugins>
-      <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
-                    defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
-    </local:plugins>
+  <local:layout>
+    <layout_VBox align="stretch"/>
+  </local:layout>
+  <local:plugins>
+    <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
+                  defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+  </local:plugins>
 
 </local:EsAnalyticsChartBase>

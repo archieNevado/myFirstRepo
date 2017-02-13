@@ -33,12 +33,12 @@
                            readOnly="true"
                            fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductTeaser_productName_text')}"
                            labelAlign="top"
-                           propertyPath="{CatalogObjectPropertyNames.NAME}" />
+                           propertyPath="{CatalogObjectPropertyNames.NAME}"/>
 
     <livecontext:ProductDescriptionTextArea itemId="{PRODUCT_DESCRIPTION_FIELD_ITEM_ID}"
                                             fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductTeaser_productShortDescription_text')}"
                                             labelAlign="top"
-                                            bindTo="{config.bindTo}" />
+                                            bindTo="{config.bindTo}"/>
   </editor:items>
 
 </editor:PropertyFieldGroup>

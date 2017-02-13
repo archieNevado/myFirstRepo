@@ -18,11 +18,11 @@
     public native function MetaDataInformationForm(config:MetaDataInformationForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentInfo/>
-      <editor:VersionHistory/>
-      <editor:ReferrerListPanel/>
-      <editor:DocumentMetaDataFormDispatcher bindTo="{config.bindTo}"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentInfo/>
+    <editor:VersionHistory/>
+    <editor:ReferrerListPanel/>
+    <editor:DocumentMetaDataFormDispatcher bindTo="{config.bindTo}"/>
+  </editor:items>
+
 </editor:DocumentForm>

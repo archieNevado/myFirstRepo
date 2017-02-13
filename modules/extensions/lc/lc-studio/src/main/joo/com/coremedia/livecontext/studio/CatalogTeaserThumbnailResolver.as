@@ -13,7 +13,7 @@ public class CatalogTeaserThumbnailResolver extends CatalogThumbnailResolver {
     super(docType);
   }
 
-  override public function getThumbnail(model:Object, operations:String):Object {
+  override public function getThumbnail(model:Object, operations:String = null):Object {
     return renderLiveContextProductTeaserPreview(model as Content);
   }
 

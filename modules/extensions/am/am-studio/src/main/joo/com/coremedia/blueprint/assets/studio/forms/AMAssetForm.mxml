@@ -42,27 +42,28 @@
       </editor:PropertyFieldGroup>
     </fx:Array>
 
-    <!--- 
-      The items to be displayed in the 'Renditions' tab below the property editor for the original property.
-     -->
+    <!---
+     The items to be displayed in the 'Renditions' tab below the property editor for the original property.
+    -->
     <fx:Array id="renditions">{null}</fx:Array>
 
-    <!--- 
-       An optional class used as iconCls for the original property editor.
-     -->
+    <!---
+     An optional class used as iconCls for the original property editor.
+    -->
     <fx:String id="originalIconCls">content-type-l content-type-AMAsset-icon</fx:String>
 
-    <!--- 
-       An optional class used as iconCls for the download property editor.
-     -->
+    <!---
+     An optional class used as iconCls for the download property editor.
+    -->
     <fx:String id="downloadIconCls">content-type-l content-type-AMAsset-icon</fx:String>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Tab_renditions_title')}"
-                           items="{localItems.concat(config.renditions || [])}"/>
-      <am:AMAssetMetaDataTab/>
-      <am:AMAssetSystemTab/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Tab_renditions_title')}"
+            items="{localItems.concat(config.renditions || [])}"/>
+    <am:AMAssetMetaDataTab/>
+    <am:AMAssetSystemTab/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

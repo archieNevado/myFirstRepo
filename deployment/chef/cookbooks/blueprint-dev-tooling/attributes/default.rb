@@ -12,6 +12,8 @@ default['blueprint']['dev']['content']['workflow_definitions']['builtin'] = %w(s
 default['blueprint']['dev']['content']['workflow_definitions']['custom'] = ['/opt/coremedia/workflow-server-tools/properties/corem/workflows/translation.xml']
 #<> The contentquery for the publishall content action.
 default['blueprint']['dev']['content']["publishall_contentquery"] = 'NOT BELOW PATH \'/Home\''
+#<> The number of concurrent threads to replicate the content
+default['blueprint']['dev']['content']['publishall_threads'] = 1
 #<> A string to be used as a prefix for created RPMs.
 default['blueprint']['dev']['rpm']['package_prefix'] = 'lc2-'
 #<> The version of the created RPMs.

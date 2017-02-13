@@ -12,11 +12,11 @@
     the navigation structure can be arbitrary deeply nested. The floating header and the footer can be configured and
     re-ordered in content settings.
   </description>
-  <thumbnail>img/theme-preview.png</thumbnail>
+  <thumbnail>img/theme-preview.jpg</thumbnail>
 
   <javaScriptLibraries>
-    <javaScript>vendor/jquery.min.js</javaScript>
-    <javaScript>vendor/bootstrap/bootstrap.min.js</javaScript>
+    <javaScript disableCompress="true">vendor/jquery.min.js</javaScript>
+    <javaScript disableCompress="true">vendor/bootstrap/bootstrap.min.js</javaScript>
     <javaScript>vendor/bootstrap/carousel-swipe.js</javaScript>
     <javaScript>vendor/imagesloaded/imagesloaded.pkgd.js</javaScript>
     <javaScript>vendor/magnific-popup/dist/jquery.magnific-popup.js</javaScript>
@@ -26,13 +26,14 @@
   <javaScripts>
     <!-- CoreMedia Basic JavaScripts -->
     <javaScript>js/jquery.coremedia.utils.js</javaScript>
-    <javaScript>js/lib/logger.js</javaScript>
+    <javaScript disableCompress="true">js/lib/logger.js</javaScript>
     <javaScript>js/jquery.coremedia.smartresize.js</javaScript>
     <javaScript>js/jquery.coremedia.responsiveimages.js</javaScript>
     <javaScript>js/jquery.coremedia.spinner.js</javaScript>
     <javaScript>js/coremedia.blueprint.nodeDecorationService.js</javaScript>
     <javaScript>js/jquery.coremedia.carousel.js</javaScript>
     <javaScript>js/jquery.coremedia.videopopup.js</javaScript>
+    <javaScript>js/coremedia.blueprint.hashBasedFragment.js</javaScript>
     <!-- Quick Info -->
     <javaScript>js/coremedia.blueprint.quickinfo.js</javaScript>
     <javaScript>js/coremedia.blueprint.quickinfo.init.js</javaScript>
@@ -43,6 +44,9 @@
     <javaScript>js/coremedia.blueprint.es.timezone.js</javaScript>
     <javaScript>js/coremedia.blueprint.es.js</javaScript>
     <javaScript>js/coremedia.blueprint.basic.js</javaScript>
+    <!-- Asset Managment Download Portal -->
+    <javaScript>js/coremedia.blueprint.am.downloadCollection.js</javaScript>
+    <javaScript>js/coremedia.blueprint.am.downloadCollection.init.js</javaScript>
     <!-- CoreMedia Corporate JavaScripts -->
     <javaScript>js/coremedia.blueprint.corporate.js</javaScript>
   </javaScripts>
@@ -60,6 +64,7 @@
     <resourceBundle>l10n/Bundle_en.properties</resourceBundle>
     <resourceBundle>l10n/Preview_en.properties</resourceBundle>
     <resourceBundle>l10n/ElasticSocial_en.properties</resourceBundle>
+    <resourceBundle>l10n/AssetManagement_en.properties</resourceBundle>
     <resourceBundle>l10n/Corporate_en.properties</resourceBundle>
   </resourceBundles>
 

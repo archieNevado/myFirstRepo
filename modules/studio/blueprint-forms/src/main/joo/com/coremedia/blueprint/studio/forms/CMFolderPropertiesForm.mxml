@@ -17,21 +17,23 @@
     public native function CMFolderPropertiesForm(config:CMFolderPropertiesForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMFolderProperties_contexts_text')}"
-                                     itemId="cmFolderContextsForm">
-            <editor:items>
-              <editor:LinkListPropertyField propertyName="contexts"
-                                            hideLabel="true"
-                                            itemId="contextsPropertyField" />
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataInformationForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMFolderProperties_contexts_text')}"
+                itemId="cmFolderContextsForm">
+          <editor:items>
+            <editor:LinkListPropertyField propertyName="contexts"
+                                          hideLabel="true"
+                                          itemId="contextsPropertyField"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataInformationForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

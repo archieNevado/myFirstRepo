@@ -7,7 +7,7 @@
                http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <import resource="classpath:/META-INF/coremedia/livecontext-handler-interceptors.xml"/>
-  <import resource="classpath:/com/coremedia/cae/link-services.xml"/>
+  <import resource="classpath:/framework/spring/blueprint-links.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-cae-vendor-placeholders.xml"/>
 
   <context:component-scan base-package="com.coremedia.livecontext.preview"/>

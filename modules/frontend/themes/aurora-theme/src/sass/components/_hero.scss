@@ -55,14 +55,15 @@ $cm-hero-picture-background-color: none;
     margin-bottom: 0;
   }
 
-  .cm-teaser__info {
+  &__info {
+    position: absolute;
     right: 0;
     bottom: 0;
-    position: absolute;
-    margin: 5px;
+    width: auto;
+    background-color: rgba(255,255,255,0.8);
   }
 
-  .#{$cm-hero-prefix}__headline {
+  &__headline {
     left: 0;
     color: #4d4d4d;
     background-color: rgba(255, 255, 255, 0.8);

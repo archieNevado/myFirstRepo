@@ -12,8 +12,8 @@
     public native function OpenManagementCenterButton(config:OpenManagementCenterButton = null);
     ]]></fx:Script>
 
-    <baseAction>
-      <livecontext:OpenManagementCenterAction/>
-    </baseAction>
+  <baseAction>
+    <livecontext:OpenManagementCenterAction/>
+  </baseAction>
 
 </Button>

@@ -2,6 +2,8 @@
 <#-- @ftlvariable name="entry.link" type="com.coremedia.blueprint.common.contentbeans.CMVideo" -->
 <#-- @ftlvariable name="entry.startTimeMillis" type="java.lang.Integer" -->
 
+
+<#assign renderTeaserText=cm.localParameter("renderTeaserText", false) />
 <#assign timelineEntries=self.timeLineSequences![] />
 <#assign overlay={
   "displayTitle": true,
@@ -15,14 +17,14 @@
 <#if (timelineEntries?size > 0 || self.timeLineDefaultTarget?has_content)>
 <div class="cm-shoppable cm-container" data-cm-video-shoppable="true">
   <div class="row-grid row">
-    <div class="col-lg-9 col-xs-12">
+    <div class="col-md-9 col-xs-12">
       <#-- video on the left -->
       <div class="cm-shoppable__video"<@cm.metadata self.content />>
         <@cm.include self=self view="video" />
       </div>
     </div>
 
-    <div class="col-lg-3 col-xs-0">
+    <div class="col-md-3 hidden-xs hidden-sm">
       <#-- teaser on the right -->
       <div class="cm-shoppable__teasers"<@cm.metadata "properties.timeLine" />>
         <#-- default teaser -->
@@ -50,7 +52,9 @@
       </div>
     </div>
   </div>
+</div>
 <#else>
-  <@cm.include self=self view="[]" />
+  <#-- open default hero teaser without shoppable extras -->
+  <@cm.include self=self view="hero[]" />
   <@bp.notification type="error" text="This is a shoppable video without timeline entries." />
 </#if>

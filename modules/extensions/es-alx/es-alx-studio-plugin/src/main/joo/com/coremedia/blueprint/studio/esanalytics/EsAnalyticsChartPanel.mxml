@@ -21,12 +21,12 @@
     public native function EsAnalyticsChartPanel(config:EsAnalyticsChartPanel = null);
     ]]></fx:Script>
 
-    <local:items>
-      <esalx:EsAnalyticsChart itemId="{ES_ALX_CHART}"
-                              bindTo="{getAlxData(ES_ALX_SERVICE_PROVIDER,'data')}"
-                              timeRangeValueExpression="{getTimeRangeValueExpression()}"
-                              timeStampValueExpression="{getAlxData(ES_ALX_SERVICE_PROVIDER,'timeStamp')}"
-                              chartHeight="200"/>
-    </local:items>
+  <local:items>
+    <esalx:EsAnalyticsChart itemId="{ES_ALX_CHART}"
+                            bindTo="{getAlxData(ES_ALX_SERVICE_PROVIDER,'data')}"
+                            timeRangeValueExpression="{getTimeRangeValueExpression()}"
+                            timeStampValueExpression="{getAlxData(ES_ALX_SERVICE_PROVIDER,'timeStamp')}"
+                            chartHeight="200"/>
+  </local:items>
 
 </local:EsAnalyticsChartPanelBase>

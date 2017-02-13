@@ -19,12 +19,12 @@
     public native function CMDownloadSystemForm(config:CMDownloadSystemForm = null);
     ]]></fx:Script>
 
-        <editor:items>
-            <editor:DocumentInfo/>
-            <editor:VersionHistory/>
-            <editor:ReferrerListPanel/>
-            <editor:DocumentMetaDataFormDispatcher bindTo="{config.bindTo}"/>
-            <bpforms:SearchableForm collapsed="true"/>
-        </editor:items>
-    
+  <editor:items>
+    <editor:DocumentInfo/>
+    <editor:VersionHistory/>
+    <editor:ReferrerListPanel/>
+    <editor:DocumentMetaDataFormDispatcher bindTo="{config.bindTo}"/>
+    <bpforms:SearchableForm collapsed="true"/>
+  </editor:items>
+
 </editor:DocumentForm>

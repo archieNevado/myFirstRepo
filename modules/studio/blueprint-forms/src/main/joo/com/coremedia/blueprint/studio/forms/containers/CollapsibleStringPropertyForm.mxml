@@ -23,10 +23,10 @@
     <fx:String id="title"/>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:StringPropertyField bindTo="{config.bindTo}"
-                                  hideLabel="true"
-                                  propertyName="{config.propertyName}"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:StringPropertyField bindTo="{config.bindTo}"
+                                hideLabel="true"
+                                propertyName="{config.propertyName}"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

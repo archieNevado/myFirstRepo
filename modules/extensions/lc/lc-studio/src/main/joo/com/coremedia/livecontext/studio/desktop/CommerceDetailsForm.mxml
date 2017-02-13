@@ -26,32 +26,32 @@
     <fx:String id="titleLabel"/>
   </fx:Declarations>
 
-    <editor:items>
-      <ui:TextFieldContainer itemId="{CatalogObjectPropertyNames.NAME}"
-                             fieldLabel="{config.titleLabel}"
-                             propertyPath="{CatalogObjectPropertyNames.NAME}"
-                             readOnly="true"/>
-      <ui:TextAreaContainer itemId="{CatalogObjectPropertyNames.LONG_DESCRIPTION}"
-                            fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_description_label')}"
-                            propertyValueExpression="{ValueExpressionFactory.createTransformingValueExpression(
+  <editor:items>
+    <ui:TextFieldContainer itemId="{CatalogObjectPropertyNames.NAME}"
+                           fieldLabel="{config.titleLabel}"
+                           propertyPath="{CatalogObjectPropertyNames.NAME}"
+                           readOnly="true"/>
+    <ui:TextAreaContainer itemId="{CatalogObjectPropertyNames.LONG_DESCRIPTION}"
+                          fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_description_label')}"
+                          propertyValueExpression="{ValueExpressionFactory.createTransformingValueExpression(
                                                         config.bindTo.extendBy(CatalogObjectPropertyNames.LONG_DESCRIPTION),
                                                         RichTextPlainTextTransformer.convertToPlainText
                                                       )}"
-                            readOnly="true"
-                            initialHeight="{23*5}"/>
-      <editor:PropertyFieldGroup itemId="{SHORT_DESCRIPTION_COLLAPSIBLE_ITEM_ID}"
-                                 title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_shortDescription_label')}"
-                                 collapsed="true">
-        <editor:items>
-          <ui:TextAreaContainer itemId="{CatalogObjectPropertyNames.SHORT_DESCRIPTION}"
-                                hideLabel="true"
-                                propertyValueExpression="{ValueExpressionFactory.createTransformingValueExpression(
+                          readOnly="true"
+                          initialHeight="{23*5}"/>
+    <editor:PropertyFieldGroup itemId="{SHORT_DESCRIPTION_COLLAPSIBLE_ITEM_ID}"
+                               title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_shortDescription_label')}"
+                               collapsed="true">
+      <editor:items>
+        <ui:TextAreaContainer itemId="{CatalogObjectPropertyNames.SHORT_DESCRIPTION}"
+                              hideLabel="true"
+                              propertyValueExpression="{ValueExpressionFactory.createTransformingValueExpression(
                                                            config.bindTo.extendBy(CatalogObjectPropertyNames.SHORT_DESCRIPTION),
                                                            RichTextPlainTextTransformer.convertToPlainText
                                                          )}"
-                                readOnly="true"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
-  
+                              readOnly="true"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

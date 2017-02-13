@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "production": "grunt production",
-    "watch": "grunt watch"
+    "start": "grunt monitor"
   },
   "dependencies": {
     "magnific-popup": "1.1.0",
-    "mediaelement": "2.23.4"
+    "mediaelement": "2.23.5"
   },
   "theme": {
     "name": "aurora",

@@ -17,8 +17,8 @@
     public native function AnalyticsMiscPanel(config:AnalyticsMiscPanel = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <!-- extend this one with miscellaneous options -->
-    </editor:items>
-  
+  <editor:items>
+    <!-- extend this one with miscellaneous options -->
+  </editor:items>
+
 </editor:PropertyFieldGroup>

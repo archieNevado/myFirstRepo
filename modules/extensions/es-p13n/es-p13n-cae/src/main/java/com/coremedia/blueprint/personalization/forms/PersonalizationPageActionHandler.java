@@ -7,6 +7,7 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.personalization.elastic.InterestsService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
@@ -63,7 +64,8 @@ public class PersonalizationPageActionHandler extends PageHandlerBase {
           @PathVariable(SEGMENT_ROOT) String context,
           @PathVariable(SEGMENT_ID) ContentBean contentBean,
           @ModelAttribute() PersonalizationForm form,
-          BindingResult bindingResult) {
+          BindingResult bindingResult,
+          HttpServletRequest request) {
 
     if (!(contentBean instanceof CMAction)) {
       return badRequest();
@@ -71,7 +73,7 @@ public class PersonalizationPageActionHandler extends PageHandlerBase {
 
     // compute page
     Navigation navigation = getNavigation(singletonList(context));
-    Page page = asPage(navigation, (CMAction) contentBean);
+    Page page = asPage(navigation, (CMAction) contentBean, UserVariantHelper.getUser(request));
 
     // perform update
     PersonalizationForm updatedForm = (PersonalizationForm)
@@ -88,7 +90,8 @@ public class PersonalizationPageActionHandler extends PageHandlerBase {
    */
   @RequestMapping(value = EXPLICITINTEREST_URI, method = RequestMethod.GET)
   public ModelAndView handleGetExplicitInterestsAjax(@PathVariable(SEGMENT_ROOT) String context,
-                                                     @PathVariable(SEGMENT_ID) ContentBean contentBean) {
+                                                     @PathVariable(SEGMENT_ID) ContentBean contentBean,
+                                                     HttpServletRequest request) {
 
     if (!(contentBean instanceof CMAction)) {
       return badRequest();
@@ -97,7 +100,7 @@ public class PersonalizationPageActionHandler extends PageHandlerBase {
 
     // compute page
     Navigation navigation = getNavigation(singletonList(context));
-    Page page = asPage(navigation, action);
+    Page page = asPage(navigation, action, UserVariantHelper.getUser(request));
 
     final PersonalizationForm form = interestsService.getExplicitInterests(page);
 

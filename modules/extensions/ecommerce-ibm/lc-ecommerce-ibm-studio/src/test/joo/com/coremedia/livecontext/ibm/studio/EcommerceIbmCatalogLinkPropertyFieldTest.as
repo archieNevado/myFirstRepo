@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ibm.studio {
 import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkContextMenu;
-import com.coremedia.ecommerce.studio.components.link.CatalogLinkField;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
 import com.coremedia.livecontext.ibm.studio.library.EcommerceIbmCollectionViewActionsPlugin;
 import com.coremedia.livecontext.ibm.studio.mgmtcenter.ManagementCenterUtil;
@@ -20,7 +19,7 @@ import ext.menu.Item;
 import js.HTMLElement;
 
 public class EcommerceIbmCatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
-  private var link:CatalogLinkField;
+  private var link:CatalogLinkPropertyField;
   private var openWcsButton:Button;
   private var openInTabMenuItem:Item;
   private var openWcsMenuItem:Item;
@@ -154,10 +153,7 @@ public class EcommerceIbmCatalogLinkPropertyFieldTest extends AbstractProductTea
    */
   private function createTestling(config:CatalogLinkPropertyFieldTestView):void {
     viewPort = new CatalogLinkPropertyFieldTestView(config);
-    var testling:CatalogLinkPropertyField =
-            viewPort.getComponent(CatalogLinkPropertyFieldTestView.CATALOG_LINK_PROPERTY_FIELD_ITEM_ID) as CatalogLinkPropertyField;
-    link = testling.find('itemId', CatalogLinkPropertyField.CATALOG_LINK_FIELD_ITEM_ID)[0] as CatalogLinkField;
-
+    link = viewPort.getComponent(CatalogLinkPropertyFieldTestView.CATALOG_LINK_PROPERTY_FIELD_ITEM_ID) as CatalogLinkPropertyField;
     var openInTabButton:Button = Button(link.getTopToolbar().find('itemId', ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID)[0]);
     //we cannot and don't want test the open in tab action as it needs the workarea.
     link.getTopToolbar().remove(openInTabButton);

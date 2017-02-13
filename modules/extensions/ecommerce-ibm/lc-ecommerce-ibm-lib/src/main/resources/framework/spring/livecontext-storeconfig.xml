@@ -38,18 +38,10 @@
     <entry key="wcs.version" value="${livecontext.ibm.wcs.version}"/>
   </util:map>
 
-  <util:map id="perfectchefStoreConfig">
-    <entry key="store.name" value="${livecontext.ibm.wcs.store.name.perfectchef}"/>
-    <entry key="currency" value="${livecontext.ibm.wcs.currency.perfectchef}"/>
-    <entry key="catalog.asset.store" value="${livecontext.ibm.wcs.catalog.asset.store.perfectchef}"/>
-    <entry key="wcs.version" value="${livecontext.ibm.wcs.version}"/>
-  </util:map>
-
   <customize:append id="ibmStoreConfigurationsCustomizer" bean="ibmStoreConfigurations">
     <map>
       <entry key="aurora" value-ref="auroraStoreConfig"/>
       <entry key="aurorab2b" value-ref="aurorab2bStoreConfig"/>
-      <entry key="perfectchef" value-ref="perfectchefStoreConfig"/>
     </map>
   </customize:append>
 

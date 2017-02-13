@@ -1,9 +1,11 @@
 package com.coremedia.blueprint.themeimporter.client;
 
-import com.coremedia.blueprint.themeimporter.ThemeImporter;
+import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.server.legacy.exporter.ServerXmlExport;
+import com.coremedia.cap.themeimporter.ThemeImporter;
+import com.coremedia.cap.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,16 +18,29 @@ import org.springframework.core.env.Environment;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+import static com.coremedia.blueprint.themeimporter.client.ThemeImporterInitializer.THEMEIMPORTER_CLEAN;
+import static com.coremedia.blueprint.themeimporter.client.ThemeImporterInitializer.THEMEIMPORTER_DEVELOPMENT_MODE;
+import static com.coremedia.blueprint.themeimporter.client.ThemeImporterInitializer.THEMEIMPORTER_EXITCODE;
+import static com.coremedia.blueprint.themeimporter.client.ThemeImporterInitializer.THEMEIMPORTER_FOLDER;
+import static com.coremedia.blueprint.themeimporter.client.ThemeImporterInitializer.THEMEIMPORTER_SERVEREXPORTPATH;
+import static com.coremedia.blueprint.themeimporter.client.ThemeImporterInitializer.THEMEIMPORTER_THEMES;
 
 public abstract class AbstractThemeImporterClient implements CommandLineRunner, ApplicationContextAware {
   private static final Logger LOG = LoggerFactory.getLogger(AbstractThemeImporterClient.class);
 
   private CapConnection capConnection;
   private ThemeImporter themeImporter;
+  private ThemeService themeService;
   private Environment env;
 
 
@@ -41,6 +56,11 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
     this.themeImporter = themeImporter;
   }
 
+  @Resource(name="themeService")
+  public void setThemeService(ThemeService themeService) {
+    this.themeService = themeService;
+  }
+
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) {
     env = applicationContext.getEnvironment();
@@ -49,6 +69,9 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
   @Override
   public void run(String... strings) {
     try {
+      if (env.getProperty(THEMEIMPORTER_DEVELOPMENT_MODE, Boolean.class)) {
+        LOG.info("Theme importer runs in development mode.");
+      }
       work();
       if (getExitCode().get() != 0) {
         LOG.warn("Done, with errors.");
@@ -74,35 +97,65 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
   // --- properties -------------------------------------------------
 
   private String getFolder() {
-    return env.getProperty(ThemeImporterInitializer.THEMEIMPORTER_FOLDER);
+    String originalFolder = env.getProperty(THEMEIMPORTER_FOLDER);
+    if (!env.getProperty(THEMEIMPORTER_DEVELOPMENT_MODE, Boolean.class)) {
+      return originalFolder;
+    }
+    User developer = capConnection.getSession().getUser();
+    return themeService.developerPath(originalFolder, developer);
+  }
+
+  private boolean cleanBeforeImport() {
+    return env.getProperty(THEMEIMPORTER_CLEAN, Boolean.class);
   }
 
   private List<String> getThemes() {
-    return env.getProperty(ThemeImporterInitializer.THEMEIMPORTER_THEMES, List.class);
+    return env.getProperty(THEMEIMPORTER_THEMES, List.class);
   }
 
   private String getServerExportPath() {
-    return env.getProperty(ThemeImporterInitializer.THEMEIMPORTER_SERVEREXPORTPATH);
+    return env.getProperty(THEMEIMPORTER_SERVEREXPORTPATH);
   }
 
   private AtomicInteger getExitCode() {
-    return env.getProperty(ThemeImporterInitializer.THEMEIMPORTER_EXITCODE, AtomicInteger.class);
+    return env.getProperty(THEMEIMPORTER_EXITCODE, AtomicInteger.class);
   }
 
 
   // --- internal ---------------------------------------------------
 
   private void work() {
-    themeImporter.importThemes(getFolder(), collectThemeFiles(getThemes(), getExitCode()));
+    String targetFolder = getFolder();
+    if (targetFolder == null) {
+      LOG.error("No target folder, or no corresponding development folder");
+      getExitCode().set(5);
+      return;
+    }
+    LOG.info("Import themes to {}", targetFolder);
+    Collection<File> files = collectThemeFiles(getThemes(), getExitCode());
+    List<InputStream> streams = files.stream().
+            map(AbstractThemeImporterClient::openStream).
+            filter(Objects::nonNull).
+            collect(Collectors.toList());
+    themeImporter.importThemes(targetFolder, streams, true, cleanBeforeImport());
     String serverExportPath = getServerExportPath();
     if (serverExportPath!=null) {
-      Content themeRoot = capConnection.getContentRepository().getChild(getFolder());
+      Content themeRoot = capConnection.getContentRepository().getChild(targetFolder);
       if (themeRoot == null) {
-        LOG.warn("Nothing to export at {}, maybe the theme import did not work as expected.", getFolder());
+        LOG.warn("Nothing to export at {}, maybe the theme import did not work as expected.", targetFolder);
       } else {
-        LOG.info("serverexport themes to " + serverExportPath);
+        LOG.info("serverexport themes to {}", serverExportPath);
         export(capConnection, themeRoot, serverExportPath);
       }
+    }
+  }
+
+  private static InputStream openStream(File file) {
+    try {
+      return new FileInputStream(file);
+    } catch (FileNotFoundException e) {
+      LOG.error("could not open file {}, skipping", file, e);
+      return null;
     }
   }
 

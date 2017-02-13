@@ -1,9 +1,10 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMDownload" -->
 <#-- @ftlvariable name="islast" type="java.lang.Boolean" -->
 
+<#-- same as CMTeasable.teaser.ftl but with a link to the file. -->
 <#assign cssClasses = self.teaserText?has_content?then(" is-text", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign additionalClass=cm.localParameters().additionalClass!"cm-teasable" />
-<#assign link=cm.getLink(self!cm.UNDEFINED) />
+<#assign link=cm.getLink(self.data!cm.UNDEFINED) />
 
 <#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
 <#assign renderCTA=cm.localParameter("renderCTA", true) />
@@ -16,9 +17,8 @@
         <#-- picture -->
         <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=additionalClass displayEmptyImage=renderEmptyImage displayDimmer=renderDimmer limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_teaser", [])/>
 
-
         <div class="${additionalClass}__caption caption">
-        <#-- teaser title -->
+          <#-- teaser title -->
           <#if self.teaserTitle?has_content>
               <h3 class="${additionalClass}__headline" <@cm.metadata "properties.teaserTitle" />>
           <span>

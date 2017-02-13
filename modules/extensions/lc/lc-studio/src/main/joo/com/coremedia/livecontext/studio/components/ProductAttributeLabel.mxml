@@ -16,7 +16,8 @@
     ]]></fx:Script>
 
   <items>
-    <DisplayField fieldLabel="{config.productAttribute.displayName}" labelSeparator=":" labelAlign="left" value="{config.productAttribute.value.toLocaleString()+''}"/>
+    <DisplayField fieldLabel="{config.productAttribute.displayName}" labelSeparator=":" labelAlign="left"
+                  value="{config.productAttribute.value.toLocaleString()+''}"/>
   </items>
 
 </FieldContainer>

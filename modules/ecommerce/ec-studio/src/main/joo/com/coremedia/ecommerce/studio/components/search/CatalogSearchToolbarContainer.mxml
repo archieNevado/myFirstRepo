@@ -18,16 +18,16 @@
     public native function CatalogSearchToolbarContainer(config:CatalogSearchToolbarContainer = null);
     ]]></fx:Script>
 
-    <items>
-      <ec:CatalogSearchToolbar>
-        <ec:items exml:mode="append">
-          <TbFill />
-          <editor:SwitchViewButtonsContainer scope="{this}"/>
-        </ec:items>
-      </ec:CatalogSearchToolbar>
-    </items>
-    <layout>
-      <layout_HBox/>
-    </layout>
-  
+  <items>
+    <ec:CatalogSearchToolbar>
+      <ec:items exml:mode="append">
+        <TbFill/>
+        <editor:SwitchViewButtonsContainer scope="{this}"/>
+      </ec:items>
+    </ec:CatalogSearchToolbar>
+  </items>
+  <layout>
+    <layout_HBox/>
+  </layout>
+
 </Container>

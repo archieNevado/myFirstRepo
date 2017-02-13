@@ -3,9 +3,12 @@ package com.coremedia.blueprint.studio {
 import com.coremedia.blueprint.base.components.sites.SiteAwareVisibilityPluginBase;
 import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
+import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
+import com.coremedia.cms.editor.sdk.sites.SitesService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 
 public class BlueprintFormsStudioPluginBase extends StudioPlugin {
@@ -53,6 +56,13 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
     var orderBys:Array = [];
     orderBys.push('name ' + direction);
     return orderBys;
+  }
+
+  /**
+   * Prevents global downloads to be previewed.
+   */
+  protected function mayPreviewDownload(content:Content):Boolean {
+    return editorContext.getSitesService().getSiteFor(content);
   }
 
 }

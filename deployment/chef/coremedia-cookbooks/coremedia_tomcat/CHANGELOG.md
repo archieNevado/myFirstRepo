@@ -2,6 +2,10 @@ coremedia_tomcat Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia_tomcat cookbook.
 
+v.2.0.12
+--------
+- support for Tomcat `8.5.x`
+
 v.2.0.11
 ------------
 - add attribute `clean_log_dir_on_start` to `coremedia_tomcat` resource to allow cleaning the logs.

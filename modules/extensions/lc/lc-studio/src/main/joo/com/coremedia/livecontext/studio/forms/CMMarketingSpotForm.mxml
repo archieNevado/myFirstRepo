@@ -22,34 +22,39 @@
     public native function CMMarketingSpotForm(config:CMMarketingSpotForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <bpforms:TeaserDocumentForm/>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMMarketingSpot_text')}"
-                                     itemId="cmMarketingSpotExternalIdForm">
-            <editor:items>
-              <ec:CatalogLinkPropertyField ddGroup="ContentDD"
-                                           propertyName="externalId"
-                                           openLinkSources="{CatalogHelper.getInstance().openMarketingSpots}"
-                                           catalogObjectType="{CatalogModel.TYPE_MARKETING_SPOT}"
-                                           emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text')}"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMDynamicList_maxLength_text')}"
-                                     itemId="cmMarketingSpotLengthForm"
-                                     manageHeight="{false}">
-            <editor:items>
-              <editor:IntegerPropertyField propertyName="maxLength"
-                                           hideLabel="true"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:ViewTypeSelectorForm paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
-                                        collapsed="false"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataInformationForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <bpforms:TeaserDocumentForm/>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMMarketingSpot_text')}"
+                itemId="cmMarketingSpotExternalIdForm">
+          <editor:items>
+            <ec:CatalogLinkPropertyField propertyName="externalId"
+                                         maxCardinality="1"
+                                         replaceOnDrop="true"
+                                         linkTypeNames="{[CatalogModel.TYPE_MARKETING_SPOT]}"
+                                         dropAreaClickHandler="{CatalogHelper.getInstance().openMarketingSpots}"
+                                         dropAreaText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text')}"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMDynamicList_maxLength_text')}"
+                itemId="cmMarketingSpotLengthForm"
+                manageHeight="{false}">
+          <editor:items>
+            <editor:IntegerPropertyField propertyName="maxLength"
+                                         hideLabel="true"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:ViewTypeSelectorForm
+                paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
+                collapsed="false"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataInformationForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

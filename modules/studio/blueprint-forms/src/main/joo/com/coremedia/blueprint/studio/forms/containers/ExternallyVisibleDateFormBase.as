@@ -7,6 +7,11 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
+/**
+ * Fires after the externally display date has changed.
+ */
+[Event(name = "externallyDisplayedDateChanged")] // NOSONAR - no type
+
 public class ExternallyVisibleDateFormBase extends PropertyFieldGroup {
 
   internal var model:Bean;
@@ -14,7 +19,6 @@ public class ExternallyVisibleDateFormBase extends PropertyFieldGroup {
   internal var modelValueExpression:ValueExpression;
 
   public function ExternallyVisibleDateFormBase(config:ExternallyVisibleDateForm = null) {
-    /* EXT6_GONE:ext.util.Observable#addEvents addEvents("externallyDisplayedDateChanged");*/
     super(config);
 
     getModel().addPropertyChangeListener("externallyDisplayDate", externallyDisplayDateChangeListener);

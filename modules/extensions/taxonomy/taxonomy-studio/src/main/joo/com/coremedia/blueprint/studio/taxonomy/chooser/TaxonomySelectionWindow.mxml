@@ -11,6 +11,7 @@
         width="510"
         height="450"
         modal="true"
+        constrainHeader="true"
         ui="{WindowSkin.GRID_200.getSkin()}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
@@ -67,7 +68,7 @@
                                             emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_empty_chooser_text')}">
           <taxonomy:linkListWrapper>
             <editor:MemoryLinkListWrapper linksVE="{getSelectionExpression()}"
-                                          linkTypeName="CMTaxonomy" />
+                                          linkTypeName="CMTaxonomy"/>
           </taxonomy:linkListWrapper>
         </taxonomy:TaxonomyLinkListGridPanel>
       </items>

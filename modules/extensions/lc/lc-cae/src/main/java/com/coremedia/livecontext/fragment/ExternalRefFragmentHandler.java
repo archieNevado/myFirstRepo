@@ -10,10 +10,12 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.fragment.resolver.LinkableAndNavigation;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -88,7 +91,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
       return badRequest("The content resolved for the given external reference (" + externalRef + ") is not part of the given site");
     }
 
-    ModelAndView modelAndView = doCreateModelAndView(parameters, navigation, linkable);
+    ModelAndView modelAndView = doCreateModelAndView(parameters, navigation, linkable, UserVariantHelper.getUser(request));
     return modelAndView!=null ? modelAndView : badRequest("Don't know how to handle fragment parameters " + parameters);
   }
 
@@ -101,23 +104,26 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
    * This default implementation covers all current and historical
    * Blueprint usecases.  You can enhance or simplify it according to your
    * project's particular needs.
+   * <p>
+   * The developer parameter may be considered by particular features to
+   * reflect work in progress.
    */
-  protected ModelAndView doCreateModelAndView(FragmentParameters parameters, Content navigation, Content linkable) {
+  protected ModelAndView doCreateModelAndView(FragmentParameters parameters, Content navigation, Content linkable, @Nullable User developer) {
     String view = parameters.getView();
 
     if (isBlank(parameters.getPlacement()) && usePageRendering) {
-      return createModelAndViewForPage(navigation, linkable, view);
+      return createModelAndViewForPage(navigation, linkable, view, developer);
     }
 
     String placement = normalizedPlacement(parameters, linkable, view);
 
     if (!isRequestToPlacement(linkable, navigation, placement)) {
-      return createModelAndViewForLinkable(navigation, linkable, view);
+      return createModelAndViewForLinkable(navigation, linkable, view, developer);
     }
 
     //include a page fragment for the given channel
     if (isNotBlank(placement)) {
-      return createModelAndViewForPlacement(navigation, view, placement);
+      return createModelAndViewForPlacement(navigation, view, placement, developer);
     }
     return null;
   }
@@ -136,7 +142,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
 
   @VisibleForTesting
   @Nonnull
-  protected ModelAndView createModelAndViewForLinkable(@Nonnull Content channel, @Nonnull Content child, String view) {
+  protected ModelAndView createModelAndViewForLinkable(@Nonnull Content channel, @Nonnull Content child, String view, @Nullable User developer) {
     // The default view is used only for placement requests, that do not request a certain view. For
     // any other requests, the default view is null (as usual).
     if ("default".equals(view)) {
@@ -153,7 +159,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
       return handleInvalidLinkable(linkable);
     }
 
-    Page page = asPage(navigation, navigation);
+    Page page = asPage(navigation, navigation, developer);
     ModelAndView modelAndView = HandlerHelper.createModelWithView(linkable, view);
     RequestAttributeConstants.setPage(modelAndView, page);
     NavigationLinkSupport.setNavigation(modelAndView, navigation);
@@ -161,20 +167,20 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return modelAndView;
   }
 
-  private ModelAndView createModelAndViewForPage(Content navigation, Content linkable, String view) {
+  private ModelAndView createModelAndViewForPage(Content navigation, Content linkable, String view, @Nullable User developer) {
     Navigation navigationBean = getContentBeanFactory().createBeanFor(navigation, Navigation.class);
     Linkable linkableBean = getContentBeanFactory().createBeanFor(linkable, Linkable.class);
     if (!getValidationService().validate(linkableBean)) {
       return handleInvalidLinkable(linkableBean);
     }
-    Page page = asPage(navigationBean, linkableBean);
+    Page page = asPage(navigationBean, linkableBean, developer);
     return createModelAndView(page, view);
   }
 
-  private ModelAndView createModelAndViewForPlacement(Content navigation, String view, String placement) {
+  private ModelAndView createModelAndViewForPlacement(Content navigation, String view, String placement, @Nullable User developer) {
     CMChannel channelBean = getContentBeanFactory().createBeanFor(navigation, CMChannel.class);
     // validation will be done in following method
-    return createModelAndViewForPlacementAndView(channelBean, placement, view);
+    return createModelAndViewForPlacementAndView(channelBean, placement, view, developer);
   }
 
   // --------------- Helper -----------------

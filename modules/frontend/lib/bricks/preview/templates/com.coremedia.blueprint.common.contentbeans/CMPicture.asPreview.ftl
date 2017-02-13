@@ -55,15 +55,15 @@
       <#-- id may not be generated using bp.generateId, as persisting toggle state in local storage will not work -->
       <#assign toggleId="toggle-" + (ratio_index + 2) + "-crop-" + ratio />
       <div class="toggle-item cm-preview-item" data-id="${toggleId}">
-        <a href="#" class="toggle-button cm-preview-item__headline">
+        <a href="#" class="toggle-button cm-preview-item__headline toggle-off">
           <@bp.message "preview_image_"+ratio />
         </a>
-        <div class="toggle-container cm-preview-item__container">
-          <div class="cm-image-box cm-image-box--preview" style="max-width: ${maxPreviewImageWidth}px;">
+        <div class="toggle-container cm-preview-item__container toggle-container-off">
+          <div style="max-width: ${maxPreviewImageWidth}px;">
             <@cm.include self=self params={
               "limitAspectRatios": [ratio],
               "crop": ratio,
-              "classBox": "cm-image-box__image"
+              "classBox": "cm-preview__image"
             }/>
           </div>
         </div>

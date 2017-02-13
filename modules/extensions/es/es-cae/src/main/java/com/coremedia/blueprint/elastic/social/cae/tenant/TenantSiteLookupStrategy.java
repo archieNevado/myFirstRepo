@@ -31,7 +31,7 @@ public class TenantSiteLookupStrategy implements TenantLookupStrategy {
     if (null != siteFromRequest) {
       return elasticSocialPlugin.getElasticSocialConfiguration(siteFromRequest).getTenant();
     } else {
-      LOG.warn("no navigation content found for request {}", request);
+      LOG.trace("no navigation content found for request {}", request);
     }
     return null;
   }

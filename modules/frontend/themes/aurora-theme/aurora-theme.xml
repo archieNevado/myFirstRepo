@@ -15,8 +15,8 @@
   <thumbnail>img/theme-preview.jpg</thumbnail>
 
   <javaScriptLibraries>
-    <javaScript>vendor/jquery.min.js</javaScript>
-    <javaScript>vendor/bootstrap/bootstrap.min.js</javaScript>
+    <javaScript disableCompress="true">vendor/jquery.min.js</javaScript>
+    <javaScript disableCompress="true">vendor/bootstrap/bootstrap.min.js</javaScript>
     <javaScript>vendor/bootstrap/carousel-swipe.js</javaScript>
     <javaScript>vendor/imagesloaded/imagesloaded.pkgd.js</javaScript>
     <javaScript>vendor/jquery.cycle2.js</javaScript>
@@ -35,7 +35,7 @@
     <javaScript>js/jquery.coremedia.responsiveimages.js</javaScript>
     <javaScript>js/jquery.coremedia.spinner.js</javaScript>
     <javaScript>js/jquery.coremedia.equalheight.js</javaScript>
-    <javaScript>js/lib/logger.js</javaScript>
+    <javaScript disableCompress="true">js/lib/logger.js</javaScript>
     <javaScript>js/coremedia.blueprint.nodeDecorationService.js</javaScript>
     <javaScript>js/coremedia.blueprint.deviceDetector.js</javaScript>
     <javaScript>js/coremedia.blueprint.hashBasedFragment.js</javaScript>
@@ -52,8 +52,8 @@
     <javaScript>js/coremedia.blueprint.es.timezone.js</javaScript>
     <javaScript>js/coremedia.blueprint.es.js</javaScript>
     <!-- CoreMedia Aurora-->
-    <javaScript>js/coremedia.blueprint.perfectchef.deviceSettings.js</javaScript>
-    <javaScript>js/coremedia.blueprint.perfectchef.js</javaScript>
+    <javaScript>js/coremedia.blueprint.livecontext.deviceSettings.js</javaScript>
+    <javaScript>js/coremedia.blueprint.livecontext.js</javaScript>
   </javaScripts>
 
   <styleSheets>

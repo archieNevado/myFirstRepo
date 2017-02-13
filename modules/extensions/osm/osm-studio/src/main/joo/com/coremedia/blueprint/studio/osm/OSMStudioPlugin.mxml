@@ -20,34 +20,35 @@
     ]]></fx:Script>
 
 
-    <editor:rules>
+  <editor:rules>
 
-      <bpforms:CMLocTaxonomyForm>
-        <bpforms:plugins>
-          <ui:NestedRulesPlugin>
-            <ui:rules>
-              <editor:DocumentForm itemId="CMLocTaxonomy">
-                <editor:plugins>
-                  <ui:ReplaceItemsPlugin>
-                    <ui:items>
-                      <osm:OSMPropertyField propertyName="latitudeLongitude"
-                                            itemId="latitudeLongitude"/>
-                    </ui:items>
-                  </ui:ReplaceItemsPlugin>
-                </editor:plugins>
-              </editor:DocumentForm>
-            </ui:rules>
-          </ui:NestedRulesPlugin>
-        </bpforms:plugins>
-      </bpforms:CMLocTaxonomyForm>
+    <bpforms:CMLocTaxonomyForm>
+      <bpforms:plugins>
+        <ui:NestedRulesPlugin>
+          <ui:rules>
+            <editor:DocumentForm itemId="CMLocTaxonomy">
+              <editor:plugins>
+                <ui:ReplaceItemsPlugin>
+                  <ui:items>
+                    <osm:OSMPropertyField propertyName="latitudeLongitude"
+                                          itemId="latitudeLongitude"/>
+                  </ui:items>
+                </ui:ReplaceItemsPlugin>
+              </editor:plugins>
+            </editor:DocumentForm>
+          </ui:rules>
+        </ui:NestedRulesPlugin>
+      </bpforms:plugins>
+    </bpforms:CMLocTaxonomyForm>
 
-    </editor:rules>
+  </editor:rules>
 
-    <editor:configuration>
+  <editor:configuration>
 
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.osm.OSMStudioPlugin')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.osm.OSMStudioPlugin')}"/>
 
-    </editor:configuration>
-  
+  </editor:configuration>
+
 </editor:StudioPlugin>

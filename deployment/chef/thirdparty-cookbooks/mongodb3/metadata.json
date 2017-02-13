@@ -6,10 +6,10 @@
   "maintainer_email": "sunggun.dev@gmail.com",
   "license": "Apache 2.0",
   "platforms": {
-    "ubuntu": "= 12.04",
+    "ubuntu": ">= 12.04",
     "debian": "= 7.8",
     "redhat": "= 6.6",
-    "centos": "= 6.6",
+    "centos": "= 7.2",
     "oracle": "= 6.6",
     "amazon": ">= 0.0.0"
   },
@@ -43,7 +43,7 @@
   "recipes": {
 
   },
-  "version": "5.2.0",
+  "version": "5.3.0",
   "source_url": "",
   "issues_url": "",
   "privacy": false,

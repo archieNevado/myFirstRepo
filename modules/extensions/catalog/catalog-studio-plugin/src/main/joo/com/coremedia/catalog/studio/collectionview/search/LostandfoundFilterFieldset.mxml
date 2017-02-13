@@ -23,23 +23,23 @@
     public native function LostandfoundFilterFieldset(config:LostandfoundFilterFieldset = null);
     ]]></fx:Script>
 
-    <local:items>
-      <Container>
-        <items>
-          <Checkbox itemId="filterLostandfoundCheckbox"
-                    boxLabel="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Filter_LostAndFound_checkbox')}"
-                    hideLabel="true">
-            <plugins>
-              <ui:BindPropertyPlugin bidirectional="true">
-                <ui:bindTo>
-                  <ui:ValueExpression expression="{LOSTANDFOUND_CHECKBOX_SELECTED}"
-                                      context="{getStateBean()}"/>
-                </ui:bindTo>
-              </ui:BindPropertyPlugin>
-            </plugins>
-          </Checkbox>
-        </items>
-      </Container>
-    </local:items>
-  
+  <local:items>
+    <Container>
+      <items>
+        <Checkbox itemId="filterLostandfoundCheckbox"
+                  boxLabel="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Filter_LostAndFound_checkbox')}"
+                  hideLabel="true">
+          <plugins>
+            <ui:BindPropertyPlugin bidirectional="true">
+              <ui:bindTo>
+                <ui:ValueExpression expression="{LOSTANDFOUND_CHECKBOX_SELECTED}"
+                                    context="{getStateBean()}"/>
+              </ui:bindTo>
+            </ui:BindPropertyPlugin>
+          </plugins>
+        </Checkbox>
+      </items>
+    </Container>
+  </local:items>
+
 </local:LostandfoundFilterFieldsetBase>

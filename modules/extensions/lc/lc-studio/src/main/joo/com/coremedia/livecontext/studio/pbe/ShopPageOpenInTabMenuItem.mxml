@@ -19,15 +19,16 @@
     public native function ShopPageOpenInTabMenuItem(config:ShopPageOpenInTabMenuItem = null);
     ]]></fx:Script>
 
-    <baseAction>
-      <livecontext:MetadataToEntitiesActionAdapter metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
-                                                   itemId="{LC_OPEN_IN_TAB_MENU_ITEM_ID}"
-                                                   hideOnDisable="true"
-                                                   useParentNode="true">
-        <livecontext:backingAction>
-          <editor:OpenInTabAction/>
-        </livecontext:backingAction>
-      </livecontext:MetadataToEntitiesActionAdapter>
-    </baseAction>
-  
+  <baseAction>
+    <livecontext:MetadataToEntitiesActionAdapter
+            metadataVariableName="{PreviewPanelBase.CURRENT_PREVIEW_METADATA_SELECTION_VARIABLE_NAME}"
+            itemId="{LC_OPEN_IN_TAB_MENU_ITEM_ID}"
+            hideOnDisable="true"
+            useParentNode="true">
+      <livecontext:backingAction>
+        <editor:OpenInTabAction/>
+      </livecontext:backingAction>
+    </livecontext:MetadataToEntitiesActionAdapter>
+  </baseAction>
+
 </MenuItem>

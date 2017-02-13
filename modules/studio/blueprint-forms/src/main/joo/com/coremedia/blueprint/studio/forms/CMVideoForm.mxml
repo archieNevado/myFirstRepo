@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <local:CMVideoFormBase
-                xmlns:fx="http://ns.adobe.com/mxml/2009"
-                xmlns:local="com.coremedia.blueprint.studio.forms.*"
-                xmlns:exml="http://www.jangaroo.net/exml/0.8"
-                xmlns="exml:ext.config"
-                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-                xmlns:bpbase-components="exml:com.coremedia.blueprint.base.components.config"
-                xmlns:ui="exml:com.coremedia.ui.config"
-                xmlns:bpforms="exml:com.coremedia.blueprint.studio.config">
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.blueprint.studio.forms.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns:bpbase-components="exml:com.coremedia.blueprint.base.components.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:bpforms="exml:com.coremedia.blueprint.studio.config">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
@@ -28,84 +28,81 @@
     public native function CMVideoForm(config:CMVideoForm = null);
     ]]></fx:Script>
 
-    <local:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <bpforms:DetailsDocumentForm/>
-          <!-- same as bpforms:teaserDocumentForm without bpforms:callToActionConfigurationForm -->
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Teaser_label')}"
-                                     itemId="teaserDocumentForm"
-                                     propertyNames="{['teaserTitle','teaserText']}"
-                                     expandOnValues="teaserTitle,teaserText.data"
-                                     collapsed="true">
-            <editor:items>
-              <editor:StringPropertyField propertyName="teaserTitle">
-                <editor:plugins exml:mode="append">
-                  <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
-                </editor:plugins>
-              </editor:StringPropertyField>
-              <editor:TextAreaPropertyField propertyName="teaserText"
-                                            itemId="teaserText"
-                                            changeBuffer="1000">
-                <editor:plugins exml:mode="append">
-                  <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
-                </editor:plugins>
-              </editor:TextAreaPropertyField>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:DataDocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_text')}"
-                                    helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_helpText')}"/>
-          <bpforms:ViewTypeSelectorForm bindTo="{config.bindTo}"
-                                        hideForSingleChoice="false"/>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_timeline_text')}"
-                                     collapsed="false"
-                                     itemId="videoTimeLineForm">
-            <editor:plugins exml:mode="append">
-              <ui:BindVisibilityPlugin bindTo="{getVisibleForViewTypeValueExpression(config.bindTo, 'shoppable')}"/>
-            </editor:plugins>
-            <editor:items>
-              <editor:LinkListPropertyField linkType="{'CMTeasable'}"
-                                            itemId="default"
-                                            showThumbnails="true"
-                                            openCollectionViewHandler="{openCollectionViewHandler}"
-                                            propertyName="{'timeLine.' + Sequence.DEFAULT_TARGET_PROPERTY_NAME}"
-                                            bindTo="{config.bindTo}"
-                                            maxCardinality="1" />
-              <bpbase-components:TimelineEditor propertyName="timeLine"
-                                                searchType="CMProductTeaser"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_WidthAndHeight')}"
-                                     itemId="cmVideoSizeForm"
-                                     collapsed="true">
-            <editor:items>
-              <editor:IntegerPropertyField propertyName="width"/>
-              <editor:IntegerPropertyField propertyName="height"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:PictureDocumentForm collapsed="true"
-                                       maxCardinality="1"/>
-          <bpforms:ViewTypeSelectorForm/>
-          <bpforms:ValidityDocumentForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
-                           itemId="{EXTRAS_TAB_ITEM_ID}">
-        <editor:items>
-          <bpforms:CategoryDocumentForm/>
-          <editor:PropertyFieldGroup collapsed="false"
-                                     itemId="{COPYRIGHT_FORM_ITEM_ID}"
-                                     title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Description_label')}"
-                                     forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
-            <editor:items>
-              <editor:StringPropertyField propertyName="copyright"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:SEOForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSearchableForm/>
-    </local:items>
-  
+  <local:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <bpforms:DetailsDocumentForm/>
+        <!-- same as bpforms:teaserDocumentForm without bpforms:callToActionConfigurationForm -->
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Teaser_label')}"
+                itemId="teaserDocumentForm"
+                propertyNames="{['teaserTitle','teaserText']}"
+                expandOnValues="teaserTitle,teaserText.data"
+                collapsed="true">
+          <editor:items>
+            <editor:StringPropertyField propertyName="teaserTitle">
+              <editor:plugins exml:mode="append">
+                <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
+              </editor:plugins>
+            </editor:StringPropertyField>
+            <editor:TextAreaPropertyField propertyName="teaserText"
+                                          itemId="teaserText"
+                                          changeBuffer="1000">
+              <editor:plugins exml:mode="append">
+                <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
+              </editor:plugins>
+            </editor:TextAreaPropertyField>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:DataDocumentForm
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_text')}"
+                helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_helpText')}"/>
+        <bpforms:ViewTypeSelectorForm bindTo="{config.bindTo}"
+                                      hideForSingleChoice="false"/>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_timeline_text')}"
+                collapsed="false"
+                itemId="videoTimeLineForm">
+          <editor:plugins exml:mode="append">
+            <ui:BindVisibilityPlugin bindTo="{getVisibleForViewTypeValueExpression(config.bindTo, 'shoppable')}"/>
+          </editor:plugins>
+          <editor:items>
+            <editor:LinkListPropertyField linkType="{'CMTeasable'}"
+                                          itemId="default"
+                                          showThumbnails="true"
+                                          openCollectionViewHandler="{openCollectionViewHandler}"
+                                          propertyName="{'timeLine.' + Sequence.DEFAULT_TARGET_PROPERTY_NAME}"
+                                          bindTo="{config.bindTo}"
+                                          maxCardinality="1"/>
+            <bpbase-components:TimelineEditor propertyName="timeLine"
+                                              searchType="CMProductTeaser"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:PictureDocumentForm collapsed="true"
+                                     maxCardinality="1"/>
+        <bpforms:ViewTypeSelectorForm/>
+        <bpforms:ValidityDocumentForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
+            itemId="{EXTRAS_TAB_ITEM_ID}">
+      <editor:items>
+        <bpforms:CategoryDocumentForm/>
+        <editor:PropertyFieldGroup collapsed="false"
+                                   itemId="{COPYRIGHT_FORM_ITEM_ID}"
+                                   title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Description_label')}"
+                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
+          <editor:items>
+            <editor:StringPropertyField propertyName="copyright"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:SEOForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSearchableForm/>
+  </local:items>
+
 </local:CMVideoFormBase>

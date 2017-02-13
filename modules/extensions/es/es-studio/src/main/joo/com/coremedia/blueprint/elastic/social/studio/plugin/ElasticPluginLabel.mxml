@@ -16,13 +16,13 @@
     <fx:String id="expression"/>
   </fx:Declarations>
 
-    <plugins>
-      <ui:BindPropertyPlugin>
-        <ui:bindTo>
-          <ui:ValueExpression expression="{config.expression}"
-                              context="{ModerationImpl.getInstance()}"/>
-        </ui:bindTo>
-      </ui:BindPropertyPlugin>
-    </plugins>
-  
+  <plugins>
+    <ui:BindPropertyPlugin>
+      <ui:bindTo>
+        <ui:ValueExpression expression="{config.expression}"
+                            context="{ModerationImpl.getInstance()}"/>
+      </ui:bindTo>
+    </ui:BindPropertyPlugin>
+  </plugins>
+
 </DisplayField>

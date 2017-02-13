@@ -44,35 +44,37 @@ $cm-teasable-padding-large-horizontal: 0;
 }
 
 // --- product teaser
-.cm-teaser--product .cm-heading2--boxed {
-  background-color: rgba(255, 255, 255, 0.8);
-  color: #373737;
-}
-
-.cm-product-info {
-  display: block;
-  width: 100%;
-  line-height: 1.4rem;
-
-  &__pricing {
-    margin-left: 1rem;
+.cm-teasable--product {
+  .cm-heading2--boxed {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #373737;
   }
 
-  &__title,
-  &__pricing {
-    display: table-cell;
-  }
+  .cm-product-info {
+    display: block;
+    width: 100%;
+    line-height: 1.4rem;
 
-  &__title > *,
-  &__pricing > * {
-    background: transparent;
-  }
+    &__pricing {
+      margin-left: 1rem;
+    }
 
-  &__offerprice {
-    position: absolute;
-    top: -2rem;
-    left: 0;
-    background-color: #f8f8f8;
+    &__title,
+    &__pricing {
+      display: table-cell;
+    }
+
+    &__title > *,
+    &__pricing > * {
+      background: transparent;
+    }
+
+    &__offerprice {
+      position: absolute;
+      top: -2rem;
+      left: 0;
+      background-color: #f8f8f8;
+    }
   }
 }
 
@@ -198,3 +200,21 @@ $cm-teasable-padding-large-horizontal: 0;
     }
   }
 }
+
+//fix CMS-7403 - center teaser with max-width as in WCS
+.cm-placement-header {
+  max-width: 785px;
+  margin: 0 auto;
+
+  > .#{$cm-teasable-prefix} {
+    margin: 20px;
+  }
+
+  @include breakpoint(sm-and-up) {
+    .#{$cm-teasable-prefix}__picture-box {
+      @include aspect-ratio-box(16, 9);
+    }
+  }
+}
+
+

@@ -200,6 +200,30 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
             requestUri.toString());
   }
 
+
+  @Test
+  public void testFormatJsonForLogging() throws Exception {
+    String testJson = "{\"logonId\":\"coremedia\",\"logonPassword\":\"thepassword\"}";
+    String testJsonMasked = "{\"logonId\":\"coremedia\",\"logonPassword\":\"***\"}";
+    String result = wcRestConnector.formatJsonForLogging(testJson);
+    assertEquals(testJsonMasked, result);
+
+    // test with whitespaces before and after delimiter
+    testJson = "{\"logonId\":\"coremedia\",\"logonPassword\" : \"thepassword\"}";
+    result = wcRestConnector.formatJsonForLogging(testJson);
+    assertEquals(testJsonMasked, result);
+
+    // test with newlines before and after delimiter
+    testJson = "{\"logonId\":\"coremedia\",\"logonPassword\"\n:\n\"thepassword\"}";
+    result = wcRestConnector.formatJsonForLogging(testJson);
+    assertEquals(testJsonMasked, result);
+
+    // test non-greediness with more JSON elements after the password
+    String extraJson = ",\"foo\":\"bar\"}";
+    result = wcRestConnector.formatJsonForLogging(testJson+extraJson);
+    assertEquals(testJsonMasked+extraJson, result);
+  }
+
   /**
    * Adds the given values to a parameters map
    */

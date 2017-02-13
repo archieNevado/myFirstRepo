@@ -32,44 +32,47 @@
     public native function CommerceCategoryContentForm(config:CommerceCategoryContentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <livecontext:CommerceDetailsForm itemId="categoryDetails"
-                                       titleLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_name_label')}"/>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_thumbnail_title')}"
-                                 itemId="picture">
-        <editor:items>
-          <ui:Image width="120">
-            <ui:plugins>
-              <ui:BindPropertyPlugin componentProperty="src"
-                                     bindTo="{CatalogThumbnailResolver.imageValueExpression(config.bindTo)}"/>
-            </ui:plugins>
-          </ui:Image>
-        </editor:items>
-        <editor:layout>
-          <layout_VBox/>
-        </editor:layout>
-      </editor:PropertyFieldGroup>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_richMedia_title')}"
-                                 itemId="richMedia">
-        <editor:items>
-          <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.VISUALS}"
-                                             assetContentTypes="{['CMPicture', 'CMVideo', 'CMSpinner']}"
-                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_richMedia_emptyText')}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_downloads_title')}"
-                                 itemId="downloads">
-        <editor:items>
-          <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.DOWNLOADS}"
-                                             assetContentTypes="{['CMDownload']}"
-                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_downloads_emptyText')}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <livecontext:CommerceAugmentedPageGridForm itemId="placement"
-                                                 showLocal="true"
-                                                 forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
-                                                 bindTo="{augmentedCategoryExpression}"
-                                                 pageGridPropertyName="placement"/>
-    </editor:items>
-  
+  <editor:items>
+    <livecontext:CommerceDetailsForm itemId="categoryDetails"
+                                     titleLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_name_label')}"/>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_thumbnail_title')}"
+            itemId="picture">
+      <editor:items>
+        <ui:Image width="120">
+          <ui:plugins>
+            <ui:BindPropertyPlugin componentProperty="src"
+                                   bindTo="{CatalogThumbnailResolver.imageValueExpression(config.bindTo)}"/>
+          </ui:plugins>
+        </ui:Image>
+      </editor:items>
+      <editor:layout>
+        <layout_VBox/>
+      </editor:layout>
+    </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_richMedia_title')}"
+            itemId="richMedia">
+      <editor:items>
+        <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.VISUALS}"
+                                           assetContentTypes="{['CMPicture', 'CMVideo', 'CMSpinner']}"
+                                           emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_richMedia_emptyText')}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_downloads_title')}"
+            itemId="downloads">
+      <editor:items>
+        <livecontext:CatalogAssetsProperty propertyName="{CatalogObjectPropertyNames.DOWNLOADS}"
+                                           assetContentTypes="{['CMDownload']}"
+                                           emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_downloads_emptyText')}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <livecontext:CommerceAugmentedPageGridForm itemId="placement"
+                                               showLocal="true"
+                                               forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
+                                               bindTo="{augmentedCategoryExpression}"
+                                               pageGridPropertyName="placement"/>
+  </editor:items>
+
 </editor:DocumentForm>

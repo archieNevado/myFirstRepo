@@ -9,6 +9,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ui.components.StatefulProgressBar;
 import com.coremedia.ui.components.StatefulQuickTip;
+import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.impl.BeanFactoryImpl;
 import com.coremedia.ui.mixins.ValidationState;
 import com.coremedia.ui.util.EventUtil;
@@ -26,6 +27,8 @@ import ext.tip.QuickTipManager;
  */
 [ResourceBundle('com.coremedia.blueprint.studio.UploadStudioPlugin')]
 public class UploadProgressContainerBase extends Container {
+  private const ALWAYS_CHECKIN:Boolean = true;
+
   /**
    * The file wrapper model for this panel.
    */
@@ -122,10 +125,6 @@ public class UploadProgressContainerBase extends Container {
       }
     }
 
-    if (settings.getOpenInTab()) {
-      editorContext.getContentTabManager().openDocuments(translatedContents);
-    }
-
     var filteredResults:Array = results.filter(function (resultItem:XliffBulkOperationResultItem):Boolean {
       return resultItem.resultCode !== XliffImportResultCodes.SUCCESS &&
               ignoredXliffResultCodes.indexOf(resultItem.resultCode) === -1;
@@ -138,9 +137,7 @@ public class UploadProgressContainerBase extends Container {
       ComponentManager.create(xliffImportResultWindowCfg).show();
     }
 
-    progressBarUpdateSuccess();
-    file.setStatus(FileWrapper.STATUS_UPLOADED);
-    callback.call(null);
+    finalizeSuccessfulUpload(translatedContents);
   }
 
   /**
@@ -155,12 +152,27 @@ public class UploadProgressContainerBase extends Container {
         initializer(postProcessedContent);
       }
 
-      if (settings.getOpenInTab()) {
-        editorContext.getContentTabManager().openDocument(postProcessedContent);
-      } else if (postProcessedContent.isCheckedOutByCurrentSession()) {
-        postProcessedContent.checkIn();
+      finalizeSuccessfulUpload([postProcessedContent]);
+    });
+  }
+
+  private function finalizeSuccessfulUpload(postProcessedContents:Array):void {
+    ValueExpressionFactory.createFromFunction(function():Boolean {
+      if (ALWAYS_CHECKIN) {
+        for each(var content:Content in postProcessedContents) {
+          if(content.isCheckedOutByCurrentSession()) {
+            content.checkIn();
+            return undefined;
+          }
+        }
       }
 
+      if (settings.getOpenInTab()) {
+        editorContext.getContentTabManager().openDocuments(postProcessedContents);
+      }
+
+      return true;
+    }).loadValue(function():void {
       progressBarUpdateSuccess();
       file.setStatus(FileWrapper.STATUS_UPLOADED);
       callback.call(null);

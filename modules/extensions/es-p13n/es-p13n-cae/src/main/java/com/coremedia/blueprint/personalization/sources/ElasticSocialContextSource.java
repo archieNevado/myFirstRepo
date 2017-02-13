@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public final class ElasticSocialContextSource extends AbstractContextSource {
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSocialContextSource.class);
-  private static final String P13N_CONTEXT_COLLECTION = "p13n-contexts";
+  private static final String P13N_CONTEXT_COLLECTION = "p13n_contexts";
   private static final String CONTEXT_PROPERTY = "encodedContext";
 
   // name of the context we're responsible for

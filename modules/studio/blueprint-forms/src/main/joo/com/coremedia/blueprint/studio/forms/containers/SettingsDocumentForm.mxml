@@ -22,17 +22,17 @@
     <fx:String id="contentType"/>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:PropertyFieldGroup bindTo="{config.bindTo}"
-                                 itemId="settingsDocumentFieldGroup"
-                                 forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
-                                 header="{false}">
-        <editor:items>
-          <editor:LinkListPropertyField propertyName="linkedSettings" />
-          <editor:StructPropertyField propertyName="localSettings"
-                                      itemId="localSettings"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
-  
+  <editor:items>
+    <editor:PropertyFieldGroup bindTo="{config.bindTo}"
+                               itemId="settingsDocumentFieldGroup"
+                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                               header="{false}">
+      <editor:items>
+        <editor:LinkListPropertyField propertyName="linkedSettings"/>
+        <editor:StructPropertyField propertyName="localSettings"
+                                    itemId="localSettings"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

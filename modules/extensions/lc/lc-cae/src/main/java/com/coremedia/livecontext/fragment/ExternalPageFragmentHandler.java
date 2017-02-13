@@ -5,8 +5,10 @@ import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,18 +42,19 @@ public class ExternalPageFragmentHandler extends FragmentHandler {
       context = rootChannel;
     }
 
+    User developer = UserVariantHelper.getUser(request);
     String placement = params.getPlacement();
     if (StringUtils.isEmpty(placement)) {
       // No placement means that a complete page is requested.
       // Either the context is this page, or we have no such page.
       if (fullPageInheritance || isTheExternalPage(context, pageId)) {
-        return createFragmentModelAndView(context, params.getView(), rootChannel);
+        return createFragmentModelAndView(context, params.getView(), rootChannel, developer);
       } else {
         return HandlerHelper.notFound("No explicit augmented page found for id " + pageId);
       }
     } else {
       // Only a particular fragment is requested.
-      return createFragmentModelAndViewForPlacementAndView(context, placement, params.getView(), rootChannel);
+      return createFragmentModelAndViewForPlacementAndView(context, placement, params.getView(), rootChannel, developer);
     }
   }
 

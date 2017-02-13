@@ -1,6 +1,14 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 <#-- @ftlvariable name="js" type="com.coremedia.blueprint.common.contentbeans.CMJavaScript" -->
 
+<#-- include preview javascript  -->
+<#if preview.isPreviewCae()>
+  <#assign previewJs=bp.setting(self, "previewJs", []) />
+  <#list previewJs as js>
+    <@cm.include self=js view="asJSLink"/>
+  </#list>
+</#if>
+
 <#-- include javascript at bottom for performance -->
 <#list self.javaScript![] as js>
   <#-- items in result of getJavaScript() are always CMJavaScript -->
@@ -12,10 +20,5 @@
 <#-- hook for extensions at bottom of page (for e.g. javascripts) -->
 <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_END />
 
-<#-- include preview javascript  -->
-<#if preview.isPreviewCae()>
-  <#assign previewJs=bp.setting(self, "previewJs", []) />
-  <#list previewJs as js>
-    <@cm.include self=js view="asJSLink"/>
-  </#list>
-</#if>
+<#-- icon and tools for developer mode -->
+<@cm.include self=self view="_developerMode" />

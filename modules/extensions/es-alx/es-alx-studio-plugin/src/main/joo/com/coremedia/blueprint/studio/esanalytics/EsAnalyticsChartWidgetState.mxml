@@ -19,9 +19,9 @@
     public var content:Content;
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The name
-     -->
+    <!---
+     The name
+    -->
     <fx:String id="name"/>
   </fx:Declarations>
 

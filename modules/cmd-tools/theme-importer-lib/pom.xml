@@ -23,6 +23,11 @@
       <artifactId>theme-importer</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>content-services</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -39,6 +44,10 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>theme-importer-base</artifactId>
     </dependency>
 
     <dependency>

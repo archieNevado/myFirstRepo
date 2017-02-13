@@ -17,14 +17,13 @@
     private var config:SelectSubCategoriesRadioGroup;
 
     public native function SelectSubCategoriesRadioGroup(config:SelectSubCategoriesRadioGroup = null);
-
     ]]></fx:Script>
 
-    <ui:items>
-      <Radio itemId="inheritFromCatalogRadioButton"
-             boxLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Child_Categories_inherit_label')}"/>
-      <Radio itemId="selectChildrenRadioButton"
-             boxLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Child_Categories_select_label')}"/>
-    </ui:items>
-  
+  <ui:items>
+    <Radio itemId="inheritFromCatalogRadioButton"
+           boxLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Child_Categories_inherit_label')}"/>
+    <Radio itemId="selectChildrenRadioButton"
+           boxLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Child_Categories_select_label')}"/>
+  </ui:items>
+
 </ui:BoundRadioGroup>

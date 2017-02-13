@@ -23,10 +23,10 @@
     <fx:String id="contentType"/>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:BooleanPropertyField bindTo="{config.bindTo}"
-                                   hideLabel="true"
-                                   propertyName="notSearchable"/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:BooleanPropertyField bindTo="{config.bindTo}"
+                                 hideLabel="true"
+                                 propertyName="notSearchable"/>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

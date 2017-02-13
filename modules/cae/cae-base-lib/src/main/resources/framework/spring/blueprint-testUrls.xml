@@ -38,7 +38,7 @@
         <value>/Themes</value>
         <value>/System</value>
         <value>/Home</value>
-        <value>/Sites/PerfectChef/United States/English/Navigation/Fragments</value>
+        <value>/Sites/Aurora Augmentation/United States/English/Navigation/Fragments</value>
       </list>
     </property>
   </bean>
@@ -60,4 +60,5 @@
   <bean id="testSitemapSetupFactory" class="com.coremedia.blueprint.cae.sitemap.SpringBasedSitemapSetupFactory">
     <property name="sitemapSetup" ref="testUrlsConfig"/>
   </bean>
+
 </beans>

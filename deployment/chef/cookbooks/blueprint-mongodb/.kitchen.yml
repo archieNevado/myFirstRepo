@@ -11,7 +11,7 @@ driver:
   synced_folders:
     - ["./.kitchen/build", "/shared", "create: true"]
   network:
-    - ['private_network',{ ip: '192.168.252.100' }]
+    - ['private_network',{ ip: '192.168.252.109' }]
 
 provisioner:
   name: chef_solo
@@ -39,3 +39,27 @@ suites:
   includes: [centos7-vagrant]
   run_list:
     - recipe[blueprint-mongodb::default]
+
+- name: mongod_3_2
+  run_list:
+    - recipe[blueprint-mongodb::default]
+  attributes:
+    mongodb:
+      yum:
+        mirrorlist: "https://s3-eu-west-1.amazonaws.com/mirrors.coremedia.com/repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/$basearch/mirror"
+    mongodb3:
+      version: '3.2.11'
+      mongod:
+        disable-transparent-hugepages: true
+
+- name: mongod_3_4
+  run_list:
+    - recipe[blueprint-mongodb::default]
+  attributes:
+    mongodb:
+      yum:
+        baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64
+    mongodb3:
+      version: '3.4.1'
+      mongod:
+        disable-transparent-hugepages: false

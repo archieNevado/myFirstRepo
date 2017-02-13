@@ -24,86 +24,92 @@
     public native function CMImageMapForm(config:CMImageMapForm = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- 
-       The content type to fill the tree with.
-     -->
+    <!---
+     The content type to fill the tree with.
+    -->
     <fx:String id="contentType"/>
 
-    <!--- 
-       The comma separated folder values to read the content from.
-     -->
+    <!---
+     The comma separated folder values to read the content from.
+    -->
     <fx:String id="folders"/>
   </fx:Declarations>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <bpforms:TeaserDocumentForm itemId="detailsForm" collapsed="false"/>
-          <bpforms:SinglePictureDocumentForm itemId="cmImageMapPicturesForm"/>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_target_text')}"
-                                       itemId="cmImageMapTargetForm">
-            <editor:items>
-              <editor:LinkListPropertyField propertyName="target"
-                                             hideLabel="true"
-                                            showThumbnails="true"
-                                             maxCardinality="1">
-                <editor:additionalToolbarItems>
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <bpforms:TeaserDocumentForm itemId="detailsForm" collapsed="false"/>
+        <bpforms:SinglePictureDocumentForm itemId="cmImageMapPicturesForm"/>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_target_text')}"
+                itemId="cmImageMapTargetForm">
+          <editor:items>
+            <editor:LinkListPropertyField propertyName="target"
+                                          hideLabel="true"
+                                          showThumbnails="true"
+                                          maxCardinality="1">
+              <editor:additionalToolbarItems>
                 <TbSeparator/>
                 <bpb-components:QuickCreateToolbarButton contentType="CMPicture"
                                                          propertyName="target"
                                                          bindTo="{config.bindTo}"/>
-                </editor:additionalToolbarItems>
-              </editor:LinkListPropertyField>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <editor:PropertyFieldGroup itemId="{OVERLAY_CONFIG_ITEMID}"
-                                       title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_overlayConfiguration_title')}">
-            <editor:plugins exml:mode="append">
-              <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
-                                       propertyName="localSettings.overlay"/>
-              <editor:PropertyFieldPlugin propertyName="localSettings.overlay"/>
-            </editor:plugins>
-            <editor:items>
-              <editor:BooleanPropertyField propertyName="localSettings.overlay.displayTitle"
-                                           hideLabel="true"
-                                             dontTransformToInteger="true"/>
-              <editor:BooleanPropertyField propertyName="localSettings.overlay.displayShortText"
-                                           hideLabel="true"
-                                             dontTransformToInteger="true"/>
-              <editor:BooleanPropertyField propertyName="localSettings.overlay.displayPicture"
-                                           hideLabel="true"
-                                             dontTransformToInteger="true"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:ViewTypeSelectorForm/>
-          <bpforms:ValidityDocumentForm bindTo="{config.bindTo}"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_title')}"
-                                       itemId="cmImageMapEditorForm">
-            <editor:items>
-              <im:ImageMapEditor imageBlobValueExpression="{config.bindTo.extendBy('properties.pictures.0.properties.data')}"
-                                 structPropertyName="localSettings"
-                                 areaContentType="CMTeasable">
-                <im:plugins>
-                  <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
-                                defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
-                </im:plugins>
-              </im:ImageMapEditor>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-        <editor:items>
-          <bpforms:CategoryDocumentForm/>
-          <bpforms:SEOForm/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataWithoutSearchableForm/>
-    </editor:items>
-  
+              </editor:additionalToolbarItems>
+            </editor:LinkListPropertyField>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <editor:PropertyFieldGroup itemId="{OVERLAY_CONFIG_ITEMID}"
+                                   title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_overlayConfiguration_title')}">
+          <editor:plugins exml:mode="append">
+            <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
+                                     propertyName="localSettings.overlay"/>
+            <editor:PropertyFieldPlugin propertyName="localSettings.overlay"/>
+          </editor:plugins>
+          <editor:items>
+            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayTitle"
+                                         hideLabel="true"
+                                         dontTransformToInteger="true"/>
+            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayShortText"
+                                         hideLabel="true"
+                                         dontTransformToInteger="true"/>
+            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayPicture"
+                                         hideLabel="true"
+                                         dontTransformToInteger="true"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:ViewTypeSelectorForm/>
+        <bpforms:ValidityDocumentForm bindTo="{config.bindTo}"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMImageMap_title')}"
+                itemId="cmImageMapEditorForm">
+          <editor:items>
+            <im:ImageMapEditor
+                    imageBlobValueExpression="{config.bindTo.extendBy('properties.pictures.0.properties.data')}"
+                    structPropertyName="localSettings"
+                    areaContentType="CMTeasable">
+              <im:plugins>
+                <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
+                              defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+              </im:plugins>
+            </im:ImageMapEditor>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+      <editor:items>
+        <bpforms:CategoryDocumentForm/>
+        <bpforms:SEOForm/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataWithoutSearchableForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

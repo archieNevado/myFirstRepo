@@ -4,6 +4,7 @@
 
 <#assign cssClasses = self.teaserText?has_content?then(" is-text", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign additionalClass=cm.localParameters().additionalClass!"cm-teasable" />
+<#assign renderTeaserText=cm.localParameter("renderTeaserText", false) />
 
 <#assign timelineEntries=self.timeLineSequences![] />
 <#assign overlay={
@@ -18,7 +19,7 @@
 <#if (timelineEntries?size > 0 || self.timeLineDefaultTarget?has_content)>
 <div class="cm-shoppable cm-container" data-cm-video-shoppable="true">
   <div class="row-grid row">
-    <div class="col-lg-9 col-xs-12">
+    <div class="col-md-9 col-xs-12">
       <#-- video on the left -->
       <div class="${additionalClass} ${cssClasses} ${additionalClass}--video cm-shoppable__video" data-cm-teasable--video='{"preview": ".cm-teaser__content", "player": ".${additionalClass}--video__video", "play": ".cm-play-button"}'<@cm.metadata (metadata![]) + [self.content] />>
         <div class="${additionalClass}__wrapper">
@@ -56,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-xs-0">
+    <div class="col-md-3 hidden-xs hidden-sm">
     <#-- teaser on the right -->
       <div class="cm-shoppable__teasers"<@cm.metadata "properties.timeLine" />>
       <#-- default teaser -->
@@ -84,12 +85,8 @@
       </div>
     </div>
   </div>
-
-
-
-
 </div>
 <#else>
-  <@cm.include self=self view="[]" />
+  <@cm.include self=self view="teaser[]" />
   <@bp.notification type="error" text="This is a shoppable video without timeline entries." />
 </#if>

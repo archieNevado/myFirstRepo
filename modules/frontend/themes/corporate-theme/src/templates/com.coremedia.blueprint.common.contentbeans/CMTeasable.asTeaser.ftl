@@ -2,7 +2,6 @@
 <#-- @ftlvariable name="index" type="java.lang.Integer" -->
 <#-- @ftlvariable name="additionalClass" type="java.lang.String" -->
 
-<#-- todo: simplify variables with ?then() -->
 <#assign index=cm.localParameters().index!0 />
 <#assign hasImage=self.picture?has_content />
 <#assign hasEvenIndex=(index % 2 == 0) />

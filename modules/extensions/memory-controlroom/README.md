@@ -8,4 +8,4 @@ Extension that enables the collaborative features and that supports in-memory da
 
 ##Documentation
 
-[Manual](https://documentation.coremedia.com/dxp/current/manuals/ibmdeployment-en/webhelp/content/ch06.html)
+[Manual](https://documentation.coremedia.com/livecontext-3-for-ibm-wcs/current/manuals/ibmdeployment-en/webhelp/content/ch06.html)

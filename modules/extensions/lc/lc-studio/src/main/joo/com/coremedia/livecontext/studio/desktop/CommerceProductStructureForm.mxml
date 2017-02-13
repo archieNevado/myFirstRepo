@@ -6,6 +6,7 @@
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:livecontext="exml:com.coremedia.livecontext.studio.config"
+        xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
         title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Tab_structure_title')}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
@@ -14,6 +15,7 @@
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
     import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
     import com.coremedia.ecommerce.studio.model.ProductPropertyNames;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.commerceProductStructureForm";
 
@@ -22,35 +24,38 @@
     public native function CommerceProductStructureForm(config:CommerceProductStructureForm = null);
     ]]></fx:Script>
 
-    <editor:items>
+  <editor:items>
 
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_category_title')}"
-                                 itemId="category">
-        <editor:items>
-          <livecontext:ReadOnlyCatalogLinkProperty propertyName="{CatalogObjectPropertyNames.CATEGORY}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_category_title')}"
+            itemId="category">
+      <editor:items>
+        <ec:ReadOnlyCatalogLinkPropertyField propertyName="{CatalogObjectPropertyNames.CATEGORY}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
 
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_parentProduct_title')}"
-                                 itemId="parentProductd">
-        <editor:plugins exml:mode="append">
-          <ui:BindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsVariantExpression(config.bindTo)}"/>
-        </editor:plugins>
-        <editor:items>
-          <livecontext:ReadOnlyCatalogLinkProperty propertyName="{CatalogObjectPropertyNames.PARENT}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_parentProduct_title')}"
+            itemId="parentProductd">
+      <editor:plugins exml:mode="append">
+        <ui:BindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsVariantExpression(config.bindTo)}"/>
+      </editor:plugins>
+      <editor:items>
+        <ec:ReadOnlyCatalogLinkPropertyField propertyName="{CatalogObjectPropertyNames.PARENT}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
 
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_productVariants_title')}"
-                                 itemId="variants">
-        <editor:plugins exml:mode="append">
-          <ui:BindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsNotVariantExpression(config.bindTo)}"/>
-        </editor:plugins>
-        <editor:items>
-          <livecontext:ReadOnlyCatalogLinkProperty propertyName="{ProductPropertyNames.VARIANTS}"
-                                                   emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_productVariants_emptyText')}"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
-  
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_productVariants_title')}"
+            itemId="variants">
+      <editor:plugins exml:mode="append">
+        <ui:BindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsNotVariantExpression(config.bindTo)}"/>
+      </editor:plugins>
+      <editor:items>
+        <ec:ReadOnlyCatalogLinkPropertyField propertyName="{ProductPropertyNames.VARIANTS}"
+                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_productVariants_emptyText')}"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
+
 </editor:DocumentForm>

@@ -14,6 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -63,6 +65,7 @@ class IbmCommerceEventConfiguration {
   @Bean
   @Autowired
   CommerceCacheInvalidationListener commerceCacheInvalidationListener(List<CommerceCacheInvalidationPropagator> propagators, WcRestConnector wcRestConnector) {
+    AnnotationAwareOrderComparator.sort(propagators);
     return new CommerceCacheInvalidationListener(propagators, cacheWrapperService(wcRestConnector));
   }
 
@@ -76,6 +79,7 @@ class IbmCommerceEventConfiguration {
 
   @Bean
   @Autowired
+  @Order(0) // must be informed very early
   CommerceCacheInvalidationPropagator commerceCacheInvalidationPropagator(Cache cache) {
     return new CommerceCacheInvalidationPropagatorImpl(cache);
   }

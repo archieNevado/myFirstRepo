@@ -223,6 +223,7 @@
           <path>/</path>
           <systemProperties>
             <propertieslocations>${propertieslocations}</propertieslocations>
+            <themeImporter.apiKeyStore.basePath>${project.build.directory}/themeImporter/apiKeyStore</themeImporter.apiKeyStore.basePath>
           </systemProperties>
         </configuration>
       </plugin>

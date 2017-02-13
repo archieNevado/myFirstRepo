@@ -6,32 +6,45 @@ Bricks are reusable frontend modules for your theme. Mostly they include templat
 
 ### Available bricks
 
-- [bootstrap](bootstrap/README.md): Bootstrap 3 based on sass with carousel swipe plugin
-- [cta](cta/README.md): simple Call-To-Action button
-- [elastic-social](elastic-social/README.md): CoreMedia Elastic Social Extension
-- [fragment-scenario](fragment-scenario/README.md): templates rendering externally requested fragment. e.g. used for the IBM blended hybrid or augmentation scenario
-- [generic-templates](generic-templates/README.md): This brick adds support for rendering items in various occurrences, like detail, hero and teaser view.
-- `image-maps`: Image Maps
-- `preview`: templates for Studio preview
-- `responsive-images`: CoreMedia Adaptive and Responsive Image Framework
+- **[bootstrap](bootstrap/README.md)**: 
+  Bootstrap 3 based on sass with carousel swipe plugin
+- **[cta](cta/README.md)**: 
+  Simple Call-To-Action button
+- **[download-portal](download-portal/README.md)**: 
+  CoreMedia Asset Management Download Portal Extension
+- **[elastic-social](elastic-social/README.md)**: 
+  CoreMedia Elastic Social Extension
+- **[fragment-scenario](fragment-scenario/README.md)**: templates rendering externally requested fragment. e.g. used for the IBM blended hybrid or augmentation scenario
+- **[generic-templates](generic-templates/README.md)**: This brick adds support for rendering items in various occurrences, like detail, hero and teaser view.
+- **image-maps**: Image Maps Feature
+- **[livecontext](livecontext/README.md)**: CoreMedia LiveContext Extension
+- **pdp-augmentation**: Product Detail Page enhancement for CoreMedia LiveContext Extension
+- **preview**: Studio preview templates and styles
+- **responsive-images**: CoreMedia Adaptive and Responsive Image Framework
+- **shoppable-video**: Shoppable Video Feature
 
 ### Usage
 
-Just add following line to your theme to get the templates and javascript files. Don't forget to add them to your theme 
-descriptor.
+Just add following config to your theme `Gruntfile.js` to get the templates and javascript files. Don't forget to add them to your theme descriptor.
 
 ```
-    // import coremedia utils to simply reuse all available grunt tasks.
-    var utils = require('@coremedia/utils');
-    
-    // load a single brick 
-    utils.loadBrick(grunt, "name-of-the-brick");
-    
-    // load multiple bricks 
-    utils.loadBricks(grunt, ["name-of-the-brick-foo", "name-of-the-brick-bar"]);
+  grunt.initConfig({
+    ...
+    // load bricks into theme
+    bricks: {
+      src: [
+        '<name-of-the-brick>',
+        ...
+      ]
+    },
+    ...
+  });
+  
+  // load CoreMedia initialization
+  require('../../lib/tools/grunt/scripts/init')(grunt);
 ```
 
 If a brick has sass files, you need to import them to your themes sass file explicitly.
 
-**Notice:** _Don't forget to add Javascript files and templates of the used bricks to the [theme descriptor file](../../themes/DESCRIPTOR.md) 
-of your theme. See bricks description in README files._
+**Notice:** _Don't forget to add Javascript files and templates of the used bricks to the theme descriptor file of your 
+theme. See bricks description in README files._

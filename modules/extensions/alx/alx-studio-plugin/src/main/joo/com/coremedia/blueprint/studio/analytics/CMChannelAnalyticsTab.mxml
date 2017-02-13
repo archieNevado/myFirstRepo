@@ -17,12 +17,12 @@
     public native function CMChannelAnalyticsTab(config:CMChannelAnalyticsTab = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <alx:AnalyticsTrackingPanel bindTo="{config.bindTo}"/>
-      <alx:AnalyticsRetrievalPanel bindTo="{config.bindTo}"
-                                   collapsed="true"/>
-      <alx:AnalyticsMiscPanel bindTo="{config.bindTo}"
-                              collapsed="true"/>
-    </editor:items>
-  
+  <editor:items>
+    <alx:AnalyticsTrackingPanel bindTo="{config.bindTo}"/>
+    <alx:AnalyticsRetrievalPanel bindTo="{config.bindTo}"
+                                 collapsed="true"/>
+    <alx:AnalyticsMiscPanel bindTo="{config.bindTo}"
+                            collapsed="true"/>
+  </editor:items>
+
 </editor:DocumentForm>

@@ -7,10 +7,10 @@
 </viewtype>
 <linkedSettings>
 </linkedSettings>
-<resourceBundles>
-</resourceBundles>
+<resourceBundles2>
+</resourceBundles2>
 <segment>women-handbags</segment>
-<title>Women Handbags</title>
+<title>Handbags</title>
 <htmlTitle></htmlTitle>
 <keywords></keywords>
 <htmlDescription></htmlDescription>
@@ -31,6 +31,8 @@
 </javaScript>
 <css>
 </css>
+<theme>
+</theme>
 <header>
 </header>
 <footer>

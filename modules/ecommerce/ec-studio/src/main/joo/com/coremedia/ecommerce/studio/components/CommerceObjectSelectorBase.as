@@ -44,8 +44,6 @@ public class CommerceObjectSelectorBase extends StatefulComboBox {
     return ValueExpressionFactory.createFromFunction(function():Array {
       var store:Store = CatalogHelper.getInstance().getStoreForContentExpression(getContentExpression()).getValue();
       if (!store) {
-        //no store defined
-        markInvalid(config.noStoreMessage);
         return undefined;
       } else {
         clearInvalid();

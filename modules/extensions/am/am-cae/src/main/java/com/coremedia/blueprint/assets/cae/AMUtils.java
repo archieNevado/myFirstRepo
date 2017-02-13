@@ -73,9 +73,7 @@ public class AMUtils {
     String propertyAsString = "";
     if (property instanceof String) {
       propertyAsString = (String) property;
-    } else if (property instanceof Integer) {
-      propertyAsString = property.toString();
-    } else if (property instanceof Boolean) {
+    } else if (property instanceof Integer || property instanceof Boolean) {
       propertyAsString = property.toString();
     } else if (property instanceof GregorianCalendar) {
       GregorianCalendar calendar = (GregorianCalendar) property;

@@ -56,7 +56,7 @@ public class AssetRenditionBlobHandlerTest {
   @Before
   public void setUp() {
     when(amAssetRendition.getBlob()).thenReturn(capBlobRef);
-    when(capBlobHandler.buildLink(any(CapBlobRef.class))).thenReturn(Collections.<String, String>emptyMap());
+    when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.<String, String>emptyMap());
     when(capBlobHandler.handleRequest(any(ContentBean.class), anyString(), anyString(), anyString(), any(WebRequest.class))).thenReturn(modelAndView);
   }
 
@@ -92,7 +92,7 @@ public class AssetRenditionBlobHandlerTest {
     String assetName = "asset-name";
     String expectedAssetName = "asset_name";
 
-    when(capBlobHandler.buildLink(any(CapBlobRef.class))).thenReturn(Collections.singletonMap(UriConstants.Segments.SEGMENT_NAME, assetName));
+    when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.singletonMap(UriConstants.Segments.SEGMENT_NAME, assetName));
     Map<String, String> result = assetRenditionBlobHandler.buildRenditionLink(amAssetRendition);
 
     assertNotNull("the map should never be null", result);
@@ -101,7 +101,7 @@ public class AssetRenditionBlobHandlerTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void buildLink_validBean_assetWithoutBlob() {
-    when(capBlobHandler.buildLink(any(CapBlobRef.class))).thenReturn(Collections.singletonMap(UriConstants.Segments.SEGMENT_NAME, "asset-name"));
+    when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.singletonMap(UriConstants.Segments.SEGMENT_NAME, "asset-name"));
     assetRenditionBlobHandler.buildRenditionLink(amAssetRenditionWithoutBlob);
   }
 

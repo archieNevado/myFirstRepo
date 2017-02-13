@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<CMFolderProperties folder="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Sitemap" name="_folderProperties" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale>de-DE</locale>
-<master>
-</master>
-<contexts>
-<link href="../Corporate%20Hidden%20Page.xml" path="/Sites/PerfectChef/Germany/German/Navigation/Site-Wide/Corporate%20Hidden%20Page"/>
-</contexts>
-</CMFolderProperties>

@@ -23,36 +23,38 @@
     public native function AMAssetSystemTab(config:AMAssetSystemTab = null);
     ]]></fx:Script>
 
-    <editor:plugins exml:mode="append">
-      <ui:AddItemsPlugin onlyIf="{function():Boolean {return SESSION.getUser().isAdministrative();}}">
-        <ui:items>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_state_label')}"
-                                     itemId="stateFormPanel"
-                                     collapsed="true">
-            <editor:items>
-              <editor:StructPropertyField propertyName="state"
-                                          hideLabel="true"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </ui:items>
-        <ui:after>
-          <editor:DocumentInfo/>
-        </ui:after>
-      </ui:AddItemsPlugin>
-    </editor:plugins>
-    <editor:items>
-      <editor:DocumentInfo/>
-      <editor:VersionHistory/>
+  <editor:plugins exml:mode="append">
+    <ui:AddItemsPlugin onlyIf="{function():Boolean {return SESSION.getUser().isAdministrative();}}">
+      <ui:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_state_label')}"
+                itemId="stateFormPanel"
+                collapsed="true">
+          <editor:items>
+            <editor:StructPropertyField propertyName="state"
+                                        hideLabel="true"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </ui:items>
+      <ui:after>
+        <editor:DocumentInfo/>
+      </ui:after>
+    </ui:AddItemsPlugin>
+  </editor:plugins>
+  <editor:items>
+    <editor:DocumentInfo/>
+    <editor:VersionHistory/>
 
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_metadata_label')}"
-                                 itemId="metadataForm"
-                                 collapsed="true">
-        <editor:items>
-          <editor:StructPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_METADATA}"
-                                      hideLabel="true"
-                                      itemId="metadataStructPropertyField"/>
-    </editor:items>
-  </editor:PropertyFieldGroup>
-</editor:items>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_metadata_label')}"
+            itemId="metadataForm"
+            collapsed="true">
+      <editor:items>
+        <editor:StructPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_METADATA}"
+                                    hideLabel="true"
+                                    itemId="metadataStructPropertyField"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
 
 </editor:DocumentForm>

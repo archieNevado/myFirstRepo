@@ -1,10 +1,10 @@
 // Imports
 @import "../../../sass/utils/imports";
 
-@include font-face('perfectchef', 'perfectchef');
+@include font-face('livecontext-icons', 'livecontext-icons');
 
 [class^="icon-"], [class*=" icon-"] {
-  font-family: 'perfectchef';
+  font-family: 'livecontext-icons';
   font-weight: normal;
   font-style: normal;
   font-variant: normal;

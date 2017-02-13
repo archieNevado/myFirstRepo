@@ -79,3 +79,5 @@ attribute :group, kind_of: String, default: lazy { node['blueprint']['group'] }
 attribute :timeout, kind_of: Integer, default: 2_400
 # <> @attribute publishall_contentquery The contentquery to determine which content should not be published. Only effective on publishall_content action.
 attribute :publishall_contentquery, kind_of: String, default: 'NOT BELOW PATH \'/Home\''
+# <> @attribute publishall_threads The number of concurrent threads for replicating content
+attribute :publishall_threads, kind_of: Integer, default: 1

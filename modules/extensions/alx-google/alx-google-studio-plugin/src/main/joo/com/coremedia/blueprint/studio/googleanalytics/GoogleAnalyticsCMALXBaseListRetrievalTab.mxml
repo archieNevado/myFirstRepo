@@ -17,8 +17,8 @@
     public native function GoogleAnalyticsCMALXBaseListRetrievalTab(config:GoogleAnalyticsCMALXBaseListRetrievalTab = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <google:GoogleAnalyticsRetrievalFields/>
-    </editor:items>
-  
+  <editor:items>
+    <google:GoogleAnalyticsRetrievalFields/>
+  </editor:items>
+
 </editor:DocumentForm>

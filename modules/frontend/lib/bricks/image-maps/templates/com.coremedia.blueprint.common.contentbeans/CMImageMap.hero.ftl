@@ -25,7 +25,7 @@
 
   <#if self.teaserTitle?has_content>
   <#-- with banderole -->
-      <div class="${additionalClass}__banderole row">
+      <div class="${additionalClass}__banderole cm-imagemap__banderole row">
           <div class="col-xs-10 col-xs-push-1">
             <#-- headline -->
             <@bp.optionalLink href="${link}">

@@ -4,7 +4,7 @@
 $cm-shoppable-prefix: "cm-shoppable" !default;
 $cm-shoppable-teaser-background-color: #fff !default;
 $cm-shoppable-teaser-quickinfo-color: #fff !default;
-$cm-shoppable-teaser-specialprice-color:  #fff !default;
+$cm-shoppable-teaser-specialprice-color: #fff !default;
 
 /* hide shoppable video teasers by default */
 .cm-shoppable__teasers {
@@ -16,11 +16,19 @@ $cm-shoppable-teaser-specialprice-color:  #fff !default;
   @include aspect-ratio-box(16, 9);
 }
 
+// shoppable videos
+.#{$cm-shoppable-prefix} {
+  &__teasers {
+    display: none;
+  }
 
-@include breakpoint(md) {
-  // shoppable videos
-  .#{$cm-shoppable-prefix} {
+  &__player {
+    .cm-aspect-ratio-box__content {
+      @include center-absolute();
+    }
+  }
 
+  @include breakpoint(md) {
     &__teasers {
       display: block;
     }
@@ -72,15 +80,19 @@ $cm-shoppable-teaser-specialprice-color:  #fff !default;
       }
 
       .cm-button {
-        background-color: #fff;
+        /*background-color: #fff;
         border-color: #fff;
         color: #373737;
-        width: auto;
+        width: auto;*/
       }
     }
 
     &__default {
       display: block;
+    }
+
+    .cm-teasable__play.cm-hidden + .cm-teasable__caption {
+      display: none;
     }
   }
 }

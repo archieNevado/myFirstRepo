@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.themeimporter.client;
 
+import com.coremedia.blueprint.coderesources.configuration.ThemeServiceConfiguration;
 import com.coremedia.blueprint.themeimporter.configuration.ThemeImporterConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
@@ -29,7 +30,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
  * <p>
  * This simplifies automated initial deployments.  They can simply serverimport
  * the themes along with any other initial content and do not need to run the
- * ThemeImporter explicitely as an additional step.
+ * theme importer explicitly as an additional step.
  * <p>
  * How to use: Add the following plugin do your workspace and configure the two system properties themes_folder and export_path
  * <plugin>
@@ -50,7 +51,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
  * </plugin>
  */
 @Configuration
-@Import({XmlRepoConfiguration.class, ThemeImporterConfiguration.class})
+@Import({XmlRepoConfiguration.class, ThemeImporterConfiguration.class, ThemeServiceConfiguration.class})
 public class ThemeImporterRunner extends AbstractThemeImporterClient {
   private static final Logger LOG = LoggerFactory.getLogger(ThemeImporterRunner.class);
 
@@ -83,7 +84,7 @@ public class ThemeImporterRunner extends AbstractThemeImporterClient {
       return null;
     }
     ThemeImporterInitializer themeImporterInitializer =
-            new ThemeImporterInitializer(params.repositoryFolder, themeFiles(params.themeFolder), params.exportPath, exitCodeCallback);
+            new ThemeImporterInitializer(params.repositoryFolder, themeFiles(params.themeFolder), params.exportPath, false, false, exitCodeCallback);
     SpringApplication springApplication = new SpringApplication(ThemeImporterRunner.class);
     springApplication.setBannerMode(Banner.Mode.OFF);
     springApplication.addInitializers(themeImporterInitializer);

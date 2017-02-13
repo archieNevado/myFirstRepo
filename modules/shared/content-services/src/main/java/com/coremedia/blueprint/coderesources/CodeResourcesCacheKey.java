@@ -4,10 +4,13 @@ import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.user.User;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Cache Key for caching the {@link CodeResources} for a CMNavigation.
@@ -32,6 +35,7 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
   private static final String CMNAVIGATION_THEME = "theme";
 
   private final boolean developerMode;
+  private final User developer;
   private final String codePropertyName;
   private final CodeCarriers codeCarriers = new CodeCarriers();
 
@@ -44,33 +48,38 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
   public CodeResourcesCacheKey(Content navigation,
                                String codePropertyName,
                                boolean developerMode,
-                               TreeRelation<Content> treeRelation) {
+                               TreeRelation<Content> treeRelation,
+                               @Nullable User developer) {
     checkIsNavigation(navigation, false);
-    this.developerMode = developerMode;
+    this.developerMode = developerMode || developer!=null;
     this.codePropertyName = codePropertyName;
+    this.developer = developer;
     initCodeCarriers(codeCarriers, navigation, codePropertyName, treeRelation);
   }
 
   /**
    * Constructor for link resolution.
    * <p>
-   * Creates a CacheKey of the given channelWithTheme and channelWithCode.
+   * Creates a CacheKey of the given channelWithTheme and channelWithCode,
+   * specific for the developer's work in progress.
    */
   public CodeResourcesCacheKey(Content channelWithTheme,
                                Content channelWithCode,
                                String codePropertyName,
-                               boolean developerMode) {
+                               boolean developerMode,
+                               @Nullable User developer) {
     checkIsNavigation(channelWithTheme, true);
     checkIsNavigation(channelWithCode, true);
-    this.developerMode = developerMode;
+    this.developerMode = developerMode || developer!=null;
     this.codePropertyName = codePropertyName;
+    this.developer = developer;
     codeCarriers.setThemeCarrier(channelWithTheme);
     codeCarriers.setCodeCarrier(channelWithCode);
   }
 
   @Override
   public CodeResources evaluate(Cache cache) {
-    return new CodeResourcesImpl(codeCarriers, codePropertyName, developerMode);
+    return new CodeResourcesImpl(codeCarriers, codePropertyName, developerMode, developer);
   }
 
   @Override
@@ -85,7 +94,8 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
     CodeResourcesCacheKey that = (CodeResourcesCacheKey) o;
     return developerMode==that.developerMode &&
            codePropertyName.equals(that.codePropertyName) &&
-           codeCarriers.equals(that.codeCarriers);
+           codeCarriers.equals(that.codeCarriers) &&
+           Objects.equals(developer, that.developer);
   }
 
   @Override
@@ -93,6 +103,7 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
     int result = developerMode ? 1 : 0;
     result = 31 * result + codeCarriers.hashCode();
     result = 31 * result + codePropertyName.hashCode();
+    result = 31 * result + (developer!=null ? developer.hashCode() : 0);
     return result;
   }
 

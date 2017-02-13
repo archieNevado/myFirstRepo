@@ -5,10 +5,11 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.cap.content.Version;
-import com.coremedia.cap.content.results.BulkOperationResult;
+import com.coremedia.cap.content.authorization.AccessControl;
+import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
+import com.coremedia.cap.themeimporter.ThemeImporterResultImpl;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -16,8 +17,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 /**
@@ -26,13 +29,15 @@ import java.util.StringTokenizer;
 class ThemeImporterContentHelper {
   private static final Logger LOGGER = LoggerFactory.getLogger(ThemeImporterContentHelper.class);
   private CapConnection capConnection;
+  private final ThemeImporterResultImpl result;
   private Collection<Content> toBeCheckedIn = new HashSet<>();
 
 
   // --- Construct and configure ------------------------------------
 
-  ThemeImporterContentHelper(CapConnection capConnection) {
+  ThemeImporterContentHelper(CapConnection capConnection, ThemeImporterResultImpl result) {
     this.capConnection = capConnection;
+    this.result = result;
   }
 
 
@@ -46,24 +51,27 @@ class ThemeImporterContentHelper {
     return capConnection.getContentRepository().getChild(path);
   }
 
-  int currentVersion(Content content) {
-    return IdHelper.parseVersionId(getExistingVersion(content).getId());
-  }
-
   Content updateContent(String newType, String folder, String path, Map<String, ?> properties) {
     return updateContent(newType, normalize(folder)+path, properties);
   }
 
   Content updateContent(String newType, String absolutePath, Map<String, ?> properties) {
     try {
-      Content content = getOrCreateContent(newType, absolutePath);
-      //Only do this if the document has not been checked out by somebody else.
+      Content content = modifiableContent(newType, absolutePath);
       if (content != null) {
-        content.setProperties(properties);
+        Map<String, Object> changedProperties = difference(content, properties);
+        if (!changedProperties.isEmpty()) {
+          checkOut(content);
+          content.setProperties(properties);
+          result.addUpdate(absolutePath, content);
+        }
+      } else {
+        result.addFailure(absolutePath);
       }
       return content;
     } catch (Exception e) {
       LOGGER.error("Error creating content {} ", absolutePath, e);
+      result.addFailure(absolutePath);
       return null;
     }
   }
@@ -87,18 +95,42 @@ class ThemeImporterContentHelper {
   /**
    * I'll do my very best...
    */
-  void deleteContent(Content content) {
-    try {
-      if (content.isCheckedOut()) {
-        content.checkIn();
+  boolean deleteContent(Content content) {
+    String absolutePath = content.getPath();
+    AccessControl accessControl = capConnection.getContentRepository().getAccessControl();
+    if (!accessControl.mayDelete(content)) {
+      LOGGER.warn("Must not delete content {}", absolutePath);
+    } else if (content.isCheckedOut() && !accessControl.mayCheckIn(content)) {
+      LOGGER.warn("Content {} is checked out by other user, must not delete", absolutePath);
+    } else {
+      try {
+        if (content.isCheckedOut()) {
+          content.checkIn();
+        }
+        toBeCheckedIn.remove(content);
+        if (!content.delete().isSuccessful()) {
+          LOGGER.warn("Cannot delete content {}, you should clean up manually afterwards.", content);
+        } else {
+          result.addUpdate(absolutePath, content);
+          return true;
+        }
+      } catch (Exception e) {
+        LOGGER.warn("Cannot delete content {}, you should clean up manually afterwards.", content, e);
       }
-      toBeCheckedIn.remove(content);
-      BulkOperationResult result = content.delete();
-      if (!result.isSuccessful()) {
-        LOGGER.warn("Cannot delete content {}, you should clean up manually afterwards.", content);
-      }
-    } catch (Exception e) {
-      LOGGER.warn("Cannot delete content {}, you should clean up manually afterwards.", content, e);
+    }
+    result.addFailure(absolutePath);
+    return false;
+  }
+
+  // *initially*: Do not use after getOrCreateContent, or additionally remove
+  // the query result's contents from toBeCheckedIn.
+  void initiallyDeleteSubfolder(String targetFolderPath, String affectedTheme) {
+    ContentRepository contentRepository = capConnection.getContentRepository();
+    Content targetFolder = contentRepository.getChild(targetFolderPath + '/' + affectedTheme);
+    if (targetFolder != null) {
+      QueryService queryService = contentRepository.getQueryService();
+      queryService.poseContentQuery("isCheckedOut AND BELOW ?0", targetFolder).forEach(Content::checkIn);
+      targetFolder.delete();
     }
   }
 
@@ -107,11 +139,40 @@ class ThemeImporterContentHelper {
   }
 
   void revertAll() {
-    toBeCheckedIn.forEach(Content::revert);
+    toBeCheckedIn.forEach(this::revert);
   }
 
 
   // --- internal ---------------------------------------------------
+
+  private Map<String, Object> difference(Content content, Map<String, ?> newProperties) {
+    Map<String, Object> changedProperties = new HashMap<>();
+    for (Map.Entry<String, ?> entry : newProperties.entrySet()) {
+      String key = entry.getKey();
+      Object value = entry.getValue();
+      if (!equivalent(content.get(key), value)) {
+        changedProperties.put(key, value);
+      }
+    }
+    return changedProperties;
+  }
+
+  /**
+   * equivalent is slightly more tolerant than equals, e.g. "" vs. null.
+   */
+  private boolean equivalent(Object oldValue, Object newValue) {
+    if (Objects.equals(newValue, oldValue)) {
+      return true;
+    }
+    if (isEmptyString(oldValue) && isEmptyString(newValue)) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean isEmptyString(Object o) {
+    return o==null || o instanceof String && ((String)o).isEmpty();
+  }
 
   @VisibleForTesting
   KeyValue parseProperty(String line) {
@@ -128,19 +189,11 @@ class ThemeImporterContentHelper {
     return new KeyValue(key, value);
   }
 
-  private Version getExistingVersion(Content content) {
-    Version version = content.getCheckedInVersion();
-    if (version == null) {
-      version = content.getCheckedOutVersion();
-    }
-    return version;
-  }
-
   /**
-   * Returns the requested content in checked-out-by-me state, or null if this
+   * Returns the requested modifiable content, or null if this
    * is not possible for whatever reason.
    */
-  private Content getOrCreateContent(String contentType, String absolutePath) {
+  private Content modifiableContent(String contentType, String absolutePath) {
     ContentRepository repository = capConnection.getContentRepository();
     Content content = repository.getChild(absolutePath);
     if (content != null) {
@@ -148,10 +201,11 @@ class ThemeImporterContentHelper {
         //Set to null, because the type is different
         LOGGER.warn("Cannot update document {} since it is of type {} even though it should be of type {}", absolutePath, content.getType().getName(), contentType);
         content = null;
-      } else if (content.isCheckedIn()) {
-        content.checkOut();
-        toBeCheckedIn.add(content);
-      } else if (!content.isCheckedOutByCurrentSession()) {
+      } else if (content.isCheckedOut() && !content.isCheckedOutByCurrentSession()) {
+        // Maybe the document would need no update anyway, so we could return
+        // it for now and handle this case in checkOut. But it means that we
+        // do not control this document, state and effects are unpredictable,
+        // even if we do not touch it, so better warn early.
         LOGGER.warn("Cannot update document {} since it has been checkout out by somebody else.", absolutePath);
         content = null;
       }
@@ -167,6 +221,25 @@ class ThemeImporterContentHelper {
     return content;
   }
 
+  private void checkOut(Content content) {
+    // checkedOut by other user has already been handled in getOrCreateContent,
+    // so we can keep it simple here.
+    if (!content.isCheckedOut()) {
+      content.checkOut();
+      toBeCheckedIn.add(content);
+    }
+  }
+
+  private void revert(Content content) {
+    if (content.getCheckedOutVersion() !=null) {
+      content.revert();
+    } else {
+      // Cannot revert checked out version 1.
+      content.checkIn();
+      content.delete();
+    }
+  }
+
   private static String normalize(@Nonnull String folder) {
     return folder.endsWith("/") ? folder : folder + "/";
   }
@@ -176,7 +249,7 @@ class ThemeImporterContentHelper {
     String key;
     String value;
 
-    public KeyValue(String key, String value) {
+    KeyValue(String key, String value) {
       this.key = key;
       this.value = value;
     }

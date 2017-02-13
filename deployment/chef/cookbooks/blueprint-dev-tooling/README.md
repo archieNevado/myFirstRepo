@@ -39,6 +39,7 @@ This is the development cookbook for the CoreMedia Blueprint. It contains recipe
 * `node['blueprint']['dev']['content']['workflow_definitions']['builtin']` - An array of builtin workflow names to be uploaded during content import. Defaults to `%w(studio-simple-publication.xml immediate-publication.xml studio-two-step-publication.xml three-step-publication.xml global-search-replace.xml /com/coremedia/translate/workflow/derive-site.xml)`.
 * `node['blueprint']['dev']['content']['workflow_definitions']['custom']` - An array of custom workflow definitions paths(absolute or classpath) to be uploaded during content import. Defaults to `[ ... ]`.
 * `node['blueprint']['dev']['content']["publishall_contentquery"]` - The contentquery for the publishall content action. Defaults to `NOT BELOW PATH \'/Home\'`.
+* `node['blueprint']['dev']['content']['publishall_threads']` - The number of concurrent threads to replicate the content. Defaults to `1`.
 * `node['blueprint']['dev']['rpm']['package_prefix']` - A string to be used as a prefix for created RPMs. Defaults to `lc2-`.
 * `node['blueprint']['dev']['rpm']['version']` - The version of the created RPMs. Defaults to `1.0.0`.
 * `node['blueprint']['dev']['rpm']['dir']` - The folder to create the RPMs in. By default the vagrant based kitchen setup will share this folder with your host machine. Defaults to `/shared/packages`.
@@ -142,19 +143,20 @@ resources.
 
 ### Attribute Parameters
 
-- content_dir: The directory containing the content. See above description about the expected layout.
-- serverimport_extra_args: An array of extra args passed to the contentimport call. Defaults to <code>[]</code>.
-- builtin_workflows: An array of workflow names from the builtin workflows to upload. Defaults to <code>[]</code>.
-- custom_workflows: An array of paths to custom workflow definitions to upload. Defaults to <code>[]</code>.
-- cms_ior: The ior of the content management server. Only necessary if publishall_content is being used. Defaults to <code>"http://localhost:40180/coremedia/ior"</code>.
-- cms_tools_dir: The path of the directory, where the server tools of the content management server are installed. 
-- mls_ior: The ior of the master live server. Only necessary if publishall_content is being used. Defaults to <code>"http://localhost:40280/coremedia/ior"</code>.
-- mls_tools_dir: The path of the directory, where the server tools of the master live server are installed. 
-- wfs_tools_dir: The path of the directory, where the server tools of the workflow server are installed. 
-- user: The username to use for execute and filesystem resources. 
-- group: The group to use for execute and filesystem resources. 
-- timeout: The timeout for all execute resource blocks. Defaults to <code>1800</code>.
-- publishall_contentquery: The contentquery to determine which content should not be published. Only effective on publishall_content action. Defaults to <code>"NOT BELOW PATH '/Home'"</code>.
+- content_dir:
+- serverimport_extra_args:  Defaults to <code>[]</code>.
+- builtin_workflows:  Defaults to <code>[]</code>.
+- custom_workflows:  Defaults to <code>[]</code>.
+- cms_ior:  Defaults to <code>"http://localhost:40180/coremedia/ior"</code>.
+- cms_tools_dir:  Defaults to <code>Lazy Evaluator</code>, see LWRP code for default.
+- mls_ior:  Defaults to <code>"http://localhost:40280/coremedia/ior"</code>.
+- mls_tools_dir:  Defaults to <code>Lazy Evaluator</code>, see LWRP code for default.
+- wfs_tools_dir:  Defaults to <code>Lazy Evaluator</code>, see LWRP code for default.
+- user:  Defaults to <code>Lazy Evaluator</code>, see LWRP code for default.
+- group:  Defaults to <code>Lazy Evaluator</code>, see LWRP code for default.
+- timeout:  Defaults to <code>2400</code>.
+- publishall_contentquery:  Defaults to <code>"NOT BELOW PATH '/Home'"</code>.
+- publishall_threads:  Defaults to <code>1</code>.
 
 ### Content User Directory Layoyt
 

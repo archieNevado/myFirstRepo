@@ -12,7 +12,7 @@
 
   <div class="${additionalClass} ${additionalClass}--product"<@cm.metadata self.content />>
     <#-- picture -->
-    <@cm.include self=self view="_picture" params={"additionalClass": additionalClass, "aspectRatiosSuffix": "hero_teaser"}/>
+    <@cm.include self=self view="_picture" params={"additionalClass": additionalClass, "aspectRatiosSuffix": "hero_teaser", "renderDimmer": renderDimmer, "renderEmptyImage": renderEmptyImage}/>
 
   <#if self.teaserTitle?has_content>
   <#-- with banderole -->

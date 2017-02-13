@@ -7,9 +7,16 @@ import com.coremedia.personalization.ui.util.SelectionRuleHelper;
 import ext.data.Model;
 import ext.form.field.ComboBox;
 
+/**
+ * Fires after the data represented by this component was modified. Intended to be used for
+ * automatically saving changes.
+ */
+[Event(name = "modified")] // NOSONAR - no type
+
 [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class CommerceSegmentConditionBase extends AbstractCondition{
 
+  private static const MODIFIED_EVENT:String = "modified";
   private static const OPERATORS:Array = [SelectionRuleHelper.OP_CONTAINS];
 
   private var segmentSelector:CommerceObjectSelector;
@@ -23,17 +30,8 @@ public class CommerceSegmentConditionBase extends AbstractCondition{
 
     super(config);
 
-    /* EXT6_GONE:ext.util.Observable#addEvents addEvents({
-     /!**
-     * @event modified
-     * Fires after the data represented by this component was modified. Intended to be used for
-     * automatically saving changes.
-     * @param {Component} this
-     *!/
-     modified:true});*/
-
     // check the supplied configuration
-    if (config.propertyPrefix == null) {
+    if (config.propertyPrefix === null || config.propertyPrefix === undefined) {
       throw new Error("config.propertyPrefix must not be null");
     }
     propertyPrefix = config['propertyPrefix'].length > 0 ? config['propertyPrefix'] + '.' : "";
@@ -56,7 +54,6 @@ public class CommerceSegmentConditionBase extends AbstractCondition{
     segmentSelectorCfg.emptyText = resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'p13n_commerce_user_segments_selector_emptyText');
     segmentSelectorCfg.getCommerceObjectsFunction = LivecontextP13NStudioPluginBase.getSegments;
     segmentSelectorCfg.listConfig = {minWidth: 200};
-    /* EXT6_GONE:ext.config.box#margins segmentSelectorCfg.margins = "0 5 0 5";*/
     segmentSelectorCfg.forceSelection = true;
     segmentSelectorCfg.selectOnFocus = true;
     segmentSelectorCfg.typeAhead = true;
@@ -67,11 +64,11 @@ public class CommerceSegmentConditionBase extends AbstractCondition{
     segmentSelector = new CommerceObjectSelector(segmentSelectorCfg);
 
     segmentSelector.addListener('change', function ():void {
-      fireEvent('modified');
+      fireEvent(MODIFIED_EVENT);
     });
 
     segmentSelector.addListener('select', function (combo:ComboBox, record:Model, index:Number):void {
-      fireEvent('modified');
+      fireEvent(MODIFIED_EVENT);
     });
 
     // if data changed (e.g. segment deleted), validate again
@@ -97,7 +94,7 @@ public class CommerceSegmentConditionBase extends AbstractCondition{
     var segmentId:String = segmentSelector.getUnquotedValue();
     if (segmentId) {
       // check if value is not in store
-      if (segmentSelector.getStore().find(segmentSelector.valueField, segmentId) == -1) {
+      if (segmentSelector.getStore().find(segmentSelector.valueField, segmentId) === -1) {
         // set segment name as rawValue to avoid checking out the document
         // mark as "invalid"
         segmentSelector.markInvalid(resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'p13n_context_commerce_segment_invalid'));

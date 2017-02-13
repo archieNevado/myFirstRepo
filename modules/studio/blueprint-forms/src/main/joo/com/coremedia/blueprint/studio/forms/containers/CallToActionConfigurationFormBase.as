@@ -6,13 +6,17 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 
+/**
+ * Fires after the configuration has changed.
+ */
+[Event(name = "CTAConfigurationChanged")] // NOSONAR - no type
+
 public class CallToActionConfigurationFormBase extends PropertyFieldGroup {
   internal var model:Bean;
 
   internal var modelValueExpression:ValueExpression;
 
   public function CallToActionConfigurationFormBase(config:CallToActionConfigurationForm = null) {
-    /* EXT6_GONE:ext.util.Observable#addEvents addEvents("CTAConfigurationChanged");*/
     super(config);
 
     getModel().addPropertyChangeListener("callToActionDisabled", callToActionDisabledListener);

@@ -3,7 +3,7 @@
 This recipe installs and configures the CoreMedia Blueprint Content Feeder.
 #>
 =end
-
+include_recipe 'blueprint-tomcat::_base'
 service_name = 'content-feeder'
 
 node.default['blueprint']['webapps'][service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('content-management-server')}/ior"

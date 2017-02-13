@@ -27,29 +27,30 @@
     public native function UploadCollectionViewPlugin(config:UploadCollectionViewPlugin = null);
     ]]></fx:Script>
 
-    <ui:rules>
+  <ui:rules>
 
-      <!-- Add the upload button -->
-      <editor:RepositoryToolbar>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <ui:IconButton itemId="openUpload"
-                             text="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'UploadFileAction_menu_item_text')}"
-                             iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'upload')}"
-                             tooltip="{UploadHelper.resolveTooltip()}">
-                <ui:baseAction>
-                  <upload:OpenUploadDialogAction contentValueExpression="{myCollectionView.getSelectedFolderValueExpression()}"/>
-                </ui:baseAction>
-              </ui:IconButton>
-            </ui:items>
-            <ui:after>
-              <Component itemId="createDocument"/>
-            </ui:after>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:RepositoryToolbar>
+    <!-- Add the upload button -->
+    <editor:RepositoryToolbar>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <ui:IconButton itemId="openUpload"
+                           text="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.UploadStudioPlugin', 'UploadFileAction_menu_item_text')}"
+                           iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'upload')}"
+                           tooltip="{UploadHelper.resolveTooltip()}">
+              <ui:baseAction>
+                <upload:OpenUploadDialogAction
+                        contentValueExpression="{myCollectionView.getSelectedFolderValueExpression()}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+          </ui:items>
+          <ui:after>
+            <Component itemId="createDocument"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:RepositoryToolbar>
 
-    </ui:rules>
-  
+  </ui:rules>
+
 </ui:NestedRulesPlugin>

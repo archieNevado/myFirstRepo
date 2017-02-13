@@ -49,8 +49,9 @@
   </local:tbar>
 
   <local:plugins>
-    <ui:BindComponentsPlugin valueExpression="{ValueExpressionFactory.createFromFunction(getCombinedValueExpression, config.selectedValueExpression, config.dataSourceValueExpression)}"
-                             configBeanParameterName="combinedVE">
+    <ui:BindComponentsPlugin
+            valueExpression="{ValueExpressionFactory.createFromFunction(getCombinedValueExpression, config.selectedValueExpression, config.dataSourceValueExpression)}"
+            configBeanParameterName="combinedVE">
       <ui:template>
         <local:PreviewContentContainer/>
       </ui:template>

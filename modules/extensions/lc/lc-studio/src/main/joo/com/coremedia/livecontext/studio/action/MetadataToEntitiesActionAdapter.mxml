@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--- 
-    
-     Adapter that implements a MetadataAction based on a backing action.
+<!---
 
-     All critical methods are delegated to the backing action after extracting a bean
-     from the underlying metadata. If no bean can be obtained from the MetadataTreeNode
-     (or one of it's parents if useParentNode is enabled), the backing action is configured
-     with metadata properties (if available).
-    
-   -->
+ Adapter that implements a MetadataAction based on a backing action.
+
+ All critical methods are delegated to the backing action after extracting a bean
+ from the underlying metadata. If no bean can be obtained from the MetadataTreeNode
+ (or one of it's parents if useParentNode is enabled), the backing action is configured
+ with metadata properties (if available).
+
+-->
 <local:MetadataToEntitiesActionAdapterBase
         xmlns="exml:ext.config"
         xmlns:fx="http://ns.adobe.com/mxml/2009"
@@ -21,10 +21,10 @@
   <fx:Declarations>
     <Action id="backingAction"/>
 
-    <!--- 
-      The name of the backing action's function to pass the resolved metadata beans to.
-      Defaults to ContentAction#setContents.
-     -->
+    <!---
+     The name of the backing action's function to pass the resolved metadata beans to.
+     Defaults to ContentAction#setContents.
+    -->
     <fx:String id="setEntities">setContents</fx:String>
   </fx:Declarations>
 

@@ -34,22 +34,22 @@
     public native function CommerceCategoryWorkAreaTab(config:CommerceCategoryWorkAreaTab = null);
     ]]></fx:Script>
 
-    <livecontext:subTabs>
-      <livecontext:CommerceCategoryContentForm itemId="{CONTENT_TAB_ITEM_ID}"
-                                               bindTo="{getEntityExpression()}"/>
-      <livecontext:CommerceCategoryStructureForm itemId="{STRUCTURE_TAB_ITEM_ID}"/>
-      <editor:DocumentForm itemId="{PDP_PAGEGRID_TAB_ITEM_ID}"
-                           title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMExternalChannel_tab_PDP_pagegrid_title')}">
-        <editor:items>
-          <livecontext:CommerceAugmentedPageGridForm itemId="pdpPagegrid"
-                                                     showLocal="true"
-                                                     forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
-                                                     bindTo="{augmentedCategoryExpression}"
-                                                     pageGridPropertyName="pdpPagegrid"
-                                                     fallbackPageGridPropertyName="placement"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <livecontext:CommerceSystemForm autoHide="true"/>
-    </livecontext:subTabs>
-  
+  <livecontext:subTabs>
+    <livecontext:CommerceCategoryContentForm itemId="{CONTENT_TAB_ITEM_ID}"
+                                             bindTo="{getEntityExpression()}"/>
+    <livecontext:CommerceCategoryStructureForm itemId="{STRUCTURE_TAB_ITEM_ID}"/>
+    <editor:DocumentForm itemId="{PDP_PAGEGRID_TAB_ITEM_ID}"
+                         title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMExternalChannel_tab_PDP_pagegrid_title')}">
+      <editor:items>
+        <livecontext:CommerceAugmentedPageGridForm itemId="pdpPagegrid"
+                                                   showLocal="true"
+                                                   forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
+                                                   bindTo="{augmentedCategoryExpression}"
+                                                   pageGridPropertyName="pdpPagegrid"
+                                                   fallbackPageGridPropertyName="placement"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <livecontext:CommerceSystemForm autoHide="true"/>
+  </livecontext:subTabs>
+
 </livecontext:CommerceWorkAreaTab>

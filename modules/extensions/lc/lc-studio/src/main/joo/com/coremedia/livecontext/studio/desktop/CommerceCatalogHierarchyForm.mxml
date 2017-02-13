@@ -4,7 +4,7 @@
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns:livecontext="exml:com.coremedia.livecontext.studio.config"
+        xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_Hierarchy_title')}"
         itemId="catalogHierarchy">
@@ -16,6 +16,7 @@
     import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
     import com.coremedia.livecontext.studio.LivecontextStudioPluginBase;
     import com.coremedia.ui.data.ValueExpression;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.commerceCatalogHierarchyForm";
 
@@ -51,8 +52,8 @@
             title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_PropertyGroup_parentCategory_title')}"
             itemId="parentCategory">
       <editor:items>
-        <livecontext:ReadOnlyCatalogLinkProperty propertyName="{CatalogObjectPropertyNames.PARENT}"
-                                                 emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_PropertyGroup_parentCategory_emptyText')}"/>
+        <ec:ReadOnlyCatalogLinkPropertyField propertyName="{CatalogObjectPropertyNames.PARENT}"
+                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_PropertyGroup_parentCategory_emptyText')}"/>
       </editor:items>
       <editor:defaults>
         <fx:Object bindTo="{config.bindTo}"
@@ -65,8 +66,8 @@
             title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_PropertyGroup_subcategories_title')}"
             itemId="subcategories">
       <editor:items>
-        <livecontext:ReadOnlyCatalogLinkProperty propertyName="{CatalogObjectPropertyNames.SUB_CATEGORIES}"
-                                                 emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_subcategories_emptyText')}"/>
+        <ec:ReadOnlyCatalogLinkPropertyField propertyName="{CatalogObjectPropertyNames.SUB_CATEGORIES}"
+                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_subcategories_emptyText')}"/>
       </editor:items>
       <editor:defaults>
         <fx:Object bindTo="{config.bindTo}"
@@ -79,8 +80,8 @@
             title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_PropertyGroup_products_title')}"
             itemId="products">
       <editor:items>
-        <livecontext:ReadOnlyCatalogLinkProperty propertyName="{CatalogObjectPropertyNames.PRODUCTS}"
-                                                 emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_products_emptyText')}"/>
+        <ec:ReadOnlyCatalogLinkPropertyField propertyName="{CatalogObjectPropertyNames.PRODUCTS}"
+                                             emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_products_emptyText')}"/>
       </editor:items>
       <editor:defaults>
         <fx:Object bindTo="{config.bindTo}"

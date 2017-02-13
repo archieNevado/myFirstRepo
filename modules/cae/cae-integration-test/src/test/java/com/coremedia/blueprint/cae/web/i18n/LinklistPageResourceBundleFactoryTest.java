@@ -88,7 +88,7 @@ public class LinklistPageResourceBundleFactoryTest {
     ContentBean article = contentTestHelper.getContentBean(30);
     Navigation navigation = contentTestHelper.getContentBean(20);
     Page page = new PageImpl(navigation, article, false, new SitesServiceImpl(), null, null, null, null);
-    ResourceBundle resourceBundle = testling.resourceBundle(page);
+    ResourceBundle resourceBundle = testling.resourceBundle(page, null);
     assertEquals("str2fromBundle10", resourceBundle.getString("str2"));
     assertEquals("str4fromBundle20a", resourceBundle.getString("str4"));
     assertEquals("str1fromBundle20", resourceBundle.getString("str1"));
@@ -103,7 +103,7 @@ public class LinklistPageResourceBundleFactoryTest {
   public void testBundleForPageByTheme() {
     Navigation navigation = contentTestHelper.getContentBean(220);
     Page page = new PageImpl(navigation, navigation, false, new SitesServiceImpl(), null, null, null, null);
-    ResourceBundle resourceBundle = testling.resourceBundle(page);
+    ResourceBundle resourceBundle = testling.resourceBundle(page, null);
     assertEquals("localeFromBundle_en_gb_europe", resourceBundle.getString("locale"));
     assertEquals("str1", resourceBundle.getString("str1"));
     assertEquals("str2", resourceBundle.getString("str2"));
@@ -112,7 +112,7 @@ public class LinklistPageResourceBundleFactoryTest {
     navigation = contentTestHelper.getContentBean(216);
     page = new PageImpl(navigation, navigation, false, new SitesServiceImpl(), null, null, null, null);
 
-    resourceBundle = testling.resourceBundle(page);
+    resourceBundle = testling.resourceBundle(page, null);
     assertEquals("localeFromBundle_en_gb", resourceBundle.getString("locale"));
     assertEquals("str1", resourceBundle.getString("str1"));
     assertEquals("str2", resourceBundle.getString("str2"));
@@ -120,7 +120,7 @@ public class LinklistPageResourceBundleFactoryTest {
     navigation = contentTestHelper.getContentBean(210);
     page = new PageImpl(navigation, navigation, false, new SitesServiceImpl(), null, null, null, null);
 
-    resourceBundle = testling.resourceBundle(page);
+    resourceBundle = testling.resourceBundle(page, null);
     assertEquals("localeFromBundle_en", resourceBundle.getString("locale"));
     assertEquals("str1", resourceBundle.getString("str1"));
   }

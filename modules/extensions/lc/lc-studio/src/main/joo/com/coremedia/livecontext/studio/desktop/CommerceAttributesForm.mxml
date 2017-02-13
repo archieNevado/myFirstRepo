@@ -24,50 +24,52 @@
     public native function CommerceAttributesForm(config:CommerceAttributesForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_definingAttributes_title')}"
-                                 itemId="definingAttributes">
-        <editor:plugins exml:mode="append">
-          <ui:BindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsVariantExpression(config.bindTo)}"/>
-          <ui:BindComponentsPlugin valueExpression="{config.bindTo.extendBy(ProductPropertyNames.DEFINING_ATTRIBUTES)}"
-                                   configBeanParameterName="productAttribute"
-                                   getKey="{function(productAttribute:ProductAttribute):String {return productAttribute.name}}">
-            <ui:template>
-              <livecontext:ProductAttributeLabel/>
-            </ui:template>
-          </ui:BindComponentsPlugin>
-        </editor:plugins>
-        <editor:items>
-          <Label text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_definingAttributes_emptyText')}">
-            <plugins>
-              <ui:BindVisibilityPlugin bindTo="{ValueExpressionFactory.createTransformingValueExpression(
+  <editor:items>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_definingAttributes_title')}"
+            itemId="definingAttributes">
+      <editor:plugins exml:mode="append">
+        <ui:BindVisibilityPlugin bindTo="{CatalogHelper.getInstance().getIsVariantExpression(config.bindTo)}"/>
+        <ui:BindComponentsPlugin valueExpression="{config.bindTo.extendBy(ProductPropertyNames.DEFINING_ATTRIBUTES)}"
+                                 configBeanParameterName="productAttribute"
+                                 getKey="{function(productAttribute:ProductAttribute):String {return productAttribute.name}}">
+          <ui:template>
+            <livecontext:ProductAttributeLabel/>
+          </ui:template>
+        </ui:BindComponentsPlugin>
+      </editor:plugins>
+      <editor:items>
+        <Label text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_definingAttributes_emptyText')}">
+          <plugins>
+            <ui:BindVisibilityPlugin bindTo="{ValueExpressionFactory.createTransformingValueExpression(
                 config.bindTo.extendBy(ProductPropertyNames.DEFINING_ATTRIBUTES),
                 ArrayUtils.isEmpty)}"/>
-            </plugins>
-          </Label>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_describingAttributes_title')}"
-                                 itemId="describingAttributes">
-        <editor:plugins exml:mode="append">
-          <ui:BindComponentsPlugin valueExpression="{config.bindTo.extendBy(ProductPropertyNames.DESCRIBING_ATTRIBUTES)}"
-                                   configBeanParameterName="productAttribute"
-                                   getKey="{function(productAttribute:ProductAttribute):String {return productAttribute.name}}">
-            <ui:template>
-              <livecontext:ProductAttributeLabel/>
-            </ui:template>
-          </ui:BindComponentsPlugin>
-        </editor:plugins>
-        <editor:items>
-          <Label text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_describingAttributes_emptyText')}">
-            <plugins>
-              <ui:BindVisibilityPlugin bindTo="{ValueExpressionFactory.createTransformingValueExpression(
+          </plugins>
+        </Label>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_describingAttributes_title')}"
+            itemId="describingAttributes">
+      <editor:plugins exml:mode="append">
+        <ui:BindComponentsPlugin valueExpression="{config.bindTo.extendBy(ProductPropertyNames.DESCRIBING_ATTRIBUTES)}"
+                                 configBeanParameterName="productAttribute"
+                                 getKey="{function(productAttribute:ProductAttribute):String {return productAttribute.name}}">
+          <ui:template>
+            <livecontext:ProductAttributeLabel/>
+          </ui:template>
+        </ui:BindComponentsPlugin>
+      </editor:plugins>
+      <editor:items>
+        <Label text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_describingAttributes_emptyText')}">
+          <plugins>
+            <ui:BindVisibilityPlugin bindTo="{ValueExpressionFactory.createTransformingValueExpression(
                 config.bindTo.extendBy(ProductPropertyNames.DESCRIBING_ATTRIBUTES),
                 ArrayUtils.isEmpty)}"/>
-            </plugins>
-          </Label>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
+          </plugins>
+        </Label>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
 
 </editor:DocumentForm>

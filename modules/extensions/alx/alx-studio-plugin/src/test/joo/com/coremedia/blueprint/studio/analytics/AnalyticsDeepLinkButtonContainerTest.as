@@ -78,7 +78,7 @@ public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
     var container:AnalyticsDeepLinkButtonContainer = AnalyticsDeepLinkButtonContainer(contentContainer.getComponent("alxDeepLinkButtonContainer"));
 
     // the menu button should be disabled initially
-    var item:Button = Button(container.itemCollection.get(0));
+    var item:Button = Button(container.itemCollection.get(3));
     assertEquals('button', item.xtype);
     assertNotNull(item.menu);
     assertTrue("menu button should be initially disabled", item.disabled);

@@ -82,11 +82,65 @@ template node['mongodb3']['mongod']['config_file'] do
   helpers Mongodb3Helper
 end
 
+# Disable Transparent Huge Pages (THP)
+# https://docs.mongodb.com/manual/tutorial/transparent-huge-pages/
+cookbook_file '/etc/init.d/disable-transparent-hugepages' do
+  source 'disable-transparent-hugepages'
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create
+  only_if {
+    node['mongodb3']['mongod']['disable-transparent-hugepages']
+  }
+end
+
+case node['platform']
+  when 'ubuntu'
+    if node['platform_version'].to_f >= 15.04
+      cookbook_file '/lib/systemd/system/disable-transparent-hugepages.service' do
+        source 'disable-transparent-hugepages.service'
+        owner 'root'
+        group 'root'
+        mode '0655'
+        action :create
+        only_if {
+          node['mongodb3']['mongod']['disable-transparent-hugepages']
+        }
+      end
+    end
+end
+
+service 'disable-transparent-hugepages' do
+  case node['platform']
+    when 'ubuntu'
+      if node['platform_version'].to_f >= 15.04
+        provider Chef::Provider::Service::Systemd
+      end
+  end
+  action [ :enable, :start ]
+  only_if {
+    node['mongodb3']['mongod']['disable-transparent-hugepages']
+  }
+end
+
+# Create the mongod.service file
+case node['platform']
+  when 'ubuntu'
+    template '/lib/systemd/system/mongod.service' do
+      source 'mongod.service.erb'
+      mode 0644
+      only_if { node['platform_version'].to_f >= 15.04 }
+    end
+end
+
 # Start the mongod service
 service 'mongod' do
   case node['platform']
     when 'ubuntu'
-      if node['platform_version'].to_f >= 14.04
+      if node['platform_version'].to_f >= 15.04
+        provider Chef::Provider::Service::Systemd
+      elsif node['platform_version'].to_f >= 14.04
         provider Chef::Provider::Service::Upstart
       end
   end

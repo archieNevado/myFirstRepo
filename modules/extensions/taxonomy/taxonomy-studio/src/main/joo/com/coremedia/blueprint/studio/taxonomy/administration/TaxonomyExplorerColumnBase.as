@@ -12,6 +12,8 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.models.bem.BEMBlock;
 import com.coremedia.ui.models.bem.BEMModifier;
 
+import ext.Component;
+
 import ext.Ext;
 import ext.data.Model;
 import ext.data.Store;
@@ -25,6 +27,8 @@ import js.KeyEvent;
 [ResourceBundle('com.coremedia.icons.CoreIcons')]
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
 public class TaxonomyExplorerColumnBase extends GridPanel {
+
+  public static const DRAG_DROP_PLUGIN_ID:String = "dragdrop";
 
   private static const COLUMN_ENTRY_BLOCK:BEMBlock = new BEMBlock("cm-column-entry");
   private static const COLUMN_ENTRY_MODIFIER_EMPTY:BEMModifier = COLUMN_ENTRY_BLOCK.createModifier("empty");
@@ -50,8 +54,14 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
 
     getSelectionModel().addListener('selectionchange', selectionChanged);
     addListener('rowclick', onPanelClick);
+    addListener("beforedestroy", onBeforeDestroy, this, {single:true});
   }
 
+
+  //Dnd is causing focus issues/console errors: since we don't need the focus on the column, we skip the parent call
+  override public function focus(selectText:* = undefined, delay:* = undefined, callback:Function = null, scope:Function = null):Component {
+    return this;
+  }
 
   override protected function afterRender():void {
     super.afterRender();
@@ -59,8 +69,12 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
 
     taxonomyExplorerColumnDropTarget = new TaxonomyExplorerColumnDropTarget(this);
 
-    var ddPlugin:GridViewDragDropPlugin = getView().getPlugin("dragdrop") as GridViewDragDropPlugin;
+    var ddPlugin:GridViewDragDropPlugin = getView().getPlugin(DRAG_DROP_PLUGIN_ID) as GridViewDragDropPlugin;
     ddPlugin.dragZone['getDragText'] = getDragText;
+    //DnD is causing focus issues, so we skip the focus handling here and simply call the parent
+    ddPlugin.dragZone['onValidDrop'] =  function(target:*, e:*, id:*):void {
+      this.callParent([target, e, id]);
+    };
     ddPlugin.dropZone.addToGroup('taxonomies');
     ddPlugin.dropZone.onNodeOver = taxonomyExplorerColumnDropTarget.notifyOnNodeOver;
     ddPlugin.dropZone.onNodeDrop = taxonomyExplorerColumnDropTarget.notifyOnNodeDrop;
@@ -76,23 +90,21 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
 
   private function onKeyInput(event:Event):void {
     var key:Number = event.getKey();
-    if (key == KeyEvent.DOM_VK_LEFT) {
+    if (key === KeyEvent.DOM_VK_LEFT) {
       if (globalSelectedNodeExpression && parentNode) {
           activeNode = parentNode;
           globalSelectedNodeExpression.setValue(parentNode);
         getExplorerPanel().getColumnContainer(parentNode).selectNode(parentNode, true);
       }
+    }
+    else if (key === KeyEvent.DOM_VK_RIGHT && activeNode.isExtendable()) {
+      activeNode.loadChildren(function(list:TaxonomyNodeList):void {
+        if(list.size() > 0) {
+          var selectNode:TaxonomyNode = list.getNodes()[0];
+          globalSelectedNodeExpression.setValue(selectNode);
+          getExplorerPanel().getColumnContainer(selectNode).selectNode(selectNode, true);
         }
-    else if (key == KeyEvent.DOM_VK_RIGHT) {
-        if(activeNode.isExtendable()) {
-          activeNode.loadChildren(function(list:TaxonomyNodeList):void {
-            if(list.size() > 0) {
-              var selectNode:TaxonomyNode = list.getNodes()[0];
-              globalSelectedNodeExpression.setValue(selectNode);
-              getExplorerPanel().getColumnContainer(selectNode).selectNode(selectNode, true);
-            }
-          });
-        }
+      });
     }
   }
 
@@ -175,8 +187,6 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
           getView().focusRow(i);
         }
       }
-      //not sure why I needed this, should be invoked later anyway (test with initial search)
-      // getExplorerPanel().updateTaxonomyNodeForm(activeNode);
     }
     else {
       (getSelectionModel() as RowSelectionModel).deselectRange(0, getStore().getCount() - 1);
@@ -280,18 +290,13 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     return '<div class="' + cls + '">' + TaxonomyUtil.escapeHTML(name) + '</div>';
   }
 
-  override protected function beforeDestroy():void {
-    taxonomyExplorerColumnDropTarget && taxonomyExplorerColumnDropTarget.unreg();
-    super.beforeDestroy();
-  }
-
   /**
    * Executed for a regular click on the panel, updates
    * backward selections that are on the same selection path.
    */
   private function onPanelClick():void {
     selectionChanged();
-    }
+  }
 
   /**
    * Returns the parent taxonomy explorer panel.
@@ -317,12 +322,11 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     return '';
   }
 
-
-  override protected function onDestroy():void {
+  private function onBeforeDestroy():void {
+    taxonomyExplorerColumnDropTarget && taxonomyExplorerColumnDropTarget.unreg();
     if(getEl()){
       getEl().removeListener("keyup", onKeyInput);
     }
-    super.onDestroy();
   }
 }
 }

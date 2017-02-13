@@ -19,44 +19,45 @@
     public native function CommerceSystemForm(config:CommerceSystemForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_filing_title')}"
-                                 itemId="filing">
-        <editor:items>
-          <DisplayField itemId="store"
-                        fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_store_label')}"
-                        labelAlign="left"
-                        labelSeparator=":">
-            <plugins>
-              <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.STORE + '.name')}"/>
-            </plugins>
-          </DisplayField>
-          <DisplayField itemId="id"
-                        labelAlign="left"
-                        fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_id_label')}"
-                        labelSeparator=":">
-            <plugins>
-              <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.ID)}"/>
-            </plugins>
-          </DisplayField>
-          <DisplayField itemId="externalId"
-                        labelAlign="left"
-                        fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_externalId_label')}"
-                        labelSeparator=":">
-            <plugins>
-              <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_ID)}"/>
-            </plugins>
-          </DisplayField>
-          <DisplayField itemId="externalTechId"
-                        labelAlign="left"
-                        fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_externalTechId_label')}"
-                        labelSeparator=":">
-            <plugins>
-              <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_TECH_ID)}"/>
-            </plugins>
-          </DisplayField>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </editor:items>
+  <editor:items>
+    <editor:PropertyFieldGroup
+            title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_filing_title')}"
+            itemId="filing">
+      <editor:items>
+        <DisplayField itemId="store"
+                      fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_store_label')}"
+                      labelAlign="left"
+                      labelSeparator=":">
+          <plugins>
+            <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.STORE + '.name')}"/>
+          </plugins>
+        </DisplayField>
+        <DisplayField itemId="id"
+                      labelAlign="left"
+                      fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_id_label')}"
+                      labelSeparator=":">
+          <plugins>
+            <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.ID)}"/>
+          </plugins>
+        </DisplayField>
+        <DisplayField itemId="externalId"
+                      labelAlign="left"
+                      fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_externalId_label')}"
+                      labelSeparator=":">
+          <plugins>
+            <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_ID)}"/>
+          </plugins>
+        </DisplayField>
+        <DisplayField itemId="externalTechId"
+                      labelAlign="left"
+                      fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_externalTechId_label')}"
+                      labelSeparator=":">
+          <plugins>
+            <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_TECH_ID)}"/>
+          </plugins>
+        </DisplayField>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </editor:items>
 
 </editor:DocumentForm>

@@ -26,13 +26,13 @@
     public var selectedItemsValueExpression:ValueExpression;
     ]]></fx:Script>
 
-    <local:items>
-      <ec:CatalogSearchList itemId="{CollectionViewConstants.LIST_VIEW}"
-                            searchResultHitsValueExpression="{config.searchResultHitsValueExpression}"
-                            selectedItemsValueExpression="{config.selectedItemsValueExpression}"/>
-      <ec:CatalogSearchThumbnails itemId="{CollectionViewConstants.THUMBNAILS_VIEW}"
-                                  searchResultHitsValueExpression="{config.searchResultHitsValueExpression}"
-                                  selectedItemsValueExpression="{config.selectedItemsValueExpression}"/>
-    </local:items>
-  
+  <local:items>
+    <ec:CatalogSearchList itemId="{CollectionViewConstants.LIST_VIEW}"
+                          searchResultHitsValueExpression="{config.searchResultHitsValueExpression}"
+                          selectedItemsValueExpression="{config.selectedItemsValueExpression}"/>
+    <ec:CatalogSearchThumbnails itemId="{CollectionViewConstants.THUMBNAILS_VIEW}"
+                                searchResultHitsValueExpression="{config.searchResultHitsValueExpression}"
+                                selectedItemsValueExpression="{config.selectedItemsValueExpression}"/>
+  </local:items>
+
 </local:CatalogSearchListContainerBase>

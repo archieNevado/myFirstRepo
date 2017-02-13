@@ -18,31 +18,32 @@
     public native function CMLocTaxonomyForm(config:CMLocTaxonomyForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <!--Do not rename itemId, because the TaxonomyExplorerPanel uses it to highlight the value field-->
-      <!--Do not rename itemId, because the OSM extension replaces the location property editor this way-->
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
-                           itemId="CMLocTaxonomy">
-        <editor:items>
-          <editor:PropertyFieldGroup itemId="locTaxonomy"
-                                     title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Location_label')}"
-                                     propertyNames="{['value','externalReference','postcode']}">
-            <editor:items>
-              <editor:StringPropertyField bindTo="{config.bindTo}"
-                                          propertyName="value"/>
-              <editor:StringPropertyField bindTo="{config.bindTo}"
-                                          propertyName="externalReference"/>
-              <editor:StringPropertyField bindTo="{config.bindTo}"
-                                          propertyName="postcode"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <bpforms:CollapsibleStringPropertyForm propertyName="latitudeLongitude"
-                                                 collapsed="true"
-                                                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMLocTaxonomy_latitudeLongitude_text')}"
-                                                 itemId="latitudeLongitude"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MetaDataInformationForm/>
-    </editor:items>
-  
+  <editor:items>
+    <!--Do not rename itemId, because the TaxonomyExplorerPanel uses it to highlight the value field-->
+    <!--Do not rename itemId, because the OSM extension replaces the location property editor this way-->
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+            itemId="CMLocTaxonomy">
+      <editor:items>
+        <editor:PropertyFieldGroup itemId="locTaxonomy"
+                                   title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Location_label')}"
+                                   propertyNames="{['value','externalReference','postcode']}">
+          <editor:items>
+            <editor:StringPropertyField bindTo="{config.bindTo}"
+                                        propertyName="value"/>
+            <editor:StringPropertyField bindTo="{config.bindTo}"
+                                        propertyName="externalReference"/>
+            <editor:StringPropertyField bindTo="{config.bindTo}"
+                                        propertyName="postcode"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <bpforms:CollapsibleStringPropertyForm propertyName="latitudeLongitude"
+                                               collapsed="true"
+                                               title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMLocTaxonomy_latitudeLongitude_text')}"
+                                               itemId="latitudeLongitude"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MetaDataInformationForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

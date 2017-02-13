@@ -46,6 +46,12 @@
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>core-icons</artifactId>
+    </dependency>
+
   </dependencies>
 
 

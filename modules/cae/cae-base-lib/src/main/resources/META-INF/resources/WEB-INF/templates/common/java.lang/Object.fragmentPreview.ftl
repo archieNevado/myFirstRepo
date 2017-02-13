@@ -1,10 +1,9 @@
 <@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/>
 <#-- @ftlvariable name="self" type="java.lang.Object" -->
+<#assign sliderMetadata=(cmpage?has_content)?then(bp.setting(cmpage, "sliderMetaData", ""), '')/>
 
-<#assign language=bp.getPageLanguageTag(self) />
-<#assign direction=bp.getPageDirection(self) />
 <!DOCTYPE html>
-<html class="no-js" lang="${language}" dir="${direction}">
+<html class="no-js" lang="${bp.getPageLanguageTag(cmpage!self)}" dir="${bp.getPageDirection(cmpage!self)!'ltr'}" <@cm.metadata data=bp.getPageMetadata(cmpage!self)!"" />>
 
 <#if cmpage?has_content>
   <@cm.include self=cmpage view="head"/>
@@ -17,20 +16,12 @@
   </head>
 </#if>
 
-<body id="top" class="cm-page-preview">
+<body id="top" class="cm-page-preview"<@cm.metadata sliderMetadata!"" />>
 
+<#-- include fragmented preview -->
   <@cm.include self=self view="asPreview"/>
 
-  <#-- Show icon in CoreMedia developerMode -->
   <#if cmpage?has_content>
-    <#if cmpage.developerMode>
-      <div class="cm-preview-developer-mode" data-cm-developer-mode="true">
-        <i class="icon-wrench" title="You're in Developer Mode"></i>
-        <#-- this js is used for a automatic reload of webrources changes, triggert by the grunt watch task -->
-        <script src="http://localhost:35729/livereload.js"></script>
-      </div>
-    </#if>
-
     <@cm.include self=cmpage view="bodyEnd"/>
   </#if>
 

@@ -25,88 +25,100 @@
     public native function P13NStudioPlugin(config:P13NStudioPlugin = null);
     ]]></fx:Script>
 
-    <local:rules>
+  <local:rules>
 
-      <editor:TabbedDocumentFormDispatcher>
-        <editor:plugins>
-          <editor:AddTabbedDocumentFormsPlugin>
-            <editor:documentTabPanels>
-              <plugin:CMSelectionRulesForm itemId="CMSelectionRules"/>
-              <plugin:CMP13NSearchForm itemId="CMP13NSearch"/>
-              <plugin:CMPersonaForm itemId="CMUserProfile"/>
-              <plugin:CMSegmentForm itemId="CMSegment"/>
-            </editor:documentTabPanels>
-          </editor:AddTabbedDocumentFormsPlugin>
-        </editor:plugins>
-      </editor:TabbedDocumentFormDispatcher>
+    <editor:TabbedDocumentFormDispatcher>
+      <editor:plugins>
+        <editor:AddTabbedDocumentFormsPlugin>
+          <editor:documentTabPanels>
+            <plugin:CMSelectionRulesForm itemId="CMSelectionRules"/>
+            <plugin:CMP13NSearchForm itemId="CMP13NSearch"/>
+            <plugin:CMPersonaForm itemId="CMUserProfile"/>
+            <plugin:CMSegmentForm itemId="CMSegment"/>
+          </editor:documentTabPanels>
+        </editor:AddTabbedDocumentFormsPlugin>
+      </editor:plugins>
+    </editor:TabbedDocumentFormDispatcher>
 
-      <editor:PreviewPanel>
-        <editor:plugins>
-          <plugin:AddPersonaSelectorPlugin/>
-        </editor:plugins>
-      </editor:PreviewPanel>
+    <editor:PreviewPanel>
+      <editor:plugins>
+        <plugin:AddPersonaSelectorPlugin/>
+      </editor:plugins>
+    </editor:PreviewPanel>
 
-      <editor:NewContentMenu>
-        <editor:plugins>
-          <ui:AddItemsPlugin>
-            <ui:items>
-              <MenuSeparator/>
-              <bpb-components:QuickCreateMenuItem contentType="CMUserProfile" iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'user_personalization')}"/>
-              <bpb-components:QuickCreateMenuItem contentType="CMSegment" iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'users_personalization')}"/>
-              <bpb-components:QuickCreateMenuItem contentType="CMSelectionRules" iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'type_personalized_content')}"/>
-            </ui:items>
-          </ui:AddItemsPlugin>
-        </editor:plugins>
-      </editor:NewContentMenu>
+    <editor:NewContentMenu>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <MenuSeparator/>
+            <bpb-components:QuickCreateMenuItem contentType="CMUserProfile"
+                                                iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'user_personalization')}"/>
+            <bpb-components:QuickCreateMenuItem contentType="CMSegment"
+                                                iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'users_personalization')}"/>
+            <bpb-components:QuickCreateMenuItem contentType="CMSelectionRules"
+                                                iconCls="{ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'type_personalized_content')}"/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:NewContentMenu>
 
-      <perso:SelectionRulesField>
-        <perso:plugins>
-          <perso:Addconditionitems>
-            <perso:items>
-              <plugin:PercentageTaxonomyCondition conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
-                                                  keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
-                                                  propertyPrefix="locationTaxonomies"
-                                                  suffixText="%"/>
-              <plugin:PercentageTaxonomyCondition conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
-                                                  keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
-                                                  propertyPrefix="subjectTaxonomies"
-                                                  suffixText="%"/>
-              <plugin:BooleanTaxonomyCondition conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_explicit')}"
-                                               propertyPrefix="explicit"/>
-            </perso:items>
-          </perso:Addconditionitems>
-        </perso:plugins>
-      </perso:SelectionRulesField>
+    <perso:SelectionRulesField>
+      <perso:plugins>
+        <perso:Addconditionitems>
+          <perso:items>
+            <plugin:PercentageTaxonomyCondition
+                    conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
+                    keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
+                    propertyPrefix="locationTaxonomies"
+                    suffixText="%"/>
+            <plugin:PercentageTaxonomyCondition
+                    conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
+                    keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
+                    propertyPrefix="subjectTaxonomies"
+                    suffixText="%"/>
+            <plugin:BooleanTaxonomyCondition
+                    conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_explicit')}"
+                    propertyPrefix="explicit"/>
+          </perso:items>
+        </perso:Addconditionitems>
+      </perso:plugins>
+    </perso:SelectionRulesField>
 
-      <perso:ConditionsField>
-        <perso:plugins>
-          <perso:Addconditionitems>
-            <perso:items>
-              <plugin:PercentageTaxonomyCondition conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
-                                                  keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
-                                                  propertyPrefix="locationTaxonomies"
-                                                  suffixText="%"/>
-              <plugin:PercentageTaxonomyCondition conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
-                                                  keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
-                                                  propertyPrefix="subjectTaxonomies"
-                                                  suffixText="%"/>
-              <plugin:BooleanTaxonomyCondition conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_explicit')}"
-                                               propertyPrefix="explicit"/>
-            </perso:items>
-          </perso:Addconditionitems>
-        </perso:plugins>
-      </perso:ConditionsField>
-    </local:rules>
+    <perso:ConditionsField>
+      <perso:plugins>
+        <perso:Addconditionitems>
+          <perso:items>
+            <plugin:PercentageTaxonomyCondition
+                    conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
+                    keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_locationTaxonomies')}"
+                    propertyPrefix="locationTaxonomies"
+                    suffixText="%"/>
+            <plugin:PercentageTaxonomyCondition
+                    conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
+                    keywordEmptyText="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_subjectTaxonomies')}"
+                    propertyPrefix="subjectTaxonomies"
+                    suffixText="%"/>
+            <plugin:BooleanTaxonomyCondition
+                    conditionName="{ResourceManager.getInstance().getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_explicit')}"
+                    propertyPrefix="explicit"/>
+          </perso:items>
+        </perso:Addconditionitems>
+      </perso:plugins>
+    </perso:ConditionsField>
+  </local:rules>
 
-    <local:configuration>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.personalization.editorplugin.PersonalizationDocTypes')}"/>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.personalization.ui.PersonalizationContextNames')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext')}"/>
-      <editor:CopyResourceBundleProperties destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.personalization.ui.PersonalizationContextNames')}"
-                                           source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn')}"/>
-      <editor:ConfigureDocumentTypes names="CMSegment,CMUserProfile"
-                                     preview="false"/>
-    </local:configuration>
-  
+  <local:configuration>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ContentTypes')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.personalization.editorplugin.PersonalizationDocTypes')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.personalization.ui.PersonalizationContextNames')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext')}"/>
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.personalization.ui.PersonalizationContextNames')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn')}"/>
+    <editor:ConfigureDocumentTypes names="CMSegment,CMUserProfile"
+                                   preview="false"/>
+  </local:configuration>
+
 </local:P13NStudioPluginBase>

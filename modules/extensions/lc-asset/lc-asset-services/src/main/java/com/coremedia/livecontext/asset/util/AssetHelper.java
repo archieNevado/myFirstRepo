@@ -1,9 +1,7 @@
 package com.coremedia.livecontext.asset.util;
 
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import org.springframework.beans.factory.annotation.Required;
@@ -27,8 +25,6 @@ import static com.coremedia.livecontext.asset.util.InheritFlag.INHERIT;
  * Helper for common livecontext asset operations.
  */
 public class AssetHelper {
-
-  public static final String CONFIG_KEY_DEFAULT_PICTURE = "livecontext.assets.default.picture";
 
   private ContentRepository contentRepository;
   private AssetReadSettingsHelper assetReadSettingsHelper;
@@ -190,11 +186,6 @@ public class AssetHelper {
 
   private Struct getEmptyStruct() {
     return contentRepository.getConnection().getStructService().createStructBuilder().build();
-  }
-
-  @Nullable
-  public static Content getDefaultPicture(@Nonnull Site site, @Nonnull SettingsService settingsService) {
-    return settingsService.setting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site.getSiteRootDocument());
   }
 
   @Required

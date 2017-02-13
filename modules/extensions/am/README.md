@@ -4,7 +4,7 @@
 
 ###Description
 
-Asset Management extension which contains the Adobe Drive Connector and the download portal. This is, together with "LiveContext Asset Management", a part of the Advanced Asset Management module which  requires a separate license.
+Asset Management extension which contains the Adobe Drive Connector. This is, together with "LiveContext Asset Management", a part of the Advanced Asset Management module which  requires a separate license.
 
 ###Documentation
 

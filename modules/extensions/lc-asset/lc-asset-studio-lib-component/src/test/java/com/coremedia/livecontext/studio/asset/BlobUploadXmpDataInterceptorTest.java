@@ -1,22 +1,23 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.ecommerce.common.ProductIdExtractor;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.asset.util.AssetHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -29,11 +30,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @PrepareForTest({ProductIdExtractor.class, Commerce.class})
@@ -42,6 +44,9 @@ public class BlobUploadXmpDataInterceptorTest {
 
   @Mock
   private ContentRepository contentRepository;
+
+  @Mock
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Mock
   private CommerceConnection commerceConnection;
@@ -70,11 +75,15 @@ public class BlobUploadXmpDataInterceptorTest {
   @Mock
   private StoreContext defaultContext;
 
+  private Map<String, Object> properties;
+
   private BlobUploadXmpDataInterceptor testling;
 
   @Before
   public void setup() {
-    testling = new BlobUploadXmpDataInterceptor();
+    properties = new HashMap<>();
+
+    testling = new BlobUploadXmpDataInterceptor(commerceConnectionSupplier);
     testling.setBlobProperty("data");
     testling.setAssetHelper(assetHelper);
 
@@ -83,51 +92,40 @@ public class BlobUploadXmpDataInterceptorTest {
     when(blob.getInputStream()).thenReturn(blobInputStream);
 
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+
+    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
+            .thenReturn(Optional.of(commerceConnection));
   }
 
   @Test
   public void testInterceptNoMatch() {
-    when(contentWriteRequest.getProperties()).thenReturn(Collections.<String, Object>emptyMap());
     testling.intercept(contentWriteRequest);
 
     PowerMockito.verifyStatic(times(0));
     ProductIdExtractor.extractProductIds(blob);
-  }
 
-  @Test
-  public void testInterceptNoCommerceConnection() {
-    Map<String, Object> properties = new HashMap<>();
-    properties.put("data", blob);
-    when(contentWriteRequest.getProperties()).thenReturn(properties);
-    when(contentWriteRequest.getParent()).thenReturn(parentFolder);
-
-    testling.intercept(contentWriteRequest);
-
-    PowerMockito.verifyStatic(times(0));
-    ProductIdExtractor.extractProductIds(blob);
+    assertThat(properties).doesNotContainKey("localSettings");
   }
 
   @Test
   public void testInterceptNoXmpData() {
-    Map<String, Object> propertiesMock = mock(Map.class);
-    when(propertiesMock.get("data")).thenReturn(blob);
-    when(contentWriteRequest.getProperties()).thenReturn(propertiesMock);
+    properties.put("data", blob);
+
+    when(contentWriteRequest.getProperties()).thenReturn(properties);
     when(contentWriteRequest.getParent()).thenReturn(parentFolder);
     PowerMockito.mockStatic(ProductIdExtractor.class);
     when(ProductIdExtractor.extractProductIds(blob)).thenReturn(Collections.<String>emptyList());
 
     testling.intercept(contentWriteRequest);
 
-    verify(propertiesMock, never()).put(Matchers.anyString(), Matchers.anyObject());
+    assertThat(properties).containsEntry("localSettings", null);
   }
 
   @Test
   public void testInterceptWithXmpData() {
-    Map<String, Object> propertiesMock = mock(Map.class);
-    when(propertiesMock.get("data")).thenReturn(blob);
-    when(propertiesMock.containsKey("data")).thenReturn(true);
+    properties.put("data", blob);
 
-    when(contentWriteRequest.getProperties()).thenReturn(propertiesMock);
+    when(contentWriteRequest.getProperties()).thenReturn(properties);
     when(contentWriteRequest.getParent()).thenReturn(parentFolder);
     when(contentWriteRequest.getEntity()).thenReturn(content);
     List<String> xmpData = Arrays.asList("PC_EVENING_DRESS", "PC_EVENING_DRESS-RED-M");
@@ -141,7 +139,8 @@ public class BlobUploadXmpDataInterceptorTest {
     when(commerceConnection.getCatalogService().findProductById("vendor:///catalog/product/PC_EVENING_DRESS")).thenReturn(productMock);
 
     testling.intercept(contentWriteRequest);
-    verify(propertiesMock, times(1)).put(Matchers.anyString(), Matchers.anyObject());
+
+    assertThat(properties).containsKey("localSettings");
   }
 
   @Test
@@ -154,8 +153,11 @@ public class BlobUploadXmpDataInterceptorTest {
     when(commerceConnection.getCatalogService().findProductById("vendor:///catalog/product/" + unknown)).thenReturn(null);
     when(commerceConnection.getCatalogService().findProductVariantById("vendor:///catalog/sku/" + unknown)).thenReturn(null);
 
-    Assert.assertNotNull(testling.retrieveProductOrVariant(aProductExtId));
-    Assert.assertNotNull(testling.retrieveProductOrVariant(aSkuExtId));
-    Assert.assertNull(testling.retrieveProductOrVariant("unkown"));
+    CatalogService catalogService = commerceConnection.getCatalogService();
+    CommerceIdProvider idProvider = commerceConnection.getIdProvider();
+
+    assertThat(testling.retrieveProductOrVariant(aProductExtId, idProvider, catalogService)).isNotNull();
+    assertThat(testling.retrieveProductOrVariant(aSkuExtId, idProvider, catalogService)).isNotNull();
+    assertThat(testling.retrieveProductOrVariant("unkown", idProvider, catalogService)).isNull();
   }
 }

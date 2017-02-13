@@ -9,17 +9,16 @@ This brick adds support for rendering beans in the following views:
 
 ### Usage
 
-Just add following line to your Gruntfile.js to load the brick.
+Just add following config to your Gruntfile.js to load the brick.
 
 ```
-    // Load the "generic-template" brick
-    utils.loadBrick(grunt, "generic-templates");
-```
-
-If you want to load multiple bricks, you may also use the following syntax:
-```
-     // Load the "generic-template" brick
-    utils.loadBricks(grunt, [..., "generic-templates", ...]);
+    // load bricks into theme
+    bricks: {
+      src: [
+        'generic-templates',
+        ...
+      ]
+    }
 ```
 
 To use the included sass files, you need to load them explicitly in your sass file by adding:

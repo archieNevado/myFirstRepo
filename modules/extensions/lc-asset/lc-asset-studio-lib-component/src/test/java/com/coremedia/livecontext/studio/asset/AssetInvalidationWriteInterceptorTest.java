@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 import static org.mockito.Matchers.any;
@@ -68,7 +69,8 @@ public class AssetInvalidationWriteInterceptorTest {
     testling.setType(cmPictureType);
     testling.afterPropertiesSet();
 
-    when(commerceConnectionSupplier.getCommerceConnectionForContent(any(Content.class))).thenReturn(commerceConnection);
+    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
+            .thenReturn(Optional.of(commerceConnection));
 
     when(contentWriteRequest.getEntity()).thenReturn(content);
     when(content.getRepository()).thenReturn(repository);

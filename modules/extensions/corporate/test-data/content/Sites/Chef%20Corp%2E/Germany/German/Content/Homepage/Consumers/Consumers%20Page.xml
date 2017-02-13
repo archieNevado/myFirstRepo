@@ -30,7 +30,6 @@
 <related>
 </related>
 <children>
-<link href="Perfect%20Chef/Perfect%20Chef%20Page.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Consumers/Perfect%20Chef/Perfect%20Chef%20Page"/>
 <link href="Aurora%20B2C/Aurora%20B2C%20Page.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Consumers/Aurora%20B2C/Aurora%20B2C%20Page"/>
 </children>
 <javaScript>
@@ -53,7 +52,6 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Perfect%20Chef/Perfect%20Chef%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Consumers/Perfect%20Chef/Perfect%20Chef%20Page"/>
 <Link xlink:href="coremedia:///cap/resources/Aurora%20B2C/Aurora%20B2C%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Consumers/Aurora%20B2C/Aurora%20B2C%20Page"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/main"/>

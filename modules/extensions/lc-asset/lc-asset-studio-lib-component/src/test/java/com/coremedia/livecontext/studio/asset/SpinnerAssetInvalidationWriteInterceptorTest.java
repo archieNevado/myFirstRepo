@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.coremedia.livecontext.studio.asset.SpinnerAssetInvalidationWriteInterceptor.SEQUENCE_SPINNER_PROPERTY;
@@ -71,7 +72,8 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Before
   public void setup() {
-    when(commerceConnectionSupplier.getCommerceConnectionForContent(any(Content.class))).thenReturn(commerceConnection);
+    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
+            .thenReturn(Optional.of(commerceConnection));
 
     when(contentRepository.getConnection().getStructService().createStructBuilder().build()).thenReturn(emptyStruct);
   }

@@ -4,20 +4,13 @@ import com.coremedia.blueprint.base.queryeditor.conditions.ConditionEditor;
 
 public class TaxonomyConditionEditorBase extends ConditionEditor {
 
-  private var structPropertyName:String;
-
   public function TaxonomyConditionEditorBase(config:TaxonomyConditionEditor = null) {
     super(config);
-    structPropertyName = propertyName.substring(propertyName.lastIndexOf(".")+1, propertyName.length);
-  }
 
-  /**
-   * Ensures that the substruct the condition editor
-   * writes into is created.
-   */
-  override protected function afterRender():void {
-    super.afterRender();
-    super.applyBaseStruct(bindTo, contentType, structPropertyName);
+    // Ensures that the substruct the condition editor writes into is created as this acts as an indicator if the
+    // form is shown (even if no context is specified) or not.
+    var structPropertyName:String = propertyName.substring(propertyName.lastIndexOf(".")+1, propertyName.length);
+    applyBaseStruct(bindTo, contentType, structPropertyName);
   }
 }
 }

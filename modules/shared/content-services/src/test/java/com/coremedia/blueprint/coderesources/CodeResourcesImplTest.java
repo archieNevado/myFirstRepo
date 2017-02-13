@@ -61,8 +61,8 @@ public class CodeResourcesImplTest {
     //JavaScript
     code50 = content(50);
 
-    jsTestling = new CodeResourcesImpl(new CodeCarriers(context, context), "javaScript", true);
-    cssTestling = new CodeResourcesImpl(new CodeCarriers(context, context), "css", true);
+    jsTestling = new CodeResourcesImpl(new CodeCarriers(context, context), "javaScript", true, null);
+    cssTestling = new CodeResourcesImpl(new CodeCarriers(context, context), "css", true, null);
   }
 
   private Content content(int id) {
@@ -129,7 +129,7 @@ public class CodeResourcesImplTest {
     Content code46 = content(46);
     List<Content> expected = Arrays.asList(code46, code44);
 
-    CodeResources recursiveTestling = new CodeResourcesImpl(new CodeCarriers(recursiveContext, recursiveContext), "css", true);
+    CodeResources recursiveTestling = new CodeResourcesImpl(new CodeCarriers(recursiveContext, recursiveContext), "css", true, null);
 
     assertEquals("list does not match", expected, recursiveTestling.getModel("body").getLinkTargetList());
   }

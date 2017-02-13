@@ -30,14 +30,15 @@
     <fx:String id="propertyName"/>
   </fx:Declarations>
 
-    <baseAction>
-      <ui:OpenDialogAction iconCls="{ContentLocalizationUtil.getIconStyleClassForContentTypeName(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype'))}"
-                           toggleDialog="true"
-                           text="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text')}">
-        <ui:dialog>
-          <template:CreateFromTemplateDialog/>
-        </ui:dialog>
-      </ui:OpenDialogAction>
-    </baseAction>
-  
+  <baseAction>
+    <ui:OpenDialogAction
+            iconCls="{ContentLocalizationUtil.getIconStyleClassForContentTypeName(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype'))}"
+            toggleDialog="true"
+            text="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text')}">
+      <ui:dialog>
+        <template:CreateFromTemplateDialog/>
+      </ui:dialog>
+    </ui:OpenDialogAction>
+  </baseAction>
+
 </MenuItem>

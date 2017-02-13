@@ -25,6 +25,7 @@ public final class EsCaeWebComponentInitializer extends ComponentWebApplicationI
   public static final String USER_FILTER = "userFilter";
 
   private static final String ELASTIC_SOCIAL = "elastic-social";
+  private static final String SERVLET = "/servlet/*";
   private static final String SERVLET_DYNAMIC = "/servlet/dynamic/*";
   private static final String SERVLET_RESOURCE_ELASTIC = "/servlet/resource/elastic/*";
 
@@ -57,7 +58,7 @@ public final class EsCaeWebComponentInitializer extends ComponentWebApplicationI
     builder.add(RegistrationBeanBuilder
             .forFilterProxy(SITE_FILTER)
             .name(SITE_FILTER)
-            .urlPatterns("/servlet/*")
+            .urlPatterns(SERVLET)
             .build());
 
     builder.add(RegistrationBeanBuilder
@@ -69,7 +70,7 @@ public final class EsCaeWebComponentInitializer extends ComponentWebApplicationI
     builder.add(RegistrationBeanBuilder
             .forFilterProxy(TENANT_FILTER)
             .name(TENANT_FILTER)
-            .urlPatterns(SERVLET_DYNAMIC, SERVLET_RESOURCE_ELASTIC)
+            .urlPatterns(SERVLET)
             .build());
 
     builder.add(RegistrationBeanBuilder

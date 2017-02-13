@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
@@ -40,7 +42,7 @@ public class WebCommerceContextInterceptorTest {
   @Before
   public void setup() {
     connection = MockCommerceEnvBuilder.create().setupEnv();
-    when(commerceConnectionInitializer.getCommerceConnectionForSite(site)).thenReturn(connection);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
 
     testling.setSiteResolver(siteLinkHelper);
     testling.setInitUserContext(false);
@@ -61,7 +63,7 @@ public class WebCommerceContextInterceptorTest {
 
     testling.preHandle(request, null, null);
 
-    verify(commerceConnectionInitializer).getCommerceConnectionForSite(any(Site.class));
+    verify(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
     assertThat(SiteHelper.getSiteFromRequest(request)).isNotNull();
   }
 

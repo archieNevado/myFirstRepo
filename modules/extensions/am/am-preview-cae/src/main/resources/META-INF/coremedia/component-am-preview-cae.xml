@@ -16,7 +16,6 @@
     <property name="sitesService" ref="sitesService"/>
     <property name="settingsService" ref="settingsService"/>
     <property name="cache" ref="cache"/>
-    <property name="developerModeEnabled" value="${cae.developer.mode:false}"/>
     <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
     <property name="contextHelper" ref="contextHelper"/>
   </bean>

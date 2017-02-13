@@ -55,6 +55,11 @@ case $1 in
     echo "  enable: $(cat ${thp_path}/enabled | sed -e "s|\[|${bold}|g" -e "s|\]|${normal}|g")"
     echo "  defrag: $(cat ${thp_path}/defrag | sed -e "s|\[|${bold}|g" -e "s|\]|${normal}|g")"
 
+    if ( [ $(cat ${thp_path}/defrag | grep -c -e "[never]") -eq 1 ] && [ $(cat ${thp_path}/enabled | grep -c -e "[never]") -eq 1 ]  )
+    then
+      exit 0
+    fi
+
     exit 1
     ;;
 esac

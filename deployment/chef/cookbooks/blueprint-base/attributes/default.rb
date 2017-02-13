@@ -211,9 +211,6 @@ default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.url-k
 default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora'] = 'AuroraESite'
 default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora'] = 'USD'
 default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora'] = 'ibm'
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.store.name.perfectchef'] = 'PerfectChefESite'
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.currency.perfectchef'] = 'USD'
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.vendor.perfectchef'] = 'ibm'
 default['blueprint']['wcs']['application.properties']['livecontext.managementtool.web.url'] = "https://#{node['blueprint']['wcs']['host']}:8000/lobtools/CoreMediaManagementCenterWrapper.html"
 
 #<> The path to the libjpeg turbo installation to increase image transformation performance

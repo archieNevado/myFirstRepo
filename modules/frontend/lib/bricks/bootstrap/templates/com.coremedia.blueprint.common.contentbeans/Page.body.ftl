@@ -16,19 +16,10 @@
 <#-- render page grid with content -->
 <@cm.include self=self.pageGrid!cm.UNDEFINED />
 
-<#-- info icon for developer mode -->
-<#if cmpage.developerMode>
-  <div class="cm-preview-developer-mode" data-cm-developer-mode="true" aria-label="Developer Mode">
-    <i class="glyphicon glyphicon-wrench" title="You're in Developer Mode" aria-hidden="true"></i>
-  </div>
-  <#-- this js is used for a automatic reload of webrources changes, triggert by the grunt watch task -->
-  <script src="http://localhost:35729/livereload.js"></script>
-</#if>
-
 <#-- info box for users with javascript disabled -->
-<div class="cm-javascript">
+<noscript class="cm-javascript">
   ${bp.getMessage("error_noJavascript")}
-</div>
+</noscript>
 
 <#if bp.setting(cmpage.navigation, "render_back_to_top_button", true)>
   <a id="back-to-top" href="#" class="btn btn-primary cm-back-to-top" role="button" title="<@bp.message key="button_top" highlightErrors=false />" data-toggle="tooltip" data-placement="left">

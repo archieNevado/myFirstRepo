@@ -18,8 +18,8 @@
     public native function AnalyticsTrackingPanel(config:AnalyticsTrackingPanel = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <!-- extend this one with tracking options -->
-    </editor:items>
-  
+  <editor:items>
+    <!-- extend this one with tracking options -->
+  </editor:items>
+
 </editor:PropertyFieldGroup>

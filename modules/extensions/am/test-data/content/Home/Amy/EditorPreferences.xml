@@ -239,11 +239,6 @@
 <StringProperty Name="dataIndex">freshness</StringProperty>
 <BooleanProperty Name="hidden">true</BooleanProperty>
 </Struct>
-<Struct>
-<StringProperty Name="id">score</StringProperty>
-<StringProperty Name="dataIndex">score</StringProperty>
-<BooleanProperty Name="hidden">true</BooleanProperty>
-</Struct>
 </StructListProperty>
 </Struct>
 </StructProperty>

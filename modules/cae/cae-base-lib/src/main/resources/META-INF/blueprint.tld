@@ -44,11 +44,6 @@
   </tag>
 
   <tag-file>
-    <name>errorpage</name>
-    <path>/META-INF/tags/errorpage.tag</path>
-  </tag-file>
-
-  <tag-file>
     <description>Create a notification box of the following types "success", "error", warning" or "info"</description>
     <name>notification</name>
     <path>/META-INF/tags/notification.tag</path>

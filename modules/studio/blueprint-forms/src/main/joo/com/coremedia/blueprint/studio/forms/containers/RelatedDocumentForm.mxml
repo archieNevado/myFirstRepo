@@ -19,16 +19,16 @@
     public native function RelatedDocumentForm(config:RelatedDocumentForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:LinkListPropertyField propertyName="related"
-                                    hideLabel="true"
-                                    showThumbnails="true">
-        <editor:additionalToolbarItems>
-          <TbSeparator/>
-          <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
-                                                  propertyName="related"/>
-        </editor:additionalToolbarItems>
-      </editor:LinkListPropertyField>
-    </editor:items>
-  
+  <editor:items>
+    <editor:LinkListPropertyField propertyName="related"
+                                  hideLabel="true"
+                                  showThumbnails="true">
+      <editor:additionalToolbarItems>
+        <TbSeparator/>
+        <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
+                                                propertyName="related"/>
+      </editor:additionalToolbarItems>
+    </editor:LinkListPropertyField>
+  </editor:items>
+
 </editor:PropertyFieldGroup>

@@ -20,57 +20,57 @@
     public native function AMPictureAssetForm(config:AMPictureAssetForm = null);
     ]]></fx:Script>
 
-    <am:renditions>
-      <editor:PropertyFieldGroup itemId="web"
-                                 title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_label')}"
-                                 expandOnValues="{AssetConstants.PROPERTY_ASSET_WEB}"
-                                 collapsed="true">
-        <editor:items>
-          <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_WEB}"
-                                            hideLabel="true"
-                                            visiblePropertyName="metadata.renditions.web.show"/>
-          <Component height="20px"/>
-          <editor:ReferrerListPanel propertyName="asset"
-                                    showThumbnail="true"
-                                    contentType="CMPicture"
-                                    title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_referrers_label')}"
-                                    displayToolbarWhenEmpty="{true}">
-            <editor:plugins exml:mode="append">
-              <ui:NestedRulesPlugin>
-                <ui:rules>
-                  <Toolbar>
-                    <plugins>
-                      <ui:AddItemsPlugin>
-                        <ui:items>
-                          <TbSeparator/>
-                          <ui:IconButton itemId="createPicture">
-                            <ui:baseAction>
-                              <am:CreatePictureFromPictureAssetAction contentValueExpression="{config.bindTo}"/>
-                            </ui:baseAction>
-                          </ui:IconButton>
-                        </ui:items>
-                        <ui:after>
-                          <Component itemId="copyToClipboard"/>
-                        </ui:after>
-                      </ui:AddItemsPlugin>
-                    </plugins>
-                  </Toolbar>
-                </ui:rules>
-              </ui:NestedRulesPlugin>
-            </editor:plugins>
-          </editor:ReferrerListPanel>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-      <editor:PropertyFieldGroup itemId="print"
-                                 title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_print_label')}"
-                                 collapsed="true">
-        <editor:items>
-          <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_PRINT}"
-                                            hideLabel="true"
-                                            showImageThumbnail="false"
-                                            visiblePropertyName="metadata.renditions.print.show"/>
-        </editor:items>
-      </editor:PropertyFieldGroup>
-    </am:renditions>
-  
+  <am:renditions>
+    <editor:PropertyFieldGroup itemId="web"
+                               title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_label')}"
+                               expandOnValues="{AssetConstants.PROPERTY_ASSET_WEB}"
+                               collapsed="true">
+      <editor:items>
+        <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_WEB}"
+                                          hideLabel="true"
+                                          visiblePropertyName="metadata.renditions.web.show"/>
+        <Component height="20px"/>
+        <editor:ReferrerListPanel propertyName="asset"
+                                  showThumbnail="true"
+                                  contentType="CMPicture"
+                                  title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_web_referrers_label')}"
+                                  displayToolbarWhenEmpty="{true}">
+          <editor:plugins exml:mode="append">
+            <ui:NestedRulesPlugin>
+              <ui:rules>
+                <Toolbar>
+                  <plugins>
+                    <ui:AddItemsPlugin>
+                      <ui:items>
+                        <TbSeparator/>
+                        <ui:IconButton itemId="createPicture">
+                          <ui:baseAction>
+                            <am:CreatePictureFromPictureAssetAction contentValueExpression="{config.bindTo}"/>
+                          </ui:baseAction>
+                        </ui:IconButton>
+                      </ui:items>
+                      <ui:after>
+                        <Component itemId="copyToClipboard"/>
+                      </ui:after>
+                    </ui:AddItemsPlugin>
+                  </plugins>
+                </Toolbar>
+              </ui:rules>
+            </ui:NestedRulesPlugin>
+          </editor:plugins>
+        </editor:ReferrerListPanel>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+    <editor:PropertyFieldGroup itemId="print"
+                               title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_print_label')}"
+                               collapsed="true">
+      <editor:items>
+        <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_PRINT}"
+                                          hideLabel="true"
+                                          showImageThumbnail="false"
+                                          visiblePropertyName="metadata.renditions.print.show"/>
+      </editor:items>
+    </editor:PropertyFieldGroup>
+  </am:renditions>
+
 </am:AMAssetForm>

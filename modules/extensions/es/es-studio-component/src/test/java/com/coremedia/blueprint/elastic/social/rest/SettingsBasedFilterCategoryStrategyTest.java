@@ -6,7 +6,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
-import com.google.common.collect.Multimap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class SettingsBasedFilterCategoryStrategyTest {
   private SettingsService settingsService;
 
   @Mock
-  private Multimap<String, Content> tenantSiteMap;
+  private Map<String, Collection<Content>> tenantSiteMap;
 
   @Mock
   private Content rootChannel1;

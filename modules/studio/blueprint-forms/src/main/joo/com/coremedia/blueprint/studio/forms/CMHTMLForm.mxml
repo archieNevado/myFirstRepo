@@ -17,39 +17,42 @@
     public native function CMHTMLForm(config:CMHTMLForm = null);
     ]]></fx:Script>
 
-    <editor:items>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
-        <editor:items>
-          <editor:PropertyFieldGroup
-                  title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
-                  itemId="detailsDocumentForm"
-                  propertyNames="{['teaserTitle','description']}">
-            <editor:items>
-              <editor:StringPropertyField propertyName="teaserTitle"/>
-              <editor:StringPropertyField propertyName="description"/>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-          <editor:PropertyFieldGroup title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMHTML_data_text')}"
-                                     itemId="cmHtmlDataForm">
-            <editor:items>
-              <editor:RichTextPropertyField itemId="data"
-                                            hideLabel="true"
-                                            propertyName="data">
-                <editor:plugins exml:mode="append">
-                  <editor:HideRichTextToolbarPlugin/>
-                </editor:plugins>
-              </editor:RichTextPropertyField>
-            </editor:items>
-          </editor:PropertyFieldGroup>
-        </editor:items>
-      </editor:DocumentForm>
-      <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-        <editor:items>
-          <bpforms:CategoryDocumentForm collapsed="false"/>
-        </editor:items>
-      </editor:DocumentForm>
-      <bpforms:MultiLanguageDocumentForm/>
-      <bpforms:MetaDataInformationForm/>
-    </editor:items>
-  
+  <editor:items>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+      <editor:items>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
+                itemId="detailsDocumentForm"
+                propertyNames="{['teaserTitle','description']}">
+          <editor:items>
+            <editor:StringPropertyField propertyName="teaserTitle"/>
+            <editor:StringPropertyField propertyName="description"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+        <editor:PropertyFieldGroup
+                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMHTML_data_text')}"
+                itemId="cmHtmlDataForm">
+          <editor:items>
+            <editor:RichTextPropertyField itemId="data"
+                                          hideLabel="true"
+                                          propertyName="data">
+              <editor:plugins exml:mode="append">
+                <editor:HideRichTextToolbarPlugin/>
+              </editor:plugins>
+            </editor:RichTextPropertyField>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+      <editor:items>
+        <bpforms:CategoryDocumentForm collapsed="false"/>
+      </editor:items>
+    </editor:DocumentForm>
+    <bpforms:MultiLanguageDocumentForm/>
+    <bpforms:MetaDataInformationForm/>
+  </editor:items>
+
 </editor:DocumentTabPanel>

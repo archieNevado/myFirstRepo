@@ -11,8 +11,8 @@
     public native function GoogleAnalyticsStudioButtonTestView(config:GoogleAnalyticsStudioButtonTestView = null);
     ]]></fx:Script>
 
-    <items>
-      <gai:GoogleAnalyticsReportPreviewButton/>
-    </items>
-  
+  <items>
+    <gai:GoogleAnalyticsReportPreviewButton/>
+  </items>
+
 </Viewport>

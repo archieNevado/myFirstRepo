@@ -12,11 +12,8 @@
   <component class="com.coremedia.livecontext.studio.components.ProductAttributeLabel"/>
   <component class="com.coremedia.livecontext.studio.components.SelectSubCategoriesRadioGroup"/>
   <component class="com.coremedia.livecontext.studio.components.TimeZoneInfoIconDisplayField"/>
-  <component class="com.coremedia.livecontext.studio.components.link.CatalogAssets"/>
   <component class="com.coremedia.livecontext.studio.components.link.CatalogAssetsProperty"/>
-  <component class="com.coremedia.livecontext.studio.components.link.ReadOnlyCatalogLinkProperty"/>
   <component class="com.coremedia.livecontext.studio.components.product.ProductDescriptionTextArea"/>
-  <component class="com.coremedia.livecontext.studio.components.product.ProductNameTextField"/>
   <component class="com.coremedia.livecontext.studio.components.product.ViewSettingsRadioGroup"/>
   <component class="com.coremedia.livecontext.studio.desktop.CommerceAttributesForm"/>
   <component class="com.coremedia.livecontext.studio.desktop.CommerceAugmentedPageGridForm"/>

@@ -21,14 +21,14 @@
     public native function TaxonomyCombo(config:TaxonomyCombo = null);
     ]]></fx:Script>
 
-    <local:plugins exml:mode="append">
-      <ui:BindListPlugin bindTo="{getTaxonomiesExpression()}">
-        <ui:fields>
-          <ui:DataField name="id"/>
-          <ui:DataField name="path"
-                        encode="false"/>
-        </ui:fields>
-      </ui:BindListPlugin>
-    </local:plugins>
-  
+  <local:plugins exml:mode="append">
+    <ui:BindListPlugin bindTo="{getTaxonomiesExpression()}">
+      <ui:fields>
+        <ui:DataField name="id"/>
+        <ui:DataField name="path"
+                      encode="false"/>
+      </ui:fields>
+    </ui:BindListPlugin>
+  </local:plugins>
+
 </local:TaxonomyComboBase>
