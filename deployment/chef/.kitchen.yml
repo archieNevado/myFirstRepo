@@ -33,7 +33,6 @@ driver:
     - ["./.kitchen/build", "/shared", "create: true"]
     - ["<%= maven_local_repo %>", "/maven-repo"]
     - ["../../test-data/target", "/test-data"]
-    - ["../../test-data/target", "/var/tmp/coremedia/test-data"]
     - ["../../workspace-configuration/development-licenses", "/var/tmp/coremedia/licenses"]
   network:
     - ['private_network',{ ip: '192.168.252.100' }]
