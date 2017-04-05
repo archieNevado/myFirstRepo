@@ -1,0 +1,21 @@
+{
+  "name": "@coremedia/corporate-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "production": "grunt production",
+    "start": "grunt monitor"
+  },
+  "dependencies": {
+    "magnific-popup": "1.1.0",
+    "svg4everybody": "2.1.4"
+  },
+  "theme": {
+    "name": "corporate",
+    "supportedBrowsers": [
+      "last 2 versions",
+      "Firefox ESR",
+      "Explorer >= 9"
+    ]
+  }
+}

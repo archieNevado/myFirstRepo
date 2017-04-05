@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+
+  <import resource="classpath:/framework/spring/persistentcache/persistentcache-dependency.xml"/>
+  <!-- import bean "navigationTreeRelation" -->
+  <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
+
+  <bean id="taxonomyIdPathKeyFactory" class="com.coremedia.blueprint.caefeeder.TreePathKeyFactory">
+    <description>The PersistentCacheKeyFactory for taxonomy id paths.</description>
+    <property name="persistentCache" ref="persistentDependencyCache"/>
+    <property name="contentRepository" ref="contentRepository"/>
+    <property name="treeRelation" ref="taxonomyTreeRelation"/>
+    <property name="keyPrefix" value="taxidpath:"/>
+  </bean>
+
+  <bean id="taxonomyValuePathKeyFactory" class="com.coremedia.blueprint.caefeeder.TaxonomyValuePathKeyFactory">
+    <description>The PersistentCacheKeyFactory for taxonomy value paths.</description>
+    <property name="persistentCache" ref="persistentDependencyCache"/>
+    <property name="contentRepository" ref="contentRepository"/>
+    <property name="treeRelation" ref="taxonomyTreeRelation"/>
+    <property name="keyPrefix" value="taxvalpath:"/>
+  </bean>
+
+  <customize:append id="addTaxonomyPathPersistentCacheKeyFactories"
+                    bean="fragmentPersistentCacheKeyFactory"
+                    property="keyFactories">
+    <description>
+      Registers the PersistentCacheKeyFactory for taxonomy path fragment keys with the PersistentDependencyCache.
+    </description>
+    <list>
+      <ref bean="taxonomyIdPathKeyFactory"/>
+      <ref bean="taxonomyValuePathKeyFactory"/>
+    </list>
+  </customize:append>
+
+</beans>

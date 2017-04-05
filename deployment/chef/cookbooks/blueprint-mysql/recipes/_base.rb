@@ -1,0 +1,16 @@
+def configure_package_repositories
+  # we need to enable the yum-mysql-community repository to get packages
+  return unless %w(rhel fedora).include? node['platform_family']
+  case node['blueprint']['mysql']['version']
+  when '5.5'
+    return if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5
+    return if node['platform_family'] == 'fedora'
+    include_recipe 'yum-mysql-community::mysql55'
+  when '5.6'
+    include_recipe 'yum-mysql-community::mysql56'
+  when '5.7'
+    include_recipe 'yum-mysql-community::mysql57'
+  end
+end
+
+configure_package_repositories
