@@ -1,0 +1,82 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+// variables
+$cm-reviews-margin-bottom: $padding-large-vertical;
+
+$cm-user-chooser-padding-base-vertical: $padding-base-vertical;
+$cm-user-chooser-line-height: $line-height-computed;
+$cm-user-chooser-padding-base-horizontal: $padding-base-horizontal;
+$cm-user-chooser-items-top: $logo-size;
+$cm-user-chooser-items-background-color: $header-color-bg;
+
+$cm-rating-statistics-color: $brand-primary;
+
+// Import Brick
+@import "../../../../../lib/bricks/elastic-social/sass/elastic-social";
+
+// reviews
+.cm-reviews {
+  padding: 0 10px;
+
+  @include breakpoint(md) {
+    padding: 0;
+  }
+
+  .cm-toolbar .cm-button {
+    font-size: 18px;
+    padding: 10px 15px;
+  }
+}
+
+.cm-ratings {
+  &-average {
+    &__rating,
+    &__text,
+    &__votes,
+    &__switch {
+      display: inline-block;
+      margin: 6px 5px;
+      vertical-align: middle;
+    }
+    &__rating {
+      margin-left: 0;
+    }
+
+    &__votes {
+      @include breakpoint(xs) {
+        display: none;
+      }
+    }
+
+    &__switch {
+      display: none;
+    }
+  }
+}
+
+// notification
+.cm-notification {
+  margin: 5px 0;
+
+  &--error {
+    color: palette(red);
+  }
+
+  &--warning {
+    color: palette(orange);
+  }
+
+  &--info {
+    color: palette(blue);
+  }
+
+  &--success {
+    color: palette(green);
+  }
+
+  &--inactive {
+    display: none;
+  }
+}

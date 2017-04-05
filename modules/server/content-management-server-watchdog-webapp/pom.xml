@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>server</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>content-management-server-watchdog-webapp</artifactId>
+  <packaging>war</packaging>
+
+  <description>
+    To start the content-management-server-watchdog-webapp run: mvn tomcat7:run
+  </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>watchdog-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>database-drivers</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>watchdog</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>com.coremedia.maven</groupId>
+        <artifactId>coremedia-application-maven-plugin</artifactId>
+        <extensions>true</extensions>
+      </plugin>
+
+      <!--
+         invoke "mvn tomcat7:run" for running this webapp locally
+      -->
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <configuration>
+          <path>/${project.build.finalName}</path>
+          <port>33331</port>
+          <systemProperties>
+            <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
+          </systemProperties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <!--
+            build executable war that can be run like this:
+            JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
+
+            only set to 'true' if chef run won't fail on warning when unzipping the webapp
+          -->
+          <executable>false</executable>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

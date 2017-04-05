@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:FilterToolbarBase
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.blueprint.studio.externallibrary.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:externallib="exml:com.coremedia.blueprint.studio.config.externallibrary"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        ui="{ToolbarSkin.WINDOW_HEADER.getSkin()}"
+        id_="externalLibraryFilterToolbar">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin')]
+    [ResourceBundle('com.coremedia.cms.editor.Editor')]
+    [ResourceBundle('com.coremedia.icons.CoreIcons')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.ui.skins.ButtonSkin;
+    import com.coremedia.ui.skins.ContainerSkin;
+    import com.coremedia.ui.skins.TextfieldSkin;
+    import com.coremedia.ui.skins.ToolbarSkin;
+
+    import ext.data.JsonStore;
+
+    public static const xtype:String = "com.coremedia.blueprint.studio.config.externallibrary.filterToolbar";
+
+    private var config:FilterToolbar;
+
+    public native function FilterToolbar(config:FilterToolbar = null);
+    ]]></fx:Script>
+  <fx:Declarations>
+    <fx:int id="dataIndex"/>
+  </fx:Declarations>
+
+  <local:items>
+    <Button id_="externalLibraryHistoryBack"
+            ui="{ButtonSkin.INVERTED.getSkin()}"
+            itemId="back"
+            scale="medium"
+            handler="{back}"
+            iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'backward')}"
+            ariaLabel="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_previous_tooltip')}"
+            tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_previous_tooltip')}">
+    </Button>
+    <Button id_="externalLibraryHistoryForward"
+            ui="{ButtonSkin.INVERTED.getSkin()}"
+            itemId="forward"
+            scale="medium"
+            handler="{forward}"
+            iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'forward')}"
+            ariaLabel="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_next_tooltip')}"
+            tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_next_tooltip')}">
+    </Button>
+    <Container flex="1">
+      <items>
+        <Container width="200"
+                   itemId="typeSelector">
+          <items>
+            <Combo store="{new JsonStore()}"
+                   id_="externalDataCombo"
+                   allowBlank="true"
+                   triggerAction="all"
+                   queryMode="local"
+                   displayField="name"
+                   valueField="index"
+                   ui="{TextfieldSkin.GROUPED_LEFT.getSkin()}"
+                   emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_empty_source_combo')}"
+                   editable="false"/>
+          </items>
+          <layout>
+            <layout_Fit/>
+          </layout>
+        </Container>
+        <Container flex="1">
+          <items>
+            <TextField id_="externalLibrarySearchFilter"
+                       ui="{TextfieldSkin.GROUPED_RIGHT.getSkin()}"
+                       emptyText="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'SearchField_empty_text')}">
+              <listeners>
+                <fx:Object specialkey="{applyFilterInput}"/>
+              </listeners>
+            </TextField>
+          </items>
+          <layout>
+            <layout_Fit/>
+          </layout>
+        </Container>
+      </items>
+      <layout>
+        <layout_HBox/>
+      </layout>
+    </Container>
+    <ui:IconButton id_="externalLibraryApplySearch"
+                   itemId="startSearch"
+                   scale="small"
+                   ui="{ButtonSkin.INVERTED.getSkin()}"
+                   iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'search')}"
+                   text="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_apply_filter')}"
+                   tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_apply_filter')}">
+      <ui:baseAction>
+        <externallib:ApplyFilterAction filterValueExpression="{config.filterValueExpression}"
+                                       dataSourceValueExpression="{config.dataSourceValueExpression}"/>
+      </ui:baseAction>
+    </ui:IconButton>
+  </local:items>
+  <local:layout>
+    <layout_HBox/>
+  </local:layout>
+
+</local:FilterToolbarBase>

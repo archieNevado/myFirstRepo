@@ -1,0 +1,24 @@
+{
+  "name": "@coremedia/common",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "themescripts install",
+    "test": "grunt test && themescripts test",
+    "production": "themescripts production",
+    "apidoc": "grunt apidoc"
+  },
+  "devDependencies": {
+    "@coremedia/grunt-utils": "file:lib/tools/grunt",
+    "@coremedia/themescripts": "file:lib/tools/themescripts",
+    "grunt": "1.0.1",
+    "grunt-cli": "1.2.0"
+  },
+  "dependencies": {
+    "bootstrap-carousel-swipe": "0.0.6",
+    "bootstrap-sass": "3.3.7",
+    "console-polyfill": "0.2.3",
+    "imagesloaded": "4.1.1",
+    "jquery": "3.1.1"
+  }
+}

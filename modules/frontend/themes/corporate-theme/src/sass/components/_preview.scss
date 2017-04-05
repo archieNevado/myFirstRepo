@@ -1,0 +1,66 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+/* Overrides for Preview in Studio to fix Longscroller and Parallax Effect Issues */
+.#{$prefix}container--superhero {
+  max-height: 667px;
+
+  @include breakpoint(sm-and-up) {
+    max-height: 1024px;
+  }
+
+  /* Override vh and vw units and height, set by javascript */
+  .#{$prefix}superhero,
+  .#{$prefix}superhero__image,
+  & .#{$prefix}carousel,
+  & .#{$prefix}carousel-inner {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  & .#{$prefix}carousel-inner .active {
+    height: 100%;
+  }
+}
+
+.#{$prefix}gap {
+  max-height: 300px;
+}
+
+.#{$prefix}-superhero,
+.#{$prefix}-hero {
+  &__dimmer {
+    transition: visibility 0s linear 0ms, opacity 300ms;
+  }
+  &:hover &__dimmer {
+    transition: visibility 0s linear 300ms, opacity 300ms;
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@supports (pointer-events: none) {
+  .#{$prefix}-superhero,
+  .#{$prefix}-hero {
+    &__dimmer {
+      transition: none;
+    }
+    &:hover &__dimmer {
+      transition: none;
+      visibility: visible;
+      opacity: $dimmer-opacity;
+    }
+  }
+}
+
+.#{$prefix}details--spinner {
+  .#{$prefix}spinner__canvas {
+    border: 1px solid #B7B7B7;
+    padding: 10px;
+    box-shadow: inset 0 0 10px #B7B7B7;
+    background-color: #fff;
+    max-width: 500px;
+    margin: 0;
+  }
+}

@@ -1,0 +1,24 @@
+$cm-teaser-overlay-prefix: "cm-teaser-overlay" !default;
+$cm-teaser-overlay-padding: 5px !default;
+
+.#{$cm-teaser-overlay-prefix} {
+  position: absolute;
+  
+  // hide overflow
+  overflow: hidden;
+
+  &__text {
+    padding: $cm-teaser-overlay-padding;
+
+    // remove the margin-top of the first richtext item, otherwise there will always be a gap
+    :first-child {
+      margin-top: 0;
+    }
+
+    // remove the margin-bottom of the last richtext item, otherwise there will always be a gap
+    :last-child {
+      margin-bottom: 0;
+    }
+
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "solr-master",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The role for the solr-master node",
+  "run_list": [
+    "role[base]",
+    "recipe[blueprint-tomcat::solr]"
+  ],
+  "override_attributes": {
+    "blueprint": {
+      "tomcat": {
+        "solr": {
+          "catalina_properties": {
+            "master.enable": true,
+            "slave.enable": false
+          }
+        }
+      }
+    }
+  }
+}

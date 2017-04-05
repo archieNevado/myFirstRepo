@@ -1,0 +1,19 @@
+{
+  "author": {
+    "name": "CoreMedia",
+    "url": "http://www.coremedia.com"
+  },
+  "bin": {
+    "themescripts": "bin/themescripts.js"
+  },
+  "dependencies": {
+    "shelljs": "0.7.6"
+  },
+  "description": "The CoreMedia command line interface for building themes.",
+  "name": "@coremedia/themescripts",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}

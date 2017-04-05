@@ -1,0 +1,39 @@
+To use remote configuration of the locally started webapps, use the following maven profiles:
+<ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
+  <li><p>
+    candy-preview - use this profile in the cae-preview-webapp maven module to automatically configure the local preview CAE </br>
+    <code>mvn tomcat7:run -Pcandy-preview -Dinstallation.host=<%= @host %></code>
+  </p></li>
+  <li><p>
+    candy-studio - use this profile in the studio-webapp maven module to automatically configure the local studio </br>
+    <code>mvn tomcat7:run -Pcandy-studio -Dinstallation.host=<%= @host %></code>
+  </p></li>
+  <li><p>
+    candy-studio-preview - use this profile in the studio-webapp maven module to automatically configure the local
+    studio to use a locally started preview. Start the preview locally using candy-preview profile </br>
+    <code>mvn tomcat7:run -Pcandy-studio-preview -Dinstallation.host=<%= @host %></code>
+  </p></li>
+</ul>
+
+<h2>Extra Studio Candy</h2>
+<p>
+  To run the Studio Sencha App locally but use the Studio REST API from the test system, run <code>sencha web start</code> from within
+  the workspace. Depending on the path location you've started teh sencer server, you need to add the file path to the <code>/target/app</code>
+  folder of the <code>studio-app</code> module as URL suffix.
+</p>
+<p>
+  If for example you've started the sencha server in the root of the worspace, you need to open:
+  <ul style=""...>
+    <li><a href="https://candy-studio-client.<%= @host %>/modules/studio/studio-app/target/app" target="_blank">https://candy-studio-client.<%= @host %>/modules/studio/studio-app/target/app</a></li>
+ </ul>
+</p>
+
+<p>
+  If you want to test the build state of the <code>studio-app</code> module, you need to start the sencha server from within the
+  <code>modules/studio/studio-app/target/app/build/jangaroo-app</code> folder and open:
+  <ul style=""...>
+    <li><a href="https://candy-studio-client.<%= @host %>" target="_blank">https://candy-studio-client.<%= @host %></a></li>
+  </ul>
+</p>
+
+<p><br/></p>
