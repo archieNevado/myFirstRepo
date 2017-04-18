@@ -39,16 +39,35 @@ web_app '_overview' do
   docroot www_dir.path
 end
 
-if node.recipe? 'blueprint-proxy::candy-proxy'
-  %w(preview studio studio-preview).each do |candy_setup_name|
-    template "#{www_dir.path}/candy-#{candy_setup_name}.properties" do
-      variables(props: node['blueprint']['proxy']['candy_properties'][candy_setup_name])
-      owner node['blueprint']['user']
-      group node['blueprint']['group']
-      source 'properties.erb'
-      cookbook 'blueprint-tomcat'
-    end
-  end
+template "#{www_dir.path}/candy-studio.properties" do
+  variables(props: node['blueprint']['proxy']['candy_properties']['studio'])
+  owner node['blueprint']['user']
+  group node['blueprint']['group']
+  source 'properties.erb'
+  cookbook 'blueprint-tomcat'
+  sensitive true
+  only_if { node.recipe? 'blueprint-proxy::candy-studio-proxy' }
+end
+
+template "#{www_dir.path}/candy-preview.properties" do
+  variables(props: node['blueprint']['proxy']['candy_properties']['preview'])
+  owner node['blueprint']['user']
+  group node['blueprint']['group']
+  source 'properties.erb'
+  cookbook 'blueprint-tomcat'
+  sensitive true
+  only_if { node.recipe? 'blueprint-proxy::candy-preview-proxy' }
+end
+
+template "#{www_dir.path}/candy-studio-preview.properties" do
+  variables(props: node['blueprint']['proxy']['candy_properties']['studio-preview'])
+  owner node['blueprint']['user']
+  group node['blueprint']['group']
+  source 'properties.erb'
+  cookbook 'blueprint-tomcat'
+  sensitive true
+  only_if { node.recipe?('blueprint-proxy::candy-preview-proxy') &&
+            node.recipe?('blueprint-proxy::candy-studio-proxy') }
 end
 
 # restart it immediately and not in delayed phase so we can use the overview before the content import has been finished.
