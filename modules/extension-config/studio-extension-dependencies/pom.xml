@@ -61,7 +61,7 @@
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-notification-studio-plugin</artifactId>
-      <version>1704.1-10</version>
+      <version>1704.2-4</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>

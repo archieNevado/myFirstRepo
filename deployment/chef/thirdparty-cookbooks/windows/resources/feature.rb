@@ -25,6 +25,22 @@ property :install_method, Symbol, equal_to: [:windows_feature_dism, :windows_fea
 
 include Windows::Helper
 
+def whyrun_supported?
+  true
+end
+
+action :install do
+  run_default_provider :install
+end
+
+action :remove do
+  run_default_provider :remove
+end
+
+action :delete do
+  run_default_provider :delete
+end
+
 action_class do
   def locate_default_provider
     if new_resource.install_method
@@ -63,16 +79,4 @@ action_class do
       end
     end
   end
-end
-
-action :install do
-  run_default_provider :install
-end
-
-action :remove do
-  run_default_provider :remove
-end
-
-action :delete do
-  run_default_provider :delete
 end

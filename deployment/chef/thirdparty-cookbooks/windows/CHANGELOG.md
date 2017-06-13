@@ -2,6 +2,17 @@
 
 This file is used to list changes made in each version of the windows cookbook.
 
+## 3.1.0 (2017-05-30)
+
+- Updated resource documentation for windows_pagefile
+- Declare windows_feature as why-runnable
+- Remove action_class.class_eval usage and require 12.7+ as class_eval is causing issues with later versions of Chef
+
+## 3.0.5 (2017-04-07)
+
+- Add support for windows_task resource to run on non-English editions of Windows
+- Ensure chef-client 12.6 compatibility with action_class.class_eval
+
 ## 3.0.4 (2017-03-29)
 
 - restoring the `cached_file` helper as downstream cookbooks use it.

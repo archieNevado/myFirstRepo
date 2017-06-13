@@ -88,7 +88,7 @@ JMX Login (readwrite) = (control / control)
 * coremedia_tomcat (~> 2.0.11)
 * coremedia_maven (~> 2.0.4)
 * chef-sugar (~> 3.0)
-* java_se (~> 8.112.0)
+* java_se (~> 8.131.0)
 
 # Attributes
 
@@ -340,7 +340,7 @@ This approach is applied to the following attribute paths:
 
 ### Parameters
 
-- skip_lifecycle: Set thist to true to skip the lifecycle at the end of this definition. See lifecycle section for mode details about this paramter.. Defaults to: nil
+- skip_lifecycle: Set thist to true to skip the lifecycle at the end of this definition. See lifecycle section for mode details about this paramter..
 - base_service_name: The service key from which to get the default component configuration before merging overrides using this service key. Defaults to: nil
 
 ### Lifecycle

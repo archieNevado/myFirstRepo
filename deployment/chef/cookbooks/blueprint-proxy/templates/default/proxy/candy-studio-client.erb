@@ -14,9 +14,7 @@ ProxyPreserveHost On
   <%- protocol = 'http' -%>
 <%- end -%>
 
-
 SetEnvIf Remote_Addr "(.*)" devaddr=$1
-
 ProxyPass /login http://<%= @params[:rest_api_host] ||= node[:fqdn] %>:41080/studio/login
 ProxyPass /logout http://<%= @params[:rest_api_host] ||= node[:fqdn] %>:41080/studio/logout
 ProxyPass /api http://<%= @params[:rest_api_host] ||= node[:fqdn] %>:41080/studio/api

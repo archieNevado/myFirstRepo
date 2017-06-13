@@ -13,7 +13,7 @@ coremedia_proxy_webapp 'candy-preview' do
   proxy_template_cookbook 'blueprint-proxy'
   rewrite_template 'rewrite/preview.erb'
   rewrite_template_cookbook 'blueprint-proxy'
-  default_site node['blueprint']['proxy']['virtual_host']['preview']['default_site']
+  default_site default_site
   rewrite_log_level node['blueprint']['proxy']['virtual_host']['preview']['rewrite_log_level']
   ssl_proxy_verify false
 end

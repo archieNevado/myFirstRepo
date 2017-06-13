@@ -79,11 +79,11 @@ module OpenURI
   end
 
   def self.http_to_https?(uri1, uri2)
-    schemes_from([uri1, uri2]) == %w(http https)
+    schemes_from([uri1, uri2]) == %w[http https]
   end
 
   def self.https_to_http?(uri1, uri2)
-    schemes_from([uri1, uri2]) == %w(https http)
+    schemes_from([uri1, uri2]) == %w[https http]
   end
 
   def self.schemes_from(uris)
@@ -96,9 +96,8 @@ module JavaSE
   # Monkey patched open library to allow oracle downloads
   module Downloader
     class <<self
-      # rubocop:disable Metrics/MethodLength
       def fetch(url, file, checksum, limit = 5)
-        raise ArgumentError, "too many download failures from #{url}" if limit.zero?
+        raise ArgumentError, "too many download failures from #{url}" if limit == 0
         begin
           open(URI(url),
                'Cookie' => 'oraclelicense=accept-securebackup-cookie',

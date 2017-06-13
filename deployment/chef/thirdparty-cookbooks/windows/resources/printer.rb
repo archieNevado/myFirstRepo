@@ -22,15 +22,15 @@
 
 require 'resolv'
 
-attribute :device_id, String, name_attribute: true, required: true
-attribute :comment, String
-attribute :default, [TrueClass, FalseClass], default: false
-attribute :driver_name, String, required: true
-attribute :location, String
-attribute :shared, [TrueClass, FalseClass], default: false
-attribute :share_name, String
-attribute :ipv4_address, String, regex: Resolv::IPv4::Regex
-property :exists, [TrueClass, FalseClass], desired_state: true
+property :device_id, String, name_property: true, required: true
+property :comment, String
+property :default, [true, false], default: false
+property :driver_name, String, required: true
+property :location, String
+property :shared, [true, false], default: false
+property :share_name, String
+property :ipv4_address, String, regex: Resolv::IPv4::Regex
+property :exists, [true, false], desired_state: true
 
 PRINTERS_REG_KEY = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Printers\\'.freeze unless defined?(PRINTERS_REG_KEY)
 

@@ -2,6 +2,22 @@
 
 This file is used to list changes made in each version of the build-essential cookbook.
 
+## 8.0.3 (2017-05-30)
+
+- Fix solaris metadata in metadata.rb
+- Remove mac_os_x_server from metata as it's not a platform
+
+## 8.0.2 (2017-05-06)
+
+- Remove buggy action_class.class_eval usage
+
+## 8.0.1 (2017-04-14)
+
+- Test with local delivery and not Rake
+- Ensure compatibility with Chef 12.5
+- Update apache2 license string
+- Ensure compatibility with Amazon Linux on Chef 13
+
 ## 8.0.0 (2017-02-14)
 
 - Require 12.5 or later and remove compat_resource cookbook dependency

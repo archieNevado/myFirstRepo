@@ -28,13 +28,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1704.1-10</blueprint-base.version>
-    <cms.version>1704.1-10</cms.version>
-    <personalization.version>1704.1-10</personalization.version>
-    <elastic.version>1704.1-10</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1704.1-10</studio.version>
-    <caetoolbox.version>1704.1-10</caetoolbox.version>
-    <livecontext.version>1704.1-10</livecontext.version>
+    <blueprint-base.version>1704.2-4</blueprint-base.version>
+    <cms.version>1704.2-4</cms.version>
+    <personalization.version>1704.2-4</personalization.version>
+    <elastic.version>1704.2-4</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1704.2-4</studio.version>
+    <caetoolbox.version>1704.2-4</caetoolbox.version>
+    <livecontext.version>1704.2-4</livecontext.version>
     <jangaroo.version>4.0.45</jangaroo.version>
     <jangaroo.libs.version>4.0.38</jangaroo.libs.version>
 

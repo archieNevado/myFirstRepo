@@ -6,25 +6,8 @@ default it is expected that all services and its dependencies run locally on the
 
 The property files are being passed to the Tomcat instances by using the `propertieslocations` system property. 
 
-### Virtualized Setup
-If you like to virtualize the whole or parts of your deployment, it is recommended to use Test Kitchen to bootstrap a VirtualBox. 
-You'll find the setup below the `<WORKSPACE_ROOT>/deployment/chef` folder. By default, the system will be deployed with 
-an IP: `192.168.252.100` and as a hostname the http://xip.io dns and the generic hostname `192.168.252.100.xip.io` is used. 
-To start webapps like studio, preview-cae or live-cae against that virtualized system, all you need to do is set the Java 
-system property `installation.host` to that generic hostname.
-
-```
-mvn tomcat7:run -Dinstallation.host=192.168.252.100.xip.io
-```
-
-or even simpler using the inbuilt `kitchen` profile
-
-```
-mvn tomcat7:run -Pkitchen
-```
-
 ### Using a remote system
-To start webapps like studio, preview-cae or live-cae against that virtualized system, all you need to do is set the Java 
+To start webapps like studio, preview-cae or live-cae against a remote system, all you need to do is set the Java
 system property `installation.host` to your servers name or IP address or create a Maven profile in your 
 `~/.m2/settings.xml` setting that property.
 
@@ -36,23 +19,6 @@ system property `installation.host` to your servers name or IP address or create
   </properties>
 </profile>
 ```
-
-### Configuring IBM WCS Instance 
-####(Only relevant for CoreMedia LiveContext 3 for IBM WebSphere Commerce customers)
-
-To configure the hostname of the IBM WCS instance, the property `wcs.host` needs to be defined, too. Use the previously created
-profile to keep remote CMS/WCS pair configuration together.
-
-```
-<profile>
-  <id>ci-system</id>
-  <properties>
-    <installation.host>my-ci-system.my.domain</installation.host>
-    <wcs.host>my-ci-wcs-system.my.domain</wcs.host>
-  </properties>
-</profile>
-```
-
 
 ### Running multiple applications locally
 
