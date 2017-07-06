@@ -1,5 +1,7 @@
-/* forms */
+@import "../base/vars";
+@import "../../../../sass/utils/imports";
 
+//forms
 .cm-form {
   position: relative;
 
@@ -15,6 +17,39 @@
 
   &__fieldset {
     margin: 0;
+  }
+
+  &__container {
+    padding: 20px 0;
+  }
+
+  &__image {
+    display: block;
+    border: 1px solid #333333;
+    background-color: white;
+  }
+
+  @include breakpoint('xs') {
+    &.well {
+      border: none;
+      box-shadow: none;
+    }
+
+    input[type="file"] {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 340px) {
+
+    #g-recaptcha {
+      transform: scale(.85);
+      transform-origin: 0 0;
+    }
+  }
+
+  .has-error label {
+    color: #a94442;
   }
 }
 

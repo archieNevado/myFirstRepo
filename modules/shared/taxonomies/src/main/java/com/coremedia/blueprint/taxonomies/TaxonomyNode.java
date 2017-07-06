@@ -39,7 +39,7 @@ public class TaxonomyNode {
    * Every taxonomy node has a name, which is shown in the taxonomy chooser and editor.
    * The names may be localized by client side resource bundles (for the root nodes).
    *
-   * @return
+   * @return name
    */
   public String getName() {
     return name;
@@ -54,7 +54,7 @@ public class TaxonomyNode {
    * in another database.
    * For the Studio UI this reference is not of interest, but the TaxonomyStrategies rely on it.
    *
-   * @return
+   * @return reference
    */
   public String getRef() {
     return ref;
@@ -69,7 +69,7 @@ public class TaxonomyNode {
    * A taxonomy node might represent an object of a specific 'type' like: 'Country', 'State', 'City', 'Street'. These
    * types might be rendered differently in the frontend.
    *
-   * @return
+   * @return type
    */
   public String getType() {
     return type;
@@ -82,7 +82,7 @@ public class TaxonomyNode {
   /**
    * A taxonomy node might be selectable (or choosable) in in the taxonomy chooser.
    *
-   * @return
+   * @return true if selectable
    */
   public Boolean isSelectable() {
     return selectable;
@@ -95,7 +95,7 @@ public class TaxonomyNode {
   /**
    * this flag indicates, that a node has child nodes.
    *
-   * @return
+   * @return true if leaf
    */
   public Boolean isLeaf() {
     return leaf;
@@ -108,7 +108,7 @@ public class TaxonomyNode {
   /**
    * this flag indicates, that the taxonomy editor may add children to this node. If false this node is leaf-only.
    *
-   * @return
+   * @return true if extendable
    */
   public boolean isExtendable() {
     return extendable;
@@ -122,7 +122,7 @@ public class TaxonomyNode {
    * Indicates that this node represents the root of a taxonomy tree, not a taxonomy node in this taxonomy.
    * In most cases - but not necessarily - root nodes do not represent entities and are not selectable.
    *
-   * @return
+   * @return true if root
    */
   public boolean isRoot() {
     return root;
@@ -148,7 +148,7 @@ public class TaxonomyNode {
    * <p/>
    * the root nodes have level 0, the first level nodes in every taxonomy therefore have level 1.
    *
-   * @return
+   * @return depth in treee
    */
   public int getLevel() {
     return level;
@@ -185,7 +185,7 @@ public class TaxonomyNode {
   /**
    * The plain string path, slash separated.
    *
-   * @return
+   * @return path as string
    */
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public String getPathString() {

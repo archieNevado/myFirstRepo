@@ -33,6 +33,12 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
+      <artifactId>content-server-solr-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>content-management-server-config</artifactId>
       <type>coremedia-application</type>
       <scope>runtime</scope>
@@ -100,8 +106,6 @@
           <port>40180</port>
           <systemProperties>
             <propertieslocations>classpath:/content-management-server.properties</propertieslocations>
-            <!--workaround for CMS-7024, but this workaround requires building the webapp first-->
-            <cap.server.search.context.configLocations>file:#{T(hox.corem.Corem).getHome()}/../../../../target/coremedia/WEB-INF/config/contentserver/spring/search/applicationContext.xml</cap.server.search.context.configLocations>
           </systemProperties>
         </configuration>
       </plugin>

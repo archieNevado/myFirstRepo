@@ -69,6 +69,8 @@
         <ui:DataField name="weight"/>
       </ui:fields>
     </ui:BindListPlugin>
+    <ui:BindSelectionPlugin selectedPositions="{getSelectedPositionsExpression()}"
+                            selectedValues="{getSelectedValuesExpression()}"/>
     <ui:BEMPlugin block="{LinkListBEMEntities.BLOCK}"
                   bodyElement="{LinkListBEMEntities.ELEMENT_LIST}"
                   modifier="{LinkListBEMEntities.MODIFIER_NO_TAIL}"/>
@@ -85,13 +87,14 @@
                 text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_suggestions_add_all')}"
                 handler="{addAllKeywordsHandler}">
           <plugins>
-            <editor:BindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+            <editor:BindDisablePlugin forceReadOnlyValueExpression="{getAddAllDisabledVE(config.forceReadOnlyValueExpression)}"
                                       bindTo="{config.bindTo}"/>
           </plugins>
         </Button>
       </items>
     </Toolbar>
     <Toolbar dock="bottom"
+             enableFocusableContainer="false"
              maskOnDisable="false"
              ui="{ToolbarSkin.EMBEDDED_FOOTER.getSkin()}">
       <items>

@@ -42,38 +42,6 @@
 <#-- remove no-js class before loading css and more -->
 <script>document.documentElement.className = document.documentElement.className.replace(/no-js/g, 'js');</script>
 
-<#-- include css -->
-<#list self.css![] as css>
-    <@cm.include self=css view="asCSSLink"/>
-</#list>
-
-<#-- include css with conditional comments for IE -->
-<#list self.internetExplorerCss![] as css>
-  <@cm.include self=css view="asCSSLink"/>
-</#list>
-
-<#-- include additional css for preview -->
-<#if preview.isPreviewCae()>
-  <#assign previewCss=bp.setting(self, "previewCss", []) />
-  <#list previewCss as css>
-    <@cm.include self=css view="asCSSLink"/>
-  </#list>
-</#if>
-
-<#-- include additional javascript -->
-<#list self.headJavaScript![] as js>
-  <@cm.include self=js view="asJSLink"/>
-</#list>
-
-<#-- include javascript with conditional comments for IE -->
-<#list self.internetExplorerJavaScript![] as js>
-  <@cm.include self=js view="asJSLink"/>
-</#list>
-
-<#-- include PDE -->
-<@preview.previewScripts/>
-
-<#-- hook for extensions in head (for e.g. css or javascripts) -->
-<@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_HEAD />
+<@cm.include self=self view="_additionalHead" />
 
 </head>

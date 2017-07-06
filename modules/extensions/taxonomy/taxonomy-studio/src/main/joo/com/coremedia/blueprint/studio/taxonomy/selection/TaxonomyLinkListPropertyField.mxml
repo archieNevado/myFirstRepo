@@ -17,6 +17,7 @@
     import com.coremedia.ui.bem.LinkListBEMEntities;
     import com.coremedia.ui.skins.TextfieldSkin;
     import com.coremedia.ui.skins.ToolbarSkin;
+    import com.coremedia.ui.util.createComponentSelector;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyLinkListPropertyField";
 
@@ -57,7 +58,6 @@
                             taxonomyId="{config.taxonomyId}"/>
                   </baseAction>
                 </MenuItem>
-
                 <MenuSeparator/>
                 <MenuItem>
                   <baseAction>
@@ -81,6 +81,15 @@
                                             forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
                   </baseAction>
                 </MenuItem>
+                <MenuSeparator/>
+                <MenuItem>
+                  <baseAction>
+                    <editor:DeleteSelectedLinksAction contentValueExpression="{config.bindTo}"
+                                                      propertyName="{config.propertyName}"
+                                                      selectedPositionsExpression="{getSelectedPositionsVE()}"
+                                                      forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+                  </baseAction>
+                </MenuItem>
               </items>
             </Menu>
           </ui:contextMenu>
@@ -89,6 +98,14 @@
       <taxonomy:tbar>
         <Toolbar ui="{ToolbarSkin.FIELD.getSkin()}">
           <items>
+            <ui:IconButton itemId="{DELETE_BUTTON_ITEM_ID}">
+              <ui:baseAction>
+                <editor:DeleteSelectedLinksAction contentValueExpression="{config.bindTo}"
+                                                  propertyName="{config.propertyName}"
+                                                  selectedPositionsExpression="{getSelectedPositionsVE()}"
+                                                  forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+              </ui:baseAction>
+            </ui:IconButton>
             <ui:IconButton
                     text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
                     tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
@@ -133,9 +150,13 @@
         </Toolbar>
       </taxonomy:tbar>
       <taxonomy:dockedItems>
+        <!--We are setting the default focus to the text field since we are not interested in opening the library -->
         <editor:LinkListDropArea dock="bottom"
                                  linkListWrapper="{getLinkListWrapper(config)}"
                                  ddGroups="{['ContentDD', 'ContentLinkDD']}"
+                                 defaultFocus="{createComponentSelector().itemId(TAXONOMY_SEARCH_FIELD_ITEM_ID).build()}"
+                                 appendOnDrop="true"
+                                 dropHandler="{handleDropAreaDrop}"
                                  readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}">
           <editor:mixins>
             <ui:BEMMixin bemElement="{LinkListBEMEntities.ELEMENT_TAIL}"/>

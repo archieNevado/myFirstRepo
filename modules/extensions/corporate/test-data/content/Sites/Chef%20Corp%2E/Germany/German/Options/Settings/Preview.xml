@@ -95,6 +95,10 @@
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>
+<LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
+</LinkListProperty>
+<LinkListProperty Name="fragmentPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
+</LinkListProperty>
 </Struct>
 </settings>
 <identifier></identifier>

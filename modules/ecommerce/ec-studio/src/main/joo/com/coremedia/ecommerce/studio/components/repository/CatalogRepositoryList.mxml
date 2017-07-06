@@ -35,7 +35,7 @@
     ]]></fx:Script>
 
   <local:plugins exml:mode="prepend">
-    <ui:BindListPlugin bindTo="{getCatalogItemsValueExpression()}">
+    <ui:BindListPlugin bindTo="{getCatalogItemsValueExpression()}" lazy="true">
       <ui:fields>
         <ui:DataField name="type"
                       mapping=""

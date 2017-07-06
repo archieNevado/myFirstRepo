@@ -16,7 +16,7 @@
   <component class="com.coremedia.blueprint.studio.taxonomy.chooser.TaxonomySelectionWindow"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.chooser.TaxonomySelector"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.chooser.TextLinkButton"/>
-  <component class="com.coremedia.blueprint.studio.taxonomy.filter.TaxonomyFilterFieldset"/>
+  <component class="com.coremedia.blueprint.studio.taxonomy.filter.TaxonomyFilterPanel"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.preferences.TaxonomyPreferenceWindowPlugin"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.preferences.TaxonomyPreferences"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.queryeditor.LocationTaxonomyConditionEditor"/>

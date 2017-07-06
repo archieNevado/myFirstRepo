@@ -2,24 +2,23 @@ package com.coremedia.blueprint.assets.studio.forms {
 
 import com.coremedia.cms.editor.sdk.premular.PropertyFieldPlugin;
 import com.coremedia.cms.editor.sdk.validation.ShowIssuesPlugin;
+import com.coremedia.ui.components.AdvancedFieldContainer;
 import com.coremedia.ui.components.StatefulCheckbox;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.mixins.IValidationStateMixin;
 import com.coremedia.ui.mixins.ValidationState;
 
-import ext.form.FieldContainer;
 import ext.form.field.Checkbox;
 
 [ResourceBundle('com.coremedia.blueprint.assets.studio.AMStudioPlugin')]
-public class StringListCheckboxPropertyFieldBase extends FieldContainer implements IValidationStateMixin {
+public class StringListCheckboxPropertyFieldBase extends AdvancedFieldContainer implements IValidationStateMixin {
   private var propertyValueExpression:ValueExpression;
   private var structValueExpression:ValueExpression;
 
 
   /** @inheritDoc */
-  [Bindable]
-  public native function validationInit(validationState:ValidationState = undefined):void;
+  public native function initValidationStateMixin():void;
 
   /** @private */
   [Bindable]
@@ -29,9 +28,18 @@ public class StringListCheckboxPropertyFieldBase extends FieldContainer implemen
   [Bindable]
   public native function get validationState():ValidationState;
 
+  /** @private */
+  [Bindable]
+  public native function set validationMessage(validationMessage:String):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get validationMessage():String;
+
+
   public function StringListCheckboxPropertyFieldBase(config:StringListCheckboxPropertyField = null) {
     super(config);
-    validationInit();
+    initValidationStateMixin();
   }
 
   internal native function get structName():String;

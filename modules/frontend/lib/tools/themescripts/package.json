@@ -7,7 +7,7 @@
     "themescripts": "bin/themescripts.js"
   },
   "dependencies": {
-    "shelljs": "0.7.6"
+    "shelljs": "0.7.7"
   },
   "description": "The CoreMedia command line interface for building themes.",
   "name": "@coremedia/themescripts",

@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.studio.analytics {
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
+import com.coremedia.ui.components.IconButton;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
 import ext.button.Button;
@@ -53,7 +54,7 @@ public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
     var container:AnalyticsDeepLinkButtonContainer = AnalyticsDeepLinkButtonContainer(contentContainer.getComponent("alxDeepLinkButtonContainer"));
     var item:Button = Button(container.itemCollection.get(0));
 
-    assertEquals(OpenAnalyticsDeepLinkUrlButton.xtype, item.xtype);
+    assertTrue(item is OpenAnalyticsDeepLinkUrlButton);
     assertTrue(item.disabled);
 
     contentContainer.setContent(content);
@@ -79,7 +80,8 @@ public class AnalyticsDeepLinkButtonContainerTest extends AbstractRemoteTest {
 
     // the menu button should be disabled initially
     var item:Button = Button(container.itemCollection.get(3));
-    assertEquals('button', item.xtype);
+
+    assertTrue(item is IconButton);
     assertNotNull(item.menu);
     assertTrue("menu button should be initially disabled", item.disabled);
 

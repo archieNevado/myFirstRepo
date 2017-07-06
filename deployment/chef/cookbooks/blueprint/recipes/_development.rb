@@ -29,8 +29,6 @@ if node['blueprint']['nexus_url']
   node.default['blueprint']['webapps']['cae-preview']['version'] = 'LATEST'
   node.default['blueprint']['webapps']['cae-live']['version'] = 'LATEST'
   node.default['blueprint']['webapps']['sitemanager']['version'] = 'LATEST'
-  node.default['blueprint']['webapps']['solr']['version'] = '4.10.4'
-  node.default['blueprint']['webapps']['solr']['config_zip_version'] = 'LATEST'
   node.default['blueprint']['tools']['caefeeder-preview']['version'] = 'LATEST'
   node.default['blueprint']['tools']['caefeeder-live']['version'] = 'LATEST'
   node.default['blueprint']['tools']['content-management-server']['version'] = 'LATEST'

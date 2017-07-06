@@ -17,7 +17,7 @@ public class OpenAnalyticsUrlButtonBase extends Button {
   internal native function get windowName():String;
   internal native function get urlValueExpression():ValueExpression;
 
-  public function OpenAnalyticsUrlButtonBase(config:Button = null) {
+  public function OpenAnalyticsUrlButtonBase(config:OpenAnalyticsUrlButtonBase = null) {
     super(config);
     setHandler(_handler);
     on('afterrender', onAfterRender);

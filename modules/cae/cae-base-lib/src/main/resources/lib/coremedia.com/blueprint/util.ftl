@@ -1,5 +1,4 @@
 <#ftl strip_whitespace=true>
-<#import "/spring.ftl" as spring>
 <#-- @ftlvariable name="cmpage" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 
 <#--

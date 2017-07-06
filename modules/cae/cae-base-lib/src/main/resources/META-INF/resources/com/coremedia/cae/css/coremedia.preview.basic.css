@@ -73,7 +73,7 @@
 /* display developer-mode symbol on top right */
 .cm-preview-developer-mode {
   position: fixed;
-  top: 10px;
+  top: 70px;
   right: 0;
   z-index: 999;
   background-color: #e74c3c;

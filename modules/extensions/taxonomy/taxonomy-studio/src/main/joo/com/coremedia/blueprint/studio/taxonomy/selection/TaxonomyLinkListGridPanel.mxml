@@ -11,7 +11,6 @@
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.data.ValueExpressionFactory;
     import com.coremedia.ui.skins.TableViewSkin;
 
@@ -19,19 +18,12 @@
 
     private var config:TaxonomyLinkListGridPanel;
 
-    /**
-     * A ValueExpression whose value is set to the array of selected items.
-     * The array is empty if nothing is selected.
-     * The selection is updated by changing the value of this expression.
-     */
-    [Bindable]
-    public var selectedValuesExpression:ValueExpression;
-
     public native function TaxonomyLinkListGridPanel(config:TaxonomyLinkListGridPanel = null);
     ]]></fx:Script>
 
   <local:plugins>
     <editor:LinkListBindListPlugin bindTo="{config.linkListWrapper.getVE()}"/>
+    <editor:AriaVisibilityPlugin bindTo="{config.linkListWrapper.getVE()}"/>
     <ui:BindSelectionPlugin selectedPositions="{config.selectedPositionsExpression}"
                             selectedValues="{config.selectedValuesExpression}"/>
   </local:plugins>
@@ -45,7 +37,7 @@
     <selection_RowModel mode="MULTI"/>
   </local:selModel>
   <local:view>
-    <ui:StatefulTableView ui="{TableViewSkin.DEFAULT.getSkin()}"
+    <ui:StatefulTableView ui="{TableViewSkin.LARGE_CELLS.getSkin()}"
                           deferEmptyText="false"
                           stripeRows="false">
       <ui:plugins>

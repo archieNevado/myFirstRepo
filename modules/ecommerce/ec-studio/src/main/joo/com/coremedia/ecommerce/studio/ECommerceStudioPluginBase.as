@@ -88,18 +88,21 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
       excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_PRODUCT);
       excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_ABSTRACT_CATEGORY);
       excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_CHANNEL);
+      excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_PRODUCT);
 
       //remove the commerce doctypes from the search filter by default
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_CATEGORY);
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_PRODUCT);
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_ABSTRACT_CATEGORY);
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_CHANNEL);
+      excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_PRODUCT);
     }
     else {
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_CATEGORY);
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_PRODUCT);
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_ABSTRACT_CATEGORY);
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_CHANNEL);
+      addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_PRODUCT);
     }
   }
 

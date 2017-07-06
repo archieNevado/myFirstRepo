@@ -1,10 +1,6 @@
 package com.coremedia.blueprint.studio.taxonomy.rendering {
 
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNode;
-import com.coremedia.ui.models.bem.BEMBlock;
-import com.coremedia.ui.models.bem.BEMElement;
-import com.coremedia.ui.models.bem.BEMModifier;
-import com.coremedia.ui.plugins.BEMMixin;
 import com.coremedia.ui.util.EventUtil;
 
 import ext.ComponentManager;
@@ -19,17 +15,6 @@ import mx.resources.ResourceManager;
  */
 [ResourceBundle('com.coremedia.icons.CoreIcons')]
 public class TaxonomyRenderer {
-
-  // Makes sense to extract the BEM building to a new utility class; see CMS-7947
-  public static const TAXONOMY_BLOCK:BEMBlock = new BEMBlock("cm-taxonomy-node");
-  public static const TAXONOMY_ELEMENT_BOX:BEMElement = TAXONOMY_BLOCK.createElement("box");
-  public static const TAXONOMY_ELEMENT_NAME:BEMElement = TAXONOMY_BLOCK.createElement("name");
-  public static const TAXONOMY_ELEMENT_CONTROL:BEMElement = TAXONOMY_BLOCK.createElement("control");
-  public static const TAXONOMY_ELEMENT_LINK:BEMElement = TAXONOMY_BLOCK.createElement("link");
-  public static const TAXONOMY_MODIFIER_ARROW:BEMModifier = TAXONOMY_BLOCK.createModifier("has-children");
-  public static const TAXONOMY_MODIFIER_ELLIPSIS:BEMModifier = TAXONOMY_BLOCK.createModifier("ellipsis");
-  public static const TAXONOMY_MODIFIER_LEAF:BEMModifier = TAXONOMY_BLOCK.createModifier("leaf");
-
 
   private var html:String; //applied if the callback handler is or can not used
 
@@ -75,7 +60,7 @@ public class TaxonomyRenderer {
   }
 
   protected function renderNodeName(node:TaxonomyNode):String {
-    return '<span class="' + TAXONOMY_ELEMENT_NAME + '">' + getLeafName(node) + '</span>';
+    return '<span class="' + TaxonomyBEMEntities.NODE_ELEMENT_NAME + '">' + getLeafName(node) + '</span>';
   }
 
   /**
@@ -84,7 +69,7 @@ public class TaxonomyRenderer {
    * @param node the node used to render the link for
    */
   protected function renderNodeNameWithLink(node:TaxonomyNode):String {
-    var id:String = "taxonomy-" + componentId + "-textlink-" + node.getRef().replace("/", "-");
+    var id:String = "taxonomy-" + componentId + "-textlink-" + getDataRef(node);
     var idAttribute:String = ' id="' + id + '"';
 
     var wrapperElement:Element = window.document.getElementById(id);
@@ -99,8 +84,8 @@ public class TaxonomyRenderer {
       }
     });
 
-    return '<span ' + idAttribute + ' data-ref="' + node.getRef() + '"' +
-            ' data-componentId="' + componentId + '" class="'+  TAXONOMY_ELEMENT_NAME + ' ' + TAXONOMY_ELEMENT_LINK + '">' + getLeafName(node) + '</span>';
+    return '<span ' + idAttribute + ' data-ref="' + getDataRef(node) + '"' +
+            ' data-componentId="' + componentId + '" class="'+  TaxonomyBEMEntities.NODE_ELEMENT_NAME + ' ' + TaxonomyBEMEntities.NODE_ELEMENT_LINK + '">' + getLeafName(node) + '</span>';
   }
 
   /**
@@ -115,13 +100,17 @@ public class TaxonomyRenderer {
     event.stopPropagation();
   }
 
+  protected static function getDataRef(node:TaxonomyNode):String {
+    return node.getRef().replace('/', '-');
+  }
+
   /**
    * Renders the node including the '+' link into each row, using ids.
    */
   protected function renderPlusMinusControl(node:TaxonomyNode, plus:Boolean):String {
     if (plus !== undefined && plus !== null) {
-      var cls:String = TAXONOMY_ELEMENT_CONTROL.getCSSClass();
-      var id:String = "taxonomy-" + componentId + "-action-" + node.getRef().replace("/", "-");
+      var cls:String = TaxonomyBEMEntities.NODE_ELEMENT_CONTROL.getCSSClass();
+      var id:String = "taxonomy-" + componentId + "-action-" + getDataRef(node);
       var idAttribute:String = ' id="' + id + '"';
 
       if (plus) {
@@ -143,7 +132,7 @@ public class TaxonomyRenderer {
         }
       });
 
-      return '<span ' + idAttribute + ' class=" ' + cls + '" data-componentId="' + componentId + '" data-ref="' + node.getRef() + '"></span>';
+      return '<span ' + idAttribute + ' class=" ' + cls + '" data-componentId="' + componentId + '" data-ref="' + getDataRef(node) + '"></span>';
     }
     return "";
   }
@@ -155,6 +144,7 @@ public class TaxonomyRenderer {
   private static function plusMinusClicked(event:Event):void {
     var compId:String = event.target.getAttribute("data-componentId") as String;
     var nodeRef:String = event.target.getAttribute("data-ref") as String;
+    nodeRef = nodeRef.replace('-', '/');
     ComponentManager.get(compId)['plusMinusClicked'](nodeRef);
     event.preventDefault();
     event.stopPropagation();
@@ -177,16 +167,16 @@ public class TaxonomyRenderer {
     //     <span class="control" />
     //   </span>
     //</span>
-    var outerCls:String = TAXONOMY_BLOCK.getCSSClass();
+    var outerCls:String = TaxonomyBEMEntities.NODE_BLOCK.getCSSClass();
     if (withArrow) {
-      outerCls += " " + TAXONOMY_MODIFIER_ARROW;
+      outerCls += " " + TaxonomyBEMEntities.NODE_MODIFIER_ARROW;
     }
 
     if (selected) {
-      outerCls += " " + TAXONOMY_MODIFIER_LEAF;
+      outerCls += " " + TaxonomyBEMEntities.NODE_MODIFIER_LEAF;
     }
 
-    var borderCls:String = TAXONOMY_ELEMENT_BOX.getCSSClass();
+    var borderCls:String = TaxonomyBEMEntities.NODE_ELEMENT_BOX.getCSSClass();
 
     var html:String = '<span class="' + outerCls + '">';
     html += '<span class="' + borderCls + '">';

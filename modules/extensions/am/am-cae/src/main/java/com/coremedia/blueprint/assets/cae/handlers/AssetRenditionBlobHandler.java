@@ -6,7 +6,6 @@ import com.coremedia.blueprint.cae.handlers.CapBlobHandler;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.objectserver.web.links.Link;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,16 +76,20 @@ public class AssetRenditionBlobHandler {
                                                   @PathVariable(SEGMENT_EXTENSION) String extension,
                                                   WebRequest webRequest,
                                                   HttpServletResponse response) {
+    //maybe the asset name contains separator symbols, so we are only interested in the last segment
+    String[] propertySegments = propertyName.split(String.valueOf(ASSET_NAME_SEPARATOR));
+    String cleanPropertyName = propertySegments[propertySegments.length-1];
+
     // for live CAE, check if requested blob is a published rendition
     // before delegating the handling to the default cap blob handler
     List<AMAssetRendition> assetRenditions = isPreview
             ? asset.getRenditions()
             : asset.getPublishedRenditions();
     for (AMAssetRendition assetRendition : assetRenditions) {
-      if (assetRendition.getName().equals(propertyName)) {
+      if (assetRendition.getName().equals(cleanPropertyName)) {
         // Set content disposition header to prevent opening of new tab for download
         response.addHeader("Content-Disposition", "attachment");
-        return capBlobHandler.handleRequest(asset, eTag, propertyName, extension, webRequest);
+        return capBlobHandler.handleRequest(asset, eTag, cleanPropertyName, extension, webRequest);
       }
     }
     return notFound();

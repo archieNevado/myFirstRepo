@@ -117,7 +117,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>image-transformation</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>

@@ -19,7 +19,7 @@
     <javaScript disableCompress="true">vendor/bootstrap/bootstrap.min.js</javaScript>
     <javaScript>vendor/bootstrap/carousel-swipe.js</javaScript>
     <javaScript>vendor/imagesloaded/imagesloaded.pkgd.js</javaScript>
-    <javaScript>vendor/magnific-popup/dist/jquery.magnific-popup.js</javaScript>
+    <javaScript>vendor/jquery.magnific-popup.js</javaScript>
     <javaScript>vendor/svg4everybody/dist/svg4everybody.js</javaScript>
   </javaScriptLibraries>
 

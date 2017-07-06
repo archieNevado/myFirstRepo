@@ -17,7 +17,6 @@
   </properties>
 
   <modules>
-    <module>external-library-bom</module>
     <module>external-library-studio-lib</module>
     <module>external-library-studio</module>
   </modules>

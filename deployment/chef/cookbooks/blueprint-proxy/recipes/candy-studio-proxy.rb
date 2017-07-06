@@ -26,13 +26,11 @@ end
 studio_jmx_url = 'service:jmx:rmi://localhost:41098/jndi/rmi://localhost:41099/studio'
 mongo_client_uri = "mongodb://#{node['fqdn']}:27017/"
 
-node.default['blueprint']['proxy']['candy_properties']['studio'] = node['blueprint']['webapps']['studio']['application.properties'] if node['blueprint']['webapps']['studio']['application.properties']
 node.default['blueprint']['proxy']['candy_properties']['studio']['management.server.remote.url'] = studio_jmx_url
 node.default['blueprint']['proxy']['candy_properties']['studio']['mongoDb.clientURI'] = mongo_client_uri
 node.default['blueprint']['proxy']['candy_properties']['studio']['repository.blobCachePath'] = ''
 node.default['blueprint']['proxy']['candy_properties']['studio']['com.coremedia.transform.blobCache.basePath'] = ''
 
-node.default['blueprint']['proxy']['candy_properties']['studio-preview'] = node['blueprint']['webapps']['studio']['application.properties'] if node['blueprint']['webapps']['studio']['application.properties']
 node.default['blueprint']['proxy']['candy_properties']['studio-preview']['externalpreview.restUrl'] = "//candy-preview.#{node['blueprint']['hostname']}/blueprint/servlet/service/externalpreview"
 node.default['blueprint']['proxy']['candy_properties']['studio-preview']['externalpreview.previewUrl'] = "//candy-preview.#{node['blueprint']['hostname']}/blueprint/externalpreview"
 node.default['blueprint']['proxy']['candy_properties']['studio-preview']['externalpreview.urlPrefix'] = "//candy-preview.#{node['blueprint']['hostname']}"
@@ -41,3 +39,10 @@ node.default['blueprint']['proxy']['candy_properties']['studio-preview']['manage
 node.default['blueprint']['proxy']['candy_properties']['studio-preview']['mongoDb.clientURI'] = mongo_client_uri
 node.default['blueprint']['proxy']['candy_properties']['studio-preview']['repository.blobCachePath'] = ''
 node.default['blueprint']['proxy']['candy_properties']['studio-preview']['com.coremedia.transform.blobCache.basePath'] = ''
+
+if node['blueprint']['webapps']['studio']['application.properties']
+  node['blueprint']['webapps']['cae-preview']['application.properties'].each_key { |prop_key|
+    node.default_unless['blueprint']['proxy']['candy_properties']['studio'][prop_key] = node['blueprint']['webapps']['cae-preview']['application.properties'][prop_key]
+    node.default_unless['blueprint']['proxy']['candy_properties']['studio-preview'][prop_key] = node['blueprint']['webapps']['cae-preview']['application.properties'][prop_key]
+  }
+end

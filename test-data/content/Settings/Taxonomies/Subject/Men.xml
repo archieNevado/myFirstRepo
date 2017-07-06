@@ -27,10 +27,6 @@
 </related>
 <value>Men</value>
 <children>
-<link href="Men%20Fall%20Casual.xml" path="/Settings/Taxonomies/Subject/Men%20Fall%20Casual"/>
-<link href="Men%20Elegant%20Fall.xml" path="/Settings/Taxonomies/Subject/Men%20Elegant%20Fall"/>
-<link href="Men%20Spring%20Casual.xml" path="/Settings/Taxonomies/Subject/Men%20Spring%20Casual"/>
-<link href="Men%20Elegant%20Spring.xml" path="/Settings/Taxonomies/Subject/Men%20Elegant%20Spring"/>
 </children>
-<externalReference>PC_ApparelMen</externalReference>
+<externalReference></externalReference>
 </CMTaxonomy>

@@ -34,7 +34,7 @@
     "recipe[java_se]",
     "role[mysql]",
     "role[mongodb]",
-    "role[solr-master]",
+    "role[solr]",
     "role[cms-9-config]",
     "role[management]",
     "role[publication]",

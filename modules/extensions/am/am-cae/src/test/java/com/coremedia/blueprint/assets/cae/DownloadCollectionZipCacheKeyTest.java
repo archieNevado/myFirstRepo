@@ -16,26 +16,22 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.activation.MimeType;
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -43,11 +39,10 @@ public class DownloadCollectionZipCacheKeyTest {
 
   private static final String BLOB_ID_NUMBER = "2982";
   private static final String BLOB_ID = "coremedia:///cap/resources/" + BLOB_ID_NUMBER + "/data";
-  public static final String JPG = "jpg";
-  public static final String ASSET_CONTENT_NAME = "assetContentName";
-  public static final String ORIGINAL_RENDITION = "original";
+  private static final String JPG = "jpg";
+  private static final String ASSET_CONTENT_NAME = "assetContentName";
+  private static final String ORIGINAL_RENDITION = "original";
 
-  @InjectMocks
   private DownloadCollectionZipCacheKey cacheKey;
 
   private Cache cache;
@@ -66,9 +61,6 @@ public class DownloadCollectionZipCacheKeyTest {
 
   @Mock
   private MimeTypeService mimeTypeService;
-
-  @Mock
-  private AMAssetRendition renditionNoBlob;
 
   @Mock
   private AMAsset asset;
@@ -94,10 +86,6 @@ public class DownloadCollectionZipCacheKeyTest {
   @Mock
   private CapBlobRef renditionBlob;
 
-  @Mock
-  private InputStream inputStream;
-
-
   private static File zipFile;
 
   private List<AMAssetRendition> renditions;
@@ -112,11 +100,11 @@ public class DownloadCollectionZipCacheKeyTest {
     cache = new Cache("DCZCK");
     cache.setCapacity(Object.class.toString(), 10);
 
-    when(mimeTypeService.getMimeTypeForExtension(any(String.class))).thenReturn("application/zip");
     when(mimeTypeService.getExtensionForMimeType(anyString())).thenReturn(JPG);
     when(contentRepository.getConnection()).thenReturn(capConnection);
+    when(contentRepositoryAnother.getConnection()).thenReturn(capConnection);
     when(capConnection.getTempFileService()).thenReturn(tempFileService);
-    when(tempFileService.createTempFileFor(any(String.class), any(MimeType.class))).thenReturn(zipFile);
+    when(tempFileService.createTempFileFor(anyString(), eq("zip"))).thenReturn(zipFile);
 
     when(renditionBlob.getContentType()).thenReturn(new MimeType("image/jpeg"));
     when(renditionBlob.getInputStream()).thenReturn(IOUtils.toInputStream("some test data for my input stream"));
@@ -139,8 +127,7 @@ public class DownloadCollectionZipCacheKeyTest {
     when(amAssetRenditionInvalidId.getAsset()).thenReturn(assetInvalid);
     when(amAssetRenditionInvalidId.getBlob()).thenReturn(renditionBlob);
 
-    renditions = new ArrayList<>();
-    renditions.add(amAssetRendition);
+    renditions = newArrayList(amAssetRendition);
 
     cacheKey = new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
   }
@@ -153,84 +140,102 @@ public class DownloadCollectionZipCacheKeyTest {
 
   @Test
   public void testEquals() throws Exception {
-    DownloadCollectionZipCacheKey cacheKeySame = new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
-    assertTrue(cacheKey.equals(cacheKeySame));
+    DownloadCollectionZipCacheKey cacheKeySame = newDownloadCollectionZipCacheKeyWithRenditions(renditions);
+
+    assertThat(cacheKey).isEqualTo(cacheKeySame);
   }
 
   @Test
   public void testEqualsFail() throws Exception {
-    List<AMAssetRendition> renditionsOther = new ArrayList<>();
-    renditionsOther.add(amAssetRendition);
-    renditionsOther.add(amAssetRenditionInvalidId);
-    DownloadCollectionZipCacheKey cacheKeyOther = new DownloadCollectionZipCacheKey(renditionsOther, contentRepository, mimeTypeService);
+    List<AMAssetRendition> renditionsOther = newArrayList(amAssetRendition, amAssetRenditionInvalidId);
+    DownloadCollectionZipCacheKey cacheKeyOther = newDownloadCollectionZipCacheKeyWithRenditions(renditionsOther);
 
-    assertFalse(cacheKey.equals(cacheKeyOther));
-    assertFalse(cacheKeyOther.equals(cacheKey));
-
-    //noinspection EqualsBetweenInconvertibleTypes
-    assertFalse(cacheKey.equals("Test"));
+    assertThat(cacheKey).isNotEqualTo(cacheKeyOther);
+    assertThat(cacheKeyOther).isNotEqualTo(cacheKey);
+    assertThat(cacheKey).isNotEqualTo("Test"); // Deliberately compare against an object of another type.
   }
 
   @Test
   public void testNotEquals() throws Exception {
-    assertNotEquals(new DownloadCollectionZipCacheKey(new ArrayList<AMAssetRendition>(), contentRepositoryAnother, mimeTypeService), cacheKey);
+    List<AMAssetRendition> renditionsOther = newArrayList();
+    DownloadCollectionZipCacheKey cacheKeyOther = new DownloadCollectionZipCacheKey(renditionsOther,
+            contentRepositoryAnother, mimeTypeService);
+
+    assertThat(cacheKey).isNotEqualTo(cacheKeyOther);
   }
 
   @Test
   public void testHashCode() throws Exception {
-    List<AMAssetRendition> renditions = new ArrayList<>();
-    renditions.add(amAssetRendition);
-    DownloadCollectionZipCacheKey cacheKeyOne = new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
-    assertTrue(cacheKeyOne.hashCode() != 0);
-    DownloadCollectionZipCacheKey cacheKeyTwo = new DownloadCollectionZipCacheKey(renditions, contentRepositoryAnother, mimeTypeService);
-    assertNotEquals(cacheKeyOne.hashCode(), cacheKeyTwo.hashCode());
+    DownloadCollectionZipCacheKey cacheKeyOne = newDownloadCollectionZipCacheKeyWithContentRepository(contentRepository);
+    assertThat(cacheKeyOne.hashCode() != 0).isTrue();
+
+    DownloadCollectionZipCacheKey cacheKeyTwo = newDownloadCollectionZipCacheKeyWithContentRepository(contentRepositoryAnother);
+    assertThat(cacheKeyOne.hashCode()).isNotEqualTo(cacheKeyTwo.hashCode());
   }
 
   @Test
   public void testEvaluate() throws Exception {
-    assertEquals(zipFile, cacheKey.evaluate(cache));
+    File evaluatedZipFile = cacheKey.evaluate(cache);
+
+    assertThat(evaluatedZipFile).isEqualTo(zipFile);
   }
 
   @Test
   public void testCreateDownloadCollectionZip() throws Exception {
-    File zip = cacheKey.evaluate(cache);
+    File evaluatedZipFile = cacheKey.evaluate(cache);
 
-    List<String> files = unZipIt(zip);
-
-    assertEquals(1, files.size());
-    assertEquals(ASSET_CONTENT_NAME + "_" + ORIGINAL_RENDITION + "_" + BLOB_ID_NUMBER + "." + JPG, files.get(0));
+    List<String> unzippedFilenames = unZipIt(evaluatedZipFile);
+    assertThat(unzippedFilenames).hasSize(1);
+    assertThat(unzippedFilenames.get(0))
+            .isEqualTo(ASSET_CONTENT_NAME + "_" + ORIGINAL_RENDITION + "_" + BLOB_ID_NUMBER + "." + JPG);
   }
 
   @Test
   public void testCreateDownloadCollectionZipBlobNull() throws Exception {
-    List<AMAssetRendition> renditions = new ArrayList<>();
-    renditions.add(amAssetRenditionNoBlob);
-    DownloadCollectionZipCacheKey cacheKey = new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
-    File zip = cacheKey.evaluate(cache);
-    List<String> files = unZipIt(zip);
-    assertEquals(0, files.size());
+    List<AMAssetRendition> renditions = newArrayList(amAssetRenditionNoBlob);
+    DownloadCollectionZipCacheKey cacheKey = newDownloadCollectionZipCacheKeyWithRenditions(renditions);
+
+    File evaluatedZipFile = cacheKey.evaluate(cache);
+
+    List<String> unzippedFilenames = unZipIt(evaluatedZipFile);
+    assertThat(unzippedFilenames).isEmpty();
   }
 
   @Test
   public void testCreateDownloadCollectionZipInvalidId() throws Exception {
-    List<AMAssetRendition> renditions = new ArrayList<>();
-    renditions.add(amAssetRenditionInvalidId);
-    DownloadCollectionZipCacheKey cacheKey = new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
-    File zip = cacheKey.evaluate(cache);
-    List<String> files = unZipIt(zip);
-    assertEquals(0, files.size());
+    List<AMAssetRendition> renditions = newArrayList(amAssetRenditionInvalidId);
+    DownloadCollectionZipCacheKey cacheKey = newDownloadCollectionZipCacheKeyWithRenditions(renditions);
+
+    File evaluatedZipFile = cacheKey.evaluate(cache);
+
+    List<String> unzippedFilenames = unZipIt(evaluatedZipFile);
+    assertThat(unzippedFilenames).isEmpty();
   }
 
   @Test
   public void testWeight() throws Exception {
-    File zip = cacheKey.evaluate(cache);
-    assertEquals(zip.length(), cacheKey.weight(null, zip, 0));
+    File evaluatedZipFile = cacheKey.evaluate(cache);
+    int weight = cacheKey.weight(null, evaluatedZipFile, 0);
+
+    assertThat(weight).isEqualTo((int) evaluatedZipFile.length());
   }
 
   @Test
   public void testCacheClass() throws Exception {
-    File zip = cacheKey.evaluate(cache);
-    assertEquals(CacheFactory.CACHE_CLASS_DISK, cacheKey.cacheClass(cache, zip));
+    File evaluatedZipFile = cacheKey.evaluate(cache);
+    String cacheClass = cacheKey.cacheClass(cache, evaluatedZipFile);
+
+    assertThat(cacheClass).isEqualTo(CacheFactory.CACHE_CLASS_DISK);
+  }
+
+  private DownloadCollectionZipCacheKey newDownloadCollectionZipCacheKeyWithRenditions(
+          @Nonnull List<AMAssetRendition> renditions) {
+    return new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
+  }
+
+  private DownloadCollectionZipCacheKey newDownloadCollectionZipCacheKeyWithContentRepository(
+          @Nonnull ContentRepository contentRepository) {
+    return new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
   }
 
   /**
@@ -239,23 +244,19 @@ public class DownloadCollectionZipCacheKeyTest {
    * @param zipFile input zip file
    */
   private List<String> unZipIt(File zipFile) {
+    List<String> filenames = newArrayList();
 
-    List<String> files = new ArrayList<>();
-    ZipInputStream zis = null;
-    try {
-      //get the zip file content
-      zis = new ZipInputStream(new FileInputStream(zipFile));
-      //get the zipped file list entry
+    try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile))) {
+      // Get the zipped file list entries.
       ZipEntry ze = zis.getNextEntry();
       while (ze != null) {
-        files.add(ze.getName());
+        filenames.add(ze.getName());
         ze = zis.getNextEntry();
       }
     } catch (IOException ex) {
       ex.printStackTrace();
-    } finally {
-      IOUtils.closeQuietly(zis);
     }
-    return files;
+
+    return filenames;
   }
 }

@@ -18,7 +18,7 @@ node['blueprint']['cms-9']['virtual_host']['delivery']['sites'].keys.each do |si
   server_name = node['blueprint']['cms-9']['virtual_host']['delivery']['sites'][site]['server_name']
   server_aliases = node['blueprint']['cms-9']['virtual_host']['delivery']['sites'][site]['server_aliases']
   default_site = node['blueprint']['cms-9']['virtual_host']['delivery']['sites'][site]['default_site']
-  sitemap_site_name = node['blueprint']['cms-9']['virtual_host']['delivery']['sites'][site]['sitemap_site_name']
+  site_id = node['blueprint']['cms-9']['virtual_host']['delivery']['sites'][site]['site_id']
 
   coremedia_proxy_webapp "delivery-#{site}" do
     server_name server_name
@@ -27,7 +27,7 @@ node['blueprint']['cms-9']['virtual_host']['delivery']['sites'].keys.each do |si
     default_servlet 'servlet'
     cluster node['blueprint']['cms-9']['virtual_host']['delivery']['cluster']
     default_site default_site
-    sitemap_site_name sitemap_site_name
+    site_id site_id
     rewrite_template 'rewrite/delivery.erb'
     rewrite_log_level node['blueprint']['cms-9']['virtual_host']['delivery']['rewrite_log_level']
     rewrite_template_cookbook 'blueprint-proxy'

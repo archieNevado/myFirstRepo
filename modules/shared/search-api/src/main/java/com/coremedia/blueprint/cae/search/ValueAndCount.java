@@ -25,4 +25,9 @@ public class ValueAndCount {
   public void setCount(long count) {
     this.count = count;
   }
+
+  @Override
+  public String toString() {
+    return "ValueAndCount[name='" + name + "', count=" + count + ']';
+  }
 }

@@ -1,14 +1,13 @@
-/*
-Popup
-========================================================================================================================
-
-Contains styling definitions for all content types as cm-popup. Used by videos with magnific popup.
-*/
+@import "../../../sass/utils/imports";
 
 //default variables
 $cm-popup-prefix: "cm-popup" !default;
 $cm-popup-screen-max: 1200px !default;
 
+//import magnific popup
+@import "../../../../node_modules/magnific-popup/src/css/main";
+
+// additional changes
 .#{$cm-popup-prefix} {
   .mfp-content {
     max-width: $cm-popup-screen-max;
@@ -19,7 +18,7 @@ $cm-popup-screen-max: 1200px !default;
     visibility: visible;
   }
 
-  /* fix CMS-4839 */
+  // fix CMS-4839
   .mfp-inline-holder {
     padding: 40px 0;
   }
@@ -51,4 +50,3 @@ $cm-popup-screen-max: 1200px !default;
     }
   }
 }
-

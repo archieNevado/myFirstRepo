@@ -27,9 +27,8 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>cmd-tools-extension-dependencies</artifactId>
+      <artifactId>logging-config</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

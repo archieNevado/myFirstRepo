@@ -19,3 +19,11 @@ const { remoteThemeImporter } = require('@coremedia/common');
 ```
 
 This property provides an API for using the remoteThemeImporter. 
+
+### livereload
+
+```shell
+const { livereload } = require('@coremedia/common');
+```
+
+This property provides an API for using the tiny-lr LiveReload server implementation. 

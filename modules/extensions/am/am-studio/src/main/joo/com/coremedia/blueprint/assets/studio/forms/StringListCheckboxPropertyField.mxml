@@ -9,16 +9,17 @@
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns:am="exml:com.coremedia.blueprint.assets.studio.config"
         labelSeparator=""
-        labelAlign="top">
+        labelAlign="top"
+        defaultField="{createComponentSelector().itemId(CHECKBOX_GROUP_ITEM_ID).build()}">
   <fx:Script><![CDATA[
     import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.data.ValueExpressionFactory;
+    import com.coremedia.ui.util.createComponentSelector;
 
     public static const xtype:String = "com.coremedia.blueprint.assets.studio.config.stringListCheckboxPropertyField";
 
-    public static const BOOLEAN_PROPERTY_FIELD_CSS:String = "boolean-property-field";
+    public static const CHECKBOX_GROUP_ITEM_ID:String = "checkboxGroup";
 
     private var config:StringListCheckboxPropertyField;
 
@@ -48,7 +49,7 @@
   </local:plugins>
 
   <local:items>
-    <ui:StatefulCheckboxGroup itemId="checkboxGroup">
+    <ui:StatefulCheckboxGroup itemId="{CHECKBOX_GROUP_ITEM_ID}">
       <ui:layout>
         <layout_VBox/>
       </ui:layout>

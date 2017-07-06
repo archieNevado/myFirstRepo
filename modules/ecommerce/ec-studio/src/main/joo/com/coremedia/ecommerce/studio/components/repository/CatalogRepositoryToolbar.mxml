@@ -4,6 +4,7 @@
                           xmlns="exml:ext.config"
                           xmlns:ui="exml:com.coremedia.ui.config"
                           xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                          ariaLabel="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CollectionView_catalogRepositoryToolbar_label')}"
                           itemId="commerceToolbar">
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.collectionview.CollectionView;

@@ -4,3 +4,4 @@
 [#import "/lib/coremedia.com/cae.ftl" as cm]
 [#import "/lib/coremedia.com/preview.ftl" as preview]
 [#import "/lib/coremedia.com/blueprint.ftl" as bp]
+[#import "/spring.ftl" as spring]

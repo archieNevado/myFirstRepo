@@ -29,6 +29,8 @@
 <children>
 <link href="Twitter.xml" path="/Settings/Taxonomies/Subject/Twitter"/>
 <link href="YouTube.xml" path="/Settings/Taxonomies/Subject/YouTube"/>
+<link href="Instagram.xml" path="/Settings/Taxonomies/Subject/Instagram"/>
+<link href="Pinterest.xml" path="/Settings/Taxonomies/Subject/Pinterest"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

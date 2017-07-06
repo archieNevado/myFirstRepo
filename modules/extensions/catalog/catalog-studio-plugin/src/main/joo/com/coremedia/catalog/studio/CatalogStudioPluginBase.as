@@ -5,7 +5,7 @@ import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.ContentTypeNames;
-import com.coremedia.catalog.studio.collectionview.search.LostandfoundFilterFieldset;
+import com.coremedia.catalog.studio.collectionview.search.LostandfoundFilterPanel;
 import com.coremedia.catalog.studio.library.CatalogCollectionViewExtension;
 import com.coremedia.catalog.studio.library.CatalogTreeRelation;
 import com.coremedia.catalog.studio.library.RepositoryCatalogTreeModel;
@@ -101,7 +101,7 @@ public class CatalogStudioPluginBase extends StudioPlugin {
   }
 
   private static function addSearchFilters(editorContext:IEditorContext):void {
-    editorContext.getEnabledSearchFilterIds().push(LostandfoundFilterFieldset.FILTER_ID);
+    editorContext.getEnabledSearchFilterIds().push(LostandfoundFilterPanel.FILTER_ID);
   }
 
   private static function applySearchSettings(showCatalogContent:Boolean):void {

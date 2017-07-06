@@ -6,9 +6,7 @@
       <StringProperty Name="shape">rect</StringProperty>
       <StringProperty Name="target">_blank</StringProperty>
       <StringProperty Name="coords">100,100,200,200</StringProperty>
-      <LinkListProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_">
-        <Link xlink:href="coremedia:///cap/content/2"/>
-      </LinkListProperty>
+      <LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/content/2"/>
     </Struct>
   </StructListProperty>
 </Struct>

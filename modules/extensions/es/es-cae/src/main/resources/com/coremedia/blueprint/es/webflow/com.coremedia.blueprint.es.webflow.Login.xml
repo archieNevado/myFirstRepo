@@ -11,7 +11,7 @@
          in order to prevent Login-CSRF. Login POST requests must include this token in their form submit to succeed. -->
     <evaluate expression="csrfTokenManagement.forceToken(flowRequestContext.externalContext.nativeRequest)"/>
     <evaluate expression="loginHelper.preProcess(flowRequestContext)"/>
-    <set name="flowScope.nextUrl" value="webflowUrlHelper.getNextUrl(next, flowRequestContext)"/>
+    <set name="flowScope.nextUrl" value="webflowUrlHelper.getNextUrl(next, flowRequestContext, true)"/>
     <evaluate expression="loginHelper.postProcessProviderLogin(flowRequestContext)"/>
   </on-start>
 

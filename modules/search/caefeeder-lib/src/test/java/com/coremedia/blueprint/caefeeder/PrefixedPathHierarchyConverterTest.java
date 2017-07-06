@@ -1,7 +1,10 @@
 package com.coremedia.blueprint.caefeeder;
 
+import com.coremedia.blueprint.base.caefeeder.TreePathKeyFactory;
+import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -24,7 +27,7 @@ public class PrefixedPathHierarchyConverterTest {
   private  PrefixedPathHierarchyConverter prefixedPathHierarchyConverter;
 
   @Mock
-  private TreePathKeyFactory treePathKeyFactory;
+  private TreePathKeyFactory<NamedTaxonomy> treePathKeyFactory;
 
   @Test
   public void testConvertType_alwaysList() {
@@ -45,7 +48,8 @@ public class PrefixedPathHierarchyConverterTest {
     when(contentBean.getContent()).thenReturn(content);
 
     List<String> expectedResults = Arrays.asList("0/1", "1/1/2", "2/1/2/3");
-    when(treePathKeyFactory.getPath(content)).thenReturn("/1/2/3");
+    ImmutableList<NamedTaxonomy> taxonomyPath = taxonomyPath(1, 2, 3);
+    when(treePathKeyFactory.getPath(content)).thenReturn(taxonomyPath);
 
     Object result = prefixedPathHierarchyConverter.convertValue(Arrays.asList(contentBean));
 
@@ -62,7 +66,8 @@ public class PrefixedPathHierarchyConverterTest {
     when(contentBean.getContent()).thenReturn(content);
 
     List<String> expectedResults = Arrays.asList("0/1", "1/1/2");
-    when(treePathKeyFactory.getPath(content)).thenReturn("1/2");
+    ImmutableList<NamedTaxonomy> taxonomyPath = taxonomyPath(1, 2);
+    when(treePathKeyFactory.getPath(content)).thenReturn(taxonomyPath);
 
     Object result = prefixedPathHierarchyConverter.convertValue(Arrays.asList(contentBean));
 
@@ -82,8 +87,10 @@ public class PrefixedPathHierarchyConverterTest {
     when(contentBeanInSameRoot.getContent()).thenReturn(contentInSameRoot);
 
     List<String> expectedResults = Arrays.asList("0/1", "1/1/2", "2/1/2/3", "2/1/2/4");
-    when(treePathKeyFactory.getPath(content)).thenReturn("1/2/3");
-    when(treePathKeyFactory.getPath(contentInSameRoot)).thenReturn("1/2/4");
+    ImmutableList<NamedTaxonomy> taxonomyPath123 = taxonomyPath(1, 2, 3);
+    when(treePathKeyFactory.getPath(content)).thenReturn(taxonomyPath123);
+    ImmutableList<NamedTaxonomy> taxonomyPath124 = taxonomyPath(1, 2, 4);
+    when(treePathKeyFactory.getPath(contentInSameRoot)).thenReturn(taxonomyPath124);
 
     Object result = prefixedPathHierarchyConverter.convertValue(Arrays.asList(contentBean, contentBeanInSameRoot));
 
@@ -94,4 +101,18 @@ public class PrefixedPathHierarchyConverterTest {
     }
   }
 
+  private static ImmutableList<NamedTaxonomy> taxonomyPath(Integer... ids) {
+    ImmutableList.Builder<NamedTaxonomy> builder = ImmutableList.builder();
+    for (Integer id : ids) {
+      builder.add(new NamedTaxonomy(content(id)));
+    }
+    return builder.build();
+  }
+
+
+  private static Content content(int id) {
+    Content content = mock(Content.class, String.valueOf(id));
+    when(content.getId()).thenReturn(IdHelper.formatContentId(id));
+    return content;
+  }
 }

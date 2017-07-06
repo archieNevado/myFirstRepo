@@ -13,6 +13,12 @@ $cm-user-chooser-items-background-color: $header-color-bg;
 
 $cm-rating-statistics-color: $brand-primary;
 
+$cm-notification-color-error: palette(red);
+$cm-notification-color-info: palette(blue);
+$cm-notification-color-sucess: palette(green);
+$cm-notification-color-warning: palette(orange);
+
+
 // Import Brick
 @import "../../../../../lib/bricks/elastic-social/sass/elastic-social";
 
@@ -30,53 +36,40 @@ $cm-rating-statistics-color: $brand-primary;
   }
 }
 
-.cm-ratings {
-  &-average {
-    &__rating,
-    &__text,
-    &__votes,
-    &__switch {
-      display: inline-block;
-      margin: 6px 5px;
-      vertical-align: middle;
-    }
-    &__rating {
-      margin-left: 0;
-    }
+// forms
+.cm-form {
 
-    &__votes {
+  &__link, .checkbox label a {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &--userdetails .form-group .help-block{
+    margin: 0 0 5px 10px;
+  }
+
+  &--registration input[type="file"] {
+    margin: 5px 0;
+  }
+
+}
+
+// registration/login
+
+.cm-user {
+  &-chooser {
+    &__profileimage {
+      border-radius: 50%;
+      height: 52px;
+      vertical-align: top;
+      margin: 4px 6px 0 0;
+
       @include breakpoint(xs) {
         display: none;
       }
     }
-
-    &__switch {
-      display: none;
-    }
-  }
-}
-
-// notification
-.cm-notification {
-  margin: 5px 0;
-
-  &--error {
-    color: palette(red);
-  }
-
-  &--warning {
-    color: palette(orange);
-  }
-
-  &--info {
-    color: palette(blue);
-  }
-
-  &--success {
-    color: palette(green);
-  }
-
-  &--inactive {
-    display: none;
   }
 }

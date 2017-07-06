@@ -97,6 +97,7 @@ coremedia.blueprint = (function (module) {
         var containerWidth = $imageContainer.width();
         var containerHeight = $imageContainer.height();
         if (!containerWidth || !containerHeight) {
+          logger.log("Could not load hidden Responsive Image.", $imageContainer);
           return; // image is not visible, do not touch
         }
 
@@ -215,7 +216,7 @@ coremedia.blueprint = (function (module) {
           if ($image.is("img")) {
             // replace link if not the same
             if (fittingImage.link !== $image.attr("src")) {
-              logger.log("Change Responsive Image to aspect ratio: '" + fittingRatio.name + "' and maxWidth: '" + fittingImage.maxWidth + "'");
+              logger.log("Change Responsive Image to aspect ratio: '" + fittingRatio.name + "' and maxWidth: '" + fittingImage.maxWidth + "'", $imageContainer);
               $image.trigger({
                 type: "srcChanging",
                 src: $image.attr("src"),
@@ -233,7 +234,7 @@ coremedia.blueprint = (function (module) {
           } else {
             // replace link if not the same
             if ("background-image: url('" + fittingImage.link + "');" !== $image.attr("style")) {
-              logger.log("Change Responsive Background Image to aspect ratio: '" + fittingRatio.name + "' and maxWidth: '" + fittingImage.maxWidth + "'");
+              logger.log("Change Responsive Background Image to aspect ratio: '" + fittingRatio.name + "' and maxWidth: '" + fittingImage.maxWidth + "'", $imageContainer);
               $image.data("lastMaxWidth", fittingImage.maxWidth);
               $image.data("lastRatio", fittingRatio.name);
               $image.attr("style", "background-image: url('" + fittingImage.link + "');");

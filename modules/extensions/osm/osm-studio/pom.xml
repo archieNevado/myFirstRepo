@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>osm-studio</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <description>OSM Studio Plugin for the CoreMedia Studio</description>
 
@@ -16,38 +16,32 @@
     <coremedia.project.extension.for>studio</coremedia.project.extension.for>
   </properties>
 
-
   <dependencies>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>ui-components</artifactId>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
+      <type>swc</type>
     </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-    </dependency>
-  </dependencies>
-
+   </dependencies>
 
   <build>
     <plugins>
@@ -57,11 +51,6 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.blueprint.studio.osm.OSMStudioPlugin</entry>
-            </requiredClasses>
-          </production>
             <additionalCssNonBundle>
               <value>resources/css/osm-ui.css</value>
             </additionalCssNonBundle>
@@ -106,5 +95,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

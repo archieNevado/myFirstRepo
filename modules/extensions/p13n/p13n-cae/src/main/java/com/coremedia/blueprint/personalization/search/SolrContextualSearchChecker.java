@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.personalization.search;
 
-import com.coremedia.cap.search.solr.SolrSearchException;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.search.ArgumentMissingException;
 import com.coremedia.personalization.search.ArgumentSyntaxException;
@@ -29,7 +28,6 @@ public final class SolrContextualSearchChecker {
   private static final String STATUS_FNNAME_KEY = "func";
   private static final String STATUS_PARAM_KEY = "param";
   private static final String STATUS_MSG_KEY = "msg";
-  private static final String STATUS_QUERY_KEY = "query";
 
   private static final String CODE_ARGUMENT_MISSING = "ARGUMENT_MISSING";
   private static final String CODE_ARGUMENT_SYNTAX = "ARGUMENT_SYNTAX";
@@ -37,7 +35,6 @@ public final class SolrContextualSearchChecker {
   private static final String CODE_ARGUMENT_VALUE = "ARGUMENT_VALUE";
   private static final String CODE_FUNCTION_EVALUATION = "FUNCTION_EVALUATION";
   private static final String CODE_FUNCTION_UNKNOWN = "FUNCTION_UNKNOWN";
-  private static final String CODE_SOLR = "SOLR";
   private static final String CODE_GENERAL = "GENERAL";
 
   private final ObjectMapper mapper = new ObjectMapper();
@@ -72,7 +69,7 @@ public final class SolrContextualSearchChecker {
       final String processedQuery = searchPreprocessor.process(query, contextCollection);
       LOGGER.debug("query pre-processing result of '{}' is '{}'", query, processedQuery);
     } catch (Exception e) {
-      return toJSON(e,query);
+      return toJSON(e);
     }
     return null;
   }
@@ -84,7 +81,7 @@ public final class SolrContextualSearchChecker {
    *
    * @return the encoded exception or <code>null</code> if it couldn't be encoded
    */
-  private String toJSON(final Exception ex, String query) {
+  private String toJSON(final Exception ex) {
     // this map will later be encoded into JSON
     final Map<String, String> statusMap = new HashMap<>();
 
@@ -113,9 +110,6 @@ public final class SolrContextualSearchChecker {
       final SearchFunctionUnknownException evalEx = (SearchFunctionUnknownException)ex;
       statusMap.put(STATUS_CODE_KEY, CODE_FUNCTION_UNKNOWN);
       statusMap.put(STATUS_FNNAME_KEY, evalEx.getFunctionName());
-    } else if (ex instanceof SolrSearchException) {
-      statusMap.put(STATUS_CODE_KEY, CODE_SOLR);
-      statusMap.put(STATUS_QUERY_KEY, query);
     } else {
       statusMap.put(STATUS_CODE_KEY, CODE_GENERAL);
     }

@@ -63,7 +63,7 @@ if node.deep_fetch('blueprint', 'proxy', 'virtual_host', 'delivery', 'sites')
     server_name = node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['server_name']
     server_aliases = node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['server_aliases']
     default_site = node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['default_site']
-    sitemap_site_name = node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['sitemap_site_name']
+    site_id = node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['site_id']
 
     coremedia_proxy_webapp "delivery-#{site}" do
       server_name server_name
@@ -72,7 +72,7 @@ if node.deep_fetch('blueprint', 'proxy', 'virtual_host', 'delivery', 'sites')
       default_servlet 'servlet'
       cluster node['blueprint']['proxy']['virtual_host']['delivery']['cluster']
       default_site default_site
-      sitemap_site_name sitemap_site_name
+      site_id site_id
       rewrite_template 'rewrite/delivery.erb'
       rewrite_log_level node['blueprint']['proxy']['virtual_host']['delivery']['rewrite_log_level']
     end

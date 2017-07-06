@@ -9,6 +9,7 @@ import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.dependencies.DependencyTracker;
+import com.coremedia.ui.store.BeanRecord;
 
 import ext.Component;
 import ext.container.Container;
@@ -67,9 +68,8 @@ public class CommerceCatalogObjectsSelectFormBase extends FieldContainer{
   }
 
   internal function getHandleSelectFunction(config:CommerceCatalogObjectsSelectForm):Function {
-    return function (selector:CommerceObjectSelector, newValue:String, startValue:String):void {
-      if(!newValue) return;
-      CatalogHelper.addCatalogObject(getContentExpression(), config.catalogObjectIdListName, newValue, config.catalogObjectIdsExpression);
+    return function (selector:CommerceObjectSelector, record:BeanRecord):void {
+      CatalogHelper.addCatalogObject(getContentExpression(), config.catalogObjectIdListName, record.getBean().get("id"), config.catalogObjectIdsExpression);
       selector.clearValue();
     };
   }

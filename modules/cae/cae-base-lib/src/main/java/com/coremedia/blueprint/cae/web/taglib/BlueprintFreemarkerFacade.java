@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions;
 import com.coremedia.blueprint.base.cae.web.taglib.SettingsFunction;
 import com.coremedia.blueprint.base.cae.web.taglib.UniqueIdGenerator;
 import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
+import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
@@ -31,10 +32,12 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
+import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.coremedia.util.WordAbbreviator;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -51,6 +54,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,7 +65,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 /**
  * A Facade for utility functions used by FreeMarker templates.
  */
-public class BlueprintFreemarkerFacade {
+public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   private static final Logger LOG = LoggerFactory.getLogger(BlueprintFreemarkerFacade.class);
   private static final String RESPONSIVE_SETTINGS_KEY = "responsiveImageSettings";
@@ -86,6 +90,10 @@ public class BlueprintFreemarkerFacade {
           "png"
   );
 
+  static final String HAS_ITEMS = "hasItems";
+  static final String PLACEMENT_NAME = "placementName";
+  private static final String STORE_REF = "storeRef";
+  static final String IS_IN_LAYOUT = "isInLayout";
 
   private ContentBeanFactory contentBeanFactory;
   private DataViewFactory dataViewFactory;
@@ -383,7 +391,7 @@ public class BlueprintFreemarkerFacade {
 
   public boolean isWebflowRequest() {
     HttpServletRequest currentRequest = FreemarkerUtils.getCurrentRequest();
-    return currentRequest.getRequestURL().toString().contains(BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC)
+    return currentRequest.getRequestURL().toString().contains(UriConstants.Segments.PREFIX_DYNAMIC)
             && currentRequest.getParameterMap().containsKey(BlueprintFlowUrlHandler.FLOW_EXECUTION_KEY_PARAMETER);
   }
 
@@ -579,6 +587,66 @@ public class BlueprintFreemarkerFacade {
       return abstractPage.getDirection();
     }
     return DEFAULT_DIRECTION;
+  }
+
+  /**
+   * This method returns a {@link Map} which contains information about the state of the placement.<br>
+   * The map contains the following keys: {@link #PLACEMENT_NAME}, {@link #IS_IN_LAYOUT} and {@link #HAS_ITEMS}.<br>
+   * The values of those keys are of type boolean.
+   *
+   * @param placementObject a PageGridPlacement
+   * @return a map containing informations for placement highlighting
+   * @throws IOException
+   */
+  @Nonnull
+  public Map<String, Object> getPlacementHighlightingMetaData(@Nonnull Object placementObject) throws IOException {
+    if (placementObject instanceof ContainerWithViewTypeName) {
+      return getPlacementHighlightingMetaData(((ContainerWithViewTypeName) placementObject).getBaseContainer());
+    }
+    if (placementObject instanceof CMCollection) {
+      return Collections.emptyMap();
+    }
+
+    PageGridPlacement placement = asPageGridPlacement(placementObject);
+    String placementName = placement != null ? placement.getName() : asPageGridPlacementName(placementObject);
+
+    if (placementName == null || !isMetadataEnabled()) {
+      return Collections.emptyMap();
+    }
+
+    return getPlacementHighlightingMetaDataInternal(placement, placementName);
+  }
+
+  private Map<String, Object> getPlacementHighlightingMetaDataInternal(PageGridPlacement placement, String placementName) throws IOException {
+    boolean isInLayout = placement != null;
+    boolean hasItems = hasItems(placement, isInLayout);
+
+    List<Object> metaDataList = new LinkedList<>();
+    ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
+    builder.put(IS_IN_LAYOUT, isInLayout);
+    builder.put(HAS_ITEMS, hasItems);
+    builder.put(PLACEMENT_NAME, placementName);
+    metaDataList.add(builder.build());
+
+    return Collections.<String, Object>singletonMap("placementRequest", metaDataList);
+  }
+
+  private static PageGridPlacement asPageGridPlacement(Object object) {
+    if (object instanceof PageGridPlacement) {
+      return (PageGridPlacement) object;
+    }
+    return null;
+  }
+
+  private static String asPageGridPlacementName(Object object) {
+    if (object instanceof String) {
+      return (String) object;
+    }
+    return null;
+  }
+
+  private static boolean hasItems(PageGridPlacement placement, boolean isInLayout) {
+    return isInLayout && !placement.getItems().isEmpty();
   }
 
   //====================================================================================================================

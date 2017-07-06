@@ -101,7 +101,7 @@
     <Splitter width="4px"
               ui="{SplitterSkin.DARK.getSkin()}"/>
 
-    <Container>
+    <Container itemId="preview">
       <layout>
         <layout_VBox align="stretch"/>
       </layout>

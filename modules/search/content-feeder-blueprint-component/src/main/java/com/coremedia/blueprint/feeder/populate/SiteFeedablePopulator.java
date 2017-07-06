@@ -31,8 +31,7 @@ public class SiteFeedablePopulator implements FeedablePopulator<Content> {
 
     // set the Content's site if this is a full index document update (add/replace) where all fields need to be set
     // or if it's a partial update and the content's path has changed to a possibly different site
-    if (feedable.isPartialUpdate()
-            && !feedable.getUpdatedAspects().contains(ContentFeedableAspect.PATH)) {
+    if (!feedable.isUpdating(ContentFeedableAspect.PATH)) {
       return;
     }
 

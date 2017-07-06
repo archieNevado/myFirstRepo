@@ -59,4 +59,12 @@ public interface CMSitemap extends CMTeasable {
    * @cm.template.api
    */
   CMNavigation getRoot();
+
+  /**
+   * Returns the depth of the sitemap, stored in local setting "sitemap_depth". Default is 3.
+   *
+   * @return depth of the sitemap
+   * @cm.template.api
+   */
+  int getSitemapDepth();
 }

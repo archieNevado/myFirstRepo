@@ -9,7 +9,7 @@
 <StringProperty Name="description">Dark Text</StringProperty>
 <StructProperty Name="style">
 <Struct>
-<StringProperty Name="color">#000</StringProperty>
+<StringProperty Name="color">#333</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

@@ -34,14 +34,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.elastic.social.rest.api.ElasticSocialRestConstants.ELASTIC_SOCIAL_REST_PREFIX;
+
 /**
  * Copies {@link Comment Comments} and associated image attachements from Elastic Social into {@link Content}
  * in the {@link com.coremedia.cap.common.CapRepository repository}.
  */
 @Named
 @Produces(MediaType.APPLICATION_JSON)
-@Path("curate")
+@Path(CuratedTransferResource.PATH)
 public class CuratedTransferResource extends AbstractLinkingResource {
+  public static final String PATH = ELASTIC_SOCIAL_REST_PREFIX + "/curate";
   private static final Logger LOG = LoggerFactory.getLogger(CuratedTransferResource.class);
   private static final String LINEBREAK = "\r\n";
 
@@ -246,10 +249,13 @@ public class CuratedTransferResource extends AbstractLinkingResource {
         if (comment == null) {
           comment = reviewService.getReview(commentId);
         }
-        if (comment == null && LOG.isDebugEnabled()) {
-          LOG.debug("Could not create comment/review for ID {}. Skipping.", commentId);
+        if (comment != null) {
+          comments.add(comment);
+        } else {
+          if (LOG.isInfoEnabled()) {
+            LOG.info("Could not create comment/review for ID {}. Skipping.", commentId);
+          }
         }
-        comments.add(comment);
       } catch (RuntimeException ex) {
         LOG.error(String.format("Error creating comment/review for ID %s. Skipping.", commentId), ex);
       }

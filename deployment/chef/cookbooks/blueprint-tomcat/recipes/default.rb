@@ -4,7 +4,6 @@ This recipe installs all services.
 #>
 =end
 
-include_recipe 'blueprint-tomcat::solr'
 include_recipe 'blueprint-tomcat::content-management-server'
 include_recipe 'blueprint-tomcat::workflow-server'
 include_recipe 'blueprint-tomcat::content-feeder'

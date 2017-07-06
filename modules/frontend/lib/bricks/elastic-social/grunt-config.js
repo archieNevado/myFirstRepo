@@ -66,7 +66,7 @@ module.exports = function (grunt, options) {
             spawn: true
           },
           files: options.brickDirectory + '/sass/**/*.scss',
-          tasks: ['sass', 'postcss']
+          tasks: ['sass']
         }
       }
     }

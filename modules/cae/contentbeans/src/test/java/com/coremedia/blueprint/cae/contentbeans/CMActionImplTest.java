@@ -43,7 +43,7 @@ public class CMActionImplTest extends ContentBeanTestBase {
   public void testGetId() throws Exception {
     action = getContentBean(90);
     Assert.assertEquals("content contains String property \"id\", must not return anything else",
-            "com.coremedia.blueprint.elastic.social.cae.flows.Login",
+            "com.coremedia.blueprint.es.webflow.Login",
             action.getId());
   }
 

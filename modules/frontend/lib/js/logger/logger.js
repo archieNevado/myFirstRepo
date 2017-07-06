@@ -28,7 +28,7 @@ export const LEVEL = {
  * @private
  */
 let settings = {
-  level: LEVEL.ALL,
+  level: LEVEL.OFF,
   prefix: '[CoreMedia]'
 };
 
@@ -130,7 +130,7 @@ const toggleCycleLogger = (log) => {
  * @return {string}
  * @private
  */
-const getCurrentLevelName = () => {
+export const getCurrentLevelName = () => {
   for (let level in LEVEL) {
     if (LEVEL[level] === settings.level) {
       return `LEVEL.${level}`;

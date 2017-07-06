@@ -18,7 +18,7 @@
   </p>
   <#-- play button -->
   <#if videoLink?has_content>
-    <a class="cm-text__button cm-button cm-button--primay btn" data-cm-popup="" href="${videoLink}">
+    <a class="cm-text__button cm-button cm-button--primary btn" data-cm-popup="" href="${videoLink}">
       ${bp.getMessage("button_video")}
     </a>
   </#if>

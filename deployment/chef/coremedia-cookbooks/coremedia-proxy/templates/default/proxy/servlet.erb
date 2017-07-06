@@ -19,10 +19,11 @@
   </Proxy>
 <%- else -%>
   <%- member = @params[:cluster].keys.first -%>
+  <%- proxy_params = @params[:cluster][member]['params'] ? @params[:cluster][member]['params'].sort.map{ |k, v| "#{k}=#{v}" }.join(' ') : '' -%>
   <%- servlet_url = "#{protocol}://#{@params[:cluster][member]['host']}:#{@params[:cluster][member]['port']}/#{@params[:servlet_context]}" -%>
 <%- end -%>
 
-  ProxyPass /<%= @params[:servlet_context] %> <%= servlet_url %>
+  ProxyPass /<%= @params[:servlet_context] %> <%= servlet_url %> <%= proxy_params || '' %>
   ProxyPassReverse /<%= @params[:servlet_context] %> <%= servlet_url %>
   ProxyPassReverseCookiePath /<%= @params[:servlet_context] %> /
-  ProxyPass / <%= servlet_url %><%= "/" unless @params[:servlet_context].empty? %><%- if @params[:default_servlet] -%><%= @params[:default_servlet] %>/ <%- end %>
+  ProxyPass / <%= servlet_url %><%= "/" unless @params[:servlet_context].empty? %><%- if @params[:default_servlet] -%><%= @params[:default_servlet] %>/ <%- end %><%= proxy_params || '' %>

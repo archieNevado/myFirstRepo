@@ -3,7 +3,9 @@ package com.coremedia.blueprint.taxonomies.strategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
+import com.coremedia.cap.common.CapSession;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentException;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
@@ -135,27 +137,59 @@ public class TaxonomyResolverImpl implements TaxonomyResolver, InitializingBean 
     Map<String,Taxonomy> newTaxonomies = new HashMap<>();
     Set<Site> sites = sitesService.getSites();
     for (Site site : sites) {
-      Content siteTaxonomyFolder = site.getSiteRootFolder().getChild(siteConfigPath);
-      if (siteTaxonomyFolder != null) {
-        Content taxonomyFolder = siteTaxonomyFolder.getChild(TAXONOMY_FOLDER_NAME);
-        if(taxonomyFolder != null) {
-          Map<String,Taxonomy> taxonomies = createStrategies(taxonomyFolder, site.getId());
-          newTaxonomies.putAll(taxonomies);
-        }
-      }
+      Content siteTaxonomyFolder = getSiteConfigFolder(site);
+      addStrategies(newTaxonomies, siteTaxonomyFolder, site.getId());
     }
 
-    Content globalConfigFolder = contentRepository.getChild(globalConfigPath);
-    if(globalConfigFolder != null) {
-      Content globalTaxonomyFolder = globalConfigFolder.getChild(TAXONOMY_FOLDER_NAME);
-      if(globalTaxonomyFolder != null) {
-        Map<String,Taxonomy> taxonomies = createStrategies(globalTaxonomyFolder, null);
-        newTaxonomies.putAll(taxonomies);
-      }
-    }
+    Content globalConfigFolder = getGlobalConfigFolder();
+    addStrategies(newTaxonomies, globalConfigFolder, null);
 
     strategies.clear();
     strategies.putAll(newTaxonomies);
+  }
+
+  private void addStrategies(Map<String, Taxonomy> newTaxonomies, Content taxonomyRootFolder, String id) {
+    if (taxonomyRootFolder != null) {
+      Content taxonomyFolder = taxonomyRootFolder.getChild(TAXONOMY_FOLDER_NAME);
+      if (taxonomyFolder != null) {
+        Map<String, Taxonomy> taxonomies = createStrategies(taxonomyFolder, id);
+        newTaxonomies.putAll(taxonomies);
+      }
+    }
+  }
+
+  /**
+   * Returns the site configuration folder or
+   * null if that one is not readable.
+   */
+  private Content getSiteConfigFolder(Site site) {
+    CapSession originalSession = contentRepository.getConnection().getConnectionSession().activate();
+    try {
+      return site.getSiteRootFolder().getChild(siteConfigPath);
+    } catch (ContentException e) {
+      LOG.error("Failed to read site config folder " + siteConfigPath+ " for site " + site.getSiteRootFolder().getPath() + ": " + e.getMessage());
+    }
+    finally {
+      originalSession.activate();
+    }
+    return null;
+  }
+
+  /**
+   * Returns the global configuration folder or
+   * null if that one is not readable.
+   */
+  private Content getGlobalConfigFolder() {
+    CapSession originalSession = contentRepository.getConnection().getConnectionSession().activate();
+    try {
+      return contentRepository.getChild(globalConfigPath);
+    } catch (ContentException e) {
+      LOG.error("Failed to read " + globalConfigPath + ": " + e.getMessage());
+    }
+    finally {
+      originalSession.activate();
+    }
+    return null;
   }
 
 

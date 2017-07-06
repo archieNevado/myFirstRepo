@@ -56,6 +56,8 @@ public class PreviewContentContainerBase extends Container {
    */
   protected function resolveMediaHTML(ve:ValueExpression):String {
     if (!mediaUrl) {
+      mediaUrl = '';
+
       var rawDataList:Array = getContent('rawDataList', ve) as Array;
       if (rawDataList && rawDataList instanceof Array) {
         for (var i:int = 0; i < rawDataList.length; i++) {
@@ -64,15 +66,16 @@ public class PreviewContentContainerBase extends Container {
             var videoHtml:String = resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryProviderSettings', 'preview_video_item_template');
             videoHtml = StringUtil.format(videoHtml, dataItem.getValue(), dataItem.getType());
             mediaUrl = videoHtml;
+            break;
           }
           else if (dataItem.getType().indexOf('image') != -1) {
             var imageHtml:String = resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryProviderSettings', 'preview_picture_item_template');
             imageHtml = StringUtil.format(imageHtml, dataItem.getValue());
             mediaUrl = imageHtml;
+            break;
           }
         }
       }
-      mediaUrl = '';
     }
     return mediaUrl;
   }

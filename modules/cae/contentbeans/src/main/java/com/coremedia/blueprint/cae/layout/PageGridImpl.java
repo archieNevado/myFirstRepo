@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGrid;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.PageGridConstants;
-import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.layout.HasPageGrid;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.layout.PageGridRow;
@@ -23,15 +23,15 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
   private ValidationService<Linkable> validationService;
   private ContentBackedPageGridService contentBackedPageGridService;
   private ViewtypeService viewtypeService;
-  private CMNavigation navigation;
+  private HasPageGrid bean;
 
   // --- construction -----------------------------------------------
 
-  public PageGridImpl(CMNavigation navigation,
+  public PageGridImpl(HasPageGrid bean,
                       ContentBackedPageGridService contentBackedPageGridService,
                       ValidationService<Linkable> validationService,
                       ViewtypeService viewtypeService) {
-    this.navigation = navigation;
+    this.bean = bean;
     this.contentBackedPageGridService = contentBackedPageGridService;
     this.validationService = validationService;
     this.viewtypeService = viewtypeService;
@@ -51,7 +51,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
     List<PageGridRow> result = new ArrayList<>();
     int numRows = getContentBackedPageGrid().getStyleGrid().getNumRows();
     for (int row = 0; row < numRows; ++row) {
-      result.add(new PageGridRowImpl(navigation, row, contentBackedPageGridService, validationService, viewtypeService));
+      result.add(new PageGridRowImpl(bean, row, contentBackedPageGridService, validationService, viewtypeService));
     }
     return result;
   }
@@ -96,7 +96,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
 
   @Override
   public String toString() {
-    String id = navigation!=null ? String.valueOf(IdHelper.parseContentId(navigation.getContent().getId())) : "-";
+    String id = bean !=null ? String.valueOf(IdHelper.parseContentId(bean.getContent().getId())) : "-";
     return "PageGridImpl{" + "navigation=" + id + '}';
   }
 
@@ -115,7 +115,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
     PageGridImpl pageGrid = (PageGridImpl) o;
 
     //noinspection RedundantIfStatement
-    if (navigation != null ? !navigation.equals(pageGrid.navigation) : pageGrid.navigation != null) {
+    if (bean != null ? !bean.equals(pageGrid.bean) : pageGrid.bean != null) {
       return false;
     }
     return true;
@@ -123,7 +123,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
 
   @Override
   public int hashCode() {
-    return navigation != null ? navigation.hashCode() : 0;
+    return bean != null ? bean.hashCode() : 0;
   }
 
   @Override
@@ -132,13 +132,13 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
     validationService = other.validationService;
     contentBackedPageGridService = other.contentBackedPageGridService;
     viewtypeService = other.viewtypeService;
-    navigation = other.navigation;
+    this.bean = other.bean;
   }
 
 
   // --- internal ---------------------------------------------------
 
-  private ContentBackedPageGrid getContentBackedPageGrid() {
-    return contentBackedPageGridService.getContentBackedPageGrid(navigation.getContent());
+  protected ContentBackedPageGrid getContentBackedPageGrid() {
+    return contentBackedPageGridService.getContentBackedPageGrid(bean.getContent());
   }
 }

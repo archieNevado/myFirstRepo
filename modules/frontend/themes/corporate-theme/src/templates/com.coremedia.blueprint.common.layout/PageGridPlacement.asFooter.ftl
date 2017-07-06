@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.layout.PageGridPlacement" -->
 
 <#-- This placement is used for the footer section -->
-<footer id="cm-${self.name!""}" class="cm-footer"<@cm.metadata data=bp.getPlacementPropertyName(self)!""/>>
+<footer id="cm-${self.name!""}" class="cm-footer"<@cm.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
   <#-- links -->
   <#assign numberOfItems=self.items?size />
   <#if (numberOfItems > 0)>

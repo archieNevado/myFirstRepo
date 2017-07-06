@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
+import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
@@ -33,7 +34,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
 
   public static final String QUERY_PARAMETER_WORKSPACE_ID = "workspaceId";
 
-  private static final String DYNAMIC_FRAGMENT = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + "/";
+  private static final String DYNAMIC_FRAGMENT = "/" + UriConstants.Segments.PREFIX_DYNAMIC + "/";
 
   private static final String STORE_CONTEXT_INITIALIZED = AbstractCommerceContextInterceptor.class.getName()
           + "#storeContext.initialized";

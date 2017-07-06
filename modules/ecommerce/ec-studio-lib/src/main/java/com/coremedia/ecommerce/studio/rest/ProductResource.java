@@ -2,10 +2,13 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
+import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -53,6 +56,8 @@ public class ProductResource extends CommerceBeanResource<Product> {
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
     representation.setDescribingAttributes(entity.getDescribingAttributes());
+
+    representation.setContent(getContent());
   }
 
   @Override
@@ -63,5 +68,12 @@ public class ProductResource extends CommerceBeanResource<Product> {
     String productId = idProvider.formatProductId(getId());
     return catalogService.findProductById(productId);
   }
+
+  @Autowired(required = false)
+  @Qualifier("productAugmentationService")
+  public void setAugmentationService(AugmentationService augmentationService) {
+    super.setAugmentationService(augmentationService);
+  }
+
 
 }

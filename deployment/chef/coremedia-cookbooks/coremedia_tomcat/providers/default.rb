@@ -19,6 +19,14 @@ action :install do
     new_resource.updated_by_last_action(false)
   end
 
+  directory "#{new_resource.path}/service-hooks" do
+    recursive true
+    action :create
+    owner new_resource.user
+    group new_resource.group
+    new_resource.updated_by_last_action(false)
+  end
+
   remote_file tomcat_zip do
     source tomcat_url
     checksum new_resource.source_checksum unless new_resource.source_checksum.nil?
@@ -101,6 +109,7 @@ action :install do
               :start_priority => new_resource.start_priority,
               :stop_priority => 100 - new_resource.start_priority,
               :user => new_resource.user,
+              :description => new_resource.name,
               :tomcat_dir => current,
               :service_dir => new_resource.path,
               :shutdown_wait => new_resource.shutdown_wait,

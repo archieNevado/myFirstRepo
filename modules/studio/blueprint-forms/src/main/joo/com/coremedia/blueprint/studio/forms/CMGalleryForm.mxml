@@ -34,8 +34,7 @@
       <editor:items>
         <bpforms:DetailsDocumentForm/>
         <bpforms:TeaserDocumentForm collapsed="true"/>
-        <editor:PropertyFieldGroup collapsible="true"
-                                   itemId="cmGalleryPicturesForm"
+        <editor:PropertyFieldGroup itemId="cmGalleryPicturesForm"
                                    title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_GalleryPictures_label')}">
           <editor:items>
             <editor:LinkListPropertyField linkType="CMPicture"

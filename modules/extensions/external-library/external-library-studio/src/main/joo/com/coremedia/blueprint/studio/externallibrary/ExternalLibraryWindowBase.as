@@ -1,19 +1,19 @@
 package com.coremedia.blueprint.studio.externallibrary {
 
+import com.coremedia.cms.editor.sdk.components.StudioDialog;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.util.EventUtil;
 
 import ext.LoadMask;
-import ext.window.Window;
 
 /**
  * The base class of the external content library window, creates all value
  * expression for event handling between the panels.
  */
 [ResourceBundle('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin')]
-public class ExternalLibraryWindowBase extends Window {
+public class ExternalLibraryWindowBase extends StudioDialog {
 
   private var filterValueExpression:ValueExpression;
   private var dataSourceValueExpression:ValueExpression;

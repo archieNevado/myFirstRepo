@@ -1,3 +1,15 @@
+# jetbrains apps
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# osx
+.DS_Store
+
+# emacs
+*~
+
 # folders
 target/
 node/
@@ -5,4 +17,4 @@ node_modules/
 
 # logs and configs
 .cmconfig.json
-.npm-debug.log
+.npm-debug.log*

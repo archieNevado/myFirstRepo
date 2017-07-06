@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
+import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
@@ -72,7 +73,7 @@ public class AbstractCommerceContextInterceptorTest {
   @Test
   public void testNormalizeDynamicFragmentPath() {
     String path = "/cart/helios/action/cart";
-    String dynamicPath = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + path;
+    String dynamicPath = "/" + UriConstants.Segments.PREFIX_DYNAMIC + path;
 
     String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(dynamicPath);
 

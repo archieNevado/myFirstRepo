@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>create-from-template-studio-plugin</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <description>Create Pages from templates for the CoreMedia Studio</description>
 
@@ -17,36 +17,31 @@
   </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>ui-components</artifactId>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
+      <type>swc</type>
     </dependency>
   </dependencies>
-
 
   <build>
     <resources>
@@ -63,11 +58,6 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin</entry>
-            </requiredClasses>
-          </production>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.template.config</uri>
@@ -77,6 +67,4 @@
       </plugin>
     </plugins>
   </build>
-
-    
 </project>

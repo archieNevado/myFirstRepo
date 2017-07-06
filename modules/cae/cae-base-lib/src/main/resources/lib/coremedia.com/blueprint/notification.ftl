@@ -1,6 +1,5 @@
 <#ftl strip_whitespace=true>
 <#escape x as x?html>
-<#import "/spring.ftl" as spring>
 <#import "util.ftl" as util>
 
 <#--
@@ -42,7 +41,7 @@
  * The text will automatically be determinated.
  *
  * @param path the name of the field to bind to
- * @param dismissable @see notification#dismissable
+ * @param dismissable (optional) @see notification#dismissable
  * @param class @see notification#baseClass
  * @param class @see notification#additionalClasses
  * @param ignoreIfEmpty (optional) specifies if the notification will not be rendered if spring error messages are empty
@@ -52,7 +51,7 @@
  * @param attr (optional) @see notification#attr
  * @nested (optional) nested content will be rendered between the text and dismiss output
  -->
-<#macro notificationFromSpring path dismissable baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
+<#macro notificationFromSpring path dismissable=false baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>
   <#local text="" />
   <#if spring.status.error>

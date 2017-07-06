@@ -41,7 +41,6 @@ The prefixes however are completely configurable, it can be an integer between `
 
 | Webapp Key                | Prefix  | Context         |
 | ------------------------- | ------- | ----------------|
-| solr                      | 400     | solr            |
 | content-management-server | 401     | coremedia       |
 | master-live-server        | 402     | coremedia       |
 | workflow-server           | 403     | workflow        |

@@ -27,9 +27,7 @@
 </related>
 <value>Attributes</value>
 <children>
-<link href="Color.xml" path="/Settings/Taxonomies/Subject/Color"/>
 <link href="Gender.xml" path="/Settings/Taxonomies/Subject/Gender"/>
-<link href="Age-Group.xml" path="/Settings/Taxonomies/Subject/Age-Group"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

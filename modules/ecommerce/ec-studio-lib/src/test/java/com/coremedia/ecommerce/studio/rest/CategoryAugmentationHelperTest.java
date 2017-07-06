@@ -9,7 +9,6 @@ import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.rest.cap.intercept.InterceptService;
-import com.coremedia.rest.linking.LinkResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,15 +26,14 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PAGEGRID_STRUCT_PROPERTY;
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.DEFAULT_BASE_FOLDER_NAME;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.EXTERNAL_ID;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.SEGMENT;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.TITLE;
-import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PAGEGRID_STRUCT_PROPERTY;
-import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.PRODUCT_PAGEGRID_STRUCT_PROPERTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -66,7 +64,7 @@ public class CategoryAugmentationHelperTest {
   private Category rootCategory;
 
   @Mock
-  private LinkResolver linkResolver;
+  private Category leafCategory;
 
   @Before
   public void setUp() throws Exception {
@@ -82,7 +80,7 @@ public class CategoryAugmentationHelperTest {
     Category topCategory = mock(Category.class);
     when(topCategory.getParent()).thenReturn(rootCategory);
     when(topCategory.getDisplayName()).thenReturn(TOP);
-    Category leafCategory = mock(Category.class, RETURNS_DEEP_STUBS);
+    leafCategory = mock(Category.class, RETURNS_DEEP_STUBS);
     when(leafCategory.getParent()).thenReturn(topCategory);
     when(leafCategory.getDisplayName()).thenReturn(CATEGORY_DISPLAY_NAME);
     when(leafCategory.getId()).thenReturn(CATEGORY_ID);
@@ -92,16 +90,11 @@ public class CategoryAugmentationHelperTest {
     breadcrumb.add(leafCategory);
     when(leafCategory.getBreadcrumb()).thenReturn(breadcrumb);
     when(leafCategory.getContext().getSiteId()).thenReturn("theSiteId");
-
-    when(linkResolver.resolveLink(anyString())).thenReturn(leafCategory);
   }
 
   @Test
   public void testAugment() {
-    String categoryUri = "livecontext/category/theSiteId/NO_WS/Dairy";
-    Category category = (Category) linkResolver.resolveLink(categoryUri);
-
-    testling.augment(category);
+    testling.augment(leafCategory);
 
     Content externalChannel = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
             + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME);
@@ -121,7 +114,7 @@ public class CategoryAugmentationHelperTest {
     assertEquals("CategoryLayoutSettings", categoryLayout.getName());
 
     //assert the initialized layout for product pages
-    Struct productPageGridStruct = externalChannel.getStruct(PRODUCT_PAGEGRID_STRUCT_PROPERTY);
+    Struct productPageGridStruct = externalChannel.getStruct(CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY);
     assertNotNull(productPageGridStruct);
     Struct productPlacements2Struct = productPageGridStruct.getStruct(PageGridContentKeywords.PLACEMENTS_PROPERTY_NAME);
     assertNotNull(productPlacements2Struct);

@@ -1,7 +1,7 @@
 /**
  * Coremedia Logger module.
  *
- * The Logger is disabled by default.
+ * The Logger is disabled by default. It will be enabled if developer mode is enabled.
  *
  * usage:
  * 1) enable logging:
@@ -22,12 +22,15 @@
 import { domReady } from '../utils/index';
 import * as Logger from './logger.js';
 
-// DOCUMENT READY
+// check cookie if developerMode is active
+if (document.cookie.indexOf("cmUserVariant=") > 0) {
+  Logger.setLevel(Logger.LEVEL.ALL);
+}
+
+// document ready, check for developer mode element in DOM as fallback
 domReady(() => {
-  // disable logging if developerMode is inactive
-  // insure that there´s no logging in production
-  if (!document.querySelector('[data-cm-developer-mode]')) {
-    Logger.setLevel(Logger.LEVEL.OFF);
+  if (document.querySelector('[data-cm-developer-mode]') && Logger.getCurrentLevelName() === Logger.LEVEL.OFF.toString()) {
+    Logger.setLevel(Logger.LEVEL.ALL);
   }
 });
 

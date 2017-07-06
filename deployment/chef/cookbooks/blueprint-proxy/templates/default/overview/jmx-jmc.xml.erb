@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <server_model>
 <%- services = [
-'solr',
 'content-management-server',
 'master-live-server',
 'workflow-server',
@@ -24,4 +23,9 @@
     <server_path><%= host %></server_path>
   </server>
 <%- end -%>
+  <server>
+    <jmx_service_url>service:jmx:rmi:///jndi/rmi://<%= host %>:40099/jmxrmi</jmx_service_url>
+    <server_name>Solr</server_name>
+    <server_path><%= host %></server_path>
+  </server>
 </server_model>

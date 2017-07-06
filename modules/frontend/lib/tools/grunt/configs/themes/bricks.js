@@ -10,8 +10,10 @@ module.exports = (grunt, {themeConfig}) => {
 
   const bricks = grunt.config('bricks.src');
   if (!(Array.isArray(bricks)) || bricks.length < 1) {
-    grunt.log.errorlns('No Bricks found');
-    return;
+    grunt.log.errorlns('No Bricks were found.');
+    return {
+      tasks: {}
+    };
   }
   const WORKING_DIRECTORY = process.cwd();
   const THEME_CONFIG = themeConfig || {};
@@ -42,7 +44,7 @@ module.exports = (grunt, {themeConfig}) => {
 
     // load config files
     if (!fs.existsSync(BRICK_DIRECTORY) || !fs.existsSync(BRICK_CONFIG_FILE)) {
-      grunt.log.errorlns(`No Brick found in ${BRICK_DIRECTORY}`);
+      grunt.log.errorlns(`No Brick were found in ${BRICK_DIRECTORY}`);
       return;
     }
 

@@ -11,7 +11,7 @@ this will NOT work: extraResourcePaths="/=a, /=b"
 
 -->
   <Resources className="org.apache.naming.resources.VirtualDirContext"
-             extraResourcePaths="/=${project.basedir}/../../.."/>
+             extraResourcePaths="/=${sencha.workspace.root}"/>
 
   <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="x-forwarded-proto" />
 </Context>

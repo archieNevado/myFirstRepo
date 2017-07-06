@@ -4,7 +4,7 @@
   # Internal services, served only by Tomcat. Deny external invocation.
   RewriteRule ^/internal/(.*) - [F,PT,L]
 
-  RewriteRule ^/<%= @params[:servlet_context] %>/servlet/internal/(.*) - [F,PT,L]
+  RewriteRule ^/<%= @params[:servlet_context] %>/+servlet/+internal/(.*) - [F,PT,L]
 
 <%- if @params[:default_site] %>
   # robots.txt

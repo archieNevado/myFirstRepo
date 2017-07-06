@@ -43,7 +43,6 @@ The prefixes however are completely configurable, it can be an integer between `
 
 | Webapp Key                | Prefix  | Context         |
 | ------------------------- | ------- | ----------------|
-| solr                      | 400     | solr            |
 | content-management-server | 401     | coremedia       |
 | master-live-server        | 402     | coremedia       |
 | workflow-server           | 403     | workflow        |
@@ -85,7 +84,7 @@ JMX Login (readwrite) = (control / control)
 ## Cookbooks:
 
 * blueprint-base
-* coremedia_tomcat (~> 2.0.11)
+* coremedia_tomcat (~> 2.1.0)
 * coremedia_maven (~> 2.0.4)
 * chef-sugar (~> 3.0)
 * java_se (~> 8.131.0)
@@ -132,7 +131,6 @@ JMX Login (readwrite) = (control / control)
 * `node['blueprint']['tomcat']['studio']['heap']` -  Defaults to `512m`.
 * `node['blueprint']['tomcat']['cae-preview']['heap']` -  Defaults to `1024m`.
 * `node['blueprint']['tomcat']['cae-live']['heap']` -  Defaults to `1024m`.
-* `node['blueprint']['tomcat']['solr']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['caefeeder-preview']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['caefeeder-live']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['sitemanager']['heap']` -  Defaults to `92m`.
@@ -146,7 +144,6 @@ JMX Login (readwrite) = (control / control)
 * `node['blueprint']['tomcat']['studio']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['cae-preview']['perm']` -  Defaults to `128m`.
 * `node['blueprint']['tomcat']['cae-live']['perm']` -  Defaults to `128m`.
-* `node['blueprint']['tomcat']['solr']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['caefeeder-preview']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['caefeeder-live']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['sitemanager']['perm']` -  Defaults to `64m`.
@@ -164,7 +161,6 @@ JMX Login (readwrite) = (control / control)
 * `node['blueprint']['tomcat']['sitemanager']['port_prefix']` -  Defaults to `413`.
 * `node['blueprint']['tomcat']['replication-live-server']['port_prefix']` -  Defaults to `420`.
 * `node['blueprint']['tomcat']['cae-live']['port_prefix']` -  Defaults to `421`.
-* `node['blueprint']['tomcat']['solr']['start_priority']` -  Defaults to `81`.
 * `node['blueprint']['tomcat']['content-management-server']['start_priority']` -  Defaults to `81`.
 * `node['blueprint']['tomcat']['master-live-server']['start_priority']` -  Defaults to `81`.
 * `node['blueprint']['tomcat']['workflow-server']['start_priority']` -  Defaults to `82`.
@@ -182,11 +178,6 @@ JMX Login (readwrite) = (control / control)
 * `node['blueprint']['tomcat']['cae-live-1']['sitemap']['enabled']` - There should only be one cae generating the sitemaps, by default this is cae-live-1. Defaults to `true`.
 * `node['blueprint']['tomcat']['cae-live-1']['sitemap']['start_time']` - The time when the sitemap should be created, see blueprint sitemap documentation for property blueprint.sitemap.starttime. Defaults to `+200`.
 * `node['blueprint']['tomcat']['common_libs']['coremedia-tomcat.jar']` -  Defaults to `node['blueprint']['common_libs']['coremedia-tomcat.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['slf4j-api.jar']` -  Defaults to `node['blueprint']['common_libs']['slf4j-api.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['jul-to-slf4j.jar']` -  Defaults to `node['blueprint']['common_libs']['jul-to-slf4j.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['jcl-over-slf4j.jar']` -  Defaults to `node['blueprint']['common_libs']['jcl-over-slf4j.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['slf4j-log4j12.jar']` -  Defaults to `node['blueprint']['common_libs']['slf4j-log4j12.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['log4j.jar']` -  Defaults to `node['blueprint']['common_libs']['log4j.jar']`.
 
 # Recipes
 
@@ -201,7 +192,6 @@ JMX Login (readwrite) = (control / control)
 * [blueprint-tomcat::master-live-server](#blueprint-tomcatmaster-live-server) - This recipe installs and configures the CoreMedia Blueprint Master Live Server.
 * [blueprint-tomcat::replication-live-server](#blueprint-tomcatreplication-live-server) - This recipe installs and configures the CoreMedia Blueprint Master Live Server.
 * [blueprint-tomcat::sitemanager](#blueprint-tomcatsitemanager) - This recipe installs and configures the CoreMedia Blueprint Preview CAE.
-* [blueprint-tomcat::solr](#blueprint-tomcatsolr) - This recipe installs and configures the CoreMedia Blueprint Solr Search Engine.
 * [blueprint-tomcat::studio](#blueprint-tomcatstudio) - This recipe installs and configures the CoreMedia Blueprint Studio.
 * [blueprint-tomcat::user-changes](#blueprint-tomcatuser-changes) - This recipe installs and configures the CoreMedia Blueprint User Changes Webapp.
 * [blueprint-tomcat::workflow-server](#blueprint-tomcatworkflow-server) - This recipe installs and configures the CoreMedia Blueprint Workflow Server.
@@ -267,11 +257,6 @@ This recipe installs and configures the CoreMedia Blueprint Master Live Server.
 ## blueprint-tomcat::sitemanager
 
 This recipe installs and configures the CoreMedia Blueprint Preview CAE.
-
-## blueprint-tomcat::solr
-
-This recipe installs and configures the CoreMedia Blueprint Solr Search Engine.
-
 
 ## blueprint-tomcat::studio
 

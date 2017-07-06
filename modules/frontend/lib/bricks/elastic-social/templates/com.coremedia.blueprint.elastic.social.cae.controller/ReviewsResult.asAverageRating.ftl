@@ -4,16 +4,11 @@
 <#if self.isEnabled()>
   <#assign numberOfReviews=self.getNumberOfOnlineReviews()!0 />
   <#if (numberOfReviews > 0)>
-    <#assign averageRatingRounded=((self.getAverageRating())!0)?round />
+    <#assign averageRating=(self.getAverageRating())!0 />
     <div class="cm-rating cm-rating--average">
-      <div class="cm-rating__stars">
-        <#list es.getMaxRating()..1 as currentRating>
-          <#assign classRatingIndicator="" />
-          <#if currentRating == averageRatingRounded>
-            <#assign classRatingIndicator=" cm-rating-indicator--active" />
-          </#if>
-          <div class="cm-rating-indicator${classRatingIndicator}">${currentRating}</div>
-        </#list>
+      <div class="cm-ratings-average__rating">
+        <div class="cm-ratings-average__stars--back"></div>
+        <div class="cm-ratings-average__stars--front" style="width: ${(averageRating / es.getReviewMaxRating() * 100)?string("0.##")}%"></div>
       </div>
       <span class="cm-rating__votes">${numberOfReviews}</span>
     </div>

@@ -94,6 +94,18 @@ $cm-reviews-padding-base-vertical: 10px !default;
     font-style: italic;
   }
 
+  &__user-image {
+    border-radius: 50%;
+    float: left;
+    height: 40px;
+    margin: 6px 10px 0 0;
+
+    &--default {
+      background-image: url("#{$path-to-images}default-user.svg");
+      width: 40px;
+    }
+  }
+
   &__text {
     word-wrap: break-word; /* legacy */
     overflow-wrap: break-word;

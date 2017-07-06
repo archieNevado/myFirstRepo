@@ -58,12 +58,10 @@
   </local:plugins>
   <local:items>
     <ec:CommerceObjectSelector itemId="{SELECTOR_ITEM_ID}"
-                               typeAhead="true"
                                forceSelection="true"
-                               selectOnFocus="true"
                                queryMode="local"
                                triggerAction="all"
-                               listeners="{{'change': getHandleSelectFunction(config)}}"
+                               listeners="{{'select': getHandleSelectFunction(config)}}"
                                selectedCatalogObjectsExpression="{getCatalogObjectsExpression(config)}"
                                getCommerceObjectsFunction="{config.getCommerceObjectsFunction}"
                                emptyText="{config.emptyText}"

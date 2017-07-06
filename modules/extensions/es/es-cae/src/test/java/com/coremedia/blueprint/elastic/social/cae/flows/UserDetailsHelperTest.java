@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
@@ -18,6 +18,7 @@ import com.coremedia.elastic.social.api.comments.CommentService;
 import com.coremedia.elastic.social.api.mail.MailTemplateService;
 import com.coremedia.elastic.social.api.ratings.LikeService;
 import com.coremedia.elastic.social.api.ratings.RatingService;
+import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import org.junit.Before;
@@ -27,6 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.verification.VerificationMode;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -69,8 +71,8 @@ public class UserDetailsHelperTest {
   private String surName = "surName";
   private String emailAddress = "email@address.de";
   private Locale locale = Locale.ENGLISH;
-  private String password = "1234";
-  private String newPassword = "4321";
+  private String password = "123456";
+  private String newPassword = "654321";
   private String contentType = "image/jpeg";
   private Map<String, Object> params = new HashMap<>();
   private UserDetails details = new UserDetails();
@@ -92,6 +94,9 @@ public class UserDetailsHelperTest {
 
   @Mock
   private RatingService ratingService;
+
+  @Mock
+  private ReviewService reviewService;
 
   @Mock
   private LikeService likeService;
@@ -179,6 +184,7 @@ public class UserDetailsHelperTest {
     when(commentService.getNumberOfApprovedComments(communityUser)).thenReturn(10L);
     when(ratingService.getNumberOfRatingsFromUser(communityUser)).thenReturn(10L);
     when(likeService.getNumberOfLikesFromUser(communityUser)).thenReturn(10L);
+    when(reviewService.getNumberOfApprovedReviews(communityUser)).thenReturn(10L);
     when(communityUserService.getUserByName(userName)).thenReturn(communityUser);
     when(communityUserService.createFrom(communityUser)).thenReturn(communityUser);
 
@@ -215,6 +221,7 @@ public class UserDetailsHelperTest {
     inject(userDetailsHelper, mailTemplateService);
     inject(userDetailsHelper, flowUrlHelper);
     inject(userDetailsHelper, elasticSocialPlugin);
+    inject(userDetailsHelper, reviewService);
   }
 
   @Test
@@ -223,10 +230,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService, never()).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(times(1));    
     verify(communityUser).isReceiveCommentReplyEmails();
     verify(communityUser).getGivenName();
     verify(communityUser).getSurName();
@@ -248,11 +252,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-    verify(communityUser).isReceiveCommentReplyEmails();
+    verifyStatsServicesBeingCalled(times(1));    verify(communityUser).isReceiveCommentReplyEmails();
     verify(communityUser).getGivenName();
     verify(communityUser).getSurName();
     verify(communityUser).getImage();
@@ -275,11 +275,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-    verify(communityUser).isReceiveCommentReplyEmails();
+    verifyStatsServicesBeingCalled(times(1));    verify(communityUser).isReceiveCommentReplyEmails();
     verify(communityUser, never()).getGivenName();
     verify(communityUser, never()).getSurName();
     verify(communityUser).getImage();
@@ -301,11 +297,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-  }
+    verifyStatsServicesBeingCalled(times(1));  }
 
   @Test
   public void getBlockedUserOnProduction() {
@@ -317,11 +309,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-  }
+    verifyStatsServicesBeingCalled(times(1));  }
 
   @Test
   public void getUnactivatedUserOnProduction() {
@@ -333,11 +321,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-  }
+    verifyStatsServicesBeingCalled(times(1));  }
 
   @Test
   public void testUserDetailsForUserFromContextLoggedIn() {
@@ -347,11 +331,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-  }
+    verifyStatsServicesBeingCalled(times(1));  }
 
   @Test
   public void testUserDetailsForUserFromContextOtherLoggedIn() {
@@ -365,11 +345,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-  }
+    verifyStatsServicesBeingCalled(times(1));  }
 
 
   @Test
@@ -382,10 +358,7 @@ public class UserDetailsHelperTest {
     assertNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService, never()).getNumberOfLogins(communityUser);
-    verify(commentService, never()).getNumberOfApprovedComments(communityUser);
-    verify(ratingService, never()).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService, never()).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(never());
   }
 
   @Test
@@ -397,10 +370,8 @@ public class UserDetailsHelperTest {
     assertNull(details);
 
     verify(communityUserService, never()).getUserByName(userName);
-    verify(communityUserService, never()).getNumberOfLogins(communityUser);
-    verify(commentService, never()).getNumberOfApprovedComments(communityUser);
-    verify(ratingService, never()).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService, never()).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(never());
+
   }
 
 
@@ -413,10 +384,7 @@ public class UserDetailsHelperTest {
     assertNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService, never()).getNumberOfLogins(communityUser);
-    verify(commentService, never()).getNumberOfApprovedComments(communityUser);
-    verify(ratingService, never()).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService, never()).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(never());
   }
 
   @Test
@@ -428,10 +396,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(times(1));
   }
 
   @Test
@@ -444,10 +409,7 @@ public class UserDetailsHelperTest {
     assertNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService, never()).getNumberOfLogins(communityUser);
-    verify(commentService, never()).getNumberOfApprovedComments(communityUser);
-    verify(ratingService, never()).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService, never()).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(never());
   }
 
   @Test
@@ -460,10 +422,7 @@ public class UserDetailsHelperTest {
     assertNull(details);
 
     verify(communityUserService).getUserByName(userName);
-    verify(communityUserService, never()).getNumberOfLogins(communityUser);
-    verify(commentService, never()).getNumberOfApprovedComments(communityUser);
-    verify(ratingService, never()).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService, never()).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(never());
   }
 
   @Test
@@ -474,10 +433,8 @@ public class UserDetailsHelperTest {
     assertNull(details);
 
     verify(communityUserService, never()).getUserByName(userName);
-    verify(communityUserService, never()).getNumberOfLogins(communityUser);
-    verify(commentService, never()).getNumberOfApprovedComments(communityUser);
-    verify(ratingService, never()).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService, never()).getNumberOfLikesFromUser(communityUser);
+    verifyStatsServicesBeingCalled(never());
+
   }
 
   @Test
@@ -487,11 +444,15 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService, never()).getUserByName(userName);
-    verify(communityUserService).getNumberOfLogins(communityUser);
-    verify(commentService).getNumberOfApprovedComments(communityUser);
-    verify(ratingService).getNumberOfRatingsFromUser(communityUser);
-    verify(likeService).getNumberOfLikesFromUser(communityUser);
-    verify(communityUser).applyChangesFromPreModeration();
+    verifyStatsServicesBeingCalled(times(1));    verify(communityUser).applyChangesFromPreModeration();
+  }
+
+  private void verifyStatsServicesBeingCalled(VerificationMode mode) {
+    verify(communityUserService,mode).getNumberOfLogins(communityUser);
+    verify(commentService,mode).getNumberOfApprovedComments(communityUser);
+    verify(ratingService,mode).getNumberOfRatingsFromUser(communityUser);
+    verify(likeService,mode).getNumberOfLikesFromUser(communityUser);
+    verify(reviewService,mode).getNumberOfApprovedReviews(communityUser);
   }
 
   @Test

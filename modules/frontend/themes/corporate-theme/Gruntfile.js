@@ -44,7 +44,6 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'node_modules',
           src: [
-            'magnific-popup/dist/jquery.magnific-popup.js',
             'svg4everybody/dist/**',
           ],
           dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'

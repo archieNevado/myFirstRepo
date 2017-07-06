@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>p13n-bom</module>
     <module>p13n-cae</module>
     <module>p13n-editor-lib</module>
     <module>p13n-preview-cae</module>

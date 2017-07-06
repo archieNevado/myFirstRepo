@@ -15,8 +15,6 @@ import ext.data.Model;
 import ext.grid.GridPanel;
 import ext.selection.RowSelectionModel;
 
-import js.Event;
-
 /**
  * Displays the active taxonomy node sorted alphabetically.
  */
@@ -56,8 +54,6 @@ public class LetterListPanelBase extends GridPanel {
 
     selectedLetter = config.selectedLetter;
     selectedLetter.addChangeListener(updateSelectedLetter);
-
-    addListener('dblclick', rowDblClicked);
   }
 
 
@@ -157,9 +153,10 @@ public class LetterListPanelBase extends GridPanel {
   }
 
   private function selectRecord(ref:String):void {
+    var nodeId:String = ref.replace('-','/');//unique id generation, problem raised with Ext6 and invalid id characters
     getStore().each(function (record:*):void {
       var itemNodeRef:String = TaxonomyUtil.getRestIdFromCapId(record.data.id);
-      if (itemNodeRef === ref) {
+      if (itemNodeRef === nodeId) {
         (getSelectionModel() as RowSelectionModel).select(record, false, true);
       }
     });
@@ -276,14 +273,6 @@ public class LetterListPanelBase extends GridPanel {
   public function nodeClicked(ref:String):void {
     selectRecord(ref);
     updateSelection(); //has the same behaviour like when double clicking a row.
-  }
-
-  //noinspection JSUnusedLocalSymbols
-  /**
-   * Registered for handling double clicks.
-   */
-  private function rowDblClicked(e:Event):void {
-    updateSelection();
   }
 
   /**

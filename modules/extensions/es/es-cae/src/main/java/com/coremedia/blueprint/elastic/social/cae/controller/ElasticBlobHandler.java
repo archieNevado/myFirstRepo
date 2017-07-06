@@ -59,7 +59,7 @@ public class ElasticBlobHandler extends HandlerBase {
   protected static final String SIMPLE_URI_PATTERN =
           '/' + PREFIX_RESOURCE +
                   "/" + URI_PREFIX +
-                  "/{" + SEGMENT_SITE + ":" + PATTERN_WORD + "}" +
+                  "/{" + SEGMENT_SITE + "}" +
                   "/{" + SEGMENT_ID + ":" + PATTERN_WORD + "}" +
                   "/{" + SEGMENT_ETAG + "}" +
                   "/{" + SECHASH_SEGMENT + "}" +
@@ -67,7 +67,7 @@ public class ElasticBlobHandler extends HandlerBase {
   protected static final String URI_PATTERN =
           '/' + PREFIX_RESOURCE +
                   "/" + URI_PREFIX +
-                  "/{" + SEGMENT_SITE + ":" + PATTERN_WORD + "}" +
+                  "/{" + SEGMENT_SITE + "}" +
                   "/{" + SEGMENT_ID + ":" + PATTERN_WORD + "}" +
                   "/{" + SEGMENT_ETAG + "}" +
                   "/{" + WIDTH_SEGMENT + ":" + PATTERN_NUMBER + "}" +
@@ -133,7 +133,7 @@ public class ElasticBlobHandler extends HandlerBase {
     // Use content type of original blob, not of the transformed blob which may be different.
     // Requesting the transformed blob's content type forces the transformation to be performed, which is too
     // costly for link generation.
-    Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
+    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
             .put(SEGMENT_ID, bean.getId())
             .put(SEGMENT_ETAG, bean.getMd5())
             .put(SEGMENT_NAME, bean.getFileName())
@@ -143,7 +143,9 @@ public class ElasticBlobHandler extends HandlerBase {
     //generate secure hash from all parameters and add to map
     String secHash = getSecureHashCode(parameters);
 
-    return new ImmutableMap.Builder<String, Object>().putAll(parameters).put(SECHASH_SEGMENT, secHash).build();
+    return ImmutableMap.<String, Object>builder()
+            .putAll(parameters).put(SECHASH_SEGMENT, secHash)
+            .build();
   }
 
   private String getSiteId(HttpServletRequest request) {
@@ -183,7 +185,7 @@ public class ElasticBlobHandler extends HandlerBase {
     // Use content type of original blob, not of the transformed blob which may be different.
     // Requesting the transformed blob's content type forces the transformation to be performed, which is too
     // costly for link generation.
-    Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
+    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
             .put(SEGMENT_ID, bean.getId())
             .put(SEGMENT_ETAG, bean.getMd5())
             .put(WIDTH_SEGMENT, width)
@@ -195,7 +197,10 @@ public class ElasticBlobHandler extends HandlerBase {
     //generate secure hash from all parameters and add to map
     String secHash = getSecureHashCode(parameters);
 
-    return new ImmutableMap.Builder<String, Object>().putAll(parameters).put(SECHASH_SEGMENT, secHash).build();
+    return ImmutableMap.<String, Object>builder()
+            .putAll(parameters)
+            .put(SECHASH_SEGMENT, secHash)
+            .build();
   }
 
 
@@ -235,7 +240,7 @@ public class ElasticBlobHandler extends HandlerBase {
     String mediaSegment = removeSpecialCharacters(blob.getFileName());
     if (name.equals(mediaSegment)) {
       //name matches, make sure that secHash matches given URL
-      Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
+      Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
               .put(SEGMENT_ID, imageId)
               .put(SEGMENT_ETAG, eTag)
               .put(SEGMENT_NAME, name)
@@ -284,7 +289,7 @@ public class ElasticBlobHandler extends HandlerBase {
     String mediaSegment = removeSpecialCharacters(blob.getFileName());
     if (name.equals(mediaSegment)) {
       //name matches, make sure that secHash matches given URL
-      Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
+      Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
               .put(SEGMENT_ID, imageId)
               .put(SEGMENT_ETAG, eTag)
               .put(WIDTH_SEGMENT, width)

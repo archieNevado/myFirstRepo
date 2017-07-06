@@ -9,4 +9,5 @@ default['blueprint']['cms-9']['virtual_host']['delivery']['context'] = 'blueprin
 default['blueprint']['cms-9']['virtual_host']['delivery']['rewrite_log_level'] = rewrite_log_level
 default['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['server_name'] = "corporate.#{node['blueprint']['hostname']}"
 default['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['default_site'] = 'corporate'
-default['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['sitemap_site_name'] = 'Corporate'
+#<> The id property of the CMSite content associated with this site
+default['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['site_id'] = 'abffe57734feeee'

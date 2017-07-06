@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>es-alx-bom</module>
     <module>es-alx-cae</module>
     <module>es-alx-google</module>
     <module>es-alx-retrieval-component</module>

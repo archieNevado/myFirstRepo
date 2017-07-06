@@ -18,7 +18,6 @@ import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.ParagraphHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.objectserver.beans.UnexpectedBeanTypeException;
 import com.coremedia.xml.Markup;
 import com.google.common.collect.Lists;
 
@@ -44,8 +43,7 @@ public class CMTeasableImpl extends CMTeasableBase {
   @Override
   public Markup getTeaserText() {
     Markup tt = super.getTeaserText();
-    if ((getTeaserOverlaySettings() == null || !getTeaserOverlaySettings().isEnabled())
-            && isEmptyRichtext(tt, true)) {
+    if (isEmptyRichtext(tt, true)) {
       tt = getDetailText();
     }
     return tt;
@@ -211,7 +209,7 @@ public class CMTeasableImpl extends CMTeasableBase {
 
   @Override
   public TeaserOverlaySettings getTeaserOverlaySettings() {
-    Map<String, Object> mapping = getSettingsService().settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, getContent());
+    Map<String, Object> mapping = getSettingsService().settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, this);
     
     return getSettingsService().createProxy(TeaserOverlaySettings.class, mapping);
   }
@@ -219,17 +217,9 @@ public class CMTeasableImpl extends CMTeasableBase {
   @Override
   public TeaserOverlayStyle getTeaserOverlayStyle() {
     Map<String, Object> mapping = null;
-    Content linkedContent= getTeaserOverlaySettings().getStyle();
-    if (linkedContent != null) {
-      CMSettings styleSettings = null;
-      try {
-        styleSettings = getContentBeanFactory().createBeanFor(linkedContent, CMSettings.class);
-      } catch (UnexpectedBeanTypeException e) {
-        // invalid content type linked, ignore
-      }
-      if (styleSettings != null) {
-        mapping = getSettingsService().settingAsMap(TEASER_OVERLAY_SETTINGS_STYLE_SUB_STRUCT_NAME, String.class, Object.class, styleSettings.getSettings());
-      }
+    CMSettings styleSettings = getTeaserOverlaySettings().getStyle();
+    if (styleSettings != null) {
+      mapping = getSettingsService().settingAsMap(TEASER_OVERLAY_SETTINGS_STYLE_SUB_STRUCT_NAME, String.class, Object.class, styleSettings.getSettings());
     }
     if (mapping == null) {
       mapping = new HashMap<>();

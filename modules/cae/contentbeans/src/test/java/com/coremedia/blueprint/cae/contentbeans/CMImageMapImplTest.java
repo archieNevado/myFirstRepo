@@ -41,7 +41,7 @@ public class CMImageMapImplTest extends ContentBeanTestBase {
     Map<String, Object> imageMapArea = imageMapAreas.get(0);
     assertEquals("rect", imageMapArea.get(ImageFunctions.SHAPE));
     assertEquals("one", imageMapArea.get(ImageFunctions.ALT));
-    assertEquals(ImmutableList.of(article), imageMapArea.get(ImageFunctions.LINKED_CONTENT));
+    assertEquals(article, imageMapArea.get(ImageFunctions.LINKED_CONTENT));
     assertEquals("100,100,200,200", imageMapArea.get(ImageFunctions.COORDS));
     assertEquals(ImmutableList.of(new Point2D.Double(100, 100), new Point2D.Double(200, 200)),
             imageMapArea.get(ImageFunctions.COORDS_AS_POINTS));

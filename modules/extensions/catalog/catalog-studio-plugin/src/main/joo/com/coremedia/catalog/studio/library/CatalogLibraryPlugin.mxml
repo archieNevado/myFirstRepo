@@ -44,6 +44,7 @@
           <ui:items>
             <editor:FolderContentContainer instanceName="catalog"
                                            itemId="{CatalogCollectionViewExtension.CATALOG_FOLDER_CONTAINER_ITEM_ID}"
+                                           uploadDisabledExpression="{selectionHolder.getUploadDisabledValueExpression()}"
                                            selectedRepositoryItemsValueExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"
                                            createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"/>
           </ui:items>

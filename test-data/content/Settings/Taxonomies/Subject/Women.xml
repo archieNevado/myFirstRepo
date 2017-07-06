@@ -27,10 +27,6 @@
 </related>
 <value>Women</value>
 <children>
-<link href="Women%20Fall%20Casual.xml" path="/Settings/Taxonomies/Subject/Women%20Fall%20Casual"/>
-<link href="Women%20Fall%20Elegant.xml" path="/Settings/Taxonomies/Subject/Women%20Fall%20Elegant"/>
-<link href="Women%20Spring%20Casual.xml" path="/Settings/Taxonomies/Subject/Women%20Spring%20Casual"/>
-<link href="Women%20Spring%20Elegant.xml" path="/Settings/Taxonomies/Subject/Women%20Spring%20Elegant"/>
 </children>
-<externalReference>PC_ApparelWomen</externalReference>
+<externalReference></externalReference>
 </CMTaxonomy>

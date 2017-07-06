@@ -2,6 +2,28 @@
 
 This file is used to list changes made in each version of the mysql cookbook.
 
+## 8.3.1 (2017-04-04)
+
+- Fix an ignoring of 'cookbook' attribute by 'mysql_config' resource
+- Remove unused helper method
+- Call out the supported platform versions in the metadata
+- Switch to Delivery Local and rename the docked config
+- Remove mention of the EOL opensuse 13.x in the readme
+
+## 8.3.0 (2017-03-20)
+- Refactor mysql_service_manager_upstart.rb to eliminate use of cloned resource
+
+## 8.2.0 (2016-12-03)
+
+- Include client development packages on RHEL/SUSE platforms
+
+## 8.1.1 (2016-10-31)
+- Fixing CVE-2016-6662 - Reverting execure bit on mysql config
+
+## 8.1.0 (2016-10-29)
+
+- Drop hardcoded, specific package version logic that broke many users
+
 ## 8.0.4 (2016-09-26)
 - Bump debian version
 - Updated packages for 12.04 and 14.04 too

@@ -10,18 +10,11 @@ import java.util.List;
 
 public class TaxonomyIdsPropertyConverterTest extends AbstractTaxonomyPropertyConverterTest {
 
-  @Override
-  protected TreePathKeyFactory createTreePathKeyFactory() {
-    TreePathKeyFactory taxonomyIdPathKeyFactory = new TreePathKeyFactory();
-    taxonomyIdPathKeyFactory.setKeyPrefix("taxidpath:");
-    return taxonomyIdPathKeyFactory;
-  }
-
   @Test
   public void testNoTaxonomies() {
     List<CMLocTaxonomy> items = new ArrayList<>();
 
-    TaxonomyPropertyConverter converter = taxonomyPropertyConverter;
+    TaxonomyPropertyConverter converter = new TaxonomyIdsPropertyConverter();
     converter.setIgnoreParents(true);
     Assert.assertNull(converter.convertValue(items));
   }
@@ -32,7 +25,7 @@ public class TaxonomyIdsPropertyConverterTest extends AbstractTaxonomyPropertyCo
     items.add(sanFrancisco);
     items.add(michigan);
 
-    TaxonomyPropertyConverter converter = taxonomyPropertyConverter;
+    TaxonomyPropertyConverter converter = new TaxonomyIdsPropertyConverter();
     converter.setIgnoreParents(true);
     String result = (String) converter.convertValue(items);
     Assert.assertNotNull(result);
@@ -53,7 +46,8 @@ public class TaxonomyIdsPropertyConverterTest extends AbstractTaxonomyPropertyCo
     items.add(sanFrancisco);
     items.add(michigan);
 
-    TaxonomyPropertyConverter converter = taxonomyPropertyConverter;
+    TaxonomyPropertyConverter converter = new TaxonomyIdsPropertyConverter();
+    converter.setTaxonomyPathKeyFactory(taxonomyPathKeyFactory);
     String result = (String) converter.convertValue(items);
     Assert.assertNotNull(result);
     Assert.assertTrue(result.contains("62"));

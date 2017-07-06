@@ -20,7 +20,7 @@ of:
 Because FPM supports many packaging types this approach could be extended for deb, solaris and other package formats.
 Currently we only support RPM.
 
-When the recipe finishes, all rpms should lie in the directory defined by `['blueprint']['dev']['rpm']['dir']`. 
+When the recipe finishes, all rpms should lie in the directory defined by `['blueprint']['dev']['rpm']['dir']`.
 #>
 =end
 
@@ -47,8 +47,7 @@ package 'rpm-build'
 tomcat_dir = "apache-tomcat-#{node['blueprint']['tomcat']['version']}"
 # an array of service confs. Each item is a hash with the keys name and config_files and optional recipe_name
 # the config_files key points to an array of relative paths to files that should be marked in the rpm as config files.
-services = [{ name: 'solr', config_files: [] },
-            { name: 'content-management-server', config_files: ['content-management-server.properties'] },
+services = [{ name: 'content-management-server', config_files: ['content-management-server.properties'] },
             { name: 'workflow-server', config_files: ['workflow-server.properties'] },
             { name: 'content-feeder', config_files: ['content-feeder.properties'] },
             { name: 'user-changes', config_files: ['user-changes.properties'] },
@@ -117,41 +116,6 @@ services.each do |service_conf|
     version package_version
     input_args args
   end
-end
-
-# SolR home
-solr_home_dir = "#{node['blueprint']['base_dir']}/solr-home"
-preinstall = template '/tmp/preinstall-solr_home.sh' do
-  source 'preinstall.sh.erb'
-  variables(service_group: package_group,
-            service_group_user: package_user,
-            base_dir: node['blueprint']['base_dir'],
-            restart_services: ['solr'])
-end
-
-postinstall = template '/tmp/postinstall-solr_home.sh' do
-  source 'postinstall.sh.erb'
-  variables(install_user: package_user,
-            install_group: package_group,
-            restart_services: ['solr'],
-            install_dir: solr_home_dir)
-end
-
-config_files = []
-args = []
-args << "--before-install #{preinstall.name}"
-args << "--after-install #{postinstall.path}"
-args << "--rpm-user #{package_user}"
-args << "--rpm-group #{package_group}"
-config_files.each do |config_file|
-  args << "--config-files #{config_file}"
-end
-args << solr_home_dir
-
-fpm_tng_package "#{package_prefix}solr-home" do
-  output_type 'rpm'
-  version package_version
-  input_args args
 end
 
 # An array of tool configurations. Each item has a key mame that must match the recipe name in blueprint-tools. There must

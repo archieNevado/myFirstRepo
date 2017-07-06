@@ -39,16 +39,16 @@ coremedia.blueprint = (function (module) {
    * $('[data-cm-carousel]').cmCarousel();
    * ```
    * Auto-initialization is not supported for carousels that are added to the DOM after jQuery's ready event has
-   * fired. In this case you will need to programatically initialize your carousel by invoking the method as shown
+   * fired. In this case you will need to programmatically initialize your carousel by invoking the method as shown
    * above.
    *
    * The carousel can be configured by assigning an object with the following properties to the `data-cm-carousel`
    * attribute.
    *
-   * | Name | Type | Default | Description |
-   * | --- | --- | --- | --- |
-   * | pause | <code>boolean</code> | <code>false</code> | Pause the carousel from sliding, if needed. |
-   * | interval | <code>number</code> | <code>5000</code> | Interval used for each sliding. |
+   * | Name     | Type                 | Default            | Description                                 |
+   * | -------- | -------------------- | ------------------ | ------------------------------------------- |
+   * | pause    | <code>boolean</code> | <code>false</code> | Pause the carousel from sliding, if needed. |
+   * | interval | <code>number</code>  | <code>5000</code>  | Interval used for each sliding.             |
    */
   $.fn.cmCarousel = function () {
 
@@ -77,8 +77,11 @@ coremedia.blueprint = (function (module) {
         var $pagination = $theCarousel.find(".cm-carousel__pagination-index");
         //set pagination
         $pagination.text(String(index + 1));
-        //reload responsive image. hidden slides had no image because of height/width=0
-        $theCarousel.find(".carousel-inner .cm-image--responsive").responsiveImages();
+        // reload responsive image for active slide, hidden slides had no image because of height/width=0
+        // (not in superhero, they are already loaded, avoid flickering in studio)
+        if (!$(this).parent().hasClass('.cm-container--superhero')) {
+          $activeSlide.find(".cm-image--responsive").responsiveImages();
+        }
       });
 
     });

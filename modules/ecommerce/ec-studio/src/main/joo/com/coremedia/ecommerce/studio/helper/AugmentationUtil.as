@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.helper {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
+import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -71,9 +72,13 @@ public class AugmentationUtil {
 
   public static function getTypeCls(catalogObject:CatalogObject):String {
     var catalogType:String = catalogHelper.getType(catalogObject);
-    //if a category is augmented show a different icon
+    //if a catalog object is augmented show a different icon
     if (augmentationService.getContent(catalogObject)) {
-      return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedCategory_icon');
+      if (catalogType === CatalogModel.TYPE_CATEGORY) {
+        return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedCategory_icon');
+      } else if (catalogType === CatalogModel.TYPE_PRODUCT) {
+        return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedProduct_icon');
+      }
     }
     return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', catalogType + '_icon');
   }

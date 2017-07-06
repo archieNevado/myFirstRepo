@@ -20,5 +20,5 @@
     <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "text.max.length", 600)) />
   </p>
   <#-- custom call-to-action button -->
-  <@cm.include self=self view="_callToAction" params={"additionalClass": "cm-text__button cm-button--primay "}/>
+  <@cm.include self=self view="_callToAction" params={"additionalClass": "cm-text__button cm-button--primary "}/>
 </div>

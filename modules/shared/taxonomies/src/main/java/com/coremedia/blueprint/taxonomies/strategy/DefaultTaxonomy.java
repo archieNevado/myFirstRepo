@@ -313,7 +313,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
             // rename content
             String name = content.getString(VALUE);
             if (!StringUtils.isEmpty(name)) {
-              content.rename(newNodeName);
+              content.rename(StringUtils.trim(newNodeName));
             }
           }
         }
@@ -342,7 +342,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * Used for the name matching strategy to resolve all matching taxonomies for text
    * by simple name matching.
    *
-   * @return
+   * @return all children
    */
   @Override
   public List<TaxonomyNode> getAllChildren() {
@@ -404,10 +404,10 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   }
 
   /**
-   * Returns the content for the given ref.
+   * Returns the content for the given reference.
    *
-   * @param ref
-   * @return
+   * @param ref given reference
+   * @return content
    */
   private Content getContent(String ref) {
     return contentRepository.getContent(TaxonomyUtil.asContentId(ref));
@@ -450,7 +450,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * of a taxonomy node.
    *
    * @param content The taxonomy content to search the referrer for.
-   * @return
+   * @return parent content
    */
   private Content getParent(Content content) {
     return content.getReferrerWithDescriptorFulfilling(taxonomyContentType.getName(), CHILDREN, "isInProduction");
@@ -520,8 +520,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   /**
    * Filters deleted or destroyed children of the taxonomy.
    *
-   * @param content
-   * @return
+   * @param content given content
+   * @return valid children
    */
   private List<Content> getValidChildren(Content content) {
     List<Content> validChildren = new ArrayList<>();
@@ -536,7 +536,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   /**
    * Creates a list of top level nodes.
    *
-   * @return
+   * @return list of top level nodes
    */
   private TaxonomyNodeList getTopLevel() {
     List<TaxonomyNode> list = new ArrayList<>();

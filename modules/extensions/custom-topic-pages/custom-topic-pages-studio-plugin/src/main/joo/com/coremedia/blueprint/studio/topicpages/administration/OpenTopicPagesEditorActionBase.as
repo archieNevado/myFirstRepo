@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.studio.topicpages.administration {
 
-import com.coremedia.blueprint.base.components.util.StringHelper;
 import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.TopicsHelper;
 import com.coremedia.cap.common.SESSION;
@@ -8,6 +7,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.desktop.WorkAreaTabType;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.util.StringHelper;
 import com.coremedia.ui.data.Bean;
 
 import ext.Action;

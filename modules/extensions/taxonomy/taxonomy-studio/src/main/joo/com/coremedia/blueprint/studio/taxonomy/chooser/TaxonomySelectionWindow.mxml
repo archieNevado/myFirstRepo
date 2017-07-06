@@ -7,6 +7,8 @@
         xmlns="exml:ext.config" xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="com.coremedia.cms.editor.sdk.util.*"
         id_="taxonomySelectionDialog"
+        stateId="taxonomySelectionWindowState"
+        stateful="true"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'taxonomy_selection_dialog_title')}"
         width="510"
         height="450"

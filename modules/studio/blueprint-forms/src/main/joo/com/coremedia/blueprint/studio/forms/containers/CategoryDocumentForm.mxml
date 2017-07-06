@@ -4,7 +4,7 @@
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Subject_label')}"
+        title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_tags_label')}"
         expandOnValues="subjectTaxonomy,locationTaxonomy,keywords"
         itemId="subjectTaxonomyDocumentForm"
         collapsed="{config.collapsed === undefined || config.collapsed === true}">

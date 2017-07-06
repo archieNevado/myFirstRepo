@@ -44,6 +44,11 @@ printStatus(){
 }
 
 start(){
+  for hook_script in <%= @service_dir%>/service-hooks/pre-start*.sh; do
+    if [ -f ${hook_script} ]; then
+      source $hook_script;
+    fi
+  done
   <%- if @clean_log_dir_on_start -%>
   kill -0 `cat "$CATALINA_PID" 2>/dev/null` >/dev/null 2>&1 || rm -f <%= @log_dir %>/*
   <%- end -%>
@@ -52,13 +57,28 @@ start(){
   RETVAL=$?
   printStatus $RETVAL
   [ $RETVAL = 0 ] && touch /var/lock/subsys/<%= @name %>
+  for hook_script in <%= @service_dir%>/service-hooks/post-start*.sh; do
+    if [ -f ${hook_script} ]; then
+      source $hook_script;
+    fi
+  done
 }
 stop(){
+  for hook_script in <%= @service_dir%>/service-hooks/pre-stop*.sh; do
+    if [ -f ${hook_script} ]; then
+      source $hook_script;
+    fi
+  done
   echo "Stopping <%= @name %>"
   su <%= @user %> -s /bin/sh -p -c '$CATALINA_HOME/bin/shutdown.sh <%= @shutdown_wait %> <%= '-force' if @shutdown_force %>'
   RETVAL=$?
   printStatus $RETVAL
   [ $RETVAL = 0 ] && rm -f /var/lock/subsys/<%= @name %>
+  for hook_script in <%= @service_dir%>/service-hooks/post-stop*.sh; do
+    if [ -f ${hook_script} ]; then
+      source $hook_script;
+    fi
+  done
 }
 status(){
   if [ ! -z "$CATALINA_PID" ]; then

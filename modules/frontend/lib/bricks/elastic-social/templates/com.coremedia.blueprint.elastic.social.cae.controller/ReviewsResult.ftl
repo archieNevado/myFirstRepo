@@ -12,19 +12,13 @@
       <div class="cm-reviews__average-rating cm-ratings-average" itemscope="itemscope" itemtype="http://data-vocabulary.org/Review-aggregate">
   
         <#assign averageRating=(self.getAverageRating())!0 />
-        <#assign averageRatingRounded=averageRating?round />
-  
+
         <div class="cm-ratings-average__header">
-  
-          <span class="cm-ratings-average__rating cm-rating">
-            <#list es.getReviewMaxRating()..1 as currentRating>
-              <#assign classRatingIndicator="" />
-              <#if currentRating == averageRatingRounded>
-                <#assign classRatingIndicator=" cm-rating-indicator--active" />
-              </#if>
-                <div class="cm-rating__option cm-rating-indicator${classRatingIndicator}">${currentRating}</div>
-            </#list>
-          </span>
+          <div class="cm-ratings-average__rating">
+            <div class="cm-ratings-average__stars--back"></div>
+            <div class="cm-ratings-average__stars--front" style="width: ${(averageRating / es.getReviewMaxRating() * 100)?string("0.##")}%"></div>
+          </div>
+
           <span class="cm-ratings-average__text" itemprop="rating" itemscope="itemscope" itemtype="http://data-vocabulary.org/Rating">
             <@bp.message es.messageKeys.REVIEWS_AVERAGE_SYMBOL /> <span itemprop="average">${averageRating?string("0.##")}</span> <@bp.message es.messageKeys.REVIEWS_AVERAGE_OUT_OF /> <span itemprop="best">${es.getReviewMaxRating()}</span>
           </span>
@@ -40,18 +34,12 @@
         </div>
   
         <table class="cm-ratings-average__details cm-rating-statistics">
-          <#assign maxNumber=0 />
-          <#list es.getReviewMaxRating()..1 as currentRating>
-            <#assign currentNumber=(self.getNumberOfOnlineReviewsFor(currentRating)!0) />
-            <#if (currentNumber > maxNumber)>
-              <#assign maxNumber=currentNumber />
-            </#if>
-          </#list>
+          <#assign totalNumberOfReviews=(self.getNumberOfOnlineReviews()!0) />
           <#list es.getReviewMaxRating()..1 as currentRating>
             <#assign currentNumber=(self.getNumberOfOnlineReviewsFor(currentRating))!0 />
             <#assign percentage=0 />
-            <#if (maxNumber > 0)>
-              <#assign percentage=(currentNumber * 100 / maxNumber) />
+            <#if (totalNumberOfReviews > 0)>
+              <#assign percentage=(currentNumber * 100 / totalNumberOfReviews) />
             </#if>
             <#assign indicatorLabel="" />
             <#if (currentRating == 1)>
@@ -61,7 +49,11 @@
             </#if>
             <tr class="cm-rating-statistic">
               <td class="cm-rating-statistic__column">${currentRating} ${indicatorLabel}</td>
-              <td class="cm-rating-statistic__column cm-rating-statistic__column--rating-bar"><div class="cm-rating-bar"><div class="cm-rating-bar__filled" style="width: ${percentage}%;"></div></div></td>
+              <td class="cm-rating-statistic__column cm-rating-statistic__column--rating-bar">
+                <div class="cm-rating-bar">
+                  <div class="cm-rating-bar__filled" style="width: ${percentage}%;"></div>
+                </div>
+              </td>
               <td class="cm-rating-statistic__column">${currentNumber}</td>
             </tr>
           </#list>

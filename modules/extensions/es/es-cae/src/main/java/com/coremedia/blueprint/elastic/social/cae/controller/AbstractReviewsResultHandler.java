@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialCo
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.blueprint.elastic.social.cae.tags.ElasticSocialFunctions;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.elastic.social.api.ContributionType;
@@ -120,7 +121,7 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
       addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_NOT_LOGGED_IN);
     }
     // validate Recaptcha
-    if (elasticSocialConfiguration.isRecaptchaForReviewRequired() && !elasticSocialConfiguration.validateCaptcha(request)) {
+    if (elasticSocialConfiguration.isRecaptchaForReviewRequired() && ElasticSocialFunctions.isAnonymousUser() && !elasticSocialConfiguration.validateCaptcha(request)) {
       addErrorMessage(handlerInfo, "recaptcha", navigation, developer, ContributionMessageKeys.INVALID_CAPTCHA);
     }
 
@@ -138,4 +139,5 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
       addErrorMessage(handlerInfo, "text", navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_TEXT_TOO_SHORT);
     }
   }
+
 }

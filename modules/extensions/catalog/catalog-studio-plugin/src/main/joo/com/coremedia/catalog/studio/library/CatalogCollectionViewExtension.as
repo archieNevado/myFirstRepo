@@ -106,5 +106,9 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
   override public function getSearchViewItemId():String {
     return RepositoryCatalogSearchListContainer.VIEW_CONTAINER_ITEM_ID;
   }
+
+  override public function isUploadDisabledFor(folder:Object):Boolean {
+    return true;
+  }
 }
 }

@@ -75,7 +75,6 @@ public abstract class HandlerBaseTest {
           PERMITTED_PARAM, "value",
           "forbidden", "secret");
 
-
   private LinkFormatter linkFormatter = new LinkFormatter();
 
   private ApplicationContext applicationContext = mock(ApplicationContext.class);
@@ -217,7 +216,6 @@ public abstract class HandlerBaseTest {
 
   protected void registerMimeTypeWithExtensions(String mimeType, String extension) throws MimeTypeParseException {
     when(mimeTypeService.getExtensionForMimeType(mimeType)).thenReturn(extension);
-    when(mimeTypeService.getMimeTypeForExtension(extension)).thenReturn(mimeType);
   }
 
   /**

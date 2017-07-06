@@ -22,7 +22,7 @@
   <@cm.include self=self view="asPreview"/>
 
   <#if cmpage?has_content>
-    <@cm.include self=cmpage view="bodyEnd"/>
+    <@cm.include self=cmpage view="_bodyEnd"/>
   </#if>
 
 </body>

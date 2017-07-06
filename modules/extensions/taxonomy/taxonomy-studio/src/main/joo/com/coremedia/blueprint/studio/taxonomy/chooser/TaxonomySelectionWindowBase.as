@@ -1,16 +1,14 @@
 package com.coremedia.blueprint.studio.taxonomy.chooser {
 import com.coremedia.cap.content.Content;
+import com.coremedia.cms.editor.sdk.components.StudioDialog;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
-import com.coremedia.ui.data.beanFactory;
-
-import ext.window.Window;
 
 /**
  * The base class of the taxonomy selection window.
  */
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
-public class TaxonomySelectionWindowBase extends Window {
+public class TaxonomySelectionWindowBase extends StudioDialog {
 
   private var selectionExpression:ValueExpression;
   private var propertyValueExpression:ValueExpression;

@@ -2,7 +2,7 @@
  * <h2>Plug-in controllers</h2>
  * <p>
  * Plug-in specific controllers accept HTTP requests, bind the request parameters, and typically delegate to
- * a {@link com.coremedia.blueprint.elastic.social.blueprint.ElasticSocialService}.
+ * a {@link com.coremedia.blueprint.elastic.social.cae.ElasticSocialService}.
  * </p>
  * <h2>Registered controller mappings</h2>
  * <table>
@@ -14,20 +14,20 @@
  * </thead>
  * <tbody>
  * <tr>
- * <td>/elastic/social/comments</td>
- * <td>{@link com.coremedia.blueprint.elastic.social.blueprint.controller.CommentsController}</td>
+ * <td>/dynamic/fragment/comments/{segment}/{contextId}/{id}</td>
+ * <td>{@link com.coremedia.blueprint.elastic.social.cae.controller.CommentsResultHandler}</td>
  * </tr>
  * <tr>
- * <td>/elastic/social/complaint</td>
- * <td>{@link com.coremedia.blueprint.elastic.social.blueprint.controller.ComplaintController}</td>
+ * <td>/dynamic/fragment/complaint/{segment}/{contextId}/{id}</td>
+ * <td>{@link com.coremedia.blueprint.elastic.social.cae.controller.ComplaintResultHandler}</td>
  * </tr>
  * <tr>
- * <td>/elastic/social/like</td>
- * <td>{@link com.coremedia.blueprint.elastic.social.blueprint.controller.LikeController}</td>
+ * <td>/dynamic/fragment/likes/{segment}/{contextId}/{id}</td>
+ * <td>{@link com.coremedia.blueprint.elastic.social.cae.controller.LikeResultHandler}</td>
  * </tr>
  * <tr>
- * <td>/elastic/social/ratings</td>
- * <td>{@link com.coremedia.blueprint.elastic.social.blueprint.controller.RatingsController}</td>
+ * <td>/dynamic/fragment/reviews/{segment}/{contextId}/{id}</td>
+ * <td>{@link com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResultHandler}</td>
  * </tr>
  * </tbody>
  * </table>

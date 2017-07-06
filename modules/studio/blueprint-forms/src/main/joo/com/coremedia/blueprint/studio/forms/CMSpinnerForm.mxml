@@ -36,8 +36,7 @@
         <bpforms:DetailsDocumentForm itemId="detailsForm"
                                      collapsed="true"/>
         <bpforms:TeaserWithPictureDocumentForm collapsed="true"/>
-        <editor:PropertyFieldGroup collapsible="true"
-                                   itemId="cmSpinnerPicturesForm"
+        <editor:PropertyFieldGroup itemId="cmSpinnerPicturesForm"
                                    title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_SpinnerPictures_label')}">
           <editor:items>
             <editor:LinkListPropertyField linkType="CMPicture"

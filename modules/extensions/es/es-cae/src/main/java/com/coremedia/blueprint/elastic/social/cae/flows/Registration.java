@@ -39,6 +39,7 @@ public class Registration implements Serializable {
   private boolean deleteProfileImage = false;
   private boolean acceptTermsOfUse = false;
   private String timeZoneId;
+  private String recaptchaResponse;
 
 
   public String getUsername() {
@@ -140,6 +141,14 @@ public class Registration implements Serializable {
     this.timeZoneId = timeZoneId;
   }
 
+  public String getRecaptchaResponse() {
+    return recaptchaResponse;
+  }
+
+  public void setRecaptchaResponse(String recaptchaResponse) {
+    this.recaptchaResponse = recaptchaResponse;
+  }
+
   public void validateRegistration(ValidationContext context) {
     validateName(context);
     validateEmail(context);
@@ -152,6 +161,14 @@ public class Registration implements Serializable {
     if (!acceptTermsOfUse) {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_ACCEPT_TERMS_OF_USE_ERROR, "acceptTermsOfUse");
     }
+  }
+
+  /**
+   *  validate${state}, where ${state} is the id of your view-state where you want validation to run
+   * @param context
+   */
+  public void validateBpRegistration(ValidationContext context) {
+    this.validateRegistration(context);
   }
 
   private void validateName(ValidationContext context) {
@@ -191,12 +208,12 @@ public class Registration implements Serializable {
 
     ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin.getElasticSocialConfiguration(page);
     ServletRequest servletRequest = (ServletRequest) requestContext.getExternalContext().getNativeRequest();
-    if (elasticSocialConfiguration.isCaptchaForRegistrationRequired() && !elasticSocialConfiguration.validateCaptcha(servletRequest)) {
-      addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_INVALID_CAPTCHA, "recaptcha_response_field");
+    if (elasticSocialConfiguration.isRecaptchaForRegistrationRequired() && !elasticSocialConfiguration.validateCaptcha(servletRequest)) {
+      addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_INVALID_CAPTCHA, "recaptchaResponse");
     }
   }
 
-  protected void validateRegistrationPassword(ValidationContext context) {
+  private void validateRegistrationPassword(ValidationContext context) {
     if (isBlank(password)) {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_PASSWORD_ERROR, "password");
     }

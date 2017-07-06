@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.studio.taxonomy {
 
-import com.coremedia.blueprint.base.components.util.StudioConfigurationUtil;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.util.StudioConfigurationUtil;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -118,7 +118,7 @@ public class TaxonomyUtil {
     }
     var url:String = 'taxonomies/path?' + Ext.urlEncode({taxonomyId: taxonomyId, nodeRef: parseRestId(bean), site: siteId});
     var taxRemoteBean:RemoteBean = beanFactory.getRemoteBean(url);
-    taxRemoteBean.load(function ():void {
+    taxRemoteBean.invalidate(function ():void {
       EventUtil.invokeLater(function ():void {
         if (taxRemoteBean.get('path')) { //maybe not set if the taxonomy does not exist
           var nodes:Array = taxRemoteBean.get('path')["nodes"];

@@ -14,7 +14,6 @@
     <workspace.configuration.dir>../../../../workspace-configuration</workspace.configuration.dir>
   </properties>
   <modules>
-    <module>es-controlroom-bom</module>
     <module>es-controlroom-studio</module>
     <module>es-controlroom-user-changes</module>
     <module>es-controlroom-workflow</module>

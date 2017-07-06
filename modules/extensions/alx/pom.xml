@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>alx-bom</module>
     <module>alx-cae</module>
     <module>alx-server</module>
     <module>alx-studio-component</module>

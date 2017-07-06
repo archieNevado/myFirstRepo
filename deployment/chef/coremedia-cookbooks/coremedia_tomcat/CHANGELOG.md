@@ -2,6 +2,19 @@ coremedia_tomcat Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia_tomcat cookbook.
 
+v.2.1.1
+-------
+- guard if hook script is there
+- add description to systemV init files
+
+v.2.1.0
+-------
+- use `debug` flag to toggle the comment character for the debug opts instead of not rendering the complete line.
+- the service init script now executes arbitrary hook scripts below a `service-hooks` directory. The scripts will
+be executed prior and after Tomcat starts or stops and must match the pattern `<phase>.*\.sh`, where `<phase>` may be one
+of `pre-start`, `post-start`, `pre-stop` or `post-stop`.
+- fixed warning `property classifier is declared in both coremedia_maven...`
+
 v.2.0.12
 --------
 - support for Tomcat `8.5.x`

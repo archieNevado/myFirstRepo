@@ -19,7 +19,7 @@
   <dependencies>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-search-api</artifactId>
+      <artifactId>cap-feeder-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>

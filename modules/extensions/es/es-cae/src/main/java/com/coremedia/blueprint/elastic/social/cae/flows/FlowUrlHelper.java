@@ -29,7 +29,7 @@ public class FlowUrlHelper {
   }
 
   public String getNextUrl(String nextParameter, RequestContext context, boolean forceAbsolute) {
-    if (nextParameter != null) {
+    if (nextParameter != null && !nextParameter.isEmpty()) {
       return prependScheme(nextParameter, context, forceAbsolute);
     }
     HttpServletRequest request = getRequest(context);

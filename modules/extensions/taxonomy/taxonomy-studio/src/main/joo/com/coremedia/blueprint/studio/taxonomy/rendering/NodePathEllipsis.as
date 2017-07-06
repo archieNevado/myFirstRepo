@@ -1,8 +1,5 @@
 package com.coremedia.blueprint.studio.taxonomy.rendering {
-import com.coremedia.ui.util.TextMetricsUtil;
-
 import ext.Component;
-
 import ext.Ext;
 
 import js.Collection;
@@ -109,7 +106,7 @@ public class NodePathEllipsis {
    * @return
    */
   private function getNodeBoxWidth(node:HTMLElement):Number {
-    var elements:Array = Ext.fly(node).query(TaxonomyRenderer.TAXONOMY_ELEMENT_BOX.getCSSSelector(), false) as Array;
+    var elements:Array = Ext.fly(node).query(TaxonomyBEMEntities.NODE_ELEMENT_BOX.getCSSSelector(), false) as Array;
     return elements && elements.length > 0 ? elements[0].getWidth() : 0;
   }
 
@@ -172,7 +169,7 @@ public class NodePathEllipsis {
     var nodeSpan:HTMLElement = getTaxonomyNode(node);
     var textSpan:HTMLElement = getNameNode(node);
     var width:String = Ext.fly(textSpan).getAttribute("data-width");
-    Ext.fly(nodeSpan).addCls(TaxonomyRenderer.TAXONOMY_MODIFIER_ELLIPSIS.getCSSClass());
+    Ext.fly(nodeSpan).addCls(TaxonomyBEMEntities.NODE_MODIFIER_ELLIPSIS.getCSSClass());
     Ext.fly(textSpan).setStyle("width", width + "px");
   }
 
@@ -185,7 +182,7 @@ public class NodePathEllipsis {
     var nodeSpan:HTMLElement = getTaxonomyNode(node);
     var textSpan:HTMLElement = getNameNode(node);
     Ext.fly(textSpan).setStyle("width");
-    Ext.fly(nodeSpan).removeCls(TaxonomyRenderer.TAXONOMY_MODIFIER_ELLIPSIS.getCSSClass());
+    Ext.fly(nodeSpan).removeCls(TaxonomyBEMEntities.NODE_MODIFIER_ELLIPSIS.getCSSClass());
   }
 
   /**
@@ -195,7 +192,7 @@ public class NodePathEllipsis {
    * @return
    */
   private static function getNameNode(selection:*):* {
-    var textSpan:* = selection.getElementsByClassName(TaxonomyRenderer.TAXONOMY_ELEMENT_NAME)[0];
+    var textSpan:* = selection.getElementsByClassName(TaxonomyBEMEntities.NODE_ELEMENT_NAME)[0];
     if (!textSpan) {
       textSpan = selection;
     }
@@ -209,7 +206,7 @@ public class NodePathEllipsis {
    * @return
    */
   private static function getTaxonomyNode(selection:*):* {
-    return Ext.fly(selection).up(TaxonomyRenderer.TAXONOMY_BLOCK.getCSSSelector()) || selection;
+    return Ext.fly(selection).up(TaxonomyBEMEntities.NODE_BLOCK.getCSSSelector()) || selection;
   }
 
   /**

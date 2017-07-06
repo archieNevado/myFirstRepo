@@ -18,3 +18,25 @@ default['blueprint']['mysql']['initial_root_password'] = 'coremedia'
 default['blueprint']['mysql']['port'] = '3306'
 #<> mysql socket file path
 default['blueprint']['mysql']['socket'] = '/var/lib/mysql/mysql.sock'
+
+#<> mysql yum repo base url
+default['blueprint']['mysql']['baseurl'] = "http://repo.mysql.com/yum/mysql-#{node['blueprint']['mysql']['version']}-community/el/$releasever/$basearch/"
+
+#<> mysql yum repo base url for amazon platform
+default['blueprint']['mysql']['baseurl'] = "http://repo.mysql.com/yum/mysql-#{node['blueprint']['mysql']['version']}-community/el/6/$basearch/" if node['platform'] == 'amazon'
+
+if node['yum']['mysql57-community']
+  #<> mysql yum repo base url using attribute node['yum']['mysql57-community'] when avail (used to be backward compatible)
+  default['blueprint']['mysql']['baseurl'] =  node['yum']['mysql57-community']['baseurl'] unless node['yum']['mysql57-community']['baseurl'].nil?
+  Chef::Log.warn("The attribute to define the remote mysql rpm repository url has been changed from node['yum']['mysql57-community']['baseurl'] to node['blueprint']['mysql']['baseurl']. Please change your attribute accordingly, as we will remove this backwards compatibility with the next AEP") unless node['yum']['mysql57-community']['baseurl'].nil?
+
+  #<> mysql yum repo mirrorlist url using attribute node['yum']['mysql57-community'] when avail (used to be backward compatible)
+  default['blueprint']['mysql']['mirrorlist'] =  node['yum']['mysql57-community']['mirrorlist'] unless node['yum']['mysql57-community']['mirrorlist'].nil?
+  Chef::Log.warn("The attribute to define the remote mysql rpm repository url has been changed from node['yum']['mysql57-community']['mirrorlist'] to node['blueprint']['mysql']['mirrorlist']. Please change your attribute accordingly, as we will remove this backwards compatibility with the next AEP") unless node['yum']['mysql57-community']['mirrorlist'].nil?
+end
+
+#<> mysql yum repo gpgkey
+default['blueprint']['mysql']['gpgkey'] = 'https://raw.githubusercontent.com/chef-cookbooks/yum-mysql-community/master/files/default/mysql_pubkey.asc'
+
+#<> mysql yum repo failovermethod
+default['blueprint']['mysql']['failovermethod'] = 'priority'

@@ -14,7 +14,7 @@ Livecontext for SAP Hybris.
 * blueprint-base
 * blueprint-tomcat
 * blueprint-proxy
-* coremedia-proxy (~> 0.3.0)
+* coremedia-proxy (~> 0.3.2)
 
 # Attributes
 
@@ -26,18 +26,15 @@ Livecontext for SAP Hybris.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['server_name']` -  Defaults to `corporate.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['default_site']` -  Defaults to `corporate`.
-* `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['sitemap_site_name']` -  Defaults to `Corporate`.
+* `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['site_id']` - The id property of the CMSite content associated with this site. Defaults to `abffe57734feeee`.
+* `node['blueprint']['proxy']['candy_properties']['preview']['blueprint.site.mapping.corporate']` -  Defaults to `//candy-preview.#{node['blueprint']['hostname']}`.
+* `node['blueprint']['proxy']['candy_properties']['studio-preview']['blueprint.site.mapping.corporate']` -  Defaults to `//candy-preview.#{node['blueprint']['hostname']}`.
 
 # Recipes
 
-* [blueprint-cms-9::candy-proxy](#blueprint-cms-9candy-proxy) - This recipe installs virtual hosts for the CoreMedia Blueprint Candy Preview to your local CAE.
 * [blueprint-cms-9::delivery-proxy](#blueprint-cms-9delivery-proxy) - This recipe installs virtual hosts for the CoreMedia Blueprint Live CAE.
 * blueprint-cms-9::overview
 * [blueprint-cms-9::test-data-config](#blueprint-cms-9test-data-config)
-
-## blueprint-cms-9::candy-proxy
-
-This recipe installs virtual hosts for the CoreMedia Blueprint Candy Preview to your local CAE.
 
 ## blueprint-cms-9::delivery-proxy
 

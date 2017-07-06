@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>custom-topic-pages-studio-plugin</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <description>Topic Pages Administration Plugin for the CoreMedia Studio</description>
 
@@ -17,41 +17,39 @@
   </properties>
 
   <dependencies>
-
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>taxonomy-studio</artifactId>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-studio-components</artifactId>
+      <type>swc</type>
     </dependency>
-
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>taxonomy-studio</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>ui-components</artifactId>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>studio-theme</artifactId>
+      <type>swc</type>
       <scope>provided</scope>
     </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-    </dependency>
   </dependencies>
-
 
   <build>
     <sourceDirectory>src/main/joo</sourceDirectory>
@@ -69,11 +67,6 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.blueprint.studio.topicpages.TopicPagesStudioPlugin</entry>
-            </requiredClasses>
-          </production>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.topicpages.config</uri>
@@ -83,6 +76,4 @@
       </plugin>
     </plugins>
   </build>
-
-
 </project>

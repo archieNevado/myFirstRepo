@@ -3,7 +3,6 @@ package com.coremedia.blueprint.cae.search.solr;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.Value;
-import com.coremedia.cap.feeder.FeedableElement;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,9 +28,7 @@ public class SolrSearchQueryBuilderTest {
     SearchQueryBean query = new SearchQueryBean();
     SolrQuery sq = qb.buildQuery(query);
     assertTrue(sq.getFilterQueries().length == 1);
-    assertTrue(sq.getFilterQueries()[0].equals(
-            FeedableElement.ELEMENT_FEEDERSTATE + ':' + FeedableElement.FEEDERSTATE_SUCCESS +
-                    " AND notsearchable:false"));
+    assertEquals("feederstate:SUCCESS AND notsearchable:false", sq.getFilterQueries()[0]);
     assertTrue(sq.getFacetFields() == null);
   }
 

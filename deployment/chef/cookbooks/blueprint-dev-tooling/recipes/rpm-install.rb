@@ -15,8 +15,7 @@ include_recipe 'blueprint-yum::local'
 end
 
 # install and start order
-services = ['solr',
-            'content-management-server',
+services = ['content-management-server',
             'workflow-server',
             'content-feeder',
             'user-changes',
@@ -28,9 +27,6 @@ services = ['solr',
             'master-live-server',
             'caefeeder-live',
             'cae-live-1']
-
-# install solr-home
-package "#{node['blueprint']['dev']['rpm']['package_prefix']}solr-home"
 
 # install rpm and wait 30 seconds before installing the next, services automatically get started
 services.each do |tomcat|

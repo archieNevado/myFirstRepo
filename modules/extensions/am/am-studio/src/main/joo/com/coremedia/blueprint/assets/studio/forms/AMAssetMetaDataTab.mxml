@@ -6,6 +6,7 @@
                      xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
                      xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
                      xmlns:am="exml:com.coremedia.blueprint.assets.studio.config"
+                     xmlns:ui="exml:com.coremedia.ui.config"
                      title="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Tab_metadata_title')}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.assets.studio.AMStudioPlugin')]
@@ -69,16 +70,17 @@
           </items>
         </Container>
 
-        <FieldContainer labelAlign="top"
-                        labelSeparator="">
-          <layout>
+        <ui:AdvancedFieldContainer labelAlign="top"
+                                   labelSeparator=""
+                                   defaultField=":first">
+          <ui:layout>
             <layout_HBox/>
-          </layout>
-          <plugins>
+          </ui:layout>
+          <ui:plugins>
             <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
                                            propertyName="{AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE }"/>
-          </plugins>
-          <items>
+          </ui:plugins>
+          <ui:items>
             <editor:DatePropertyField bindTo="{config.bindTo}"
                                       propertyName="{AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_EXPIRATIONDATE}"
                                       format="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'ExpirationDate_dateFormat')}"
@@ -96,8 +98,8 @@
                                           bindTo="{config.bindTo}"/>
               </plugins>
             </Button>
-          </items>
-        </FieldContainer>
+          </ui:items>
+        </ui:AdvancedFieldContainer>
 
         <editor:StringPropertyField
                 propertyName="{AssetConstants.PROPERTY_ASSET_METADATA + '.' + AssetConstants.PROPERTY_ASSET_METADATA_COPYRIGHT}"

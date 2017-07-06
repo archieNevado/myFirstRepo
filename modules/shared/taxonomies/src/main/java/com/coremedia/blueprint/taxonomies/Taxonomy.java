@@ -11,7 +11,7 @@ public interface Taxonomy {
   /**
    * Returns the taxonomy id of the strategy, must be unique.
    *
-   * @return
+   * @return id
    */
   String getTaxonomyId();
 
@@ -114,21 +114,21 @@ public interface Taxonomy {
   /**
    * Returns a list of all available keywords for this taxonomy.
    *
-   * @return
+   * @return list of all available keywords
    */
   List<TaxonomyNode> getAllChildren();
 
   /**
    * Returns the document type used for keywords.
    *
-   * @return
+   * @return document type
    */
   String getKeywordType();
 
   /**
    * Returns true if the taxonomy strategy is still valid (and not deleted).
    *
-   * @return
+   * @return true if valid
    */
   boolean isValid();
 }

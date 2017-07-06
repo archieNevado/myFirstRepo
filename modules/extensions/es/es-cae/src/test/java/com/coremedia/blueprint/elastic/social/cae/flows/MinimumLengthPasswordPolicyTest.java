@@ -9,7 +9,7 @@ public class MinimumLengthPasswordPolicyTest {
   @Test
   public void testVerify() {
     PasswordPolicy passwordPolicy = new MinimumLengthPasswordPolicy();
-    assertTrue(passwordPolicy.verify("test"));
-    assertFalse(passwordPolicy.verify("xxx"));
+    assertTrue(passwordPolicy.verify("testme"));
+    assertFalse(passwordPolicy.verify("xxxxx"));
   }
 }

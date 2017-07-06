@@ -12,8 +12,11 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.store.BeanRecord;
 
+import ext.EventManager;
 import ext.LoadMask;
 import ext.grid.GridPanel;
+
+import js.KeyEvent;
 
 /**
  *
@@ -29,6 +32,10 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
 
   private var loadMask:LoadMask;
   private var cache:TaxonomyCache;
+
+  private var selectedPositionsExpression:ValueExpression;
+  private var selectedItemsExpression:ValueExpression;
+
 
   /**
    * @param config The configuration options. See the config class for details.
@@ -60,6 +67,31 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
     loadMask.disable();
 
     updateSuggestions(true);
+
+    EventManager.on(getEl(), 'keyup', function (evt:KeyEvent, t:*, o:*):void {
+      if(evt.keyCode === KeyEvent.DOM_VK_ENTER || evt.keyCode === KeyEvent.DOM_VK_RETURN) {
+        var values:Array = getSelectedValuesExpression().getValue();
+        if(values.length > 0) {
+          var selection:Content = values[0];
+          var ref:String = TaxonomyUtil.parseRestId(selection);
+          plusMinusClicked(ref);
+        }
+      }
+    });
+  }
+
+  /**
+   * Compute the disabled state of the add-all button.
+   *
+   * @param forceReadOnlyValueExpression the expression
+   * @return a VE which disables the add all button
+   */
+  protected function getAddAllDisabledVE(forceReadOnlyValueExpression:ValueExpression):ValueExpression {
+    return ValueExpressionFactory.createFromFunction(function():Boolean {
+      var readOnly:Boolean = forceReadOnlyValueExpression && forceReadOnlyValueExpression.getValue();
+      var suggestions:Array = (getSuggestionsExpression() && getSuggestionsExpression().getValue()) || [];
+      return readOnly || suggestions.length === 0;
+    });
   }
 
   /**
@@ -115,6 +147,22 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
     } else {
       loadMask.hide();
     }
+  }
+
+  /**
+   * Return a value expression evaluating to an array of selected positions (indexes) in the link list.
+   * @return a value expression evaluating to an array of selected position
+   */
+  public function getSelectedPositionsExpression():ValueExpression {
+    return selectedPositionsExpression || (selectedPositionsExpression = ValueExpressionFactory.create('positions', beanFactory.createLocalBean()));
+  }
+
+  /**
+   * Return a value expression evaluating to an array of selected values (elements) in the link list.
+   * @return a value expression evaluating to an array of selected values
+   */
+  public function getSelectedValuesExpression():ValueExpression {
+    return selectedItemsExpression || (selectedItemsExpression = ValueExpressionFactory.create('items', beanFactory.createLocalBean()));
   }
 
   private function convertResultToContentList(list:TaxonomyNodeList):void {

@@ -20,15 +20,19 @@
     ]]></fx:Script>
 
   <local:items>
-    <Checkbox itemId="catalogSettingsGroup"
-              fieldLabel="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'EcCatalogPreferences_catalog_title')}"
-              boxLabel="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'EcCatalogPreferences_show_catalog_items')}">
-      <plugins>
-        <ui:BindPropertyPlugin bidirectional="true"
-                               ifUndefined="false"
-                               bindTo="{getShowCatalogValueExpression()}"/>
-      </plugins>
-    </Checkbox>
+    <CheckboxGroup columns="1"
+                   fieldLabel="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'EcCatalogPreferences_catalog_title')}">
+      <items>
+        <Checkbox itemId="catalogSettingsGroup"
+                  boxLabel="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'EcCatalogPreferences_show_catalog_items')}">
+          <plugins>
+            <ui:BindPropertyPlugin bidirectional="true"
+                                   ifUndefined="false"
+                                   bindTo="{getShowCatalogValueExpression()}"/>
+          </plugins>
+        </Checkbox>
+      </items>
+    </CheckboxGroup>
   </local:items>
   <local:layout>
     <layout_Anchor/>

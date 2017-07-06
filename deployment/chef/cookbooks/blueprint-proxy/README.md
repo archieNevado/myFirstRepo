@@ -11,7 +11,7 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 
 * blueprint-base
 * blueprint-tomcat
-* coremedia-proxy (~> 0.3.0)
+* coremedia-proxy (~> 0.3.2)
 
 # Attributes
 

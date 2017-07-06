@@ -14,7 +14,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>corporate-es-bom</module>
     <module>corporate-es-cae</module>
   </modules>
 

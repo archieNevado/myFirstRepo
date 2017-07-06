@@ -14,7 +14,7 @@ public class CuratedUtil {
    * @param content the Content that is being created via the openCreateContentDialog
    */
   public static function postCreateArticleFromComments(content:Content):void {
-    var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod("curate/comments", 'POST');
+    var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod((ModerationImpl.getInstance() as ModerationImpl).getTenantAwareESUriPrefix() + "/curate/comments", 'POST');
     var params:* = makeRequestParameters(content);
     remoteServiceMethod.request(params, openOnSuccessfullyCreatedArticle, null);
   }
@@ -24,7 +24,7 @@ public class CuratedUtil {
    * @param content the Content that is being created via the openCreateContentDialog
    */
   public static function postCreateGalleryFromComments(content:Content):void {
-    var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod("curate/images", 'POST');
+    var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod((ModerationImpl.getInstance() as ModerationImpl).getTenantAwareESUriPrefix() + "/curate/images", 'POST');
     var params:* = makeRequestParameters(content);
     remoteServiceMethod.request(params, openOnSuccessfullyCreatedArticle, null);
   }

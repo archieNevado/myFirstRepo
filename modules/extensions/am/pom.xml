@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>am-bom</module>
     <module>am-common</module>
     <module>am-server-component</module>
     <module>am-studio</module>

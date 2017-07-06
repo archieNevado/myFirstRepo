@@ -7,6 +7,10 @@
          version="3.0">
   <description>CoreMedia CMS: Preview CAE</description>
 
+  <session-config>
+    <tracking-mode>COOKIE</tracking-mode>
+  </session-config>
+
   <jsp-config>
     <jsp-property-group>
       <url-pattern>*.jsp</url-pattern>

@@ -10,11 +10,14 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.store.BeanRecord;
 import com.coremedia.ui.util.EventUtil;
 
+import ext.EventManager;
 import ext.Ext;
 import ext.StringUtil;
 import ext.dd.DropTarget;
 import ext.dd.ScrollManager;
 import ext.grid.GridPanel;
+
+import js.KeyEvent;
 
 /**
  * @private
@@ -41,6 +44,14 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel {
    */
   [Bindable]
   public var selectedPositionsExpression:ValueExpression;
+
+  /**
+   * A ValueExpression whose value is set to the array of selected items.
+   * The array is empty if nothing is selected.
+   * The selection is updated by changing the value of this expression.
+   */
+  [Bindable]
+  public var selectedValuesExpression:ValueExpression;
 
   /**
    * The taxonomy identifier configured on the server side.
@@ -75,6 +86,16 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel {
 
       this.addListener("beforedestroy", onBeforeDestroy, this, {single:true});
     }
+
+    EventManager.on(getEl(), 'keyup', function (evt:KeyEvent, t:*, o:*):void {
+      if(evt.keyCode === KeyEvent.DOM_VK_DELETE) {
+        var values:Array = selectedValuesExpression.getValue();
+        for each(var selection:Content in values) {
+          var ref:String = TaxonomyUtil.parseRestId(selection);
+          plusMinusClicked(ref);
+        }
+      }
+    });
   }
 
   private function isWritable():Boolean {

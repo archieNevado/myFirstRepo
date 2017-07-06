@@ -10,6 +10,7 @@
 <div class="cm-error">
   <style type="text/css">
     .cm-error {
+      font-family: Arial, Helvetica, sans-serif;
       position: relative;
       display: block;
       background: #eeeeee;
@@ -53,7 +54,6 @@
         z-index: 9998;
         background-color: rgba(0, 0, 0, 0.5);
       }
-
       .cm-error__box {
         position: relative;
         width: 80vw;
@@ -69,20 +69,18 @@
         font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
       }
-
       .cm-error__box button {
         position: absolute;
         top: 10px;
         right: 10px;
         z-index: 2;
       }
-
       .cm-error__details {
         position: relative;
       }
-
       .cm-error__details pre,
       .cm-error__details textarea {
+        box-sizing: border-box;
         display: block;
         width: 100%;
         white-space: pre-wrap;
@@ -98,14 +96,13 @@
         border: 1px solid #ccc;
         border-radius: 4px;
       }
-
       .cm-error__label {
         font-weight: bold;
         margin: 10px 0 5px 0;
       }
-
       .cm-error__small {
         max-height: 150px;
+        overflow-y: scroll;
       }
     </style>
     <script>

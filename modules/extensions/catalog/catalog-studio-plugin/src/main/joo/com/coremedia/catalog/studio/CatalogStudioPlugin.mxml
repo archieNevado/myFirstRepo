@@ -53,8 +53,7 @@
             <cat:ProductCodeColumn width="126"
                                    sortable="true"
                                    u:sortField="productCode"/>
-            <editor:ListViewCreationDateColumn width="120"
-                                               sortable="true"
+            <editor:ListViewCreationDateColumn sortable="true"
                                                u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
             <editor:ListViewStatusColumn width="46"
                                          sortable="true"
@@ -136,7 +135,7 @@
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <cat:LostandfoundFilterFieldset/>
+            <cat:LostandfoundFilterPanel/>
           </ui:items>
         </ui:AddItemsPlugin>
       </editor:plugins>

@@ -10,6 +10,7 @@
 <StructProperty Name="style">
 <Struct>
 <StringProperty Name="color">#b04747</StringProperty>
+<StringProperty Name="ctaCls">cm-button--primary</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

@@ -19,7 +19,7 @@
 <Struct>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=300;y=0;width=1080;height=1080</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=318;y=0;width=1439;height=1080</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=0;width=1920;height=1080</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -66,8 +66,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Pans.xml" path="/Settings/Taxonomies/Subject/Pans"/>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Pots.xml" path="/Settings/Taxonomies/Subject/Pots"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

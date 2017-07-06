@@ -136,6 +136,7 @@ module.exports = grunt => {
             grunt.task.run(['remoteThemeImporter:login', 'remoteThemeImporter:uploadTheme']);
           }
         },
+        // deprecated
         uploadDescriptor: () => {
           if (grunt.config('cm.uploadDescriptor.filepaths')) {
             const done = self.async();
@@ -153,6 +154,7 @@ module.exports = grunt => {
             grunt.fail.warn('No files to upload have been specified.')
           }
         },
+        // deprecated
         uploadFile: () => {
           if (grunt.config('cm.uploadFile.filepaths')) {
             const done = self.async();
@@ -170,6 +172,7 @@ module.exports = grunt => {
             grunt.fail.warn('No files to upload have been specified.')
           }
         },
+        // deprecated
         deleteFile: () => {
           const filepaths = grunt.config('cm.deleteFile.filepaths');
           if (filepaths) {

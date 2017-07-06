@@ -32,6 +32,7 @@ public class UserDetails implements Serializable {
   private long numberOfComments;
   private long numberOfRatings;
   private long numberOfLikes;
+  private long numberOfReviews;
   private LocalizedLocale localizedLocale;
   private String timeZoneId;
   private boolean viewOwnProfile = false;
@@ -136,6 +137,19 @@ public class UserDetails implements Serializable {
 
   public void setNumberOfLikes(long numberOfLikes) {
     this.numberOfLikes = numberOfLikes;
+  }
+
+  /**
+   * Returns the number of approved reviews from the current user.
+   * @return The number of approved reviews from the current user.
+   * @cm.template.api
+   */
+  public long getNumberOfReviews() {
+    return numberOfReviews;
+  }
+
+  public void setNumberOfReviews(long numberOfReviews) {
+    this.numberOfReviews = numberOfReviews;
   }
 
   /**

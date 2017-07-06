@@ -4,6 +4,7 @@ import com.coremedia.cms.editor.sdk.premular.Premular;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Store;
+import com.coremedia.ui.components.LocalComboBox;
 import com.coremedia.ui.components.StatefulComboBox;
 import com.coremedia.ui.data.RemoteBeanUtil;
 import com.coremedia.ui.data.ValueExpression;
@@ -16,7 +17,7 @@ import ext.form.field.IField;
  * It contains mainly the model logic to retrieve the catalog objects from the commerce system and
  * the string conversion acrobatic to ensure that the catalog object id (which looks like a number) is stored as String.
  */
-public class CommerceObjectSelectorBase extends StatefulComboBox {
+public class CommerceObjectSelectorBase extends LocalComboBox {
 
   private var contentExpression:ValueExpression;
   private var selectedCatalogObjectsExpression:ValueExpression;

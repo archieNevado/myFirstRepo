@@ -241,7 +241,9 @@ public class CodeResourceHandlerTest {
 
   @Test
   public void testLinkForMergedContent() {
-    Map<String,Object> cmParams = new ImmutableMap.Builder<String,Object>().put("extension","js").build();
+    Map<String,Object> cmParams = ImmutableMap.<String,Object>builder()
+            .put("extension", "js")
+            .build();
     CodeResources codeResources = new CodeResourcesCacheKey(codeCarryingBean.getContent(), CMNavigationBase.JAVA_SCRIPT, false, treeRelation, null).evaluate(null);
     MergeableResources mergeableResources = new MergeableResourcesImpl(codeResources.getModel("body"), contentBeanFactory, null);
     String url = linkFormatterTestHelper.formatLink(cmParams, mergeableResources, null, MERGED_JS_VIEW);

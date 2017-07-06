@@ -21,4 +21,14 @@ public interface TeaserOverlayStyle {
    * @cm.template.api
    */
   String getCls();
+
+  /**
+   * @cm.template.api
+   */
+  String getCtaCls();
+
+  /**
+   * @cm.template.api
+   */
+  String getAdditionalStyles();
 }

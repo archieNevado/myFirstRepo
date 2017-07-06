@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.studio {
 
-import com.coremedia.blueprint.base.components.util.StringHelper;
 import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
 import com.coremedia.cap.common.IdHelper;
@@ -10,6 +9,7 @@ import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewURI;
+import com.coremedia.cms.editor.sdk.util.StringHelper;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 public class TaxonomyStudioPluginBase extends StudioPlugin {

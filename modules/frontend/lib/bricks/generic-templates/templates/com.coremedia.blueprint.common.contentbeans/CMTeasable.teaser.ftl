@@ -36,12 +36,18 @@
             </#if>
             <#-- custom call-to-action button -->
             <#if renderCTA>
-              <@cm.include self=self view="_callToAction" params={"additionalClass": "${additionalClass}__button cm-button--white "}/>
+              <@cm.include self=self view="_callToAction" params={
+                "renderLink": !renderLink,
+                "additionalClass": "${additionalClass}__button cm-button--white "
+              }/>
             </#if>
           </div>
         </#if>
       <#else>
-        <@cm.include self=self view="_teaserOverlay" />
+        <@cm.include self=self view="_teaserOverlay" params={
+          "renderCTA": renderCTA,
+          "renderCTALink": !renderLink
+        } />
       </#if>
     </@bp.optionalLink>
     </div>

@@ -24,19 +24,19 @@ Because the sitemap should only be generated on one cae, you can disable sitemap
 include_recipe 'blueprint-tomcat::_base'
 base_service_name = 'cae-live'
 
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('master-live-server')}/ior"
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['solr.collection.cae'] = 'live'
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobStreamingSizeThreshold'] = -1
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobStreamingThreads'] = -1
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['cae.is.standalone'] = false
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['view.debug.enabled'] = false
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.sitemap.target.root'] = "#{node['blueprint']['cache_dir']}/sitemap"
-node.default['blueprint']['webapps'][base_service_name]['application.properties']['link.urlPrefixType'] = 'live'
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['repository.url'] = "#{cm_webapp_url('master-live-server')}/ior"
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['solr.collection.cae'] = 'live'
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobStreamingSizeThreshold'] = -1
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['repository.blobStreamingThreads'] = -1
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['cae.is.standalone'] = false
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['view.debug.enabled'] = false
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.sitemap.target.root'] = "#{node['blueprint']['cache_dir']}/sitemap"
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['link.urlPrefixType'] = 'live'
 # by default disable periodic sitemap generation.
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.sitemap.starttime'] = '-'
 (1..node['blueprint']['tomcat'][base_service_name]['instances']).to_a.each do |i|
@@ -49,15 +49,15 @@ node.default['blueprint']['webapps'][base_service_name]['application.properties'
   end
   if node.deep_fetch('blueprint', 'tomcat', service_name, 'sitemap', 'enabled')
     start_time = node.deep_fetch('blueprint', 'tomcat', service_name, 'sitemap', 'start_time')
-    node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.sitemap.starttime'] = start_time.nil? ? '+200' : start_time
+    node.default_unless['blueprint']['webapps'][service_name]['application.properties']['blueprint.sitemap.starttime'] = start_time.nil? ? '+200' : start_time
     # Set the port correctly for the sitemap generation
-    node.default['blueprint']['webapps'][service_name]['application.properties']['blueprint.sitemap.cae.port'] = "#{port_prefix}80"
+    node.default_unless['blueprint']['webapps'][service_name]['application.properties']['blueprint.sitemap.cae.port'] = "#{port_prefix}80"
   end
   node.override['blueprint']['webapps'][service_name]['application.properties']['repository.blobCachePath'] = cache_dir
 
   # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
   # and all transformed blobs are saved in memory
-  node.default['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"
+  node.override['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"
 
   blueprint_tomcat_service service_name do
     base_service_name base_service_name

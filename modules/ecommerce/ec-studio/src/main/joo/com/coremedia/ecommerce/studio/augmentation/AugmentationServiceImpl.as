@@ -6,6 +6,7 @@ import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ecommerce.studio.model.Category;
+import com.coremedia.ecommerce.studio.model.Product;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 internal class AugmentationServiceImpl implements IAugmentationService {
@@ -44,6 +45,14 @@ internal class AugmentationServiceImpl implements IAugmentationService {
       return undefined;
     }
     return catalogObject as Category;
+  }
+
+  public function getProduct(content:Content):Product {
+    var catalogObject:CatalogObject = getCatalogObject(content);
+    if (catalogObject === undefined) {
+      return undefined;
+    }
+    return catalogObject as Product;
   }
 }
 }

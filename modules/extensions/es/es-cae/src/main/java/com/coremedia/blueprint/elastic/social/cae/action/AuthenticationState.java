@@ -16,7 +16,6 @@ import java.util.Map;
  */
 public class AuthenticationState extends WebflowActionState {
 
-  private final RegistrationDisclaimers disclaimers;
   private final SettingsService settingsService;
 
   /**
@@ -27,10 +26,8 @@ public class AuthenticationState extends WebflowActionState {
    */
   public AuthenticationState(CMAction action, Map<String, Object> model,
                              String flowId, String flowView,
-                             RegistrationDisclaimers disclaimers,
                              @Nonnull SettingsService settingsService) {
     super(action, model, flowId, flowView);
-    this.disclaimers = disclaimers;
     this.settingsService = settingsService;
   }
 
@@ -48,14 +45,6 @@ public class AuthenticationState extends WebflowActionState {
    */
   public CommunityUser getUser() {
     return UserContext.getUser();
-  }
-
-  /**
-   * @return The disclaimer documents
-   * @cm.template.api
-   */
-  public RegistrationDisclaimers getDisclaimers() {
-    return disclaimers;
   }
 
   /**

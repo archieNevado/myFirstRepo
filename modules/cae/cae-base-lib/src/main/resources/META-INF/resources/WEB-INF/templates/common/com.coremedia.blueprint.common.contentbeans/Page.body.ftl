@@ -16,6 +16,6 @@
   </#list>
 </#if>
 
-<@cm.include self=self view="bodyEnd"/>
+<@cm.include self=self view="_bodyEnd"/>
 
 </body>

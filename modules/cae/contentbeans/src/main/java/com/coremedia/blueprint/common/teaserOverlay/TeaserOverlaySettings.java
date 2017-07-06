@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.common.teaserOverlay;
 
-import com.coremedia.cap.content.Content;
+import com.coremedia.blueprint.common.contentbeans.CMSettings;
 
 /**
  * Settings for the teaser overlay feature.
@@ -14,7 +14,7 @@ public interface TeaserOverlaySettings {
    */
   boolean isEnabled();
 
-  Content getStyle();
+  CMSettings getStyle();
 
   /**
    * @cm.template.api

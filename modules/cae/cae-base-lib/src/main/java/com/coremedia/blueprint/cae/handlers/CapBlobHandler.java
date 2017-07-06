@@ -157,12 +157,13 @@ public class CapBlobHandler extends HandlerBase {
    */
   public Map<String, String> linkParameters(CapBlobRef bean) {
     String etag = bean.getETag();
-    return new ImmutableMap.Builder<String, String>()
+    return ImmutableMap.<String, String>builder()
             .put(SEGMENT_ID, String.valueOf(IdHelper.parseContentId(bean.getCapObject().getId())))
             .put(SEGMENT_ETAG, etag != null ? etag : EMPTY_ETAG)
             .put(SEGMENT_NAME, getName(bean))
             .put(SEGMENT_PROPERTY, bean.getPropertyName())
-            .put(SEGMENT_EXTENSION, getExtension(bean.getContentType(), BlobHelper.BLOB_DEFAULT_EXTENSION)).build();
+            .put(SEGMENT_EXTENSION, getExtension(bean.getContentType(), BlobHelper.BLOB_DEFAULT_EXTENSION))
+            .build();
   }
 
 

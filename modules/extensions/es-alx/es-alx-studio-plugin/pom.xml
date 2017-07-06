@@ -7,7 +7,7 @@
   </parent>
 
   <artifactId>es-alx-studio-plugin</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <description>The Analytics Plugin for the CoreMedia Studio</description>
 
@@ -19,6 +19,7 @@
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
 
     <!-- PROJECT DEPENDENCIES -->
@@ -26,18 +27,13 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>joounit</artifactId>
+      <type>swc</type>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
   </dependencies>
 
@@ -56,11 +52,6 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin</entry>
-            </requiredClasses>
-          </production>
             <additionalCssNonBundle>
               <value>resources/joo/resources/css/morris.css</value>
             </additionalCssNonBundle>

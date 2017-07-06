@@ -65,7 +65,6 @@ profiles to load a complete different set of property files. Doing this can be a
   <id>ci-system</id>
   <properties>
     <installation.host>my-ci-system.my.domain</installation.host>
-    <wcs.host>my-ci-wcs-system.my.domain</wcs.host>
     <development-properties.dir>/Users/myName/dev/ci-system-properties</development-properties.dir>
   </properties>
 </profile>

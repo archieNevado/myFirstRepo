@@ -20,7 +20,6 @@
     <module>controlroom-studio-plugin</module>
     <module>studio-app</module>
     <module>studio-webapp</module>
-    <module>studio-remote-packages</module>
   </modules>
 
 </project>

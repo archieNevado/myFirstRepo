@@ -5,7 +5,7 @@ action :install do
     group_id new_resource.group_id
     artifact_id new_resource.artifact_id
     version new_resource.version
-    classifier new_resource.classifier
+    classifier new_resource.classifier unless new_resource.classifier.nil?
     packaging 'war'
     checksum new_resource.checksum unless new_resource.checksum.nil?
     repository_url new_resource.maven_repository_url

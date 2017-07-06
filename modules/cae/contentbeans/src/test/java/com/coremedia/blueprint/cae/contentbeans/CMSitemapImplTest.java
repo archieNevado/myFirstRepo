@@ -9,10 +9,12 @@ import org.junit.Test;
 public class CMSitemapImplTest extends ContentBeanTestBase {
 
   private CMSitemap sitemap;
+  private CMSitemap sitemap2;
 
   @Before
   public void setUp() throws Exception {
     sitemap = getContentBean(86);
+    sitemap2 = getContentBean(84);
   }
 
   @Test
@@ -43,5 +45,15 @@ public class CMSitemapImplTest extends ContentBeanTestBase {
   @Test
   public void testGetRoot() throws Exception {
     Assert.assertEquals(10, sitemap.getRoot().getContentId());
+  }
+
+  @Test
+  public void testGetSitemapDepth() throws Exception {
+    Assert.assertEquals(5, sitemap2.getSitemapDepth());
+  }
+
+  @Test
+  public void testGetSitemapDepthWithDefault() throws Exception {
+    Assert.assertEquals(3, sitemap.getSitemapDepth());
   }
 }

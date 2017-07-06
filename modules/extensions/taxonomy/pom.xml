@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>taxonomy-bom</module>
     <module>taxonomy-studio</module>
     <module>taxonomy-studio-lib</module>
   </modules>

@@ -6,6 +6,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.linking.EntityResource;
+import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 import static java.util.Objects.requireNonNull;
 
@@ -33,10 +32,6 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
   private String siteId;
   private String workspaceId = StoreContextImpl.NO_WS_MARKER;
 
-  public String getId() {
-    return id;
-  }
-
   @GET
   public AbstractCatalogRepresentation get() {
     return getRepresentation();
@@ -44,20 +39,26 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   protected abstract AbstractCatalogRepresentation getRepresentation();
 
+  public String getId() {
+    return id;
+  }
+
   @PathParam(ID)
   public void setId(@Nullable String id) {
-    if (id != null) {
-      try {
-        // Todo mbi: at least "+" chars must be encoded to recognize it later when the id is to be requested
-        this.id = id.replace("+", "%2B");
-        this.id = URLDecoder.decode(this.id, "UTF-8");
-      } catch (UnsupportedEncodingException e) { //NOSONAR - exception ignored on purpose
-        //ignore
-      }
-    }
-    else {
-      this.id = null;
-    }
+    this.id = id != null ? decodeId(id) : null;
+  }
+
+  @Nonnull
+  @VisibleForTesting
+  static String decodeId(@Nonnull String id) {
+    // At least, encoded `+` chars (`%2B`) must be decoded because
+    // some program logic double escapes it in order to avoid `+`
+    // characters being unescaped to SPACE characters.
+    return id.replace("%2B", "+");
+  }
+
+  public String getSiteId() {
+    return siteId;
   }
 
   @PathParam(SITE_ID)
@@ -65,17 +66,13 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     this.siteId = siteId;
   }
 
+  public String getWorkspaceId() {
+    return workspaceId;
+  }
+
   @PathParam(WORKSPACE_ID)
   public void setWorkspaceId(@Nullable String workspaceId) {
     this.workspaceId = workspaceId == null ? StoreContextImpl.NO_WS_MARKER : workspaceId;
-  }
-
-  public String getSiteId() {
-    return siteId;
-  }
-
-  public String getWorkspaceId() {
-    return workspaceId;
   }
 
   @Nullable

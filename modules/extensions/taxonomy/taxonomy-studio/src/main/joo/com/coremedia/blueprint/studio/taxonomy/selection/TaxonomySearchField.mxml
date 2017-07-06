@@ -18,6 +18,7 @@
                                pageSize="0"
                                selectOnFocus="true"
                                emptyText="{getEmptyTextText(config.bindTo)}"
+                               ariaLabel="{getEmptyTextText(config.bindTo)}"
                                displayField="{'name'}"
                                validator="{tagPrefixValidValidator}">
   <fx:Metadata>

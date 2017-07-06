@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -90,9 +91,11 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
         try {
           Analytics analytics = initializeAnalytics(applicationName, clientId, privateKey);
           GaData gaData = call(analytics, query);
-          LOGGER.debug("Got {} tracked page views from Google Analytics", gaData.getTotalResults());
-          if (gaData.getTotalResults() > 0) {
+          if (gaData != null && gaData.getTotalResults() > 0) {
+            LOGGER.debug("Got {} tracked page views from Google Analytics", gaData.getTotalResults());
             return query.process(gaData.getRows(), gaData.getColumnHeaders());
+          } else {
+            LOGGER.debug("Got no tracked page views from Google Analytics");
           }
         } catch (Exception e) {
           LOGGER.debug("cannot initialize Google Analytics for {}.", cmalxBaseList, e);
@@ -185,13 +188,13 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
         try {
           Analytics analytics = initializeAnalytics(applicationName, serviceAccountEmail, privateKey);
           GaData gaData = call(analytics, query);
-          if (gaData.getTotalResults() > 0) {
+          if (gaData != null && gaData.getTotalResults() > 0) {
             result = newHashMap(query.process(gaData.getRows(), gaData.getColumnHeaders()));
           }
           // process pageviews map for the root navigation node
           OverallPerformanceQuery overAllQuery = new OverallPerformanceQuery(content, googleAnalyticsSettings);
           GaData overAllDataEntries = call(analytics, overAllQuery);
-          if (overAllDataEntries.getTotalResults() > 0) {
+          if (overAllDataEntries != null && overAllDataEntries.getTotalResults() > 0) {
             result.putAll(overAllQuery.process(overAllDataEntries.getRows(), overAllDataEntries.getColumnHeaders()));
           }
         } catch (Exception e) {
@@ -218,6 +221,7 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
   /**
    * @return List of results as returned by Google Analytics.
    */
+  @Nullable
   private GaData call(@Nonnull Analytics analytics, @Nonnull GoogleAnalyticsQuery googleAnalyticsQuery) {
     try {
       final Analytics.Data.Ga.Get query = googleAnalyticsQuery.getDataQuery(analytics);

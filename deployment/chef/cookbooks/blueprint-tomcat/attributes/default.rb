@@ -80,7 +80,6 @@ default['blueprint']['tomcat']['content-feeder']['heap'] = '256m'
 default['blueprint']['tomcat']['studio']['heap'] = '512m'
 default['blueprint']['tomcat']['cae-preview']['heap'] = '1024m'
 default['blueprint']['tomcat']['cae-live']['heap'] = '1024m'
-default['blueprint']['tomcat']['solr']['heap'] = '256m'
 default['blueprint']['tomcat']['caefeeder-preview']['heap'] = '256m'
 default['blueprint']['tomcat']['caefeeder-live']['heap'] = '256m'
 default['blueprint']['tomcat']['sitemanager']['heap'] = '92m'
@@ -96,12 +95,11 @@ default['blueprint']['tomcat']['content-feeder']['perm'] = '92m'
 default['blueprint']['tomcat']['studio']['perm'] = '92m'
 default['blueprint']['tomcat']['cae-preview']['perm'] = '128m'
 default['blueprint']['tomcat']['cae-live']['perm'] = '128m'
-default['blueprint']['tomcat']['solr']['perm'] = '92m'
 default['blueprint']['tomcat']['caefeeder-preview']['perm'] = '92m'
 default['blueprint']['tomcat']['caefeeder-live']['perm'] = '92m'
 default['blueprint']['tomcat']['sitemanager']['perm'] = '64m'
 
-# Port Prefixe
+# Port Prefixes
 default['blueprint']['tomcat']['solr']['port_prefix'] = 400
 default['blueprint']['tomcat']['content-management-server']['port_prefix'] = 401
 default['blueprint']['tomcat']['master-live-server']['port_prefix'] = 402
@@ -119,7 +117,6 @@ default['blueprint']['tomcat']['replication-live-server']['port_prefix'] = 420
 default['blueprint']['tomcat']['cae-live']['port_prefix'] = 421
 
 # start_priority
-default['blueprint']['tomcat']['solr']['start_priority'] = 81
 default['blueprint']['tomcat']['content-management-server']['start_priority'] = 81
 default['blueprint']['tomcat']['master-live-server']['start_priority'] = 81
 default['blueprint']['tomcat']['workflow-server']['start_priority'] = 82
@@ -145,8 +142,3 @@ default['blueprint']['tomcat']['cae-live-1']['sitemap']['start_time'] = '+200'
 ##     Common & Shared Libs    ##
 #################################
 default['blueprint']['tomcat']['common_libs']['coremedia-tomcat.jar'] = node['blueprint']['common_libs']['coremedia-tomcat.jar']
-default['blueprint']['tomcat']['common_libs']['slf4j-api.jar'] = node['blueprint']['common_libs']['slf4j-api.jar']
-default['blueprint']['tomcat']['common_libs']['jul-to-slf4j.jar'] = node['blueprint']['common_libs']['jul-to-slf4j.jar']
-default['blueprint']['tomcat']['common_libs']['jcl-over-slf4j.jar'] = node['blueprint']['common_libs']['jcl-over-slf4j.jar']
-default['blueprint']['tomcat']['common_libs']['slf4j-log4j12.jar'] = node['blueprint']['common_libs']['slf4j-log4j12.jar']
-default['blueprint']['tomcat']['common_libs']['log4j.jar'] = node['blueprint']['common_libs']['log4j.jar']

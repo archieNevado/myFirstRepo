@@ -9,7 +9,8 @@
 <StringProperty Name="description">Light Text</StringProperty>
 <StructProperty Name="style">
 <Struct>
-<StringProperty Name="color">#ffffff</StringProperty>
+<StringProperty Name="color">#fff</StringProperty>
+<StringProperty Name="ctaCls">cm-button--white</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

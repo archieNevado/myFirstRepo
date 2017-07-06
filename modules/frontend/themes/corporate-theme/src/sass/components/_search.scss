@@ -102,7 +102,7 @@ Contains styling definitions for search including search field and resultpage.
       .#{$prefix}header--open &,
       &:focus,
       &.focus {
-        width: 300px;
+        width: $search-width;
         background-color: rgba(255, 255, 255, 0.8);
         border-bottom: 0;
       }
@@ -114,6 +114,15 @@ Contains styling definitions for search including search field and resultpage.
       // if input field is focused and navigation is not openend, background will change to white
       .#{$prefix}header--open &:focus {
         background: palette(white);
+      }
+    }
+
+    @include breakpoint(sm) {
+      // input field is smaller for narrow tablet view, since login/registration links where added
+      .#{$prefix}header--open &,
+      &:focus,
+      &.focus {
+        width: $search-small-width;
       }
     }
 

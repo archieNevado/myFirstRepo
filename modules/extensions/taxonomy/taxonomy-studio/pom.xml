@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>taxonomy-studio</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <description>Taxonomy Studio Plugin for the CoreMedia Studio</description>
 
@@ -23,30 +23,26 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-dynamic-query-list</artifactId>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-components</artifactId>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>studio-theme</artifactId>
+      <type>swc</type>
       <scope>provided</scope>
-    </dependency>
-
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
   </dependencies>
 
@@ -67,11 +63,6 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.blueprint.studio.TaxonomyStudioPlugin</entry>
-            </requiredClasses>
-          </production>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.config.taxonomy</uri>

@@ -1,3 +1,6 @@
+@import "../base/vars";
+@import "../../../../sass/utils/imports";
+
 .#{$cm-user-chooser} {
 
   &__button {
@@ -13,9 +16,9 @@
     position: absolute;
     top: 2*$cm-user-chooser-padding-base-vertical+$cm-user-chooser-line-height;
     left: 0;
-    right: 0;
     padding: 0;
     background-color: #ffffff;
+    z-index: 1;
   }
 
   &__item {
@@ -30,6 +33,8 @@
 
     &__item {
       padding: 0 $cm-user-chooser-padding-base-horizontal;
+      white-space: nowrap;
+      line-height: 2;
     }
   }
 }

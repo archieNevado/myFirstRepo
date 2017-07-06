@@ -8,6 +8,10 @@ $cm-carousel-prefix: "cm-carousel" !default;
 
   &-inner {
     height: 100%;
+
+    .item {
+      height: 100%;
+    }
   }
 
   &-control {

@@ -7,7 +7,7 @@
   </parent>
 
   <artifactId>ec-studio-test-helper</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
   <name>ec-studio-test-helper</name>
   <description>Internally reused test helpers for commerce-studio</description>
 
@@ -20,16 +20,12 @@
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>client-core-test-helper</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
+      <type>swc</type>
     </dependency>
   </dependencies>
 
