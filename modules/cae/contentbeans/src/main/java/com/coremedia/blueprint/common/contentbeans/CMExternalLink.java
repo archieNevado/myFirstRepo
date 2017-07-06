@@ -9,9 +9,14 @@ import java.util.Map;
 
 
 /**
+ * <p>
  * CMExternalLink enhances an external URL with the Teasable features.
+ * </p>
+ * <p>
+ * Represents document type {@link #NAME CMExternalLink}.
+ * </p>
  *
- * <p>Represents document type {@link #NAME CMExternalLink}.</p>
+ * @cm.template.api
  */
 public interface CMExternalLink extends CMTeasable {
   /**
@@ -48,6 +53,7 @@ public interface CMExternalLink extends CMTeasable {
    * Returns the value of the document property {@link #URL}.
    *
    * @return the value of the document property {@link #URL}
+   * @cm.template.api
    */
   String getUrl();
 }

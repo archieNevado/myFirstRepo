@@ -9,11 +9,16 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Currently CMArticle has no additional features compared to CMTeasable.
  * However, we decided to keep the abstract CMTeasable and the concrete CMArticle
  * in order to facilitate future changes.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMArticle}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMArticle}.</p>
+ * @cm.template.api
  */
 public interface CMArticle extends CMTeasable {
 

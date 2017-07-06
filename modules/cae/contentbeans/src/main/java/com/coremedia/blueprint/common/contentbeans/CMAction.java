@@ -8,10 +8,18 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Dynamic resources which don't contain their actual content in the shape of
  * properties but generate it on the fly by some business logic.
- * <p>Usecases:  Search, Login, UAPI Queries, Webflows ...</p>
- * <p>Represents the document type "CMAction".</p>
+ * </p>
+ * <p>
+ * Usecases:  Search, Login, UAPI Queries, Webflows ...
+ * </p>
+ * <p>
+ * Represents the document type "CMAction".
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMAction extends CMPlaceholder {
   /**
@@ -51,14 +59,9 @@ public interface CMAction extends CMPlaceholder {
   @Override
   List<? extends Aspect<? extends CMAction>> getAspects();
 
-
   /**
    * @return Checks whether this action represents a webflow action.
    */
   boolean isWebFlow();
-
-
-
-
 
 }

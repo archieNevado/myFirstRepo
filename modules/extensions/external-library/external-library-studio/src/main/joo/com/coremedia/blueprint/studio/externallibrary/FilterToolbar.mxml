@@ -14,8 +14,8 @@
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.bem.GroupBEMEntities;
     import com.coremedia.ui.skins.ButtonSkin;
-    import com.coremedia.ui.skins.ContainerSkin;
     import com.coremedia.ui.skins.TextfieldSkin;
     import com.coremedia.ui.skins.ToolbarSkin;
 
@@ -52,42 +52,39 @@
     </Button>
     <Container flex="1">
       <items>
-        <Container width="200"
-                   itemId="typeSelector">
-          <items>
-            <Combo store="{new JsonStore()}"
-                   id_="externalDataCombo"
-                   allowBlank="true"
-                   triggerAction="all"
-                   queryMode="local"
-                   displayField="name"
-                   valueField="index"
-                   ui="{TextfieldSkin.GROUPED_LEFT.getSkin()}"
-                   emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_empty_source_combo')}"
-                   editable="false"/>
-          </items>
-          <layout>
-            <layout_Fit/>
-          </layout>
-        </Container>
-        <Container flex="1">
-          <items>
-            <TextField id_="externalLibrarySearchFilter"
-                       ui="{TextfieldSkin.GROUPED_RIGHT.getSkin()}"
-                       emptyText="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'SearchField_empty_text')}">
-              <listeners>
-                <fx:Object specialkey="{applyFilterInput}"/>
-              </listeners>
-            </TextField>
-          </items>
-          <layout>
-            <layout_Fit/>
-          </layout>
-        </Container>
+        <Combo store="{new JsonStore()}"
+               width="200"
+               id_="externalDataCombo"
+               allowBlank="true"
+               triggerAction="all"
+               queryMode="local"
+               displayField="name"
+               valueField="index"
+               emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_empty_source_combo')}"
+               editable="false"
+               ui="{TextfieldSkin.WINDOW_HEADER.getSkin()}">
+          <mixins>
+            <ui:BEMMixin bemElement="{GroupBEMEntities.ELEMENT_LEFT}"/>
+          </mixins>
+        </Combo>
+        <TextField id_="externalLibrarySearchFilter"
+                   flex="1"
+                   emptyText="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'SearchField_empty_text')}"
+                   ui="{TextfieldSkin.WINDOW_HEADER.getSkin()}">
+          <mixins>
+            <ui:BEMMixin bemElement="{GroupBEMEntities.ELEMENT_RIGHT}"/>
+          </mixins>
+          <listeners>
+            <fx:Object specialkey="{applyFilterInput}"/>
+          </listeners>
+        </TextField>
       </items>
       <layout>
         <layout_HBox/>
       </layout>
+      <plugins>
+        <ui:BEMPlugin block="{GroupBEMEntities.BLOCK}"/>
+      </plugins>
     </Container>
     <ui:IconButton id_="externalLibraryApplySearch"
                    itemId="startSearch"

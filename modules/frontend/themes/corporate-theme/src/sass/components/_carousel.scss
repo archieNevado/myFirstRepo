@@ -86,4 +86,8 @@ Contains styling definitions for all content types as cm-carousel.
       color: rgba(palette(white), 0.8);
     }
   }
+
+  .cm-image--responsive {
+    color: transparent; // hide alt text
+  }
 }

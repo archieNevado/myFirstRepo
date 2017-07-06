@@ -1,12 +1,9 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
-import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
-import com.coremedia.blueprint.common.layout.PageGridPlacement;
-import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
@@ -16,10 +13,10 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +40,65 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FragmentPageHandlerTest {
+
+  private final static String STORE_ID = "10001";
+  private final static String SITE_ID = "123456789";
+  private final static Locale LOCALE = Locale.CANADA;
+  private final static String SITE_ATTRIBUTE_NAME = SiteHelper.class.getName() + "site";
+
+  private FragmentPageHandler testling;
+  private FragmentParameters fragmentParameters;
+
+  @Mock
+  private BeanFactory beanFactory;
+
+  @Mock
+  private StoreContextProvider storeContextProvider;
+
+  @Mock
+  private StoreContext storeContext;
+
+  @Mock
+  private SitesService sitesService;
+
+  @Mock
+  private Site site;
+
+  @Mock
+  private Content rootChannel;
+
+  @Mock
+  private ContentType rootChannelType;
+
+  @Mock
+  private ContentBeanFactory contentBeanFactory;
+
+  @Mock
+  private Content placementChannel;
+
+  @Mock
+  private ContentType placementChannelType;
+
+  @Mock
+  private CMChannel placementChannelBean;
+
+  @Mock
+  private CMChannel channelBean;
+
+  @Mock
+  private HttpServletResponse response;
+
+  @Mock
+  private HttpServletRequest request;
+
+  @Mock
+  private CommerceConnection connection;
+
+  @Mock
+  private ValidationService validationService;
+
+  private final Cache cache = new Cache("test");
+
   @Test
   public void testDefault() {
     ModelAndView result = testling.handleFragment(STORE_ID, LOCALE, request, response);
@@ -65,7 +121,6 @@ public class FragmentPageHandlerTest {
   @Test
   public void noSiteInPreview() {
     testling.setPreview(true);
-    when(storeContextProvider.getCurrentContext()).thenReturn(null);
     when(connection.getStoreContext()).thenReturn(null);
     ModelAndView result = testling.handleFragment("unknown", LOCALE, request, response);
     assertNotNull(result);
@@ -89,17 +144,16 @@ public class FragmentPageHandlerTest {
     testling.setContentBeanFactory(contentBeanFactory);
     testling.setSitesService(sitesService);
 
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getStoreContext()).thenReturn(storeContext);
 
-    when(storeContextProvider.getCurrentContext()).thenReturn(storeContext);
     when(storeContext.getSiteId()).thenReturn(SITE_ID);
     when(sitesService.getSite(SITE_ID)).thenReturn(site);
 
     when(site.getSiteRootDocument()).thenReturn(rootChannel);
     when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, cache, null, null, null));
     when(validationService.validate(any())).thenReturn(true);
 
     FragmentContext context = new FragmentContext();
@@ -119,74 +173,9 @@ public class FragmentPageHandlerTest {
     when(placementChannelBean.getContent()).thenReturn(placementChannel);
   }
 
-  private FragmentPageHandler testling;
-  private FragmentParameters fragmentParameters;
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
+  }
 
-  @Mock
-  private BeanFactory beanFactory;
-
-  @Mock
-  private StoreContextProvider storeContextProvider;
-
-  @Mock
-  private StoreContext storeContext;
-
-  @Mock
-  private SitesService sitesService;
-
-  @Mock
-  private PageGridPlacementResolver pageGridPlacementResolver;
-
-  @Mock
-  private Site site;
-
-  @Mock
-  private Content rootChannel;
-
-  @Mock
-  private ContentType rootChannelType;
-
-  @Mock
-  private ContentBeanFactory contentBeanFactory;
-
-  @Mock
-  private PageGridPlacement placement;
-
-  @Mock
-  private ContentBeanBackedPageGridPlacement contentBeanBackedPageGridPlacement;
-
-  @Mock
-  private Content placementChannel;
-
-  @Mock
-  private ContentType placementChannelType;
-
-  @Mock
-  private CMChannel placementChannelBean;
-
-  @Mock
-  private CMChannel channelBean;
-
-  @Mock
-  private Linkable linkableBean;
-
-  @Mock
-  private Content linkable;
-
-  @Mock
-  private HttpServletResponse response;
-
-  @Mock
-  private HttpServletRequest request;
-
-  @Mock
-  private CommerceConnection connection;
-
-  @Mock
-  private ValidationService validationService;
-
-  private final static String STORE_ID = "10001";
-  private final static String SITE_ID = "123456789";
-  private final static Locale LOCALE = Locale.CANADA;
-  private final static String SITE_ATTRIBUTE_NAME = SiteHelper.class.getName() + "site";
 }

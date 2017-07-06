@@ -21,13 +21,13 @@
       <bean class="com.coremedia.livecontext.handler.WorkspaceIdAppendingLinkTransformer">
         <description>
           Creates a CAE LinkTransformer that rewrites all generated links
-          and adds the request parameter for a given ibm wcs workspace id.
+          and adds the request parameter for a given workspace id of a commerce system.
         </description>
       </bean>
       <bean class="com.coremedia.livecontext.preview.PreviewTokenAppendingLinkTransformer">
         <description>
           Creates a CAE LinkTransformer that rewrites all generated links
-          and adds the request parameter for a given ibm wcs preview token id.
+          and adds the request parameter for a given preview token id of a commerce system.
         </description>
         <property name="previewTokenProvider" ref="previewTokenProvider"/>
       </bean>

@@ -33,7 +33,6 @@
       <ui:items>
         <Checkbox itemId="{CHECKBOX_ITEM_ID}"
                   boxLabel="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Rendition_downloadable')}"
-                  tabIndex="1"
                   u:colspan="3">
           <plugins>
             <editor:BindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"

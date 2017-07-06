@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.caefeeder;
 
+import com.coremedia.blueprint.base.caefeeder.TreePathKeyFactory;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMLocTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
@@ -65,8 +66,7 @@ public abstract class AbstractTaxonomyPropertyConverterTest {
   protected CMLocTaxonomy sanFrancisco;
   protected CMLocTaxonomy michigan;
   protected CMTaxonomy formula1;
-  protected TaxonomyPropertyConverter taxonomyPropertyConverter;
-  
+
   @Inject
   private ContentTestHelper contentTestHelper;
   @Inject
@@ -74,23 +74,18 @@ public abstract class AbstractTaxonomyPropertyConverterTest {
   @Inject
   private TreeRelation<Content> taxonomyTreeRelation;
 
+  TreePathKeyFactory<NamedTaxonomy> taxonomyPathKeyFactory;
+
   @Before
   public void setUp() throws Exception {
     sanFrancisco = contentTestHelper.getContentBean(72);
     michigan = contentTestHelper.getContentBean(70);
     formula1 = contentTestHelper.getContentBean(80);
 
-    // spring in java.
-    TreePathKeyFactory taxonomyIdPathKeyFactory = createTreePathKeyFactory();
-    taxonomyIdPathKeyFactory.setContentRepository(contentRepository);
-    taxonomyIdPathKeyFactory.setTreeRelation(taxonomyTreeRelation);
-    PersistentCache dummyPersistentCache = new DummyPersistentCache();
-    taxonomyIdPathKeyFactory.setPersistentCache(dummyPersistentCache);
-    taxonomyPropertyConverter = new TaxonomyPropertyConverter();
-    taxonomyPropertyConverter.setTaxonomyPathKeyFactory(taxonomyIdPathKeyFactory);
+    taxonomyPathKeyFactory = new TreePathKeyFactory<>("taxonomypath.test:", new DummyPersistentCache(),
+                                                      contentRepository, taxonomyTreeRelation,
+                                                      new NamedTaxonomyFactory());
   }
-
-  protected abstract TreePathKeyFactory createTreePathKeyFactory();
 
   private static class DummyPersistentCache implements PersistentCache {
     @Override

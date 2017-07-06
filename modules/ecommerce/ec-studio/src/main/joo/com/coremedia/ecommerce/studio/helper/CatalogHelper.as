@@ -56,6 +56,7 @@ public class CatalogHelper {
   public static const CONTENT_TYPE_CM_PRODUCT:String = "CMProduct";
   public static const CONTENT_TYPE_CM_ABSTRACT_CATEGORY:String = "CMAbstractCategory";
   public static const CONTENT_TYPE_CM_EXTERNAL_CHANNEL:String = "CMExternalChannel";
+  public static const CONTENT_TYPE_CM_EXTERNAL_PRODUCT:String = "CMExternalProduct";
 
   private static const PREFERENCES_COMMERCE_STRUCT:String = 'commerce';
   public static const COMMERCE_STRUCT_WORKSPACE:String = 'workspace';
@@ -227,11 +228,9 @@ public class CatalogHelper {
   /**
    *
    * @param bindTo value expression pointing to a document of which 'externalId' property as the product id
-   * @param productPropertyName
    */
   public function getCatalogExpression(bindTo:ValueExpression):ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():* {
-      var product:Product;
       var catalogObjectId:String = bindTo.extendBy('properties').extendBy('externalId').getValue();
       if (!catalogObjectId || catalogObjectId.length === 0) {
         return null;
@@ -444,9 +443,17 @@ public class CatalogHelper {
       if (attributes) {
         name += ' ' + attributes;
       }
-    } else if (catalogObject is Category) {
-      name = (catalogObject as Category).getDisplayName();
     }
+    return name;
+  }
+
+  /**
+   *
+   * @param catalogObject
+   * @return the name and for variants the defining attributes as comma-separated list. E.g. (Red, XL)
+   */
+  public function getDisplayName(catalogObject:CatalogObject):String {
+    var name:String = catalogObject is Category ? (catalogObject as Category).getDisplayName() : getDecoratedName(catalogObject);
     return name;
   }
 

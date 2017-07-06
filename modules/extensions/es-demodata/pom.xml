@@ -19,7 +19,6 @@
   </properties>
 
   <modules>
-    <module>es-demodata-bom</module>
     <module>es-demodata-preview-cae</module>
     <module>es-demodata-generator-component</module>
     <module>es-demodata-generator-webapp</module>

@@ -99,14 +99,6 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>am-adobe-drive-server-webapp</artifactId>
-      <version>${project.version}</version>
-      <type>war</type>
-    </dependency>
-
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>cms-tools-application</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
@@ -147,12 +139,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr</artifactId>
-      <type>war</type>
-    </dependency>
-
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>solr-config</artifactId>
       <version>${project.version}</version>
@@ -164,38 +150,6 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>coremedia-tomcat</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <!--SOLR logging Jars-->
-    <!--
-     |  keep in mind to sync the versions used for the artifacts below with the attributes in the blueprint-base cookbook.
-     |  also update checksums if versions are updated
-     -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jul-to-slf4j</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.12</version>
-    </dependency>
-
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
     </dependency>
 
     <dependency>

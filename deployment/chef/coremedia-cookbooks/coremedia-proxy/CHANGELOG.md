@@ -2,6 +2,11 @@ coremedia-proxy Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia-proxy cookbook.
 
+0.3.2
+-----
+- add `text/javascript` to `deflate.conf.erb` template
+- if cluster size is `1` also render proxy params
+
 0.3.1
 -----
 - fix virtual host template. Add `NameVirtualHost *:<PORT>` directive. With the update to `apache2` version `>=3.2.0` the `NameVirtualHost` directive

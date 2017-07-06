@@ -25,7 +25,11 @@
   </#list>
   <#--if detailview add content element too as last item (leaf), if not disabled -->
   <#if (cmpage.detailView && !hideLastElement)>
-    <li class="cm-breadcrumb__item active"<@cm.metadata data=[cmpage.content, "properties.teaserTitle"]/>>${cmpage.content.teaserTitle!""}</li>
+<#--
+  TODO: See CMS-9172. We would like to render the metadata like:
+  <li class="cm-breadcrumb__item active"<@cm.metadata data=[cmpage.content, "properties.teaserTitle"]/>>${cmpage.content.teaserTitle!""}</li>
+-->
+  <li class="cm-breadcrumb__item active">${cmpage.content.teaserTitle!""}</li>
   </#if>
   </ul>
 </#if>

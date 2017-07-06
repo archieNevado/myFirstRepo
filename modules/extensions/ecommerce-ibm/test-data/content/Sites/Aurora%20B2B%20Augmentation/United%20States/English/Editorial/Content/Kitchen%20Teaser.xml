@@ -5,6 +5,19 @@
 </master>
 <viewtype>
 </viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="teaserOverlay">
+<Struct>
+<BooleanProperty Name="enabled">true</BooleanProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Options/Settings/Teaser%20Styles/Light%20on%20Dark.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light%20on%20Dark"/>
+<IntProperty Name="positionX">-47</IntProperty>
+<IntProperty Name="positionY">-28</IntProperty>
+<IntProperty Name="width">29</IntProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles2>
@@ -20,9 +33,10 @@
 </locationTaxonomy>
 <contexts>
 </contexts>
-<teaserTitle>Chef Corp provides great products to grow my business</teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p/></div></teaserText>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1">Great products <br/>to grow my business</p><p>Find out more about kitchen products</p></div></teaserText>
 <pictures>
+<link href="Homepage/Corporate%20Image/Chef%20Corp%20Foundf14a982c.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Corporate%20Image/Chef%20Corp%20Founder%20Portrait%20Picture"/>
 </pictures>
 <related>
 </related>

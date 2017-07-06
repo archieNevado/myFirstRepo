@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.ibm.studio.action {
-import com.coremedia.livecontext.studio.action.*;
 import com.coremedia.cms.editor.sdk.actions.ActionConfigUtil;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.MarketingSpot;
 import com.coremedia.ecommerce.studio.model.Product;
+import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.livecontext.ibm.studio.mgmtcenter.ManagementCenterUtil;
+import com.coremedia.livecontext.studio.action.*;
 
 import mx.resources.ResourceManager;
 
@@ -24,7 +25,7 @@ public class OpenInManagementCenterActionBase extends LiveContextCatalogObjectAc
   }
 
   override protected function isDisabledFor(catalogObjects:Array):Boolean {
-    if (!ManagementCenterUtil.isSupportedBrowser()) {
+    if (!ManagementCenterUtil.isSupportedBrowser(catalogObjects)) {
       return true;
     }
 
@@ -47,8 +48,26 @@ public class OpenInManagementCenterActionBase extends LiveContextCatalogObjectAc
     return true;
   }
 
+  override protected function isHiddenFor(catalogObjects:Array):Boolean {
+    //we need a catalog object to access the store object.
+    if (catalogObjects.length === 0) {
+      return false;
+    }
+    var catalogObject:CatalogObject = catalogObjects[0] as CatalogObject;
+    if (!catalogObject) {
+      return true;
+    }
+
+    var store:Store = catalogObject.getStore();
+    if (!store) {
+      return true;
+    }
+
+    return store.getVendorName() !== "IBM" || super.isHiddenFor(catalogObjects);
+  }
+
   private function doExecute():void {
-    if (!ManagementCenterUtil.isSupportedBrowser()) {
+    if (!ManagementCenterUtil.isSupportedBrowser(getCatalogObjects())) {
       return;
     }
     var catalogObject:CatalogObject = getCatalogObjects()[0];

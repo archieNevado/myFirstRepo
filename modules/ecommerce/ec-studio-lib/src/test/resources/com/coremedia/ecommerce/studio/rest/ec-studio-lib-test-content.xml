@@ -33,6 +33,54 @@
                 </linkProperty>
               </version>
             </document>
+            <document id="20" type="CMExternalChannel" name="catalogRoot">
+              <version number="1">
+                <stringProperty name="segment" value="catalogRoot"/>
+                <stringProperty name="title" value="catalogRoot"/>
+                <stringProperty name="externalId" value="ROOT"/>
+                <markupProperty name="placement" grammar="coremedia-struct-2008" url="20placement.xml"/>
+                <markupProperty name="pdpPagegrid" grammar="coremedia-struct-2008" url="20pdpPagegrid.xml"/>
+              </version>
+            </document>
+
+            <!-- section symbols -->
+            <document id="212" type="CMSymbol" name="north">
+              <version number="1">
+                <stringProperty name="description" value="north"/>
+              </version>
+            </document>
+            <document id="214" type="CMSymbol" name="east">
+              <version number="1">
+                <stringProperty name="description" value="east"/>
+              </version>
+            </document>
+            <document id="216" type="CMSymbol" name="south">
+              <version number="1">
+                <stringProperty name="description" value="south"/>
+              </version>
+            </document>
+            <document id="218" type="CMSymbol" name="west">
+              <version number="1">
+                <stringProperty name="description" value="west"/>
+              </version>
+            </document>
+            <document id="220" type="CMSymbol" name="main">
+              <version number="1">
+                <stringProperty name="description" value="main"/>
+              </version>
+            </document>
+
+            <document id="224" type="CMSettings" name="CategoryLayoutSettings">
+              <version number="1">
+                <markupProperty name="settings" url="224settings.xml" grammar="coremedia-struct-2008"/>
+              </version>
+            </document>
+
+            <document id="226" type="CMSettings" name="ProductLayoutSettings">
+              <version number="1">
+                <markupProperty name="settings" url="226settings.xml" grammar="coremedia-struct-2008"/>
+              </version>
+            </document>
 
           </folder>
         </folder>

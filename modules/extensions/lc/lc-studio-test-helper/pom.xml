@@ -7,7 +7,7 @@
   </parent>
 
   <artifactId>lc-studio-test-helper</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
   <name>lc-studio-test-helper</name>
   <description>Internally reused test helpers for lc-studio</description>
 
@@ -20,41 +20,42 @@
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>ui-components</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-studio-model</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-studio</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-studio-test-helper</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core-test-helper</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
-    <!--<dependency>-->
-      <!--<groupId>com.coremedia.ui.toolkit</groupId>-->
-      <!--<artifactId>client-core-test-helper</artifactId>-->
-    <!--</dependency>-->
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
+      <type>swc</type>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-    </dependency>
-  </dependencies>
+   </dependencies>
 
   <build>
     <plugins>

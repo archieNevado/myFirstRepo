@@ -11,6 +11,6 @@
   -->
   <bean id="searchResultRedirectUrlProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.DummyCommercePropertyProvider"/>
   <bean id="checkoutRedirectUrlProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.DummyCommercePropertyProvider"/>
-  <bean id="pageHandlerUrlProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.DummyCommercePropertyProvider"/>
+  <bean id="pageHandlerUrlProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.NoOpCommercePropertyProvider"/>
   <bean id="previewTokenProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.DummyCommercePropertyProvider"/>
 </beans>

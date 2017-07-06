@@ -4,6 +4,7 @@ import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -13,6 +14,7 @@ public class PreviewTokenProvider implements CommercePropertyProvider {
 
   private LoginService loginService;
 
+  @Nullable
   @Override
   public Object provideValue(@Nonnull Map<String, Object> parameters) {
     String result = null;
@@ -27,5 +29,4 @@ public class PreviewTokenProvider implements CommercePropertyProvider {
   public void setLoginService(LoginService loginService) {
     this.loginService = loginService;
   }
-
 }

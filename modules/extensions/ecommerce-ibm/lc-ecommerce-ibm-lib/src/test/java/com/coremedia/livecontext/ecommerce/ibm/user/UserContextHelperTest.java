@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
 
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,9 +12,9 @@ import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class UserContextHelperTest extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class UserContextHelperTest extends IbmServiceTestBase {
 
   @Test
   public void testNullContext(){

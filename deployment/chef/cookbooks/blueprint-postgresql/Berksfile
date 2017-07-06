@@ -20,7 +20,6 @@ def add_all_from_dir(dir, excludes = [])
 end
 
 # END HELPER FUNCTIONS
-source 'https://supermarket.coremedia.com'
 source 'https://supermarket.chef.io'
 
 metadata

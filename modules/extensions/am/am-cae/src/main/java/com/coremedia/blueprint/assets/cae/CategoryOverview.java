@@ -9,6 +9,8 @@ import java.util.List;
 
 /**
  * This model provides an overview of the subcategories of the given category.
+ *
+ * @cm.template.api
  */
 public class CategoryOverview implements DownloadPortalContext {
 
@@ -17,7 +19,8 @@ public class CategoryOverview implements DownloadPortalContext {
 
   /**
    * Creates an instance of the AMCategoryOverview
-   * @param category the selected category or <code>null</code> for the root category
+   *
+   * @param category      the selected category or {@code null} for the root category
    * @param subcategories all subcategories of the selected category
    */
   public CategoryOverview(@Nullable AMTaxonomy category, @Nonnull List<Subcategory> subcategories) {
@@ -26,8 +29,10 @@ public class CategoryOverview implements DownloadPortalContext {
   }
 
   /**
-   * Returns the selected category or <code>null</code> for the root category.
-   * @return the selected category or <code>null</code> for the root category.
+   * Returns the selected category or {@code null} for the root category.
+   *
+   * @return the selected category or {@code null} for the root category.
+   * @cm.template.api
    */
   @Nullable
   public AMTaxonomy getCategory() {
@@ -36,7 +41,9 @@ public class CategoryOverview implements DownloadPortalContext {
 
   /**
    * Returns a list of all subcategories that contain assets.
+   *
    * @return a list of all subcategories that contain assets.
+   * @cm.template.api
    */
   @Nonnull
   public List<Subcategory> getSubcategories() {

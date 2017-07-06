@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ibm.studio.mgmtcenter {
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.MarketingSpot;
 import com.coremedia.ecommerce.studio.model.Product;
@@ -160,10 +161,18 @@ public class ManagementCenterUtil {
   }
 
 
-  public static function isSupportedBrowser():Boolean {
-    var activeStore:Store = CatalogHelper.getInstance().getActiveStoreExpression().getValue();
-    if (activeStore) {
-      var wcsVersion:Vector.<int> = parseWcsVersion(activeStore.getVendorVersion() as String);
+  public static function isSupportedBrowser(catalogObjects:Array = null):Boolean {
+    var store:Store;
+    if (catalogObjects && catalogObjects.length > 0) {
+      store = CatalogObject(catalogObjects[0]).getStore();
+    } else {
+      store = CatalogHelper.getInstance().getActiveStoreExpression().getValue();
+    }
+    if (store) {
+      if (store.getVendorName() !== "IBM") {
+        return false;
+      }
+      var wcsVersion:Vector.<int> = parseWcsVersion(store.getVendorVersion() as String);
       if (wcsVersion[0] > 7 || wcsVersion[0] == 7 && wcsVersion[1] > 7) {
         return Ext.isIE || Ext.isGecko || Ext.isChrome;
       }

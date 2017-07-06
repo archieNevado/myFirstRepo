@@ -1,6 +1,9 @@
 package com.coremedia.ecommerce.studio.components.link {
 import com.coremedia.cap.content.Content;
+import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.*;
+import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ui.data.Bean;
@@ -92,11 +95,47 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
   }
 
   public function acceptsLinks(links:Array):Boolean {
-    return links.every(function(link:CatalogObject):Boolean {
+    return links.every(function(link:Object):Boolean {
+      var catalogObject:CatalogObject = getCatalogObject(link);
+      if (!catalogObject) {
+        return false;
+      }
+      if (catalogObject.getSiteId() !== getSiteId()) {
+        return false;
+      }
+
       return linkTypeNames.some(function(linkTypeName:String):Boolean {
-        return CatalogHelper.getInstance().isSubType(link, linkTypeName);
+        return CatalogHelper.getInstance().isSubType(catalogObject, linkTypeName);
       });
     });
+  }
+
+  private function getSiteId():String {
+    var siteId:String;
+    if (bindTo) {
+      var content:Content = bindTo.getValue() as Content;
+      if (content) {
+        siteId = editorContext.getSitesService().getSiteFor(content).getId();
+      }
+    } else {
+      //no content there. so let's take the preferred site
+      var preferredSite:Site = editorContext.getSitesService().getPreferredSite();
+      if (preferredSite) {
+        siteId = preferredSite.getId();
+      }
+    }
+    return siteId;
+  }
+
+  private function getCatalogObject(link:Object):CatalogObject {
+    var catalogObject:CatalogObject = link as CatalogObject;
+    if (!catalogObject) {
+      var content:Content = link as Content;
+      if (content) {
+        catalogObject = augmentationService.getCatalogObject(content);
+      }
+    }
+    return catalogObject;
   }
 
   public function getLinks():Array {
@@ -107,7 +146,20 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
     if (createStructFunction) {
       createStructFunction.apply();
     }
-    getVE().setValue(links);
+    var myLinks:Array = links.map(getCatalogObject);
+    //are some links yet not loaded?
+    var notLoadedLinks:Array = myLinks.filter(function(myLink:CatalogObject):Boolean {
+      return !myLink.isLoaded();
+    });
+    if (!notLoadedLinks || notLoadedLinks.length === 0) {
+      getVE().setValue(myLinks);
+    } else {
+      notLoadedLinks.every(function(notLoadedLink:CatalogObject):void {
+        notLoadedLink.load(function():void {
+          setLinks(myLinks);
+        })
+      });
+    }
   }
 
   private function transformer(value:*):Array {

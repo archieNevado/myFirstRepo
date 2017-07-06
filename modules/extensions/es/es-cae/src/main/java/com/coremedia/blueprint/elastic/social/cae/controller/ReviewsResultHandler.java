@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.objectserver.web.links.Link;
@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 @Link
 @RequestMapping
@@ -30,11 +30,11 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
    * URI pattern, for URIs like "/dynamic/fragment/reviews/{segment}/{contextId}/{id}"
    */
   public static final String DYNAMIC_PATTERN_REVIEWS = "/" + PREFIX_DYNAMIC +
-    "/" + SEGMENTS_FRAGMENT +
-    "/" + REVIEWS_PREFIX +
-    "/{" + ROOT_SEGMENT + "}" +
-    "/{" + CONTEXT_ID + "}" +
-    "/{" + ID + "}";
+          "/" + SEGMENTS_FRAGMENT +
+          "/" + REVIEWS_PREFIX +
+          "/{" + ROOT_SEGMENT + "}" +
+          "/{" + CONTEXT_ID + "}" +
+          "/{" + ID + "}";
 
   @RequestMapping(value = DYNAMIC_PATTERN_REVIEWS, method = RequestMethod.GET)
   public ModelAndView getReviews(@PathVariable(CONTEXT_ID) String contextId,
@@ -50,7 +50,7 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
                                    @RequestParam(value = "text", required = false) String text,
                                    @RequestParam(value = "title", required = false) String title,
                                    @RequestParam(value = "rating", required = false) Integer rating,
-                                   HttpServletRequest request ) {
+                                   HttpServletRequest request) {
     return handleCreateReview(contextId, targetId, text, title, rating, request);
   }
 
@@ -69,7 +69,7 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
   }
 
   @Override
-  protected ReviewsResult getReviewsResult(Object target, boolean enabled, ContributionType contributionType) {
-    return new ReviewsResult(target, getElasticSocialUserHelper().getCurrentUser(), getElasticSocialService(), enabled, contributionType);
+  protected ReviewsResult getReviewsResult(Object target, boolean enabled, ContributionType contributionType, ElasticSocialConfiguration elasticSocialConfiguration) {
+    return new ReviewsResult(target, getElasticSocialUserHelper().getCurrentUser(), getElasticSocialService(), enabled, contributionType, elasticSocialConfiguration);
   }
 }

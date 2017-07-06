@@ -93,7 +93,7 @@
 
   <bean id="microSiteHandler" class="com.coremedia.livecontext.handler.LiveContextChannelLinkBuilder" parent="ecommerceHandlerBase">
     <property name="resolveContextStrategy" ref="resolveProductContextStrategy"/>  <!-- ## actually not needed -->
-    <property name="microSiteExtension" ref="microSiteExtension"/>
+    <property name="commerceLedPageExtension" ref="commerceLedPageExtension"/>
     <property name="searchLandingPagesExtension" ref="searchLandingPagesExtension" />
   </bean>
 
@@ -106,9 +106,11 @@
     <property name="contentRepository" ref="contentRepository"/>
   </bean>
 
-  <bean id="microSiteExtension" class="com.coremedia.livecontext.logictypes.MicroSiteExtension" parent="ecommerceHandlerBase">
+  <bean id="commerceLedPageExtension" class="com.coremedia.livecontext.logictypes.CommerceLedPageExtension" parent="ecommerceHandlerBase">
     <property name="resolveContextStrategy" ref="resolveProductContextStrategy"/>
-    <property name="externalSeoSegmentBuilder" ref="externalSeoSegmentBuilder" />
+    <property name="contentURLKeyword" value="${livecontext.content-url-prefix}"/>
+    <!--Use legacyExternalSeoSegmentBuilder for the legacy format-->
+    <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder" />
   </bean>
 
   <bean id="searchLandingPagesExtension" class="com.coremedia.livecontext.logictypes.SearchLandingPagesExtension" parent="ecommerceHandlerBase">

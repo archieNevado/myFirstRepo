@@ -10,16 +10,25 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * A picture with the actual image blob and some metadata.
- * <p>Note that a Picture is a first class content object. If you are sure
+ * </p>
+ * <p>
+ * Note that a Picture is a first class content object. If you are sure
  * that your picture is used only in an article or in a photoshow, just
  * ignore the teaser properties. We could have introduced an <i>Asset</i> type
- * for such purposes, but we wanted to keep the doctypes simple.</p>
- * <p/>
- * <p>If you need distinct blobs of a picture, e.g. optimized for online
+ * for such purposes, but we wanted to keep the doctypes simple.
+ * </p>
+ * <p>
+ * If you need distinct blobs of a picture, e.g. optimized for online
  * or print usage, you should derive a new doctype from CMPicture and
- * add more BlobProperties or use an DocTypeAspect to attach further properties.</p>
- * <p>Represents the document type {@link #NAME CMPicture}.</p>
+ * add more BlobProperties or use an DocTypeAspect to attach further properties.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMPicture}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMPicture extends CMVisual {
   /**
@@ -58,6 +67,8 @@ public interface CMPicture extends CMVisual {
   /**
    * Returns the available transformation definitions for this image.
    * Image variants may differ if the site specific image variants are enabled.
+   *
+   * @cm.template.api
    */
   List<Transformation> getTransformations();
 

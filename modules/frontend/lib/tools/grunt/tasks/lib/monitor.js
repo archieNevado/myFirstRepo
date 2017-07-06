@@ -93,53 +93,148 @@ const getMonitorConfig = grunt => {
  * @param grunt
  * @private
  */
-const addWatchEventListener = grunt => {
+const addWatchEventListener = (grunt, livereload) => {
   const { debounce } = require('lodash');
   const path = require('path');
+  const { remoteThemeImporter } = require('@coremedia/common');
 
   const COPY_MAIN_CWD = path.normalize(grunt.config('copy.main.cwd'));
   const COPY_TEMPLATES_CWD = path.normalize(grunt.config('copy.templates.cwd'));
   const CLEAN_FILELIST_CWD = path.normalize(grunt.config('clean.options.cwd'));
 
-  let watchedFiles = Object.create(null);
-  const onChange = debounce(() => {
-    grunt.config('cm.uploadFile.filepaths', '');
-    grunt.config('cm.deleteFile.filepaths', '');
-    grunt.config('copy.main.src', []);
-    grunt.config('clean.filelist.src', []);
-    grunt.config('copy.templates.src', '');
+  const logger = {
+    log: grunt.verbose.writeln,
+    info: grunt.log.writeln,
+    error: grunt.log.error
+  };
 
-    for (let target in watchedFiles) {
-      let files = Array.from(watchedFiles[target]);
-      if (target === 'themeChanged') {
-        files = files.map(f => f.replace(COPY_MAIN_CWD, ''));
-        grunt.config('copy.main.src', files);
-      } else if (target === 'themeDeleted') {
-        files = files.map(f => f.replace('src', CLEAN_FILELIST_CWD));
-        grunt.config('clean.filelist.src', files);
-      } else if (target === 'ftl') {
-        files = files.map(f => f.replace(COPY_TEMPLATES_CWD, ''));
-        grunt.config('copy.templates.src', files);
-      } else if (target === 'targetDescriptor') {
-        grunt.config('cm.uploadDescriptor.filepaths', files);
-      } else if (target === 'targetChanged') {
-        grunt.config('cm.uploadFile.filepaths', files);
-      } else if (target === 'targetDeleted') {
-        grunt.config('cm.deleteFile.filepaths', files);
-      }
+  let busy = false;
+  let watchedFiles = Object.create(null);
+
+  const done = () => {
+    busy = false;
+    livereload.trigger(logger);
+    grunt.log.writeln('');
+    grunt.log.writeln('Done. Waiting...');
+    grunt.log.writeln('');
+    onChange();
+  };
+
+  const handleThemeChanged = () => {
+    const files = Array.from(watchedFiles.themeChanged).map(f => f.replace(COPY_MAIN_CWD, ''));
+    delete watchedFiles.themeChanged;
+    grunt.config('copy.main.src', files);
+  };
+
+  const handleThemeDeleted = () => {
+    const files = Array.from(watchedFiles.themeDeleted).map(f => f.replace('src', CLEAN_FILELIST_CWD));
+    delete watchedFiles.themeDeleted;
+    grunt.config('clean.filelist.src', files);
+  };
+
+  const handleTemplates = () => {
+    const files = Array.from(watchedFiles.ftl).map(f => f.replace(COPY_TEMPLATES_CWD, ''));
+    delete watchedFiles.ftl;
+    grunt.config('copy.templates.src', files);
+  };
+
+  const handleTargetDescriptor = callback => {
+    const { targetDescriptor } = watchedFiles;
+    delete watchedFiles.targetDescriptor;
+    const uploadDescriptorFiles = Array.from(targetDescriptor);
+    remoteThemeImporter.uploadDescriptor(
+      grunt.config('themeConfig').name,
+      uploadDescriptorFiles,
+      logger
+    ).then(msg => {
+      grunt.log.oklns(msg);
+      callback();
+    }).catch(e => {
+      grunt.log.errorlns(e);
+      callback();
+    });
+  };
+
+  const handleTargetChanged = callback => {
+    const { targetChanged } = watchedFiles;
+    delete watchedFiles.targetChanged;
+    const uploadFiles = Array.from(targetChanged);
+    remoteThemeImporter.uploadFile(
+      grunt.config('themeConfig').name,
+      uploadFiles,
+      logger
+    ).then(msg => {
+      grunt.log.oklns(msg);
+      callback();
+    }).catch(e => {
+      grunt.log.errorlns(e);
+      callback();
+    });
+  };
+
+  const handleTargetDeleted = callback => {
+    const { targetDeleted } = watchedFiles;
+    delete watchedFiles.targetDeleted;
+    const deleteFiles = Array.from(targetDeleted);
+    const deletions = deleteFiles.map(filepath =>
+      remoteThemeImporter.deleteFile(
+        grunt.config('themeConfig').name,
+        filepath,
+        logger
+      )
+    );
+    /*global Promise*/
+    Promise.all(deletions).then(msgs => {
+      msgs.forEach(msg => {
+        if (msg.type === 'SUCCESS') {
+          grunt.log.oklns(msg.text);
+        } else {
+          grunt.log.errorlns(msg.text);
+        }
+      });
+      callback();
+    });
+  };
+
+  const onChange = debounce(() => {
+    if (watchedFiles.themeChanged) {
+      handleThemeChanged();
+    }
+    if (watchedFiles.themeDeleted) {
+      handleThemeDeleted();
+    }
+    if (watchedFiles.ftl) {
+      handleTemplates();
     }
 
-    watchedFiles = Object.create(null);
-  }, 200);
+    if (busy) {
+      return;
+    }
+
+    if (watchedFiles.targetDescriptor) {
+      busy = true;
+      handleTargetDescriptor(done);
+      return;
+    }
+    if (watchedFiles.targetChanged) {
+      busy = true;
+      handleTargetChanged(done);
+      return;
+    }
+    if (watchedFiles.targetDeleted) {
+      busy = true;
+      handleTargetDeleted(done);
+      return;
+    }
+
+  }, 2000);
 
   // Add watch event listener to set the file to be uploaded
   grunt.event.on('watch', (action, filepath, target) => {
     if (!watchedFiles[target]) {
       watchedFiles[target] = new Set();
     }
-    watchedFiles[target].add(
-            path.normalize(filepath)
-    );
+    watchedFiles[target].add(path.normalize(filepath));
     onChange();
   });
 };

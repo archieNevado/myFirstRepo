@@ -1,7 +1,7 @@
 !tape
 name: ssi_testFindSegmentById
 interactions:
-- recorded: 2016-07-25T15:26:22.485Z
+- recorded: 2017-01-27T12:17:56.784Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,22 +17,19 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:23 GMT
+      Date: Fri, 27 Jan 2017 12:17:56 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000bus46QBOnSXBQ2AUQtqtgAb:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000ZB-cWscITThuoHGMqjbvU56:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
-      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
       Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
-      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-07-25T15:26:22.522Z
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-01-27T12:17:56.821Z
   request:
     method: POST
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
@@ -50,14 +47,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:23 GMT
+      Date: Fri, 27 Jan 2017 12:17:56 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000gmg2UqO_lgUL2QRK5gr7tBQ:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000z5LKiZoQT07Iuj2YkoGYdD7:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"WCToken":"2%2Cr9G1jWGmdmigQrkHnHHvjWPmdVlR8%2F5p87KmCzWvNByFv%2FmzIGyABVXMitnzXwueezu7nSetzQl7D2%2BjlxurDv1YozgPrfcple3pcek6APGfcTNhqgSHrEQMsKmLe%2Fa3OIVaoCHUNcvpFcnstP5SEbtjghh8MB7iuLoGJNo42%2FxzHzEx1JV%2F49uYVqGmpxVAt9dYVLcoAXN3gZxzcmp26ljx9KlWNNB19JMw5s7CyFw%3D","userId":"2","WCTrustedToken":"2%2ChDyZYiBYOgRVIVwNsoJf%2BmCS3DojCT%2FluytRcKgDF%2FE%3D","personalizationID":"1469420030228-2"}'
-- recorded: 2016-07-25T15:26:22.559Z
+    body: '{"WCToken":"2%2Cr5eyeArOy6gnq5CNRsiIllpDQiC1DqJ7EZiNFPwP5fea5ItNS4U169fLMndNxg0pzFz51NzV1%2Bde3%2B7yteiE4tDCA1FaxqGyT1C%2Fmq%2FBPbQz%2FOw9XGN%2Fn9lB1LGk9H9L%2BYIeihPZ7fjtTpzo4eizNaVD2zpVnm%2Fwe8ZK0BrasoR8rHwt3JdsocNoPaEkWnFs7019AE1i7mgTwe41%2FUDWD%2BUNqYpwpEMr8Qs79HZZp6M%3D","userId":"2","WCTrustedToken":"2%2CeSVNuLYiwDDGko59A7DzVZP0ZeLuqxnRXA44o4m1amU%3D","personalizationID":"1485481511365-1"}'
+- recorded: 2017-01-27T12:17:56.859Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/segment?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -67,27 +63,26 @@ interactions:
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
       User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-      WCToken: 2%2Cr9G1jWGmdmigQrkHnHHvjWPmdVlR8%2F5p87KmCzWvNByFv%2FmzIGyABVXMitnzXwueezu7nSetzQl7D2%2BjlxurDv1YozgPrfcple3pcek6APGfcTNhqgSHrEQMsKmLe%2Fa3OIVaoCHUNcvpFcnstP5SEbtjghh8MB7iuLoGJNo42%2FxzHzEx1JV%2F49uYVqGmpxVAt9dYVLcoAXN3gZxzcmp26ljx9KlWNNB19JMw5s7CyFw%3D
+      WCToken: 2%2Cr5eyeArOy6gnq5CNRsiIllpDQiC1DqJ7EZiNFPwP5fea5ItNS4U169fLMndNxg0pzFz51NzV1%2Bde3%2B7yteiE4tDCA1FaxqGyT1C%2Fmq%2FBPbQz%2FOw9XGN%2Fn9lB1LGk9H9L%2BYIeihPZ7fjtTpzo4eizNaVD2zpVnm%2Fwe8ZK0BrasoR8rHwt3JdsocNoPaEkWnFs7019AE1i7mgTwe41%2FUDWD%2BUNqYpwpEMr8Qs79HZZp6M%3D
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:23 GMT
+      Date: Fri, 27 Jan 2017 12:17:56 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000TAc9v8RwDzn-ygLS0-wDlDU:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=000083XwXPf1y1EnEaCi2Wn7gjx:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":8,"resourceId":"http:\/\/toko-16-01-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/segment?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":8,"recordSetComplete":true,"recordSetStartNumber":0,"MemberGroup":[{"id":"8407790678950000508","description":{"value":"Customers
+    body: '{"recordSetTotal":8,"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/segment?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":8,"recordSetComplete":true,"recordSetStartNumber":0,"MemberGroup":[{"id":"8407790678950000508","description":{"value":"Customers
       who are 40 years of age or older","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Customers who are 40 years of age or older","language":"-1"}},{"id":"8407790678950000507","description":{"value":"Customers who are under 40 years of
       age","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Customers who are under 40 years of age","language":"-1"}},{"id":"8407790678950000506","description":{"value":"Female Customers","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Female
-      Customers","language":"-1"}},{"id":"8407790678950000702","description":{"value":"Frequent Buyer","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Frequent Buyer","language":"-1"}},{"id":"8407790678950000504","description":{"value":"Guest
+      Customers","language":"-1"}},{"id":"8407790678950000652","description":{"value":"Frequent Buyer","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Frequent Buyer","language":"-1"}},{"id":"8407790678950000504","description":{"value":"Guest
       Shoppers","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Guest Shoppers","language":"-1"}},{"id":"8407790678950000505","description":{"value":"Male Customers","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Male
       Customers","language":"-1"}},{"id":"8407790678950000502","description":{"value":"Customers who have registered with the store","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Registered Customers","language":"-1"}},{"id":"8407790678950000503","description":{"value":"Customers
       who have placed at least one order with the store","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Repeat Customers","language":"-1"}}],"resourceName":"segment"}'
-- recorded: 2016-07-25T15:26:22.583Z
+- recorded: 2017-01-27T12:17:56.882Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/segment/8407790678950000502?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -97,18 +92,17 @@ interactions:
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
       User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-      WCToken: 2%2Cr9G1jWGmdmigQrkHnHHvjWPmdVlR8%2F5p87KmCzWvNByFv%2FmzIGyABVXMitnzXwueezu7nSetzQl7D2%2BjlxurDv1YozgPrfcple3pcek6APGfcTNhqgSHrEQMsKmLe%2Fa3OIVaoCHUNcvpFcnstP5SEbtjghh8MB7iuLoGJNo42%2FxzHzEx1JV%2F49uYVqGmpxVAt9dYVLcoAXN3gZxzcmp26ljx9KlWNNB19JMw5s7CyFw%3D
+      WCToken: 2%2Cr5eyeArOy6gnq5CNRsiIllpDQiC1DqJ7EZiNFPwP5fea5ItNS4U169fLMndNxg0pzFz51NzV1%2Bde3%2B7yteiE4tDCA1FaxqGyT1C%2Fmq%2FBPbQz%2FOw9XGN%2Fn9lB1LGk9H9L%2BYIeihPZ7fjtTpzo4eizNaVD2zpVnm%2Fwe8ZK0BrasoR8rHwt3JdsocNoPaEkWnFs7019AE1i7mgTwe41%2FUDWD%2BUNqYpwpEMr8Qs79HZZp6M%3D
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:23 GMT
+      Date: Fri, 27 Jan 2017 12:17:56 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000naQq9FSVKeDdCQdXQuSoBvp:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000QwOVNQMUHocMJ-DHiHqFOiI:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":1,"resourceId":"http:\/\/toko-16-01-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/segment\/8407790678950000502?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"recordSetComplete":true,"recordSetStartNumber":0,"MemberGroup":[{"id":"8407790678950000502","description":{"value":"Customers
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/segment\/8407790678950000502?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"recordSetComplete":true,"recordSetStartNumber":0,"MemberGroup":[{"id":"8407790678950000502","description":{"value":"Customers
       who have registered with the store","language":"-1"},"usage":["GeneralPurpose"],"displayName":{"value":"Registered Customers","language":"-1"}}],"resourceName":"segment"}'

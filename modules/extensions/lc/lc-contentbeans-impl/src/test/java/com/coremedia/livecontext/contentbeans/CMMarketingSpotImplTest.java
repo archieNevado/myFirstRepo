@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.contentbeans;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -9,7 +10,6 @@ import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
@@ -18,6 +18,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -88,7 +89,7 @@ public class CMMarketingSpotImplTest {
   @Before
   public void init() {
     initMocks(this);
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
 
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(storeContextProvider.findContextByContent(any(Content.class))).thenReturn(storeContext);
@@ -106,6 +107,11 @@ public class CMMarketingSpotImplTest {
     testling.setLiveContextNavigationFactory(liveContextNavigationFactory);
     when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
     when(contentSiteAspect.getSite()).thenReturn(site);
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   @Test

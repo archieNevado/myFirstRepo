@@ -19,7 +19,7 @@
 <Struct>
 <StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=466;y=0;width=1294;height=2008</StringProperty>
 <StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=264;y=0;width=1503;height=2008</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=20;y=0;width=2009;height=2008</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=20;y=0;width=2008;height=2008</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=0;width=1910;height=1431</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=217;width=2048;height=1152</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=221;width=2048;height=821</StringProperty>
@@ -85,7 +85,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../../Settings/Taxonomies/Subject/Blenders.xml" path="/Settings/Taxonomies/Subject/Blenders"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

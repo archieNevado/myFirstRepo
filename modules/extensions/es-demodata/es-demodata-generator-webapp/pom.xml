@@ -95,6 +95,12 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>logging-config</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
@@ -152,9 +158,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <!--
-           invoke "mvn spring-boot:run" for running this webapp on http://localhost:8080/
-        -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>

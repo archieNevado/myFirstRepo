@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.studio.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
@@ -84,12 +84,12 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
       // connection on the respective thread-local because the catalog
       // service needs it for now (and the commerce filter doesn't apply
       // in this upload scenario).
-      Commerce.setCurrentConnection(commerceConnection.get());
+      DefaultConnection.set(commerceConnection.get());
       List<String> productIds;
       try {
         productIds = getProductIds(commerceConnection.get(), request, blob);
       } finally {
-        Commerce.clearCurrent();
+        DefaultConnection.clear();
       }
 
       properties.put(NAME_LOCAL_SETTINGS, assetHelper.updateCMPictureForExternalIds(request.getEntity(), productIds));

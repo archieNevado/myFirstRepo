@@ -20,7 +20,7 @@ public class RatingViewHookEventListener implements ViewHookEventListener<CMTeas
     // not yet implemented
     /*
     if(VIEW_HOOK_END.equals(event.getId())) {
-      return new RenderNode(getRatingResult(event.getBean()), null);
+      return new RenderNode(getRating(event.getBean()), null);
     }*/
 
     return null;
@@ -28,7 +28,7 @@ public class RatingViewHookEventListener implements ViewHookEventListener<CMTeas
 
   //====================================================================================================================
 
-  private RatingResult getRatingResult(Object target) {
+  private RatingResult getRating(Object target) {
     return new RatingResult(target);
   }
 

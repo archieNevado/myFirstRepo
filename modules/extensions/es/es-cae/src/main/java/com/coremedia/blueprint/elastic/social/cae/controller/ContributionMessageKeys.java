@@ -30,6 +30,7 @@ public class ContributionMessageKeys {
   public static final String COMPLAINT_FORM_ERROR_NOT_ENABLED = "complaintForm_not_enabled";
   public static final String COMPLAINT_FORM_ERROR_NOT_LOGGED_IN = "complaintForm_not_logged_in";
   public static final String COMPLAINT_FORM_LABEL_SUBMIT = "complaintForm_label_submit";
+  public static final String INVALID_CAPTCHA = "invalid_captcha";
   public static final String LIKE_FORM_ERROR_NOT_ENABLED = "likeForm_not_enabled";
   public static final String LIKE_FORM_ERROR_NOT_LOGGED_IN = "likeForm_not_logged_in";
   public static final String RATINGS_AVERAGE_OUT_OF = "ratings_average_out_of";

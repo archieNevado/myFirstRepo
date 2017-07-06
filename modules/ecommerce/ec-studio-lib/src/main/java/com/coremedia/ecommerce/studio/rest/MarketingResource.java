@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Marketing;
+import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -32,8 +33,9 @@ public class MarketingResource extends AbstractCatalogResource<Marketing> {
     }
 
     representation.setId(entity.getId());
-    if (getConnection().getMarketingSpotService() != null) {
-      representation.setMarketingSpots(getConnection().getMarketingSpotService().findMarketingSpots());
+    MarketingSpotService marketingSpotService = getConnection().getMarketingSpotService();
+    if (marketingSpotService != null) {
+      representation.setMarketingSpots(marketingSpotService.findMarketingSpots());
     }
   }
 

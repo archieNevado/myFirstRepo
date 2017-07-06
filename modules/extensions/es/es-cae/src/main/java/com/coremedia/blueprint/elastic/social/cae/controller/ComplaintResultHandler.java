@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.elastic.core.api.users.UserService.USERS_COLLECTION;
 import static com.coremedia.elastic.social.api.comments.CommentService.COMMENTS_COLLECTION;
 

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,13 +105,15 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
   @Override
   public Markup getShortDescription() {
     String shortDescription = DataMapHelper.getValueForKey(getDelegate(), "shortDescription", String.class);
+    //short description by WCS is pure text.
     return toRichtext(shortDescription);
   }
 
   @Override
   public Markup getLongDescription() {
     String longDescription = DataMapHelper.getValueForKey(getDelegate(), "longDescription", String.class);
-    return toRichtext(longDescription);
+    //long description by WCS is already html and encoded
+    return toRichtext(longDescription, false);
   }
 
   @Override
@@ -154,7 +157,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
         Map<String, WcPrice> prices = priceInfo.getPrices();
         if (prices != null && !prices.isEmpty()) {
           WcPrice offerPrice = prices.get("Offer");
-          if (offerPrice != null) {
+          if (offerPrice != null && !offerPrice.getPriceValue().isEmpty())  {
             return convertStringToBigDecimal(offerPrice.getPriceValue());
           } else {
             return getPersonalizedOfferPrice();
@@ -218,6 +221,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
     return cmLocalizedSeoSegment;
   }
 
+  @Nullable
   @Override
   public String getSeoSegment() {
     String localizedSeoSegment = getCmSeoSegment();
@@ -325,7 +329,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
   @Override
   public List<Category> getCategories() {
     Category category = doGetCategory();
-    return category==null ? Collections.<Category>emptyList() : Collections.singletonList(category);
+    return category == null ? Collections.emptyList() : Collections.singletonList(category);
   }
 
   @Override

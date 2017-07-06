@@ -24,7 +24,7 @@ the `coremedia-application-maven-plugin` based on the `application-runtime` arti
 
 * blueprint-base
 * coremedia_maven (~> 2.0)
-* java_se (~> 8.112.0)
+* java_se (~> 8.131.0)
 
 # Attributes
 
@@ -41,7 +41,7 @@ the `coremedia-application-maven-plugin` based on the `application-runtime` arti
 * `node['blueprint']['tools']['master-live-server']['property_files']['capclient.properties']['cap.client.server.ior.url']` -  Defaults to `http://localhost:40280/coremedia/ior`.
 * `node['blueprint']['tools']['master-live-server']['property_files']['capclient.properties']['cap.client.timezone.default']` -  Defaults to `Europe/Berlin`.
 * `node['blueprint']['tools']['replication-live-server']['dir']` -  Defaults to `#{node['blueprint']['base_dir']}/replication-live-server-tools`.
-* `node['blueprint']['tools']['replication-live-server']['property_files']['capclient.properties']['cap.client.server.ior.url']` -  Defaults to `http://localhost:40280/coremedia/ior`.
+* `node['blueprint']['tools']['replication-live-server']['property_files']['capclient.properties']['cap.client.server.ior.url']` -  Defaults to `http://localhost:42080/coremedia/ior`.
 * `node['blueprint']['tools']['replication-live-server']['property_files']['capclient.properties']['cap.client.timezone.default']` -  Defaults to `Europe/Berlin`.
 * `node['blueprint']['tools']['workflow-server']['dir']` -  Defaults to `#{node['blueprint']['base_dir']}/workflow-server-tools`.
 * `node['blueprint']['tools']['workflow-server']['property_files']['capclient.properties']` -  Defaults to `node['blueprint']['tools']['content-management-server']['property_files']['capclient.properties']`.

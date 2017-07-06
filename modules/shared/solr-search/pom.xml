@@ -38,13 +38,8 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-search-impl</artifactId>
+      <artifactId>coremedia-solr-client</artifactId>
       <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-search-solr</artifactId>
     </dependency>
 
     <dependency>

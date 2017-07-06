@@ -1,7 +1,7 @@
 <div xmlns="http://www.coremedia.com/2003/richtext-1.0"
      xmlns:xlink="http://www.w3.org/1999/xlink">
   <p class="p--heading-1">h1</p>
-  <p class="p--heading-2">h2</p>
+  <p class="p--heading-2 align--right">h2</p>
   <p class="p--heading-3">h3</p>
   <p class="p--heading-4">h4</p>
   <p class="p--heading-5">h5</p>

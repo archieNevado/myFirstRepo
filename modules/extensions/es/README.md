@@ -18,4 +18,4 @@ Wich features amongst others:
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/UsingBlueprintElasticSocial.html)
+See the "Elastic Social" chapter of the CoreMedia Developer Manual.

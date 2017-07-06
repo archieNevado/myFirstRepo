@@ -6,12 +6,14 @@ import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
@@ -33,9 +35,11 @@ import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
  */
 public abstract class FragmentHandler extends PageHandlerBase implements Predicate<FragmentParameters> {
 
+  private static final String DEFAULT_PAGEGRID_VIEW = "asFragment";
   static final String PLACEMENT_NAME_MAV_KEY = "placementName";
   static final String UNRESOLVABLE_PLACEMENT_VIEW_NAME = "unresolvablePlacement";
-  private PageGridPlacementResolver pageGridPlacementResolver;
+
+  protected PageGridPlacementResolver pageGridPlacementResolver;
   protected ValidationService<Linkable> validationService;
 
   /**
@@ -49,69 +53,76 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
    * @param request The servlet request
    * @return The ModelAndView to create for the given parameters.
    */
-  abstract ModelAndView createModelAndView(FragmentParameters params, HttpServletRequest request);
+  @Nullable
+  abstract ModelAndView createModelAndView(@Nonnull FragmentParameters params, @Nonnull HttpServletRequest request);
 
   @Nonnull
-  protected ModelAndView createModelAndView(
-          @Nonnull Navigation navigation,
-          @Nullable String view,
-          @Nullable User developer) {
+  protected ModelAndView createModelAndView(@Nonnull Navigation navigation, @Nullable String view,
+                                            @Nullable User developer) {
     return createModelAndView(asPage(navigation, navigation, developer), view);
   }
 
   @Nonnull
-  protected ModelAndView createFragmentModelAndView(
-          @Nonnull Navigation navigation,
-          @Nullable String view,
-          @Nonnull CMChannel rootChannel,
-          @Nullable User developer) {
+  protected ModelAndView createFragmentModelAndView(@Nonnull Navigation navigation, @Nullable String view,
+                                                    @Nonnull CMChannel rootChannel, @Nullable User developer) {
     CMContext context = navigation.getContext();
-    if (context != null) {
-      return createModelAndView(asPage(context, context, navigation.getCodeResourcesTreeRelation(), developer), view);
+
+    if (view == null) {
+      view = "asFragment";
     }
 
-    LOG.info("Could not find a content based context for category '{}'. Will use the root channel instead.", navigation.getTitle());
-    return createModelAndView(asPage(rootChannel, rootChannel, developer), view);
+    if (context == null) {
+      LOG.info("Could not find a content based context for category '{}'. Will use the root channel instead.",
+              navigation.getTitle());
+
+      Page page = asPage(rootChannel, rootChannel, developer);
+      return createModelAndView(page, view);
+    }
+
+    Page page = asPage(context, context, navigation.getCodeResourcesTreeRelation(), developer);
+    return createModelAndView(page, view);
   }
 
   @Nonnull
-  protected ModelAndView createFragmentModelAndViewForPlacementAndView(
-          @Nonnull Navigation navigation,
-          @Nonnull String placement,
-          @Nullable String view,
-          @Nonnull CMChannel rootChannel,
-          @Nullable User developer) {
+  protected ModelAndView createFragmentModelAndViewForPlacementAndView(@Nonnull Navigation navigation,
+                                                                       @Nonnull String placement,
+                                                                       @Nullable String view,
+                                                                       @Nonnull CMChannel rootChannel,
+                                                                       @Nullable User developer) {
     CMContext context = navigation.getContext();
-    if (context instanceof CMChannel) {
-      return createModelAndViewForPlacementAndView((CMChannel) context, placement, view, developer);
+    if (!(context instanceof CMChannel)) {
+      LOG.info("Could not find a content based context for category '{}'. Will use the root channel instead.",
+              navigation.getTitle());
+
+      return createModelAndViewForPlacementAndView(rootChannel, placement, view, developer);
     }
 
-    LOG.info("Could not find a content based context for category '{}'. Will use the root channel instead.", navigation.getTitle());
-    return createModelAndViewForPlacementAndView(rootChannel, placement, view, developer);
+    return createModelAndViewForPlacementAndView((CMChannel) context, placement, view, developer);
   }
 
   @Nonnull
-  protected ModelAndView createModelAndViewForPlacementAndView(
-          @Nonnull CMChannel channel,
-          @Nonnull String placementName,
-          @Nullable String view,
-          @Nullable User developer) {
+  protected ModelAndView createModelAndViewForPlacementAndView(@Nonnull CMChannel channel,
+                                                               @Nonnull String placementName, @Nullable String view,
+                                                               @Nullable User developer) {
     //noinspection unchecked
     if (!validationService.validate(channel)) {
       return handleInvalidLinkable(channel);
     }
-    PageGridPlacement placement =  pageGridPlacementResolver.resolvePageGridPlacement(channel, placementName);
+
+    PageGridPlacement placement = pageGridPlacementResolver.resolvePageGridPlacement(channel, placementName);
     if (placement == null) {
       return createPlacementUnresolvableError(channel, placementName);
     }
+
     CMNavigation context = channel;
     // Take the context  of the placement for building the page . In most cases, this is the given channel.
     // For PDPs a specific navigation can be defined which differs from the given channel.
     if (placement instanceof ContentBeanBackedPageGridPlacement) {
       ContentBeanBackedPageGridPlacement contentBeanBackedPageGridPlacement =
               (ContentBeanBackedPageGridPlacement) placement;
-      if (contentBeanBackedPageGridPlacement.getNavigation() != null) {
-        context = contentBeanBackedPageGridPlacement.getNavigation();
+      CMNavigation navigation = contentBeanBackedPageGridPlacement.getNavigation();
+      if (navigation != null) {
+        context = navigation;
       }
     }
 
@@ -123,18 +134,36 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     return modelAndView;
   }
 
-  private static ModelAndView createPlacementUnresolvableError(@Nonnull CMChannel channel, @Nonnull String placementName) {
-    LOG.error("No placement named {} found for {}.", placementName, channel.getContent().getPath());
+  @Nonnull
+   static ModelAndView createPlacementUnresolvableError(@Nonnull CMLinkable cmLinkable, @Nonnull String placementName) {
+    LOG.error("No placement named {} found for {}.", placementName, cmLinkable.getContent().getPath());
+
     ModelAndView modelAndView = notFound("No placement found for name '" + placementName + "'");
     modelAndView.setViewName(UNRESOLVABLE_PLACEMENT_VIEW_NAME);
-    NavigationLinkSupport.setNavigation(modelAndView, channel);
+    if (cmLinkable instanceof Navigation) {
+      NavigationLinkSupport.setNavigation(modelAndView, (Navigation) cmLinkable);
+    }
     modelAndView.addObject(PLACEMENT_NAME_MAV_KEY, placementName);
     return modelAndView;
   }
 
-  protected ModelAndView handleInvalidLinkable(Linkable linkable) {
-    LOG.debug("Trying to render invalid content, returning {} ({}).", SC_NO_CONTENT, linkable.getSegment());
-    return notFound("invalid content: " + linkable.getSegment());
+  @Nonnull
+  protected ModelAndView handleInvalidLinkable(@Nonnull Linkable linkable) {
+    String segment = linkable.getSegment();
+    LOG.debug("Trying to render invalid content, returning {} ({}).", SC_NO_CONTENT, segment);
+    return notFound("invalid content: " + segment);
+  }
+
+  // if the target is a channel and no placement and/or view is given we use a well-known "pagegrid" view that
+  // results in a full page grid rendering (but without complete html head and body)
+  protected String normalizedPageFragmentView(@Nonnull Content linkable, @Nullable String placement,
+                                              @Nullable String view) {
+    // A channel without a given placement or view is always rendered as full pagegrid (view "pagegrid")
+    if (linkable.getType().isSubtypeOf(CMChannel.NAME) && placement == null && view == null) {
+      return DEFAULT_PAGEGRID_VIEW;
+    }
+
+    return view;
   }
 
   //-------------- Config --------------------

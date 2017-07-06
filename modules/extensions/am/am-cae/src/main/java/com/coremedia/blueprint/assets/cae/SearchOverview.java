@@ -1,5 +1,8 @@
 package com.coremedia.blueprint.assets.cae;
 
+/**
+ * @cm.template.api
+ */
 public class SearchOverview implements DownloadPortalContext {
 
   private String query;

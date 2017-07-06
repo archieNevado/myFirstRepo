@@ -8,11 +8,9 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
-import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,6 +18,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -37,20 +36,23 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   @Override
   public Site findSiteFor(@Nonnull FragmentParameters fragmentParameters) {
     String environment = fragmentParameters.getEnvironment();
-    if (!StringUtils.isEmpty(environment)) {
+
+    if (!isNullOrEmpty(environment)) {
       Site site = findSiteForEnvironment(fragmentParameters.getLocale(), environment);
       if (site != null) {
         return site;
       }
     }
+
     return findSiteFor(fragmentParameters.getStoreId(), fragmentParameters.getLocale());
   }
 
   @Nullable
   @Override
-  public Site findSiteFor(@Nonnull final String storeId, @Nonnull final Locale locale) {
+  public Site findSiteFor(@Nonnull String storeId, @Nonnull Locale locale) {
     Set<Site> matchingSites = sitesService.getSites().stream()
-            .filter(site -> localeMatchesSite(site, locale) && siteHasStore(site, storeId))
+            .filter(site -> localeMatchesSite(site, locale))
+            .filter(site -> siteHasStore(site, storeId))
             .collect(toSet());
 
     int matchingSitesCount = matchingSites.size();
@@ -94,11 +96,11 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   private boolean localeMatchesSite(@Nonnull Site site, @Nonnull Locale locale) {
     Locale siteLocale = site.getLocale();
     return locale.equals(siteLocale) ||
-            (Strings.isNullOrEmpty(siteLocale.getCountry()) && locale.getLanguage().equals(siteLocale.getLanguage()));
+            (isNullOrEmpty(siteLocale.getCountry()) && locale.getLanguage().equals(siteLocale.getLanguage()));
   }
 
   /**
-   * Extracts the site name out of the environment parameter String, e.g. site:PerfectChef
+   * Extracts the site name out of the environment parameter String, e.g. site:siteName
    *
    * @param locale      The locale passed for the fragment request.
    * @param environment The name of the environment which contains the site name to use.
@@ -109,10 +111,11 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
       return null;
     }
 
-    final String siteName = environment.split(":")[1];
+    String siteName = environment.split(":")[1];
 
     return sitesService.getSites().stream()
-            .filter(site -> site.getName().equals(siteName) && site.getLocale().equals(locale))
+            .filter(site -> site.getName().equals(siteName))
+            .filter(site -> site.getLocale().equals(locale))
             .findFirst()
             .orElse(null);
   }

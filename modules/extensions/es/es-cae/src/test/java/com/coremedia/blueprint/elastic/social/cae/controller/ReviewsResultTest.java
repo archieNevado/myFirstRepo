@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.reviews.Review;
@@ -28,6 +29,9 @@ public class ReviewsResultTest {
   private ElasticSocialService elasticSocialService;
 
   @Mock
+  private ElasticSocialConfiguration elasticSocialConfiguration;
+
+  @Mock
   private Object target;
 
   @Mock
@@ -44,7 +48,7 @@ public class ReviewsResultTest {
     List<Review> reviews = ImmutableList.of(createReview(3));
     when(elasticSocialService.getReviews(target, user)).thenReturn(reviews);
 
-    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED);
+    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED, elasticSocialConfiguration);
 
     assertEquals(reviews, result.getReviews());
     verify(elasticSocialService).getReviews(target, user);
@@ -55,7 +59,7 @@ public class ReviewsResultTest {
     long numberOfOnlineReviews = 5;
     when(elasticSocialService.getNumberOfReviews(target)).thenReturn(numberOfOnlineReviews);
 
-    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED);
+    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED, elasticSocialConfiguration);
 
     assertEquals(numberOfOnlineReviews, result.getNumberOfOnlineReviews());
     verify(elasticSocialService).getReviews(target, user);
@@ -66,7 +70,7 @@ public class ReviewsResultTest {
     double averageRating = 4.0;
     when(elasticSocialService.getAverageReviewRating(target)).thenReturn(averageRating);
 
-    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED);
+    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED, elasticSocialConfiguration);
 
     assertEquals(averageRating, result.getAverageRating(), 0.1);
     verify(elasticSocialService).getReviews(target, user);
@@ -83,7 +87,7 @@ public class ReviewsResultTest {
     ImmutableList<Review> reviews = ImmutableList.of(review1, review2a, review2b, review3);
     when(elasticSocialService.getReviews(target, user)).thenReturn(reviews);
 
-    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED);
+    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED, elasticSocialConfiguration);
 
     assertEquals(1, result.getNumberOfOnlineReviewsFor(1));
     assertEquals(2, result.getNumberOfOnlineReviewsFor(2));
@@ -94,7 +98,7 @@ public class ReviewsResultTest {
 
   @Test (expected = IllegalArgumentException.class)
   public void testGetRootContributions() {
-    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED);
+    ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED, elasticSocialConfiguration);
     result.getRootContributions();
   }
 

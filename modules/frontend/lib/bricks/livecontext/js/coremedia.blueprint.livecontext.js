@@ -192,7 +192,7 @@ coremedia.blueprint.$(function () {
   // init jquery.elevateZoom
   coremedia.blueprint.nodeDecorationService.addNodeDecoratorBySelector(".cm-product-assets__slideshow", function ($target) {
 
-    if (coremedia.blueprint.deviceDetector.getLastDevice().isTouch) { // do not use zoom plugin on touch devices
+    if (coremedia.blueprint.deviceDetector.getLastDevice().isTouch && coremedia.blueprint.deviceDetector.getLastDevice().type !== "desktop") { // do not use zoom plugin on touch devices
       return;
     }
 
@@ -930,7 +930,7 @@ coremedia.blueprint.$(function () {
   coremedia.blueprint.nodeDecorationService.addNodeDecorator(function ($target) {
     var baseConfig = {flash: undefined};
     var identifier = "cm-video--html5";
-    var selector = "[data-" + identifier + "]";
+    var selector = ".cm-video--html5";
     $target.findAndSelf(selector).each(function () {
       var $video = $(this);
 

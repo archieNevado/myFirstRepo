@@ -68,7 +68,7 @@ public class AddSiteSpecificPathPlugin extends AbstractPlugin {
   private function doLoadPersonas(selectedSitePath:String):void {
     if (selectedSitePath) {
       SESSION.getConnection().getContentRepository().getRoot().getChild(selectedSitePath, function (content:Content, cPath:String):void {
-        if (content) {
+        if (content && personaSelector) {
           personaSelector.addPath(selectedSitePath, groupHeaderLabel);
           if (debug) {
             trace("[INFO]", "added persona lookup path", selectedSitePath, "with label", groupHeaderLabel);

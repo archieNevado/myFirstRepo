@@ -11,4 +11,4 @@ building blocks for your personalized site, whether you want to implement explic
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/Personalization.html)
+See the "Adaptive Personalization Extensions" chapter in the product's developer manual.

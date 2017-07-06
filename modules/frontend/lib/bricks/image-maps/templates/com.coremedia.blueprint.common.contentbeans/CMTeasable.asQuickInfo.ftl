@@ -26,7 +26,7 @@
   <#if overlay.displayPicture>
     <div class="cm-quickinfo__property cm-quickinfo__property--image">
       <@cm.include self=self.picture!cm.UNDEFINED params={
-        "limitAspectRatios": [ "landscape_ratio4x3" ],
+        "limitAspectRatios": [ "portrait_ratio1x1", "landscape_ratio4x3" ],
         "classBox": "cm-quickinfo__image cm-aspect-ratio-box",
         "classImage": "cm-aspect-ratio-box__content",
         "metadata": ["properties.pictures"]

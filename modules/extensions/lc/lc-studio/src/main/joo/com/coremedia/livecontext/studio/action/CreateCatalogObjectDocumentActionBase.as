@@ -6,6 +6,7 @@ import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 
 import ext.ComponentManager;
+import ext.Ext;
 import ext.window.Window;
 
 import mx.resources.ResourceManager;
@@ -55,7 +56,7 @@ public class CreateCatalogObjectDocumentActionBase extends LiveContextCatalogObj
   }
 
   protected function isCorrectType(catalogObject:CatalogObject):Boolean {
-    return catalogObject is catalogObjectType;
+    return Ext.getClassName(catalogObject) === Ext.getClassName(catalogObjectType);
   }
 
   protected function myHandler():void {
@@ -63,7 +64,7 @@ public class CreateCatalogObjectDocumentActionBase extends LiveContextCatalogObj
     if (isCorrectType(catalogObject)) {
       //create the dialog
       var dialogConfig:QuickCreateDialog = QuickCreateDialog({});
-      dialogConfig.contentType = contentType;
+      dialogConfig.contentType = getContentType();
       dialogConfig.model = new ProcessingData();
       dialogConfig.model.set(EXTERNAL_ID_PROPERTY, catalogObject.getId());
       dialogConfig.model.set(ProcessingData.NAME_PROPERTY, catalogObject.getName());
@@ -72,6 +73,10 @@ public class CreateCatalogObjectDocumentActionBase extends LiveContextCatalogObj
       var dialog:Window = ComponentManager.create(dialogConfig, 'window') as Window;
       dialog.show();
     }
+  }
+
+  protected function getContentType():String {
+    return contentType;
   }
 }
 }

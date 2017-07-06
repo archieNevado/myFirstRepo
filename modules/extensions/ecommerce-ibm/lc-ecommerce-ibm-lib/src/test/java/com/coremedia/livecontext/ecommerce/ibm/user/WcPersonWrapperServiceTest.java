@@ -19,8 +19,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class WcPersonWrapperServiceTest extends AbstractWrapperServiceTestCase {
 
-  private static final String BEAN_NAME = "personWrapperService";
-
   @Inject
   private WcPersonWrapperService testling;
   @Inject
@@ -31,6 +29,7 @@ public class WcPersonWrapperServiceTest extends AbstractWrapperServiceTestCase {
 
   @Before
   public void setup() {
+    testling.clearLanguageMapping();
     connection = commerce.getConnection("wcs1");
     testConfig.setWcsVersion(storeInfoService.getWcsVersion());
     connection.setStoreContext(testConfig.getStoreContext());

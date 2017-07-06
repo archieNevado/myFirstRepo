@@ -7,6 +7,7 @@
                      xmlns:plugin="exml:com.coremedia.blueprint.personalization.editorplugin.config"
                      name="{'properties.' + config.propertyName}"
                      anchor="100%"
+                     checkChangeBuffer="500"
                      labelSeparator="">
   <fx:Script><![CDATA[
     import com.coremedia.ui.data.ValueExpression;

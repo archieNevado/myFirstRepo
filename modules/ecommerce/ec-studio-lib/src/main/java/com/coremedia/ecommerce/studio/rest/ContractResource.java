@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 
@@ -67,7 +67,7 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
   }
 
   public ContractService getContractService() {
-    return Commerce.getCurrentConnection().getContractService();
+    return DefaultConnection.get().getContractService();
   }
 
 

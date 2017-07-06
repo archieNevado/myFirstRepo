@@ -30,6 +30,9 @@
     <fx:Object id="state"/>
   </fx:Declarations>
 
+  <header>
+    <Header enableFocusableContainer="false"/>
+  </header>
   <items>
     <!--<editor:searchFilters/>-->
   </items>

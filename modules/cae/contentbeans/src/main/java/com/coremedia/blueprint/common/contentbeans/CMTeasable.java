@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.common.contentbeans;
 
+import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
+import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.xml.Markup;
 
@@ -9,12 +11,18 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Each content has an embedded Teaser and a detailText for the page view.
+ * </p>
  * <p>
  * If you need different teasers for the document, you can use additional
  * {@link CMTeaser} documents.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMTeasable}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMTeasable}.</p>
+ * @cm.template.api
  */
 public interface CMTeasable extends CMHasContexts {
   /**
@@ -48,9 +56,12 @@ public interface CMTeasable extends CMHasContexts {
   String TEASER_TITLE = "teaserTitle";
 
   /**
+   * <p>
    * Returns the value of the document property {@link #TEASER_TITLE}.
+   * </p>
    *
    * @return the value of the document property {@link #TEASER_TITLE}
+   * @cm.template.api
    */
   String getTeaserTitle();
 
@@ -63,6 +74,7 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the value of the document property {@link #TEASER_TEXT}.
    *
    * @return the value of the document property {@link #TEASER_TEXT}
+   * @cm.template.api
    */
   Markup getTeaserText();
 
@@ -75,6 +87,7 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the value of the document property {@link #DETAIL_TEXT}.
    *
    * @return the value of the document property {@link #DETAIL_TEXT}
+   * @cm.template.api
    */
   Markup getDetailText();
 
@@ -90,11 +103,14 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the pictures of the Teasable.
    *
    * @return the CMPicture subset of {@link #getMedia()}
+   * @cm.template.api
    */
   List<CMPicture> getPictures();
 
   /**
    * Returns the media of the Teasable.
+   *
+   * @cm.template.api
    */
   List<CMMedia> getMedia();
 
@@ -102,6 +118,7 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the first element of document property {@link #PICTURES}.
    *
    * @return the first element of the document property {@link #PICTURES}
+   * @cm.template.api
    */
   CMPicture getPicture();
 
@@ -109,6 +126,7 @@ public interface CMTeasable extends CMHasContexts {
    * Returns this. Overridden by standalone teasers.
    *
    * @return a {@link CMLinkable} object
+   * @cm.template.api
    */
   CMLinkable getTarget();
 
@@ -133,6 +151,7 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the value of the document property {@link #RELATED}.
    *
    * @return a list of {@link CMTeasable} objects
+   * @cm.template.api
    */
   List<? extends CMTeasable> getRelated();
 
@@ -164,6 +183,7 @@ public interface CMTeasable extends CMHasContexts {
    * {@link CMTeasable#getRelatedBySimilarTaxonomies()}.
    *
    * @return a list of {@link CMTeasable} objects
+   * @cm.template.api
    */
   List<? extends CMTeasable> getRelatedImplicitly();
 
@@ -172,6 +192,7 @@ public interface CMTeasable extends CMHasContexts {
    * related to this object.
    *
    * @return a Map of String to Lists of CMTeasable
+   * @cm.template.api
    * @see #getRelatedAll()
    */
   Map<String, List<CMTeasable>> getRelatedAllByType();
@@ -189,6 +210,33 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the detail text splitted at each paragraph.
    *
    * @return the detail text splitted at each paragraph.the detail text splitted at each paragraph.
+   * @cm.template.api
    */
   List<Markup> getTextAsParagraphs();
+
+  /**
+   * The name of the teaser overlay settings struct.
+   */
+  String TEASER_OVERLAY_SETTINGS_STRUCT_NAME = "teaserOverlay";
+
+  /**
+   * The name of the style settings in the teaser overlay settings sub struct.
+   */
+  String TEASER_OVERLAY_SETTINGS_STYLE_SUB_STRUCT_NAME = "style";
+
+  /**
+   * Returns the settings for the teaser overlay feature.
+   *
+   * @return the settings for the teaser overlay feature.
+   * @cm.template.api
+   */
+  TeaserOverlaySettings getTeaserOverlaySettings();
+
+  /**
+   * Returns the style for the teaser overlay feature.
+   *
+   * @return the style for the teaser overlay feature.
+   * @cm.template.api
+   */
+  TeaserOverlayStyle getTeaserOverlayStyle();
 }

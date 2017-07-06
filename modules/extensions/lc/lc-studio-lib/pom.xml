@@ -16,7 +16,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-services-api</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -97,7 +97,7 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-services-lib</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
@@ -130,13 +130,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-asset-services</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>ec-test-util</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>

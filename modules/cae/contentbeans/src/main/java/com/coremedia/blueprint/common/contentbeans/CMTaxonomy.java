@@ -3,9 +3,14 @@ package com.coremedia.blueprint.common.contentbeans;
 import java.util.List;
 
 /**
+ * <p>
  * CMTaxonomy beans allow for a categorization of contents.
+ * </p>
+ * <p>
+ * Represents document type {@link #NAME CMTaxonomy}.
+ * </p>
  *
- * <p>Represents document type {@link #NAME CMTaxonomy}.</p>
+ * @cm.template.api
  */
 public interface CMTaxonomy extends CMTeasable {
   /**
@@ -22,13 +27,14 @@ public interface CMTaxonomy extends CMTeasable {
    * Returns the value of the document property {@link #VALUE}.
    *
    * @return the value of the document property {@link #VALUE}
+   * @cm.template.api
    */
   String getValue();
 
   /**
-   * Returns the parent taxonomy or <code>null</code> if this taxonomy has no parent taxonomy.
+   * Returns the parent taxonomy or {@code null} if this taxonomy has no parent taxonomy.
    *
-   * @return parent taxonomy or <code>null</code> for the root taxonomy node.
+   * @return parent taxonomy or {@code null} for the root taxonomy node.
    */
   CMTaxonomy getParent();
 
@@ -60,6 +66,7 @@ public interface CMTaxonomy extends CMTeasable {
    * Returns the list of {@link CMTaxonomy} items from the root taxonomy item to this item including this item.
    *
    * @return a list of {@link CMTaxonomy} items
+   * @cm.template.api
    */
   List<? extends CMTaxonomy> getTaxonomyPathList();
 }

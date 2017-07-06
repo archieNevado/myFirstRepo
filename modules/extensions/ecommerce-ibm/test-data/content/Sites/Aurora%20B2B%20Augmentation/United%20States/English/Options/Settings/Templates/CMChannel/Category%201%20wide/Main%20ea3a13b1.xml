@@ -4,7 +4,7 @@
 <master>
 </master>
 <viewtype>
-<link href="../../../../Viewtypes/CMChannel/tiles-layout-highlight.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-highlight"/>
+<link href="../../../../Viewtypes/CMChannel/tiles-layout-landscape.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-landscape"/>
 </viewtype>
 <linkedSettings>
 </linkedSettings>

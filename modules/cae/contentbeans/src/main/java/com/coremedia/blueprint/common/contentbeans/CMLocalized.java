@@ -8,10 +8,18 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * <p>Nearly everything except very technical entities is localizable, so this
- * type is nearly top level.</p>
- * <p>Derived doctypes <b>must</b> override the master linklist and restrict it to exactly their own type.</p>
- * <p>Represents the document type {@link #NAME CMLocalized}.</p>
+ * <p>
+ * Nearly everything except very technical entities is localizable, so this
+ * type is nearly top level.
+ * </p>
+ * <p>
+ * Derived doctypes <b>must</b> override the master linklist and restrict it to exactly their own type.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMLocalized}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMLocalized extends CMObject {
 
@@ -34,9 +42,43 @@ public interface CMLocalized extends CMObject {
   Map<Locale, ? extends CMLocalized> getVariantsByLocale();
 
   /**
+   * <p>
    * Returns the {@link java.util.Locale} specific variants of this {@link CMLocalized}
+   * </p>
+   * <dl><dt><strong>Usage:</strong></dt><dd><p>
+   * Add elements for each variant excluding self (self is of type {@link Page} in this example).
+   * </p>
+   * <dl>
+   * <dt><strong>Freemarker:</strong></dt><dd>
+   * <pre>{@code
+   * <#if (self.content.localizations)?has_content>
+   *   <#assign localizations=self.content.localizations![] />
+   *   <#list localizations as localization>
+   *     <#if localization.locale != self.content.locale>
+   *       <link rel="alternate" ... />
+   *     </#if>
+   *   </#list>
+   * </#if>
+   * }</pre>
+   * </dd>
+   * <dt><strong>JSP:</strong></dt><dd>
+   * <pre>{@code
+   * <c:set var="locales" value="${self.content.localizations}"/>
+   * <c:if test="${not empty locales}">
+   *   <c:forEach var="localization" items="${locales}">
+   *     <c:if test="${localization.locale != self.content.locale}">
+   *       <cm:link var="localitationLink" target="${localization}"/>
+   *       <link rel="alternate" ... />
+   *     </c:if>
+   *   </c:forEach>
+   * </c:if>
+   * }</pre>
+   * </dd>
+   * </dl>
+   * </dd></dl>
    *
    * @return the {@link java.util.Locale} specific variants of this {@link CMLocalized}
+   * @cm.template.api
    */
   Collection<? extends CMLocalized> getLocalizations();
 
@@ -49,6 +91,7 @@ public interface CMLocalized extends CMObject {
    * Returns the value of the document property {@link #MASTER}.
    *
    * @return a {@link CMLocalized} object
+   * @cm.template.api
    */
   CMLocalized getMaster();
 
@@ -70,9 +113,36 @@ public interface CMLocalized extends CMObject {
   String LOCALE = "locale";
 
   /**
+   * <p>
    * Returns the Locale of this document.
+   * </p>
+   * <dl><dt><strong>Usage:</strong></dt><dd><p>
+   * Given one entry {@code localization}of {@link #getLocalizations()} above, render a link to a alternate locale of the current
+   * document.
+   * </p>
+   * <dl>
+   * <dt><strong>Freemarker:</strong></dt><dd>
+   * <pre>{@code
+   * <link rel="alternate"
+   *       hreflang="${localization.locale.toLanguageTag()}"
+   *       href="${cm.getLink(localization)}"
+   *       title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}"/>
+   * }</pre>
+   * </dd>
+   * <dt><strong>JSP:</strong></dt><dd>
+   * <pre>{@code
+   * <cm:link var="localitationLink" target="${localization}"/>
+   * <link rel="alternate"
+   *       hreflang="${localization.locale.toLanguageTag()}"
+   *       href="${localitationLink}"
+   *       title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}" />
+   * }</pre>
+   * </dd>
+   * </dl>
+   * </dd></dl>
    *
    * @return the Locale of this document.
+   * @cm.template.api
    */
   Locale getLocale();
 

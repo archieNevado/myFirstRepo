@@ -5,6 +5,7 @@ import org.springframework.core.convert.support.DefaultConversionService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -98,8 +99,16 @@ public class DataMapHelper {
   private static <T> T convert(@Nullable Object source, @Nonnull Class<T> targetType, @Nullable T defaultValue) {
     if (source != null) {
       return DEFAULT_CONVERSION_SERVICE.convert(source, targetType);
-    } else {
-      return defaultValue;
     }
+    // avoid NPE when trying to lookup map or list
+    if (defaultValue == null) {
+      if (Map.class.isAssignableFrom(targetType) ) {
+        return (T) Collections.emptyMap();
+      }
+      if (List.class.isAssignableFrom(targetType) ) {
+        return (T) Collections.emptyList();
+      }
+    }
+    return defaultValue;
   }
 }

@@ -1,12 +1,3 @@
-# You cannot use the convenience property node['blueprint']['wcs']['host'] here, it is being used in attribute files as well. chicken egg problem.
-# we may move these properties from blueprint-base attribute files to the environments default recipe to clear things up.
-wcs_host = 'YOUR WCS HOST'
-node.default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.url'] = "http://#{wcs_host}"
-node.default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.secureUrl'] = "https://#{wcs_host}"
-node.default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.host'] = wcs_host
-node.default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.rest.search.url'] = "http://#{wcs_host}:3737/search/resources"
-node.default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.rest.search.secureUrl'] = "https://#{wcs_host}:3738/search/previewresources"
-
 node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.driver'] = 'com.mysql.jdbc.Driver'
 node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.url'] = 'jdbc:mysql://localhost:3306/cm_management'
 node.default['blueprint']['webapps']['content-management-server']['application.properties']['sql.store.dbProperties'] = 'corem/mysql'
@@ -52,9 +43,6 @@ if node['blueprint']['nexus_url']
   node.default['blueprint']['webapps']['cae-preview']['version'] = 'RELEASE'
   node.default['blueprint']['webapps']['cae-live']['version'] = 'RELEASE'
   node.default['blueprint']['webapps']['sitemanager']['version'] = 'RELEASE'
-  node.default['blueprint']['webapps']['adobe-drive-server']['version'] = 'RELEASE'
-  node.default['blueprint']['webapps']['solr']['version'] = '4.10.4'
-  node.default['blueprint']['webapps']['solr']['config_zip_version'] = 'RELEASE'
   node.default['blueprint']['tools']['caefeeder-preview']['version'] = 'RELEASE'
   node.default['blueprint']['tools']['caefeeder-live']['version'] = 'RELEASE'
   node.default['blueprint']['tools']['content-management-server']['version'] = 'RELEASE'
@@ -77,9 +65,6 @@ else
   node.default['blueprint']['webapps']['cae-preview']['version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['webapps']['cae-live']['version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['webapps']['sitemanager']['version'] = 'ENTER CONCRETE VERSION HERE'
-  node.default['blueprint']['webapps']['adobe-drive-server']['version'] = 'ENTER CONCRETE VERSION HERE'
-  node.default['blueprint']['webapps']['solr']['version'] = '4.10.4'
-  node.default['blueprint']['webapps']['solr']['config_zip_version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['tools']['caefeeder-preview']['version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['tools']['caefeeder-live']['version'] = 'ENTER CONCRETE VERSION HERE'
   node.default['blueprint']['tools']['content-management-server']['version'] = 'ENTER CONCRETE VERSION HERE'

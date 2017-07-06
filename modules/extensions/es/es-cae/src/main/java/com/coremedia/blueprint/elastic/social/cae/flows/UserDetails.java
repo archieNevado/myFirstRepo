@@ -16,6 +16,9 @@ import static org.apache.commons.lang3.StringUtils.contains;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+/**
+ * @cm.template.api
+ */
 public class UserDetails implements Serializable {
   private static final long serialVersionUID = 42L;
 
@@ -29,6 +32,7 @@ public class UserDetails implements Serializable {
   private long numberOfComments;
   private long numberOfRatings;
   private long numberOfLikes;
+  private long numberOfReviews;
   private LocalizedLocale localizedLocale;
   private String timeZoneId;
   private boolean viewOwnProfile = false;
@@ -61,6 +65,9 @@ public class UserDetails implements Serializable {
     this.username = username;
   }
 
+  /**
+   * @cm.template.api
+   */
   public Date getRegistrationDate() {
     return registrationDate == null ? null : new Date(registrationDate.getTime());
   }
@@ -69,6 +76,9 @@ public class UserDetails implements Serializable {
     this.registrationDate = registrationDate == null ? null : new Date(registrationDate.getTime());
   }
 
+  /**
+   * @cm.template.api
+   */
   public Date getLastLoginDate() {
     return lastLoginDate == null ? null : new Date(lastLoginDate.getTime());
   }
@@ -85,6 +95,9 @@ public class UserDetails implements Serializable {
     this.emailAddress = emailAddress;
   }
 
+  /**
+   * @cm.template.api
+   */
   public long getNumberOfLogins() {
     return numberOfLogins;
   }
@@ -93,6 +106,9 @@ public class UserDetails implements Serializable {
     this.numberOfLogins = numberOfLogins;
   }
 
+  /**
+   * @cm.template.api
+   */
   public long getNumberOfComments() {
     return numberOfComments;
   }
@@ -101,6 +117,9 @@ public class UserDetails implements Serializable {
     this.numberOfComments = numberOfComments;
   }
 
+  /**
+   * @cm.template.api
+   */
   public long getNumberOfRatings() {
     return numberOfRatings;
   }
@@ -109,6 +128,9 @@ public class UserDetails implements Serializable {
     this.numberOfRatings = numberOfRatings;
   }
 
+  /**
+   * @cm.template.api
+   */
   public long getNumberOfLikes() {
     return numberOfLikes;
   }
@@ -117,6 +139,22 @@ public class UserDetails implements Serializable {
     this.numberOfLikes = numberOfLikes;
   }
 
+  /**
+   * Returns the number of approved reviews from the current user.
+   * @return The number of approved reviews from the current user.
+   * @cm.template.api
+   */
+  public long getNumberOfReviews() {
+    return numberOfReviews;
+  }
+
+  public void setNumberOfReviews(long numberOfReviews) {
+    this.numberOfReviews = numberOfReviews;
+  }
+
+  /**
+   * @cm.template.api
+   */
   public BlobRef getProfileImage() {
     return profileImage;
   }
@@ -133,6 +171,9 @@ public class UserDetails implements Serializable {
     this.localizedLocale = localizedLocale;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isViewOwnProfile() {
     return viewOwnProfile;
   }
@@ -201,6 +242,9 @@ public class UserDetails implements Serializable {
     return localizedLocale != null ? localizedLocale.getLocale() : null;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isPreModerationChanged() {
     return preModerationChanged;
   }
@@ -209,6 +253,9 @@ public class UserDetails implements Serializable {
     this.preModerationChanged = preModerationChanged;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isPreview() {
     return preview;
   }
@@ -254,7 +301,7 @@ public class UserDetails implements Serializable {
     if (isBlank(surname)) {
       MessageHelper.addErrorMessageWithSource(context, WebflowMessageKeys.USER_DETAILS_SURNAME_ERROR, "surname");
     }
-    
+
     if (contains(username, '#')) {
       MessageHelper.addErrorMessageWithSource(context, WebflowMessageKeys.USER_DETAILS_USERNAME_SYNTAX_ERROR, "username");
     }
@@ -304,6 +351,9 @@ public class UserDetails implements Serializable {
     return result;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isConnectedWithTwitter() {
     return connectedWithTwitter;
   }
@@ -312,6 +362,9 @@ public class UserDetails implements Serializable {
     this.connectedWithTwitter = connectedWithTwitter;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isConnectedWithFacebook() {
     return connectedWithFacebook;
   }

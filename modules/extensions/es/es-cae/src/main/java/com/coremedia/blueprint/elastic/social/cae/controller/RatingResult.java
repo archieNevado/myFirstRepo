@@ -4,6 +4,9 @@ import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 
+/**
+ * @cm.template.api
+ */
 public class RatingResult extends ContributionResult {
 
   private int rating;
@@ -23,10 +26,16 @@ public class RatingResult extends ContributionResult {
     return rating;
   }
 
+  /**
+   * @cm.template.api
+   */
   public double getAverageRating() {
     return averageRating;
   }
 
+  /**
+   * @cm.template.api
+   */
   public long getNumberOfRatings() {
     return numberOfRatings;
   }

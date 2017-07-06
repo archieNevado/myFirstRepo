@@ -27,10 +27,7 @@
 </related>
 <value>Product Category</value>
 <children>
-<link href="Deli.xml" path="/Settings/Taxonomies/Subject/Deli"/>
-<link href="For%20the%20Cook.xml" path="/Settings/Taxonomies/Subject/For%20the%20Cook"/>
-<link href="In%20the%20Kitchen.xml" path="/Settings/Taxonomies/Subject/In%20the%20Kitchen"/>
-<link href="On%20the%20Table.xml" path="/Settings/Taxonomies/Subject/On%20the%20Table"/>
+<link href="Apparel.xml" path="/Settings/Taxonomies/Subject/Apparel"/>
 </children>
 <externalReference>PC_Deli</externalReference>
 </CMTaxonomy>

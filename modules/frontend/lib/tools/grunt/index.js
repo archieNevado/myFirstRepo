@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 /**
  * Initialize Grunt config and load available configs and tasks
@@ -48,7 +48,11 @@ module.exports = (grunt) => {
   loadGruntTasks(grunt, taskOptions);
 
   // default: undefined => true, display execution time
-  if (grunt.config('displayExecutionTime') !== false) {
+  if (grunt.config('displayExecutionTime') !== false && (
+          grunt.cli.tasks.includes('development') ||
+          grunt.cli.tasks.includes('production') ||
+          grunt.cli.tasks.includes('test'))
+  ) {
     grunt.verbose.writeln('Display grunt tasks with execution time is enabled');
     require('time-grunt')(grunt);
   }

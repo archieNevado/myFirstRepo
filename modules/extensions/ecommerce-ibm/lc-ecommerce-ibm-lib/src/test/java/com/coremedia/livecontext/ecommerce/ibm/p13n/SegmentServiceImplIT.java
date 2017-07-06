@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
@@ -20,9 +20,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class SegmentServiceImplIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class SegmentServiceImplIT extends IbmServiceTestBase {
 
   @Inject
   SegmentServiceImpl testling;

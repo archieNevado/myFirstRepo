@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.p13n.preview;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
@@ -64,25 +64,23 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
   }
 
   private void addUserSegmentsToStoreContext(List<String> userSegmentList){
-    StoreContextProvider storeContextProvider = Commerce.getStoreContextProvider();
-    CommerceIdProvider commerceIdProvider = Commerce.getCommerceIdProvider();
+    CommerceConnection currentConnection = DefaultConnection.get();
+    StoreContext storeContext = currentConnection != null ? currentConnection.getStoreContext() : null;
+    CommerceIdProvider commerceIdProvider = currentConnection != null ? currentConnection.getIdProvider() : null;
 
-    if (storeContextProvider == null || commerceIdProvider == null) {
-      LOG.debug("at least one of storeContextProvider {} or commerceIdProvider {} is null", storeContextProvider, commerceIdProvider);
+    if (storeContext == null || commerceIdProvider == null) {
+      LOG.debug("at least one of storeContext {} or commerceIdProvider {} is null", storeContext, commerceIdProvider);
       return;
     }
 
-    StoreContext currentContext = storeContextProvider.getCurrentContext();
-    if (currentContext != null){
-      List<String> segmentIds = new ArrayList<>();
-      for (String userSegment : userSegmentList) {
-        String segmentId = commerceIdProvider.parseExternalIdFromId(userSegment);
-        if (segmentId != null) {
-          segmentIds.add(segmentId);
-        }
+    List<String> segmentIds = new ArrayList<>();
+    for (String userSegment : userSegmentList) {
+      String segmentId = commerceIdProvider.parseExternalIdFromId(userSegment);
+      if (segmentId != null) {
+        segmentIds.add(segmentId);
       }
-      currentContext.setUserSegments(StringUtils.join(segmentIds, ","));
     }
+    storeContext.setUserSegments(StringUtils.join(segmentIds, ","));
   }
 
   private Object getProperty(Map<String, Object> profileExtensions, String propertyPath) {

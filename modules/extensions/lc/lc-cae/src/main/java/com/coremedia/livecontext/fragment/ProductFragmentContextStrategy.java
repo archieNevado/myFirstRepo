@@ -3,12 +3,13 @@ package com.coremedia.livecontext.fragment;
 import com.coremedia.livecontext.context.AbstractResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -32,12 +33,11 @@ public class ProductFragmentContextStrategy extends AbstractResolveContextStrate
   @Override
   protected Category findNearestCategoryFor(@Nonnull String id, @Nonnull StoreContext storeContext) {
     checkArgument(isNotBlank(id), "You must provide an external id");
-    //noinspection ConstantConditions
-    checkArgument(storeContext != null, "You  must provide a store context");
 
     // CMS-3247: Allow product resolution by stable id
-    String formattedId = useStableIds ? getCurrentCommerceIdProvider().formatProductId(id) :
-            getCurrentCommerceIdProvider().formatProductTechId(id);
+    CommerceConnection connection = getCommerceConnection();
+    CommerceIdProvider idProvider = connection.getIdProvider();
+    String formattedId = useStableIds ? idProvider.formatProductId(id) : idProvider.formatProductTechId(id);
 
     Product product = getCatalogService().withStoreContext(storeContext).findProductById(formattedId);
     if (product != null) {

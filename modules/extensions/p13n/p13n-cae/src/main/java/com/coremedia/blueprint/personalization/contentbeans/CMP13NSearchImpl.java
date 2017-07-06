@@ -36,7 +36,6 @@ public class CMP13NSearchImpl extends CMP13NSearchBase {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CMP13NSearchImpl.class);
 
-  private String statusMessageJSON;
   private SolrContextualSearchChecker solrContextualSearchChecker;
 
   public void setSolrContextualSearchChecker(SolrContextualSearchChecker solrContextualSearchChecker) {
@@ -51,7 +50,8 @@ public class CMP13NSearchImpl extends CMP13NSearchBase {
   @Override
   public List<CMTeasable> getItemsUnfiltered() {
     final String query = getSearchQuery();
-    if(checkSearchFunctions(query)) {
+    String statusMessageJSON = getSearchStatusAsJSON();
+    if(statusMessageJSON == null) {
       final SearchQueryBean searchQueryBean = new SearchQueryBean();
       searchQueryBean.setQuery(query);
 
@@ -93,15 +93,6 @@ public class CMP13NSearchImpl extends CMP13NSearchBase {
     }
   }
 
-  // the query is considered valid if statusMessageJSON is null
-  private boolean checkSearchFunctions(final String query) {
-    statusMessageJSON = null;
-    if(solrContextualSearchChecker != null) {
-      statusMessageJSON = solrContextualSearchChecker.checkSearchFunctions(query);
-    }
-    return statusMessageJSON == null;
-  }
-
   /**
    * Retrieves the status produces by the previous search as a JS dictionary in JSON.
    *
@@ -109,7 +100,7 @@ public class CMP13NSearchImpl extends CMP13NSearchBase {
    */
   @Override
   public String getSearchStatusAsJSON() {
-    return statusMessageJSON;
+    return solrContextualSearchChecker.checkSearchFunctions(getSearchQuery());
   }
 
   /**

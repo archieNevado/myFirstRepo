@@ -46,9 +46,9 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
   @Override
   @Nonnull
   public Collection<Linkable> getChildrenOf(Linkable parent) {
-    List<Linkable> navigationList = new ArrayList<>();
+    Collection<Linkable> navigationList = new ArrayList<>();
     Site site = getSite(parent);
-    if (parent != null && parent instanceof LiveContextNavigation && site != null) {
+    if (parent instanceof LiveContextNavigation && site != null) {
       Category parentCategory = ((LiveContextNavigation) parent).getCategory();
       if (parentCategory != null) {
         //we deal with a category already, so we simply resolve the categories children
@@ -127,8 +127,7 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
     if (linkable instanceof LiveContextNavigation) {
       return ((LiveContextNavigation) linkable).getSite();
     } else if (linkable instanceof ContentBean) {
-      CMExternalChannel extChannel = (CMExternalChannel) linkable;
-      ContentObjectSiteAspect siteAspect = sitesService.getSiteAspect(extChannel.getContent());
+      ContentObjectSiteAspect siteAspect = sitesService.getSiteAspect(((ContentBean)linkable).getContent());
       return siteAspect.getSite();
     }
     return null;

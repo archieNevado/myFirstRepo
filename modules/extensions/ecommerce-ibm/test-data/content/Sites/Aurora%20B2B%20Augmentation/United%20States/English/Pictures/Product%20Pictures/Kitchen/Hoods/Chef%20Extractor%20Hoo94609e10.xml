@@ -17,11 +17,11 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=460;y=0;width=2061;height=3190</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=461;y=0;width=2058;height=3190</StringProperty>
 <StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=604;y=422;width=1821;height=2433</StringProperty>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=604;y=709;width=1821;height=1820</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=249;y=623;width=2540;height=1906</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=757;width=2981;height=1676</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=757;width=2981;height=1677</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=1303;width=2981;height=1188</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=1724;width=2981;height=747</StringProperty>
 </Struct>
@@ -70,6 +70,7 @@
 <Struct>
 <StringListProperty Name="references">
 <String>ibm:///catalog/product/B2B_CHEF_HOOD_HD800</String>
+<String>ibm:///catalog/category/B2B_Hoods</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

@@ -5,8 +5,9 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingImage;
@@ -31,9 +32,9 @@ import static org.junit.Assert.fail;
 /**
  * Test for {@link com.coremedia.livecontext.ecommerce.ibm.p13n.MarketingSpotServiceImpl}
  */
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class MarketingSpotServiceImplIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   private static final String MARKETING_SPOT_EXTERNAL_ID1 = "ApparelRow1_Content";
   private static final String MARKETING_SPOT_EXTERNAL_ID2 = "BoysRow4_CatEntries";
@@ -41,6 +42,9 @@ public class MarketingSpotServiceImplIT extends AbstractServiceTest {
 
   @Inject
   MarketingSpotServiceImpl testling;
+
+  @Inject
+  IbmTestConfig testConfig;
 
   @Before
   public void setup() {

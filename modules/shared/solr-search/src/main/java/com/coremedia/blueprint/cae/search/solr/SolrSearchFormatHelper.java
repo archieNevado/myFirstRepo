@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.search.solr;
 
-import org.apache.solr.common.util.DateUtil;
-
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,11 +29,11 @@ public final class SolrSearchFormatHelper {
   }
 
   public static String calendarToString(Calendar calendar) {
-    return DateUtil.getThreadLocalDateFormat().format(calendar.getTime());
+    return calendar.getTime().toInstant().toString();
   }
 
   public static String dateToString(Date date) {
-    return DateUtil.getThreadLocalDateFormat().format(date);
+    return date.toInstant().toString();
   }
 
 }

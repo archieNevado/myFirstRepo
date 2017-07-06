@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.core.context.SecurityContext;
 
 import javax.annotation.Nullable;
 import java.sql.Timestamp;
@@ -45,6 +44,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class FragmentCommerceContextInterceptorTest {
 
+  private static final String REQUEST_PATH_INFO = "/anyShop";
   private FragmentCommerceContextInterceptor testling;
 
   @Mock
@@ -52,9 +52,6 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Mock
   private Site site;
-
-  @Mock
-  private SecurityContext securityContext;
 
   @Mock
   private CommerceConnectionInitializer commerceConnectionInitializer;
@@ -70,6 +67,7 @@ public class FragmentCommerceContextInterceptorTest {
     initMocks(this);
 
     connection = MockCommerceEnvBuilder.create().setupEnv();
+    connection.setVendorName("IBM");
     connection.getStoreContext().put(StoreContextImpl.SITE, "siteId");
     connection.setContractService(contractService);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
@@ -90,7 +88,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.initUserContext(connection, request);
 
-    UserContext userContext = Commerce.getCurrentConnection().getUserContext();
+    UserContext userContext = DefaultConnection.get().getUserContext();
     assertThat(userContext.getUserId()).isEqualTo("userId");
     assertThat(userContext.getUserName()).isEqualTo("loginId");
   }
@@ -117,7 +115,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
     testling.initUserContext(connection, request);
-    String[] contractIdsInStoreContext = Commerce.getCurrentConnection().getStoreContext().getContractIds();
+    String[] contractIdsInStoreContext = DefaultConnection.get().getStoreContext().getContractIds();
     List storeContextList = Arrays.asList(contractIdsInStoreContext);
     Collections.sort(storeContextList);
     List expected = Arrays.asList("contract1", "contract2");
@@ -149,7 +147,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
     testling.initUserContext(connection, request);
-    String[] contractIdsInStoreContext = Commerce.getCurrentConnection().getStoreContext().getContractIds();
+    String[] contractIdsInStoreContext = DefaultConnection.get().getStoreContext().getContractIds();
     assertThat(contractIdsInStoreContext).isNull();
   }
 
@@ -157,7 +155,7 @@ public class FragmentCommerceContextInterceptorTest {
   public void testInitStoreContextProviderInPreview() {
     testling.setPreview(true);
     MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setPathInfo("/helios");
+    request.setPathInfo(REQUEST_PATH_INFO);
 
     Timestamp ts = Timestamp.valueOf("2014-07-02 17:57:00.000");
 
@@ -189,7 +187,7 @@ public class FragmentCommerceContextInterceptorTest {
   public void testInitStoreContextProviderWithTimeShift() {
     testling.setPreview(true);
     MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setPathInfo("/helios");
+    request.setPathInfo(REQUEST_PATH_INFO);
 
     Timestamp ts = Timestamp.valueOf("2014-07-02 17:57:00.000");
 
@@ -200,7 +198,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
+    StoreContext storeContext = DefaultConnection.get().getStoreContext();
     assertThat(storeContext.getPreviewDate()).isEqualTo("02-07-2014 17:57 US/Pacific");
 
     Calendar calendar = parsePreviewDateIntoCalendar(storeContext.getPreviewDate());
@@ -213,7 +211,7 @@ public class FragmentCommerceContextInterceptorTest {
   public void testConvertPreviewDate() {
     testling.setPreview(true);
     MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setPathInfo("/helios");
+    request.setPathInfo(REQUEST_PATH_INFO);
 
     Timestamp ts = Timestamp.valueOf("2014-07-02 17:57:00.000");
 
@@ -244,7 +242,7 @@ public class FragmentCommerceContextInterceptorTest {
   @Test
   public void testInitStoreContextProviderInLive() {
     MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setPathInfo("/helios");
+    request.setPathInfo(REQUEST_PATH_INFO);
     Context fragmentContext = ContextBuilder.create().build();
     Timestamp ts = Timestamp.valueOf("2014-07-02 17:57:00.000");
     fragmentContext.put("wc.preview.memberGroups", "memberGroup1, memberGroup2");

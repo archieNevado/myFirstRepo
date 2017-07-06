@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridService;
 import com.coremedia.blueprint.common.navigation.Linkable;
@@ -18,11 +18,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A LiveContextNavigation which is backed by a CMExternalChannel content
@@ -38,7 +37,12 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
 
   @Override
   public Category getCategory() {
-    StoreContextProvider storeContextProvider = getStoreContextProvider();
+    CommerceConnection currentConnection = DefaultConnection.get();
+    if (currentConnection == null) {
+      return null;
+    }
+
+    StoreContextProvider storeContextProvider = currentConnection.getStoreContextProvider();
     if (storeContextProvider == null) {
       return null;
     }
@@ -47,8 +51,9 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
     String externalId = getExternalId();
 
     StoreContext storeContext = storeContextProvider.findContextByContent(content);
-    String categoryId = getCurrentCommerceIdProvider().formatCategoryId(externalId);
-    Category category = getCatalogService().withStoreContext(storeContext).findCategoryById(categoryId);
+    String categoryId = currentConnection.getIdProvider().formatCategoryId(externalId);
+    Category category = requireNonNull(currentConnection.getCatalogService(), "no catalog service available")
+            .withStoreContext(storeContext).findCategoryById(categoryId);
 
     if (category == null) {
       LOG.debug("Content #{}: No category found for externalId:{} - maybe the category only exists in a workspace?",
@@ -83,10 +88,12 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   @Override
   protected List<Linkable> getExternalChildren(Site site) {
     if (isCommerceChildrenSelected()) {
-      StoreContextProvider storeContextProvider = getStoreContextProvider();
+      CommerceConnection currentConnection = DefaultConnection.get();
+      StoreContextProvider storeContextProvider = currentConnection != null ? currentConnection.getStoreContextProvider() : null;
       StoreContext storeContext = null != storeContextProvider ? storeContextProvider.findContextBySite(site) : null;
       if (storeContext != null) {
-        CatalogService catalogService = getCatalogService().withStoreContext(storeContext);
+        CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service available")
+                .withStoreContext(storeContext);
         List<Category> subCategories = new ArrayList<>();
 
         List<String> commerceChildrenIds = getCommerceChildrenIds();
@@ -107,12 +114,6 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
 
     // in all other cases (especially in automatic mode) we ask the treeRelation...
     return new ArrayList<>(treeRelation.getChildrenOf(this));
-  }
-
-  @Nullable
-  private static StoreContextProvider getStoreContextProvider() {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
-    return currentConnection != null ? currentConnection.getStoreContextProvider() : null;
   }
 
   @Override

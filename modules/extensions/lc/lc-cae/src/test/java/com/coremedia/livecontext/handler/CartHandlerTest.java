@@ -38,6 +38,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CartHandlerTest {
 
+  private static final String CONTEXT_NAME = "anyChannelName";
+
   private CartHandler testling;
 
   @Mock
@@ -70,30 +72,27 @@ public class CartHandlerTest {
 
   @Test
   public void testHandleRequestNoContextFound() {
-    String context = "helios";
-
     UriComponentsBuilder testUrlBuilder = UriComponentsBuilder.fromUriString("checkoutUrl");
     UriComponents testUrl = testUrlBuilder.build();
     when(checkoutRedirectPropertyProvider.provideValue(any(Map.class))).thenReturn(testUrl);
 
-    View modelAndView = testling.handleRequest(context, mock(HttpServletRequest.class), mock(HttpServletResponse.class));
+    View modelAndView = testling.handleRequest(CONTEXT_NAME, mock(HttpServletRequest.class), mock(HttpServletResponse.class));
     assertTrue(modelAndView instanceof RedirectView);
     assertTrue(((RedirectView) modelAndView).getUrl().equals(testUrl.toString()));
   }
 
   @Test
   public void testHandleFragmentRequest() {
-    String contextName = "helios";
     Navigation context = mock(Navigation.class);
 
-    configureContext(contextName, context);
+    configureContext(context);
 
     Cart resolvedCart = mock(Cart.class);
     configureResolveCart(resolvedCart);
 
     String viewName = "viewName";
 
-    ModelAndView modelAndView = testling.handleFragmentRequest(contextName, viewName);
+    ModelAndView modelAndView = testling.handleFragmentRequest(CONTEXT_NAME, viewName);
 
     checkCartServiceIsUsedCorrectly();
 
@@ -104,10 +103,9 @@ public class CartHandlerTest {
 
   @Test
   public void testHandleFragmentRequestNoContext() {
-    String contextName = "helios";
-    configureContext(contextName, null);
+    configureContext(null);
     String viewName = "viewName";
-    ModelAndView modelAndView = testling.handleFragmentRequest(contextName, viewName);
+    ModelAndView modelAndView = testling.handleFragmentRequest(CONTEXT_NAME, viewName);
     checkSelfIsHttpError(modelAndView);
   }
 
@@ -189,8 +187,8 @@ public class CartHandlerTest {
     when(commerceConnection.getCartService().getCart()).thenReturn(cart);
   }
 
-  private void configureContext(String context, Navigation navigation) {
-    when(navigationSegmentsUriHelper.parsePath(eq(Collections.singletonList(context)))).thenReturn(navigation);
+  private void configureContext(Navigation navigation) {
+    when(navigationSegmentsUriHelper.parsePath(eq(Collections.singletonList(CONTEXT_NAME)))).thenReturn(navigation);
   }
 
   //Checks and Verifies...

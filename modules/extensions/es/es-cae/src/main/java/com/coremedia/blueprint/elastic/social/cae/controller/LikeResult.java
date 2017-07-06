@@ -5,6 +5,9 @@ import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 
+/**
+ * @cm.template.api
+ */
 public class LikeResult extends ContributionResult {
 
   private boolean alreadyLiked;
@@ -15,18 +18,24 @@ public class LikeResult extends ContributionResult {
   }
 
   public LikeResult(Object target,
-                         CommunityUser user,
-                         ElasticSocialService elasticSocialService,
-                         boolean feedbackEnabled,
-                         ContributionType contributionType) {
+                    CommunityUser user,
+                    ElasticSocialService elasticSocialService,
+                    boolean feedbackEnabled,
+                    ContributionType contributionType) {
     super(target, user, elasticSocialService, feedbackEnabled, contributionType);
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean hasLiked() {
     ensureLoaded();
     return alreadyLiked;
   }
 
+  /**
+   * @cm.template.api
+   */
   public long getNumberOfLikes() {
     ensureLoaded();
     return numberOfLikes;

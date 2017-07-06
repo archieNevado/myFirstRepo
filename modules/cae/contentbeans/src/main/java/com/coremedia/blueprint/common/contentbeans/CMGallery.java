@@ -9,9 +9,14 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * A collection of media contents.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMGallery}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMCollection}.</p>
+ * @cm.template.api
  */
 public interface CMGallery<T extends CMMedia> extends CMCollection<T>, Flatless {
   /**

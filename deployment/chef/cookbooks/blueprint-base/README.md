@@ -35,14 +35,6 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['nexus_repo']` - The nexus repo name to retrieve the artifacts via REST API. Defaults to `public`.
 * `node['blueprint']['hostname']` - Convenience property to set the hostname used for public available urls in case of all components installed on the same host. Do not use or set this attribute in recipes, use the concrete attributes instead. Defaults to `node['fqdn']`.
 * `node['blueprint']['default_version']` - Convenience property to set the version of all coremedia artifacts. For individual versions you can still set a version attribute beside each artifact_id attribute. Do not use or set this attribute in recipes, use the concrete attributes instead. Defaults to `1-SNAPSHOT`.
-* `node['blueprint']['webapps']['solr']['group_id']` -  Defaults to `org.apache.solr`.
-* `node['blueprint']['webapps']['solr']['artifact_id']` -  Defaults to `solr`.
-* `node['blueprint']['webapps']['solr']['version']` -  Defaults to `4.10.4`.
-* `node['blueprint']['webapps']['solr']['checksum']` -  Defaults to `a956cdc35b4448a0c814bd8b55473a12bb50236e0e538793f0285c32f2fd8a6f`.
-* `node['blueprint']['webapps']['solr']['explode']` -  Defaults to `true`.
-* `node['blueprint']['webapps']['solr']['config_zip_group_id']` -  Defaults to `com.coremedia.blueprint`.
-* `node['blueprint']['webapps']['solr']['config_zip_artifact_id']` -  Defaults to `solr-config`.
-* `node['blueprint']['webapps']['solr']['config_zip_version']` -  Defaults to `node['blueprint']['default_version']`.
 * `node['blueprint']['webapps']['solr']['context']` -  Defaults to `solr`.
 * `node['blueprint']['webapps']['content-management-server']['group_id']` -  Defaults to `com.coremedia.blueprint`.
 * `node['blueprint']['webapps']['content-management-server']['artifact_id']` -  Defaults to `content-management-server-webapp`.
@@ -101,10 +93,6 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['webapps']['cae-live']['artifact_id']` -  Defaults to `cae-live-webapp`.
 * `node['blueprint']['webapps']['cae-live']['version']` -  Defaults to `node['blueprint']['default_version']`.
 * `node['blueprint']['webapps']['cae-live']['context']` -  Defaults to `blueprint`.
-* `node['blueprint']['webapps']['adobe-drive-server']['group_id']` -  Defaults to `com.coremedia.blueprint`.
-* `node['blueprint']['webapps']['adobe-drive-server']['artifact_id']` -  Defaults to `am-adobe-drive-server-webapp`.
-* `node['blueprint']['webapps']['adobe-drive-server']['version']` -  Defaults to `node['blueprint']['default_version']`.
-* `node['blueprint']['webapps']['adobe-drive-server']['context']` -  Defaults to `drive`.
 * `node['blueprint']['tools']['content-management-server']['group_id']` -  Defaults to `com.coremedia.blueprint`.
 * `node['blueprint']['tools']['content-management-server']['artifact_id']` -  Defaults to `cms-tools-application`.
 * `node['blueprint']['tools']['content-management-server']['version']` -  Defaults to `node['blueprint']['default_version']`.
@@ -129,26 +117,6 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['common_libs']['coremedia-tomcat.jar']['group_id']` -  Defaults to `com.coremedia.blueprint`.
 * `node['blueprint']['common_libs']['coremedia-tomcat.jar']['artifact_id']` -  Defaults to `coremedia-tomcat`.
 * `node['blueprint']['common_libs']['coremedia-tomcat.jar']['version']` -  Defaults to `node['blueprint']['default_version']`.
-* `node['blueprint']['common_libs']['slf4j-api.jar']['group_id']` -  Defaults to `org.slf4j`.
-* `node['blueprint']['common_libs']['slf4j-api.jar']['artifact_id']` -  Defaults to `slf4j-api`.
-* `node['blueprint']['common_libs']['slf4j-api.jar']['version']` -  Defaults to `1.7.12`.
-* `node['blueprint']['common_libs']['slf4j-api.jar']['checksum']` -  Defaults to `0aee9a77a4940d72932b0d0d9557793f872e66a03f598e473f45e7efecdccf99`.
-* `node['blueprint']['common_libs']['jul-to-slf4j.jar']['group_id']` -  Defaults to `org.slf4j`.
-* `node['blueprint']['common_libs']['jul-to-slf4j.jar']['artifact_id']` -  Defaults to `jul-to-slf4j`.
-* `node['blueprint']['common_libs']['jul-to-slf4j.jar']['version']` -  Defaults to `1.7.12`.
-* `node['blueprint']['common_libs']['jul-to-slf4j.jar']['checksum']` -  Defaults to `00a25fcbec155c28152c2252aeadb0ace7947a519fe5d858dbb988de412b8529`.
-* `node['blueprint']['common_libs']['jcl-over-slf4j.jar']['group_id']` -  Defaults to `org.slf4j`.
-* `node['blueprint']['common_libs']['jcl-over-slf4j.jar']['artifact_id']` -  Defaults to `jcl-over-slf4j`.
-* `node['blueprint']['common_libs']['jcl-over-slf4j.jar']['version']` -  Defaults to `1.7.12`.
-* `node['blueprint']['common_libs']['jcl-over-slf4j.jar']['checksum']` -  Defaults to `702d1b805b9fa319609f7bdd7022017919be2280b4116666aaae5a01c0b50158`.
-* `node['blueprint']['common_libs']['slf4j-log4j12.jar']['group_id']` -  Defaults to `org.slf4j`.
-* `node['blueprint']['common_libs']['slf4j-log4j12.jar']['artifact_id']` -  Defaults to `slf4j-log4j12`.
-* `node['blueprint']['common_libs']['slf4j-log4j12.jar']['version']` -  Defaults to `1.7.12`.
-* `node['blueprint']['common_libs']['slf4j-log4j12.jar']['checksum']` -  Defaults to `84b96c9ab58313f44321bda0602408e79f33613c05a379b99a0000b24c4e6c3c`.
-* `node['blueprint']['common_libs']['log4j.jar']['group_id']` -  Defaults to `log4j`.
-* `node['blueprint']['common_libs']['log4j.jar']['artifact_id']` -  Defaults to `log4j`.
-* `node['blueprint']['common_libs']['log4j.jar']['version']` -  Defaults to `1.2.17`.
-* `node['blueprint']['common_libs']['log4j.jar']['checksum']` -  Defaults to `1d31696445697720527091754369082a6651bd49781b6005deb94e56753406f9`.
 * `node['blueprint']['jaas']['crowd']['enabled']` -  Defaults to `false`.
 * `node['blueprint']['jaas']['crowd']['properties']['crowd.domain']` -  Defaults to `crowd`.
 * `node['blueprint']['jaas']['crowd']['properties']['crowd.expiration']` -  Defaults to `3599`.
@@ -157,9 +125,9 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['jaas']['crowd']['properties']['crowd.admingroups']` -  Defaults to `false`.
 * `node['blueprint']['jaas']['crowd']['properties']['application.name']` -  Defaults to `blueprint`.
 * `node['blueprint']['jaas']['crowd']['properties']['application.password']` -  Defaults to `secret`.
-* `node['blueprint']['jaas']['crowd']['properties']['application.login.url']` -  Defaults to `https://sso.coremedia.com:8443/crowd/console/`.
-* `node['blueprint']['jaas']['crowd']['properties']['crowd.server.url']` -  Defaults to `https://sso.coremedia.com:8443/crowd/rest/`.
-* `node['blueprint']['jaas']['crowd']['properties']['crowd.base.url']` -  Defaults to `https://sso.coremedia.com:8443/crowd/`.
+* `node['blueprint']['jaas']['crowd']['properties']['application.login.url']` -  Defaults to `https://mycrowdserver:port/crowd/console/`.
+* `node['blueprint']['jaas']['crowd']['properties']['crowd.server.url']` -  Defaults to `https://mycrowdserver:port/crowd/rest/`.
+* `node['blueprint']['jaas']['crowd']['properties']['crowd.base.url']` -  Defaults to `https://mycrowdserver:port/crowd/`.
 * `node['blueprint']['jaas']['crowd']['properties']['session.isauthenticated']` -  Defaults to `session.isauthenticated`.
 * `node['blueprint']['jaas']['crowd']['properties']['session.tokenkey']` -  Defaults to `session.tokenkey`.
 * `node['blueprint']['jaas']['crowd']['properties']['session.validationinterval']` -  Defaults to `2`.
@@ -171,20 +139,6 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['jaas']['cas']['enabled']` -  Defaults to `false`.
 * `node['blueprint']['jaas']['cas']['validator_url']` -  Defaults to `http://`.
 * `node['blueprint']['jaas']['cas']['cap_service_url']` -  Defaults to `http://`.
-* `node['blueprint']['wcs']['host']` - Convenience property to set the hostname of wcs. Do not use or set this attribute in recipes, use the concrete attributes instead. Defaults to `localhost`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.service.credentials.username']` -  Defaults to `cmadmin`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.service.credentials.password']` -  Defaults to `VTJjyo0AYSnXFHI201yo`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.cookie.domain']` -  Defaults to `.#{node['fqdn']}`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.url']` -  Defaults to `http://#{node['blueprint']['wcs']['host']}`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.secureUrl']` -  Defaults to `https://#{node['blueprint']['wcs']['host']}`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.host']` -  Defaults to `node['blueprint']['wcs']['host']`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.rest.search.url']` -  Defaults to `http://#{node['blueprint']['wcs']['host']}:3737/search/resources`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.rest.search.secureUrl']` -  Defaults to `https://#{node['blueprint']['wcs']['host']}:3738/search/previewresources`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.url-keyword']` -  Defaults to `cm`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora']` -  Defaults to `AuroraESite`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora']` -  Defaults to `USD`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora']` -  Defaults to `ibm`.
-* `node['blueprint']['wcs']['application.properties']['livecontext.managementtool.web.url']` -  Defaults to `https://#{node['blueprint']['wcs']['host']}:8000/lobtools/CoreMediaManagementCenterWrapper.html`.
 * `node['blueprint']['libjpeg_turbo_path']` - The path to the libjpeg turbo installation to increase image transformation performance. Defaults to `/opt/libjpeg-turbo/lib64`.
 
 # Recipes

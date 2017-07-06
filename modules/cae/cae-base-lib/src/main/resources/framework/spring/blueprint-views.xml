@@ -142,6 +142,12 @@
     <property name="settingsService" ref="settingsService"/>
   </bean>
 
+  <bean id="htmlMarkupView" class="com.coremedia.objectserver.view.XmlMarkupView">
+    <description>
+      Programmed view for rendering markup without further filters, e.g. for plain HTML"
+    </description>
+  </bean>
+
   <bean id="blueprintProgrammedViews" class="org.springframework.beans.factory.config.MapFactoryBean">
     <description>
       Contains programmed views injected into all view repositories.
@@ -150,6 +156,9 @@
     <property name="sourceMap">
       <map>
         <entry key="com.coremedia.xml.Markup" value-ref="richtextMarkupView"/>
+        <!-- new -->
+        <entry key="com.coremedia.xml.Markup#html" value-ref="htmlMarkupView"/>
+        <!-- /new -->
         <entry key="com.coremedia.cap.common.Blob" value-ref="blobView"/>
         <entry key="com.coremedia.objectserver.view.events.ViewHookEvent" value-ref="viewHookEventView"/>
         <entry key="java.lang.Throwable" value-ref="errorView"/>
@@ -377,6 +386,22 @@
         <ref bean="contextStrategy"/>
       </entry>
     </map>
+  </customize:append>
+
+  <!-- *************************************
+  Placement Highlighting
+  **************************************  -->
+
+  <customize:append id="placementHighlightingJs" bean="previewResourcesJsList">
+    <list value-type="java.lang.String">
+      <value>/com/coremedia/cae/js/placementHighlighting.js</value>
+    </list>
+  </customize:append>
+
+  <customize:append id="placementHighlightingCss" bean="previewResourcesCssList">
+    <list value-type="java.lang.String">
+      <value>/com/coremedia/cae/css/placementHighlighting.css</value>
+    </list>
   </customize:append>
 
 </beans>

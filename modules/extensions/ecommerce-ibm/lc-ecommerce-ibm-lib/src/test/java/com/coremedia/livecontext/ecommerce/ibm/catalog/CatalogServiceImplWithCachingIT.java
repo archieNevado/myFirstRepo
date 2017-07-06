@@ -2,12 +2,13 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
@@ -20,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +33,9 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
 
   //Rest response values
   private static final String PRODUCT_CODE = "GFR033_3303";
@@ -46,7 +48,6 @@ public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
   WcRestConnector wcRestConnector;
   @Inject
   WcCatalogWrapperService catalogWrapperService;
-
   @Inject
   CatalogServiceImpl testling;
 
@@ -86,16 +87,26 @@ public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
       return;
     }
 
-    testling.getCommerceCache().clear();
-    Product product1 = testling.findProductByExternalId(PRODUCT_CODE);
-    assertEquals(PRODUCT_CODE, product1.getExternalId());
-    Map<String, Object> productWrapper1 = (Map<String, Object>) getNotAccessibleMethodValue(product1, "getDelegate");
-    // we assume a cache duration time of 30 seconds or lesser
-    sleepForSeconds(40);
-    Product product2 = testling.findProductByExternalId(PRODUCT_CODE);
-    Map<String, Object> productWrapper2 = (Map<String, Object>) getNotAccessibleMethodValue(product2, "getDelegate");
-    assertEquals(PRODUCT_CODE, product2.getExternalId());
-    assertNotSame("the first cache entry should be timed out in the meantime", productWrapper1, productWrapper2);
+    CommerceCache commerceCache = testling.getCommerceCache();
+    commerceCache.clear();
+    //reduce cache duration of products for testing
+    Map<String, Long> origCacheTimesInSeconds = commerceCache.getCacheTimesInSeconds();
+    Map<String, Long> tempCacheTimesInSeconds = new HashMap<>(origCacheTimesInSeconds);
+    tempCacheTimesInSeconds.put("Product", 3L);
+    commerceCache.setCacheTimesInSeconds(tempCacheTimesInSeconds);
+    try {
+      Product product1 = testling.findProductByExternalId(PRODUCT_CODE);
+      assertEquals(PRODUCT_CODE, product1.getExternalId());
+      Map<String, Object> productWrapper1 = (Map<String, Object>) getNotAccessibleMethodValue(product1, "getDelegate");
+      // we assume a cache duration time of 30 seconds or lesser
+      sleepForSeconds(5);
+      Product product2 = testling.findProductByExternalId(PRODUCT_CODE);
+      Map<String, Object> productWrapper2 = (Map<String, Object>) getNotAccessibleMethodValue(product2, "getDelegate");
+      assertEquals(PRODUCT_CODE, product2.getExternalId());
+      assertNotSame("the first cache entry should be timed out in the meantime", productWrapper1, productWrapper2);
+    }finally {
+      commerceCache.setCacheTimesInSeconds(origCacheTimesInSeconds);
+    }
   }
 
   @Betamax(tape = "csiwc_testProductIsCached1", match = {MatchRule.path, MatchRule.query})
@@ -147,18 +158,6 @@ public class CatalogServiceImplWithCachingIT extends AbstractServiceTest {
     accessProductVariantByExternalTechId();
     verifyConnectorIsNotCalled(instrumentedConnector);
   }
-
-/*
-  @Betamax(tape = "csiwc_testProductVariantIsCached3", match = {MatchRule.path, MatchRule.query})
-  @Test
-  public void testProductVariantIsCached3() throws Exception {
-    testling.getCommerceCache().clear();
-    accessProductVariantBySeoSegment();
-    WcRestConnector instrumentedConnector = instrumentConnector();
-    accessProductVariantBySeoSegment();
-    verifyConnectorIsNotCalled(instrumentedConnector);
-  }
-*/
 
   @Betamax(tape = "csiwc_testCategoryIsCached1", match = {MatchRule.path, MatchRule.query})
   @Test

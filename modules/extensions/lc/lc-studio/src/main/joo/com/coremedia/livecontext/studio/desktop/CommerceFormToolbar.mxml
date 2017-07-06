@@ -39,7 +39,7 @@
                          ui="{IconDisplayFieldSkin.WORKAREA.getSkin()}">
       <ui:plugins>
         <ui:BindPlugin bindTo="{getLocaleValueExpression()}"
-                       boundValueChanged="{changeLabel}"/>
+                       boundValueChanged="{changeLocale}"/>
       </ui:plugins>
     </ui:IconDisplayField>
     <TbFill/>

@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.asset.impl;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -69,7 +69,7 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
   private Set<Content> resolveCachedAndIndexedAssets(@Nonnull String contentType, @Nonnull String id,
                                                      @Nonnull Site site) {
     Collection<Content> cachedAssets = assetChanges.get(id, site);
-    String externalId = BaseCommerceIdHelper.getCurrentCommerceIdProvider().parseExternalIdFromId(id);
+    String externalId = getCommerceConnection().getIdProvider().parseExternalIdFromId(id);
     List<Content> indexedAssets = assetSearchService.searchAssets(contentType, externalId, site);
 
     List<Content> filteredCachedAssets = filterCachedAssets(contentType, cachedAssets);
@@ -163,7 +163,7 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
   }
 
   private static CommerceConnection getCommerceConnection() {
-    return Commerce.getCurrentConnection();
+    return DefaultConnection.get();
   }
 
   @VisibleForTesting

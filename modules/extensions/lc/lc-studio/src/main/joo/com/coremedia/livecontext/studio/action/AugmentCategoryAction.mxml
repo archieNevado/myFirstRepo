@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<local:AugmentCategoryActionBase
+<local:AugmentCatalogObjectActionBase
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:local="com.coremedia.livecontext.studio.action.*"
         actionName="augmentCategory"
         contentType="CMExternalChannel"
-        catalogObjectType="{Category}"
+        catalogObjectType="{CategoryImpl}"
         inheritEditors="false">
   <fx:Script><![CDATA[
-    import com.coremedia.ecommerce.studio.model.Category;
+    import com.coremedia.ecommerce.studio.model.CategoryImpl;
 
     private var config:AugmentCategoryAction;
 
     public native function AugmentCategoryAction(config:AugmentCategoryAction = null);
     ]]></fx:Script>
 
-</local:AugmentCategoryActionBase>
+</local:AugmentCatalogObjectActionBase>

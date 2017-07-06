@@ -82,3 +82,12 @@
 .row.facetContainer {
   margin: 0;
 }
+
+// CMS-7907: more than 100% width of landing page content
+#content .cm-placement {
+  box-sizing: border-box;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}

@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
@@ -103,6 +103,7 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
    *                   <li>StudioPreview Flag(optional)</li>
    *                   </ol>
    */
+  @Nullable
   @Override
   public Object provideValue(@Nonnull Map<String, Object> parameters) {
     String resultUrl = getUrlPattern();
@@ -134,6 +135,7 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
     //TODO maybe better no absolute url if fragmentContext available
     //make url absolute
     resultUrl = makeShopUrlAbsolute(resultUrl, isStudioPreview);
+    resultUrl = applyParameters(resultUrl, parameters);
 
     // always append "newPreviewSession=true" if request is initial studio preview request
     if (isStudioPreview) {
@@ -245,7 +247,7 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
   }
 
   public CatalogService getCatalogService() {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     if (currentConnection == null) {
       return null;
     }

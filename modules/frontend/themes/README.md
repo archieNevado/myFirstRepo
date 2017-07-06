@@ -16,11 +16,6 @@ A CoreMedia Blueprint Theme should also include following files, as they depend 
 - [Gruntfile.js](http://gruntjs.com/getting-started#the-gruntfile)
 - Theme descriptor (CoreMedia xml file used by theme-importer)
 
-### Available Themes
-
-- [Aurora](aurora-theme/README.md)
-- [Corporate](corporate-theme/README.md)
-
 ### Default Npm Scripts
 
 All available themes include two [npm-scripts](https://docs.npmjs.com/misc/scripts).

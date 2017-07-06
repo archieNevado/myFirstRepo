@@ -60,7 +60,7 @@ This recipe includes all necessary recipes to set up the yum repo configuration.
 
 ## blueprint-yum::local
 
-This recipe configures a local repository, i.e. for development purposes with vagrant.
+This recipe configures a local repository, i.e. for development purposes.
 
 ## blueprint-yum::remote
 

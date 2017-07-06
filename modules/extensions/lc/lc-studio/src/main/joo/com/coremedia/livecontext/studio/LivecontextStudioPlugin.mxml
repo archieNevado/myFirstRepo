@@ -49,6 +49,8 @@
 
     public static const CONTENT_TYPE_PRODUCT_TEASER:String = "CMProductTeaser";
 
+    public static const CONTENT_TYPE_EXTERNAL_PRODUCT:String = "CMExternalProduct";
+
     public static const EXTERNAL_ID_PROPERTY:String = "externalId";
 
     /**
@@ -77,6 +79,11 @@
     public static const AUGMENT_CATEGORY_MENU_ITEM_ID:String = "augmentCategory";
 
     /**
+     * The itemId of the create augmented product menu item.
+     */
+    public static const AUGMENT_PRODUCT_MENU_ITEM_ID:String = "augmentProduct";
+
+    /**
      * The itemId of the search product variants button item.
      */
     public static const SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID:String = "searchProductVariants";
@@ -85,6 +92,11 @@
      * The itemId of the create augmented category button
      */
     public static const AUGMENT_CATEGORY_BUTTON_ITEM_ID:String = "augmentCategory";
+
+    /**
+     * The itemId of the create augmented product button
+     */
+    public static const AUGMENT_PRODUCT_BUTTON_ITEM_ID:String = "augmentProduct";
 
     /**
      * The itemId of the create product teaser button
@@ -152,6 +164,20 @@
         </ui:AddItemsPlugin>
       </bpforms:plugins>
     </bpforms:CMImageMapForm>
+    <bpforms:CMVideoForm>
+      <bpforms:plugins>
+        <ui:AddItemsPlugin applyTo="{function(cont:Container):Container {
+                                        return Container(cont.getComponent(CMVideoForm.CONTENT_TAB_ITEM_ID));
+                                        }}">
+          <ui:after>
+            <bpforms:DataDocumentForm/>
+          </ui:after>
+          <ui:items>
+            <livecontext:ProductAssignmentField itemId="videoTimeLineForm"/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </bpforms:plugins>
+    </bpforms:CMVideoForm>
     <editor:TabbedDocumentFormDispatcher>
       <editor:plugins>
         <editor:AddTabbedDocumentFormsPlugin>
@@ -160,6 +186,7 @@
             <livecontext:CMExternalChannelForm itemId="{CONTENT_TYPE_EXTERNAL_CHANNEL}"/>
             <livecontext:CMExternalPageForm itemId="{CONTENT_TYPE_EXTERNAL_PAGE}"/>
             <livecontext:CMProductTeaserForm itemId="{CONTENT_TYPE_PRODUCT_TEASER}"/>
+            <livecontext:CMExternalProductForm itemId="{CONTENT_TYPE_EXTERNAL_PRODUCT}"/>
           </editor:documentTabPanels>
         </editor:AddTabbedDocumentFormsPlugin>
       </editor:plugins>
@@ -200,13 +227,12 @@
       </editor:plugins>
     </editor:HeaderToolbarUserMenu>
     <!--Reload frame when changing the workspace-->
-    <editor:PreviewIFrameToolbar>
+    <editor:PreviewPanel>
       <editor:plugins exml:mode="append">
         <ui:BindPlugin bindTo="{CatalogHelper.getInstance().getCommerceWorkspaceExpression()}"
                        boundValueChanged="{reloadPreview}"/>
-        <livecontext:AddFragmentHighlightButtonPlugin/>
       </editor:plugins>
-    </editor:PreviewIFrameToolbar>
+    </editor:PreviewPanel>
     <!-- Register product view for the workArea-->
     <editor:WorkArea>
       <editor:plugins>
@@ -257,6 +283,12 @@
                         catalogObjectVariableName="{WorkAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
               </baseAction>
             </MenuItem>
+            <MenuItem>
+              <baseAction>
+                <livecontext:AugmentProductAction
+                        catalogObjectVariableName="{WorkAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
+              </baseAction>
+            </MenuItem>
           </ui:items>
         </ui:AddItemsPlugin>
       </editor:plugins>
@@ -277,12 +309,18 @@
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <Button itemId="{AUGMENT_CATEGORY_BUTTON_ITEM_ID}"
-                    disabled="true">
-              <baseAction>
+            <ui:IconButton itemId="{AUGMENT_CATEGORY_BUTTON_ITEM_ID}"
+                           disabled="true">
+              <ui:baseAction>
                 <livecontext:AugmentCategoryAction catalogObjectVariableName="{ActionsToolbar.ENTITY_VARIABLE_NAME}"/>
-              </baseAction>
-            </Button>
+              </ui:baseAction>
+            </ui:IconButton>
+            <ui:IconButton itemId="{AUGMENT_PRODUCT_BUTTON_ITEM_ID}"
+                           disabled="true">
+              <ui:baseAction>
+                <livecontext:AugmentProductAction catalogObjectVariableName="{ActionsToolbar.ENTITY_VARIABLE_NAME}"/>
+              </ui:baseAction>
+            </ui:IconButton>
           </ui:items>
           <ui:before>
             <Component itemId="{ActionsToolbar.WITHDRAW_BUTTON_ITEM_ID}"/>
@@ -326,9 +364,11 @@
             destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.validation.Validators')}"
             source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.livecontext.studio.LiveContextStudioPluginValidator')}"/>
     <livecontext:LivecontextCollectionViewActionsPlugin/>
-    <!-- exclude Augmented Category from the create new documents menu
+    <!-- exclude Augmented Category and Product from the create new documents menu
     it will created from a selected augmented category directly-->
     <editor:ConfigureDocumentTypes names="{CONTENT_TYPE_EXTERNAL_CHANNEL}"
+                                   exclude="true"/>
+    <editor:ConfigureDocumentTypes names="{CONTENT_TYPE_EXTERNAL_PRODUCT}"
                                    exclude="true"/>
     <editor:RegisterLibraryTreeFilter filter="{new EcCatalogTreeFilter('Augmentation')}"/>
   </local:configuration>

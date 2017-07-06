@@ -13,10 +13,10 @@
 //
 
 @function calculatePaddingTop($x, $y, $includeGutter) {
-  $gutter: ceil(($grid-gutter-width / 2));
   $percentage: percentage($y/$x);
 
   @if $includeGutter {
+    $gutter: ceil(($grid-gutter-width / 2));
     @return calc(#{$percentage} - #{$gutter});
   } @else {
     @return calc(#{$percentage});

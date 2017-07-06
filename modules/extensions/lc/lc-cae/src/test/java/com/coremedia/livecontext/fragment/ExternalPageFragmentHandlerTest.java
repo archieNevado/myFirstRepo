@@ -63,7 +63,7 @@ public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<Ext
     return new ExternalPageFragmentHandler() {
       @Override
       protected Page asPage(Navigation context, Linkable content, User developer) {
-        PageImpl page = new PageImpl(context, content, false, getSitesService(), null, null, null, null);
+        PageImpl page = new PageImpl(context, content, false, getSitesService(), cache, null, null, null);
         page.setDeveloper(developer);
         return page;
       }

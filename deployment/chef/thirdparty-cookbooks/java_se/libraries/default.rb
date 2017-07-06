@@ -15,7 +15,7 @@ end
 def java_version_on_macosx?
   cmd = Mixlib::ShellOut.new("pkgutil --pkgs='com.oracle.jdk#{jdk_version}'")
   cmd.run_command
-  cmd.exitstatus.zero?
+  cmd.exitstatus == 0
 end
 
 def win_install_dir
@@ -26,7 +26,6 @@ def win_install_dir
   end
 end
 
-# rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 def fetch_java_installer
   case node['platform_family']
   when 'mac_os_x'
@@ -42,7 +41,8 @@ def fetch_java_installer
 
   uri = node['java_se']['uri']
   if uri.nil? || uri.empty?
-    download_url = "http://download.oracle.com/otn-pub/java/jdk/#{jdk_version}-b#{node['java_se']['build']}/#{jdk}"
+    download_url = "http://download.oracle.com/otn-pub/java/jdk/#{jdk_version}-b#{node['java_se']['build']}/" \
+        "#{node['java_se']['hash']}/#{jdk}"
   elsif uri.start_with?('file://')
     file_cache_path =
       platform?('windows') ? uri.gsub('file:///', '').tr('/', '\\').tr('|', ':') : uri.gsub('file://', '')

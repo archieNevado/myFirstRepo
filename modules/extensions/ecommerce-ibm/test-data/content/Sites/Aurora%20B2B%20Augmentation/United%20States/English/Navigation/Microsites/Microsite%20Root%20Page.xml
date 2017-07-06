@@ -5,11 +5,6 @@
 </master>
 <viewtype>
 </viewtype>
-<localSettings>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<BooleanProperty Name="livecontext.policy.commerce-microsite-links">true</BooleanProperty>
-</Struct>
-</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles2>

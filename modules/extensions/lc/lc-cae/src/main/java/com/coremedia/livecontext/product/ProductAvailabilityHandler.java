@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.product;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -11,8 +11,8 @@ import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
@@ -28,10 +28,10 @@ import org.springframework.web.util.UriTemplate;
 import java.util.Map;
 import java.util.Set;
 
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This handler generates and handles URLs to retrieve the availability of {@link Product} and {@link ProductVariant}
@@ -72,31 +72,23 @@ public class ProductAvailabilityHandler extends PageHandlerBase {
                                                    @PathVariable(PATH_VARIABLE_NAME_PRODUCT_TYPE) String productType,
                                                    @PathVariable(PATH_VARIABLE_NAME_EXTERNAL_ID) String productId,
                                                    @RequestParam(value = "targetView", required = false) String view) {
-    Site currentSite = getSite(shopName);
-
     Navigation navigationContext = getNavigation(shopName);
-    //TODO handle context not found i.e. storeContext == null
-    StoreContext storeContext = getStoreContextProvider().findContextBySite(currentSite);
+    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    CommerceIdProvider idProvider = currentConnection.getIdProvider();
 
     ModelAndView model;
+    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service available");
     if ("variant".equals(productType)) {
-      ProductVariant productVariant = getCatalogService().findProductVariantById(getCurrentCommerceIdProvider().formatProductVariantId(productId));
+      String formattedProductVariantId = idProvider.formatProductVariantId(productId);
+      ProductVariant productVariant = catalogService.findProductVariantById(formattedProductVariantId);
       model = HandlerHelper.createModelWithView(productVariant, view);
     } else {
-      Product product = getCatalogService().findProductById(
-              getCurrentCommerceIdProvider().formatProductId(productId));
+      String formattedProductId = idProvider.formatProductId(productId);
+      Product product = catalogService.findProductById(formattedProductId);
       model = HandlerHelper.createModelWithView(product, view);
     }
     NavigationLinkSupport.setNavigation(model, navigationContext);
     return model;
-  }
-
-  public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
-  }
-
-  public CatalogService getCatalogService() {
-    return Commerce.getCurrentConnection().getCatalogService();
   }
 
   @Required

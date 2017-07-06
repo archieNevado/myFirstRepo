@@ -13,7 +13,7 @@ $cm-teasable-dimmer-background-color: #000000 !default;
 // set this variable to "none" to not display the dimmer
 $cm-teasable-dimmer-display: block !default;
 // The default background color for the image. This color is being displayed until the image has been loaded from the server.
-$cm-teasable-picture-background-color: #ffffff !default;
+$cm-teasable-picture-background-color: transparent !default;
 // The default padding for mobile
 $cm-teasable-padding-base-horizontal: 15px !default;
 // The default padding for tablet and desktop
@@ -43,7 +43,7 @@ $cm-teasable-padding-large-horizontal: 45px !default;
   }
 
   &__picture {
-    background: $cm-teasable-picture-background-color none; /* no loading spinner */
+    background-color: $cm-teasable-picture-background-color;
     @include stretch-absolute();
   }
 

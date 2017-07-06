@@ -1,16 +1,26 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.cap.common.XmlGrammar;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.xml.Markup;
-import com.coremedia.xml.MarkupFactory;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Locale;
 
 public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
+
+  private CommerceCache commerceCache;
+
+  protected CommerceCache getCommerceCache() {
+    return commerceCache;
+  }
+
+  @Required
+  public void setCommerceCache(CommerceCache commerceCache) {
+    this.commerceCache = commerceCache;
+  }
 
   @Override
   public Locale getLocale() {
@@ -36,18 +46,10 @@ public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
   public abstract void setDelegate(Object delegate);
 
   protected AssetUrlProvider getAssetUrlProvider() {
-    return Commerce.getCurrentConnection().getAssetUrlProvider();
+    return DefaultConnection.get().getAssetUrlProvider();
   }
 
   protected static Markup toRichtext(String str) {
-    StringBuilder sb = new StringBuilder();
-    sb.append("<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");  // NOSONAR
-    if (str!=null && !str.isEmpty()) {
-      sb.append("<p>");  // NOSONAR
-      sb.append(StringEscapeUtils.escapeXml(str));
-      sb.append("</p>");  // NOSONAR
-    }
-    sb.append("</div>");  // NOSONAR
-    return MarkupFactory.fromString(sb.toString()).withGrammar(XmlGrammar.RICH_TEXT_1_0_ID);
+    return toRichtext(str, true);
   }
 }

@@ -9,6 +9,9 @@ import static com.coremedia.elastic.social.api.ContributionType.DISABLED;
 import static com.coremedia.elastic.social.api.ContributionType.READONLY;
 import static com.coremedia.elastic.social.api.ContributionType.REGISTERED;
 
+/**
+ * @cm.template.api
+ */
 public abstract class ContributionResult {
   protected ElasticSocialService elasticSocialService;
   protected boolean feedbackEnabled = false;
@@ -43,6 +46,9 @@ public abstract class ContributionResult {
 
   protected abstract void load();
 
+  /**
+   * @cm.template.api
+   */
   public Object getTarget() {
     return target;
   }
@@ -51,10 +57,16 @@ public abstract class ContributionResult {
     return user;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isEnabled() {
     return feedbackEnabled && contributionType != DISABLED;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isReadOnly() {
     return isEnabled() && contributionType == READONLY;
   }
@@ -71,10 +83,16 @@ public abstract class ContributionResult {
     return getContributionType() == ANONYMOUS;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isWritingContributionsEnabled() {
     return getContributionType() == REGISTERED || getContributionType() == ANONYMOUS;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isWritingContributionsAllowed() {
     return isEnabled() && isWritingContributionsEnabled() && isWritingAllowedForUser();
   }

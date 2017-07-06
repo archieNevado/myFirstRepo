@@ -411,6 +411,14 @@
           <linkProperty name="children"/>
         </version>
       </document>
+      <document id="84" name="Sitemap" type="CMSitemap">
+        <version number="1">
+          <linkProperty name="root">
+            <link id="10"/>
+          </linkProperty>
+          <markupProperty name="localSettings" url="152settings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
       <document id="86" name="Sitemap" type="CMSitemap">
         <version number="1">
           <linkProperty name="root">
@@ -425,7 +433,7 @@
       </document>
       <document id="90" name="Action" type="CMAction">
         <version number="1">
-          <stringProperty name="id" value="com.coremedia.blueprint.elastic.social.cae.flows.Login"/>
+          <stringProperty name="id" value="com.coremedia.blueprint.es.webflow.Login"/>
           <stringProperty name="type" value="webflow"/>
         </version>
       </document>

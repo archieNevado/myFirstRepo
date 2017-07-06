@@ -6,15 +6,9 @@
 <viewtype>
 </viewtype>
 <localSettings>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<LinkProperty Name="flow.registration" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Registration.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/Registration"/>
-<LinkProperty Name="flow.passwordExpired" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/PasswordExpired.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/PasswordExpired"/>
-<LinkProperty Name="flow.passwordReset" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/PasswordReset.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/PasswordReset"/>
-<LinkProperty Name="flow.logout" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Logout.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/Logout"/>
-<LinkProperty Name="flow.userDetails" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/UserDetails.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/UserDetails"/>
-</Struct>
 </localSettings>
 <linkedSettings>
+<link href="../Elastic%20Social.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Elastic%20Social"/>
 </linkedSettings>
 <resourceBundles2>
 </resourceBundles2>
@@ -30,7 +24,7 @@
 <contexts>
 </contexts>
 <teaserTitle></teaserTitle>
-<detailText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>Please register by creating a new account on Perfect Chef.</p></div></detailText>
+<detailText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>Please register by creating a new account on Chef Corp.</p></div></detailText>
 <pictures>
 </pictures>
 <notSearchable>0</notSearchable>

@@ -1,17 +1,14 @@
 package com.coremedia.blueprint.studio.taxonomy.administration {
 
-import com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings_properties;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNode;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeFactory;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeList;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
-import com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyExplorerColumn;
 import com.coremedia.blueprint.studio.taxonomy.selection.TaxonomySearchField;
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
-import com.coremedia.cms.editor.sdk.premular.FocusForwarder;
 import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
 import com.coremedia.cms.editor.sdk.premular.StandAloneDocumentView;
 import com.coremedia.cms.editor.sdk.premular.TabbedDocumentFormDispatcher;
@@ -20,12 +17,14 @@ import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.skins.LoadMaskSkin;
 import com.coremedia.ui.util.EventUtil;
 import com.coremedia.ui.util.IdUtil;
 import com.coremedia.ui.util.createComponentSelector;
 
 import ext.Component;
 import ext.Ext;
+import ext.LoadMask;
 import ext.MessageBox;
 import ext.StringUtil;
 import ext.button.Button;
@@ -34,8 +33,6 @@ import ext.form.field.TextField;
 import ext.panel.Panel;
 import ext.tab.TabPanel;
 import ext.window.MessageBoxWindow;
-
-import js.HTMLElement;
 
 /**
  * Handles the adding and removing of the level columns.
@@ -51,6 +48,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
 
   private var columnsContainer:Container;
   private var clipboardValueExpression:ValueExpression;
+  private var previewLoadMask:LoadMask;
 
   public function TaxonomyExplorerPanelBase(config:TaxonomyExplorerPanel = null) {
     super(config);
@@ -66,6 +64,16 @@ public class TaxonomyExplorerPanelBase extends Panel {
     super.afterRender();
     var formDispatcher:TabbedDocumentFormDispatcher = getDocumentForm().getTabbedDocumentFormDispatcher();
     formDispatcher.bindTo.addChangeListener(updateTabs);
+
+    var target:Component = queryById('preview');
+    var loadMaskCfg:LoadMask = LoadMask({
+      target: target
+    });
+    loadMaskCfg.msg = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_loading_text');
+    loadMaskCfg.ui = LoadMaskSkin.OPAQUE.getSkin();
+
+    previewLoadMask = new LoadMask(loadMaskCfg);
+    previewLoadMask.disable();
   }
 
   public function getSelectedValueExpression():ValueExpression {
@@ -139,10 +147,11 @@ public class TaxonomyExplorerPanelBase extends Panel {
     var nodeRef:Content = SESSION.getConnection().getContentRepository().getContent(uriPath);
     var referrerDoctype:String = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_referrer_doctype');
     var referrerProperties:Array = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_referrer_properties').split(",");
+
     ValueExpressionFactory.createFromFunction(function ():Array {
       var referrers:Array = [];
-      for(var i:int = 0; i<referrerProperties.length; i++) {
-        var taxonomyReferrers:Array = nodeRef.getReferrersWithNamedDescriptor(referrerDoctype, referrerProperties[i]);
+      for (var i:int = 0; i < referrerProperties.length; i++) {
+        var taxonomyReferrers:Array = nodeRef.getReferrersWithNamedDescriptor(referrerDoctype, referrerProperties[i], Ext.emptyFn);
         if (undefined === taxonomyReferrers) {
           return undefined;
         }
@@ -341,6 +350,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
    * @param node The node to display the Document Form Dispatcher for.
    */
   public function updateTaxonomyNodeForm(node:TaxonomyNode):void {
+    previewLoadMask.show();
+    setBusy(true);
     getDisplayedTaxonomyNodeExpression().setValue(node);
     var dfd:Container = queryById('documentFormDispatcher') as Container;
 
@@ -354,6 +365,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
           ValueExpressionFactory.create(propertyName, content).addChangeListener(selectedTaxonomyNameChanged);
           getDisplayedTaxonomyContentExpression().setValue(content);
           dfd.show();
+          previewLoadMask.hide();
+          setBusy(false);
 
           ensureExpandState(dfd, content, attachBlurListener);
           Ext.resumeLayouts(true);
@@ -361,10 +374,14 @@ public class TaxonomyExplorerPanelBase extends Panel {
       }
       else {
         dfd.hide();
+        previewLoadMask.hide();
+        setBusy(false);
       }
     } else {
       //hide the document dispatcher panel!
       dfd.hide();
+      previewLoadMask.hide();
+      setBusy(false);
     }
   }
 
@@ -373,7 +390,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       var formDispatcher:Container = dfd.down(createComponentSelector().itemId(content.getType().getName()).build()) as Container;
       var documentForm:Container = formDispatcher.down(createComponentSelector().itemId(content.getType().getName()).build()) as Container;
       var collapsable:Panel = documentForm.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
-      if(collapsable.collapsed) {
+      if (collapsable.collapsed) {
         collapsable.expand(false);
       }
 
@@ -382,7 +399,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
         var stringPropertyFields:Array = collapsable.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
 
         for each(var field:StringPropertyField in stringPropertyFields) {
-          if(field.propertyName === fieldId) {
+          if (field.propertyName === fieldId) {
             var nameField:TextField = field.query(createComponentSelector()._xtype("textfield").build())[0] as TextField;
             callback(nameField);
           }
@@ -467,7 +484,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
    * @param node The selected node.
    */
   public function updateColumns(node:TaxonomyNode):void {
-    setBusy(true);
     var cc:Container = getColumnsContainer();
     if (node) {
       var level:int = node.getLevel();
@@ -483,8 +499,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
     } else {
       cc.removeAll(true);
     }
-
-    setBusy(false);
   }
 
   /**
@@ -506,8 +520,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
 
   private function scrollTop():void {
     //remove listener...
-    var lastColumn:TaxonomyExplorerColumn = columnsContainer.items['items'][columnsContainer.items.length-1] as TaxonomyExplorerColumn;
-    if(lastColumn) {
+    var lastColumn:TaxonomyExplorerColumn = columnsContainer.items['items'][columnsContainer.items.length - 1] as TaxonomyExplorerColumn;
+    if (lastColumn) {
       lastColumn.removeListener('afterrender', scrollRight);
     }
     //and scroll right
@@ -661,7 +675,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   private function updateTabs():void {
     getTabs().removeListener('tabchange', onTabChange);
-    Ext.suspendLayouts();
     clearTabs();
 
     //add tabs
@@ -682,7 +695,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
     }
 
     getTabs().addListener('tabchange', onTabChange);
-    Ext.resumeLayouts();
   }
 
   private static function getTabs():TabPanel {

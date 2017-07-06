@@ -30,7 +30,7 @@ public class SiteFilter implements Filter {
 
   private static final Logger LOG = LoggerFactory.getLogger(SiteFilter.class);
 
-  static final Pattern SITE_ID_URL_PATTERN = Pattern.compile("/livecontext/.+?/(.+?)((/.*)|$)");
+  private static final Pattern SITE_ID_URL_PATTERN = Pattern.compile("/livecontext/.+?/(.+?)((/.*)|$)");
 
   @Inject
   @SuppressWarnings("squid:S3306") //squid:S3306 Constructor injection should be used instead of field injection

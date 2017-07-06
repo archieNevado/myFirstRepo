@@ -2,6 +2,7 @@ package com.coremedia.catalog.studio.lib.validators;
 
 import com.coremedia.blueprint.base.ecommerce.catalog.CmsCatalogService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.multisite.Site;
@@ -87,36 +88,31 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
     @Override
     public Collection<Category> evaluate(Cache cache) throws Exception {
       Collection<Category> rootCategories = new LinkedList<>();
-
       Set<Site> sites = sitesService.getSites();
       for (Site site : sites) {
-        String connectionId = commerceConnectionIdProvider.findConnectionIdBySite(site);
-        if (connectionId != null) {
-          CommerceConnection connection = commerce.getConnection(connectionId);
-          if (connection != null && "coremedia".equals(connection.getVendorName())) {
-            connection.setStoreContext(connection.getStoreContextProvider().findContextBySite(site));
-
-            Commerce.setCurrentConnection(connection);
-
-            try {
+        try {
+          String connectionId = commerceConnectionIdProvider.findConnectionIdBySite(site);
+          if (connectionId != null) {
+            CommerceConnection connection = commerce.getConnection(connectionId);
+            if (connection != null && "coremedia".equals(connection.getVendorName())) {
+              connection.setStoreContext(connection.getStoreContextProvider().findContextBySite(site));
+              DefaultConnection.set(connection);
               RootCategoryCacheKey cacheKey = new RootCategoryCacheKey(connection, catalogService, linker,
                       rootCategoryInvalidationSource);
-
               Category rootCategory = cache.get(cacheKey);
               if (rootCategory != null) {
                 rootCategories.add(rootCategory);
               } else {
                 LOG.debug("connection {} has no root category", connection);
               }
-            } catch (Exception e) {
-              LOG.debug("unable to determine root category for connection {}", connection, e);
-            } finally {
-              Commerce.clearCurrent();
             }
           }
+        } catch (Exception e) {
+          LOG.debug("unable to determine root category for site {}", site, e);
+        } finally {
+          DefaultConnection.clear();
         }
       }
-
       return rootCategories;
     }
 

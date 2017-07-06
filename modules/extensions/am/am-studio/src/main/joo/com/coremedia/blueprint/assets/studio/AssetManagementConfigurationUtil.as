@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.assets.studio {
 
-import com.coremedia.blueprint.base.components.util.StudioConfigurationUtil;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.util.StudioConfigurationUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 

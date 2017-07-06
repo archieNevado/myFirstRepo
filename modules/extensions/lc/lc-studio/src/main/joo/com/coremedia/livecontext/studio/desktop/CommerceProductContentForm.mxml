@@ -14,18 +14,35 @@
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
     import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
     import com.coremedia.ecommerce.studio.model.ProductPropertyNames;
+    import com.coremedia.ecommerce.studio.tree.augmentedCategoryTreeRelation;
     import com.coremedia.livecontext.studio.CatalogThumbnailResolver;
+    import com.coremedia.ui.data.ValueExpression;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.commerceProductContentForm";
 
     private var config:CommerceProductContentForm;
+    private var augmentedCategoryExpression:ValueExpression;
+
+    // called by generated constructor code
+    private function __initialize__(config:CommerceProductContentForm):void {
+      augmentedCategoryExpression = ValueExpressionFactory.createFromFunction(function ():* {
+        return augmentedCategoryTreeRelation.getParentUnchecked(config.bindTo.getValue());
+      });
+    }
 
     public native function CommerceProductContentForm(config:CommerceProductContentForm = null);
     ]]></fx:Script>
 
   <editor:items>
-    <livecontext:CommerceDetailsForm itemId="productDetails"
-                                     titleLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_name_label')}"/>
+    <livecontext:CommerceDetailsForm itemId="productDetails"/>
+
+    <livecontext:CommerceAugmentedPageGridForm itemId="pdpPagegrid"
+                                               showLocal="true"
+                                               forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
+                                               bindTo="{augmentedCategoryExpression}"
+                                               pageGridPropertyName="pdpPagegrid"
+                                               fallbackPageGridPropertyName="placement"/>
     <editor:PropertyFieldGroup
             title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_PropertyGroup_prices_title')}"
             itemId="prices">

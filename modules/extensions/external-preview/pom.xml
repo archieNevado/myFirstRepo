@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>external-preview-bom</module>
     <module>external-preview-cae</module>
     <module>external-preview-studio-lib</module>
     <module>external-preview-studio</module>

@@ -1,12 +1,12 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
-import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
-import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.base.elastic.common.ImageHelper;
-import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
-import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
+import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
+import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
@@ -20,6 +20,7 @@ import com.coremedia.elastic.social.api.comments.CommentService;
 import com.coremedia.elastic.social.api.mail.MailTemplateService;
 import com.coremedia.elastic.social.api.ratings.LikeService;
 import com.coremedia.elastic.social.api.ratings.RatingService;
+import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.google.common.annotations.VisibleForTesting;
@@ -72,6 +73,9 @@ public class UserDetailsHelper {
 
   @Inject
   protected LikeService likeService;
+
+  @Inject
+  protected ReviewService reviewService;
 
   @Inject
   protected MailTemplateService mailTemplateService;
@@ -151,7 +155,9 @@ public class UserDetailsHelper {
 
   public boolean save(UserDetails userDetails, RequestContext context, CommonsMultipartFile file) {
     userDetails.validate(context);
-    return !context.getMessageContext().hasErrorMessages() && doSave(userDetails, context, file);
+    final boolean result = !context.getMessageContext().hasErrorMessages() && doSave(userDetails, context, file);
+    userDetails.setDeleteProfileImage(false);
+    return result;
   }
 
   public boolean doSave(UserDetails userDetails, RequestContext context, CommonsMultipartFile file) {
@@ -286,6 +292,7 @@ public class UserDetailsHelper {
       details.setNumberOfComments(commentService.getNumberOfApprovedComments(communityUser));
       details.setNumberOfRatings(ratingService.getNumberOfRatingsFromUser(communityUser));
       details.setNumberOfLikes(likeService.getNumberOfLikesFromUser(communityUser));
+      details.setNumberOfReviews(reviewService.getNumberOfApprovedReviews(communityUser));
       details.setLocalizedLocale(communityUser.getLocale() != null ? new LocalizedLocale(communityUser.getLocale(),
               communityUser.getLocale().getDisplayLanguage(requestLocale)) : null);
       details.setPasswordPolicy(passwordPolicy);

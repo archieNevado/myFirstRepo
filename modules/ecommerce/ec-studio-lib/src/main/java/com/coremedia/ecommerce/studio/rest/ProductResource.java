@@ -2,12 +2,19 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
+import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A catalog {@link Product} object as a RESTful resource.
@@ -49,13 +56,24 @@ public class ProductResource extends CommerceBeanResource<Product> {
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
     representation.setDescribingAttributes(entity.getDescribingAttributes());
+
+    representation.setContent(getContent());
   }
 
   @Override
   protected Product doGetEntity() {
-    CommerceConnection commerceConnection = getConnection();
-    String productId = commerceConnection.getIdProvider().formatProductId(getId());
-    return commerceConnection.getCatalogService().findProductById(productId);
+    CommerceConnection connection = getConnection();
+    CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
+    CatalogService catalogService = requireNonNull(connection.getCatalogService(), "catalog service not available");
+    String productId = idProvider.formatProductId(getId());
+    return catalogService.findProductById(productId);
   }
+
+  @Autowired(required = false)
+  @Qualifier("productAugmentationService")
+  public void setAugmentationService(AugmentationService augmentationService) {
+    super.setAugmentationService(augmentationService);
+  }
+
 
 }

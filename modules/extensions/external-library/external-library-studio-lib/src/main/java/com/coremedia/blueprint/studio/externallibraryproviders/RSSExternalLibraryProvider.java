@@ -198,7 +198,10 @@ public class RSSExternalLibraryProvider implements ExternalLibraryProvider {
 
         MimeType mimeType = new MimeType(mimeTypeString);
         Blob blob = blobService.fromInputStream(bufferedInputStream, mimeType);
-        BufferedImage img = ImageIO.read(blob.getInputStream());
+        BufferedImage img;
+        try (InputStream blobInputStream = blob.getInputStream()) {
+          img = ImageIO.read(blobInputStream);
+        }
 
         if (img.getWidth() > MIN_IMG_WIDTH && img.getHeight() > MIN_IMG_HEIGHT) {
           Content newImageContent = contentType.createByTemplate(connection.getContentRepository().getChild(folder), content.getName() + " - Picture", "{3} ({1})", new HashMap<String, Object>());

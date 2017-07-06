@@ -20,7 +20,7 @@ public interface SemanticStrategy {
   /**
    * Returns the service id of this service.
    *
-   * @return
+   * @return id
    */
   String getServiceId();
 }

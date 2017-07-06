@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -49,12 +49,12 @@ public class CatalogServiceResource {
 
   @Nullable
   public CatalogService getCatalogService() {
-    return Commerce.getCurrentConnection().getCatalogService();
+    return DefaultConnection.get().getCatalogService();
   }
 
   @Nullable
   public MarketingSpotService getMarketingSpotService() {
-    return Commerce.getCurrentConnection().getMarketingSpotService();
+    return DefaultConnection.get().getMarketingSpotService();
   }
 
   @GET
@@ -155,6 +155,6 @@ public class CatalogServiceResource {
 
   @Nullable
   protected CommerceConnection getConnection(String siteId) {
-    return Commerce.getCurrentConnection();
+    return DefaultConnection.get();
   }
 }

@@ -79,7 +79,7 @@ public class UnsurroundFilterTest {
     StringWriter stringWriter = new StringWriter();
     markup.writeOn(newXmlFilters, stringWriter);
     Assert.assertEquals("<p class=\"p--heading-1\" xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">h1</p>\n" +
-            "  <p class=\"p--heading-2\" xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">h2</p>\n" +
+            "  <p class=\"p--heading-2 align--right\" xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">h2</p>\n" +
             "  <p class=\"p--heading-3\" xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">h3</p>\n" +
             "  <p class=\"p--heading-4\" xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">h4</p>\n" +
             "  <p class=\"p--heading-5\" xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">h5</p>\n" +

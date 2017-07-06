@@ -7,12 +7,15 @@ import java.util.List;
 /**
  * A Page is a {@link AbstractPage} that represents a complete page including its own CSS, JavaScript
  * and favicon.
+ *
+ * @cm.template.api
  */
 public interface Page extends AbstractPage {
   /**
    * Returns the css contents for this page.
    *
    * @return the css contents for this page
+   * @cm.template.api
    */
   List<?> getCss();
 
@@ -20,6 +23,7 @@ public interface Page extends AbstractPage {
    * Returns the ie specific css contents for this page.
    *
    * @return the css contents for this page
+   * @cm.template.api
    */
   List<?> getInternetExplorerCss();
 
@@ -27,6 +31,7 @@ public interface Page extends AbstractPage {
    * Returns the JavaScript contents for this page.
    *
    * @return the JavaScript contents for this page
+   * @cm.template.api
    */
   List<?> getJavaScript();
 
@@ -35,6 +40,7 @@ public interface Page extends AbstractPage {
    * the HTML head.
    *
    * @return the JavaScript contents for the head of this page
+   * @cm.template.api
    */
   List<?> getHeadJavaScript();
 
@@ -42,16 +48,21 @@ public interface Page extends AbstractPage {
    * Returns the ie specific JavaScript contents for this page.
    *
    * @return the ie specific JavaScript contents for this page
+   * @cm.template.api
    */
   List<?> getInternetExplorerJavaScript();
 
   /**
    * Returns a favicon for this page. May be null.
+   *
+   * @cm.template.api
    */
   Blob getFavicon();
 
   /**
    * Return the first navigation context within the navigation hierarchy which is an instance of CMContext
+   *
+   * @cm.template.api
    */
   CMContext getContext();
 }

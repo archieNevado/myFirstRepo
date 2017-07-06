@@ -14,7 +14,6 @@
   <import resource="livecontext-handlers.xml"/>
   <import resource="livecontext-cae-services.xml"/>
   <import resource="livecontext-fragment.xml"/>
-  <import resource="livecontext-sitemap.xml"/>
   <import resource="livecontext-views.xml"/>
   <import resource="livecontext-handler-interceptors.xml"/>
   <import resource="livecontext-freemarker-views.xml"/>
@@ -22,7 +21,6 @@
   <import resource="livecontext-hybrid.xml"/>
   <import resource="livecontext-resolver.xml"/>
   <import resource="livecontext-validation.xml"/>
-  <import resource="livecontext-testurls.xml"/>
 
   <import resource="classpath:META-INF/coremedia/livecontext-contentbeans-settings.xml"/>
   <import resource="classpath:META-INF/coremedia/livecontext-contentbeans.xml"/>

@@ -6,6 +6,8 @@
            xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
            itemId="{CATALOG_SEARCH_TOOLBAR_ITEM_ID}">
   <fx:Script><![CDATA[
+    import com.coremedia.ui.skins.ToolbarSkin;
+
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogSearchToolbarContainer";
 
     /**
@@ -19,12 +21,14 @@
     ]]></fx:Script>
 
   <items>
-    <ec:CatalogSearchToolbar>
-      <ec:items exml:mode="append">
-        <TbFill/>
+    <ec:CatalogSearchToolbar/>
+    <Toolbar itemId="switchViewButtonsToolbar"
+             ariaLabel="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'CollectionView_switchView_toolbar_label')}"
+             ui="{ToolbarSkin.LIGHT.getSkin()}">
+      <items>
         <editor:SwitchViewButtonsContainer scope="{this}"/>
-      </ec:items>
-    </ec:CatalogSearchToolbar>
+      </items>
+    </Toolbar>
   </items>
   <layout>
     <layout_HBox/>

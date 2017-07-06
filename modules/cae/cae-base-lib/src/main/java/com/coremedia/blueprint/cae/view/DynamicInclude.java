@@ -2,6 +2,8 @@ package com.coremedia.blueprint.cae.view;
 
 /**
  * A wrapper class for bean includes
+ *
+ * @cm.template.api
  */
 public class DynamicInclude {
 
@@ -13,6 +15,9 @@ public class DynamicInclude {
     this.view = view;
   }
 
+  /**
+   * @cm.template.api
+   */
   public String getView() {
     return view;
   }
@@ -22,11 +27,14 @@ public class DynamicInclude {
   }
 
   public void setDelegate(Object delegate) {
-    if(this.delegate == null) {
+    if (this.delegate == null) {
       this.delegate = delegate;
     }
   }
 
+  /**
+   * @cm.template.api
+   */
   public Object getDelegate() {
     return delegate;
   }

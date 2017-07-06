@@ -1,5 +1,9 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -9,10 +13,13 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +32,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 
-public class WcRestConnectorUnauthorizedTest {
+public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestCase {
+
+  @Inject
+  protected Commerce commerce;
+  protected CommerceConnection connection;
+
+  @Before
+  public void setup() {
+    connection = commerce.getConnection("wcs1");
+    String wcsVersion = storeInfoService.getWcsVersion();
+    testConfig.setWcsVersion(wcsVersion);
+    connection.setStoreContext(testConfig.getStoreContext());
+    DefaultConnection.set(connection);
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
+  }
 
   @Test(expected = UnauthorizedException.class)
   public void testUnauthorizedExceptionBranch() throws Exception {
@@ -82,6 +107,12 @@ public class WcRestConnectorUnauthorizedTest {
     @Nullable
     @Override
     public String getServiceSslEndpoint(@Nullable StoreContext storeContext) {
+      return "https://shop-ref.ecommerce.coremedia.com/wcs/resources";
+    }
+
+    @Nullable
+    @Override
+    public String getServiceEndpoint(@Nullable StoreContext storeContext) {
       return "http://shop-ref.ecommerce.coremedia.com/wcs/resources";
     }
   }

@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
@@ -59,6 +60,7 @@ public class IbmStoreContextProviderTest {
   }
 
   @Inject
+  @Named("testStoreContextProvider")
   private StoreContextProviderImpl testling;
 
   @Inject

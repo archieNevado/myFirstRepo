@@ -17,13 +17,18 @@ Contains styling definitions for all content types as cm-button.
   transition: all $transition-duration ease;
   @include transparent-button(palette(grey, darker), palette(white));
 
-  //primay button with white hover
-  &--primay {
+  //primary button with white hover
+  &--primary {
     @include transparent-button($brand-primary, palette(white));
   }
 
   //white button with grey-darker hover
   &--white {
     @include transparent-button(palette(white), palette(grey, darker))
+  }
+
+  &--secondary {
+    border: none;
+    text-decoration: underline;
   }
 }

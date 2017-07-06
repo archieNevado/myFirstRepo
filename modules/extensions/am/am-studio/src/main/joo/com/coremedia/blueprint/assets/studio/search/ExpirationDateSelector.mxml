@@ -57,6 +57,7 @@
       </plugins>
     </Component>
     <ui:StatefulDateField
+            ariaLabel="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'Date_property_field')}"
             format="{resourceManager.getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'ExpirationDate_dateFormat')}"
             formatText=""
             hideLabel="true"

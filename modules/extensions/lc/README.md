@@ -31,4 +31,4 @@ as Java properties at the command line.
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/lc2/current/manuals/coremedia-en/webhelp/content/BlueprintWebsite.html)
+See the "CoreMedia Blueprint - Functionality for Websites" chapter of the CoreMedia Developer Manual.

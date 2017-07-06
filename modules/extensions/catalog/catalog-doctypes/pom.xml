@@ -19,7 +19,7 @@
   <dependencies>
     <dependency>
       <!-- import ecommerce base doctypes -->
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>ec-doctypes</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>

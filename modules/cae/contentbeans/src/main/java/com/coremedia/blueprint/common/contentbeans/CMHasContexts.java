@@ -8,15 +8,21 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * <p>Actually, contexts are related to segment and link building and
- * thus belong to {@link CMLinkable}.</p>
- * <p/>
- * <p>However, we want to enforce navigation trees (no arbitrary graphs),
+ * <p>
+ * Actually, contexts are related to segment and link building and
+ * thus belong to {@link CMLinkable}.
+ * </p>
+ * <p>
+ * However, we want to enforce navigation trees (no arbitrary graphs),
  * therefore we don't want explicit contexts in {@link CMNavigation}
  * documents which are also derived from CMLinkable. In the content beans
- * we implement contexts in CMLinkable.</p>
- * <p/>
- * <p>Represents the document type {@link #NAME CMHasContexts}.</p>
+ * we implement contexts in CMLinkable.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMHasContexts}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMHasContexts extends CMLinkable {
   /**

@@ -57,12 +57,12 @@
 <StringProperty Name="site">ANY</StringProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-modificationdate">
+<StructProperty Name="datefilter-panel-modificationdate">
 <Struct>
 <IntProperty Name="modificationdate">-1</IntProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-publicationdate">
+<StructProperty Name="datefilter-panel-publicationdate">
 <Struct>
 <IntProperty Name="publicationdate">-1</IntProperty>
 </Struct>
@@ -149,12 +149,12 @@
 <StringProperty Name="site">ANY</StringProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-modificationdate">
+<StructProperty Name="datefilter-panel-modificationdate">
 <Struct>
 <IntProperty Name="modificationdate">-1</IntProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-publicationdate">
+<StructProperty Name="datefilter-panel-publicationdate">
 <Struct>
 <IntProperty Name="publicationdate">-1</IntProperty>
 </Struct>
@@ -326,12 +326,12 @@
 <StringProperty Name="site">ANY</StringProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-modificationdate">
+<StructProperty Name="datefilter-panel-modificationdate">
 <Struct>
 <IntProperty Name="modificationdate">-1</IntProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-publicationdate">
+<StructProperty Name="datefilter-panel-publicationdate">
 <Struct>
 <IntProperty Name="publicationdate">-1</IntProperty>
 </Struct>
@@ -425,12 +425,12 @@
 <StringProperty Name="site">ANY</StringProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-modificationdate">
+<StructProperty Name="datefilter-panel-modificationdate">
 <Struct>
 <IntProperty Name="modificationdate">-1</IntProperty>
 </Struct>
 </StructProperty>
-<StructProperty Name="datefilter-fieldset-publicationdate">
+<StructProperty Name="datefilter-panel-publicationdate">
 <Struct>
 <IntProperty Name="publicationdate">-1</IntProperty>
 </Struct>

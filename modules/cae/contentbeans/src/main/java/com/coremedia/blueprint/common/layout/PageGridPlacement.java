@@ -8,6 +8,8 @@ import java.util.Map;
 
 /**
  * A PageGridPlacement is a part of a whole PageGrid representing for example the sidebar or main column
+ *
+ * @cm.template.api
  */
 public interface PageGridPlacement extends HasViewTypeName, Container<Linkable> {
   /**
@@ -16,9 +18,14 @@ public interface PageGridPlacement extends HasViewTypeName, Container<Linkable> 
   List<? extends Linkable> getItems();
 
   /**
+   * <p>
    * Returns the logical name of this placement.
+   * </p>
    * <p>
    * "main" is magic for the current content.
+   * </p>
+   *
+   * @cm.template.api
    */
   String getName();
 
@@ -35,15 +42,22 @@ public interface PageGridPlacement extends HasViewTypeName, Container<Linkable> 
   int getCol();
 
   /**
+   * <p>
    * Returns the colspan of this placement.
+   * </p>
    * <p>
    * The colspan concept is motivated by the HTML table model,
    * the Blueprint templates map this value to CSS styles, though.
+   * </p>
+   *
+   * @cm.template.api
    */
   int getColspan();
 
   /**
    * Returns the relative (percentage) width of this placement.
+   *
+   * @cm.template.api
    */
   int getWidth();
 

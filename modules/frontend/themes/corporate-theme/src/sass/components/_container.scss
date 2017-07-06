@@ -22,6 +22,16 @@ Contains styling definitions for all content types as cm-container.
     color: palette(white);
     font-size: 3rem;
     text-align: center;
+
+    .glyphicon-chevron-down {
+      cursor: pointer;
+      transition: all .1s cubic-bezier(0, 0, 0.8, 3);
+    }
+
+    .glyphicon-chevron-down:hover {
+      top: 4px;
+      padding-top: 5px; //prevent element jumping
+    }
   }
 
   > :not(.#{$prefix}container) {
@@ -47,6 +57,15 @@ Contains styling definitions for all content types as cm-container.
   &--gap {
     > :not(.#{$prefix}container) {
       max-width: none;
+    }
+  }
+
+  // add margin around claims (no overlay with header)
+  &--claim {
+    margin: $logo-size-mobile 0;
+
+    @include breakpoint(sm-and-up) {
+      border: none;
     }
   }
 

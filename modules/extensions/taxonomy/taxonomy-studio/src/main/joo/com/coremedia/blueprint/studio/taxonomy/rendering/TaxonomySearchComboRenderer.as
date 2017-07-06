@@ -16,7 +16,7 @@ public class TaxonomySearchComboRenderer extends TaxonomyRenderer {
   }
 
   override protected function doRenderInternal(nodes:Array, callback:Function):void {
-    var html:String = '<div class="cm-taxonomy-node-wrap" id="' + wrapperId + '">';
+    var html:String = '<div class="' + TaxonomyBEMEntities.NODE_WRAP + '" id="' + wrapperId + '">';
 
     for (var i:int = 1; i < nodes.length; i++) {
       var node:TaxonomyNode = new TaxonomyNode(nodes[i]);

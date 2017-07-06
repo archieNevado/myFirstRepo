@@ -6,11 +6,17 @@ import org.apache.commons.collections.ListUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @cm.template.api
+ */
 public class PersonalizationForm {
   private List<FormField> entries =
           ListUtils.lazyList(new ArrayList<FormField>(), FactoryUtils.instantiateFactory(FormField.class));
   private boolean actionSuccess = false;
 
+  /**
+   * @cm.template.api
+   */
   public List<FormField> getEntries() {
     return entries;
   }
@@ -19,6 +25,9 @@ public class PersonalizationForm {
     this.entries = entries;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isActionSuccess() {
     return actionSuccess;
   }

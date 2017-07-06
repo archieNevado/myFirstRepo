@@ -122,6 +122,10 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     return true;
   }
 
+  public function isUploadDisabledFor(folder:Object):Boolean {
+    return true;
+  }
+
   public function getSearchToolbarItemId():String {
     return CatalogSearchToolbarContainer.CATALOG_SEARCH_TOOLBAR_ITEM_ID;
   }

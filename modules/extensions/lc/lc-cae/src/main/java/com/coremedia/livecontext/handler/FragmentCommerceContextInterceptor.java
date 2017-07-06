@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.handler;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
@@ -56,11 +57,13 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   private String contextNamePreviewMode = "wc.p13n_test";
   private String contextNameTimeIsElapsing = "wc.preview.timeiselapsing";
   private String contextNameTimestamp = "wc.preview.timestamp";
+  private String contextNamePreviewUserGroup = "wc.preview.usergroup";
   private String contextNameTimezone = "wc.preview.timezone";
   private String contextNameWorkspaceId = "wc.preview.workspaceId";
   private String contextNameUserId = "wc.user.id";
   private String contextNameUserName = "wc.user.loginid";
   private String contextNameContractIds = "wc.preview.contractIds";
+  private String contextNameUserGroupIds = "wc.user.membergroupids"; //TODO: mbi
 
   // --- AbstractCommerceContextInterceptor -------------------------
 
@@ -80,7 +83,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
       Context fragmentContext = LiveContextContextHelper.fetchContext(request);
       if (fragmentContext != null) {
         StoreContext storeContext = connection.get().getStoreContext();
-        initStoreContextPreview(fragmentContext, storeContext, request);
+        initStoreContextPreview(fragmentContext, storeContext, connection.get(), request);
       }
     }
 
@@ -200,9 +203,9 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   // --- internal ---------------------------------------------------
 
   private void initStoreContextPreview(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
-                                       @Nonnull HttpServletRequest request) {
+                                       @Nonnull CommerceConnection connection, @Nonnull HttpServletRequest request) {
     initStoreContextUserSegments(fragmentContext, storeContext);
-    initStoreContextPreviewMode(fragmentContext, storeContext, request);
+    initStoreContextPreviewMode(fragmentContext, storeContext, connection, request);
     initStoreContextWorkspaceId(fragmentContext, storeContext);
   }
 
@@ -221,39 +224,48 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   }
 
   private void initStoreContextPreviewMode(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
-                                           @Nonnull HttpServletRequest request) {
+                                           @Nonnull CommerceConnection connection, @Nonnull HttpServletRequest request) {
     boolean previewMode = Boolean.valueOf(fragmentContext.get(contextNamePreviewMode) + "");
     boolean timeIsElapsing = isTimeElapsing(fragmentContext);
     // are we in a studio preview call?
     request.setAttribute(PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW, timeIsElapsing || previewMode);
     if (!timeIsElapsing) {
-      initStoreContextPreviewDate(fragmentContext, storeContext, request);
+      initStoreContextPreviewDate(fragmentContext, storeContext, connection, request);
     }
   }
 
   private void initStoreContextPreviewDate(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
-                                           @Nonnull HttpServletRequest request) {
-    Calendar calendar = createPreviewCalendar(fragmentContext);
-    if (calendar == null) {
-      return;
+                                           @Nonnull CommerceConnection connection, @Nonnull HttpServletRequest request) {
+    Calendar calendar = createPreviewCalendar(fragmentContext, connection);
+    if (calendar != null) {
+      storeContext.setPreviewDate(convertToPreviewDateRequestParameterFormat(calendar));
+      request.setAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE, calendar);
     }
 
-    storeContext.setPreviewDate(convertToPreviewDateRequestParameterFormat(calendar));
-    request.setAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE, calendar);
+    //TODO: mbi
+    Object previewUserGroupObj = fragmentContext.get(contextNamePreviewUserGroup);
+    if (null != previewUserGroupObj){
+      storeContext.setUserSegments((String) previewUserGroupObj);
+    }
   }
 
-  private Calendar createPreviewCalendar(@Nonnull Context fragmentContext) {
+  private Calendar createPreviewCalendar(@Nonnull Context fragmentContext, @Nonnull CommerceConnection connection) {
     String timestamp = (String) fragmentContext.get(contextNameTimestamp);
     if (timestamp == null) {
       return null;
     }
 
+    //TODO mbi vendor specific krempel
     long timestampMillis;
-    try {
-      timestampMillis = timestampToMillis(timestamp);
-    } catch (IllegalArgumentException e) {
-      LOG.warn("Cannot convert timestamp \"{}\", ignore", timestamp);
-      return null;
+    if ("IBM".equals(connection.getVendorName())){
+      try {
+        timestampMillis = timestampToMillis(timestamp);
+      } catch (IllegalArgumentException e) {
+        LOG.warn("Cannot convert timestamp \"{}\", ignore", timestamp, e);
+        return null;
+      }
+    } else {
+      timestampMillis = Long.valueOf(timestamp);
     }
 
     Calendar calendar = Calendar.getInstance();
@@ -274,6 +286,12 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     String userName = (String) fragmentContext.get(contextNameUserName);
     if (userName != null) {
       userContext.setUserName(userName);
+    }
+    //TODO: mbi
+    String userGroupIds = (String) fragmentContext.get(contextNameUserGroupIds);
+    if (userGroupIds != null){
+      StoreContext storeContext = DefaultConnection.get().getStoreContext();
+      storeContext.setUserSegments(userGroupIds);
     }
   }
 
@@ -310,9 +328,8 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
                                          UserContext userContext,
                                          String organizationId) {
     Collection<String> contractIdsForUser = new ArrayList<>();
-    Collection<Contract> contractsForUser = contractService.findContractIdsForUser(userContext, storeContext,
-            organizationId);
-    if (contractsForUser != null) {
+    Collection<Contract> contractsForUser = contractService.findContractIdsForUser(userContext, storeContext, organizationId);
+    if (contractsForUser!=null) {
       for (Contract contract : contractsForUser) {
         contractIdsForUser.add(contract.getExternalTechId());
       }

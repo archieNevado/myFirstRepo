@@ -53,7 +53,6 @@ test/*
 features/*
 Guardfile
 Procfile
-.kitchen
 
 # SCM #
 #######
@@ -85,11 +84,6 @@ Colanderfile
 Strainerfile
 .colander
 .strainer
-
-# Vagrant #
-###########
-.vagrant
-Vagrantfile
 
 # Travis #
 ##########

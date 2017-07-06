@@ -24,7 +24,13 @@ module.exports = function (grunt, options) {
           cwd: options.brickDirectory + '/templates',
           src: '**',
           dest: options.brickTemplatesDest
-        }
+        },
+        brick_pdp_augmentation_vendor: {
+          expand: true,
+          cwd: options.brickDirectory,
+          src: 'vendor/**',
+          dest: '../../target/resources/themes/<%= themeConfig.name %>/'
+        },
       },
       watch: {
         brick_pdp_augmentation_templates: {
@@ -36,7 +42,7 @@ module.exports = function (grunt, options) {
             spawn: true
           },
           files: options.brickDirectory + '/sass/**/*.scss',
-          tasks: ['sass', 'postcss']
+          tasks: ['sass']
         }
       }
     }

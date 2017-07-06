@@ -8,65 +8,59 @@
   </parent>
 
   <artifactId>ec-studio</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-components</artifactId>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-pagegrid-studio-plugin</artifactId>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-studio-model</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>ui-components</artifactId>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-studio-test-helper</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>client-core-test-helper</artifactId>
+      <type>swc</type>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>joounit</artifactId>
+      <type>swc</type>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
   </dependencies>
 
@@ -78,11 +72,6 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.ecommerce.studio.ECommerceStudioPlugin</entry>
-            </requiredClasses>
-          </production>
           <skip>false</skip>
           <testSuite>com.coremedia.ecommerce.studio.TestSuite</testSuite>
           <jooUnitTestExecutionTimeout>120000</jooUnitTestExecutionTimeout>
@@ -95,5 +84,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

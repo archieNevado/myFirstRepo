@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>alx-google-bom</module>
     <module>alx-google-cae</module>
     <module>alx-google-studio-lib</module>
     <module>alx-google-studio-plugin</module>

@@ -57,6 +57,7 @@
                 collapsed="true">
           <editor:items>
             <editor:LinkListPropertyField bindTo="{config.bindTo}"
+                                          hideLabel="true"
                                           propertyName="downloads">
               <editor:additionalToolbarItems>
                 <TbSeparator/>
@@ -83,6 +84,7 @@
           <editor:items>
             <editor:LinkListPropertyField propertyName="contexts"
                                           showThumbnails="true"
+                                          hideLabel="true"
                                           itemId="contextsPropertyField"
                                           openCollectionViewHandler="{CatalogStudioPluginBase.openCatalogSearch}"
                                           bindTo="{config.bindTo}"/>

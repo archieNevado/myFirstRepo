@@ -5,7 +5,6 @@ import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchFilterProvider;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.Value;
-import com.coremedia.cap.feeder.FeedableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -201,8 +200,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
 
   protected static String createConstantFilterQuery() {
     // exclude error documents from result
-    Condition feederStateCondition = Condition.is(FeedableElement.ELEMENT_FEEDERSTATE,
-            Value.exactly(FeedableElement.FEEDERSTATE_SUCCESS));
+    Condition feederStateCondition = Condition.is("feederstate", Value.exactly("SUCCESS"));
     return convertCondition(feederStateCondition);
   }
 

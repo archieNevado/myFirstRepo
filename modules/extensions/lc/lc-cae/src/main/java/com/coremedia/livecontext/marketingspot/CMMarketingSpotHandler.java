@@ -30,9 +30,9 @@ import java.util.Map;
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handle dynamic/personalized marketing spots via esi/client include.
@@ -47,7 +47,7 @@ public class CMMarketingSpotHandler extends PageHandlerBase {
   private static final String SHOP_NAME_VARIABLE = "shopName";
 
   /**
-   * URI pattern, for URIs like "/dynamic/fragment/marketingspot/aurora/id"
+   * URI pattern, for URIs like "/dynamic/fragment/marketingspot/shopName/id"
    */
   public static final String DYNAMIC_URI_PATTERN = '/' + PREFIX_DYNAMIC +
           '/' + SEGMENTS_FRAGMENT +

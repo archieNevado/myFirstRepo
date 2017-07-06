@@ -11,6 +11,7 @@
 
   <context:annotation-config/>
 
+  <import resource="classpath:/com/coremedia/springframework/customizer/customizer-services.xml"/>
   <import resource="test-commerce-services.xml"/>
   <context:property-placeholder
           ignore-unresolvable="true"
@@ -32,7 +33,6 @@
     <property name="wcsUrl" value="${livecontext.ibm.wcs.url}"/>
     <property name="wcsStoreUrl" value="${livecontext.ibm.wcs.store.url}"/>
     <property name="wcsAssetsUrl" value="${livecontext.ibm.wcs.assets.url}"/>
-    <property name="storeContextProvider" ref="storeContextProvider"/>
   </bean>
 
   <customize:replace id="wcCatalogWrapperServiceReplacement" bean="catalogWrapperService" custom-ref="catalogWrapperServiceBod"/>

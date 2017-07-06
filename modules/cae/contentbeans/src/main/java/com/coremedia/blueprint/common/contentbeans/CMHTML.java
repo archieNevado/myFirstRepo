@@ -11,13 +11,19 @@ import java.util.Map;
 
 
 /**
+ * <p>
  * CMHTML beans represent static HTML code.
+ * </p>
  * <p>
  * Should be used only if the concrete code snippet is given by an other party,
  * e.g. embedding of external ADs.  Your own HTML code should of course be modeled
  * by templates.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMHTML}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMHTML}.</p>
+ * @cm.template.api
  */
 public interface CMHTML extends CMMedia {
   /**

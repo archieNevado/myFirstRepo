@@ -8,7 +8,7 @@
 <root>
 <link href="Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%20Home%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%20Home%20Page"/>
 </root>
-<siteManagerGroup>manager-en-US</siteManagerGroup>
+<siteManagerGroup>manager-b2b-en-US</siteManagerGroup>
 <linkedSettings>
 <link href="../Options/Settings/SiteSettings.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/SiteSettings"/>
 </linkedSettings>

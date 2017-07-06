@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.reviews.Review;
@@ -27,6 +28,9 @@ public class ProductReviewsResultTest {
   private ElasticSocialService elasticSocialService;
 
   @Mock
+  private ElasticSocialConfiguration elasticSocialConfiguration;
+
+  @Mock
   private Object target;
 
   @Test
@@ -34,7 +38,7 @@ public class ProductReviewsResultTest {
     List<Review> resultList = Collections.emptyList();
     when(elasticSocialService.getReviews(target, user)).thenReturn(resultList);
 
-    ProductReviewsResult result = new ProductReviewsResult(target, user, elasticSocialService, true, ContributionType.ANONYMOUS);
+    ProductReviewsResult result = new ProductReviewsResult(target, user, elasticSocialService, true, ContributionType.ANONYMOUS, elasticSocialConfiguration);
 
     assertEquals(target, result.getTarget());
     assertEquals(user, result.getUser());

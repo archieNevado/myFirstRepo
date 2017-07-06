@@ -87,18 +87,6 @@ public class AssetRenditionBlobHandlerTest {
     assertEquals("modelAndView should be the notFound-ModelAndView", HandlerHelper.notFound().getModel(), result.getModel());
   }
 
-  @Test
-  public void buildLink_validBean_segmentNameWithoutHyphens() {
-    String assetName = "asset-name";
-    String expectedAssetName = "asset_name";
-
-    when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.singletonMap(UriConstants.Segments.SEGMENT_NAME, assetName));
-    Map<String, String> result = assetRenditionBlobHandler.buildRenditionLink(amAssetRendition);
-
-    assertNotNull("the map should never be null", result);
-    assertEquals("the map should have the asset-compatible segment name", expectedAssetName, result.get(UriConstants.Segments.SEGMENT_NAME));
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void buildLink_validBean_assetWithoutBlob() {
     when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.singletonMap(UriConstants.Segments.SEGMENT_NAME, "asset-name"));

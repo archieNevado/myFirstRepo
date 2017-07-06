@@ -6,7 +6,6 @@ import com.coremedia.blueprint.cae.handlers.CapBlobHandler;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.objectserver.web.links.Link;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +32,7 @@ import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 
 /**
  * <p>
- *   Specialized blob handler for blobs from assets. These blobs have slightly different
- *   filenames so that the downloaded documents match the naming conventions of the Adobe Drive integration.
+ *   Specialized blob handler for blobs from assets.
  * </p>
  * <p>
  *   The request handler also validates if the blob is still published.
@@ -47,9 +45,9 @@ import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 @RequestMapping
 public class AssetRenditionBlobHandler {
 
-  private static final char ASSET_NAME_SEPARATOR = '_';
+  private static final char ASSET_NAME_SEPARATOR = '-';
 
-  //e.g. /resource/asset/126/4fb7741a1080d02953ac7d79c76c955c/press_release_print.pdf
+  //e.g. /resource/asset/126/4fb7741a1080d02953ac7d79c76c955c/xyz-print.pdf
   private static final String ASSET_URI_PATTERN = '/' + PREFIX_RESOURCE +
           "/asset" +
           "/{" + SEGMENT_ID + ":" + PATTERN_NUMBER + "}" +
@@ -78,16 +76,20 @@ public class AssetRenditionBlobHandler {
                                                   @PathVariable(SEGMENT_EXTENSION) String extension,
                                                   WebRequest webRequest,
                                                   HttpServletResponse response) {
+    //maybe the asset name contains separator symbols, so we are only interested in the last segment
+    String[] propertySegments = propertyName.split(String.valueOf(ASSET_NAME_SEPARATOR));
+    String cleanPropertyName = propertySegments[propertySegments.length-1];
+
     // for live CAE, check if requested blob is a published rendition
     // before delegating the handling to the default cap blob handler
     List<AMAssetRendition> assetRenditions = isPreview
             ? asset.getRenditions()
             : asset.getPublishedRenditions();
     for (AMAssetRendition assetRendition : assetRenditions) {
-      if (assetRendition.getName().equals(propertyName)) {
+      if (assetRendition.getName().equals(cleanPropertyName)) {
         // Set content disposition header to prevent opening of new tab for download
         response.addHeader("Content-Disposition", "attachment");
-        return capBlobHandler.handleRequest(asset, eTag, propertyName, extension, webRequest);
+        return capBlobHandler.handleRequest(asset, eTag, cleanPropertyName, extension, webRequest);
       }
     }
     return notFound();
@@ -101,10 +103,6 @@ public class AssetRenditionBlobHandler {
     }
     Map<String, String> uriComponentParameters = new HashMap<>();
     uriComponentParameters.putAll(capBlobHandler.linkParameters((CapBlobRef) blob));
-
-    String segmentName = StringUtils.defaultString(uriComponentParameters.get(SEGMENT_NAME));
-    // any slashes in the blob link should be replaced by the asset friendly underscores
-    uriComponentParameters.put(SEGMENT_NAME, segmentName.replace('-',ASSET_NAME_SEPARATOR));
 
     return Collections.unmodifiableMap(uriComponentParameters);
   }

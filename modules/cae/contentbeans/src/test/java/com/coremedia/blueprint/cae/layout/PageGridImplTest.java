@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.layout;
 
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.PageGridConstants;
+import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
@@ -56,7 +57,7 @@ public class PageGridImplTest {
   @Before
   public void setUp() throws Exception {
     Content content = contentRepository.getContent(IdHelper.formatContentId(222));
-    CMNavigation channel = (CMNavigation) contentBeanFactory.createBeanFor(content);
+    CMChannel channel = (CMChannel) contentBeanFactory.createBeanFor(content);
     pageGrid = new PageGridImpl(channel, contentBackedPageGridService, validationService, viewtypeService);
   }
 
@@ -120,7 +121,7 @@ public class PageGridImplTest {
   @Test(expected = EvaluationException.class)
   public void testBrokenPageGrid() {
     Content content = contentRepository.getContent(IdHelper.formatContentId(668));
-    CMNavigation brokenChannel = (CMNavigation) contentBeanFactory.createBeanFor(content);
+    CMChannel brokenChannel = (CMChannel) contentBeanFactory.createBeanFor(content);
     PageGrid brokenGrid = new PageGridImpl(brokenChannel, contentBackedPageGridService, validationService, viewtypeService);
 
     //Exception will be thrown when trying to access a placement.

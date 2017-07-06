@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>CoreMedia CMS 9</title>
+  <link rel="stylesheet" type="text/css" href="assets/overview.css">
+</head>
+<body>
+<div class="page_margins" id="top">
+  <div class="page">
+    <div id="header">
+      <div id="header_content" class="clearfix">
+        <div class="logoBox">
+          <h1><a href="//coremedia.com/">CoreMedia</a></h1>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div id="nav_content" class="clearfix">
+        <div class="primaryNav">
+          <div class="content"></div>
+        </div>
+      </div>
+    </div>
+    <%- host = node['blueprint']['hostname'] -%>
+    <div id="main" class="maintenance">
+      <div id="col3" style="margin:auto;width:65%">
+        <div id="col3_content" class="clearfix">
+          <div class="floatbox">
+            <div class="detailView articleDetails">
+              <h1>Welcome to CoreMedia CMS 9</h1>
+              <hr>
+              <div>
+                <h2>You can access our preview storefronts and sites on the following URLs</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
+                  <li><a href="//preview.<%= host %>/corporate" target="_blank">Chef Corp. Corporate Site (English)</a></li>
+                  <li><a href="//preview.<%= host %>/corporate-de-de" target="_blank">Chef Corp. Corporate Site (German)</a></li>
+                </ul>
+
+                <p><br/></p>
+
+                <h2>You can access our live storefronts and sites on the following URLs</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
+                  <li><a href="//corporate.<%= host %>/corporate" target="_blank">Chef Corp. Corporate Site (English)</a></li>
+                  <li><a href="//corporate.<%= host %>/corporate-de-de" target="_blank">Chef Corp. Corporate Site (German)</a></li>
+                </ul>
+
+                <p><br/></p>
+
+                <h2>The management interfaces are available at</h2>
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
+                  <li><a href="//studio.<%= host %>" target="_blank">CoreMedia Studio</a></li>
+                </ul>
+
+                <p><br/></p>
+                <h2>Development URLs</h2>
+                <p>
+                  If you deployed the test system using the development environment, you will automatically get extra Apache
+                  virtual hosts installed. These <em>candy</em> hosts provide some dev-sugar to sweeten up your daily work.
+                </p>
+                <p>
+                  A <em>candy</em> host returns the favor, i.e. it redirects the callers request to the caller itself. This allows
+                  the developer to start his webapps using the Maven Tomcat plugin and work with portless HTTPS URLs, without having
+                  the need to start and configure any reverse proxy such as Apache or Nginx.
+                </p>
+
+                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
+                  <li><a href="//candy-studio.<%= host %>" target="_blank">Candy Studio</a></li>
+                  <li><a href="//candy-preview.<%= host %>" target="_blank">Candy Preview</a></li>
+                </ul>
+
+                <%= render "overview/candy-profiles-partial.erb", :cookbook => 'blueprint-proxy', :variables => { :host => host } %>
+
+                <p><br/></p>
+
+                <%= render 'other-links',
+                           :source => @other_links_source ? @other_links_source : 'overview/other-links-partial.erb',
+                           :cookbook => @other_links_cookbook ? @other_links_cookbook : 'blueprint-proxy',
+                           :variables => { :host => host }
+                %>
+
+                Enjoy!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="ie_clearing">&nbsp;</div>
+      </div>
+    </div>
+    <%= render "overview/footer-partial.erb", :cookbook => 'blueprint-proxy' %>
+  </div>
+</div>
+</body>
+</html>

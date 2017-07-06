@@ -5,13 +5,20 @@
         xmlns:livecontext="exml:com.coremedia.livecontext.studio.config"
         actionName="createProductTeaser"
         contentType="CMProductTeaser"
-        catalogObjectType="{Product}">
+        catalogObjectType="{ProductImpl}">
   <fx:Script><![CDATA[
+    import com.coremedia.ecommerce.studio.model.CatalogObject;
     import com.coremedia.ecommerce.studio.model.Product;
+    import com.coremedia.ecommerce.studio.model.ProductImpl;
 
     private var config:CreateProductTeaserAction;
 
     public native function CreateProductTeaserAction(config:CreateProductTeaserAction = null);
+
+    override protected function isCorrectType(catalogObject:CatalogObject):Boolean {
+      //check the product type so that a product variant is also of a correct type.
+      return catalogObject is Product;
+    }
     ]]></fx:Script>
 
 </livecontext:CreateCatalogObjectDocumentAction>

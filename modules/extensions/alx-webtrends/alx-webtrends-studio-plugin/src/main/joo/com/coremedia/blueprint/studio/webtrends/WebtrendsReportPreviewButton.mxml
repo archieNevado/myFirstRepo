@@ -9,6 +9,7 @@
         xmlns:alx="exml:com.coremedia.blueprint.studio.config.analytics"
         windowName="WebtrendsReportWindow"
         tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.webtrends.WebtrendsStudioPlugin', 'webtrends_preview_btn_tooltip')}"
+        text="{resourceManager.getString('com.coremedia.blueprint.studio.webtrends.WebtrendsStudioPlugin', 'webtrends_preview_btn_tooltip')}"
         itemId="btn-analytics-report-webtrends"
         iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'analytics')}"
         ui="{ButtonSkin.WORKAREA.getSkin()}"

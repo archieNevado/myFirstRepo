@@ -1,10 +1,13 @@
 package com.coremedia.blueprint.common.contentbeans;
 
 /**
+ * <p>
  * CMQueryList documents utilize a struct in the localSettings property to store
  * a query.
- *
- * <p>Represents the document type {@link #NAME CMQueryList}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMQueryList}.
+ * </p>
  */
 public interface CMQueryList extends CMDynamicList<CMLinkable> {
   /**

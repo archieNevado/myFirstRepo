@@ -5,7 +5,6 @@
   "description": "The role for the delivery proxy node",
   "run_list": [
     "role[base]",
-    "recipe[blueprint-proxy::shop]",
     "recipe[blueprint-proxy::delivery]"
   ]
 }

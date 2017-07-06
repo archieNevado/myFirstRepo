@@ -8,7 +8,6 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.transform.BlobHelper;
 import com.coremedia.cap.transform.TransformImageService;
-import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
@@ -94,24 +93,23 @@ public class TransformedBlobHandler extends HandlerBase {
                                     WebRequest webRequest) {
 
     if (contentBean instanceof CMMedia) {
-
       CMMedia media = getDataViewFactory().loadCached((CMMedia) contentBean, null);
 
       // URL validation: segment must match and hash value must be correct
       String segment = removeSpecialCharacters(media.getContent().getName());
       if (name.equals(segment)) {
         //name matches, make sure that secHash matches given URL
-        Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
-          .put(SEGMENT_ID, ((CMMedia) contentBean).getContentId())
-          .put(TRANSFORMATION_SEGMENT, transformationName)
-          .put(WIDTH_SEGMENT, width)
-          .put(HEIGHT_SEGMENT, height)
-          .put(DIGEST_SEGMENT, digest)
-          .put(SEGMENT_NAME, name)
-          .put(SEGMENT_EXTENSION, extension).build();
+        Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
+                .put(SEGMENT_ID, ((CMMedia) contentBean).getContentId())
+                .put(TRANSFORMATION_SEGMENT, transformationName)
+                .put(WIDTH_SEGMENT, width)
+                .put(HEIGHT_SEGMENT, height)
+                .put(DIGEST_SEGMENT, digest)
+                .put(SEGMENT_NAME, name)
+                .put(SEGMENT_EXTENSION, extension)
+                .build();
 
         if (secureHashCodeGeneratorStrategy.matches(parameters, secHash)) {
-
           //request is valid, resolve blob and return model
           Blob transformedBlob = getTransformedBlob(media, transformationName, extension, width, height);
 
@@ -133,7 +131,6 @@ public class TransformedBlobHandler extends HandlerBase {
 
   @Link(type = TransformedBeanBlob.class, parameter = {HEIGHT_SEGMENT, WIDTH_SEGMENT}, uri = URI_PATTERN)
   public Map<String, ?> buildLink(TransformedBeanBlob bean, Map<String, String> linkParameters) {
-
     if (!(bean.getBean() instanceof CMMedia)) {
       return null;
     }
@@ -152,19 +149,23 @@ public class TransformedBlobHandler extends HandlerBase {
     // Requesting the transformed blob's content type forces the transformation to be performed, which is too
     // costly for link generation.
     MimeType contentType = original.getContentType();
-    Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
+    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
             .put(SEGMENT_ID, contentId)
             .put(TRANSFORMATION_SEGMENT, bean.getTransformName())
             .put(WIDTH_SEGMENT, width)
             .put(HEIGHT_SEGMENT, height)
             .put(DIGEST_SEGMENT, bean.getETag())
             .put(SEGMENT_NAME, getName(original))
-            .put(SEGMENT_EXTENSION, getExtension(contentType, BlobHelper.BLOB_DEFAULT_EXTENSION)).build();
+            .put(SEGMENT_EXTENSION, getExtension(contentType, BlobHelper.BLOB_DEFAULT_EXTENSION))
+            .build();
 
     //generate secure hash from all parameters and add to map
     String secHash = secureHashCodeGeneratorStrategy.generateSecureHashCode(parameters);
 
-    return new ImmutableMap.Builder<String, Object>().putAll(parameters).put(SECHASH_SEGMENT, secHash).build();
+    return ImmutableMap.<String, Object>builder()
+            .putAll(parameters)
+            .put(SECHASH_SEGMENT, secHash)
+            .build();
   }
 
   /**
@@ -197,5 +198,4 @@ public class TransformedBlobHandler extends HandlerBase {
     }
     return null;
   }
-
 }

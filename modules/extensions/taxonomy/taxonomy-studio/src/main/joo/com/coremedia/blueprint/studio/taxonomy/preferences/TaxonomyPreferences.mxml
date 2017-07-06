@@ -21,8 +21,7 @@
     ]]></fx:Script>
 
   <local:items>
-    <FieldContainer
-            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_option_name')}">
+    <FieldContainer fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_option_name')}">
       <items>
         <editor:LocalComboBox encodeItems="true"
                               valueField="value"
@@ -40,14 +39,15 @@
             <BoundList/>
           </editor:listConfig>
         </editor:LocalComboBox>
-        <ui:IconButton scale="small"
-                       width="24"
-                       ui="{ButtonSkin.SIMPLE.getSkin()}"
-                       iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'help')}"
-                       tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_settings_tooltip')}"/>
+        <TbSpacer width="6"/>
+        <ui:IconDisplayField iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'help')}">
+          <ui:tooltip>
+            <ui:StatefulQuickTip text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_settings_tooltip')}"/>
+          </ui:tooltip>
+        </ui:IconDisplayField>
       </items>
       <layout>
-        <layout_HBox/>
+        <layout_HBox align="middle"/>
       </layout>
     </FieldContainer>
   </local:items>

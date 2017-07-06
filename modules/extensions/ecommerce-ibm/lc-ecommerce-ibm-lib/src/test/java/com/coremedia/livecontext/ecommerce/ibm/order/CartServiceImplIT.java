@@ -1,9 +1,9 @@
 package com.coremedia.livecontext.ecommerce.ibm.order;
 
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
@@ -28,9 +28,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class CartServiceImplIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class CartServiceImplIT extends IbmServiceTestBase {
 
   private static final String SKU_CODE = "CLA022_220301";
   private static final String PASSWORD = "passw0rd";

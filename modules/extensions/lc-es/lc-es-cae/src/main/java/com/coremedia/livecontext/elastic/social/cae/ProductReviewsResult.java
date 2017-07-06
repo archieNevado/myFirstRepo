@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResult;
 import com.coremedia.elastic.social.api.ContributionType;
@@ -16,7 +17,8 @@ public class ProductReviewsResult extends ReviewsResult {
                               CommunityUser user,
                               ElasticSocialService service,
                               boolean feedbackEnabled,
-                              ContributionType contributionType) {
-    super(target, user, service, feedbackEnabled, contributionType);
+                              ContributionType contributionType,
+                              ElasticSocialConfiguration elasticSocialConfiguration) {
+    super(target, user, service, feedbackEnabled, contributionType, elasticSocialConfiguration);
   }
 }

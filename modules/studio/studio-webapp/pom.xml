@@ -16,7 +16,9 @@
   <properties>
     <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
     <logging-properties.dir>${project.basedir}/../../../workspace-configuration/logging</logging-properties.dir>
-    <propertieslocations>classpath:/wcs.properties,classpath:/studio.properties</propertieslocations>
+    <propertieslocations>classpath:/studio.properties,classpath:/wcs.properties</propertieslocations>
+    <!-- The relative path to the directory containing a .remote-packages folder with Sencha packages: -->
+    <sencha.workspace.root>${project.basedir}/../../..</sencha.workspace.root>
   </properties>
 
   <dependencies>
@@ -30,20 +32,17 @@
       <artifactId>base-component</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>studio-app</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-resources</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>studio-lib-extension-dependencies</artifactId>
@@ -51,53 +50,56 @@
       <type>pom</type>
       <scope>runtime</scope>
     </dependency>
-
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>logging-config</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>content-services</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-uapi-client</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-multisite-impl</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-schema-bundle</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>editing-rest-component</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>editing-rest-security-component</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui.collaboration</groupId>
       <artifactId>control-room-rest-component</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>collaboration-project-rest-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.elastic</groupId>
+      <artifactId>core-rest-impl-component</artifactId>
       <scope>runtime</scope>
     </dependency>
 
@@ -106,58 +108,43 @@
       <artifactId>commons-httpclient</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>javax.servlet.jsp.jstl</groupId>
       <artifactId>javax.servlet.jsp.jstl-api</artifactId>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>javax.management</groupId>
       <artifactId>jmxremote_optional</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-client</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-image-struct-adapter</artifactId>
       <scope>runtime</scope>
     </dependency>
-
-
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-rest</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-pagegrid-rest-extension</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-metadata</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-components</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>image-transformation</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
@@ -224,13 +211,11 @@
           <systemProperties>
             <propertieslocations>${propertieslocations}</propertieslocations>
             <themeImporter.apiKeyStore.basePath>${project.build.directory}/themeImporter/apiKeyStore</themeImporter.apiKeyStore.basePath>
+            <sencha.workspace.root>${sencha.workspace.root}</sencha.workspace.root>
           </systemProperties>
         </configuration>
       </plugin>
       <plugin>
-        <!--
-           invoke "mvn spring-boot:run" for running this webapp on http://localhost:8080/
-        -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
@@ -244,7 +229,7 @@ see http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-e
 see https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes#jersey-classpath-scanning-limitations
             -->
             <dependency>
-              <groupId>com.coremedia.blueprint</groupId>
+              <groupId>${project.groupId}</groupId>
               <artifactId>ec-studio-lib</artifactId>
             </dependency>
             <dependency>
@@ -315,11 +300,38 @@ see https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-
     </profile>
 
     <profile>
-      <id>apache-box</id>
-      <properties>
-        <proxy.host>192.168.252.100.xip.io</proxy.host>
-        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/apache-box</development-properties.dir>
-      </properties>
+      <id>candy-studio</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <configuration>
+              <systemProperties>
+                <propertieslocations>http://overview.${installation.host}/candy-studio.properties
+                </propertieslocations>
+              </systemProperties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>candy-studio-preview</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <configuration>
+              <systemProperties>
+                <propertieslocations>http://overview.${installation.host}/candy-studio-preview.properties
+                </propertieslocations>
+              </systemProperties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 

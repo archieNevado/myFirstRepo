@@ -13,6 +13,10 @@ $cm-details-margin-large-horizontal: 30px;
 // Styles
 .#{$cm-details-prefix} {
 
+  &__headline {
+    margin-top: 15px;
+  }
+
   &__media-box {
     @include aspect-ratio-box(5, 2);
   }

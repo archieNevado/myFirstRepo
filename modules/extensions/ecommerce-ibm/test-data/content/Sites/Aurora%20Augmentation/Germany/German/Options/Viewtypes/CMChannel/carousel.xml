@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMViewtype folder="/Sites/Aurora Augmentation/Germany/German/Options/Viewtypes/CMChannel" name="carousel" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../United%20States/English/Options/Viewtypes/CMChannel/carousel.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
+</master>
+<description>Displays a collection as a carousel with hero teasers</description>
+<icon md5="ecff5437cf2117d3224b3bfd00f3ec18" size="4644" href="../../../../../../../__blob/ecff5437cf2117d3224b3bfd00f3ec18.blob" mimetype="image/png"/>
+<layout>carousel</layout>
+</CMViewtype>

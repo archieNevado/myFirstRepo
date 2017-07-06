@@ -2,8 +2,8 @@ package com.coremedia.lc.studio.lib.validators;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -121,7 +121,7 @@ public class LcStudioValidatorsXmlRepoTest {
     site = sitesService.getSite(siteId);
 
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
-    Commerce.clearCurrent();
+    DefaultConnection.clear();
 
     commerceConnectionInitializer = mock(CommerceConnectionInitializer.class);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));

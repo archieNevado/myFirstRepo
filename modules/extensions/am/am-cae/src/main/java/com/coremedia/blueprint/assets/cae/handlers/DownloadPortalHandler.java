@@ -59,8 +59,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handles all Download Portal related request and link processing.
@@ -71,6 +71,7 @@ public class DownloadPortalHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(DownloadPortalHandler.class);
 
+  // Also update blueprint-tests/test-extensions/corporate-tests/corporate-cae-wrapper/src/main/java/com/coremedia/blueprint/uitesting/corporate/wrapper/base/Navigation.java
   private static final String PREFIX_DOWNLOAD_PORTAL = "asset-download-portal";
 
   private static final String PORTAL = "portal";
@@ -605,7 +606,11 @@ public class DownloadPortalHandler {
                                              @Nonnull Content assetContent) {
     if (isAssetValid(assetContent)) {
       AMAsset amAsset = (AMAsset) contentBeanFactory.createBeanFor(assetContent);
-      addValidRenditions(renditionsToDownload, renditionNames, amAsset);
+      if (amAsset != null) {
+        addValidRenditions(renditionsToDownload, renditionNames, amAsset);
+      } else {
+        throw new NullPointerException("Could not determine AMAsset based on asset content");
+      }
     }
   }
 

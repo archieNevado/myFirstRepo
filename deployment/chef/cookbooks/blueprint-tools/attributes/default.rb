@@ -16,7 +16,7 @@ default['blueprint']['tools']['master-live-server']['property_files']['capclient
 default['blueprint']['tools']['master-live-server']['property_files']['capclient.properties']['cap.client.timezone.default'] = 'Europe/Berlin'
 
 default['blueprint']['tools']['replication-live-server']['dir'] = "#{node['blueprint']['base_dir']}/replication-live-server-tools"
-default['blueprint']['tools']['replication-live-server']['property_files']['capclient.properties']['cap.client.server.ior.url'] = 'http://localhost:40280/coremedia/ior'
+default['blueprint']['tools']['replication-live-server']['property_files']['capclient.properties']['cap.client.server.ior.url'] = 'http://localhost:42080/coremedia/ior'
 default['blueprint']['tools']['replication-live-server']['property_files']['capclient.properties']['cap.client.timezone.default'] = 'Europe/Berlin'
 
 default['blueprint']['tools']['workflow-server']['dir'] = "#{node['blueprint']['base_dir']}/workflow-server-tools"

@@ -1,7 +1,7 @@
 !tape
 name: csi_testFindProductByExternalTechId
 interactions:
-- recorded: 2016-05-23T15:45:45.908Z
+- recorded: 2017-01-27T12:17:01.614Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,22 +17,19 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:45:45 GMT
+      Date: Fri, 27 Jan 2017 12:17:01 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000d2YbLwPSxJpwWQuLE2JWaZE:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000vV8w25tDhbsmAOxH8N_HLnl:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
-      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
       Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
-      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-05-23T15:45:45.925Z
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-01-27T12:17:01.633Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -48,14 +45,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:45:45 GMT
+      Date: Fri, 27 Jan 2017 12:17:01 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00004XyRyPJ7Z_pG7gEUDfXVvKd:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=00009cP_GADqN7WJ2VNO-cpIjCW:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2016-05-23T15:45:45.975Z
+- recorded: 2017-01-27T12:17:01.698Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/CLA022_2203?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -68,16 +64,16 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:45:45 GMT
-      Expires: Mon, 23 May 2016 16:45:45 GMT
-      Set-Cookie: JSESSIONID=0000Q7cSYBL9mEJ5Wq3D2rX_jr3:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Date: Fri, 27 Jan 2017 12:17:01 GMT
+      Expires: Fri, 27 Jan 2017 13:17:01 GMT
+      Set-Cookie: JSESSIONID=0000cD7d9F8FU_BeoUEUwShC2p1:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/CLA022_2203?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","Attributes":[{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"2
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/CLA022_2203?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","Attributes":[{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"2
       GB","uniqueID":"7741124012283334912","identifier":"2 GB"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Memory","name":"Memory","uniqueID":"7741124012283333421","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsMemory","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"DVR
       Technics","uniqueID":"7741124012283334907","identifier":"DVR Technics"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Brand","name":"Brand","uniqueID":"7741124012283333419","usage":"Defining","displayable":"true","comparable":"false","identifier":"ComputersLaptopsBrand","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"1
       lb","uniqueID":"7741124012283334915","identifier":"1 lb"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Weight","name":"Weight","uniqueID":"7741124012283333422","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsWeight","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"6
@@ -85,7 +81,7 @@ interactions:
       Life","searchable":"false"},{"Values":[{"values":"2 GB","uniqueID":"7741124012283334919","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Memory","name":"Memory","uniqueID":"7741124012283333417","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Memory","searchable":"false"},{"Values":[{"values":"1
       lb","uniqueID":"7741124012283334931","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Weight","name":"Weight","uniqueID":"7741124012283333424","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Weight","searchable":"false"},{"Values":[{"values":"6
       hours","uniqueID":"7741124012283334928","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Battery Life","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Battery
-      Life","searchable":"false"}],"metaDescription":"A lightweight and portable laptop with excellent battery life.","subscriptionType":"NONE","uniqueID":"3074457345616679331","parentCategoryID":"3074457345616676697","singleSKUUniqueID":"3074457345616679332","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679331","title":"Travel
+      Life","searchable":"false"}],"metaDescription":"A lightweight and portable laptop with excellent battery life.","subscriptionType":"NONE","uniqueID":"3074457345616679331","parentCategoryID":"3074457345616676697","singleSKUUniqueID":"3074457345616679332","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679331","title":"Travel
       Laptop | AuroraESite","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","SKUs":[{"Attributes":[{"Values":[{"values":"DVR Technics","uniqueID":"7741124012283334907","identifier":"DVR
       Technics"}],"name":"Brand","usage":"Defining","uniqueID":"7741124012283333419","comparable":"false","displayable":"true","identifier":"ComputersLaptopsBrand","searchable":"false"},{"Values":[{"values":"2 GB","uniqueID":"7741124012283334912","identifier":"2
       GB"}],"name":"Memory","usage":"Defining","uniqueID":"7741124012283333421","comparable":"true","displayable":"true","identifier":"ComputersLaptopsMemory","searchable":"false"},{"Values":[{"values":"6 hours","uniqueID":"7741124012283334910","identifier":"6
@@ -94,7 +90,7 @@ interactions:
       lightweight and portable laptop with excellent battery life.","manufacturer":"DVR Technics","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"575.0"}],"name":"Travel Laptop","buyable":"true","longDescription":"This tiny laptop is made
       with portability and battery life in mind, so that you can take it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel companion.","xcatentry_seoSegment":"travel-laptop","storeID":"715837934","metaKeyword":"
       DVR Technics","fullImageAltDescription":"Image for Travel Laptop from AuroraESite","numberOfSKUs":"1","partNumber":"CLA022_2203"}],"recordSetStartNumber":"0","resourceName":"productview"}'
-- recorded: 2016-05-23T15:45:46.036Z
+- recorded: 2017-01-27T12:17:01.764Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/byId/3074457345616679331?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -107,16 +103,16 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:45:45 GMT
-      Expires: Mon, 23 May 2016 16:45:46 GMT
-      Set-Cookie: JSESSIONID=0000hriYNWGCDJhc9iHZFdqXcpT:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Date: Fri, 27 Jan 2017 12:17:01 GMT
+      Expires: Fri, 27 Jan 2017 13:17:01 GMT
+      Set-Cookie: JSESSIONID=0000Q7dhRmZdumCcYU4mzoB3411:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679331?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","Attributes":[{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"2
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679331?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","Attributes":[{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"2
       GB","uniqueID":"7741124012283334912","identifier":"2 GB"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Memory","name":"Memory","uniqueID":"7741124012283333421","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsMemory","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"DVR
       Technics","uniqueID":"7741124012283334907","identifier":"DVR Technics"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Brand","name":"Brand","uniqueID":"7741124012283333419","usage":"Defining","displayable":"true","comparable":"false","identifier":"ComputersLaptopsBrand","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"1
       lb","uniqueID":"7741124012283334915","identifier":"1 lb"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Weight","name":"Weight","uniqueID":"7741124012283333422","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsWeight","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"6
@@ -124,7 +120,7 @@ interactions:
       Life","searchable":"false"},{"Values":[{"values":"2 GB","uniqueID":"7741124012283334919","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Memory","name":"Memory","uniqueID":"7741124012283333417","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Memory","searchable":"false"},{"Values":[{"values":"1
       lb","uniqueID":"7741124012283334931","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Weight","name":"Weight","uniqueID":"7741124012283333424","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Weight","searchable":"false"},{"Values":[{"values":"6
       hours","uniqueID":"7741124012283334928","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Battery Life","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Battery
-      Life","searchable":"false"}],"metaDescription":"A lightweight and portable laptop with excellent battery life.","subscriptionType":"NONE","uniqueID":"3074457345616679331","parentCategoryID":"3074457345616676697","singleSKUUniqueID":"3074457345616679332","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679331","title":"Travel
+      Life","searchable":"false"}],"metaDescription":"A lightweight and portable laptop with excellent battery life.","subscriptionType":"NONE","uniqueID":"3074457345616679331","parentCategoryID":"3074457345616676697","singleSKUUniqueID":"3074457345616679332","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679331","title":"Travel
       Laptop | AuroraESite","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","SKUs":[{"Attributes":[{"Values":[{"values":"DVR Technics","uniqueID":"7741124012283334907","identifier":"DVR
       Technics"}],"name":"Brand","usage":"Defining","uniqueID":"7741124012283333419","comparable":"false","displayable":"true","identifier":"ComputersLaptopsBrand","searchable":"false"},{"Values":[{"values":"2 GB","uniqueID":"7741124012283334912","identifier":"2
       GB"}],"name":"Memory","usage":"Defining","uniqueID":"7741124012283333421","comparable":"true","displayable":"true","identifier":"ComputersLaptopsMemory","searchable":"false"},{"Values":[{"values":"6 hours","uniqueID":"7741124012283334910","identifier":"6
@@ -133,7 +129,7 @@ interactions:
       lightweight and portable laptop with excellent battery life.","manufacturer":"DVR Technics","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"575.0"}],"name":"Travel Laptop","buyable":"true","longDescription":"This tiny laptop is made
       with portability and battery life in mind, so that you can take it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel companion.","xcatentry_seoSegment":"travel-laptop","storeID":"715837934","metaKeyword":"
       DVR Technics","fullImageAltDescription":"Image for Travel Laptop from AuroraESite","numberOfSKUs":"1","partNumber":"CLA022_2203"}],"recordSetStartNumber":"0","resourceName":"productview"}'
-- recorded: 2016-05-23T15:45:46.076Z
+- recorded: 2017-01-27T12:17:01.805Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/byId/3074457345616676697?catalogId=3074457345616676719&langId=-1
@@ -146,19 +142,19 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:45:46 GMT
-      Expires: Mon, 23 May 2016 16:45:46 GMT
-      Set-Cookie: JSESSIONID=0000CiK_0ISUHDTbDuv6tAbPq8S:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Date: Fri, 27 Jan 2017 12:17:01 GMT
+      Expires: Fri, 27 Jan 2017 13:17:01 GMT
+      Set-Cookie: JSESSIONID=0000CaKw617g-V5vdbX5AglKo9_:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
 
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","CatalogGroupView":[{"parentCatalogGroupID":["3074457345616676694"],"metaDescription":"Laptops","uniqueID":"3074457345616676697","xcatgroup_seoSegment":"laptops-3074457345616676697--1","fullImage":"images\/catalog\/electronics\/category\/catr_cla_laptops.png","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676697","title":"Laptops
-      | AuroraESite","productsURL":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676697","thumbnail":"images\/catalog\/electronics\/category\/catr_cla_laptops.png","shortDescription":"Laptops","name":"Laptops","metaKeyword":"Laptops","fullImageAltDescription":"Image
-      for Laptops from AuroraESite","identifier":"Computers Laptops"}],"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676697?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
-- recorded: 2016-05-23T15:45:46.107Z
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"parentCatalogGroupID":["3074457345616676694"],"metaDescription":"Laptops","uniqueID":"3074457345616676697","xcatgroup_seoSegment":"laptops-3074457345616676697--1","fullImage":"images\/catalog\/electronics\/category\/catr_cla_laptops.png","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676697","title":"Laptops
+      | AuroraESite","productsURL":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676697","thumbnail":"images\/catalog\/electronics\/category\/catr_cla_laptops.png","shortDescription":"Laptops","name":"Laptops","metaKeyword":"Laptops","fullImageAltDescription":"Image
+      for Laptops from AuroraESite","identifier":"Computers Laptops"}],"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676697?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2017-01-27T12:17:01.845Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/byId/3074457345616676694?catalogId=3074457345616676719&langId=-1
@@ -171,18 +167,18 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:45:46 GMT
-      Expires: Mon, 23 May 2016 16:45:46 GMT
-      Set-Cookie: JSESSIONID=0000yRRukxTS5jU8bELrNKKZKuq:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Date: Fri, 27 Jan 2017 12:17:01 GMT
+      Expires: Fri, 27 Jan 2017 13:17:01 GMT
+      Set-Cookie: JSESSIONID=0000EbCCSIVPoQKsYeiU5Of6-wd:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
 
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","CatalogGroupView":[{"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676694","title":"Electronics | AuroraESite","thumbnail":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","productsURL":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676694","shortDescription":"Electronics","name":"Electronics","metaDescription":"Electronics","uniqueID":"3074457345616676694","metaKeyword":"Electronics","fullImageAltDescription":"Image
-      for Electronics from AuroraESite","xcatgroup_seoSegment":"electronics","identifier":"Electronics","fullImage":"images\/catalog\/electronics\/category\/catr_cta_tablets.png"}],"resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676694?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
-- recorded: 2016-05-23T15:45:46.178Z
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676694","title":"Electronics | AuroraESite","thumbnail":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","productsURL":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676694","shortDescription":"Electronics","name":"Electronics","metaDescription":"Electronics","uniqueID":"3074457345616676694","metaKeyword":"Electronics","fullImageAltDescription":"Image
+      for Electronics from AuroraESite","xcatgroup_seoSegment":"electronics","identifier":"Electronics","fullImage":"images\/catalog\/electronics\/category\/catr_cta_tablets.png"}],"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676694?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2017-01-27T12:17:01.969Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/byId/3074457345616679332?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -195,20 +191,20 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:45:46 GMT
-      Expires: Mon, 23 May 2016 16:45:46 GMT
-      Set-Cookie: JSESSIONID=0000FMwiXueSLVhDuGlZgDrX7jw:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
+      Date: Fri, 27 Jan 2017 12:17:01 GMT
+      Expires: Fri, 27 Jan 2017 13:17:01 GMT
+      Set-Cookie: JSESSIONID=0000rUWXaxShRRyRQgj1-YmWwbQ:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679332?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"Attributes":[{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"DVR
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679332?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"Attributes":[{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"DVR
       Technics","uniqueID":"7741124012283334907","identifier":"DVR Technics"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Brand","name":"Brand","uniqueID":"7741124012283333419","usage":"Defining","displayable":"true","comparable":"false","identifier":"ComputersLaptopsBrand","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"2
       GB","uniqueID":"7741124012283334912","identifier":"2 GB"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Memory","name":"Memory","uniqueID":"7741124012283333421","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsMemory","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"6
       hours","uniqueID":"7741124012283334910","identifier":"6 hours"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Battery Life","name":"Battery Life","uniqueID":"7741124012283333420","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsBattery
       Life","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"1 lb","uniqueID":"7741124012283334915","identifier":"1 lb"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Weight","name":"Weight","uniqueID":"7741124012283333422","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsWeight","searchable":"false"}],"metaDescription":"A
-      lightweight and portable laptop with excellent battery life.","subscriptionType":"NONE","uniqueID":"3074457345616679332","parentCategoryID":"3074457345616676697","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","productType":"ItemBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-wcs8-03.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679332","title":"Travel
+      lightweight and portable laptop with excellent battery life.","subscriptionType":"NONE","uniqueID":"3074457345616679332","parentCategoryID":"3074457345616676697","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","productType":"ItemBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679332","title":"Travel
       Laptop | AuroraESite","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","parentProductID":"3074457345616679331","shortDescription":"A lightweight and portable laptop with excellent
       battery life.","manufacturer":"DVR Technics","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"575.0"}],"name":"Travel Laptop","longDescription":"This tiny laptop is made with portability and battery life in mind, so that you can take
       it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel companion.","buyable":"true","xcatentry_seoSegment":"travel-laptop-cla022-220301","metaKeyword":"

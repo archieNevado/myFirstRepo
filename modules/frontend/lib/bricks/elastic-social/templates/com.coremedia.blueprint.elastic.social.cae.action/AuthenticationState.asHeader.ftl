@@ -4,32 +4,37 @@
 <#-- @ftlvariable name="loginLink" type="java.lang.String" -->
 <#-- @ftlvariable name="logoutLink" type="java.lang.String" -->
 
+<#assign elasticSocialConfiguration=es.getElasticSocialConfiguration(cmpage) />
 <#assign loginAction=self.loginAction />
 <#assign logoutAction=self.logoutAction />
 <#assign profileAction=self.profileAction />
 
-<#if loginAction?has_content && logoutAction?has_content && profileAction?has_content>
-  <#assign logoutLink=cm.getLink(logoutAction)/>
-  <#if self.authenticated>
-    <div class="cm-icon cm-icon--logout"<@cm.metadata data=[logoutAction.content, "properties.id"] />>
-      <a href="${logoutLink}" title="<@bp.message es.messageKeys.LOGOUT_TITLE />">
-        <i class="cm-icon__symbol icon-profile-unlocked-alternative"></i>
-        <span class="cm-icon__info cm-visuallyhidden"><@bp.message es.messageKeys.LOGOUT_TITLE /></span>
-      </a>
-    </div>
-    <div class="cm-icon cm-icon--user-details"<@cm.metadata data=[profileAction.content, "properties.id"] />>
-      <a href="${cm.getLink(profileAction)}" title="<@bp.message es.messageKeys.USER_DETAILS_TITLE />">
-        <i class="cm-icon__symbol icon-profile-unlocked"></i>
-        <span class="cm-icon__info cm-visuallyhidden"><@bp.message es.messageKeys.USER_DETAILS_TITLE /></span>
-      </a>
-    </div>
-  <#else>
-    <div class="cm-icon cm-icon--login"<@cm.metadata data=[loginAction.content, "properties.id"] />>
-      <#assign loginLink=cm.getLink(self, {"next": "$nextUrl$", "absolute": true, "scheme": lc.getSecureScheme()})/>
-      <a data-href="${loginLink}" title="<@bp.message es.messageKeys.LOGIN_TITLE />">
-        <i class="cm-icon__symbol icon-profile-locked"></i>
-        <span class="cm-icon__info cm-visuallyhidden"><@bp.message es.messageKeys.LOGIN_TITLE /></span>
-      </a>
-    </div>
+<#-- show login/logout link, if ES is enabled. this templates is included as fragment (DynamicInclude.ftl) -->
+<#if elasticSocialConfiguration.isFeedbackEnabled()!false>
+  <#if loginAction?has_content && logoutAction?has_content && profileAction?has_content>
+    <#-- user profile / logout -->
+    <#if self.authenticated>
+      <#assign logoutLink=cm.getLink(logoutAction)/>
+      <div class="cm-icon cm-icon--logout"<@cm.metadata data=[logoutAction.content, "properties.id"] />>
+        <a href="${logoutLink}" title="<@bp.message "logout_title" />">
+          <i class="cm-icon__symbol icon-profile-unlocked-alternative"></i>
+          <span class="cm-icon__info cm-visuallyhidden"><@bp.message "logout_title" /></span>
+        </a>
+      </div>
+      <div class="cm-icon cm-icon--user-details"<@cm.metadata data=[profileAction.content, "properties.id"] />>
+        <a href="${cm.getLink(profileAction)}" title="<@bp.message "userDetails_title" />">
+          <i class="cm-icon__symbol icon-profile-unlocked"></i>
+          <span class="cm-icon__info cm-visuallyhidden"><@bp.message "userDetails_title" /></span>
+        </a>
+      </div>
+    <#else>
+      <div class="cm-icon cm-icon--login"<@cm.metadata data=[loginAction.content, "properties.id"] />>
+        <#assign loginLink=cm.getLink(self, {"next": "$nextUrl$", "absolute": true, "scheme": "https"})/>
+        <a data-href="${loginLink}" <@cm.metadata data="properties.teaserTitle" />>
+          <i class="cm-icon__symbol icon-profile-locked"></i>
+          <span class="cm-icon__info cm-visuallyhidden">${self.action.teaserTitle!""}</span>
+        </a>
+      </div>
+    </#if>
   </#if>
 </#if>

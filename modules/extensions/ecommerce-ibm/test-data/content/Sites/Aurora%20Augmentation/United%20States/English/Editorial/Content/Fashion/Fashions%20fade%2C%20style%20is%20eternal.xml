@@ -7,14 +7,6 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<StructProperty Name="teaserOverlay">
-<Struct>
-<BooleanProperty Name="enabled">false</BooleanProperty>
-<IntProperty Name="xpos">5</IntProperty>
-<IntProperty Name="ypos">5</IntProperty>
-<StringProperty Name="layout">cm-overlay--theme-dark-on-light</StringProperty>
-</Struct>
-</StructProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
@@ -27,6 +19,7 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
+<link href="../../../../../../../Settings/Taxonomies/Subject/Apparel.xml" path="/Settings/Taxonomies/Subject/Apparel"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>
@@ -42,7 +35,6 @@
 </pictures>
 <related>
 <link href="The%20difference%20between%20style%20and%20fashion.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion"/>
-<link href="../../../Videos/Campaigns/Spring%20Dresses%20Campaign/Red%20Summer%20Dress%20Vi8155a23f.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Videos/Campaigns/Spring%20Dresses%20Campaign/Red%20Summer%20Dress%20Video%204%3A3"/>
 <link href="Fashion%20should%20be%20fun.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Fashion%20should%20be%20fun"/>
 </related>
 </CMArticle>

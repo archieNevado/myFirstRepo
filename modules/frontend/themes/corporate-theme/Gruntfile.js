@@ -22,20 +22,6 @@ module.exports = function (grunt) {
         'download-portal'
       ]
     },
-    // generate css files
-    sass: {
-      options: {
-        outputStyle: 'expanded',
-        sourceMap: true,
-        sourceMapRoot: 'file://' + process.cwd() + 'target/resources/themes/../<%= themeConfig.name %>/css'
-      },
-      build: {
-        files: {
-          '../../target/resources/themes/<%= themeConfig.name %>/css/corporate.css': 'src/sass/corporate.scss',
-          '../../target/resources/themes/<%= themeConfig.name %>/css/preview.css': 'src/sass/preview.scss'
-        }
-      }
-    },
     // copy js and vendor files
     copy: {
       basic: {
@@ -58,7 +44,6 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'node_modules',
           src: [
-            'magnific-popup/dist/jquery.magnific-popup.js',
             'svg4everybody/dist/**',
           ],
           dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'

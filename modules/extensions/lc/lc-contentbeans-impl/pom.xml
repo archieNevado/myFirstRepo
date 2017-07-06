@@ -137,9 +137,8 @@
 
     <!-- SCOPE TEST -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>lc-asset-services</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

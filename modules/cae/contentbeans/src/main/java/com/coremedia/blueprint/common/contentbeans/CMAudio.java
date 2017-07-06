@@ -9,11 +9,17 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * The CMAudio type splits the media hierarchy to audio components.
  * <p>
- * It provides the audio data as a blob property of mime type audio/*.
+ * The CMAudio type splits the media hierarchy to audio components.
+ * </p>
+ * <p>
+ * It provides the audio data as a blob property of mime type audio.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMAudio}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMAudio}.</p>
+ * @cm.template.api
  */
 public interface CMAudio extends CMMedia {
 
@@ -56,6 +62,7 @@ public interface CMAudio extends CMMedia {
    * Returns the value of the document property (@link #dataUrl}
    *
    * @return the value of the document property (@link #dataUrl}
+   * @cm.template.api
    */
   String getDataUrl();
 }

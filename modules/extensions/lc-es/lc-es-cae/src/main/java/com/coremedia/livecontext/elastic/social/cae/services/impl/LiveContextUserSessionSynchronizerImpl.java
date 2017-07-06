@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.elastic.social.cae.services.impl;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.elastic.core.api.models.UniqueConstraintViolationException;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
@@ -27,7 +27,8 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
   private CommunityUserService communityUserService;
 
   @Override
-  public void synchronizeUserSession(HttpServletRequest request, HttpServletResponse response) throws GeneralSecurityException {
+  public void synchronizeUserSession(HttpServletRequest request, HttpServletResponse response)
+          throws GeneralSecurityException {
     UserSessionService commerceUserSessionService = getCommerceUserSessionService();
     boolean authenticatedOnCommerce = commerceUserSessionService != null && commerceUserSessionService.isLoggedIn();
 
@@ -38,7 +39,7 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
 
   private void synchronizeUserContext() {
     UserService userService = getCommerceUserService();
-    com.coremedia.livecontext.ecommerce.user.User shopUser = userService!=null ? userService.findCurrentUser() : null;
+    com.coremedia.livecontext.ecommerce.user.User shopUser = userService != null ? userService.findCurrentUser() : null;
 
     if (shopUser != null) {
       //get community user
@@ -71,17 +72,17 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
   }
 
   public UserContextProvider getUserContextProvider() {
-    CommerceConnection connection = Commerce.getCurrentConnection();
-    return connection!=null ? connection.getUserContextProvider() : null;
+    CommerceConnection connection = DefaultConnection.get();
+    return connection != null ? connection.getUserContextProvider() : null;
   }
 
   public UserSessionService getCommerceUserSessionService() {
-    CommerceConnection connection = Commerce.getCurrentConnection();
-    return connection!=null ? connection.getUserSessionService() : null;
+    CommerceConnection connection = DefaultConnection.get();
+    return connection != null ? connection.getUserSessionService() : null;
   }
 
   public UserService getCommerceUserService() {
-    CommerceConnection connection = Commerce.getCurrentConnection();
-    return connection!=null ? connection.getUserService() : null;
+    CommerceConnection connection = DefaultConnection.get();
+    return connection != null ? connection.getUserService() : null;
   }
 }

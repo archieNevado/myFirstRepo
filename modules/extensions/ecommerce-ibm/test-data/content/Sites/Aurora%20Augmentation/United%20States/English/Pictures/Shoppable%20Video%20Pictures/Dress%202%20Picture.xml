@@ -17,13 +17,13 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=21;y=0;width=1324;height=2048</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=0;y=113;width=1365;height=1821</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=344;width=1365;height=1364</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=22;y=0;width=1321;height=2048</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=0;y=114;width=1365;height=1820</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=342;width=1365;height=1365</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=76;width=1365;height=1024</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=643;width=1365;height=766</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=753;width=1365;height=546</StringProperty>
-<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=856;width=1365;height=340</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=640;width=1365;height=768</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=751;width=1365;height=546</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=853;width=1365;height=341</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -69,11 +69,6 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="references">
-<String>ibm:///catalog/product/AuroraWMDRS-11</String>
-<String>ibm:///catalog/sku/AuroraWMDRS-151</String>
-<String>ibm:///catalog/sku/AuroraWMDRS-152</String>
-<String>ibm:///catalog/sku/AuroraWMDRS-153</String>
-<String>ibm:///catalog/sku/AuroraWMDRS-154</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.asset.impl;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -44,7 +43,7 @@ public class AssetServiceImpl implements AssetService {
       return new CatalogPicture(url, null);
     }
 
-    // Make absolute and replace {cmsHost}
+    // Make absolute and replace `{cmsHost}`
     String imageUrl = getAssetUrlProvider().getImageUrl(url);
 
     List<Content> pictures = findPictures(id);
@@ -176,7 +175,7 @@ public class AssetServiceImpl implements AssetService {
       return null;
     }
 
-    CommerceIdProvider commerceIdProvider = BaseCommerceIdHelper.getCurrentCommerceIdProvider();
+    CommerceIdProvider commerceIdProvider = getCommerceConnection().getIdProvider();
     String partNumber = parsePartNumberFromUrl(url);
 
     if (url.contains(CATEGORY_URI_PREFIX)) {
@@ -233,11 +232,13 @@ public class AssetServiceImpl implements AssetService {
     return getServiceProxyForStoreContext(storeContext, this, AssetService.class);
   }
 
+  @Nullable
   public static AssetUrlProvider getAssetUrlProvider() {
     return getCommerceConnection().getAssetUrlProvider();
   }
 
+  @Nullable
   private static CommerceConnection getCommerceConnection() {
-    return Commerce.getCurrentConnection();
+    return DefaultConnection.get();
   }
 }

@@ -41,7 +41,6 @@ The prefixes however are completely configurable, it can be an integer between `
 
 | Webapp Key                | Prefix  | Context         |
 | ------------------------- | ------- | ----------------|
-| solr                      | 400     | solr            |
 | content-management-server | 401     | coremedia       |
 | master-live-server        | 402     | coremedia       |
 | workflow-server           | 403     | workflow        |
@@ -52,7 +51,6 @@ The prefixes however are completely configurable, it can be an integer between `
 | caefeeder-live            | 408     | caefeeder       |
 | cae-preview               | 409     | blueprint       |
 | studio                    | 410     | studio          |
-| adobe-drive-server        | 411     | drive           |
 | sitemanager               | 413     | editor-webstart |
 | replication-live-server   | 420     | coremedia       |
 | cae-live                  | 421     | blueprint       |
@@ -74,4 +72,3 @@ case each instance can be configured using the webapp key suffixed by a dash and
 JMX address = `service:jmx:rmi://<HOST>:<PREFIX>98/jndi/rmi://<HOST>:<PREFIX>99/jmxrmi`
 JMX Login (readonly) = (monitor / monitor)
 JMX Login (readwrite) = (control / control)
-In case you start the system with testkitchen, you need to use `192.168.252.100.xip.io` as hostname. 

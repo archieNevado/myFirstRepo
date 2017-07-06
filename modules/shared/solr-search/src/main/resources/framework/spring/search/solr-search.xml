@@ -1,4 +1,4 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -10,10 +10,13 @@
     Search specific bean definitions
   </description>
 
-  <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
-
   <context:property-placeholder location="classpath:/framework/spring/search/solr-search-defaults.properties"
                                 ignore-unresolvable="true" local-override="false"/>
+
+  <!-- import bean "contentRepository" -->
+  <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
+  <!-- import bean "solrClient" -->
+  <import resource="classpath:com/coremedia/search/solr/client/coremedia-solr-client.xml"/>
 
   <bean class="org.springframework.beans.factory.config.ListFactoryBean" id="solrSearchFilters">
     <property name="sourceList">
@@ -28,18 +31,11 @@
 
   <bean id="resultFactory" class="com.coremedia.blueprint.cae.search.solr.SolrSearchResultFactory">
     <property name="contentRepository" ref="contentRepository"/>
-    <property name="solrSearchEngineFactory" ref="blueprintSolrSearchEngineFactory"/>
+    <property name="solrClient" ref="solrClient"/>
+    <property name="collection" value="${solr.collection.cae}"/>
     <property name="queryBuilder" ref="solrSearchQueryBuilder"/>
     <property name="representationMapper" ref="representationMapper"/>
   </bean>
-
-  <bean id="blueprintSolrSearchEngineFactory" class="com.coremedia.cap.search.solr.SolrSearchEngineFactory">
-    <property name="solrBaseUrlsAsArray" value="${solr.url}"/>
-    <property name="collection" value="${solr.collection.cae}"/>
-    <property name="connectionTimeout" value="${solr.connectionTimeout}"/>
-    <property name="socketTimeout" value="${solr.socketTimeout}"/>
-  </bean>
-
 
   <bean id="representationMapper" class="com.coremedia.blueprint.id.ContentRepresentationMapper">
     <property name="idProvider" ref="idProvider"/>

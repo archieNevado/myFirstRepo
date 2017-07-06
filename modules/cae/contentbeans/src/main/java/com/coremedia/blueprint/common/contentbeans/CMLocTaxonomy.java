@@ -1,10 +1,13 @@
 package com.coremedia.blueprint.common.contentbeans;
 
 /**
+ * <p>
  * CMLocTaxonomy beans allow for a categorization of contents by
  * geographical attributes.
- *
- * <p>Represents document type {@link #NAME CMLocTaxonomy}.</p>
+ * </p>
+ * <p>
+ * Represents document type {@link #NAME CMLocTaxonomy}.
+ * </p>
  */
 public interface CMLocTaxonomy extends CMTaxonomy {
 

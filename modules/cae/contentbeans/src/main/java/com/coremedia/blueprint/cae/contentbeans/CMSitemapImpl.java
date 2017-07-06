@@ -7,10 +7,7 @@ public class CMSitemapImpl extends CMSitemapBase {
   private static final int DEFAULT_SITEMAP_DEPTH = 3;
   private static final String PROPERTY_SITEMAP_DEPTH = "sitemap_depth";
 
-  /**
-   * Returns the depth of the sitemap.
-   * @return
-   */
+  @Override
   public int getSitemapDepth() {
     return getSettingsService().settingWithDefault(PROPERTY_SITEMAP_DEPTH, Integer.class, DEFAULT_SITEMAP_DEPTH, getContent());
   }

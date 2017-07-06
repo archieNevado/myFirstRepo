@@ -1,6 +1,6 @@
 =begin
 #<
-This recipe installs virtual hosts for the CoreMedia Blueprint Sitemanager.
+This recipe installs virtual hosts for the CoreMedia Sitemanager.
 #>
 =end
 

@@ -21,7 +21,6 @@
 
 
   <modules>
-    <module>adobe-drive-server-extension-dependencies</module>
     <module>server-extension-dependencies</module>
     <module>contentfeeder-extension-dependencies</module>
     <module>cae-extension-dependencies</module>
@@ -33,7 +32,6 @@
     <module>elastic-worker-extension-dependencies</module>
     <module>workflow-server-extension-dependencies</module>
     <module>user-changes-extension-dependencies</module>
-    <module>cmd-tools-extension-dependencies</module>
   </modules>
   <profiles>
     <profile>
@@ -41,6 +39,7 @@
       <activation>
         <property>
           <name>!skipContent</name>
+          <value>!true</value>
         </property>
       </activation>
       <modules>

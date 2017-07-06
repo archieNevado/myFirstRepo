@@ -5,6 +5,9 @@ import com.coremedia.blueprint.analytics.AnalyticsProvider;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.Page;
 
+/**
+ * @cm.template.api
+ */
 public class GoogleAnalytics extends AnalyticsProvider {
   /**
    * The Google Analytics service key.
@@ -24,11 +27,17 @@ public class GoogleAnalytics extends AnalyticsProvider {
     return isNonEmptyString(getWebPropertyId(), WEB_PROPERTY_ID_KEY);
   }
 
-  public Object getWebPropertyId(){
+  /**
+   * @cm.template.api
+   */
+  public Object getWebPropertyId() {
     return getSettings().get(WEB_PROPERTY_ID_KEY);
   }
 
-  public String getDomainName(){
+  /**
+   * @cm.template.api
+   */
+  public String getDomainName() {
     final Object domainName = getSettings().get(DOMAIN_NAME_KEY);
     return domainName instanceof String ? (String) domainName : DEFAULT_DOMAIN_NAME;
   }

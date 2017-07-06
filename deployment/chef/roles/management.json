@@ -14,7 +14,6 @@
     "recipe[blueprint-tomcat::user-changes]",
     "recipe[blueprint-tomcat::elastic-worker]",
     "recipe[blueprint-tomcat::caefeeder-preview]",
-    "recipe[blueprint-tomcat::adobe-drive-server]",
     "recipe[blueprint-tools::caefeeder-preview-tools]"
   ]
 }

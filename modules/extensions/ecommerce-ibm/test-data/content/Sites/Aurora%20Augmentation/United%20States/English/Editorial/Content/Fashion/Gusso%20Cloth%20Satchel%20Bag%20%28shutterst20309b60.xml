@@ -17,10 +17,10 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=181;y=0;width=774;height=1200</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=129;y=0;width=899;height=1200</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=129;y=19;width=762;height=1181</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=113;y=19;width=886;height=1181</StringProperty>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=89;y=0;width=1201;height=1200</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=185;width=1354;height=1015</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=290;width=1600;height=898</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=556;width=1600;height=640</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=785;width=1600;height=399</StringProperty>
@@ -28,10 +28,10 @@
 </StructProperty>
 <StructProperty Name="relative">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">position;x1=0.11335012594458438;y1=0;x2=0.5969773299748111;y2=1</StringProperty>
-<StringProperty Name="portrait_ratio3x4">position;x1=0.08060453400503778;y1=0;x2=0.6423173803526449;y2=1</StringProperty>
+<StringProperty Name="portrait_ratio20x31">position;x1=0.08037825059101655;y1=0.015772870662460567;x2=0.5566171841414389;y2=1</StringProperty>
+<StringProperty Name="portrait_ratio3x4">position;x1=0.07092198581560283;y1=0.015772870662460567;x2=0.6245497460679688;y2=1</StringProperty>
 <StringProperty Name="portrait_ratio1x1">position;x1=0.055415617128463476;y1=0;x2=0.8060453400503779;y2=1</StringProperty>
-<StringProperty Name="landscape_ratio4x3">position;x1=0;y1=0.15436241610738255;x2=0.8463476070528967;y2=1</StringProperty>
+<StringProperty Name="landscape_ratio4x3">position;x1=0;y1=0;x2=1;y2=1</StringProperty>
 <StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0.24161073825503357;x2=1;y2=0.9899328859060402</StringProperty>
 <StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.46308724832214765;x2=1;y2=0.9966442953020134</StringProperty>
 <StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.6543624161073825;x2=1;y2=0.9865771812080537</StringProperty>
@@ -70,6 +70,7 @@
 <Struct>
 <StringListProperty Name="references">
 <String>ibm:///catalog/product/WBG006_0612</String>
+<String>ibm:///catalog/sku/WBG006_061201</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

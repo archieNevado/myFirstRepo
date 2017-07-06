@@ -73,7 +73,7 @@ $cm-hero-padding-large-horizontal: 45px !default;
     z-index: 1;
 
     @include breakpoint(xs) {
-      max-width: 20%; // make sure there is space for headline
+      max-width: 25%; // make sure there is space for headline
     }
   }
 }

@@ -20,7 +20,7 @@
   <component class="com.coremedia.blueprint.assets.studio.forms.StringListCheckboxPropertyField"/>
   <component class="com.coremedia.blueprint.assets.studio.repository.AssetRepositoryListContainer"/>
   <component class="com.coremedia.blueprint.assets.studio.repository.AssetSearchListContainer"/>
-  <component class="com.coremedia.blueprint.assets.studio.search.ExpirationDateFilterFieldset"/>
+  <component class="com.coremedia.blueprint.assets.studio.search.ExpirationDateFilterPanel"/>
   <component class="com.coremedia.blueprint.assets.studio.search.ExpirationDateSelector"/>
-  <component class="com.coremedia.blueprint.assets.studio.search.StringListCheckboxFilterFieldset"/>
+  <component class="com.coremedia.blueprint.assets.studio.search.StringListCheckboxFilterPanel"/>
 </componentPackage>

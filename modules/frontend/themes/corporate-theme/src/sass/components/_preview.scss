@@ -2,52 +2,30 @@
 @import "../base/imports";
 @import "../utils/imports";
 
-/* Overrides for Preview in Studio to fix Longscroller and Parallax Effect Issues */
+// override vh and vw units (on zooming)
 .#{$prefix}container--superhero {
-  max-height: 667px;
-
-  @include breakpoint(sm-and-up) {
     max-height: 1024px;
-  }
 
-  /* Override vh and vw units and height, set by javascript */
   .#{$prefix}superhero,
-  .#{$prefix}superhero__image,
-  & .#{$prefix}carousel,
-  & .#{$prefix}carousel-inner {
+  .#{$prefix}superhero__picture-box {
     max-height: 100%;
     max-width: 100%;
   }
+
+  // avoids wrong height of image and distrubing resizing
+  .#{$prefix}carousel-inner .item {
+    height: 100%;
+  }
 }
 
+// overwrite vh units (on zooming)
+.#{$prefix}container--details {
+  min-height: 0;
+}
+
+// overwrite vh units (on zooming)
 .#{$prefix}gap {
   max-height: 300px;
-}
-
-.#{$prefix}-superhero, 
-.#{$prefix}-hero {
-  &__dimmer {
-    transition: visibility 0s linear 0ms, opacity 300ms;
-  }
-  &:hover &__dimmer {
-    transition: visibility 0s linear 300ms, opacity 300ms;
-    visibility: hidden;
-    opacity: 0;
-  }
-}
-
-@supports (pointer-events: none) {
-  .#{$prefix}-superhero, 
-  .#{$prefix}-hero {
-    &__dimmer {
-      transition: none;
-    }
-    &:hover &__dimmer {
-      transition: none;
-      visibility: visible;
-      opacity: $dimmer-opacity;
-    }
-  }
 }
 
 .#{$prefix}details--spinner {
@@ -59,4 +37,9 @@
     max-width: 500px;
     margin: 0;
   }
+}
+
+// override for the position:relative from the placement highlighting
+.#{$prefix}header.#{$prefix}placement-highlighting-blue {
+  position: fixed;
 }

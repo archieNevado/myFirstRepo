@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>osm-bom</module>
     <module>osm-cae</module>
     <module>osm-studio</module>
   </modules>

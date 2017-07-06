@@ -3,7 +3,11 @@ package com.coremedia.blueprint.assets.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 
 /**
- * <p>Represents the document type {@link #NAME AMTaxonomy}.</p>
+ * <p>
+ * Represents the document type {@link #NAME AMTaxonomy}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface AMTaxonomy extends CMTaxonomy {
 
@@ -21,6 +25,7 @@ public interface AMTaxonomy extends CMTaxonomy {
    * Returns the value of the document property {@link #ASSET_THUMBNAIL}.
    *
    * @return the value of the document property {@link #ASSET_THUMBNAIL}
+   * @cm.template.api
    */
   AMAsset getAssetThumbnail();
 }

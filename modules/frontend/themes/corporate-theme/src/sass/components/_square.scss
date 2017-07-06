@@ -15,13 +15,12 @@ $cm-teasable-padding-large-horizontal: $padding-large-horizontal;
 
 // Load brick scss file for teasers
 @import "../../../../../lib/bricks/generic-templates/sass/teaser";
+@import "../../../../../lib/bricks/generic-templates/sass/teaser-overlay";
 
 // Transformations are not part of the brick.
-.#{$cm-teasable-prefix}:hover {
-  &__dimmer {
-    transition: all $transition-duration ease(in-out-quad);
-  }
+.#{$cm-teasable-prefix} {
 
+  &__dimmer,
   &__text,
   &__headline {
     transition: all $transition-duration ease(in-out-quad);
@@ -35,14 +34,14 @@ $cm-teasable-padding-large-horizontal: $padding-large-horizontal;
     }
   }
 
-  a .#{$cm-teasable-prefix} {
-
+  &:hover .#{$cm-teasable-prefix} {
     &__dimmer {
       opacity: 0.44;
     }
 
     &__headline {
       transform: translate3d(0, 5px, 0);
+
       & > span {
         &:after {
           opacity: 1;
@@ -50,68 +49,38 @@ $cm-teasable-padding-large-horizontal: $padding-large-horizontal;
         }
       }
     }
-  }
 
-  a .cm-button {
-    transform: translate3d(0, -5px, 0);
-  }
-
-
-  // if teaser text
-  &.is-text {
-
-    &:hover {
-      a .#{$cm-teasable-prefix} {
-        &__headline {
-          transform: translate3d(0, 10px, 0);
-          & > span {
-            &:after {
-              opacity: 1;
-              width: 100%;
-            }
-          }
-        }
-      }
-
-      a .cm-button {
-        transform: translate3d(0, -10px, 0);
-      }
+    &__button {
+      transform: translate3d(0, -5px, 0);
     }
   }
 
+  // if teaser text, more animation
+  &.is-text:hover .#{$cm-teasable-prefix} {
+    &__headline {
+      transform: translate3d(0, 10px, 0);
+    }
 
-  // if teaser text
-  &--video.is-text {
-
-    &:hover {
-      a .#{$cm-teasable-prefix} {
-        &__headline {
-          transform: none;
-          & > span {
-            &:after {
-              display: none;
-            }
-          }
-        }
-      }
+    &__button {
+      transform: translate3d(0, -10px, 0);
     }
   }
-
 
   // removing hover effects for video
   // the play-button takes the hover
-  &--video:hover {
-    a .#{$cm-teasable-prefix} {
-
-      &__headline {
-        transform: none;
-        & > span {
-          &:after {
-            display: none;
-          }
+  &--video:hover .#{$cm-teasable-prefix},
+  &--video.is-text:hover .#{$cm-teasable-prefix} {
+    &__headline {
+      transform: none;
+      & > span {
+        &:after {
+          display: none;
         }
       }
     }
-  }
 
+    &__button {
+      transform: none;
+    }
+  }
 }

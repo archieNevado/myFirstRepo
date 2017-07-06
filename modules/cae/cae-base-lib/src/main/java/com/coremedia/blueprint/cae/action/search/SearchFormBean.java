@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 /**
  * Bean to store search values
+ *
+ * @cm.template.api
  */
 public class SearchFormBean {
 
@@ -24,6 +26,9 @@ public class SearchFormBean {
   // Escape every character or character sequence matched by PATTERN
   private static final String REPLACEMENT = "\\\\$1$2$3";
 
+  /**
+   * @cm.template.api
+   */
   public String getQuery() {
     return query;
   }

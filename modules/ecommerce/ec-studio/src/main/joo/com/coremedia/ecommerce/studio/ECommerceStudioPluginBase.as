@@ -8,6 +8,7 @@ import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeDragDropModel;
@@ -87,18 +88,21 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
       excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_PRODUCT);
       excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_ABSTRACT_CATEGORY);
       excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_CHANNEL);
+      excludeFromSearch(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_PRODUCT);
 
       //remove the commerce doctypes from the search filter by default
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_CATEGORY);
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_PRODUCT);
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_ABSTRACT_CATEGORY);
       excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_CHANNEL);
+      excludeFromSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_PRODUCT);
     }
     else {
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_CATEGORY);
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_PRODUCT);
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_ABSTRACT_CATEGORY);
       addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_CHANNEL);
+      addToSearchResult(CatalogHelper.CONTENT_TYPE_CM_EXTERNAL_PRODUCT);
     }
   }
 
@@ -151,7 +155,11 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
       return undefined;
     }
     if (ct.isSubtypeOf(EXTERNAL_CHANNEL_TYPE)) {
-      var store:Store = StoreUtil.getActiveStore();
+      var site:Site = editorContext.getSitesService().getSiteFor(content);
+      if (!site) {
+        return undefined;
+      }
+      var store:Store = StoreUtil.getStoreForSite(site);
       if (store === undefined) {
         return undefined;
       }
@@ -165,7 +173,7 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
           if (rootCategoryContent === undefined) {
             return undefined;
           }
-          var layout:Content = PageGridUtil.getLayoutSettings(rootCategoryContent, pagegridProperty);
+          var layout:Content = PageGridUtil.getLayoutWithoutDefault(rootCategoryContent, pagegridProperty);
           if (layout === undefined) {
             return undefined;
           }

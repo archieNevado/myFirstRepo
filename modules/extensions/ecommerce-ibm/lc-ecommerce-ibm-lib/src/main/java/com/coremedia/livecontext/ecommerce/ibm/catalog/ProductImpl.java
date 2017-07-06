@@ -4,13 +4,13 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextHelper
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,18 +87,19 @@ public class ProductImpl extends ProductBase {
         for (Map<String, Object> wcSku : wcSkus) {
           String technicalId = DataMapHelper.getValueForKey(wcSku, "uniqueID", String.class);
           if (technicalId != null) {
-            ProductVariant pv = (ProductVariant) getCommerceBeanFactory().createBeanFor(
-                    CommerceIdHelper.formatProductVariantTechId(technicalId), getContext());
+            String variantTechId = CommerceIdHelper.formatProductVariantTechId(technicalId);
+            ProductVariant pv = (ProductVariant) getCommerceBeanFactory().createBeanFor(variantTechId, getContext());
             newVariants.add(pv);
           }
         }
       } else {
         //In some cases the initial load mechanism does not come with containing SKUs (e.g. findProductsByCategory).
         //Therefor the product is loaded again via #findProductById to make sure all product data is loaded.
+        String productTechId = CommerceIdHelper.formatProductTechId(getExternalTechId());
+        UserContext userContext = UserContextHelper.getCurrentContext();
+        ProductCacheKey productCacheKey = new ProductCacheKey(productTechId, getContext(), userContext, getCatalogWrapperService(), getCommerceCache());
         @SuppressWarnings("unchecked")
-        Map<String, Object> wcProduct = (Map<String, Object>) getCommerceCache().get(
-                new ProductCacheKey(CommerceIdHelper.formatProductTechId(getExternalTechId()),
-                        Commerce.getCurrentConnection().getStoreContext(),  UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
+        Map<String, Object> wcProduct = (Map<String, Object>) getCommerceCache().get(productCacheKey);
         if (wcProduct != null && wcProduct.containsKey("sKUs")) {
           setDelegate(wcProduct);
           //reset the fields after a new delegate is set.

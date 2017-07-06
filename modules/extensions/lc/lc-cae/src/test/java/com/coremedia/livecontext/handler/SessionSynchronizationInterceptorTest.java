@@ -1,10 +1,11 @@
 package com.coremedia.livecontext.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.pricing.PriceService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.services.SessionSynchronizer;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,34 +24,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SessionSynchronizationInterceptorTest {
-  @Test
-  public void optionsRequest() throws GeneralSecurityException, IOException {
-    when(request.getScheme()).thenReturn("https");
-    when(request.getMethod()).thenReturn(OPTIONS);
-    testling.preHandle(request, response, null);
 
-    verify(request).getMethod();
-    verify(sessionSynchronizer, never()).synchronizeUserSession(request, response);
-  }
-
-  @Test
-  public void getRequest() throws GeneralSecurityException, IOException {
-    when(commerceConnection.getUserSessionService()).thenReturn(userSessionService);
-    Commerce.setCurrentConnection(commerceConnection);
-    testling.preHandle(request, response, null);
-
-    verify(request).getMethod();
-    verify(sessionSynchronizer).synchronizeUserSession(request, response);
-  }
-
-  @Before
-  public void defaultSetup() {
-    testling = new SessionSynchronizationInterceptor();
-    testling.setSessionSynchronizer(sessionSynchronizer);
-
-    when(request.getMethod()).thenReturn(GET);
-    when(request.getScheme()).thenReturn("https");
-  }
+  private static final String OPTIONS = "OPTIONS";
+  private static final String GET = "GET";
 
   private SessionSynchronizationInterceptor testling;
 
@@ -69,6 +45,38 @@ public class SessionSynchronizationInterceptorTest {
   @Mock
   private UserSessionService userSessionService;
 
-  private static final String OPTIONS = "OPTIONS";
-  private static final String GET = "GET";
+  @Test
+  public void optionsRequest() throws GeneralSecurityException, IOException {
+    when(request.getScheme()).thenReturn("https");
+    when(request.getMethod()).thenReturn(OPTIONS);
+    testling.preHandle(request, response, null);
+
+    verify(request).getMethod();
+    verify(sessionSynchronizer, never()).synchronizeUserSession(request, response);
+  }
+
+  @Test
+  public void getRequest() throws GeneralSecurityException, IOException {
+    when(commerceConnection.getUserSessionService()).thenReturn(userSessionService);
+    DefaultConnection.set(commerceConnection);
+    testling.preHandle(request, response, null);
+
+    verify(request).getMethod();
+    verify(sessionSynchronizer).synchronizeUserSession(request, response);
+  }
+
+  @Before
+  public void defaultSetup() {
+    testling = new SessionSynchronizationInterceptor();
+    testling.setSessionSynchronizer(sessionSynchronizer);
+
+    when(request.getMethod()).thenReturn(GET);
+    when(request.getScheme()).thenReturn("https");
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
+  }
+
 }

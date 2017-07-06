@@ -28,5 +28,7 @@
     <#if self.teaserTitle?has_content>
       <h3 class="cm-squarelist__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h3>
     </#if>
+
+    <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_TEASER />
   </@bp.optionalLink>
 </div>

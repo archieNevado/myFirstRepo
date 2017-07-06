@@ -69,6 +69,7 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="references">
+<String>ibm:///catalog/category/B2B_Cooling</String>
 <String>ibm:///catalog/product/B2B_CHEF_COOLING_CCS95</String>
 <String>ibm:///catalog/product/B2B_CHEF_COOLING_CCS80</String>
 </StringListProperty>

@@ -2,84 +2,56 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.contract.Contract;
-import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
-import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.junit.Before;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import com.coremedia.livecontext.ecommerce.search.SearchFacet;
+import com.coremedia.livecontext.ecommerce.search.SearchResult;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
 import org.junit.Test;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.Profile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
-import static com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImplSearchBasedIT.LocalConfig.PROFILE;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for BOD REST interface.
+ * Tests for Search REST interface.
  */
-@ContextConfiguration(classes = CatalogServiceImplSearchBasedIT.LocalConfig.class)
-@ActiveProfiles(PROFILE)
-public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl {
-  @Configuration
-  @ImportResource(
-          value = {
-                  HANDLERS,
-                  "classpath:/com.coremedia.livecontext.ecommerce.ibm.service/test-commerce-services.xml",
-                  "classpath:/com.coremedia.livecontext.ecommerce.ibm.service/test-commerce-services-search.xml",
-                  "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
-          },
-          reader = ResourceAwareXmlBeanDefinitionReader.class
-  )
-  @Import(XmlRepoConfiguration.class)
-  @Profile(PROFILE)
-  public static class LocalConfig {
-    public static final String PROFILE = "CatalogServiceImplSearchBasedTest";
-  }
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
-  @Before
-  public void setup() {
-    super.setup();
-    testling.getCatalogWrapperService().clearLanguageMapping();
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-  }
-
-  @Betamax(tape = "csi_testFindProductByPartNumber_search", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindProductById_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProductByExternalId() throws Exception {
-    super.testFindProductByExternalId();
+  public void testFindProductById() throws Exception {
+    super.testFindProductById();
+  }
+
+  @Betamax(tape = "csi_testFindCategoryById_search", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindCategoryById() throws Exception {
+    super.testFindCategoryById();
   }
 
   @Betamax(tape = "csi_testFindProductByPartNumberWithSlash_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProductByExternalIdWithSlash() throws Exception {
-    super.testFindProductByExternalIdWithSlash();
+  public void testFindProductByIdWithSlash() {
+    if (testConfig.getWcsVersion().lessThan(WcsVersion.WCS_VERSION_8_0)) {
+      return;
+    }
+    super.testFindProductByIdWithSlash();
   }
 
-  @Betamax(tape = "csi_testFindProductByPartNumberIsNull_search", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindProductByIdNotFound_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProductByExternalIdIsNull() throws Exception {
-    super.testFindProductByExternalIdIsNull();
+  public void testFindProductByIdNotFound() throws Exception {
+    super.testFindProductByIdNotFound();
   }
 
   @Betamax(tape = "csi_testFindProductByExternalTechId_search", match = {MatchRule.path, MatchRule.query})
@@ -110,43 +82,28 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testFindProductByExternalIdReturns502();
   }
 
-  @Betamax(tape = "csi_testFindProduct2ByExternalId_search", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindProductVariantById_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProduct2ByExternalId() throws Exception {
-    super.testFindProduct2ByExternalId();
+  public void testFindProductVariantById() throws Exception {
+    super.testFindProductVariantById();
   }
 
-  @Betamax(tape = "csi_testFindProductVariantByExternalId_search", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindProductVariantByExternalIdWithContractSupport_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProductVariantByExternalId() throws Exception {
-    super.testFindProductVariantByExternalId();
-  }
-
-  @Test
   public void testFindProductVariantByExternalIdWithContractSupport() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    super.testFindProductVariantByExternalIdWithContractSupport();
+  }
+
+  @Betamax(tape = "csi_testFindProductVariantByIdWithSlash_search", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindProductVariantByIdWithSlash() throws Exception {
+    if (testConfig.getWcsVersion().lessThan(WcsVersion.WCS_VERSION_8_0)) {
       return;
     }
-
-    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-    ProductVariant productVariant = testling.findProductVariantById(CommerceIdHelper.formatProductVariantId(PRODUCT_VARIANT_CODE_B2B));
-    assertNotNull(productVariant);
-    BigDecimal offerPrice = productVariant.getOfferPrice();
-
-    prepareContextsForContractBasedPreview();
-    ProductVariant productVariantContract = testling.findProductVariantById(CommerceIdHelper.formatProductVariantId(PRODUCT_VARIANT_CODE_B2B));
-    BigDecimal offerPriceContract = productVariantContract.getOfferPrice();
-
-    assertTrue("Contract price for product should be lower", offerPrice.floatValue() > offerPriceContract.floatValue());
-  }
-
-  @Betamax(tape = "csi_testFindProductVariantByExternalIdWithSlash_search", match = {MatchRule.path, MatchRule.query})
-  @Test
-  @Override
-  public void testFindProductVariantByExternalIdWithSlash() throws Exception {
-    super.testFindProductVariantByExternalIdWithSlash();
+    super.testFindProductVariantByIdWithSlash();
   }
 
   @Betamax(tape = "csi_testFindProductVariantByExternalTechId_search", match = {MatchRule.path, MatchRule.query})
@@ -184,6 +141,7 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testFindProductsByCategoryIsEmpty();
   }
 
+  @Betamax(tape = "csi_testFindProductsByCategoryIsRoot_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
   public void testFindProductsByCategoryIsRoot() throws Exception {
@@ -204,6 +162,24 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testSearchProductVariants();
   }
 
+  @Test
+  @Betamax(tape = "csi_testSearchProductVariants_search", match = {MatchRule.path, MatchRule.query})
+  public void testSearchFacetsProductVariants() throws Exception {
+    SearchResult<ProductVariant> searchResult = testling.searchProductVariants(SEARCH_TERM_1 + " " + SEARCH_TERM_2, null);
+    assertNotNull(searchResult);
+
+    List<SearchFacet> facets = searchResult.getFacets();
+    assertNotNull(facets);
+    assertTrue(!facets.isEmpty());
+    testSearchFacet(facets.get(0));
+  }
+
+  @Test
+  @Betamax(tape = "csi_testSearchProducts_search", match = {MatchRule.path, MatchRule.query})
+  public void testSearchFacetsProducts() throws Exception {
+    super.testSearchFacetsProducts(SEARCH_TERM_1, null);
+  }
+
   @Betamax(tape = "csi_testFindTopCategories_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -212,20 +188,10 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
   }
 
   @Test
+  @Betamax(tape = "csi_testFindTopCategoriesWithContractSupport_search", match = {MatchRule.path, MatchRule.query})
+  @Override
   public void testFindTopCategoriesWithContractSupport() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
-      return;
-    }
-
-    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-    List<Category> topCategories = testling.findTopCategories(null);
-    int topCategoriesCount = topCategories.size();
-
-    prepareContextsForContractBasedPreview();
-    List<Category> topCategoriesContract = testling.findTopCategories(null);
-    int topCategoriesContractCount = topCategoriesContract.size();
-
-    assertTrue("Contract filter for b2b topcategories not working", topCategoriesCount > topCategoriesContractCount);
+    super.testFindTopCategoriesWithContractSupport();
   }
 
   @Betamax(tape = "csi_testFindSubCategories_search", match = {MatchRule.path, MatchRule.query})
@@ -236,6 +202,7 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
   }
 
   @Test
+  @Betamax(tape = "csi_testFindSubCategoriesWithContract_search", match = {MatchRule.path, MatchRule.query})
   @Override
   public void testFindSubCategoriesWithContract() throws Exception {
     super.testFindSubCategoriesWithContract();
@@ -280,7 +247,6 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
   @Test
   @Override
   public void testFindGermanCategoryBySeoSegment() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getGermanStoreContext());
     super.testFindGermanCategoryBySeoSegment();
   }
 
@@ -291,44 +257,40 @@ public class CatalogServiceImplSearchBasedIT extends BaseTestsCatalogServiceImpl
     super.testFindCategoryBySeoSegmentIsNull();
   }
 
-  @Betamax(tape = "csi_testFindCategoryByPartNumber_search", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindCategoryByIdIsNull_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindCategoryByExternalId() {
-    super.testFindCategoryByExternalId();
+  public void testFindCategoryByIdIsNull() {
+    super.testFindCategoryByIdIsNull();
   }
 
-  @Betamax(tape = "csi_testFindCategoryByExternalIdIsNull_search", match = {MatchRule.path, MatchRule.query})
   @Test
+  @Betamax(tape = "csi_testFindRootCategory_search", match = {MatchRule.path, MatchRule.query})
   @Override
-  public void testFindCategoryByExternalIdIsNull() {
-    super.testFindCategoryByExternalIdIsNull();
+  public void testFindRootCategory() throws Exception {
+    super.testFindRootCategory();
   }
 
   @Betamax(tape = "csi_testFindCategoryByPartNumberWithSlash_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindCategoryByExternalIdWithSlash() {
-    super.testFindCategoryByExternalIdWithSlash();
+  public void testFindCategoryByIdWithSlash() {
+    if (testConfig.getWcsVersion().lessThan(WcsVersion.WCS_VERSION_8_0)) {
+      return;
+    }
+    super.testFindCategoryByIdWithSlash();
   }
 
-  private void prepareContextsForContractBasedPreview() {
-    StoreContext b2BStoreContext = testConfig.getB2BStoreContext();
-    StoreContextHelper.setCurrentContext(b2BStoreContext);
-    UserContext userContext = userContextProvider.createContext(testConfig.getPreviewUserName());
-    UserContextHelper.setCurrentContext(userContext);
-    Collection<Contract> contracts = contractService.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
-    assertNotNull(contracts);
-    Iterator<Contract> iterator  = contracts.iterator();
-    Contract contract = null;
-    while (iterator.hasNext()) {
-      contract = iterator.next();
-      String contractName = contract.getName();
-      if (contractName != null && contractName.contains("Applicances Expert")) {
-        break;
-      }
-    }
-    assertNotNull(contract);
-    b2BStoreContext.setContractIdsForPreview(new String[]{contract.getExternalTechId()});
+  @Betamax(tape = "csi_testWithStoreContext_search", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testWithStoreContext() {
+    super.testWithStoreContext();
+  }
+
+  @Test(expected = CommerceException.class)
+  @Override
+  public void testWithStoreContextRethrowException() {
+    super.testWithStoreContextRethrowException();
   }
 }

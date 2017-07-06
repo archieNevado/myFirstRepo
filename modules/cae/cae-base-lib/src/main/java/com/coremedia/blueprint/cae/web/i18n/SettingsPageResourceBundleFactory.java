@@ -12,6 +12,7 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.user.User;
 import com.google.common.base.Function;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -81,7 +82,7 @@ public class SettingsPageResourceBundleFactory implements PageResourceBundleFact
   }
 
   private static class ResourceBundleCacheKey extends ContentCacheKey<ResourceBundle> {
-    public ResourceBundleCacheKey(Content content) {
+    public ResourceBundleCacheKey(@Nonnull Content content) {
       super(content);
     }
 

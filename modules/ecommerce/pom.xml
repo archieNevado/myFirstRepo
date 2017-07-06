@@ -25,5 +25,6 @@
     <module>ec-studio-model</module>
     <module>ec-studio-test-helper</module>
     <module>ec-test-util</module>
+    <module>lc-ecommerce-webapp-component</module>
   </modules>
 </project>

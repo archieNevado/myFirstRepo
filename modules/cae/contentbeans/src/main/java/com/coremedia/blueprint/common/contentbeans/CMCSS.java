@@ -11,10 +11,15 @@ import java.util.Map;
 
 
 /**
+ * <p>
  * CMCSS beans provide static CSS resources with a media attribute and
  * a dependency list with other CSS documents.
+ * </p>
+ * <p>
+ * Represents document type {@link #NAME CMCSS}.
+ * </p>
  *
- * <p>Represents document type {@link #NAME CMCSS}.</p>
+ * @cm.template.api
  */
 public interface CMCSS extends CMAbstractCode {
 
@@ -52,6 +57,7 @@ public interface CMCSS extends CMAbstractCode {
    * Returns the value of the document property {@link #MEDIA}.
    *
    * @return the value of the document property {@link #MEDIA}
+   * @cm.template.api
    */
   String getMedia();
 

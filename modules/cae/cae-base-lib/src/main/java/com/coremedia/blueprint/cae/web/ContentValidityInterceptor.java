@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.web;
 
 import com.coremedia.blueprint.cae.exception.InvalidContentException;
-import com.coremedia.blueprint.common.contentbeans.CMChannel;
+import com.coremedia.blueprint.common.contentbeans.CMHasContexts;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -39,12 +39,9 @@ public class ContentValidityInterceptor extends HandlerInterceptorAdapter {
           throw new InvalidContentException(msg, page);
         }
       }
-      // Todo: it should be test to CMHasContexts because that harmonizes with the ResourceBundleInterceptor
-      // that can resolve a resource bundle from all "selfs" that has an context, the reason why we limit
-      // this to CHChannel is why we fear the consequences to other parts of the blueprint
-      else if (self instanceof CMChannel) {
+      else if (self instanceof CMHasContexts) {
         if (!validationService.validate(self)) {
-          final String msg = "Trying to render invalid content, returning " + SC_NOT_FOUND + ".  Content=" + self;
+          final String msg = "Trying to render invalid content, returning " + SC_NOT_FOUND + ".  CMHasContexts=" + self;
           LOG.debug(msg);
           throw new InvalidContentException(msg, self);
         }

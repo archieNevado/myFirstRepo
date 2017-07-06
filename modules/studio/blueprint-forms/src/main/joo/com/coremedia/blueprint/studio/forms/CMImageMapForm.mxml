@@ -13,8 +13,6 @@
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.ui.layouts.BEMLayouts;
-
     public static const xtype:String = "com.coremedia.blueprint.studio.config.cmImageMapForm";
 
     public static const OVERLAY_CONFIG_ITEMID:String = "overlayConfig";
@@ -93,8 +91,7 @@
                     structPropertyName="localSettings"
                     areaContentType="CMTeasable">
               <im:plugins>
-                <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
-                              defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+                <ui:VerticalSpacingPlugin/>
               </im:plugins>
             </im:ImageMapEditor>
           </editor:items>

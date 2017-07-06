@@ -57,7 +57,7 @@ public class EventQueryTest {
             GoogleAnalyticsQuery.METRIC_UNIQUE_PAGEVIEWS);
     verify(query).setDimensions("ga:eventCategory,ga:eventAction,ga:eventLabel");
     verify(query).setMetrics("ga:totalEvents");
-    verify(query).setFilters("ga:eventCategory==TestCategory,ga:eventAction==TestAction");
+    verify(query).setFilters("ga:eventCategory==TestCategory;ga:eventAction==TestAction");
     verify(query).setSort("-ga:totalEvents");
   }
 

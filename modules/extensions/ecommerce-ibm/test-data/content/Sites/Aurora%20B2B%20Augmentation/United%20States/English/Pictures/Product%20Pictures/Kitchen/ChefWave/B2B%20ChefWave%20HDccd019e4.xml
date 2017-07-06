@@ -70,6 +70,7 @@
 <Struct>
 <StringListProperty Name="references">
 <String>ibm:///catalog/product/B2B_CHEF_WAVE_HD_SMALL</String>
+<String>ibm:///catalog/category/B2B_ChefWave</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

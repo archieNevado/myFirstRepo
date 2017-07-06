@@ -1,9 +1,8 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.i18n.PageResourceBundleFactory;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
@@ -15,7 +14,6 @@ import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.controller.ContributionMessageKeys;
 import com.coremedia.blueprint.elastic.social.cae.controller.HandlerInfo;
-import com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResult;
 import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
@@ -101,9 +99,6 @@ public class ProductReviewsResultHandlerTest {
   private ElasticSocialConfiguration elasticSocialConfiguration;
 
   @Mock
-  private SettingsService settingsService;
-
-  @Mock
   private PageResourceBundleFactory resourceBundleFactory;
 
   // @Mock   Möööp... ResourceBundle is all final, cannot be mocked
@@ -147,9 +142,6 @@ public class ProductReviewsResultHandlerTest {
 
   @Mock
   private HttpServletRequest request;
-
-  @Mock
-  private ReviewsResult reviewsResult;
 
   @Mock
   private ProductReviewsResult productReviewsResult;
@@ -232,8 +224,7 @@ public class ProductReviewsResultHandlerTest {
 
     when(request.getAttribute(SiteHelper.SITE_KEY)).thenReturn(site);
 
-    Commerce.setCurrentConnection(commerceConnection);
-    when(storeContextProvider.getCurrentContext()).thenReturn(storeContext);
+    DefaultConnection.set(commerceConnection);
     when(commerceConnection.getStoreContext()).thenReturn(storeContext);
     when(commerceConnection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(commerceConnection.getIdProvider()).thenReturn(new BaseCommerceIdProvider("vendor"));
@@ -244,6 +235,7 @@ public class ProductReviewsResultHandlerTest {
   @After
   public void cleanUp(){
     UserContext.clear();
+    DefaultConnection.clear();
   }
 
   @Test

@@ -6,11 +6,12 @@
         xmlns="exml:ext.config"
         xmlns:externallib="exml:com.coremedia.blueprint.studio.config.externallibrary"
         id_="externalLibrary"
+        stateId="externalLibraryWindowState"
+        stateful="true"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'ExternalLibraryWindow_title')}"
         width="950"
         height="640"
-        constrainHeader="true"
-        focusOnToFront="false">
+        constrainHeader="true">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin')]
   </fx:Metadata>

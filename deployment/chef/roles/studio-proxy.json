@@ -6,9 +6,14 @@
   "run_list": [
     "role[base]",
     "recipe[blueprint-proxy::studio]",
-    "recipe[blueprint-proxy::preview]",
-    "recipe[blueprint-proxy::sitemanager]",
-    "recipe[blueprint-proxy::shop-preview]",
-    "recipe[blueprint-proxy::adobe-drive-server]"
-  ]
+    "recipe[blueprint-proxy::sitemanager]"
+  ],
+  "env_run_lists": {
+    "development": [
+      "role[base]",
+      "recipe[blueprint-proxy::studio]",
+      "recipe[blueprint-proxy::sitemanager]",
+      "recipe[blueprint-proxy::candy-studio-proxy]"
+    ]
+  }
 }

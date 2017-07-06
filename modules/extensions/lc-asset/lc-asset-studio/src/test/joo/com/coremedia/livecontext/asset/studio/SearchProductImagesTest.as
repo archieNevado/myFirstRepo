@@ -32,6 +32,7 @@ import com.coremedia.ui.util.TableUtil;
 
 import ext.Component;
 import ext.ComponentManager;
+import ext.Ext;
 import ext.button.Button;
 import ext.container.Container;
 import ext.data.Model;
@@ -229,7 +230,8 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
               return selection.length === 1 && Model(selection[0]).get("text") === "PerfectChefESite";
             },
             function ():void {
-              //nothing to do
+              var selectionModel:TreeSelectionModel = TreeSelectionModel(catalogTree.getSelectionModel());
+              selectionModel.getSelection()[0]['expand']();
             });
   }
 
@@ -242,6 +244,7 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
             function ():void {
               var selectionModel:TreeSelectionModel = TreeSelectionModel(catalogTree.getSelectionModel());
               selectionModel.selectNext();
+              selectionModel.getSelection()[0]['expand']();
             });
   }
 
@@ -321,7 +324,7 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
     return new Step("Wait for the repository list to be loaded with products",
             function ():Boolean {
               return getRepositoryList().getStore().getCount() > 0 &&
-                      TableUtil.getCellAsDom(getRepositoryList(), 0, 0)['textContent'] === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label');
+                      Ext.get(TableUtil.getCellAsDom(getRepositoryList(), 0,0)).query("[aria-label]")[0].getAttribute("aria-label") === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label');
             }
     );
   }

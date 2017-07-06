@@ -7,10 +7,13 @@
          xmlns:u="exml:untyped"
          enableOverflow="true"
          itemId="commerceToolbar"
+         ui="{ToolbarSkin.LIGHT.getSkin()}"
+         ariaLabel="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CollectionView_catalogSearchToolbar_label')}"
          flex="1">
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
     import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
+    import com.coremedia.ui.skins.ToolbarSkin;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogSearchToolbar";
 

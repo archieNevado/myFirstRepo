@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.studio.externalpreview.dialog {
 
 import com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPluginBase;
+import com.coremedia.cms.editor.sdk.components.StudioDialog;
 
 import ext.Ext;
 import ext.StringUtil;
-import ext.window.Window;
 
 /**
  * Base class for the external preview help dialog.
  */
 [ResourceBundle('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin')]
-public class ExternalPreviewWindowBaseBase extends Window {
+public class ExternalPreviewWindowBaseBase extends StudioDialog {
   internal static const WINDOW_FEATURES:String = "menubar=yes,resizable=yes,scrollbars=yes,status=yes,location=yes";
 
   public function ExternalPreviewWindowBaseBase(config:ExternalPreviewWindow = null) {

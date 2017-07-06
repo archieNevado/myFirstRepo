@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * <p>
  * CMFolderProperties documents hold a list of contexts which is inherited by all
  * resources under this document's folder.  If most resources have the same contexts,
  * this is more convenient than assigning the CMHasContexts.contexts property.
- *
- * <p>Represents document type {@link #NAME CMFolderProperties}.</p>
+ * </p>
+ * <p>
+ * Represents document type {@link #NAME CMFolderProperties}.
+ * </p>
  */
 public interface CMFolderProperties extends CMLocalized {
   /**

@@ -4,7 +4,7 @@
 <#if self.items?has_content || self.name == "main">
   <#if renderDiv>
   <div id="cm-placement-${self.name!""}"
-       class="cm-placement-${self.name!""} col-xs-12 col-md-${self.colspan!1}"<@cm.metadata data=[bp.getPlacementPropertyName(self)!"", lc.fragmentHighlightingMetaData(self)!""]/>>
+       class="cm-placement cm-placement-${self.name!""} col-xs-12 col-md-${self.colspan!1}"<@cm.metadata data=[bp.getPlacementPropertyName(self)!"", lc.fragmentHighlightingMetaData(self)!""]/>>
   </#if>
 
   <#-- replace main section with the main content to render -->

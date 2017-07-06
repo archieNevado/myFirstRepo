@@ -8,11 +8,11 @@ import com.coremedia.blueprint.cae.search.ValueAndCount;
 import com.coremedia.blueprint.id.Representation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
+import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.search.solr.SolrSearchEngine;
-import com.coremedia.cap.search.solr.SolrSearchEngineFactory;
-import com.coremedia.cap.search.solr.SolrSearchException;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
@@ -20,10 +20,10 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,15 +38,15 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * The Solr specific implementation of a {@link SearchResultFactory}.
  */
-public class SolrSearchResultFactory implements SearchResultFactory, InitializingBean, DisposableBean {
+public class SolrSearchResultFactory implements SearchResultFactory, InitializingBean {
 
   private static final Logger LOG = LoggerFactory.getLogger(SolrSearchResultFactory.class);
 
-  private SolrSearchEngine searchEngine;
   private SolrQueryBuilder queryBuilder;
   private ContentRepository contentRepository;
   private Representation<Object> representationMapper;
-  private SolrSearchEngineFactory solrSearchEngineFactory;
+  private SolrClient solrClient;
+  private String collection;
 
   @Override
   public SearchResultBean createSearchResult(SearchQueryBean searchInput, long cacheForInSeconds) {
@@ -55,8 +55,13 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     }
     SolrQuery query = queryBuilder.buildQuery(searchInput);
     SolrQueryCacheKey cacheKey = new SolrQueryCacheKey(query, cacheForInSeconds);
-    QueryResponse solrQueryResponse = contentRepository.getConnection().getCache().get(cacheKey);
-    return createResultBean(searchInput, solrQueryResponse);
+    try {
+      QueryResponse solrQueryResponse = contentRepository.getConnection().getCache().get(cacheKey);
+      return createResultBean(searchInput, solrQueryResponse);
+    } catch (EvaluationException e) {
+      LOG.error("Error performing search: {}", query, e.getCause());
+      return createEmptyResultBean(searchInput);
+    }
   }
 
   @Override
@@ -65,7 +70,7 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     try {
       QueryResponse solrQueryResponse = doSearchSolr(query);
       return createResultBean(searchInput, solrQueryResponse);
-    } catch (SolrSearchException e) {
+    } catch (SolrServerException | IOException e) {
       LOG.error("Error performing search: {}", query, e);
       return createEmptyResultBean(searchInput);
     }
@@ -313,20 +318,19 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
   }
 
 
-  protected QueryResponse doSearchSolr(SolrQuery query) {
-    return searchEngine.search(query);
+  protected QueryResponse doSearchSolr(SolrQuery query) throws IOException, SolrServerException {
+    return solrClient.query(collection, query);
   }
 
   @Override
   public void afterPropertiesSet() {
-    searchEngine = solrSearchEngineFactory.createSearchEngine();
-  }
-
-  @Override
-  public void destroy() throws Exception {
-    if (searchEngine != null) {
-      searchEngine.close();
+    if (solrClient == null) {
+      throw new IllegalStateException("Required property not set: solrClient");
     }
+    if (collection == null) {
+      throw new IllegalStateException("Required property not set: collection");
+    }
+    LOG.info("Configured to search in collection {} of {}", collection, solrClient);
   }
 
   @Required
@@ -339,8 +343,12 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     this.contentRepository = contentRepository;
   }
 
-  public void setSolrSearchEngineFactory(SolrSearchEngineFactory solrSearchEngineFactory) {
-    this.solrSearchEngineFactory = solrSearchEngineFactory;
+  public void setSolrClient(SolrClient solrClient) {
+    this.solrClient = solrClient;
+  }
+
+  public void setCollection(String collection) {
+    this.collection = collection;
   }
 
   private class SolrQueryCacheKey extends CacheKey<QueryResponse> {
@@ -355,7 +363,7 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     SolrQueryCacheKey(SolrQuery query, long cacheForInSeconds) {
       this.cacheForInSeconds = cacheForInSeconds;
       this.solrQuery = query;
-      myEqualsValue = solrQuery.toString();
+      myEqualsValue = solrQuery.toQueryString();
     }
 
     @Override
@@ -384,7 +392,7 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
      * @return QueryResponse
      */
     @Override
-    public QueryResponse evaluate(Cache cache) {
+    public QueryResponse evaluate(Cache cache) throws IOException, SolrServerException {
       QueryResponse queryResponse = null;
       try {
         Cache.disableDependencies();

@@ -7,4 +7,6 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '1.0.0'
 
 depends 'blueprint-base'
-depends 'coremedia-proxy', '~> 0.3.0'
+depends 'blueprint-tomcat'
+depends 'coremedia-proxy', '~> 0.3.2'
+depends 'blueprint-tomcat'

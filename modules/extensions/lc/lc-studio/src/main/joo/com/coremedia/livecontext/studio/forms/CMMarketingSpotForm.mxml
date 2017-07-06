@@ -35,7 +35,7 @@
                                          maxCardinality="1"
                                          replaceOnDrop="true"
                                          linkTypeNames="{[CatalogModel.TYPE_MARKETING_SPOT]}"
-                                         dropAreaClickHandler="{CatalogHelper.getInstance().openMarketingSpots}"
+                                         dropAreaHandler="{CatalogHelper.getInstance().openMarketingSpots}"
                                          dropAreaText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text')}"/>
           </editor:items>
         </editor:PropertyFieldGroup>

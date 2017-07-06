@@ -5,6 +5,8 @@ import com.coremedia.elastic.core.api.counters.Counter;
 
 /**
  * Helper class for {@link Counter} results.
+ *
+ * @cm.template.api
  */
 public final class Count {
   private final String name;
@@ -41,6 +43,9 @@ public final class Count {
     return name;
   }
 
+  /**
+   * @cm.template.api
+   */
   public Object getTarget() {
     return target;
   }

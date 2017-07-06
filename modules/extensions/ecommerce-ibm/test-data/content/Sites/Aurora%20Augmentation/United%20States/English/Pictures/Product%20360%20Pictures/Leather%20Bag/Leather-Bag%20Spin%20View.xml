@@ -9,10 +9,9 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
-<BooleanProperty Name="inherit">true</BooleanProperty>
+<BooleanProperty Name="inherit">false</BooleanProperty>
 <StringListProperty Name="references">
-<String>ibm:///catalog/sku/PC_HERMITAGE_LEATHER_BAG_SKU</String>
-<String>ibm:///catalog/product/PC_HERMITAGE_LEATHER_BAG</String>
+<String>ibm:///catalog/sku/WBG006_061201</String>
 </StringListProperty>
 <StringListProperty Name="originReferences">
 <String>ibm:///catalog/sku/PC_HERMITAGE_LEATHER_BAG_SKU</String>

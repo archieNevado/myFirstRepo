@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: ohai
+# Cookbook:: ohai
 # Recipe:: default
 #
-# Copyright 2011-2016, Chef Software, Inc
+# Copyright:: 2011-2017, Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,4 +17,4 @@
 # limitations under the License.
 #
 
-Chef::Log.warn('The Ohai cookbook default recipe has no content has of the 4.0 release. See the readme for instructions on using the custom resources.')
+Chef::Log.warn('The Ohai cookbook default recipe has no content as of the 4.0 release. See the readme for instructions on using the custom resources.')

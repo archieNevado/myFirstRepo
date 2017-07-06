@@ -2,10 +2,16 @@ package com.coremedia.blueprint.personalization.forms;
 
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 
+/**
+ * @cm.template.api
+ */
 public class FormField {
   private CMObject bean;
   private boolean value;
 
+  /**
+   * @cm.template.api
+   */
   public CMObject getBean() {
     return bean;
   }

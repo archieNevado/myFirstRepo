@@ -105,42 +105,6 @@
     </description>
     <list>
       <!--
-        The following ImageDimensionFeedablePopulator is used to set the index fields imageOrientation,
-        imageSizeCategory, imageWidth, imageHeight and imageMaxLength.
-        For a detailed description of the field values see the Javadoc or Solr schema.xml file.
-
-        To categorize image orientation (portrait, square, landscape) and image size (small, medium, large), some
-        properties must be configured:
-
-        docType                  : the document type of the content to be indexed, including subtypes
-        widthPropertyName        : the property name of the content which holds the width value
-        heightPropertyName       : the property name of the content which holds the height value
-        dataPropertyName         : the property name of the content which holds the image data. The value of this
-                                   object must be of type com.coremedia.cap.common.Blob.
-        You must set either widthPropertyName and heightPropertyName or dataPropertyName or both.
-
-        largeWidth               : lower bound width of large images.
-        largeHeight              : lower bound height of large images.
-        mediumWidth              : lower bound width of medium images.
-        mediumHeight             : lower bound height of medium images.
-
-        An image is categorized as large(as medium) if its width is larger than or equal to the configured
-        largeWidth(mediumWidth) property and its height is also larger than or equal to the configured
-        largeHeight(mediumHeight) property. The image is small, if its width is smaller than mediumWidth or
-        its height is smaller than mediumHeight.
-      -->
-      <bean class="com.coremedia.cap.feeder.populate.ImageDimensionFeedablePopulator">
-        <property name="largeWidth" value="${feeder.populator.imageDimension.largeWidth}"/>
-        <property name="largeHeight" value="${feeder.populator.imageDimension.largeHeight}"/>
-        <property name="mediumWidth" value="${feeder.populator.imageDimension.mediumWidth}"/>
-        <property name="mediumHeight" value="${feeder.populator.imageDimension.mediumHeight}"/>
-        <property name="docType" value="${feeder.populator.imageDimension.docType}"/>
-        <property name="widthPropertyName" value="${feeder.populator.imageDimension.widthPropertyName}"/>
-        <property name="heightPropertyName" value="${feeder.populator.imageDimension.heightPropertyName}"/>
-        <property name="dataPropertyName" value="${feeder.populator.imageDimension.dataPropertyName}"/>
-      </bean>
-
-      <!--
         The following FeedablePopulator sets an additional field 'tabletext' with text that
         appears in tables of the richtext property 'Text' of documents of type 'Text'.
       -->

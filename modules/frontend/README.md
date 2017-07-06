@@ -3,7 +3,7 @@
 ## Frontend Module
 
 This is the main module for all frontend developers. It includes reusable bricks, configs, node modules for reuse and
-our themes "aurora" and "corporate" and for our demo websites.
+our themes for our example websites.
 
 More informations:
 

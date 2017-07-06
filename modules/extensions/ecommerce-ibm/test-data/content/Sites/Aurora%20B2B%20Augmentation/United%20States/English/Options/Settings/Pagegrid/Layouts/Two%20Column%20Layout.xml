@@ -45,7 +45,7 @@
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>
 </StructListProperty>
-<StringProperty Name="name">Aurora LiveContext Two Column Layout</StringProperty>
+<StringProperty Name="name">Two Column Layout</StringProperty>
 <StringProperty Name="description">A two column layout with "main", "sidebar", "header" and "footer" placement. </StringProperty>
 </Struct>
 </settings>

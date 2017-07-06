@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 
 /**
  * This model provides an overview of assets linked with the given {@link CMTaxonomy}.
+ *
+ * @cm.template.api
  */
 public class TaxonomyOverview implements DownloadPortalContext {
 
@@ -14,6 +16,7 @@ public class TaxonomyOverview implements DownloadPortalContext {
 
   /**
    * Creates an instance of the {@link TaxonomyOverview}
+   *
    * @param taxonomy the selected {@link CMTaxonomy}
    */
   public TaxonomyOverview(@Nonnull CMTaxonomy taxonomy) {
@@ -22,7 +25,9 @@ public class TaxonomyOverview implements DownloadPortalContext {
 
   /**
    * Returns the {@link CMTaxonomy}
+   *
    * @return the {@link CMTaxonomy}
+   * @cm.template.api
    */
   @Nullable
   public CMTaxonomy getTaxonomy() {

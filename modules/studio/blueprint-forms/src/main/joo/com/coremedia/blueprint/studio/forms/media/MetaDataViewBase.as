@@ -11,7 +11,6 @@ import ext.container.Container;
 public class MetaDataViewBase extends Container {
 
   public static const PROPERTIES_BLOCK:BEMBlock = new BEMBlock("meta-data-view");
-  public static const PROPERTIES_ELEMENT_CONTAINER:BEMElement = PROPERTIES_BLOCK.createElement("container");
   public static const PROPERTIES_ELEMENT_LABEL:BEMElement = PROPERTIES_BLOCK.createElement("label");
   public static const PROPERTIES_ELEMENT_TEXT:BEMElement = PROPERTIES_BLOCK.createElement("text");
 
@@ -30,18 +29,16 @@ public class MetaDataViewBase extends Container {
 
   protected static function getXTemplate():XTemplate {
     var xTemplate:XTemplate = new XTemplate([
-      '<table class="' + PROPERTIES_BLOCK + '">',
       '<tpl for=".">',
-      '<tr class="' + PROPERTIES_ELEMENT_CONTAINER + '">',
-      '<td class="' + PROPERTIES_ELEMENT_LABEL + '">',
-      '{property}:',
-      '</td>',
-      '<td data-qtip="{value:htmlEncode}" class="' + PROPERTIES_ELEMENT_TEXT + '">',
-      '{formattedValue}',
-      '</td>',
-      '</tr>',
-      '</tpl>',
-      '</table>'
+        '<div class="' + PROPERTIES_BLOCK + '">',
+          '<div class="' + PROPERTIES_ELEMENT_LABEL + '">',
+            '{property}:',
+          '</div>',
+          '<div data-qtip="{value:htmlEncode}" class="' + PROPERTIES_ELEMENT_TEXT + '">',
+            '{formattedValue}',
+          '</div>',
+        '</div>',
+      '</tpl>'
     ]);
     return xTemplate;
   }

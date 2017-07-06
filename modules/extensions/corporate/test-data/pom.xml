@@ -24,6 +24,7 @@
       <activation>
         <property>
           <name>!skipContent</name>
+          <value>!true</value>
         </property>
       </activation>
       <build>

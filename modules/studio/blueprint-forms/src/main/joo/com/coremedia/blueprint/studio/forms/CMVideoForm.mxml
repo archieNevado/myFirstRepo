@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<local:CMVideoFormBase
+<editor:DocumentTabPanel
         xmlns:fx="http://ns.adobe.com/mxml/2009"
-        xmlns:local="com.coremedia.blueprint.studio.forms.*"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns:bpbase-components="exml:com.coremedia.blueprint.base.components.config"
-        xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:bpforms="exml:com.coremedia.blueprint.studio.config">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
@@ -14,23 +11,23 @@
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.blueprint.base.components.timeline.Sequence;
-    import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
-
     public static const xtype:String = "com.coremedia.blueprint.studio.config.cmVideoForm";
 
     public static const COPYRIGHT_FORM_ITEM_ID:String = "copyrightFormItemId";
 
     public static const EXTRAS_TAB_ITEM_ID:String = "extrasTab";
 
+    public static const CONTENT_TAB_ITEM_ID:String = "contentTab";
+
     private var config:CMVideoForm;
 
     public native function CMVideoForm(config:CMVideoForm = null);
     ]]></fx:Script>
 
-  <local:items>
+  <editor:items>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+            itemId="{CONTENT_TAB_ITEM_ID}">
       <editor:items>
         <bpforms:DetailsDocumentForm/>
         <!-- same as bpforms:teaserDocumentForm without bpforms:callToActionConfigurationForm -->
@@ -58,27 +55,6 @@
         <bpforms:DataDocumentForm
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_text')}"
                 helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_helpText')}"/>
-        <bpforms:ViewTypeSelectorForm bindTo="{config.bindTo}"
-                                      hideForSingleChoice="false"/>
-        <editor:PropertyFieldGroup
-                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_timeline_text')}"
-                collapsed="false"
-                itemId="videoTimeLineForm">
-          <editor:plugins exml:mode="append">
-            <ui:BindVisibilityPlugin bindTo="{getVisibleForViewTypeValueExpression(config.bindTo, 'shoppable')}"/>
-          </editor:plugins>
-          <editor:items>
-            <editor:LinkListPropertyField linkType="{'CMTeasable'}"
-                                          itemId="default"
-                                          showThumbnails="true"
-                                          openCollectionViewHandler="{openCollectionViewHandler}"
-                                          propertyName="{'timeLine.' + Sequence.DEFAULT_TARGET_PROPERTY_NAME}"
-                                          bindTo="{config.bindTo}"
-                                          maxCardinality="1"/>
-            <bpbase-components:TimelineEditor propertyName="timeLine"
-                                              searchType="CMProductTeaser"/>
-          </editor:items>
-        </editor:PropertyFieldGroup>
         <bpforms:PictureDocumentForm collapsed="true"
                                      maxCardinality="1"/>
         <bpforms:ViewTypeSelectorForm/>
@@ -103,6 +79,6 @@
     </editor:DocumentForm>
     <bpforms:MultiLanguageDocumentForm/>
     <bpforms:MetaDataWithoutSearchableForm/>
-  </local:items>
+  </editor:items>
 
-</local:CMVideoFormBase>
+</editor:DocumentTabPanel>

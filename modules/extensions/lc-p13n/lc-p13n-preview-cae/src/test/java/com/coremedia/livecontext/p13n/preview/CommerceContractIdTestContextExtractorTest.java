@@ -1,14 +1,14 @@
 package com.coremedia.livecontext.p13n.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.util.StringUtil;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,9 +39,6 @@ public class CommerceContractIdTestContextExtractorTest {
   @Mock
   private ContentBeanFactory contentBeanFactory;
 
-  @Mock
-  private StoreContextProvider storeContextProvider;
-
   private StoreContext storeContext;
 
   @Mock
@@ -53,15 +50,19 @@ public class CommerceContractIdTestContextExtractorTest {
     testling.setContentBeanFactory(contentBeanFactory);
     storeContext = newStoreContext();
 
-    Commerce.setCurrentConnection(commerceConnection);
-
-    when(commerceConnection.getStoreContextProvider()).thenReturn(storeContextProvider);
+    DefaultConnection.set(commerceConnection);
+    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
     when(commerceConnection.getIdProvider()).thenReturn(new BaseCommerceIdProvider("vendor"));
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   @Test
   public void testExtractTestContextsFromContent() {
-    String userContractsStr = "ibm:///catalog/contract/contract1,ibm:///catalog/contract/contract2";
+    String userContractsStr = "vendor:///catalog/contract/contract1,vendor:///catalog/contract/contract2";
     String[] userContractIds = new String[]{"contract1", "contract2"};
     List<String> contracts = StringUtil.tokenizeToList(userContractsStr, ",");
     when(contentBeanFactory.createBeanFor(content)).thenReturn(cmUserProfile);
@@ -69,7 +70,6 @@ public class CommerceContractIdTestContextExtractorTest {
     when(profileExtensions.get(CommerceContractIdTestContextExtractor.PROPERTIES_PREFIX)).thenReturn(properties);
     when(properties.get(CommerceContractIdTestContextExtractor.COMMERCE_CONTEXT)).thenReturn(commerce);
     when(commerce.get(CommerceContractIdTestContextExtractor.USER_CONTRACT_PROPERTY)).thenReturn(contracts);
-    when(storeContextProvider.getCurrentContext()).thenReturn(storeContext);
 
     testling.extractTestContextsFromContent(content, null);
 

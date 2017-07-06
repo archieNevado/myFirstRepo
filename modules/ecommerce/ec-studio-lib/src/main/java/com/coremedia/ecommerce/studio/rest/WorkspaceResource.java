@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 
@@ -54,6 +54,6 @@ public class WorkspaceResource extends AbstractCatalogResource<Workspace> {
   }
 
   public WorkspaceService getWorkspaceService() {
-    return Commerce.getCurrentConnection().getWorkspaceService();
+    return DefaultConnection.get().getWorkspaceService();
   }
 }

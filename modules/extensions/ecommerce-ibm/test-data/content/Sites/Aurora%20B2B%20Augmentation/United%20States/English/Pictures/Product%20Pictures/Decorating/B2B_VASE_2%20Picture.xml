@@ -17,13 +17,13 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">flip;d=h/b;a=0;c=1/crop;x=583;y=0;width=841;height=1303</StringProperty>
-<StringProperty Name="portrait_ratio3x4">flip;d=h/b;a=0;c=1/crop;x=459;y=0;width=1027;height=1365</StringProperty>
-<StringProperty Name="portrait_ratio1x1">flip;d=h/b;a=0;c=1/crop;x=325;y=0;width=1171;height=1169</StringProperty>
-<StringProperty Name="landscape_ratio4x3">flip;d=h/b;a=0;c=1/crop;x=273;y=26;width=1522;height=1138</StringProperty>
-<StringProperty Name="landscape_ratio16x9">flip;d=h/b;a=0;c=1/crop;x=139;y=288;width=1728;height=968</StringProperty>
-<StringProperty Name="landscape_ratio5x2">flip;d=h/b;a=0;c=1/crop;x=0;y=325;width=2048;height=819</StringProperty>
-<StringProperty Name="landscape_ratio4x1">flip;d=h/b;a=0;c=1/crop;x=0;y=458;width=2048;height=510</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/flip;d=h/crop;x=583;y=0;width=841;height=1303</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/flip;d=h/crop;x=459;y=0;width=1027;height=1365</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/flip;d=h/crop;x=325;y=0;width=1171;height=1169</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/flip;d=h/crop;x=273;y=26;width=1522;height=1138</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/flip;d=h/crop;x=139;y=288;width=1728;height=968</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/flip;d=h/crop;x=0;y=325;width=2048;height=819</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/flip;d=h/crop;x=0;y=458;width=2048;height=510</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -85,7 +85,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Decoration.xml" path="/Settings/Taxonomies/Subject/Decoration"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

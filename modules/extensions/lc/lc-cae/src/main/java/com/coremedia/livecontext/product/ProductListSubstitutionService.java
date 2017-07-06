@@ -1,17 +1,16 @@
 package com.coremedia.livecontext.product;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
+import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.view.substitution.Substitution;
 import com.google.common.base.Function;
@@ -26,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.transform;
+import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -68,11 +68,12 @@ public class ProductListSubstitutionService {
   public ProductList getProductList(@Nullable LiveContextNavigation navigation, int startIndex, int steps) {
     if (navigation != null) {
       try {
-        StoreContext context = getStoreContextProvider().getCurrentContext();
+        CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+        StoreContext context = connection.getStoreContext();
         notNull(context, "No default catalog default context set.");
 
         Category category = navigation.getCategory();
-        List<Product> list = getCatalogService().findProductsByCategory(category);
+        List<Product> list = DefaultConnection.get().getCatalogService().findProductsByCategory(category);
         ProductList productList = new ProductList(navigation, startIndex, steps, list.size(), liveContextNavigationFactory);
 
         //apply the subset of products according to the passed parameters.
@@ -113,15 +114,6 @@ public class ProductListSubstitutionService {
     public ProductInSite apply(@Nullable Product product) {
       return product==null ? null : liveContextNavigationFactory.createProductInSite(product, site);
     }
-  }
-
-
-  public CatalogService getCatalogService() {
-    return Commerce.getCurrentConnection().getCatalogService();
-  }
-
-  public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
   }
 
   @Required

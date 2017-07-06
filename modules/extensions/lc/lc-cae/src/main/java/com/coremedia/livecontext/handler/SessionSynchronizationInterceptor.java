@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.services.SessionSynchronizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class SessionSynchronizationInterceptor extends HandlerInterceptorAdapter
       return true;
     }
 
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     if (currentConnection == null || currentConnection.getUserSessionService() == null) {
       return true;
     }

@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * <p>
  * CMViewtype symbols are used to represent viewtypes of documents.
- *
- * <p>Represents the document type {@link #NAME CMViewtype}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMViewtype}.
+ * </p>
+ * @cm.template.api
  */
 public interface CMViewtype extends CMSymbol {
   /**
@@ -31,7 +35,7 @@ public interface CMViewtype extends CMSymbol {
    * Returns the value of the document property {@link #LAYOUT}.
    *
    * @return the value of the document property {@link #LAYOUT}
+   * @cm.template.api
    */
   String getLayout();
 }
-  

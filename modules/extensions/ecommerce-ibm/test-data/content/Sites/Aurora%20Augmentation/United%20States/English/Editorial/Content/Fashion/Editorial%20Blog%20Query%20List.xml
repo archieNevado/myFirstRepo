@@ -4,10 +4,11 @@
 <master>
 </master>
 <viewtype>
+<link href="../../../Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait"/>
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<IntProperty Name="limit">5</IntProperty>
+<IntProperty Name="limit">4</IntProperty>
 <StructProperty Name="fq">
 <Struct>
 <StringProperty Name="documenttype">CMArticle</StringProperty>

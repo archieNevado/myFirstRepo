@@ -7,8 +7,12 @@ DEPENDENCIES
     path: cookbooks/blueprint
   blueprint-base
     path: cookbooks/blueprint-base
+  blueprint-cms-9
+    path: cookbooks/blueprint-cms-9
   blueprint-dev-tooling
     path: cookbooks/blueprint-dev-tooling
+  blueprint-lc3-ibm-wcs
+    path: cookbooks/blueprint-lc3-ibm-wcs
   blueprint-mongodb
     path: cookbooks/blueprint-mongodb
   blueprint-mysql
@@ -17,6 +21,8 @@ DEPENDENCIES
     path: cookbooks/blueprint-postgresql
   blueprint-proxy
     path: cookbooks/blueprint-proxy
+  blueprint-solr
+    path: cookbooks/blueprint-solr
   blueprint-tomcat
     path: cookbooks/blueprint-tomcat
   blueprint-tools
@@ -81,41 +87,44 @@ DEPENDENCIES
     path: thirdparty-cookbooks/yum
   yum-centos
     path: thirdparty-cookbooks/yum-centos
-  yum-mysql-community
-    path: thirdparty-cookbooks/yum-mysql-community
   yum-pgdg
     path: thirdparty-cookbooks/yum-pgdg
 
 GRAPH
   apache2 (3.2.2)
-  apt (4.0.2)
-    compat_resource (>= 12.10)
+  apt (6.1.2)
   blueprint (1.0.0)
   blueprint-base (1.0.0)
     chef_handler (~> 1.2.0)
     compat_resource (~> 12.10.7)
     sysctl (~> 0.6.0)
     ulimit (~> 0.3.2)
+  blueprint-cms-9 (1.0.0)
+    blueprint-base (>= 0.0.0)
+    blueprint-proxy (>= 0.0.0)
+    blueprint-tomcat (>= 0.0.0)
+    coremedia-proxy (~> 0.3.2)
   blueprint-dev-tooling (1.0.0)
-    apache2 (>= 0.0.0)
     blueprint-base (>= 0.0.0)
     blueprint-mongodb (>= 0.0.0)
     blueprint-mysql (>= 0.0.0)
     blueprint-postgresql (>= 0.0.0)
-    blueprint-proxy (>= 0.0.0)
     blueprint-tomcat (>= 0.0.0)
     blueprint-tools (>= 0.0.0)
     blueprint-yum (>= 0.0.0)
     chef-sugar (~> 3.0)
-    coremedia-proxy (>= 0.0.0)
     fpm-tng (~> 0.1.7)
-  blueprint-mongodb (1.0.4)
+  blueprint-lc3-ibm-wcs (1.0.0)
+    blueprint-base (>= 0.0.0)
+    blueprint-proxy (>= 0.0.0)
+    blueprint-tomcat (>= 0.0.0)
+    coremedia-proxy (~> 0.3.2)
+  blueprint-mongodb (1.0.0)
     mongodb3 (~> 5.3.0)
     ulimit (~> 0.3.0)
   blueprint-mysql (1.0.0)
     blueprint-base (>= 0.0.0)
-    mysql (~> 8.0.2)
-    yum-mysql-community (~> 0.3.0)
+    mysql (~> 8.3.1)
   blueprint-postgresql (1.0.0)
     blueprint-base (>= 0.0.0)
     blueprint-yum (>= 0.0.0)
@@ -123,32 +132,35 @@ GRAPH
     yum-pgdg (~> 0.2.7)
   blueprint-proxy (1.0.0)
     blueprint-base (>= 0.0.0)
-    coremedia-proxy (~> 0.3.0)
+    blueprint-tomcat (>= 0.0.0)
+    coremedia-proxy (~> 0.3.2)
+  blueprint-solr (1.0.0)
+    coremedia_maven (~> 2.0)
+    java_se (~> 8.131.0)
   blueprint-tomcat (1.0.0)
     blueprint-base (>= 0.0.0)
     chef-sugar (~> 3.0)
     coremedia_maven (~> 2.0.4)
-    coremedia_tomcat (~> 2.0.11)
-    java_se (~> 8.112.0)
+    coremedia_tomcat (~> 2.1.0)
+    java_se (~> 8.131.0)
   blueprint-tools (1.0.0)
     blueprint-base (>= 0.0.0)
     coremedia_maven (~> 2.0)
-    java_se (~> 8.112.0)
+    java_se (~> 8.131.0)
   blueprint-yum (1.0.0)
     yum (~> 3.8)
     yum-centos (~> 0.4.5)
-  build-essential (6.0.4)
-    compat_resource (>= 12.10)
+  build-essential (8.0.3)
     mingw (>= 1.1)
     seven_zip (>= 0.0.0)
   chef-sugar (3.4.0)
   chef_handler (1.2.0)
   compat_resource (12.10.7)
-  coremedia-proxy (0.3.1)
+  coremedia-proxy (0.3.2)
     apache2 (~> 3.2.0)
     chef-sugar (~> 3.0)
   coremedia_maven (2.0.4)
-  coremedia_tomcat (2.0.12)
+  coremedia_tomcat (2.1.1)
     coremedia_maven (~> 2.0)
     ulimit (~> 0.3)
   fpm-tng (0.1.7)
@@ -156,27 +168,25 @@ GRAPH
     reprepro (>= 0.0.0)
     ruby_installer (>= 0.0.0)
   gpg (0.2.2)
-  java_se (8.112.1)
-  mingw (1.2.4)
-    compat_resource (>= 0.0.0)
+  java_se (8.131.0)
+  mingw (2.0.1)
     seven_zip (>= 0.0.0)
   mongodb3 (5.3.0)
     apt (>= 0.0.0)
     runit (~> 1.7.0)
     user (>= 0.0.0)
     yum (>= 0.0.0)
-  mysql (8.0.4)
+  mysql (8.3.1)
   nginx (1.8.0)
     apt (>= 0.0.0)
     build-essential (>= 0.0.0)
     ohai (>= 1.1.4)
     runit (>= 0.0.0)
     yum (>= 0.0.0)
-  ohai (4.2.0)
-    compat_resource (>= 12.10)
+  ohai (5.1.0)
   openssl (4.4.0)
     chef-sugar (>= 3.1.1)
-  packagecloud (0.2.5)
+  packagecloud (0.3.0)
   postgresql (4.0.6)
     apt (>= 1.9.0)
     build-essential (>= 0.0.0)
@@ -200,13 +210,11 @@ GRAPH
   sysctl (0.6.2)
     ohai (>= 0.0.0)
   ulimit (0.3.3)
-  user (0.6.0)
-  windows (2.1.1)
+  user (0.7.0)
+  windows (3.1.1)
     ohai (>= 4.0.0)
   yum (3.13.0)
   yum-centos (0.4.13)
     yum (~> 3.10)
-  yum-mysql-community (0.3.0)
-    yum (>= 3.2)
   yum-pgdg (0.2.7)
     yum (~> 3.2)

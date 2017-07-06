@@ -1,6 +1,6 @@
 =begin
 #<
-This recipe configures a local repository, i.e. for development purposes with vagrant.
+This recipe configures a local repository, i.e. for development purposes.
 #>
 =end
 local_repository = node['blueprint']['yum']['local']['path']

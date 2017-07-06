@@ -2,10 +2,10 @@ package com.coremedia.livecontext.ecommerce.ibm.inventory;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import org.junit.Before;
@@ -24,9 +24,9 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test for {@link com.coremedia.livecontext.ecommerce.ibm.inventory.AvailabilityServiceImpl}
  */
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class AvailabilityServiceImplIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class AvailabilityServiceImplIT extends IbmServiceTestBase {
 
   private static final String PRODUCT2_CODE = "AuroraWMDRS-1";
 
@@ -45,7 +45,7 @@ public class AvailabilityServiceImplIT extends AbstractServiceTest {
   @Test
   public void testGetAvailabilityInfo() {
     List<ProductVariant> variants = catalogService.findProductById(
-            Commerce.getCurrentConnection().getIdProvider().formatProductId(PRODUCT2_CODE)).getVariants();
+            DefaultConnection.get().getIdProvider().formatProductId(PRODUCT2_CODE)).getVariants();
     ProductVariant productVariant = variants.get(0);
     ProductVariant productVariant2 = (ProductVariant) testling.getCommerceBeanFactory().createBeanFor(CommerceIdHelper.formatProductVariantTechId(productVariant.getExternalTechId()), testConfig.getStoreContext());
     assertEquals(productVariant, productVariant2);

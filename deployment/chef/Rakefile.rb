@@ -4,11 +4,10 @@ require 'rubocop/formatter/base_formatter'
 require 'rubocop/formatter/checkstyle_formatter'
 require 'cookstyle'
 require 'foodcritic'
-require 'kitchen'
 
 is_jenkins = ENV.key?('JENKINS_HOME')
 
-task :default => ['style', 'kitchen_syntax']
+task :default => ['style']
 
 desc 'Run all style checks'
 task :style => ['style:chef', 'style:ruby']
@@ -25,25 +24,8 @@ task :doc do
   readmes.each do |file_name|
     text = File.read(file_name)
     new_contents = text.gsub(/<code>#<Chef::.*/, "<code>Lazy Evaluator</code>, see LWRP code for default.")
-
-    # To merely print the contents of the file, use:
-    puts new_contents
-
     # To write changes to the file, use:
     File.open(file_name, "w") {|file| file.puts new_contents }
-  end
-end
-
-desc 'Test kitchen syntax'
-task :kitchen_syntax do
-  Kitchen.logger = Kitchen.default_file_logger
-  Rake::FileList['cookbooks/blueprint*/.kitchen.yml', 'cookbooks/blueprint*/.kitchen.vagrant.yml'].each do |kitchen_file|
-    puts "checking kitchen syntax for #{kitchen_file}"
-    Dir.chdir(File.dirname(kitchen_file)) do
-      Kitchen::Config.new.instances.each do |instance|
-        instance.diagnose
-      end
-    end
   end
 end
 

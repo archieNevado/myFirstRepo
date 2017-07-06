@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.context;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
@@ -17,6 +18,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.hasText;
 import static org.springframework.util.Assert.notNull;
 
@@ -37,13 +39,17 @@ public abstract class AbstractResolveContextStrategy implements ResolveContextSt
     this.cache = cache;
   }
 
-
   protected CatalogService getCatalogService() {
-    return Commerce.getCurrentConnection().getCatalogService();
+    return getCommerceConnection().getCatalogService();
   }
 
   protected StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
+    return getCommerceConnection().getStoreContextProvider();
+  }
+
+  @Nonnull
+  protected CommerceConnection getCommerceConnection() {
+    return requireNonNull(DefaultConnection.get(), "no commerce connection available");
   }
 
   @Required

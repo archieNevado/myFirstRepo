@@ -48,9 +48,16 @@
       <bpforms:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <taxonomy:TaxonomyPropertyField propertyName="subjectTaxonomy"
-                                            hideLabel="true"
-                                            taxonomyId="Subject"/>
+            <editor:PropertyFieldGroup
+              title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Subject_label')}"
+              expandOnValues="subjectTaxonomy"
+              itemId="subjectTaxonomyItemId">
+              <editor:items>
+                <taxonomy:TaxonomyPropertyField propertyName="subjectTaxonomy"
+                                                hideLabel="true"
+                                                taxonomyId="Subject"/>
+              </editor:items>
+            </editor:PropertyFieldGroup>
             <editor:PropertyFieldGroup
                     title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Free_Keywords_label')}"
                     expandOnValues="keywords"
@@ -114,12 +121,12 @@
           <ui:items>
             <!--Lower case used for the property name here, since the name must match
             the SOLR field name that is complete lower case. The editor converts to lowercase to be sure too. -->
-            <taxonomy:TaxonomyFilterFieldset taxonomyId="Subject"
-                                             filterId="Subject"
-                                             propertyName="subjecttaxonomy"/>
-            <taxonomy:TaxonomyFilterFieldset taxonomyId="Location"
-                                             filterId="Location"
-                                             propertyName="locationtaxonomy"/>
+            <taxonomy:TaxonomyFilterPanel taxonomyId="Subject"
+                                          filterId="Subject"
+                                          propertyName="subjecttaxonomy"/>
+            <taxonomy:TaxonomyFilterPanel taxonomyId="Location"
+                                          filterId="Location"
+                                          propertyName="locationtaxonomy"/>
           </ui:items>
           <ui:after>
             <Component itemId="{SearchFilters.LAST_EDITED_FILTER_ITEM_ID}"/>

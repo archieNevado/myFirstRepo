@@ -16,7 +16,6 @@
     <module>lc-asset-studio</module>
     <module>lc-asset-studio-lib-component</module>
     <module>lc-asset-services</module>
-    <module>lc-asset-bom</module>
   </modules>
 
   <properties>

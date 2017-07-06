@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.fragment;
 
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -10,6 +10,8 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.collect.ImmutableList;
@@ -71,7 +73,9 @@ public class FragmentPageHandler extends PageHandlerBase {
                                      @PathVariable(SEGMENT_LOCALE) Locale locale,
                                      HttpServletRequest request,
                                      HttpServletResponse response) {
-    if (Commerce.getCurrentConnection() == null || Commerce.getCurrentConnection().getStoreContext() == null) {
+    CommerceConnection connection = DefaultConnection.get();
+    StoreContext storeContext = connection != null ? connection.getStoreContext() : null;
+    if (storeContext == null) {
       return HandlerHelper.badRequest("Store context not initialized for fragment call " + request.getRequestURI());
     }
 
@@ -79,7 +83,7 @@ public class FragmentPageHandler extends PageHandlerBase {
     FragmentParameters fragmentParameters = FragmentContextProvider.getFragmentContext(request).getParameters();
 
     //resolve the site first
-    Site site = getSitesService().getSite(Commerce.getCurrentConnection().getStoreContext().getSiteId());
+    Site site = getSitesService().getSite(storeContext.getSiteId());
     if (site == null) {
       return createNoSiteModelAndView(fragmentParameters, storeId, locale);
     }
@@ -113,12 +117,6 @@ public class FragmentPageHandler extends PageHandlerBase {
   public void setPreview(boolean isPreview) {
     this.isPreview = isPreview;
   }
-
-  @Required
-  public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
-  }
-
 
   // --- internal ---------------------------------------------------
 

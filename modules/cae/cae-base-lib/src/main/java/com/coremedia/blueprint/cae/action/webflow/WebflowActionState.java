@@ -19,6 +19,8 @@ import java.util.Map;
  * The template location is computed from the flow id and the flow view id. For instance,
  * a flow id "com.mycompany.MyFlow" with a flow view name "myView" is translated (depending
  * on the concrete view engine) into a template path "[...]/templates/com.mycompany/MyFlow.myView.jsp"
+ *
+ * @cm.template.api
  */
 public class WebflowActionState implements HasCustomType, CMActionState {
 
@@ -30,17 +32,16 @@ public class WebflowActionState implements HasCustomType, CMActionState {
   private final Type type;
 
   /**
-   *
-   * @param action The original action
-   * @param model The action's result as named beans
-   * @param flowId The flow id
+   * @param action   The original action
+   * @param model    The action's result as named beans
+   * @param flowId   The flow id
    * @param flowView The flow view name, e.g. "success"
    */
   public WebflowActionState(CMAction action, Map<String, Object> model, String flowId, String flowView) {
     this.flowId = flowId; // assuming that flowId consists of alphanumeric characters an "." only
     this.flowViewId = flowView;
     this.action = action;
-    this.model = model == null ?  new HashMap<String, Object>() : new HashMap<>(model);
+    this.model = model == null ? new HashMap<>() : new HashMap<>(model);
 
     // build the type hierarchy that shall be used by the view engine for the template lookup
     List<String> typeHierarchy = new ArrayList<>();
@@ -51,6 +52,7 @@ public class WebflowActionState implements HasCustomType, CMActionState {
 
   /**
    * @return The view name to be used for rendering the action result
+   * @cm.template.api
    */
   public String getFlowViewId() {
     return flowViewId;
@@ -75,6 +77,6 @@ public class WebflowActionState implements HasCustomType, CMActionState {
 
   @Override
   public String toString() {
-    return getClass().getName()+"[flowId="+flowId+", flowViewId="+ flowViewId +", type="+type+"]";
+    return getClass().getName() + "[flowId=" + flowId + ", flowViewId=" + flowViewId + ", type=" + type + "]";
   }
 }

@@ -5,9 +5,9 @@
         xmlns:livecontext="exml:com.coremedia.livecontext.studio.config"
         actionName="createMarketingSpot"
         contentType="CMMarketingSpot"
-        catalogObjectType="{MarketingSpot}">
+        catalogObjectType="{MarketingSpotImpl}">
   <fx:Script><![CDATA[
-    import com.coremedia.ecommerce.studio.model.MarketingSpot;
+    import com.coremedia.ecommerce.studio.model.MarketingSpotImpl;
 
     private var config:CreateMarketingSpotAction;
 

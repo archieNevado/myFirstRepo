@@ -21,6 +21,8 @@ import java.util.Map;
  * <p>
  * This content bean represents documents of that type within the CAE.
  * </p>
+ *
+ * @cm.template.api
  */
 public interface CMMarketingSpot extends CMDynamicList {
   /**
@@ -53,16 +55,16 @@ public interface CMMarketingSpot extends CMDynamicList {
   Collection<? extends CMMarketingSpot> getLocalizations();
 
   /**
-   * Returns a <code>Map</code> from aspectIDs to Aspects. AspectIDs consists of an aspect name with a
+   * Returns a {@code Map} from aspectIDs to Aspects. AspectIDs consists of an aspect name with a
    * prefix which identifies the plugin provider.
    *
-   * @return a <code>Map</code> from aspectIDs to <code>Aspect</code>s
+   * @return a {@code Map} from aspectIDs to {@code Aspect}s
    */
   @Override
   Map<String, ? extends Aspect<? extends CMMarketingSpot>> getAspectByName();
 
   /**
-   * Returns a list of all  <code>Aspect</code>s from all availiable
+   * Returns a list of all  {@code Aspect}s from all availiable
    * PlugIns that are registered to this content bean.
    *
    * @return a list of {@link com.coremedia.cae.aspect.Aspect}
@@ -81,6 +83,6 @@ public interface CMMarketingSpot extends CMDynamicList {
    * @return list of items calculated by the marketing spot
    */
   @Override
-  public List getItems();
+  List getItems();
 
 }

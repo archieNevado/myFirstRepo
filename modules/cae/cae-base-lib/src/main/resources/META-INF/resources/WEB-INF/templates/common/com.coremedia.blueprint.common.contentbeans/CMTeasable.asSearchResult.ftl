@@ -35,5 +35,7 @@
         </p>
       </#if>
     </div>
+
+    <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_SEARCH />
   </a>
 </div>

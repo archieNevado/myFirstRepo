@@ -9,8 +9,9 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
-<BooleanProperty Name="inherit">true</BooleanProperty>
+<BooleanProperty Name="inherit">false</BooleanProperty>
 <StringListProperty Name="references">
+<String>ibm:///catalog/product/WAC007_0715</String>
 <String>ibm:///catalog/sku/PC_HERMITAGE_CATTY_SUNGLASSES_SKU</String>
 <String>ibm:///catalog/product/PC_HERMITAGE_CATTY_SUNGLASSES</String>
 </StringListProperty>

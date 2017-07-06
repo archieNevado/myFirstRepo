@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>alx-p13n-bom</module>
     <module>alx-p13n-cae</module>
   </modules>
 

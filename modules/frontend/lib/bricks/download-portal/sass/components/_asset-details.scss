@@ -154,6 +154,7 @@
 }
 
 .am-rendition {
+  $parent: &;
   color: $am-text-color;
   font-size: $am-text-size;
 
@@ -246,21 +247,21 @@
   }
 
   &:first-child {
-    &__name,
-    &__size,
-    &__type,
-    &__download,
-    &__control {
+    #{$parent}__name,
+    #{$parent}__size,
+    #{$parent}__type,
+    #{$parent}__download,
+    #{$parent}__control {
       padding-top: 0;
     }
   }
 
   &:last-child {
-    &__name,
-    &__size,
-    &__type,
-    &__download,
-    &__control {
+    #{$parent}__name,
+    #{$parent}__size,
+    #{$parent}__type,
+    #{$parent}__download,
+    #{$parent}__control {
       padding-bottom: 0;
     }
   }

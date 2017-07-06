@@ -13,12 +13,13 @@ import java.util.Map;
 
 /**
  * <p>
- *   The class encapsulates all parameters that may be past during a fragment request.
- *   The origin request is handled by the {@see FragmentPageHandler} that may receive additional
- *   parameters through matrix parameters.
- *
- *   @see com.coremedia.livecontext.fragment.FragmentPageHandler
+ * The class encapsulates all parameters that may be past during a fragment request.
+ * The origin request is handled by the {@link FragmentPageHandler} that may receive additional
+ * parameters through matrix parameters.
  * </p>
+ *
+ * @see com.coremedia.livecontext.fragment.FragmentPageHandler
+ * @cm.template.api
  */
 public class FragmentParameters {
   private static final Logger LOG = LoggerFactory.getLogger(FragmentParameters.class);
@@ -42,8 +43,8 @@ public class FragmentParameters {
   private Map<String, String> matrixParams = new HashMap<>();
 
   /**
-   * @param storeId The storeId of the store to work on.
-   * @param locale The locale of the store to work on.
+   * @param storeId    The storeId of the store to work on.
+   * @param locale     The locale of the store to work on.
    * @param matrixVars The matrix parameters passed by the fragment request.
    */
   protected FragmentParameters(@Nonnull String storeId,
@@ -66,6 +67,9 @@ public class FragmentParameters {
     return getDecodedValue(EXTERNAL_REFERENCE);
   }
 
+  /**
+   * @cm.template.api
+   */
   public String getParameter() {
     return getDecodedValue(PARAMETER);
   }
@@ -114,12 +118,12 @@ public class FragmentParameters {
     matrixParams.put(PLACEMENT, placement);
   }
 
-  public Map<String,String> getMatrixParams() {
+  public Map<String, String> getMatrixParams() {
     return matrixParams;
   }
 
   public String getEnvironment() {
-    if(matrixParams.containsKey(ENVIRONMENT)) {
+    if (matrixParams.containsKey(ENVIRONMENT)) {
       return matrixParams.get(ENVIRONMENT);
     }
     return null;
@@ -164,6 +168,9 @@ public class FragmentParameters {
     return value;
   }
 
+  /**
+   * @cm.template.api
+   */
   public String getMetaDataKeywords() {
     return metaDataKeywords;
   }
@@ -172,6 +179,9 @@ public class FragmentParameters {
     this.metaDataKeywords = metaDataKeywords;
   }
 
+  /**
+   * @cm.template.api
+   */
   public String getMetaDataTitle() {
     return metaDataTitle;
   }
@@ -180,6 +190,9 @@ public class FragmentParameters {
     this.metaDataTitle = metaDataTitle;
   }
 
+  /**
+   * @cm.template.api
+   */
   public String getMetaDataDescription() {
     return metaDataDescription;
   }

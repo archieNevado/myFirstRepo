@@ -1,0 +1,19 @@
+{
+  "name": "lc3-ibm-wcs-config",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The role for the wcs config",
+  "run_list": [
+    "recipe[blueprint-lc3-ibm-wcs::cae-preview-config]",
+    "recipe[blueprint-lc3-ibm-wcs::cae-live-config]",
+    "recipe[blueprint-lc3-ibm-wcs::studio-config]"
+  ],
+  "env_run_lists": {
+    "development": [
+      "recipe[blueprint-lc3-ibm-wcs::cae-preview-config]",
+      "recipe[blueprint-lc3-ibm-wcs::cae-live-config]",
+      "recipe[blueprint-lc3-ibm-wcs::studio-config]",
+      "recipe[blueprint-lc3-ibm-wcs::test-data-config]"
+    ]
+  }
+}

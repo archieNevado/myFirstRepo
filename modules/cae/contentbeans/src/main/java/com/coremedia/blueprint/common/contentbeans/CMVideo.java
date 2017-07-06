@@ -10,9 +10,15 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * The CMVideo adds no extra properties but leaves a pluggable spot where needed properties could be
  * attached via a DocTypeAspect.
- * <p>Represents the document type {@link #NAME CMVideo}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMVideo}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMVideo extends CMVisual {
 
@@ -51,9 +57,18 @@ public interface CMVideo extends CMVisual {
   @Override
   Blob getData();
 
+  /**
+   * @cm.template.api
+   */
   Struct getTimeLine();
 
+  /**
+   * @cm.template.api
+   */
   CMTeasable getTimeLineDefaultTarget();
 
+  /**
+   * @cm.template.api
+   */
   List getTimeLineSequences();
 }

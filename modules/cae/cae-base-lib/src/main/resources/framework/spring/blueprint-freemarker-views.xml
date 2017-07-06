@@ -34,6 +34,7 @@
                     property="autoImports">
     <map>
       <entry key="bp" value="/lib/coremedia.com/blueprint.ftl"/>
+      <entry key="spring" value="/spring.ftl"/>
     </map>
   </customize:append>
 

@@ -38,6 +38,7 @@ import mx.resources.ResourceManager;
 public class LivecontextStudioPluginBase extends StudioPlugin {
 
   internal static const CONTENT_LED_PROPERTY:String = 'livecontext.contentLed';
+  internal static const MANAGE_NAVIGATION_PROPERTY:String = 'livecontext.manageNavigation';
   internal static const EXTERNAL_ID_PROPERTY:String = 'externalId';
 
   public function LivecontextStudioPluginBase(config:LivecontextStudioPlugin = null) {
@@ -45,7 +46,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
       delete config['rules'];
       delete config['configuration'];
     }
-    super(config)
+    super(config);
   }
 
 
@@ -67,6 +68,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
      * Apply image link list preview
      */
     editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
+    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PRODUCT));
     editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, "pictures"));
     editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
     editorContext.registerThumbnailResolver(new CatalogThumbnailResolver("CatalogObject"));
@@ -86,6 +88,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, initMarketingSpot);
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, initProductTeaser);
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL, initExternalChannel);
+    editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PRODUCT, initExternalProduct);
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE, initExternalPage);
 
     editorContext['getMetadataNodeRendererRegistry']().register(new StoreNodeRenderer());
@@ -101,7 +104,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
     QuickCreate.addQuickCreateDialogProperty(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, EXTERNAL_ID_PROPERTY,
             function (data:ProcessingData, properties:Object):Component {
               var config:CatalogLinkPropertyField = CatalogLinkPropertyField(properties);
-              config.dropAreaClickHandler = CatalogHelper.getInstance().openMarketingSpots;
+              config.dropAreaHandler = CatalogHelper.getInstance().openMarketingSpots;
               config.maxCardinality = 1;
               config.linkTypeNames = [CatalogModel.TYPE_MARKETING_SPOT];
               config.dropAreaText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text');
@@ -153,6 +156,12 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   }
 
   private static function initExternalChannel(content:Content):void {
+    ContentInitializer.initializePropertyWithName(content, 'title');
+    ContentInitializer.initCMLinkable(content);
+    ContentInitializer.initCMLocalized(content);
+  }
+
+  private static function initExternalProduct(content:Content):void {
     ContentInitializer.initializePropertyWithName(content, 'title');
     ContentInitializer.initCMLinkable(content);
     ContentInitializer.initCMLocalized(content);
@@ -232,6 +241,9 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
           }
           if (structType.hasProperty(CONTENT_LED_PROPERTY)) {
             return liveContextStruct.get(CONTENT_LED_PROPERTY);
+          }
+          if (structType.hasProperty(MANAGE_NAVIGATION_PROPERTY)) {
+            return liveContextStruct.get(MANAGE_NAVIGATION_PROPERTY);
           }
         }
       }

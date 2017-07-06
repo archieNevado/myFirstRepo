@@ -73,6 +73,7 @@
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 <Link xlink:href="coremedia:///cap/resources/For%20Professionals%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/For%20Professionals%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Unsere%20Produkte.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Editorial/Content/Unsere%20Produkte"/>
 </LinkListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Viewtypes/CMChannel/hero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>

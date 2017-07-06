@@ -39,9 +39,9 @@ public class AssetHelperTest {
 
   static final String CONTENT_XML_URI = "classpath:/com/coremedia/livecontext/ecommerce/asset/assetRepository.xml";
 
-  static final List<String> AB_LIST = Arrays.asList("ibm:///catalog/product/A", "ibm:///catalog/sku/B");
-  static final List<String> ACD_LIST = Arrays.asList("ibm:///catalog/product/A", "ibm:///catalog/sku/C", "ibm:///catalog/sku/D");
-  static final List<String> EF_LIST = Arrays.asList("ibm:///catalog/product/E", "ibm:///catalog/sku/F");
+  static final List<String> AB_LIST = Arrays.asList("vendor:///catalog/product/A", "vendor:///catalog/sku/B");
+  static final List<String> ACD_LIST = Arrays.asList("vendor:///catalog/product/A", "vendor:///catalog/sku/C", "vendor:///catalog/sku/D");
+  static final List<String> EF_LIST = Arrays.asList("vendor:///catalog/product/E", "vendor:///catalog/sku/F");
   static final List<String> EMPTY_LIST = Collections.emptyList();
 
   @Inject

@@ -1,14 +1,14 @@
 package com.coremedia.livecontext.navigation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
-import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
+import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -112,11 +112,11 @@ public class LiveContextNavigationFactory {
   }
 
   public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
+    return DefaultConnection.get().getStoreContextProvider();
   }
 
   public CatalogService getCatalogService() {
-    return Commerce.getCurrentConnection().getCatalogService();
+    return DefaultConnection.get().getCatalogService();
   }
 
   @Required

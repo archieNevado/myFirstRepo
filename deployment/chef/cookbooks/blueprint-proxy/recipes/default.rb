@@ -4,10 +4,6 @@ This recipe wraps all recipes of this cookbook for apache running in front of to
 #>
 =end
 
-include_recipe 'blueprint-proxy::shop'
-include_recipe 'blueprint-proxy::shop-preview'
-include_recipe 'blueprint-proxy::adobe-drive-server'
-
 include_recipe 'blueprint-proxy::studio'
 include_recipe 'blueprint-proxy::preview'
 include_recipe 'blueprint-proxy::delivery'

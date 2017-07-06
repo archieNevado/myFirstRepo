@@ -23,20 +23,3 @@ To build RPMs, proceed as follows:
 > By default the Chef will set `node['fqdn']` as its hostname so make sure you set all properties correctly. You could create a verification step that searchs the
 > installation folder for the default name `<suite>-<platform>` and fail if still one found. You could use target systems host names and modify the `/etc/hosts` so that
 > all app think they are talking remotely but don't. 
-
-To get started you can use the `.kitchen.rpm.yml` simply export the environment variable `KITCHEN_YAML` with that kitchen file as its value and test kitchen will now use that file instead of the default.
-
-```bash
-export KITCHEN_YAML=.kitchen.rpm.yml
-kitchen converge rpm-build
-```
-
-## Install RPMs
-
-For convenience reasons a `install-rpm` recipe has been added, which installs and starts all services. This recipe and its kitchen instance won't fail by default, but the applications
-won't be configured correctly as described in the section above.
-
-```bash
-export KITCHEN_YAML=.kitchen.rpm.yml
-kitchen converge rpm-install
-```

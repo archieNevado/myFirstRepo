@@ -10,8 +10,10 @@
 <StructProperty Name="teaserOverlay">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
-<IntProperty Name="ypos">0</IntProperty>
-<IntProperty Name="xpos">45</IntProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Dark%20on%20Light.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Dark%20on%20Light"/>
+<IntProperty Name="positionX">-39</IntProperty>
+<IntProperty Name="positionY">-42</IntProperty>
+<IntProperty Name="width">23</IntProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -31,8 +33,8 @@
 </locationTaxonomy>
 <contexts>
 </contexts>
-<teaserTitle>Lighting</teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p/></div></teaserText>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1 align--left">Lighting</p><p class="align--left">Modern light bulbs in all form factors</p></div></teaserText>
 <pictures>
 <link href="Evolution%20of%20Lightbulbs%20Picture.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Evolution%20of%20Lightbulbs%20Picture"/>
 </pictures>

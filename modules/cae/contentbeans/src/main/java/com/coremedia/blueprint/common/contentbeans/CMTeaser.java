@@ -8,9 +8,15 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Stand-alone teaser, in case you need multiple teasers to some content,
  * so that the embedded teaser is not sufficient.
- * <p>Represents the document type {@link #NAME CMTeaser}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMTeaser}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMTeaser extends CMTeasable {
   /**

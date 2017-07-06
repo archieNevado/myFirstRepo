@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.common.contentbeans.CMPlaceholder;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -10,11 +11,10 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.view.substitution.Substitution;
@@ -37,10 +37,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 @RequestMapping
 @Link
@@ -142,8 +141,9 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
   }
 
   private Product getProduct(String productId) {
-    String techId = getCurrentCommerceIdProvider().formatProductTechId(productId);
-    Product product = getCatalogService().findProductById(techId);
+    CommerceConnection connection = DefaultConnection.get();
+    String techId = connection.getIdProvider().formatProductTechId(productId);
+    Product product = connection.getCatalogService().findProductById(techId);
     if (product != null && product instanceof ProductVariant) {
       // we only use products as targets for reviews, no product variants (SKUs)
       // e.g. only store the review for PC_TSHIRT and not for PC_TSHIRT_BLUE_XXL
@@ -155,22 +155,14 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
     return product;
   }
 
-
   private ProductReviewsResult getReviewsResult(Object target) {
     return  new ProductReviewsResult(target);
   }
 
   @Override
-  protected ProductReviewsResult getReviewsResult(Object target, boolean feedbackEnabled, ContributionType contributionType) {
+  protected ProductReviewsResult getReviewsResult(Object target, boolean feedbackEnabled, ContributionType contributionType, ElasticSocialConfiguration elasticSocialConfiguration) {
     CommunityUser user = getElasticSocialUserHelper().getCurrentUser();
-    return  new ProductReviewsResult(target, user, getElasticSocialService(), feedbackEnabled, contributionType);
+    return  new ProductReviewsResult(target, user, getElasticSocialService(), feedbackEnabled, contributionType, elasticSocialConfiguration);
   }
 
-  public CatalogService getCatalogService() {
-    return Commerce.getCurrentConnection().getCatalogService();
-  }
-
-  public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
-  }
 }

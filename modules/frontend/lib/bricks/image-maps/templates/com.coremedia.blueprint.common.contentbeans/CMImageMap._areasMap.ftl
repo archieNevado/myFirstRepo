@@ -56,6 +56,9 @@
           </div>
         <#else>
           <#assign parameters={"class": "cm-imagemap__hotzone cm-imagemap__hotzone--icon"}/>
+          <#if linkedContent.content?has_content>
+            <#assign parameters+={"metadata" : ["properties.localSettings", linkedContent.content]}/>
+          </#if>
           <#if useQuickinfo>
             <#assign parameters+={"data-cm-button--quickinfo": '{"target": "${quickInfoId!""}"}'}/>
           </#if>

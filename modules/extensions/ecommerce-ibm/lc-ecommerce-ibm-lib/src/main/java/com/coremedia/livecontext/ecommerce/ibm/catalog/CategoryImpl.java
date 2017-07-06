@@ -114,7 +114,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   @Override
   public Markup getLongDescription() {
     String longDescription = DataMapHelper.getValueForKey(getDelegate(), "longDescription", String.class);
-    return toRichtext(longDescription);
+    return toRichtext(longDescription, false);
   }
 
   @Override
@@ -215,8 +215,8 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
     return cmLocalizedSeoSegment;
   }
 
+  @Nullable
   @Override
-  @Nonnull
   public String getSeoSegment() {
     String localizedSeoSegment = getCmSeoSegment();
     if (isBlank(localizedSeoSegment)) {

@@ -10,10 +10,10 @@
 <Struct>
 <LinkListProperty Name="explicit" LinkType="coremedia:///cap/contenttype/CMTaxonomy">
 <Link xlink:href="coremedia:///cap/resources/../../../../../../../Settings/Taxonomies/Subject/Male.xml" cmexport:path="/Settings/Taxonomies/Subject/Male"/>
-<Link xlink:href="coremedia:///cap/resources/../../../../../../../Settings/Taxonomies/Subject/Men%20Elegant%20Spring.xml" cmexport:path="/Settings/Taxonomies/Subject/Men%20Elegant%20Spring"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../../../../Settings/Taxonomies/Subject/Men.xml" cmexport:path="/Settings/Taxonomies/Subject/Men"/>
 </LinkListProperty>
 <LinkListProperty Name="subjectTaxonomies" LinkType="coremedia:///cap/contenttype/CMTaxonomy">
-<Link xlink:href="coremedia:///cap/resources/../../../../../../../Settings/Taxonomies/Subject/Men%20Elegant%20Spring.xml" cmexport:path="/Settings/Taxonomies/Subject/Men%20Elegant%20Spring"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../../../../Settings/Taxonomies/Subject/Men.xml" cmexport:path="/Settings/Taxonomies/Subject/Men"/>
 </LinkListProperty>
 <LinkListProperty Name="profileImage" LinkType="coremedia:///cap/contenttype/CMPicture">
 <Link xlink:href="coremedia:///cap/resources/Male%20Elegant.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Personalization/Profiles/Male%20Elegant"/>

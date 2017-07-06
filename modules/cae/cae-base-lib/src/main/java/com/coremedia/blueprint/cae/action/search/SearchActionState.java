@@ -7,6 +7,8 @@ import com.coremedia.blueprint.common.contentbeans.CMAction;
 
 /**
  * The current state of the search action. Holds the action form as well as the action result
+ *
+ * @cm.template.api
  */
 public class SearchActionState implements CMActionState {
 
@@ -43,10 +45,16 @@ public class SearchActionState implements CMActionState {
     return action;
   }
 
+  /**
+   * @cm.template.api
+   */
   public SearchFormBean getForm() {
     return form;
   }
 
+  /**
+   * @cm.template.api
+   */
   public SearchResultBean getResult() {
     return result;
   }
@@ -55,6 +63,9 @@ public class SearchActionState implements CMActionState {
     return topicsResult;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isQueryTooShort() {
     return ERROR_QUERY_TOO_SHORT.equals(errorCode);
   }

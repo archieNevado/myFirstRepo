@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>catalog-bom</module>
     <module>catalog-doctypes</module>
     <module>catalog-content-services</module>
     <module>catalog-contentbeans-api</module>

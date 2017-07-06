@@ -168,10 +168,9 @@ public class TopicPagesResource {
     if (siteConfigFolder != null) {
       folder = siteConfigFolder.getPath();
       Content topicPagesFolder = capConnection.getContentRepository().getChild(folder);
-      if (topicPagesFolder == null) {
-        topicPagesFolder = capConnection.getContentRepository().createSubfolders(folder);
+      if (topicPagesFolder != null) {
+        representation.setFolder(topicPagesFolder);
       }
-      representation.setFolder(topicPagesFolder);
     }
 
     return representation;
@@ -567,8 +566,8 @@ public class TopicPagesResource {
       Content root = site.getSiteRootFolder();
       Content configPath = root.getChild(siteConfigurationPath);
       if (configPath == null) {
-        LOG.debug("Could not resolve relative site config path '" + siteConfigurationPath + "' for site " + site.getName() + ", creating folder.");
-        return capConnection.getContentRepository().createSubfolders(root, siteConfigurationPath);
+        LOG.debug("Could not resolve relative site config path '" + siteConfigurationPath + "' for site " + site.getName());
+        return null;
       }
       return configPath;
     }

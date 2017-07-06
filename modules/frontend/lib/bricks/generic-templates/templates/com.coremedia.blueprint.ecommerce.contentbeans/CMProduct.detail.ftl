@@ -16,10 +16,10 @@
   <#-- media -->
   <@cm.include self=bp.getContainer(self.media) view="asCarousel" params={"modifier": "details", "additionalClass": "${additionalClass}__medias", "controlIcon": "triangle", "viewItems": "_header", "displayPagination": true, "metadataItemsName":"pictures"}/>
 
-<#-- product code -->
-    <div class="${additionalClass}__code"<@cm.metadata "properties.productCode"/>>
-        <span>${bp.getMessage("product_code")}</span> ${self.productCode!""}
-    </div>
+  <#-- product code -->
+  <div class="${additionalClass}__code"<@cm.metadata "properties.productCode"/>>
+      <span>${bp.getMessage("product_code")}</span> ${self.productCode!""}
+  </div>
 
   <#-- text -->
   <#if self.detailText?has_content>
@@ -31,7 +31,7 @@
   <#-- downloads -->
   <#if self.downloads?has_content>
     <div class="${additionalClass}__downloads cm-downloads"<@cm.metadata "properties.downloads"/>>
-      <h2>${bp.getMessage("download_label")}</h2>
+      <h3>${bp.getMessage("download_label")}</h3>
       <ul class="cm-downloads__items">
         <#list self.downloads![] as download>
           <li class="cm-downloads__item">
@@ -57,10 +57,10 @@
   </#if>
 </article>
 
+<#-- extensions -->
+<@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_END />
+
 <#-- related -->
 <#if renderRelated>
   <@cm.include self=self view="_related" params={"relatedView": relatedView}/>
 </#if>
-
-<#-- extensions -->
-<@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_END />

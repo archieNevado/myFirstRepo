@@ -29,6 +29,7 @@ import com.coremedia.ui.data.test.AbstractRemoteTest;
 import com.coremedia.ui.data.test.MockAjax;
 import com.coremedia.ui.data.test.Step;
 import com.coremedia.ui.util.EventUtil;
+import com.coremedia.ui.util.RequestCounter;
 
 import joo.getQualifiedObject;
 
@@ -66,6 +67,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
 
   override public function setUp():void {
     super.setUp();
+    RequestCounter.reset();
     BeanFactoryImpl.initBeanFactory();
     CapPropertyDescriptorUtil.registerResolver();
     BeanFactoryImpl(beanFactory).registerRemoteBeanClasses(ContentRepositoryImpl);
@@ -207,6 +209,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
   override public function tearDown():void {
     super.tearDown();
     MockAjax.destroyMock();
+    RequestCounter.reset();
     RemoteBeanCache.disposeAll();
   }
 
@@ -280,7 +283,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           {"$Ref": "livecontext/marketing/HeliosSiteId/NO_WS"},
           {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/ROOT"}
         ],
-        "vendorName" : "ibm",
+        "vendorName" : "IBM",
         "childrenByName": {
           "root-category": {"displayName":"Product Catalog", "child": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/ROOT"}},
           "store-marketing": {"displayName":"store-marketing", "child": {"$Ref": "livecontext/marketing/HeliosSiteId/NO_WS"}}

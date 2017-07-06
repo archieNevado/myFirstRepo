@@ -12,10 +12,6 @@
 
   <artifactId>catalog-contentbeans-lib</artifactId>
 
-  <properties>
-    <coremedia.project.extension.for>cae</coremedia.project.extension.for>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>

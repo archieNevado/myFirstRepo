@@ -9,8 +9,10 @@ import com.coremedia.blueprint.base.pagegrid.PageGridConstants;
 import com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords;
 import com.coremedia.blueprint.base.pagegrid.TableLayoutData;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.layout.HasPageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.navigation.Linkable;
+import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
 import com.coremedia.blueprint.common.util.IsInProductionPredicate;
@@ -32,7 +34,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
   private ContentBackedPageGridService contentBackedPageGridService;
   private ViewtypeService viewtypeService;
 
-  private CMNavigation navigation;
+  private HasPageGrid bean;
   private int row;
   private int columns;
 
@@ -46,12 +48,12 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
 
   // --- construction -----------------------------------------------
 
-  public ContentBeanBackedPageGridPlacement(CMNavigation navigation,
+  public ContentBeanBackedPageGridPlacement(HasPageGrid bean,
                                             int row, int columns, int colIndex,
                                             ContentBackedPageGridService contentBackedPageGridService,
                                             ValidationService<Linkable> validationService,
                                             ViewtypeService viewtypeService) {
-    this.navigation = navigation;
+    this.bean = bean;
     this.row = row;
     this.columns = columns;
     this.colIndex = colIndex;
@@ -72,7 +74,10 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
 
 
   public CMNavigation getNavigation() {
-    return navigation;
+    if (bean instanceof CMNavigation) {
+      return (CMNavigation) bean;
+    }
+    return bean.getContext();
   }
 
   @Override
@@ -156,7 +161,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
       return false;
     }
     //noinspection RedundantIfStatement
-    if (navigation != null ? !navigation.equals(that.navigation) : that.navigation != null) {
+    if (bean != null ? !bean.equals(that.bean) : that.bean != null) {
       return false;
     }
 
@@ -165,7 +170,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
 
   @Override
   public int hashCode() {
-    int result = (navigation != null ? navigation.hashCode() : 0);
+    int result = (bean != null ? bean.hashCode() : 0);
     result = 31 * result + row;
     result = 31 * result + colIndex;
     return result;
@@ -177,7 +182,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
     validationService = other.validationService;
     contentBackedPageGridService = other.contentBackedPageGridService;
     viewtypeService = other.viewtypeService;
-    navigation = other.navigation;
+    this.bean = other.bean;
     row = other.row;
     colIndex = other.colIndex;
   }
@@ -223,12 +228,12 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
   }
 
   private ContentBackedPageGrid getContentBackedPageGrid() {
-    return contentBackedPageGridService.getContentBackedPageGrid(navigation.getContent());
+    return contentBackedPageGridService.getContentBackedPageGrid(bean.getContent());
   }
 
   private ContentBeanFactory getContentBeanFactory() {
-    if (navigation != null) {
-      return navigation.getContentBeanFactory();
+    if (bean != null) {
+      return bean.getContentBeanFactory();
     } else {
       throw new IllegalStateException("cannot determine content bean factory");
     }

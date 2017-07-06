@@ -2,6 +2,7 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.links.PostProcessorPrecendences;
 import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -14,8 +15,8 @@ import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.livecontext.product.ProductList;
 import com.coremedia.livecontext.product.ProductListSubstitutionService;
@@ -68,7 +69,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   private ProductListSubstitutionService productListSubstitutionService;
   private TreeRelation<Content> treeRelation;
 
-  // e.g. /category/perfectchef/and/here/comes/a/category/path
+  // e.g. /category/shopName/and/here/comes/a/category/path
   public static final String URI_PATTERN =
           "/" + SEGMENT_CATEGORY +
                   "/{" + SHOP_NAME_VARIABLE + "}" +
@@ -155,6 +156,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return doMakeAbsoluteUri(originalUri, liveContextNavigation, linkParameters, request);
   }
 
+
   // --------------------  Helper ---------------------------
 
   public boolean useCommerceCategoryLinks(Site site) {
@@ -194,8 +196,8 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   }
 
   private boolean isStoreContextAvailable() {
-    StoreContextProvider storeContextProvider = getStoreContextProvider();
-    return null != storeContextProvider && storeContextProvider.getCurrentContext() != null;
+    CommerceConnection currentConnection = DefaultConnection.get();
+    return null != currentConnection && currentConnection.getStoreContext() != null;
   }
 
   private Object buildNonCatalogLink(CMExternalPage navigation, Map<String, Object> linkParameters) {

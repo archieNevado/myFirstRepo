@@ -168,7 +168,7 @@ public class ExternalReferenceResolverTest {
 
   @Test
   public void testRejectAbsolutePathContainsSitesExternalReferenceResolver() throws Exception {
-    String ref = "cm-path!!Sites!Aurora!you!may!not!pass";
+    String ref = "cm-path!!Sites!shopName!you!may!not!pass";
 
     ContentPathExternalReferenceResolver testling = new ContentPathExternalReferenceResolver();
     testling.setContentRepository(contentRepository);

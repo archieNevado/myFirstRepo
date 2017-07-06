@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>es-p13n-bom</module>
     <module>es-p13n-cae</module>
   </modules>
 

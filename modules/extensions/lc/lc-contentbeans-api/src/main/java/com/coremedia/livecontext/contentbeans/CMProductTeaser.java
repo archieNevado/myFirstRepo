@@ -18,8 +18,10 @@ import java.util.Map;
  * <p>
  * This content bean represents documents of that type within the CAE.
  * </p>
+ *
+ * @cm.template.api
  */
-public interface CMProductTeaser extends CMTeasable {
+public interface CMProductTeaser extends CMTeasable, LiveContextProductTeasable {
   /**
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMProductTeaser'.
    */
@@ -57,16 +59,16 @@ public interface CMProductTeaser extends CMTeasable {
   Collection<? extends CMProductTeaser> getLocalizations();
 
   /**
-   * Returns a <code>Map</code> from aspectIDs to Aspects. AspectIDs consists of an aspect name with a
+   * Returns a {@code Map} from aspectIDs to Aspects. AspectIDs consists of an aspect name with a
    * prefix which identifies the plugin provider.
    *
-   * @return a <code>Map</code> from aspectIDs to <code>Aspect</code>s
+   * @return a {@code Map} from aspectIDs to {@code Aspect}s
    */
   @Override
   Map<String, ? extends Aspect<? extends CMProductTeaser>> getAspectByName();
 
   /**
-   * Returns a list of all  <code>Aspect</code>s from all availiable
+   * Returns a list of all  {@code Aspect}s from all availiable
    * PlugIns that are registered to this content bean.
    *
    * @return a list of {@link com.coremedia.cae.aspect.Aspect}
@@ -74,25 +76,4 @@ public interface CMProductTeaser extends CMTeasable {
   @Override
   List<? extends Aspect<? extends CMProductTeaser>> getAspects();
 
-  /**
-   * Returns the teasered product.
-   *
-   * @return the teasered product
-   */
-  public Product getProduct();
-
-  /**
-   * Returns a ProductInSite bean, suitable for link building.
-   *
-   * @return a ProductInSite
-   */
-  ProductInSite getProductInSite();
-
-  /**
-   * Returns true if the "Shop now" visualization is to be applied on this
-   * teaser.
-   *
-   * @param context fallback to lookup the shop now policy
-   */
-  boolean isShopNowEnabled(CMContext context);
 }

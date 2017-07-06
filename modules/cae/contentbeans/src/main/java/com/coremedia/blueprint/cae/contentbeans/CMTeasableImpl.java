@@ -9,9 +9,12 @@ import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
+import com.coremedia.blueprint.common.contentbeans.CMSettings;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
+import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.navigation.Linkable;
+import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.ParagraphHelper;
 import com.coremedia.cap.content.Content;
@@ -204,6 +207,25 @@ public class CMTeasableImpl extends CMTeasableBase {
     return ParagraphHelper.createParagraphs(getDetailText());
   }
 
+  @Override
+  public TeaserOverlaySettings getTeaserOverlaySettings() {
+    Map<String, Object> mapping = getSettingsService().settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, this);
+    
+    return getSettingsService().createProxy(TeaserOverlaySettings.class, mapping);
+  }
+
+  @Override
+  public TeaserOverlayStyle getTeaserOverlayStyle() {
+    Map<String, Object> mapping = null;
+    CMSettings styleSettings = getTeaserOverlaySettings().getStyle();
+    if (styleSettings != null) {
+      mapping = getSettingsService().settingAsMap(TEASER_OVERLAY_SETTINGS_STYLE_SUB_STRUCT_NAME, String.class, Object.class, styleSettings.getSettings());
+    }
+    if (mapping == null) {
+      mapping = new HashMap<>();
+    }
+    return getSettingsService().createProxy(TeaserOverlayStyle.class, mapping);
+  }
 
   // --- internal ---------------------------------------------------
 

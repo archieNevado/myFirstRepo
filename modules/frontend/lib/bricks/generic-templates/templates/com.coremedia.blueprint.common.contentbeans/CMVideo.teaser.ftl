@@ -39,4 +39,6 @@
       </#if>
     </@bp.optionalLink>
     </div>
+  
+  <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_TEASER />
 </div>

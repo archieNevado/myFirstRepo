@@ -6,6 +6,8 @@ import java.util.Map;
 
 /**
  * The SearchResultBean is a search engine independent representation of a search result.
+ *
+ * @cm.template.api
  */
 public class SearchResultBean {
 
@@ -39,6 +41,7 @@ public class SearchResultBean {
    * Returns the hits returned by the search engine
    *
    * @return the hits returned by the search engine
+   * @cm.template.api
    */
   public List<?> getHits() {
     return hits;
@@ -57,6 +60,7 @@ public class SearchResultBean {
    * Returns the total number of hits
    *
    * @return the total number of hits
+   * @cm.template.api
    */
   public long getNumHits() {
     return numHits;
@@ -114,6 +118,7 @@ public class SearchResultBean {
    *
    * @return a map where the key is the id of the result item and the value is a map where the key is a field
    * in the result item and the value is a list of Strings with highlighting embedded.
+   * @cm.template.api
    */
   public Map<Object, Map<String, List<String>>> getHighlightingResults() {
     return highlightingResults;

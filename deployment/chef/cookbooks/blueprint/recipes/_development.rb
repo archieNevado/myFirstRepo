@@ -1,10 +1,8 @@
 # if you use this environment with chef-solo make sure you set the following convenience attributes in you node.json
-# * node['blueprint']['wcs']['host']
 # * node['blueprint']['hostname'] if the default node['fqdn'] is not enough
 # * node['blueprint']['default_version'] if you want to use this convenience attribute
 
 # attributes to set here
-node.default['blueprint']['proxy']['ssl_proxy_verify'] = false
 node.default['blueprint']['dev']['db']['type'] = 'mysql'
 node.default['blueprint']['tomcat']['jmx_remote_authenticate'] = false
 
@@ -31,9 +29,6 @@ if node['blueprint']['nexus_url']
   node.default['blueprint']['webapps']['cae-preview']['version'] = 'LATEST'
   node.default['blueprint']['webapps']['cae-live']['version'] = 'LATEST'
   node.default['blueprint']['webapps']['sitemanager']['version'] = 'LATEST'
-  node.default['blueprint']['webapps']['adobe-drive-server']['version'] = 'LATEST'
-  node.default['blueprint']['webapps']['solr']['version'] = '4.10.4'
-  node.default['blueprint']['webapps']['solr']['config_zip_version'] = 'LATEST'
   node.default['blueprint']['tools']['caefeeder-preview']['version'] = 'LATEST'
   node.default['blueprint']['tools']['caefeeder-live']['version'] = 'LATEST'
   node.default['blueprint']['tools']['content-management-server']['version'] = 'LATEST'

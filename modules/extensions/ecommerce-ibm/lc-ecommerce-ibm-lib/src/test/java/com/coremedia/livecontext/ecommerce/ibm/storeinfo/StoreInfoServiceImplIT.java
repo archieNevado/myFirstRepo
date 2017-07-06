@@ -2,8 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.storeinfo;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
-import org.junit.Before;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,9 +15,9 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Test for {@link com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoServiceImpl}
  */
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class StoreInfoServiceImplIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class StoreInfoServiceImplIT extends IbmServiceTestBase {
 
   @Inject
   private StoreInfoServiceImpl testling;

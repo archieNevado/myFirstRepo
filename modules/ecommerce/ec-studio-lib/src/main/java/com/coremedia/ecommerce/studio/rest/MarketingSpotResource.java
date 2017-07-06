@@ -41,7 +41,7 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
 
   @Override
   protected MarketingSpot doGetEntity() {
-    return getMarketingSpotService().findMarketingSpotByExternalId(getId());
+    return getConnection().getMarketingSpotService().findMarketingSpotByExternalId(getId());
   }
 
   @Override

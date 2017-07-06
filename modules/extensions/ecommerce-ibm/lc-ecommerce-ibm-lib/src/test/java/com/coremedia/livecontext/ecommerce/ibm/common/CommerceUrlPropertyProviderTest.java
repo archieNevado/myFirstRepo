@@ -1,12 +1,14 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -32,9 +34,9 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class CommerceUrlPropertyProviderTest extends IbmServiceTestBase {
 
   private static final String SEO_SEGMENT = "seo";
   private static final String SEARCH_TERM_WITH_UMLAUTS = "eté-küche";
@@ -66,9 +68,14 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
     CommerceConnection connection = Mockito.mock(CommerceConnection.class);
     CatalogServiceImpl catalogService = Mockito.mock(CatalogServiceImpl.class);
 
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
     when(connection.getCatalogService()).thenReturn(catalogService);
     when(catalogService.getLanguageId(any(Locale.class))).thenReturn("-1");
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   @Test
@@ -175,7 +182,7 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
     parametersMap.put(CommerceUrlPropertyProvider.PRODUCT_ID, PRODUCT_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
     if (locale != null) {
-      CatalogService catalogService = Commerce.getCurrentConnection().getCatalogService();
+      CatalogService catalogService = DefaultConnection.get().getCatalogService();
       String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
       parametersMap.put(CommerceUrlPropertyProvider.PARAM_LANG_ID, languageId);
     }
@@ -202,7 +209,7 @@ public class CommerceUrlPropertyProviderTest extends AbstractServiceTest {
     parametersMap.put(CommerceUrlPropertyProvider.CATEGORY_ID, CATEGORY_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
     if (locale != null) {
-      CatalogService catalogService = Commerce.getCurrentConnection().getCatalogService();
+      CatalogService catalogService = DefaultConnection.get().getCatalogService();
       String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
       parametersMap.put(CommerceUrlPropertyProvider.PARAM_LANG_ID, languageId);
     }

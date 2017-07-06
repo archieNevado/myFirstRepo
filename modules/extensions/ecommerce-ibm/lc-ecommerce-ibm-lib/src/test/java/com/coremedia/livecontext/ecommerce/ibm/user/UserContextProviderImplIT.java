@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -18,9 +18,9 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContex
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class UserContextProviderImplIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class UserContextProviderImplIT extends IbmServiceTestBase {
 
   @Inject
   UserContextProviderImpl testling;

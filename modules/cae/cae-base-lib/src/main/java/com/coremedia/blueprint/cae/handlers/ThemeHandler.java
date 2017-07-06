@@ -54,8 +54,9 @@ public class ThemeHandler extends HandlerBase {
       uriComponentsBuilder.queryParam(VIEW_PARAMETER, viewName);
     }
 
-    Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
-            .put(SEGMENT_ID, bean.getContentId()).build();
+    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
+            .put(SEGMENT_ID, bean.getContentId())
+            .build();
 
     return uriComponentsBuilder.buildAndExpand(parameters);
   }

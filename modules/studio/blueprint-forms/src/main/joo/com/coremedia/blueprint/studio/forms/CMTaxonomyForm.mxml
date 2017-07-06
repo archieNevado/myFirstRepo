@@ -24,7 +24,7 @@
             itemId="CMTaxonomy">
       <editor:items>
         <editor:PropertyFieldGroup itemId="taxonomy"
-                                   title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Subject_label')}"
+                                   title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_tags_label')}"
                                    propertyNames="{['value','externalReference']}">
           <editor:items>
             <editor:StringPropertyField bindTo="{config.bindTo}"

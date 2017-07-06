@@ -1,53 +1,76 @@
 package com.coremedia.blueprint.caefeeder;
 
+import com.coremedia.blueprint.base.caefeeder.TreePathKeyFactory;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cap.feeder.bean.PropertyConverter;
+import com.coremedia.objectserver.beans.ContentBean;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class TaxonomyPropertyConverter implements PropertyConverter {
+/**
+ * Abstract class to convert a collection of {@link CMTaxonomy} beans to a comma-separated string of values for all
+ * taxonomies including ancestors - unless {@link #setIgnoreParents(boolean)} was set to true.
+ *
+ * <p>The actual comma-separated values are created in subclasses.
+ */
+public abstract class TaxonomyPropertyConverter implements PropertyConverter, InitializingBean {
   private static final Logger LOGGER = LoggerFactory.getLogger(TaxonomyPropertyConverter.class);
 
   private boolean ignoreParents;
-  private TreePathKeyFactory taxonomyPathKeyFactory;
+  private TreePathKeyFactory<NamedTaxonomy> taxonomyPathKeyFactory;
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    Preconditions.checkState(ignoreParents || taxonomyPathKeyFactory != null,
+                             "taxonomyPathKeyFactory must be set to a non-null value or ignoreParents must be true");
+  }
 
   @Override
   public Object convertValue(Object object) {
-    if (object instanceof List) {
-      @SuppressWarnings("unchecked")
-      List<CMTaxonomy> taxonomies = (List<CMTaxonomy>) object;
-      Set<String> tags = new TreeSet<>();
-      if(ignoreParents) {
-        for(CMTaxonomy taxonomy: taxonomies) {
-          // obtain the path segment (id or value)
-          String tag = taxonomyPathKeyFactory.getPathSegment(taxonomy.getContent());
-          tags.add(tag);
-        }
-      } else {
-        for(CMTaxonomy taxonomy: taxonomies) {
-          // do the (recursive) fragment cache key lookup
-          String path = taxonomyPathKeyFactory.getPath(taxonomy.getContent());
-          // path starts with a slash and is separated by slashes. Ignore the empty token in the beginning.
-          String[] strings = StringUtils.tokenizeToStringArray(path, "/", false, true);
-          tags.addAll(Arrays.asList(strings));
-        }
-      }
-      if(tags.isEmpty()){
-        return null;
-      }
-      // convert the Set to a string like "2,10,6,4,8". order is irrelevant for solr.
-      String convertedValue = StringUtils.collectionToDelimitedString(tags, ",", "", "");
-      LOGGER.debug("Converted into: {}", convertedValue);
-      return convertedValue;
+    if (!(object instanceof Collection)) {
+      return null;
     }
-    return null;
+
+    Collection<?> collection = (Collection<?>) object;
+    Stream<CMTaxonomy> taxonomies = typed(collection.stream(), CMTaxonomy.class);
+    Stream<String> converted;
+    if (ignoreParents) {
+      converted = taxonomies.map(this::convertTaxonomy);
+    } else {
+      converted = taxonomies.map(ContentBean::getContent)
+                            .map(taxonomyPathKeyFactory::getPath) // recursive fragment cache key lookup
+                            .flatMap(Collection::stream)
+                            .map(this::convertNamedTaxonomy);
+    }
+
+    // skip empty values and duplicates and combine into comma-separated result string
+    String result = converted.filter(s -> s != null && !s.trim().isEmpty())
+                             .distinct()
+                             .collect(Collectors.joining(","));
+    if (result.isEmpty()) {
+      result = null;
+    }
+    LOGGER.debug("Converted {} to {}", collection, result);
+    return result;
   }
+
+  private static <T> Stream<T> typed(Stream<?> input, Class<T> type) {
+    return input.filter(type::isInstance).map(type::cast);
+  }
+
+  @Nullable
+  protected abstract String convertNamedTaxonomy(@Nonnull NamedTaxonomy namedTaxonomy);
+
+  @Nullable
+  protected abstract String convertTaxonomy(@Nonnull CMTaxonomy taxonomy);
 
   @Override
   public Class<?> convertType(Class<?> type) {
@@ -62,7 +85,7 @@ public class TaxonomyPropertyConverter implements PropertyConverter {
     this.ignoreParents = ignoreParents;
   }
 
-  public void setTaxonomyPathKeyFactory(TreePathKeyFactory taxonomyPathKeyFactory) {
+  public void setTaxonomyPathKeyFactory(TreePathKeyFactory<NamedTaxonomy> taxonomyPathKeyFactory) {
     this.taxonomyPathKeyFactory = taxonomyPathKeyFactory;
   }
 }

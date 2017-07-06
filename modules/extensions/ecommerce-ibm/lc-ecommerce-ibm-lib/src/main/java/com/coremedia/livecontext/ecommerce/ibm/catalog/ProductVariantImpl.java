@@ -85,7 +85,6 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   @Override
   @Nullable
   public Object getAttributeValue(@Nonnull String attributeId) {
-
     notNull(attributeId);
 
     List<ProductAttribute> attributes = getDefiningAttributes();
@@ -110,28 +109,28 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   @Override
   public List<String> getVariantAxisNames() {
     Product parent = getParent();
-    return parent != null ? parent.getVariantAxisNames() : Collections.<String>emptyList();
+    return parent != null ? parent.getVariantAxisNames() : Collections.emptyList();
   }
 
   @Override
   @Nonnull
   public List<ProductVariant> getVariants() {
     Product parent = getParent();
-    return parent != null ? parent.getVariants() : Collections.<ProductVariant>emptyList();
+    return parent != null ? parent.getVariants() : Collections.emptyList();
   }
 
   @Override
   @Nonnull
   public List<ProductVariant> getVariants(@Nullable List<VariantFilter> filters) {
     Product parent = getParent();
-    return parent != null ? parent.getVariants(filters) : Collections.<ProductVariant>emptyList();
+    return parent != null ? parent.getVariants(filters) : Collections.emptyList();
   }
 
   @Override
   @Nonnull
   public List<ProductVariant> getVariants(@Nullable VariantFilter filter) {
     Product parent = getParent();
-    return parent != null ? parent.getVariants(filter) : Collections.<ProductVariant>emptyList();
+    return parent != null ? parent.getVariants(filter) : Collections.emptyList();
   }
 
   @Override
@@ -152,7 +151,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   @Nonnull
   public Map<ProductVariant, AvailabilityInfo> getAvailabilityMap() {
     Product parent = getParent();
-    return parent != null ? parent.getAvailabilityMap() : Collections.<ProductVariant, AvailabilityInfo>emptyMap();
+    return parent != null ? parent.getAvailabilityMap() : Collections.emptyMap();
   }
 
   @Override

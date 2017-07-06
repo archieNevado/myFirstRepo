@@ -10,6 +10,10 @@
 <StructProperty Name="teaserOverlay">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Light%20on%20Dark.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light%20on%20Dark"/>
+<IntProperty Name="positionX">-36</IntProperty>
+<IntProperty Name="positionY">31</IntProperty>
+<IntProperty Name="width">30</IntProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -30,7 +34,7 @@
 <contexts>
 </contexts>
 <teaserTitle>Register to receive exclusive contract pricing!</teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1 align--center">Join Us Now   </p></div></teaserText>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="align--left p--heading-3">Join Us Now</p><p class="align--left">Register to receive exclusive contract pricing!</p></div></teaserText>
 <pictures>
 <link href="../../Content/Homepage/Corporate%20Image/Chef%20Corp%20Foundf14a982c.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Corporate%20Image/Chef%20Corp%20Founder%20Portrait%20Picture"/>
 </pictures>

@@ -8,11 +8,17 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Represents a human readable sitemap for orientation in the website.
+ * </p>
  * <p>
  * Not to be confused with sitemap.org compliant sitemaps for search engines.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMSitemap}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMSitemap}.</p>
+ * @cm.template.api
  */
 public interface CMSitemap extends CMTeasable {
 
@@ -50,6 +56,15 @@ public interface CMSitemap extends CMTeasable {
    * Returns the value of the document property {@link #ROOT}.
    *
    * @return a {@link CMLinkable} object
+   * @cm.template.api
    */
   CMNavigation getRoot();
+
+  /**
+   * Returns the depth of the sitemap, stored in local setting "sitemap_depth". Default is 3.
+   *
+   * @return depth of the sitemap
+   * @cm.template.api
+   */
+  int getSitemapDepth();
 }

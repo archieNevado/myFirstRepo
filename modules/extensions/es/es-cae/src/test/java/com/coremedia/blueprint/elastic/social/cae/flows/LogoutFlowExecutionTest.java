@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -26,10 +25,6 @@ public class LogoutFlowExecutionTest extends AbstractXmlFlowExecutionTests {
   @Mock
   private LoginHelper loginHelper;
 
-  @Before
-  public void init() {
-  }
-
   protected FlowDefinitionResource getResource(FlowDefinitionResourceFactory resourceFactory) {
     return resourceFactory.createClassPathResource("/com/coremedia/blueprint/es/webflow/com.coremedia.blueprint.es.webflow.Logout.xml", LogoutFlowExecutionTest.class);
   }
@@ -40,17 +35,28 @@ public class LogoutFlowExecutionTest extends AbstractXmlFlowExecutionTests {
   }
 
   @Test
-  public void start() {
+  public void loggedIn() {
     MutableAttributeMap input = new LocalAttributeMap();
     String contextPath = "/context_path";
     MockExternalContext context = new MockExternalContext();
     context.setContextPath(contextPath);
     String logoutRedirectUrl = "http://some.host" + contextPath + "/some/other/url";
     when(flowUrlHelper.getLogoutUrl(any(RequestContext.class))).thenReturn(logoutRedirectUrl);
+    when(loginHelper.isLoggedIn()).thenReturn(true);
 
     startFlow(input, context);
+    assertFlowExecutionOutcomeEquals("bpSuccess");
+  }
 
-    assertCurrentStateEquals("bpLogout");
-    assertEquals(logoutRedirectUrl, getFlowScope().get("nextUrl"));
+  @Test
+  public void notLoggedIn() {
+    MutableAttributeMap input = new LocalAttributeMap();
+    String contextPath = "/context_path";
+    MockExternalContext context = new MockExternalContext();
+    context.setContextPath(contextPath);
+    when(loginHelper.isLoggedIn()).thenReturn(false);
+
+    startFlow(input, context);
+    assertFlowExecutionOutcomeEquals("invalid");
   }
 }

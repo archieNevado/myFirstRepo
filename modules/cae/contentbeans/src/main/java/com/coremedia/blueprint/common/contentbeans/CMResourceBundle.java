@@ -9,8 +9,11 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
+ * Represents document type {@link #NAME CMResourceBundle}.
+ * </p>
  *
- * <p>Represents document type {@link #NAME CMResourceBundle}.</p>
+ * @cm.template.api
  */
 public interface CMResourceBundle extends CMLocalized {
   /**

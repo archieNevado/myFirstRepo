@@ -1,16 +1,19 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.content.ContentType;
+import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.coremedia.rest.cap.intercept.InterceptService;
-import com.coremedia.rest.linking.LinkResolver;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,14 +24,16 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PAGEGRID_STRUCT_PROPERTY;
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.DEFAULT_BASE_FOLDER_NAME;
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.EXTERNAL_ID;
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.SEGMENT;
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.TITLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -39,6 +44,11 @@ import static org.mockito.Mockito.when;
 public class CategoryAugmentationHelperTest {
 
   private static final String CATEGORY_ID = "test:///catalog/category/leafCategory";
+  //External ids of category can contain '/'. See CMS-5075
+  private static final String CATEGORY_DISPLAY_NAME = "le/af";
+  private static final String ESCAPED_CATEGORY_DISPLAY_NAME = "le_af";
+  private static final String ROOT = "root";
+  private static final String TOP = "top";
 
   @Inject
   private ContentRepository contentRepository;
@@ -47,19 +57,70 @@ public class CategoryAugmentationHelperTest {
   @Inject
   private CategoryAugmentationHelper testling;
 
-  @Inject
-  private LinkResolver linkResolver;
+  @Mock
+  private AugmentationService augmentationService;
+
+  @Mock
+  private Category rootCategory;
+
+  @Mock
+  private Category leafCategory;
+
+  @Before
+  public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    testling.setAugmentationService(augmentationService);
+
+    Content rootCategoryContent = contentRepository.getContent("20");
+    when(augmentationService.getContent(rootCategory)).thenReturn(rootCategoryContent);
+
+    //mock category tree
+    when(rootCategory.isRoot()).thenReturn(true);
+    when(rootCategory.getDisplayName()).thenReturn(ROOT);
+    Category topCategory = mock(Category.class);
+    when(topCategory.getParent()).thenReturn(rootCategory);
+    when(topCategory.getDisplayName()).thenReturn(TOP);
+    leafCategory = mock(Category.class, RETURNS_DEEP_STUBS);
+    when(leafCategory.getParent()).thenReturn(topCategory);
+    when(leafCategory.getDisplayName()).thenReturn(CATEGORY_DISPLAY_NAME);
+    when(leafCategory.getId()).thenReturn(CATEGORY_ID);
+    List<Category> breadcrumb = new ArrayList<>();
+    breadcrumb.add(rootCategory);
+    breadcrumb.add(topCategory);
+    breadcrumb.add(leafCategory);
+    when(leafCategory.getBreadcrumb()).thenReturn(breadcrumb);
+    when(leafCategory.getContext().getSiteId()).thenReturn("theSiteId");
+  }
 
   @Test
   public void testAugment() {
-    String categoryUri = "livecontext/category/theSiteId/NO_WS/Dairy";
-    Category category = (Category) linkResolver.resolveLink(categoryUri);
+    testling.augment(leafCategory);
 
-    testling.augment(category);
-
-    Content externalChannel = contentRepository.getChild("/Sites/Content Test/Augmentation/root/top/leaf/leaf");
+    Content externalChannel = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
+            + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME);
     assertNotNull(externalChannel);
-    assertEquals(CATEGORY_ID, externalChannel.getString("externalId"));
+    assertEquals(ESCAPED_CATEGORY_DISPLAY_NAME, externalChannel.getName());
+    assertEquals(CATEGORY_ID, externalChannel.getString(EXTERNAL_ID));
+    assertEquals(CATEGORY_DISPLAY_NAME, externalChannel.getString(TITLE));
+    assertEquals(CATEGORY_DISPLAY_NAME, externalChannel.getString(SEGMENT));
+
+    //assert the initialized layout for category pages
+    Struct categoryPageGridStruct = externalChannel.getStruct(CATEGORY_PAGEGRID_STRUCT_PROPERTY);
+    assertNotNull(categoryPageGridStruct);
+    Struct categoryPlacements2Struct = categoryPageGridStruct.getStruct(PageGridContentKeywords.PLACEMENTS_PROPERTY_NAME);
+    assertNotNull(categoryPlacements2Struct);
+    Content categoryLayout = (Content) categoryPlacements2Struct.get(PageGridContentKeywords.LAYOUT_PROPERTY_NAME);
+    assertNotNull(categoryLayout);
+    assertEquals("CategoryLayoutSettings", categoryLayout.getName());
+
+    //assert the initialized layout for product pages
+    Struct productPageGridStruct = externalChannel.getStruct(CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY);
+    assertNotNull(productPageGridStruct);
+    Struct productPlacements2Struct = productPageGridStruct.getStruct(PageGridContentKeywords.PLACEMENTS_PROPERTY_NAME);
+    assertNotNull(productPlacements2Struct);
+    Content productLayout = (Content) productPlacements2Struct.get(PageGridContentKeywords.LAYOUT_PROPERTY_NAME);
+    assertNotNull(productLayout);
+    assertEquals("ProductLayoutSettings", productLayout.getName());
   }
 
   @Configuration
@@ -84,35 +145,7 @@ public class CategoryAugmentationHelperTest {
 
     @Bean
     public InterceptService interceptService() {
-      InterceptService interceptService = mock(InterceptService.class);
-      ContentWriteRequest contentWriteRequest = mock(ContentWriteRequest.class);
-      when(interceptService.interceptCreate(any(Content.class), anyString(), any(ContentType.class), anyMap()))
-              .thenReturn(contentWriteRequest);
-      when(contentWriteRequest.getProperties()).thenReturn(Collections.<String, Object>singletonMap("externalId", CATEGORY_ID));
-      return interceptService;
-    }
-
-    @Bean
-    public LinkResolver linkResolver() {
-      LinkResolver linkResolver = mock(LinkResolver.class);
-
-      //mock category tree
-      Category rootCategory = mock(Category.class);
-      when(rootCategory.getDisplayName()).thenReturn("root");
-      Category topCategory = mock(Category.class);
-      when(topCategory.getDisplayName()).thenReturn("top");
-      Category leafCategory = mock(Category.class, RETURNS_DEEP_STUBS);
-      when(leafCategory.getDisplayName()).thenReturn("leaf");
-      when(leafCategory.getId()).thenReturn(CATEGORY_ID);
-      List<Category> breadcrumb = new ArrayList<>();
-      breadcrumb.add(rootCategory);
-      breadcrumb.add(topCategory);
-      breadcrumb.add(leafCategory);
-      when(leafCategory.getBreadcrumb()).thenReturn(breadcrumb);
-      when(leafCategory.getContext().getSiteId()).thenReturn("theSiteId");
-
-      when(linkResolver.resolveLink(anyString())).thenReturn(leafCategory);
-      return linkResolver;
+      return null;
     }
   }
 }

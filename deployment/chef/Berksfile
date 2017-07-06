@@ -1,4 +1,3 @@
-source 'https://supermarket.coremedia.com'
 source 'https://supermarket.chef.io'
 
 cwd = File.dirname(__FILE__)

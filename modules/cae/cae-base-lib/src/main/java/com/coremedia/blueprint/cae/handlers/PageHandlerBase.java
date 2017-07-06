@@ -18,6 +18,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -144,9 +145,11 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
       page.setValidFrom(cmLinkable.getValidFrom());
       page.setValidTo(cmLinkable.getValidTo());
     }
+
     // load a dataview for the page
-    if (getDataViewFactory() != null) {
-      page = getDataViewFactory().loadCached(page, null);
+    DataViewFactory dataViewFactory = getDataViewFactory();
+    if (dataViewFactory != null) {
+      page = dataViewFactory.loadCached(page, null);
     }
     return page;
   }

@@ -22,7 +22,7 @@ public class PreviewInfoItem {
 
   /**
    * Returns the token that identifies this item.
-   * @return
+   * @return token
    */
   public String getToken() {
     return token;
@@ -30,7 +30,7 @@ public class PreviewInfoItem {
 
   /**
    * The preview data is already json, so this works like a regular getter.
-   * @return
+   * @return data as json
    */
   public String asJSON() {
     return data;

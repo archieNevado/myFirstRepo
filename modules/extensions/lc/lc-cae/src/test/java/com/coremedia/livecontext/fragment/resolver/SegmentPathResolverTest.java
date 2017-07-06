@@ -13,7 +13,6 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -139,15 +138,6 @@ public class SegmentPathResolverTest {
     parameters.setExternalReference("cm-segmentpath:!");
     LinkableAndNavigation can = testling.resolveExternalRef(parameters, site);
     assertNull(can);
-  }
-
-  @Ignore  // Known shortcoming.
-  @Test
-  public void testEvilSegment() {
-    FragmentParameters parameters = createFragmentParameters();
-    parameters.setExternalReference("cm-segmentpath:!root!level1!bses!Dokument");
-    LinkableAndNavigation can = testling.resolveExternalRef(parameters, site);
-    checkResult(can, 128, 8);
   }
 
 

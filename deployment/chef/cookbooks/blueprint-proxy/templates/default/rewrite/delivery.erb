@@ -5,7 +5,7 @@
 
   # Internal services, served only by Tomcat. Deny external invocation.
   RewriteRule ^/internal/(.*) - [F,PT,L]
-  RewriteRule ^/<%= @params[:servlet_context] %>/servlet/internal/(.*) - [F,PT,L]
+  RewriteRule ^/<%= @params[:servlet_context] %>/+servlet/+internal/(.*) - [F,PT,L]
 
   # robots.txt
   RewriteRule ^/robots.txt /<%= @params[:servlet_context] %>/servlet/service/robots/<%= @params[:default_site] %> [PT,L]
@@ -13,6 +13,7 @@
   # Send empty URL to <%= @params[:default_site] %> home page
   RewriteRule ^/$ /<%= @params[:default_site] %> [R=302,L]
 
-  RewriteRule ^/<%= @params[:servlet_context] %>/servlet/sitemap-generation$ - [F,PT,L]
-  RewriteRule  ^/sitemap_index.xml  /<%= @params[:servlet_context] %>/servlet/service/sitemap/Sites/<%= @params[:sitemap_site_name] %>/United\\%20States/English/sitemap_index.xml  [L]
-  RewriteRule  ^/sitemap(.*).xml.gz  /<%= @params[:servlet_context] %>/servlet/service/sitemap/Sites/<%= @params[:sitemap_site_name] %>/United\\%20States/English/sitemap$1.xml.gz  [L]
+  <% if @params[:site_id] -%>
+    RewriteRule  ^/sitemap_index.xml  /<%= @params[:servlet_context] %>/servlet/service/sitemap/<%= @params[:site_id] %>/sitemap_index.xml  [PT,L]
+    RewriteRule  ^/sitemap(.*).xml.gz  /<%= @params[:servlet_context] %>/servlet/service/sitemap/<%= @params[:site_id] %>/sitemap$1.xml.gz  [PT,L]
+  <%- end -%>

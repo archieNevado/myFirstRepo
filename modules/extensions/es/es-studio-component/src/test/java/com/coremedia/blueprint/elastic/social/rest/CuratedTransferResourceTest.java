@@ -241,6 +241,31 @@ public class CuratedTransferResourceTest {
     verify(articleToCopyTo).set(CMARTICLE_PROPERTY_TITLE, articleName);
   }
 
+  @Test
+  public void postProcess_commentNotFound() throws ParseException {
+    String articleContentId = VALID_CONTENT_ID;
+    String commentId = "42";
+    String articleName = "test";
+
+    // Mock services
+    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
+    ReviewService reviewService = mockAndInjectInto(ReviewService.class, curatedTransferResource);
+    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
+
+    Content articleToCopyTo = mockContent();
+    when(articleToCopyTo.getName()).thenReturn(articleName);
+    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
+
+    //No comment or review found
+    when(commentService.getComment(commentId)).thenReturn(null);
+    when(reviewService.getReview(commentId)).thenReturn(null);
+
+    // Actual computation
+    curatedTransferResource.postProcess(articleContentId, commentId);
+
+    verify(articleToCopyTo, never()).set(eq(CONTENT_PROPERTY_TO_COPY_TO), anyString());
+    verify(articleToCopyTo, never()).set(eq(CMARTICLE_PROPERTY_TITLE), anyString());
+  }
 
   // --- CuratedTransfer: Image attachments ----------------------------------------------------------------------------
 

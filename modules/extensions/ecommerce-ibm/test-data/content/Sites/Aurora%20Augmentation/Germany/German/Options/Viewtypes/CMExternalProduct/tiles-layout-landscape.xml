@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMViewtype folder="/Sites/Aurora Augmentation/Germany/German/Options/Viewtypes/CMExternalProduct" name="tiles-layout-landscape" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../United%20States/English/Options/Viewtypes/CMExternalProduct/tiles-layout-landscape.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMExternalProduct/tiles-layout-landscape"/>
+</master>
+<description>Displays a collection in a tiles layout (landscape).</description>
+<icon md5="7f786d67feee73ddc3b30aa5d83a7247" size="3577" href="../../../../../../../__blob/7f786d67feee73ddc3b30aa5d83a7247.blob" mimetype="image/png"/>
+<layout>tiles-layout-landscape</layout>
+</CMViewtype>

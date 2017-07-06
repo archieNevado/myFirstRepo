@@ -7,10 +7,11 @@
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         id_="externalPreviewDialog"
+        stateId="externalPreviewWindowState"
+        stateful="true"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_title')}"
         width="490"
         resizable="true"
-        focusOnToFront="false"
         ui="{WindowSkin.GRID_200_DARK.getSkin()}"
         constrainHeader="true">
   <fx:Metadata>
@@ -19,8 +20,7 @@
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.blueprint.studio.externalpreview.ExternalPreviewPluginBase;
-    import com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPluginBase;
-    import com.coremedia.ui.layouts.BEMLayouts;
+    import com.coremedia.ui.bem.SpacingBEMEntities;
     import com.coremedia.ui.skins.ButtonSkin;
     import com.coremedia.ui.skins.WindowSkin;
 
@@ -53,7 +53,7 @@
           <items>
             <Button itemId="mailLinkButton"
                     scale="small"
-                    ui="{ButtonSkin.INLINE_SECONDARY.getSkin()}"
+                    ui="{ButtonSkin.INLINE.getSkin()}"
                     text="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_mail_button')}"
                     handler="{mailPreviewLink}"/>
           </items>
@@ -63,8 +63,7 @@
                       value="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_dialog_tip_text')}"/>
       </editor:items>
       <editor:plugins>
-        <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
-                      defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+        <ui:VerticalSpacingPlugin/>
       </editor:plugins>
     </editor:CollapsiblePanel>
     <editor:CollapsiblePanel
@@ -92,8 +91,6 @@
     </Toolbar>
   </local:fbar>
   <local:plugins>
-    <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
-                  modifier="{BEMLayouts.VERTICAL_SPACING_MODIFIER_200}"
-                  defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+    <ui:VerticalSpacingPlugin modifier="{SpacingBEMEntities.VERTICAL_SPACING_MODIFIER_200}"/>
   </local:plugins>
 </local:ExternalPreviewWindowBase>

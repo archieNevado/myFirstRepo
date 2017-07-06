@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * <p>
  * Helper document: All root navigations must be referred to by a CMSite.
  * This is an internal optimization to find the root navigations quickly.
- *
- * <p>Represents the document type {@link #NAME CMSite}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMSite}.
+ * </p>
  */
 public interface CMSite extends CMLocalized {
   /**

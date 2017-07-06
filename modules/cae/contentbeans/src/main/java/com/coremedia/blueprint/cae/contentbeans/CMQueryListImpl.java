@@ -1,9 +1,13 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.cae.search.Condition;
+import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.SearchResultBean;
+import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.SettingsStructToSearchQueryConverter;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -48,6 +52,10 @@ public class CMQueryListImpl extends CMQueryListBase {
 
     SearchQueryBean searchQuery = getSearchQuery();
     int limit = searchQuery.getLimit();
+
+    // exclude this CMTeasable from results
+    Condition excludeThis = Condition.isNot(SearchConstants.FIELDS.ID.toString(), Value.exactly(ContentBeanSolrSearchFormatHelper.getContentBeanId(this)));
+    searchQuery.addFilter(excludeThis);
 
     if (limit > 0 && limit < tempResult.size()) {
       result.addAll(tempResult.subList(0, tempResult.size() > limit ? limit : tempResult.size()));

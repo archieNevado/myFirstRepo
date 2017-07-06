@@ -1,15 +1,16 @@
 package com.coremedia.livecontext.preview;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +37,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
 
   private static final String SEGMENT_CATEGORY_PREVIEW = "categoryPreview";
 
-  // e.g. /categoryPreview/perfectchef/segment-1234
+  // e.g. /categoryPreview/shopName/segment-1234
   public static final String PREVIEW_URI_PATTERN =
           "/" + SEGMENT_CATEGORY_PREVIEW +
                   "/{" + SHOP_NAME_VARIABLE + "}" +
@@ -68,8 +67,8 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
           final LiveContextExternalChannelImpl navigation,
           final String viewName,
           final Map<String, Object> linkParameters) {
-    StoreContextProvider storeContextProvider = getStoreContextProvider();
-    if (storeContextProvider != null && storeContextProvider.getCurrentContext() != null) {
+    CommerceConnection currentConnection = DefaultConnection.get();
+    if (currentConnection != null && currentConnection.getStoreContext() != null) {
 
       Category category;
       try {
@@ -79,9 +78,8 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
         if (category != null && category.isRoot()) {
           return null;
         }
-      } catch (NotFoundException e) {
-        return null;
-      } catch (InvalidIdException e) {
+      } catch (NotFoundException | InvalidIdException e) {
+        LOG.debug("ignoring exception while checking category of {}", navigation, e);
         return null;
       }
 
@@ -99,21 +97,6 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
 
   private boolean useCommerceCategoryLinks(Site site) {
     return externalNavigationHandler.useCommerceCategoryLinks(site);
-  }
-
-  private UriComponents buildPreviewLinkForLiveContextExternalChannel(
-          @Nonnull final LiveContextExternalChannelImpl navigation,
-          final String viewName,
-          final Map<String, Object> linkParameters) {
-    Site site = navigation.getSite();
-    String siteSegment = getSiteSegment(site);
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder
-            .newInstance()
-            .pathSegment(SEGMENT_CATEGORY_PREVIEW)
-            .pathSegment(siteSegment)
-            .pathSegment(getVanityName(navigation) + "-" + navigation.getContentId());
-    addViewAndParameters(uriBuilder, viewName, linkParameters);
-    return uriBuilder.build();
   }
 
   @Required

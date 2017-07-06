@@ -1,5 +1,6 @@
 <#ftl strip_whitespace=true>
 <#-- @ftlvariable name="liveContextFreemarkerFacade" type="com.coremedia.livecontext.web.taglib.LiveContextFreemarkerFacade" -->
+<#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
 
 <#--
  * Renders an addToCart button
@@ -67,7 +68,16 @@
   <#return liveContextFreemarkerFacade.getPreviewMetadata()>
 </#function>
 
+<#function augmentedContent>
+  <#return liveContextFreemarkerFacade.isAugmentedContent()>
+</#function>
+
 <#function fragmentHighlightingMetaData placement>
-  <#return liveContextFreemarkerFacade.getFragmentHighlightingMetaData(placement)>
+  <#return blueprintFreemarkerFacade.getPlacementHighlightingMetaData(placement)>
+</#function>
+
+<#-- Returns name of eCommerce Vendor like IBM or SAP Hybris -->
+<#function getVendorName>
+  <#return liveContextFreemarkerFacade.getVendorName()>
 </#function>
 

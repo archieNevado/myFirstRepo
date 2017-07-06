@@ -36,10 +36,7 @@ features/*
 examples/*
 Guardfile
 Procfile
-.kitchen/*
 build
-.kitchen.*
-Vagrantfile.erb
 
 # SCM #
 #######
@@ -64,12 +61,6 @@ Berksfile.lock
 CONTRIBUTING*
 CHANGELOG*
 TESTING*
-
-# Vagrant #
-###########
-.vagrant
-Vagrantfile
-vagrantfiles/*
 
 # Travis #
 ##########

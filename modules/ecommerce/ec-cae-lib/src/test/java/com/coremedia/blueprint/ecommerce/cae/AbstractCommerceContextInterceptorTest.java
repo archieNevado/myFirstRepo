@@ -1,8 +1,9 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
+import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.links.BlueprintUriConstants;
@@ -72,7 +73,7 @@ public class AbstractCommerceContextInterceptorTest {
   @Test
   public void testNormalizeDynamicFragmentPath() {
     String path = "/cart/helios/action/cart";
-    String dynamicPath = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + path;
+    String dynamicPath = "/" + UriConstants.Segments.PREFIX_DYNAMIC + path;
 
     String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(dynamicPath);
 
@@ -105,7 +106,7 @@ public class AbstractCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     assertThat(currentConnection).isNotNull();
 
     StoreContext context = currentConnection.getStoreContext();

@@ -44,7 +44,7 @@
 <data md5="72abe0d12c5b05f97a7a3047074a156c" size="17213599" href="../../../../../../__blob/72abe0d12c5b05f97a7a3047074a156c.blob" mimetype="video/mp4"/>
 <timeLine>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<LinkProperty Name="defaultTarget" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../Navigation/Fragments/Search%20Landing%20Pages/Spring%20Summer%20Dresse48133204.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/Spring%20Summer%20Dresses%20Hidden%20Landing%20Page"/>
+<LinkProperty Name="defaultTarget" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../Augmentation/Apparel/Women/Dresses/Dresses.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses"/>
 <StructListProperty Name="sequences">
 <Struct>
 <LinkProperty Name="link" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Dress%201%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Videos/Shoppable/Dress%201%20Teaser"/>

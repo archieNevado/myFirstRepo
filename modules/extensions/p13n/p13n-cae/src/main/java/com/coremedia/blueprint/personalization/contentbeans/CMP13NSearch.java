@@ -7,11 +7,16 @@ import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import java.util.List;
 
 /**
+ * <p>
  * Generated interface for beans of document type "CMP13NSearch".
- *
- * The bean corresponding to the <code>CMP13NSearch</code> document type. It represents
+ * </p>
+ * <p>
+ * The bean corresponding to the {@code CMP13NSearch} document type. It represents
  * a Solr query that may contain search functions accessing the active user's context and thus
  * contextualizing the search.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMP13NSearch extends CMDynamicList<CMTeasable> {
 
@@ -28,18 +33,21 @@ public interface CMP13NSearch extends CMDynamicList<CMTeasable> {
 
   /**
    * Returns the value of the document property "documentType"
+   *
    * @return the value
    */
   String getDocumentType();
 
   /**
    * Returns the value of the document property "searchContext"
+   *
    * @return the value of the document property "searchContext"
    */
   List<CMNavigation> getNavigationList();
 
   /**
    * Returns the value of the document property "searchQuery"
+   *
    * @return the value
    */
   String getSearchQuery();
@@ -48,12 +56,14 @@ public interface CMP13NSearch extends CMDynamicList<CMTeasable> {
    * Provides access to the status produced while executing {@link #getItems()} as a dictionary in JSON notation.
    * Intended to be included in an HTML (preview) page so it can be picked up by CoreMedia Studio components.
    *
-   * @return the current status or <code>null</code>
+   * @return the current status or {@code null}
+   * @cm.template.api
    */
   String getSearchStatusAsJSON();
 
   /**
    * Returns the value of the document property "master"
+   *
    * @return the value
    */
   @Override

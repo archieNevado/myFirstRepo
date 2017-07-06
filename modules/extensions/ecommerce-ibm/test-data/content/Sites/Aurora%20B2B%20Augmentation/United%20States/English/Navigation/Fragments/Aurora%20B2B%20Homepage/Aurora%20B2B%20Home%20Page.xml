@@ -24,12 +24,11 @@
 <link href="../../../Options/Settings/ExternalLibraries.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/ExternalLibraries"/>
 </linkedSettings>
 <resourceBundles2>
-<link href="../../../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
 </resourceBundles2>
 <segment>aurorab2b</segment>
-<title>Aurora B2B Homepage</title>
+<title>Home</title>
 <htmlTitle></htmlTitle>
-<keywords>CoreMedia,Aurora,Aurora Augmentation,Demo,Blueprint,LiveContext,CoreMedia LiveContext 2.0 for IBM WebSphere Commerce</keywords>
+<keywords>CoreMedia,Aurora,Aurora Augmentation,Demo,Blueprint,LiveContext,CoreMedia LiveContext 3.0 for IBM WebSphere Commerce</keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
 </subjectTaxonomy>
@@ -43,9 +42,13 @@
 <related>
 </related>
 <children>
-<link href="../../../Augmentation/Aurora%20B2B%20Catalog%20Root.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/Aurora%20B2B%20Catalog%20Root"/>
+<link href="../../../Augmentation/Fasteners/Fasteners.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/Fasteners/Fasteners"/>
+<link href="../../../Augmentation/B2B_Kitchen_Products/Kitchen%20Products.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Kitchen_Products/Kitchen%20Products"/>
+<link href="../../../Augmentation/Hardware%20Lighting/Hardware%20Lighting.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/Hardware%20Lighting/Hardware%20Lighting"/>
+<link href="../../../Augmentation/B2B_Decorating/Decorating.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Decorating/Decorating"/>
 <link href="../../Microsites/Microsite%20Root%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Microsites/Microsite%20Root%20Page"/>
 <link href="../Augmented%20Pages/Augmented%20Pages%20Root%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Navigation/Fragments/Augmented%20Pages/Augmented%20Pages%20Root%20Page"/>
+<link href="../../../Augmentation/Aurora%20B2B%20Catalog%20Root.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/Aurora%20B2B%20Catalog%20Root"/>
 </children>
 <hidden>1</hidden>
 <hiddenInSitemap>1</hiddenInSitemap>
@@ -61,7 +64,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/Hero%20Layout.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Layouts/Hero%20Layout"/>
 <StructProperty Name="placements">
 <Struct>
 </Struct>
@@ -71,20 +74,33 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion3fc631ae.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Products/Kitchen%20Goods%20Promotion%20Teaser%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Decorating%20Category%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Decorating%20Category%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Decorating/Decorating%20Products%20Category%20eaa7dc7e.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Decorating/Decorating%20Products%20Category%20Promotion%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Products/Aurora%20B2B/Kitchen/Chef%20Wave/Chef%20Wave%a6d3455f.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Products/Aurora%20B2B/Kitchen/Chef%20Wave/Chef%20Wave%20Heavy%20Duty%20Fryer%20Large"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Products/Aurora%20B2B/Kitchen/Blenders/Kitchenette%20K3ece5786.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Products/Aurora%20B2B/Kitchen/Blenders/Kitchenette%20KN30%20Blender"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Products/Aurora%20B2B/Kitchen/Ranges/Chef%20Ranges%20Ccfb31849.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Products/Aurora%20B2B/Kitchen/Ranges/Chef%20Ranges%20CR990%20Product%20Teaser"/>
 </LinkListProperty>
-<BooleanProperty Name="locked">false</BooleanProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/tiles-layout-portrait.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-portrait"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../../../Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement1.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement1"/>
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Decorating%20Category%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Decorating%20Category%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Decorating/Decorating%20Products%20Category%20eaa7dc7e.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Decorating/Decorating%20Products%20Category%20Promotion%20Collection"/>
 </LinkListProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/header"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../../../Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement2"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Hardware%20Lighting%20Category%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Lighting/Lighting%20Products%20Promotion%20Collection"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../../../Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement3"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Kitchen%20Teaser.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Kitchen%20Teaser"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../../../Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 </StructListProperty>
 </Struct>

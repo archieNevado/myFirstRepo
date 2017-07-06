@@ -8,4 +8,4 @@ Asset Management extension for LiveContext. This is, together with "Asset Manage
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/lc2/current/manuals/coremedia-en/webhelp/content/AssetManagementDrive.html)
+See the "Advanced Asset Management" chapter of the CoreMedia Developer Manual.

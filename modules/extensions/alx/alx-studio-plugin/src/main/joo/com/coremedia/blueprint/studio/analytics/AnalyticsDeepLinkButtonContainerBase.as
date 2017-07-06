@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.studio.analytics {
 
+import com.coremedia.ui.components.IconButton;
 import com.coremedia.ui.skins.ButtonSkin;
 
 import ext.Ext;
@@ -44,15 +45,16 @@ internal class AnalyticsDeepLinkButtonContainerBase extends Container {
     var buttonMenu:Menu = new Menu(menuCfg);
 
     // create menu button that holds the above menu
-    var buttonCfg:Button = Button({});
+    var buttonCfg:IconButton = IconButton({});
     buttonCfg.iconCls = resourceManager.getString('com.coremedia.icons.CoreIcons', 'analytics');
     buttonCfg.ui = ButtonSkin.WORKAREA.getSkin();
     buttonCfg.scale = 'medium';
     buttonCfg.itemId = 'analyticsReportButton';
+    buttonCfg.text = resourceManager.getString('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin', 'multi_analytics_button_text');
     buttonCfg.tooltip = resourceManager.getString('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin', 'multi_analytics_button_tooltip');
     buttonCfg.disabled = true;
     buttonCfg.menu = buttonMenu;
-    var newButton:Button = new Button(buttonCfg);
+    var newButton:IconButton = new IconButton(buttonCfg);
 
     add(newButton);
   }

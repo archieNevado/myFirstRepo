@@ -2,16 +2,16 @@ package com.coremedia.livecontext.fragment.links.transformers.resolvers;
 
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
+import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
-import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
+import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.SeoSegmentBuilder;
 import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
-import com.coremedia.livecontext.logictypes.MicroSiteExtension;
+import com.coremedia.livecontext.logictypes.CommerceLedPageExtension;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -51,19 +51,19 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
   public static final String TOP_CATEGORY_ID = "topCategoryId";
   public static final String PARENT_CATEGORY_ID = "parentCategoryId";
 
-  private ExternalSeoSegmentBuilder externalSeoSegmentBuilder;
+  private SeoSegmentBuilder seoSegmentBuilder;
 
-  private MicroSiteExtension microSiteExtension;
+  private CommerceLedPageExtension commerceLedPageExtension;
   private ExternalNavigationHandler externalNavigationHandler;
 
   @Required
-  public void setMicroSiteExtension(MicroSiteExtension microSiteExtension) {
-    this.microSiteExtension = microSiteExtension;
+  public void setCommerceLedPageExtension(CommerceLedPageExtension commerceLedPageExtension) {
+    this.commerceLedPageExtension = commerceLedPageExtension;
   }
 
   @Required
-  public void setExternalSeoSegmentBuilder(ExternalSeoSegmentBuilder externalSeoSegmentBuilder) {
-    this.externalSeoSegmentBuilder = externalSeoSegmentBuilder;
+  public void setSeoSegmentBuilder(SeoSegmentBuilder seoSegmentBuilder) {
+    this.seoSegmentBuilder = seoSegmentBuilder;
   }
 
   @Required
@@ -101,13 +101,17 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
       // Product
       if (bean instanceof CMProductTeaser || bean instanceof ProductInSite) {
         Product product;
+        // Todo: mbi better logging
         if (bean instanceof CMProductTeaser) {
           product = ((CMProductTeaser) bean).getProduct();
+          if (product == null) {
+            throw new IllegalArgumentException("Product cannot be retrieved (product teaser: " + ((CMProductTeaser) bean).getContent().getPath() + ")");
+          }
         } else {
           product = ((ProductInSite) bean).getProduct();
-        }
-        if (product == null) {
-          throw new IllegalArgumentException("Product cannot be retrieved");
+          if (product == null) {
+            throw new IllegalArgumentException("Product cannot be retrieved (in site: " + ((ProductInSite) bean).getSite() + ")");
+          }
         }
 
         //set type and id
@@ -165,16 +169,16 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
         out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_CONTENT);
         out.put(CONTENT_ID, contentId);
 
-        // Set URL keyword for micro site
-        if (microSiteExtension.isMicroSite(contentBean)) {
-          String microSiteContentURLKeyword = microSiteExtension.getContentURLKeywordForMicroSite(contentBean);
-          if (StringUtils.isNotBlank(microSiteContentURLKeyword)) {
-            out.put("staticContentURLKeyword", microSiteContentURLKeyword);
+        // read url prefix for coremedia content
+        if (commerceLedPageExtension.isCommerceLedChannel(contentBean)) {
+          String contentURLKeyword = commerceLedPageExtension.getContentURLKeyword();
+          if (StringUtils.isNotBlank(contentURLKeyword)) {
+            out.put("staticContentURLKeyword", contentURLKeyword);
           }
         }
 
         // SEO Segments
-        String externalSeoSegment = externalSeoSegmentBuilder.asSeoSegment(navigation, contentBean);
+        String externalSeoSegment = seoSegmentBuilder.asSeoSegment(navigation, contentBean);
         if (StringUtils.isNotBlank(externalSeoSegment)) {
           out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalSeoSegment);
         }

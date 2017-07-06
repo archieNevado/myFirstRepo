@@ -13,8 +13,14 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Base type for navigation items.
- * <p>Represents the document type {@link #NAME CMNavigation}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMNavigation}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMNavigation extends Navigation, CMTeasable, FeedSource<CMLinkable> {
 
@@ -67,6 +73,7 @@ public interface CMNavigation extends Navigation, CMTeasable, FeedSource<CMLinka
    * Returns the value of the document property {@link #JAVA_SCRIPT}.
    *
    * @return a list of {@link CMJavaScript} objects
+   * @cm.template.api
    */
   List<CMJavaScript> getJavaScript();
 
@@ -84,6 +91,7 @@ public interface CMNavigation extends Navigation, CMTeasable, FeedSource<CMLinka
    * Returns the value of the document property {@link #CSS}.
    *
    * @return a list of {@link CMCSS} objects
+   * @cm.template.api
    */
   List<CMCSS> getCss();
 
@@ -96,6 +104,7 @@ public interface CMNavigation extends Navigation, CMTeasable, FeedSource<CMLinka
    * Returns the value of the document property {@link #FAVICON}.
    *
    * @return the value of the document property {@link #FAVICON}
+   * @cm.template.api
    */
   Blob getFavicon();
 

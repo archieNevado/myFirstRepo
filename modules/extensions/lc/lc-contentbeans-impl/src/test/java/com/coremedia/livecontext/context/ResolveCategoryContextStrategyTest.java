@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.context;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.multisite.Site;
@@ -10,9 +10,11 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -26,21 +28,43 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResolveCategoryContextStrategyTest {
-  @SuppressWarnings("ConstantConditions")
-  @Test(expected = IllegalArgumentException.class)
-  public void findNearestCategoryForNoSeoSegmentProvided() {
-    testling.findNearestCategoryFor(null, defaultContext);
-  }
+
+  private static final String DEFAULT_SEO_SEGMENT = "billion-year-bunker";
+  private static final String DEFAULT_SITE_ID = "Sirius-Cybernetics-Corporation";
+  private static final long DEFAULT_CACHED_TIME_SECONDS = 2;
+
+  private Cache cache;
+
+  @InjectMocks
+  private ResolveCategoryContextStrategy testling;
+
+  @Mock
+  private CatalogService catalogService;
+
+  @Mock
+  private StoreContext defaultContext;
+
+  @Mock
+  private StoreContextProvider storeContextProvider;
+
+  @Mock
+  private Site site;
+
+  @Mock
+  private Category defaultCategory;
+
+  @Mock
+  private LiveContextNavigationFactory liveContextNavigationFactory;
+
+  @Mock
+  private LiveContextNavigation defaultLiveContextNavigation;
+
+  @Mock
+  private CommerceConnection connection;
 
   @Test(expected = IllegalArgumentException.class)
   public void findNearestCategoryForEmptySeoSegmentProvided() {
     testling.findNearestCategoryFor("         ", defaultContext);
-  }
-
-  @SuppressWarnings("ConstantConditions")
-  @Test(expected = IllegalArgumentException.class)
-  public void findNearestCategoryForNoStoreContextProvided() {
-    testling.findNearestCategoryFor(DEFAULT_SEO_SEGMENT, null);
   }
 
   @Test
@@ -49,18 +73,6 @@ public class ResolveCategoryContextStrategyTest {
 
     assertEquals(defaultCategory, result);
     verify(catalogService, times(1)).findCategoryBySeoSegment(DEFAULT_SEO_SEGMENT);
-  }
-
-  @SuppressWarnings("ConstantConditions")
-  @Test(expected = IllegalArgumentException.class)
-  public void resolveContextNoShopNameProvided() {
-    testling.resolveContext(null, DEFAULT_SEO_SEGMENT);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void resolveContextNoSeoSegmentProvided() {
-    //noinspection ConstantConditions
-    testling.resolveContext(site, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -119,7 +131,7 @@ public class ResolveCategoryContextStrategyTest {
   public void defaultSetup() {
     cache = new Cache("test-cache");
 
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
 
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getCatalogService()).thenReturn(catalogService);
@@ -137,6 +149,11 @@ public class ResolveCategoryContextStrategyTest {
     when(site.getName()).thenReturn(DEFAULT_SITE_ID);
   }
 
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
+  }
+
   private void waitUntilCacheIsEmpty(long maximumWaitMillis) throws InterruptedException {
     long start = System.currentTimeMillis();
     long duration = 0;
@@ -149,34 +166,4 @@ public class ResolveCategoryContextStrategyTest {
     }
   }
 
-  private ResolveCategoryContextStrategy testling;
-  private Cache cache;
-
-  @Mock
-  private CatalogService catalogService;
-
-  @Mock
-  private StoreContext defaultContext;
-
-  @Mock
-  private StoreContextProvider storeContextProvider;
-
-  @Mock
-  private Site site;
-
-  @Mock
-  private Category defaultCategory;
-
-  @Mock
-  private LiveContextNavigationFactory liveContextNavigationFactory;
-
-  @Mock
-  private LiveContextNavigation defaultLiveContextNavigation;
-
-  @Mock
-  private CommerceConnection connection;
-
-  private static final String DEFAULT_SEO_SEGMENT = "billion-year-bunker";
-  private static final String DEFAULT_SITE_ID = "Sirius-Cybernetics-Corporation";
-  private static final long DEFAULT_CACHED_TIME_SECONDS = 2;
 }

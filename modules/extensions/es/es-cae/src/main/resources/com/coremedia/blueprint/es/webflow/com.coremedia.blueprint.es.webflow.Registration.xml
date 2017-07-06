@@ -14,7 +14,7 @@
   </on-start>
 
   <view-state id="bpRegistration" model="bpRegistration">
-    <transition on="submit" to="bpRegistrationSuccess" validate="false">
+    <transition on="submit" to="bpRegistrationSuccess">
       <set name="requestScope.emailAddress" value="bpRegistration.emailAddress"/>
       <evaluate expression="registrationHelper.register(bpRegistration, flowRequestContext, requestParameters.imageFile)"/>
     </transition>

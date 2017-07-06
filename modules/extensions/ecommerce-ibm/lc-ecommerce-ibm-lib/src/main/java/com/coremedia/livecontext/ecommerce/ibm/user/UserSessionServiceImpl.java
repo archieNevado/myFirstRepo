@@ -2,7 +2,9 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService;
@@ -37,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -119,15 +122,16 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   @Override
   public void pingCommerce(HttpServletRequest request, HttpServletResponse response) {
     try {
-      String baseUrl = CommercePropertyHelper.replaceTokens(wcsStorefrontUrl, getStoreContextProvider().getCurrentContext());
-      StoreContext currentContext = getStoreContextProvider().getCurrentContext();
+      CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+      StoreContext currentContext = connection.getStoreContext();
+      String baseUrl = getWcsStorefrontUrl(currentContext);
 
       Map<String, Object> params = new HashMap<>();
       params.put(CommerceUrlPropertyProvider.STORE_CONTEXT, currentContext);
       params.put(CommerceUrlPropertyProvider.URL_TEMPLATE, baseUrl);
 
       UriComponents pingUrl = (UriComponents) getUrlProvider().provideValue(params);
-      handleStorefrontCall(pingUrl.toUriString(), Collections.<String, String>emptyMap(), request, response);
+      handleStorefrontCall(pingUrl.toUriString(), Collections.emptyMap(), request, response);
     } catch (GeneralSecurityException e) {
       LOG.warn("Security exception occurred.", e);
     }
@@ -381,6 +385,10 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   @Required
   public void setWcsStorefrontUrl(String wcsStorefrontUrl) {
     this.wcsStorefrontUrl = wcsStorefrontUrl;
+  }
+
+  private String getWcsStorefrontUrl(StoreContext storeContext) {
+    return CommercePropertyHelper.replaceTokens(wcsStorefrontUrl, storeContext);
   }
 
   @Required

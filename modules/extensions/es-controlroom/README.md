@@ -8,4 +8,4 @@ Extension that enables the collaborative features and supports MongoDB as the da
 
 ##Documentation
 
-[Manual](https://documentation.coremedia.com/lc2/current/manuals/operation-basics-en/webhelp/content/CollaborativeComponents.html)
+See the "Collaborative Components" chapter of the Operations Basics Manual.

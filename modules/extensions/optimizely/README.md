@@ -9,4 +9,4 @@ A/B testing using the editor on the Optimizely website.
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/Optimizely.html)
+See the "Optimizely" chapter in the product's developer manual.

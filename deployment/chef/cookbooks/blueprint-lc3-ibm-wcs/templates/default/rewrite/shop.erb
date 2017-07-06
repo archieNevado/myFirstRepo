@@ -1,0 +1,5 @@
+RequestHeader set X-FragmentHost live
+Header unset X-Frame-Options
+
+# Send empty URL to aurora home page
+RewriteRule ^/$ /webapp/wcs/stores/servlet/en/auroraesite [R=302,L]

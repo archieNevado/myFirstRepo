@@ -9,9 +9,14 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Serves arbitrary download data of mime type *.*.
+ * </p>
+ * <p>
+ * Represents document type {@link #NAME CMDownload}.
+ * </p>
  *
- * <p>Represents document type {@link #NAME CMDownload}.</p>
+ * @cm.template.api
  */
 public interface CMDownload extends CMTeasable {
 
@@ -49,6 +54,7 @@ public interface CMDownload extends CMTeasable {
    * Returns the value of the document property {@link #DATA}.
    *
    * @return the value of the document property {@link #DATA}
+   * @cm.template.api
    */
   Blob getData();
 

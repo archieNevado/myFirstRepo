@@ -39,6 +39,12 @@
                         catalogObjectVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
               </ui:baseAction>
             </ui:IconButton>
+            <ui:IconButton itemId="{LivecontextStudioPlugin.AUGMENT_PRODUCT_BUTTON_ITEM_ID}">
+              <ui:baseAction>
+                <livecontext:AugmentProductAction
+                        catalogObjectVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
+              </ui:baseAction>
+            </ui:IconButton>
             <TbSeparator itemId="createProductTeaserSeparator"/>
             <ui:IconButton itemId="{LivecontextStudioPlugin.CREATE_PRODUCT_TEASER_BUTTON_ITEM_ID}">
               <ui:baseAction>
@@ -77,6 +83,12 @@
                         catalogObjectVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
               </baseAction>
             </MenuItem>
+            <MenuItem itemId="{LivecontextStudioPlugin.AUGMENT_PRODUCT_MENU_ITEM_ID}">
+              <baseAction>
+                <livecontext:AugmentProductAction
+                        catalogObjectVariableName="{CollectionView.SELECTED_ITEMS_VARIABLE_NAME}"/>
+              </baseAction>
+            </MenuItem>
             <MenuItem itemId="{LivecontextStudioPlugin.CREATE_PRODUCT_TEASER_MENU_ITEM_ID}">
               <baseAction>
                 <livecontext:CreateProductTeaserAction
@@ -104,6 +116,12 @@
             <ui:IconButton itemId="{LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID}">
               <ui:baseAction>
                 <livecontext:SearchProductVariantsAction
+                        catalogObjectVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+            <ui:IconButton itemId="{LivecontextStudioPlugin.AUGMENT_PRODUCT_BUTTON_ITEM_ID}">
+              <ui:baseAction>
+                <livecontext:AugmentProductAction
                         catalogObjectVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
               </ui:baseAction>
             </ui:IconButton>
@@ -139,6 +157,12 @@
               </baseAction>
             </MenuItem>
             <MenuSeparator/>
+            <MenuItem itemId="{LivecontextStudioPlugin.AUGMENT_PRODUCT_MENU_ITEM_ID}">
+              <baseAction>
+                <livecontext:AugmentProductAction
+                        catalogObjectVariableName="{CollectionView.SELECTED_SEARCH_ITEMS_VARIABLE_NAME}"/>
+              </baseAction>
+            </MenuItem>
             <MenuItem itemId="{LivecontextStudioPlugin.CREATE_PRODUCT_TEASER_MENU_ITEM_ID}">
               <baseAction>
                 <livecontext:CreateProductTeaserAction

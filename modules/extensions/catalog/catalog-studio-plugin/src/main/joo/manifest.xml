@@ -4,7 +4,7 @@
   <component class="com.coremedia.catalog.studio.ProductCodeColumn"/>
   <component class="com.coremedia.catalog.studio.ReferrerImageListWrapper"/>
   <component class="com.coremedia.catalog.studio.actions.UnlinkAction"/>
-  <component class="com.coremedia.catalog.studio.collectionview.search.LostandfoundFilterFieldset"/>
+  <component class="com.coremedia.catalog.studio.collectionview.search.LostandfoundFilterPanel"/>
   <component class="com.coremedia.catalog.studio.forms.CMCategoryForm"/>
   <component class="com.coremedia.catalog.studio.forms.CMProductForm"/>
   <component class="com.coremedia.catalog.studio.library.CatalogLibraryPlugin"/>

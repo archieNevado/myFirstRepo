@@ -111,7 +111,7 @@
 -->
 <#macro complaining value id collection itemId navigationId customClass="">
 <span id="complainTag_${id}" class="complaint">
-  <#if value??>
+  <#if value?has_content>
       <a class="enabled complaint button ${customClass}" id="complainAnchor_${id}" style="display:none"
          onclick="c_${id}.complain(complainerId, true);"><@bp.message "comment-complaint"/></a>
       <a class="enabled uncomplaint button ${customClass}" id="uncomplainAnchor_${id}"

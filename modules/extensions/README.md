@@ -33,7 +33,5 @@ These modules are integrated into CoreMedia Blueprint to enhance CoreMedia CMS a
 
 ##Documentation
 
-- [Project Extensions](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/projectExtensions2.html)
-- [Developing with Extensions](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/DevelopmentWithExtensions.html)
-- [Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/BlueprintWebsite.html)
+See the product's development manual for details about the extension mechanism.
 

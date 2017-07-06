@@ -9,12 +9,18 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * A technical image, e.g. for usage in stylesheets.
- * <p/>
- * <p>Not for editorial usage. Use CMPicture instead. In order to avoid confusion,
+ * </p>
+ * <p>
+ * Not for editorial usage. Use CMPicture instead. In order to avoid confusion,
  * you should withdraw all rights on doctype CMImage from ordinary editors.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMImage}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMImage}.</p>
+ * @cm.template.api
  */
 public interface CMImage extends CMLocalized {
   /**

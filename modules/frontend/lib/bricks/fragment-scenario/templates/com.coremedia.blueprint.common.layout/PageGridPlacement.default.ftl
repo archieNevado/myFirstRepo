@@ -3,6 +3,6 @@
 
 <#-- workaround for coremedia widget, will be removed with CMS-1482 -->
 <!-- CoreMedia Placement ${self.name!""} -->
-<div class="cm-placement-${self.name!""}" <@cm.metadata data=[bp.getPageMetadata(cmpage)!"", bp.getPlacementPropertyName(self)!"", lc.fragmentHighlightingMetaData(self)!""] />>
+<div class="cm-placement-${self.name!""}" <@cm.metadata data=[bp.getPlacementPropertyName(self)!"", lc.fragmentHighlightingMetaData(self)!""] />>
 <@cm.include self=self params={"renderDiv": false}/>
 </div>

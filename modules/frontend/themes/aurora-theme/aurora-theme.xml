@@ -14,46 +14,47 @@
   </description>
   <thumbnail>img/theme-preview.jpg</thumbnail>
 
+  <!-- To avoid conflicts with IBM WCS all js files should be loaded in head -->
   <javaScriptLibraries>
-    <javaScript disableCompress="true">vendor/jquery.min.js</javaScript>
-    <javaScript disableCompress="true">vendor/bootstrap/bootstrap.min.js</javaScript>
-    <javaScript>vendor/bootstrap/carousel-swipe.js</javaScript>
-    <javaScript>vendor/imagesloaded/imagesloaded.pkgd.js</javaScript>
-    <javaScript>vendor/jquery.cycle2.js</javaScript>
-    <javaScript>vendor/jquery.cycle2.swipe.js</javaScript>
-    <javaScript>vendor/jquery.cycle2.carousel.patched.js</javaScript>
-    <javaScript>vendor/jquery.elevatezoom.js</javaScript>
-    <javaScript>vendor/jquery.magnific-popup.js</javaScript>
-    <javaScript>vendor/mediaelement-and-player.js</javaScript>
+    <javaScript inHead="true" disableCompress="true">vendor/jquery.min.js</javaScript>
+    <javaScript inHead="true" disableCompress="true">vendor/bootstrap/bootstrap.min.js</javaScript>
+    <javaScript inHead="true">vendor/bootstrap/carousel-swipe.js</javaScript>
+    <javaScript inHead="true">vendor/imagesloaded/imagesloaded.pkgd.js</javaScript>
+    <javaScript inHead="true">vendor/jquery.cycle2.js</javaScript>
+    <javaScript inHead="true">vendor/jquery.cycle2.swipe.js</javaScript>
+    <javaScript inHead="true">vendor/jquery.cycle2.carousel.patched.js</javaScript>
+    <javaScript inHead="true">vendor/jquery.elevatezoom.js</javaScript>
+    <javaScript inHead="true">vendor/jquery.magnific-popup.js</javaScript>
+    <javaScript inHead="true">vendor/mediaelement-and-player.js</javaScript>
   </javaScriptLibraries>
 
   <javaScripts>
     <!-- CoreMedia Basic JavaScripts -->
-    <javaScript>js/coremedia.blueprint.noconflict.js</javaScript>
-    <javaScript>js/jquery.coremedia.utils.js</javaScript>
-    <javaScript>js/jquery.coremedia.smartresize.js</javaScript>
-    <javaScript>js/jquery.coremedia.responsiveimages.js</javaScript>
-    <javaScript>js/jquery.coremedia.spinner.js</javaScript>
-    <javaScript>js/jquery.coremedia.equalheight.js</javaScript>
-    <javaScript disableCompress="true">js/lib/logger.js</javaScript>
-    <javaScript>js/coremedia.blueprint.nodeDecorationService.js</javaScript>
-    <javaScript>js/coremedia.blueprint.deviceDetector.js</javaScript>
-    <javaScript>js/coremedia.blueprint.hashBasedFragment.js</javaScript>
-    <javaScript>js/coremedia.blueprint.basic.js</javaScript>
-    <javaScript>js/jquery.coremedia.carousel.js</javaScript>
-    <javaScript>js/jquery.coremedia.videopopup.js</javaScript>
-    <!-- Quick Info -->
-    <javaScript>js/coremedia.blueprint.quickinfo.js</javaScript>
-    <javaScript>js/coremedia.blueprint.quickinfo.init.js</javaScript>
-    <!-- Image Maps -->
-    <javaScript>js/coremedia.blueprint.imagemap.js</javaScript>
-    <javaScript>js/coremedia.blueprint.imagemap.init.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.noconflict.js</javaScript>
+    <javaScript inHead="true">js/jquery.coremedia.utils.js</javaScript>
+    <javaScript inHead="true">js/jquery.coremedia.smartresize.js</javaScript>
+    <javaScript inHead="true">js/jquery.coremedia.responsiveimages.js</javaScript>
+    <javaScript inHead="true">js/jquery.coremedia.spinner.js</javaScript>
+    <javaScript inHead="true">js/jquery.coremedia.equalheight.js</javaScript>
+    <javaScript inHead="true" disableCompress="true">js/lib/logger.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.nodeDecorationService.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.deviceDetector.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.hashBasedFragment.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.basic.js</javaScript>
+    <javaScript inHead="true">js/jquery.coremedia.carousel.js</javaScript>
+    <javaScript inHead="true">js/jquery.coremedia.videopopup.js</javaScript>
+    <!-- QuickInfo -->
+    <javaScript inHead="true">js/coremedia.blueprint.quickinfo.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.quickinfo.init.js</javaScript>
+    <!-- ImageMaps -->
+    <javaScript inHead="true">js/coremedia.blueprint.imagemap.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.imagemap.init.js</javaScript>
     <!-- Elastic Social JavaScripts -->
-    <javaScript>js/coremedia.blueprint.es.timezone.js</javaScript>
-    <javaScript>js/coremedia.blueprint.es.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.es.timezone.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.es.js</javaScript>
     <!-- CoreMedia Aurora-->
-    <javaScript>js/coremedia.blueprint.livecontext.deviceSettings.js</javaScript>
-    <javaScript>js/coremedia.blueprint.livecontext.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.livecontext.deviceSettings.js</javaScript>
+    <javaScript inHead="true">js/coremedia.blueprint.livecontext.js</javaScript>
   </javaScripts>
 
   <styleSheets>

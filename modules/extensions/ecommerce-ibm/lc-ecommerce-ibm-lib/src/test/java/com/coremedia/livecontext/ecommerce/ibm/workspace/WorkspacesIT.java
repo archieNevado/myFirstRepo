@@ -6,8 +6,8 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
@@ -25,9 +25,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class WorkspacesIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class WorkspacesIT extends IbmServiceTestBase {
 
   @Inject
   WorkspaceService workspaceService;
@@ -35,9 +35,11 @@ public class WorkspacesIT extends AbstractServiceTest {
   @Inject
   CatalogService catalogService;
 
-  @Betamax(tape = "wt_testFindAllWorkspaces", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindAllWorkspaces() throws Exception {
+    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+      return;
+    }
     Workspace workspace = findWorkspace("Anniversary");
     assertTrue("segment id has wrong format", workspace.getId().startsWith("ibm:///catalog/workspace/"));
   }

@@ -21,6 +21,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * A simple form bean for use by the registration web flow.
+ *
+ * @cm.template.api
  */
 public class Registration implements Serializable {
   private static final long serialVersionUID = 42L;
@@ -37,8 +39,8 @@ public class Registration implements Serializable {
   private boolean deleteProfileImage = false;
   private boolean acceptTermsOfUse = false;
   private String timeZoneId;
-  private String recaptchaChallengeField;
-  private String recaptchaResponseField;
+  private String recaptchaResponse;
+
 
   public String getUsername() {
     return username;
@@ -96,6 +98,9 @@ public class Registration implements Serializable {
     this.passwordPolicy = passwordPolicy;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isRegisteringWithProvider() {
     return registeringWithProvider;
   }
@@ -136,20 +141,12 @@ public class Registration implements Serializable {
     this.timeZoneId = timeZoneId;
   }
 
-  public String getRecaptcha_challenge_field() { // NOSONAR
-    return recaptchaChallengeField;
+  public String getRecaptchaResponse() {
+    return recaptchaResponse;
   }
 
-  public void setRecaptcha_challenge_field(String recaptchaChallengeField) { // NOSONAR
-    this.recaptchaChallengeField = recaptchaChallengeField;
-  }
-
-  public String getRecaptcha_response_field() { // NOSONAR
-    return recaptchaResponseField;
-  }
-
-  public void setRecaptcha_response_field(String recaptchaResponseField) { // NOSONAR
-    this.recaptchaResponseField = recaptchaResponseField;
+  public void setRecaptchaResponse(String recaptchaResponse) {
+    this.recaptchaResponse = recaptchaResponse;
   }
 
   public void validateRegistration(ValidationContext context) {
@@ -164,6 +161,14 @@ public class Registration implements Serializable {
     if (!acceptTermsOfUse) {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_ACCEPT_TERMS_OF_USE_ERROR, "acceptTermsOfUse");
     }
+  }
+
+  /**
+   *  validate${state}, where ${state} is the id of your view-state where you want validation to run
+   * @param context
+   */
+  public void validateBpRegistration(ValidationContext context) {
+    this.validateRegistration(context);
   }
 
   private void validateName(ValidationContext context) {
@@ -203,12 +208,12 @@ public class Registration implements Serializable {
 
     ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin.getElasticSocialConfiguration(page);
     ServletRequest servletRequest = (ServletRequest) requestContext.getExternalContext().getNativeRequest();
-    if (elasticSocialConfiguration.isCaptchaForRegistrationRequired() && !elasticSocialConfiguration.validateCaptcha(servletRequest)) {
-      addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_INVALID_CAPTCHA, "recaptcha_response_field");
+    if (elasticSocialConfiguration.isRecaptchaForRegistrationRequired() && !elasticSocialConfiguration.validateCaptcha(servletRequest)) {
+      addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_INVALID_CAPTCHA, "recaptchaResponse");
     }
   }
 
-  protected void validateRegistrationPassword(ValidationContext context) {
+  private void validateRegistrationPassword(ValidationContext context) {
     if (isBlank(password)) {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_PASSWORD_ERROR, "password");
     }

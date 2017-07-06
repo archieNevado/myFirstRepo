@@ -28,9 +28,13 @@
           </#if>
           <#-- custom call-to-action button -->
           <#if renderCTA>
-            <@cm.include self=self view="_callToAction" params={"additionalClass": "${additionalClass}__button cm-button--white "}/>
+            <@cm.include self=self view="_callToAction" params={
+              "renderLink": false,
+              "additionalClass": "${additionalClass}__button cm-button--white "
+            }/>
           </#if>
         </div>
     </@bp.optionalLink>
     </div>
+  <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_TEASER />
 </div>

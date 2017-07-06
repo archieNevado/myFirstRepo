@@ -9,19 +9,6 @@
 
   <!--
     A write interceptor that reacts to writes on asset blob properties (renditions)
-    by updating the rendition state.
-    -->
-  <bean id="updateAssetStateWriteInterceptor" class="com.coremedia.cms.assets.interceptors.UpdateAssetStateWriteInterceptor">
-    <!-- the name of the root asset type -->
-    <property name="type" value="AMAsset"/>
-    <!-- true to make sure the interceptor applies to all asset types -->
-    <property name="interceptingSubtypes" value="true"/>
-    <!-- the name of struct property storing the editorial state of individual renditions -->
-    <property name="stateProperty" value="state"/>
-  </bean>
-
-  <!--
-    A write interceptor that reacts to writes on asset blob properties (renditions)
     by storing parsed rendition metadata.
     -->
   <bean id="updateAssetMetadataWriteInterceptor" class="com.coremedia.blueprint.assets.intercept.UpdateAssetMetadataWriteInterceptor">

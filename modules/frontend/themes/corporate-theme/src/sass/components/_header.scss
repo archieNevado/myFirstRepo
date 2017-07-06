@@ -187,7 +187,7 @@ Contains styling definitions for all content types as cm-header.
     @include breakpoint(sm-and-up) {
       top: 0;
       left: auto;
-      right: $padding-base-horizontal + $search-width + $padding-base-horizontal + 40px + $padding-base-horizontal; //paddings + search + navbutton
+      right: $padding-base-horizontal + $search-width + $padding-base-horizontal + $padding-base-horizontal; //paddings + search + navbutton
       line-height: $logo-size;
       background-color: transparent;
       color: palette(white);
@@ -200,12 +200,16 @@ Contains styling definitions for all content types as cm-header.
         }
       }
     }
+
+    @include breakpoint(sm) {
+      right: $padding-base-horizontal + $search-small-width + $padding-base-horizontal + $padding-base-horizontal; //override for narrow tablet view, since login/registration links where added
+    }
   }
 
   &--without-search {
     .#{$prefix}header__items {
       @include breakpoint(sm-and-up) {
-        right: 40px + $padding-base-horizontal;;
+        right: 40px + $padding-base-horizontal;
       }
     }
   }
@@ -220,8 +224,11 @@ Contains styling definitions for all content types as cm-header.
     position: absolute;
     top: 0;
     left: $logo-size+2*$padding-base-horizontal;
+    right: 200px;
     margin: 0;
     line-height: $logo-size;
+    white-space: nowrap;
+    overflow: hidden;
 
     &__item a {
       color: palette(white);
@@ -234,6 +241,10 @@ Contains styling definitions for all content types as cm-header.
     & > li + li::before {
       content: ">\00a0"; /* overwrite bootstrap, cause of libsass double escaping */
     }
+  }
+
+  @include breakpoint(sm) {
+    right: 70px;
   }
 
   &--outer {

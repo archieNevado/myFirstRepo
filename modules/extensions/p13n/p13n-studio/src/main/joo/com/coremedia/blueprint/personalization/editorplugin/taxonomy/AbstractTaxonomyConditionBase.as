@@ -13,8 +13,7 @@ import com.coremedia.ui.components.StatefulNumberField;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
-import com.coremedia.ui.layouts.BEMLayouts;
-import com.coremedia.ui.plugins.BEMPlugin;
+import com.coremedia.ui.plugins.HorizontalSpacingPlugin;
 
 import ext.Ext;
 import ext.form.FieldContainer;
@@ -136,11 +135,11 @@ public class AbstractTaxonomyConditionBase extends AbstractCondition {
 
     // store the keyword prefix
     propertyPrefix = config.propertyPrefix;
-    if (propertyPrefix == null) {
+    if (propertyPrefix === null) {
       throw new Error(resourceManager.getString('com.coremedia.personalization.ui.Personalization', 'p13n_error_propertyPrefix'));
     }
 
-    if (propertyPrefix != null && propertyPrefix.charAt(propertyPrefix.length - 1) == '.') {
+    if (propertyPrefix !== null && propertyPrefix.charAt(propertyPrefix.length - 1) === '.') {
       // remove the '.' at the end of the prefix
       propertyPrefix = propertyPrefix.substring(0, propertyPrefix.length - 1);
     }
@@ -193,19 +192,16 @@ public class AbstractTaxonomyConditionBase extends AbstractCondition {
     var containerConfig:FieldContainer = FieldContainer({});
     containerConfig.flex = 30;
     containerConfig.layout = layoutConfig;
-    containerConfig.plugins = [BEMPlugin({
-      block: BEMLayouts.HORIZONTAL_SPACING_BLOCK,
-      defaultElement: BEMLayouts.HORIZONTAL_SPACING_ELEMENT_ITEM
-    })];
+    containerConfig.plugins = [HorizontalSpacingPlugin({})];
 
     var fieldContainer:FieldContainer = new FieldContainer(containerConfig);
     valueField = new StatefulNumberField(StatefulNumberField({
-      emptyText:config['valueEmptyText'] != null ? config['valueEmptyText'] : VALUE_EMPTY_TEXT,
+      emptyText:config['valueEmptyText'] !== null ? config['valueEmptyText'] : VALUE_EMPTY_TEXT,
       allowBlank:false,
       flex: 1,
       minValue: 0,
       maxValue: 100,
-      vtype:config['valueVType'] != null ? config['valueVType'] : 'keywordConditionValue',
+      vtype:config['valueVType'] !== null ? config['valueVType'] : 'keywordConditionValue',
       enableKeyEvents:true,
       hidden:!visible
     }));
@@ -216,8 +212,8 @@ public class AbstractTaxonomyConditionBase extends AbstractCondition {
     valueField.setValue(config.valueText);
 
     fieldContainer.add(valueField);
-    if (config.suffixText != null) {
-      var labelConfig:Label= Label({});
+    if (config.suffixText !== null) {
+      var labelConfig:Label = Label({});
       labelConfig.text = config.suffixText;
       fieldContainer.add(new Label(labelConfig));
     }
@@ -273,7 +269,7 @@ public class AbstractTaxonomyConditionBase extends AbstractCondition {
   }
 
   public override function setPropertyValue(value:String):void {
-    valueField.setValue(value == SelectionRuleHelper.EMPTY_VALUE ? null : TaxonomyConditionUtil.formatPropertyValue4Textfield(value));
+    valueField.setValue(value === SelectionRuleHelper.EMPTY_VALUE ? null : TaxonomyConditionUtil.formatPropertyValue4Textfield(value));
   }
 }
 }

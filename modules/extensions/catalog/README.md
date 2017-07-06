@@ -8,4 +8,4 @@ This extensions adds the functionality for the internal CoreMedia catalog featur
 
 ##Documentation
 
-[Manual](https://documentation.coremedia.com/dxp8/current/manuals/coremedia-en/webhelp/content/CMS_Catalog.html)
+See the CMS Catalog chapter in the product's developer manual.

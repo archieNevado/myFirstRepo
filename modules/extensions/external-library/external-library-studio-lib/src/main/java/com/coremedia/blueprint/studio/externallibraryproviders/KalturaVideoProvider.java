@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,6 +73,7 @@ public class KalturaVideoProvider implements ExternalLibraryProvider { // NOSONA
     this.dataUrlTemplate = (String) parameters.get("dataUrl.template");
   }
 
+  @Nullable
   private KalturaClient createKaltureClient() {
     KalturaClient client = null;
     try {
@@ -97,12 +99,15 @@ public class KalturaVideoProvider implements ExternalLibraryProvider { // NOSONA
   @Override
   public ExternalLibraryItemListRepresentation getItems(String filter) {
     ExternalLibraryItemListRepresentation result = new ExternalLibraryItemListRepresentation();
-    KalturaClient client;
+    KalturaClient client = null;
     try {
       client = createKaltureClient();
     } catch (NoClassDefFoundError e) {
       LOG.warn("Problems contacting Kaltura Sevice. Maybe the credentials are not set correctly.");
       result.setErrorMessage("Problems contacting Kaltura Sevice. Maybe the credentials are not set correctly.");
+    }
+
+    if (client == null) {
       return result;
     }
 
@@ -139,6 +144,9 @@ public class KalturaVideoProvider implements ExternalLibraryProvider { // NOSONA
   @Override
   public ExternalLibraryItemRepresentation getItem(String id) {
     KalturaClient client = createKaltureClient();
+    if (client == null) {
+      return null;
+    }
     try {
       KalturaMediaEntry entry = client.getMediaService().get(id);
       if (entry != null) {

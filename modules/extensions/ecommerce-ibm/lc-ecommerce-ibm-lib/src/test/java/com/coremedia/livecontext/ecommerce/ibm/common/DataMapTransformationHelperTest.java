@@ -1,9 +1,10 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.google.common.collect.ImmutableList;
+import org.junit.After;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -16,6 +17,11 @@ import static org.junit.Assert.assertNotNull;
 
 public class DataMapTransformationHelperTest {
 
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
+  }
+
   @Test
   public void testFormatParentCatGroupIdWithStoreContext() throws Exception {
     List<String> innerList = ImmutableList.of("10051_10031", "10051_10051", "10061_10032");
@@ -27,7 +33,7 @@ public class DataMapTransformationHelperTest {
 
     CommerceConnection connection = new BaseCommerceConnection();
     connection.setStoreContext(StoreContextHelper.createContext("configId", "storeId", "storeName", "10051", "en", "USD"));
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
 
     DataMapTransformationHelper.formatParentCatGroupId(outerList);
 
@@ -46,8 +52,6 @@ public class DataMapTransformationHelperTest {
     map.put("parentCatalogGroupID", innerList);
 
     List<Map<String, Object>> outerList = Collections.singletonList(map);
-
-    Commerce.setCurrentConnection(new BaseCommerceConnection());
 
     DataMapTransformationHelper.formatParentCatGroupId(outerList);
 

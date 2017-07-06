@@ -79,7 +79,7 @@ public class AppendClassToElementFilterTest {
     markup.writeOn(newXmlFilters, stringWriter);
     org.junit.Assert.assertEquals("<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n" +
             "  <p class=\"p--heading-1\">h1</p>\n" +
-            "  <p class=\"p--heading-2\">h2</p>\n" +
+            "  <p class=\"p--heading-2 align--right\">h2</p>\n" +
             "  <p class=\"p--heading-3\">h3</p>\n" +
             "  <p class=\"p--heading-4\">h4</p>\n" +
             "  <p class=\"p--heading-5\">h5</p>\n" +

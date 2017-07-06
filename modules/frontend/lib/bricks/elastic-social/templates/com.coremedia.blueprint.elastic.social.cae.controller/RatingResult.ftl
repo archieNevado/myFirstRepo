@@ -14,7 +14,6 @@
         <#assign averageRatingRounded=averageRating?round />
 
         <div class="cm-ratings-average__header">
-          <button class="cm-ratings-average__switch" data-cm-switch-average-rating=""></button>
   
           <span class="cm-ratings-average__rating cm-rating">
             <#list es.getMaxRating()..1 as currentRating>

@@ -5,7 +5,6 @@
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin', 'Tracking_title')}"
-        collapsible="true"
         itemId="analyticsTrackingPanel">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin')]

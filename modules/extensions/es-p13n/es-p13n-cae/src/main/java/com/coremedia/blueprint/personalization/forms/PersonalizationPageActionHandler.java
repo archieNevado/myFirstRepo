@@ -120,9 +120,10 @@ public class PersonalizationPageActionHandler extends PageHandlerBase {
     Page page = (Page) linkParameters.get("page");
     List<String> segmentNames = getPathSegments(page.getNavigation());
     //todo page.getContentId() may be null for non-CMS content beans rendered as main content on a page
-    Map<String, Object> parameters = new ImmutableMap.Builder<String, Object>()
+    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
             .put(SEGMENT_ID, page.getContentId())
-            .put(SEGMENT_ROOT, segmentNames.get(0)).build();
+            .put(SEGMENT_ROOT, segmentNames.get(0))
+            .build();
     return uriTemplate.expand(parameters);
   }
 }

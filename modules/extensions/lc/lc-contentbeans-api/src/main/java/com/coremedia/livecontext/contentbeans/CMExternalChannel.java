@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * @cm.template.api
+ */
 public interface CMExternalChannel extends CMAbstractCategory {
 
   /**

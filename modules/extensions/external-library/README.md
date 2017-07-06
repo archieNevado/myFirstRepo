@@ -9,4 +9,4 @@ view external content, for example from an RSS feed, in Studio and create CMS co
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/livecontext-3-for-ibm-wcs/current/manuals/coremedia-en/webhelp/content/External_library.html)
+See section "External Library" in the CoreMedia Developer Manual.

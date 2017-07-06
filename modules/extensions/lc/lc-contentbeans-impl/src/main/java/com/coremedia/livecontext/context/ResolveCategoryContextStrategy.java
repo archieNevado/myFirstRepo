@@ -8,14 +8,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static org.springframework.util.Assert.hasText;
-import static org.springframework.util.Assert.notNull;
 
 public class ResolveCategoryContextStrategy extends AbstractResolveContextStrategy {
   @Override
   @Nullable
   protected Category findNearestCategoryFor(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
     hasText(seoSegment);
-    notNull(storeContext);
 
     StoreContextProvider storeContextProvider = getStoreContextProvider();
     storeContextProvider.setCurrentContext(storeContext);

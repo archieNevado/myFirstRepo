@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.studio.taxonomy {
 
-import com.coremedia.blueprint.base.components.util.StudioConfigurationUtil;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.util.StudioConfigurationUtil;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -60,6 +60,7 @@ public class TaxonomyUtil {
    * Invokes the callback function with true or false depending on if the taxonomy is editable or not.
    * @param taxonomyId The taxonomy id to check.
    * @param callback The callback handler.
+   * @param content content used for checking if the editor is editable
    */
   public static function isEditable(taxonomyId:String, callback:Function, content:Content = undefined):void {
     if(!content) {
@@ -105,15 +106,19 @@ public class TaxonomyUtil {
   /**
    * Loads the path nodes for the given bean record (content).
    * @param record The record to load the path for.
-   * @param siteId The siteId to encode in the path
+   * @param content content used to determine the site specific taxonomy for the given path, may be null
    * @param taxonomyId The id of the taxonomy the record is located in.
    * @param callback The callback function the updated record is passed to or null if node does not exist.
    */
-  public static function loadTaxonomyPath(record:BeanRecord, siteId:String, taxonomyId:String, callback:Function):void {
+  public static function loadTaxonomyPath(record:BeanRecord, content:Content, taxonomyId:String, callback:Function):void {
     var bean:Content = record.getBean() as Content;
+    var siteId:String = null;
+    if(content) {
+      siteId = editorContext.getSitesService().getSiteIdFor(content);
+    }
     var url:String = 'taxonomies/path?' + Ext.urlEncode({taxonomyId: taxonomyId, nodeRef: parseRestId(bean), site: siteId});
     var taxRemoteBean:RemoteBean = beanFactory.getRemoteBean(url);
-    taxRemoteBean.load(function ():void {
+    taxRemoteBean.invalidate(function ():void {
       EventUtil.invokeLater(function ():void {
         if (taxRemoteBean.get('path')) { //maybe not set if the taxonomy does not exist
           var nodes:Array = taxRemoteBean.get('path')["nodes"];
@@ -133,7 +138,8 @@ public class TaxonomyUtil {
   /**
    * Adds the content represented by the given node to the list of the
    * selection expression.
-   * @param node The node to add to the selection.
+   * @param selectionExpression the current selection
+   * @param contentId The id of the node to add to the selection.
    */
   public static function addNodeToSelection(selectionExpression:ValueExpression, contentId:String):void {
     var newSelection:Array = [];
@@ -153,7 +159,8 @@ public class TaxonomyUtil {
   /**
    * Removes the content represented by the given node from the list of the
    * selection expression.
-   * @param node The node to remove from the selection.
+   * @param selectionExpression the current selection
+   * @param contentId The node to remove from the selection.
    */
   public static function removeNodeFromSelection(selectionExpression:ValueExpression, contentId:String):void {
     var selection:Array = selectionExpression.getValue();

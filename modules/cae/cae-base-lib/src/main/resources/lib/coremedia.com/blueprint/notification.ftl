@@ -1,6 +1,5 @@
 <#ftl strip_whitespace=true>
 <#escape x as x?html>
-<#import "/spring.ftl" as spring>
 <#import "util.ftl" as util>
 
 <#--
@@ -14,12 +13,16 @@
  * @param text (optional) plain text to show (html will be escaped)
  * @param attr (optional) additional attributes for notification tag
  * @param dismissable (optional) specifies if the dismiss button is shown, default is false
+ * @param iconClass (optional) set icon with given css class
  * @nested (optional) nested content will be rendered between the text and dismiss output
  -->
-<#macro notification type baseClass="cm-notification" additionalClasses=[] title="" text="" dismissable=false attr={}>
+<#macro notification type baseClass="cm-notification" additionalClasses=[] title="" text="" dismissable=false iconClass="" attr={}>
   <#local classes=[baseClass, baseClass + "--" + type] + additionalClasses />
   <#local attr=util.extendSequenceInMap(attr, "classes", classes) />
   <div<@util.renderAttr attr=attr />>
+    <#if iconClass?has_content>
+      <i class="${iconClass}" aria-hidden="true"></i>
+    </#if>
     <#if title?has_content>
       <span class="${baseClass}__headline">${title}</span>
     </#if>
@@ -38,7 +41,7 @@
  * The text will automatically be determinated.
  *
  * @param path the name of the field to bind to
- * @param dismissable @see notification#dismissable
+ * @param dismissable (optional) @see notification#dismissable
  * @param class @see notification#baseClass
  * @param class @see notification#additionalClasses
  * @param ignoreIfEmpty (optional) specifies if the notification will not be rendered if spring error messages are empty
@@ -48,7 +51,7 @@
  * @param attr (optional) @see notification#attr
  * @nested (optional) nested content will be rendered between the text and dismiss output
  -->
-<#macro notificationFromSpring path dismissable baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
+<#macro notificationFromSpring path dismissable=false baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>
   <#local text="" />
   <#if spring.status.error>

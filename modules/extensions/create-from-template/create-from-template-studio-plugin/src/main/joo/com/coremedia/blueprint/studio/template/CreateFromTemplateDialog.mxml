@@ -5,10 +5,12 @@
                                     xmlns="exml:ext.config"
                                     xmlns:ui="exml:com.coremedia.ui.config"
                                     xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
+                                    xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
                                     title="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text')}"
-                                    focusOnToFront="false"
                                     id_="createFromTemplate"
                                     resizable="true"
+                                    stateId="createFromTemplateDialogState"
+                                    stateful="true"
                                     resizeHandles="e"
                                     minWidth="401"
                                     width="401"
@@ -24,7 +26,6 @@
   <fx:Script><![CDATA[
     import com.coremedia.blueprint.studio.template.model.ProcessingData;
     import com.coremedia.ui.data.ValueExpressionFactory;
-    import com.coremedia.ui.layouts.BEMLayouts;
     import com.coremedia.ui.skins.ButtonSkin;
     import com.coremedia.ui.skins.WindowSkin;
 
@@ -36,7 +37,7 @@
     ]]></fx:Script>
 
   <local:items>
-    <Panel itemId="editorContainer">
+    <Panel itemId="{EDITOR_CONTAINER_ITEM_ID}">
       <items>
         <ui:StatefulTextField name="{ProcessingData.NAME_PROPERTY}"
                               itemId="{NAME_FIELD_ID}"
@@ -75,19 +76,18 @@
           </layout>
         </FieldContainer>
 
-        <bpb-components:FolderCombo labelSeparator=""
-                                    bindTo="{ValueExpressionFactory.create(ProcessingData.FOLDER_PROPERTY, getModel())}"
-                                    itemId="{PAGE_FOLDER_COMBO_ID}"
-                                    fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'channel_folder_text')}"
-                                    contentType="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
-                                    folderPathsExpression="{ValueExpressionFactory.createFromFunction(getNavigationFolders)}"/>
-        <bpb-components:FolderCombo validator="{editorialFolderValidator}"
-                                    labelSeparator=""
-                                    bindTo="{ValueExpressionFactory.create(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'), getModel())}"
-                                    itemId="{EDITORIAL_FOLDER_COMBO_ID}"
-                                    fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'editorial_folder_text')}"
-                                    contentType="CMArticle"
-                                    folderPathsExpression="{ValueExpressionFactory.createFromFunction(getEditorialFolders)}"/>
+        <editor:FolderCombo labelSeparator=""
+                            bindTo="{ValueExpressionFactory.create(ProcessingData.FOLDER_PROPERTY, getModel())}"
+                            itemId="{PAGE_FOLDER_COMBO_ID}"
+                            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'channel_folder_text')}"
+                            contentType="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
+                            folderPathsExpression="{ValueExpressionFactory.createFromFunction(getNavigationFolders)}"/>
+        <editor:FolderCombo labelSeparator=""
+                            bindTo="{ValueExpressionFactory.create(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'), getModel())}"
+                            itemId="{EDITORIAL_FOLDER_COMBO_ID}"
+                            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'editorial_folder_text')}"
+                            contentType="CMArticle"
+                            folderPathsExpression="{ValueExpressionFactory.createFromFunction(getEditorialFolders)}"/>
       </items>
       <layout>
         <layout_VBox align="stretch"/>
@@ -97,8 +97,7 @@
                    labelAlign="top"/>
       </defaults>
       <plugins>
-        <ui:BEMPlugin block="{BEMLayouts.VERTICAL_SPACING_BLOCK}"
-                      defaultElement="{BEMLayouts.VERTICAL_SPACING_ELEMENT_ITEM}"/>
+        <ui:VerticalSpacingPlugin/>
       </plugins>
     </Panel>
   </local:items>

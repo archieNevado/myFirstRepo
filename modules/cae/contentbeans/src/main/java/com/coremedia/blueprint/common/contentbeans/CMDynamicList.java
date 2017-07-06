@@ -8,12 +8,18 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * A placeholder for a dynamically populated list of content objects.
- * <p/>
+ * </p>
  * <p>
  * The actual entries of the dynamic list depend on the concrete subtype and
- * the plug-in implementation reponsible for providing the list entries.</p>
- * <p>Represents the document type {@link #NAME CMDynamicList}.</p>
+ * the plug-in implementation reponsible for providing the list entries.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMDynamicList}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMDynamicList<T> extends CMCollection<T> {
   /**
@@ -45,7 +51,7 @@ public interface CMDynamicList<T> extends CMCollection<T> {
    * Returns the value of the document property {@link #MAX_LENGTH}.
    *
    * @return Maximum number of entries in the dynamic content list.
-   *         The list may return fewer entries. A value of 0 or less indicates no restriction.
+   * The list may return fewer entries. A value of 0 or less indicates no restriction.
    */
   int getMaxLength();
 

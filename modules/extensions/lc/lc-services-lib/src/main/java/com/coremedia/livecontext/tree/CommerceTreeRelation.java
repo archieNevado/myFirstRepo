@@ -24,7 +24,6 @@ public class CommerceTreeRelation implements TreeRelation<Category> {
 
   @Override
   public Category getParentUnchecked(Category child) {
-    //TODO do we need cycle detection here?
     return getParentOf(child);
   }
 

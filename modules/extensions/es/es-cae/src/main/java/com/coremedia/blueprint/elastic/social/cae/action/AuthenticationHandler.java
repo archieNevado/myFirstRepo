@@ -35,11 +35,11 @@ import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_WORD;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_NAVIGATION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ACTION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handles authentication (login/logout) actions. This handler is currently used for rendering the initial form only.
@@ -61,8 +61,8 @@ public class AuthenticationHandler extends WebflowHandlerBase {
   private static final String URI_PREFIX = "auth";
 
   /**
-   * URI pattern suffix for actions on page resources like "/dynamic/auth/(fragment|--)/media/4420/login"
-   *                                                        /dynamic/auth/--/perfectchef/5320/login
+   * URI pattern suffix for actions on page resources like "/dynamic/auth/fragment/site/4420/login"
+   *                                                        /dynamic/auth/--/site/5320/login
    */
   public static final String URI_PATTERN =
           '/' + PREFIX_DYNAMIC +
@@ -93,8 +93,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
    */
   @Substitution(LOGIN_ACTION_ID)
   public AuthenticationState createLoginActionStateBean(CMAction action) {
-    RegistrationDisclaimers disclaimers = settingsService.createProxy(RegistrationDisclaimers.class, action);
-    return new AuthenticationState(action, null, AuthenticationState.class.getName(), null, disclaimers, getSettingsService());
+    return new AuthenticationState(action, null, AuthenticationState.class.getName(), null, getSettingsService());
   }
 
   /**
@@ -119,8 +118,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
 
   @Override
   protected WebflowActionState getWebflowActionState(CMAction action, ModelAndView webFlowOutcome, String flowId, String flowViewId) {
-    RegistrationDisclaimers disclaimers = settingsService.createProxy(RegistrationDisclaimers.class, action);
-    return new AuthenticationState(action, webFlowOutcome.getModelMap(), flowId, flowViewId, disclaimers, getSettingsService());
+    return new AuthenticationState(action, webFlowOutcome.getModelMap(), flowId, flowViewId, getSettingsService());
   }
 
   // ---------------- links -------------------

@@ -5,12 +5,12 @@
       <!--catalog configuration-->
       <StringProperty Name="config.id">anAlternativeStoreConfig</StringProperty>
       <StringProperty Name="store.id">10202</StringProperty>
-      <StringProperty Name="store.name">PerfectChefESite</StringProperty>
+      <StringProperty Name="store.name">anyStoreName</StringProperty>
       <StringProperty Name="catalog.id">10051</StringProperty>
       <StringProperty Name="currency">USD</StringProperty>
       <StringProperty Name="workspace.id">42</StringProperty>
-      <StringProperty Name="livecontext.ibm.wcs.host">shop-ref.ecommerce.coremedia.com</StringProperty>
-      <StringProperty Name="livecontext.apache.wcs.host">shop-helios.blueprint-box.vagrant</StringProperty>
+      <StringProperty Name="shop-host">hostpath.123.123.123.123.ip</StringProperty>
+      <StringProperty Name="shop-url">proxy.commerce-shop.com</StringProperty>
     </Struct>
   </StructProperty>
 </Struct>

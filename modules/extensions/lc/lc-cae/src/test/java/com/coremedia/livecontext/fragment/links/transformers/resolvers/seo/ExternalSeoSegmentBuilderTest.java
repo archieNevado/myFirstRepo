@@ -1,16 +1,24 @@
 package com.coremedia.livecontext.fragment.links.transformers.resolvers.seo;
 
+import com.coremedia.blueprint.base.links.SettingsBasedVanityUrlMapper;
+import com.coremedia.blueprint.base.links.VanityUrlMapperCacheKey;
+import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
+import com.coremedia.cache.Cache;
+import com.coremedia.cap.content.Content;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,53 +33,58 @@ public class ExternalSeoSegmentBuilderTest {
   @Mock
   private CMNavigation navigation;
 
+  @Mock
+  private Content rootChannnel;
+
+  @Mock
+  private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
+
+  @Mock
+  private Cache cache;
+
+  @Mock
+  private SettingsBasedVanityUrlMapper vanityUrlMapper;
+
+  private ExternalSeoSegmentBuilder testling;
+
   @Before
   public void beforeEachTest() {
-    when(navigation.getContentId()).thenReturn(1234);
-    when(navigation.getTitle()).thenReturn("Some Channel Title");
-    when(object.getContentId()).thenReturn(3456);
-    when(linkable.getContentId()).thenReturn(5678);
-    when(linkable.getTitle()).thenReturn("A Perfect Dinner @ Home!");
+    testling = new ExternalSeoSegmentBuilder();
+    testling.setCache(cache);
+    testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
+
+    when(navigation.getRootNavigation()).thenReturn(navigation);
+
+    when(cache.get(any(VanityUrlMapperCacheKey.class))).thenReturn(vanityUrlMapper);
+    when(navigationSegmentsUriHelper.getPathList(navigation)).thenReturn(Arrays.asList("aurora", "pages", "perfect-dinner"));
   }
 
   @Test
-  public void testPartialValuesReturnNull() throws Exception {
-    ExternalSeoSegmentBuilder testling = new ExternalSeoSegmentBuilder();
+  public void testPartialValuesReturnEmptyString() throws Exception {
 
-    assertNull(testling.asSeoSegment(null, object));
-    assertNull(testling.asSeoSegment(navigation, null));
-  }
-
-  @Test
-  public void testAsSeoSegmentForCMObjects() throws Exception {
-    ExternalSeoSegmentBuilder testling = new ExternalSeoSegmentBuilder();
-
-    // second param is an object
-    assertEquals("--1234-3456", testling.asSeoSegment(navigation, object));
+    assertEquals("", testling.asSeoSegment(null, object));
+    assertEquals("", testling.asSeoSegment(navigation, null));
   }
 
   @Test
   public void testAsSeoSegmentForCMLinkables() throws Exception {
-    ExternalSeoSegmentBuilder testling = new ExternalSeoSegmentBuilder();
-
-    // second param is a linkable with a title
-    assertEquals("a-perfect-dinner-home--1234-5678", testling.asSeoSegment(navigation, linkable));
+    when(linkable.getContentId()).thenReturn(5678);
+    when(linkable.getSegment()).thenReturn("---A Perfect-----Dinner @ Home!!!");
+    String seoSegment = testling.asSeoSegment(navigation, linkable);
+    //special charaters and '--' will be replaced by '-'. Beginning and trailing '-' will be removed.
+    assertEquals("pages--perfect-dinner--a-perfect-dinner-home-5678", seoSegment);
   }
 
   @Test
   public void testAsSeoSegmentForChannels() throws Exception {
-    ExternalSeoSegmentBuilder testling = new ExternalSeoSegmentBuilder();
-
-    // linkable == navigation here
-    assertEquals("some-channel-title--1234", testling.asSeoSegment(navigation, navigation));
+    String seoSegment = testling.asSeoSegment(navigation, navigation);
+    assertEquals("pages--perfect-dinner", seoSegment);
   }
 
-
   @Test
-  public void testAsSeoTitleEscaping() throws Exception {
-    ExternalSeoSegmentBuilder testling = new ExternalSeoSegmentBuilder();
-
-    assertEquals("a-perfect-dinner", testling.asSeoTitle("A Perfect Dinner"));
-    assertEquals("-p-rfect-dinner", testling.asSeoTitle("Ä Pörfect Dinner"));
+  public void testVanityUrl() {
+    when(vanityUrlMapper.patternFor(linkable.getContent())).thenReturn("deep/link");
+    String seoSegment = testling.asSeoSegment(navigation, linkable);
+    assertEquals("deep--link", seoSegment);
   }
 }

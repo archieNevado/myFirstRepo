@@ -8,7 +8,6 @@ import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
-import com.coremedia.cms.editor.sdk.sites.SitesService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 
 public class BlueprintFormsStudioPluginBase extends StudioPlugin {

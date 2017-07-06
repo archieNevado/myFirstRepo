@@ -6,7 +6,6 @@
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:alx="exml:com.coremedia.blueprint.studio.config.analytics"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin', 'Retrieval_title')}"
-        collapsible="true"
         itemId="analyticsRetrievalPanel"
         bindTo="{config.bindTo}">
   <fx:Metadata>

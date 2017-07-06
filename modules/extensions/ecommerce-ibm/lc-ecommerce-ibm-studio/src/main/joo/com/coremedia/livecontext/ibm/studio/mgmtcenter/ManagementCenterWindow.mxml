@@ -11,7 +11,6 @@
         id_="{MANAGEMENT_CENTER_WINDOW_ID}"
         closeAction="hide"
         resizable="true"
-        focusOnToFront="false"
         constrainHeader="true"
         stateful="true"
         stateId="{MANAGEMENT_CENTER_WINDOW_ID}"

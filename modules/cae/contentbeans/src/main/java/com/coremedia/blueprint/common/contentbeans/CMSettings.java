@@ -3,10 +3,13 @@ package com.coremedia.blueprint.common.contentbeans;
 import com.coremedia.cap.struct.Struct;
 
 /**
+ * <p>
  * The Blueprint uses settings for various purposes.  They are available by
  * CMSettings beans.
- *
- * <p>Represents document type {@link #NAME CMSettings}.</p>
+ * </p>
+ * <p>
+ * Represents document type {@link #NAME CMSettings}.
+ * </p>
  */
 public interface CMSettings extends CMLocalized {
   /**

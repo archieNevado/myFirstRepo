@@ -14,6 +14,8 @@ import java.util.List;
 /**
  * Common methods implemented by navigation nodes, like CMNavigation.
  * Navigation objects are Linkable too.
+ *
+ * @cm.template.api
  */
 public interface Navigation extends Linkable {
 
@@ -27,14 +29,14 @@ public interface Navigation extends Linkable {
 
   /**
    * Returns the parent of this navigation instance.
-   * @return
    */
   Navigation getParentNavigation();
 
   /**
    * Returns the theme of this navigation instance or its parent.
-   * @return the theme of this navigation instance or its parent
+   *
    * @param developer Use the developer's variant rather than the production theme.
+   * @return the theme of this navigation instance or its parent
    */
   CMTheme getTheme(@Nullable User developer);
 
@@ -53,40 +55,53 @@ public interface Navigation extends Linkable {
 
 
   /**
+   * <p>
    * Use hidden in order to provide <i>nice</i> URLs for content
    * which should not be reachable by navigation.
-   * <p>Semantic: hidden implies hiddenInSitemap.</p>
+   * </p>
+   * <p>
+   * Semantic: hidden implies hiddenInSitemap.
+   * </p>
+   *
+   * @cm.template.api
    */
   boolean isHidden();
 
   /**
+   * <p>
    * Returns the children which are visible in navigational contexts.
-   * <p/>
+   * </p>
+   * <p>
    * I.e. the same list as {@link #getChildren()} except {@link Navigation}
-   * documents whose
-   * {@link Navigation#isHidden()}
-   * flag is true.
+   * documents whose {@link Navigation#isHidden()} flag is true.
+   * </p>
    *
    * @return the children which are visible in navigational contexts.
+   * @cm.template.api
    */
   List<? extends Linkable> getVisibleChildren();
 
   /**
+   * <p>
    * Returns the value of the document is hidden in sidemap.
-   * <p/>
-   * <p>Do not show this channel in a sitemap. We recommend to use this flag
+   * </p>
+   * <p>
+   * Do not show this channel in a sitemap. We recommend to use this flag
    * in exceptional cases only, because a sitemap is not very helpful if it
-   * differs too much from the actual navigation.</p>
-   *
+   * differs too much from the actual navigation.
+   * </p>
    */
   boolean isHiddenInSitemap();
 
   /**
+   * <p>
    * Returns the children which are visible in sitemaps.
-   * <p/>
+   * </p>
+   * <p>
    * Reasonable implementations will delegate to {@link #getVisibleChildren()}
    * and possibly filter the result.  A list which is unrelated to
    * {@link #getVisibleChildren()} would be confusing.
+   * </p>
    *
    * @return the children which are visible in sitemaps.
    */
@@ -94,6 +109,7 @@ public interface Navigation extends Linkable {
 
   /**
    * @return true if this navigation item has no parents.
+   * @cm.template.api
    */
   boolean isRoot();
 
@@ -106,6 +122,7 @@ public interface Navigation extends Linkable {
    * to this navigation.
    *
    * @return the list of navigations forming the path to this Navigation including this.
+   * @cm.template.api
    */
   List<? extends Linkable> getNavigationPathList();
 

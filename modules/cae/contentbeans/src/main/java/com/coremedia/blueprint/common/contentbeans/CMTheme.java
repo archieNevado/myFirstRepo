@@ -11,10 +11,15 @@ import java.util.Map;
 
 
 /**
+ * <p>
  * CMTheme beans provide access to combined {@link com.coremedia.blueprint.common.contentbeans.CMCSS},
  * {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} documents usable to be attached to a channel.
+ * </p>
  * <p>
- * <p>Represents document type {@link #NAME CMTheme}.</p>
+ * Represents document type {@link #NAME CMTheme}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMTheme extends CMLocalized {
 
@@ -23,8 +28,10 @@ public interface CMTheme extends CMLocalized {
    */
   String NAME = "CMTheme";
 
+  @Override
   Map<String, ? extends Aspect<? extends CMTheme>> getAspectByName();
 
+  @Override
   List<? extends Aspect<? extends CMTheme>> getAspects();
 
   /**
@@ -48,8 +55,10 @@ public interface CMTheme extends CMLocalized {
    * Returns the value of the {@link CMSymbol} document property {@link CMSymbol#ICON}.
    *
    * @return the value of the {@link CMSymbol} document property {@link CMSymbol#ICON} or null
+   * @cm.template.api
    */
   Blob getIcon();
+
   /**
    * Name of the document property 'javaScriptLibs'.
    */
@@ -89,6 +98,7 @@ public interface CMTheme extends CMLocalized {
    * Returns the value of the document property {@link #DETAIL_TEXT}.
    *
    * @return the value of the document property {@link #DETAIL_TEXT}
+   * @cm.template.api
    */
   Markup getDetailText();
 
@@ -96,29 +106,36 @@ public interface CMTheme extends CMLocalized {
    * Returns the value of the document property {@link #JAVA_SCRIPT_LIBS}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} objects
+   * @cm.template.api
    */
-  @Nonnull List<CMJavaScript> getJavaScriptLibraries();
+  @Nonnull
+  List<CMJavaScript> getJavaScriptLibraries();
 
   /**
    * Returns the value of the document property {@link #JAVA_SCRIPTS}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} objects
+   * @cm.template.api
    */
-  @Nonnull List<CMJavaScript> getJavaScripts();
+  @Nonnull
+  List<CMJavaScript> getJavaScripts();
 
   /**
    * Returns the value of the document property {@link #CSS}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMCSS} objects
+   * @cm.template.api
    */
-  @Nonnull List<CMCSS> getCss();
+  @Nonnull
+  List<CMCSS> getCss();
 
   /**
    * Returns the value of the document property {@link #RESOURCE_BUNDLES}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMResourceBundle} objects
    */
-  @Nonnull List<CMResourceBundle> getResourceBundles();
+  @Nonnull
+  List<CMResourceBundle> getResourceBundles();
 
   String getViewRepositoryName();
 }

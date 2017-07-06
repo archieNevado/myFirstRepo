@@ -223,7 +223,6 @@ public class TaxonomySelectorBase extends Container {
           if(index == activePathList.getNodes().length-1) {
             var label:IconDisplayField = new IconDisplayField(IconDisplayField({
               value:node.getDisplayName(),
-              iconPosition: IconDisplayField.ICON_POSITION_BEFORE_LABEL,
               iconCls: resourceManager.getString('com.coremedia.icons.CoreIcons', 'arrow_right')
             }));
             label.setUI(IconDisplayFieldSkin.DEFAULT.getSkin());

@@ -1,7 +1,7 @@
 !tape
 name: csi_testFindCategoryMultiSEOSegmentsByExternalTechId_search
 interactions:
-- recorded: 2016-05-23T15:46:07.548Z
+- recorded: 2017-01-27T12:17:19.996Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,22 +17,19 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:07 GMT
+      Date: Fri, 27 Jan 2017 12:17:20 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000kYKxuSJhNYMUJCUL34Clye-:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000a9hId4yIkiKd6We8TMKqAY2:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
-      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
       Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
-      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-05-23T15:46:07.566Z
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-01-27T12:17:20.018Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -48,14 +45,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:07 GMT
+      Date: Fri, 27 Jan 2017 12:17:20 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000Yp96FbBHefZsLuJL9mQU6Pw:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000c5Y6dzEGTIpuDs3IgsU4SkB:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2016-05-23T15:46:07.584Z
+- recorded: 2017-01-27T12:17:20.048Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/%2520?categoryIdentifier=PC_Magazines&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1
@@ -68,16 +64,16 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:07 GMT
-      Expires: Mon, 23 May 2016 16:46:07 GMT
+      Date: Fri, 27 Jan 2017 12:17:20 GMT
+      Expires: Fri, 27 Jan 2017 13:17:20 GMT
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=PC_Magazines&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676795","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Magazines.jpg","seo_token_ntk":"pc-magazines;pc-magazines-auroraesite","shortDescription":"Magazines","parentCatalogGroupID":["3074457345616676668_3074457345616676785","3074457345616676719_3074457345616676785"],"name":"Magazines","longDescription":"Find
       the best style, fashion and cooking magazines.","uniqueID":"3074457345616676795","storeID":"715837934","cm_seo_token_ntk":"715837934_pc-magazines;715838084_pc-magazines-auroraesite","identifier":"PC_Magazines","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Magazines.jpg"}]}'
-- recorded: 2016-05-23T15:46:07.617Z
+- recorded: 2017-01-27T12:17:20.075Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/%2520?categoryIdentifier=PC_ToEat&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1
@@ -90,16 +86,16 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:07 GMT
-      Expires: Mon, 23 May 2016 16:46:07 GMT
+      Date: Fri, 27 Jan 2017 12:17:20 GMT
+      Expires: Fri, 27 Jan 2017 13:17:20 GMT
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=PC_ToEat&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676794","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ToEat.jpg","seo_token_ntk":"pc-to-eat;pc-to-eat-pcesite;pc-to-eat-auroraesite","shortDescription":"Chocolates.
-      Spices and special ingredients","parentCatalogGroupID":["3074457345616676668_3074457345616676771","3074457345616676719_3074457345616676771"],"name":"To Eat","longDescription":"Find chocolates as gifts as well as exotic ingredients to spice up your dishes.","uniqueID":"3074457345616676794","storeID":"715837934","cm_seo_token_ntk":"715837934_pc-to-eat;715838086_pc-to-eat-pcesite;715838084_pc-to-eat-auroraesite","identifier":"PC_ToEat","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_ToEat.jpg"}]}'
-- recorded: 2016-05-23T15:46:07.652Z
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=PC_ToEat&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676794","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ToEat.jpg","seo_token_ntk":"pc-to-eat;pc-to-eat-auroraesite","shortDescription":"Chocolates.
+      Spices and special ingredients","parentCatalogGroupID":["3074457345616676668_3074457345616676771","3074457345616676719_3074457345616676771"],"name":"To Eat","longDescription":"Find chocolates as gifts as well as exotic ingredients to spice up your dishes.","uniqueID":"3074457345616676794","storeID":"715837934","cm_seo_token_ntk":"715837934_pc-to-eat;715838084_pc-to-eat-auroraesite","identifier":"PC_ToEat","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_ToEat.jpg"}]}'
+- recorded: 2017-01-27T12:17:20.149Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/%2520?categoryIdentifier=PC_Glasses&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1
@@ -112,12 +108,12 @@ interactions:
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:07 GMT
-      Expires: Mon, 23 May 2016 16:46:07 GMT
+      Date: Fri, 27 Jan 2017 12:17:20 GMT
+      Expires: Fri, 27 Jan 2017 13:17:20 GMT
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=PC_Glasses&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676772","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Glasses.jpg","seo_token_ntk":"pc-glasses;pc-glasses-pcesite","shortDescription":"Glasses","parentCatalogGroupID":["3074457345616676668_3074457345616676768","3074457345616676719_3074457345616676768"],"name":"Glasses","longDescription":"Find
-      glasses that compliment your stylish table.","uniqueID":"3074457345616676772","storeID":"715837934","cm_seo_token_ntk":"715837934_pc-glasses;715838086_pc-glasses-pcesite","identifier":"PC_Glasses","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Glasses.jpg"}]}'
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=PC_Glasses&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676772","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Glasses.jpg","seo_token_ntk":"pc-glasses","shortDescription":"Glasses","parentCatalogGroupID":["3074457345616676668_3074457345616676768","3074457345616676719_3074457345616676768"],"name":"Glasses","longDescription":"Find
+      glasses that compliment your stylish table.","uniqueID":"3074457345616676772","storeID":"715837934","cm_seo_token_ntk":"715837934_pc-glasses","identifier":"PC_Glasses","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Glasses.jpg"}]}'

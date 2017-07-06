@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.fragment.resolver;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -69,7 +69,7 @@ public class BreadcrumbExternalReferenceResolver extends ExternalReferenceResolv
     }
 
     //use the fragment parameters locale, not the one of the site
-    StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
+    StoreContext storeContext = DefaultConnection.get().getStoreContext();
     String storeName = storeContext.getStoreName();
     if(lowerCaseSiteName) {
       storeName = storeName.toLowerCase(fragmentParameters.getLocale());

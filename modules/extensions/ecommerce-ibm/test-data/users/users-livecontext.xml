@@ -9,8 +9,6 @@
           <group id="global-site-manager" name="global-site-manager" contentgroup="true" livegroup="false" administrative="false">
             <rule content="/Sites/Aurora Augmentation" type="CMObject" rights="RMDAPS"/>
             <rule content="/Sites/Aurora Augmentation" type="Folder_" rights="RMDAPS"/>
-            <rule content="/Sites/Aurora B2B Augmentation" type="CMObject" rights="RMDAPS"/>
-            <rule content="/Sites/Aurora B2B Augmentation" type="Folder_" rights="RMDAPS"/>
             <members>
               <user id="rick" name="Rick" home="/Home/Rick"/>
               <user id="mary" name="Mary" home="/Home/Mary"/>
@@ -36,6 +34,8 @@
                 </members>
               </group>
               <group name="manager-de-DE" contentgroup="true" livegroup="false" administrative="false">
+                <rule content="/Sites/Aurora Augmentation/Germany/German" type="CMObject" rights="RMDAP"/>
+                <rule content="/Sites/Aurora Augmentation/Germany/German" type="Folder_" rights="RMDAP"/>
                 <members>
                   <user id="piet" name="Piet" home="/Home/Piet"/>
                 </members>
@@ -76,21 +76,21 @@
             <rule content="/Sites/Aurora Augmentation/United States/English/Pictures" type="Folder_" rights="RMD"/>
             <rule content="/Sites/Aurora Augmentation/United States/English/Videos" type="CMObject" rights="RMD"/>
             <rule content="/Sites/Aurora Augmentation/United States/English/Videos" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English" type="Folder_" rights="R"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Editorial/Content" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Editorial/Content" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Editorial/Products" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Editorial/Products" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Pictures" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Pictures" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Videos" type="Folder_" rights="RMD"/>
             <members>
               <user id="george" name="George" home="/Home/George"/>
             </members>
           </group> <!-- online-editor-en-US -->
           <group name="online-editor-de-DE" contentgroup="true" livegroup="false" administrative="false">
+            <rule content="/Sites/Aurora Augmentation/Germany/German" type="CMObject" rights="R"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German" type="Folder_" rights="R"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Editorial/Content" type="CMObject" rights="RMD"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Editorial/Content" type="Folder_" rights="RMD"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Editorial/Products" type="CMObject" rights="RMD"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Editorial/Products" type="Folder_" rights="RMD"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Pictures" type="CMObject" rights="RMD"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Pictures" type="Folder_" rights="RMD"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Videos" type="CMObject" rights="RMD"/>
+            <rule content="/Sites/Aurora Augmentation/Germany/German/Videos" type="Folder_" rights="RMD"/>
             <members>
               <user id="georg" name="Georg" home="/Home/Georg"/>
             </members>
@@ -107,12 +107,6 @@
             <rule content="/Sites/Aurora Augmentation/United States/English/Pictures" type="Folder_" rights="RMD"/>
             <rule content="/Sites/Aurora Augmentation/United States/English/Videos" type="CMObject" rights="RMD"/>
             <rule content="/Sites/Aurora Augmentation/United States/English/Videos" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English" type="Folder_" rights="R"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Pictures" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Pictures" type="Folder_" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Aurora B2B Augmentation/United States/English/Videos" type="Folder_" rights="RMD"/>
             <members>
               <user id="mark" name="Mark" home="/Home/Mark"/>
               <user id="amy" name="Amy" home="/Home/Amy"/>

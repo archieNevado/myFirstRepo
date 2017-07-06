@@ -125,7 +125,9 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
       CommerceBeanFactory commerceBeanFactory = commerceConnection.getCommerceBeanFactory();
 
       // clear the workspace id before validating
-      StoreContext storeContextWithoutWorkspaceId = cloneStoreContextWithWorkspaceId(storeContext, null);
+      StoreContext storeContextWithoutWorkspaceId = cloneStoreContext(storeContext);
+      storeContextWithoutWorkspaceId.setWorkspaceId(null);
+
       boolean commerceBeanWithoutWorkspaceExists = hasCommerceBean(commerceBeanFactory, propertyValue,
               storeContextWithoutWorkspaceId);
       if (commerceBeanWithoutWorkspaceExists) {
@@ -165,13 +167,6 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
     return commerceConnectionInitializer.findConnectionForSite(site)
             .orElseThrow(() -> new NoCommerceConnectionAvailable(
                     String.format("No commerce connection available for site '%s'.", site.getName())));
-  }
-
-  private static StoreContext cloneStoreContextWithWorkspaceId(@Nonnull StoreContext source,
-                                                               @Nullable String workspaceId) {
-    StoreContext clone = cloneStoreContext(source);
-    clone.setWorkspaceId(workspaceId);
-    return clone;
   }
 
   private static StoreContext cloneStoreContext(@Nonnull StoreContext source) {

@@ -1,14 +1,18 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.context.AbstractResolveContextStrategy;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -31,14 +35,15 @@ public class CategoryFragmentContextStrategy extends AbstractResolveContextStrat
   @Override
   protected Category findNearestCategoryFor(@Nonnull String id, @Nonnull StoreContext storeContext) {
     checkArgument(isNotBlank(id), "You must provide an external id");
-    //noinspection ConstantConditions
-    checkArgument(storeContext != null, "You must provide a store context");
 
     // CMS-3247: Allow category resolution by stable id
-    String formattedId = useStableIds ? getCurrentCommerceIdProvider().formatCategoryId(id) :
-            getCurrentCommerceIdProvider().formatCategoryTechId(id);
+    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    CommerceIdProvider idProvider = connection.getIdProvider();
+    String formattedId = useStableIds ? idProvider.formatCategoryId(id) :
+            idProvider.formatCategoryTechId(id);
 
-    return getCatalogService().withStoreContext(storeContext).findCategoryById(formattedId);
+    CatalogService catalogService = requireNonNull(connection.getCatalogService(), "no catalog service available");
+    return catalogService.withStoreContext(storeContext).findCategoryById(formattedId);
   }
 
   /**

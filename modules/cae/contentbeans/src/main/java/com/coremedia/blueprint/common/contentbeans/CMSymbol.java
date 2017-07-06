@@ -7,9 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * <p>
  * CMSymbol documents are constants, used in terms of enumeration values.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMSymbol}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMSymbol}.</p>
+ * @cm.template.api
  */
 public interface CMSymbol extends CMLocalized {
   /**

@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 @Link
 @RequestMapping
@@ -33,7 +33,7 @@ public class RatingResultHandler extends ElasticContentHandler<RatingResult> {
   public static final String RATING_PARAMETER = "rating";
 
   /**
-   * URI pattern, for URIs like "/dynamic/fragment/Rating/{segment}/{contextId}/{id}"
+   * URI pattern, for URIs like "/dynamic/fragment/rating/{segment}/{contextId}/{id}"
    */
   public static final String DYNAMIC_PATTERN_RATING = "/" + PREFIX_DYNAMIC +
           "/" + SEGMENTS_FRAGMENT +
@@ -43,10 +43,10 @@ public class RatingResultHandler extends ElasticContentHandler<RatingResult> {
           "/{" + ID + "}";
 
   @RequestMapping(value = DYNAMIC_PATTERN_RATING, method = RequestMethod.GET)
-  public ModelAndView getRatingResult(@PathVariable(CONTEXT_ID) String contextId,
-                                 @PathVariable(ID) String id,
-                                 @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                 HttpServletRequest request) {
+  public ModelAndView getRating(@PathVariable(CONTEXT_ID) String contextId,
+                                @PathVariable(ID) String id,
+                                @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
+                                HttpServletRequest request) {
 
     Navigation navigation = getNavigation(contextId);
 
@@ -76,7 +76,7 @@ public class RatingResultHandler extends ElasticContentHandler<RatingResult> {
     Navigation navigation = getNavigation(contextId);
 
     Object contributionTarget = fetchContributionTarget(request, targetId);
-    if( contributionTarget == null ) {
+    if (contributionTarget == null) {
       return HandlerHelper.notFound();
     }
 
@@ -112,7 +112,7 @@ public class RatingResultHandler extends ElasticContentHandler<RatingResult> {
   }
 
   @Link(type = RatingResult.class, uri = DYNAMIC_PATTERN_RATING)
-  public UriComponents buildInfoLink(RatingResult RatingResult, UriTemplate uriTemplate,HttpServletRequest request) {
+  public UriComponents buildInfoLink(RatingResult RatingResult, UriTemplate uriTemplate, HttpServletRequest request) {
     return getUriComponentsBuilder(SiteHelper.getSiteFromRequest(request), RatingResult, uriTemplate).build();
   }
 }

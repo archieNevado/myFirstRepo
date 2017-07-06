@@ -421,9 +421,12 @@
   }
 
   &__counter {
+    position: absolute;
     display: block;
     width: 30px;
-    @include center-absolute();
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
   }
 
   &--loading {

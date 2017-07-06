@@ -7,7 +7,7 @@
   </parent>
 
   <artifactId>alx-google-studio-plugin</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <description>Google Analytics Plugin for the CoreMedia Studio</description>
 
@@ -20,44 +20,46 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>alx-studio-plugin</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>ui-components</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>core-icons</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
+      <type>swc</type>
     </dependency>
 
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>joounit</artifactId>
+      <type>swc</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
       <!--<scope>test</scope> cannot be used here, because it would override the transitive compile dependency -->
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>client-core-test-helper</artifactId>
+      <type>swc</type>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
   </dependencies>
 

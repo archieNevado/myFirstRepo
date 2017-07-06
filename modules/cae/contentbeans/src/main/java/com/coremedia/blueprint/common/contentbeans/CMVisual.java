@@ -8,9 +8,15 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * The CMVisual type splits the media hierarchy to visual components. It adds visibility properties
- * like width and height.<br />
- * <p>Represents the document type {@link #NAME CMVisual}.</p>
+ * like width and height.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMVisual}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMVisual extends CMMedia {
 
@@ -68,6 +74,7 @@ public interface CMVisual extends CMMedia {
    * Returns the value of the document property (@link #dataUrl}
    *
    * @return the value of the document property (@link #dataUrl}
+   * @cm.template.api
    */
   String getDataUrl();
 }

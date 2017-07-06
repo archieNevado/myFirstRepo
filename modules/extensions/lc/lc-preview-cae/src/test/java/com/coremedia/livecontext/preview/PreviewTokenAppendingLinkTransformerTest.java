@@ -38,6 +38,7 @@ public class PreviewTokenAppendingLinkTransformerTest {
     testling.setPreview(true);
     testling.setPreviewTokenProvider(previewTokenProvider);
     connection = MockCommerceEnvBuilder.create().setupEnv();
+    connection.setVendorName("IBM");
 
     when(previewTokenProvider.provideValue(anyMap())).thenReturn("aPreviewTokenStr");
   }

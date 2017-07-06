@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 
@@ -56,7 +56,7 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
   }
 
   public SegmentService getSegmentService() {
-    return Commerce.getCurrentConnection().getSegmentService();
+    return DefaultConnection.get().getSegmentService();
   }
 
 

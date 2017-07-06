@@ -11,10 +11,11 @@ import java.util.Map;
 
 /**
  * A bean that represents the authentication action state (either logged in or logged out)
+ *
+ * @cm.template.api
  */
 public class AuthenticationState extends WebflowActionState {
 
-  private final RegistrationDisclaimers disclaimers;
   private final SettingsService settingsService;
 
   /**
@@ -25,15 +26,14 @@ public class AuthenticationState extends WebflowActionState {
    */
   public AuthenticationState(CMAction action, Map<String, Object> model,
                              String flowId, String flowView,
-                             RegistrationDisclaimers disclaimers,
                              @Nonnull SettingsService settingsService) {
     super(action, model, flowId, flowView);
-    this.disclaimers = disclaimers;
     this.settingsService = settingsService;
   }
 
   /**
    * @return true, if the current user is currently authenticated ("logged in") or not.
+   * @cm.template.api
    */
   public boolean isAuthenticated() {
     return getUser() != null;
@@ -41,20 +41,15 @@ public class AuthenticationState extends WebflowActionState {
 
   /**
    * @return The currently {@link #isAuthenticated() authenticated} user or null if not authenticated
+   * @cm.template.api
    */
   public CommunityUser getUser() {
     return UserContext.getUser();
   }
 
   /**
-   * @return The disclaimer documents
-   */
-  public RegistrationDisclaimers getDisclaimers() {
-    return disclaimers;
-  }
-
-  /**
    * @return The CMAction that represents the "login" action
+   * @cm.template.api
    */
   public CMAction getLoginAction() {
     return getAction();
@@ -62,6 +57,7 @@ public class AuthenticationState extends WebflowActionState {
 
   /**
    * @return The CMAction that represents the "logout" action
+   * @cm.template.api
    */
   public CMAction getLogoutAction() {
     return settingsService.setting("flow.logout", CMAction.class, getAction());
@@ -69,6 +65,7 @@ public class AuthenticationState extends WebflowActionState {
 
   /**
    * @return The CMAction that represents the "password reset" action
+   * @cm.template.api
    */
   public CMAction getPasswordResetAction() {
     return settingsService.setting("flow.passwordReset", CMAction.class, getAction());
@@ -76,6 +73,7 @@ public class AuthenticationState extends WebflowActionState {
 
   /**
    * @return The CMAction that represents the "registration" action
+   * @cm.template.api
    */
   public CMAction getRegistrationAction() {
     CMAction cmAction = getAction();
@@ -88,6 +86,7 @@ public class AuthenticationState extends WebflowActionState {
 
   /**
    * @return The CMAction that represents the "profile"/"user details" action
+   * @cm.template.api
    */
   public CMAction getProfileAction() {
     return settingsService.setting("flow.userDetails", CMAction.class, getAction());

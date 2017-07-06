@@ -38,7 +38,7 @@
       <artifactId>cap-multisite</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>ec-test-util</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>

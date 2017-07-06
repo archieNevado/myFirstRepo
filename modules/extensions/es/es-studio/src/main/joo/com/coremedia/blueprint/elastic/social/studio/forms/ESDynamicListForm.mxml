@@ -53,7 +53,6 @@
                                             ['MOST_SHARED', resourceManager.getString('com.coremedia.blueprint.elastic.social.studio.ElasticSocialStudioPlugin', 'MOST_SHARED')]
                                           ]}"
                               triggerAction="all"
-                              tabIndex="1"
                               encodeItems="true">
               <ui:plugins exml:mode="append">
                 <editor:BindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
@@ -74,7 +73,6 @@
                                             ['LAST_DAY', resourceManager.getString('com.coremedia.blueprint.elastic.social.studio.ElasticSocialStudioPlugin', 'LAST_DAY')]
                                           ]}"
                               triggerAction="all"
-                              tabIndex="1"
                               encodeItems="true">
               <ui:plugins exml:mode="append">
                 <editor:BindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"

@@ -14,7 +14,6 @@
 </StructProperty>
 <StructProperty Name="workarea">
 <Struct>
-<StringProperty Name="tabs">[{"type":"com.coremedia.cms.editor.sdk.config.premular","state":{"content":{"$Ref":"content/458"}}}]</StringProperty>
 <IntProperty Name="activeTabIndex">0</IntProperty>
 </Struct>
 </StructProperty>

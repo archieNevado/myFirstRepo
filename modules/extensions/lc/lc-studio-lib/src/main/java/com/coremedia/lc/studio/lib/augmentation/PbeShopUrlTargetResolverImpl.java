@@ -1,6 +1,7 @@
 package com.coremedia.lc.studio.lib.augmentation;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -49,7 +50,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
       return null;
     }
 
-    CommerceConnection commerceConnection = Commerce.getCurrentConnection();
+    CommerceConnection commerceConnection = DefaultConnection.get();
     if (commerceConnection == null) {
       return null;
     }

@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -16,10 +17,14 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.undoc.multisite.SitesService;
+import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
@@ -35,6 +40,7 @@ import com.coremedia.objectserver.web.HttpError;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,142 +50,28 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
 
-  protected void defaultSetup() {
-    testling = createTestling();
-    testling.setPageGridPlacementResolver(pageGridPlacementResolver);
-    testling.setSitesService(sitesService);
-    testling.setContentBeanFactory(contentBeanFactory);
-    testling.setValidationService(validationService);
-    testling.setBeanFactory(beanFactory);
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
-
-    siteResolver.setSitesService(sitesService);
-
-    when(request.getAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE)).thenReturn(fragmentContext);
-
-    Set<Site> sites = new HashSet<>();
-    sites.add(site);
-    when(site.getId()).thenReturn(SITE_ID);
-    when(site.getName()).thenReturn(SITE_NAME);
-    when(site.getLocale()).thenReturn(LOCALE);
-    when(site.getSiteRootDocument()).thenReturn(rootChannel);
-    when(sitesService.getSites()).thenReturn(sites);
-    when(sitesService.getSiteFor(any(Content.class))).thenReturn(site);
-    when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
-
-    when(fragmentParameters.getExternalRef()).thenReturn(EXTERNAL_REF);
-    when(fragmentParameters.getStoreId()).thenReturn(STORE_ID);
-    when(fragmentParameters.getLocale()).thenReturn(LOCALE);
-    when(fragmentParameters.getParameter()).thenReturn(PARAMETER);
-    when(fragmentParameters.getView()).thenReturn(VIEW);
-    when(fragmentParameters.getParameter()).thenReturn(PLACEMENT);
-
-    when(storeContextProvider.findContextBySite(site)).thenReturn(storeContext);
-    when(storeContext.get("storeId")).thenReturn(STORE_ID);
-
-    when(resolveContextStrategy.resolveContext(site, EXTERNAL_TECH_ID)).thenReturn(navigation);
-    when(resolveContextStrategy.resolveContext(site, CATEGORY_ID)).thenReturn(navigation);
-    when(navigation.getContext()).thenReturn(cmContext);
-
-    when(cmContext.getTitle()).thenReturn(TITLE);
-    when(cmContext.getKeywords()).thenReturn(KEYWORDS);
-    when(cmContext.getContentId()).thenReturn(CMCONTEXT_ID);
-    when(cmContext.getContent()).thenReturn(cmContextContent);
-    when(cmContextContent.getType()).thenReturn(cmContextContentType);
-    when(cmContextContentType.getName()).thenReturn(CMContext.NAME);
-
-    when(cmExternalChannelContext.getTitle()).thenReturn(TITLE);
-    when(cmExternalChannelContext.getKeywords()).thenReturn(KEYWORDS);
-    when(cmExternalChannelContext.getContentId()).thenReturn(CMCONTEXT_ID);
-    when(cmExternalChannelContext.getContent()).thenReturn(cmExternalChannelContextContent);
-    when(cmExternalChannelContextContent.getType()).thenReturn(cmExternalChannelContextContentType);
-    when(cmExternalChannelContextContentType.getName()).thenReturn(CMExternalChannel.NAME);
-
-    when(rootChannelBean.getTitle()).thenReturn(TITLE);
-    when(rootChannelBean.getKeywords()).thenReturn(KEYWORDS);
-    when(rootChannelBean.getContentId()).thenReturn(CMCONTEXT_ID);
-    when(rootChannelBean.getContent()).thenReturn(cmContextContent);
-    when(cmContextContent.getType()).thenReturn(cmContextContentType);
-    when(cmContextContentType.getName()).thenReturn(CMContext.NAME);
-    when(contentBeanFactory.createBeanFor(rootChannel, CMChannel.class)).thenReturn(rootChannelBean);
-    when(contentBeanFactory.createBeanFor(rootChannel, Navigation.class)).thenReturn(rootChannelBean);
-    when(contentBeanFactory.createBeanFor(rootChannel, Linkable.class)).thenReturn(rootChannelBean);
-
-    when(pageGridPlacementResolver.resolvePageGridPlacement(any(CMChannel.class), eq(PLACEMENT))).thenReturn(placement);
-
-    when(linkableAndNavigation.getLinkable()).thenReturn(linkable);
-    when(linkableAndNavigation.getNavigation()).thenReturn(navigationDoc);
-
-    when(site.getSiteRootFolder()).thenReturn(rootFolder);
-    when(site.getSiteRootDocument()).thenReturn(rootChannel);
-    when(rootFolder.getRepository()).thenReturn(contentRepository);
-    when(contentRepository.getContentType("CMExternalChannel")).thenReturn(externalChannelContentType);
-  }
-
-  protected void assertDefaultPage(ModelAndView result) {
-    assertNotNull(result);
-  }
-
-  protected FragmentParameters getFragmentParameters4Product() {
-    String url = "http://localhost:40081/blueprint/servlet/service/fragment/" + STORE_ID + "/" + LOCALE_STRING + "/params;";
-    FragmentParameters  params = FragmentParametersFactory.create(url);
-    params.setCategoryId(CATEGORY_ID);
-    params.setProductId(EXTERNAL_TECH_ID);
-    params.setExternalReference(EXTERNAL_REF);
-    params.setView(VIEW);
-    return params;
-  }
-
-  protected void assertDefaultPlacement(ModelAndView result) {
-    assertNotNull(result);
-  }
-
-  protected void assertErrorPage(ModelAndView result, int expectedErrorCode) {
-    HttpError error = (HttpError)result.getModel().get(HandlerHelper.MODEL_ROOT);
-    assertEquals(expectedErrorCode, error.getErrorCode());
-  }
-
-  public CMChannel getRootChannelBean() {
-    return rootChannelBean;
-  }
-
-  protected void verifyDefault() {
-    //verify(fragmentContext, times(1)).setFragmentRequest(true); => moved to interceptor
-  }
-
-  protected StoreContext getStoreContext() {
-    return storeContext;
-  }
-
-  public ResolveContextStrategy getResolveContextStrategy() {
-    return resolveContextStrategy;
-  }
-
-  protected SitesService getSitesService() {
-    return sitesService;
-  }
-
-  public Site getSite() {
-    return site;
-  }
-
-  public LiveContextNavigation getNavigation() {
-    return navigation;
-  }
-
-  protected T getTestling() {
-    return testling;
-  }
-
-  protected abstract T createTestling();
-
-  private T testling;
+  protected static final String STORE_ID = "Sirius Cybernetics Corporation";
+  protected static final String CATEGORY_ID = "Sirius Cybernetics Corporation";
+  protected static final String SITE_NAME = "Betelgeuse";
+  protected static final String SITE_ID = "0987654321";
+  protected static final String LOCALE_STRING = "en-US";
+  protected static final Locale LOCALE = Locale.forLanguageTag(LOCALE_STRING);
+  protected static final String EXTERNAL_TECH_ID = "Nutrimatic Drinks Dispenser";
+  protected static final String VIEW = "Point of View Gun";
+  protected static final String TITLE = "title";
+  protected static final String KEYWORDS = "keywords";
+  protected static final int CMCONTEXT_ID = 42;
+  protected static final String PLACEMENT = "placement";
+  protected static final String EXTERNAL_REF = "cm:coremedia:///cap/content/5678";
+  protected static final String PARAMETER = "parameter";
+  protected static final String SITE_ATTRIBUTE_NAME = SiteHelper.class.getName() + "site";
 
   @Mock
   protected BeanFactory beanFactory;
@@ -251,7 +143,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   protected ContentBeanFactory contentBeanFactory;
 
   @Mock
-  private PageGridPlacement placement;
+  protected PageGridPlacement placement;
 
   @Mock
   protected PageGridPlacementResolver pageGridPlacementResolver;
@@ -279,26 +171,175 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
 
   @Mock
   protected ContentCapIdExternalReferenceResolver contentCapIdExternalReferenceResolver;
+
   @Mock
   protected ContentNumericIdWithChannelIdExternalReferenceResolver contentNumericIdWithChannelIdExternalReferenceResolver;
+
   @Mock
   protected ContentNumericIdExternalReferenceResolver contentNumericIdExternalReferenceResolver;
+
   @Mock
   protected ContentPathExternalReferenceResolver contentPathExternalReferenceResolver;
 
-  protected static final String STORE_ID = "Sirius Cybernetics Corporation";
-  protected static final String CATEGORY_ID = "Sirius Cybernetics Corporation";
-  protected static final String SITE_NAME = "Betelgeuse";
-  protected static final String SITE_ID = "0987654321";
-  protected static final String LOCALE_STRING = "en-US";
-  protected static final Locale LOCALE = Locale.forLanguageTag(LOCALE_STRING);
-  protected static final String EXTERNAL_TECH_ID = "Nutrimatic Drinks Dispenser";
-  protected static final String VIEW = "Point of View Gun";
-  protected static final String TITLE = "title";
-  protected static final String KEYWORDS = "keywords";
-  protected static final int CMCONTEXT_ID = 42;
-  protected static final String PLACEMENT = "placement";
-  protected static final String EXTERNAL_REF = "cm:coremedia:///cap/content/5678";
-  protected static final String PARAMETER = "parameter";
-  protected static final String SITE_ATTRIBUTE_NAME = SiteHelper.class.getName() + "site";
+  @Mock
+  protected CommerceConnection connection;
+
+  @Mock
+  protected CommerceBeanFactory commerceBeanFactory;
+
+  @Mock
+  protected CommerceIdProvider idProvider;
+
+  private T testling;
+
+  protected final Cache cache = new Cache("test");
+
+  protected void defaultSetup() {
+    testling = createTestling();
+    testling.setPageGridPlacementResolver(pageGridPlacementResolver);
+    testling.setSitesService(sitesService);
+    testling.setContentBeanFactory(contentBeanFactory);
+    testling.setValidationService(validationService);
+    testling.setBeanFactory(beanFactory);
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, cache, null, null, null));
+
+    siteResolver.setSitesService(sitesService);
+
+    when(request.getAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE)).thenReturn(fragmentContext);
+
+    Set<Site> sites = new HashSet<>();
+    sites.add(site);
+    when(site.getId()).thenReturn(SITE_ID);
+    when(site.getName()).thenReturn(SITE_NAME);
+    when(site.getLocale()).thenReturn(LOCALE);
+    when(site.getSiteRootDocument()).thenReturn(rootChannel);
+    when(sitesService.getSites()).thenReturn(sites);
+    when(sitesService.getSiteFor(any(Content.class))).thenReturn(site);
+    when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
+
+    when(fragmentParameters.getExternalRef()).thenReturn(EXTERNAL_REF);
+    when(fragmentParameters.getStoreId()).thenReturn(STORE_ID);
+    when(fragmentParameters.getLocale()).thenReturn(LOCALE);
+    when(fragmentParameters.getParameter()).thenReturn(PARAMETER);
+    when(fragmentParameters.getView()).thenReturn(VIEW);
+    when(fragmentParameters.getParameter()).thenReturn(PLACEMENT);
+
+    when(storeContextProvider.findContextBySite(site)).thenReturn(storeContext);
+    when(storeContext.get("storeId")).thenReturn(STORE_ID);
+
+    when(resolveContextStrategy.resolveContext(site, EXTERNAL_TECH_ID)).thenReturn(navigation);
+    when(resolveContextStrategy.resolveContext(site, CATEGORY_ID)).thenReturn(navigation);
+    when(navigation.getContext()).thenReturn(cmContext);
+
+    when(cmContext.getTitle()).thenReturn(TITLE);
+    when(cmContext.getKeywords()).thenReturn(KEYWORDS);
+    when(cmContext.getContentId()).thenReturn(CMCONTEXT_ID);
+    when(cmContext.getContent()).thenReturn(cmContextContent);
+    when(cmContextContent.getType()).thenReturn(cmContextContentType);
+    when(cmContextContentType.getName()).thenReturn(CMContext.NAME);
+
+    when(cmExternalChannelContext.getTitle()).thenReturn(TITLE);
+    when(cmExternalChannelContext.getKeywords()).thenReturn(KEYWORDS);
+    when(cmExternalChannelContext.getContentId()).thenReturn(CMCONTEXT_ID);
+    when(cmExternalChannelContext.getContent()).thenReturn(cmExternalChannelContextContent);
+    when(cmExternalChannelContextContent.getType()).thenReturn(cmExternalChannelContextContentType);
+    when(cmExternalChannelContextContentType.getName()).thenReturn(CMExternalChannel.NAME);
+
+    when(rootChannelBean.getTitle()).thenReturn(TITLE);
+    when(rootChannelBean.getKeywords()).thenReturn(KEYWORDS);
+    when(rootChannelBean.getContentId()).thenReturn(CMCONTEXT_ID);
+    when(rootChannelBean.getContent()).thenReturn(cmContextContent);
+    when(cmContextContent.getType()).thenReturn(cmContextContentType);
+    when(cmContextContentType.getName()).thenReturn(CMContext.NAME);
+    when(contentBeanFactory.createBeanFor(rootChannel, CMChannel.class)).thenReturn(rootChannelBean);
+    when(contentBeanFactory.createBeanFor(rootChannel, Navigation.class)).thenReturn(rootChannelBean);
+    when(contentBeanFactory.createBeanFor(rootChannel, Linkable.class)).thenReturn(rootChannelBean);
+
+    when(pageGridPlacementResolver.resolvePageGridPlacement(any(CMChannel.class), eq(PLACEMENT))).thenReturn(placement);
+
+    when(linkableAndNavigation.getLinkable()).thenReturn(linkable);
+    when(linkableAndNavigation.getNavigation()).thenReturn(navigationDoc);
+
+    when(site.getSiteRootFolder()).thenReturn(rootFolder);
+    when(site.getSiteRootDocument()).thenReturn(rootChannel);
+    when(rootFolder.getRepository()).thenReturn(contentRepository);
+    when(contentRepository.getContentType("CMExternalChannel")).thenReturn(externalChannelContentType);
+
+    connection = MockCommerceEnvBuilder.create().setupEnv();
+    connection.getStoreContext().put(StoreContextImpl.SITE, SITE_ID);
+  }
+
+  protected void assertDefaultPage(ModelAndView result) {
+    assertNotNull(result);
+    ModelMap modelMap = result.getModelMap();
+    assertTrue(modelMap.containsKey("self"));
+    assertTrue(modelMap.containsKey("cmpage"));
+  }
+
+  protected FragmentParameters getFragmentParameters4Product() {
+    String url = "http://localhost:40081/blueprint/servlet/service/fragment/" + STORE_ID + "/" + LOCALE_STRING + "/params;";
+    FragmentParameters  params = FragmentParametersFactory.create(url);
+    params.setCategoryId(CATEGORY_ID);
+    params.setProductId(EXTERNAL_TECH_ID);
+    params.setExternalReference(EXTERNAL_REF);
+    params.setView(VIEW);
+    return params;
+  }
+
+  protected FragmentParameters getFragmentParameters4ProductAssets() {
+    String url = "http://localhost:40081/blueprint/servlet/service/fragment/" + STORE_ID + "/" + LOCALE_STRING + "/params;view=asAssets;parameter=orientation%253Dportrait%252Ctypes%253Dall;";
+    FragmentParameters  params = FragmentParametersFactory.create(url);
+    params.setCategoryId(CATEGORY_ID);
+    params.setProductId(EXTERNAL_TECH_ID);
+    params.setExternalReference(EXTERNAL_REF);
+    return params;
+  }
+
+  protected void assertDefaultPlacement(ModelAndView result) {
+    assertNotNull(result);
+    assertNotNull(result.getModel());
+    Object self = result.getModel().get("self");
+    assertNotNull(self);
+    assertTrue(self instanceof PageGridPlacement);
+  }
+
+  protected void assertErrorPage(ModelAndView result, int expectedErrorCode) {
+    HttpError error = (HttpError)result.getModel().get(HandlerHelper.MODEL_ROOT);
+    assertEquals(expectedErrorCode, error.getErrorCode());
+  }
+
+  public CMChannel getRootChannelBean() {
+    return rootChannelBean;
+  }
+
+  protected void verifyDefault() {
+    //verify(fragmentContext, times(1)).setFragmentRequest(true); => moved to interceptor
+  }
+
+  protected StoreContext getStoreContext() {
+    return storeContext;
+  }
+
+  public ResolveContextStrategy getResolveContextStrategy() {
+    return resolveContextStrategy;
+  }
+
+  protected SitesService getSitesService() {
+    return sitesService;
+  }
+
+  public Site getSite() {
+    return site;
+  }
+
+  public LiveContextNavigation getNavigation() {
+    return navigation;
+  }
+
+  protected T getTestling() {
+    return testling;
+  }
+
+  protected abstract T createTestling();
+
 }

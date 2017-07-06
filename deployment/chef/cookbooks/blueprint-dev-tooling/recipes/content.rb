@@ -50,6 +50,7 @@ unless node['blueprint']['dev']['content']['content_zip'].empty?
     # make sure that if force is set, we do not use publishall but bulkpublish
     notifies :publishall_content, "blueprint_dev_tooling_content[#{content_dir}]", :delayed if node['blueprint']['dev']['content']['mode'] != 'force'
     notifies :bulkpublish_content, "blueprint_dev_tooling_content[#{content_dir}]", :delayed if node['blueprint']['dev']['content']['mode'] == 'force'
+    not_if { node['blueprint']['dev']['content']['mode'] == 'skip' }
   end
 end
 

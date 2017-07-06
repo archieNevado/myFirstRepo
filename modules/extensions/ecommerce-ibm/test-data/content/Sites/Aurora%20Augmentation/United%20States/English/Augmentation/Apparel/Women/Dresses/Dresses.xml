@@ -26,7 +26,9 @@
 <contexts>
 </contexts>
 <teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>All the beautiful dresses you need for this Summer.</p></div></teaserText>
 <pictures>
+<link href="../../../../Pictures/Categories/Beautiful%20young%20woman%20in%20black%20and%20whic3559259.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Categories/Beautiful%20young%20woman%20in%20black%20and%20white%20striped%20dress"/>
 </pictures>
 <related>
 </related>
@@ -85,13 +87,6 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../../Videos/Campaigns/Spring%20Dresses%20Campaign/White%20Summer%20Dress%20c944bd0c.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Videos/Campaigns/Spring%20Dresses%20Campaign/White%20Summer%20Dress%20Video%205%3A2"/>
-</LinkListProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/banner.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/banner"/>
-</Struct>
-<Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../../Navigation/Fragments/Aurora%20Categories/Apparel/Women/Dresses/Aurora%c6bd76c7.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Women/Dresses/Aurora%20Dresses%20PDP%20Related%20Tab%20Collection"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/tab.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/tab"/>
 </Struct>

@@ -1,7 +1,7 @@
 !tape
 name: csi_testFindMarketingSpots
 interactions:
-- recorded: 2016-07-25T15:26:19.237Z
+- recorded: 2017-01-27T12:17:55.410Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,22 +17,19 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:20 GMT
+      Date: Fri, 27 Jan 2017 12:17:55 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000H3carTmMRqWPILH7mkYo8x5:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=00006OKmMjTQ5KFpEkm20nd0YMY:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
-      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
       Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
-      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-07-25T15:26:19.257Z
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-01-27T12:17:55.426Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -48,14 +45,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:20 GMT
+      Date: Fri, 27 Jan 2017 12:17:55 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000yJhuLIt547NEy-_V5YDN94w:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000q7hVupCU8ryKzKFEz6JJLrl:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2016-07-25T15:26:19.285Z
+- recorded: 2017-01-27T12:17:55.460Z
   request:
     method: POST
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
@@ -73,14 +69,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:20 GMT
+      Date: Fri, 27 Jan 2017 12:17:55 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000bkAAy59r5q13qkiavQKFvDR:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000b12YWlq4dsrR6zUtCzbCQIt:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"WCToken":"2%2Ccn5bkOen6gb2ncruRjkVh6Ec6Y%2FkmeTzIPYBIGX%2FdxUYaIoeQa85Gk9v9FfPcULY9PYHhFmJ5JrdKEJS9ED3qPo55vtRJIEWAFgM0gEWv3CRE0UlmPXUavINI4Jx9WXY4e1gcCiRppCYoWfUl74o0k0M7yrRfQQU4QKLI8lHf%2FMwtSg1IyTVCLMs%2BMiFKnRsOhYk%2BuACgm9zZscv41%2F53qk5ZGHFAQHGE%2B2L%2BrUqYuo%3D","userId":"2","WCTrustedToken":"2%2CugVUugQZioP7vNN2xM2kpc%2BxWPCxpxlAQGktku6CqDk%3D","personalizationID":"1469420030228-2"}'
-- recorded: 2016-07-25T15:26:19.355Z
+    body: '{"WCToken":"2%2CPuqDmctPeU4iRQcI44OPpLq8yhp3JcUxkzG1MstGaWtxvlpqFuVNg%2Fj30n1SjOr84YYTYFmGzUgO8aTl2WRkusOggpk%2FFiJvr0IUfL%2B59tPrqvA1Ux434ar%2FtNWIrASDxHL7SInkAKcrTv4DpN06F73fVWCjq4QlQYrNPTPNIQJE6HuEPuTfajR3kYrO8hAd1CaKiJnesOwMp%2BlWQ%2BGClj6FRb1EAClMSorAGrrRIaY%3D","userId":"2","WCTrustedToken":"2%2C2duxSyIPHoDdfyFP5U%2F0opXMGmN4%2B8LeBK1pPbE2Xs0%3D","personalizationID":"1485481511365-1"}'
+- recorded: 2017-01-27T12:17:55.522Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/spot?q=byType&qType=MARKETING&catalogId=3074457345616676719&currency=USD&langId=-1
@@ -90,20 +85,19 @@ interactions:
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
       User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-      WCToken: 2%2Ccn5bkOen6gb2ncruRjkVh6Ec6Y%2FkmeTzIPYBIGX%2FdxUYaIoeQa85Gk9v9FfPcULY9PYHhFmJ5JrdKEJS9ED3qPo55vtRJIEWAFgM0gEWv3CRE0UlmPXUavINI4Jx9WXY4e1gcCiRppCYoWfUl74o0k0M7yrRfQQU4QKLI8lHf%2FMwtSg1IyTVCLMs%2BMiFKnRsOhYk%2BuACgm9zZscv41%2F53qk5ZGHFAQHGE%2B2L%2BrUqYuo%3D
+      WCToken: 2%2CPuqDmctPeU4iRQcI44OPpLq8yhp3JcUxkzG1MstGaWtxvlpqFuVNg%2Fj30n1SjOr84YYTYFmGzUgO8aTl2WRkusOggpk%2FFiJvr0IUfL%2B59tPrqvA1Ux434ar%2FtNWIrASDxHL7SInkAKcrTv4DpN06F73fVWCjq4QlQYrNPTPNIQJE6HuEPuTfajR3kYrO8hAd1CaKiJnesOwMp%2BlWQ%2BGClj6FRb1EAClMSorAGrrRIaY%3D
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:20 GMT
+      Date: Fri, 27 Jan 2017 12:17:55 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000su2bEQIKaCZfrWN9l2rNScS:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000ZEU0zh2UcCPXW4Ddu-tqIvF:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":189,"resourceId":"http:\/\/toko-16-01-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/spot?q=byType&qType=MARKETING&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":189,"recordSetComplete":true,"recordSetStartNumber":0,"MarketingSpot":[{"uiDisplayable":1,"description":"Display
+    body: '{"recordSetTotal":189,"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/spot?q=byType&qType=MARKETING&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":189,"recordSetComplete":true,"recordSetStartNumber":0,"MarketingSpot":[{"uiDisplayable":1,"description":"Display
       the main ad on About Dress Designer page","spotName":"AboutDressDesignerPageMainAd","spotId":"715839022","type":"MARKETING"},{"uiDisplayable":1,"description":"Display the main ad on Apparel department page","spotName":"ApparelRow1_Content","spotId":"715839021","type":"MARKETING"},{"uiDisplayable":1,"description":"Display
       ads on Apparel department page","spotName":"ApparelRow2_Content_Left","spotId":"715839025","type":"MARKETING"},{"uiDisplayable":1,"description":"Display ads on Apparel department page","spotName":"ApparelRow2_Content_Right","spotId":"715839026","type":"MARKETING"},{"uiDisplayable":1,"description":"Display
       category recommendations on Apparel department page.","spotName":"ApparelRow3_Categories","spotId":"715839109","type":"MARKETING"},{"uiDisplayable":1,"description":"Display catalog entry recommendations on Apparel department page. If more than four catalog
@@ -178,10 +172,10 @@ interactions:
       Recommendation in Magazines and Newsletters","spotName":"NewslettersAndMagazinesRow4_CatEntries","spotId":"715839070","type":"MARKETING"},{"uiDisplayable":1,"description":"Product Recommendation in Newsletters","spotName":"NewslettersProductRight_CatEntries","spotId":"715839055","type":"MARKETING"},{"uiDisplayable":1,"description":"Display
       ads on Newsletters category page","spotName":"NewslettersRow2_Content","spotId":"715839137","type":"MARKETING"},{"uiDisplayable":1,"description":"Display recommendations on Nuts product pages for Fasteners","spotName":"NutsProductRec_CatEntries","spotId":"715839158","type":"MARKETING"},{"uiDisplayable":1,"description":"Product
       Recommendation in Nuts","spotName":"NutsProductRight_CatEntries","spotId":"715839076","type":"MARKETING"},{"uiDisplayable":1,"description":"Display the main ad on Nuts category page","spotName":"NutsRow2_Content","spotId":"715839150","type":"MARKETING"},{"uiDisplayable":1,"description":"Display
-      catalog entry recommendations from Coremetrics Intelligent Offer on the order confirmation page.","spotName":"OrderConf_ProductRec","spotId":"715837887","type":"MARKETING"},{"uiDisplayable":1,"description":"Homepage Text banner for Offers","spotName":"PC_Homepage_Offer","spotId":"715839634","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef
-      widget for Order Confirmation page with contextual content based on purchase","spotName":"PC_RelatedBox_OrderConfirmation","spotId":"715839635","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef widget for Check-Out Thank you page with contextual
-      content based on cart","spotName":"PC_RelatedBox_Recently_Viewed","spotId":"715839636","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef related box with automated list of Top Sellers","spotName":"PC_RelatedBox_TopSellers","spotId":"715839637","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef
-      Sidebar that shows various activities based on login status, activity, cart content and applicable promotions (e.g. Women''s dress sale targeted at women)","spotName":"PC_Sidebar_Personalized","spotId":"715839638","type":"MARKETING"},{"uiDisplayable":1,"description":"Email
+      catalog entry recommendations from Coremetrics Intelligent Offer on the order confirmation page.","spotName":"OrderConf_ProductRec","spotId":"715837887","type":"MARKETING"},{"uiDisplayable":1,"description":"Homepage Text banner for Offers","spotName":"PC_Homepage_Offer","spotId":"715839384","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef
+      widget for Order Confirmation page with contextual content based on purchase","spotName":"PC_RelatedBox_OrderConfirmation","spotId":"715839385","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef widget for Check-Out Thank you page with contextual
+      content based on cart","spotName":"PC_RelatedBox_Recently_Viewed","spotId":"715839386","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef related box with automated list of Top Sellers","spotName":"PC_RelatedBox_TopSellers","spotId":"715839387","type":"MARKETING"},{"uiDisplayable":1,"description":"PerfectChef
+      Sidebar that shows various activities based on login status, activity, cart content and applicable promotions (e.g. Women''s dress sale targeted at women)","spotName":"PC_Sidebar_Personalized","spotId":"715839388","type":"MARKETING"},{"uiDisplayable":1,"description":"Email
       change password notification","spotName":"PasswordChangeNotifyCenter_Content","spotId":"715837919","type":"MARKETING"},{"uiDisplayable":1,"description":"Display content in the Privacy Policy page.","spotName":"PrivacyPolicyPageCenter_Content","spotId":"715837914","type":"MARKETING"},{"uiDisplayable":1,"description":"Display
       catalog entry recommendations from Coremetrics Intelligent Offer on the product details page.","spotName":"Product_ProductRec","spotId":"715837884","type":"MARKETING"},{"uiDisplayable":1,"description":"Display a list of the catalog entries that the customer
       has recently viewed. This e-Marketing Spot can also display other types of catalog entry recommendations, just like any e-Marketing Spot with a name that ends with _CatEntries","spotName":"RecViewed_CatEntries","spotId":"715837893","type":"MARKETING"},{"uiDisplayable":1,"description":"Display

@@ -7,21 +7,21 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class CommerceIdSchemeIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class CommerceIdSchemeIT extends IbmServiceTestBase {
 
   private static final String PRODUCT = "AuroraWMDRS-1";
   private static final String CATEGORY = "Women";
@@ -31,7 +31,6 @@ public class CommerceIdSchemeIT extends AbstractServiceTest {
   private static final String CATEGORY_ID = "ibm:///catalog/category/" + CATEGORY;
 
   @Inject
-  @Named("catalogIdScheme")
   CommerceIdScheme testling;
 
   @Before

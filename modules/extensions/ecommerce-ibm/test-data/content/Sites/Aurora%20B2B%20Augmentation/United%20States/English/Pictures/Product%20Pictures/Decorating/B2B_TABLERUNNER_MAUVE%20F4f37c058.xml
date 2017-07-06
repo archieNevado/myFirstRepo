@@ -18,9 +18,9 @@
 <StructProperty Name="transforms">
 <Struct>
 <StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=784;y=0;width=882;height=1367</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=513;y=0;width=1022;height=1367</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=343;y=0;width=1365;height=1367</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=114;y=0;width=1819;height=1367</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=511;y=0;width=1025;height=1367</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=341;y=0;width=1367;height=1367</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=113;y=0;width=1823;height=1367</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=213;width=2048;height=1154</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=497;width=2048;height=821</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=90;y=895;width=1888;height=472</StringProperty>
@@ -85,7 +85,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Decoration.xml" path="/Settings/Taxonomies/Subject/Decoration"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

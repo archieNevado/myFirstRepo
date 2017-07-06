@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * <p>
@@ -57,10 +58,22 @@ public class FragmentContextProvider implements Filter {
    */
   @Nonnull
   public static FragmentContext getFragmentContext(@Nonnull ServletRequest request) {
+    return findFragmentContext(request).orElseThrow(
+            () -> new IllegalStateException("FragmentContext not set. FragmentContextProvider#doFilter not invoked?"));
+  }
+
+  /**
+   * Returns the {@link FragmentContext} for the given request, if available
+   *
+   * @param request request
+   * @return Optional with FragmentContext, or empty Optional if no FragmentContext is available.
+   * @see #getFragmentContext(ServletRequest)
+   */
+  @Nonnull
+  public static Optional<FragmentContext> findFragmentContext(@Nonnull ServletRequest request) {
     Object attribute = request.getAttribute(FRAGMENT_CONTEXT_ATTRIBUTE);
-    if (!(attribute instanceof FragmentContext)) {
-      throw new IllegalStateException("FragmentContext not set. FragmentContextProvider#doFilter not invoked?");
-    }
-    return (FragmentContext) attribute;
+    return attribute instanceof FragmentContext
+            ? Optional.of((FragmentContext) attribute)
+            : Optional.empty();
   }
 }

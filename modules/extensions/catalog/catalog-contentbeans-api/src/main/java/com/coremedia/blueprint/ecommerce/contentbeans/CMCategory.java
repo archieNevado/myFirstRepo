@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * @cm.template.api
+ */
 public interface CMCategory extends CMAbstractCategory {
   /**
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMChannel'.
@@ -40,6 +43,7 @@ public interface CMCategory extends CMAbstractCategory {
    * Returns the subcategories of this category.
    *
    * @return immutable list of subcategories
+   * @cm.template.api
    */
   @Nonnull
   List<CMCategory> getSubcategories();
@@ -48,6 +52,7 @@ public interface CMCategory extends CMAbstractCategory {
    * Returns the products of this category.
    *
    * @return immutable list of products
+   * @cm.template.api
    */
   @Nonnull
   List<CMProduct> getProducts();

@@ -2,6 +2,7 @@
 <componentPackage>
   <component class="com.coremedia.livecontext.studio.LivecontextStudioPlugin"/>
   <component class="com.coremedia.livecontext.studio.action.AugmentCategoryAction"/>
+  <component class="com.coremedia.livecontext.studio.action.AugmentProductAction"/>
   <component class="com.coremedia.livecontext.studio.action.CreateCatalogObjectDocumentAction"/>
   <component class="com.coremedia.livecontext.studio.action.CreateMarketingSpotAction"/>
   <component class="com.coremedia.livecontext.studio.action.CreateProductTeaserAction"/>
@@ -30,16 +31,15 @@
   <component class="com.coremedia.livecontext.studio.desktop.CommerceSystemForm"/>
   <component class="com.coremedia.livecontext.studio.desktop.CommerceWorkAreaTab"/>
   <component class="com.coremedia.livecontext.studio.forms.CMExternalChannelForm"/>
+  <component class="com.coremedia.livecontext.studio.forms.CMExternalProductForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CMExternalPageForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CMMarketingSpotForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CMProductTeaserForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CommerceAugmentedCategoryStructureForm"/>
-  <component class="com.coremedia.livecontext.studio.forms.ProductDetailsDocumentForm"/>
+  <component class="com.coremedia.livecontext.studio.forms.ProductAssignmentField"/>
   <component class="com.coremedia.livecontext.studio.forms.ProductTeaserDocumentForm"/>
   <component class="com.coremedia.livecontext.studio.library.LivecontextCollectionViewActionsPlugin"/>
-  <component class="com.coremedia.livecontext.studio.pbe.AddFragmentHighlightButtonPlugin"/>
   <component class="com.coremedia.livecontext.studio.pbe.DisableStoreNodePlugin"/>
-  <component class="com.coremedia.livecontext.studio.pbe.FragmentHighlightButton"/>
   <component class="com.coremedia.livecontext.studio.pbe.OpenCreateExternalPageMenuItem"/>
   <component class="com.coremedia.livecontext.studio.pbe.ShopPageOpenInBackgroundMenuItem"/>
   <component class="com.coremedia.livecontext.studio.pbe.ShopPageOpenInTabMenuItem"/>

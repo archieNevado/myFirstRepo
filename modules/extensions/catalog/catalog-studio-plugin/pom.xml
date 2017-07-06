@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>catalog-studio-plugin</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <description>Catalog Management Plugin for CoreMedia Studio</description>
 
@@ -20,10 +20,12 @@
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>core-icons</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
     </dependency>
 
     <!-- PROJECT DEPENDENCIES -->
@@ -31,28 +33,25 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-studio</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>joounit</artifactId>
+      <type>swc</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
       <!--scope>test</scope> IDEA bug - only test scope needed for maven build, but causing compile error when building with IDEA -->
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
   </dependencies>
 
@@ -64,11 +63,6 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.catalog.studio.CatalogStudioPlugin</entry>
-            </requiredClasses>
-          </production>
           <skip>false</skip>
           <namespaces>
             <namespace>

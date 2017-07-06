@@ -30,7 +30,7 @@
 
   <ui:plugins>
     <ui:BindPropertyPlugin bindTo="{ValueExpressionFactory.createTransformingValueExpression(
-        CatalogHelper.getInstance().getProductPropertyExpression(config.bindTo, ProductPropertyNames.SHORT_DESC),
+        config.bindTo.extendBy(ProductPropertyNames.SHORT_DESC),
         RichTextPlainTextTransformer.convertToPlainText)}"/>
   </ui:plugins>
 

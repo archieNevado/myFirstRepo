@@ -9,9 +9,14 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Content beans for static JavaScript code.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMJavaScript}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMJavaScript}.
+ * @cm.template.api
  */
 public interface CMJavaScript extends CMAbstractCode {
   /**

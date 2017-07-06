@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>lc-ecommerce-ibm-studio</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <properties>
     <coremedia.project.extension.for>studio</coremedia.project.extension.for>
@@ -17,24 +17,32 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>ec-studio</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-studio</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>lc-studio-test-helper</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>core-icons</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>ui-components</artifactId>
+      <type>swc</type>
     </dependency>
   </dependencies>
 
@@ -46,11 +54,6 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
-          <production>
-            <requiredClasses>
-              <entry>com.coremedia.livecontext.ibm.studio.EcommerceIbmStudioPlugin</entry>
-            </requiredClasses>
-          </production>
           <testSuite>com.coremedia.livecontext.ibm.studio.TestSuite</testSuite>
           <jooUnitTestExecutionTimeout>120000</jooUnitTestExecutionTimeout>
           <namespaces>

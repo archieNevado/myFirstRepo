@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.p13n.preview;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
@@ -60,25 +60,23 @@ public class CommerceContractIdTestContextExtractor implements TestContextExtrac
   }
 
   private void addContractIdsForPreviewToStoreContext(List<String> contractList) {
-    StoreContextProvider storeContextProvider = Commerce.getStoreContextProvider();
-    CommerceIdProvider commerceIdProvider = Commerce.getCommerceIdProvider();
+    CommerceConnection currentConnection = DefaultConnection.get();
+    StoreContext storeContext = currentConnection != null ? currentConnection.getStoreContext() : null;
+    CommerceIdProvider commerceIdProvider = currentConnection != null ? currentConnection.getIdProvider() : null;
 
-    if (storeContextProvider == null || commerceIdProvider == null) {
-      LOG.debug("at least one of storeContextProvider {} or commerceIdProvider {} is null", storeContextProvider, commerceIdProvider);
+    if (storeContext == null || commerceIdProvider == null) {
+      LOG.debug("at least one of storeContext {} or commerceIdProvider {} is null", storeContext, commerceIdProvider);
       return;
     }
 
-    StoreContext currentContext = storeContextProvider.getCurrentContext();
-    if (currentContext != null) {
-      List<String> contractIds = new ArrayList<>();
-      for (String contract : contractList) {
-        String contractId = commerceIdProvider.parseExternalIdFromId(contract);
-        if (contractId != null) {
-          contractIds.add(contractId);
-        }
+    List<String> contractIds = new ArrayList<>();
+    for (String contract : contractList) {
+      String contractId = commerceIdProvider.parseExternalIdFromId(contract);
+      if (contractId != null) {
+        contractIds.add(contractId);
       }
-      currentContext.setContractIdsForPreview(contractIds.toArray((new String[0])));
     }
+    storeContext.setContractIdsForPreview(contractIds.toArray((new String[0])));
   }
 
   private Object getProperty(Map<String, Object> profileExtensions, String propertyPath) {

@@ -66,7 +66,19 @@ public class P2TagFilter extends Filter implements FilterFactory {
             if (style.contains(hClass)) {
               count++;
               currentTag = hClass;
-              super.startElement(uri, localName, entry.getValue(), EMPTY_ATTRIBUTES);
+
+              //set additional class if alignment was set
+              String[] styles = style.split(" ");
+              if(styles.length > 1) {
+                AttributesImpl attributes = new AttributesImpl();
+                String styleString = StringUtils.remove(style, hClass);
+                attributes.addAttribute("", "", "class", "CDATA", styleString.trim());
+                super.startElement(uri, localName, entry.getValue(), attributes);
+              }
+              else {
+                super.startElement(uri, localName, entry.getValue(), EMPTY_ATTRIBUTES);
+              }
+
               return;
             }
           }

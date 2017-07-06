@@ -1,7 +1,7 @@
 !tape
 name: csi_testFindProductByPartNumberWithSlash_search
 interactions:
-- recorded: 2016-05-23T15:46:10.159Z
+- recorded: 2017-05-18T10:00:41.420Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -10,17 +10,16 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_45)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:10 GMT
+      Date: Thu, 18 May 2017 10:00:41 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00005suN_jE4h3hu12HQQhC51M1:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000MiplSuqerzdzXNyyAKfQqU_:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
@@ -32,7 +31,7 @@ interactions:
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
       Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-05-23T15:46:10.176Z
+- recorded: 2017-05-18T10:00:41.481Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -41,62 +40,39 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_45)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:10 GMT
+      Date: Thu, 18 May 2017 10:00:41 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000dcXKnV1QY_Zv6TB4pA0TVhw:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000YuVDS6nuZ57Ta3C5_DwA2wS:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2016-05-23T15:46:10.209Z
+- recorded: 2017-05-18T10:00:41.550Z
   request:
     method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/%2520?partNumber=PC_PULLOVER_1/2_ZIP&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/%2520?partNumber=PC_PULLOVER_1/2_ZIP%2B%25&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676719&currency=USD&langId=-1
     headers:
       Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_45)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:10 GMT
-      Expires: Mon, 23 May 2016 16:46:10 GMT
+      Date: Thu, 18 May 2017 10:00:41 GMT
+      Expires: Thu, 18 May 2017 11:00:41 GMT
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/%2520?partNumber=PC_PULLOVER_1\/2_ZIP&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","disallowRecurringOrder":"1","parentCatalogGroupID":["3074457345616676668_3074457345616676797","3074457345616676719_3074457345616676797"],"uniqueID":"3074457345616680918","singleSKUCatalogEntryID":"3074457345616680919","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680919","price":[{"description":"L","value":"39.99","usage":"Display","currency":"USD"},{"description":"I","value":"29.99","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/200x310\/PC_FLORAL_TOP.jpg","catalogEntryTypeCode":"ItemBean","shortDescription":"Casual
-      Pullover 1\/2 Zip","parentCatalogGroupID":["3074457345616676668_3074457345616676797","3074457345616676719_3074457345616676797"],"name":"Pullover 1\/2 Zip","buyable":"true","uniqueID":"3074457345616680919","storeID":"715837934","partNumber":"PC_PULLOVER_1\/2_ZIP_SKU"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/646x1000\/PC_FLORAL_TOP.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680918","price":[{"description":"L","value":"39.99","usage":"Display","currency":"USD"},{"description":"I","value":"29.99","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/200x310\/PC_FLORAL_TOP.jpg","seo_token_ntk":"pc-pullover-halb-zip","shortDescription":"Casual
-      Pullover 1\/2 Zip","name":"Pullover 1\/2 Zip","subscriptionTypeCode":"NONE","buyable":"true","longDescription":"You will look lovely in this pullover.","storeID":"715837934","cm_seo_token_ntk":"715837934_pc-pullover-halb-zip","numberOfSKUs":1,"partNumber":"PC_PULLOVER_1\/2_ZIP"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
-- recorded: 2016-05-23T15:46:10.228Z
-  request:
-    method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byId/3074457345616676797?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-1
-    headers:
-      Accept-Encoding: text/plain
-      Content-Type: application/json
-      Host: shop-ref.ecommerce.coremedia.com:3737
-      Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-  response:
-    status: 200
-    headers:
-      Cache-Control: no-transform
-      Content-Language: en-US
-      Content-Type: application/json
-      Date: Mon, 23 May 2016 15:46:10 GMT
-      Expires: Mon, 23 May 2016 16:46:10 GMT
-      Vary: Accept,Accept-Encoding,User-Agent
-      X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676797?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"parentCatalogGroupID":["3074457345616676668_3074457345616676788","3074457345616676719_3074457345616676788"],"uniqueID":"3074457345616676797","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ApparelWomenCasual.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676797","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ApparelWomenCasual.jpg","seo_token_ntk":"pc-women-blouses-sweaters","shortDescription":"Women''s
-      blouses \/ Women''s sweaters","name":"Women Blouses\/Sweaters","longDescription":"Find the nice looking women''s blouses \/ sweaters.","childCatalogGroupID":["3074457345616676668_3074457345616677268","3074457345616676719_3074457345616677268"],"storeID":"715837934","cm_seo_token_ntk":"715837934_pc-women-blouses-sweaters","identifier":"PC_Blouses\/Sweaters"}]}'
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/%2520?partNumber=PC_PULLOVER_1\/2_ZIP%2B%25&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","disallowRecurringOrder":"1","parentCatalogGroupID":["3074457345616676668_3074457345616676797","3074457345616676719_3074457345616676797"],"uniqueID":"3074457345616680918","singleSKUCatalogEntryID":"3074457345616680919","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680919","catalogEntryTypeCode":"ItemBean","name":"Pullover
+      1\/2 Zip","uniqueID":"3074457345616680919","storeID":"715837934","partNumber":"PC_PULLOVER_1\/2_ZIP_SKU+%"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/646x1000\/PC_FLORAL_TOP.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680918","price":[{"description":"L","value":"39.99","usage":"Display","currency":"USD"},{"description":"I","value":"29.99","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/200x310\/PC_FLORAL_TOP.jpg","seo_token_ntk":"pc-pullover-halb-zip","shortDescription":"Casual
+      Pullover 1\/2 Zip","name":"Pullover 1\/2 Zip","subscriptionTypeCode":"NONE","buyable":"true","longDescription":"You will look lovely in this pullover.","storeID":"715837934","cm_seo_token_ntk":"715837934_pc-pullover-halb-zip","numberOfSKUs":1,"partNumber":"PC_PULLOVER_1\/2_ZIP+%"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'

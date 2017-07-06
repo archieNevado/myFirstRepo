@@ -8,4 +8,4 @@ Personalization extension for LiveContext
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/lc2/current/manuals/coremedia-en/webhelp/content/Personalization.html)
+See the "Adaptive Personalization" chapter in the product's developer manual.

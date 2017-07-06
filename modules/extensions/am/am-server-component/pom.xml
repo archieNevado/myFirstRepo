@@ -27,7 +27,7 @@
       <artifactId>cap-unified-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>am-common</artifactId>
       <version>${project.version}</version>
     </dependency>

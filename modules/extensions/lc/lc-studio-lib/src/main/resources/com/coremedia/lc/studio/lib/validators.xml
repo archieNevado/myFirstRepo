@@ -47,6 +47,16 @@
     <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
   </bean>
 
+  <bean id="segmentFormatValidator" class="com.coremedia.lc.studio.lib.validators.SegmentFormatValidator">
+    <property name="connection" ref="connection"/>
+    <property name="validatingSubtypes" value="true"/>
+    <property name="contentType" value="CMChannel"/>
+    <property name="propertyName" value="segment"/>
+    <property name="fallbackPropertyName" value="title"/>
+    <property name="sitesService" ref="sitesService"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+  </bean>
+
   <bean id="cmExternalChannelNavigationValidator"
         class="com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator">
     <property name="connection" ref="connection"/>

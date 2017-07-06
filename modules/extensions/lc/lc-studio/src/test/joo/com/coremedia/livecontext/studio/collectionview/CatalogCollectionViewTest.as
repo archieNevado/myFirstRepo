@@ -391,7 +391,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
     return new Step("Wait for the repository list to be loaded with products",
             function ():Boolean {
               return getRepositoryList().getStore().getCount() > 0 &&
-                      TableUtil.getCellAsDom(getRepositoryList(), 0,0)['textContent'] === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label');
+                      Ext.get(TableUtil.getCellAsDom(getRepositoryList(), 0,0)).query("[aria-label]")[0].getAttribute("aria-label") === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label');
             }
     );
   }
@@ -400,7 +400,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
     return new Step("Wait for the search list to be loaded with product variants",
             function ():Boolean {
               return getSearchList().getStore().getCount() > 0 &&
-                      TableUtil.getCellAsDom(getSearchList(), 0,0)['textContent'] === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'ProductVariant_label');
+                      Ext.get(TableUtil.getCellAsDom(getSearchList(), 0,0)).query("[aria-label]")[0].getAttribute("aria-label") === ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'ProductVariant_label');
             }
     );
   }

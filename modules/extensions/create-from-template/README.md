@@ -9,4 +9,4 @@ even a complete navigation hierachy.
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/Content_creation_channel.html)
+See the "Create from Template" chapter in the product's developer manual.

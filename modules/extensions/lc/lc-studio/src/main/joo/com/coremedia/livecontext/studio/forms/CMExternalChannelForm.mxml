@@ -17,14 +17,16 @@
     import com.coremedia.cms.editor.sdk.premular.VersionHistory;
     import com.coremedia.ecommerce.studio.CatalogModel;
     import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
-    import com.coremedia.ecommerce.studio.helper.CatalogHelper;
     import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
     import com.coremedia.livecontext.studio.CatalogThumbnailResolver;
     import com.coremedia.ui.data.ValueExpression;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.cmExternalChannelForm";
 
+    public static const CONTENT_TAB_ITEM_ID:String = "contentTab";
     public static const CATALOG_STRUCTURE_TAB_ITEM_ID:String = "catalogStructureTab";
+    public static const PDP_PAGEGRID_TAB_ITEM_ID:String = "pdpPageGridTab";
 
     public static const CATALOG_LINK_ITEM_ID:String = "catalogLink";
 
@@ -43,13 +45,17 @@
 
   <editor:items>
     <editor:DocumentForm
+            itemId="{CONTENT_TAB_ITEM_ID}"
             title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
       <editor:items>
         <bpforms:CollapsibleStringPropertyForm propertyName="title"
                                                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMChannel_title_text')}"/>
         <livecontext:CommerceDetailsForm itemId="commerceDetails"
                                          bindTo="{catalogObjectExpression}"
-                                         titleLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_name_label')}"/>
+                                         contentBindTo="{config.bindTo}"
+                                         collapsed="true"/>
+        <livecontext:CommerceAugmentedPageGridForm itemId="placement"
+                                                   pageGridPropertyName="placement"/>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_thumbnail_title')}"
                 itemId="picture">
@@ -85,8 +91,6 @@
                                                emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_downloads_emptyText')}"/>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <livecontext:CommerceAugmentedPageGridForm itemId="placement"
-                                                   pageGridPropertyName="placement"/>
         <bpforms:TeaserWithPictureDocumentForm/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>
@@ -94,6 +98,7 @@
     <livecontext:CommerceAugmentedCategoryStructureForm bindTo="{config.bindTo}"
                                                         itemId="{CATALOG_STRUCTURE_TAB_ITEM_ID}"/>
     <editor:DocumentForm
+            itemId="{PDP_PAGEGRID_TAB_ITEM_ID}"
             title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMExternalChannel_tab_PDP_pagegrid_title')}">
       <editor:items>
         <livecontext:CommerceAugmentedPageGridForm itemId="pdpPagegrid"
@@ -132,7 +137,8 @@
                                              propertyName="{EXTERNAL_ID_PROPERTY}"
                                              linkTypeNames="{[CatalogModel.TYPE_CATEGORY]}"
                                              dropAreaText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Category_Link_empty_text')}"
-                                             hideOpenInTab="true"/>
+                                             hideOpenInTab="true"
+                                             readOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"/>
               </editor:items>
             </editor:PropertyFieldGroup>
           </ui:items>

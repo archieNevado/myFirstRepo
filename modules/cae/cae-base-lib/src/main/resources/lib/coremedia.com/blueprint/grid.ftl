@@ -96,3 +96,7 @@
     <div class="${additionalClass}row">
   </#if>
 </#macro>
+
+<#function getPlacementHighlightingMetaData placement>
+  <#return blueprintFreemarkerFacade.getPlacementHighlightingMetaData(placement)>
+</#function>

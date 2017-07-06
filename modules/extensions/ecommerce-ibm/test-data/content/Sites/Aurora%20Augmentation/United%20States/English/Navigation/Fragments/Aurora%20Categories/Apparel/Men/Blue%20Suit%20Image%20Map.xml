@@ -32,16 +32,23 @@
 </Struct>
 <Struct>
 <StringProperty Name="id">map-area-0</StringProperty>
-<StringProperty Name="coords">399,1687,659,1822</StringProperty>
+<StringProperty Name="coords">674,983,934,1118</StringProperty>
 <StringProperty Name="alt"/>
 <StringProperty Name="rotation"/>
 <StringProperty Name="shape">rect</StringProperty>
 <StringProperty Name="target">_blank</StringProperty>
 <BooleanProperty Name="displayAsInlineOverlay">true</BooleanProperty>
 <StringProperty Name="inlineOverlayTheme">light-on-dark</StringProperty>
-<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../../../Editorial/Products/Fall%20Campaign/Blue%20Suit%20Product%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Products/Fall%20Campaign/Blue%20Suit%20Product%20Teaser"/>
+<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../../../Editorial/Products/Luigi%20Valenti%20Navy%20Blue%20Formal%20Suit.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Products/Luigi%20Valenti%20Navy%20Blue%20Formal%20Suit"/>
 </Struct>
 </StructListProperty>
+<StructProperty Name="teaserOverlay">
+<Struct>
+<BooleanProperty Name="enabled">true</BooleanProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../../../Options/Settings/Teaser%20Styles/Light.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light"/>
+<IntProperty Name="positionY">37</IntProperty>
+</Struct>
+</StructProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
@@ -59,13 +66,14 @@
 </locationTaxonomy>
 <contexts>
 </contexts>
-<teaserTitle>Exclusive</teaserTitle>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1">Exclusive</p></div></teaserText>
 <pictures>
-<link href="../../../../../Pictures/Product%20Teaser%20Pictures/03_For%20The%20Cook/Apparel/Apparf908721c.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20Teaser%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Elegant/Spring/For%20Him/PC_BLUE_SUIT%20Sideshot"/>
+<link href="../../../../../Pictures/Product%20Pictures/PC_BLUE_SUIT%20Sideshot.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20Pictures/PC_BLUE_SUIT%20Sideshot"/>
 </pictures>
 <related>
 </related>
 <target>
-<link href="../../../../../Augmentation/PC_ForTheCook/PC_Apparel/PC_ApparelMen/PC_ApparelMenExclu62c5079f.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_ForTheCook/PC_Apparel/PC_ApparelMen/PC_ApparelMenExclusive/PC_ApparelMenExclusive"/>
+<link href="../../../../../Augmentation/Apparel/Men/Men%20Suits/Men%20Suits.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Men/Men%20Suits/Men%20Suits"/>
 </target>
 </CMImageMap>

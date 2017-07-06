@@ -1,12 +1,13 @@
 package com.coremedia.livecontext.p13n;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -41,7 +42,12 @@ public class CommerceSegmentSourceTest {
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
     commerceConnection.getUserContext().setUserId(USER1_ID);
     commerceConnection.getUserContext().setUserName(USER1_NAME);
-    Commerce.setCurrentConnection(commerceConnection);
+    DefaultConnection.set(commerceConnection);
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   @Test

@@ -6,11 +6,6 @@
 </master>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<StructProperty Name="elasticSocial">
-<Struct>
-<StringProperty Name="tenant">corporate-de-de</StringProperty>
-</Struct>
-</StructProperty>
 <StringProperty Name="analyticsProvider">googleAnalytics</StringProperty>
 <StructProperty Name="googleAnalytics">
 <Struct>

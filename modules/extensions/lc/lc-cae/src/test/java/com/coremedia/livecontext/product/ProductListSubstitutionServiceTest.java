@@ -3,13 +3,13 @@ package com.coremedia.livecontext.product;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.context.LiveContextNavigation;
+import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
+import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +55,6 @@ public class ProductListSubstitutionServiceTest {
   @Test(expected = IllegalArgumentException.class)
   public void getProductListNoDefaultStoreContextSet() {
     connection.setStoreContext(null);
-    when(connection.getStoreContextProvider().getCurrentContext()).thenReturn(null);
     testling.getProductList(liveContextNavigation, 0, 10);
   }
 

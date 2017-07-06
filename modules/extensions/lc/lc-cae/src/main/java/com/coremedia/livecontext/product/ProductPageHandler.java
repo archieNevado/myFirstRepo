@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.product;
 
 import com.coremedia.blueprint.base.links.PostProcessorPrecendences;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
@@ -11,7 +12,9 @@ import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.contentbeans.ProductDetailPage;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
@@ -36,7 +39,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTE
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_REST;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static java.util.Objects.requireNonNull;
 
@@ -102,10 +104,9 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   public ModelAndView getProducts(@PathVariable(SITE_CHANNEL_ID) CMNavigation context,
                                   @PathVariable(PRODUCT_SEO_SEGMENT) String productId,
                                   HttpServletRequest request) {
-    if (getCatalogService() == null) {
-      throw new IllegalStateException("No Catalog Service configured for product "+productId);
-    }
-    Product product = getCatalogService().findProductBySeoSegment(productId);
+    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    Product product = requireNonNull(currentConnection.getCatalogService(), "No Catalog Service configured for product " + productId)
+            .findProductBySeoSegment(productId);
     Site site = requireNonNull(getSitesService().getContentSiteAspect(context.getContent()).getSite(), "Site for context does not exist");
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
     ModelAndView modelAndView = HandlerHelper.createModelWithView(productInSite, QUICKINFO_VIEW);
@@ -174,13 +175,12 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   }
 
   private ModelAndView createLiveContextPage(@Nonnull Site site, @Nonnull String seoSegment, String view, @Nullable User developer) {
-    if (getCatalogService() == null) {
-      throw new IllegalStateException("No Catalog Service configured for seo segment \""+seoSegment+"\"");
-    }
+    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
     Navigation context = getNavigationContext(site, seoSegment);
 
-    Product product = getCatalogService().findProductById(
-            getCurrentCommerceIdProvider().formatProductSeoSegment(seoSegment));
+    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service configured for seo segment \"" + seoSegment + '"');
+    String productSeoSegment = currentConnection.getIdProvider().formatProductSeoSegment(seoSegment);
+    Product product = requireNonNull(catalogService.findProductById(productSeoSegment), "no product found for id \"" + productSeoSegment + '\"');
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
     PageImpl page = createPageImpl(productInSite, context, developer);
     page.setTitle(product.getTitle());

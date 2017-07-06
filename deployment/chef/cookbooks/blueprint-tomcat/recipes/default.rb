@@ -4,14 +4,12 @@ This recipe installs all services.
 #>
 =end
 
-include_recipe 'blueprint-tomcat::solr'
 include_recipe 'blueprint-tomcat::content-management-server'
 include_recipe 'blueprint-tomcat::workflow-server'
 include_recipe 'blueprint-tomcat::content-feeder'
 include_recipe 'blueprint-tomcat::user-changes'
 include_recipe 'blueprint-tomcat::elastic-worker'
 include_recipe 'blueprint-tomcat::caefeeder-preview'
-include_recipe 'blueprint-tomcat::adobe-drive-server'
 include_recipe 'blueprint-tomcat::cae-preview'
 include_recipe 'blueprint-tomcat::studio'
 include_recipe 'blueprint-tomcat::sitemanager'

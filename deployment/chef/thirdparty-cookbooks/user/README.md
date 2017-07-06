@@ -1,6 +1,6 @@
 # <a name="title"></a> User Chef Cookbook
 
-[![Build Status](https://secure.travis-ci.org/fnichol/chef-user.png?branch=master)](http://travis-ci.org/fnichol/chef-user)
+[![Build Status](https://secure.travis-ci.org/fnichol/chef-user.svg?branch=master)](http://travis-ci.org/fnichol/chef-user)
 
 ## <a name="description"></a> Description
 
@@ -393,9 +393,11 @@ this by installing the "libshadow-ruby1.8" package.
 ##### Creating a User Account
 
     user_account 'hsolo' do
-      comment   'Han Solo'
-      ssh_keys  ['3dc348d9af8027df7b9c...', '2154d3734d609eb5c452...']
-      home      '/opt/hoth/hsolo'
+      comment     'Han Solo'
+      ssh_keys    ['3dc348d9af8027df7b9c...', '2154d3734d609eb5c452...']
+      home        '/opt/hoth/hsolo'
+      ssh_keypair 'id_rsa' => "-----BEGIN OPENSSH PRIVATE KEY-----\n...",
+                  'id_rsa.pub' => 'ssh-rsa AAAA....'
     end
 
 ##### Creating and Locking a User Account

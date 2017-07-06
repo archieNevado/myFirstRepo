@@ -27,8 +27,8 @@
 </related>
 <value>Apparel</value>
 <children>
-<link href="Men.xml" path="/Settings/Taxonomies/Subject/Men"/>
 <link href="Women.xml" path="/Settings/Taxonomies/Subject/Women"/>
+<link href="Men.xml" path="/Settings/Taxonomies/Subject/Men"/>
 </children>
 <externalReference>PC_Apparel</externalReference>
 </CMTaxonomy>

@@ -1,6 +1,6 @@
 =begin
 #<
-This recipe installs virtual hosts for the CoreMedia Blueprint Studio.
+This recipe installs virtual hosts for the CoreMedia Studio.
 #>
 =end
 

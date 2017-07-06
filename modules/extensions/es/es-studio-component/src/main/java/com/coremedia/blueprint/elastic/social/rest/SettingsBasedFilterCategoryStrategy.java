@@ -50,8 +50,10 @@ public class SettingsBasedFilterCategoryStrategy implements FilterCategoryStrate
 
     String currentTenant = tenantService.getCurrent();
     Collection<Content> rootNavigations = tenantSiteMapping.getTenantSiteMap().get(currentTenant);
-    for (Content rootNavigation : rootNavigations) {
-      addCategoryListForRootChannel(categories, rootNavigation);
+    if (rootNavigations != null) {
+      for (Content rootNavigation : rootNavigations) {
+        addCategoryListForRootChannel(categories, rootNavigation);
+      }
     }
 
     return categories;

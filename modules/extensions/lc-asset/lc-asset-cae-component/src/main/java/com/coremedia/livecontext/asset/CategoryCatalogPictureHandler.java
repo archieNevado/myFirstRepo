@@ -1,17 +1,17 @@
 package com.coremedia.livecontext.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_EXTENSION;
+import static java.util.Objects.requireNonNull;
 
 @RequestMapping
 public class CategoryCatalogPictureHandler extends CatalogPictureHandlerBase {
@@ -36,7 +36,7 @@ public class CategoryCatalogPictureHandler extends CatalogPictureHandlerBase {
                                                @PathVariable(SEGMENT_EXTENSION) String extension,
                                                WebRequest request) throws IOException {
 
-    String id = BaseCommerceIdHelper.getCurrentCommerceIdProvider().formatCategoryId(partNumber);
+    String id = requireNonNull(DefaultConnection.get(), "no commerce connection available").getIdProvider().formatCategoryId(partNumber);
 
     return handleRequestWidthHeight(storeId, locale, formatName, id, extension, request);
   }

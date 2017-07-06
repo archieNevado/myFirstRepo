@@ -13,7 +13,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>custom-topic-pages-bom</module>
     <module>custom-topic-pages-studio-plugin</module>
     <module>custom-topic-pages-rest-extension</module>
   </modules>

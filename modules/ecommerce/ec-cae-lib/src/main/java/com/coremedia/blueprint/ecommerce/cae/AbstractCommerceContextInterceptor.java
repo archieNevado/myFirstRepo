@@ -1,7 +1,8 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
@@ -33,7 +34,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
 
   public static final String QUERY_PARAMETER_WORKSPACE_ID = "workspaceId";
 
-  private static final String DYNAMIC_FRAGMENT = "/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + "/";
+  private static final String DYNAMIC_FRAGMENT = "/" + UriConstants.Segments.PREFIX_DYNAMIC + "/";
 
   private static final String STORE_CONTEXT_INITIALIZED = AbstractCommerceContextInterceptor.class.getName()
           + "#storeContext.initialized";
@@ -82,7 +83,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
     }
 
     // Initialize just once.
-    // We're not testing against `Commerce.getCurrentConnection()` in
+    // We're not testing against `Commerce.get()` in
     // case we're running behind `CommerceConnectionFilter`.
     if (request.getAttribute(STORE_CONTEXT_INITIALIZED) != null) {
       return true;
@@ -102,8 +103,8 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
         return;
       }
 
-      Commerce.setCurrentConnection(commerceConnection.get());
-
+      DefaultConnection.set(commerceConnection.get());
+      
       request.setAttribute(STORE_CONTEXT_INITIALIZED, true);
 
       if (initUserContext) {
@@ -119,7 +120,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
           throws Exception {
     super.afterCompletion(request, response, handler, ex);
 
-    Commerce.clearCurrent();
+    DefaultConnection.clear();
   }
 
 // --- abstract ---------------------------------------------------

@@ -4,8 +4,8 @@
 
 ###Description
 
-Eastic Social extension for LiveContext
+Elastic Social extension for LiveContext
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/lc2/current/manuals/coremedia-en/webhelp/content/UsingBlueprintElasticSocial.html)
+See section "Elastic Social" in the CoreMedia Developer Manual.

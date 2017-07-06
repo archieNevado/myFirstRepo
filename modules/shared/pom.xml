@@ -17,6 +17,7 @@
     <module>doctypes</module>
     <module>content-services</module>
     <module>link-services</module>
+    <module>logging</module>
     <module>image-transformation</module>
     <module>taxonomies</module>
     <module>test-util</module>

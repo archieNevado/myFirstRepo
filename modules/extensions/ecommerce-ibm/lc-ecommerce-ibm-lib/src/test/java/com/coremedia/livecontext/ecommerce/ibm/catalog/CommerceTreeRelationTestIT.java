@@ -2,13 +2,20 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.tree.CommerceTreeRelation;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -24,9 +31,17 @@ import static org.junit.Assert.assertNull;
  * Test for CommerceTreeRelation below module bpbase-lc-common.
  * Since we want to make use of the ibm betamax infrastructure the test is below the ibm module for now.
  */
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class CommerceTreeRelationTestIT extends AbstractServiceTest {
+@ContextConfiguration(classes = {IbmServiceTestBase.LocalConfig.class, CommerceTreeRelationTestIT.LocalConfig.class})
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
+  @Configuration
+  @Profile(IbmServiceTestBase.LocalConfig.PROFILE)
+  public static class LocalConfig {
+    @Bean
+    public CommerceTreeRelation commerceTreeRelation() {
+      return new CommerceTreeRelation();
+    }
+  }
 
   private String CATEGORY_SEO_SEGMENT = "pc-on-the-table";
 

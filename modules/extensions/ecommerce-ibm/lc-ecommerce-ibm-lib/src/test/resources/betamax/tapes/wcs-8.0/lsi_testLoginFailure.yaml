@@ -1,7 +1,7 @@
 !tape
 name: lsi_testLoginFailure
 interactions:
-- recorded: 2016-05-20T08:52:39.539Z
+- recorded: 2017-04-10T14:10:08.969Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,10 +17,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Fri, 20 May 2016 08:52:39 GMT
+      Date: Mon, 10 Apr 2017 14:10:08 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00000ddB74nndxaMlYQXR7HVi2E:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000kH0Woo-IPyxOmgOl5HEpmwA:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
@@ -32,7 +31,7 @@ interactions:
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
       Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-05-20T08:52:39.557Z
+- recorded: 2017-04-10T14:10:09.191Z
   request:
     method: POST
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
@@ -50,10 +49,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Fri, 20 May 2016 08:52:39 GMT
+      Date: Mon, 10 Apr 2017 14:10:09 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000uYuNmb0NAKgB4_rdulhRERH:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000mda3jTef-PrKQF6IHkJ8M-b:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"errors":[{"errorMessage":"The specified logon ID or password are not correct. Verify the information provided and log in again.","errorParameters":"","errorCode":"2030","errorKey":"_ERR_AUTHENTICATION_ERROR"}]}'

@@ -24,6 +24,7 @@
       <activation>
         <property>
           <name>!skipContent</name>
+          <value>!true</value>
         </property>
       </activation>
       <build>
@@ -64,6 +65,8 @@
               </execution>
             </executions>
           </plugin>
+
+          <!-- Build testdata zip -->
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>

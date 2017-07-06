@@ -83,16 +83,14 @@ public class ThemeImporterImpl implements ThemeImporter {
    */
   static final String THEME_METADATA_DIR = "THEME-METADATA";
 
-  // In this context only the "data" protocol (base 64 encoding) is relevant.
-  // Therefore we do not parse out //host:port but put all the rest into the
-  // path.
-  // The pattern means                     url  ("        protocol   :  the/path     suffix     "        )
-  private static final String URL_REGEX = "url\\([\"\']?((([^)\"']*?):)?([^)\"\'#?]*)([^)\"']*))[\"\']?\\)";
-  // Capturing groups                                   123         3 2 4           45        51
+  // The pattern means                     url  ("        prtcl :   //hostport        the/path     suffix     "        )
+  private static final String URL_REGEX = "url\\([\"\']?(((\\w*):)?(//([^/)\"\'#?]*))?([^)\"\'#?]*)([^)\"']*))[\"\']?\\)";
+  // Capturing groups                                   123    3 2 4  5            54 6           67        71
   @VisibleForTesting static final int CG_URL = 1;
   @VisibleForTesting static final int CG_PROTOCOL = 3;
-  @VisibleForTesting static final int CG_PATH = 4;
-  @VisibleForTesting static final int CG_SUFFIX = 5;
+  @VisibleForTesting static final int CG_HOSTPORT = 5;
+  @VisibleForTesting static final int CG_PATH = 6;
+  @VisibleForTesting static final int CG_SUFFIX = 7;
 
   @VisibleForTesting static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
@@ -265,6 +263,11 @@ public class ThemeImporterImpl implements ThemeImporter {
   }
 
   private void processStyleSheets(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
+    // CSSs may reference one another, they all must exist as content before
+    // we start processing them.
+    for (Map.Entry<String, String> css : importData.getStyleSheets().entrySet()) {
+      contentHelper.ensureContent(CM_CSS_DOCTYPE, targetFolder, css.getKey());
+    }
     for (Map.Entry<String, String> css : importData.getStyleSheets().entrySet()) {
       Map<String, Object> properties = new HashMap<>();
       properties.put(CODE_PROPERTY, createMarkup(css.getValue(), css.getKey(), targetFolder, contentHelper));
@@ -571,11 +574,12 @@ public class ThemeImporterImpl implements ThemeImporter {
 
       String uri = matcher.group(CG_URL);
       String protocol = matcher.group(CG_PROTOCOL);
+      String hostport = matcher.group(CG_HOSTPORT);
       String path = matcher.group(CG_PATH);
       String suffix = matcher.group(CG_SUFFIX);
 
       // replace url -> RichText (incl non-matching prefix)
-      String replacement = urlReplacement(uri, protocol, path, suffix, targetDocumentPath, contentHelper);
+      String replacement = urlReplacement(uri, protocol, hostport, path, suffix, targetDocumentPath, contentHelper);
       matcher.appendReplacement(appender, replacement);
 
       // extract the actual url replacement from the appendReplacement result
@@ -591,8 +595,8 @@ public class ThemeImporterImpl implements ThemeImporter {
     return result.toString();
   }
 
-  private String urlReplacement(String uri, String protocol, String path, String suffix, String targetDocumentPath, ThemeImporterContentHelper contentHelper) {
-    if (protocol == null) {
+  private String urlReplacement(String uri, String protocol, String hostport, String path, String suffix, String targetDocumentPath, ThemeImporterContentHelper contentHelper) {
+    if (protocol == null && hostport == null) {
       return toRichtextInternalLink(path, targetDocumentPath, suffix, contentHelper);
     } else if (DATA_PROPERTY.equals(protocol)) {
       return toRichtextPlain(protocol, path);
@@ -603,8 +607,9 @@ public class ThemeImporterImpl implements ThemeImporter {
 
   private String toRichtextInternalLink(String uriMatch, String targetDocumentPath, String suffix, ThemeImporterContentHelper contentHelper) {
     try {
-      String linkPath = PathUtil.concatPath(targetDocumentPath, uriMatch);
-      Content referencedContent = contentHelper.fetchContent(linkPath);
+      boolean isSuitablePath = !StringUtils.isEmpty(uriMatch) && !uriMatch.startsWith("/");
+      String linkPath = isSuitablePath ? PathUtil.concatPath(targetDocumentPath, uriMatch) : null;
+      Content referencedContent = linkPath!=null ? contentHelper.fetchContent(linkPath) : null;
       if (referencedContent != null) {
         URI linkImportId = new URI("coremedia", "", "/cap/resources/" + contentHelper.id(referencedContent), null);
         if (!StringUtils.isEmpty(suffix)) {
@@ -616,7 +621,9 @@ public class ThemeImporterImpl implements ThemeImporter {
           return toRichtextImg(linkImportId);
         }
       } else {
-        if (linkPath.contains(" + ") || linkPath.contains("...")) {
+        if (linkPath == null) {
+          LOGGER.warn("Cannot handle invalid path '{}'", uriMatch);
+        } else if (linkPath.contains(" + ") || linkPath.contains("...")) {
           LOGGER.debug("Cannot resolve {}, looks like a pattern or expression", linkPath);
         } else {
           LOGGER.warn("Cannot resolve {}", linkPath);

@@ -1,12 +1,15 @@
 package com.coremedia.livecontext.logictypes;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.fragment.resolver.SearchTermExternalReferenceResolver;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.google.common.base.Preconditions;
@@ -19,6 +22,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Extension that create custom links on CMChannel documents.
@@ -50,7 +55,9 @@ public class SearchLandingPagesExtension extends ExtensionBase {
    */
   public Object createSearchLandingPageURLFor(CMChannel channel) {
     Site site = getSitesService().getContentSiteAspect(channel.getContent()).getSite();
-    StoreContext storeContext = getStoreContextProvider().findContextBySite(site);
+    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    StoreContextProvider storeContextProvider = requireNonNull(currentConnection.getStoreContextProvider(), "no store context provider available on connection " + currentConnection);
+    StoreContext storeContext = storeContextProvider.findContextBySite(site);
     String term = channel.getContent().getString(keywordsProperty);
 
     Map<String, Object> params = new HashMap<>();

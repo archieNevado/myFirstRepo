@@ -33,6 +33,12 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
+      <artifactId>content-server-solr-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>content-management-server-config</artifactId>
       <type>coremedia-application</type>
       <scope>runtime</scope>
@@ -100,37 +106,14 @@
           <port>40180</port>
           <systemProperties>
             <propertieslocations>classpath:/content-management-server.properties</propertieslocations>
-            <!--workaround for CMS-7024, but this workaround requires building the webapp first-->
-            <cap.server.search.context.configLocations>file:#{T(hox.corem.Corem).getHome()}/../../../../target/coremedia/WEB-INF/config/contentserver/spring/search/applicationContext.xml</cap.server.search.context.configLocations>
           </systemProperties>
         </configuration>
       </plugin>
       <plugin>
-        <!--
-           invoke "mvn spring-boot:run" for running this webapp on http://localhost:8080/
-        -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>embedded</id>
-      <properties>
-        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/embedded-hsqldb</development-properties.dir>
-        <!-- embedded SQL config -->
-        <sql.store.driver>org.hsqldb.jdbc.JDBCDriver</sql.store.driver>
-        <sql.store.url>jdbc:hsqldb:mem:cmmanagement;sql.syntax_mys=true;</sql.store.url>
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>org.hsqldb</groupId>
-          <artifactId>hsqldb</artifactId>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
 </project>

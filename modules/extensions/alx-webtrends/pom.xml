@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>alx-webtrends-bom</module>
     <module>alx-webtrends-cae</module>
     <module>alx-webtrends-studio-lib</module>
     <module>alx-webtrends-studio-plugin</module>

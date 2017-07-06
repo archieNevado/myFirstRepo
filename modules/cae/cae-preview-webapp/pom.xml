@@ -31,6 +31,12 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>logging-config</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>preview-cae-extension-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -71,14 +77,11 @@
           <contextFile>${project.basedir}/src/main/servletengine/tomcat-context.xml</contextFile>
           <systemProperties>
             <coremedia.blueprint.project.directory>${project.basedir}/../../../</coremedia.blueprint.project.directory>
-            <propertieslocations>classpath:/wcs.properties,classpath:/cae-preview.properties</propertieslocations>
+            <propertieslocations>classpath:/cae-preview.properties,classpath:/wcs.properties</propertieslocations>
           </systemProperties>
         </configuration>
       </plugin>
       <plugin>
-        <!--
-           invoke "mvn spring-boot:run" for running this webapp on http://localhost:8080/
-        -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
@@ -120,11 +123,21 @@
     </profile>
 
     <profile>
-      <id>apache-box</id>
-      <properties>
-        <proxy.host>192.168.252.100.xip.io</proxy.host>
-        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/apache-box</development-properties.dir>
-      </properties>
+      <id>candy-preview</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <configuration>
+              <systemProperties>
+                <propertieslocations>http://overview.${installation.host}/candy-preview.properties
+                </propertieslocations>
+              </systemProperties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 

@@ -2,6 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Contracts;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
+import com.coremedia.livecontext.ecommerce.contract.ContractService;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -34,8 +35,9 @@ public class ContractsResource extends AbstractCatalogResource<Contracts> {
     }
 
     representation.setId(contracts.getId());
-    if (getConnection().getContractService() != null) {
-      Collection<Contract> contractIdsForServiceUser = getConnection().getContractService().findContractIdsForServiceUser(getStoreContext());
+    ContractService contractService = getConnection().getContractService();
+    if (contractService != null) {
+      Collection<Contract> contractIdsForServiceUser = contractService.findContractIdsForServiceUser(getStoreContext());
       //filter default contract from contract list
       Collection<Contract> filteredContracts = new ArrayList<>();
       for (Contract contract : contractIdsForServiceUser) {

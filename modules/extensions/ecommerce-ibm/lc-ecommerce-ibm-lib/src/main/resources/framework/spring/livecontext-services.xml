@@ -7,11 +7,11 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <import resource="classpath:/framework/spring/livecontext-cache.xml"/>
-  <import resource="classpath:/framework/spring/livecontext-ibm-cache.xml"/>
   <import resource="classpath:/framework/spring/livecontext-storeconfig.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-beanfactory.xml"/>
 
   <context:annotation-config/>
+  <context:component-scan base-package="com.coremedia.livecontext.ecommerce.ibm.event"/>
 
   <bean id="restConnector" class="com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector">
     <property name="serviceEndpoint" value="${livecontext.ibm.wcs.rest.url}"/>
@@ -90,7 +90,6 @@
     <property name="wcsUrl" value="http:${livecontext.apache.wcs.url}"/>
     <property name="wcsStoreUrl" value="${livecontext.ibm.wcs.store.url}"/>
     <property name="wcsAssetsUrl" value="${livecontext.ibm.wcs.assets.url}"/>
-    <property name="storeContextProvider" ref="storeContextProvider"/>
   </bean>
 
   <bean id="availabilityService" class="com.coremedia.livecontext.ecommerce.ibm.inventory.AvailabilityServiceImpl">
@@ -143,7 +142,6 @@
   <bean id="storeFrontService" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService"
         abstract="true">
     <property name="storeFrontConnector" ref="storeFrontConnector"/>
-    <property name="storeContextProvider" ref="storeContextProvider"/>
     <property name="urlProvider" ref="wcsPageHandlerUrlProvider"/>
   </bean>
 
@@ -204,5 +202,5 @@
   <bean id="storeInfoWrapperService" class="com.coremedia.livecontext.ecommerce.ibm.storeinfo.WcStoreInfoWrapperService">
     <property name="restConnector" ref="restConnector"/>
   </bean>
-
+  
 </beans>

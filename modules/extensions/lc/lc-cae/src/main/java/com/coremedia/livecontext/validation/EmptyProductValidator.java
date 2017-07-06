@@ -1,9 +1,11 @@
 package com.coremedia.livecontext.validation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.google.common.base.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,10 +53,13 @@ public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
   }
 
   private boolean isInContextOfContracts() {
-    return Commerce.getCurrentConnection() != null &&
-            Commerce.getCurrentConnection().getStoreContext() != null &&
-            (Commerce.getCurrentConnection().getStoreContext().getContractIds() != null ||
-              Commerce.getCurrentConnection().getStoreContext().getContractIdsForPreview() != null);
+    CommerceConnection connection = DefaultConnection.get();
+    if (connection == null) {
+      return false;
+    }
+
+    StoreContext storeContext = connection.getStoreContext();
+    return storeContext != null && (storeContext.getContractIds() != null || storeContext.getContractIdsForPreview() != null);
   }
   
 }

@@ -35,7 +35,7 @@
     &__picture-box {
       @include aspect-ratio-box(1, 1);
     }
-    &__picture {
+    &__picture, &__video {
       @include stretch-absolute()
     }
   }

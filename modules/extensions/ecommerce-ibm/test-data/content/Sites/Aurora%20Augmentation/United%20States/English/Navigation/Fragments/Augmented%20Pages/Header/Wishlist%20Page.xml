@@ -22,6 +22,7 @@
 </contexts>
 <teaserTitle></teaserTitle>
 <pictures>
+<link href="../../../../Pictures/Shoppable%20Video%20Pictures/Dress%203%20Picture.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Shoppable%20Video%20Pictures/Dress%203%20Picture"/>
 </pictures>
 <related>
 </related>
@@ -46,7 +47,7 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../../Pictures/Sitewide%20Pictures/Legal%20-%20Chef%20holding%20papers%20Picture.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Sitewide%20Pictures/Legal%20-%20Chef%20holding%20papers%20Picture"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../Pictures/Sitewide%20Pictures/About%20Us.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Sitewide%20Pictures/About%20Us"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/header"/>
 </Struct>

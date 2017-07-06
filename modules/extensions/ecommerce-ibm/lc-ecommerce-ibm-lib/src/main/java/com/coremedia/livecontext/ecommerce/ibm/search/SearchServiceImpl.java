@@ -15,8 +15,7 @@ import java.util.List;
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 
 /**
- * TODO: Description
- * To change this template use File | Settings | File Templates.
+ * IBM Commerce Service implementation.
  */
 public class SearchServiceImpl implements SearchService {
   private WcSearchWrapperService searchWrapperService;

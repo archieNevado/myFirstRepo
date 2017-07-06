@@ -17,15 +17,6 @@
 <StringProperty Name="tenant">helios</StringProperty>
 </Struct>
 </StructProperty>
-<LinkProperty Name="flowLogin" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/Login.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Actions/Login"/>
-<LinkProperty Name="flowLogout" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/Logout.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Actions/Logout"/>
-<LinkProperty Name="flowUserDetails" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/UserDetails.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Actions/UserDetails"/>
-<LinkProperty Name="action.userDetailsView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/UserDetails.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Actions/UserDetails"/>
-<LinkProperty Name="action.registrationActivationView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/ActivateRegistration.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Actions/ActivateRegistration"/>
-<LinkProperty Name="action.confirmPasswordResetView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/ConfirmPasswordReset.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Actions/ConfirmPasswordReset"/>
-<LinkProperty Name="linkTermsOfUse" LinkType="coremedia:///cap/contenttype/CMArticle" xlink:href="coremedia:///cap/resources/../../Editorial/Content/Corporate/Terms%20of%20Use.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Corporate/Terms%20of%20Use"/>
-<LinkProperty Name="linkPrivacyPolicy" LinkType="coremedia:///cap/contenttype/CMArticle" xlink:href="coremedia:///cap/resources/../../Editorial/Content/Corporate/Privacy%20Policy.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Corporate/Privacy%20Policy"/>
-<LinkProperty Name="linkTooYoungPolicy" LinkType="coremedia:///cap/contenttype/CMArticle" xlink:href="coremedia:///cap/resources/../../Editorial/Content/Corporate/Age%20Policy.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Corporate/Age%20Policy"/>
 </Struct>
 </settings>
 <identifier></identifier>

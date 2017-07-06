@@ -10,10 +10,13 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.fragment.resolver.LinkableAndNavigation;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.annotations.VisibleForTesting;
@@ -33,12 +36,11 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ExternalRefFragmentHandler extends FragmentHandler {
-  private static final Logger LOG = LoggerFactory.getLogger(ExternalRefFragmentHandler.class);
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternalRefFragmentHandler.class);
 
   private List<ExternalReferenceResolver> externalReferenceResolvers;
-  private String defaultPlacementName;
   private boolean usePageRendering = false;
-
 
   // --- FragmentHandler --------------------------------------------
 
@@ -47,14 +49,16 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return !Strings.isNullOrEmpty(params.getExternalRef());
   }
 
+  @Nonnull
   @Override
-  public ModelAndView createModelAndView(FragmentParameters parameters, HttpServletRequest request) {
+  public ModelAndView createModelAndView(@Nonnull FragmentParameters parameters, @Nonnull HttpServletRequest request) {
     String externalRef = parameters.getExternalRef();
 
     ExternalReferenceResolver resolver = findReferenceResolver(parameters);
     if (resolver == null) {
-      LOG.warn("Cannot resolve external reference value '" + externalRef + "'");
-      return HandlerHelper.notFound("ExternalRefFragmentHandler could not find an external reference resolver for '" + externalRef + "'");
+      LOGGER.warn("Cannot resolve external reference value '{}'", externalRef);
+      return HandlerHelper.notFound("ExternalRefFragmentHandler could not find an external reference resolver for '"
+              + externalRef + "'");
     }
 
     // resolve the external reference
@@ -62,10 +66,11 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     if (site == null) {
       return HandlerHelper.notFound("No site available from SiteHelper.");
     }
+
     LinkableAndNavigation linkableAndNavigation = resolver.resolveExternalRef(parameters, site);
 
     if (linkableAndNavigation == null || linkableAndNavigation.getLinkable() == null) {
-      LOG.info("No content could be resolved for external reference value '" + externalRef + "'");
+      LOGGER.info("No content could be resolved for external reference value '{}'", externalRef);
       return HandlerHelper.notFound(resolver + " could not find content for '" + externalRef + "'");
     }
 
@@ -79,20 +84,27 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     }
 
     if (navigation == null) {
-      LOG.warn("No navigation could be resolved for external reference value '" + externalRef + "'");
-      return HandlerHelper.notFound("No navigation could be resolved for external reference value '" + externalRef + "'");
+      LOGGER.warn("No navigation could be resolved for external reference value '{}'", externalRef);
+      return HandlerHelper.notFound("No navigation could be resolved for external reference value '"
+              + externalRef + "'");
     }
 
     //check if the content and navigation belong to the selected site
-    if (!getSitesService().isContentInSite(site, navigation)) {
+    SitesService sitesService = getSitesService();
+    if (!sitesService.isContentInSite(site, navigation)) {
       return badRequest("Resolved context is not part of the given site");
     }
-    if (!getSitesService().isContentInSite(site, linkable)) {
-      return badRequest("The content resolved for the given external reference (" + externalRef + ") is not part of the given site");
+    if (!sitesService.isContentInSite(site, linkable)) {
+      return badRequest("The content resolved for the given external reference (" + externalRef
+              + ") is not part of the given site");
     }
 
-    ModelAndView modelAndView = doCreateModelAndView(parameters, navigation, linkable, UserVariantHelper.getUser(request));
-    return modelAndView!=null ? modelAndView : badRequest("Don't know how to handle fragment parameters " + parameters);
+    ModelAndView modelAndView = doCreateModelAndView(parameters, navigation, linkable,
+            UserVariantHelper.getUser(request));
+
+    return modelAndView != null
+            ? modelAndView
+            : badRequest("Don't know how to handle fragment parameters " + parameters);
   }
 
   /**
@@ -108,15 +120,23 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
    * The developer parameter may be considered by particular features to
    * reflect work in progress.
    */
-  protected ModelAndView doCreateModelAndView(FragmentParameters parameters, Content navigation, Content linkable, @Nullable User developer) {
+  @Nullable
+  protected ModelAndView doCreateModelAndView(@Nonnull FragmentParameters parameters, Content navigation,
+                                              Content linkable, @Nullable User developer) {
+    String placement = parameters.getPlacement();
     String view = parameters.getView();
 
-    if (isBlank(parameters.getPlacement()) && usePageRendering) {
+    // when usePageRendering = true the full html head and body is rendered
+    if (isBlank(placement) && usePageRendering) {
       return createModelAndViewForPage(navigation, linkable, view, developer);
     }
 
-    String placement = normalizedPlacement(parameters, linkable, view);
+    // if the target is a channel and no placement and/or view is given we use a well-known "pagegrid" view that
+    // results in a full page grid rendering (but without complete html head and body)
+    view = normalizedPageFragmentView(linkable, placement, view);
 
+    // if the target is a deep content (like an article) we render a
+    // linkable directly (and not a page or pagegrid or placement)
     if (!isRequestToPlacement(linkable, navigation, placement)) {
       return createModelAndViewForLinkable(navigation, linkable, view, developer);
     }
@@ -125,41 +145,36 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     if (isNotBlank(placement)) {
       return createModelAndViewForPlacement(navigation, view, placement, developer);
     }
+
     return null;
   }
 
-
   // --- internal ---------------------------------------------------
-
-  private String normalizedPlacement(FragmentParameters parameters, Content linkable, String view) {
-    String placement = parameters.getPlacement();
-    // A channel is linked in the include tag. Since we can only render placements, we assume the "main" section should be used.
-    if (linkable.getType().isSubtypeOf(CMChannel.NAME) && placement == null && view == null) {
-      placement = defaultPlacementName;
-    }
-    return placement;
-  }
 
   @VisibleForTesting
   @Nonnull
-  protected ModelAndView createModelAndViewForLinkable(@Nonnull Content channel, @Nonnull Content child, String view, @Nullable User developer) {
+  protected ModelAndView createModelAndViewForLinkable(@Nonnull Content channel, @Nonnull Content child, String view,
+                                                       @Nullable User developer) {
     // The default view is used only for placement requests, that do not request a certain view. For
     // any other requests, the default view is null (as usual).
     if ("default".equals(view)) {
       view = null;
     }
 
-    Navigation navigation = getContentBeanFactory().createBeanFor(channel, Navigation.class);
-    Linkable linkable = getContentBeanFactory().createBeanFor(child, Linkable.class);
-    if (getDataViewFactory() != null) {
-      linkable = getDataViewFactory().loadCached(linkable, null);
+    ContentBeanFactory contentBeanFactory = getContentBeanFactory();
+    Navigation navigation = contentBeanFactory.createBeanFor(channel, Navigation.class);
+    Linkable linkable = contentBeanFactory.createBeanFor(child, Linkable.class);
+
+    DataViewFactory dataViewFactory = getDataViewFactory();
+    if (dataViewFactory != null) {
+      linkable = dataViewFactory.loadCached(linkable, null);
     }
 
     if (!getValidationService().validate(linkable)) {
       return handleInvalidLinkable(linkable);
     }
 
-    Page page = asPage(navigation, navigation, developer);
+    Page page = asPage(navigation, linkable, developer);
     ModelAndView modelAndView = HandlerHelper.createModelWithView(linkable, view);
     RequestAttributeConstants.setPage(modelAndView, page);
     NavigationLinkSupport.setNavigation(modelAndView, navigation);
@@ -167,18 +182,27 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return modelAndView;
   }
 
-  private ModelAndView createModelAndViewForPage(Content navigation, Content linkable, String view, @Nullable User developer) {
-    Navigation navigationBean = getContentBeanFactory().createBeanFor(navigation, Navigation.class);
-    Linkable linkableBean = getContentBeanFactory().createBeanFor(linkable, Linkable.class);
+  @Nonnull
+  private ModelAndView createModelAndViewForPage(Content navigation, Content linkable, String view,
+                                                 @Nullable User developer) {
+    ContentBeanFactory contentBeanFactory = getContentBeanFactory();
+
+    Navigation navigationBean = contentBeanFactory.createBeanFor(navigation, Navigation.class);
+
+    Linkable linkableBean = contentBeanFactory.createBeanFor(linkable, Linkable.class);
     if (!getValidationService().validate(linkableBean)) {
       return handleInvalidLinkable(linkableBean);
     }
+
     Page page = asPage(navigationBean, linkableBean, developer);
     return createModelAndView(page, view);
   }
 
-  private ModelAndView createModelAndViewForPlacement(Content navigation, String view, String placement, @Nullable User developer) {
+  @Nonnull
+  private ModelAndView createModelAndViewForPlacement(Content navigation, String view, String placement,
+                                                      @Nullable User developer) {
     CMChannel channelBean = getContentBeanFactory().createBeanFor(navigation, CMChannel.class);
+
     // validation will be done in following method
     return createModelAndViewForPlacementAndView(channelBean, placement, view, developer);
   }
@@ -193,7 +217,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
    * linkable is a requested article and navigation its context, no placement shall be rendered but
    * the whole article. The placement name must then be ignored.
    */
-  private boolean isRequestToPlacement(Content linkable, Content navigation, String placementName) {
+  private boolean isRequestToPlacement(@Nullable Content linkable, Content navigation, @Nullable String placementName) {
     if (isBlank(placementName)) {
       return false;
     }
@@ -209,26 +233,22 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
   /**
    * Finds the matching resolver for the given fragment attribute values.
    */
+  @Nullable
   private ExternalReferenceResolver findReferenceResolver(FragmentParameters params) {
-    for(ExternalReferenceResolver resolver : externalReferenceResolvers) {
-      if(resolver.include(params)) {
+    for (ExternalReferenceResolver resolver : externalReferenceResolvers) {
+      if (resolver.include(params)) {
         return resolver;
       }
     }
+
     return null;
   }
-
 
   // ---------- Config ----------------------------
 
   @Required
   public void setExternalReferenceResolvers(List<ExternalReferenceResolver> externalReferenceResolvers) {
     this.externalReferenceResolvers = externalReferenceResolvers;
-  }
-
-  @Required
-  public void setDefaultPlacementName(String defaultPlacementName) {
-    this.defaultPlacementName = defaultPlacementName;
   }
 
   public void setUsePageRendering(boolean usePageRendering) {

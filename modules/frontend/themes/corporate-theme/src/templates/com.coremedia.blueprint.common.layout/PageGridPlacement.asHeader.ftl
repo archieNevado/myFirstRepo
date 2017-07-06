@@ -3,7 +3,7 @@
 <#assign numberOfItems=self.items?size />
 <#assign searchAction=bp.setting(cmpage.context,"searchAction", {})/>
 
-<header id="cm-${self.name!""}" class="cm-header <#if !searchAction?has_content>cm-${self.name!""}--without-search</#if> navbar navbar-default"<@cm.metadata data=bp.getPlacementPropertyName(self)!""/>>
+<header id="cm-${self.name!""}" class="cm-header <#if !searchAction?has_content>cm-${self.name!""}--without-search</#if> navbar navbar-default"<@cm.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
 
   <#-- fixed position of logo and navigation button-->
   <div class="navbar-header">

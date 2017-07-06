@@ -5,7 +5,6 @@
   "description": "The role for the studio node",
   "run_list": [
     "role[base]",
-    "recipe[blueprint-tomcat::cae-preview]",
     "recipe[blueprint-tomcat::studio]",
     "recipe[blueprint-tomcat::sitemanager]"
   ]

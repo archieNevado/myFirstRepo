@@ -150,10 +150,14 @@ coremedia.blueprint.es = function (module) {
             $form.trigger(module.EVENT_MODEL_INFO, [result]);
           } else {
             coremedia.blueprint.es.addNotifications($form, result.messages);
+            /*global grecaptcha*/
+            if (typeof grecaptcha !== "undefined") {
+              //reset recaptcha if recaptcha is enabled and an error is found
+              grecaptcha.reset();
+            }
           }
           $document.trigger(coremedia.blueprint.basic.EVENT_LAYOUT_CHANGED);
         }).fail(function () {
-          // @TODO if more messages cannot be localized a concept is needed for providing resource bundles on client side
           coremedia.blueprint.es.addNotifications($form, [{type: "error", "text": "Due to an internal error, comment could not be posted."}]);
         }).always(function () {
           module.formSubmitEnd($form);
@@ -320,12 +324,6 @@ coremedia.blueprint.es = function (module) {
   coremedia.blueprint.nodeDecorationService.addNodeDecoratorBySelector(".cm-ratings-average", function ($target) {
     $target.on(module.EVENT_TOGGLE_AVERAGE_RATING, function() {
       $target.toggleClass("cm-ratings-average--active");
-    });
-  });
-
-  coremedia.blueprint.nodeDecorationService.addNodeDecoratorByData({}, "cm-switch-average-rating", function ($target) {
-    $target.on("click", function () {
-      $target.trigger(module.EVENT_TOGGLE_AVERAGE_RATING);
     });
   });
 

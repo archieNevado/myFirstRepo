@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
@@ -9,10 +10,10 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
@@ -38,6 +39,7 @@ import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelpe
 import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
 
 public class CatalogServiceImpl implements CatalogService {
 
@@ -46,7 +48,6 @@ public class CatalogServiceImpl implements CatalogService {
   static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT";
 
   private WcCatalogWrapperService catalogWrapperService;
-  private StoreContextProvider storeContextProvider;
   private CommerceBeanFactory commerceBeanFactory;
   private CommerceIdProvider commerceIdProvider;
   private CommerceCache commerceCache;
@@ -68,11 +69,6 @@ public class CatalogServiceImpl implements CatalogService {
 
   public CommerceBeanFactory getCommerceBeanFactory() {
     return commerceBeanFactory;
-  }
-
-  @Required
-  public void setStoreContextProvider(StoreContextProvider storeContextProvider) {
-    this.storeContextProvider = storeContextProvider;
   }
 
   @Required
@@ -282,7 +278,8 @@ public class CatalogServiceImpl implements CatalogService {
   @Nonnull
   public Category findRootCategory() throws CommerceException {
     String rootCategoryId = commerceIdProvider.formatCategoryId(EXTERNAL_ID_ROOT_CATEGORY);
-    return (Category) getCommerceBeanFactory().createBeanFor(rootCategoryId, storeContextProvider.getCurrentContext());
+    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    return (Category) getCommerceBeanFactory().createBeanFor(rootCategoryId, connection.getStoreContext());
   }
 
   /**
@@ -350,6 +347,7 @@ public class CatalogServiceImpl implements CatalogService {
     result.setTotalCount(wcSearchResult.getTotalCount());
     result.setPageNumber(wcSearchResult.getPageNumber());
     result.setPageSize(wcSearchResult.getPageSize());
+    result.setFacets(wcSearchResult.getFacets());
     return result;
   }
 
@@ -386,10 +384,19 @@ public class CatalogServiceImpl implements CatalogService {
     result.setTotalCount(wcSearchResult.getTotalCount());
     result.setPageNumber(wcSearchResult.getPageNumber());
     result.setPageSize(wcSearchResult.getPageSize());
+    result.setFacets(wcSearchResult.getFacets());
     return result;
   }
 
   public String getLanguageId(Locale locale) {
+    StoreContext storeContext = getStoreContext();
+    if (storeContext != null){
+      String langId = StoreContextHelper.getLangId(storeContext);
+      if (langId != null) {
+        return langId;
+      }
+    }
+
     return getCatalogWrapperService().getLanguageId(locale);
   }
 

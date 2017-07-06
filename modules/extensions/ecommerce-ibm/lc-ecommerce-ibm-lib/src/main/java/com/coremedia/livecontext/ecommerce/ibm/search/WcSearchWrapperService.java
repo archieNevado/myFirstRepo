@@ -19,8 +19,7 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.
 import static java.util.Arrays.asList;
 
 /**
- * TODO: Description
- * To change this template use File | Settings | File Templates.
+ * Wrapper query and result format of the IBM rest search service.
  */
 public class WcSearchWrapperService extends AbstractWcWrapperService {
 
@@ -38,12 +37,6 @@ public class WcSearchWrapperService extends AbstractWcWrapperService {
         return suggestionViews.getSuggestionView().get(0).getEntry();
       }
       return Collections.emptyList();
-    } catch (CommerceRemoteException e) {
-      if ("TODO".equals(e.getErrorKey())) {  //TODO
-        return Collections.emptyList();
-      } else {
-        throw e;
-      }
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {

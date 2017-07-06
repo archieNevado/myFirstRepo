@@ -5,6 +5,7 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
@@ -14,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.ibm.order.WcCart;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -70,7 +72,12 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     String wcsVersion = storeInfoService.getWcsVersion();
     testConfig.setWcsVersion(wcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   /**
@@ -152,7 +159,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     String cookieHeader = "myCookieHeader";
 
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
-    Commerce.setCurrentConnection(commerceConnection);
+    DefaultConnection.set(commerceConnection);
 
     StoreContext storeContext = StoreContextHelper.createContext("configId", "storeId", "storeName", "catalogId", "de", "EUR");
     storeContext.setContractIds(new String[]{"contractA", "contractB"});

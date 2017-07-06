@@ -4,11 +4,11 @@
 <master>
 </master>
 <viewtype>
-<link href="../../../../Viewtypes/CMChannel/tiles-layout-highlight.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-highlight"/>
+<link href="../../../../Viewtypes/CMChannel/tiles-layout-landscape.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-landscape"/>
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<IntProperty Name="limit">5</IntProperty>
+<IntProperty Name="limit">6</IntProperty>
 <StructProperty Name="fq">
 <Struct>
 <StringProperty Name="documenttype">CMArticle</StringProperty>

@@ -15,8 +15,6 @@
 <keywords>evening dresses</keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/AuroraWMDRS-1.xml" path="/Settings/Taxonomies/Subject/AuroraWMDRS-1"/>
-<link href="../../../../../../../Settings/Taxonomies/Subject/AuroraWMDRS-19.xml" path="/Settings/Taxonomies/Subject/AuroraWMDRS-19"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>
@@ -24,6 +22,7 @@
 </contexts>
 <teaserTitle></teaserTitle>
 <pictures>
+<link href="../../../Pictures/Product%20Pictures/PC_EVENING_DRESS%20red%20Actionshot.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20Pictures/PC_EVENING_DRESS%20red%20Actionshot"/>
 </pictures>
 <related>
 </related>
@@ -37,27 +36,6 @@
 </css>
 <theme>
 </theme>
-<placement>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<StructProperty Name="placements_2">
-<Struct>
-<StructProperty Name="placements">
-<Struct>
-</Struct>
-</StructProperty>
-</Struct>
-</StructProperty>
-<StructListProperty Name="placements">
-<Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Fall%20Evening%20Dressesc23ad6c4.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/Fall%20Evening%20Dresses/Fall%20Cocktail%20Dresses%20Landing%20Page%20Main%20Collection"/>
-</LinkListProperty>
-<BooleanProperty Name="locked">false</BooleanProperty>
-<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
-</Struct>
-</StructListProperty>
-</Struct>
-</placement>
 <header>
 </header>
 <footer>

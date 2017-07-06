@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnknownUserException;
@@ -14,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPrice;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPrices;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -53,10 +56,16 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
 
   @Before
   public void setup() {
+    testling.clearLanguageMapping();
     connection = commerce.getConnection("wcs1");
     testConfig.setWcsVersion(storeInfoService.getWcsVersion());
     connection.setStoreContext(testConfig.getStoreContext());
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   @Betamax(tape = "wcws_testFindDynamicProductPriceByExternalId", match = {MatchRule.path, MatchRule.query})
@@ -67,14 +76,21 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     if (StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
       assertNotNull(productPrice.getPriceDescription());
       assertNotNull(productPrice.getPriceUsage());
-    } else
+    } else {
       assertNotNull(productPrice.getCurrency());
-  }
+    }
+    assertEquals(testConfig.getStoreContext().getCurrency().getCurrencyCode(), productPrice.getCurrency());
+
+    // test with different currency (CMS-9402)
+    productPrice = testling.findDynamicProductPriceByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext("EUR"), null);
+    assertNotNull(productPrice.getPriceValue());
+    assertEquals("EUR", productPrice.getCurrency());
+    }
 
   @Betamax(tape = "wcws_testFindStaticProductPricesByExternalId", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindStaticProductPricesByExternalId() throws Exception {
-    WcPrices productPrice = testling.findStaticProductPricesByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), Commerce.getCurrentConnection().getUserContext());
+    WcPrices productPrice = testling.findStaticProductPricesByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
     assertNotNull(productPrice);
     assertTrue(productPrice.getPrices().containsKey("Offer"));
     if (WCS_VERSION_7_7 == StoreContextHelper.getWcsVersion(testConfig.getStoreContext())) {
@@ -86,7 +102,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
   @Betamax(tape = "wcws_testFindDynamicProductPriceByExternalIdForFrequentBuyer", match = {MatchRule.path, MatchRule.query})
 //  @Test
   public void testFindDynamicProductPriceByExternalIdForFrequentBuyer() throws Exception {
-    WcPrices productPrice = testling.findStaticProductPricesByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), Commerce.getCurrentConnection().getUserContext());
+    WcPrices productPrice = testling.findStaticProductPricesByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
     WcPrice staticOfferPrice = productPrice.getPrices().get("Offer");
 
     String userName = TEST_USER;
@@ -174,7 +190,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
             Mockito.any(UserContext.class));
     testlingSpy.setRestConnector(restConnectorSpy);
 
-    testlingSpy.findCategoryByExternalId("vanilla", testConfig.getStoreContext(), Commerce.getCurrentConnection().getUserContext());
+    testlingSpy.findCategoryByExternalId("vanilla", testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
 
     // BOD handler called
     Mockito.verify(restConnectorSpy, times(1)).callService(eq((WcRestServiceMethod) CategoryRestCallFieldBod.get(null)),
@@ -226,7 +242,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
             Mockito.any(UserContext.class));
     testlingSpy.setRestConnector(restConnectorSpy);
 
-    testlingSpy.findProductByExternalId("0815", testConfig.getStoreContext(), Commerce.getCurrentConnection().getUserContext());
+    testlingSpy.findProductByExternalId("0815", testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
 
     // search handler called
     Mockito.verify(restConnectorSpy, times(1)).callService(eq((WcRestServiceMethod) productRestCallFieldSearch.get(null)),

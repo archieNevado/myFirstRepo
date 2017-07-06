@@ -126,11 +126,15 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
     LOG.debug("parent node called for " + TAXONOMY_ID + "='" + taxonomyId + "', " + NODE_REF + "='" + ref + "'"); //NOSONAR
     try {
       Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
-      return strategy.getParent(ref);
+      if(strategy != null) {
+        return strategy.getParent(ref);
+      }
     } catch (Exception e) {
       LOG.error("parent failed for " + ref, e);
       throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
     }
+    throw new WebApplicationException(new Throwable("No taxonomy strategy found for site id '" + siteId + "' and taxonomy id '" + taxonomyId + "', " +
+            "or taxonomy is not readable."), Response.Status.INTERNAL_SERVER_ERROR);
   }
 
   @GET
@@ -143,11 +147,16 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
     }
     try {
       Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
-      return strategy.getNodeByRef(ref);
+      if(strategy != null) {
+        return strategy.getNodeByRef(ref);
+      }
     } catch (Exception e) {
       LOG.error("getNode failed for " + ref, e);
       throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
     }
+
+    throw new WebApplicationException(new Throwable("No taxonomy strategy found for site id '" + siteId + "' and taxonomy id '" + taxonomyId + "', " +
+            "or taxonomy is not readable."), Response.Status.INTERNAL_SERVER_ERROR);
   }
 
   @GET
@@ -159,13 +168,18 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
     LOG.debug("move node called for " + TAXONOMY_ID + "='" + taxonomyId + "', " + NODE_REF + "='" + ref + "'"); //NOSONAR
     try {
       Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
-      TaxonomyNode node = strategy.getNodeByRef(ref);
-      TaxonomyNode targetNode = strategy.getNodeByRef(targetRef);
-      return strategy.moveNode(node, targetNode);
+      if(strategy != null) {
+        TaxonomyNode node = strategy.getNodeByRef(ref);
+        TaxonomyNode targetNode = strategy.getNodeByRef(targetRef);
+        return strategy.moveNode(node, targetNode);
+      }
     } catch (Exception e) {
       LOG.error("move node failed for " + ref, e);
       throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
     }
+
+    throw new WebApplicationException(new Throwable("No taxonomy strategy found for site id '" + siteId + "' and taxonomy id '" + taxonomyId + "', " +
+            "or taxonomy is not readable."), Response.Status.INTERNAL_SERVER_ERROR);
   }
 
   @GET
@@ -230,15 +244,20 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
                                   @QueryParam(DEFAULT_NAME) String defaultName) {
     LOG.debug("createChild called for " + TAXONOMY_ID + "='" + taxonomyId + "', " + NODE_REF + "='" + ref + "'"); //NOSONAR
     Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
-    TaxonomyNode node = (ref == null)
-            ? strategy.getRoot()
-            : strategy.getNodeByRef(ref);
+    if(strategy != null) {
+      TaxonomyNode node = (ref == null)
+              ? strategy.getRoot()
+              : strategy.getNodeByRef(ref);
 
-    TaxonomyNode newChild = strategy.createChild(node, defaultName);
-    if (node.isRoot()) {
-      waitUntilSearchable(newChild);
+      TaxonomyNode newChild = strategy.createChild(node, defaultName);
+      if (node.isRoot()) {
+        waitUntilSearchable(newChild);
+      }
+      return newChild;
     }
-    return newChild;
+
+    throw new WebApplicationException(new Throwable("No taxonomy strategy found for site id '" + siteId + "' and taxonomy id '" + taxonomyId + "', " +
+            "or taxonomy is not readable."), Response.Status.INTERNAL_SERVER_ERROR);
   }
 
   @GET
@@ -249,15 +268,20 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
     LOG.debug("Delete called for " + TAXONOMY_ID + "='" + taxonomyId + "', " + NODE_REF + "='" + ref + "'");  //NOSONAR
     try {
       Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
-      TaxonomyNode node = (ref == null)
-              ? strategy.getRoot()
-              : strategy.getNodeByRef(ref);
+      if(strategy != null) {
+        TaxonomyNode node = (ref == null)
+                ? strategy.getRoot()
+                : strategy.getNodeByRef(ref);
 
-      return strategy.delete(node);
+        return strategy.delete(node);
+      }
     } catch (Exception e) {
       LOG.error("delete failed for " + ref, e);
       throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
     }
+
+    throw new WebApplicationException(new Throwable("No taxonomy strategy found for site id '" + siteId + "' and taxonomy id '" + taxonomyId + "', " +
+            "or taxonomy is not readable."), Response.Status.INTERNAL_SERVER_ERROR);
   }
 
   @GET
@@ -268,15 +292,20 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
     LOG.debug("commit called for " + TAXONOMY_ID + "='" + taxonomyId + "', " + NODE_REF + "='" + ref + "'");   //NOSONAR
     try {
       Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
-      TaxonomyNode node = (ref == null)
-              ? strategy.getRoot()
-              : strategy.getNodeByRef(ref);
+      if(strategy != null) {
+        TaxonomyNode node = (ref == null)
+                ? strategy.getRoot()
+                : strategy.getNodeByRef(ref);
 
-      return strategy.commit(node);
+        return strategy.commit(node);
+      }
     } catch (Exception e) {
       LOG.error("commit failed for {}", ref, e);
       throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
     }
+
+    throw new WebApplicationException(new Throwable("No taxonomy strategy found for site id '" + siteId + "' and taxonomy id '" + taxonomyId + "', " +
+            "or taxonomy is not readable."), Response.Status.INTERNAL_SERVER_ERROR);
   }
 
 

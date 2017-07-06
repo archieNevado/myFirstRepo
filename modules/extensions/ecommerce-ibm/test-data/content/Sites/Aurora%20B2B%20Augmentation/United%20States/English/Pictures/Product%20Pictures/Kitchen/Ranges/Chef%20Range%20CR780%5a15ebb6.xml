@@ -18,11 +18,11 @@
 <StructProperty Name="transforms">
 <Struct>
 <StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=598;y=0;width=852;height=1321</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=531;y=0;width=990;height=1321</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=364;y=0;width=1319;height=1321</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=147;y=0;width=1759;height=1321</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=83;width=2048;height=1154</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=250;width=2048;height=821</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=529;y=0;width=991;height=1321</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=364;y=0;width=1321;height=1321</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=143;y=0;width=1761;height=1321</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=85;width=2048;height=1152</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=251;width=2048;height=819</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=405;width=2048;height=512</StringProperty>
 </Struct>
 </StructProperty>
@@ -70,6 +70,7 @@
 <Struct>
 <StringListProperty Name="references">
 <String>ibm:///catalog/product/B2B_CHEF_RANGE_CR780</String>
+<String>ibm:///catalog/category/B2B_Ranges</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

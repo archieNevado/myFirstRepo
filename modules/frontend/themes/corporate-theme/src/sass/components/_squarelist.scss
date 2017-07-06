@@ -13,6 +13,7 @@ Contains styling definitions for all content types as cm-squarelist.
 .#{$prefix}squarelist {
   margin: 0;
   padding: $padding-base-vertical $padding-base-horizontal;
+  text-align: center;
 
   @include breakpoint(sm-and-up) {
     padding: $padding-large-vertical $padding-large-vertical;
@@ -30,7 +31,7 @@ Contains styling definitions for all content types as cm-squarelist.
     font-size: font-format(h4, mobile);
     text-align: center;
     margin: 0;
-    padding: $padding-base-vertical 0;
+    padding: $padding-base-vertical 0 $padding-small-vertical 0;
   }
 
   a:hover {

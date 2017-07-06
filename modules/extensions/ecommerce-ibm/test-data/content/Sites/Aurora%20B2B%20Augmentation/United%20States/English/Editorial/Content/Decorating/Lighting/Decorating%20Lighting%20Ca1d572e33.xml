@@ -10,6 +10,7 @@
 <StructProperty Name="teaserOverlay">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Teaser%20Styles/Light%20on%20Dark.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light%20on%20Dark"/>
 </Struct>
 </StructProperty>
 </Struct>
@@ -30,7 +31,7 @@
 <contexts>
 </contexts>
 <teaserTitle>Lights and Lamps</teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1 align--center"><strong>SALE</strong></p><p class="p--heading-3 align--center"><em>up to</em></p><p class="p--heading-1 align--center"><strong>50% Off</strong></p></div></teaserText>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1 align--center"><strong>SALE: Up to </strong><strong>50% Off</strong></p></div></teaserText>
 <pictures>
 <link href="../../../../Pictures/Product%20Category%20Pictures/Decorating/Lighting/Lightc0dc71ba.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Pictures/Product%20Category%20Pictures/Decorating/Lighting/Lighting%20Category%20Picture"/>
 </pictures>

@@ -12,9 +12,10 @@ class CalendarComparator implements Comparator<Calendar>, Serializable {
   private static final long serialVersionUID = 5667734265087336585L;
 
   /**
+   * <p>
    * Compares its two calendar arguments for order. Returns a negative integer, zero, or a positive
    * integer as the first calendar is before, equal, or after the the second calendar.
-   * <p/>
+   * </p>
    * {@inheritDoc}
    */
   @Override

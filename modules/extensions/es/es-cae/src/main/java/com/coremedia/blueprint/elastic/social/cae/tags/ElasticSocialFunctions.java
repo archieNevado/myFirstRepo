@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.tags;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
@@ -7,8 +9,6 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.elastic.social.cae.action.AuthenticationHandler;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -63,10 +63,20 @@ public final class ElasticSocialFunctions {
     }
   }
 
+  /**
+   * Checks if the current user of the web page is a logged-in user or it is an anonymous user.
+   * @return <code>true</code> if the current user is not logged in otherwise <code>false</code>
+   */
   public static @Nonnull Boolean isAnonymousUser() {
     return null == getUser();
   }
 
+  /**
+   * Checks if the user choose not to publish its user name, profile image, and other personal information with
+   * its contributions.
+   * @param user the user to be checked
+   * @return <code>true</code> if the user wants to remain anonymous otherwise <code>false</code>
+   */
   public static @Nonnull Boolean isAnonymous(@Nonnull CommunityUser user) {
     return user.isAnonymous();
   }

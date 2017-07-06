@@ -17,9 +17,9 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio1x1">flip;d=h/b;a=0;c=1/crop;x=530;y=0;width=1364;height=1365</StringProperty>
-<StringProperty Name="landscape_ratio4x3">flip;d=h/b;a=0;c=1/crop;x=39;y=0;width=1661;height=1247</StringProperty>
-<StringProperty Name="landscape_ratio16x9">flip;d=h/b;a=0;c=1/crop;x=0;y=91;width=2048;height=1152</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/flip;d=h/crop;x=530;y=0;width=1364;height=1365</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/flip;d=h/crop;x=39;y=0;width=1661;height=1247</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/flip;d=h/crop;x=0;y=91;width=2048;height=1152</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -66,7 +66,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Tableware.xml" path="/Settings/Taxonomies/Subject/Tableware"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

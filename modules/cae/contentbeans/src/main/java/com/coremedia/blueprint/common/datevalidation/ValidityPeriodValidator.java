@@ -131,17 +131,15 @@ public class ValidityPeriodValidator<T> extends AbstractValidator<T> implements 
   private static Calendar getPreviewDateFromRequestParameter() {
     Calendar calendar = Calendar.getInstance();
     String dateAsString = ContextAttributes.getRequestParameter(REQUEST_PARAMETER_PREVIEW_DATE);
-    if (StringUtils.isNotEmpty(dateAsString)) {
-        if (dateAsString != null && dateAsString.length() > 0) {
-          SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-          sdb.setTimeZone(TimeZone.getTimeZone(dateAsString.substring(dateAsString.lastIndexOf(' ') + 1)));
-          try {
-            calendar.setTime(sdb.parse(dateAsString.substring(0, dateAsString.lastIndexOf(' '))));
-          } catch (ParseException e) {
-            LOG.warn("error parsing previewDate {}", dateAsString, e);
-          }
-        }
+    if (StringUtils.isNotEmpty(dateAsString) && dateAsString.length() > 0) {
+      SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+      sdb.setTimeZone(TimeZone.getTimeZone(dateAsString.substring(dateAsString.lastIndexOf(' ') + 1)));
+      try {
+        calendar.setTime(sdb.parse(dateAsString.substring(0, dateAsString.lastIndexOf(' '))));
+      } catch (ParseException e) {
+        LOG.warn("error parsing previewDate {}", dateAsString, e);
       }
+    }
     return calendar;
   }
 

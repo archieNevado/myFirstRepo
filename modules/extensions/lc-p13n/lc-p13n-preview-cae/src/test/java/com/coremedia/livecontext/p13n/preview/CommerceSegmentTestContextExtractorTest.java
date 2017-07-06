@@ -1,17 +1,17 @@
 package com.coremedia.livecontext.p13n.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
 import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.util.StringUtil;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,9 +44,6 @@ public class CommerceSegmentTestContextExtractorTest {
   @Mock
   private ContentBeanFactory contentBeanFactory;
 
-  @Mock
-  private StoreContextProvider storeContextProvider;
-
   private StoreContext storeContext;
 
   @Mock
@@ -59,15 +56,20 @@ public class CommerceSegmentTestContextExtractorTest {
     storeContext = newStoreContext();
     contextCollection = new ContextCollectionImpl();
 
-    Commerce.setCurrentConnection(commerceConnection);
+    DefaultConnection.set(commerceConnection);
 
-    when(commerceConnection.getStoreContextProvider()).thenReturn(storeContextProvider);
+    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
     when(commerceConnection.getIdProvider()).thenReturn(new BaseCommerceIdProvider("vendor"));
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   @Test
   public void testExtractTestContextsFromContent() {
-    String userSegmentsStr = "ibm:///catalog/segment/segment1,ibm:///catalog/segment/segment2";
+    String userSegmentsStr = "vendor:///catalog/segment/segment1,vendor:///catalog/segment/segment2";
     String userSegmentIds = "segment1,segment2";
     List<String> userSegments = StringUtil.tokenizeToList(userSegmentsStr, ",");
     when(contentBeanFactory.createBeanFor(content)).thenReturn(cmUserProfile);
@@ -75,7 +77,6 @@ public class CommerceSegmentTestContextExtractorTest {
     when(profileExtensions.get(CommerceSegmentTestContextExtractor.PROPERTIES_PREFIX)).thenReturn(properties);
     when(properties.get(CommerceSegmentTestContextExtractor.COMMERCE_CONTEXT)).thenReturn(commerce);
     when(commerce.get(CommerceSegmentTestContextExtractor.USER_SEGMENTS_PROPERTY)).thenReturn(userSegments);
-    when(storeContextProvider.getCurrentContext()).thenReturn(storeContext);
 
     testling.extractTestContextsFromContent(content, contextCollection);
 

@@ -18,6 +18,23 @@
 
   <context:component-scan base-package="com.coremedia.blueprint.studio.boot"/>
 
+  <customize:replace id="studioServiceInfoManager" bean="serviceInfoManager" property="serviceType"
+                     custom-value="studio"/>
+
+  <!--
+
+  Extension Point for Adding Contents to XLIFF: List Bean translate.xliff.translatableExpressions
+
+  Typically used for adding struct entries to XLIFF, where the struct itself is not marked as translatable.
+  For details see CoreMedia Manual/Translation Workflow Configuration.
+
+  -->
+  <customize:append id="blueprint.translate.xliff.translatableExpressions" bean="translate.xliff.translatableExpressions">
+    <list>
+      <value>CMLinkable.localSettings.callToActionCustomText</value>
+    </list>
+  </customize:append>
+
   <beans profile="controlroom-memory">
     <customize:append id="uapiMemoryCapListConnector" bean="connectionParameters" order="42">
       <map>

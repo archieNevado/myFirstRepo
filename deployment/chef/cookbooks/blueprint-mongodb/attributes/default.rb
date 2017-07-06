@@ -15,7 +15,7 @@ default['mongodb']['yum']['mirrorlist'] = nil
 default['mongodb']['yum']['baseurl'] = 'https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64'
 
 #<> fixed version
-default['mongodb3']['version'] = '3.2.11'
+default['mongodb3']['version'] = '3.4.2'
 
 #<> fixed configuration
 default['mongodb3']['config']['mongod']['net']['bindIp'] = '0.0.0.0'

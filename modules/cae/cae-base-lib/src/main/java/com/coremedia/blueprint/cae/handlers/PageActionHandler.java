@@ -1,9 +1,12 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
+import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.links.Link;
+import com.coremedia.objectserver.web.links.UriComponentsHelper;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,13 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
-import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_NAVIGATION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ACTION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
-import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 
 /**
  * Handler and Linkscheme for {@link com.coremedia.blueprint.common.contentbeans.CMAction} beans that are contained in a
@@ -38,12 +37,7 @@ public class PageActionHandler extends DefaultPageActionHandler {
    * URI pattern prefix for actions on page resources. The action name is appended to this URI with a slash.
    * The final URI might look like {@value #URI_PATTERN}
    */
-  public static final String URI_PATTERN =
-          '/' + PREFIX_DYNAMIC +
-          '/' + SEGMENT_ACTION +
-                  "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}" +
-                  "/{" + SEGMENT_ID + ':' + PATTERN_NUMBER + '}' +
-                  "/{" + SEGMENT_ACTION + '}';
+  public static final String URI_PATTERN = UriConstants.Patterns.ACTION_URI_PATTERN;
 
   /**
    * Fallback: Handles all remaining actions by simply displaying the page
@@ -54,8 +48,14 @@ public class PageActionHandler extends DefaultPageActionHandler {
                                     @PathVariable(SEGMENT_ACTION) String action,
                                     HttpServletRequest request,
                                     HttpServletResponse response) {
-    Navigation navigationContext = getNavigation(navigationPath);
-    return handleRequestInternal(contentBean, navigationContext, action, request, response);
+    Navigation navigationFromLink = getNavigation(navigationPath);
+
+    //find navigation context from the _folderProperties of the Action
+    CMAction actionBean = (CMAction) contentBean;
+    final List<CMContext> contexts = actionBean.getContexts();
+    Navigation navigation = contexts != null && !contexts.isEmpty() ? contexts.get(0) : navigationFromLink;
+
+    return handleRequestInternal(contentBean, navigation, action, request, response);
   }
 
   @SuppressWarnings({"TypeMayBeWeakened", "UnusedParameters"})

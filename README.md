@@ -2,8 +2,7 @@
 
 ## Documentation
 
-Refer to the Getting Started chapter of the CoreMedia DXP Manual for a detailed description of the project workspace
-(e.g. for the [current release](https://documentation.coremedia.com/livecontext-3-for-ibm-wcs/current/manuals/coremedia-en/webhelp/content/Getting_started.html)).
+Refer to the Getting Started chapter of the product's Developer Manual for a detailed description of the project workspace.
 
 ## Structure
 

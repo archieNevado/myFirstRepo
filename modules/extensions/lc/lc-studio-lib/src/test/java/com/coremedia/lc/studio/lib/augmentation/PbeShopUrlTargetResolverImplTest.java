@@ -1,7 +1,7 @@
 package com.coremedia.lc.studio.lib.augmentation;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -43,7 +43,8 @@ public class PbeShopUrlTargetResolverImplTest {
   public void setup() {
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
 
-    Commerce.getCurrentConnection().getStoreContext().put(StoreContextImpl.SITE, "theSiteId");
+    DefaultConnection.get().getStoreContext().put(StoreContextImpl.SITE, "theSiteId");
+    DefaultConnection.get().getStoreContext().put(StoreContextImpl.STORE_NAME, "storeName");
     when(sitesService.getSite("theSiteId")).thenReturn(site);
 
     when(commerceConnection.getCatalogService().findCategoryBySeoSegment(anyString())).thenReturn(null);
@@ -51,7 +52,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveCategoryUrlTest() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/en/auroraesite/pc-on-the-table/pc-glasses#facet:&productBeginIndex:0&orderBy:&pageView:grid&minPrice:&maxPrice:&pageSize:&";
+    String testUrl = "http://anyhost/pc-on-the-table/pc-glasses#facet:&productBeginIndex:0&orderBy:&pageView:grid&minPrice:&maxPrice:&pageSize:&";
 
     Category category = mock(Category.class);
     when(commerceConnection.getCatalogService().findCategoryBySeoSegment("pc-glasses")).thenReturn(category);
@@ -63,7 +64,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveExternalPageSeoUrlTest() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/en/auroraesite/contact-us";
+    String testUrl = "http://anyhost/contact-us";
 
     Object resolvedBean = testling.resolveUrl(testUrl, "theSiteId");
 
@@ -72,7 +73,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveExternalPageSeoUrlNotAugmentedTest() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/en/auroraesite/contact-us";
+    String testUrl = "http://anyhost/contact-us";
 
     Object resolvedBean = testling.resolveUrl(testUrl, "theSiteId");
 
@@ -81,7 +82,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveSiteRootDocument() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/en/aurora/";
+    String testUrl = "http://anyhost/storeName/";
 
     Content rootDocument = mock(Content.class);
     when(site.getSiteRootDocument()).thenReturn(rootDocument);
@@ -93,7 +94,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveExternalPageSeoUrlAugmentedTest() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/en/auroraesite/contact-us";
+    String testUrl = "http://anyhost/contact-us";
 
     Content externalPage = mock(Content.class);
     when(externalPageAugmentationService.getContentByExternalId("contact-us", site)).thenReturn(externalPage);
@@ -105,7 +106,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveExternalPageUnresolvableSeoUrl() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/en/auroraesite//";
+    String testUrl = "http://anyhost/";
 
     Object resolvedBean = testling.resolveUrl(testUrl, "theSiteId");
 
@@ -114,7 +115,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveExternalPageNonSeoUrlNotAugmentedTest() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/AdvancedSearchDisplay?catalogId=10152&langId=-1&storeId=10301";
+    String testUrl = "http://anyhost/AdvancedSearchDisplay?catalogId=10152&langId=-1&storeId=10301";
 
     Object resolvedBean = testling.resolveUrl(testUrl, "theSiteId");
 
@@ -123,7 +124,7 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Test
   public void resolveExternalPageNonSeoUrlAugmentedTest() {
-    String testUrl = "http://shop-helios.toko-test-05.coremedia.vm/webapp/wcs/stores/servlet/AdvancedSearchDisplay?catalogId=10152&langId=-1&storeId=10301";
+    String testUrl = "http://anyhost/AdvancedSearchDisplay?catalogId=10152&langId=-1&storeId=10301";
 
     Content externalPage = mock(Content.class);
     when(externalPageAugmentationService.getContentByExternalId("AdvancedSearchDisplay", site)).thenReturn(externalPage);

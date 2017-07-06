@@ -37,7 +37,7 @@ module.exports = function (grunt, options) {
           src: 'l10n/**',
           dest: '../../target/resources/themes/<%= themeConfig.name %>/'
         },
-        brick_livecontext_templates: {
+        brick_elastic_social_templates: {
           expand: true,
           cwd: options.brickDirectory + '/templates',
           src: '**',
@@ -57,12 +57,16 @@ module.exports = function (grunt, options) {
           files: [options.brickDirectory + "/l10n/**"],
           tasks: ['copy:brick_elastic_social_l10n']
         },
+        brick_elastic_social_templates: {
+          files: [options.brickDirectory + "/templates/**"],
+          tasks: ['copy:brick_elastic_social_templates', 'compress:brick_templates']
+        },
         brick_elastic_social_sass: {
           options: {
             spawn: true
           },
           files: options.brickDirectory + '/sass/**/*.scss',
-          tasks: ['sass', 'postcss']
+          tasks: ['sass']
         }
       }
     }

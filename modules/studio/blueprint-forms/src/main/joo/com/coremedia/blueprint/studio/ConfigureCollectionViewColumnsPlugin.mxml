@@ -37,8 +37,7 @@
     <editor:ListViewStatusColumn width="46"
                                  sortable="true"
                                  u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-    <editor:ListViewCreationDateColumn width="120"
-                                       sortable="true"
+    <editor:ListViewCreationDateColumn sortable="true"
                                        u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
     <editor:FreshnessColumn sortable="true"
                             hidden="true"/>

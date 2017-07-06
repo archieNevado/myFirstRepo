@@ -27,11 +27,6 @@
 </related>
 <value>News</value>
 <children>
-<link href="Breaking%20News.xml" path="/Settings/Taxonomies/Subject/Breaking%20News"/>
-<link href="Events.xml" path="/Settings/Taxonomies/Subject/Events"/>
-<link href="News%20General.xml" path="/Settings/Taxonomies/Subject/News%20General"/>
-<link href="OpEd.xml" path="/Settings/Taxonomies/Subject/OpEd"/>
-<link href="Press%20Release.xml" path="/Settings/Taxonomies/Subject/Press%20Release"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

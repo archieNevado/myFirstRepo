@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @cm.template.api
+ */
 public class Notification {
 
   private NotificationType type;
@@ -19,16 +22,25 @@ public class Notification {
     this.params = params == null ? Collections.emptyList() : new ArrayList<>(params);
   }
 
+  /**
+   * @cm.template.api
+   */
   @Nonnull
   public NotificationType getType() {
     return type;
   }
 
+  /**
+   * @cm.template.api
+   */
   @Nonnull
   public String getKey() {
     return key;
   }
 
+  /**
+   * @cm.template.api
+   */
   public List<?> getParams() {
     return params;
   }
@@ -60,10 +72,25 @@ public class Notification {
     return result;
   }
 
+  /**
+   * @cm.template.api
+   */
   public enum NotificationType {
+    /**
+     * @cm.template.api
+     */
     SUCCESS,
+    /**
+     * @cm.template.api
+     */
     INFO,
+    /**
+     * @cm.template.api
+     */
     WARNING,
+    /**
+     * @cm.template.api
+     */
     ERROR
   }
 }

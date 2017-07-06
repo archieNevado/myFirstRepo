@@ -7,6 +7,7 @@
                            title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
                            itemId="detailsDocumentForm"
                            propertyNames="{['title','detailText']}"
+                           expandOnValues="title,detailText"
                            manageHeight="{false}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]

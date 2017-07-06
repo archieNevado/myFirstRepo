@@ -2,7 +2,7 @@ package com.coremedia.ecommerce.test;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.cap.multisite.Site;
@@ -98,7 +98,6 @@ public class MockCommerceEnvBuilder {
     storeContext.put(StoreContextImpl.LOCALE, LocaleHelper.getLocaleFromString("en_US"));
     storeContext.put(StoreContextImpl.CURRENCY, Currency.getInstance("USD"));
 
-    when(storeContextProvider.getCurrentContext()).thenReturn(storeContext);
     when(storeContextProvider.findContextBySite((Site) anyObject())).thenReturn(storeContext);
 
     UserContext userContext = newUserContext();
@@ -123,7 +122,7 @@ public class MockCommerceEnvBuilder {
     commerceConnection.setAssetUrlProvider(assetUrlProvider);
     commerceConnection.setStoreContext(storeContext);
     commerceConnection.setUserContext(userContext);
-    Commerce.setCurrentConnection(commerceConnection);
+    DefaultConnection.set(commerceConnection);
 
     return commerceConnection;
   }

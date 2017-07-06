@@ -16,7 +16,7 @@
 <Link xlink:href="coremedia:///cap/resources/IR%20News%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Investor%20Relations/News/IR%20News%20Page"/>
 </LinkListProperty>
 <LinkListProperty Name="subjecttaxonomy" LinkType="coremedia:///cap/contenttype/CMTaxonomy">
-<Link xlink:href="coremedia:///cap/resources/../../../../../../../../../Settings/Taxonomies/Subject/News.xml" cmexport:path="/Settings/Taxonomies/Subject/News"/>
+<Link xlink:href="coremedia:///cap/resources/../../../../../../../../../Settings/Taxonomies/Subject/Press%20Release.xml" cmexport:path="/Settings/Taxonomies/Subject/Press%20Release"/>
 </LinkListProperty>
 </Struct>
 </StructProperty>

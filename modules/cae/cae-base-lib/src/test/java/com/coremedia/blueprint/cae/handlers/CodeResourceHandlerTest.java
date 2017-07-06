@@ -39,6 +39,7 @@ import javax.activation.MimeType;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -240,7 +241,9 @@ public class CodeResourceHandlerTest {
 
   @Test
   public void testLinkForMergedContent() {
-    Map<String,Object> cmParams = new ImmutableMap.Builder<String,Object>().put("extension","js").build();
+    Map<String,Object> cmParams = ImmutableMap.<String,Object>builder()
+            .put("extension", "js")
+            .build();
     CodeResources codeResources = new CodeResourcesCacheKey(codeCarryingBean.getContent(), CMNavigationBase.JAVA_SCRIPT, false, treeRelation, null).evaluate(null);
     MergeableResources mergeableResources = new MergeableResourcesImpl(codeResources.getModel("body"), contentBeanFactory, null);
     String url = linkFormatterTestHelper.formatLink(cmParams, mergeableResources, null, MERGED_JS_VIEW);
@@ -295,8 +298,10 @@ public class CodeResourceHandlerTest {
     assertEquals("mimetype does not match", expectedMimetype, mimetype.toString());
 
     String expected = "//this file is for testing purposes";
-    String actual = IOUtils.toString(blob.getInputStream(), "UTF-8");
-    assertEquals("file content differs", expected, actual);
+    try (InputStream inputStream = blob.getInputStream()) {
+      String actual = IOUtils.toString(inputStream, "UTF-8");
+      assertEquals("file content differs", expected, actual);
+    }
   }
 
   /**

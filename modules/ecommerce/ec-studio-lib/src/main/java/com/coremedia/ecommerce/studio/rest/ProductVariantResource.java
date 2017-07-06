@@ -2,7 +2,10 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;
 
 import javax.inject.Inject;
@@ -11,7 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A catalog {@link ProductVariant} object as a RESTful resource.
@@ -65,7 +68,11 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
 
   @Override
   protected ProductVariant doGetEntity() {
-    return getConnection().getCatalogService().findProductVariantById(getCurrentCommerceIdProvider().formatProductVariantId(getId()));
+    CommerceConnection connection = getConnection();
+    CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
+    CatalogService catalogService = requireNonNull(connection.getCatalogService(), "catalog service not available");
+    String productVariantId = idProvider.formatProductVariantId(getId());
+    return catalogService.findProductVariantById(productVariantId);
   }
 
   @Override

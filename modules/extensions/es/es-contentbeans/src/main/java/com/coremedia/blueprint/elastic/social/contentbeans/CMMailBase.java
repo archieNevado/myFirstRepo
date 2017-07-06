@@ -5,6 +5,7 @@ import com.coremedia.cap.common.CapBlobRef;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Generated base class for beans of document type "CMMail".
@@ -23,7 +24,13 @@ public abstract class CMMailBase extends CMHasContextsImpl {
   public String getText() {
     try {
       CapBlobRef text = getContent().getBlobRef("text");
-      return text == null ? "" : IOUtils.toString(text.getInputStream(), "UTF-8");
+      if (text == null) {
+        return "";
+      }
+
+      try (InputStream inputStream = text.getInputStream()) {
+        return IOUtils.toString(inputStream, "UTF-8");
+      }
     } catch (IOException e) {
       throw new IllegalArgumentException("Couldn't write blob 'text' to message template", e);
     }

@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -25,7 +25,7 @@ public class UserContextHelper {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException
    */
   public static void setCurrentContext(UserContext context) throws InvalidContextException {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     if (currentConnection != null) {
       currentConnection.setUserContext(context);
     }
@@ -37,7 +37,7 @@ public class UserContextHelper {
    * @return the UserContext
    */
   public static UserContext getCurrentContext() {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     if (currentConnection != null) {
       UserContext userContext = currentConnection.getUserContext();
       userContext = userContext == null ? newUserContext() :userContext;

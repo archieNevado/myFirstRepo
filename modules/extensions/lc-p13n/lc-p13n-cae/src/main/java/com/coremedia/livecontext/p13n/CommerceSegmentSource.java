@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.p13n;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
@@ -38,7 +38,7 @@ public class CommerceSegmentSource extends AbstractContextSource {
   @Override
   public void preHandle(HttpServletRequest request, HttpServletResponse response, ContextCollection contextCollection) {
 
-    if (Commerce.getCurrentConnection() == null ||
+    if (DefaultConnection.get() == null ||
             getStoreContext() == null ||
             getUserContext() == null ||
             StringUtils.isEmpty(getStoreContext().getUserSegments()) &&
@@ -90,18 +90,18 @@ public class CommerceSegmentSource extends AbstractContextSource {
   }
 
   public StoreContext getStoreContext() {
-    return Commerce.getCurrentConnection().getStoreContext();
+    return DefaultConnection.get().getStoreContext();
   }
 
   public UserContext getUserContext() {
-    return Commerce.getCurrentConnection().getUserContext();
+    return DefaultConnection.get().getUserContext();
   }
 
   public SegmentService getSegmentService() {
-    return Commerce.getCurrentConnection().getSegmentService();
+    return DefaultConnection.get().getSegmentService();
   }
 
   public CommerceIdProvider getCommerceIdProvider() {
-    return Commerce.getCurrentConnection().getIdProvider();
+    return DefaultConnection.get().getIdProvider();
   }
 }

@@ -1,128 +1,103 @@
 package com.coremedia.livecontext.contentbeans;
 
+import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.common.contentbeans.CMTeasable;
+import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.xml.Markup;
-import com.coremedia.xml.MarkupFactory;
 import com.coremedia.xml.MarkupUtil;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
+import static com.coremedia.livecontext.contentbeans.ProductTeasableHelperTest.createMarkup;
+import static java.util.Collections.emptyMap;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CMProductTeaserImplTest {
 
-  public static final String CONTENT_TEASER_TITLE_PROPERTY = "teaserTitle";
-  public static final String CONTENT_TEASER_TITLE = "content teaser title";
-  public static final String CATALOG_TEASER_TITLE = "catalog teaser title";
+  static final String CONTENT_TEASER_TITLE_PROPERTY = "teaserTitle";
+  static final String CONTENT_TEASER_TITLE = "content teaser title";
+  static final String CATALOG_TEASER_TITLE = "catalog teaser title";
 
-  public static final String CONTENT_TEASER_TEXT_PROPERTY = "teaserText";
-  public static final String CONTENT_TEASER_TEXT = "content teaser text";
-  public static final String CATALOG_TEASER_TEXT = "catalog teaser text";
-  public static final Markup CONTENT_TEASER_TEXT_MARKUP = createMarkup(CONTENT_TEASER_TEXT);
-  public static final Markup CATALOG_TEASER_TEXT_MARKUP = createMarkup(CATALOG_TEASER_TEXT);
-  public static final Markup EMPTY_MARKUP = createMarkup("");
+  static final String CONTENT_TEASER_TEXT_PROPERTY = "teaserText";
+  static final String CONTENT_TEASER_TEXT = "content teaser text";
+  static final String CATALOG_TEASER_TEXT = "catalog teaser text";
+  static final Markup CONTENT_TEASER_TEXT_MARKUP = createMarkup(CONTENT_TEASER_TEXT);
+  static final Markup CATALOG_TEASER_TEXT_MARKUP = createMarkup(CATALOG_TEASER_TEXT);
+  static final Markup EMPTY_MARKUP = createMarkup("");
 
-  public static final String CONTENT_TITLE_PROPERTY = "title";
-  public static final String CONTENT_TITLE = "content title";
+  static final String CONTENT_TITLE_PROPERTY = "title";
+  static final String CONTENT_TITLE = "content title";
 
-  public static final String CONTENT_DETAIL_TEXT_PROPERTY = "detailText";
-  public static final String CONTENT_DETAIL_TEXT = "content detail text";
+  static final String CONTENT_DETAIL_TEXT_PROPERTY = "detailText";
+  static final String CONTENT_DETAIL_TEXT = "content detail text";
 
+  @Mock
   private Content content;
-  private Product product;
+
+  @Mock
+  private SettingsService settingsService;
+
+  @Mock
+  private TeaserOverlaySettings teaserOverlaySettings;
+
   private CMProductTeaserImpl testling;
+
+  @Mock
+  private ProductTeasableHelper productTeasableHelper;
 
   @Before
   public void setUp() {
     initMocks(this);
 
-    content = mock(Content.class);
-    product = mock(Product.class);
-    testling = new TestCMProductTeaserImpl(content, product);
+    when(teaserOverlaySettings.isEnabled()).thenReturn(false);
+
+    when(settingsService.settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, Content.class)).thenReturn(emptyMap());
+    when(settingsService.createProxy(TeaserOverlaySettings.class, Object.class)).thenReturn(teaserOverlaySettings);
+
+    testling = new TestCMProductTeaserImpl(content, mock(Product.class));
+    testling.setProductTeasableHelper(productTeasableHelper);
+    testling.setSettingsService(settingsService);
   }
 
   @Test
-  public void testGetTeaserValuesFromContent() {
-    when(content.getString(anyString())).thenReturn(CONTENT_TEASER_TITLE);
-    when(content.getMarkup(anyString())).thenReturn(createMarkup(CONTENT_TEASER_TEXT));
+  public void testTeasableFallbackPropertiesWithNull() {
+    when(content.getString(CONTENT_TEASER_TITLE_PROPERTY)).thenReturn(null);
+    when(content.getMarkup(CONTENT_TEASER_TEXT_PROPERTY)).thenReturn(null);
+    when(content.getString(CONTENT_TITLE_PROPERTY)).thenReturn(CONTENT_TITLE);
+    when(content.getMarkup(CONTENT_DETAIL_TEXT_PROPERTY)).thenReturn(createMarkup(CONTENT_DETAIL_TEXT));
 
-    assertEquals(CONTENT_TEASER_TITLE, testling.getTeaserTitle());
-    assertEquals(CONTENT_TEASER_TEXT_MARKUP, testling.getTeaserText());
+    when(productTeasableHelper.getTeaserTextInternal(testling, null)).thenReturn(null);
+    when(productTeasableHelper.getTeaserTitleInternal(testling, null)).thenReturn(null);
+
+    assertThat(testling.getTeaserTitle()).isEqualTo(CONTENT_TITLE);
+    assertThat(MarkupUtil.asPlainText(testling.getTeaserText()).trim()).isEqualTo(CONTENT_DETAIL_TEXT);
   }
 
   @Test
-  public void testGetTeaserValuesFromCatalog() {
-    when(content.getString(anyString())).thenReturn(null);
-    when(content.getMarkup(anyString())).thenReturn(null);
-
-    when(product.getName()).thenReturn(CATALOG_TEASER_TITLE);
-    when(product.getShortDescription()).thenReturn(createMarkup(CATALOG_TEASER_TEXT));
-
-    assertEquals(CATALOG_TEASER_TITLE, testling.getTeaserTitle());
-    assertEquals(CATALOG_TEASER_TEXT_MARKUP, testling.getTeaserText());
-  }
-
-  @Test
-  public void testGetTeaserValuesFromCatalogWhenPropertyEmpty() {
-    when(content.getString(anyString())).thenReturn("");
-    when(content.getMarkup(anyString())).thenReturn(EMPTY_MARKUP);
-
-    when(product.getName()).thenReturn(CATALOG_TEASER_TITLE);
-    when(product.getShortDescription()).thenReturn(createMarkup(CATALOG_TEASER_TEXT));
-
-    assertEquals(CATALOG_TEASER_TITLE, testling.getTeaserTitle());
-    assertEquals(CATALOG_TEASER_TEXT_MARKUP, testling.getTeaserText());
-  }
-
-  @Test
-  public void testGetTeaserValuesFromXXIfContentAndCatalogEmpty() {
-    when(content.getString(anyString())).thenReturn("");
-    when(content.getMarkup(anyString())).thenReturn(EMPTY_MARKUP);
-
-    when(product.getName()).thenReturn(CATALOG_TEASER_TITLE);
-    when(product.getShortDescription()).thenReturn(createMarkup(CATALOG_TEASER_TEXT));
-
-    assertEquals(CATALOG_TEASER_TITLE, testling.getTeaserTitle());
-    assertEquals(CATALOG_TEASER_TEXT_MARKUP, testling.getTeaserText());
-  }
-
-  @Test
-  public void testGetTeaserValuesWithCommerceException() {
+  public void testTeasableFallbackPropertiesWithEmptyValues() {
     when(content.getString(CONTENT_TEASER_TITLE_PROPERTY)).thenReturn("");
     when(content.getMarkup(CONTENT_TEASER_TEXT_PROPERTY)).thenReturn(EMPTY_MARKUP);
     when(content.getString(CONTENT_TITLE_PROPERTY)).thenReturn(CONTENT_TITLE);
     when(content.getMarkup(CONTENT_DETAIL_TEXT_PROPERTY)).thenReturn(createMarkup(CONTENT_DETAIL_TEXT));
 
-    when(product.getName()).thenThrow(CommerceException.class);
-    when(product.getShortDescription()).thenReturn(null);
+    when(productTeasableHelper.getTeaserTextInternal(testling, null)).thenReturn(EMPTY_MARKUP);
+    when(productTeasableHelper.getTeaserTitleInternal(testling, null)).thenReturn("");
 
-    assertEquals(CONTENT_TITLE, testling.getTeaserTitle());
-    assertEquals(CONTENT_DETAIL_TEXT, MarkupUtil.asPlainText(testling.getTeaserText()).trim());
+    assertThat(testling.getTeaserTitle()).isEqualTo(CONTENT_TITLE);
+    assertThat(MarkupUtil.asPlainText(testling.getTeaserText()).trim()).isEqualTo(CONTENT_DETAIL_TEXT);
   }
 
-  @Test
-  public void testGetTeaserValuesWithNoProduct() {
-    when(content.getString(CONTENT_TEASER_TITLE_PROPERTY)).thenReturn("");
-    when(content.getMarkup(CONTENT_TEASER_TEXT_PROPERTY)).thenReturn(EMPTY_MARKUP);
-    when(content.getString(CONTENT_TITLE_PROPERTY)).thenReturn(CONTENT_TITLE);
-    when(content.getMarkup(CONTENT_DETAIL_TEXT_PROPERTY)).thenReturn(createMarkup(CONTENT_DETAIL_TEXT));
-    product = null;
-
-    assertEquals(CONTENT_TITLE, testling.getTeaserTitle());
-    assertEquals(CONTENT_DETAIL_TEXT, MarkupUtil.asPlainText(testling.getTeaserText()).trim());
-  }
-
-  private class TestCMProductTeaserImpl extends CMProductTeaserImpl {
+  private static class TestCMProductTeaserImpl extends CMProductTeaserImpl {
     private Content content;
     private Product product;
 
-    public TestCMProductTeaserImpl(Content content, Product product) {
+    TestCMProductTeaserImpl(Content content, Product product) {
       this.content = content;
       this.product = product;
     }
@@ -136,15 +111,5 @@ public class CMProductTeaserImplTest {
     public Product getProduct() {
       return product==null ? super.getProduct() : product;
     }
-  }
-
-  private static Markup createMarkup(String value) {
-    StringBuilder markupData = new StringBuilder(value.length());
-    markupData.append("<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
-    markupData.append("<p>");
-    markupData.append(value);
-    markupData.append("</p>");
-    markupData.append("</div>");
-    return MarkupFactory.fromString(markupData.toString());
   }
 }

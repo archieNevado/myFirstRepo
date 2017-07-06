@@ -1,9 +1,10 @@
 package com.coremedia.livecontext.preview;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.action.CMActionState;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -75,9 +75,11 @@ public class PreviewTokenAppendingLinkTransformer implements LinkTransformer {
       // On AIX-environments regexp-pattern matching is time consuming.
       // Therefor only check schemes via "startsWith" by default.
       // all external link targets in a commerce context will have a preview token added
+      CommerceConnection commerceConnection = DefaultConnection.get();
       if ((bean instanceof CMActionState || bean instanceof CommerceBean ||
               (source != null && (source.startsWith(SCHEME_RELATIVE) || source.startsWith(HTTP_SCHEME) || source.startsWith(HTTPS_SCHEME))))
-              && isStoreContextAvailable() && isStudioPreviewRequest(request)) {
+              && isStoreContextAvailable(commerceConnection) && isStudioPreviewRequest(request)
+              && "IBM".equals(commerceConnection.getVendorName())) {//TODO: mbi LinkTransformer shall only be processed for ibm requests
         if (includePattern == null || includePattern.matcher(source).matches()) {
           String previewToken = (String) previewTokenProvider.provideValue(new HashMap<String, Object>());
           if (previewToken != null) {
@@ -95,8 +97,8 @@ public class PreviewTokenAppendingLinkTransformer implements LinkTransformer {
             || PreviewHandler.isStudioPreviewRequest();
   }
 
-  private boolean isStoreContextAvailable(){
-    return Commerce.getCurrentConnection() != null && Commerce.getCurrentConnection().getStoreContext() != null;
+  private boolean isStoreContextAvailable(CommerceConnection commerceConnection){
+    return commerceConnection != null && commerceConnection.getStoreContext() != null;
   }
 
 }

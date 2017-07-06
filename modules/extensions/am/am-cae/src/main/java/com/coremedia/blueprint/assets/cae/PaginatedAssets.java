@@ -11,8 +11,12 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * <p>
  * This model contains a subset of assets, e.g. of a subject tag or an asset category. The subset is defined by the
  * currentPage and the total number of pages with assets.
+ * </p>
+ *
+ * @cm.template.api
  */
 public class PaginatedAssets {
 
@@ -35,10 +39,11 @@ public class PaginatedAssets {
 
   /**
    * Creates an asset page defined by the given parameters.
-   * @param assets the asset subset
+   *
+   * @param assets      the asset subset
    * @param currentPage the current page number
-   * @param pageCount the total number of available pages
-   * @param totalCount the total number of assets
+   * @param pageCount   the total number of available pages
+   * @param totalCount  the total number of assets
    */
   public PaginatedAssets(@Nonnull List<AMAsset> assets, int currentPage, int pageCount, long totalCount) {
     this.assets = Collections.unmodifiableList(assets);
@@ -53,7 +58,9 @@ public class PaginatedAssets {
 
   /**
    * Returns the assets within the current page
+   *
    * @return the assets within the current page
+   * @cm.template.api
    */
   @Nonnull
   public List<AMAsset> getAssets() {
@@ -62,7 +69,9 @@ public class PaginatedAssets {
 
   /**
    * Returns the current page number
+   *
    * @return the current page (always greater than 0)
+   * @cm.template.api
    */
   public int getCurrentPage() {
     return currentPage;
@@ -70,7 +79,9 @@ public class PaginatedAssets {
 
   /**
    * Returns the total number of available pages
+   *
    * @return the total number of available pages (always greater than 0)
+   * @cm.template.api
    */
   public int getPageCount() {
     return pageCount;
@@ -80,6 +91,9 @@ public class PaginatedAssets {
     return totalCount;
   }
 
+  /**
+   * @cm.template.api
+   */
   public Map<String, String> getBaseRequestParams() {
     return Collections.unmodifiableMap(baseRequestParams);
   }
@@ -89,6 +103,9 @@ public class PaginatedAssets {
     this.baseRequestParams.putAll(baseRequestParams);
   }
 
+  /**
+   * @cm.template.api
+   */
   @Nullable
   public Notification getNotification() {
     return notification;

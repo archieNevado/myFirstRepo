@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>lc-p13n-bom</module>
     <module>lc-p13n-cae</module>
     <module>lc-p13n-preview-cae</module>
     <module>lc-p13n-studio</module>

@@ -48,10 +48,6 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-search-solr</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-handlerservices-api</artifactId>
     </dependency>
     <dependency>

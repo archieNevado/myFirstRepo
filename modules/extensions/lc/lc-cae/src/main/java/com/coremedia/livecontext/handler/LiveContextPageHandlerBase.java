@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
@@ -9,14 +9,11 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.web.links.LinkFormatter;
@@ -32,7 +29,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 
-import javax.annotation.Nullable;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -110,26 +106,8 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
 
   // --- features ---------------------------------------------------
 
-  @Nullable
-  protected StoreContextProvider getStoreContextProvider() {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
-    if(currentConnection != null) {
-      return currentConnection.getStoreContextProvider();
-    }
-    return null;
-  }
-
   protected SettingsService getSettingsService() {
     return settingsService;
-  }
-
-  @Nullable
-  protected CatalogService getCatalogService() {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
-    if(currentConnection != null) {
-      return currentConnection.getCatalogService();
-    }
-    return null;
   }
 
   protected LiveContextNavigation getNavigationContext(Site site, String seoSegment) {
@@ -173,7 +151,7 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
   }
 
   protected Object buildCommerceLinkFor(String urlTemplate, String seoSegments, Map<String, ?> queryParams) {
-    StoreContext currentContext = Commerce.getCurrentConnection().getStoreContext();
+    StoreContext currentContext = DefaultConnection.get().getStoreContext();
     Map<String, Object> newQueryParams = new HashMap<>(queryParams);
 
     Map<String,Object> params = new HashMap<>();

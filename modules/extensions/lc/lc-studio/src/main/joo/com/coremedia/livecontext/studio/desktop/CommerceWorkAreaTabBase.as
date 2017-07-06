@@ -53,7 +53,7 @@ public class CommerceWorkAreaTabBase extends WorkAreaTab {
 
   override protected function calculateTitle():String {
     var catalogObject:CatalogObject = getCatalogObject();
-    return catalogObject && CatalogHelper.getInstance().getDecoratedName(catalogObject);
+    return catalogObject && CatalogHelper.getInstance().getDisplayName(catalogObject);
   }
 
   override protected function calculateIcon():String {
@@ -145,7 +145,7 @@ public class CommerceWorkAreaTabBase extends WorkAreaTab {
 
   private static function showAugmentationMessage(augmentedCatalogObject:CatalogObject):void {
     var title:String = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Category_augmentedMessage_title');
-    var categoryName:String = CatalogHelper.getInstance().getDecoratedName(augmentedCatalogObject);
+    var categoryName:String = CatalogHelper.getInstance().getDisplayName(augmentedCatalogObject);
     var text:String = StringUtil.format(ResourceManager.getInstance().getString(
             'com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Category_augmentedMessage_text'), categoryName);
 

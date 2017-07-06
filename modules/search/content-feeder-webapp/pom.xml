@@ -59,9 +59,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <!--
-           invoke "mvn spring-boot:run" for running this webapp on http://localhost:8080/
-        -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>

@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest.model;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -25,7 +25,7 @@ public class Store implements CommerceObject {
    * @return Returns the web URL of the commerce system's management tool
    */
   public String getVendorUrl() {
-    CommerceConnection connection = Commerce.getCurrentConnection();
+    CommerceConnection connection = DefaultConnection.get();
     if (connection != null) {
       return connection.getVendorUrl();
     }
@@ -33,7 +33,7 @@ public class Store implements CommerceObject {
   }
 
   public String getVendorVersion() {
-    CommerceConnection connection = Commerce.getCurrentConnection();
+    CommerceConnection connection = DefaultConnection.get();
     if (connection != null) {
       return connection.getVendorVersion();
     }
@@ -41,7 +41,7 @@ public class Store implements CommerceObject {
   }
 
   public String getVendorName() {
-    CommerceConnection connection = Commerce.getCurrentConnection();
+    CommerceConnection connection = DefaultConnection.get();
     if (connection != null) {
       return connection.getVendorName();
     }

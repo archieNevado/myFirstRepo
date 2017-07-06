@@ -1,5 +1,4 @@
 package com.coremedia.blueprint.studio.template {
-import com.coremedia.blueprint.base.components.util.ContentCreationUtil;
 import com.coremedia.blueprint.studio.template.model.PageTemplate;
 import com.coremedia.blueprint.studio.template.model.ProcessingData;
 import com.coremedia.cap.common.SESSION;
@@ -7,6 +6,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.results.CopyResult;
+import com.coremedia.cms.editor.sdk.util.ContentCreationUtil;
 import com.coremedia.ui.data.FlushResult;
 import com.coremedia.ui.data.ValueExpressionFactory;
 

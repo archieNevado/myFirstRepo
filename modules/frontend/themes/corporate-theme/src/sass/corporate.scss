@@ -14,7 +14,11 @@
 
 // Third party styles
 @import "vendor/bootstrap";
-@import "vendor/magnific-popup";
+
+// Bricks
+@import "../../../../lib/bricks/generic-templates/sass/popup";
+@import "../../../../lib/bricks/download-portal/sass/download-portal";
+@import "../../../../lib/bricks/generic-templates/sass/coremedia-richtext-1.0";
 
 // Global components
 @import "components/grid";
@@ -26,20 +30,17 @@
 @import "components/logo";
 @import "components/nav";
 @import "components/footer";
-@import "../../../../lib/bricks/generic-templates/sass/_coremedia-richtext-1.0";
 
 // Special components [a-z]
 @import "components/carousel";
 @import "components/claim";
 @import "components/detail";
 @import "components/elastic-social";
-@import "../../lib/bricks/download-portal/sass/download-portal";
 @import "components/gap";
 @import "components/helpers";
 @import "components/hero";
 @import "components/medialist";
 @import "components/placeholder";
-@import "components/popup";
 @import "components/search";
 @import "components/spinner";
 @import "components/square";

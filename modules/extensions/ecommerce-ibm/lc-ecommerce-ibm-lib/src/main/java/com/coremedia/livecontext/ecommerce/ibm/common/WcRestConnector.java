@@ -21,6 +21,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
@@ -32,7 +38,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.protocol.RequestDefaultHeaders;
 import org.apache.http.entity.StringEntity;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
@@ -49,10 +54,14 @@ import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -506,9 +515,13 @@ public class WcRestConnector {
   @Nullable
   private static <T> T parseFromJson(@Nonnull HttpEntity entity, @Nonnull Class<T> classOfT) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+    return parseFromJson(reader, classOfT);
+  }
 
-    Gson gson = new GsonBuilder().create();
-
+  protected static <T> T parseFromJson(@Nonnull Reader reader, @Nonnull Class<T> classOfT) throws IOException {
+    Gson gson = new GsonBuilder().registerTypeAdapter(Map.class, new MapDeserializer()).
+                                  registerTypeAdapter(List.class, new ListDeserializer()).
+                                  create();
     return gson.fromJson(reader, classOfT);
   }
 
@@ -626,17 +639,13 @@ public class WcRestConnector {
       boolean mustBeAuthenticated = mustBeAuthenticated(serviceMethod, storeContext, userContext);
 
       if (mustBeAuthenticated && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
-        if (serviceMethod.isSearch()) {
-          //use basic authentication for wcs >= 7.8
-          String user = CommercePropertyHelper.replaceTokens(serviceUser, storeContext);
-          String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
-          String credentials = Base64.encode((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
-          headers.put("Authorization", "Basic " + credentials);
-        } else {
-          // [CMS-6123] for bod based services basic authentication is buggy
-          applyWCTokens(headers, mustBeSecured, mustBeAuthenticated);
-        }
-      } else if (mustBeAuthenticated || mustBeSecured) {
+        //use basic authentication for wcs >= 7.8
+        String user = CommercePropertyHelper.replaceTokens(serviceUser, storeContext);
+        String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
+        String credentials = Base64.encode((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
+        headers.put("Authorization", "Basic " + credentials);
+      } else if (!WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext)) &&
+              (mustBeAuthenticated || mustBeSecured)) {
         //use WCToken for wcsVersion < 7.8
         applyWCTokens(headers, mustBeSecured, mustBeAuthenticated);
       }
@@ -939,5 +948,47 @@ public class WcRestConnector {
   @SuppressWarnings("unused")
   public void setConnectionRequestTimeout(int connectionRequestTimeout) {
     this.connectionRequestTimeout = connectionRequestTimeout;
+  }
+
+  private static class MapDeserializer implements JsonDeserializer<Map<String, Object>> {
+    public Map<String, Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+      Map<String, Object> m = new LinkedHashMap<>();
+      JsonObject jo = json.getAsJsonObject();
+      for (Map.Entry<String, JsonElement> mx : jo.entrySet()) {
+        String key = mx.getKey();
+        JsonElement v = mx.getValue();
+        if (v.isJsonArray()) {
+          m.put(key, context.deserialize(v, List.class));
+        } else if (v.isJsonPrimitive()) {
+          m.put(key, v.getAsString());
+        } else if (v.isJsonObject()) {
+          m.put(key, context.deserialize(v, typeOfT));
+        }
+
+      }
+      return m;
+    }
+  }
+
+  private static class ListDeserializer implements JsonDeserializer<List<Object>> {
+    public List<Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+      List<Object> m = new ArrayList<>();
+      JsonArray arr = json.getAsJsonArray();
+      for (JsonElement jsonElement : arr) {
+        if (jsonElement.isJsonObject()) {
+          if (typeOfT instanceof ParameterizedType && ((ParameterizedType) typeOfT).getActualTypeArguments().length > 0) {
+            // use the generics target type of the list's elements (e.g. parsing into a specific POJO is wanted
+            m.add(context.deserialize(jsonElement, ((ParameterizedType) typeOfT).getActualTypeArguments()[0]));
+          } else {
+            m.add(context.deserialize(jsonElement, Map.class));
+          }
+        } else if (jsonElement.isJsonArray()) {
+          m.add(context.deserialize(jsonElement, List.class));
+        } else if (jsonElement.isJsonPrimitive()) {
+          m.add(jsonElement.getAsString());
+        }
+      }
+      return m;
+    }
   }
 }

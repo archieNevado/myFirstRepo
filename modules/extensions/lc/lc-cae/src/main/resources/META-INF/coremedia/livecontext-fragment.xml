@@ -21,6 +21,7 @@
   <import resource="livecontext-handlers.xml"/>
   <import resource="classpath:META-INF/coremedia/context-services.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-beanfactory.xml"/>
+  <import resource="classpath:META-INF/coremedia/livecontext-contentbeans.xml"/>
 
   <bean id="fragmentPageHandler" class="com.coremedia.livecontext.fragment.FragmentPageHandler"
         parent="pageHandlerBase">
@@ -38,13 +39,14 @@
   <bean id="externalPageFragmentHandler" class="com.coremedia.livecontext.fragment.ExternalPageFragmentHandler"
         parent="fragmentHandler">
     <property name="contextStrategy" ref="externalPageContextStrategy"/>
+    <property name="settingsService" ref="settingsService"/>
+    <property name="navigationViewName" value="asNavigation"/>
   </bean>
 
   <bean id="productFragmentHandler" class="com.coremedia.livecontext.fragment.ProductFragmentHandler"
         parent="fragmentHandler">
     <property name="contextStrategy" ref="resolveProductFragmentContextStrategy"/>
-    <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
-    <property name="pageGridPlacementResolver" ref="productDetailPageGridPlacementResolver" />
+    <property name="pageGridPlacementResolver" ref="pdpPageGridPlacementResolver" />
   </bean>
 
   <bean id="productAssetsHandler" class="com.coremedia.livecontext.asset.ProductAssetsHandler" parent="pageHandlerBase">
@@ -58,7 +60,6 @@
   <bean id="externalRefFragmentHandler" class="com.coremedia.livecontext.fragment.ExternalRefFragmentHandler"
         parent="fragmentHandler">
     <property name="externalReferenceResolvers" ref="fragmentExternalRefResolvers" />
-    <property name="defaultPlacementName" value="main" />
   </bean>
 
   <util:list id="fragmentHandlers" value-type="com.coremedia.livecontext.fragment.FragmentHandler">
@@ -79,9 +80,9 @@
     <ref bean="contentNumericIdExternalReferenceResolver"/>
     <ref bean="contentNumericIdWithChannelIdExternalReferenceResolver"/>
     <ref bean="contentSeoSegmentExternalReferenceResolver"/>
+    <ref bean="seoSegmentExternalReferenceResolver"/>
     <ref bean="searchTermExternalReferenceResolver" />
     <ref bean="segmentPathResolver"/>
-    <ref bean="metaDataExternalReferenceResolver"/>
     <ref bean="breadcrumbExternalReferenceResolver"/>
   </util:list>
 
@@ -97,9 +98,8 @@
   </bean>
 
   <bean id="defaultPageGridPlacementResolver" class="com.coremedia.livecontext.fragment.pagegrid.DefaultPageGridPlacementResolver"/>
-  <bean id="productDetailPageGridPlacementResolver"
-        class="com.coremedia.livecontext.fragment.pagegrid.ProductDetailPageGridPlacementResolver">
-  </bean>
+  <bean id="pdpPageGridPlacementResolver" class="com.coremedia.livecontext.fragment.pagegrid.PdpPageGridPlacementResolver"/>
+
   <bean id="pageGridPlacementResolver" class="com.coremedia.livecontext.fragment.pagegrid.CompositePageGridPlacementResolver">
     <property name="resolvers">
       <list>
@@ -155,11 +155,18 @@
     <property name="settingsService" ref="settingsService"/>
   </bean>
 
-  <bean id="externalSeoSegmentBuilder" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder" />
+  <bean id="legacyExternalSeoSegmentBuilder" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.LegacyExternalSeoSegmentBuilder"/>
+
+  <bean id="externalSeoSegmentBuilder" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder" >
+    <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
+    <property name="settingsService" ref="settingsService"/>
+    <property name="cache" ref="cache"/>
+  </bean>
 
   <bean id="lcCMObjectLinkResolver" parent="abstractLinkResolver" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.CMObjectLiveContextLinkResolver">
-    <property name="microSiteExtension" ref="microSiteExtension"/>
-    <property name="externalSeoSegmentBuilder" ref="externalSeoSegmentBuilder" />
+    <property name="commerceLedPageExtension" ref="commerceLedPageExtension"/>
+    <!--Use legacyExternalSeoSegmentBuilder for the legacy format-->
+    <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder" />
     <property name="externalNavigationHandler" ref="externalNavigationHandler"/>
   </bean>
 

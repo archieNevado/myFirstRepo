@@ -10,13 +10,23 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * The abstract CMMedia type starts the media hierarchy defining data, caption and an alt property.
- * <p>All subtypes override and specialize the BlobProperty defining the MIME-type. To allow not only Blobs as data
+ * </p>
+ * <p>
+ * All subtypes override and specialize the BlobProperty defining the MIME-type. To allow not only Blobs as data
  * CMMedia defines the data return type to be Object and leave it to the developer to concretise the type by covariant
- * overiding the return type.</p>
- * <p>Additionally needed properties can be attached on server-side via a DocTypeAspect and represented by aspect content beans
- * on client-side.</p>
- * <p>Represents the document type {@link #NAME CMMedia}.</p>
+ * overriding the return type.
+ * </p>
+ * <p>
+ * Additionally needed properties can be attached on server-side via a DocTypeAspect and represented by aspect content beans
+ * on client-side.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMMedia}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMMedia extends CMTeasable {
 
@@ -64,6 +74,7 @@ public interface CMMedia extends CMTeasable {
    * Returns the value of the document property {@link #COPYRIGHT}.
    *
    * @return the value of the document property {@link #COPYRIGHT}
+   * @cm.template.api
    */
   String getCopyright();
 
@@ -71,6 +82,7 @@ public interface CMMedia extends CMTeasable {
    * Returns the value of the document property (@link #data}
    *
    * @return the value of the document property (@link #data}
+   * @cm.template.api
    */
   Object getData();
 
@@ -78,6 +90,7 @@ public interface CMMedia extends CMTeasable {
    * Returns the value of the document property {@link #CAPTION}.
    *
    * @return the value of the document property {@link #CAPTION}
+   * @cm.template.api
    */
   Markup getCaption();
 
@@ -85,11 +98,13 @@ public interface CMMedia extends CMTeasable {
    * Returns the value of the document property {@link #ALT}.
    *
    * @return the value of the document property {@link #ALT}
+   * @cm.template.api
    */
   String getAlt();
 
   /**
    * Returns the transformed data blob for the given transformName
+   *
    * @param transformName
    * @return the transformed data blob for the given transformName
    */
@@ -97,15 +112,18 @@ public interface CMMedia extends CMTeasable {
 
   /**
    * provides the transformMap for this media
+   *
    * @return the transformData if exists, an empty Map when no transform
    * data exists.
    */
-  Map<String,String> getTransformMap();
+  Map<String, String> getTransformMap();
 
   /**
    * In Studio an editor can disable cropping for specific media in general.
    * This is the getter to check this.
+   *
    * @return true, if the media should be general uncropped.
+   * @cm.template.api
    */
   boolean getDisableCropping();
 }

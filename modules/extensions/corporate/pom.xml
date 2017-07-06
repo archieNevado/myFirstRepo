@@ -19,7 +19,6 @@
   </properties>
 
   <modules>
-    <module>corporate-bom</module>
     <module>corporate-cae</module>
     <module>corporate-caefeeder-component</module>
     <module>corporate-contentfeeder-component</module>

@@ -3,7 +3,7 @@ package com.coremedia.blueprint.themeimporter.client;
 import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.server.legacy.exporter.ServerXmlExport;
+import com.coremedia.cap.server.importexport.base.exporter.ServerExporter;
 import com.coremedia.cap.themeimporter.ThemeImporter;
 import com.coremedia.cap.user.User;
 import org.slf4j.Logger;
@@ -174,13 +174,11 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
   }
 
   private static void export(CapConnection capConnection, Content themeRoot, String exportPath) {
-    ServerXmlExport export = new ServerXmlExport(capConnection, null);
+    ServerExporter export = new ServerExporter(capConnection, null);
     export.setContentIds(themeRoot.getId());
     export.setBaseDir(new File(exportPath));  // NOSONAR Yes, as a matter of fact, we do write files, like it or not.
     export.setPrettyPrint(true);
     export.setRecursive(true);
-    export.setCutOff(0);
-    export.init();
     export.doExport();
   }
 }

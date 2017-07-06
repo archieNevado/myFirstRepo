@@ -27,11 +27,10 @@
 </related>
 <value>Season</value>
 <children>
-<link href="Fall.xml" path="/Settings/Taxonomies/Subject/Fall"/>
-<link href="Spring.xml" path="/Settings/Taxonomies/Subject/Spring"/>
 <link href="Summer.xml" path="/Settings/Taxonomies/Subject/Summer"/>
+<link href="Spring.xml" path="/Settings/Taxonomies/Subject/Spring"/>
+<link href="Autumn.xml" path="/Settings/Taxonomies/Subject/Autumn"/>
 <link href="Winter.xml" path="/Settings/Taxonomies/Subject/Winter"/>
-<link href="Holidays%20X-Mas.xml" path="/Settings/Taxonomies/Subject/Holidays%20X-Mas"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

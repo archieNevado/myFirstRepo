@@ -24,11 +24,8 @@ This is the development cookbook for the CoreMedia Blueprint. It contains recipe
 * blueprint-mongodb
 * blueprint-tomcat
 * blueprint-tools
-* blueprint-proxy
-* coremedia-proxy
 * fpm-tng (~> 0.1.7)
 * chef-sugar (~> 3.0)
-* apache2
 
 # Attributes
 
@@ -40,9 +37,9 @@ This is the development cookbook for the CoreMedia Blueprint. It contains recipe
 * `node['blueprint']['dev']['content']['workflow_definitions']['custom']` - An array of custom workflow definitions paths(absolute or classpath) to be uploaded during content import. Defaults to `[ ... ]`.
 * `node['blueprint']['dev']['content']["publishall_contentquery"]` - The contentquery for the publishall content action. Defaults to `NOT BELOW PATH \'/Home\'`.
 * `node['blueprint']['dev']['content']['publishall_threads']` - The number of concurrent threads to replicate the content. Defaults to `1`.
-* `node['blueprint']['dev']['rpm']['package_prefix']` - A string to be used as a prefix for created RPMs. Defaults to `lc2-`.
+* `node['blueprint']['dev']['rpm']['package_prefix']` - A string to be used as a prefix for created RPMs. Defaults to `myOrg-`.
 * `node['blueprint']['dev']['rpm']['version']` - The version of the created RPMs. Defaults to `1.0.0`.
-* `node['blueprint']['dev']['rpm']['dir']` - The folder to create the RPMs in. By default the vagrant based kitchen setup will share this folder with your host machine. Defaults to `/shared/packages`.
+* `node['blueprint']['dev']['rpm']['dir']` - The folder to create the RPMs in. Defaults to `/shared/packages`.
 * `node['blueprint']['dev']['db']['type']` - The database to install (mysql | postgresql). Defaults to `mysql`.
 * `node['blueprint']['dev']['db']['host']` - The database host to create schemas on. Defaults to `localhost`.
 * `node['blueprint']['dev']['db']['schemas']['content-management-server']` - The schema, user and password for the content-management-server. Defaults to `cm_management`.
@@ -55,7 +52,6 @@ This is the development cookbook for the CoreMedia Blueprint. It contains recipe
 
 * [blueprint-dev-tooling::content](#blueprint-dev-toolingcontent) - This recipe imports and publishes content, uploads workflows and restore users.
 * [blueprint-dev-tooling::databases](#blueprint-dev-toolingdatabases) - This recipe sets the db properties of all applications depending on the database type selected.
-* [blueprint-dev-tooling::overview](#blueprint-dev-toolingoverview)
 * [blueprint-dev-tooling::rpm-build](#blueprint-dev-toolingrpm-build) - This recipe uses [FPM](https://github.com/jordansissel/fpm) to create RPMs from the files installed with the recipes from the blueprint-tomcat and blueprint-tools cookbooks.
 * [blueprint-dev-tooling::rpm-install](#blueprint-dev-toolingrpm-install) - this is a recipe to test the rpms created with the rpm-build recipe.
 
@@ -86,10 +82,6 @@ suites:
           type: postgresql
 ```
 
-## blueprint-dev-tooling::overview
-
-creates a simple overview page with all necessary links at `overview.<hostname>` for dev systems
-
 ## blueprint-dev-tooling::rpm-build
 
 This recipe uses [FPM](https://github.com/jordansissel/fpm) to create RPMs from the files installed with the recipes from the
@@ -112,10 +104,7 @@ of:
 Because FPM supports many packaging types this approach could be extended for deb, solaris and other package formats.
 Currently we only support RPM.
 
-When the recipe finishes, all rpms should lie in the directory defined by `['blueprint']['dev']['rpm']['dir']`. In
-case you run it locally from the `test-system` path with testkitchen, the rpms will be placed in the shared folder
-`test-system/build/packages`.
-
+When the recipe finishes, all rpms should lie in the directory defined by `['blueprint']['dev']['rpm']['dir']`.
 
 ## blueprint-dev-tooling::rpm-install
 

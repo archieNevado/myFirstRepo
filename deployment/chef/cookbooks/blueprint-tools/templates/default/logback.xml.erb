@@ -32,6 +32,9 @@
   <% end -%>
   <% end -%>
 
+  <!-- Avoid frequent ERRORs and WARNs from pdfbox when parsing text from PDFs for indexing -->
+  <logger name="org.apache.pdfbox.pdmodel.font" additivity="false" level="off"/>
+
   <root level="warn">
   <%- unless @config['appender'].nil? -%>
     <% @config['appender'].sort.each do |appender| -%>

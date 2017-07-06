@@ -25,6 +25,7 @@
     <property name="vendorUrl" value="${livecontext.managementtool.web.url}"/>
     <property name="vendorVersion" value="${livecontext.ibm.wcs.version}"/>
     <property name="vendorName" value="IBM"/>
+    <property name="invalidationService" ref="invalidationService"/>
   </bean>
 
   <bean id="wcsSearchResultRedirectUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider">

@@ -60,7 +60,7 @@
 
             <document id="20" type="CMMarketingSpot" name="cmMarketingSpot">
               <version number="1">
-                <stringProperty name="externalId" value="ibm:///catalog/marketingspot/BathAccessoriesRow2_Content"/>
+                <stringProperty name="externalId" value="vendor:///catalog/marketingspot/BathAccessoriesRow2_Content"/>
               </version>
             </document>
 
@@ -85,7 +85,7 @@
             <!-- Valid only in workspace -->
             <document id="28" type="CMExternalChannel" name="validOnlyInWorkspace">
               <version number="1">
-                <stringProperty name="externalId" value="ibm:///catalog/category/buxtehude"/>
+                <stringProperty name="externalId" value="vendor:///catalog/category/buxtehude"/>
               </version>
             </document>
 

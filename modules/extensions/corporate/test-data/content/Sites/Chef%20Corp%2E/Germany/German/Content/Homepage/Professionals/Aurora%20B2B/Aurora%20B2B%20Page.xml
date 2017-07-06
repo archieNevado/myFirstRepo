@@ -69,7 +69,6 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Site-Wide/External%20Links/Aurora%20B2B%20External%20Link.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20Links/Aurora%20B2B%20External%20Link"/>
 <Link xlink:href="coremedia:///cap/resources/../../../Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Placements/below.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/below"/>

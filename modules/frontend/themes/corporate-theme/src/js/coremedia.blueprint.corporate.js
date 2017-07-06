@@ -270,7 +270,7 @@ coremedia.blueprint.corporate = function (module) {
         'height': $window.height(),
         'width': $window.width()
       });
-      this.ele.find('.cm-superhero__image').css({
+      this.ele.find('.cm-superhero__picture').css({
         'height': $window.height(),
         'width': $window.width()
       });
@@ -650,7 +650,6 @@ coremedia.blueprint.$(function () {
   // init modules: scroller, superhero, gaps, carousel
   coremedia.blueprint.corporate.scroller();
   coremedia.blueprint.corporate.header();
-  coremedia.blueprint.corporate.superhero();
   coremedia.blueprint.corporate.gaps();
   coremedia.blueprint.corporate.affix();
 
@@ -659,7 +658,25 @@ coremedia.blueprint.$(function () {
     $document.trigger(coremedia.blueprint.corporate.EVENT_LAYOUT_CHANGED);
   });
 
+  // prevent iOS two click bug
+
+  $('.cm-square__wrapper a, .cm-teasable__text-content a').on('touchstart', function () {
+    $(this).data('distance', $('body').scrollTop());
+  }).on('touchend', function () {
+    if ($(this).data('distance') == $('body').scrollTop()) {
+      $(this).click();
+    }
+  });
+
   // --- EVENTS --------------------------------------------------------------------------------------------------------
+
+  // Click on scroll indicator
+
+  $('.cm-container--superhero .cm-container__more .glyphicon-chevron-down').on('click', function () {
+    $('html, body').animate({
+      scrollTop: $('.cm-container--superhero').height()
+    },'slow');
+  });
 
   // EVENT_LAYOUT_CHANGED
   $document.on(coremedia.blueprint.corporate.EVENT_LAYOUT_CHANGED, function () {

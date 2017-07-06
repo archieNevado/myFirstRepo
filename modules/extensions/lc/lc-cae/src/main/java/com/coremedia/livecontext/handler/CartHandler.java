@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -8,7 +8,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.ecommerce.order.CartService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
@@ -33,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -45,10 +45,10 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 
 /**
@@ -61,14 +61,14 @@ public class CartHandler extends LiveContextPageHandlerBase {
   protected static final String URI_PREFIX = "cart";
 
   /**
-   * URI pattern, for URIs like "/service/cart/perfectchef"
+   * URI pattern, for URIs like "/service/cart/shopName"
    */
   public static final String URI_PATTERN = '/' + PREFIX_SERVICE +
           '/' + URI_PREFIX +
           "/{" + SEGMENT_ROOT + '}';
 
   /**
-   * URI pattern, for URIs like "/dynamic/fragment/cart/perfectchef"
+   * URI pattern, for URIs like "/dynamic/fragment/cart/shopName"
    */
   public static final String DYNAMIC_URI_PATTERN = '/' + PREFIX_DYNAMIC +
           '/' + SEGMENTS_FRAGMENT +
@@ -81,8 +81,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
   static final String ACTION_REMOVE_ORDER_ITEM = "removeOrderItem";
   private static final String ORDER_ITEM_ID = "orderItemId";
 
-  @VisibleForTesting
-  static final String ACTION_ADD_ORDER_ITEM = "addOrderItem";
+  private static final String ACTION_ADD_ORDER_ITEM = "addOrderItem";
   private static final String EXTERNAL_TECH_ID = "externalTechId";
 
   private CommercePropertyProvider checkoutRedirectUrlProvider;
@@ -96,12 +95,12 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
   @RequestMapping(value = URI_PATTERN, method = RequestMethod.GET)
   public View handleRequest(@PathVariable(SEGMENT_ROOT) String context, HttpServletRequest request, HttpServletResponse response) {
-    StoreContextProvider storeContextProvider = getStoreContextProvider();
-    if (storeContextProvider == null) {
+    CommerceConnection currentConnection = DefaultConnection.get();
+    if (currentConnection == null) {
       return null;
     }
 
-    StoreContext storeContext = storeContextProvider.getCurrentContext();
+    StoreContext storeContext = currentConnection.getStoreContext();
 
     Map<String,Object> params = new HashMap<>();
     params.put(URL_PROVIDER_STORE_CONTEXT, storeContext);
@@ -187,7 +186,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
   }
 
   public UserSessionService getUserSessionService() {
-    CommerceConnection connection = Commerce.getCurrentConnection();
+    CommerceConnection connection = DefaultConnection.get();
     return connection!=null ? connection.getUserSessionService() : null;
   }
 
@@ -230,7 +229,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
   }
 
   public CartService getCartService() {
-    return Commerce.getCurrentConnection().getCartService();
+    return DefaultConnection.get().getCartService();
   }
 
 
@@ -309,6 +308,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     /**
      * @return null
      */
+    @Nullable
     @Override
     public String getStatus() {
       return null;
@@ -320,8 +320,9 @@ public class CartHandler extends LiveContextPageHandlerBase {
       return getDelegate().getCustomAttributes();
     }
 
+    @Nullable
     @Override
-    public <T> T getCustomAttribute(String key, Class<T> expectedType) {
+    public <T> T getCustomAttribute(@Nonnull String key, @Nonnull Class<T> expectedType) {
       return getDelegate().getCustomAttribute(key, expectedType);
     }
 

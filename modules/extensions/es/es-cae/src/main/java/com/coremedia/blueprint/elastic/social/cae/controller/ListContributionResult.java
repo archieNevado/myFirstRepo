@@ -8,6 +8,9 @@ import com.google.common.collect.ImmutableList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @cm.template.api
+ */
 public abstract class ListContributionResult<T> extends ContributionResult {
 
   private List<T> contributions;
@@ -30,6 +33,9 @@ public abstract class ListContributionResult<T> extends ContributionResult {
     return contributions == null ? Collections.<T>emptyList() : ImmutableList.copyOf(contributions);
   }
 
+  /**
+   * @cm.template.api
+   */
   public List<T> getRootContributions() {
     ensureLoaded();
     if (rootContributions == null) {
@@ -38,6 +44,9 @@ public abstract class ListContributionResult<T> extends ContributionResult {
     return rootContributions == null ? Collections.<T>emptyList() : ImmutableList.copyOf(rootContributions);
   }
 
+  /**
+   * @cm.template.api
+   */
   public int getNumberOfContributions() {
     ensureLoaded();
     return contributions == null ? 0 : contributions.size();

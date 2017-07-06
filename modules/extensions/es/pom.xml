@@ -12,7 +12,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>es-bom</module>
     <module>es-cae</module>
     <module>es-cae-users</module>
     <module>es-contentbeans</module>

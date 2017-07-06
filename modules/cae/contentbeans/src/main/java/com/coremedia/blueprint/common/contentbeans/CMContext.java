@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.common.contentbeans;
 
 
+import com.coremedia.blueprint.common.layout.HasPageGrid;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.cae.aspect.Aspect;
 
@@ -10,11 +11,16 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * Abstract base type for navigational documents.
- * <p/>
- * <p>Represents the document type {@link #NAME CMContext}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMContext}.
+ * </p>
+ *
+ * @cm.template.api
  */
-public interface CMContext extends CMNavigation {
+public interface CMContext extends CMNavigation, HasPageGrid {
 
   /**
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMContext'.
@@ -41,11 +47,4 @@ public interface CMContext extends CMNavigation {
   @Override
   List<? extends Aspect<? extends CMContext>> getAspects();
 
-  /**
-   * Returns the merged Placement-Map regarding the inheritence along the navigation
-   *
-   *
-   * @return the PageGrid
-   */
-  PageGrid getPageGrid();
 }

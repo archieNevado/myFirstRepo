@@ -51,6 +51,10 @@ class ThemeImporterContentHelper {
     return capConnection.getContentRepository().getChild(path);
   }
 
+  Content ensureContent(String type, String folder, String path) {
+    return modifiableContent(type, normalize(folder)+path);
+  }
+
   Content updateContent(String newType, String folder, String path, Map<String, ?> properties) {
     return updateContent(newType, normalize(folder)+path, properties);
   }
@@ -222,7 +226,7 @@ class ThemeImporterContentHelper {
   }
 
   private void checkOut(Content content) {
-    // checkedOut by other user has already been handled in getOrCreateContent,
+    // checkedOut by other user has already been handled in modifiableContent,
     // so we can keep it simple here.
     if (!content.isCheckedOut()) {
       content.checkOut();

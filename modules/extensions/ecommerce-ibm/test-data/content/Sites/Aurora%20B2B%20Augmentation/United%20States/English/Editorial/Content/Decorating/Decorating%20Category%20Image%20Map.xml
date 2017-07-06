@@ -17,17 +17,6 @@
 </StructProperty>
 <StructListProperty Name="image-map">
 <Struct>
-<StringProperty Name="id">map-area-1</StringProperty>
-<StringProperty Name="coords">1537,586,2424,1271</StringProperty>
-<StringProperty Name="alt"/>
-<StringProperty Name="rotation"/>
-<StringProperty Name="shape">rect</StringProperty>
-<StringProperty Name="target">_blank</StringProperty>
-<BooleanProperty Name="displayAsInlineOverlay">true</BooleanProperty>
-<StringProperty Name="inlineOverlayTheme">dark</StringProperty>
-<LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Augmentation/B2B_Decorating/B2B_Decorating.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Decorating/B2B_Decorating"/>
-</Struct>
-<Struct>
 <StringProperty Name="id">map-area-0</StringProperty>
 <StringProperty Name="coords">52,545,1152,1511</StringProperty>
 <StringProperty Name="alt"/>
@@ -42,8 +31,7 @@
 <StructProperty Name="teaserOverlay">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
-<IntProperty Name="xpos">40</IntProperty>
-<IntProperty Name="ypos">0</IntProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Dark%20on%20Light.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Dark%20on%20Light"/>
 </Struct>
 </StructProperty>
 </Struct>
@@ -64,13 +52,13 @@
 <contexts>
 </contexts>
 <teaserTitle></teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1 align--center">Details</p><p class="p--heading-1 align--center">Count</p></div></teaserText>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1 align--left">Decorating</p><p class="align--left">The new trends in decorating.</p></div></teaserText>
 <pictures>
 <link href="../../../Pictures/Product%20Pictures/Decorating/Square%20Glass%20Vase%20w93e609f0.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Pictures/Product%20Pictures/Decorating/Square%20Glass%20Vase%20with%20Rose%20Picture"/>
 </pictures>
 <related>
 </related>
 <target>
-<link href="../../../Augmentation/B2B_Decorating/B2B_Decorating.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Decorating/B2B_Decorating"/>
+<link href="../../../Augmentation/B2B_Decorating/Decorating.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Decorating/Decorating"/>
 </target>
 </CMImageMap>

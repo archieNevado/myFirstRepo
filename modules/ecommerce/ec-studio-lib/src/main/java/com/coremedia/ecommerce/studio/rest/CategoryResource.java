@@ -1,8 +1,5 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
@@ -14,7 +11,6 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.annotation.Nullable;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -35,9 +31,6 @@ public class CategoryResource extends CommerceBeanResource<Category> {
    */
   static final String ROOT_CATEGORY_ROLE_ID = "ROOT";
   public static final String LIVECONTEXT_CATEGORY_SITE_ID_WORKSPACE_ID_ID = "livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
-
-  private AugmentationService augmentationService;
-  private SitesService sitesService;
 
   @Override
   public CategoryRepresentation getRepresentation() {
@@ -110,31 +103,11 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     setWorkspaceId(context.getWorkspaceId());
   }
 
+  @Override
   @Autowired(required = false)
   @Qualifier("categoryAugmentationService")
   public void setAugmentationService(AugmentationService augmentationService) {
-    this.augmentationService = augmentationService;
+    super.setAugmentationService(augmentationService);
   }
 
-  @Autowired
-  public void setSitesService(SitesService sitesService) {
-    this.sitesService = sitesService;
-  }
-
-  /**
-   * @return the augmented category document which links to this category
-   */
-  @Nullable
-  private Content getContent() {
-    if (augmentationService == null) {
-      return null;
-    }
-
-    Site site = sitesService.getSite(getEntity().getContext().getSiteId());
-    if (site == null) {
-      return null;
-    }
-
-    return augmentationService.getContent(getEntity());
-  }
 }

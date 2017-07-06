@@ -16,7 +16,6 @@
     <module>lc-es-cae</module>
     <module>lc-es-studio-lib-component</module>
     <module>lc-es-studio</module>
-    <module>lc-es-bom</module>
     <module>lc-es-worker-component</module>
   </modules>
 

@@ -8,9 +8,14 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * A 360 degrees spinner.
+ * </p>
+ * <p>
+ * Represents the document type CMSpinner.
+ * </p>
  *
- * <p>Represents the document type CMSpinner.</p>
+ * @cm.template.api
  */
 public interface CMSpinner extends CMVisual {
 
@@ -47,6 +52,8 @@ public interface CMSpinner extends CMVisual {
 
   /**
    * Returns the images of the spinner, from left to right.
+   *
+   * @cm.template.api
    */
   List<CMPicture> getSequence();
 }

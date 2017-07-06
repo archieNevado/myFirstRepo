@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.contract;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -21,9 +21,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class ContractServiceImplIT extends AbstractServiceTest {
+@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+public class ContractServiceImplIT extends IbmServiceTestBase {
 
   @Inject
   ContractServiceImpl testling;
@@ -68,9 +68,15 @@ public class ContractServiceImplIT extends AbstractServiceTest {
   @Test
   public void testFindContractIdsForServiceUserWithNoServiceUser() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-    Collection<Contract> contracts = testling.findContractIdsForServiceUser(StoreContextHelper.getCurrentContext());
-    assertNotNull(contracts);
-    assertTrue(contracts.isEmpty());
+    String contractPreviewServiceUserName = testling.getContractPreviewServiceUserName();
+    try {
+      testling.setContractPreviewServiceUserName(null);
+      Collection<Contract> contracts = testling.findContractIdsForServiceUser(StoreContextHelper.getCurrentContext());
+      assertNotNull(contracts);
+      assertTrue(contracts.isEmpty());
+    } finally {
+      testling.setContractPreviewServiceUserName(contractPreviewServiceUserName);
+    }
   }
 
   @Betamax(tape = "contract_testFindContractById", match = {MatchRule.path, MatchRule.query})

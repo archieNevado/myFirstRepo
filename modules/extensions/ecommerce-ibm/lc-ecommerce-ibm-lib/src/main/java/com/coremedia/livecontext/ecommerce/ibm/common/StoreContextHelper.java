@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -18,7 +18,6 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
@@ -46,6 +45,7 @@ public class StoreContextHelper {
   private static final String CREDENTIALS = "credentials";
   private static final String PREVIEW_TOKEN = "previewToken";
   private static final String MISSING_TPL = "missing %s (%s)";
+  private static final String CONTEXT_LANG_ID = "lang.id";
 
   private StoreContextHelper() {
   }
@@ -57,9 +57,9 @@ public class StoreContextHelper {
    * @param context the current context
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException
    */
-  public static void setCurrentContext(@Nonnull StoreContext context) throws InvalidContextException {
+  public static void setCurrentContext(@Nullable StoreContext context) throws InvalidContextException {
     validateContext(context);
-    Commerce.getCurrentConnection().setStoreContext(context);
+    DefaultConnection.get().setStoreContext(context);
   }
 
   /**
@@ -70,8 +70,19 @@ public class StoreContextHelper {
    */
   @Nullable
   public static StoreContext getCurrentContext() {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     return currentConnection != null ? currentConnection.getStoreContext() : null;
+  }
+
+  @Nonnull
+  public static StoreContext getCurrentContextOrThrow() {
+    StoreContext context = getCurrentContext();
+
+    if (context == null) {
+      throw new InvalidContextException("Current store context not available");
+    }
+
+    return context;
   }
 
   @Nullable
@@ -80,7 +91,7 @@ public class StoreContextHelper {
 
     // locale can be null if the default locale is not set for commerce beans
     // in such a case we return the current context (a warning should be logged from caller)
-    if (locale != null) {
+    if (locale != null && currentStoreContext != null) {
       StoreContext result = StoreContextHelper.createContext(
               currentStoreContext.getConfigId(),
               currentStoreContext.getStoreId(),
@@ -124,7 +135,7 @@ public class StoreContextHelper {
     setLocale(context, localeStr);
 
     if (currency != null) {
-      setCurrency(context, currency);
+      setCurrency(context, currency); // NOSONAR squid:S2259 context is not null here, false positive caused by SONARJAVA-2037
     }
 
     return context;
@@ -169,6 +180,10 @@ public class StoreContextHelper {
     }
 
     return (String) value;
+  }
+
+  public static String getLangId(@Nonnull StoreContext context){
+    return context.getReplacements().get(CONTEXT_LANG_ID);
   }
 
   /**
@@ -487,6 +502,16 @@ public class StoreContextHelper {
     getStoreName(context);
     getLocale(context);
     getCurrency(context);
+  }
+
+  public static boolean isValid(StoreContext storeContext) {
+    try {
+      validateContext(storeContext);
+    }
+    catch (InvalidContextException e) {
+      return false;
+    }
+    return true;
   }
 
   @Nonnull

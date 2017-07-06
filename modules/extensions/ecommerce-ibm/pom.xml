@@ -19,11 +19,11 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>ecommerce-ibm-bom</module>
     <module>lc-ecommerce-ibm-lib</module>
     <module>lc-ecommerce-ibm-component</module>
     <module>lc-ecommerce-ibm-studio</module>
     <module>lc-ecommerce-ibm-studio-lib</module>
+    <module>lc-ecommerce-ibm-cae</module>
     <module>lc-ecommerce-ibm-cae-component</module>
     <module>test-data</module>
   </modules>

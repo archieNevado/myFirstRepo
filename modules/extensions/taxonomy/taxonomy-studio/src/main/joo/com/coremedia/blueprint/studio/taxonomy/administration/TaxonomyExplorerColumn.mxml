@@ -87,13 +87,13 @@
   </local:plugins>
   <local:columns>
     <GridColumn stateId="name"
-                width="179"
+                flex="1"
                 sortable="false"
                 fixed="true"
                 dataIndex="name"
                 renderer="{nameColRenderer}"/>
     <GridColumn stateId="leaf"
-                width="20"
+                width="21"
                 sortable="false"
                 fixed="true"
                 dataIndex="leaf"

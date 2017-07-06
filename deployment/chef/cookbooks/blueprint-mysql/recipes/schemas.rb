@@ -8,6 +8,7 @@ include_recipe 'blueprint-mysql::_base'
 
 mysql_client_installation_package 'default' do
   version node['blueprint']['mysql']['version']
+  package_version node['blueprint']['mysql']['package_version'] unless node['blueprint']['mysql']['package_version'].nil?
   action :create
 end
 

@@ -84,7 +84,7 @@ public class P2TagFilterTest {
     markup.writeOn(newXmlFilters, stringWriter);
     Assert.assertEquals("<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n" +
             "  <h1>h1</h1>\n" +
-            "  <h2>h2</h2>\n" +
+            "  <h2 class=\"align--right\">h2</h2>\n" +
             "  <h3>h3</h3>\n" +
             "  <h4>h4</h4>\n" +
             "  <h5>h5</h5>\n" +

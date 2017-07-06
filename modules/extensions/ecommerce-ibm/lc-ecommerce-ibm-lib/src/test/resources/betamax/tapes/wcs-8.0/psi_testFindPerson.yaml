@@ -1,7 +1,7 @@
 !tape
 name: psi_testFindPerson
 interactions:
-- recorded: 2016-07-25T15:26:26.497Z
+- recorded: 2017-01-27T12:17:58.244Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,22 +17,19 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:27 GMT
+      Date: Fri, 27 Jan 2017 12:17:58 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000CjjOzxU8LDujidHfYs_cxHz:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000Axj4icuoYEkiMEToFkRCw_f:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
-      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
       Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
-      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-07-25T15:26:26.515Z
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-01-27T12:17:58.262Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -48,14 +45,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:27 GMT
+      Date: Fri, 27 Jan 2017 12:17:58 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000p1Pab31wr0g5bA_hV8Os2dA:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=00007BpC8goB0NBJuvXgP8qwfJG:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2016-07-25T15:26:26.550Z
+- recorded: 2017-01-27T12:17:58.297Z
   request:
     method: POST
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
@@ -73,14 +69,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:27 GMT
+      Date: Fri, 27 Jan 2017 12:17:58 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00000QqVmjti9-3V59X2jf-TuVm:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000iv3cKYEVoYEHF5Ai01L6JF-:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"WCToken":"2%2CCqy3UEWzBZT91esSgZUsUnukQikFYtMINBY%2Fu%2FIJvghX6nvF73OJ1pAIRQH5yPeQE54YWbz0u66EpENCQT7qolDdU8pGlN5wKyEwTNTPwmh%2BsO0pf23t32uLUEPrJVZoQLR9niZS3q%2BM0749uh0uG9WKrcEkrIX0lusD9ko54fNPdirAw2miKD64oF9Vtypi8%2FSNCLo1Pacqn9iP42PBzV5ZrqAQgaoCZvwtupcCbqg%3D","userId":"2","WCTrustedToken":"2%2C8D1fQNV2WrVAw4mcQ36tDvkA36XPxKRukuuZsIML%2F08%3D","personalizationID":"1469420030228-2"}'
-- recorded: 2016-07-25T15:26:26.586Z
+    body: '{"WCToken":"2%2CZY%2FhwrIz6TwDBekvyXgof7F2766qj93z9D0yZoGuSYwHZfhatjvdxbd3ZPd51TE7su%2Fm0v0sdBpJgtnw%2FH01gLaajjtL2zZILB%2FdsK8jG49zdL4zMC4hqPIYvFDnv3Cf7t66kCaums1HXzU0TIZoRm7g9HgOdVclKvveqO01itXfa26oRzfJwEfbI%2FdWKb7%2Bniohu1mvyWe%2BDJR2RhmFDkncKr3sJVfUAQ%2BhbG%2Bw9ws%3D","userId":"2","WCTrustedToken":"2%2CcMYDaRVCKfpp9fPJknUh%2FJ%2BB9E2jG3dQqNALO60%2B3gg%3D","personalizationID":"1485481511365-1"}'
+- recorded: 2017-01-27T12:17:58.327Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/person/@self?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -90,18 +85,17 @@ interactions:
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
       User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-      WCToken: 2%2CCqy3UEWzBZT91esSgZUsUnukQikFYtMINBY%2Fu%2FIJvghX6nvF73OJ1pAIRQH5yPeQE54YWbz0u66EpENCQT7qolDdU8pGlN5wKyEwTNTPwmh%2BsO0pf23t32uLUEPrJVZoQLR9niZS3q%2BM0749uh0uG9WKrcEkrIX0lusD9ko54fNPdirAw2miKD64oF9Vtypi8%2FSNCLo1Pacqn9iP42PBzV5ZrqAQgaoCZvwtupcCbqg%3D
+      WCToken: 2%2CZY%2FhwrIz6TwDBekvyXgof7F2766qj93z9D0yZoGuSYwHZfhatjvdxbd3ZPd51TE7su%2Fm0v0sdBpJgtnw%2FH01gLaajjtL2zZILB%2FdsK8jG49zdL4zMC4hqPIYvFDnv3Cf7t66kCaums1HXzU0TIZoRm7g9HgOdVclKvveqO01itXfa26oRzfJwEfbI%2FdWKb7%2Bniohu1mvyWe%2BDJR2RhmFDkncKr3sJVfUAQ%2BhbG%2Bw9ws%3D
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Mon, 25 Jul 2016 15:26:27 GMT
+      Date: Fri, 27 Jan 2017 12:17:58 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000Ebh3brH3uJngb552qUrrmxM:-1; HTTPOnly; Path=/; Domain=.toko-16-01.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000Mv9xTsHM58MUwuETvi63yaP:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"organizationDistinguishedName":"o=root organization","registrationStatus":"RegisteredPerson","state":"D","receiveSMSNotification":"false","addressId":"3074457345616677818","city":"Hamburg","addressLine":["Unknown","",""],"resourceId":"http:\/\/toko-16-01-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/person\/@self?catalogId=3074457345616676719&currency=USD&langId=-1","orgizationId":"-2001","nickName":"cmadmin","description":"CoreMedia
-      Admin User","accountStatus":"Enabled","userId":"2","primary":"true","zipCode":"20459","gender":"Unspecified","firstName":"Cm","distinguishedName":"uid=cmadmin,o=root organization","resourceName":"person","lastName":"Admin","passwordExpired":"false","addressType":"ShippingAndBilling","email1":"development@coremedia.com","country":"D","bestCallingTime":"Daytime","profileType":"Business","registrationApprovalStatus":"Approved","personTitle":"Mr.","numberOfChildren":"0","displayName":"cmadmin","logonId":"cmadmin"}'
+    body: '{"organizationDistinguishedName":"o=root organization","registrationStatus":"RegisteredPerson","state":"D","receiveSMSNotification":"false","addressId":"3074457346668491811","city":"Hamburg","addressLine":["Unknown","",""],"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/person\/@self?catalogId=3074457345616676719&currency=USD&langId=-1","orgizationId":"-2001","nickName":"cmadmin","description":"CoreMedia
+      Admin User","accountStatus":"Enabled","userId":"2","primary":"true","zipCode":"20459","gender":"Unspecified","firstName":"Cm","distinguishedName":"uid=cmadmin,o=root organization","resourceName":"person","lastName":"Admin","passwordExpired":"false","addressType":"ShippingAndBilling","email1":"testcustomer-cmadmin@coremedia.com","country":"D","bestCallingTime":"Daytime","profileType":"Business","registrationApprovalStatus":"Approved","personTitle":"Mr.","numberOfChildren":"0","displayName":"cmadmin","logonId":"cmadmin"}'

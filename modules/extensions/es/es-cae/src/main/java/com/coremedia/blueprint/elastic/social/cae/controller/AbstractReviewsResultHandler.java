@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialCo
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.blueprint.elastic.social.cae.tags.ElasticSocialFunctions;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.elastic.social.api.ContributionType;
@@ -23,9 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class AbstractReviewsResultHandler extends ElasticContentHandler<ReviewsResult> {
 
   /* TODO min_length is currently duplicated translations for labels */
-  private static final int REVIEW_TEXT_MIN_LENGTH = 30;
+  private static final int REVIEW_TEXT_MIN_LENGTH = 5;
 
-  protected abstract ReviewsResult getReviewsResult(Object target, boolean enabled, ContributionType contributionType);
+  protected abstract ReviewsResult getReviewsResult(Object target, boolean enabled, ContributionType contributionType, ElasticSocialConfiguration elasticSocialConfiguration);
 
   protected ModelAndView handleCreateReview(String contextId,
                                             String targetId,
@@ -52,7 +53,7 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
     CommunityUser author = getElasticSocialUserHelper().getCurrentUser();
 
     HandlerInfo result = new HandlerInfo();
-    validateReview(result, author, rating, title, text, navigation, developer, beans);
+    validateReview(result, author, rating, title, text, navigation, developer, request, beans);
 
     if (result.isSuccess()) {
       ModerationType moderationType = elasticSocialConfiguration.getReviewModerationType();
@@ -98,7 +99,7 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
       return null;
     }
 
-    final ReviewsResult reviewsResult = getReviewsResult(contributionTarget, elasticSocialConfiguration.isFeedbackEnabled(), elasticSocialConfiguration.getReviewType());
+    final ReviewsResult reviewsResult = getReviewsResult(contributionTarget, elasticSocialConfiguration.isFeedbackEnabled(), elasticSocialConfiguration.getReviewType(), elasticSocialConfiguration);
 
     ModelAndView modelWithView = HandlerHelper.createModelWithView(reviewsResult, view);
     NavigationLinkSupport.setNavigation(modelWithView, navigation);
@@ -110,7 +111,8 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
    * @param user The community user that this is all about
    * @param developer A Blueprint developer whose work in progress may be considered by particular features
    */
-  private void validateReviewsEnabled(HandlerInfo handlerInfo, CommunityUser user, Navigation navigation, @Nullable User developer, Object... beans) {
+  private void validateReview(HandlerInfo handlerInfo, CommunityUser user, Integer rating, String title, String text, Navigation navigation, @Nullable User developer, HttpServletRequest request, Object... beans) {
+    // user == null was not allowed in previous versions, removed because user filter handling not fix
     ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(beans);
     // user == null was not allowed in previous versions, removed because user filter handling not fix
     if (!elasticSocialConfiguration.isWritingReviewsEnabled()) {
@@ -118,15 +120,11 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
     } else if ((user == null || user.isAnonymous()) && !elasticSocialConfiguration.isAnonymousReviewingEnabled()) {
       addErrorMessage(handlerInfo, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_NOT_LOGGED_IN);
     }
-  }
+    // validate Recaptcha
+    if (elasticSocialConfiguration.isRecaptchaForReviewRequired() && ElasticSocialFunctions.isAnonymousUser() && !elasticSocialConfiguration.validateCaptcha(request)) {
+      addErrorMessage(handlerInfo, "recaptcha", navigation, developer, ContributionMessageKeys.INVALID_CAPTCHA);
+    }
 
-  /**
-   * @param user The community user that this is all about
-   * @param developer A Blueprint developer whose work in progress may be considered by particular features
-   */
-  protected void validateReview(HandlerInfo handlerInfo, CommunityUser user, Integer rating, String title, String text, Navigation navigation, @Nullable User developer, Object... beans) {
-    // user == null was not allowed in previous versions, removed because user filter handling not fix
-    validateReviewsEnabled(handlerInfo, user, navigation, developer, beans);
     if (rating == null) {
       addErrorMessage(handlerInfo, "rating", navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_RATING_BLANK);
     }
@@ -141,4 +139,5 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
       addErrorMessage(handlerInfo, "text", navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR_TEXT_TOO_SHORT);
     }
   }
+
 }

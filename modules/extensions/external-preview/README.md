@@ -9,4 +9,4 @@ use one or more additional displays for Studio's preview based editing.
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/External_preview.html)
+See the "External Preview" chapter of the CoreMedia Developer Manual.

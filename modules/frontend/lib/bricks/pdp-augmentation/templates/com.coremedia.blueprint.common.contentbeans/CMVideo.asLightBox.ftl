@@ -17,7 +17,7 @@
     </#if>
     <@cm.include self=self view="_playButton"/>
     <div class="cm-teasable--video__video cm-product-assets__picture-box ${ownPictureCssClass}">
-      <@cm.include self=self view="video" params={"classVideo": "cm-aspect-ratio-box__content", "adaptive": true} />
+      <@cm.include self=self view="video" params={"classVideo": "cm-aspect-ratio-box__content cm-product-assets__video", "adaptive": true} />
     </div>
   </div>
 </div>

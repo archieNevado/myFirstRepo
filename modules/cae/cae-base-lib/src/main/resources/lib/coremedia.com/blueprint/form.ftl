@@ -1,5 +1,4 @@
 <#ftl strip_whitespace=true>
-<#import "/spring.ftl" as spring>
 <#import "util.ftl" as util>
 
 <#function _getIdFromExpression expression>
@@ -16,7 +15,7 @@
  -->
 <#macro labelFromSpring path text="" bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>
-  <label<@util.renderAttr attr />>${text}</label>
+  <label for="${_getIdFromExpression(spring.status.expression)}" <@util.renderAttr attr />>${text}</label>
 </#macro>
 
 <#--
@@ -37,12 +36,12 @@
   <#if bindPath><@spring.bind path=path /></#if>
   <#assign hasErrors=spring.status.error />
 
-  <#local attr={"type": type, "name": spring.status.expression} + attr />
+  <#local attr={"type": type, "id": spring.status.expression, "name": spring.status.expression} + attr />
 
   <#if type == "checkbox">
     <#local classes=classes + ["cm-checkbox"] />
     <input type="hidden" name="_${spring.status.expression}" value="on"/>
-    <#if spring.status.value??
+    <#if spring.status.value?has_content
          && ((spring.status.value?is_string && spring.status.value == "true")
              || (spring.status.value?is_boolean && spring.status.value))>
       <#local attr={"checked": "checked"} + attr />
@@ -101,13 +100,9 @@
   <#local attr=util.extendSequenceInMap(attr, "classes", classes) />
   <div<@util.renderAttr attr />>
     <#nested />
-    <#local inputId=_getIdFromExpression(spring.status.expression) />
 
     <#local labelAttr=util.extendSequenceInMap(labelAttr, "classes", [baseClass + "__name"]) />
-    <#local labelAttr=labelAttr + {"for": inputId} />
-
     <#local inputAttr=util.extendSequenceInMap(inputAttr, "classes", [baseClass + "__value"]) />
-    <#local inputAttr=inputAttr + {"id": inputId} />
 
     <#if inputType != "checkbox">
       <@labelFromSpring path=path text=labelText bindPath=false attr=labelAttr />

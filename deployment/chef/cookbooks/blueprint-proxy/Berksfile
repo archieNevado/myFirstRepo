@@ -21,7 +21,6 @@ end
 # END HELPER FUNCTIONS
 
 source 'https://supermarket.chef.io'
-source 'https://supermarket.coremedia.com'
 
 metadata
 
@@ -30,4 +29,5 @@ group :integration do
   add_all_from_dir '../../thirdparty-cookbooks'
   add_all_from_dir '../../coremedia-cookbooks'
   cookbook 'blueprint-base', :path => '../blueprint-base'
+  cookbook 'blueprint-tomcat', :path => '../blueprint-tomcat'
 end

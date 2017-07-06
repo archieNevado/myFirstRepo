@@ -13,6 +13,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -124,5 +125,10 @@ public class ContractServiceImpl implements ContractService {
 
   public void setContractPreviewServiceUserName(String contractPreviewServiceUserName) {
     this.contractPreviewServiceUserName = contractPreviewServiceUserName;
+  }
+
+  @VisibleForTesting
+  public String getContractPreviewServiceUserName() {
+    return contractPreviewServiceUserName;
   }
 }

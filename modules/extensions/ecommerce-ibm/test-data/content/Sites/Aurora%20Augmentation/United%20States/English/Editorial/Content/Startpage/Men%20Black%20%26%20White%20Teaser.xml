@@ -5,6 +5,19 @@
 </master>
 <viewtype>
 </viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="teaserOverlay">
+<Struct>
+<BooleanProperty Name="enabled">true</BooleanProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Light.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light"/>
+<IntProperty Name="positionY">-18</IntProperty>
+<IntProperty Name="positionX">20</IntProperty>
+<IntProperty Name="width">71</IntProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles2>
@@ -20,7 +33,8 @@
 </locationTaxonomy>
 <contexts>
 </contexts>
-<teaserTitle>Simple is the New Elegant</teaserTitle>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="align--right p--heading-1">Simple is the</p><p class="align--right p--heading-1">New Elegant</p></div></teaserText>
 <pictures>
 <link href="Elegant%20young%20handsome%20man%202%20%20Picture.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Elegant%20young%20handsome%20man%202%20%20Picture"/>
 </pictures>

@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.validation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
@@ -14,8 +14,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper.getCurrentCommerceIdProvider;
 
 /**
  * {@link com.coremedia.livecontext.contentbeans.CMExternalChannel} may link to categories that
@@ -65,11 +63,12 @@ public class CMExternalChannelValidator extends AbstractValidator<CMExternalChan
   @VisibleForTesting
   @Nullable
   Category getCategory(@Nonnull String externalId) {
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     if (null != currentConnection) {
       CatalogService catalogService = currentConnection.getCatalogService();
       if (null != catalogService) {
-        return catalogService.findCategoryById(getCurrentCommerceIdProvider().formatCategoryId(externalId));
+        String categoryId = currentConnection.getIdProvider().formatCategoryId(externalId);
+        return catalogService.findCategoryById(categoryId);
       }
     }
     LOG.warn("commerce connection {} does not provide catalog service", currentConnection);

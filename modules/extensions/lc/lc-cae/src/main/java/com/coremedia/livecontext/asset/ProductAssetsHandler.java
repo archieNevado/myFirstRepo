@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
@@ -13,6 +13,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -41,8 +42,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 import static java.lang.String.format;
 
 /**
@@ -65,6 +66,9 @@ public class ProductAssetsHandler extends PageHandlerBase {
   private static final String REQUEST_PARAM_SKU_ID = "catEntryId";
   private static final String REQUEST_PARAM_ATTRIBUTES = "attributes";
   private static final String VIEW_NAME = "asDynaAssets";
+
+  // Todo mbi: make this configurable
+  private boolean useStableIds = false;
 
   /**
    * URI pattern, for URIs like "/dynamic/fragment/productassets/87a126f3812f638/asAssets/square/10567/8004"
@@ -94,11 +98,13 @@ public class ProductAssetsHandler extends PageHandlerBase {
           HttpServletRequest request,
           HttpServletResponse response) {
 
-    if (Commerce.getCurrentConnection() == null || Commerce.getCurrentConnection().getStoreContext() == null) {
-      LOG.error("Commerce connection and/or store context not properly initialized.");
+    CommerceConnection connection = DefaultConnection.get();
+    StoreContext storeContext = connection != null ? connection.getStoreContext() : null;
+    if (storeContext == null) {
+      LOG.warn("Commerce connection not properly initialized.");
       return HandlerHelper.notFound();
     }
-    StoreContext storeContext = Commerce.getCurrentConnection().getStoreContext();
+
     if (StringUtils.isBlank(productId)) {
       LOG.warn("Cannot handle request because productId is null.");
       return HandlerHelper.notFound();
@@ -137,14 +143,16 @@ public class ProductAssetsHandler extends PageHandlerBase {
   // called (1) to create fragment link and (2) to create link as needed by Product.asDynaAssets.ftl
   @Link(type = Product.class, uri = DYNAMIC_URI_PATTERN, view = {"fragment", "asAssets"})
   public UriComponents buildFragmentLink(Product product, UriTemplate uriPattern, Map<String, Object> linkParameters, HttpServletRequest request) {
-    if (Commerce.getCurrentConnection() == null || Commerce.getCurrentConnection().getStoreContext() == null) {
-      LOG.error("Commerce connection and/or store context not properly initialized.");
+    CommerceConnection connection = DefaultConnection.get();
+    StoreContext storeContext = connection != null ? connection.getStoreContext() : null;
+    if (storeContext == null) {
+      LOG.warn("Commerce connection not properly initialized.");
       return null;
     }
     if (product != null) {
       UriComponentsBuilder result = UriComponentsBuilder.fromPath(uriPattern.toString());
       result = addLinkParametersAsQueryParameters(result, linkParameters);
-      String siteId = Commerce.getCurrentConnection().getStoreContext().getSiteId();
+      String siteId = storeContext.getSiteId();
       Site site = getSitesService().getSite(siteId);
       if (site != null) {
         Content rootChannel = site.getSiteRootDocument();
@@ -195,7 +203,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
     // we support two different formats: semicolon separated list of alternating keys and values (eg. a;2;b;3;c;4)
     List<VariantFilter> result = parseAttributesFromSSL(attributes);
     // ... and the good old comma separated key value pair list (eg. a=2,b=3,c=4)
-    return result != null && result.size() > 0 ? result : parseAttributesFromCSL(attributes);
+    return result.size() > 0 ? result : parseAttributesFromCSL(attributes);
   }
 
   public static List<VariantFilter> parseAttributesFromCSL(String attributes) {
@@ -214,6 +222,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return result;
   }
 
+  @Nonnull
   public static List<VariantFilter> parseAttributesFromSSL(String attributes) {
     List<VariantFilter> result = new ArrayList<>();
     String[] tokens = attributes.split(";");
@@ -229,6 +238,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return result;
   }
 
+  // Todo mbi: the following method is changed
   private Product findProduct(String productId, String skuId, String attributes, StoreContext storeContext) {
 
     Product result = null;
@@ -237,20 +247,17 @@ public class ProductAssetsHandler extends PageHandlerBase {
       // in general an existing skuId parameter is more current than a productId param
       // in case a skuId was passed we hope it is a real sku and we can close case
       if (StringUtils.isNotBlank(skuId)) {
-        String externalTechId = getCommerceIdProvider().formatProductVariantTechId(skuId);
-        result = (ProductVariant) getCommerceBeanFactory().loadBeanFor(externalTechId, storeContext);
+        result = (ProductVariant) getCommerceBeanFactory().loadBeanFor(formatProductVariantId(skuId), storeContext);
         if (!result.isVariant()) {
           result = null;
         }
       }
       // we give it a chance that the productId is actually a skuId
       if (result == null) {
-        String externalTechId = getCommerceIdProvider().formatProductVariantTechId(productId);
-        result = (ProductVariant) getCommerceBeanFactory().loadBeanFor(externalTechId, storeContext);
+        result = (ProductVariant) getCommerceBeanFactory().loadBeanFor(formatProductVariantId(productId), storeContext);
         // if not we convert it to a product and take it
         if (!result.isVariant()) {
-          externalTechId = getCommerceIdProvider().formatProductTechId(productId);
-          result = (Product) getCommerceBeanFactory().loadBeanFor(externalTechId, storeContext);
+          result = (Product) getCommerceBeanFactory().loadBeanFor(formatProductId(productId), storeContext);
         }
       }
       if (result == null) {
@@ -261,11 +268,9 @@ public class ProductAssetsHandler extends PageHandlerBase {
     else {
       // attention: in case the attributes are set we do not trust the skuId or productId parameter
       // we always try to determine the base product and retrieve the sku from given attributes
-      String externalTechId = getCommerceIdProvider().formatProductTechId(productId);
-      Product product = (Product) getCommerceBeanFactory().loadBeanFor(externalTechId, storeContext);
+      Product product = (Product) getCommerceBeanFactory().loadBeanFor(formatProductId(productId), storeContext);
       if (product.isVariant()) {
-        externalTechId = getCommerceIdProvider().formatProductVariantTechId(productId);
-        ProductVariant productVariant = (ProductVariant) getCommerceBeanFactory().loadBeanFor(externalTechId, storeContext);
+        ProductVariant productVariant = (ProductVariant) getCommerceBeanFactory().loadBeanFor(formatProductVariantId(productId), storeContext);
         product = productVariant.getParent();
         if (product == null) {
           LOG.warn("Cannot handle request because the base product of the sku '{}' cannot be determined.", productId);
@@ -284,12 +289,28 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return result;
   }
 
+  // Todo mbi: added
+  private String formatProductId(String externalId) {
+    return useStableIds ? getCommerceIdProvider().formatProductId(externalId) :
+            getCommerceIdProvider().formatProductTechId(externalId);
+  }
+
+  // Todo mbi: added
+  private String formatProductVariantId(String externalId) {
+    return useStableIds ? getCommerceIdProvider().formatProductVariantId(externalId) :
+            getCommerceIdProvider().formatProductVariantTechId(externalId);
+  }
+
   private CommerceBeanFactory getCommerceBeanFactory() {
-    return Commerce.getCurrentConnection().getCommerceBeanFactory();
+    return DefaultConnection.get().getCommerceBeanFactory();
   }
 
   private CommerceIdProvider getCommerceIdProvider() {
-    return Commerce.getCurrentConnection().getIdProvider();
+    return DefaultConnection.get().getIdProvider();
   }
 
+  // Todo mbi: added
+  public void setUseStableIds(boolean useStableIds) {
+    this.useStableIds = useStableIds;
+  }
 }

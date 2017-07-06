@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * @cm.template.api
+ */
 public interface CMAbstractCategory extends CMChannel {
   /**
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMAbstractCategory'.

@@ -9,6 +9,7 @@ include_recipe 'blueprint-mysql::_base'
 mysql_service 'default' do
   port node['blueprint']['mysql']['port']
   version node['blueprint']['mysql']['version']
+  package_version node['blueprint']['mysql']['package_version'] unless node['blueprint']['mysql']['package_version'].nil?
   initial_root_password node['blueprint']['mysql']['initial_root_password']
   socket node['blueprint']['mysql']['socket']
   action [:create, :start]

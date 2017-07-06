@@ -8,8 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * This function is able to find the earliest date after a reference date from the <tt>validTo</tt> and
- * <tt>validFrom</tt> properties of a content.</br>
+ * <p>
+ * This function is able to find the earliest date after a reference date from the {@code validTo} and
+ * {@code validFrom} properties of a content.
+ * </p>
  */
 class ContentToEarliestValidationDateFunction implements Function<ValidityPeriod, Calendar> {
   /**

@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.search;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.searchsuggestion.Suggestion;
 import com.coremedia.blueprint.cae.searchsuggestion.Suggestions;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 
 /**
  * Handler gets search suggestions from shop search service.
@@ -54,18 +54,18 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
 @Link
 public class CommerceSearchHandler extends PageHandlerBase {
 
-  protected static final String ACTION_NAME = "wcssearch";
-  protected static final String ACTION_ID = "wcssearch";
+  private static final String ACTION_NAME = "shopsearch";
+  private static final String ACTION_ID = "shopsearch";
 
-  protected static final String SEGMENT_ROOT = "root";
-  protected static final String PARAMETER_QUERY = "query";
-  protected static final String PARAMETER_TYPE = "type";
+  private static final String SEGMENT_ROOT = "root";
+  private static final String PARAMETER_QUERY = "query";
+  private static final String PARAMETER_TYPE = "type";
 
   private LinkFormatter linkFormatter;
 
   /**
-   * e.g.: /dynamic/perfectchef/wcssearch?type=suggest&query=dre
-   * e.g.: /dynamic/perfectchef/wcssearch?query=dress
+   * e.g.: /dynamic/shopName/shopsearch?type=suggest&query=dre
+   * e.g.: /dynamic/shopName/shopsearch?query=dress
    */
   private static final String   URI_PATTERN =
                   '/' + PREFIX_DYNAMIC +
@@ -181,11 +181,11 @@ public class CommerceSearchHandler extends PageHandlerBase {
   }
 
   private SearchService getSearchService() {
-    return Commerce.getCurrentConnection().getSearchService();
+    return DefaultConnection.get().getSearchService();
   }
 
   private StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
+    return DefaultConnection.get().getStoreContextProvider();
   }
 
   @Override

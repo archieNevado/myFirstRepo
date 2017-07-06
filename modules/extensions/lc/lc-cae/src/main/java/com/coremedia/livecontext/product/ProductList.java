@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * Representation class for REST calls to display a subset of products for a category.
+ *
+ * @cm.template.api
  */
 public class ProductList {
   private List<ProductInSite> loadedProducts = new ArrayList<>();
@@ -32,10 +34,16 @@ public class ProductList {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean isProductCategory() {
     return totalProductCount > 0;
   }
 
+  /**
+   * @cm.template.api
+   */
   public boolean hasCategories() {
     return !CollectionUtils.isEmpty(navigation.getChildren());
   }
@@ -44,6 +52,9 @@ public class ProductList {
     this.loadedProducts = products;
   }
 
+  /**
+   * @cm.template.api
+   */
   public List<ProductInSite> getLoadedProducts() {
     return loadedProducts;
   }
@@ -60,10 +71,16 @@ public class ProductList {
     return steps;
   }
 
+  /**
+   * @cm.template.api
+   */
   public LiveContextNavigation getNavigation() {
     return navigation;
   }
 
+  /**
+   * @cm.template.api
+   */
   public Category getCategory() {
     return navigation.getCategory();
   }
@@ -72,6 +89,9 @@ public class ProductList {
     return navigation.getCategory().getExternalId();
   }
 
+  /**
+   * @cm.template.api
+   */
   public List<CategoryInSite> getSubCategoriesInSite() {
     List<CategoryInSite> result = new ArrayList<>();
     for (Linkable child : getNavigation().getChildren()) {

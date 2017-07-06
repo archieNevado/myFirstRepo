@@ -15,6 +15,5 @@
 
   <modules>
     <module>create-from-template-studio-plugin</module>
-    <module>create-from-template-bom</module>
   </modules>
 </project>

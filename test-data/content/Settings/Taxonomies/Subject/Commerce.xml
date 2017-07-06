@@ -28,9 +28,8 @@
 <value>Commerce</value>
 <children>
 <link href="Product%20Category.xml" path="/Settings/Taxonomies/Subject/Product%20Category"/>
-<link href="Season.xml" path="/Settings/Taxonomies/Subject/Season"/>
-<link href="Recipes.xml" path="/Settings/Taxonomies/Subject/Recipes"/>
 <link href="Attributes.xml" path="/Settings/Taxonomies/Subject/Attributes"/>
+<link href="Campaigns.xml" path="/Settings/Taxonomies/Subject/Campaigns"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

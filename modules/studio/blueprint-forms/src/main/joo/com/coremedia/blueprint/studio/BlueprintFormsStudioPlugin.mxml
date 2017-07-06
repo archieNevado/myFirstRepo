@@ -93,9 +93,15 @@
       </editor:plugins>
     </editor:PreviewPanel>
 
+    <editor:PreviewIFrameToolbar>
+      <editor:plugins exml:mode="append">
+        <bpb-components:AddPlacementHighlightButtonPlugin/>
+      </editor:plugins>
+    </editor:PreviewIFrameToolbar>
+
     <editor:NewContentMenu>
       <editor:plugins>
-        <ui:AddItemsPlugin>
+        <ui:AddItemsPlugin index="0">
           <ui:items>
             <bpb-components:QuickCreateMenuItem contentType="CMArticle"/>
             <bpb-components:QuickCreateMenuItem contentType="CMCollection"/>
@@ -206,10 +212,13 @@
 
     <editor:ContentUtilConfigurationPlugin expandFolderLimit="100"/>
 
+    <!-- Register document types to be allowed to be dropped -->
+    <editor:ConfigureDocumentTypes names="CMTeasable" richTextLinkable="true" />
+
     <!-- register Image Types for thumbnail view and RichText Drag'n'Drop -->
     <editor:ConfigureDocumentTypes names="CMMedia,CMImage"
                                    imageProperty="data"
-                                   richTextDropImageProperty="data"/>
+                                   richTextImageBlobProperty="data"/>
     <editor:ConfigureDefaultRichTextImageDocumentType defaultRichTextImageType="CMPicture"/>
 
     <!-- exclude DocTypes from the create new documents menu -->

@@ -29,8 +29,8 @@ import org.springframework.web.util.UriTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
@@ -40,6 +40,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CMMarketingSpotHandlerTest {
 
+  private static final String MARKETINGSPOT_PREFIX = '/' + PREFIX_DYNAMIC + '/' + SEGMENTS_FRAGMENT + "/marketingspot/";
+  private static final String SITE_VANITYNAME = "anySiteVanityName";
   private CMMarketingSpotHandler testling;
 
   @Mock
@@ -89,7 +91,7 @@ public class CMMarketingSpotHandlerTest {
     when(sitesService.getContentSiteAspect(marketingSpotContent)).thenReturn(contentSiteAspect);
     when(contentSiteAspect.getSite()).thenReturn(site);
     when(site.getSiteRootDocument()).thenReturn(siteContent);
-    when(contentLinkBuilder.getVanityName(siteContent)).thenReturn("helios");
+    when(contentLinkBuilder.getVanityName(siteContent)).thenReturn(SITE_VANITYNAME);
 
     Map<String, Object> linkParameters = new HashMap<>();
     linkParameters.put("targetView", "fragment");
@@ -97,7 +99,7 @@ public class CMMarketingSpotHandlerTest {
     UriComponents uriComponents = testling.buildFragmentLink(cmMarketingSpot, uriTemplate, linkParameters);
 
     assertEquals("Expected link does not match built link.",
-            '/' + PREFIX_DYNAMIC + '/' + SEGMENTS_FRAGMENT + "/marketingspot/helios/4711", uriComponents.getPath());
+                 MARKETINGSPOT_PREFIX + SITE_VANITYNAME+"/4711", uriComponents.getPath());
   }
 
   @Test

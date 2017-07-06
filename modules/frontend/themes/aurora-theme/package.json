@@ -7,7 +7,6 @@
     "start": "grunt monitor"
   },
   "dependencies": {
-    "magnific-popup": "1.1.0",
     "mediaelement": "2.23.5"
   },
   "theme": {

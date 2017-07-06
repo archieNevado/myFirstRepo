@@ -2,7 +2,7 @@ package com.coremedia.blueprint.assets.studio {
 
 import com.coremedia.blueprint.assets.studio.repository.AssetRepositoryListContainer;
 import com.coremedia.blueprint.assets.studio.repository.AssetSearchListContainer;
-import com.coremedia.blueprint.assets.studio.search.ExpirationDateFilterFieldset;
+import com.coremedia.blueprint.assets.studio.search.ExpirationDateFilterPanel;
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -11,9 +11,9 @@ import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.cms.editor.sdk.collectionview.RepositoryCollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.search.ContentTypeSelectorBase;
-import com.coremedia.cms.editor.sdk.collectionview.search.LastEditedFilterFieldset;
+import com.coremedia.cms.editor.sdk.collectionview.search.LastEditedFilterPanel;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchQueryUtil;
-import com.coremedia.cms.editor.sdk.collectionview.search.StatusFilterFieldset;
+import com.coremedia.cms.editor.sdk.collectionview.search.StatusFilterPanel;
 import com.coremedia.cms.editor.sdk.editorContext;
 
 public class AssetCollectionViewExtension extends RepositoryCollectionViewExtension {
@@ -28,6 +28,9 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
     assetTreeRelation = new AssetTreeRelation();
   }
 
+  override public function isUploadDisabledFor(folder:Object):Boolean {
+    return true;
+  }
 
   override public function getContentTreeRelation():ContentTreeRelation {
     return assetTreeRelation;
@@ -53,16 +56,16 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
 
   override public function getEnabledSearchFilterIds():Array {
     return [
-      StatusFilterFieldset.FILTER_ID,
-      LastEditedFilterFieldset.FILTER_ID,
-      'datefilter-fieldset-modificationdate',
-      'datefilter-fieldset-publicationdate',
+      StatusFilterPanel.FILTER_ID,
+      LastEditedFilterPanel.FILTER_ID,
+      'datefilter-panel-modificationdate',
+      'datefilter-panel-publicationdate',
       'Location',
       'Subject',
       'Asset Download Portal',
       'rightsChannels',
       'rightsRegions',
-      ExpirationDateFilterFieldset.FILTER_ID
+      ExpirationDateFilterPanel.FILTER_ID
     ];
   }
 

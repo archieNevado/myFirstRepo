@@ -6,6 +6,7 @@ The layout will be:
 
 ```
 <path>
+    |-service-hooks
     |-apache-tomcat-<version>
     |-current   -> <path>/apache-tomcat-<version>
     |-server-lib
@@ -13,6 +14,12 @@ The layout will be:
 
 /etc/init.d/<name>  -> <path>/current/bin/init.sh
 ```
+@section Service Hooks
+If you want to execute some scripts before or after Tomcat is started/stopped, you may place arbitrary scripts below
+the `service-hooks` directory. To be picked up, the scripts must be named according to the regular expression
+`<PHASE>.*.sh`,where `<PHASE>` may be either `pre-start`, `post-start`, `pre-stop` or `post-stop`.
+In order for the scripts to be executed in a certain order, you should prefix the phase with an alphanumeric element i.e.
+`pre-start-01.sh`.
 
 @section Port Schema
 If you set the `port_prefix` attribute, all ports and the debug_opts, which include a port will automatically be preset

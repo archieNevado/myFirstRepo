@@ -6,7 +6,6 @@ import com.coremedia.blueprint.common.feeds.FeedFormat;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
-import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -22,10 +21,6 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
 
   protected TreeRelation<Linkable> treeRelation;
   private TreeRelation<Content> codeResourcesTreeRelation;
-  private DataViewFactory dataViewFactory;
-
-  //TODO used to add live context navi items
-  private List<Navigation> children = new ArrayList<>(); //TODO smarter solution than this
 
   // --- construction -----------------------------------------------
 
@@ -39,21 +34,12 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
     this.codeResourcesTreeRelation = codeResourcesTreeRelation;
   }
 
-  @Required
-  public void setDataViewFactory(DataViewFactory dataViewFactory) {
-    this.dataViewFactory = dataViewFactory;
-  }
-
   // --- CMNavigation -----------------------------------------------
 
   @Override
   public List<? extends Linkable> getChildren() {
-    final List<? extends Linkable> childrenUnfiltered = getChildrenUnfiltered();
-    List<? extends Linkable> cmLinkables = filterItems(childrenUnfiltered);
-    List<Linkable> linkables = new ArrayList<>();  //TODO smarter way to combine navigation instances!
-    linkables.addAll(cmLinkables);
-    linkables.addAll(children);
-    return linkables;
+    List<? extends Linkable> childrenUnfiltered = getChildrenUnfiltered();
+    return filterItems(childrenUnfiltered);
   }
 
   @SuppressWarnings("unchecked")

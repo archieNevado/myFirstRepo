@@ -15,7 +15,7 @@ public class AssetDetailsBlobPropertyFieldBase  extends BlobPropertyField {
 
   private var checkboxVisibleVE:ValueExpression;
 
-  protected const CHECKBOX_ITEM_ID:String = "checkBoxItemId";
+  public const CHECKBOX_ITEM_ID:String = "checkBoxItemId";
 
   public function AssetDetailsBlobPropertyFieldBase(config:AssetDetailsBlobPropertyField = null) {
     super(config);
@@ -63,7 +63,7 @@ public class AssetDetailsBlobPropertyFieldBase  extends BlobPropertyField {
   }
 
   protected static function findBlobDetailsContainer(container:Container):Component {
-    return container.queryById(BlobPropertyField.BLOB_DETAILS_ITEM_ID);
+    return container.queryById(BLOB_DETAILS_ITEM_ID);
   }
 
   private function findCheckBox():Checkbox {
@@ -77,8 +77,14 @@ public class AssetDetailsBlobPropertyFieldBase  extends BlobPropertyField {
     super.onDestroy();
   }
 
-  override protected function blobImageTransformer(uri:String):String {
-    return ImageUtil.getCroppingUri(uri, 122, 122);
+  override protected function getBlobImage(uri:String, width:int, height:int):String {
+    if (uri) {
+      var url:String = ImageUtil.getCroppingUri(uri, width, height);
+      if (url) {
+        return url;
+      }
+    }
+    return uri;
   }
 
 }

@@ -17,7 +17,7 @@ public class FormatFunctions {
    * @param amount The numeric part of the price
    * @param currency The currency of the price
    * @param locale The locale to be used
-   * @return
+   * @return formatted price
    */
   public static String formatPrice(Object amount, Currency currency, Locale locale) {
     NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);

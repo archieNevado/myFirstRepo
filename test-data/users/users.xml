@@ -26,7 +26,7 @@
     </members>
   </group>
 
-  <group capid="coremedia:///cap/group/0" name="administratoren" contentgroup="true" livegroup="true"
+  <group capid="coremedia:///cap/group/0" id="administrator" name="administratoren" contentgroup="true" livegroup="true"
          administrative="true">
     <rule content="/" type="Document_" rights="RMDAPS"/>
     <rule content="/" type="Folder_" rights="RMDAPS"/>
@@ -39,6 +39,7 @@
     <rule content="/" type="Document_" rights="RMDAP"/>
     <rule content="/" type="Folder_" rights="RMDAP"/>
     <members>
+      <groupref id="administrator"/>
       <user id="dave" name="Dave" home="/Home/Dave"/>
     </members>
   </group>

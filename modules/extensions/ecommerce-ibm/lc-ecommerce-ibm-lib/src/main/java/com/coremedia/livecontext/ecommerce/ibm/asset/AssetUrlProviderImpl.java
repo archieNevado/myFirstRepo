@@ -1,9 +1,11 @@
 package com.coremedia.livecontext.ecommerce.ibm.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -95,9 +97,16 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
 
     //replace [cmsHost]
     resolvedUrl = resolvedUrl.replace(CMS_HOST_PLACEHOLDER, cmsHost);
-    //replace [storeId]
-    if (Commerce.getCurrentConnection() != null && Commerce.getCurrentConnection().getStoreContext() != null){
-      resolvedUrl = resolvedUrl.replace(STORE_ID_PLACEHOLDER, Commerce.getCurrentConnection().getStoreContext().getStoreId());
+
+    CommerceConnection connection = DefaultConnection.get();
+    if (connection == null) {
+      return resolvedUrl;
+    }
+
+    StoreContext storeContext = connection.getStoreContext();
+    if (storeContext != null) {
+      //replace [storeId]
+      resolvedUrl = resolvedUrl.replace(STORE_ID_PLACEHOLDER, storeContext.getStoreId());
     }
 
     return resolvedUrl;

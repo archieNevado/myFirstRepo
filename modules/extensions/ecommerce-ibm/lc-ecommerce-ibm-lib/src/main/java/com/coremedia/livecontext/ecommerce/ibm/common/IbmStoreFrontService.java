@@ -1,9 +1,10 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontService;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -19,6 +20,7 @@ import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -30,9 +32,27 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public abstract class IbmStoreFrontService extends StoreFrontService {
 
+  /**
+   * The prefix of the cookie that commerce uses to track activities of users. Users are
+   * anonymous, registered and guest users. This cookie flows both across http and https.
+   * While anonymous user are identified by negative userId, known users (guest or registered) have positive
+   * user ids. The user Id can be read from the cookie name or from its value.
+   */
+  public static final String IBM_WC_USERACTIVITY_COOKIE_NAME = "WC_USERACTIVITY_";
+  public static final String IBM_WCP_USERACTIVITY_COOKIE_NAME = "WCP_USERACTIVITY_";
+
+  /**
+   * The prefix of the cookie that commerce uses for anonymous users only. It is not present for known users.
+   */
+  public static final String IBM_GENERIC_ACTIVITY_COOKIE_NAME = "WC_GENERIC_ACTIVITYDATA";
+
+  private static final String REGEXP_POSITIVE_NUMBER = "\\d+";
+
   private static final Logger LOG = LoggerFactory.getLogger(IbmStoreFrontService.class);
 
   private static final String PREVIEW_TOKEN = "previewToken";
+
+  private CommerceUrlPropertyProvider urlProvider;
 
   /**
    * Calls the store front via the {@link StoreFrontConnector storefront connector}
@@ -50,7 +70,6 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
    *                       its response must be copied to the sourceResponse.
    *
    * @return the {@link StoreFrontResponse store front response}
-   * @throws GeneralSecurityException
    */
   @Override
   public StoreFrontResponse handleStorefrontCall(
@@ -174,11 +193,13 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
   }
 
   protected String resolveStoreId() {
-    return contextProvider.getCurrentContext().getStoreId();
+    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    return connection.getStoreContext().getStoreId();
   }
 
   protected String resolveCatalogId() {
-    return contextProvider.getCurrentContext().getCatalogId();
+    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    return connection.getStoreContext().getCatalogId();
   }
 
   private boolean isAnonymousUser(String cookieName, String cookieValue) {
@@ -225,32 +246,4 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     return urlProvider;
   }
 
-  @Required
-  public void setStoreContextProvider(StoreContextProvider contextProvider) {
-    this.contextProvider = contextProvider;
-  }
-
-  public StoreContextProvider getStoreContextProvider() {
-    return contextProvider;
-  }
-
-  private CommerceUrlPropertyProvider urlProvider;
-
-  private StoreContextProvider contextProvider;
-
-  /**
-   * The prefix of the cookie that commerce uses to track activities of users. Users are
-   * anonymous, registered and guest users. This cookie flows both across http and https.
-   * While anonymous user are identified by negative userId, known users (guest or registered) have positive
-   * user ids. The user Id can be read from the cookie name or from its value.
-   */
-  public static final String IBM_WC_USERACTIVITY_COOKIE_NAME = "WC_USERACTIVITY_";
-  public static final String IBM_WCP_USERACTIVITY_COOKIE_NAME = "WCP_USERACTIVITY_";
-
-  /**
-   * The prefix of the cookie that commerce uses for anonymous users only. It is not present for known users.
-   */
-  public static final String IBM_GENERIC_ACTIVITY_COOKIE_NAME = "WC_GENERIC_ACTIVITYDATA";
-
-  private static final String REGEXP_POSITIVE_NUMBER = "\\d+";
 }

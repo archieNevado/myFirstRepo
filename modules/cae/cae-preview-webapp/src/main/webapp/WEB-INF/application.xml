@@ -2,13 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd"
        default-init-method="validateConfig">
 
   <import resource="classpath:/framework/spring/blueprint-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/link-services.xml"/>
-
-  <import resource="classpath:/framework/spring/blueprint-services.xml"/>
 
   <bean id="previewHandler" class="com.coremedia.blueprint.cae.handlers.PreviewHandler">
     <description>
@@ -40,5 +41,9 @@
       <ref bean="channelValidityInterceptor"/>
     </list>
   </customize:prepend>
+
+  <customize:replace id="caePreviewServiceInfoManager" bean="serviceInfoManager" property="serviceType"
+                     custom-value="cae-preview"/>
+
 </beans>
 

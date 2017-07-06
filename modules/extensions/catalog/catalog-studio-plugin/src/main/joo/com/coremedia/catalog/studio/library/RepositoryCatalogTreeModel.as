@@ -76,6 +76,15 @@ public class RepositoryCatalogTreeModel extends ContentTreeModel {
     }
 
     var content:Content = beanFactory.getRemoteBean(nodeId) as Content;
+    if(!content.isLoaded()) {
+      content.load();
+      return undefined;
+    }
+
+    if(!content.getType().isSubtypeOf(CatalogTreeRelation.CONTENT_TYPE_CATEGORY)) {
+      return null;
+    }
+
     return content && !content.isFolder() ? content : null;
   }
 

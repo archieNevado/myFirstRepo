@@ -26,7 +26,7 @@
 
     <customer>Blueprint</customer>
 
-    <jangaroo.version>4.0.44</jangaroo.version>
+    <jangaroo.version>4.0.50</jangaroo.version>
 
     <!-- Some values for the ThemeImporter exec-maven-plugin configuration -->
     <theme-importer.argument.folder>-Dthemes_folder=${project.build.directory}/themes</theme-importer.argument.folder>
@@ -92,9 +92,6 @@
         <groupId>net.jangaroo</groupId>
         <artifactId>jangaroo-maven-plugin</artifactId>
         <version>${jangaroo.version}</version>
-        <configuration>
-          <remotePackagesArtifact>${project.groupId}:studio-remote-packages</remotePackagesArtifact>
-        </configuration>
       </plugin>
     </plugins>
   </build>

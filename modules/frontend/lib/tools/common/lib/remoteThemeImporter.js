@@ -425,6 +425,8 @@ module.exports = () => {
    */
   exports.uploadTheme = (theme, logger) => {
     return new Promise((resolve, reject) => {
+      logger.info(`Upload theme to remote server.`);
+
       try {
         validateThemeParam(theme);
         validateLoggerParam(logger);
@@ -477,6 +479,8 @@ module.exports = () => {
    */
   exports.uploadDescriptor = (theme, filepaths, logger) => {
     return new Promise((resolve, reject) => {
+      logger.info(`Upload descriptor to remote server.`);
+
       try {
         validateThemeParam(theme);
         validateFilepathsParam(filepaths);
@@ -531,6 +535,8 @@ module.exports = () => {
    */
   exports.uploadFile = (theme, filepaths, logger) => {
     return new Promise((resolve, reject) => {
+      logger.info(`Upload file changes to remote server.`);
+
       try {
         validateThemeParam(theme);
         validateFilepathsParam(filepaths);
@@ -585,6 +591,8 @@ module.exports = () => {
    */
   exports.deleteFile = (theme, file, logger) => {
     return new Promise((resolve) => {
+      logger.info(`Delete file ${file} on remote server.`);
+
       try {
         validateThemeParam(theme);
         validateFileParam(file);
@@ -606,7 +614,6 @@ module.exports = () => {
           }
         );
 
-        logger.log(`Delete file ${filePath} on remote server.`);
         logger.info(`Using ${url}`);
 
         request(options).then(() => {

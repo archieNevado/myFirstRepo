@@ -1,7 +1,7 @@
 !tape
 name: lsi_testLoginSuccess
 interactions:
-- recorded: 2016-05-20T08:52:38.891Z
+- recorded: 2017-04-10T14:08:02.083Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -17,10 +17,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Fri, 20 May 2016 08:52:38 GMT
+      Date: Mon, 10 Apr 2017 14:08:01 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000VomBK6cjNre7r-UsCJggViO:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000bvDUaq5I-sFRBVBSIqvZVnx:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
@@ -32,7 +31,7 @@ interactions:
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
       Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-05-20T08:52:38.969Z
+- recorded: 2017-04-10T14:08:03.559Z
   request:
     method: POST
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity
@@ -50,14 +49,13 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Fri, 20 May 2016 08:52:38 GMT
+      Date: Mon, 10 Apr 2017 14:08:03 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000Z6aXojoxG2M8mk02mFstfP6:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000wBBvnYGlY5sksUZlWWf7sBh:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"WCToken":"2%2CBPGYdsYWm649Rtpuifafbf1NxpyQQ8UaAgmRMO4U3%2B1KSaNs0zxp%2FiyguX0prkkUtJ1DMeR42OcC0IZuKg8gjGbsKlhi3qcS84hJm%2BVIzORa6DqHt9jeo76KIO6LDJw%2Fo81vpchE1KD9AD%2FfM7ixliZpysWcBSBTec%2BezXTI9Y1oQ7%2F6DbhH0rKxnuGD7OYtjkz019tv4Uw5OecyNygvOw%3D%3D","userId":"2","WCTrustedToken":"2%2CzAj6loMPKQQgS3YzMvw2278OXXd3%2FrSjzs1qoJ%2Bxh%2BE%3D","personalizationID":"1463708831948-1"}'
-- recorded: 2016-05-20T08:52:38.985Z
+    body: '{"WCToken":"2%2C7BVtjKATNmxkDfUL1VeVbm0eVho2bb7SxodZh0K70E8A%2FThKOrVd00tsUqeGcHGLzlqHjSu%2FT6Ek4mPrkVJWZy2e5%2FDZPLe8r1AdPoBYutZvwiZVEM7JP2ZYLQWms1v9Rl2o5TQiDECdhGeVe8yLcG5AGPhCfTIAokTCy94k%2FXURYdhBmrSvIprGMfCmgLWkzLNCGPQCkH8Pz59wMPGq7zsnmvzc6yOL7I%2FmTa3HTow%3D","userId":"2","WCTrustedToken":"2%2CVJeRQ6t6FQXdR2%2FPOeL9PxidTP%2F%2Fd71k%2BUPdLjLhhRA%3D","personalizationID":"1491786474600-1"}'
+- recorded: 2017-04-10T14:08:03.655Z
   request:
     method: DELETE
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/loginidentity/@self
@@ -73,10 +71,9 @@ interactions:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Fri, 20 May 2016 08:52:38 GMT
+      Date: Mon, 10 Apr 2017 14:08:03 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00006MPFRNzlNxkVNCwPiBJzOFv:-1; HTTPOnly; Path=/; Domain=.toko-test-03.coremedia.vm; HttpOnly
-      Surrogate-Control: no-store
+      Set-Cookie: JSESSIONID=0000r2NkAaunTvJc-c7IUUUbiZG:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: ''

@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment.links.transformers;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.links.UriConstants;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.web.taglib.FindNavigationContext;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
@@ -10,12 +11,11 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
-import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveContextLinkResolver;
 import com.coremedia.objectserver.view.ViewUtils;
@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.left;
 import static org.apache.commons.lang3.StringUtils.remove;
@@ -56,11 +57,11 @@ public class LiveContextLinkTransformer implements LinkTransformer {
   @Override
   public String transform(String cmsLink, Object bean, String view, HttpServletRequest request, HttpServletResponse response, boolean forRedirect) {
     // Only transform links for Fragment Requests
-    if (!FragmentContextProvider.getFragmentContext(request).isFragmentRequest()) {
+    if (!isFragmentRequest(request)) {
       return cmsLink;
     }
 
-    StoreContext storeContext = getStoreContextProvider().getCurrentContext();
+    StoreContext storeContext = requireNonNull(DefaultConnection.get(), "no commerce connection available").getStoreContext();
     Site site = sitesService.getSite(storeContext.getSiteId());
     if (site == null) {
       throw new IllegalStateException("Could not find a site for store id '" + storeContext.getStoreId() + "' and " +
@@ -85,7 +86,7 @@ public class LiveContextLinkTransformer implements LinkTransformer {
       return cmsLink;
     }
 
-    if (cmsLink != null && cmsLink.contains("/" + BlueprintUriConstants.Prefixes.PREFIX_DYNAMIC + "/")) {
+    if (cmsLink != null && cmsLink.contains("/" + UriConstants.Segments.PREFIX_DYNAMIC + "/")) {
       return cmsLink;
     }
 
@@ -109,7 +110,13 @@ public class LiveContextLinkTransformer implements LinkTransformer {
 
     return transform(modifiableSource, content, variant, navigation, request);
   }
-  
+
+  private static boolean isFragmentRequest(HttpServletRequest request) {
+    return FragmentContextProvider.findFragmentContext(request)
+                                  .map(FragmentContext::isFragmentRequest)
+                                  .orElse(false);
+  }
+
   private String transform(String modifiableSource, Object content, Object variant, CMNavigation navigation, HttpServletRequest request) {
     String lcUrl = null;
 
@@ -132,7 +139,7 @@ public class LiveContextLinkTransformer implements LinkTransformer {
 
   private String removeBaseUri(String source, HttpServletRequest request) {
     String baseUri = ViewUtils.getBaseUri(request);
-    if (source.startsWith(baseUri)) {
+    if (source != null && source.startsWith(baseUri)) {
       return remove(source, baseUri);
     }
 
@@ -140,7 +147,7 @@ public class LiveContextLinkTransformer implements LinkTransformer {
   }
 
   private String removeJSession(String source) {
-    if (isRemoveJSession && source.contains(";jsessionid")) {
+    if (isRemoveJSession && source != null && source.contains(";jsessionid")) {
       int jSessionIndex = StringUtils.indexOf(source, ";jsessionid");
       return left(source, jSessionIndex);
     }
@@ -215,10 +222,6 @@ public class LiveContextLinkTransformer implements LinkTransformer {
   @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
-  }
-
-  public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
   }
 
   @Required

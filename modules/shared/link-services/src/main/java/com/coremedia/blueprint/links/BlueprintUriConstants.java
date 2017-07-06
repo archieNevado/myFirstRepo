@@ -27,10 +27,6 @@ public final class BlueprintUriConstants {
      */
     public static final String PREFIX_SERVICE = "service";
     /**
-     * Prefix for all links/handlers that are never to be cached by downstream proxies like personalized fragments.
-     */
-    public static final String PREFIX_DYNAMIC = "dynamic";
-    /**
      * Prefix for expensive internal operations, to be blocked by Apache & Co (e.g. sitemap generation).
      */
     public static final String PREFIX_INTERNAL = "internal";
@@ -44,7 +40,7 @@ public final class BlueprintUriConstants {
     /**
      * This pattern is used for Interceptors handling requests that should never be cached.
      */
-    public static final String DYNAMIC_URI_PATTERN = '/' + Prefixes.PREFIX_DYNAMIC + "/{all:"+ UriConstants.Patterns.PATTERN_SEGMENTS +"}";
+    public static final String DYNAMIC_URI_PATTERN = '/' + UriConstants.Segments.PREFIX_DYNAMIC + "/{all:"+ UriConstants.Patterns.PATTERN_SEGMENTS +"}";
 
     // static class
     private Patterns() {}

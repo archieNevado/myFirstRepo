@@ -13,7 +13,6 @@
         resizable="false"
         constrainHeader="true"
         constrain="true"
-        focusOnToFront="false"
         ui="{WindowSkin.GRID_200.getSkin()}"
         cls="es-cm-mail-help-window">
   <fx:Metadata>

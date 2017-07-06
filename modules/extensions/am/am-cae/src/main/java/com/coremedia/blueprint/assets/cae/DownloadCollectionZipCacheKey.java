@@ -5,17 +5,16 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.IdHelper;
+import com.coremedia.cap.common.TempFileService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.transform.BlobHelper;
 import com.coremedia.cotopaxi.common.CacheFactory;
 import com.coremedia.mimetype.MimeTypeService;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.activation.MimeType;
 import javax.annotation.Nonnull;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -28,6 +27,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
 final class DownloadCollectionZipCacheKey extends CacheKey<File> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DownloadCollectionZipCacheKey.class);
@@ -39,14 +40,15 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
 
   private List<AMAssetRendition> renditions;
   private ContentRepository contentRepository;
+  private TempFileService tempFileService;
   private MimeTypeService mimeTypeService;
 
   public DownloadCollectionZipCacheKey(@Nonnull List<AMAssetRendition> renditions,
                                        @Nonnull ContentRepository contentRepository,
                                        @Nonnull MimeTypeService mimeTypeService) {
-
     this.renditions = renditions;
     this.contentRepository = contentRepository;
+    tempFileService = contentRepository.getConnection().getTempFileService();
     this.mimeTypeService = mimeTypeService;
   }
 
@@ -81,7 +83,8 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
   @Override
   public File evaluate(Cache cache) throws Exception {
     String name = TEMP_FILE_PREFIX + hashCode();
-    File f = contentRepository.getConnection().getTempFileService().createTempFileFor(name, new MimeType(mimeTypeService.getMimeTypeForExtension(ZIP_FILE_EXTENSION)));
+
+    File f = tempFileService.createTempFileFor(name, ZIP_FILE_EXTENSION);
     boolean ok = false;
 
     try (FileOutputStream fos = new FileOutputStream(f)) {
@@ -97,7 +100,7 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
       return f;
     } finally {
       if (!ok) {
-        contentRepository.getConnection().getTempFileService().release(f);
+        tempFileService.release(f);
       }
 
       Cache.enableDependencies();
@@ -108,8 +111,8 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
   private void createDownloadCollectionZip(@Nonnull OutputStream outputStream) throws IOException {
 
     try (
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-        ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream)
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+            ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream)
     ) {
       for (AMAssetRendition rendition : renditions) {
         addBlobToZipFile(zipOutputStream, rendition);
@@ -138,7 +141,7 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
       IOUtils.copy(blobInputStream, zipOutputStream);
     } catch (Exception e) {
       LOG.error("An exception occurred while adding zip entry for rendition {} of asset {} to download collection zip",
-                rendition.getName(), assetContent.getId(), e);
+              rendition.getName(), assetContent.getId(), e);
     } finally {
       zipOutputStream.closeEntry();
     }
@@ -146,6 +149,6 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
 
   private String getExtension(String contentType, String fallback) {
     String extension = mimeTypeService.getExtensionForMimeType(contentType);
-    return StringUtils.isNotBlank(extension) ? extension : fallback;
+    return firstNonNull(extension, fallback);
   }
 }

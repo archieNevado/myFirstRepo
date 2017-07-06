@@ -10,7 +10,7 @@
 <resourceBundles2>
 </resourceBundles2>
 <segment></segment>
-<title>Help</title>
+<title>Store Locator</title>
 <htmlTitle></htmlTitle>
 <keywords></keywords>
 <htmlDescription></htmlDescription>
@@ -22,6 +22,7 @@
 </contexts>
 <teaserTitle></teaserTitle>
 <pictures>
+<link href="../../../../../Pictures/Sitewide%20Pictures/Country%20Flags%20Picture.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Sitewide%20Pictures/Country%20Flags%20Picture"/>
 </pictures>
 <related>
 </related>

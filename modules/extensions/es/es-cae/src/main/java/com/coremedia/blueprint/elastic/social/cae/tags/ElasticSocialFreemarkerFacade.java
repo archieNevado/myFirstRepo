@@ -1,13 +1,13 @@
 package com.coremedia.blueprint.elastic.social.cae.tags;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.controller.CommentsResult;
 import com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResult;
 import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
@@ -39,6 +39,10 @@ public class ElasticSocialFreemarkerFacade {
     return ElasticSocialFunctions.isLoginAction(bean);
   }
 
+  /**
+   * Checks if the current user of the web page is a logged-in user or it is an anonymous user.
+   * @return <code>true</code> if the current user is not logged in otherwise <code>false</code>
+   */
   public boolean isAnonymousUser() {
     return ElasticSocialFunctions.isAnonymousUser();
   }
@@ -47,6 +51,12 @@ public class ElasticSocialFreemarkerFacade {
     return elasticSocialUserHelper.getCurrentOrAnonymousUser();
   }
 
+  /**
+   * Checks if the user choose not to publish its user name, profile image, and other personal information with
+   * its contributions.
+   * @param communityUser the user to be checked
+   * @return <code>true</code> if the user wants to remain anonymous otherwise <code>false</code>
+   */
   public boolean isAnonymous(CommunityUser communityUser) {
     return ElasticSocialFunctions.isAnonymous(communityUser);
   }

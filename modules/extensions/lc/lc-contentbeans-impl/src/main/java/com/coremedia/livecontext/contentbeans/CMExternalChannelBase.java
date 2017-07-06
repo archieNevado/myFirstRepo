@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.ecommerce.common.contentbeans.CMAbstractCategoryImpl;
@@ -8,7 +7,6 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -87,17 +85,7 @@ public abstract class CMExternalChannelBase extends CMAbstractCategoryImpl imple
   protected abstract List<Linkable> getExternalChildren(Site siteId);
 
   private List<? extends Linkable> merge(List<? extends Linkable> internalChildren, List<Linkable> externalChildren) {
-/*
-    // if some children are explicitely linked, take these children only and do NOT add any external children
-    if (internalChildren != null && !internalChildren.isEmpty()) {
-      return internalChildren;
-    }
-*/
     return externalChildren != null ? externalChildren : Collections.<Navigation>emptyList();
-  }
-
-  protected static CatalogService getCatalogService() {
-    return Commerce.getCurrentConnection().getCatalogService();
   }
 
 }

@@ -37,7 +37,7 @@
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>
 </StructListProperty>
-<StringProperty Name="name">Aurora LiveContext Any Layout</StringProperty>
+<StringProperty Name="name">Any Layout</StringProperty>
 <StringProperty Name="description">Any page layout that can only be extended with a header and footer banner.</StringProperty>
 </Struct>
 </settings>

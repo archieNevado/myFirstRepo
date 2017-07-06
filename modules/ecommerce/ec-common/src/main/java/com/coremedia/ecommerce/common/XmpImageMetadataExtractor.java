@@ -4,7 +4,6 @@ import com.adobe.xmp.XMPException;
 import com.adobe.xmp.XMPMeta;
 import com.adobe.xmp.options.IteratorOptions;
 import com.adobe.xmp.properties.XMPPropertyInfo;
-import com.coremedia.common.util.Function;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.common.util.Predicates;
 import com.drew.metadata.Metadata;
@@ -20,6 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -82,7 +82,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
 
     @Override
     public String toString() {
-      return "<XMPPropetyInfo.getValue()>";
+      return "<XMPPropertyInfo.getValue()>";
     }
   };
   /**
@@ -139,7 +139,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
    */
   @Nonnull
   private Function<XMPPropertyInfo, String> getConvertFunction() {
-    return Optional.fromNullable(convertFunction).or(DEFAULT_CONVERT_FUNCTION);
+    return convertFunction != null ? convertFunction : DEFAULT_CONVERT_FUNCTION;
   }
 
   /**

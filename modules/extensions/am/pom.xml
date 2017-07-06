@@ -16,14 +16,12 @@
   </properties>
 
   <modules>
-    <module>am-bom</module>
     <module>am-common</module>
     <module>am-server-component</module>
     <module>am-studio</module>
     <module>am-studio-component</module>
     <module>am-contentbeans</module>
     <module>am-cae</module>
-    <module>am-adobe-drive-server-webapp</module>
     <module>am-contentfeeder-component</module>
     <module>am-caefeeder-component</module>
     <module>am-preview-cae</module>

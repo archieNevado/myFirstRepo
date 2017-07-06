@@ -43,7 +43,6 @@ The prefixes however are completely configurable, it can be an integer between `
 
 | Webapp Key                | Prefix  | Context         |
 | ------------------------- | ------- | ----------------|
-| solr                      | 400     | solr            |
 | content-management-server | 401     | coremedia       |
 | master-live-server        | 402     | coremedia       |
 | workflow-server           | 403     | workflow        |
@@ -54,7 +53,6 @@ The prefixes however are completely configurable, it can be an integer between `
 | caefeeder-live            | 408     | caefeeder       |
 | cae-preview               | 409     | blueprint       |
 | studio                    | 410     | studio          |
-| adobe-drive-server        | 411     | drive           |
 | sitemanager               | 413     | editor-webstart |
 | replication-live-server   | 420     | coremedia       |
 | cae-live                  | 421     | blueprint       |
@@ -76,7 +74,6 @@ case each instance can be configured using the webapp key suffixed by a dash and
 JMX address = `service:jmx:rmi://<HOST>:<PREFIX>98/jndi/rmi://<HOST>:<PREFIX>99/jmxrmi`
 JMX Login (readonly) = (monitor / monitor)
 JMX Login (readwrite) = (control / control)
-In case you start the system with testkitchen, you need to use `192.168.252.100.xip.io` as hostname.
 
 # Requirements
 
@@ -87,10 +84,10 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 ## Cookbooks:
 
 * blueprint-base
-* coremedia_tomcat (~> 2.0.11)
+* coremedia_tomcat (~> 2.1.0)
 * coremedia_maven (~> 2.0.4)
 * chef-sugar (~> 3.0)
-* java_se (~> 8.112.0)
+* java_se (~> 8.131.0)
 
 # Attributes
 
@@ -132,10 +129,8 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['elastic-worker']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['content-feeder']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['studio']['heap']` -  Defaults to `512m`.
-* `node['blueprint']['tomcat']['adobe-drive-server']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['cae-preview']['heap']` -  Defaults to `1024m`.
 * `node['blueprint']['tomcat']['cae-live']['heap']` -  Defaults to `1024m`.
-* `node['blueprint']['tomcat']['solr']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['caefeeder-preview']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['caefeeder-live']['heap']` -  Defaults to `256m`.
 * `node['blueprint']['tomcat']['sitemanager']['heap']` -  Defaults to `92m`.
@@ -147,10 +142,8 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['elastic-worker']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['content-feeder']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['studio']['perm']` -  Defaults to `92m`.
-* `node['blueprint']['tomcat']['adobe-drive-server']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['cae-preview']['perm']` -  Defaults to `128m`.
 * `node['blueprint']['tomcat']['cae-live']['perm']` -  Defaults to `128m`.
-* `node['blueprint']['tomcat']['solr']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['caefeeder-preview']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['caefeeder-live']['perm']` -  Defaults to `92m`.
 * `node['blueprint']['tomcat']['sitemanager']['perm']` -  Defaults to `64m`.
@@ -165,11 +158,9 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['caefeeder-live']['port_prefix']` -  Defaults to `408`.
 * `node['blueprint']['tomcat']['cae-preview']['port_prefix']` -  Defaults to `409`.
 * `node['blueprint']['tomcat']['studio']['port_prefix']` -  Defaults to `410`.
-* `node['blueprint']['tomcat']['adobe-drive-server']['port_prefix']` -  Defaults to `411`.
 * `node['blueprint']['tomcat']['sitemanager']['port_prefix']` -  Defaults to `413`.
 * `node['blueprint']['tomcat']['replication-live-server']['port_prefix']` -  Defaults to `420`.
 * `node['blueprint']['tomcat']['cae-live']['port_prefix']` -  Defaults to `421`.
-* `node['blueprint']['tomcat']['solr']['start_priority']` -  Defaults to `81`.
 * `node['blueprint']['tomcat']['content-management-server']['start_priority']` -  Defaults to `81`.
 * `node['blueprint']['tomcat']['master-live-server']['start_priority']` -  Defaults to `81`.
 * `node['blueprint']['tomcat']['workflow-server']['start_priority']` -  Defaults to `82`.
@@ -178,7 +169,6 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['elastic-worker']['start_priority']` -  Defaults to `82`.
 * `node['blueprint']['tomcat']['content-feeder']['start_priority']` -  Defaults to `82`.
 * `node['blueprint']['tomcat']['studio']['start_priority']` -  Defaults to `83`.
-* `node['blueprint']['tomcat']['adobe-drive-server']['start_priority']` -  Defaults to `82`.
 * `node['blueprint']['tomcat']['cae-preview']['start_priority']` -  Defaults to `82`.
 * `node['blueprint']['tomcat']['cae-live']['start_priority']` -  Defaults to `83`.
 * `node['blueprint']['tomcat']['caefeeder-preview']['start_priority']` -  Defaults to `82`.
@@ -188,15 +178,9 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * `node['blueprint']['tomcat']['cae-live-1']['sitemap']['enabled']` - There should only be one cae generating the sitemaps, by default this is cae-live-1. Defaults to `true`.
 * `node['blueprint']['tomcat']['cae-live-1']['sitemap']['start_time']` - The time when the sitemap should be created, see blueprint sitemap documentation for property blueprint.sitemap.starttime. Defaults to `+200`.
 * `node['blueprint']['tomcat']['common_libs']['coremedia-tomcat.jar']` -  Defaults to `node['blueprint']['common_libs']['coremedia-tomcat.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['slf4j-api.jar']` -  Defaults to `node['blueprint']['common_libs']['slf4j-api.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['jul-to-slf4j.jar']` -  Defaults to `node['blueprint']['common_libs']['jul-to-slf4j.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['jcl-over-slf4j.jar']` -  Defaults to `node['blueprint']['common_libs']['jcl-over-slf4j.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['slf4j-log4j12.jar']` -  Defaults to `node['blueprint']['common_libs']['slf4j-log4j12.jar']`.
-* `node['blueprint']['tomcat']['common_libs']['log4j.jar']` -  Defaults to `node['blueprint']['common_libs']['log4j.jar']`.
 
 # Recipes
 
-* [blueprint-tomcat::adobe-drive-server](#blueprint-tomcatadobe-drive-server) - This recipe installs and configures the CoreMedia Blueprint Adobe Drive Server.
 * [blueprint-tomcat::cae-live](#blueprint-tomcatcae-live) - This recipe installs and configures the CoreMedia Blueprint Live CAE.
 * [blueprint-tomcat::cae-preview](#blueprint-tomcatcae-preview) - This recipe installs and configures the CoreMedia Blueprint Preview CAE.
 * [blueprint-tomcat::caefeeder-live](#blueprint-tomcatcaefeeder-live) - This recipe installs and configures the CoreMedia Blueprint Live CAE Feeder.
@@ -208,14 +192,9 @@ In case you start the system with testkitchen, you need to use `192.168.252.100.
 * [blueprint-tomcat::master-live-server](#blueprint-tomcatmaster-live-server) - This recipe installs and configures the CoreMedia Blueprint Master Live Server.
 * [blueprint-tomcat::replication-live-server](#blueprint-tomcatreplication-live-server) - This recipe installs and configures the CoreMedia Blueprint Master Live Server.
 * [blueprint-tomcat::sitemanager](#blueprint-tomcatsitemanager) - This recipe installs and configures the CoreMedia Blueprint Preview CAE.
-* [blueprint-tomcat::solr](#blueprint-tomcatsolr) - This recipe installs and configures the CoreMedia Blueprint Solr Search Engine.
 * [blueprint-tomcat::studio](#blueprint-tomcatstudio) - This recipe installs and configures the CoreMedia Blueprint Studio.
 * [blueprint-tomcat::user-changes](#blueprint-tomcatuser-changes) - This recipe installs and configures the CoreMedia Blueprint User Changes Webapp.
 * [blueprint-tomcat::workflow-server](#blueprint-tomcatworkflow-server) - This recipe installs and configures the CoreMedia Blueprint Workflow Server.
-
-## blueprint-tomcat::adobe-drive-server
-
-This recipe installs and configures the CoreMedia Blueprint Adobe Drive Server.
 
 ## blueprint-tomcat::cae-live
 
@@ -278,11 +257,6 @@ This recipe installs and configures the CoreMedia Blueprint Master Live Server.
 ## blueprint-tomcat::sitemanager
 
 This recipe installs and configures the CoreMedia Blueprint Preview CAE.
-
-## blueprint-tomcat::solr
-
-This recipe installs and configures the CoreMedia Blueprint Solr Search Engine.
-
 
 ## blueprint-tomcat::studio
 
@@ -351,7 +325,7 @@ This approach is applied to the following attribute paths:
 
 ### Parameters
 
-- skip_lifecycle: Set thist to true to skip the lifecycle at the end of this definition. See lifecycle section for mode details about this paramter.. Defaults to: nil
+- skip_lifecycle: Set thist to true to skip the lifecycle at the end of this definition. See lifecycle section for mode details about this paramter..
 - base_service_name: The service key from which to get the default component configuration before merging overrides using this service key. Defaults to: nil
 
 ### Lifecycle

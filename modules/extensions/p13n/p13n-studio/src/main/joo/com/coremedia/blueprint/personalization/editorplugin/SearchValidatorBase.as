@@ -124,8 +124,6 @@ public class SearchValidatorBase extends AbstractPlugin {
       case "FUNCTION_EVALUATION":
       case "FUNCTION_UNKNOWN":
         return StringUtil.format(msg, status['func'], status['msg']);
-      case "SOLR":
-        return StringUtil.format(msg, status['query']);
       case "GENERAL":
       default:
         return StringUtil.format(msg, status['msg']);

@@ -11,12 +11,18 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * A collection of contents.
+ * </p>
  * <p>
  * Although Collection is not abstract, you are encouraged
  * to subclass it and implement alternative strategies to fetch the items.
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMCollection}.
+ * </p>
  *
- * <p>Represents the document type {@link #NAME CMCollection}.</p>
+ * @cm.template.api
  */
 public interface CMCollection<T> extends CMTeasable, FeedSource<T>, Container<T> {
 

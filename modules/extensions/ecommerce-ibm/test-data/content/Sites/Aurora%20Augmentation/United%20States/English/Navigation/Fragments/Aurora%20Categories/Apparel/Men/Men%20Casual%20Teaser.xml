@@ -5,6 +5,17 @@
 </master>
 <viewtype>
 </viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="teaserOverlay">
+<Struct>
+<BooleanProperty Name="enabled">true</BooleanProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../../../Options/Settings/Teaser%20Styles/Light.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light"/>
+<IntProperty Name="positionY">37</IntProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles2>
@@ -20,13 +31,14 @@
 </locationTaxonomy>
 <contexts>
 </contexts>
-<teaserTitle>Casual</teaserTitle>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1">Casual</p></div></teaserText>
 <pictures>
-<link href="../../../../../Pictures/Product%20Teaser%20Pictures/03_For%20The%20Cook/Apparel/Appara1ecdc90.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20Teaser%20Pictures/03_For%20The%20Cook/Apparel/Apparel%20Casual/Spring/For%20Him/PC_BLUE_SWEATER%20Actionshot%201"/>
+<link href="../../../../../Pictures/Product%20Pictures/PC_BLUE_SWEATER%20Actionshot%201.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Product%20Pictures/PC_BLUE_SWEATER%20Actionshot%201"/>
 </pictures>
 <related>
 </related>
 <target>
-<link href="../../../../../Augmentation/PC_ForTheCook/PC_Apparel/PC_ApparelMen/PC_ApparelMenCasua45f69d71.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_ForTheCook/PC_Apparel/PC_ApparelMen/PC_ApparelMenCasual/PC_ApparelMenCasual"/>
+<link href="../../../../../Augmentation/Apparel/Men/Men%20Shirts/Shirts.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Men/Men%20Shirts/Shirts"/>
 </target>
 </CMTeaser>

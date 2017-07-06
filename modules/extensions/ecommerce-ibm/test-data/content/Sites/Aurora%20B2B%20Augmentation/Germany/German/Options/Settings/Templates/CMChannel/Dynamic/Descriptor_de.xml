@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSymbol folder="/Sites/Aurora B2B Augmentation/Germany/German/Options/Settings/Templates/CMChannel/Dynamic" name="Descriptor_de" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../../../United%20States/English/Options/Settings/Templates/CMChannel/Dynamic/Descriptor_de.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Templates/CMChannel/Dynamic/Descriptor_de"/>
+</master>
+<description>Dynamische Liste</description>
+<icon md5="5c865a928c353693b730814a3285fcb4" size="3737" href="../../../../../../../../../__blob/5c865a928c353693b730814a3285fcb4.blob" mimetype="image/png"/>
+</CMSymbol>

@@ -4,4 +4,4 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  java_se (8.112.0)
+  java_se (8.131.0)

@@ -19,7 +19,7 @@
 <Struct>
 <StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=413;y=113;width=1248;height=1935</StringProperty>
 <StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=294;y=93;width=1465;height=1955</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=0;width=2048;height=2048</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=387;width=2048;height=1537</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=655;width=2048;height=1150</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=862;width=2048;height=820</StringProperty>
@@ -85,7 +85,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Decoration.xml" path="/Settings/Taxonomies/Subject/Decoration"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

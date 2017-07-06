@@ -17,7 +17,7 @@ public final class EventQuery extends GoogleAnalyticsListQuery {
   static final String DIMENSION_LABEL = KEY_PREFIX + "eventLabel";
   static final String DIMENSIONS = DIMENSION_CATEGORY + "," + DIMENSION_ACTION + "," + DIMENSION_LABEL;
   private static final String METRIC_TOTAL_EVENTS = KEY_PREFIX + "totalEvents";
-  private static final String FILTER_PATTERN = DIMENSION_CATEGORY + "==%s," + DIMENSION_ACTION + "==%s";
+  private static final String FILTER_PATTERN = DIMENSION_CATEGORY + "==%s;" + DIMENSION_ACTION + "==%s";
   private static final String SORT_CRITERION = "-" + METRIC_TOTAL_EVENTS;
 
   // the Event Category

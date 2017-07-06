@@ -83,7 +83,7 @@ public class ExternalPreviewResource {
 
   /**
    * Returns the preview urls and host names for displaying the content to preview.
-   * @return
+   * @return configuration
    */
   @GET
   @Path(METHOD_CONFIG_PATH)

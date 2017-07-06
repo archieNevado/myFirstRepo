@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserSessionServiceImpl;
 import com.google.common.collect.ImmutableMap;
-import org.apache.http.Header;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,9 +49,6 @@ public class IbmStoreFrontServiceTest {
   private StoreFrontConnector storeFrontConnector;
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private StoreContextProvider storeContextProvider;
-
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private StoreFrontResponse storeFrontResponse;
 
   @Mock
@@ -61,6 +59,9 @@ public class IbmStoreFrontServiceTest {
 
   @Mock
   private CommerceUrlPropertyProvider urlProvider;
+
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private CommerceConnection commerceConnection;
 
   private javax.servlet.http.Cookie[] sourceRequestCookies;
 
@@ -92,7 +93,7 @@ public class IbmStoreFrontServiceTest {
 
   @Test
   public void isLoggedInStoreFrontEmptyCookies() {
-    when(storeFrontResponse.getCookies()).thenReturn(Collections.<String, String>emptyMap());
+    when(storeFrontResponse.getCookies()).thenReturn(Collections.emptyMap());
     assertFalse(testling.isKnownUser(storeFrontResponse));
     verify(storeFrontResponse).getCookies();
   }
@@ -307,15 +308,15 @@ public class IbmStoreFrontServiceTest {
   @Before
   public void setup() throws GeneralSecurityException {
     testling.setStoreFrontConnector(storeFrontConnector);
-    testling.setStoreContextProvider(storeContextProvider);
     testling.setUrlProvider(urlProvider);
 
     //noinspection unchecked
     when(storeFrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
-    when(storeContextProvider.getCurrentContext().getStoreId()).thenReturn(STORE_ID);
-    when(storeContextProvider.getCurrentContext().getCatalogId()).thenReturn(CATALOG_ID);
+    when(commerceConnection.getStoreContext().getStoreId()).thenReturn(STORE_ID);
+    when(commerceConnection.getStoreContext().getCatalogId()).thenReturn(CATALOG_ID);
+    DefaultConnection.set(commerceConnection);
 
-    when(storeFrontResponse.getCookies()).thenReturn(Collections.<String, String>emptyMap());
+    when(storeFrontResponse.getCookies()).thenReturn(Collections.emptyMap());
     initializeCookies(new String[]{
             UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID,
             UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + ANONYMOUS_USER_ID,
@@ -323,6 +324,11 @@ public class IbmStoreFrontServiceTest {
             GUEST_OR_LOGGEDIN_USER_ID,
             "DEL"
     });
+  }
+
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
 
   private void verifyNoCookiesAtAll() {
@@ -334,14 +340,8 @@ public class IbmStoreFrontServiceTest {
   private void initializeCookies(String[] names, String[] values) {
     ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
     if (names.length > 0) {
-      Header[] wcsResponseCookies = new Header[names.length];
       sourceRequestCookies = new javax.servlet.http.Cookie[names.length];
       for (int i = 0; i < names.length; i++) {
-        Header header = mock(Header.class);
-        when(header.getName()).thenReturn(names[i]);
-        when(header.getValue()).thenReturn(values[i]);
-        wcsResponseCookies[i] = header;
-
         builder.put(names[i], values[i]);
 
         javax.servlet.http.Cookie servletCookie = mock(javax.servlet.http.Cookie.class);

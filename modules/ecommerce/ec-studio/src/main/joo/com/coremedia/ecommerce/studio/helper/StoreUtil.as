@@ -19,7 +19,7 @@ public class StoreUtil {
     return ValueExpressionFactory.createFromFunction(getStoreForSite, site);
   }
 
-  internal static function getStoreForSite(site:Site):Store {
+  public static function getStoreForSite(site:Site):Store {
     var siteId:String = site.getId();
     return getValidatedStore(siteId);
   }

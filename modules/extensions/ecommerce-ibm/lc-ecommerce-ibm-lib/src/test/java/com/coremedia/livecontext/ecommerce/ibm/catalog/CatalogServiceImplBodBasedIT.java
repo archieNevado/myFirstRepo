@@ -2,21 +2,41 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.ibm.common.AbstractServiceTest;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests for BOD REST interface.
  */
-@ContextConfiguration(classes = AbstractServiceTest.LocalConfig.class)
-@ActiveProfiles(AbstractServiceTest.LocalConfig.PROFILE)
-public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
+@ContextConfiguration(classes = {IbmServiceTestBase.LocalConfig.class, CatalogServiceImplBodBasedIT.LocalConfig.class})
+public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
+  @Configuration
+  @ImportResource(
+          value = {
+                  "classpath:/com.coremedia.livecontext.ecommerce.ibm.service/test-commerce-services-bod-customizers.xml"
+          },
+          reader = ResourceAwareXmlBeanDefinitionReader.class
+  )
+  @Import(XmlRepoConfiguration.class)
+  @Profile(IbmServiceTestBase.LocalConfig.PROFILE)
+  public static class LocalConfig {
+  }
 
   @Before
   public void setup() {
@@ -25,18 +45,18 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
   }
 
-  @Betamax(tape = "csi_testFindProductByPartNumber", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindCategoryById", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProductByExternalId() throws Exception {
-    super.testFindProductByExternalId();
+  public void testFindCategoryById() throws Exception {
+    super.testFindCategoryById();
   }
 
-  @Betamax(tape = "csi_testFindProductByPartNumberIsNull", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindProductByIdNotFound", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProductByExternalIdIsNull() throws Exception {
-    super.testFindProductByExternalIdIsNull();
+  public void testFindProductByIdNotFound() throws Exception {
+    super.testFindProductByIdNotFound();
   }
 
   @Betamax(tape = "csi_testFindProductByExternalTechId", match = {MatchRule.path, MatchRule.query})
@@ -60,18 +80,11 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
     super.testFindProductByExternalIdReturns502();
   }
 
-  @Betamax(tape = "csi_testFindProduct2ByExternalId", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindProductVariantById", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindProduct2ByExternalId() throws Exception {
-    super.testFindProduct2ByExternalId();
-  }
-
-  @Betamax(tape = "csi_testFindProductVariantByExternalId", match = {MatchRule.path, MatchRule.query})
-  @Test
-  @Override
-  public void testFindProductVariantByExternalId() throws Exception {
-    super.testFindProductVariantByExternalId();
+  public void testFindProductVariantById() throws Exception {
+    super.testFindProductVariantById();
   }
 
   @Betamax(tape = "csi_testFindProductVariantByExternalTechId", match = {MatchRule.path, MatchRule.query})
@@ -109,6 +122,7 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
     super.testFindProductsByCategoryIsEmpty();
   }
 
+  @Betamax(tape = "csi_testFindProductsByCategoryIsRoot", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
   public void testFindProductsByCategoryIsRoot() throws Exception {
@@ -143,8 +157,10 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
     super.testFindSubCategories();
   }
 
+  @Betamax(tape = "csi_testFindSubCategoriesWithContract", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
+  @Ignore("TW-151 - flaky on firefox // Resolve with CMS-8632")
   public void testFindSubCategoriesWithContract() throws Exception {
     super.testFindSubCategoriesWithContract();
   }
@@ -184,18 +200,11 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
     super.testFindCategoryBySeoSegmentIsNull();
   }
 
-  @Betamax(tape = "csi_testFindCategoryByPartNumber", match = {MatchRule.path, MatchRule.query})
+  @Betamax(tape = "csi_testFindCategoryByIdIsNull", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindCategoryByExternalId() {
-    super.testFindCategoryByExternalId();
-  }
-
-  @Betamax(tape = "csi_testFindCategoryByExternalIdIsNull", match = {MatchRule.path, MatchRule.query})
-  @Test
-  @Override
-  public void testFindCategoryByExternalIdIsNull() {
-    super.testFindCategoryByExternalIdIsNull();
+  public void testFindCategoryByIdIsNull() {
+    super.testFindCategoryByIdIsNull();
   }
 
 
@@ -210,5 +219,78 @@ public class CatalogServiceImplBodBasedIT extends BaseTestsCatalogServiceImpl {
   @Test(expected = CommerceException.class)
   public void testWithStoreContextRethrowException() {
     super.testWithStoreContextRethrowException();
+  }
+
+  @Betamax(tape = "csi_testFindProductById", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindProductById() throws Exception {
+    super.testFindProductById();
+  }
+
+  @Betamax(tape = "csi_testFindProductVariantByExternalIdWithContractSupport", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindProductVariantByExternalIdWithContractSupport() throws Exception {
+    super.testFindProductVariantByExternalIdWithContractSupport();
+  }
+
+  @Test
+  @Override
+  @Ignore("BOD cannot handle slash in product code")
+  public void testFindProductByIdWithSlash() {
+    super.testFindProductByIdWithSlash();
+  }
+
+  @Betamax(tape = "csi_testFindProductMultiSEOByExternalTechId", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindProductMultiSEOByExternalTechId() throws Exception {
+    super.testFindProductMultiSEOByExternalTechId();
+  }
+
+  @Test
+  @Override
+  @Ignore("BOD cannot handle slash in sku code")
+  public void testFindProductVariantByIdWithSlash() throws Exception {
+    super.testFindProductVariantByIdWithSlash();
+  }
+
+  @Betamax(tape = "csi_testFindRootCategory", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindRootCategory() throws Exception {
+    super.testFindRootCategory();
+  }
+
+  @Test
+  @Override
+  @Ignore("No Contract Support for BOD Handler")
+  public void testFindTopCategoriesWithContractSupport() throws Exception {
+    super.testFindTopCategoriesWithContractSupport();
+  }
+
+  @Betamax(tape = "csi_testFindCategoryMultiSEOByExternalTechId", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindCategoryMultiSEOByExternalTechId() throws Exception {
+    Category category = testling.findCategoryById(CommerceIdHelper.formatCategoryId(CATEGORY1_WITH_MULTI_SEO));
+    String seoSegment = category.getSeoSegment();
+    assertNotNull(seoSegment);
+    assertFalse(seoSegment.contains(";"));
+  }
+
+  @Betamax(tape = "csi_testFindGermanCategoryBySeoSegment", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testFindGermanCategoryBySeoSegment() throws Exception {
+    super.testFindGermanCategoryBySeoSegment();
+  }
+
+  @Test
+  @Override
+  @Ignore("BOD cannot handle slash in category code")
+  public void testFindCategoryByIdWithSlash() {
+    super.testFindCategoryByIdWithSlash();
   }
 }

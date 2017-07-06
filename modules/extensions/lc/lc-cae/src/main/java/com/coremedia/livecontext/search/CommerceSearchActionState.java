@@ -6,6 +6,8 @@ import com.coremedia.blueprint.common.contentbeans.CMAction;
 
 /**
  * The current state of the search action. Holds the action form as well as the action result
+ *
+ * @cm.template.api
  */
 public class CommerceSearchActionState implements CMActionState {
 

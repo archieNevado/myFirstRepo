@@ -6,7 +6,7 @@
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         itemId="com-coremedia-ecommerce-studio-model-ProductImpl"
-        ui="{ContainerSkin.COLLAPSIBLE_200}">
+        ui="{ContainerSkin.CARD_200}">
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.util.RichTextPlainTextTransformer;
     import com.coremedia.elastic.social.studio.model.ContributionAdministrationPropertyNames;

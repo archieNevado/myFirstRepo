@@ -25,20 +25,6 @@ module.exports = function (grunt) {
         'pdp-augmentation'
       ]
     },
-    // generate css files
-    sass: {
-      options: {
-        outputStyle: 'expanded',
-        sourceMap: true,
-        sourceMapRoot: 'file://' + process.cwd() + 'target/resources/themes/../<%= themeConfig.name %>/css'
-      },
-      build: {
-        files: {
-          '../../target/resources/themes/<%= themeConfig.name %>/css/aurora.css': 'src/sass/aurora.scss',
-          '../../target/resources/themes/<%= themeConfig.name %>/css/preview.css': 'src/sass/preview.scss'
-        }
-      }
-    },
     // copy js and vendor files
     copy: {
       basic: {
@@ -62,14 +48,6 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'node_modules/jquery/dist',
           src: 'jquery.min.js',
-          dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
-        }]
-      },
-      magnificpopup: {
-        files: [{
-          expand: true,
-          cwd: 'node_modules/magnific-popup/dist',
-          src: 'jquery.magnific-popup.js',
           dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
         }]
       },

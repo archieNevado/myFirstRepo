@@ -3,6 +3,7 @@ package com.coremedia.blueprint.studio.taxonomy.action {
 import com.coremedia.blueprint.studio.TaxonomyStudioPlugin;
 import com.coremedia.blueprint.studio.TaxonomyStudioPluginBase;
 import com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyEditor;
+import com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyEditor;
 import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.desktop.WorkAreaTabType;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -12,6 +13,7 @@ import ext.Action;
 import ext.Component;
 import ext.Ext;
 import ext.button.Button;
+import ext.panel.Panel;
 
 import mx.resources.ResourceManager;
 
@@ -84,11 +86,15 @@ public class OpenTaxonomyEditorActionBase extends Action {
 
     if (!taxonomyAdminTab) {
       var workAreaTabType:WorkAreaTabType = workArea.getTabTypeById(TaxonomyEditor.xtype);
-      taxonomyAdminTab = workAreaTabType.createTab(null) as TaxonomyEditor;
-      workArea.addTab(workAreaTabType, taxonomyAdminTab);
+      workAreaTabType.createTab(null, function(tab:Panel):void {
+        var editor:TaxonomyEditor = tab as TaxonomyEditor;
+        workArea.addTab(workAreaTabType, editor);
+        workArea.setActiveTab(editor);
+      });
     }
-
-    workArea.setActiveTab(taxonomyAdminTab);
+    else {
+      workArea.setActiveTab(taxonomyAdminTab);
+    }
   }
 
   override public function removeComponent(comp:Component):void {

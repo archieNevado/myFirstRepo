@@ -7,6 +7,7 @@
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
   <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"/>
 
   <bean id="externalReferenceResolverBase" abstract="true" class="com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolverBase" >
     <property name="contentRepository" ref="contentRepository"/>
@@ -30,6 +31,12 @@
   <bean id="contentSeoSegmentExternalReferenceResolver" parent="externalReferenceResolverBase"
         class="com.coremedia.livecontext.fragment.resolver.ContentSeoSegmentExternalReferenceResolver" />
 
+  <bean id="seoSegmentExternalReferenceResolver" parent="externalReferenceResolverBase"
+        class="com.coremedia.livecontext.fragment.resolver.SeoSegmentExternalReferenceResolver">
+    <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
+    <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
+  </bean>
+
   <bean id="searchTermExternalReferenceResolver" parent="externalReferenceResolverBase"
         class="com.coremedia.livecontext.fragment.resolver.SearchTermExternalReferenceResolver">
     <property name="cache" ref="cache"/>
@@ -40,8 +47,6 @@
     <property name="field" value="${searchTermExternalReferenceResolver.field:keywords}"/>
     <property name="cacheForSeconds" value="${searchTermExternalReferenceResolver.cacheTime:60}"/>
   </bean>
-  <bean id="metaDataExternalReferenceResolver" parent="externalReferenceResolverBase"
-        class="com.coremedia.livecontext.fragment.resolver.MetaDataExternalReferenceResolver"/>
   <bean id="breadcrumbExternalReferenceResolver" parent="externalReferenceResolverBase"
         class="com.coremedia.livecontext.fragment.resolver.BreadcrumbExternalReferenceResolver">
     <property name="storefrontUrl" value="${livecontext.storefront.url}" />

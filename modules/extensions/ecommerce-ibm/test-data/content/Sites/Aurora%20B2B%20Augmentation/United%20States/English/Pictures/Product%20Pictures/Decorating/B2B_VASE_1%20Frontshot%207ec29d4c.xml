@@ -17,13 +17,13 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">flip;d=h/b;a=0;c=1/crop;x=382;y=862;width=1429;height=2215</StringProperty>
-<StringProperty Name="portrait_ratio3x4">flip;d=h/b;a=0;c=1/crop;x=201;y=821;width=1687;height=2256</StringProperty>
-<StringProperty Name="portrait_ratio1x1">flip;d=h/b;a=0;c=1/crop;x=0;y=1146;width=1795;height=1797</StringProperty>
-<StringProperty Name="landscape_ratio4x3">flip;d=h/b;a=0;c=1/crop;x=0;y=1187;width=2048;height=1539</StringProperty>
-<StringProperty Name="landscape_ratio16x9">flip;d=h/b;a=0;c=1/crop;x=0;y=1884;width=1888;height=1064</StringProperty>
-<StringProperty Name="landscape_ratio5x2">flip;d=h/b;a=0;c=1/crop;x=0;y=2148;width=1924;height=769</StringProperty>
-<StringProperty Name="landscape_ratio4x1">flip;d=h/b;a=0;c=1/crop;x=0;y=2194;width=2048;height=511</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/flip;d=h/crop;x=382;y=862;width=1429;height=2215</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/flip;d=h/crop;x=201;y=821;width=1687;height=2256</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/flip;d=h/crop;x=0;y=1146;width=1795;height=1797</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/flip;d=h/crop;x=0;y=1187;width=2048;height=1539</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/flip;d=h/crop;x=0;y=1884;width=1888;height=1064</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/flip;d=h/crop;x=0;y=2148;width=1924;height=769</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/flip;d=h/crop;x=0;y=2194;width=2048;height=511</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -85,8 +85,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Orange%282%29.xml" path="/Settings/Taxonomies/Subject/Orange%282%29"/>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Decoration.xml" path="/Settings/Taxonomies/Subject/Decoration"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

@@ -6,11 +6,11 @@ import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cap.undoc.content.ContentUtil;
-import com.coremedia.cms.editor.sdk.columns.grid.IconColumnBase;
 import com.coremedia.cms.editor.sdk.desktop.TabChangePluginBase;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
+import com.coremedia.ui.bem.IconWithTextBEMEntities;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.PropertyChangeEvent;
 import com.coremedia.ui.data.ValueExpression;
@@ -235,20 +235,20 @@ public class TopicsPanelBase extends Panel {
         pageContent.addPropertyChangeListener(ContentPropertyNames.LIFECYCLE_STATUS, customPageChanged);
         var iconCls:String = ContentLocalizationUtil.getIconStyleClassForContentTypeName(pageContent.getType().getName());
         var tooltipText:String = pageContent.getName();
-        var html:String = '<span class="' + IconColumnBase.BLOCK + '">'
-                + '<span class="' + IconColumnBase.ELEMENT_ICON + ' ' + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_page_icon') + '"></span>'
-                + '<a class="' + IconColumnBase.ELEMENT_TEXT + '" '+ QtipUtil.formatUnsafeQtip(tooltipText) +' href="#" data-topic-action="open">'
+        var html:String = '<span class="' + IconWithTextBEMEntities.BLOCK + '">'
+                + '<span class="' + IconWithTextBEMEntities.ELEMENT_ICON + ' ' + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_page_icon') + '"></span>'
+                + '<a class="' + IconWithTextBEMEntities.ELEMENT_TEXT + '" '+ QtipUtil.formatUnsafeQtip(tooltipText) +' href="#" data-topic-action="open">'
                 + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_name')
                 + '</a>'
-                + '<span class="' + IconColumnBase.BLOCK + '">'
-                + '<a id="topicpage-delete-' + id + '" class="' + IconColumnBase.ELEMENT_ICON + ' ' + resourceManager.getString('com.coremedia.icons.CoreIcons', 'trash_bin') + '" style="text-decoration:none;" href="#" title="' + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_deletion_tooltip') + '" data-topic-action="delete"/></span>'
+                + '<span class="' + IconWithTextBEMEntities.BLOCK + '">'
+                + '<a id="topicpage-delete-' + id + '" class="' + IconWithTextBEMEntities.ELEMENT_ICON + ' ' + resourceManager.getString('com.coremedia.icons.CoreIcons', 'trash_bin') + '" style="text-decoration:none;" href="#" title="' + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_deletion_tooltip') + '" data-topic-action="delete"/></span>'
                 + '</a>';
         return html;
       }
     }
 
     if(editorContext.getSitesService().getPreferredSite()) {
-      return '<div class="' + IconColumnBase.BLOCK +'"><a href="#" id="topicpage-create-' + id + '"  class="' + IconColumnBase.ELEMENT_TEXT + '" data-topic-action="create">'
+      return '<div class="' + IconWithTextBEMEntities.BLOCK +'"><a href="#" id="topicpage-create-' + id + '"  class="' + IconWithTextBEMEntities.ELEMENT_TEXT + '" data-topic-action="create">'
               + resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_create_link') + '</a></div>';
     }
     return resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_no_preferred_site');

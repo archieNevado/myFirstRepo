@@ -10,9 +10,13 @@
 <#assign columnCssClass=cm.localParameters().columnCssClass!"" />
 <#assign center=cm.localParameters().center!true />
 <#assign addRows=cm.localParameters().addRows!true />
+<#assign showHeadline=cm.localParameters().showHeadline!false />
 
-<div class="cm-container ${additionalClass}" <@cm.metadata data=bp.getContainerMetadata(self) />>
-<#if (numberOfItems > 0)>
+<div class="cm-container ${additionalClass}" <@cm.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
+  <#if showHeadline && self.teaserTitle?has_content>
+    <h2 class="cm-container__headline" <@cm.metadata "properties.teaserTitle"/>><span>${self.teaserTitle}</span></h2>
+  </#if>
+  <#if (numberOfItems > 0)>
     <div class="row-grid row">
       <#list items as item>
         <#if addRows>
@@ -29,5 +33,5 @@
           </div>
       </#list>
     </div>
-</#if>
+  </#if>
 </div>

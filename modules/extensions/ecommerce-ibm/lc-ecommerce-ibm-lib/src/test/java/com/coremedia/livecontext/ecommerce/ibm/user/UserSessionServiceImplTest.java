@@ -19,7 +19,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -85,7 +84,6 @@ public class UserSessionServiceImplTest {
 
   private BaseCommerceConnection commerceConnection;
 
-  @InjectMocks
   private UserSessionServiceImpl testling;
 
   @Test
@@ -256,7 +254,10 @@ public class UserSessionServiceImplTest {
     UserContext context = commerceConnection.getUserContext();
     context.setUserId(USERID);
 
-    testling.setStoreContextProvider(commerceConnection.getStoreContextProvider());
+    testling = new UserSessionServiceImpl();
+    testling.setLoginWrapperService(wcLoginWrapperService);
+    testling.setUrlProvider(urlProvider);
+    testling.setStoreFrontConnector(storeFrontConnector);
     CommerceCache commerceCache = new CommerceCache();
     commerceCache.setEnabled(false);
     commerceCache.setCacheTimesInSeconds(Collections.EMPTY_MAP);
@@ -274,7 +275,7 @@ public class UserSessionServiceImplTest {
     when(anonymousUser.getLogonId()).thenReturn(null);
     when(registeredUser.getLogonId()).thenReturn("yes");
 
-    when(storeFrontResponse.getCookies()).thenReturn(Collections.<String, String>emptyMap());
+    when(storeFrontResponse.getCookies()).thenReturn(Collections.emptyMap());
   }
 
   @After

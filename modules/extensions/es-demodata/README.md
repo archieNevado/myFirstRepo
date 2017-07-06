@@ -17,4 +17,4 @@ It creates demo data like:
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/ElasticSocialDemoData.html)
+See the "Elastic Social Demo Data Generator" chapter of the CoreMedia Developer Manual.

@@ -57,11 +57,19 @@
 <StringProperty Name="viewName">DEFAULT</StringProperty>
 </Struct>
 <Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
+<Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMTeaser">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
 <Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
@@ -93,6 +101,10 @@
 <LinkListProperty Name="previewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
+</LinkListProperty>
+<LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
+</LinkListProperty>
+<LinkListProperty Name="fragmentPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>
 </Struct>
 </settings>

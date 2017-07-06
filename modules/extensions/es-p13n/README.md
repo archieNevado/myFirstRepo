@@ -9,4 +9,4 @@ Extension to retrieve data from CoreMedia [Elastic Social](../es/README.md) for 
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/coremedia-en/webhelp/content/personalization_extension_modules_overview.html)
+See the "Adaptive Personalization Extensions" chapter of the CoreMedia Developer Manual.

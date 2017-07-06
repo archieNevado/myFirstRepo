@@ -8,9 +8,6 @@ import com.coremedia.objectserver.view.events.ViewHookEventListener;
 
 import javax.inject.Named;
 
-import static com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNames.VIEW_HOOK_END;
-
-
 /**
  * A {@link com.coremedia.objectserver.view.events.ViewHookEventListener} that
  * is responsible for adding the review widget to rendered views.
@@ -20,9 +17,11 @@ public class ReviewsViewHookEventListener implements ViewHookEventListener<CMTea
 
   @Override
   public RenderNode onViewHook(ViewHookEvent<CMTeasable> event) {
+    // implemented only in corporate for CMProducts
+    /*
     if (VIEW_HOOK_END.equals(event.getId())) {
       return new RenderNode(getReviewsResult(event.getBean()), null);
-    }
+    }*/
 
     return null;
   }

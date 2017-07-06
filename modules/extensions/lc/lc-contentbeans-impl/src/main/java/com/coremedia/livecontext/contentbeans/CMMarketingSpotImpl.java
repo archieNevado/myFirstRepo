@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.contentbeans;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.contentbeans.CMDynamicListImpl;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
@@ -108,7 +108,7 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
   }
 
   public StoreContextProvider getStoreContextProvider() {
-    return Commerce.getCurrentConnection().getStoreContextProvider();
+    return DefaultConnection.get().getStoreContextProvider();
   }
 
   @Required
@@ -120,7 +120,7 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
     MarketingSpot marketingSpot = null;
     StoreContext storeContext = getStoreContextProvider().findContextByContent(getContent());
     if (storeContext != null && getExternalId() != null && !getExternalId().trim().isEmpty()) {
-      MarketingSpotService marketingSpotService = Commerce.getCurrentConnection().getMarketingSpotService();
+      MarketingSpotService marketingSpotService = DefaultConnection.get().getMarketingSpotService();
       if (marketingSpotService != null) {
         marketingSpot = marketingSpotService.withStoreContext(storeContext).findMarketingSpotById(getExternalId());
       }

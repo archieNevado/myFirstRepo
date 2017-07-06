@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.multisite.Site;
@@ -12,9 +12,11 @@ import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -28,21 +30,48 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CategoryFragmentContextStrategyTest {
-  @SuppressWarnings("ConstantConditions")
-  @Test(expected = IllegalArgumentException.class)
-  public void findNearestCategoryForNoExternalTechIdProvided() {
-    testling.findNearestCategoryFor(null, defaultContext);
-  }
 
+  private static final String DEFAULT_EXTERNAL_TECH_ID = "billion-year-bunker";
+  private static final String DEFAULT_EXTERNAL_ID = "external-id";
+  private static final String DEFAULT_ID = "ibm://catalog/category/techId:billion-year-bunker";
+  private static final long DEFAULT_CACHED_TIME_SECONDS = 2;
+  private static final String DEFAULT_SITE_ID = "Sirius-Cybernetics-Corporation";
+
+  private Cache cache;
+
+  @InjectMocks
+  private CategoryFragmentContextStrategy testling;
+
+  @Mock
+  private CatalogService catalogService;
+
+  @Mock
+  private StoreContext defaultContext;
+
+  @Mock
+  private StoreContextProvider storeContextProvider;
+
+  @Mock
+  private Site site;
+
+  @Mock
+  private Category defaultCategory;
+
+  @Mock
+  private LiveContextNavigationFactory liveContextNavigationFactory;
+
+  @Mock
+  private LiveContextNavigation defaultLiveContextNavigation;
+
+  @Mock
+  private CommerceConnection connection;
+
+  @Mock
+  private CommerceIdProvider idProvider;
+  
   @Test(expected = IllegalArgumentException.class)
   public void findNearestCategoryForEmptyExternalTechIdProvided() {
     testling.findNearestCategoryFor("         ", defaultContext);
-  }
-
-  @SuppressWarnings("ConstantConditions")
-  @Test(expected = IllegalArgumentException.class)
-  public void findNearestCategoryForNoStoreContextProvided() {
-    testling.findNearestCategoryFor(DEFAULT_EXTERNAL_TECH_ID, null);
   }
 
   @Test
@@ -51,18 +80,6 @@ public class CategoryFragmentContextStrategyTest {
 
     assertEquals(defaultCategory, result);
     verify(catalogService, times(1)).findCategoryById(DEFAULT_ID);
-  }
-
-  @SuppressWarnings("ConstantConditions")
-  @Test(expected = IllegalArgumentException.class)
-  public void resolveContextNoShopNameProvided() {
-    testling.resolveContext(null, DEFAULT_EXTERNAL_TECH_ID);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void resolveContextNoExternalTechIdProvided() {
-    //noinspection ConstantConditions
-    testling.resolveContext(site, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -113,7 +130,7 @@ public class CategoryFragmentContextStrategyTest {
   @Test
   public void resolveContextForStableId() {
     testling.setUseStableIds(true);
-    when(catalogService.findCategoryById(Commerce.getCurrentConnection().getIdProvider().formatProductTechId(DEFAULT_EXTERNAL_ID))).thenReturn(defaultCategory);
+    when(catalogService.findCategoryById(DefaultConnection.get().getIdProvider().formatProductTechId(DEFAULT_EXTERNAL_ID))).thenReturn(defaultCategory);
     LiveContextNavigation result = testling.resolveContext(site, DEFAULT_EXTERNAL_ID);
     assertEquals(defaultLiveContextNavigation, result);
   }
@@ -134,7 +151,7 @@ public class CategoryFragmentContextStrategyTest {
     testling.setCachedInSeconds(DEFAULT_CACHED_TIME_SECONDS);
     testling.setLiveContextNavigationFactory(liveContextNavigationFactory);
 
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getCatalogService()).thenReturn(catalogService);
     when(connection.getIdProvider()).thenReturn(idProvider);
@@ -148,6 +165,11 @@ public class CategoryFragmentContextStrategyTest {
     when(site.getName()).thenReturn(DEFAULT_SITE_ID);
   }
 
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
+  }
+
   private void waitUntilCacheIsEmpty(long maximumWaitMillis) throws InterruptedException {
     long start = System.currentTimeMillis();
     long duration = 0;
@@ -159,40 +181,4 @@ public class CategoryFragmentContextStrategyTest {
       duration = System.currentTimeMillis() - start;
     }
   }
-
-  private CategoryFragmentContextStrategy testling;
-  private Cache cache;
-
-  @Mock
-  private CatalogService catalogService;
-
-  @Mock
-  private StoreContext defaultContext;
-
-  @Mock
-  private StoreContextProvider storeContextProvider;
-
-  @Mock
-  private Site site;
-
-  @Mock
-  private Category defaultCategory;
-
-  @Mock
-  private LiveContextNavigationFactory liveContextNavigationFactory;
-
-  @Mock
-  private LiveContextNavigation defaultLiveContextNavigation;
-
-  @Mock
-  private CommerceConnection connection;
-
-  @Mock
-  private CommerceIdProvider idProvider;
-
-  private static final String DEFAULT_EXTERNAL_TECH_ID = "billion-year-bunker";
-  private static final String DEFAULT_EXTERNAL_ID = "external-id";
-  private static final String DEFAULT_ID = "ibm://catalog/category/techId:billion-year-bunker";
-  private static final long DEFAULT_CACHED_TIME_SECONDS = 2;
-  private static final String DEFAULT_SITE_ID = "Sirius-Cybernetics-Corporation";
 }

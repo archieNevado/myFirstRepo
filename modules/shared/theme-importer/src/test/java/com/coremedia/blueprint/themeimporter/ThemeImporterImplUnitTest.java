@@ -1,15 +1,35 @@
 package com.coremedia.blueprint.themeimporter;
 
+import com.coremedia.blueprint.localization.LocalizationService;
+import com.coremedia.cap.common.CapConnection;
+import com.coremedia.mimetype.MimeTypeService;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.regex.Matcher;
 
+import static com.coremedia.blueprint.themeimporter.ThemeImporterImpl.CG_HOSTPORT;
+import static com.coremedia.blueprint.themeimporter.ThemeImporterImpl.CG_PATH;
+import static com.coremedia.blueprint.themeimporter.ThemeImporterImpl.CG_PROTOCOL;
+import static com.coremedia.blueprint.themeimporter.ThemeImporterImpl.CG_SUFFIX;
+import static com.coremedia.blueprint.themeimporter.ThemeImporterImpl.CG_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ThemeImporterImplUnitTest {
+
+  @Mock
+  CapConnection capConnection;
+  @Mock
+  MimeTypeService mimeTypeService;
+  @Mock
+  LocalizationService localizationService;
+
 
   // --- Tests ------------------------------------------------------
 
@@ -54,10 +74,11 @@ public class ThemeImporterImplUnitTest {
   public void testRelativeUrl() {
     Matcher matcher = ThemeImporterImpl.URL_PATTERN.matcher("background-image: url(../img/button_video_play.png);");
     assertTrue(matcher.find());
-    assertEquals("../img/button_video_play.png", matcher.group(1));
-    assertNull(matcher.group(3));
-    assertEquals("../img/button_video_play.png", matcher.group(4));
-    assertTrue(matcher.group(5).isEmpty());
+    assertEquals("../img/button_video_play.png", matcher.group(CG_URL));
+    assertNull(matcher.group(CG_PROTOCOL));
+    assertNull(matcher.group(CG_HOSTPORT));
+    assertEquals("../img/button_video_play.png", matcher.group(CG_PATH));
+    assertTrue(matcher.group(CG_SUFFIX).isEmpty());
     assertFalse(matcher.find());
   }
 
@@ -65,10 +86,11 @@ public class ThemeImporterImplUnitTest {
   public void testQuerySuffix() {
     Matcher matcher = ThemeImporterImpl.URL_PATTERN.matcher("src: url(\"../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix\") format(\"embedded-opentype\"),");
     assertTrue(matcher.find());
-    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix", matcher.group(1));
-    assertNull(matcher.group(3));
-    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot", matcher.group(4));
-    assertEquals("?#iefix", matcher.group(5));
+    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix", matcher.group(CG_URL));
+    assertNull(matcher.group(CG_PROTOCOL));
+    assertNull(matcher.group(CG_HOSTPORT));
+    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot", matcher.group(CG_PATH));
+    assertEquals("?#iefix", matcher.group(CG_SUFFIX));
     assertFalse(matcher.find());
   }
 
@@ -76,21 +98,34 @@ public class ThemeImporterImplUnitTest {
   public void testFragmentSuffix() {
     Matcher matcher = ThemeImporterImpl.URL_PATTERN.matcher("src: url(\"../fonts/bootstrap/glyphicons-halflings-regular.eot#bla\") format(\"embedded-opentype\"),");
     assertTrue(matcher.find());
-    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot#bla", matcher.group(1));
-    assertNull(matcher.group(3));
-    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot", matcher.group(4));
-    assertEquals("#bla", matcher.group(5));
+    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot#bla", matcher.group(CG_URL));
+    assertNull(matcher.group(CG_PROTOCOL));
+    assertNull(matcher.group(CG_HOSTPORT));
+    assertEquals("../fonts/bootstrap/glyphicons-halflings-regular.eot", matcher.group(CG_PATH));
+    assertEquals("#bla", matcher.group(CG_SUFFIX));
     assertFalse(matcher.find());
+  }
+
+  @Test
+  public void testProtocolLessUri() {
+    Matcher matcher = ThemeImporterImpl.URL_PATTERN.matcher("src: url(\"//media.yoox.biz/ytos/resources/MONCLER/icons/icons.eot\"),");
+    assertTrue(matcher.find());
+    assertEquals("//media.yoox.biz/ytos/resources/MONCLER/icons/icons.eot", matcher.group(CG_URL));
+    assertNull(matcher.group(CG_PROTOCOL));
+    assertEquals("media.yoox.biz", matcher.group(CG_HOSTPORT));
+    assertEquals("/ytos/resources/MONCLER/icons/icons.eot", matcher.group(CG_PATH));
+    assertTrue(matcher.group(CG_SUFFIX).isEmpty());
   }
 
   @Test
   public void testBase64Encoding() {
     Matcher matcher = ThemeImporterImpl.URL_PATTERN.matcher("background: url(data:image/svg+xml;base64,PD94bWwgBlaBlaBla8L3N2Zz4=);");
     assertTrue(matcher.find());
-    assertEquals("data:image/svg+xml;base64,PD94bWwgBlaBlaBla8L3N2Zz4=", matcher.group(1));
-    assertEquals("data", matcher.group(3));
-    assertEquals("image/svg+xml;base64,PD94bWwgBlaBlaBla8L3N2Zz4=", matcher.group(4));
-    assertTrue(matcher.group(5).isEmpty());
+    assertEquals("data:image/svg+xml;base64,PD94bWwgBlaBlaBla8L3N2Zz4=", matcher.group(CG_URL));
+    assertEquals("data", matcher.group(CG_PROTOCOL));
+    assertNull(matcher.group(CG_HOSTPORT));
+    assertEquals("image/svg+xml;base64,PD94bWwgBlaBlaBla8L3N2Zz4=", matcher.group(CG_PATH));
+    assertTrue(matcher.group(CG_SUFFIX).isEmpty());
     assertFalse(matcher.find());
   }
 
@@ -118,7 +153,7 @@ public class ThemeImporterImplUnitTest {
             "    position: absolute;\n" +
             "  }\n" +
             "}\n";
-    ThemeImporterImpl testling = new ThemeImporterImpl(null, null, null);  // NOSONAR nulls are sufficient for this test
+    ThemeImporterImpl testling = new ThemeImporterImpl(capConnection, mimeTypeService, localizationService);
     String actual = testling.urlsToXlinks(css, null, null);
     assertEquals(expected, actual);
   }
@@ -139,9 +174,10 @@ public class ThemeImporterImplUnitTest {
 
   private void checkNameOnly(Matcher matcher) {
     assertTrue(matcher.find());
-    assertEquals("bigplay.svg", matcher.group(1));
-    assertNull(matcher.group(3));
-    assertEquals("bigplay.svg", matcher.group(4));
-    assertTrue(matcher.group(5).isEmpty());
+    assertEquals("bigplay.svg", matcher.group(CG_URL));
+    assertNull(matcher.group(CG_PROTOCOL));
+    assertNull(matcher.group(CG_HOSTPORT));
+    assertEquals("bigplay.svg", matcher.group(CG_PATH));
+    assertTrue(matcher.group(CG_SUFFIX).isEmpty());
   }
 }

@@ -66,7 +66,7 @@ public class CMPictureImpl extends CMPictureBase {
       //no transforms configured for current content, empty map will be returned.
     }
 
-    return transformImageService.getTransformationsUrls(this.getContent(), DATA, transformations);
+    return transformImageService.getTransformationOperations(this.getContent(), DATA, transformations);
   }
 
   @Override

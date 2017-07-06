@@ -33,8 +33,12 @@
     ]]></fx:Script>
 
   <editor:items>
-    <livecontext:CommerceDetailsForm itemId="categoryDetails"
-                                     titleLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Category_name_label')}"/>
+    <livecontext:CommerceDetailsForm itemId="categoryDetails"/>
+    <livecontext:CommerceAugmentedPageGridForm itemId="placement"
+                                               showLocal="true"
+                                               forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
+                                               bindTo="{augmentedCategoryExpression}"
+                                               pageGridPropertyName="placement"/>
     <editor:PropertyFieldGroup
             title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_PropertyGroup_thumbnail_title')}"
             itemId="picture">
@@ -68,11 +72,6 @@
                                            emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Product_downloads_emptyText')}"/>
       </editor:items>
     </editor:PropertyFieldGroup>
-    <livecontext:CommerceAugmentedPageGridForm itemId="placement"
-                                               showLocal="true"
-                                               forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}"
-                                               bindTo="{augmentedCategoryExpression}"
-                                               pageGridPropertyName="placement"/>
   </editor:items>
 
 </editor:DocumentForm>

@@ -13,6 +13,7 @@ import com.coremedia.ecommerce.studio.model.ContractImpl;
 import com.coremedia.ecommerce.studio.model.ContractsImpl;
 import com.coremedia.ecommerce.studio.model.ProductImpl;
 import com.coremedia.ecommerce.studio.model.StoreImpl;
+import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
@@ -23,6 +24,7 @@ import com.coremedia.ui.util.createComponentSelector;
 import ext.StringUtil;
 import ext.button.Button;
 import ext.container.Viewport;
+import ext.data.Model;
 import ext.data.Store;
 import ext.form.field.DisplayField;
 
@@ -125,9 +127,11 @@ public class CommerceCatalogObjectsSelectFormTest extends AbstractCatalogTest {
     return new Step("Select the exterior contract",
             function ():Boolean {return true},
             function ():void {
+              var model:Model = selector.findRecordByDisplay('Contract for CoreMedia Preview Exterior');
               var exteriorContractID:String = "ibm:///catalog/contract/4000000000000000507";
               selector.setValue(exteriorContractID);
-              selector.fireEvent('change', selector, undefined, exteriorContractID);
+              selector.fireEvent('select', selector, model);
+
             }
     );
   }
@@ -136,9 +140,10 @@ public class CommerceCatalogObjectsSelectFormTest extends AbstractCatalogTest {
     return new Step("Select the interior contract",
             function ():Boolean {return true},
             function ():void {
+              var model:Model = selector.findRecordByDisplay('Contract for CoreMedia Preview Interior');
               var interiorContractID:String = "ibm:///catalog/contract/4000000000000000508";
               selector.setValue(interiorContractID);
-              selector.fireEvent('change', selector, undefined, interiorContractID);
+              selector.fireEvent('select', selector, model);
             }
     );
   }

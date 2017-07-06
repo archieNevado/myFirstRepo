@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.navigation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -17,6 +17,7 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -71,7 +72,7 @@ public class LiveContextNavigationFactoryTest {
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
 
-    Commerce.setCurrentConnection(connection);
+    DefaultConnection.set(connection);
 
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getCatalogService()).thenReturn(catalogService);
@@ -90,6 +91,10 @@ public class LiveContextNavigationFactoryTest {
     when(validationService.validate(externalChannel)).thenReturn(true);
   }
 
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
+  }
 
   @Test
   public void testCreateNavigationWithValidCategory() throws Exception {

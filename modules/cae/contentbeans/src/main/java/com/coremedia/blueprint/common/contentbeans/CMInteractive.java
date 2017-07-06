@@ -9,9 +9,15 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * <p>
  * The CMInteractive type adds no extra properties but leaves a pluggable spot where needed
  * properties could be attached via a DocTypeAspect.
- * <p>Represents the document type {@link #NAME CMInteractive}.</p>
+ * </p>
+ * <p>
+ * Represents the document type {@link #NAME CMInteractive}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface CMInteractive extends CMVisual {
   String NAME = "CMInteractive";

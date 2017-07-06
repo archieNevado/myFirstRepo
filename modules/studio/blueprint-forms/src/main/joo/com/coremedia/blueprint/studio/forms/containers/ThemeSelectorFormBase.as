@@ -24,6 +24,7 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
 
   public static var DEFAULT_CROPPING:String = ImageUtil.getCroppingOperation(82, 50);
 
+  protected static const DISPLAY_FIELD_NAME:String = "titleUnencoded";
   protected static const TITLE_FIELD_NAME:String = "title";
   protected static const DESCRIPTION_FIELD_NAME:String = "description";
   protected static const THUMBNAIL_URI_FIELD_NAME:String = "thumbnailUri";
@@ -86,7 +87,7 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
   }
 
   private static function getName(content:Content):String {
-    return content == null ? "" : content.getName();
+    return content === null ? "" : content.getName();
   }
 
   /**
@@ -108,7 +109,7 @@ public class ThemeSelectorFormBase extends ComboBoxLinkPropertyField {
   }
 
   public static function getThumbnailUri(content:Content):String {
-    return content == null ? "" : editorContext.getThumbnailUri(content, DEFAULT_CROPPING);
+    return content === null ? "" : editorContext.getThumbnailUri(content, DEFAULT_CROPPING);
   }
 
   public static function getThumbnailTooltip(content:Content):String {

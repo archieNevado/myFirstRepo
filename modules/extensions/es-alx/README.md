@@ -8,4 +8,4 @@ Extension to retrieve and cache computed data from Analytics. The data is persis
 
 ###Documentation
 
-[Manual](https://documentation.coremedia.com/cm8/current/manuals/analytics-connectors-en/webhelp/content/Retrieval.html)
+See the "Retrieval" chapter of the Analytics Connectors Manual.

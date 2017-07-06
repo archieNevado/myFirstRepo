@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.tree;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -184,6 +184,6 @@ public class ExternalChannelContentTreeRelationTest {
   }
 
   private CommerceBeanFactory getCommerceBeanFactory() {
-    return Commerce.getCurrentConnection().getCommerceBeanFactory();
+    return DefaultConnection.get().getCommerceBeanFactory();
   }
 }

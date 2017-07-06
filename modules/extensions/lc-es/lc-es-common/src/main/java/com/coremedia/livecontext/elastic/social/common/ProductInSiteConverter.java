@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.elastic.social.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -90,20 +90,20 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
 
     // `CommerceConnectionFilter` does not recognize Elastic Social
     // Studio calls, so we have to setup the commerce connection.
-    CommerceConnection oldConnection = Commerce.getCurrentConnection();
+    CommerceConnection oldConnection = DefaultConnection.get();
     try {
       CommerceConnection myConnection = getCommerceConnectionForDeserialization(site, productId);
 
-      Commerce.setCurrentConnection(myConnection);
+      DefaultConnection.set(myConnection);
 
       product = findProduct(myConnection, productId);
     } catch (RuntimeException exception) {
       throwUnresolvable(productId, site.getId(), exception);
     } finally {
       if (oldConnection != null) {
-        Commerce.setCurrentConnection(oldConnection);
+        DefaultConnection.set(oldConnection);
       } else {
-        Commerce.clearCurrent();
+        DefaultConnection.clear();
       }
     }
 

@@ -21,7 +21,7 @@
 <StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=447;y=0;width=1026;height=1367</StringProperty>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=443;y=0;width=1367;height=1367</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=226;y=0;width=1822;height=1367</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=107;width=2048;height=1154</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=107;width=2048;height=1152</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=341;width=2048;height=821</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=530;width=2048;height=513</StringProperty>
 </Struct>
@@ -85,9 +85,6 @@
 <keywords></keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
-<link href="../../../../../../../Settings/Taxonomies/Subject/White.xml" path="/Settings/Taxonomies/Subject/White"/>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Decoration.xml" path="/Settings/Taxonomies/Subject/Decoration"/>
-<link href="../../../../../../../Settings/Taxonomies/Subject/Blue.xml" path="/Settings/Taxonomies/Subject/Blue"/>
 </subjectTaxonomy>
 <locationTaxonomy>
 </locationTaxonomy>

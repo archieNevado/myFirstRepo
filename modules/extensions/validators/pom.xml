@@ -16,7 +16,6 @@
   </properties>
 
   <modules>
-    <module>validators-bom</module>
     <module>validators-studio-lib</module>
   </modules>
 

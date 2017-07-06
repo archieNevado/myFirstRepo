@@ -19,9 +19,7 @@ CATALINA_OPTS="$CATALINA_OPTS -Djava.security.egd=file:/dev/./urandom"
 
 CATALINA_OPTS="$CATALINA_OPTS <%= @catalina_opts %>"
 
-<% if @debug -%>
-CATALINA_OPTS="$CATALINA_OPTS <%= @debug_opts %>"
-<% end -%>
+<% if !@debug -%>#<% end -%>CATALINA_OPTS="$CATALINA_OPTS <%= @debug_opts %>"
 
 <%- if @jmx_remote  -%>
 CATALINA_OPTS="$CATALINA_OPTS -Djava.rmi.server.hostname=<%= @jmx_remote_server_name %>"

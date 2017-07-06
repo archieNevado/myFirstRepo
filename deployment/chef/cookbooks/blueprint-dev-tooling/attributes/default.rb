@@ -15,10 +15,10 @@ default['blueprint']['dev']['content']["publishall_contentquery"] = 'NOT BELOW P
 #<> The number of concurrent threads to replicate the content
 default['blueprint']['dev']['content']['publishall_threads'] = 1
 #<> A string to be used as a prefix for created RPMs.
-default['blueprint']['dev']['rpm']['package_prefix'] = 'lc2-'
+default['blueprint']['dev']['rpm']['package_prefix'] = 'myOrg-'
 #<> The version of the created RPMs.
 default['blueprint']['dev']['rpm']['version'] = '1.0.0'
-#<> The folder to create the RPMs in. By default the vagrant based kitchen setup will share this folder with your host machine.
+#<> The folder to create the RPMs in.
 default['blueprint']['dev']['rpm']['dir'] = '/shared/packages'
 #<> The database to install (mysql | postgresql)
 default['blueprint']['dev']['db']['type'] = 'mysql'

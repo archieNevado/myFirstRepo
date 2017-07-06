@@ -19,6 +19,12 @@ module.exports = function (grunt, options) {
         }
       },
       copy: {
+        brick_generic_templates_magnificpopup: {
+          expand: true,
+          cwd: '../../node_modules/magnific-popup/dist',
+          src: 'jquery.magnific-popup.js',
+          dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
+        },
         brick_generic_templates_js: {
           expand: true,
           cwd: options.brickDirectory,
@@ -46,7 +52,7 @@ module.exports = function (grunt, options) {
             spawn: true
           },
           files: options.brickDirectory + '/sass/**/*.scss',
-          tasks: ['sass', 'postcss']
+          tasks: ['sass']
         }
       }
     }

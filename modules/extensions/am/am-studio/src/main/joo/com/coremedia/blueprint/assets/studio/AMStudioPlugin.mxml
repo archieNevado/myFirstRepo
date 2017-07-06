@@ -25,7 +25,8 @@
     import com.coremedia.blueprint.studio.BlueprintFormsStudioPluginBase;
     import com.coremedia.blueprint.studio.forms.CMPictureForm;
     import com.coremedia.blueprint.studio.forms.CMVideoForm;
-    import com.coremedia.cms.editor.sdk.collectionview.search.TranslationStatusFilterFieldset;
+    import com.coremedia.cms.editor.sdk.collectionview.search.TranslationStatusFilterPanel;
+    import com.coremedia.cms.editor.sdk.collectionview.search.TranslationStatusFilterPanel;
     import com.coremedia.cms.editor.sdk.editorContext;
 
     import mx.resources.ResourceManager;
@@ -139,10 +140,10 @@
           <ui:items>
             <!--Lower case used for the property name here, since the name must match
             the SOLR field name that is complete lower case. The editor converts to lowercase to be sure too. -->
-            <taxonomy:TaxonomyFilterFieldset itemId="assetDownloadPortal"
-                                             filterId="{AssetConstants.ASSET_TAXONOMY_ID}"
-                                             taxonomyId="{AssetConstants.ASSET_TAXONOMY_ID}"
-                                             propertyName="{AssetConstants.PROPERTY_ASSET_ASSETTAXONOMY_SEARCH}"/>
+            <taxonomy:TaxonomyFilterPanel itemId="assetDownloadPortal"
+                                          filterId="{AssetConstants.ASSET_TAXONOMY_ID}"
+                                          taxonomyId="{AssetConstants.ASSET_TAXONOMY_ID}"
+                                          propertyName="{AssetConstants.PROPERTY_ASSET_ASSETTAXONOMY_SEARCH}"/>
           </ui:items>
           <ui:after>
             <Component itemId="Subject"/>
@@ -150,18 +151,18 @@
         </ui:AddItemsPlugin>
         <ui:AddItemsPlugin>
           <ui:items>
-            <am:StringListCheckboxFilterFieldset filterId="rightsChannels"
-                                                 propertyName="{AssetConstants.PROPERTY_ASSET_METADATA_CHANNELS}"
-                                                 title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Filter_RightsChannels_text')}"
-                                                 availableValuesValueExpression="{AssetManagementConfigurationUtil.getConfiguredRightsChannelsValueExpression()}"/>
-            <am:StringListCheckboxFilterFieldset filterId="rightsRegions"
-                                                 propertyName="{AssetConstants.PROPERTY_ASSET_METADATA_REGIONS}"
-                                                 title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Filter_RightsRegions_text')}"
-                                                 availableValuesValueExpression="{AssetManagementConfigurationUtil.getConfiguredRightsRegionsValueExpression()}"/>
-            <am:ExpirationDateFilterFieldset/>
+            <am:StringListCheckboxFilterPanel filterId="rightsChannels"
+                                              propertyName="{AssetConstants.PROPERTY_ASSET_METADATA_CHANNELS}"
+                                              title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Filter_RightsChannels_text')}"
+                                              availableValuesValueExpression="{AssetManagementConfigurationUtil.getConfiguredRightsChannelsValueExpression()}"/>
+            <am:StringListCheckboxFilterPanel filterId="rightsRegions"
+                                              propertyName="{AssetConstants.PROPERTY_ASSET_METADATA_REGIONS}"
+                                              title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'Filter_RightsRegions_text')}"
+                                              availableValuesValueExpression="{AssetManagementConfigurationUtil.getConfiguredRightsRegionsValueExpression()}"/>
+            <am:ExpirationDateFilterPanel/>
           </ui:items>
           <ui:after>
-            <Component itemId="{TranslationStatusFilterFieldset.FILTER_ID}"/>
+            <Component itemId="{TranslationStatusFilterPanel.FILTER_ID}"/>
           </ui:after>
         </ui:AddItemsPlugin>
       </editor:plugins>

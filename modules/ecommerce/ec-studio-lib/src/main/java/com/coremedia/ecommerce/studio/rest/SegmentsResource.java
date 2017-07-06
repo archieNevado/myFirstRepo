@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Segments;
+import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -31,8 +32,9 @@ public class SegmentsResource extends AbstractCatalogResource<Segments> {
     }
 
     representation.setId(segments.getId());
-    if (getConnection().getSegmentService() != null) {
-      representation.setSegments(getConnection().getSegmentService().findAllSegments());
+    SegmentService segmentService = getConnection().getSegmentService();
+    if (segmentService != null) {
+      representation.setSegments(segmentService.findAllSegments());
     }
   }
 

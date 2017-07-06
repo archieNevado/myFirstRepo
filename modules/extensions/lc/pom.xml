@@ -14,7 +14,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>lc-bom</module>
     <module>lc-contentbeans-api</module>
     <module>lc-contentbeans-impl</module>
     <module>lc-cae</module>
@@ -22,12 +21,12 @@
     <module>lc-caefeeder-component</module>
     <module>lc-contentfeeder-component</module>
     <module>lc-server</module>
-    <module>lc-ecommerce-webapp-component</module>
     <module>lc-feeder-lib</module>
     <module>lc-services-api</module>
     <module>lc-services-lib</module>
     <module>lc-studio</module>
     <module>lc-studio-test-helper</module>
     <module>lc-studio-lib</module>
+    <module>lc-ecommerce-api-tests</module>
   </modules>
 </project>

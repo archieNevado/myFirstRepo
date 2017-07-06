@@ -1,71 +1,118 @@
 package com.coremedia.livecontext.fragment.links.transformers.resolvers.seo;
 
-import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.base.links.SettingsBasedVanityUrlMapper;
+import com.coremedia.blueprint.base.links.VanityUrlMapperCacheKey;
+import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
-import com.google.common.annotations.VisibleForTesting;
+import com.coremedia.blueprint.common.navigation.Linkable;
+import com.coremedia.cache.Cache;
+import com.coremedia.cap.content.Content;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+import static java.text.MessageFormat.format;
 
 /**
  * Generates external seo segment name for a given navigation and linkable for use in commerce links.
  */
-public class ExternalSeoSegmentBuilder {
+public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
 
   public static final Logger LOG = LoggerFactory.getLogger(ExternalSeoSegmentBuilder.class);
 
-  public static final String SEO_ID_PREFIX = "--";
-  public static final String SEO_ID_SEPARATOR = "-";
+  private static final String PATH_DELIMITER = "--";
+  private static final String PATH_DELIMITER_REGEX = PATH_DELIMITER + "+";
+  private static final String ID_DELIMITER = "-";
+  private static final String ID_DELIMITER_BEGIN_REGEX = "^" +ID_DELIMITER + "+";
+  private static final String ID_DELIMITER_END_REGEX = ID_DELIMITER + "+$";
+  private static final String DUMMY_SEGMENT = "s";
 
-  public String asSeoSegment(CMNavigation navigation, CMObject contentBean) {
-    if (navigation == null || contentBean == null) {
-      return null;
-    }
+  private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
+  private Cache cache;
+  private SettingsService settingsService;
 
-    if (contentBean instanceof CMLinkable) {
-      return asSeoSegment(navigation, ((CMLinkable) contentBean));
+  @Nonnull
+  public String asSeoSegment(CMNavigation navigation, CMObject target) {
+    if (navigation == null || target == null) {
+      return "";
     }
 
     try {
       StringBuilder sb = new StringBuilder();
-      sb.append(SEO_ID_PREFIX).append(navigation.getContentId()).append(SEO_ID_SEPARATOR).append(contentBean.getContentId());
-      return sb.toString();
+
+      //vanity url configured for the target?
+      String vanity = getVanityUrl(navigation, target);
+
+      if (vanity != null) {
+        //we allow '/' in the vanity url which we understand as a path delimiter.
+        vanity = vanity.replaceAll("/", PATH_DELIMITER);
+        sb.append(vanity);
+      } else {
+        List<String> navigationPath = navigationSegmentsUriHelper.getPathList(navigation);
+        // we omit the root segment (e.g. "aurora" because it is reproducible)
+        for (int i = 1; i < navigationPath.size(); i++) {
+          if (i > 1) {
+            sb.append(PATH_DELIMITER);
+          }
+          sb.append(navigationPath.get(i));
+        }
+
+        if (!navigation.equals(target)) {
+          String segment = null;
+          if (target instanceof Linkable) {
+            Linkable linkable = (Linkable) target;
+            segment = linkable.getSegment();
+          }
+          if (sb.length() > 0) {
+            sb.append(PATH_DELIMITER);
+          }
+          sb.append(asSeoTitle(StringUtils.isNotBlank(segment) ? segment : DUMMY_SEGMENT));
+          sb.append(ID_DELIMITER);
+          sb.append(target.getContentId());
+        }
+      }
+
+      return asUrlEncoded(sb.toString());
     }
     catch (Exception e) {
-      LOG.error("Could not generate SEOSegment", e);
-      return null;
+      LOG.error(format("Cannot generate SEOSegment for the navigation {0} and target {1}",
+              navigation.getContent().getPath(), target.getContent().getPath()), e);
+      return "";
     }
   }
 
-  public String asSeoSegment(CMNavigation navigation, CMLinkable linkable) {
-    if (navigation == null || linkable == null) {
-      return null;
-    }
+  @Nullable
+  private String getVanityUrl(CMNavigation navigation, CMObject target) {
+    Content rootChannnel = navigation.getRootNavigation().getContent();
+    final SettingsBasedVanityUrlMapper vanityUrlMapper = cache.get(new VanityUrlMapperCacheKey(rootChannnel, settingsService));
+    return vanityUrlMapper.patternFor(target.getContent());
+  }
 
+  private String asUrlEncoded(String s) {
     try {
-      StringBuilder sb = new StringBuilder();
-      sb.append(asSeoTitle(linkable.getTitle()));
-      sb.append(SEO_ID_PREFIX);
-
-      if (!navigation.equals(linkable)) {
-        sb.append(navigation.getContentId()).append(SEO_ID_SEPARATOR).append(linkable.getContentId());
-      }
-      else {
-        sb.append(navigation.getContentId());
-      }
-      return sb.toString();
+      return URLEncoder.encode(s, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      LOG.trace("Cannot encode string {}", s, e);
     }
-    catch (Exception e) {
-      LOG.error("Could not generate SEOSegment", e);
-      return null;
-    }
+    return s;
   }
 
   /**
-   * To lowercase; replace all non-alphabetic with a dash; reduce multiple dashes to one, remove dashes at end.
+   * To lowercase;
+   * replace all non-alphabetic with a dash;
+   * reduce multiple dashes to one;
+   * remove dashes at the beginning.
+   * remove dashes at the end.
    */
-  @VisibleForTesting
-  protected String asSeoTitle(String s) {
+  private String asSeoTitle(String s) {
     char[] ca = s.toCharArray();
     for (int index = 0; index < ca.length; index++) {
       if (Character.isLetterOrDigit(ca[index]) && isAscii(ca[index])) {
@@ -77,19 +124,35 @@ public class ExternalSeoSegmentBuilder {
     }
     String result = String.valueOf(ca);
 
-    // Reduce consecutive dashes into one
-    while (result.contains("--")) {
-      result = result.replace("--", "-");
-    }
+    //'+' means that PATH_DELIMITER will be replaced RECURSIVELY.
+    result = result.replaceAll(PATH_DELIMITER_REGEX, ID_DELIMITER);
 
-    // Remove dashes at end
-    while (result.endsWith("-")) {
-      result = result.substring(0, result.length() - 1);
-    }
+    // Remove dashes at the beginning
+    result = result.replaceAll(ID_DELIMITER_BEGIN_REGEX, "");
+
+    // Remove dashes at the end
+    result = result.replaceAll(ID_DELIMITER_END_REGEX, "");
+
     return result;
   }
 
   private boolean isAscii(int ch) {
     return ((ch & 0xFFFFFF80) == 0);
+  }
+
+
+  @Required
+  public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
+    this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
+  }
+
+  @Required
+  public void setCache(Cache cache) {
+    this.cache = cache;
+  }
+
+  @Required
+  public void setSettingsService(SettingsService settingsService) {
+    this.settingsService = settingsService;
   }
 }

@@ -18,21 +18,14 @@
           <#-- render all ratings in reversed order -->
           <#list es.getReviewMaxRating()..1 as currentRating>
             <#assign radioAttr="" />
-            <#--
-            if form can be edited adjust radioAttr to " checked" for the element to reflect rating and
-            <#if ...>
-              <#assign radioAttr=" checked" />
-            </#if>
-            -->
-            <#-- TODO generated id is not unique through fragments, see CMS-1244 -->
             <#assign radioId=bp.generateId("cm-review-rating-indicator-") />
             <input name="rating" value="${currentRating}" id="${radioId}" type="radio"${radioAttr} /><label for="${radioId}" class="cm-rating__option cm-rating-indicator"></label>
           </#list>
         </fieldset>
       </div>
       <div class="cm-fieldset__item cm-button-group cm-button-group--default">
-        <@bp.button text=bp.getMessage(es.messageKeys.REVIEW_FORM_LABEL_SUBMIT) attr={"type": "submit", "classes": ["cm-button-group__button"], "data-cm-button--submit": ""} />
-        <@bp.button text=bp.getMessage(es.messageKeys.REVIEW_FORM_LABEL_HIDE) attr={"type": "button", "classes": ["cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
+        <@bp.button text=bp.getMessage(es.messageKeys.REVIEW_FORM_LABEL_HIDE) attr={"type": "button", "classes": ["btn", "cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
+        <@bp.button text=bp.getMessage(es.messageKeys.REVIEW_FORM_LABEL_SUBMIT) attr={"type": "submit", "classes": ["btn", "cm-button-group__button"], "data-cm-button--submit": ""} />
       </div>
     </fieldset>
   </form>

@@ -51,7 +51,7 @@ public class CommerceFormToolbarBase extends Toolbar {
     return localeNameValueExpression;
   }
 
-  public static function changeLabel(component:IconDisplayField, valueExpression:ValueExpression):void {
+  public static function changeLocale(component:IconDisplayField, valueExpression:ValueExpression):void {
     var model:Object = valueExpression.getValue();
 
     if (model) {

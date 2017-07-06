@@ -6,18 +6,13 @@
     <version>1-SNAPSHOT</version>
   </parent>
   <artifactId>blueprint-studio-theme</artifactId>
-  <packaging>jangaroo-pkg</packaging>
+  <packaging>swc</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>studio-theme</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-remote-packages</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
+      <type>swc</type>
     </dependency>
   </dependencies>
 

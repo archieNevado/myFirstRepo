@@ -1,7 +1,11 @@
 // Variables
 @import "base/imports";
+
 // Utils
 @import "../../../../lib/sass/utils/imports";
+
+// Brick
 @import "../../../../lib/bricks/preview/sass/preview";
+
 // Components
-@import "components/_preview";
+@import "components/preview";

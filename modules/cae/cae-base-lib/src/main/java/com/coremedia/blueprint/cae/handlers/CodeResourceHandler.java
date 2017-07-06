@@ -114,11 +114,11 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   public static final String CSS_PATTERN_BULK = PREFIX_CSS + URI_SUFFIX_BULK;
   public static final String JS_PATTERN_BULK = PREFIX_JS + URI_SUFFIX_BULK;
 
-  private static final Map<String, String> EXTENSION_TO_CODEPROPERTY = new ImmutableMap.Builder<String, String>()
+  private static final Map<String, String> EXTENSION_TO_CODEPROPERTY = ImmutableMap.<String, String>builder()
           .put(TYPE_CSS, CMNavigation.CSS)
           .put(TYPE_JS, CMNavigation.JAVA_SCRIPT)
           .build();
-  private static final Map<String, String> EXTENSION_TO_URLPATTERN = new ImmutableMap.Builder<String, String>()
+  private static final Map<String, String> EXTENSION_TO_URLPATTERN = ImmutableMap.<String, String>builder()
           .put(TYPE_CSS, CSS_PATTERN_BULK)
           .put(TYPE_JS, JS_PATTERN_BULK)
           .build();
@@ -315,12 +315,13 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   public UriComponents buildLink(MergeableResources mergeableResources) {
     CodeResourcesModel model = mergeableResources.getCodeResourceModel();
     String extension = model.getCodeType();
-    Map<String,Object> parameters = new ImmutableMap.Builder<String, Object>()
+    Map<String,Object> parameters = ImmutableMap.<String, Object>builder()
             .put(SEGMENT_CHANNEL_WITH_THEME, segmentForCodeResourcesLink(model.getChannelWithTheme()))
             .put(SEGMENT_CHANNEL_WITH_CODE, segmentForCodeResourcesLink(model.getChannelWithCode()))
             .put(SEGMENT_HASH, model.getETag())
             .put(SEGMENT_MODE, model.getHtmlMode())
-            .put(SEGMENT_EXTENSION, extension).build();
+            .put(SEGMENT_EXTENSION, extension)
+            .build();
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance();
     uriBuilder.path(urlPattern(extension));
     return uriBuilder.buildAndExpand(parameters);

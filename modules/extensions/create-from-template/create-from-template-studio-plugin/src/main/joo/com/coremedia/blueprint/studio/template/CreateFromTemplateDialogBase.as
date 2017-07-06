@@ -1,18 +1,17 @@
 package com.coremedia.blueprint.studio.template {
-import com.coremedia.blueprint.base.components.util.ContentCreationUtil;
-import com.coremedia.blueprint.base.components.util.StudioConfigurationUtil;
 import com.coremedia.blueprint.studio.template.model.ProcessingData;
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.user.User;
+import com.coremedia.cms.editor.sdk.components.StudioDialog;
 import com.coremedia.cms.editor.sdk.components.folderprompt.FolderCreationResult;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.editor.sdk.util.ContentCreationUtil;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
-import com.coremedia.ui.components.StatefulQuickTip;
+import com.coremedia.cms.editor.sdk.util.StudioConfigurationUtil;
 import com.coremedia.ui.components.StatefulTextField;
-import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
@@ -20,8 +19,7 @@ import com.coremedia.ui.mixins.IValidationStateMixin;
 import com.coremedia.ui.mixins.ValidationState;
 
 import ext.StringUtil;
-import ext.tip.QuickTipManager;
-import ext.window.Window;
+import ext.form.field.Field;
 
 import mx.resources.ResourceManager;
 
@@ -31,7 +29,7 @@ import mx.resources.ResourceManager;
 [ResourceBundle('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin')]
 [ResourceBundle('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings')]
 [ResourceBundle('com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField')]
-public class CreateFromTemplateDialogBase extends Window {
+public class CreateFromTemplateDialogBase extends StudioDialog {
   private var disabledExpression:ValueExpression;
   private var model:ProcessingData;
 
@@ -46,6 +44,7 @@ public class CreateFromTemplateDialogBase extends Window {
   public static const PARENT_PAGE_FIELD_ID:String = 'parentPageFieldId';
   public static const EDITORIAL_FOLDER_COMBO_ID:String = 'editorialFolderCombo';
   public static const NAME_FIELD_ID:String = 'nameField';
+  public static const EDITOR_CONTAINER_ITEM_ID:String = "editorContainer";
 
   private var nameField:StatefulTextField;
 
@@ -122,16 +121,16 @@ public class CreateFromTemplateDialogBase extends Window {
       applyValidationResult(nameField, result);
     }
 
-    validate(queryById(EDITORIAL_FOLDER_COMBO_ID));
+    validate(queryById(EDITORIAL_FOLDER_COMBO_ID), editorialFolderValidator);
     validateAsync(queryById(PAGE_FOLDER_COMBO_ID), folderValidator);
     validate(queryById(TEMPLATE_CHOOSER_FIELD_ID));
   }
 
-  private function validate(editor:*):void {
+  private function validate(editor:*, validatorFunction:Function = null):void {
     if (editor) {
-      var validatorFunction:Function = editor.initialConfig['validate'];
+      validatorFunction = validatorFunction || editor.initialConfig['validate'];
       if (validatorFunction) {
-        var result:Boolean = validatorFunction.call(null);
+        var result:Boolean = validatorFunction(editor);
         applyValidationResult(editor, result);
       }
     }
@@ -156,23 +155,14 @@ public class CreateFromTemplateDialogBase extends Window {
     if (!result) {
       if (statefulEditor) {
         statefulEditor.validationState = ValidationState.ERROR;
+        statefulEditor.validationMessage = errorMsg;
       }
       getDisabledExpression().setValue(true);
-      QuickTipManager.register(StatefulQuickTip({
-        target: editor.getId(),
-        validationState: ValidationState.ERROR,
-        text: errorMsg,
-        trackMouse: false,
-        autoHide: true,
-        dismissDelay: 3000
-      }));
-    }
-    else {
+    } else {
       if (statefulEditor) {
-        statefulEditor.validationState = undefined;
+        statefulEditor.validationState = null;
+        statefulEditor.validationMessage = null;
       }
-      QuickTipManager.unregister(editor.el);
-      QuickTipManager.getQuickTip().hide();
     }
   }
 
@@ -304,7 +294,8 @@ public class CreateFromTemplateDialogBase extends Window {
     return ve && ve.getValue() && (ve.getValue() as Array).length > 0;
   }
 
-  protected static function editorialFolderValidator(value:String):Boolean {
+  protected static function editorialFolderValidator(editor:Field):Boolean {
+    var value:* = editor.getValue();
     return !!(value && value.length > 0);
   }
 
@@ -451,16 +442,6 @@ public class CreateFromTemplateDialogBase extends Window {
       return description;
     }
     return "";
-  }
-
-  /**
-   * Comparator to sort the result list of templates, when this list is completely built
-   * @param val1 one Bean
-   * @param val2 another Bean
-   * @return the compare result
-   */
-  private static function comparator(val1:Bean, val2:Bean):Number {
-    return getDescription(val1.get('name'), val1 as Content).localeCompare(getDescription(val2.get('name'), val2 as Content));
   }
 
 }

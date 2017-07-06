@@ -63,7 +63,7 @@
 <IntProperty Name="colspan">9</IntProperty>
 </Struct>
 </StructListProperty>
-<StringProperty Name="name">Aurora Fragment PDP</StringProperty>
+<StringProperty Name="name">Fragment PDP</StringProperty>
 <StringProperty Name="description">A two column fragment layout for product detail pages (PDP) with "tab", "banner" and "additional" placement.</StringProperty>
 </Struct>
 </settings>

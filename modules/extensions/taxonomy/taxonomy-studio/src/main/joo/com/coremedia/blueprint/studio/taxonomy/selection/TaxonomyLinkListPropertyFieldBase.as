@@ -19,6 +19,7 @@ import ext.form.FieldContainer;
 public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
 
   protected static const GRID_PANEL_ITEM_ID:String = "gridPanel";
+  protected static const DELETE_BUTTON_ITEM_ID:String = "delete";
   protected static const TAXONOMY_SEARCH_FIELD_ITEM_ID:String = "taxonomySearchField";
   protected static const OPEN_TAXONOMY_CHOOSER_BUTTON_ITEM_ID:String = "openTaxonomyChooserButton";
 
@@ -180,6 +181,10 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
       searchResultExpression = ValueExpressionFactory.createFromValue([]);
     }
     return searchResultExpression;
+  }
+
+  protected function handleDropAreaDrop(contents:Array):void {
+    selectedValuesVE.setValue(contents);
   }
 
 }

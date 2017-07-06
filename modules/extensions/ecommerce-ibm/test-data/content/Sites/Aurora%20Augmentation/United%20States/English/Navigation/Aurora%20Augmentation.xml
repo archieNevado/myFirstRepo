@@ -21,6 +21,7 @@
 <link href="../Options/Settings/CMChannel/Robots%2Etxt.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Robots%2Etxt"/>
 <link href="../Options/Settings/CMChannel/Responsive%20Image%20Settings.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Responsive%20Image%20Settings"/>
 <link href="../Options/Settings/Preview.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Preview"/>
+<link href="../Options/Settings/CMChannel/Vanity%20URLs.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/CMChannel/Vanity%20URLs"/>
 </linkedSettings>
 <resourceBundles2>
 <link href="../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
@@ -38,10 +39,14 @@
 </contexts>
 <teaserTitle></teaserTitle>
 <pictures>
+<link href="../Editorial/Content/Startpage/Black-and-white%20portrait%20of%20a%20stund1866bc4.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Black-and-white%20portrait%20of%20a%20stunning%20fashionable%20model%20Picture"/>
 </pictures>
 <related>
 </related>
 <children>
+<link href="../Augmentation/Apparel/Women/Women.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
+<link href="../Augmentation/Apparel/Men/Men.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Men/Men"/>
+<link href="Microsites/Editorial%20Blog/Editorial%20Blog%20Microsite.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Microsites/Editorial%20Blog/Editorial%20Blog%20Microsite"/>
 <link href="../Augmentation/Aurora%20B2C%20Catalog%20Root.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Aurora%20B2C%20Catalog%20Root"/>
 <link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
 <link href="Fragments/Search%20Landing%20Pages/LiveContext%20Search%20L6364f111.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>
@@ -83,8 +88,7 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Black%20%26%20White%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Women%20Black%20%26%20White%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Men%20Black%20%26%20White%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Men%20Black%20%26%20White%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Gender%20Specific%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Gender%20Specific%20Teaser"/>
 </LinkListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/hero"/>
@@ -107,8 +111,11 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Our%20Latest%20Products.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Our%20Latest%20Products"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Products/Hermitage%20Fit%20and%20Flare%20Dress.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Products/Hermitage%20Fit%20and%20Flare%20Dress"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Products/Gusso%20Cloth%20Satchel%20Bag.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Products/Gusso%20Cloth%20Satchel%20Bag"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Products/Hermitage%20Catty%20Sunglasses.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Products/Hermitage%20Catty%20Sunglasses"/>
 </LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-portrait.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-portrait"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement3"/>
 </Struct>
 </StructListProperty>

@@ -24,11 +24,12 @@
 
   <bean name="contentBeanFactory:CMProductTeaser" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMProductTeaserImpl" scope="prototype">
-    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
   </bean>
 
   <bean name="pdpPage" parent="cmPage"
-        class="com.coremedia.livecontext.contentbeans.ProductDetailPage" scope="prototype"/>
+        class="com.coremedia.livecontext.contentbeans.ProductDetailPage" scope="prototype">
+    <constructor-arg index="3" name="contentTreeRelation" ref="externalChannelContentTreeRelation"/>
+  </bean>
 
   <bean name="contentBeanFactory:CMExternalPage" parent="abstractChannel-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMExternalPageImpl" scope="prototype"/>
@@ -42,6 +43,15 @@
     <property name="pdpPageGridService" ref="pdpPageGridService"/>
   </bean>
 
+  <bean name="contentBeanFactory:CMExternalProduct"
+        parent="abstractTeasable-blueprint-doctypes"
+        class="com.coremedia.livecontext.contentbeans.LiveContextExternalProductImpl"
+        scope="prototype">
+    <property name="pageGridService" ref="productPageGridService"/>
+  </bean>
+
+  <bean id="productTeasableHelper" class="com.coremedia.livecontext.contentbeans.ProductTeasableHelper"/>
+
   <bean id="pdpPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="pdpContentBackedPageGridService"/>
     <property name="validationService" ref="validationService"/>
@@ -50,6 +60,12 @@
 
   <bean id="extCategoryPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="extCategoryContentBackedPageGridService"/>
+    <property name="validationService" ref="validationService"/>
+    <property name="viewtypeService" ref="viewtypeService"/>
+  </bean>
+
+  <bean id="productPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
+    <property name="contentBackedPageGridService" ref="productContentBackedPageGridService"/>
     <property name="validationService" ref="validationService"/>
     <property name="viewtypeService" ref="viewtypeService"/>
   </bean>
@@ -63,6 +79,15 @@
         parent="contentBackedPageGridService">
     <property name="structPropertyName">
       <util:constant static-field="com.coremedia.blueprint.ecommerce.common.contentbeans.CMAbstractCategory.PDP_PAGEGRID"/>
+    </property>
+    <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
+  </bean>
+
+  <bean id="productContentBackedPageGridService"
+        class="com.coremedia.livecontext.pagegrid.ContentAugmentedProductPageGridServiceImpl"
+        parent="contentBackedPageGridService">
+    <property name="structPropertyName">
+      <util:constant static-field="com.coremedia.livecontext.contentbeans.CMExternalProduct.PAGEGRID"/>
     </property>
     <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
   </bean>

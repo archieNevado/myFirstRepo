@@ -22,15 +22,6 @@ default['blueprint']['hostname'] = node['fqdn']
 #<> Convenience property to set the version of all coremedia artifacts. For individual versions you can still set a version attribute beside each artifact_id attribute. Do not use or set this attribute in recipes, use the concrete attributes instead.
 default['blueprint']['default_version'] = '1-SNAPSHOT'
 
-# Make sure to keep solr version here and in blueprint in sync
-default['blueprint']['webapps']['solr']['group_id'] = 'org.apache.solr'
-default['blueprint']['webapps']['solr']['artifact_id'] = 'solr'
-default['blueprint']['webapps']['solr']['version'] = '4.10.4'
-default['blueprint']['webapps']['solr']['checksum'] = 'a956cdc35b4448a0c814bd8b55473a12bb50236e0e538793f0285c32f2fd8a6f'
-default['blueprint']['webapps']['solr']['explode'] = true
-default['blueprint']['webapps']['solr']['config_zip_group_id'] = 'com.coremedia.blueprint'
-default['blueprint']['webapps']['solr']['config_zip_artifact_id'] = 'solr-config'
-default['blueprint']['webapps']['solr']['config_zip_version'] = node['blueprint']['default_version']
 default['blueprint']['webapps']['solr']['context'] = 'solr'
 
 default['blueprint']['webapps']['content-management-server']['group_id'] = 'com.coremedia.blueprint'
@@ -103,11 +94,6 @@ default['blueprint']['webapps']['cae-live']['artifact_id'] = 'cae-live-webapp'
 default['blueprint']['webapps']['cae-live']['version'] = node['blueprint']['default_version']
 default['blueprint']['webapps']['cae-live']['context'] = 'blueprint'
 
-default['blueprint']['webapps']['adobe-drive-server']['group_id'] = 'com.coremedia.blueprint'
-default['blueprint']['webapps']['adobe-drive-server']['artifact_id'] = 'am-adobe-drive-server-webapp'
-default['blueprint']['webapps']['adobe-drive-server']['version'] = node['blueprint']['default_version']
-default['blueprint']['webapps']['adobe-drive-server']['context'] = 'drive'
-
 #### Tools
 default['blueprint']['tools']['content-management-server']['group_id'] = 'com.coremedia.blueprint'
 default['blueprint']['tools']['content-management-server']['artifact_id'] = 'cms-tools-application'
@@ -142,31 +128,6 @@ default['blueprint']['common_libs']['coremedia-tomcat.jar']['group_id'] = 'com.c
 default['blueprint']['common_libs']['coremedia-tomcat.jar']['artifact_id'] = 'coremedia-tomcat'
 default['blueprint']['common_libs']['coremedia-tomcat.jar']['version'] = node['blueprint']['default_version']
 
-default['blueprint']['common_libs']['slf4j-api.jar']['group_id'] = 'org.slf4j'
-default['blueprint']['common_libs']['slf4j-api.jar']['artifact_id'] = 'slf4j-api'
-default['blueprint']['common_libs']['slf4j-api.jar']['version'] = '1.7.12'
-default['blueprint']['common_libs']['slf4j-api.jar']['checksum'] = '0aee9a77a4940d72932b0d0d9557793f872e66a03f598e473f45e7efecdccf99'
-
-default['blueprint']['common_libs']['jul-to-slf4j.jar']['group_id'] = 'org.slf4j'
-default['blueprint']['common_libs']['jul-to-slf4j.jar']['artifact_id'] = 'jul-to-slf4j'
-default['blueprint']['common_libs']['jul-to-slf4j.jar']['version'] = '1.7.12'
-default['blueprint']['common_libs']['jul-to-slf4j.jar']['checksum'] = '00a25fcbec155c28152c2252aeadb0ace7947a519fe5d858dbb988de412b8529'
-
-default['blueprint']['common_libs']['jcl-over-slf4j.jar']['group_id'] = 'org.slf4j'
-default['blueprint']['common_libs']['jcl-over-slf4j.jar']['artifact_id'] = 'jcl-over-slf4j'
-default['blueprint']['common_libs']['jcl-over-slf4j.jar']['version'] = '1.7.12'
-default['blueprint']['common_libs']['jcl-over-slf4j.jar']['checksum'] = '702d1b805b9fa319609f7bdd7022017919be2280b4116666aaae5a01c0b50158'
-
-default['blueprint']['common_libs']['slf4j-log4j12.jar']['group_id'] = 'org.slf4j'
-default['blueprint']['common_libs']['slf4j-log4j12.jar']['artifact_id'] = 'slf4j-log4j12'
-default['blueprint']['common_libs']['slf4j-log4j12.jar']['version'] = '1.7.12'
-default['blueprint']['common_libs']['slf4j-log4j12.jar']['checksum'] = '84b96c9ab58313f44321bda0602408e79f33613c05a379b99a0000b24c4e6c3c'
-
-default['blueprint']['common_libs']['log4j.jar']['group_id'] = 'log4j'
-default['blueprint']['common_libs']['log4j.jar']['artifact_id'] = 'log4j'
-default['blueprint']['common_libs']['log4j.jar']['version'] = '1.2.17'
-default['blueprint']['common_libs']['log4j.jar']['checksum'] = '1d31696445697720527091754369082a6651bd49781b6005deb94e56753406f9'
-
 ##################
 ## JAAS CONFIG  ##
 ##################
@@ -179,9 +140,9 @@ default['blueprint']['jaas']['crowd']['properties']['crowd.livegroups'] = false
 default['blueprint']['jaas']['crowd']['properties']['crowd.admingroups'] = false
 default['blueprint']['jaas']['crowd']['properties']['application.name'] = 'blueprint'
 default['blueprint']['jaas']['crowd']['properties']['application.password'] = 'secret'
-default['blueprint']['jaas']['crowd']['properties']['application.login.url'] = 'https://sso.coremedia.com:8443/crowd/console/'
-default['blueprint']['jaas']['crowd']['properties']['crowd.server.url'] = 'https://sso.coremedia.com:8443/crowd/rest/'
-default['blueprint']['jaas']['crowd']['properties']['crowd.base.url'] = 'https://sso.coremedia.com:8443/crowd/'
+default['blueprint']['jaas']['crowd']['properties']['application.login.url'] = 'https://mycrowdserver:port/crowd/console/'
+default['blueprint']['jaas']['crowd']['properties']['crowd.server.url'] = 'https://mycrowdserver:port/crowd/rest/'
+default['blueprint']['jaas']['crowd']['properties']['crowd.base.url'] = 'https://mycrowdserver:port/crowd/'
 default['blueprint']['jaas']['crowd']['properties']['session.isauthenticated'] = 'session.isauthenticated'
 default['blueprint']['jaas']['crowd']['properties']['session.tokenkey'] = 'session.tokenkey'
 default['blueprint']['jaas']['crowd']['properties']['session.validationinterval'] = 2
@@ -195,23 +156,6 @@ default['blueprint']['jaas']['ldap']['domain'] = 'mydomain'
 default['blueprint']['jaas']['cas']['enabled'] = false
 default['blueprint']['jaas']['cas']['validator_url'] = 'http://'
 default['blueprint']['jaas']['cas']['cap_service_url'] = 'http://'
-
-# WCS configuration
-#<> Convenience property to set the hostname of wcs. Do not use or set this attribute in recipes, use the concrete attributes instead.
-default['blueprint']['wcs']['host'] = 'localhost'
-default['blueprint']['wcs']['application.properties']['livecontext.service.credentials.username'] = 'cmadmin'
-default['blueprint']['wcs']['application.properties']['livecontext.service.credentials.password'] = 'VTJjyo0AYSnXFHI201yo'
-default['blueprint']['wcs']['application.properties']['livecontext.cookie.domain'] = ".#{node['fqdn']}"
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.url'] = "http://#{node['blueprint']['wcs']['host']}"
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.secureUrl'] = "https://#{node['blueprint']['wcs']['host']}"
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.host'] = node['blueprint']['wcs']['host']
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.rest.search.url'] = "http://#{node['blueprint']['wcs']['host']}:3737/search/resources"
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.rest.search.secureUrl'] = "https://#{node['blueprint']['wcs']['host']}:3738/search/previewresources"
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.url-keyword'] = 'cm'
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora'] = 'AuroraESite'
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora'] = 'USD'
-default['blueprint']['wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora'] = 'ibm'
-default['blueprint']['wcs']['application.properties']['livecontext.managementtool.web.url'] = "https://#{node['blueprint']['wcs']['host']}:8000/lobtools/CoreMediaManagementCenterWrapper.html"
 
 #<> The path to the libjpeg turbo installation to increase image transformation performance
 default['blueprint']['libjpeg_turbo_path'] = '/opt/libjpeg-turbo/lib64'

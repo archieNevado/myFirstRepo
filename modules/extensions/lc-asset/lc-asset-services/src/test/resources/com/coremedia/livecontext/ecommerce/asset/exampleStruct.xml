@@ -2,7 +2,7 @@
   <StructProperty Name="commerce">
     <Struct>
       <StringListProperty Name="references">
-        <String>ibm:///catalog/product/PC_SUMMER_DRESS</String>
+        <String>vendor:///catalog/product/PC_SUMMER_DRESS</String>
       </StringListProperty>
     </Struct>
   </StructProperty>

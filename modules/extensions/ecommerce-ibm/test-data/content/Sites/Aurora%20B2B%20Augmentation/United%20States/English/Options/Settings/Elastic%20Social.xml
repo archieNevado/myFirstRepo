@@ -6,7 +6,6 @@
 <masterVersion>0</masterVersion>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<BooleanProperty Name="fileUpload">true</BooleanProperty>
 <StructProperty Name="elasticSocial">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
@@ -18,12 +17,6 @@
 <StringProperty Name="tenant">helios</StringProperty>
 </Struct>
 </StructProperty>
-<LinkProperty Name="flowLogin" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/Login.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Actions/Login"/>
-<LinkProperty Name="flowLogout" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/Logout.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Actions/Logout"/>
-<LinkProperty Name="flowUserDetails" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/UserDetails.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Actions/UserDetails"/>
-<LinkProperty Name="action.userDetailsView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/UserDetails.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Actions/UserDetails"/>
-<LinkProperty Name="action.registrationActivationView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/ActivateRegistration.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Actions/ActivateRegistration"/>
-<LinkProperty Name="action.confirmPasswordResetView" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/../Actions/ConfirmPasswordReset.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Actions/ConfirmPasswordReset"/>
 </Struct>
 </settings>
 <identifier></identifier>

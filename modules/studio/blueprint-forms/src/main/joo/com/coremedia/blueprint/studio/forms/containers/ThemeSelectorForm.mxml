@@ -3,8 +3,9 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:local="com.coremedia.blueprint.studio.forms.containers.*"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns:ui="exml:com.coremedia.ui.config"
         xmlns="exml:ext.config"
-        displayField="{TITLE_FIELD_NAME}"
+        displayField="{DISPLAY_FIELD_NAME}"
         hideLabel="true"
         offeredContentsValueExpression="{createAvailableThemesValueExpression(config)}"
         comboBoxTemplate="{ThemeSelectorFormBase.COMBO_BOX_TEMPLATE}"
@@ -25,6 +26,10 @@
   </fx:Declarations>
 
   <local:fields>
+    <ui:DataField name="{DISPLAY_FIELD_NAME}"
+                  encode="false"
+                  mapping=""
+                  convert_="{ThemeSelectorFormBase.localizeText}"/>
     <data_AutoField name="{TITLE_FIELD_NAME}"
                     mapping=""
                     convert_="{ThemeSelectorFormBase.localizeText}"/>
@@ -38,5 +43,5 @@
                     mapping=""
                     convert_="{ThemeSelectorFormBase.getThumbnailTooltip}"/>
   </local:fields>
-
+  
 </local:ThemeSelectorFormBase>

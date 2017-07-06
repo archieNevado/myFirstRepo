@@ -52,6 +52,10 @@
       <artifactId>bpbase-navigation-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-pagegrid-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
     </dependency>

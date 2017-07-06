@@ -15,21 +15,7 @@
     <workspace.configuration.dir>../../../../workspace-configuration</workspace.configuration.dir>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <!-- this extension depends on p13n extension -->
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>p13n-bom</artifactId>
-        <version>${project.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <modules>
-    <module>nuggad-bom</module>
     <module>nuggad-cae</module>
     <module>nuggad-studio</module>
     <module>nuggad-templates</module>

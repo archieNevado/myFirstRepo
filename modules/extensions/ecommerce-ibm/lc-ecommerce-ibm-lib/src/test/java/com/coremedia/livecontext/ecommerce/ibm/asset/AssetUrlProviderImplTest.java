@@ -1,7 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,20 +26,15 @@ public class AssetUrlProviderImplTest {
 
   @Before
   public void setUp() {
-    Commerce.setCurrentConnection(new BaseCommerceConnection());
+    DefaultConnection.set(new BaseCommerceConnection());
     testling.setCmsHost("localhost");
     testling.setCommercePreviewUrl("//preview/url");
   }
 
-  //TEST CHECK STATE
-  @Test (expected = IllegalStateException.class)
-  public void whenHostIsNull_IllegalArgumentExceptionIsExpected() {
-    testling.setCommerceProductionUrl(null);
-    testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
-
-    testling.getImageUrl(productImageSegment);
+  @After
+  public void teardown() {
+    DefaultConnection.clear();
   }
-
 
   @Test (expected = IllegalStateException.class)
   public void whenHostIsEmpty_IllegalArgumentExceptionIsExpected() {

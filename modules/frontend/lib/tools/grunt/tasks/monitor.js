@@ -11,55 +11,56 @@ const registerLocalMonitorTask = (grunt, livereloadConfig) => {
 
   // watch task monitor:local task for local CAE preview
   grunt.registerTask('monitor', 'Watch file changes and update theme on local CAE.', () => {
-    grunt.log.writeln('Watch file changes for local CAE...');
-    grunt.verbose.writeln('Execute monitor task.');
+      grunt.log.writeln('Watch file changes for local CAE...');
+      grunt.verbose.writeln('Execute monitor task.');
 
-    const config = {
-      watch: {
-        options: {
-          spawn: false,
-          livereload: livereloadConfig
-        },
-        sass: {
+      const config = {
+        watch: {
           options: {
-            spawn: true,
-            livereload: false
+            spawn: false,
+            livereload: livereloadConfig
           },
-          files: 'src/sass/**/*.scss',
-          tasks: ['sass', 'postcss']
-        },
-        css: {
-          files: 'src/css/**/*.css',
-          tasks: ['copy:main']
-        },
-        js: {
-          files: 'src/js/*.js',
-          tasks: ['copy:main']
-        },
-        ftl: {
-          files: 'src/templates/**/*.ftl',
-          tasks: ['copy:templates']
-        },
-        bundles: {
-          files: 'src/l10n/**/*.properties',
-          tasks: ['copy:main']
-        },
-        others: {
-          files: ['fonts/**', 'img/**', 'images/**', 'js/**', 'vendor/**'],
-          tasks: ['copy:main']
-        },
-        productionCss: {
-          options: {
-            spawn: true
+          sass: {
+            options: {
+              spawn: true,
+              livereload: false
+            },
+            files: 'src/sass/**/*.scss',
+            tasks: ['sass']
           },
-          files: '../../target/resources/themes/<%= themeConfig.name %>/css/*.css',
-          tasks: []
+          css: {
+            files: 'src/css/**/*.css',
+            tasks: ['copy:main']
+          },
+          js: {
+            files: 'src/js/*.js',
+            tasks: ['copy:main']
+          },
+          ftl: {
+            files: 'src/templates/**/*.ftl',
+            tasks: ['copy:templates']
+          },
+          bundles: {
+            files: 'src/l10n/**/*.properties',
+            tasks: ['copy:main']
+          },
+          others: {
+            files: ['fonts/**', 'img/**', 'images/**', 'js/**', 'vendor/**'],
+            tasks: ['copy:main']
+          },
+          productionCss: {
+            options: {
+              spawn: true
+            },
+            files: '../../target/resources/themes/<%= themeConfig.name %>/css/*.css',
+            tasks: []
+          }
         }
-      }
-    };
-    grunt.config.merge(config);
-    grunt.task.run('watch');
-  });
+      };
+      grunt.config.merge(config);
+      grunt.task.run('watch');
+    }
+  );
 };
 
 /**
@@ -71,123 +72,110 @@ const registerLocalMonitorTask = (grunt, livereloadConfig) => {
 const registerRemoteMonitorTask = (grunt, livereloadConfig) => {
   grunt.verbose.writeln('Generate grunt config for watch task and register alias task monitor.');
 
-  const { addWatchEventListener } = require('./lib/monitor');
+  // monitor task for uploading changes in target directory to remote CAE
+  grunt.registerTask('monitor', 'Watch file changes and update theme on remote CAE.', () => {
+    grunt.log.writeln('Watch file changes for remote CAE...');
+    grunt.verbose.writeln('Execute remote monitor task.');
 
-  try {
-    addWatchEventListener(grunt);
+    const { livereload } = require('@coremedia/common');
+    const { addWatchEventListener } = require('./lib/monitor');
 
-    // Subtask for watching theme directory
-    grunt.registerTask('watch:theme', 'Subtask of monitor task.', () => {
-      grunt.verbose.writeln('Execute remote monitor task.');
+    const logger = {
+      log: grunt.verbose.writeln,
+      info: grunt.log.writeln,
+      error: grunt.log.error
+    };
 
-      const config = {
-        watch: {
-          options: {
-            spawn: false,
-            livereload: false
-          },
-          sass: {
-            options: {
-              spawn: true
-            },
-            files: 'src/sass/**/*.scss',
-            tasks: ['sass', 'postcss']
-          },
-          ftl: {
-            files: 'src/templates/**/*.ftl',
-            tasks: ['compress:templates']
-          },
-          themeDescriptor: {
-            files: '*-theme.xml',
-            tasks: ['copy:themedescriptor']
-          },
-          themeChanged: {
-            options: {
-              event: ['added', 'changed']
-            },
-            files: ['src/css/**/*.css', 'src/js/**/*.js', 'src/l10n/**/*.properties', 'src/fonts/**', 'src/img/**'],
-            tasks: ['copy:main']
-          },
-          themeDeleted: {
-            options: {
-              event: ['deleted']
-            },
-            files: ['src/css/**/*.css', 'src/js/**/*.js', 'src/l10n/**/*.properties', 'src/fonts/**', 'src/img/**'],
-            tasks: ['clean:filelist']
-          }
-        }
-      };
-      grunt.config.merge(config);
-      grunt.task.run('watch');
-    });
+    livereload.init(livereloadConfig, logger);
+    addWatchEventListener(grunt, livereload);
 
-    // Subtask for watching target directory
-    grunt.registerTask('watch:target', 'Subtask of monitor task.', () => {
-      grunt.verbose.writeln('Execute watch:target task.');
-
-      const config = {
-        watch: {
-          options: {
-            spawn: false,
-            livereload: livereloadConfig
-          },
-          targetDescriptor: {
-            options: {
-              event: ['added', 'changed']
-            },
-            files: '../../target/resources/THEME-METADATA/<%= themeConfig.name %>-theme.xml',
-            tasks: ['remoteThemeImporter:uploadDescriptor']
-          },
-          targetChanged: {
-            options: {
-              event: ['added', 'changed']
-            },
-            files: '../../target/resources/themes/<%= themeConfig.name %>/**/*.*',
-            tasks: ['remoteThemeImporter:uploadFile']
-          },
-          targetDeleted: {
-            options: {
-              event: ['deleted']
-            },
-            files: '../../target/resources/themes/<%= themeConfig.name %>/**/*.*',
-            tasks: ['remoteThemeImporter:deleteFile']
-          }
-        }
-      };
-      grunt.config.merge(config);
-      grunt.task.run('watch');
-    });
-
-    // monitor task for uploading changes in target directory to remote CAE
-    grunt.registerTask('monitor', 'Watch file changes and update theme on remote CAE.', () => {
-      grunt.verbose.writeln('Execute remote monitor task.');
-
-      const tasklist = ['remoteThemeImporter:uploadTheme', 'concurrent:target'];
-
-      try {
-        const { remoteThemeImporter } = require('@coremedia/common');
-        const {url, apiKey} = remoteThemeImporter.getCMConfig();
-        if (typeof apiKey !== 'string' || apiKey.length === 0) {
-          throw new Error();
-        }
-        grunt.log.writeln(`Using ${url}`);
-      } catch (e) {
-        tasklist.unshift('remoteThemeImporter:login');
-        grunt.log.errorlns('API key file doesn´t exist. Please enter your credentials to generate your API key.');
-      }
-
-      grunt.config('concurrent', {
-        target: ['watch:theme', 'watch:target'],
+    const config = {
+      watch: {
         options: {
-          logConcurrentOutput: true
+          livereload: false,
+          dateFormat: function() {
+            //hide default done message
+          }
+        },
+        sass: {
+          files: 'src/sass/**/*.scss',
+          tasks: ['sass']
+        },
+        ftl: {
+          files: 'src/templates/**/*.ftl',
+          tasks: ['compress:templates']
+        },
+        themeDescriptor: {
+          files: '*-theme.xml',
+          tasks: ['copy:themedescriptor']
+        },
+        themeChanged: {
+          options: {
+            event: ['added', 'changed']
+          },
+          files: [
+            'src/css/**/*.css',
+            'src/js/**/*.js',
+            'src/l10n/**/*.properties',
+            'src/fonts/**',
+            'src/img/**'
+          ],
+          tasks: ['copy:main']
+        },
+        themeDeleted: {
+          options: {
+            event: ['deleted']
+          },
+          files: [
+            'src/css/**/*.css',
+            'src/js/**/*.js',
+            'src/l10n/**/*.properties',
+            'src/fonts/**',
+            'src/img/**'
+          ],
+          tasks: ['clean:filelist']
+        },
+        targetDescriptor: {
+          options: {
+            event: ['added', 'changed']
+          },
+          files: '../../target/resources/THEME-METADATA/<%= themeConfig.name %>-theme.xml',
+          tasks: []
+        },
+        targetChanged: {
+          options: {
+            event: ['added', 'changed']
+          },
+          files: '../../target/resources/themes/<%= themeConfig.name %>/**/*.*',
+          tasks: []
+        },
+        targetDeleted: {
+          options: {
+            event: ['deleted']
+          },
+          files: '../../target/resources/themes/<%= themeConfig.name %>/**/*.*',
+          tasks: []
         }
-      });
+      }
+    };
+    grunt.config.merge(config);
 
-      grunt.task.run(tasklist);
-    });
-  } catch (e) {
-    grunt.fail.warn(e);
-  }
+    const tasklist = ['remoteThemeImporter:uploadTheme', 'watch'];
+
+    try {
+      const { remoteThemeImporter } = require('@coremedia/common');
+      const { url, apiKey } = remoteThemeImporter.getCMConfig();
+      if (typeof apiKey !== 'string' || apiKey.length === 0) {
+        throw new Error();
+      }
+      grunt.log.writeln(`Using ${url}`);
+    } catch (e) {
+      tasklist.unshift('remoteThemeImporter:login');
+      grunt.log.errorlns('API key file doesn´t exist. Please enter your credentials to generate your API key.');
+    }
+
+    grunt.task.run(tasklist);
+  });
 };
 
 /**
@@ -202,7 +190,7 @@ module.exports = grunt => {
   try {
     const config = getMonitorConfig(grunt);
     Object.assign(monitorConfig, config);
-  } catch(e) {
+  } catch (e) {
     grunt.fail.warn(e);
   }
 

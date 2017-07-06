@@ -12,7 +12,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * <p>Represents the document type {@link #NAME AMAsset}.</p>
+ * <p>
+ * Represents the document type {@link #NAME AMAsset}.
+ * </p>
+ *
+ * @cm.template.api
  */
 public interface AMAsset extends ContentBean, ValidityPeriod {
   /**
@@ -52,18 +56,24 @@ public interface AMAsset extends ContentBean, ValidityPeriod {
 
   String METADATA = "metadata";
 
+  /**
+   * @cm.template.api
+   */
   Blob getThumbnail();
 
   /**
    * returns the CoreMedia internal id of the underlying {@link com.coremedia.cap.content.Content}
    *
    * @return the id as int (without any prefix)
+   * @cm.template.api
    */
   int getContentId();
 
   /**
    * Returns the title of the asset
+   *
    * @return the title of the asset
+   * @cm.template.api
    */
   String getTitle();
 
@@ -77,7 +87,8 @@ public interface AMAsset extends ContentBean, ValidityPeriod {
   /**
    * Returns the primary category of the asset which basically is the first
    * category that has been added to the list of asset categories.
-   * @return the primary category of the asset or <code>null</code>
+   *
+   * @return the primary category of the asset or {@code null}
    */
   @Nullable
   AMTaxonomy getPrimaryCategory();
@@ -105,13 +116,16 @@ public interface AMAsset extends ContentBean, ValidityPeriod {
 
   /**
    * Returns the list of all subject taxonomy nodes directly and indirectly linked to this asset.
+   *
    * @return the list of all subjects directly and indirectly linked to this asset.
+   * @cm.template.api
    */
   @Nonnull
   List<CMTaxonomy> getAllSubjects();
 
   /**
    * Returns the asset's information metadata (e.g. copyright)
+   *
    * @return the asset's information metadata
    */
   @Nullable
@@ -119,14 +133,18 @@ public interface AMAsset extends ContentBean, ValidityPeriod {
 
   /**
    * The list of all published and non-published asset renditions.
+   *
    * @return all published and non-published asset renditions or an empty list
+   * @cm.template.api
    */
   @Nonnull
   List<AMAssetRendition> getRenditions();
 
   /**
    * Returns the list of all published renditions
+   *
    * @return the list of all published renditions or an empty list
+   * @cm.template.api
    */
   @Nonnull
   List<AMAssetRendition> getPublishedRenditions();

@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.preview;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.objectserver.web.links.LinkTransformer;
@@ -21,7 +21,7 @@ public class PreviewDateAppendingLinkTransformer implements LinkTransformer {
   @Override
   public String transform(String source, Object bean, String view, HttpServletRequest request, HttpServletResponse response, boolean forRedirect) {
     String previewDate = null;
-    CommerceConnection currentConnection = Commerce.getCurrentConnection();
+    CommerceConnection currentConnection = DefaultConnection.get();
     if (null != currentConnection) {
       previewDate = currentConnection.getStoreContext().getPreviewDate();
     }

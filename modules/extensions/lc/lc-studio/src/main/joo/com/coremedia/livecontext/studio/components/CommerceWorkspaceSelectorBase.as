@@ -10,6 +10,7 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 import ext.StringUtil;
+import ext.form.field.IField;
 
 import mx.resources.ResourceManager;
 
@@ -31,6 +32,17 @@ public class CommerceWorkspaceSelectorBase extends LocalComboBox{
       setWorkspaceId(NO_WORKSPACE);
       setValue(undefined);
     });
+  }
+  override public function setValue(value:*):IField {
+    //TODO: Workaround for CMS-9822: Somehow the bindListPlugin tries to update the store after the first selection of a workspace
+    //which leads to null value
+    //the possible cause of the problem is that the list depends on the active store which again depends on the editor preference
+    //and we write the workspace id in the same editor preference document.
+    if (value === null) {
+      return getValue();
+    } else {
+      return super.setValue(value);
+    }
   }
 
   override public function validate():Boolean {

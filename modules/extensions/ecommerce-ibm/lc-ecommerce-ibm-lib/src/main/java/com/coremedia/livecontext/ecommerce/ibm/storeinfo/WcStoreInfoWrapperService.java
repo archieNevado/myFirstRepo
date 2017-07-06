@@ -24,16 +24,17 @@ public class WcStoreInfoWrapperService extends AbstractWcWrapperService {
   public Map<String, Object> getStoreInfos() {
     Map<String, Object> result;
     try {
-      result = getRestConnector().callServiceInternal(GET_STORE_INFO, Collections.<String>emptyList(), Collections.<String, String[]>emptyMap(),
+      result = getRestConnector().callServiceInternal(GET_STORE_INFO, Collections.emptyList(), Collections.emptyMap(),
               null, StoreContextHelper.getCurrentContext(), null);
     } catch (Exception e) {
       LOG.warn("Error occurred while calling the store info handler. Is the WCS available? ({})", e.getMessage());
       return null;
     }
+
     if (result == null || result.isEmpty()) {
       LOG.warn("No store info available from WCS.");
     }
+
     return result;
   }
-
 }

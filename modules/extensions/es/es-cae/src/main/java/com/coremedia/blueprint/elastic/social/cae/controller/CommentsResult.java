@@ -9,6 +9,9 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @cm.template.api
+ */
 public class CommentsResult extends ListContributionResult<CommentWrapper> {
 
   public CommentsResult(Object target) {
@@ -27,6 +30,9 @@ public class CommentsResult extends ListContributionResult<CommentWrapper> {
     return super.getContributions();
   }
 
+  /**
+   * @cm.template.api
+   */
   public List<CommentWrapper> getRootComments() {
     return super.getRootContributions();
   }

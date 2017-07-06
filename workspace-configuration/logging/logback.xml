@@ -31,6 +31,17 @@
     <appender-ref ref="${log.appender:-file}"/>
   </logger>
 
+  <logger name="hox" additivity="false" level="info">
+    <appender-ref ref="${log.appender:-file}"/>
+  </logger>
+
+  <logger name="cap" additivity="false" level="info">
+    <appender-ref ref="${log.appender:-file}"/>
+  </logger>
+
+  <!-- Avoid frequent ERRORs and WARNs from pdfbox when parsing text from PDFs for indexing -->
+  <logger name="org.apache.pdfbox.pdmodel.font" additivity="false" level="off"/>
+
   <root level="warn">
     <appender-ref ref="${log.appender:-file}"/>
   </root>

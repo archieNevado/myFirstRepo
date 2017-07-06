@@ -9,6 +9,8 @@ import java.util.Map;
 
 /**
  * Represents the combination of an asset and one of its categories.
+ *
+ * @cm.template.api
  */
 public class AssetDetails implements DownloadPortalContext {
 
@@ -23,16 +25,25 @@ public class AssetDetails implements DownloadPortalContext {
     this.category = category;
   }
 
+  /**
+   * @cm.template.api
+   */
   @Nonnull
   public AMAsset getAsset() {
     return asset;
   }
 
+  /**
+   * @cm.template.api
+   */
   @Nullable
   public AMTaxonomy getCategory() {
     return category;
   }
 
+  /**
+   * @cm.template.api
+   */
   @Nullable
   public Map<String, String> getMetadataProperties() {
     return metadataProperties;

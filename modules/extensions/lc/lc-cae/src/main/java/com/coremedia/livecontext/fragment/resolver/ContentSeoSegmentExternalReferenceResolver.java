@@ -39,6 +39,9 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
                                                      @Nonnull String referenceInfo,
                                                      @Nonnull Site site) {
     Ids ids = parseExternalReferenceInfo(referenceInfo);
+    if (ids == null) {
+      return null;
+    }
     Content linkable = resolveLinkable(ids);
     Content navigation = resolveNavigation(ids);
     return new LinkableAndNavigation(linkable, navigation);

@@ -43,7 +43,7 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   public WcSession login(String logonId, String password, StoreContext storeContext) throws CommerceException {
     try {
       return getRestConnector().callServiceInternal(
-              LOGIN_IDENTITY, asList(getStoreId(storeContext)), Collections.<String, String[]>emptyMap(), new WcLoginParam(logonId, password), null, null);
+              LOGIN_IDENTITY, asList(getStoreId(storeContext)), Collections.emptyMap(), new WcLoginParam(logonId, password), storeContext, null);
 
       //if login not successfully a RemoteException is thrown
     } catch (CommerceRemoteException e) {
@@ -88,7 +88,7 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   }
 
   public boolean logout(String storeId) throws CommerceException {
-    getRestConnector().callServiceInternal(LOGOUT_IDENTITY, asList(storeId), Collections.<String, String[]>emptyMap(), null, null, null);
+    getRestConnector().callServiceInternal(LOGOUT_IDENTITY, asList(storeId), Collections.emptyMap(), null, null, null);
     // Todo: if no exception is thrown we assume that the user was logged out successfully. is that correct?
     return true;
   }
@@ -97,7 +97,7 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
     try {
       return getRestConnector().callService(
               PREVIEW_TOKEN, Collections.singletonList(getStoreId(storeContext)),
-              Collections.<String, String[]>emptyMap(), bodyData, storeContext, null);
+              Collections.emptyMap(), bodyData, storeContext, null);
 
     } catch (CommerceException e) {
       throw e;

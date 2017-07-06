@@ -1,5 +1,4 @@
 <#ftl strip_whitespace=true>
-<#import "/spring.ftl" as spring>
 <#-- @ftlvariable name="cmpage" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 
 <#--
@@ -126,6 +125,23 @@
     <#nested>
   <#if title?has_content>
     </div>
+  </#if>
+</#macro>
+
+<#--TODO mbi-->
+<#macro optionalFrameForObject self="" classFrame="" attr={}>
+  <#if self.teaserTitle?has_content  || self.teaserText?has_content>
+  <div class="cm-frame ${classFrame}"<@renderAttr attr />>
+    <#if self.teaserTitle?has_content>
+        <h2 class="cm-frame__title"<@cm.metadata ["properties.teaserTitle", self.content] />>${self.teaserTitle}</h2>
+    </#if>
+  </#if>
+  <#nested>
+  <#if self.teaserTitle?has_content  || self.teaserText?has_content>
+    <#if self.teaserText?has_content>
+        <div class="cm-frame__text"<@cm.metadata ["properties.teaserTitle", self.content] />><@cm.include self=self.teaserText/></div>
+    </#if>
+  </div>
   </#if>
 </#macro>
 

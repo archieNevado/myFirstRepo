@@ -47,7 +47,6 @@ Contains styling definitions for all content types as cm-superhero.
   }
 
   &__picture-box {
-    background-color: $brand-primary;
     // fixed the glitch in the responsive image
     // therefore use vh and vw and not %
     height: 100%; height: 100vh;
@@ -59,5 +58,10 @@ Contains styling definitions for all content types as cm-superhero.
     background-position: center center;
     background-size: cover;
     @include stretch-absolute();
+
+    // hide icon on superheroes
+    &.cm-image--missing {
+      background: $brand-primary none;
+    }
   }
 }
