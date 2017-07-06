@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
+  <import resource="classpath:/framework/spring/blueprint-views.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml"/>
+  <import resource="classpath:META-INF/coremedia/context-services.xml"/>
+  <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
+  <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
+  <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
+  <import resource="classpath:/META-INF/coremedia/livecontext-navigation.xml"/>
+  <import resource="livecontext-cae-services.xml"/>
+  <import resource="livecontext-site-services.xml"/>
+  <import resource="livecontext-fragment.xml"/>
+  <import resource="livecontext-cae-vendor-placeholders.xml"/>
+  <import resource="classpath:META-INF/coremedia/lc-services.xml"/>
+
+  <bean id="ecommerceHandlerBase" abstract="true" parent="pageHandlerBase" class="com.coremedia.livecontext.handler.LiveContextPageHandlerBase">
+    <property name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="urlPrefixResolver" ref="ruleUrlPrefixResolver"/>
+    <property name="wcsStorefrontMaxUrlSegments" value="${livecontext.max-category-segments}" />
+    <property name="sitesService" ref="sitesService"/>
+    <property name="siteResolver" ref="liveContextSiteResolver" />
+    <property name="urlProvider" ref="pageHandlerUrlProvider"/>
+    <property name="settingsService" ref="settingsService" />
+    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
+    <property name="contentRepository" ref="contentRepository"/>
+    <property name="linkFormatter" ref="linkFormatter"/>
+  </bean>
+
+  <bean id="externalNavigationHandler" class="com.coremedia.livecontext.handler.ExternalNavigationHandler" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveCategoryContextStrategy"/>
+    <property name="productListSubstitutionService" ref="productListSubstitutionService"/>
+    <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
+  </bean>
+
+  <bean id="productPageHandler" class="com.coremedia.livecontext.product.ProductPageHandler" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveProductContextStrategy"/>
+  </bean>
+
+  <bean id="availabilityHandler" class="com.coremedia.livecontext.product.ProductAvailabilityHandler" parent="pageHandlerBase">
+    <property name="siteService" ref="sitesService"/>
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>targetView</value>
+        <value>fragmentConnector</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="commerceSearchHandler" class="com.coremedia.livecontext.search.CommerceSearchHandler" parent="pageHandlerBase">
+    <property name="searchResultRedirectUrlProvider" ref="searchResultRedirectUrlProvider"/>
+    <property name="linkFormatter" ref="linkFormatter"/>
+  </bean>
+
+  <bean id="restClientSchemeRegistry" class="com.coremedia.livecontext.handler.SchemeRegistryFactory">
+    <property name="schemes">
+      <list>
+        <bean class="org.apache.http.conn.scheme.Scheme">
+          <constructor-arg value="http"/>
+          <constructor-arg value="80"/>
+          <constructor-arg value="#{T(org.apache.http.conn.scheme.PlainSocketFactory).getSocketFactory()}"/>
+        </bean>
+        <bean class="org.apache.http.conn.scheme.Scheme">
+          <constructor-arg value="https"/>
+          <constructor-arg value="443"/>
+          <constructor-arg>
+            <bean class="org.apache.http.conn.ssl.SSLSocketFactory">
+              <constructor-arg>
+                <bean class="com.coremedia.livecontext.handler.AcceptAllTrustStrategy"/>
+              </constructor-arg>
+              <constructor-arg value="#{T(org.apache.http.conn.ssl.SSLSocketFactory).ALLOW_ALL_HOSTNAME_VERIFIER}"/>
+            </bean>
+          </constructor-arg>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="cartHandler" class="com.coremedia.livecontext.handler.CartHandler" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveProductContextStrategy"/>
+    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
+    <property name="checkoutRedirectUrlProvider" ref="checkoutRedirectUrlProvider" />
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>targetView</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="microSiteHandler" class="com.coremedia.livecontext.handler.LiveContextChannelLinkBuilder" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveProductContextStrategy"/>  <!-- ## actually not needed -->
+    <property name="commerceLedPageExtension" ref="commerceLedPageExtension"/>
+    <property name="searchLandingPagesExtension" ref="searchLandingPagesExtension" />
+  </bean>
+
+  <bean id="marketingSpotHandler" class="com.coremedia.livecontext.marketingspot.CMMarketingSpotHandler" parent="pageHandlerBase">
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>targetView</value>
+      </list>
+    </property>
+    <property name="contentRepository" ref="contentRepository"/>
+  </bean>
+
+  <bean id="commerceLedPageExtension" class="com.coremedia.livecontext.logictypes.CommerceLedPageExtension" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveProductContextStrategy"/>
+    <property name="contentURLKeyword" value="${livecontext.content-url-prefix}"/>
+    <!--Use legacyExternalSeoSegmentBuilder for the legacy format-->
+    <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder" />
+  </bean>
+
+  <bean id="searchLandingPagesExtension" class="com.coremedia.livecontext.logictypes.SearchLandingPagesExtension" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveProductContextStrategy"/>
+    <property name="searchResultRedirectUrlProvider" ref="searchResultRedirectUrlProvider"/>
+    <property name="navigationTreeRelation" ref="navigationTreeRelation"/>
+    <property name="segmentPath" value="${livecontext.slp.segmentPath}" />
+    <property name="keywordsProperty" value="keywords" />
+  </bean>
+</beans>

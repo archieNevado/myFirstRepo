@@ -1,0 +1,55 @@
+.cm-teaser {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  &__content {
+    text-align: center;
+    font-size: 1.1rem;
+    & ~ .cm-teaser__title {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    & ~ .cm-teaser__info {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      margin: 4px;
+
+      @include breakpoint(md) {
+        margin: 5px;
+      }
+    }
+  }
+
+  &--text .cm-teaser__content {
+    @include breakpoint(xs) {
+      font-size: 1rem;
+    }
+
+    @include breakpoint(sm) {
+      font-size: 1.22rem;
+    }
+  }
+
+  &--picture,
+  &--video {
+    @include breakpoint(md) {
+      cursor: pointer;
+    }
+  }
+
+  & > a {
+    @include breakpoint(md) {
+      //Fix for CMS-4976: Hide Scale overflow
+      overflow: hidden;
+      display: block;
+    }
+    &:focus,
+    &:active {
+      text-decoration: none;
+    }
+  }
+}

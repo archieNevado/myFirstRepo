@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMCollection folder="/Sites/Hybris Apparel/United Kingdom/English/Editorial/Content/Snow" name="Top Products Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-GB</locale>
+<master>
+</master>
+<viewtype>
+<link href="../../../Options/Viewtypes/CMChannel/tiles-layout-landscape.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Viewtypes/CMChannel/tiles-layout-landscape"/>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Our Top Products</teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<items>
+<link href="../../Products/The%20Reservoir%20Beanie%20magenta.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/The%20Reservoir%20Beanie%20magenta"/>
+<link href="../../Products/Goggles/CM%20Action%20Goggles.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Goggles/CM%20Action%20Goggles"/>
+<link href="../../Products/The%20Life%20Beanie.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/The%20Life%20Beanie"/>
+<link href="../../Products/Bandana%20300515779.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Bandana%20300515779"/>
+</items>
+</CMCollection>

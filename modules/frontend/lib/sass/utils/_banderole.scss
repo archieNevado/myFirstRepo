@@ -1,0 +1,15 @@
+//
+// Create a banderole with absolute position from bottom
+// @param: {string} distance to bottom, default is 10%
+//
+// @example:
+// .wrapper {
+//   @include banderole();
+// }
+//
+@mixin banderole($bottom: 10%) {
+  position: absolute;
+  width: 100%;
+  bottom: $bottom;
+  text-align: center;
+}

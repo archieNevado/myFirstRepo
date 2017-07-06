@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themeDefinition modelVersion="1">
+
+  <name>hybris</name>
+  <description>The Hybris Theme provides a modern, appealing, highly visual theme. It demonstrates the capability
+    to build localizable, multi-national, experience-driven e-Commerce websites. Integration with SAP Hybris Commerce
+    ships out of the box.
+
+    Based on a fully responsive, mobile-first design paradigm, it leverages the Bootstrap grid framework. It
+    scales from mobile via tablet to desktop viewport sizes and uses the CoreMedia Adaptive and Responsive Image
+    Framework to dynamically deliver the right image sizes in the right aspect ratios and crops for each viewport.
+
+    This theme integrates the fragment-based approach seamless into the SAP Hybris Apparel example.
+  </description>
+  <thumbnail>img/theme-preview.jpg</thumbnail>
+
+  <javaScriptLibraries>
+    <!-- jQuery and bootstrap are part of Hybris default shop -->
+    <!--<javaScript>vendor/jquery.min.js</javaScript>
+    <javaScript>vendor/bootstrap/bootstrap.min.js</javaScript>-->
+    <javaScript>vendor/bootstrap/carousel-swipe.js</javaScript>
+    <javaScript>vendor/imagesloaded/imagesloaded.pkgd.js</javaScript>
+    <javaScript>vendor/jquery.cycle2.js</javaScript>
+    <javaScript>vendor/jquery.cycle2.swipe.js</javaScript>
+    <javaScript>vendor/jquery.cycle2.carousel.patched.js</javaScript>
+    <javaScript>vendor/jquery.elevatezoom.js</javaScript>
+    <javaScript>vendor/jquery.magnific-popup.js</javaScript>
+    <javaScript>vendor/mediaelement-and-player.js</javaScript>
+  </javaScriptLibraries>
+
+  <javaScripts>
+    <!-- CoreMedia Basic JavaScripts -->
+    <javaScript>js/jquery.coremedia.utils.js</javaScript>
+    <javaScript>js/jquery.coremedia.smartresize.js</javaScript>
+    <javaScript>js/jquery.coremedia.responsiveimages.js</javaScript>
+    <javaScript>js/jquery.coremedia.spinner.js</javaScript>
+    <javaScript>js/jquery.coremedia.equalheight.js</javaScript>
+    <javaScript disableCompress="true">js/lib/logger.js</javaScript>
+    <javaScript>js/coremedia.blueprint.nodeDecorationService.js</javaScript>
+    <javaScript>js/coremedia.blueprint.deviceDetector.js</javaScript>
+    <javaScript>js/coremedia.blueprint.hashBasedFragment.js</javaScript>
+    <javaScript>js/coremedia.blueprint.basic.js</javaScript>
+    <javaScript>js/jquery.coremedia.carousel.js</javaScript>
+    <javaScript>js/jquery.coremedia.videopopup.js</javaScript>
+    <!-- Quick Info -->
+    <javaScript>js/coremedia.blueprint.quickinfo.js</javaScript>
+    <javaScript>js/coremedia.blueprint.quickinfo.init.js</javaScript>
+    <!-- Image Maps -->
+    <javaScript>js/coremedia.blueprint.imagemap.js</javaScript>
+    <javaScript>js/coremedia.blueprint.imagemap.init.js</javaScript>
+    <!-- Elastic Social JavaScripts -->
+    <javaScript>js/coremedia.blueprint.es.timezone.js</javaScript>
+    <javaScript>js/coremedia.blueprint.es.js</javaScript>
+    <!-- CoreMedia hybris-->
+    <javaScript>js/coremedia.blueprint.livecontext.deviceSettings.js</javaScript>
+    <javaScript>js/coremedia.blueprint.livecontext.js</javaScript>
+    <javaScript>js/coremedia.blueprint.hybris.js</javaScript>
+  </javaScripts>
+
+  <styleSheets>
+    <css>css/hybris.css</css>
+  </styleSheets>
+
+  <templateSets>
+    <templateSet>templates/hybris-templates.jar</templateSet>
+    <templateSet>templates/bricks-templates.jar</templateSet>
+  </templateSets>
+
+  <resourceBundles>
+    <resourceBundle>l10n/Bundle_en.properties</resourceBundle>
+    <resourceBundle>l10n/Preview_en.properties</resourceBundle>
+    <resourceBundle>l10n/ElasticSocial_en.properties</resourceBundle>
+    <resourceBundle>l10n/Livecontext_en.properties</resourceBundle>
+  </resourceBundles>
+
+</themeDefinition>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <!--
+    These dummy beans only allow for a technically successful setup
+    of the Spring context.  They do not support their particular features
+    however, and must be customize:replaced by beans corresponding to the
+    project's ecommerce system.
+  -->
+  <bean id="searchResultRedirectUrlProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.DummyCommercePropertyProvider"/>
+  <bean id="checkoutRedirectUrlProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.DummyCommercePropertyProvider"/>
+  <bean id="pageHandlerUrlProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.NoOpCommercePropertyProvider"/>
+  <bean id="previewTokenProvider" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.DummyCommercePropertyProvider"/>
+</beans>

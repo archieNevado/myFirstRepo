@@ -1,0 +1,90 @@
+// Imports
+@import "../base/variables";
+@import "../../../../../lib/sass/utils/imports";
+
+$cm-shoppable-teaser-quickinfo-color: $hybris-text;
+$cm-shoppable-teaser-specialprice-color: $hybris-price;
+
+// Import Bricks
+@import "../../../../../lib/bricks/shoppable-video/sass/shoppable-video";
+
+.#{$cm-shoppable-prefix} {
+  .cm-teasable {
+    &__caption {
+      position: absolute;
+      top: auto;
+      bottom: 2rem;
+      transform: none;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 0;
+    }
+
+    &__headline {
+      padding: 1rem;
+      margin: 0;
+      color: $hybris-text;
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1;
+      text-transform: uppercase;
+
+      @include breakpoint(md) {
+        font-size: 2.4rem;
+      }
+
+      @include breakpoint(lg) {
+        font-size: 3.6rem;
+      }
+    }
+  }
+
+  .cm-video {
+    max-width: 100%;
+  }
+
+  &__teasers {
+    border: 1px solid #ccc;
+  }
+
+  &__teaser {
+    .cm-quickinfo__image.cm-aspect-ratio-box {
+      @include aspect-ratio-box(1, 1);
+    }
+
+    .cm-quickinfo__title {
+      margin: 1.5rem 0 0 0;
+      padding: 0;
+      color: $hybris-text;
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .cm-quickinfo__text {
+      display: none;
+
+      @include breakpoint(lg) {
+        display: block;
+        text-align: center;
+        margin: 1rem 2rem;
+      }
+    }
+
+    .cm-quickinfo__property--pricing .cm-price--quickinfo {
+      display: block;
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 600;
+      padding: 0;
+      color: $hybris-price;
+    }
+
+    .cm-quickinfo__property--controls {
+      text-align: center;
+      margin: 1rem;
+
+      .cm-button {
+        padding: 5px 15px;
+      }
+    }
+  }
+}

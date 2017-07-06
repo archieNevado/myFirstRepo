@@ -1,0 +1,84 @@
+// Imports
+@import "../base/variables";
+@import "../../../../../lib/sass/utils/imports";
+
+// Import Bricks
+@import "../../../../../lib/bricks/livecontext/sass/imagemap";
+@import "../../../../../lib/bricks/livecontext/sass/quickinfo";
+
+//imagemaps
+.#{$cm-imagemap-prefix} {
+  &__areas {
+    display: none;
+
+    @include breakpoint(md) {
+      display: block;
+    }
+  }
+
+  &__button-group {
+    display: none;
+  }
+}
+
+// quickinfos
+.#{$cm-quickinfo-prefix} {
+  &--main.#{$cm-quickinfo-prefix}--active {
+    display: none;
+  }
+
+  @include breakpoint(md) {
+    &__image {
+      &.cm-aspect-ratio-box {
+        @include aspect-ratio-box(1, 1);
+      }
+    }
+
+    &__title {
+      width: 100%;
+      margin: 180px 0 0 0;
+      padding: 1rem;
+      color: $hybris-text;
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1;
+      text-transform: uppercase;
+      background-color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+    }
+
+    &__text {
+      margin: 1rem;
+      text-align: center;
+    }
+
+    &--compact .#{$cm-quickinfo-prefix}__property--pricing {
+      position: absolute;
+      left: 0;
+      top: 240px;
+      width: 100%;
+      display: block;
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 600;
+      padding: 0;
+      color: $hybris-price;
+      background-color: rgba(255, 255, 255, 0.8);
+
+      .#{$cm-quickinfo-prefix}__listprice {
+        font-size: 2.4rem;
+        font-weight: 600;
+        padding: 0;
+        margin: 0;
+        color: $hybris-price;
+      }
+    }
+
+    &--active {
+      position: absolute;
+      width: 306px;
+      padding: 0; /* leave space for absolute positioned title, which is always shown */
+      box-shadow: 0 0 10px #000;
+    }
+  }
+}

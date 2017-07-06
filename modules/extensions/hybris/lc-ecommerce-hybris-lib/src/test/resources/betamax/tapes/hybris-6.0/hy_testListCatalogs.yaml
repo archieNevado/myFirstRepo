@@ -1,0 +1,27 @@
+!tape
+name: hy_testListCatalogs
+interactions:
+- recorded: 2016-11-29T17:20:17.269Z
+  request:
+    method: GET
+    uri: http://hybrishost:9001/ws410/rest/catalogs
+    headers:
+      Accept: application/json
+      Accept-Encoding: gzip,deflate
+      Accept-Language: en
+      Authorization: Basic YWRtaW46bmltZGE=
+      Content-Type: application/json
+      Host: hybrishost:9001
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Content-Type: application/json;charset=UTF-8
+      Date: Tue, 29 Nov 2016 17:20:16 GMT
+      ETag: '"-1969836095"'
+      Last-Modified: Wed, 16 Nov 2016 18:25:56 GMT
+      Server: Apache-Coyote/1.1
+      Set-Cookie: _hybris.tenantID_=""; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/, JSESSIONID=5C30CE3C273003151FB9352E0C785726; Path=/ws410/; HttpOnly
+      X-Frame-Options: SAMEORIGIN
+    body: '{"@uri":"http://hybrishost:9001/ws410/rest/catalogs","catalog":[{"@id":"Default","@pk":"8796093055576","@uri":"http://hybrishost:9001/ws410/rest/catalogs/Default"},{"@id":"electronicsProductCatalog","@pk":"8796093088344","@uri":"http://hybrishost:9001/ws410/rest/catalogs/electronicsProductCatalog"},{"@id":"ElectronicsClassification","@pk":"8796093121112","@uri":"http://hybrishost:9001/ws410/rest/classificationsystems/ElectronicsClassification"},{"@type":"contentCatalogDTO","@id":"electronicsContentCatalog","@pk":"8796093153880","@uri":"http://hybrishost:9001/ws410/rest/contentcatalogs/electronicsContentCatalog"},{"@id":"apparelProductCatalog","@pk":"8796093186648","@uri":"http://hybrishost:9001/ws410/rest/catalogs/apparelProductCatalog"},{"@type":"contentCatalogDTO","@id":"apparel-ukContentCatalog","@pk":"8796093219416","@uri":"http://hybrishost:9001/ws410/rest/contentcatalogs/apparel-ukContentCatalog"},{"@type":"contentCatalogDTO","@id":"apparel-deContentCatalog","@pk":"8796093252184","@uri":"http://hybrishost:9001/ws410/rest/contentcatalogs/apparel-deContentCatalog"}]}'

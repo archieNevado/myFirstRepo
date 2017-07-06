@@ -1,0 +1,98 @@
+@import "../../../sass/utils/imports";
+
+//default variables
+$cm-shoppable-prefix: "cm-shoppable" !default;
+$cm-shoppable-teaser-background-color: #fff !default;
+$cm-shoppable-teaser-quickinfo-color: #fff !default;
+$cm-shoppable-teaser-specialprice-color: #fff !default;
+
+/* hide shoppable video teasers by default */
+.cm-shoppable__teasers {
+  display: none;
+}
+
+.cm-shoppable .cm-shoppable__content.cm-aspect-ratio-box,
+.cm-shoppable .cm-shoppable__player.cm-aspect-ratio-box {
+  @include aspect-ratio-box(16, 9);
+}
+
+// shoppable videos
+.#{$cm-shoppable-prefix} {
+  &__teasers {
+    display: none;
+  }
+
+  &__player {
+    .cm-aspect-ratio-box__content {
+      @include center-absolute();
+    }
+  }
+
+  @include breakpoint(md) {
+    &__teasers {
+      display: block;
+    }
+
+    &__teaser {
+      box-sizing: border-box;
+      display: none;
+      background: $cm-shoppable-teaser-background-color;
+      overflow: hidden; // just in case there is more text
+
+      .cm-quickinfo {
+        position: relative;
+        visibility: visible;
+        width: 100%;
+        height: inherit;
+        box-sizing: border-box;
+        padding: 0 0 65px 0; // provide space for button
+        color: $cm-shoppable-teaser-quickinfo-color;
+        background: transparent;
+        box-shadow: none;
+
+        &__title {
+          font-size: 1.25rem;
+          position: relative;
+          color: $cm-shoppable-teaser-quickinfo-color;
+          margin: 0.5rem;
+        }
+
+        &__property--controls {
+          width: auto;
+          margin: 1.5rem 0.3rem 0.3rem;
+        }
+
+        &__close {
+          display: none;
+        }
+      }
+
+      .cm-price--special {
+        color: $cm-shoppable-teaser-specialprice-color;
+      }
+
+      .cm-button-group {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+      }
+
+      .cm-button {
+        /*background-color: #fff;
+        border-color: #fff;
+        color: #373737;
+        width: auto;*/
+      }
+    }
+
+    &__default {
+      display: block;
+    }
+
+    .cm-teasable__play.cm-hidden + .cm-teasable__caption {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!---
+ The context menu for the catalog link list
+-->
+<Menu
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        width="210"
+        plain="true">
+  <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.premular.Premular;
+    import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
+    import com.coremedia.ui.data.ValueExpression;
+
+    public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogLinkContextMenu";
+
+    private var config:CatalogLinkContextMenu;
+
+    public native function CatalogLinkContextMenu(config:CatalogLinkContextMenu = null);
+
+    /**
+     * The value expression of the bean on which the context menu operates.
+     */
+    [Bindable]
+    public var bindTo:ValueExpression;
+
+    /**
+     * An optional ValueExpression which makes the component read-only if it is evaluated to true.
+     */
+    [Bindable]
+    public var forceReadOnlyValueExpression:ValueExpression;
+
+    /**
+     * ValueExpression which makes the delete button read-only if it is evaluated to true.
+     */
+    [Bindable]
+    public var readOnlyValueExpression:ValueExpression;
+
+    /**
+     * A ValueExpression whose value is set to the array of selected items.
+     */
+    [Bindable]
+    public var selectedValuesExpression:ValueExpression;
+
+    /**
+     * A ValueExpression whose value is set to the array of indexes of selected items.
+     * The array is empty if nothing is selected. The change of the value doesn't update the selection of the grid.
+     */
+    [Bindable]
+    public var selectedPositionsExpression:ValueExpression;
+    ]]></fx:Script>
+  <fx:Declarations>
+    <!---
+     The name of the link list property on which the context menu operates
+    -->
+    <fx:String id="propertyName"/>
+
+    <!---
+     Set to true if the open in tab menu item should be hidden. Default is false
+    -->
+    <fx:Boolean id="hideOpenInTab"/>
+
+    <!---
+     Set to true if the remove menu item should be hidden. Default is false
+    -->
+    <fx:Boolean id="hideRemove"/>
+  </fx:Declarations>
+
+  <plugins>
+    <ui:HideObsoleteSeparatorsPlugin/>
+  </plugins>
+  <items>
+    <MenuItem itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_MENU_ITEM_ID}"
+              hidden="{config.hideOpenInTab}">
+      <baseAction>
+        <editor:OpenEntitiesInTabsAction entitiesValueExpression="{config.selectedValuesExpression}"/>
+      </baseAction>
+    </MenuItem>
+    <MenuSeparator/>
+    <MenuItem itemId="{ECommerceStudioPlugin.REMOVE_LINK_MENU_ITEM_ID}"
+              hidden="{config.hideRemove}">
+      <baseAction>
+        <editor:DeleteSelectedLinksAction contentVariableName="{Premular.CONTENT_VARIABLE_NAME}"
+                                          propertyName="{config.propertyName}"
+                                          selectedPositionsExpression="{config.selectedPositionsExpression}"
+                                          forceReadOnlyValueExpression="{config.readOnlyValueExpression || config.forceReadOnlyValueExpression}"/>
+      </baseAction>
+    </MenuItem>
+  </items>
+
+</Menu>

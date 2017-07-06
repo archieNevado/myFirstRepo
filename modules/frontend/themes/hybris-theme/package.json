@@ -1,0 +1,15 @@
+{
+  "name": "@coremedia/hybris-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "production": "grunt production",
+    "start": "grunt monitor"
+  },
+  "dependencies": {
+    "mediaelement": "2.23.5"
+  },
+  "theme": {
+    "name": "hybris"
+  }
+}

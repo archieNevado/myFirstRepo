@@ -1,0 +1,36 @@
+// Imports
+@import "../base/imports";
+@import "../utils/imports";
+
+// Details
+// =====================================================================================================================
+
+// Variables
+// Set variables to configure _detail.scss from default-templates brick.
+// Have a look the _detail.scss for all available variables.
+$cm-details-padding-large-horizontal: $padding-large-horizontal;
+$cm-details-margin-large-horizontal: $padding-large-horizontal;
+$cm-details-padding-large-vertical: $padding-large-vertical;
+$cm-details-padding-base-vertical: $padding-base-vertical;
+
+// Import bricks
+@import "../../../../../lib/bricks/generic-templates/sass/detail";
+
+.#{$cm-details-prefix} {
+  @include spacer($brand-primary);
+
+  // product detail page
+  &--product {
+    .cm-details {
+
+      // h1 for seo, but should look like h2
+      &__headline {
+        font-size: font-format(h2, mobile);
+
+        @include breakpoint(sm-and-up) {
+          font-size: font-format(h2);
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
+  <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
+
+  <bean id="abstractContextResolver" abstract="true">
+    <property name="cache" ref="cache"/>
+    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
+  </bean>
+
+  <bean id="resolveCategoryContextStrategy" class="com.coremedia.livecontext.context.ResolveCategoryContextStrategy" parent="abstractContextResolver">
+    <description>
+      Strategy for mapping a e-Commerce category to a CoreMedia channel.
+    </description>
+  </bean>
+
+  <bean id="resolveProductContextStrategy" class="com.coremedia.livecontext.context.ResolveProductContextStrategy" parent="abstractContextResolver">
+    <description>
+      Strategy for mapping a e-Commerce product to a CoreMedia channel.
+    </description>
+  </bean>
+
+</beans>

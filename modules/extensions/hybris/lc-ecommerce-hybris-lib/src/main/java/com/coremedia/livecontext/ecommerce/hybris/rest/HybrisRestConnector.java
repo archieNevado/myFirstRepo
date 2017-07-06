@@ -1,0 +1,425 @@
+package com.coremedia.livecontext.ecommerce.hybris.rest;
+
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.HttpClientFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
+import com.coremedia.util.Base64;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Stopwatch;
+import org.apache.http.client.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+/**
+ * REST connector for Hybris REST API.
+ */
+@Service
+public class HybrisRestConnector {
+
+  protected static final Logger LOG = LoggerFactory.getLogger(HybrisRestConnector.class);
+
+  private static final String AUTHORIZATION_HEADER = "Authorization";
+
+  private static final String DEFAULT_PROTOCOL = "http";
+  private static final String DEFAULT_PROTOCOL_SECURE = "https";
+  private static final String DEFAULT_HOST = "co6scdm09";
+  private static final int DEFAULT_PORT = 9001;
+  private static final int DEFAULT_PORT_SECURE = 9002;
+  private static final String DEFAULT_BASE_PATH = "/ws410/rest";
+  private static final String DEFAULT_API_VERSION = "v2";
+
+  protected String protocol = DEFAULT_PROTOCOL;
+  protected String protocolSecure = DEFAULT_PROTOCOL_SECURE;
+  protected String host = DEFAULT_HOST;
+  protected int port = DEFAULT_PORT;
+  protected int portSecure = DEFAULT_PORT_SECURE;
+  protected String basePath = DEFAULT_BASE_PATH;
+  protected String apiVersion = DEFAULT_API_VERSION;
+
+  private String user;
+  private String password;
+  private AUTHENTICATION_TYPE authenticationType = AUTHENTICATION_TYPE.UNKNOWN;
+
+  private String authToken = null;
+  private Stopwatch stopwatch;
+  private RestTemplate restTemplate;
+  private HttpClient httpClient;
+
+  private Map<String, HttpHeaders> authenticationHeaderMap = new HashMap<>();
+
+  public HybrisRestConnector() {
+    /*
+    Version version = new Version(0, 1, 0, "alpha", "com.coremedia.blueprint", "lc-ecommerce-hybris-lib");
+
+    SimpleModule module = new SimpleModule("CategoryModule", version);
+    module.addDeserializer(CategoriesDocument.class, new CategoryDeserializer());
+
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(module);
+
+    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+    mappingJackson2HttpMessageConverter.setObjectMapper(mapper);
+
+    List<HttpMessageConverter<?>> messageConverters = newArrayList(mappingJackson2HttpMessageConverter);
+
+    restTemplate.setMessageConverters(messageConverters);
+    */
+  }
+
+  public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType) {
+    List<String> templateParameters = new ArrayList<>();
+    return performGet(resourcePath, storeContext, responseType, templateParameters, null, false);
+  }
+
+  public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType,
+                          @Nullable List<String> uriTemplateParameters) {
+    return performGet(resourcePath, storeContext, responseType, uriTemplateParameters, null, false);
+  }
+
+  @Nullable
+  public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType,
+                          @Nullable List<String> uriTemplateParameters,
+                          @Nullable MultiValueMap<String, String> queryParams, boolean isSecure) {
+    // Need to generate auth headers first:
+    generateAuthenticationHeader(storeContext);
+
+    UriComponentsBuilder uriComponentsBuilder = getBaseUri(resourcePath, queryParams, isSecure);
+
+    Object[] vars = uriTemplateParameters != null ? uriTemplateParameters.toArray() : new Object[0];
+    UriComponents uriComponents = uriComponentsBuilder.buildAndExpand(vars);
+
+    //UriComponents uriComponents = uriComponentsBuilder.build().encode();
+    URI uri = uriComponents.encode().toUri();
+
+    HttpEntity<String> requestEntity = new HttpEntity<>(authenticationHeaderMap.get(storeContext.getStoreId()));
+
+    try {
+      if (LOG.isTraceEnabled()) {
+        stopwatch = Stopwatch.createStarted();
+      }
+
+      ResponseEntity<T> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, responseType);
+
+      if (LOG.isTraceEnabled() && stopwatch != null && stopwatch.isRunning()) {
+        stopwatch.stop();
+        LOG.trace("GET request to '{}' returned with HTTP status code {} (took {})", uri,
+                responseEntity.getStatusCode().value(), stopwatch);
+      }
+
+      return responseEntity.getBody();
+    } catch (Exception ex) {
+      LOG.warn("REST call to '{}' failed. Exception:\n{}", uri, ex.getMessage());
+    }
+
+    return null;
+  }
+
+  public <T, P> T performPost(String resourcePath,
+                              Class<T> responseType,
+                              @Nullable List<String> uriTemplateParameters,
+                              @Nullable MultiValueMap<String, String> queryParams,
+                              @Nullable P bodyData,
+                              boolean isSecure) {
+    UriComponentsBuilder uriComponentsBuilder = getBaseUri(resourcePath, queryParams, isSecure);
+
+    Object[] vars = uriTemplateParameters != null ? uriTemplateParameters.toArray() : new Object[0];
+    URI uri = uriComponentsBuilder.buildAndExpand(vars).encode().toUri();
+
+    ResponseEntity<T> responseEntity = null;
+
+    try {
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
+      HttpEntity<String> requestEntity = new HttpEntity<>(toJson(bodyData), headers);//TODO authentication?
+
+      if (LOG.isTraceEnabled()) {
+        stopwatch = Stopwatch.createStarted();
+      }
+
+      responseEntity = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, responseType);
+
+      if (LOG.isTraceEnabled() && stopwatch != null && stopwatch.isRunning()) {
+        stopwatch.stop();
+        LOG.trace("GET request to '{}' returned with HTTP status code {} (took {})", uri,
+                responseEntity.getStatusCode().value(), stopwatch);
+      }
+
+      return responseEntity.getBody();
+    } catch (Exception ex) {
+      int statusCode = responseEntity != null ? responseEntity.getStatusCode().value() : -1;
+      if (isAuthenticationError(ex, statusCode)) {
+        throw new UnauthorizedException(ex.getMessage(), statusCode);
+      } else {
+        LOG.warn("REST call to '{}' failed. Exception:\n{}", uri, ex);
+        throw new CommerceRemoteException(ex.getMessage(), statusCode, statusCode + "", null);
+      }
+    }
+  }
+
+  @Nonnull
+  public String getServiceEndpointId() {
+    return UriComponentsBuilder.newInstance()
+            .scheme(getProtocol())
+            .host(getHost())
+            .port(getPort())
+            .path(getBasePath())
+            .toUriString();
+  }
+
+  @Nonnull
+  private UriComponentsBuilder getBaseUri(String resourcePath, @Nullable MultiValueMap queryParams, boolean isSecure) {
+    UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance()
+            .scheme(isSecure ? getProtocolSecure() : getProtocol())
+            .host(getHost())
+            .port(isSecure ? getPortSecure() : getPort())
+            .path(getBasePath());
+
+    if (queryParams != null) {
+      uriComponentsBuilder.queryParams(queryParams);
+    }
+
+//    if (StringUtils.isNotBlank(storeId)) {
+//      uriComponentsBuilder.path("/" + storeId);
+//    }
+//
+//    uriComponentsBuilder.path("/" + apiVersion);
+
+//    if (queryParams != null) {
+//      uriComponentsBuilder.queryParams(queryParams);
+//    }
+
+    // Add resource path
+    uriComponentsBuilder.path(resourcePath);
+
+    return uriComponentsBuilder;
+  }
+
+  private static boolean isAuthenticationError(Exception ex, int statusCode) {
+    return statusCode == HttpStatus.UNAUTHORIZED.value()
+            || ex instanceof HttpClientErrorException
+            && ex.getMessage().contains(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+  }
+
+  /**
+   * Converts the given model to a json string.
+   *
+   * @param model service model
+   * @return string(JSON) representation of model
+   * @throws java.io.IOException
+   */
+  private static String toJson(Object model) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    //mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+    //mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
+    return mapper.writeValueAsString(model);
+  }
+
+  private void generateAuthenticationHeader(@Nonnull StoreContext storeContext) {
+    //TODO: add oauth
+
+    String storeId = storeContext.getStoreId();
+
+    HttpHeaders httpHeadersForCurrentStore = authenticationHeaderMap.get(storeId);
+
+    if (httpHeadersForCurrentStore != null) {
+      return;
+    }
+
+    HttpHeaders authenticationHeader = new HttpHeaders();
+
+    switch (authenticationType) {
+      case BASIC:
+        LOG.debug("Generating basic authorization header ...");
+
+        String plainCredentials = getUser() + ':' + getPassword();
+        byte[] plainCredentialsBytes = plainCredentials.getBytes();
+        String basicAuthCredentials = Base64.encode(plainCredentialsBytes);
+
+        authenticationHeader.add(AUTHORIZATION_HEADER, "Basic " + basicAuthCredentials);
+        authenticationHeader.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+        authenticationHeader.add("Content-type", MediaType.APPLICATION_JSON_VALUE);
+        authenticationHeader.add("Accept-language", storeContext.getLocale().getLanguage());
+        authenticationHeaderMap.put(storeId, authenticationHeader);
+        break;
+
+      case BEARER:
+        //TODO example header oauth2: Authorization: Bearer 8c6924a7-5b84-4457-a9c7-06eab0be7b52
+
+        if (isNullOrEmpty(authToken)) {
+          authToken = fetchAuthToken();
+        }
+
+        LOG.debug("Generating bearer authorization header ...");
+        authenticationHeader.set(AUTHORIZATION_HEADER, "Bearer " + authToken);
+        authenticationHeaderMap.put(storeId, authenticationHeader);
+        break;
+
+      case NONE:
+        // do nothing;
+
+      default:
+        LOG.warn("Unknown authentication type value found for [livecontext.hybris.authentication.type], "
+                + "proceed w/o authentication.");
+        break;
+    }
+  }
+
+  @Nullable
+  public String fetchAuthToken() {
+    String url = UriComponentsBuilder.newInstance()
+            .scheme(protocol)
+            .host(host)
+            .path(basePath)
+            .path("/" + apiVersion)
+            .path("/integration/admin/token")
+            .build()
+            .encode()
+            .toString();
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    String requestEntityBody = "{\"username\": \"" + user + "\", \"password\": \"" + password + "\"}";
+    HttpEntity<String> requestEntity = new HttpEntity<>(requestEntityBody, headers);
+
+    ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
+
+    if (!response.getStatusCode().equals(HttpStatus.OK)) {
+      LOG.warn("Unable to request authentication token. Check credentials!");
+      return null;
+    }
+
+    return response.getBody().replaceAll("\"", "");
+  }
+
+  @Nonnull
+  private HttpClient getHttpClient() {
+    if (httpClient == null) {
+      //TODO mbi: properties file
+      int timeout = -1;
+      httpClient = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(), timeout, timeout, timeout);
+    }
+
+    return httpClient;
+  }
+
+  @PostConstruct
+  void initialize() {
+    HttpClient client = getHttpClient();
+    HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(client);
+    restTemplate = new RestTemplate(requestFactory);
+  }
+
+  public String getApiVersion() {
+    return apiVersion;
+  }
+
+  @Value("${livecontext.hybris.apiVersion}")
+  public void setApiVersion(String apiVersion) {
+    this.apiVersion = apiVersion;
+  }
+
+  public String getHost() {
+    return host;
+  }
+
+  @Value("${livecontext.hybris.host}")
+  public void setHost(String host) {
+    this.host = host;
+  }
+
+  public int getPort() {
+    return port;
+  }
+
+  @Value("${livecontext.hybris.port:80}")
+  public void setPort(int port) {
+    this.port = port;
+  }
+
+  public String getProtocol() {
+    return protocol;
+  }
+
+  @Value("${livecontext.hybris.protocol}")
+  public void setProtocol(String protocol) {
+    this.protocol = protocol;
+  }
+
+  public String getBasePath() {
+    return basePath;
+  }
+
+  @Value("${livecontext.hybris.basePath}")
+  public void setBasePath(String basePath) {
+    this.basePath = basePath;
+  }
+
+  private String getUser() {
+    return user;
+  }
+
+  @Value("${livecontext.hybris.user}")
+  public void setUser(String user) {
+    this.user = user;
+  }
+
+  private String getPassword() {
+    return password;
+  }
+
+  @Value("${livecontext.hybris.password}")
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  @Value("${livecontext.hybris.authentication.type:UNKNOWN}")
+  public void setAuthenticationType(AUTHENTICATION_TYPE authenticationTypeValue) {
+    authenticationType = authenticationTypeValue;
+  }
+
+  public String getProtocolSecure() {
+    return protocolSecure;
+  }
+
+  @Value("${livecontext.hybris.protocol.ssl}")
+  public void setProtocolSecure(String protocolSecure) {
+    this.protocolSecure = protocolSecure;
+  }
+
+  public int getPortSecure() {
+    return portSecure;
+  }
+
+  @Value("${livecontext.hybris.port.ssl:443}")
+  public void setPortSecure(int portSecure) {
+    this.portSecure = portSecure;
+  }
+}

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>cae</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+
+  <artifactId>cae-preview-webapp</artifactId>
+  <packaging>war</packaging>
+
+  <description>
+    CAE webapp for to be used in a content management environment for preview purposes.
+  </description>
+
+  <properties>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
+    <logging-properties.dir>${project.basedir}/../../../workspace-configuration/logging</logging-properties.dir>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>cae-base-component</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>logging-config</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>preview-cae-extension-dependencies</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cae-preview-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>blueprint</finalName>
+    <plugins>
+      <!--
+         invoke "mvn tomcat7:run" for running this webapp locally using a tomcat
+      -->
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <configuration>
+          <ajpPort>40909</ajpPort>
+          <path>/${project.build.finalName}</path>
+          <port>40980</port>
+          <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
+          <!-- enable Tomcat to reload resources (=templates) while running -->
+          <contextFile>${project.basedir}/src/main/servletengine/tomcat-context.xml</contextFile>
+          <systemProperties>
+            <coremedia.blueprint.project.directory>${project.basedir}/../../../</coremedia.blueprint.project.directory>
+            <propertieslocations>classpath:/cae-preview.properties,classpath:/hybris.properties</propertieslocations>
+          </systemProperties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <!--
+            build executable war that can be run like this:
+            JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
+
+            only set to 'true' if chef run won't fail on warning when unzipping the webapp
+          -->
+          <executable>false</executable>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>turbojpeg</id>
+      <dependencies>
+        <dependency>
+          <groupId>com.coremedia.com.sun.media.imageio</groupId>
+          <artifactId>jai-imageio</artifactId>
+          <version>1.1</version>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.coremedia.org.libjpegturbo</groupId>
+          <artifactId>turbojpeg-wrapper</artifactId>
+          <version>1.2.1.1</version>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.coremedia.it.geosolutions.imageio-ext</groupId>
+          <artifactId>imageio-ext-turbojpeg</artifactId>
+          <version>1.1.10</version>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>candy-preview</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <configuration>
+              <systemProperties>
+                <propertieslocations>http://overview.${installation.host}/candy-preview.properties
+                </propertieslocations>
+              </systemProperties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

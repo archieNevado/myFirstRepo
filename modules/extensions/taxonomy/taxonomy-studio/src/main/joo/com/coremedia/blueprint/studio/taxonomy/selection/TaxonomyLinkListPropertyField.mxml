@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:TaxonomyLinkListPropertyFieldBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                         xmlns:local="com.coremedia.blueprint.studio.taxonomy.selection.*"
+                                         xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                                         xmlns="exml:ext.config"
+                                         xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
+                                         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                                         xmlns:ui="exml:com.coremedia.ui.config"
+                                         labelAlign="top"
+                                         labelSeparator="">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
+  </fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.editorContext;
+    import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
+    import com.coremedia.ui.bem.LinkListBEMEntities;
+    import com.coremedia.ui.skins.TextfieldSkin;
+    import com.coremedia.ui.skins.ToolbarSkin;
+    import com.coremedia.ui.util.createComponentSelector;
+
+    public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyLinkListPropertyField";
+
+    private var config:TaxonomyLinkListPropertyField;
+
+    public native function TaxonomyLinkListPropertyField(config:TaxonomyLinkListPropertyField = null);
+    ]]></fx:Script>
+
+  <local:layout>
+    <layout_VBox align="stretch"/>
+  </local:layout>
+  <local:items>
+    <taxonomy:TaxonomyLinkListGridPanel itemId="{GRID_PANEL_ITEM_ID}"
+                                        linkListWrapper="{getLinkListWrapper(config)}"
+                                        taxonomyId="{config.taxonomyId}"
+                                        siteId="{editorContext.getSitesService().getSiteIdFor(config.bindTo.getValue())}"
+                                        selectedPositionsExpression="{getSelectedPositionsVE()}"
+                                        selectedValuesExpression="{getSelectedValuesVE()}"
+                                        readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}">
+      <taxonomy:plugins exml:mode="append">
+        <ui:BEMPlugin block="{LinkListBEMEntities.BLOCK}"
+                      bodyElement="{LinkListBEMEntities.ELEMENT_LIST}"
+                      modifier="{getModifierVE(config)}"/>
+        <ui:ContextMenuPlugin>
+          <ui:contextMenu>
+            <Menu plain="true">
+              <plugins>
+                <ui:HideObsoleteSeparatorsPlugin/>
+              </plugins>
+              <items>
+                <MenuItem>
+                  <baseAction>
+                    <taxonomy:OpenTaxonomyChooserAction
+                            text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_contextMenu_chooseTag')}"
+                            bindTo="{config.bindTo}"
+                            forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                            propertyValueExpression="{config.bindTo.extendBy('properties.' + config.propertyName)}"
+                            taxonomyId="{config.taxonomyId}"/>
+                  </baseAction>
+                </MenuItem>
+                <MenuSeparator/>
+                <MenuItem>
+                  <baseAction>
+                    <editor:CutSelectedLinksAction contentValueExpression="{config.bindTo}"
+                                                   propertyName="{config.propertyName}"
+                                                   selectedPositionsExpression="{getSelectedPositionsVE()}"
+                                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+                  </baseAction>
+                </MenuItem>
+                <MenuItem>
+                  <baseAction>
+                    <editor:CopyToClipboardAction contentValueExpression="{getSelectedValuesVE()}"/>
+                  </baseAction>
+                </MenuItem>
+                <MenuItem>
+                  <baseAction>
+                    <editor:PasteLinkAction contentValueExpression="{config.bindTo}"
+                                            maxCardinality="{config.maxCardinality}"
+                                            linkType="{config.linkType}"
+                                            propertyName="{config.propertyName}"
+                                            forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+                  </baseAction>
+                </MenuItem>
+                <MenuSeparator/>
+                <MenuItem>
+                  <baseAction>
+                    <editor:DeleteSelectedLinksAction contentValueExpression="{config.bindTo}"
+                                                      propertyName="{config.propertyName}"
+                                                      selectedPositionsExpression="{getSelectedPositionsVE()}"
+                                                      forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+                  </baseAction>
+                </MenuItem>
+              </items>
+            </Menu>
+          </ui:contextMenu>
+        </ui:ContextMenuPlugin>
+      </taxonomy:plugins>
+      <taxonomy:tbar>
+        <Toolbar ui="{ToolbarSkin.FIELD.getSkin()}">
+          <items>
+            <ui:IconButton itemId="{DELETE_BUTTON_ITEM_ID}">
+              <ui:baseAction>
+                <editor:DeleteSelectedLinksAction contentValueExpression="{config.bindTo}"
+                                                  propertyName="{config.propertyName}"
+                                                  selectedPositionsExpression="{getSelectedPositionsVE()}"
+                                                  forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+            <ui:IconButton
+                    text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
+                    tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
+                    itemId="{OPEN_TAXONOMY_CHOOSER_BUTTON_ITEM_ID}"
+                    iconCls="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_icon')}">
+              <ui:baseAction>
+                <taxonomy:OpenTaxonomyChooserAction
+                        bindTo="{config.bindTo}"
+                        forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                        propertyValueExpression="{config.bindTo.extendBy('properties.' + config.propertyName)}"
+                        taxonomyId="{config.taxonomyId}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+
+            <TbSeparator/>
+            <!-- cut -->
+            <ui:IconButton>
+              <ui:baseAction>
+                <editor:CutSelectedLinksAction contentValueExpression="{config.bindTo}"
+                                               propertyName="{config.propertyName}"
+                                               selectedPositionsExpression="{getSelectedPositionsVE()}"
+                                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+            <!-- copy -->
+            <ui:IconButton>
+              <ui:baseAction>
+                <editor:CopyToClipboardAction contentValueExpression="{getSelectedValuesVE()}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+            <!-- paste -->
+            <ui:IconButton>
+              <ui:baseAction>
+                <editor:PasteLinkAction contentValueExpression="{config.bindTo}"
+                                        maxCardinality="{config.maxCardinality}"
+                                        linkType="{config.linkType}"
+                                        propertyName="{config.propertyName}"
+                                        forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+              </ui:baseAction>
+            </ui:IconButton>
+          </items>
+        </Toolbar>
+      </taxonomy:tbar>
+      <taxonomy:dockedItems>
+        <!--We are setting the default focus to the text field since we are not interested in opening the library -->
+        <editor:LinkListDropArea dock="bottom"
+                                 linkListWrapper="{getLinkListWrapper(config)}"
+                                 ddGroups="{['ContentDD', 'ContentLinkDD']}"
+                                 defaultFocus="{createComponentSelector().itemId(TAXONOMY_SEARCH_FIELD_ITEM_ID).build()}"
+                                 appendOnDrop="true"
+                                 dropHandler="{handleDropAreaDrop}"
+                                 readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}">
+          <editor:mixins>
+            <ui:BEMMixin bemElement="{LinkListBEMEntities.ELEMENT_TAIL}"/>
+          </editor:mixins>
+          <editor:items>
+            <taxonomy:TaxonomySearchField itemId="{TAXONOMY_SEARCH_FIELD_ITEM_ID}"
+                                          ui="{TextfieldSkin.EMBEDDED.getSkin()}"
+                                          resetOnBlur="true"
+                                          showSelectionPath="false"
+                                          taxonomyId="{config.taxonomyId}"
+                                          bindTo="{config.bindTo}"
+                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                          propertyName="{config.propertyName}"
+                                          siteSelectionExpression="{getSiteSelectionExpression(config.bindTo)}"
+                                          searchResultExpression="{getSearchResultExpression()}">
+              <taxonomy:plugins>
+                <editor:BindDisablePlugin bindTo="{config.bindTo}"
+                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+              </taxonomy:plugins>
+            </taxonomy:TaxonomySearchField>
+
+          </editor:items>
+        </editor:LinkListDropArea>
+      </taxonomy:dockedItems>
+    </taxonomy:TaxonomyLinkListGridPanel>
+  </local:items>
+
+</local:TaxonomyLinkListPropertyFieldBase>
