@@ -113,9 +113,13 @@ const addWatchEventListener = (grunt, livereload) => {
 
   const done = () => {
     busy = false;
+    const date = new Date;
+    const hours = (date.getHours()<10?'0':'') + date.getHours();
+    const minutes = (date.getMinutes()<10?'0':'') + date.getMinutes();
+    const seconds = (date.getSeconds()<10?'0':'') + date.getSeconds();
     livereload.trigger(logger);
     grunt.log.writeln('');
-    grunt.log.writeln('Done. Waiting...');
+    grunt.log.writeln(`Finished @ ${hours}:${minutes}:${seconds}. Waiting...`['yellow'].bold);
     grunt.log.writeln('');
     onChange();
   };

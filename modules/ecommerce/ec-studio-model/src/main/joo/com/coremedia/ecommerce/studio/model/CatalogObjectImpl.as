@@ -7,6 +7,9 @@ public class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, 
 
   public function CatalogObjectImpl(uri:String) {
     super(uri);
+    //Do not set immideate properties in subclasses.
+    //ExternalId and SiteId need to be url en- and decoded.
+    //This is done by jersey on the server side.
   }
 
   override public function get(property:*):* {

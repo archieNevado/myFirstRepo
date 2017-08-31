@@ -3,10 +3,6 @@ package com.coremedia.ecommerce.studio.model {
 public class CategoryImpl extends CatalogObjectImpl implements Category {
   public function CategoryImpl(uri:String,vars:Object) {
     super(uri);
-    // set immediate vars
-    setImmediateProperty(CatalogObjectPropertyNames.EXTERNAL_ID, vars.externalId);
-    setImmediateProperty("siteId", vars.siteId);
-    setImmediateProperty("workspaceId", vars.workspaceId);
   }
 
 

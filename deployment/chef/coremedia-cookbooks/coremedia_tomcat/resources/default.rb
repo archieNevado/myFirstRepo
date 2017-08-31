@@ -175,3 +175,6 @@ attribute :context_template, :kind_of => [FalseClass, String], :default => 'cont
 attribute :context_template_cookbook, :kind_of => String, :default => 'coremedia_tomcat'
 #<> @attribute clean_log_dir_on_start Set this to true to clean the log directory on before starting tomcat
 attribute :clean_log_dir_on_start, :kind_of => [FalseClass, TrueClass], :default => false
+#<> @attribute access_log A toggle to switch on/off access logs
+attribute :access_log, :kind_of => [FalseClass, TrueClass], :default => true
+

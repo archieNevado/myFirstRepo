@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.hybris.links;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper.getCurrentContext;
+import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.P13N_URI_PARAMETER;
 
 /**
  * This class is an example to show how to write a annotation based linkscheme that is in front of
@@ -212,8 +214,7 @@ public class HybrisPreviewLinkScheme {
   }
 
   static boolean isStudioPreviewRequest(HttpServletRequest request) {
-    Map<String, String[]> parameterMap = request.getParameterMap();
-    return parameterMap != null && parameterMap.containsKey("p13n_test");
+    return PreviewHandler.isStudioPreviewRequest() || "true".equals(request.getParameter(P13N_URI_PARAMETER));
   }
 
   static boolean isApplicable(HttpServletRequest request) {

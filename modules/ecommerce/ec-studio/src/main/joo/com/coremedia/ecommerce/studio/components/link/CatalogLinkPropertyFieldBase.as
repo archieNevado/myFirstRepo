@@ -41,18 +41,16 @@ public class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
   }
 
   internal static function convertIdLabel(v:String, catalogObject:CatalogObject):String {
-    if (!catalogObject) return undefined;
-    if (catalogObject is CatalogObject) {
-      try {
-        var extId:String = catalogObject.getExternalId();
-        if (extId) {
-          return extId;
-        }
-      } catch(e:Error){
-        return CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
-      }
+    if (!catalogObject) {
+      return undefined;
     }
-    return CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
+    var extId:String = catalogObject.getExternalId();
+    if (extId) {
+      return extId;
+    } else if (extId == null) {
+      return CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
+    }
+    return undefined;
   }
 
   internal static function convertNameLabel(v:String, catalogObject:CatalogObject):String {

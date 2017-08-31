@@ -24,7 +24,7 @@
   RewriteRule .* - [F]
 
   # Hybris stores  pass through for preview
-  ProxyPass / <%= hybris_protocol %>://<%= @params[:hybris_host] %>:<%= hybris_port %>/ timeout=600
+  ProxyPass / <%= hybris_protocol %>://<%= @params[:hybris_host] %>:<%= hybris_port %>/ timeout=600 nocanon
 
 
 # Hybris tools pass through

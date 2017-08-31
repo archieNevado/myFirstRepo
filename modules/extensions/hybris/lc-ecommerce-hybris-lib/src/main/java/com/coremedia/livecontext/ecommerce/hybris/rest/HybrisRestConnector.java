@@ -31,6 +31,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,10 @@ public class HybrisRestConnector {
   private Stopwatch stopwatch;
   private RestTemplate restTemplate;
   private HttpClient httpClient;
+
+  private int connectionRequestTimeoutMillis = -1;
+  private int connectionTimeoutMillis = -1;
+  private int socketTimeoutMillis = -1;
 
   private Map<String, HttpHeaders> authenticationHeaderMap = new HashMap<>();
 
@@ -157,6 +162,7 @@ public class HybrisRestConnector {
     try {
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
+      headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
       HttpEntity<String> requestEntity = new HttpEntity<>(toJson(bodyData), headers);//TODO authentication?
 
       if (LOG.isTraceEnabled()) {
@@ -322,9 +328,7 @@ public class HybrisRestConnector {
   @Nonnull
   private HttpClient getHttpClient() {
     if (httpClient == null) {
-      //TODO mbi: properties file
-      int timeout = -1;
-      httpClient = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(), timeout, timeout, timeout);
+      httpClient = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(), socketTimeoutMillis, connectionTimeoutMillis, connectionRequestTimeoutMillis);
     }
 
     return httpClient;
@@ -421,5 +425,20 @@ public class HybrisRestConnector {
   @Value("${livecontext.hybris.port.ssl:443}")
   public void setPortSecure(int portSecure) {
     this.portSecure = portSecure;
+  }
+
+  @Value("${livecontext.hybris.rest.connector.connectionRequestTimeoutMillis:60000}")
+  public void setConnectionRequestTimeoutMillis(int connectionRequestTimeoutMillis) {
+    this.connectionRequestTimeoutMillis = connectionRequestTimeoutMillis;
+  }
+
+  @Value("${livecontext.hybris.rest.connector.connectionTimeoutMillis:60000}")
+  public void setConnectionTimeoutMillis(int connectionTimeoutMillis) {
+    this.connectionTimeoutMillis = connectionTimeoutMillis;
+  }
+
+  @Value("${livecontext.hybris.rest.connector.socketTimeoutMillis:60000}")
+  public void setSocketTimeoutMillis(int socketTimeoutMillis) {
+    this.socketTimeoutMillis = socketTimeoutMillis;
   }
 }

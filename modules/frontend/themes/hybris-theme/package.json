@@ -6,6 +6,9 @@
     "production": "grunt production",
     "start": "grunt monitor"
   },
+  "devDependencies": {
+    "grunt": "1.0.1"
+  },
   "dependencies": {
     "mediaelement": "2.23.5"
   },

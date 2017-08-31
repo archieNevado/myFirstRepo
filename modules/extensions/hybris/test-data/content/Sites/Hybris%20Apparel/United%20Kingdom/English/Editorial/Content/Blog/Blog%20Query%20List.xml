@@ -4,7 +4,7 @@
 <master>
 </master>
 <viewtype>
-<link href="../../../Options/Viewtypes/CMChannel/tiles-layout-landscape.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Viewtypes/CMChannel/tiles-layout-landscape"/>
+<link href="../../../Options/Viewtypes/CMChannel/tiles-layout-50-50-landscape.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Viewtypes/CMChannel/tiles-layout-50-50-landscape"/>
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -41,5 +41,6 @@
 <related>
 </related>
 <items>
+<link href="../Snow/Is%20Speed%20Riding%20Dangerous%3F.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Is%20Speed%20Riding%20Dangerous%3F"/>
 </items>
 </CMQueryList>

@@ -8,8 +8,8 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructListProperty Name="vanityUrlDefinition">
 <Struct>
-<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMArticle" xlink:href="coremedia:///cap/resources/../../../Editorial/Best%20Picture%20Contest/Share%20Your%20Best%20Pictures%20with%20Us.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Best%20Picture%20Contest/Share%20Your%20Best%20Pictures%20with%20Us"/>
-<StringProperty Name="id">share/pictures</StringProperty>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMArticle" xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Snow/Is%20Speed%20Riding%20Dangerous%3F.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Is%20Speed%20Riding%20Dangerous%3F"/>
+<StringProperty Name="id">speed/riding</StringProperty>
 </Struct>
 </StructListProperty>
 </Struct>

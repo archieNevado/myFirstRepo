@@ -50,6 +50,11 @@
       <artifactId>lc-contentbeans-impl</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+       <artifactId>cae-base-lib</artifactId>
+       <version>${project.version}</version>
+    </dependency>
 
     <!-- BP Base dependencies -->
 

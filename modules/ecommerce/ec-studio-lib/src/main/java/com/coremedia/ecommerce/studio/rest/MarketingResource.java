@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * The resource is just used for handling the top level store node "Marketing Spots".
@@ -28,8 +27,7 @@ public class MarketingResource extends AbstractCatalogResource<Marketing> {
     Marketing entity = getEntity();
 
     if (entity == null) {
-      LOG.warn("Error loading marketing bean");
-      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load marketing bean");
+      throw new CatalogBeanNotFoundRestException("Could not load marketing bean.");
     }
 
     representation.setId(entity.getId());
