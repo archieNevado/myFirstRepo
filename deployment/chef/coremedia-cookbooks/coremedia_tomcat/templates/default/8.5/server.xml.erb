@@ -50,9 +50,11 @@
       <Host name="localhost"  appBase="webapps"
             unpackWARs="false" autoDeploy="false" failCtxIfServletStartFails="true">
 
+        <% if @access_log -%>
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log." suffix=".txt"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" resolveHosts="false"/>
+        <% end -%>
 
         <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="x-forwarded-proto" />
 

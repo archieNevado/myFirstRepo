@@ -118,18 +118,34 @@ public class TaxonomyExplorerPanelBase extends Panel {
       parent.invalidate(function ():void {
         refreshNode(parent);
         updateColumns(parent);
-        //god, i love ext
-        EventUtil.invokeLater(function ():void {
-          EventUtil.invokeLater(function ():void {
-            getSelectedValueExpression().setValue(newChild);
-            selectNode(newChild, true);
 
-            // Preset location latitude/longitude for location taxonomy nodes
-            setInitialLocation(newChild, parent);
-          });
+        getSelectedValueExpression().setValue(newChild);
+        selectNode(newChild, function ():void {
+          focusNameField();
+
+          // Preset location latitude/longitude for location taxonomy nodes
+          setInitialLocation(newChild, parent);
         });
       });
     });
+  }
+
+  /**
+   * Ensures that the taxonomy name field receives the focus for immediate editing
+   */
+  private function focusNameField():void {
+    var dfd:Container = queryById('documentFormDispatcher') as Container;
+    var collapsable:Panel = dfd.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
+
+    var fieldId:String = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_display_property');
+    var stringPropertyFields:Array = collapsable.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
+
+    for each(var field:StringPropertyField in stringPropertyFields) {
+      if (field.propertyName === fieldId) {
+        var nameField:TextField = field.query(createComponentSelector()._xtype("textfield").build())[0] as TextField;
+        nameField.focus(true);
+      }
+    }
   }
 
   /**
@@ -275,7 +291,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
     for (var i:int = 0; i < nodes.length; i++) {
       var node:TaxonomyNode = nodes[i];
       if (i === 0) {
-        getRootColumnPanel().selectNode(node, true);
+        getRootColumnPanel().selectNode(node);
       }
       else {
         addColumn(nodes[i - 1]);
@@ -368,7 +384,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
           previewLoadMask.hide();
           setBusy(false);
 
-          ensureExpandState(dfd, content, attachBlurListener);
+          ensureExpandState(dfd, content);
           Ext.resumeLayouts(true);
         });
       }
@@ -385,37 +401,14 @@ public class TaxonomyExplorerPanelBase extends Panel {
     }
   }
 
-  private function ensureExpandState(dfd:Container, content:Content, callback:Function):void {
+  private function ensureExpandState(dfd:Container, content:Content):void {
     EventUtil.invokeLater(function ():void {
-      var formDispatcher:Container = dfd.down(createComponentSelector().itemId(content.getType().getName()).build()) as Container;
-      var documentForm:Container = formDispatcher.down(createComponentSelector().itemId(content.getType().getName()).build()) as Container;
-      var collapsable:Panel = documentForm.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
+      var collapsable:Panel = dfd.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
       if (collapsable.collapsed) {
         collapsable.expand(false);
       }
-
-      EventUtil.invokeLater(function ():void {
-        var fieldId:String = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_display_property');
-        var stringPropertyFields:Array = collapsable.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
-
-        for each(var field:StringPropertyField in stringPropertyFields) {
-          if (field.propertyName === fieldId) {
-            var nameField:TextField = field.query(createComponentSelector()._xtype("textfield").build())[0] as TextField;
-            callback(nameField);
-          }
-        }
-      });
     });
   }
-
-  private function attachBlurListener(nameField:TextField):void {
-    if (nameField && nameField.getValue() === resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_default_name')) {
-      nameField.selectOnFocus = true;
-      nameField.focus(true);
-    }
-    nameField.addListener('blur', onNameFieldBlur);
-  }
-
 
   /**
    * Blur event listener handler that checks if a renaming is required
@@ -423,7 +416,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
    * @param nameField
    */
   private function onNameFieldBlur(nameField:TextField):void {
-    nameField.removeListener('blur', onNameFieldBlur);
     //maybe the focus was lost because an action was triggered, so we delay the disable action
     setBusy(true);
     EventUtil.invokeLater(function ():void {
@@ -599,13 +591,13 @@ public class TaxonomyExplorerPanelBase extends Panel {
   /**
    * Selects the ext record of the given node.
    * @param node The node to select.
-   * @param force if the selection should be forced or not
+   * @param callback optional callback method
    */
-  private function selectNode(node:TaxonomyNode, force:Boolean = false):void {
+  private function selectNode(node:TaxonomyNode, callback:Function = undefined):void {
     //refresh given node entry (maybe after an update) of a visible column list.
     var nodesColumn:TaxonomyExplorerColumn = getColumnContainer(node);
     if (nodesColumn) {
-      nodesColumn.selectNode(node, force);
+      nodesColumn.selectNode(node, callback);
     }
   }
 

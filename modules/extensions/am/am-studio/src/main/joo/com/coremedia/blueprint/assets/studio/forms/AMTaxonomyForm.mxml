@@ -24,6 +24,7 @@
   <editor:items>
     <!--Do not rename itemId, because the TaxonomyExplorerPanel uses it to highlight the value field-->
     <editor:DocumentForm
+            itemId="AMTaxonomy"
             title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
       <editor:items>
         <editor:PropertyFieldGroup itemId="taxonomy"

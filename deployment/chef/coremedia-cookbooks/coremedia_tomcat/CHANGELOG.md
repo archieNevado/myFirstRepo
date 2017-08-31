@@ -2,6 +2,10 @@ coremedia_tomcat Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia_tomcat cookbook.
 
+v.2.1.2
+------
+- add `access_log` attribute to `coremedia_tomcat` resource to toggle the creation of access logs
+
 v.2.1.1
 -------
 - guard if hook script is there

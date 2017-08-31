@@ -55,6 +55,7 @@
             <perso:SearchQueryHelper/>
             <editor:ContentTypeStringPropertyField bindTo="{config.bindTo}"
                                                    propertyName="documentType"
+                                                   linkType="CMTeasable"
                                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <editor:LinkListPropertyField propertyName="searchContext"
                                           bindTo="{config.bindTo}"

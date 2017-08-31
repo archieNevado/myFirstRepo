@@ -255,6 +255,7 @@ The layout will be:
 - context_template: The template name from which to create the context_file. Defaults to <code>"context.xml.erb"</code>.
 - context_template_cookbook: The cookbook, from which to load the context_template. Defaults to <code>"coremedia_tomcat"</code>.
 - clean_log_dir_on_start: Set this to true to clean the log directory on before starting tomcat Defaults to <code>false</code>.
+- access_log: A toggle to switch on/off access logs Defaults to <code>true</code>.
 
 ### Service Hooks
 If you want to execute some scripts before or after Tomcat is started/stopped, you may place arbitrary scripts below

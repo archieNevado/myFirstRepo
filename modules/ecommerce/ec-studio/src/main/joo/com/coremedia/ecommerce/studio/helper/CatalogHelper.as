@@ -11,6 +11,7 @@ import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
+import com.coremedia.ecommerce.studio.model.CategoryImpl;
 import com.coremedia.ecommerce.studio.model.Marketing;
 import com.coremedia.ecommerce.studio.model.MarketingSpot;
 import com.coremedia.ecommerce.studio.model.Product;
@@ -156,6 +157,13 @@ public class CatalogHelper {
     return id.substr(id.lastIndexOf('/') + 1);
   }
 
+  private function encodeForUri(externalId:String):String {
+    // First all chars in externalId are encoded.
+    // After that, translate back encoded slashes ("%2F") to "/" because by default the tomcat container
+    // do not allow encoded slashes for security reasons (see org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH).
+    return encodeURIComponent(externalId).replace(/%2F/g, "/")
+  }
+
   public function isSubType(catalogObject:CatalogObject, catalogObjectType:String):Boolean {
     if (catalogObject is Category) {
       return catalogObjectType === TYPE_CATEGORY;
@@ -202,26 +210,30 @@ public class CatalogHelper {
     if (!workspaceId) {
       workspaceId = NO_WS;//No workspace selected
     }
-    var externalId:String = getExternalIdFromId(catalogObjectId);
+
+    //siteId and externalId are free text properties and therefor
+    //must be uri encoded. see #encodeForUri for more details.
+    var encodedSiteId:String = encodeForUri(siteId);
+    var endocedExternalId = encodeForUri(getExternalIdFromId(catalogObjectId));
     var uriPath:String;
     if (isCategoryId(catalogObjectId)) {
-      uriPath = "livecontext/category/" + siteId + "/" + workspaceId + "/" + externalId;
+      uriPath = "livecontext/category/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isProductVariantId(catalogObjectId)) {
-      uriPath = "livecontext/sku/" + siteId + "/" + workspaceId + "/" + externalId;
+      uriPath = "livecontext/sku/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isProductId(catalogObjectId)) {
-      uriPath = "livecontext/product/" + siteId + "/" + workspaceId + "/" + externalId;
+      uriPath = "livecontext/product/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isSegmentId(catalogObjectId)) {
-      uriPath = "livecontext/segment/" + siteId + "/" + workspaceId + "/" + externalId;
+      uriPath = "livecontext/segment/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isContractId(catalogObjectId)) {
-      uriPath = "livecontext/contract/" + siteId + "/" + workspaceId + "/" + externalId;
+      uriPath = "livecontext/contract/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isMarketingSpot(catalogObjectId)) {
-      uriPath = "livecontext/marketingspot/" + siteId + "/" + workspaceId + "/" + externalId;
+      uriPath = "livecontext/marketingspot/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isMarketing(catalogObjectId)) {
-      uriPath = "livecontext/marketing/" + siteId + "/" + workspaceId + "/";
+      uriPath = "livecontext/marketing/" + encodedSiteId + "/" + workspaceId + "/";
     }
 
     if(uriPath) {
-      return CatalogObject(beanFactory.getRemoteBean(encodeURI(uriPath)));
+      return CatalogObject(beanFactory.getRemoteBean(uriPath));
     }
   }
 

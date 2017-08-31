@@ -25,7 +25,9 @@
 
     public native function TaxonomyLinkListPropertyField(config:TaxonomyLinkListPropertyField = null);
     ]]></fx:Script>
-
+  <fx:Declarations>
+    <fx:Boolean id="hideIssues"/>
+  </fx:Declarations>
   <local:layout>
     <layout_VBox align="stretch"/>
   </local:layout>
@@ -38,6 +40,12 @@
                                         selectedValuesExpression="{getSelectedValuesVE()}"
                                         readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}">
       <taxonomy:plugins exml:mode="append">
+        <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
+                                 ifUndefined=""
+                                 propertyName="{config.propertyName}"
+                                 hideIssues="{config.hideIssues}"/>
+
+        <editor:PropertyFieldPlugin propertyName="{config.propertyName}"/>
         <ui:BEMPlugin block="{LinkListBEMEntities.BLOCK}"
                       bodyElement="{LinkListBEMEntities.ELEMENT_LIST}"
                       modifier="{getModifierVE(config)}"/>

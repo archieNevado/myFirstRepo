@@ -27,13 +27,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.coremedia.ecommerce.studio.rest.CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN;
 import static java.util.Collections.emptyList;
 
 /**
@@ -123,8 +121,7 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     Store entity = getEntity();
 
     if (entity == null) {
-      LOG.debug("Error loading store bean: store context is null (site: {}).", getSiteId());
-      throw new CatalogRestException(Status.NOT_FOUND, COULD_NOT_FIND_CATALOG_BEAN, "Could not load store bean.");
+      throw new CatalogBeanNotFoundRestException("Could not load store bean.");
     }
 
     try {

@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import static java.util.Objects.requireNonNull;
 
@@ -36,9 +35,11 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
   private void fillRepresentation(ProductVariantRepresentation representation) {
     super.fillRepresentation(representation);
     ProductVariant entity = getEntity();
+
     if (entity == null) {
-      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load sku bean");
+      throw new CatalogBeanNotFoundRestException("Could not load sku bean");
     }
+
     representation.setId(entity.getId());
     representation.setName(entity.getName());
     representation.setExternalId(entity.getExternalId());
@@ -51,15 +52,17 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
     representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, contentRepositoryResource.getEntity()));
     representation.setParent(entity.getParent());
     representation.setCategory(entity.getCategory());
-    representation.setStore((new Store(entity.getContext())));
+    representation.setStore(new Store(entity.getContext()));
     representation.setOfferPrice(entity.getOfferPrice());
     representation.setListPrice(entity.getListPrice());
     representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
+
     // get visuals directly via AssetService to avoid fallback to default picture
     AssetService assetService = getConnection().getAssetService();
-    if(null != assetService) {
+    if (assetService != null) {
       representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
     }
+
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
     representation.setDefiningAttributes(entity.getDefiningAttributes());

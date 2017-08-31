@@ -7,7 +7,6 @@ import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * A catalog {@link com.coremedia.livecontext.ecommerce.p13n.Segment} object as a RESTful resource.
@@ -27,8 +26,7 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
     Segment entity = getEntity();
 
     if (entity == null) {
-      LOG.warn("Error loading segment bean");
-      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load segment bean");
+      throw new CatalogBeanNotFoundRestException("Could not load segment bean.");
     }
 
     representation.setId(entity.getId());

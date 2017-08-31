@@ -15,6 +15,8 @@ export NEW_VERSION=$1
 
 # grep -l "${OLD_VERSION}" "$0"
 echo "replacing $OLD_VERSION with $NEW_VERSION in:"
-find ${BASE_PATH} -type f \( -name pom.xml -o -name "*.rb" -o -name "*.md" -o -name "*.json" \) -not -path "*/node_modules/*" -exec sh -c '
+find ${BASE_PATH} -type f \( -name pom.xml -or -name "*.rb" -or -name "*.md" -or -name "*.json" \) \
+ -and -not \( -path "*/.git/*" -or -path "*/node_modules/*" \) \
+ -exec sh -c '
  grep -l "${OLD_VERSION}" "$0" && sed -i "s#${OLD_VERSION}#${NEW_VERSION}#g" "$0"
 ' {} ';'

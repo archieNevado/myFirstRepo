@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * A catalog {@link com.coremedia.livecontext.ecommerce.p13n.MarketingSpot} object as a RESTful resource.
@@ -26,8 +25,7 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
     MarketingSpot entity = getEntity();
 
     if (entity == null) {
-      LOG.warn("Error loading spot bean");
-      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load spot bean");
+      throw new CatalogBeanNotFoundRestException("Could not load spot bean");
     }
 
     representation.setId(entity.getId());
@@ -35,9 +33,8 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
     representation.setShortDescription(entity.getDescription());
     representation.setExternalId(entity.getExternalId());
     representation.setExternalTechId(entity.getExternalTechId());
-    representation.setStore((new Store(entity.getContext())));
+    representation.setStore(new Store(entity.getContext()));
   }
-
 
   @Override
   protected MarketingSpot doGetEntity() {
@@ -55,5 +52,4 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
     setSiteId(spot.getContext().getSiteId());
     setWorkspaceId(spot.getContext().getWorkspaceId());
   }
-
 }

@@ -4,9 +4,9 @@
     "url": "http://www.coremedia.com"
   },
   "dependencies": {
-    "archiver": "1.3.0",
+    "archiver": "2.0.0",
     "request": "2.81.0",
-    "tiny-lr": "1.0.3"
+    "tiny-lr": "1.0.5"
   },
   "description": "CoreMedia common tools.",
   "main": "index.js",

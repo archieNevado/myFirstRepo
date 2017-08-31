@@ -155,7 +155,8 @@ action :install do
               :jmx_remote => new_resource.jmx_remote,
               :jmx_remote_registry_port => new_resource.jmx_remote_registry_port,
               :jmx_remote_server_port => new_resource.jmx_remote_server_port,
-              :jmx_remote_use_local_ports => new_resource.jmx_remote_use_local_ports)
+              :jmx_remote_use_local_ports => new_resource.jmx_remote_use_local_ports,
+              :access_log => new_resource.access_log)
   end
 
   template "#{tomcat_dir}/conf/web.xml" do

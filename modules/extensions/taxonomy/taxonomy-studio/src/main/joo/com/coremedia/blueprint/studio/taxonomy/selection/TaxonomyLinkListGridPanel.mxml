@@ -6,12 +6,14 @@
                                      xmlns:ui="exml:com.coremedia.ui.config"
                                      xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
                                      hideHeaders="true"
+                                     ui="{PanelSkin.NO_VALIDATION.getSkin()}"
                                      forceFit="true">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.ui.data.ValueExpressionFactory;
+    import com.coremedia.ui.skins.PanelSkin;
     import com.coremedia.ui.skins.TableViewSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyLinkListGridPanel";

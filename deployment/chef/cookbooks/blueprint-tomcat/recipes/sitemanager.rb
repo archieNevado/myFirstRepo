@@ -16,7 +16,7 @@ node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['
 node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['editor.startup.configuration'] = "#{cm_webapp_url(service_name, node['blueprint']['hostname'])}/webstart/properties/corem/editor-startup.xml"
 node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['editor.display.embedded.view'] = 'true'
 node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['usermanager.searchResultSize'] = '490'
-node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['user.manual.url'] = 'https://documentation.coremedia.com/editor-user/1707.1/editor-user-{0}.pdf'
+node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['user.manual.url'] = 'https://documentation.coremedia.com/editor-user/1707.2/editor-user-{0}.pdf'
 node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['editor.richtext.model.traditional'] = 'false'
 node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['show.content.change.popups'] = 'true'
 node.default_unless['blueprint']['webapps'][service_name]['editor.properties']['login.username'] = ''
