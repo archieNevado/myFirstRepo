@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * The resource handles the top level store node "Segments".
@@ -27,8 +26,7 @@ public class WorkspacesResource extends AbstractCatalogResource<Workspaces> {
     Workspaces workspaces = getEntity();
 
     if (workspaces == null) {
-      LOG.warn("Error loading workspaces bean");
-      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load workspaces bean");
+      throw new CatalogBeanNotFoundRestException("Could not load workspaces bean.");
     }
 
     representation.setId(workspaces.getId());

@@ -35,7 +35,7 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
   private ContextStrategy<Content, Content> contextStrategy;
   private String wcsStorefrontUrl;
   private String urlKeyword;
-  private ExternalSeoSegmentBuilder externalSeoSegmentBuilder = new ExternalSeoSegmentBuilder();
+  private ExternalSeoSegmentBuilder externalSeoSegmentBuilder;
 
   // --- Spring config ----------------------------------------------
 

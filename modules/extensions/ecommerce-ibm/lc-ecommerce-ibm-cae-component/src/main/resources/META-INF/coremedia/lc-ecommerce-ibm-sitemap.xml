@@ -12,6 +12,7 @@
   <import resource="classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-site-services.xml"/>
+  <import resource="classpath:/META-INF/coremedia/livecontext-fragment.xml"/>
 
   <!--
     sitemap.org sitemap
@@ -106,6 +107,7 @@
     <property name="contextStrategy" ref="contentContextStrategy"/>
     <property name="urlKeyword" value="${livecontext.url-keyword}"/>
     <property name="linkFormatter" ref="linkFormatter"/>
+    <property name="externalSeoSegmentBuilder" ref="externalSeoSegmentBuilder"/>
   </bean>
 
   <bean id="sitemapWcsAasRendererFactory" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.SitemapWcsAasRendererFactory"/>

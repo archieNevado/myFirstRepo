@@ -7,7 +7,6 @@ import com.coremedia.livecontext.ecommerce.contract.ContractService;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.Collection;
 
 /**
@@ -28,8 +27,7 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
     Contract entity = getEntity();
 
     if (entity == null) {
-      LOG.warn("Error loading contract bean");
-      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load contract bean");
+      throw new CatalogBeanNotFoundRestException("Could not load contract bean.");
     }
 
     representation.setId(entity.getId());

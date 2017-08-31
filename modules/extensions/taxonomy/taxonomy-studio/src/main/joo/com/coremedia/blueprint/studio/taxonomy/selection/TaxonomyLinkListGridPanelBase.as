@@ -5,10 +5,17 @@ import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderFactory;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderer;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cms.editor.sdk.premular.fields.LinkListDropArea;
 import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.mixins.IValidationStateMixin;
+import com.coremedia.ui.mixins.ValidationState;
+import com.coremedia.ui.mixins.ValidationStateMixin;
 import com.coremedia.ui.store.BeanRecord;
 import com.coremedia.ui.util.EventUtil;
+import com.coremedia.ui.util.createComponentSelector;
+
+import ext.Component;
 
 import ext.EventManager;
 import ext.Ext;
@@ -30,7 +37,7 @@ import js.KeyEvent;
  */
 [ResourceBundle('com.coremedia.cms.editor.Editor')]
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
-public class TaxonomyLinkListGridPanelBase extends GridPanel {
+public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidationStateMixin {
 
   [Bindable]
   public var linkListWrapper:ILinkListWrapper;
@@ -74,7 +81,11 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel {
    */
   public function TaxonomyLinkListGridPanelBase(config:TaxonomyLinkListGridPanelBase = null) {
     super(config);
+    initValidationStateMixin();
     this.addListener("afterlayout", refreshLinkList);
+    on("validationStateChanged", onValidationChanged);
+    on("validationMessageChanged", onValidationChanged);
+    onValidationChanged();
   }
 
 
@@ -96,6 +107,22 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel {
         }
       }
     });
+  }
+
+  private function onValidationChanged():void {
+    var viewValidation:ValidationStateMixin = view as ValidationStateMixin;
+    if (viewValidation) {
+      viewValidation.validationState = validationState;
+      viewValidation.validationMessage = validationMessage;
+    }
+    var dropArea:Component = query(createComponentSelector()._xtype(LinkListDropArea.xtype).build())[0];
+    if (dropArea) {
+      var dropAreaValidation:ValidationStateMixin = dropArea as ValidationStateMixin;
+      if (dropAreaValidation) {
+        dropAreaValidation.validationState = validationState;
+        dropAreaValidation.validationMessage = validationMessage;
+      }
+    }
   }
 
   private function isWritable():Boolean {
@@ -189,5 +216,24 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel {
     dropTarget && dropTarget.unreg();
     super.onRemoved(destroying);
   }
+
+  /** @inheritDoc */
+  public native function initValidationStateMixin():void;
+
+  /** @private */
+  [Bindable]
+  public native function set validationState(validationState:ValidationState):void;
+
+  /** @private */
+  [Bindable]
+  public native function set validationMessage(validationMessage:String):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get validationState():ValidationState;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get validationMessage():String;
 }
 }

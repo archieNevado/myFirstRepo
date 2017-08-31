@@ -7,14 +7,11 @@ import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
 import java.net.URLEncoder;
 
 import static java.text.MessageFormat.format;
@@ -23,7 +20,7 @@ import static java.text.MessageFormat.format;
  * An abstract catalog object as a RESTful resource.
  */
 public abstract class CommerceBeanResource<Entity extends CommerceBean> extends AbstractCatalogResource<Entity> {
-  private static final Logger LOG = LoggerFactory.getLogger(CommerceBeanResource.class);
+
   private static final String ID_AND_SITE_PARAM = "{0}&site={1}";
 
   private AugmentationService augmentationService;
@@ -32,15 +29,12 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
   @Inject
   private ContentRepositoryResource contentRepositoryResource;
 
-  protected void fillRepresentation(CommerceBeanRepresentation representation) {
+  protected void fillRepresentation(@Nonnull CommerceBeanRepresentation representation) {
     CommerceBean entity = getEntity();
 
     if (entity == null) {
-      CatalogRestException catalogRestException = new CatalogRestException(Response.Status.NOT_FOUND,
-              CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN,
-              "Could not load commerce bean with id " + getId());
-      LOG.error("Error loading commerce bean", catalogRestException);
-      throw catalogRestException;
+      String errorMessage = String.format("Could not load commerce bean with id '%s'.", getId());
+      throw new CatalogBeanNotFoundRestException(errorMessage);
     }
 
     representation.setId(entity.getId());
@@ -48,17 +42,20 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     representation.setExternalTechId(entity.getExternalTechId());
     representation.setCustomAttributes(entity.getCustomAttributes());
 
-    //set preview url
+    // set preview url
     representation.setPreviewUrl(computePreviewUrl());
-
   }
 
+  @Nonnull
   String computePreviewUrl() {
     String previewControllerUriPattern = getContentRepositoryResource().getPreviewControllerUrlPattern();
-    return formatPreviewUrl(previewControllerUriPattern, URLEncoder.encode(getEntity().getId()), getSiteId());
+    String encodedEntityId = URLEncoder.encode(getEntity().getId());
+
+    return formatPreviewUrl(previewControllerUriPattern, encodedEntityId, getSiteId());
   }
 
-  public static String formatPreviewUrl(String previewControllerUriPattern, String id, String siteId) {
+  @Nonnull
+  public static String formatPreviewUrl(@Nonnull String previewControllerUriPattern, String id, String siteId) {
     // position 0 is reserved for formatted IDs, position 1 is reserved for numeric content IDs
     // the site param is appended to the formatted ID
     String idAndSiteParam = format(ID_AND_SITE_PARAM, id, siteId);
@@ -72,7 +69,9 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
   @Override
   public void setEntity(Entity entity) {
     setId(entity.getExternalId());
+
     StoreContext context = entity.getContext();
+
     setSiteId(context.getSiteId());
     setWorkspaceId(context.getWorkspaceId());
   }
@@ -86,16 +85,21 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
       return null;
     }
 
-    Site site = sitesService.getSite(getEntity().getContext().getSiteId());
+    Entity entity = getEntity();
+
+    String siteId = entity.getContext().getSiteId();
+
+    Site site = sitesService.getSite(siteId);
     if (site == null) {
       return null;
     }
 
-    return augmentationService.getContent(getEntity());
+    return augmentationService.getContent(entity);
   }
 
   /**
    * Set augmentation service in case the commerce bean can be augmented.
+   *
    * @param augmentationService the augmentation service matching the concrete resource type
    */
   public void setAugmentationService(AugmentationService augmentationService) {
@@ -106,5 +110,4 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
-
 }

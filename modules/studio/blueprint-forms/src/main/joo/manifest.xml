@@ -41,11 +41,9 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.ChannelMetaDataInformationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.CollapsibleBlobPropertyForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.CollapsibleStringPropertyForm"/>
-  <component class="com.coremedia.blueprint.studio.forms.containers.ContextsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.DataDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.DetailsDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ExternallyVisibleDateForm"/>
-  <component class="com.coremedia.blueprint.studio.forms.containers.ItemsDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ItemsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.LinkedSettingsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.LocalSettingsForm"/>
@@ -68,5 +66,4 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.ValidityDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ViewTypeSelectorForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityDocumentForm"/>
-  <component class="com.coremedia.blueprint.studio.property.QueryListSortingDropdown"/>
 </componentPackage>

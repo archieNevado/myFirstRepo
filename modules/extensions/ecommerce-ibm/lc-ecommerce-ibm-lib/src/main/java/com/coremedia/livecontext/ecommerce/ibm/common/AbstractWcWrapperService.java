@@ -21,8 +21,8 @@ public abstract class AbstractWcWrapperService {
   private static final String PARAM_CONTRACT_ID = "contractId";
   private static final String PARAM_LANG_ID = "langId";
   private static final String PARAM_CURRENCY = "currency";
-  private static final String PARAM_FOR_USER = "forUser";
-  private static final String PARAM_FOR_USER_ID = "forUserId";
+  protected static final String PARAM_FOR_USER = "forUser";
+  protected static final String PARAM_FOR_USER_ID = "forUserId";
 
   private static final WcRestServiceMethod<Map, Void>
           GET_LANGUAGE_MAPPING = WcRestConnector.createServiceMethod(HttpMethod.GET, "coremedia/languagemap", false, false, false, Map.class);

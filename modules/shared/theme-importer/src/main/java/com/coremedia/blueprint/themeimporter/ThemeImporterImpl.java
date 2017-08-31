@@ -597,32 +597,32 @@ public class ThemeImporterImpl implements ThemeImporter {
 
   private String urlReplacement(String uri, String protocol, String hostport, String path, String suffix, String targetDocumentPath, ThemeImporterContentHelper contentHelper) {
     if (protocol == null && hostport == null) {
-      return toRichtextInternalLink(path, targetDocumentPath, suffix, contentHelper);
+      return toRichtextInternalLink(uri, path, targetDocumentPath, suffix, contentHelper);
     } else if (DATA_PROPERTY.equals(protocol)) {
       return toRichtextPlain(protocol, path);
     } else {
-      return toRichtextHref(URI.create(uri), uri);
+      return toRichtextHref(uri, uri);
     }
   }
 
-  private String toRichtextInternalLink(String uriMatch, String targetDocumentPath, String suffix, ThemeImporterContentHelper contentHelper) {
+  private String toRichtextInternalLink(String uri, String path, String targetDocumentPath, String suffix, ThemeImporterContentHelper contentHelper) {
     try {
-      boolean isSuitablePath = !StringUtils.isEmpty(uriMatch) && !uriMatch.startsWith("/");
-      String linkPath = isSuitablePath ? PathUtil.concatPath(targetDocumentPath, uriMatch) : null;
+      boolean isSuitablePath = !StringUtils.isEmpty(path) && !path.startsWith("/");
+      String linkPath = isSuitablePath ? PathUtil.concatPath(targetDocumentPath, path) : null;
       Content referencedContent = linkPath!=null ? contentHelper.fetchContent(linkPath) : null;
       if (referencedContent != null) {
         URI linkImportId = new URI("coremedia", "", "/cap/resources/" + contentHelper.id(referencedContent), null);
         if (!StringUtils.isEmpty(suffix)) {
-          LOGGER.info("Ignoring link suffix {} of {}, no reasonable way to deal with.", suffix, uriMatch);
+          LOGGER.info("Ignoring link suffix {} of {}, no reasonable way to deal with.", suffix, path);
         }
         if ("css".equals(extension(linkPath))) {
-          return toRichtextHref(linkImportId, uriMatch);
+          return toRichtextHref(linkImportId.toString(), path);
         } else {
           return toRichtextImg(linkImportId);
         }
       } else {
         if (linkPath == null) {
-          LOGGER.warn("Cannot handle invalid path '{}'", uriMatch);
+          LOGGER.warn("Cannot handle invalid path '{}'", path);
         } else if (linkPath.contains(" + ") || linkPath.contains("...")) {
           LOGGER.debug("Cannot resolve {}, looks like a pattern or expression", linkPath);
         } else {
@@ -630,9 +630,9 @@ public class ThemeImporterImpl implements ThemeImporter {
         }
       }
     } catch (Exception e) {
-      LOGGER.error("Cannot handle {}, {}", uriMatch, targetDocumentPath, e);
+      LOGGER.error("Cannot handle {}, {}", path, targetDocumentPath, e);
     }
-    return toRichtextPlain(null, uriMatch);
+    return toRichtextPlain(null, uri);
   }
 
   private String toRichtextPlain(String protocol, String uriMatch) {
@@ -648,7 +648,7 @@ public class ThemeImporterImpl implements ThemeImporter {
     return builder.toString();
   }
 
-  private String toRichtextHref(URI href, String linktext) {
+  private String toRichtextHref(String href, String linktext) {
     return "url(<a xlink:href=\"" + href + "\">" + XmlUtil5.escapeOrOmit(linktext) + "</a>)";
   }
 

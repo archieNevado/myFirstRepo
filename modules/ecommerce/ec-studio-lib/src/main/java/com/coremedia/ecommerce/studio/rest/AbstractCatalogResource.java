@@ -45,7 +45,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   @PathParam(ID)
   public void setId(@Nullable String id) {
-    this.id = id != null ? decodeId(id) : null;
+    this.id = id;
   }
 
   @Nonnull

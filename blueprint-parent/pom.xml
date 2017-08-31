@@ -29,13 +29,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1707.1</blueprint-base.version>
-    <cms.version>1707.1</cms.version>
-    <personalization.version>1707.1</personalization.version>
-    <elastic.version>1707.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1707.1</studio.version>
-    <caetoolbox.version>1707.1</caetoolbox.version>
-    <livecontext.version>1707.1</livecontext.version>
+    <blueprint-base.version>1707.2</blueprint-base.version>
+    <cms.version>1707.2</cms.version>
+    <personalization.version>1707.2</personalization.version>
+    <elastic.version>1707.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1707.2</studio.version>
+    <caetoolbox.version>1707.2</caetoolbox.version>
+    <livecontext.version>1707.2</livecontext.version>
     <jangaroo.version>4.0.50</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
@@ -314,7 +314,7 @@
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy-all</artifactId>
-        <version>2.2.1</version>
+        <version>2.4.12</version>
         <classifier>indy</classifier>
       </dependency>
 
@@ -376,7 +376,7 @@
           <artifactId>frontend-maven-plugin</artifactId>
           <version>1.4</version>
           <configuration>
-            <nodeVersion>v6.10.1</nodeVersion><!-- LTS -->
+            <nodeVersion>v6.11.1</nodeVersion><!-- LTS -->
           </configuration>
         </plugin>
         <plugin>

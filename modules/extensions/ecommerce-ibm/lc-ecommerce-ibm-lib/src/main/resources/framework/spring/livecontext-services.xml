@@ -194,13 +194,10 @@
     <property name="loginService" ref="userLoginService"/>
   </bean>
 
-  <bean id="storeInfoService" class="com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoServiceImpl">
-    <property name="wrapperService" ref="storeInfoWrapperService"/>
-    <property name="commerceCache" ref="commerceCache"/>
-  </bean>
+  <bean id="storeInfoService" class="com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService"/>
 
   <bean id="storeInfoWrapperService" class="com.coremedia.livecontext.ecommerce.ibm.storeinfo.WcStoreInfoWrapperService">
     <property name="restConnector" ref="restConnector"/>
   </bean>
-  
+
 </beans>

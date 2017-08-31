@@ -13,14 +13,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Test for {@link com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoServiceImpl}
+ * Test for {@link com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService}
  */
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
-public class StoreInfoServiceImplIT extends IbmServiceTestBase {
+public class StoreInfoServiceIT extends IbmServiceTestBase {
 
   @Inject
-  private StoreInfoServiceImpl testling;
+  private StoreInfoService testling;
 
   @Betamax(tape = "sis_testGetStoreInfos", match = {MatchRule.path, MatchRule.query})
   @Test

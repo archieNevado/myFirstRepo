@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * The resource handles the top level store node "Segments".
@@ -27,8 +26,7 @@ public class SegmentsResource extends AbstractCatalogResource<Segments> {
     Segments segments = getEntity();
 
     if (segments == null) {
-      LOG.warn("Error loading segments bean");
-      throw new CatalogRestException(Response.Status.NOT_FOUND, CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, "Could not load segments bean");
+      throw new CatalogBeanNotFoundRestException("Could not load segments bean.");
     }
 
     representation.setId(segments.getId());

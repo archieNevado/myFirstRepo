@@ -119,19 +119,21 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
    * Loads the values into the list.
    */
   private function updateSuggestions(reload:Boolean = false):void {
-    setBusy(true);
+    if (!initialConfig.disableSuggestions) {
+      setBusy(true);
 
-    var callback:Function = function (list:TaxonomyNodeList):void {
-      if (list) {
-        convertResultToContentList(list);
+      var callback:Function = function (list:TaxonomyNodeList):void {
+        if (list) {
+          convertResultToContentList(list);
+        }
+      };
+
+      if (reload) {
+        cache.invalidate(callback);
       }
-    };
-
-    if (reload) {
-      cache.invalidate(callback);
-    }
-    else {
-      cache.loadSuggestions(callback);
+      else {
+        cache.loadSuggestions(callback);
+      }
     }
   }
 

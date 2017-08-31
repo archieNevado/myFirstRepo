@@ -295,9 +295,9 @@ define :blueprint_tomcat_service, skip_lifecycle: false, base_service_name: nil 
     owner service_user
     group service_group
     sensitive true
-    # now we notify the webapp to change its updated_by_last_action flag. See how we use the stored reference, otherwise
-    # we would have written 'notifies :update, "coremedia_tomcat_webapp[#{service_name}]", :immediately
-    notifies :update, webapp, :immediately
+    # now we notify the tomcat to change its updated_by_last_action flag. See how we use the stored reference, otherwise
+    # we would have written 'notifies :update, "coremedia_tomcat[#{service_name}]", :immediately
+    notifies :update, tomcat, :immediately
     # only create the config file if the webapp can be configured this way. Exception is sitemanager.
     not_if { component_config_hash.empty? }
   end

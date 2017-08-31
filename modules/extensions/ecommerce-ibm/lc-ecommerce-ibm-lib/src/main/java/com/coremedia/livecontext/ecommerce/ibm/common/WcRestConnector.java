@@ -345,6 +345,15 @@ public class WcRestConnector {
       }
     }
 
+    if (serviceMethod.isUserCookiesSupport() && additionalHeaders.containsKey(HEADER_COOKIE))
+    {
+      // remove any forUser ("on behalf of") parameters as we already have a user cookie that should be used
+      // a normal shop user cannot act on behalf of herself/himself and would cause a http 400 instead
+      if (optionalParameters.remove(AbstractWcWrapperService.PARAM_FOR_USER) != null || optionalParameters.remove(AbstractWcWrapperService.PARAM_FOR_USER_ID) != null) {
+        LOG.debug("serviceMethod {} has cookieSupport and Cookie header is available, removed any forUser/forUserId parameters", serviceMethod);
+      }
+    }
+
     URI uri;
     try {
       uri = buildRequestUri(serviceMethod.getUriTemplate(), mustBeSecured, serviceMethod.isSearch(), variableValues,

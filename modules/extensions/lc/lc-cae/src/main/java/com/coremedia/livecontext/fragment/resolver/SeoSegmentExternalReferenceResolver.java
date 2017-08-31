@@ -47,7 +47,6 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
   protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
                                                      @Nonnull String referenceInfo,
                                                      @Nonnull Site site) {
-    int contentId = 0;
 
     String decodedSegmentPath = decode(referenceInfo);
 
@@ -58,7 +57,7 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
     }
 
     Content navigation;
-    Content linkable;
+    Content linkable = null;
 
     // try to resolve rest of path as vanity URL: this will be null, if there is no vanity mapping
     String rootSegment = urlPathFormattingHelper.getVanityName(siteRootDocument);
@@ -71,45 +70,48 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
       CMContext context = contextHelper.findAndSelectContextFor(rootChannel, target);
       navigation = context == null ? siteRootDocument : context.getContent();
       linkable = target.getContent();
-    } else {
-      List<String> segmentList = new ArrayList<>();
-
-      segmentList.add(rootSegment);
-
-      int idDelimiterIndex = decodedSegmentPath.lastIndexOf(ID_DELIMITER);
-      String potentialContentIdStr = idDelimiterIndex > 0 ? decodedSegmentPath.substring(idDelimiterIndex+1) : null;
-
-      if (potentialContentIdStr != null && StringUtils.isNumeric(potentialContentIdStr)) {
-        contentId = Integer.parseInt(potentialContentIdStr);
-        int lastPathDelimiterIndex = decodedSegmentPath.lastIndexOf(PATH_DELIMITER);
-        if (lastPathDelimiterIndex > 0) {
-          decodedSegmentPath = decodedSegmentPath.substring(0, lastPathDelimiterIndex);
-        }
-        else {
-          decodedSegmentPath = null;
-        }
-      }
-
-      if (StringUtils.isNotBlank(decodedSegmentPath)) {
-        segmentList.addAll(Arrays.asList(decodedSegmentPath.split(PATH_DELIMITER)));
-      }
-      navigation = resolveNavigation(segmentList);
-      linkable = contentId > 0 ? resolveLinkable(contentId) : navigation;
+      LOG.debug("vanity URL found for {} pointing to {}", vanity, linkable);
+      return new LinkableAndNavigation(linkable, navigation);
     }
 
-    // compatibility mode
-    if (linkable != null && linkable.getType().isSubtypeOf("CMContext")) {
+    List<String> segmentList = new ArrayList<>();
+    segmentList.add(rootSegment);
+    if (StringUtils.isNotBlank(decodedSegmentPath)) {
+      segmentList.addAll(Arrays.asList(decodedSegmentPath.split(PATH_DELIMITER)));
+    }
+    navigation = resolveNavigation(segmentList);
+    final int indexOfDelimiter = decodedSegmentPath.lastIndexOf(ID_DELIMITER);
+    if (navigation == null && indexOfDelimiter > 0) {
+      // last segment path might be a Linkable with concrete content ID
+      // first try to get parent navigation (without potential linkable path segment)
+      final List<String> parentSegmentList = segmentList.subList(0, segmentList.size() - 1);
+      LOG.debug("trying to lookup parent navigation {}", parentSegmentList);
+      navigation = resolveNavigation(parentSegmentList);
+      String potentialContentIdStr = decodedSegmentPath.substring(indexOfDelimiter + 1);
+      if (navigation != null && StringUtils.isNumeric(potentialContentIdStr)) {
+        LOG.debug("trying to lookup content by numeric id {}", potentialContentIdStr);
+        linkable = resolveLinkable(Integer.parseInt(potentialContentIdStr));
+        LOG.debug("numeric id {} resolved to {}", potentialContentIdStr, linkable);
+      }
+    } else {
+      LOG.debug("found navigation object {} pointing to {}", vanity, linkable);
+      // URL denotes a Navigation item without numeric ID, also use it as linkable
       linkable = navigation;
     }
 
+    if (linkable != null && linkable.getType().isSubtypeOf("CMContext")) {
+      linkable = navigation;
+    }
     return new LinkableAndNavigation(linkable, navigation);
   }
 
   private Content resolveNavigation(List<String> segmentList) {
     Navigation navigation = navigationSegmentsUriHelper.parsePath(segmentList);
     if (navigation != null) {
+      LOG.debug("found navigation content {} for segment list {}", navigation, segmentList);
       return navigation.getContext().getContent();
     }
+    LOG.debug("no navigation content found for segment list {}", segmentList);
     return null;
   }
 
@@ -118,7 +120,7 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
     return contentRepository.getContent(capId);
   }
 
-  private String decode(String str) {
+  private static String decode(String str) {
     try {
       return URLDecoder.decode(str, "UTF-8");
     } catch (UnsupportedEncodingException e) {

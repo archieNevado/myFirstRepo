@@ -1,24 +1,78 @@
 package com.coremedia.livecontext.ecommerce.ibm.storeinfo;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.TimeZone;
 
-/**
- * Defines an interface to retrieve availability information for {@link com.coremedia.livecontext.ecommerce.catalog.ProductVariant}.
- */
-public interface StoreInfoService {
+public class StoreInfoService {
 
-  String getStoreId(String storeName);
+  private WcStoreInfoWrapperService wrapperService;
+  private CommerceCache commerceCache;
+  private int delayOnError;
+  private StoreInfoCacheKey storeInfoCacheKey;
 
-  String getDefaultCatalogId(String storeName);
+  public String getStoreId(String storeName) {
+    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".storeId", String.class);
+  }
 
-  String getCatalogId(String storeName, String catalogName);
+  public String getDefaultCatalogId(String storeName) {
+    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".defaultCatalogId", String.class);
+  }
 
-  Map<String, String> getCatalogs(String storeName);
+  public String getCatalogId(String storeName, String catalogName) {
+    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".catalogs." + catalogName, String.class);
+  }
 
-  boolean isAvailable();
+  public TimeZone getTimeZone() {
+    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    String sTimeZoneId = DataMapHelper.getValueForPath(storeInfos, "serverTimezoneId", String.class);
+    return TimeZone.getTimeZone(sTimeZoneId);
+  }
 
-  TimeZone getTimeZone();
+  public String getWcsVersion() {
+    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    return DataMapHelper.getValueForPath(storeInfos, "wcsVersion", String.class);
+  }
 
-  String getWcsVersion();
+  public boolean isAvailable() {
+    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    return !storeInfos.isEmpty();
+  }
+
+  public WcStoreInfoWrapperService getWrapperService() {
+    return wrapperService;
+  }
+
+  @Autowired
+  public void setWrapperService(WcStoreInfoWrapperService wrapperService) {
+    this.wrapperService = wrapperService;
+  }
+
+  public CommerceCache getCommerceCache() {
+    return commerceCache;
+  }
+
+  @Autowired
+  public void setCommerceCache(CommerceCache commerceCache) {
+    this.commerceCache = commerceCache;
+  }
+
+  @Value("${livecontext.ibm.storeInfo.delayOnError:60}")
+  public void setDelayOnError(int delayOnError) {
+    this.delayOnError = delayOnError;
+  }
+
+  @PostConstruct
+  void initialize() {
+    storeInfoCacheKey = new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache);
+  }
 }

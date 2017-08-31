@@ -1,5 +1,6 @@
 package com.coremedia.ecommerce.studio.dragdrop {
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
+import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ui.util.DraggableItemsUtils;
 
@@ -27,7 +28,7 @@ public class CatalogDragDropVisualFeedback {
       //the item can be a CatalogObject or a BeanRecord
       var catalogObject:CatalogObject = (items[0] is CatalogObject)? items[0] : items[0].getBean();
       return DraggableItemsUtils.DRAG_GHOST_TEMPLATE.apply({
-        title : catalogObject.getName(),
+        title : CatalogHelper.getInstance().getDecoratedName(catalogObject),
         icon : AugmentationUtil.getTypeCls(catalogObject)
       });
     } else {

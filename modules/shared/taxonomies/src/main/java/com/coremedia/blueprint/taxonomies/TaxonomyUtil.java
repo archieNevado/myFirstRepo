@@ -33,9 +33,8 @@ public final class TaxonomyUtil {
    * @return The formatted search pattern.
    */
   public static String formatSolrSearch(String name) {
-    String result = name.replaceAll("-", " ");
-    result = result.replaceAll("_", " ");
-    return "*" + result + "*";
+    String result = '*' + name.replaceAll("-", " ");
+    return result.endsWith(" ") ? result : result + '*';
   }
 
   /**
