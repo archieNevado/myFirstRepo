@@ -73,7 +73,7 @@ const registerRemoteMonitorTask = (grunt, livereloadConfig) => {
   grunt.verbose.writeln('Generate grunt config for watch task and register alias task monitor.');
 
   // monitor task for uploading changes in target directory to remote CAE
-  grunt.registerTask('monitor', 'Watch file changes and update theme on remote CAE.', () => {
+  grunt.registerTask('monitor', 'Watch file changes and update theme on remote CAE.', function() {
     grunt.log.writeln('Watch file changes for remote CAE...');
     grunt.verbose.writeln('Execute remote monitor task.');
 
@@ -164,17 +164,29 @@ const registerRemoteMonitorTask = (grunt, livereloadConfig) => {
 
     try {
       const { remoteThemeImporter } = require('@coremedia/common');
-      const { url, apiKey } = remoteThemeImporter.getCMConfig();
+      const { apiKey } = remoteThemeImporter.getCMConfig();
       if (typeof apiKey !== 'string' || apiKey.length === 0) {
         throw new Error();
       }
-      grunt.log.writeln(`Using ${url}`);
+
+      const done = this.async();
+      remoteThemeImporter.whoami(
+        logger
+      ).then(msg => {
+        grunt.log.writeln(msg);
+        grunt.task.run(tasklist);
+        done();
+      }).catch(() => {
+        tasklist.unshift('remoteThemeImporter:login');
+        grunt.log.error('API key has been expired. Please enter your credentials to generate a new API key.');
+        grunt.task.run(tasklist);
+        done();
+      });
     } catch (e) {
       tasklist.unshift('remoteThemeImporter:login');
-      grunt.log.errorlns('API key file doesn´t exist. Please enter your credentials to generate your API key.');
+      grunt.log.error('API key file doesn´t exist. Please enter your credentials to generate your API key.');
+      grunt.task.run(tasklist);
     }
-
-    grunt.task.run(tasklist);
   });
 };
 

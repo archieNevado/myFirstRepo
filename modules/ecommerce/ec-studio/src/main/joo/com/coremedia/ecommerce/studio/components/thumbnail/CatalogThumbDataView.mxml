@@ -40,7 +40,9 @@
                           return editorContext.getThumbnailUri(catalogObject, null, CatalogHelper.getInstance().getType(catalogObject))}}"/>
     <data_AutoField
             name="shortName"
-            mapping="name"/>
+            mapping="name"
+            convert_="{function(v:String, catalogObject:CatalogObject):String {
+                          return CatalogHelper.getInstance().getDecoratedName(catalogObject)}}"/>
   </local:fields>
 
 </local:ThumbDataView>

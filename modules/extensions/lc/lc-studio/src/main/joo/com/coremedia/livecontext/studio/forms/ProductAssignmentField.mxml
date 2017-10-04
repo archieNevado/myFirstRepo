@@ -4,8 +4,10 @@
         xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns="exml:ext.config"
         title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMVideo_productAssignments_title')}"
-        collapsed="false">
+        collapsed="false"
+        padding="6 6 6 0">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
   </fx:Metadata>

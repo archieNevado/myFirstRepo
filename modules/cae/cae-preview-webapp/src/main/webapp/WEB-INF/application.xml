@@ -23,6 +23,7 @@
       <null/>
     </property>
     <property name="idProvider" ref="idProvider"/>
+    <property name="linkFormatter" ref="linkFormatter" />
   </bean>
 
   <customize:append id="previewDateLinkTransformerCustomizer" bean="linkTransformers">

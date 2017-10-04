@@ -181,7 +181,7 @@ public class DefaultPageHandler extends PageHandlerBase {
           @Nonnull Map<String, Object> linkParameters) {
     Navigation context = getNavigation(linkable);
     if (context == null) {
-      LOG.warn("Content " + linkable.getContentId() + " has no navigation context, cannot build link.");
+      LOG.warn("Linkable {} has no navigation context, cannot build link.", linkable);
       return null;
     }
     return buildLink(linkable, context, viewName, linkParameters);
@@ -194,7 +194,6 @@ public class DefaultPageHandler extends PageHandlerBase {
           @Nullable String viewName,
           @Nonnull Map<String, Object> linkParameters) {
     Content targetContent = linkable.getContent();
-    //todo we have to generalize the contentLinkBuilder to cope with Navigation instances if we want to link to {CM}Linkables below a LiveContextNavigation, say
     Content navigationContent = ((CMNavigation) navigationContext).getContent();
     UriComponentsBuilder uriComponentsBuilder = getContentLinkBuilder().buildLinkForPage(targetContent, navigationContent);
     if (uriComponentsBuilder == null) {

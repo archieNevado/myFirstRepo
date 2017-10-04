@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -25,18 +25,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {
+@SpringBootTest(classes = {
         EsDemodataGeneratorWebappIT.DemoDataGeneratorConfiguration.class,
         XmlRepoConfiguration.class
-}, initializers = ComponentLoaderInitializer.class)
-@WebIntegrationTest(
-        randomPort = true,
-        value = {
-                "components.disabled=es-p13n-cae", // this extension doesn't go with core-memory
-                "tenant.default=media",
-                "models.createIndexes=false",
-                "elastic.solr.lazyIndexCreation=true"
-        })
+}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, value = {
+        "components.disabled=es-p13n-cae", // this extension doesn't go with core-memory
+        "tenant.default=media",
+        "models.createIndexes=false",
+        "elastic.solr.lazyIndexCreation=true"
+})
+@ContextConfiguration(initializers = ComponentLoaderInitializer.class)
 @ActiveProfiles("disableDataViews")
 public class EsDemodataGeneratorWebappIT {
 

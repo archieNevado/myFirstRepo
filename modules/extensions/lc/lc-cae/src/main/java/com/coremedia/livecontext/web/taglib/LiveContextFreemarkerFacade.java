@@ -5,8 +5,9 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -43,15 +44,25 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   private transient LiveContextNavigationFactory liveContextNavigationFactory;
   private String secureScheme;
 
-  private AugmentationService augmentationService;
+  private AugmentationService categoryAugmentationService;
+  private AugmentationService productAugmentationService;
+
   private SitesService sitesService;
 
-  public AugmentationService getAugmentationService() {
-    return augmentationService;
+  public AugmentationService getCategoryAugmentationService() {
+    return categoryAugmentationService;
   }
 
-  public void setAugmentationService(AugmentationService augmentationService) {
-    this.augmentationService = augmentationService;
+  public void setCategoryAugmentationService(AugmentationService augmentationService) {
+    this.categoryAugmentationService = augmentationService;
+  }
+
+  public AugmentationService getProductAugmentationService() {
+    return productAugmentationService;
+  }
+
+  public void setProductAugmentationService(AugmentationService productAugmentationService) {
+    this.productAugmentationService = productAugmentationService;
   }
 
   public SitesService getSitesService() {
@@ -124,16 +135,21 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     FragmentParameters parameters = fragmentContext().getParameters();
     String categoryId = parameters.getCategoryId();
     String productId = parameters.getProductId();
-    Content content;
-    CommerceBean commerceBean = null;
+    Content content = null;
     boolean isAugmentedPage = isAugmentedPage(parameters);
     if (!isAugmentedPage) {
       if (!isEmpty(productId))  {
-        commerceBean = connection.getCatalogService().findProductById(idProvider.formatProductTechId(productId));
+        Product product = (Product) connection.getCommerceBeanFactory().createBeanFor(idProvider.formatProductTechId(productId), connection.getStoreContext());
+        if (product != null && product.isVariant()) {
+          // variants are not augmented, we need to check its parent
+          ProductVariant productVariant = (ProductVariant) connection.getCommerceBeanFactory().createBeanFor(idProvider.formatProductVariantTechId(productId), connection.getStoreContext());
+          product = productVariant != null ? productVariant.getParent() : product;
+        }
+        content = productAugmentationService.getContent(product);
       } else if (!isEmpty(categoryId)) {
-        commerceBean = connection.getCatalogService().findCategoryById(idProvider.formatCategoryTechId(categoryId));
+        Category category = (Category) connection.getCommerceBeanFactory().createBeanFor(idProvider.formatCategoryTechId(categoryId), connection.getStoreContext());
+        content = categoryAugmentationService.getContent(category);
       }
-      content = augmentationService.getContent(commerceBean);
       return (content != null);
     }
     return true;

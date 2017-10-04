@@ -1,9 +1,9 @@
 #
-# Cookbook Name:: yum
+# Cookbook:: yum
 # Provider:: repository
 #
 # Author:: Sean OMeara <someara@chef.io>
-# Copyright 2013-2016, Chef Software, Inc.
+# Copyright:: 2013-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-# In Chef 11 and above, calling the use_inline_resources method will
-# make Chef create a new "run_context". When an action is called, any
-# nested resources are compiled and converged in isolation from the
-# recipe that calls it.
 
 use_inline_resources
 
@@ -84,16 +79,15 @@ action :create do
 end
 
 action :delete do
-  file "/etc/yum.repos.d/#{new_resource.repositoryid}.repo" do
-    action :delete
-    notifies :run, "execute[yum clean all #{new_resource.repositoryid}]", :immediately
-    notifies :create, "ruby_block[yum-cache-reload-#{new_resource.repositoryid}]", :immediately
-  end
-
+  # clean the repo cache first.
   execute "yum clean all #{new_resource.repositoryid}" do
     command "yum clean all --disablerepo=* --enablerepo=#{new_resource.repositoryid}"
-    only_if "yum repolist | grep -P '^#{new_resource.repositoryid}([ \t]|$)'"
-    action :nothing
+    only_if "yum repolist all | grep -P '^#{new_resource.repositoryid}([ \t]|$)'"
+  end
+
+  file "/etc/yum.repos.d/#{new_resource.repositoryid}.repo" do
+    action :delete
+    notifies :create, "ruby_block[yum-cache-reload-#{new_resource.repositoryid}]", :immediately
   end
 
   ruby_block "yum-cache-reload-#{new_resource.repositoryid}" do

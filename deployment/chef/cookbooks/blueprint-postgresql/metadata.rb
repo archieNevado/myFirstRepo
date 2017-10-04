@@ -8,5 +8,5 @@ version '1.0.0'
 
 depends 'blueprint-base'
 depends 'blueprint-yum'
-depends 'yum-pgdg', '~> 0.2.7'
-depends 'postgresql', '~> 4.0.0'
+depends 'yum-pgdg', '~> 2.0.1'
+depends 'postgresql', '~> 6.1.1'

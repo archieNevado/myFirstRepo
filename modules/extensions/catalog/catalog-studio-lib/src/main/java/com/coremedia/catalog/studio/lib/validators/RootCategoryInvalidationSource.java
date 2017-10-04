@@ -108,7 +108,7 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
             }
           }
         } catch (Exception e) {
-          LOG.debug("unable to determine root category for site {}", site, e);
+          LOG.debug("unable to determine root category for site '{}'", site.getId(), e);
         } finally {
           DefaultConnection.clear();
         }

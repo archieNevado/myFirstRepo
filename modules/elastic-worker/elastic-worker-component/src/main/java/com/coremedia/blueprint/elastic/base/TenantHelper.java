@@ -1,10 +1,14 @@
 package com.coremedia.blueprint.elastic.base;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,6 +25,8 @@ import static org.apache.commons.lang3.StringUtils.join;
 @Named
 public class TenantHelper {
 
+  private static final Logger LOG = LoggerFactory.getLogger(TenantHelper.class);
+
   public static final String SETTINGS_STRUCT = "elasticSocial";
 
   @Inject
@@ -30,12 +36,16 @@ public class TenantHelper {
   private SettingsService settingsService;
 
   public Collection<String> readTenantsFromContent() {
-    final Collection<String> tenants = new HashSet<>();
+    Collection<String> tenants = new HashSet<>();
     for (Site site : sitesService.getSites()) {
-      final Map<String, Object> settingsMap = getSettingsAsMap(site.getSiteRootDocument());
-      final String tenant = join(settingsMap.get("tenant"));
-      if (!StringUtils.isEmpty(tenant)) {
-        tenants.add(tenant);
+      try {
+        Map<String, Object> settingsMap = getSettingsAsMap(site.getSiteRootDocument());
+        String tenant = join(settingsMap.get("tenant"));
+        if (!StringUtils.isEmpty(tenant)) {
+          tenants.add(tenant);
+        }
+      } catch (CapObjectDestroyedException | SiteDestroyedException e) {
+        LOG.debug("ignoring destroyed site '{}'", site.getId(), e);
       }
     }
     return Collections.unmodifiableCollection(tenants);

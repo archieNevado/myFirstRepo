@@ -1,6 +1,20 @@
 # yum-pgdg Cookbook CHANGELOG
 This file is used to list changes made in each version of the yum-pgdg cookbook.
 
+## 2.0.1 (2016-12-22)
+
+- Depend on the latest compat_resource cookbook
+- Cookstyle fixes
+
+## 2.0.0 (2016-11-26)
+- Replace yum dependency with compat_resource
+- Convert to inspec for testing
+
+## 1.0.0 (2016-09-06)
+- Testing updates
+- Add chef_version metadata
+- Remove support for Chef 11
+
 ## v0.2.7 (2015-12-01)
 - Fixing if/unless logic in recipe
 

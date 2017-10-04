@@ -29,19 +29,19 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1707.2</blueprint-base.version>
-    <cms.version>1707.2</cms.version>
-    <personalization.version>1707.2</personalization.version>
-    <elastic.version>1707.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1707.2</studio.version>
-    <caetoolbox.version>1707.2</caetoolbox.version>
-    <livecontext.version>1707.2</livecontext.version>
+    <blueprint-base.version>1707.3</blueprint-base.version>
+    <cms.version>1707.3</cms.version>
+    <personalization.version>1707.3</personalization.version>
+    <elastic.version>1707.3</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1707.3</studio.version>
+    <caetoolbox.version>1707.3</caetoolbox.version>
+    <livecontext.version>1707.3</livecontext.version>
     <jangaroo.version>4.0.50</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
-    <tomcat.version>7.0.72</tomcat.version>
-    <spring.boot.version>1.3.6.RELEASE</spring.boot.version>
+    <tomcat.version>7.0.79</tomcat.version>
+    <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -374,9 +374,9 @@
         <plugin>
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.4</version>
+          <version>1.5</version>
           <configuration>
-            <nodeVersion>v6.11.1</nodeVersion><!-- LTS -->
+            <nodeVersion>v6.11.2</nodeVersion><!-- LTS -->
           </configuration>
         </plugin>
         <plugin>

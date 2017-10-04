@@ -24,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Objects;
@@ -49,6 +51,7 @@ import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
 @RequestMapping
 public class CapBlobHandler extends HandlerBase {
 
+  private static final String FRAGMENT_PREVIEW = "fragmentPreview";
   private static final String CLASSIFIER_BLOB = "blob";
   private static final String CLASSIFIER_CODERESOURCEBLOB = "crblob";
   private static final String EMPTY_ETAG = "-";
@@ -147,7 +150,11 @@ public class CapBlobHandler extends HandlerBase {
 
   @Link(type = CMDownload.class, uri = URI_PATTERN)
   @SuppressWarnings("unused")
-  public String buildLinkForDownload(CMDownload download) {
+  public String buildLinkForDownload(@Nonnull CMDownload download, @Nullable String viewName) {    
+    if (FRAGMENT_PREVIEW.equals(viewName)) {
+      // Do not build the download link for the fragment preview. Let other handlers build the link instead.
+      return null;
+    }
     CapBlobRef blob = (CapBlobRef) download.getData();
     return blob != null ? buildLink(blob).toUriString() : "#";
   }

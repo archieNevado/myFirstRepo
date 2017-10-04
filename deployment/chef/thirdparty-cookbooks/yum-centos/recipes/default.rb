@@ -2,7 +2,7 @@
 # Author:: Sean OMeara (<someara@chef.io>)
 # Recipe:: yum-centos::default
 #
-# Copyright 2013-2015, Chef Software, Inc.
+# Copyright:: 2013-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ruby_block 'xenserver $releasever' do
+  only_if { platform?('xenserver') }
+
+  block do
+    cmd = shell_out!('rpm -q --provides xenserver-release | ' \
+                     'sed -n "s/^centos-release = \(.*\)/\1/p"')
+
+    releasever = cmd.stdout.chomp.sub(/\.el.*/, '').tr('^0-9', '.')
+
+    node.default['yum-centos']['repos'].each do |repo|
+      dir = repo == 'base' ? 'os' : repo
+      node.default['yum'][repo]['baseurl'] =
+        "http://mirror.centos.org/centos/#{releasever}/#{dir}/$basearch/"
+    end
+  end
+end
+
 ::Dir['/etc/yum.repos.d/CentOS-*'].each do |f|
   file f do
     action :delete
@@ -24,45 +41,15 @@ end
 
 node['yum-centos']['repos'].each do |repo|
   next unless node['yum'][repo]['managed']
-
   yum_repository repo do
-    baseurl node['yum'][repo]['baseurl'] unless node['yum'][repo]['baseurl'].nil?
-    cost node['yum'][repo]['cost'] unless node['yum'][repo]['cost'].nil?
-    description node['yum'][repo]['description'] unless node['yum'][repo]['description'].nil?
-    enabled node['yum'][repo]['enabled'] unless node['yum'][repo]['enabled'].nil?
-    enablegroups node['yum'][repo]['enablegroups'] unless node['yum'][repo]['enablegroups'].nil?
-    exclude node['yum'][repo]['exclude'] unless node['yum'][repo]['exclude'].nil?
-    failovermethod node['yum'][repo]['failovermethod'] unless node['yum'][repo]['failovermethod'].nil?
-    fastestmirror_enabled node['yum'][repo]['fastestmirror_enabled'] unless node['yum'][repo]['fastestmirror_enabled'].nil?
-    gpgcheck node['yum'][repo]['gpgcheck'] unless node['yum'][repo]['gpgcheck'].nil?
-    gpgkey node['yum'][repo]['gpgkey'] unless node['yum'][repo]['gpgkey'].nil?
-    http_caching node['yum'][repo]['http_caching'] unless node['yum'][repo]['http_caching'].nil?
-    include_config node['yum'][repo]['include_config'] unless node['yum'][repo]['include_config'].nil?
-    includepkgs node['yum'][repo]['includepkgs'] unless node['yum'][repo]['includepkgs'].nil?
-    keepalive node['yum'][repo]['keepalive'] unless node['yum'][repo]['keepalive'].nil?
-    make_cache node['yum'][repo]['make_cache'] unless node['yum'][repo]['make_cache'].nil?
-    max_retries node['yum'][repo]['max_retries'] unless node['yum'][repo]['max_retries'].nil?
-    metadata_expire node['yum'][repo]['metadata_expire'] unless node['yum'][repo]['metadata_expire'].nil?
-    mirror_expire node['yum'][repo]['mirror_expire'] unless node['yum'][repo]['mirror_expire'].nil?
-    mirrorlist node['yum'][repo]['mirrorlist'] unless node['yum'][repo]['mirrorlist'].nil?
-    mirrorlist_expire node['yum'][repo]['mirrorlist_expire'] unless node['yum'][repo]['mirrorlist_expire'].nil?
-    password node['yum'][repo]['password'] unless node['yum'][repo]['password'].nil?
-    priority node['yum'][repo]['priority'] unless node['yum'][repo]['priority'].nil?
-    proxy node['yum'][repo]['proxy'] unless node['yum'][repo]['proxy'].nil?
-    proxy_username node['yum'][repo]['proxy_username'] unless node['yum'][repo]['proxy_username'].nil?
-    proxy_password node['yum'][repo]['proxy_password'] unless node['yum'][repo]['proxy_password'].nil?
-    report_instanceid node['yum'][repo]['report_instanceid'] unless node['yum'][repo]['report_instanceid'].nil?
-    repositoryid node['yum'][repo]['repositoryid'] unless node['yum'][repo]['repositoryid'].nil?
-    skip_if_unavailable node['yum'][repo]['skip_if_unavailable'] unless node['yum'][repo]['skip_if_unavailable'].nil?
-    source node['yum'][repo]['source'] unless node['yum'][repo]['source'].nil?
-    sslcacert node['yum'][repo]['sslcacert'] unless node['yum'][repo]['sslcacert'].nil?
-    sslclientcert node['yum'][repo]['sslclientcert'] unless node['yum'][repo]['sslclientcert'].nil?
-    sslclientkey node['yum'][repo]['sslclientkey'] unless node['yum'][repo]['sslclientkey'].nil?
-    sslverify node['yum'][repo]['sslverify'] unless node['yum'][repo]['sslverify'].nil?
-    timeout node['yum'][repo]['timeout'] unless node['yum'][repo]['timeout'].nil?
-    username node['yum'][repo]['username'] unless node['yum'][repo]['username'].nil?
-
-    only_if { platform_family?('rhel') }
-    action :create
+    node['yum'][repo].each do |config, value|
+      case config
+      when 'managed'
+      when 'baseurl'
+        send(config.to_sym, lazy { value })
+      else
+        send(config.to_sym, value) unless value.nil?
+      end
+    end
   end
 end

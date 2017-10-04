@@ -30,16 +30,21 @@
   }
 }
 
-.cm-lightbox {
-  .cm-product-assets {
-    &__picture-box {
-      @include aspect-ratio-box(1, 1);
-    }
-    &__picture, &__video {
-      @include stretch-absolute()
-    }
+.cm-product-assets {
+  &__picture-box {
+    @include aspect-ratio-box(1, 1);
+  }
+  &__picture, &__video {
+    @include stretch-absolute()
   }
 
+  // fix CMS-10614
+  .cm-non-adaptive-content {
+    margin-top: 0 !important;
+  }
+}
+
+.cm-lightbox {
   &--portrait {
     .cm-product-assets {
       &__picture-box {

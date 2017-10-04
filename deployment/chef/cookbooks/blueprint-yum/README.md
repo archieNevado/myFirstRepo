@@ -12,8 +12,8 @@ This cookbook is a wrapper cookbook for the yum cookbook to setup the default yu
 
 ## Cookbooks:
 
-* yum (~> 3.8)
-* yum-centos (~> 0.4.5)
+* yum (~> 4.2)
+* yum-centos (~> 2.3.0)
 
 # Attributes
 

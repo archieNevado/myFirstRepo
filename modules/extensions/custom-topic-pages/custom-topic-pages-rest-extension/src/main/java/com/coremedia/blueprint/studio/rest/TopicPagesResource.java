@@ -7,12 +7,14 @@ import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
 import com.coremedia.cap.common.CapConnection;
+import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.BulkOperationFailedException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
@@ -240,13 +242,17 @@ public class TopicPagesResource {
     //gather all site depending taxonomies
     Set<Site> sites = sitesService.getSites();
     for (Site site : sites) {
-      Content siteConfigFolder= site.getSiteRootFolder().getChild(siteConfigPath);
-      if(siteConfigFolder != null) {
-        Content taxonomyFolder = siteConfigFolder.getChild(TAXONOMY_FOLDER_NAME);
-        if(taxonomyFolder != null) {
-          String taxonomiesFolderPath = taxonomyFolder.getPath();
-          addTaxonomy(taxonomiesFolderPath, taxonomies);
+      try {
+        Content siteConfigFolder= site.getSiteRootFolder().getChild(siteConfigPath);
+        if(siteConfigFolder != null) {
+          Content taxonomyFolder = siteConfigFolder.getChild(TAXONOMY_FOLDER_NAME);
+          if(taxonomyFolder != null) {
+            String taxonomiesFolderPath = taxonomyFolder.getPath();
+            addTaxonomy(taxonomiesFolderPath, taxonomies);
+          }
         }
+      } catch (CapObjectDestroyedException | SiteDestroyedException e) {
+        LOG.debug("ignoring destroyed site '{}'", site.getId(), e);
       }
     }
 

@@ -11,4 +11,4 @@ depends 'ulimit', '~> 0.3.2'
 depends 'chef_handler', '~> 1.2.0'
 # fixing the compat_resource cookbook that provides a compatibility layer for older chef versions and their concepts.
 # here it provides mainly the compatibility layer for the old LWRP dsl which has been replaced in 12.5
-depends 'compat_resource', '~> 12.10.7'
+depends 'compat_resource', '~> 12.16.3'
