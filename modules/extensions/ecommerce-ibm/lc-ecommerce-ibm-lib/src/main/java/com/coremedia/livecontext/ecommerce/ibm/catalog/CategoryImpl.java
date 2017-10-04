@@ -12,6 +12,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.DataMapTransformationHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.xml.Markup;
@@ -27,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
@@ -52,6 +54,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
 
   /**
    * Perform by-id-call to get detail data
+   *
    * @return detail data map
    */
   Map<String, Object> getDelegateFromCache() {
@@ -149,15 +152,24 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   public Category getParent() throws CommerceException {
     if (isRoot()) {
       return null;
-    } else {
-      String parentCatalogGroupID = DataMapHelper.getValueForKey(getDelegate(), "parentCatalogGroupID[0]", String.class);
-      if (parentCatalogGroupID != null && !parentCatalogGroupID.isEmpty() && !parentCatalogGroupID.equals("-1")) {
-        return (Category) getCommerceBeanFactory().createBeanFor(
-                CommerceIdHelper.formatCategoryTechId(parentCatalogGroupID), getContext());
-      } else {
-        return (Category) getCommerceBeanFactory().createBeanFor(CommerceIdHelper.formatCategoryId(CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY), getContext());
+    }
+
+    StoreContext context = getContext();
+
+    String catalogId = context.getCatalogId();
+    List<String> parentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(getDelegate(),
+            catalogId);
+
+    if (!parentCategoryIds.isEmpty()) {
+      String parentCatalogGroupID = parentCategoryIds.get(0);
+      if (!isNullOrEmpty(parentCatalogGroupID) && !parentCatalogGroupID.equals("-1")) {
+        String id = CommerceIdHelper.formatCategoryTechId(parentCatalogGroupID);
+        return (Category) getCommerceBeanFactory().createBeanFor(id, context);
       }
     }
+
+    String id = CommerceIdHelper.formatCategoryId(CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY);
+    return (Category) getCommerceBeanFactory().createBeanFor(id, context);
   }
 
   @Override
@@ -276,9 +288,9 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   }
 
   @Override
-  public CatalogPicture getCatalogPicture(){
+  public CatalogPicture getCatalogPicture() {
     AssetService assetService = getAssetService();
-    if(null != assetService) {
+    if (null != assetService) {
       return assetService.getCatalogPicture(getDefaultImageUrl());
     }
     return new CatalogPicture("#", null);
@@ -293,7 +305,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   @Override
   public List<Content> getPictures() {
     AssetService assetService = getAssetService();
-    if(assetService != null) {
+    if (assetService != null) {
       return assetService.findPictures(getReference());
     }
     return Collections.emptyList();
@@ -301,8 +313,8 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
 
   @Override
   public List<Content> getVisuals() {
-      AssetService assetService = getAssetService();
-    if(null != assetService) {
+    AssetService assetService = getAssetService();
+    if (null != assetService) {
       return assetService.findVisuals(getReference());
     }
     return Collections.emptyList();
@@ -311,14 +323,14 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category {
   @Override
   public List<Content> getDownloads() {
     AssetService assetService = getAssetService();
-    if(null != assetService) {
+    if (null != assetService) {
       return assetService.findDownloads(getReference());
     }
     return Collections.emptyList();
   }
 
 
-  public boolean isRoot(){
+  public boolean isRoot() {
     return CatalogServiceImpl.isCatalogRootId(getId());
   }
 

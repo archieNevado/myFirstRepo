@@ -40,16 +40,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
@@ -94,7 +92,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   }
 
   public void testFindProductVariantByExternalIdWithContractSupport() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if ((!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
       return;
     }
 
@@ -121,22 +119,6 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     assertNull(product);
   }
 
-  public void testFindProductByExternalIdReturns502() throws Exception {
-    String endpoint = testling.getCatalogWrapperService().getCatalogConnector().getServiceEndpoint(StoreContextHelper.getCurrentContext());
-    testling.getCatalogWrapperService().getCatalogConnector().setServiceEndpoint("http://unknownhost.unknowndomain/wcs/resources");
-    Throwable exception = null;
-    Product product = null;
-    try {
-      product = testling.findProductByExternalId("UNCACHED_PRODUCT");
-    } catch (Throwable e) {
-      exception = e;
-    } finally {
-      testling.getCatalogWrapperService().getCatalogConnector().setServiceEndpoint(endpoint);
-    }
-    assertNull(product);
-    assertTrue("CommerceException expected", exception instanceof CommerceException);
-  }
-
   public void testFindProductMultiSEOByExternalTechId() throws Exception {
     Product product = testling.findProductByExternalId(PRODUCT1_WITH_MULTI_SEO);
     assertNotNull(product.getSeoSegment());
@@ -159,7 +141,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   }
 
   public void testFindTopCategoriesWithContractSupport() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if ((!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
       return;
     }
 
@@ -175,7 +157,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   }
 
   public void testFindSubCategoriesWithContract() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if ((!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
       return;
     }
 
@@ -220,6 +202,22 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   public void testFindCategoryByExternalTechIdIsNull() throws Exception {
     Category category = testling.findCategoryById(CommerceIdHelper.formatCategoryTechId("blablablub"));
     assertNull(category);
+  }
+
+  public void testFindProductByExternalIdReturns502() throws Exception {
+    String endpoint = testling.getCatalogWrapperService().getCatalogConnector().getServiceEndpoint(StoreContextHelper.getCurrentContext());
+    testling.getCatalogWrapperService().getCatalogConnector().setServiceEndpoint("http://unknownhost.unknowndomain/wcs/resources");
+    Throwable exception = null;
+    Product product = null;
+    try {
+      product = testling.findProductByExternalId("UNCACHED_PRODUCT");
+    } catch (Throwable e) {
+      exception = e;
+    } finally {
+      testling.getCatalogWrapperService().getCatalogConnector().setServiceEndpoint(endpoint);
+    }
+    assertNull(product);
+    assertTrue("CommerceException expected", exception instanceof CommerceException);
   }
 
   private void prepareContextsForContractBasedPreview() {

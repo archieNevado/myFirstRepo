@@ -2,6 +2,31 @@
 
 This file is used to list changes made in each version of the yum-centos cookbook.
 
+## 2.3.0 (2017-06-15)
+
+- Adjust repository defaults for XenServer
+- Updated Chefspecs to avoid deprecation warnings
+
+## 2.2.0 (2017-03-28)
+
+- Remove releasever use to eliminate requirement of centos-release package.
+- Add vault recipe to support running older OS versions without mixing installation of packages.
+
+## 2.1.0 (2016-12-22)
+
+- Allow the use of any valid property via attributes
+- Depend on the latest compat_resource cookbook
+- Cookstyle fixes
+
+## 2.0.0 (2016-11-25)
+- Replace yum dependency with compat_resource
+
+## 1.0.0 (2016-09-06)
+- Add chef_version metadata
+- Testing updates
+- Remove support for Chef 11
+- Generate the GPG path dynamically
+
 ## v0.4.13 (2016-07-22)
 
 - loosen the version dependency on yum to allow for newer versions

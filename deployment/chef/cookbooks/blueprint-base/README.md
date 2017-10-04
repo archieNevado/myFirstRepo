@@ -20,7 +20,7 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * sysctl (~> 0.6.0)
 * ulimit (~> 0.3.2)
 * chef_handler (~> 1.2.0)
-* compat_resource (~> 12.10.7)
+* compat_resource (~> 12.16.3)
 
 # Attributes
 

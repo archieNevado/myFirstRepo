@@ -3,7 +3,7 @@ package com.coremedia.livecontext.preview;
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
 import com.coremedia.springframework.web.RegistrationBeanBuilder;
 import com.google.common.collect.ImmutableList;
-import org.springframework.boot.context.embedded.RegistrationBean;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.core.annotation.Order;
 
 import javax.annotation.Nonnull;

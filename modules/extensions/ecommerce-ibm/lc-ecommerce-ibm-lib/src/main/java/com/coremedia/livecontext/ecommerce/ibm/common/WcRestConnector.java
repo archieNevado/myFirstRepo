@@ -653,8 +653,7 @@ public class WcRestConnector {
         String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
         String credentials = Base64.encode((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
         headers.put("Authorization", "Basic " + credentials);
-      } else if (!WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext)) &&
-              (mustBeAuthenticated || mustBeSecured)) {
+      } else if (mustBeAuthenticated && !WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
         //use WCToken for wcsVersion < 7.8
         applyWCTokens(headers, mustBeSecured, mustBeAuthenticated);
       }
@@ -674,16 +673,20 @@ public class WcRestConnector {
   }
 
   private void applyWCTokens(@Nonnull Map<String, String> headers, boolean mustBeSecured, boolean mustBeAuthenticated) {
-    WcCredentials credentials = loginService.loginServiceIdentity();
-    if (credentials != null) {
+    if (mustBeAuthenticated) {
+      WcCredentials credentials = loginService.loginServiceIdentity();
+      if (credentials == null) {
+        return;
+      }
+
       WcSession session = credentials.getSession();
-      if (session != null) {
-        if (mustBeAuthenticated) {
-          headers.put(HEADER_WC_TOKEN, session.getWCToken());
-          if (mustBeSecured) {
-            headers.put(HEADER_WC_TRUSTED_TOKEN, session.getWCTrustedToken());
-          }
-        }
+      if (session == null) {
+        return;
+      }
+
+      headers.put(HEADER_WC_TOKEN, session.getWCToken());
+      if (mustBeSecured) {
+        headers.put(HEADER_WC_TRUSTED_TOKEN, session.getWCTrustedToken());
       }
     }
   }

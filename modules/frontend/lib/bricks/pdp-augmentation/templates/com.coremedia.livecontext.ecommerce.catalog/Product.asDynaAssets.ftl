@@ -7,8 +7,12 @@
   <#if (types == 'all' || types == 'visuals')>
     <#assign visuals=bp.createBeansFor(self.visuals) />
     <#if !visuals?has_content>
-      <#-- use catalog image if no visuals assigned -->
-      <@cm.include self=self.catalogPicture!cm.UNDEFINED params={"overflow":false}/>
+      <#if self.catalogPicture.picture?has_content>
+        <@cm.include self=self.catalogPicture!cm.UNDEFINED params={"overflow":false, "classBox": "cm-product-assets__picture-box"}/>
+      <#else>
+        <#-- use catalog image if no visuals assigned -->
+        <@cm.include self=self.catalogPicture!cm.UNDEFINED params={"overflow":false}/>
+      </#if>
     <#else>
       <#if orientation?has_content && visuals?has_content>
 

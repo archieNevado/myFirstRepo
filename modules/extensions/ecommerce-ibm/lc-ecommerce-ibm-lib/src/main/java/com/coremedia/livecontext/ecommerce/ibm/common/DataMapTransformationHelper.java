@@ -1,13 +1,17 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.google.common.collect.ImmutableMap;
 import com.rits.cloning.Cloner;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,20 +21,24 @@ import java.util.Map;
  * to the new leading search handler format.
  */
 public class DataMapTransformationHelper {
-  private static final Map<String, String> bodKeyMappings = new HashMap<>();
+  private static final Map<String, String> bodKeyMappings = ImmutableMap.<String, String>builder()
+          .put("productType", "catalogEntryTypeCode")
+          .put("xcatentry_seoSegment", "seo_token_ntk")
+          .put("xcatgroup_seoSegment", "seo_token_ntk")
+          .put("xcatentry_cmSeoSegment", "cm_seo_token_ntk")
+          .put("xcatgroup_cmSeoSegment", "cm_seo_token_ntk")
+          .put("parentProductID", "parentCatalogEntryID")
+          .put("parentCategoryID", "parentCatalogGroupID")
+          .build();
 
-  static {
-    bodKeyMappings.put("productType", "catalogEntryTypeCode");
-    bodKeyMappings.put("xcatentry_seoSegment", "seo_token_ntk");
-    bodKeyMappings.put("xcatgroup_seoSegment", "seo_token_ntk");
-    bodKeyMappings.put("xcatentry_cmSeoSegment", "cm_seo_token_ntk");
-    bodKeyMappings.put("xcatgroup_cmSeoSegment", "cm_seo_token_ntk");
-    bodKeyMappings.put("parentProductID", "parentCatalogEntryID");
-    bodKeyMappings.put("parentCategoryID", "parentCatalogGroupID");
+  private static final Logger LOG = LoggerFactory.getLogger(DataMapTransformationHelper.class);
+
+  private DataMapTransformationHelper() {
   }
 
   /**
    * Transforms a map of product data retrieved by the BOD service to the search handler format.
+   *
    * @param bodResponseMap The BOD handler based format.
    * @return The search handler based format.
    */
@@ -43,6 +51,7 @@ public class DataMapTransformationHelper {
 
   /**
    * Transforms a map of category data retrieved by the BOD service to the search handler format.
+   *
    * @param bodResponseMap The BOD handler based format.
    * @return The search handler based format.
    */
@@ -55,6 +64,7 @@ public class DataMapTransformationHelper {
 
   /**
    * Returns a deep copy of a map.
+   *
    * @param productsMap A product map.
    * @return A deep copy of the given product map.
    */
@@ -65,6 +75,7 @@ public class DataMapTransformationHelper {
 
   /**
    * Brings all map keys to lower case.
+   *
    * @param map The orignial map which will be modified.
    */
   private static void transformKeysStartLowerCase(Map<String, Object> map) {
@@ -101,11 +112,12 @@ public class DataMapTransformationHelper {
 
   /**
    * Replaces mpa keys to match search handler based format.
+   *
    * @param mapList List of catalog entry or catalog group data.
    */
   private static void replaceKeys(List<Map<String, Object>> mapList) {
     for (Map<String, Object> entryMap : mapList) {
-      for (Map.Entry<String, String> entry: bodKeyMappings.entrySet()) {
+      for (Map.Entry<String, String> entry : bodKeyMappings.entrySet()) {
         if (entryMap.containsKey(entry.getKey())) {
           entryMap.put(bodKeyMappings.get(entry.getKey()), entryMap.remove(entry.getKey()));
         }
@@ -116,6 +128,7 @@ public class DataMapTransformationHelper {
   /**
    * Unifies the catalog entry data by replacing map keys, replacing attribute keys, replacing sku keys and
    * formatting the catalog group id if required.
+   *
    * @param productWrapper The catalog entry wrapper retrieved by the wrapper service.
    */
   private static void unifyProductWrapperKeys(Map<String, Object> productWrapper) {
@@ -124,18 +137,17 @@ public class DataMapTransformationHelper {
     replaceKeys(catalogEntryView);
     replaceProductAttributeKeys(catalogEntryView);
     replaceSkus(catalogEntryView);
-    formatParentCatGroupId(catalogEntryView);
   }
 
   /**
    * Unifies catalog group data by replacing map keys and formatting the catalog group id if required.
+   *
    * @param categoryWrapper The catalog group wrapper retrieved by the wrapper service.
    */
   private static void unifyCategoryWrapperKeys(Map<String, Object> categoryWrapper) {
     //noinspection unchecked
     List<Map<String, Object>> catalogGroupView = DataMapHelper.getValueForKey(categoryWrapper, "catalogGroupView", List.class);
     replaceKeys(catalogGroupView);
-    formatParentCatGroupId(catalogGroupView);
   }
 
   /**
@@ -145,7 +157,9 @@ public class DataMapTransformationHelper {
    * the current store context.
    *
    * @param mapList The list containing the parent category ids within the current catalog
+   * @deprecated don't use anymore, logic has moved into CategoryImpl
    */
+  @Deprecated
   public static void formatParentCatGroupId(List<Map<String, Object>> mapList) {
     for (Map<String, Object> listEntry : mapList) {
       // parent catalog group ids
@@ -155,32 +169,43 @@ public class DataMapTransformationHelper {
       if (storeContext != null) {
         // try to get current catalogId from StoreContext to filter parentCatalogGroupID correctly
         currentCatalogId = storeContext.getCatalogId();
+      } else {
+        LOG.warn("no StoreContext available, cannot reliably determine parent category");
       }
-      Object origParentCategoryIds = DataMapHelper.getValueForPath(listEntry, "parentCatalogGroupID");
-      List<String> parentCategoryIdList = new ArrayList<>();
-      if (origParentCategoryIds instanceof List) {
-        // create new list copy to avoid  ConcurrentModificationException
-        //noinspection unchecked
-        for (String origParentCatString : (List<String>) origParentCategoryIds) {
-          String parentCategoryId = filterByCatalogId(currentCatalogId, origParentCatString);
-          if (parentCategoryId != null) {
-            parentCategoryIdList.add(parentCategoryId);
-          }
-        }
-        listEntry.put("parentCatalogGroupID", parentCategoryIdList);
-      } else if (origParentCategoryIds instanceof String) {
-        String parent = filterByCatalogId(currentCatalogId, (String) origParentCategoryIds);
-        if (parent != null) {
-          listEntry.put("parentCatalogGroupID", Collections.singletonList(parent));
-        }
+      if (currentCatalogId != null) {
+        listEntry.put("parentCatalogGroupID", getParentCatGroupIdForSingleWrapper(listEntry, currentCatalogId));
       }
     }
   }
 
-  private static String filterByCatalogId(String catalogId, String catalogIdAndCategoryId) {
-    if (catalogIdAndCategoryId != null && catalogIdAndCategoryId.matches(".+_.+")) {
+  @Nonnull
+  public static List<String> getParentCatGroupIdForSingleWrapper(@Nonnull Map<String, Object> delegate,
+                                                                 @Nonnull String currentCatalogId) {
+    Object origParentCategoryIds = DataMapHelper.getValueForPath(delegate, "parentCatalogGroupID");
+    List<String> parentCategoryIdList = new ArrayList<>();
+    if (origParentCategoryIds instanceof List) {
+      // create new list copy to avoid  ConcurrentModificationException
+      //noinspection unchecked
+      for (String origParentCatString : (List<String>) origParentCategoryIds) {
+        String parentCategoryId = filterByCatalogId(currentCatalogId, origParentCatString);
+        if (parentCategoryId != null) {
+          parentCategoryIdList.add(parentCategoryId);
+        }
+      }
+    } else if (origParentCategoryIds instanceof String) {
+      String parent = filterByCatalogId(currentCatalogId, (String) origParentCategoryIds);
+      if (parent != null) {
+        parentCategoryIdList = Collections.singletonList(parent);
+      }
+    }
+    return parentCategoryIdList;
+  }
+
+  @Nullable
+  private static String filterByCatalogId(@Nonnull String catalogId, @Nonnull String catalogIdAndCategoryId) {
+    if (catalogIdAndCategoryId.matches(".+_.+")) {
       String[] catalogAndCategoryIdSplit = catalogIdAndCategoryId.split("_");
-      if (catalogId == null || catalogAndCategoryIdSplit.length > 0 && catalogId.equals(catalogAndCategoryIdSplit[0])) {
+      if (catalogAndCategoryIdSplit.length > 0 && catalogId.equals(catalogAndCategoryIdSplit[0])) {
         return catalogAndCategoryIdSplit[1];
       } else {
         return null;
@@ -191,6 +216,7 @@ public class DataMapTransformationHelper {
 
   /**
    * Replaces the key <code>sKUUniqueID</code> with <code>uniqueID</code> (<code>sKUUniqueID -> uniqueID</code>)
+   *
    * @param mapList The list containing the catalog entry or catalog group data.
    */
   private static void replaceSkus(List<Map<String, Object>> mapList) {
@@ -208,6 +234,7 @@ public class DataMapTransformationHelper {
 
   /**
    * Replaces all <code>values</code> keys in <code>attributes.values</code> (<code>attributes.values.values -> attributes.values.value</code>).
+   *
    * @param mapList The map containing the catalog entry data.
    */
   private static void replaceProductAttributeKeys(List<Map<String, Object>> mapList) {

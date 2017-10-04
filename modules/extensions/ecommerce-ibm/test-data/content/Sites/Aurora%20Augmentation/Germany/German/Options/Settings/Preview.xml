@@ -104,8 +104,8 @@
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>
 <LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
-<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/aurora/css/wcs/common1_1%2Ecss.xml" cmexport:path="/Themes/aurora/css/wcs/common1_1%2Ecss"/>
-<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/aurora/css/wcs/styles%2Ecss.xml" cmexport:path="/Themes/aurora/css/wcs/styles%2Ecss"/>
+<Link xlink:href="coremedia:///cap/resources/aurora-common1_1%2Ecss.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/aurora-common1_1%2Ecss"/>
+<Link xlink:href="coremedia:///cap/resources/aurora-styles%2Ecss.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/aurora-styles%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="fragmentPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>

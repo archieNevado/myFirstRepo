@@ -23,16 +23,15 @@ public class StoreInfoCacheKey extends AbstractCommerceCacheKey<Map<String, Obje
 
   @Override
   public Map<String, Object> computeValue(Cache cache) {
-    Map<String, Object> storeInfos = wrapperService.getStoreInfos();
+    return wrapperService.getStoreInfos();
+  }
+
+  @Override
+  public void addExplicitDependency(Map<String, Object> storeInfos) {
     if (storeInfos.isEmpty()) {
       LOG.warn("no store info provided by WCS, retrying in {} seconds", DELAY_ON_ERROR_SECONDS);
       Cache.cacheFor(DELAY_ON_ERROR_SECONDS, TimeUnit.SECONDS);
     }
-    return storeInfos;
-  }
-
-  @Override
-  public void addExplicitDependency(Map<String, Object> wcStoreInfos) {
     Cache.dependencyOn(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO);
   }
 

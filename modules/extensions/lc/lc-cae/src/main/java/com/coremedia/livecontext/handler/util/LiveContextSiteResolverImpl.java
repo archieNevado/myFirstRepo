@@ -2,7 +2,9 @@ package com.coremedia.livecontext.handler.util;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -15,8 +17,10 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.stream.Collectors.toSet;
@@ -114,10 +118,33 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
     String siteName = environment.split(":")[1];
 
     return sitesService.getSites().stream()
-            .filter(site -> site.getName().equals(siteName))
-            .filter(site -> site.getLocale().equals(locale))
+            .filter(matchesNameAndLocale(siteName, locale))
             .findFirst()
             .orElse(null);
+  }
+
+  private static Predicate<Site> matchesNameAndLocale(String siteName, Locale locale) {
+    return site -> {
+      try {
+        return Objects.equals(siteName, site.getName()) && Objects.equals(locale, site.getLocale());
+      } catch (CapObjectDestroyedException | SiteDestroyedException e) {
+        LOG.debug("ignoring destroyed site '{}'", site.getId(), e);
+        return false;
+      }
+    };
+  }
+
+  @Nullable
+  private static String extractSiteNameFromEnvironment(@Nullable String environment) {
+    if (isNullOrEmpty(environment)) {
+      return null;
+    }
+
+    if (!environment.startsWith("site:")) { // NOSONAR (squid:S2259)
+      return null;
+    }
+
+    return environment.split(":")[1];
   }
 
   // -------------- Defaults ------------------------------

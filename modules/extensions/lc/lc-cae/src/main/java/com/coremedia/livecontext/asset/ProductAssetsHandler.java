@@ -5,8 +5,10 @@ import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
@@ -190,10 +192,17 @@ public class ProductAssetsHandler extends PageHandlerBase {
   private Site getSiteByName(String siteName) {
     Set<Site> sites = getSitesService().getSites();
     for (Site site : sites) {
-      Content rootChannel = site.getSiteRootDocument();
-      String vanityName = urlPathFormattingHelper.getVanityName(rootChannel);
-      if (siteName.equalsIgnoreCase(vanityName)) {
-        return site;
+      try {
+        Content rootChannel = site.getSiteRootDocument();
+        if (rootChannel == null) {
+          continue;
+        }
+        String vanityName = urlPathFormattingHelper.getVanityName(rootChannel);
+        if (siteName.equalsIgnoreCase(vanityName)) {
+          return site;
+        }
+      } catch (CapObjectDestroyedException | SiteDestroyedException e) {
+        LOG.debug("ignoring destroyed site '{}'", site.getId(), e);
       }
     }
     return null;

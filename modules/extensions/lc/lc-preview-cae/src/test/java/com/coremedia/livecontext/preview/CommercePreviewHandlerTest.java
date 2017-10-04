@@ -5,6 +5,7 @@ import com.coremedia.id.IdProvider;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.objectserver.web.HttpError;
+import com.coremedia.objectserver.web.links.LinkFormatter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,9 @@ public class CommercePreviewHandlerTest {
 
   @Mock
   private IdProvider idProvider;
+
+  @Mock
+  private LinkFormatter linkFormatter;
 
   private MockHttpServletRequest request;
 

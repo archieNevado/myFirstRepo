@@ -37,6 +37,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -118,7 +119,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
             any(WcRestServiceMethod.class),
             any(List.class),
             any(Map.class),
-            any(Object.class),
+            isNull(),
             any(StoreContext.class),
             any(UserContext.class)
     );

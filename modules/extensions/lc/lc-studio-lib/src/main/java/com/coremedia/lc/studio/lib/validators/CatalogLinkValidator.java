@@ -230,7 +230,7 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
       CommerceBean commerceBean = commerceBeanFactory.loadBeanFor(id, storeContext);
       return commerceBean != null;
     } catch (NotFoundException e) {
-      LOG.trace("Exception creating commerce bean for {} with store context {}: {}", id, storeContext, e.getMessage());
+      LOG.trace("Exception creating commerce bean for {} with store context {}", id, storeContext, e);
       return false;
     }
   }

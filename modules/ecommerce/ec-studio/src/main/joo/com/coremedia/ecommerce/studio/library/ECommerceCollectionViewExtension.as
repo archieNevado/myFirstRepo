@@ -147,7 +147,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     var store:Store = catalogObject.getStore();
     while (catalogObject) {
       namePath.push(catalogObject is Category && categoryTreeRelation.isRoot(catalogObject) ?
-              ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_root_category') : catalogObject.getName());
+              ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_root_category') : catalogHelper.getDecoratedName(catalogObject));
       if (catalogObject is Product) {
         catalogObject = (catalogObject as Product).getCategory();
       } else if (catalogObject is Category) {

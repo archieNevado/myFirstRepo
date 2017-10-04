@@ -1,9 +1,9 @@
 #
-# Cookbook Name:: yum
+# Cookbook:: yum
 # Resource:: repository
 #
 # Author:: Sean OMeara <someara@chef.io>
-# Copyright 2013-2016, Chef Software, Inc.
+# Copyright:: 2013-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,7 +64,6 @@ attribute :sslclientcert, kind_of: String, regex: /.*/, default: nil
 attribute :sslclientkey, kind_of: String, regex: /.*/, default: nil
 attribute :sslverify, kind_of: [TrueClass, FalseClass], default: nil
 attribute :timeout, kind_of: String, regex: /^\d+$/, default: nil
-
 attribute :options, kind_of: Hash
 
 alias_method :url, :baseurl

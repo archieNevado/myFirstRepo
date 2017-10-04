@@ -21,7 +21,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -95,7 +94,7 @@ public class CalaisService extends AbstractSemanticService {
     String apiUrlToUse = apiUrl;
     String apiKeyToUse = apiKey;
 
-    Site currentSite = getSiteForContent(content);
+    Site currentSite = sitesService.getContentSiteAspect(content).getSite();
     Map openCalaisSettings = settingsService.mergedSettingAsMap("openCalais", String.class, String.class, content, currentSite);
     if (openCalaisSettings.containsKey("apiUrl")) {
       LOG.debug("Found OpenCalais apiUrl to use in content settings. Preconfigured property will be replaced.");
@@ -109,16 +108,6 @@ public class CalaisService extends AbstractSemanticService {
     }
     client.setApiUrl(apiUrlToUse);
     client.setUniqueAccessKey(apiKeyToUse);
-  }
-
-  private Site getSiteForContent(Content content) {
-    Set<Site> sites = sitesService.getSites();
-    for (Site site : sites) {
-      if (sitesService.isContentInSite(site, content)) {
-        return site;
-      }
-    }
-    return null;
   }
 
   @Required

@@ -2,7 +2,7 @@ package com.coremedia.blueprint.personalization;
 
 import com.coremedia.blueprint.elastic.social.cae.EsCaeWebComponentInitializer;
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
-import org.springframework.boot.context.embedded.RegistrationBean;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.core.annotation.Order;
 
 import javax.annotation.Nonnull;

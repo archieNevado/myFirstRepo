@@ -4,8 +4,10 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnecti
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
@@ -102,10 +104,17 @@ public class ProductAvailabilityHandler extends PageHandlerBase {
   protected Site getSite(String siteSegment) {
     Set<Site> sites = siteService.getSites();
     for (Site site : sites) {
-      Content rootChannel = site.getSiteRootDocument();
-      String vanityName = getContentLinkBuilder().getVanityName(rootChannel);
-      if (siteSegment.equals(vanityName)) {
-        return site;
+      try {
+        Content rootChannel = site.getSiteRootDocument();
+        if (rootChannel == null) {
+          continue;
+        }
+        String vanityName = getContentLinkBuilder().getVanityName(rootChannel);
+        if (siteSegment.equals(vanityName)) {
+          return site;
+        }
+      } catch (CapObjectDestroyedException | SiteDestroyedException e) {
+        LOG.debug("ignoring destroyed site '{}'", site.getId(), e);
       }
     }
     return null;

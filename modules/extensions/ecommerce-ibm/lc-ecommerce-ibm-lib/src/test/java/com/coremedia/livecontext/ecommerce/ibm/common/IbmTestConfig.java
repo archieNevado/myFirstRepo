@@ -15,7 +15,7 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERS
 public class IbmTestConfig implements TestConfig {
 
   private static final String STORE_CONFIG_ID = System.getProperty("lc.test.configID", "aurora");
-  private static final String STORE_ID = System.getProperty("lc.test.storeId", "10202");
+  private static final String STORE_ID = System.getProperty("lc.test.storeId", "10201");
   static final String STORE_NAME = System.getProperty("lc.test.storeName", "AuroraESite");
   private static final String B2B_STORE_ID = System.getProperty("lc.test.storeId", "10303");
   private static final String B2B_STORE_ID_V80 = System.getProperty("lc.test.storeId", "715838085");

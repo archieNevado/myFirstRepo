@@ -11,6 +11,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.DataMapTransformationHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.PersonalizedPriceByExternalIdCacheKey;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.StaticPricesByExternalIdCacheKey;
@@ -419,8 +420,16 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product {
   // --- internal ---------------------------------------------------
 
   private Category doGetCategory() {
-    String parentCategoryID = DataMapHelper.getValueForPath(getDelegate(), "parentCatalogGroupID[0]", String.class);
-    return (Category) getCommerceBeanFactory().createBeanFor(
-            CommerceIdHelper.formatCategoryTechId(parentCategoryID), getContext());
+    String catalogId = getContext().getCatalogId();
+    List<String> parentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(getDelegate(), catalogId);
+    if (parentCategoryIds.isEmpty()) {
+      throw new IllegalStateException("Non Root Category " + this.getId() + "  should have a parent category");
+    }
+
+    String parentCategoryID = parentCategoryIds.get(0);
+    if (parentCategoryID != null) {
+      return (Category) getCommerceBeanFactory().createBeanFor(CommerceIdHelper.formatCategoryTechId(parentCategoryID), getContext());
+    }
+    return null;
   }
 }

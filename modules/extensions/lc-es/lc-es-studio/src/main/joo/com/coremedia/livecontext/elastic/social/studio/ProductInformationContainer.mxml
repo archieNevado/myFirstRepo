@@ -29,7 +29,7 @@
     <layout_VBox/>
   </local:layout>
   <local:items>
-    <Container margin="0 0 0 -12px">
+    <Container>
       <layout>
         <layout_HBox align="stretch"/>
       </layout>
@@ -51,7 +51,7 @@
         </DisplayField>
       </items>
     </Container>
-    <DisplayField>
+    <DisplayField margin="0 0 0 20px">
       <plugins>
         <ui:BindPropertyPlugin componentProperty="value"
                                transformer="{RichTextPlainTextTransformer.convertToPlainText}"

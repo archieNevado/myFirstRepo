@@ -34,7 +34,10 @@
   <#list localizations as localization>
     <#-- list all localized variants without self -->
     <#if localization.locale != self.content.locale>
-        <link rel="alternate" hreflang="${bp.getPageLanguageTag(localization)}" href="${cm.getLink(localization)}" title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}" />
+      <#assign variantLink=cm.getLink(localization) />
+      <#if variantLink?has_content>
+          <link rel="alternate" hreflang="${bp.getPageLanguageTag(localization)}" href="${variantLink}" title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}" />
+      </#if>
     </#if>
   </#list>
 </#if>
