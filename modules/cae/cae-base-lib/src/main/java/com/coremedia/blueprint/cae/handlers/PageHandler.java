@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.common.contentbeans.CMDownload;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.objectserver.web.links.Link;
@@ -13,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,16 +64,7 @@ public class PageHandler extends DefaultPageHandler {
     return handleRequestInternal(navigationPath, view, servletRequest);
   }
 
-  @Link(type = CMDownload.class, view = "fragmentPreview")
   @SuppressWarnings("unused")
-  public String buildLinkForDownload(CMDownload download, HttpServletRequest request) {
-    UriComponentsBuilder fragmentPreview = buildLinkForLinkable(download, "fragmentPreview", new HashMap<String, Object>());
-    if(fragmentPreview != null) {
-      return fragmentPreview.build().toString();
-    }
-    throw new IllegalArgumentException("Content " + download.getContentId() + " has no navigation context, cannot build link.");
-  }
-
   @Link(type = CMTaxonomy.class)
   @Nullable
   public UriComponentsBuilder buildLinkForTaxonomy(
@@ -85,7 +74,7 @@ public class PageHandler extends DefaultPageHandler {
     return buildLinkForTaxonomyInternal(taxonomy, viewName, linkParameters);
   }
 
-   //todo generalize to Linkable.class?
+  @SuppressWarnings("unused")
   @Link(type = CMLinkable.class)
   @Nullable
   public UriComponentsBuilder buildLinkForLinkable(

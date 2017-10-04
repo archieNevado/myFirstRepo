@@ -113,6 +113,8 @@ coremedia_maven "#{node['blueprint']['cache_dir']}/solr-config.zip" do
   extract_to node['blueprint']['solr']['solr_home']
   owner node['blueprint']['solr']['user']
   group node['blueprint']['solr']['group']
+  # overwrite all solr-home dir if artifact changed
+  extract_force_clean node['blueprint']['solr']['clean_solr_home_on_update']
 end
 
 service 'solr' do

@@ -51,7 +51,7 @@ public class SitemapTriggerImpl implements SitemapTrigger, ServletContextAware {
           String result = generateSitemap(site);
           LOG.info("Finished sitemap generation for {}: {}", site, result);
         } catch (Exception e) {
-          LOG.error("Sitemap generation for {} failed.", site, e);
+          LOG.warn("Sitemap generation for {} failed.", site, e);
         }
       } else {
         LOG.info("{} has no sitemap configuration.", site);

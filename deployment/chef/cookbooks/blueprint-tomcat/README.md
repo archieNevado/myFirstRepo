@@ -87,13 +87,13 @@ JMX Login (readwrite) = (control / control)
 * coremedia_tomcat (~> 2.1.0)
 * coremedia_maven (~> 2.0.4)
 * chef-sugar (~> 3.0)
-* java_se (~> 8.131.0)
+* java_se (~> 8.144.0)
 
 # Attributes
 
-* `node['blueprint']['tomcat']['source']` - The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.72/bin/apache-tomcat-7.0.72.zip`.
-* `node['blueprint']['tomcat']['source_checksum']` - The SHA-256 checksum of the tomcat installation zip. Defaults to `86ea10a9794714c5a98396d4ab7d077a524dc97c09fbb225a54a2c71d85747d7`.
-* `node['blueprint']['tomcat']['version']` - The version of tomcat to install. Defaults to `7.0.72`.
+* `node['blueprint']['tomcat']['source']` - The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.79/bin/apache-tomcat-7.0.79.zip`.
+* `node['blueprint']['tomcat']['source_checksum']` - The SHA-256 checksum of the tomcat installation zip. Defaults to `41aa3559379e6609a0352d9338f83cbd9ddf15254f787388bd742ac32cff3f04`.
+* `node['blueprint']['tomcat']['version']` - The version of tomcat to install. Defaults to `7.0.79`.
 * `node['blueprint']['tomcat']['java_home']` - The path to the java home for the tomcat services. Defaults to `/usr/lib/jvm/java`.
 * `node['blueprint']['tomcat']['catalina_opts']['agent']` - Global jvm agent opts. Use this to instrument the jvm for monitoring. Defaults to ``.
 * `node['blueprint']['tomcat']['catalina_opts']['gc']` - Global jvm garbage collection flags. Defaults to `-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+UseMembar`.
@@ -103,8 +103,8 @@ JMX Login (readwrite) = (control / control)
 * `node['blueprint']['tomcat']['cae-live']['catalina_opts']['libjpeg']` -  Defaults to `-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}`.
 * `node['blueprint']['tomcat']['studio']['catalina_opts']['libjpeg']` -  Defaults to `-Djava.library.path=#{node['blueprint']['libjpeg_turbo_path']}`.
 * `node['blueprint']['tomcat']['jmx_remote']` - A flag to enable/disable the jmx remote connector. Defaults to `true`.
-* `node['blueprint']['tomcat']['jmx_remote_jar_source']` - The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.72/bin/extras/catalina-jmx-remote.jar`.
-* `node['blueprint']['tomcat']['jmx_remote_jar_source_checksum']` - The SHA-256 checksum of the catalina-jmx-remote.jar. Defaults to `fbe611a1e7be0b3e79d16bf65dfa5f104de0ed08800079a2490fe788e72e58d1`.
+* `node['blueprint']['tomcat']['jmx_remote_jar_source']` - The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute. Defaults to `http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.79/bin/extras/catalina-jmx-remote.jar`.
+* `node['blueprint']['tomcat']['jmx_remote_jar_source_checksum']` - The SHA-256 checksum of the catalina-jmx-remote.jar. Defaults to `cb0b9e2cc63ba9ecb4c3f312c8fa02d9e99424be9c63c97a9581c2897320fe9b`.
 * `node['blueprint']['tomcat']['jmx_remote_authenticate']` - A flag to enable/disable remote jmx authentication. Defaults to `true`.
 * `node['blueprint']['tomcat']['jmx_remote_server_name']` - The server name under which the rmi server is registered. Set it to localhost and create a ssh tunnel(recommended) or set it to the actual hostname and open the ports and configure security and ssl. Defaults to `node['fqdn']`.
 * `node['blueprint']['tomcat']['jmx_remote_monitor_password']` - The password for the monitoring jmx role. Defaults to `monitor`.

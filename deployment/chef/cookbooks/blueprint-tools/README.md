@@ -24,7 +24,7 @@ the `coremedia-application-maven-plugin` based on the `application-runtime` arti
 
 * blueprint-base
 * coremedia_maven (~> 2.0)
-* java_se (~> 8.131.0)
+* java_se (~> 8.144.0)
 
 # Attributes
 

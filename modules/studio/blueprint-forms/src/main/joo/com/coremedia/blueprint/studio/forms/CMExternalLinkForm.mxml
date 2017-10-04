@@ -40,7 +40,7 @@
       </editor:items>
     </editor:DocumentForm>
     <bpforms:MultiLanguageDocumentForm/>
-    <bpforms:MetaDataWithoutSettingsForm/>
+    <bpforms:MetaDataWithoutSearchableForm/>
   </editor:items>
 
 </editor:DocumentTabPanel>

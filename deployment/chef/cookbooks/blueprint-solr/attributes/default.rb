@@ -13,6 +13,8 @@ default['blueprint']['solr']['url']      = "http://archive.apache.org/dist/lucen
 default['blueprint']['solr']['checksum'] = '6b1d1ed0b74aef320633b40a38a790477e00d75b56b9cdc578533235315ffa1e'
 # <> define solr home
 default['blueprint']['solr']['solr_home'] = '/opt/coremedia/solr-home'
+#<> clean solr home on update
+default['blueprint']['solr']['clean_solr_home_on_update'] = false
 # <> define solr index data directory
 default['blueprint']['solr']['solr_data_dir'] = '/var/coremedia/solr-data'
 # <> define solr dir

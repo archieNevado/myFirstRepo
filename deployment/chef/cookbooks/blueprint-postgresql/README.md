@@ -14,8 +14,8 @@ This is the wrapper cookbook to install postgresql.
 
 * blueprint-base
 * blueprint-yum
-* yum-pgdg (~> 0.2.7)
-* postgresql (~> 4.0.0)
+* yum-pgdg (~> 2.0.1)
+* postgresql (~> 6.1.1)
 
 # Attributes
 

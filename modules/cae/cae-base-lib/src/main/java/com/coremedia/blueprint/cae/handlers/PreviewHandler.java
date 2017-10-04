@@ -2,14 +2,21 @@ package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.cap.common.IdHelper;
+import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.IdRedirectHandlerBase;
+import com.coremedia.objectserver.web.links.LinkFormatter;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A handler used for preview purposes: Takes a "id" request parameter and redirect to the resource that is denoted
@@ -18,12 +25,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping
 public class PreviewHandler extends IdRedirectHandlerBase {
 
+  private static final Logger LOG = LoggerFactory.getLogger(PreviewHandler.class);
+
   /**
    * Uri pattern for preview URLs.
    * e.g. /preview?id=123&view=fragmentPreview
    */
   public static final String URI_PATTERN = "/preview";
   public static final String REQUEST_ATTR_IS_STUDIO_PREVIEW = "isStudioPreview";
+
+  private LinkFormatter linkFormatter;
 
   // --- Handler ----------------------------------------------------
 
@@ -36,7 +47,19 @@ public class PreviewHandler extends IdRedirectHandlerBase {
     request.setAttribute(REQUEST_ATTR_IS_STUDIO_PREVIEW, true);
     storeSite(request, siteId);
     storeTaxonomy(request, taxonomyId);
-    return super.handleId(id, view);
+    ModelAndView redirectModel = super.handleId(id, view);
+    Object rootModel = requireNonNull(HandlerHelper.getRootModel(redirectModel));
+
+    // check if link to root model can be build - let common spring MVC exception handling kick in if link building fails
+    // note that this is necessary because exceptions during rendering of RedirectView cannot be handled anymore
+    String link = linkFormatter.formatLink(rootModel, view, request, null, true);
+    LOG.debug("redirecting '{}' with view '{}' for bean '{}' to '{}'", id, view, rootModel, link);
+    return redirectModel;
+  }
+
+  @Required
+  public void setLinkFormatter(LinkFormatter linkFormatter) {
+    this.linkFormatter = linkFormatter;
   }
 
   public static boolean isStudioPreviewRequest(){

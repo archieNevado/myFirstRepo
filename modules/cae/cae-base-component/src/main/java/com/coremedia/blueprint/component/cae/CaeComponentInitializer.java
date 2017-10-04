@@ -4,7 +4,7 @@ import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.embedded.RegistrationBean;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.mobile.device.DeviceResolverRequestFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;

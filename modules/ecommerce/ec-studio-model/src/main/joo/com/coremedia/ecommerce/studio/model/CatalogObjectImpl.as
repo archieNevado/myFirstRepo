@@ -61,5 +61,16 @@ public class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, 
   public function getCustomAttribute(attribute:String):Object {
     return getCustomAttributes() ? getCustomAttributes()[attribute] : null;
   }
+
+  override public function invalidate(callback:Function = null):void {
+    super.invalidate(function () {
+      var content:Content = getContent();
+      if (content && content.getIssues()) {
+        content.getIssues().invalidate(callback);
+      } else if (callback is Function){
+        callback();
+      }
+    });
+  }
 }
 }

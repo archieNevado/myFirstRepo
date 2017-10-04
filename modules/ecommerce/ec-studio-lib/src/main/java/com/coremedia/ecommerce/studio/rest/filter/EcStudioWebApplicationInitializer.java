@@ -2,8 +2,8 @@ package com.coremedia.ecommerce.studio.rest.filter;
 
 import com.coremedia.springframework.web.ComponentWebApplicationInitializer;
 import com.coremedia.springframework.web.RegistrationBeanBuilder;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.context.embedded.RegistrationBean;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.core.annotation.Order;
 
 import javax.annotation.Nonnull;

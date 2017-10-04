@@ -3,12 +3,14 @@ package com.coremedia.blueprint.taxonomies.strategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
+import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.common.CapSession;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentException;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.rest.cap.content.search.solr.SolrSearchService;
 import org.slf4j.Logger;
@@ -137,8 +139,12 @@ public class TaxonomyResolverImpl implements TaxonomyResolver, InitializingBean 
     Map<String,Taxonomy> newTaxonomies = new HashMap<>();
     Set<Site> sites = sitesService.getSites();
     for (Site site : sites) {
-      Content siteTaxonomyFolder = getSiteConfigFolder(site);
-      addStrategies(newTaxonomies, siteTaxonomyFolder, site.getId());
+      try {
+        Content siteTaxonomyFolder = getSiteConfigFolder(site);
+        addStrategies(newTaxonomies, siteTaxonomyFolder, site.getId());
+      } catch (CapObjectDestroyedException | SiteDestroyedException e) {
+        LOG.debug("ignoring destroyed site '{}'", site.getId(), e);
+      }
     }
 
     Content globalConfigFolder = getGlobalConfigFolder();

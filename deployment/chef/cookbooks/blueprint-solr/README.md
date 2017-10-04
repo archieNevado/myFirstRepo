@@ -14,7 +14,7 @@ This is an application cookbook. It provides recipes to install:
 
 ## Cookbooks:
 
-* java_se (~> 8.112.0)
+* java_se (~> 8.144.0)
 * coremedia_maven (~> 2.0)
 
 # Attributes
@@ -23,6 +23,7 @@ This is an application cookbook. It provides recipes to install:
 * `node['blueprint']['solr']['url']` - define solr download url. Defaults to `http://archive.apache.org/dist/lucene/solr/#{node['blueprint']['solr']['version']}/solr-#{node['blueprint']['solr']['version']}.tgz`.
 * `node['blueprint']['solr']['checksum']` - define artifact checksum. Defaults to `6b1d1ed0b74aef320633b40a38a790477e00d75b56b9cdc578533235315ffa1e`.
 * `node['blueprint']['solr']['solr_home']` - define solr home. Defaults to `/opt/coremedia/solr-home`.
+* `node['blueprint']['solr']['clean_solr_home_on_update']` - clean solr home on update. Defaults to `false`.
 * `node['blueprint']['solr']['solr_data_dir']` - define solr index data directory. Defaults to `/var/coremedia/solr-data`.
 * `node['blueprint']['solr']['dir']` - define solr dir. Defaults to `/opt/solr`.
 * `node['blueprint']['solr']['port']` - define solr port. Defaults to `40080`.
