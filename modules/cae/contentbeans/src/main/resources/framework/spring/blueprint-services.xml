@@ -33,7 +33,7 @@
     <property name="preview" value="${cae.is.preview}"/>
   </bean>
 
-  <customize:append id="addDuplicateSolrFilterProvider" bean="solrSearchFilters">
+  <customize:append id="addValidityPeriodValidatorSolrSearchFilter" bean="solrSearchFilters">
     <list>
       <ref bean="validityPeriodValidator"/>
     </list>

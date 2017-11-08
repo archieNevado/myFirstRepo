@@ -33,7 +33,7 @@ public class MarketingResource extends AbstractCatalogResource<Marketing> {
     representation.setId(entity.getId());
     MarketingSpotService marketingSpotService = getConnection().getMarketingSpotService();
     if (marketingSpotService != null) {
-      representation.setMarketingSpots(marketingSpotService.findMarketingSpots());
+      representation.setMarketingSpots(marketingSpotService.findMarketingSpots(entity.getContext()));
     }
   }
 

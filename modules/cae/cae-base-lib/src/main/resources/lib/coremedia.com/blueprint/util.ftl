@@ -22,7 +22,7 @@
     <#local attr=attr + {"class": classes?join(" ")} />
   </#if>
   <#local ignore=ignore + ["classes"] />
-  <#list attr?keys as key><#if !ignore?seq_contains(key)><#assign value=attr[key]/><#if key=="metadata"><@cm.metadata data=value /><#elseif key?contains("data-")><@cm.dataAttribute name=key data=value/><#else> ${key}="${value}"</#if></#if></#list>
+  <#list attr?keys as key><#if !ignore?seq_contains(key)><#assign value=attr[key]/><#if key=="metadata"><@cm.metadata data=value /><#elseif key?contains("data-")><@cm.dataAttribute name=key data=value/><#elseif value?has_content> ${key}="${value}"</#if></#if></#list>
 </#macro>
 
 <#--
@@ -46,6 +46,7 @@
  * @param args @see spring.messageArgs#args
  * @param highlightErrors specifies if errors should be highlighted, default: true (for macro variant)
  -->
+<#outputformat "plainText">
 <#macro message key args=[] highlightErrors=true>
 <#compress>
   <#if key?has_content>
@@ -63,6 +64,7 @@
   </#if>
 </#compress>
 </#macro>
+</#outputformat>
 
 <#--
  * Translates a message key into a localized message
@@ -72,10 +74,12 @@
  * @param args @see spring.messageArgs#args
  * @param highlightErrors specifies if errors should be highlighted, default: false (function variant)
  -->
+<#outputformat "plainText">
 <#function getMessage key args=[] highlightErrors=false>
   <#local result><@message key=key args=args highlightErrors=highlightErrors /></#local>
   <#return result />
 </#function>
+</#outputformat>
 
 <#--
   * Checks if a translation for the given key exists
@@ -151,7 +155,9 @@
  * @param text String with line breaks
  -->
 <#macro renderWithLineBreaks text>
-  <@cm.unescape text=text?trim?replace("\n\n", "<br/>")?replace("\n", "<br/>") />
+  <#noautoesc>
+    ${text?trim?replace("\n\n", "<br/>")?replace("\n", "<br/>")}
+  </#noautoesc>
 </#macro>
 
 <#--

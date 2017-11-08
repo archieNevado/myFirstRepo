@@ -181,15 +181,6 @@
 <StringProperty Name="semanticSettings">nameMatching</StringProperty>
 <StringProperty Name="preferredSite">99c8ef576f385bc322564d5694df6fc2</StringProperty>
 <StringProperty Name="locale">en</StringProperty>
-<LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Startpage/Spring%20Picnic%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Startpage/Spring%20Picnic%20Image%20Map"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Women/Aurora%20Women%9dd4d86a.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Women/Aurora%20Women%20Main%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Summer%20Dresses%20Collection.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Summer%20Dresses%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Editorial%20Blog%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Editorial%20Blog%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Videos/Campaigns/Spring%20Dresses%20Campaign/Blue%20Summer%20Dress%20Va9327636.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Videos/Campaigns/Spring%20Dresses%20Campaign/Blue%20Summer%20Dress%20Video%204%3A3"/>
-</LinkListProperty>
 <StructProperty Name="dashboard">
 <Struct>
 <StructListProperty Name="widgets">
@@ -229,11 +220,34 @@
 </StructListProperty>
 </Struct>
 </StructProperty>
+<StructListProperty Name="bookmarks">
+<Struct>
+<StringProperty Name="name">Women</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
+</Struct>
+<Struct>
+<StringProperty Name="name">Dresses</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses"/>
+</Struct>
+<Struct>
+<StringProperty Name="name">Summer Dresses Collection</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Summer%20Dresses%20Collection.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Summer%20Dresses%20Collection"/>
+</Struct>
+<Struct>
+<StringProperty Name="name">Editorial Blog Teaser</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Editorial%20Blog%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Editorial%20Blog%20Teaser"/>
+</Struct>
+</StructListProperty>
 <StructProperty Name="workarea">
 <Struct>
 <StructListProperty Name="tabs">
 <Struct>
-<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.startTab</StringProperty>
+<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StructProperty Name="state">
+<Struct>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Augmented%20Pages/Footer/Explore/Advanced%20Search%20Page.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Augmented%20Pages/Footer/Explore/Advanced%20Search%20Page"/>
+</Struct>
+</StructProperty>
 </Struct>
 </StructListProperty>
 <IntProperty Name="activeTabIndex">0</IntProperty>

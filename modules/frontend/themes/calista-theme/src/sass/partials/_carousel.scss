@@ -1,0 +1,46 @@
+.#{$cm-carousel-prefix} {
+
+  &-control {
+    width: 5%;
+
+    .glyphicon {
+      position: absolute;
+      display: block;
+      width: 24px;
+      height: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &:before {
+        content: "";
+      }
+    }
+
+    @include breakpoint("xs") {
+      &.left, &.right {
+        width: 10%;
+      }
+    }
+
+    .glyphicon-triangle-right {
+      right: 50%;
+      margin-right: -12px;
+      background: url("../../img/carousel-button-right.svg") no-repeat center center transparent;
+    }
+
+    .glyphicon-triangle-left {
+      left: 50%;
+      margin-left: -12px;
+      background: url("../../img/carousel-button-left.svg") no-repeat center center transparent;
+    }
+
+    &:hover {
+      .glyphicon-triangle-left {
+        background: url("../../img/carousel-button-left-hover.svg") no-repeat center center transparent;
+      }
+      .glyphicon-triangle-right {
+        background: url("../../img/carousel-button-right-hover.svg") no-repeat center center transparent;
+      }
+    }
+  }
+}

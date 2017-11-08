@@ -10,6 +10,8 @@ import com.coremedia.rest.linking.Linker;
 import java.util.Collections;
 import java.util.Objects;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
+
 /**
  * A special purpose cache key that propagates changes of the catalog's root category to a {@link RootCategoryInvalidationSource}.
  */
@@ -48,7 +50,7 @@ class RootCategoryCacheKey extends CacheKey<Category> {
 
   @Override
   public Category evaluate(Cache cache) throws Exception {
-    return catalogService.findRootCategory();
+    return catalogService.findRootCategory(DEFAULT_CATALOG_ALIAS, connection.getStoreContext());
   }
 
   @Override

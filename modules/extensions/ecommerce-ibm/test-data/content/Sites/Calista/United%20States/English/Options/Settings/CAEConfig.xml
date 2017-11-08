@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Sites/Calista/United States/English/Options/Settings" name="CAEConfig" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<IntProperty Name="teaser.max.length">140</IntProperty>
+<BooleanProperty Name="breadcrumbHideLastElement">true</BooleanProperty>
+<StringProperty Name="sitemapOrgConfiguration">livecontext</StringProperty>
+<LinkProperty Name="searchAction" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Actions/SearchAction.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Actions/SearchAction"/>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

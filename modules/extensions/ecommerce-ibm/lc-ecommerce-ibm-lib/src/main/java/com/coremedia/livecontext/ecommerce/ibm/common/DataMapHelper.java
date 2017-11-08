@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,20 +83,21 @@ public class DataMapHelper {
     return value;
   }
 
+  @Nonnull
+  public static <T> Optional<T> findValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key,
+                                                @Nonnull Class<T> type) {
+    Object valueForKey = getValueForPath(map, key);
+    T value = convert(valueForKey, type, null);
+    return Optional.ofNullable(value);
+  }
+
   @Nullable
   public static <T> T getValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key, @Nonnull Class<T> type) {
     Object valueForKey = getValueForPath(map, key);
     return convert(valueForKey, type, null);
   }
 
-  @Nonnull
-  public static <T> T getValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key, @Nonnull T defaultValue) {
-    Object valueForKey = getValueForPath(map, key);
-    //noinspection unchecked
-    Class<T> aClass = (Class<T>) defaultValue.getClass();
-    return convert(valueForKey, aClass, defaultValue);
-  }
-
+  @Nullable
   private static <T> T convert(@Nullable Object source, @Nonnull Class<T> targetType, @Nullable T defaultValue) {
     if (source != null) {
       return DEFAULT_CONVERSION_SERVICE.convert(source, targetType);

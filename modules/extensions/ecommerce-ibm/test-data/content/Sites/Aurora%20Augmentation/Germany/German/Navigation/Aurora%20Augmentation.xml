@@ -8,7 +8,6 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/aurora/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/aurora/vendor/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../Pictures/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Pictures/Picture%20Missing%20Product%20Picture"/>
 <StringProperty Name="externalUriPath"/>
 <StringProperty Name="shopNow">disabled</StringProperty>
@@ -105,7 +104,7 @@
 <Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Accessories.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Startpage/Women%20Accessories"/>
 <Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Handbags.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Startpage/Women%20Handbags"/>
 </LinkListProperty>
-<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait"/>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-50-50-landscape.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Viewtypes/CMChannel/tiles-layout-50-50-landscape"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>
 <Struct>

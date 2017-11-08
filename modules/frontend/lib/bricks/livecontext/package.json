@@ -1,0 +1,23 @@
+{
+  "name": "@coremedia/brick-livecontext",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "magnific-popup": "1.1.0",
+    "@coremedia/js-jquery-utils": "file:../../js/jquery-utils",
+    "@coremedia/js-utils": "file:../../js/utils",
+    "@coremedia/js-device-detector": "file:../../js/device-detector",
+    "@coremedia/js-logger": "file:../../js/logger",
+    "@coremedia/js-node-decoration-service": "file:../../js/node-decoration-service",
+    "@coremedia/js-basic": "file:../../js/basic",
+    "@coremedia/js-magnific-popup": "file:../../js/magnific-popup",
+    "@coremedia/sass-utils": "file:../../sass/utils",
+    "@coremedia/brick-generic-templates": "file:../generic-templates",
+    "@coremedia/brick-responsive-images": "file:../responsive-images",
+    "@coremedia/brick-quick-info": "file:../quick-info",
+    "@coremedia/brick-footer": "file:../footer",
+    "@coremedia/brick-video": "file:../video"
+  },
+  "main": "src/js/index.js"
+}

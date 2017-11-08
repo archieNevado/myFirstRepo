@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,18 +29,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class DownloadPortalFactoryTest {
 
   @InjectMocks
@@ -81,7 +80,7 @@ public class DownloadPortalFactoryTest {
 
   @Before
   public void setUp() {
-    when(dataViewFactory.loadAllCached(anyList(), anyString())).then(returnsFirstArg());
+    when(dataViewFactory.loadAllCached(anyList(), nullable(String.class))).then(returnsFirstArg());
     when(category.getContentId()).thenReturn(123);
 
     when(asset1.getTitle()).thenReturn("asset1");
@@ -139,7 +138,7 @@ public class DownloadPortalFactoryTest {
 
     when(requestedAsset.getAssetCategories()).thenReturn(Arrays.asList(category, anotherCategory));
     List<String> whiteList = Collections.singletonList("test");
-    when(settingsService.nestedSetting(anyListOf(String.class), eq(List.class), anyObject())).thenReturn(whiteList);
+    when(settingsService.nestedSetting(anyList(), eq(List.class), any())).thenReturn(whiteList);
     Map<String, Object> metadataProperties = new HashMap<>();
     metadataProperties.put("test", "string");
     when(struct.getProperties()).thenReturn(metadataProperties);
@@ -182,7 +181,7 @@ public class DownloadPortalFactoryTest {
   public void testCreatePaginatedAssetsForCategory() {
     int customAssetsPerPageDefault = 3;
     int requestedPage = 1;
-    when(settingsService.nestedSetting(anyListOf(String.class), eq(Integer.class), eq(navigation)))
+    when(settingsService.nestedSetting(anyList(), eq(Integer.class), eq(navigation)))
             .thenReturn(customAssetsPerPageDefault);
 
     List<AMAsset> assets = Arrays.asList(asset1, asset2);
@@ -202,7 +201,7 @@ public class DownloadPortalFactoryTest {
     int customAssetsPerPageDefault = 3;
     int requestedPage = 1;
     CMTaxonomy subject = category; // Category is a subtype of taxonomy, so no new mock required
-    when(settingsService.nestedSetting(anyListOf(String.class), eq(Integer.class), eq(navigation)))
+    when(settingsService.nestedSetting(anyList(), eq(Integer.class), eq(navigation)))
             .thenReturn(customAssetsPerPageDefault);
 
     List<AMAsset> assets = Arrays.asList(asset1, asset2);

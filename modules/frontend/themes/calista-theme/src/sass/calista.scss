@@ -1,0 +1,69 @@
+/*! CoreMedia Blueprint - Theme Calista */
+
+// ### VARIABLES ###
+
+// Own variables (need to be loaded first, so default values can be overridden)
+// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+
+@import "variables/bootstrap_variables";
+@import "variables/variables";
+@import "variables/flex-grid";
+@import "variables/wcs-override";
+@import "variables/hero";
+@import "variables/video";
+
+// Dependency variables
+
+@import "~@coremedia/sass-utils/src/variables";
+@import "~@coremedia/brick-hero-teaser/src/sass/variables";
+@import "~@coremedia/brick-360-spinner/src/sass/variables";
+@import "~@coremedia/brick-default-teaser/src/sass/variables";
+@import "~@coremedia/brick-responsive-images/src/sass/variables";
+@import "~@coremedia/brick-pdp-augmentation/src/sass/variables";
+@import "~@coremedia/brick-navigation/src/sass/variables";
+@import "~@coremedia/brick-livecontext/src/sass/variables";
+@import "~@coremedia/brick-footer/src/sass/variables";
+@import "~@coremedia/brick-dynamic-include/src/sass/variables";
+@import "~@coremedia/brick-bootstrap/src/sass/variables";
+@import "~@coremedia/brick-generic-templates/src/sass/variables";
+
+// ### PARTIALS ###
+
+// excludes
+
+// Don't import styles of the video brick, since we use our own play button
+@import "~@coremedia/brick-video/src/sass/partials/video?exclude";
+
+// Dependency styles
+
+@import "~@coremedia/brick-generic-templates/src/sass/partials";
+@import "~@coremedia/brick-bootstrap/src/sass/partials";
+@import "~@coremedia/brick-dynamic-include/src/sass/partials";
+@import "~@coremedia/brick-footer/src/sass/partials";
+@import "~@coremedia/brick-livecontext/src/sass/partials";
+@import "~@coremedia/brick-navigation/src/sass/partials";
+@import "~@coremedia/brick-pdp-augmentation/src/sass/partials";
+@import "~@coremedia/brick-responsive-images/src/sass/partials";
+@import "~@coremedia/brick-default-teaser/src/sass/partials";
+@import "~@coremedia/brick-360-spinner/src/sass/partials";
+@import "~@coremedia/brick-hero-teaser/src/sass/partials";
+@import "~@coremedia/sass-utils/src/partials";
+
+// Own partials
+
+@import "partials/header";
+@import "partials/details";
+@import "partials/search";
+@import "partials/navigation";
+@import "partials/forms";
+@import "partials/footer";
+@import "partials/buttons";
+@import "partials/hero";
+@import "partials/helpers";
+@import "partials/teaser";
+@import "partials/video";
+@import "partials/flex-grid";
+@import "partials/pdp";
+@import "partials/cart";
+@import "partials/wcs-override";
+@import "partials/carousel";

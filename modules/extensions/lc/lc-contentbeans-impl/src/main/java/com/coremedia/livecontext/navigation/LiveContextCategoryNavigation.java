@@ -181,18 +181,13 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
   }
 
   @Override
-  public String getExternalId() {
-    return getCategory().getExternalId();
-  }
-
-  @Override
   public TreeRelation<Content> getCodeResourcesTreeRelation() {
     return treeRelation.getContentTreeRelation();
   }
 
   @Override
   public String toString() {
-    return "LiveContextExternalChannel{" +
+    return getClass().getName() + "{" +
             "context=" + getContext().getContent().getPath() +
             ", category=" + getCategory().getName() +
             '}';

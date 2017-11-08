@@ -1,7 +1,5 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
-import co.freeside.betamax.Betamax;
-import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl;
@@ -14,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextImpl.newUserContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -26,6 +23,7 @@ public class UserContextProviderImplIT extends IbmServiceTestBase {
   UserContextProviderImpl testling;
 
   @Before
+  @Override
   public void setup() {
     super.setup();
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
@@ -37,16 +35,10 @@ public class UserContextProviderImplIT extends IbmServiceTestBase {
   }
 
   @Test
-  @Betamax(tape = "ucpi_testCreateUserContextFor", match = {MatchRule.path, MatchRule.query})
-  public void testCreateUserContextFor() {
-    UserContext userContext = testling.createContext("testUser");
-    assertEquals(UserContextHelper.getForUserName(userContext), "testUser");
-  }
-
-  @Test
   public void testCurrentUserContext() {
-    UserContext userContext = newUserContext();
-    userContext.put(UserContextHelper.FOR_USER_NAME, "currentUser");
+    UserContext userContext = UserContext.builder()
+            .withUserName("currentUser")
+            .build();
 
     testling.setCurrentContext(userContext);
     assertNotNull(testling.getCurrentContext());

@@ -1,5 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords;
 import com.coremedia.cap.common.CapStructHelper;
 import com.coremedia.cap.common.DuplicateNameException;
@@ -11,6 +12,8 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.Catalog;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
@@ -25,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.cap.struct.StructBuilderMode.LOOSE;
 import static com.google.common.collect.Lists.newArrayList;
@@ -37,9 +41,11 @@ abstract class AugmentationHelperBase<T> {
   static final String DEFAULT_BASE_FOLDER_NAME = "Augmentation";
 
   static final String EXTERNAL_ID = "externalId";
+  public static final String OTHER_CATALOGS_FOLDER_NAME = "_other_catalogs";
 
   protected ContentRepository contentRepository;
   protected AugmentationService augmentationService;
+  protected ContentBackedPageGridService pageGridService;
   private InterceptService interceptService;
   protected SitesService sitesService;
 
@@ -50,7 +56,7 @@ abstract class AugmentationHelperBase<T> {
   abstract Content augment(@Nonnull T type);
 
   @Nullable
-  protected Content createContent(Content parent, String name, Map<String, Object> properties) {
+  protected Content createContent(@Nonnull Content parent, @Nonnull String name, @Nonnull Map<String, Object> properties) {
     // Create content (taking possible interceptors into consideration)
     ContentWriteRequest writeRequest = null;
     if (interceptService != null) {
@@ -65,10 +71,13 @@ abstract class AugmentationHelperBase<T> {
 
     try {
       Map<String, Object> myProperties = writeRequest != null ? writeRequest.getProperties() : properties;
-      content = contentType.create(parent, name, myProperties);
+      content = contentType.create(parent, name.trim(), myProperties);
     } catch (DuplicateNameException e) {
       LOGGER.debug("Ignored concurrent (redundant) augmentation request", e);
       content = parent.getChild(name);
+    } catch (Throwable t){
+      LOGGER.error("An error occured while augmenting category", t);
+      throw t;
     }
 
     // will most likely be non-null but maybe we're facing a concurrent content deletion
@@ -84,7 +93,7 @@ abstract class AugmentationHelperBase<T> {
   }
 
   @Nullable
-  protected String computeFolderName(@Nonnull CommerceBean commerceBean) {
+  protected String computeFolderPath(@Nonnull CommerceBean commerceBean) {
     Category category = getCategoryForCommerceBean(commerceBean);
 
     Site site = sitesService.getSite(category.getContext().getSiteId());
@@ -95,6 +104,15 @@ abstract class AugmentationHelperBase<T> {
     String rootPath = site.getSiteRootFolder().getPath();
 
     List<String> subPathsToJoin = newArrayList(rootPath, baseFolderName);
+
+    //Each catalog needs a separate folder. If not default catalog use the catalog alias as the basefolder.
+    Optional<Catalog> catalog = category.getCatalog();
+    if (!catalog.map(Catalog::isDefaultCatalog).orElse(false)) {
+      CatalogAlias catalogAlias = category.getId().getCatalogAlias();
+      subPathsToJoin.add(OTHER_CATALOGS_FOLDER_NAME);
+      subPathsToJoin.add(catalogAlias.value());
+    }
+
     for (Category breadcrumbCategory : category.getBreadcrumb()) {
       subPathsToJoin.add(getEscapedDisplayName(breadcrumbCategory));
     }
@@ -189,4 +207,10 @@ abstract class AugmentationHelperBase<T> {
   public void setBaseFolderName(String baseFolderName) {
     this.baseFolderName = baseFolderName;
   }
+
+  @Autowired
+  public void setPageGridService(ContentBackedPageGridService pageGridService) {
+    this.pageGridService = pageGridService;
+  }
+
 }

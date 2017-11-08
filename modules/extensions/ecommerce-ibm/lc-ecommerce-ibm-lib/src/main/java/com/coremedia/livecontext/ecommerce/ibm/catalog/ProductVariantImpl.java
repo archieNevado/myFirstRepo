@@ -5,9 +5,10 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.inventory.AvailabilityInfoImpl;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
@@ -23,6 +24,7 @@ import static org.springframework.util.Assert.notNull;
 
 public class ProductVariantImpl extends ProductBase implements ProductVariant {
 
+
   @Override
   protected Map<String, Object> getDelegate() {
     if (delegate == null) {
@@ -34,11 +36,11 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
     return delegate;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   Map<String, Object> getDelegateFromCache() {
-    return (Map<String, Object>) getCommerceCache().get(
-      new ProductCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
+    return getCommerceCache().get(
+            new ProductCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(),
+                    getCatalogWrapperService(), getCommerceCache()));
   }
 
   /**
@@ -50,17 +52,13 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   }
 
   @Override
-  public String getReference() {
-    return CommerceIdHelper.formatProductVariantId(getExternalId());
-  }
-
-  @Override
   @Nullable
   public Product getParent() {
     String parentProductID = DataMapHelper.getValueForKey(getDelegate(), "parentCatalogEntryID", String.class);
     if (parentProductID != null) {
-      return (Product) getCommerceBeanFactory().createBeanFor(
-              CommerceIdHelper.formatProductTechId(parentProductID), getContext());
+      CatalogAlias catalogAlias = getCatalogAlias();
+      CommerceId commerceId = getCommerceIdProvider().formatProductTechId(catalogAlias, parentProductID);
+      return (Product) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
     }
     return null;
   }
@@ -121,7 +119,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
 
   @Override
   @Nonnull
-  public List<ProductVariant> getVariants(@Nullable List<VariantFilter> filters) {
+  public List<ProductVariant> getVariants(@Nonnull List<VariantFilter> filters) {
     Product parent = getParent();
     return parent != null ? parent.getVariants(filters) : Collections.emptyList();
   }
@@ -135,7 +133,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
 
   @Override
   @Nonnull
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nullable List<VariantFilter> filters) {
+  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nonnull List<VariantFilter> filters) {
     Product parent = getParent();
     return parent != null ? parent.getVariantAxisValues(axisName, filters) : Collections.emptyList();
   }

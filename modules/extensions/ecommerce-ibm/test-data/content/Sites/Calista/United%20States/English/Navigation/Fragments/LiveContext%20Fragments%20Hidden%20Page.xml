@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMChannel folder="/Sites/Calista/United States/English/Navigation/Fragments" name="LiveContext Fragments Hidden Page">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment>innovation</segment>
+<title>LiveContext Fragments Hidden Page</title>
+<htmlTitle></htmlTitle>
+<keywords>CoreMedia,Perfect Chef,PerfectChef,Demo,Blueprint,LiveContext,CoreMedia LiveContext 2.0 for IBM WebSphere Commerce</keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<children>
+<link href="Augmented%20Pages/Header/Wishlist%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Augmented%20Pages/Header/Wishlist%20Page"/>
+<link href="Augmented%20Pages/Footer/Store%20Locator%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Augmented%20Pages/Footer/Store%20Locator%20Page"/>
+</children>
+<hidden>1</hidden>
+<javaScript>
+</javaScript>
+<css>
+</css>
+<theme>
+</theme>
+<placement>
+  <Struct xmlns="http://www.coremedia.com/2008/struct">
+<StructProperty Name="placements_2">
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_"/>
+<StructProperty Name="placements">
+<Struct>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+</StructListProperty>
+</Struct>
+</placement>
+<header>
+</header>
+<footer>
+</footer>
+</CMChannel>

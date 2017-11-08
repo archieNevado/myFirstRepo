@@ -164,6 +164,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/medicine?profileName=CoreMedia_findCategoryBySeoSegment&locale=en_US","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676706","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png","seo_token_ntk":"medicine","shortDescription":"Medicine","parentCatalogGroupID":["3074457345616676668_3074457345616676705","3074457345616676719_3074457345616676705"],"name":"Medicine","uniqueID":"3074457345616676706","storeID":"715837934","cm_seo_token_ntk":"715837934_medicine","identifier":"Medicine","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png"}]}'
 - recorded: 2017-02-07T18:47:12.574Z
@@ -185,6 +186,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676705?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676705","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png","seo_token_ntk":"health","shortDescription":"Health","parentCatalogGroupID":["3074457345616676668_-1","3074457345616676719_-1"],"name":"Health","uniqueID":"3074457345616676705","childCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676668_3074457345616676707","3074457345616676719_3074457345616676706","3074457345616676719_3074457345616676707"],"storeID":"715837934","cm_seo_token_ntk":"715837934_health","identifier":"Health","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png"}]}'
 - recorded: 2017-02-07T18:47:12.594Z
@@ -206,6 +208,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":10,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676706?profileName=CoreMedia_findProductsByCategory&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":10,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":10,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
       100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":0,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":0,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
@@ -232,6 +235,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679453?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679453","singleSKUCatalogEntryID":"3074457345616679454","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679454","catalogEntryTypeCode":"ItemBean","name":"Cold-Be-Gone
       Vitamin C and Zinc Lozenges","uniqueID":"3074457345616679454","storeID":"715837934","partNumber":"HME037_370101"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3701.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679453","price":[{"description":"L","value":"9.0","usage":"Display","currency":"USD"},{"description":"I","value":"8.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3701.jpg","seo_token_ntk":"cold-be-gone-vitamin-c-and-zinc-lozenges","shortDescription":"Immune
@@ -257,6 +261,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679455?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679455","singleSKUCatalogEntryID":"3074457345616679456","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679456","catalogEntryTypeCode":"ItemBean","name":"Healthy
       Boost Blood Booster","uniqueID":"3074457345616679456","storeID":"715837934","partNumber":"HME037_370201"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3702.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679455","price":[{"description":"L","value":"9.0","usage":"Display","currency":"USD"},{"description":"I","value":"8.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3702.jpg","seo_token_ntk":"healthy-boost-blood-booster-hme037-3702--1","shortDescription":"Boost
@@ -282,6 +287,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679457?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679457","singleSKUCatalogEntryID":"3074457345616679458","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679458","catalogEntryTypeCode":"ItemBean","name":"Healthy
       Boost One a Day Multi-Vitamin for Women","uniqueID":"3074457345616679458","storeID":"715837934","partNumber":"HME037_370301"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3703.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679457","price":[{"description":"L","value":"14.0","usage":"Display","currency":"USD"},{"description":"I","value":"12.99","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3703.jpg","seo_token_ntk":"healthy-boost-one-a-day-multi-vitamin-for-women","shortDescription":"One
@@ -306,6 +312,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679459?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679459","singleSKUCatalogEntryID":"3074457345616679460","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679460","catalogEntryTypeCode":"ItemBean","name":"Healthy
       Boost Golden Root Complex","uniqueID":"3074457345616679460","storeID":"715837934","partNumber":"HME037_370401"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3704.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679459","price":[{"description":"L","value":"26.0","usage":"Display","currency":"USD"},{"description":"I","value":"23.55","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3704.jpg","seo_token_ntk":"healthy-boost-golden-root-complex-hme037-3704--1","shortDescription":"Designed
@@ -330,6 +337,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679461?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679461","singleSKUCatalogEntryID":"3074457345616679462","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679462","catalogEntryTypeCode":"ItemBean","name":"Regular
       Strength Acetaminophen","uniqueID":"3074457345616679462","storeID":"715837934","partNumber":"HME037_370501"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3705.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679461","price":[{"description":"L","value":"9.0","usage":"Display","currency":"USD"},{"description":"I","value":"8.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3705.jpg","seo_token_ntk":"regular-strength-acetaminophen-hme037-3705--1","shortDescription":"Doctor
@@ -354,6 +362,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679463?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679463","singleSKUCatalogEntryID":"3074457345616679464","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679464","catalogEntryTypeCode":"ItemBean","name":"Cold-Be-Gone
       Cold and Sinus Gel Caps","uniqueID":"3074457345616679464","storeID":"715837934","partNumber":"HME037_370601"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3706.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679463","price":[{"description":"L","value":"8.0","usage":"Display","currency":"USD"},{"description":"I","value":"7.79","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3706.jpg","seo_token_ntk":"cold-be-gone-cold-and-sinus-gel-caps","shortDescription":"Fast
@@ -379,6 +388,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679465?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679465","singleSKUCatalogEntryID":"3074457345616679466","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679466","catalogEntryTypeCode":"ItemBean","name":"Healthy
       Boost St. John''s Wort Oil","uniqueID":"3074457345616679466","storeID":"715837934","partNumber":"HME037_370701"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3707.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679465","price":[{"description":"L","value":"16.0","usage":"Display","currency":"USD"},{"description":"I","value":"14.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3707.jpg","seo_token_ntk":"healthy-boost-st-johns-wort-oil","shortDescription":"For
@@ -403,6 +413,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679467?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679467","singleSKUCatalogEntryID":"3074457345616679468","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679468","catalogEntryTypeCode":"ItemBean","name":"Healthy
       Boost Ginkgo Biloba","uniqueID":"3074457345616679468","storeID":"715837934","partNumber":"HME037_370801"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3708.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679467","price":[{"description":"L","value":"8.0","usage":"Display","currency":"USD"},{"description":"I","value":"7.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3708.jpg","seo_token_ntk":"healthy-boost-ginkgo-biloba-hme037-3708--1","shortDescription":"Promotes
@@ -427,6 +438,7 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679469?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679469","singleSKUCatalogEntryID":"3074457345616679470","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679470","catalogEntryTypeCode":"ItemBean","name":"Healthy
       Boost Bismuth Subsalicylate","uniqueID":"3074457345616679470","storeID":"715837934","partNumber":"HME037_370901"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3709.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679469","price":[{"description":"L","value":"10.0","usage":"Display","currency":"USD"},{"description":"I","value":"9.29","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3709.jpg","seo_token_ntk":"healthy-boost-bismuth-subsalicylate","shortDescription":"Fast
@@ -452,9 +464,36 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:12 GMT
       Expires: Tue, 07 Feb 2017 19:47:12 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679471?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676706","3074457345616676719_3074457345616676706"],"uniqueID":"3074457345616679471","singleSKUCatalogEntryID":"3074457345616679472","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679472","catalogEntryTypeCode":"ItemBean","name":"All-In-One
       Cold and Flu Syrup","uniqueID":"3074457345616679472","storeID":"715837934","partNumber":"HME037_371001"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3710.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679471","price":[{"description":"L","value":"9.0","usage":"Display","currency":"USD"},{"description":"I","value":"8.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3710.jpg","seo_token_ntk":"all-in-one-cold-and-flu-syrup","shortDescription":"Fast
       acting relief for cold and flu symptoms.","manufacturer":"All-In-One","name":"All-In-One Cold and Flu Syrup","buyable":"true","longDescription":"Our All-In-One Cold and Flu formula provides effective relief from  dry cough, chills, congestion, sore throat,
       fever, sinus pain and a runny nose. Grape flavored. Bottle is 180 ml.","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Plastic","uniqueID":"7741124012283335252","unitID":"","unitOfMeasure":"","identifier":"HME037_3710"}],"sequence":".00000","associatedKeyword":"-","name":"Packaging","uniqueID":"7741124012283333443","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Packaging","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333445","usage":"Defining","comparable":true,"displayable":true,"identifier":"MedicinceType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333444","usage":"Defining","comparable":true,"displayable":true,"identifier":"MedicinceCategory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"5.00000","value":"Liquid","uniqueID":"7741124012283335243","unitID":"","unitOfMeasure":"","identifier":"HME037_3710"}],"sequence":"2.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"6.00000","value":"Cold
       and flu relief","uniqueID":"7741124012283335233","unitID":"","unitOfMeasure":"","identifier":"HME037_3710"}],"sequence":"3.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_all-in-one-cold-and-flu-syrup","numberOfSKUs":1,"partNumber":"HME037_3710"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-09-07T11:44:27.066Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 07 Sep 2017 11:44:26 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00006lXWwA_xNPEIjdI6PsyiPmy:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":3,"resourceId":"http:\/\/toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
+      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
+      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
+      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'

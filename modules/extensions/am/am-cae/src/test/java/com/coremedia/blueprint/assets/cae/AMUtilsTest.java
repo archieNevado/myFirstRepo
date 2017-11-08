@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,13 +21,13 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.refEq;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class AMUtilsTest {
 
   @Test
@@ -38,7 +38,7 @@ public class AMUtilsTest {
     Content downloadPortalRootDocument = mock(Content.class);
 
     when(site.getSiteRootDocument()).thenReturn(siteRootDocument);
-    when(settingsService.nestedSetting(anyListOf(String.class), eq(Content.class), refEq(siteRootDocument))).thenReturn(downloadPortalRootDocument);
+    when(settingsService.nestedSetting(anyList(), eq(Content.class), refEq(siteRootDocument))).thenReturn(downloadPortalRootDocument);
 
     Content actualContent = AMUtils.getDownloadPortalRootDocument(settingsService, site);
     assertEquals("Expected root page content was not returned", downloadPortalRootDocument, actualContent);

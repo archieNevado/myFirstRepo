@@ -11,6 +11,8 @@
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
     <property name="catalogService" ref="catalogService"/>
     <property name="commerceCache" ref="commerceCache"/>
+    <property name="assetUrlProvider" ref="assetUrlProvider"/>
+    <property name="commerceIdProvider" ref="ibmCommerceIdProvider"/>
     <property name="defaultLocale" value="${livecontext.ibm.default.locale}"/>
   </bean>
 
@@ -19,7 +21,7 @@
     <property name="availabilityService" ref="availabilityService"/>
     <property name="catalogWrapperService" ref="catalogWrapperService"/>
   </bean>
-  <bean name="commerceBeanFactory:person" parent="abstractCommerceBean"
+  <bean name="commerceBeanFactory:user" parent="abstractCommerceBean"
         class="com.coremedia.livecontext.ecommerce.ibm.user.UserImpl" scope="prototype"/>
   <bean name="commerceBeanFactory:workspace" parent="abstractCommerceBean"
         class="com.coremedia.livecontext.ecommerce.ibm.workspace.WorkspaceImpl" scope="prototype"/>
@@ -42,8 +44,10 @@
   <bean name="commerceBeanFactory:category" parent="abstractCommerceBean"
         class="com.coremedia.livecontext.ecommerce.ibm.catalog.CategoryImpl" scope="prototype">
     <property name="catalogWrapperService" ref="catalogWrapperService"/>
-    <property name="sitesService" ref="sitesService"/>
   </bean>
   <bean name="commerceBeanFactory:cart" parent="abstractCommerceBean"
           class="com.coremedia.livecontext.ecommerce.ibm.order.CartImpl" scope="prototype"/>
+  <bean name="commerceBeanFactory:catalog" parent="abstractCommerceBean"
+        class="com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogImpl" scope="prototype">
+  </bean>
 </beans>

@@ -13,11 +13,12 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl;
 import com.google.common.collect.ImmutableSet;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class LiveContextSiteResolverTest {
 
   private static final Locale LOCALE = Locale.forLanguageTag("en-US");
@@ -63,10 +64,12 @@ public class LiveContextSiteResolverTest {
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
   private CommerceConnection connection;
+  private MockCommerceEnvBuilder envBuilder;
 
   @Before
   public void setup() {
-    connection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    connection = envBuilder.setupEnv();
 
     testling.setSitesService(sitesService);
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
@@ -84,11 +87,16 @@ public class LiveContextSiteResolverTest {
     when(contentLinkBuilder.getVanityName(channel2)).thenReturn(SITE_NAME_2);
   }
 
+  @After
+  public void tearDown() {
+    envBuilder.tearDownEnv();
+  }
+
   @Test
   public void handleFragmentSiteResolving() {
     when(commerceConnectionInitializer.findConnectionForSite(site1)).thenReturn(Optional.of(connection));
     when(sitesService.getSites()).thenReturn(ImmutableSet.of(site1));
-    when(storeContext.get("storeId")).thenReturn("10001");
+    when(storeContext.getStoreId()).thenReturn("10001");
 
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;view=test";
     FragmentParameters params = FragmentParametersFactory.create(url);
@@ -99,7 +107,7 @@ public class LiveContextSiteResolverTest {
   @Test
   public void handleFragmentSiteResolvingWithEnvironment() {
     when(sitesService.getSites()).thenReturn(ImmutableSet.of(site1, site2));
-    when(storeContext.get("storeId")).thenReturn("10001");
+    when(storeContext.getStoreId()).thenReturn("10001");
 
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;environment=site:site2";
     FragmentParameters params = FragmentParametersFactory.create(url);

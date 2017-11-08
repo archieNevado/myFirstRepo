@@ -10,6 +10,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -25,6 +26,7 @@ public class FragmentParameters {
   private static final Logger LOG = LoggerFactory.getLogger(FragmentParameters.class);
 
   private static final String PAGE_ID = "pageId";
+  private static final String CATALOG_ID = "catalogId";
   private static final String CATEGORY_ID = "categoryId";
   private static final String PRODUCT_ID = "productId";
   private static final String VIEW = "view";
@@ -84,6 +86,11 @@ public class FragmentParameters {
 
   public String getPageId() {
     return getParameter(PAGE_ID);
+  }
+
+  public Optional<String> getCatalogId() {
+    String catalogId = getParameter(CATALOG_ID);
+    return Optional.ofNullable(catalogId);
   }
 
   public String getCategoryId() {

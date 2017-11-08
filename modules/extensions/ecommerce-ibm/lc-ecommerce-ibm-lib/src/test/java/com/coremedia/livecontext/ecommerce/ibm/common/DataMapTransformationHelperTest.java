@@ -19,12 +19,12 @@ public class DataMapTransformationHelperTest {
     Map<String, Object> map = new HashMap<>();
     map.put("parentCatalogGroupID", innerList);
 
-    List<String> transformedParentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(map, "10051");
+    List<String> transformedParentCategoryIds = DataMapTransformationHelper
+            .getParentCatGroupIdForSingleWrapper(map, "10051");
 
     assertNotNull(transformedParentCategoryIds);
     assertEquals(2, transformedParentCategoryIds.size());
     assertEquals("10031", transformedParentCategoryIds.get(0));
     assertEquals("10051", transformedParentCategoryIds.get(1));
   }
-
 }

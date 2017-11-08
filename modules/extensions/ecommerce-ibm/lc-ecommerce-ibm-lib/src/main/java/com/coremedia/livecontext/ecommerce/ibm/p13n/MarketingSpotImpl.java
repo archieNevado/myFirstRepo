@@ -1,18 +1,18 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingImage;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingText;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -44,11 +45,11 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
 
   private Map<String, Object> delegate;
   private WcMarketingSpotWrapperService marketingSpotWrapperService;
+  private String externalTechId;
 
   @Nonnull
   protected Map<String, Object> getDelegate() {
     if (delegate == null) {
-      //noinspection unchecked
       delegate = getDelegateFromCache();
       if (delegate == null) {
         throw new NotFoundException(getId() + " (marketing spot not found in catalog)");
@@ -64,13 +65,14 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
    * @return detail data map
    */
   Map<String, Object> getDelegateFromCache() {
-    //noinspection unchecked
-    return (Map<String, Object>) getCommerceCache().get(new MarketingSpotCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(),
-            getMarketingSpotWrapperService(), getCommerceCache()));
+    UserContext userContext = UserContextHelper.getCurrentContext();
+    return getCommerceCache().get(
+            new MarketingSpotCacheKey(getId(), getContext(), userContext, getMarketingSpotWrapperService(),
+                    getCommerceCache()));
   }
 
   @Override
-  public void load() throws CommerceException {
+  public void load() {
     getDelegate();
   }
 
@@ -87,11 +89,6 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   @Required
   public void setMarketingSpotWrapperService(WcMarketingSpotWrapperService marketingSpotWrapperService) {
     this.marketingSpotWrapperService = marketingSpotWrapperService;
-  }
-
-  @Override
-  public String getReference() {
-    return CommerceIdHelper.formatMarketingSpotId(getExternalId());
   }
 
   @Override
@@ -127,7 +124,13 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
 
   @Override
   public String getExternalTechId() {
-    return getId();
+    if (externalTechId == null) {
+      externalTechId = DataMapHelper.getValueForPath(getDelegate(), "MarketingSpotData[0].marketingSpotIdentifier", String.class);
+    }
+    if (externalTechId == null) {
+      externalTechId = DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].spotId", String.class);
+    }
+    return externalTechId;
   }
 
   protected String getResourceName() {
@@ -139,7 +142,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   public List<CommerceObject> getEntities() {
     // noinspection unchecked
     List<Map<String, Object>> activities =
-            DataMapHelper.getValueForPath(getDataMap(), "MarketingSpotData[0].baseMarketingSpotActivityData", List.class);
+            DataMapHelper.getValueForPath(getDelegate(), "MarketingSpotData[0].baseMarketingSpotActivityData", List.class);
 
     if (activities == null) {
       return emptyList();
@@ -147,7 +150,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
 
     return activities.stream()
             .map(this::readBaseMarketingSpotDataType)
-            .filter(commerceObject -> commerceObject != null)
+            .filter(Objects::nonNull)
             .collect(toList());
   }
 
@@ -160,8 +163,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
       case "CatalogGroup":
         return readCatalogGroup(activity);
       case "MarketingContent":
-        CommerceObject marketingContent = readMarketingContent(activity);
-        return marketingContent != null ? marketingContent : null;
+        return readMarketingContent(activity);
       default:
         return null;
     }
@@ -174,7 +176,8 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
       return null;
     }
 
-    return getCatalogService().findProductById(CommerceIdHelper.formatProductTechId(productId));
+    CommerceId id = getCommerceIdProvider().formatProductTechId(getCatalogAlias(), productId);
+    return getCatalogService().findProductById(id, getContext());
   }
 
   @Nullable
@@ -184,7 +187,8 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
       return null;
     }
 
-    return getCatalogService().findCategoryById(CommerceIdHelper.formatCategoryTechId(categoryId));
+    CommerceId id = getCommerceIdProvider().formatCategoryTechId(getCatalogAlias(), categoryId);
+    return getCatalogService().findCategoryById(id, getContext());
   }
 
   @Nullable
@@ -196,7 +200,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
       case CONTENT_FORMAT_TEXT:
         return getMarketingText(activity);
       default:
-        LOG.warn("Unknown Marketing Content Format: " + contentFormatName);
+        LOG.warn("Unknown marketing content format: '{}'", contentFormatName);
         return null;
     }
   }
@@ -209,7 +213,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
     String currentLanguageId = "-1";
 
     String value = ((CatalogServiceImpl) getCatalogService()).getLanguageId(currentLocale);
-    if (value != null && !value.isEmpty()) {
+    if (!value.isEmpty()) {
       currentLanguageId = value;
     }
 
@@ -268,8 +272,4 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
     return null;
   }
 
-  @Nonnull
-  protected Map<String, Object> getDataMap() {
-    return getDelegate();
-  }
 }

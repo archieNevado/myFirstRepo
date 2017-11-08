@@ -10,7 +10,7 @@
 <StructProperty Name="teaserOverlay">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
-<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Light.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light"/>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Light%20on%20Dark.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light%20on%20Dark"/>
 <IntProperty Name="positionY">41</IntProperty>
 <IntProperty Name="positionX">-36</IntProperty>
 <IntProperty Name="width">68</IntProperty>

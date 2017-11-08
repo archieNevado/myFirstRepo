@@ -8,8 +8,8 @@ import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * Provides access to the current {@link UserContext}. The handling itself is delegated to the {@link UserContextHelper}.
@@ -31,35 +31,42 @@ public class UserContextProviderImpl implements UserContextProvider {
     UserContextHelper.setCurrentContext(userContext);
   }
 
-  @Nonnull
   @Override
-  public UserContext createContext(@Nullable String loginName) {
-    return createContext(null, loginName);
-  }
+  @Nonnull
+  public UserContext createContext(@Nonnull HttpServletRequest request) {
+    UserContext.Builder builder = UserContext.builder();
 
-  @Override
-  @Nonnull
-  public UserContext createContext(HttpServletRequest request, String loginName) {
-    return createUserContext(request, loginName);
+    findUserId(request).ifPresent(builder::withUserId);
+    findCookieHeader(request).ifPresent(builder::withCookieHeader);
+
+    return builder.build();
   }
 
   @Override
   public void clearCurrentContext() {
   }
 
-  private UserContext createUserContext(HttpServletRequest request, String loginname) {
+  @Nonnull
+  private Optional<String> findUserId(@Nonnull HttpServletRequest request) {
     StoreContext storeContext = StoreContextHelper.getCurrentContext();
     StoreContextHelper.validateContext(storeContext);
+
     String userId = userSessionService.resolveUserId(request, storeContext.getStoreId(), false);
-    UserContext context = UserContextHelper.createContext(loginname, userId);
-    if (request != null && !isStudioPreviewRequest(request)) {
-      String header = request.getHeader("Cookie");
-      context.setCookieHeader(WcCookieHelper.rewritePreviewCookies(header));
-    }
-    return context;
+    return Optional.ofNullable(userId);
   }
 
-  private boolean isStudioPreviewRequest(HttpServletRequest request) {
+  @Nonnull
+  private static Optional<String> findCookieHeader(@Nonnull HttpServletRequest request) {
+    if (isStudioPreviewRequest(request)) {
+      return Optional.empty();
+    }
+
+    String header = request.getHeader("Cookie");
+    String rewrittenHeader = WcCookieHelper.rewritePreviewCookies(header);
+    return Optional.ofNullable(rewrittenHeader);
+  }
+
+  private static boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
     return "true".equals(request.getParameter(STUDIO_PREVIEW_TEST_PARAM));
   }
 
@@ -69,5 +76,4 @@ public class UserContextProviderImpl implements UserContextProvider {
   public void setUserSessionService(UserSessionService userSessionService) {
     this.userSessionService = userSessionService;
   }
-
 }

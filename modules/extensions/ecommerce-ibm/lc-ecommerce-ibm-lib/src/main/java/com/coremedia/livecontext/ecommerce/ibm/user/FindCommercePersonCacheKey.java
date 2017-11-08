@@ -36,7 +36,7 @@ public class FindCommercePersonCacheKey extends AbstractCommerceCacheKey<Map<Str
   @Override
   protected String getCacheIdentifier() {
     return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale();
+            storeContext.getStoreId() + ":" + storeContext.getLocale();
   }
 
 }

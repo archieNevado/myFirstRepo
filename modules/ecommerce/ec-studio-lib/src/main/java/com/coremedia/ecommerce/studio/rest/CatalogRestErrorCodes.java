@@ -15,4 +15,10 @@ public interface CatalogRestErrorCodes {
   String CATALOG_INTERNAL_ERROR = "LC-01002";
 
   String UNAUTHORIZED = "LC-01003";
+
+  String COULD_NOT_FIND_CATALOG = "LC-01004";
+
+  String ROOT_CATEGORY_NOT_AUGMENTED = "LC-01005";
+
+  String COULD_NOT_FIND_STORE_BEAN = "LC-01006";
 }

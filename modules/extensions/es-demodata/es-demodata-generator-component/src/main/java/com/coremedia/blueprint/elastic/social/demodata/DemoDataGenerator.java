@@ -1,12 +1,12 @@
 package com.coremedia.blueprint.elastic.social.demodata;
 
-import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
-import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.base.elastic.common.CategoryExtractor;
 import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.query.QueryService;
@@ -275,7 +275,7 @@ public class DemoDataGenerator implements Runnable {
         commentGenerator.complainOnComment(target, comment, anonymous);
       }
     } else {
-      LOG.info("Could not find/create an user, so creation of a comment was skipped");
+      LOG.info("Could not create comment, no target available with anonymous: " + anonymous);
     }
   }
 
@@ -354,7 +354,7 @@ public class DemoDataGenerator implements Runnable {
       } else {
         user = userGenerator.getRandomUser();
       }
-      likeGenerator.createLike(user, target, categoryExtractor.getCategories((Content) target, null));
+      likeGenerator.createLike(user, target, getCategories(target));
     }
   }
 
@@ -373,7 +373,7 @@ public class DemoDataGenerator implements Runnable {
       } else {
         user = userGenerator.getRandomUser();
       }
-      ratingGenerator.createRating(user, target, categoryExtractor.getCategories((Content) target, null));
+      ratingGenerator.createRating(user, target, getCategories(target));
     }
   }
 

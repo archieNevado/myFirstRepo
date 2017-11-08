@@ -1,0 +1,21 @@
+//Theme special styles
+.#{$cm-footer-prefix},
+.#{$cm-footer-navigation-prefix} {
+  font-family: $font-family-base;
+
+  &__link {
+    font-size: 12px;
+    &:focus {
+      color: $cm-footer-color;
+    }
+  }
+}
+
+.#{$cm-footer-navigation-prefix}-column {
+
+  font-size: 12px;
+  &__title {
+    font-size: $font-size-large;
+    line-height: 20px;
+  }
+}

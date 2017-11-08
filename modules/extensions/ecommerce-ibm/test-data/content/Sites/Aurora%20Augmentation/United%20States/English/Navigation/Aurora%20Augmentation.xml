@@ -8,7 +8,6 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../Themes/aurora/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/aurora/vendor/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../Pictures/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Pictures/Picture%20Missing%20Product%20Picture"/>
 <StringProperty Name="externalUriPath"/>
 <StringProperty Name="shopNow">disabled</StringProperty>
@@ -47,6 +46,7 @@
 <link href="../Augmentation/Apparel/Women/Women.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
 <link href="../Augmentation/Apparel/Men/Men.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Men/Men"/>
 <link href="Microsites/Editorial%20Blog/Editorial%20Blog%20Microsite.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Microsites/Editorial%20Blog/Editorial%20Blog%20Microsite"/>
+<link href="Blog/Fashion%20Trends%202017/Fashion%20Trends%202017.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Blog/Fashion%20Trends%202017/Fashion%20Trends%202017"/>
 <link href="../Augmentation/Aurora%20B2C%20Catalog%20Root.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Aurora%20B2C%20Catalog%20Root"/>
 <link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
 <link href="Fragments/Search%20Landing%20Pages/LiveContext%20Search%20L6364f111.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>
@@ -106,7 +106,7 @@
 <Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Accessories.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Women%20Accessories"/>
 <Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Handbags.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Women%20Handbags"/>
 </LinkListProperty>
-<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait"/>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-50-50-landscape.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/tiles-layout-50-50-landscape"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>
 <Struct>

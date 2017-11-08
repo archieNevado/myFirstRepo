@@ -1,0 +1,39 @@
+// Fix body while mobile nav is open
+body.fixed {
+  overflow: hidden;
+}
+
+// Show mobile nav also on tablet
+@include breakpoint('sm') {
+  .container {
+    width: auto;
+  }
+}
+
+.#{$prefix}placement-main > .container {
+  @include breakpoint('xs') {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// prevent the bootstrap hidden rule to apply for the carousel
+.carousel > .content > ul > li.hidden {
+  display: inline-block !important;
+}
+
+// Make sure inner containers don't behave like bootstrap containers if they are inside other containers.
+// This can happen when a collection is put into a placement without a layout variant
+.container > .container {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.cm-container {
+  &__headline {
+    text-align: center;
+    font-family: $font-family-serif;
+    font-size: $font-size-h1;
+  }
+}

@@ -27,10 +27,10 @@
 </related>
 <value>Apparel</value>
 <children>
-<link href="Women%20Casual.xml" path="/Settings/Taxonomies/Subject/Women%20Casual"/>
 <link href="Women%20Exclusive.xml" path="/Settings/Taxonomies/Subject/Women%20Exclusive"/>
-<link href="Men%20Exclusive.xml" path="/Settings/Taxonomies/Subject/Men%20Exclusive"/>
-<link href="Men%20Casual.xml" path="/Settings/Taxonomies/Subject/Men%20Casual"/>
+<link href="Dinner%20Dress.xml" path="/Settings/Taxonomies/Subject/Dinner%20Dress"/>
+<link href="Eveningwear.xml" path="/Settings/Taxonomies/Subject/Eveningwear"/>
+<link href="Women%20Casual.xml" path="/Settings/Taxonomies/Subject/Women%20Casual"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

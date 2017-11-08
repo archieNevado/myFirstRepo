@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.SocketUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -18,6 +19,28 @@ public class BetamaxTestHelper {
   private static final String BETAMAX_PROPERTIES_PATH = "/betamax.properties";
 
   private BetamaxTestHelper() {
+  }
+
+  /**
+   * Return `true` if Betamax tapes <em>should</em> be used.
+   */
+  public static boolean useBetamaxTapes() {
+    return !ignoreBetamaxTapes();
+  }
+
+  /**
+   * Return `true` if Betamax tapes should <em>not</em> be used.
+   */
+  private static boolean ignoreBetamaxTapes() {
+    return "*".equals(getIgnoreHosts());
+  }
+
+  /**
+   * Return the system property-configured hosts that should be ignored by Betamax.
+   */
+  @Nullable
+  private static Object getIgnoreHosts() {
+    return System.getProperties().get("betamax.ignoreHosts");
   }
 
   public static Properties updateSystemPropertiesWithBetamaxConfig() {

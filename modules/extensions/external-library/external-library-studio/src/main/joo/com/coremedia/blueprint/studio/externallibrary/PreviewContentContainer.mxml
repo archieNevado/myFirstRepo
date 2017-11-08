@@ -47,12 +47,6 @@
                       hidden="{resolveMediaHTML(config.combinedVE).length == 0}"
                       style="border:1px red solid"/>
 
-        <!--PREVIEW ACTION-->
-        <Button itemId="{PREVIEW_ACTION_ITEM_ID}"
-                hidden="{!showPreviewActionButton(config.combinedVE)}"
-                text="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'VideoAdminConsole_title')}"
-                handler="{previewActionHandler}"/>
-
         <!--SOURCE-->
         <DisplayField
                 fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'Preview_data_source')}"

@@ -14,6 +14,28 @@
   <import resource="classpath:/META-INF/coremedia/livecontext-cae-vendor-placeholders.xml"/>
   <import resource="classpath:/framework/spring/livecontext-services.xml"/>
   <import resource="classpath:/framework/spring/livecontext-connection.xml"/>
+  <import resource="classpath:/com/coremedia/cae/link-services.xml"/>
+
+  <bean id="wcsLoginUrlsProvider" class="com.coremedia.livecontext.ecommerce.ibm.cae.login.WcsLoginUrlsProvider">
+    <constructor-arg index="0" name="previewTokenProvider" ref="wcsPreviewTokenProvider"/>
+    <constructor-arg index="1" name="linkFormatter" ref="linkFormatter"/>
+    <property name="defaultStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.secureUrl}"/>
+    <property name="previewStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.preview.secureUrl}"/>
+    <property name="loginFormUrlTemplate" value="${livecontext.ibm.wcs.loginForm.url}"/>
+    <property name="logoutUrlTemplate"    value="${livecontext.ibm.wcs.logout.url}"/>
+  </bean>
+
+  <bean id="calistaloginhandler" class="com.coremedia.livecontext.handler.LoginStatusHandler">
+    <constructor-arg index="0" name="userSessionService" ref="commerceUserSessionService"/>
+    <constructor-arg index="1" name="liveContextSiteResolver" ref="liveContextSiteResolver"/>
+    <constructor-arg index="2" name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+  </bean>
+
+  <customize:append id="addWcsLoginUrlsProvider" bean="liveContextLoginUrlProviderByVendor">
+    <map>
+      <entry key="IBM" value-ref="wcsLoginUrlsProvider"/>
+    </map>
+  </customize:append>
 
   <customize:replace id="searchResultRedirectUrlProviderReplacer"
                      bean="searchResultRedirectUrlProvider"

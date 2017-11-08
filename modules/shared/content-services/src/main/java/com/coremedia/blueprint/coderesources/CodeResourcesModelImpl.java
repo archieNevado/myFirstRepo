@@ -91,6 +91,34 @@ class CodeResourcesModelImpl implements CodeResourcesModel {
     return getClass().getName() + "[" + codeType + ", " + htmlMode + ", " + codeResources + "]";
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    CodeResourcesModelImpl that = (CodeResourcesModelImpl) o;
+
+    if (getCodeType() != null ? !getCodeType().equals(that.getCodeType()) : that.getCodeType() != null) {
+      return false;
+    }
+    if (getHtmlMode() != null ? !getHtmlMode().equals(that.getHtmlMode()) : that.getHtmlMode() != null) {
+      return false;
+    }
+    return codeResources != null ? codeResources.equals(that.codeResources) : that.codeResources == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = getCodeType() != null ? getCodeType().hashCode() : 0;
+    result = 31 * result + (getHtmlMode() != null ? getHtmlMode().hashCode() : 0);
+    result = 31 * result + (codeResources != null ? codeResources.hashCode() : 0);
+    return result;
+  }
+
 
   // --- internal ---------------------------------------------------
 

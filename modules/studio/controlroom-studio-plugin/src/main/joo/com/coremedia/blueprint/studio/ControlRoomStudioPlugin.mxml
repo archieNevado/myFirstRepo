@@ -53,9 +53,9 @@
         <editor:ListViewSiteColumn sortable="true"/>
         <editor:ListViewSiteLocaleColumn sortable="true"/>
         <editor:ListViewCreationDateColumn sortable="true"/>
-        <editor:ListViewStatusColumn sortable="true"/>
         <editor:FreshnessColumn hidden="true"
                                 sortable="true"/>
+        <editor:ListViewStatusColumn sortable="true"/>
       </collab:projectListViewColumns>
     </collab:ConfigureProjectListViewPlugin>
 

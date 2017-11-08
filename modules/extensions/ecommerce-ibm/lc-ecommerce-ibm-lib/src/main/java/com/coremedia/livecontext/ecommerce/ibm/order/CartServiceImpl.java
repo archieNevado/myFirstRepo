@@ -1,10 +1,9 @@
 package com.coremedia.livecontext.ecommerce.ibm.order;
 
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.ecommerce.order.CartService;
@@ -17,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CART;
+import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 
 public class CartServiceImpl implements CartService {
 
@@ -25,47 +26,46 @@ public class CartServiceImpl implements CartService {
 
 
   @Override
-  public Cart getCart() {
-    StoreContext context = StoreContextHelper.getCurrentContext();
+  public Cart getCart(@Nonnull StoreContext context) {
     WcCart wcCart = cartWrapperService.getCart(UserContextHelper.getCurrentContext(), context);
     return createCartBeanFor(wcCart, context);
   }
 
   @Override
-  public void deleteCartOrderItem(String orderItemId) {
-    updateCartOrderItem(orderItemId, BigDecimal.ZERO);
+  public void deleteCartOrderItem(String orderItemId, @Nonnull StoreContext context) {
+    updateCartOrderItem(orderItemId, BigDecimal.ZERO, context);
   }
 
   @Override
-  public void updateCartOrderItem(String orderItemId, BigDecimal newQuantity) {
-    updateCart(Collections.singletonList(new OrderItemParam(orderItemId, newQuantity)));
+  public void updateCartOrderItem(String orderItemId, BigDecimal newQuantity, @Nonnull StoreContext context) {
+    updateCart(Collections.singletonList(new OrderItemParam(orderItemId, newQuantity)), context);
   }
 
   @Override
-  public void updateCart(Iterable<OrderItemParam> orderItems) {
+  public void updateCart(Iterable<OrderItemParam> orderItems, @Nonnull StoreContext context) {
     WcUpdateCartParam wcUpdateCartParam = new WcUpdateCartParam();
     List<WcUpdateCartParam.OrderItem> wcUpdateOrderItems = new ArrayList<>();
     for (OrderItemParam orderItemToUpdate :orderItems) {
       wcUpdateOrderItems.add(new WcUpdateCartParam.OrderItem(orderItemToUpdate.getExternalId(), orderItemToUpdate.getQuantity().toPlainString()));
     }
     wcUpdateCartParam.setOrderItem(wcUpdateOrderItems);
-    cartWrapperService.updateCart(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext(), wcUpdateCartParam);
+    cartWrapperService.updateCart(UserContextHelper.getCurrentContext(), context, wcUpdateCartParam);
   }
 
   @Override
-  public void addToCart(Iterable<OrderItemParam> orderItems) {
+  public void addToCart(Iterable<OrderItemParam> orderItems, @Nonnull StoreContext context) {
     WcAddToCartParam wcAddToCartParam = new WcAddToCartParam();
     List<WcAddToCartParam.OrderItem> wcAddToOrderItems = new ArrayList<>();
     for (OrderItemParam orderItem :orderItems) {
       wcAddToOrderItems.add(new WcAddToCartParam.OrderItem(orderItem.getExternalId(), orderItem.getQuantity().toPlainString()));
     }
     wcAddToCartParam.setOrderItem(wcAddToOrderItems);
-    cartWrapperService.addToCart(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext(), wcAddToCartParam);
+    cartWrapperService.addToCart(UserContextHelper.getCurrentContext(), context, wcAddToCartParam);
   }
 
   @Override
-  public void cancelCart() {
-    cartWrapperService.cancelCart(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
+  public void cancelCart(@Nonnull StoreContext context) {
+    cartWrapperService.cancelCart(UserContextHelper.getCurrentContext(), context);
   }
 
   private Cart createCartBeanFor(WcCart cartWrapper, StoreContext context) {
@@ -73,8 +73,8 @@ public class CartServiceImpl implements CartService {
       // no wcs cart == empty cart
       return new CartImpl();
     }
-    String id = CommerceIdHelper.formatCartId(cartWrapper.getBuyerId());
-    Cart cart = (Cart) commerceBeanFactory.createBeanFor(id, context);
+    CommerceId commerceId = commerceId(CART).withExternalId(cartWrapper.getBuyerId()).build();
+    Cart cart = (Cart) commerceBeanFactory.createBeanFor(commerceId, context);
     ((AbstractIbmCommerceBean) cart).setDelegate(cartWrapper);
     return cart;
   }

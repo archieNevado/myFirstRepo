@@ -1,12 +1,9 @@
 package com.coremedia.livecontext.validation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.google.common.annotations.VisibleForTesting;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.google.common.base.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,26 +49,14 @@ public class CMExternalChannelValidator extends AbstractValidator<CMExternalChan
 
   private boolean hasValidReference(@Nonnull CMExternalChannel cmExternalChannel) {
     String externalId = cmExternalChannel.getExternalId();
-    Category category = getCategory(externalId);
-    if (null == category) {
-      LOG.debug("Could not get an e-Commerce category for {} with external id '{}'", cmExternalChannel, externalId);
+    try {
+      Category category = cmExternalChannel.getCategory();
+      LOG.debug("E-Commerce category for {} with external id '{}' is '{}'", cmExternalChannel, externalId, category);
+      return category != null;
+    } catch (CommerceException e) {
+      LOG.warn("Caught exception while validating external id '{}' of {}.", externalId, cmExternalChannel, e);
       return false;
     }
-    return true;
   }
 
-  @VisibleForTesting
-  @Nullable
-  Category getCategory(@Nonnull String externalId) {
-    CommerceConnection currentConnection = DefaultConnection.get();
-    if (null != currentConnection) {
-      CatalogService catalogService = currentConnection.getCatalogService();
-      if (null != catalogService) {
-        String categoryId = currentConnection.getIdProvider().formatCategoryId(externalId);
-        return catalogService.findCategoryById(categoryId);
-      }
-    }
-    LOG.warn("commerce connection {} does not provide catalog service", currentConnection);
-    return null;
-  }
 }

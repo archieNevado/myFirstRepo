@@ -32,6 +32,7 @@
     <ec:CatalogLinkPropertyField
             readOnlyValueExpression="{getReadOnlyExpression(config)}"
             propertyName="{PROPERTY_NAME}"
+            hideCatalog="true"
             linkTypeNames="{[CatalogModel.TYPE_CATEGORY, CatalogModel.TYPE_PRODUCT]}"
             createStructFunction="{createStructs}"
             dropAreaText="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin',

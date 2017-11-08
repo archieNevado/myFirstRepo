@@ -12,16 +12,16 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
 import org.springframework.http.HttpMethod;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCatalogId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.hasText;
 
 public class WcLoginWrapperService extends AbstractWcWrapperService {
@@ -40,10 +40,10 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   private static final WcRestServiceMethod<HashMap, Void>
           USER_CONTEXT_DATA = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/usercontext/@self/contextdata", false, false, false, true, null, HashMap.class);
 
-  public WcSession login(String logonId, String password, StoreContext storeContext) throws CommerceException {
+  public WcSession login(String logonId, String password, StoreContext storeContext) {
     try {
       return getRestConnector().callServiceInternal(
-              LOGIN_IDENTITY, asList(getStoreId(storeContext)), Collections.emptyMap(), new WcLoginParam(logonId, password), storeContext, null);
+              LOGIN_IDENTITY, asList(getStoreId(storeContext)), emptyMap(), new WcLoginParam(logonId, password), storeContext, null);
 
       //if login not successfully a RemoteException is thrown
     } catch (CommerceRemoteException e) {
@@ -60,10 +60,10 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   }
 
   @SuppressWarnings("unchecked")
-  public boolean isLoggedIn(String logonId, StoreContext storeContext, UserContext userContext) throws CommerceException {
+  public boolean isLoggedIn(String logonId, StoreContext storeContext, UserContext userContext) {
     try {
       Map userContextData = getRestConnector().callServiceInternal(USER_CONTEXT_DATA, asList(getStoreId(storeContext)),
-              createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext)),
+              createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
               null, storeContext, userContext);
       if (userContextData != null && hasText(logonId)) {
         Double value = DataMapHelper.getValueForPath(userContextData, "basicInfo.callerId", Double.class);
@@ -87,8 +87,8 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
     return Objects.equals(integer, logonIdInt);
   }
 
-  public boolean logout(String storeId) throws CommerceException {
-    getRestConnector().callServiceInternal(LOGOUT_IDENTITY, asList(storeId), Collections.emptyMap(), null, null, null);
+  public boolean logout(String storeId) {
+    getRestConnector().callServiceInternal(LOGOUT_IDENTITY, asList(storeId), emptyMap(), null, null, null);
     // Todo: if no exception is thrown we assume that the user was logged out successfully. is that correct?
     return true;
   }
@@ -96,8 +96,8 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   public WcPreviewToken getPreviewToken(WcPreviewTokenParam bodyData, StoreContext storeContext) {
     try {
       return getRestConnector().callService(
-              PREVIEW_TOKEN, Collections.singletonList(getStoreId(storeContext)),
-              Collections.emptyMap(), bodyData, storeContext, null);
+              PREVIEW_TOKEN, singletonList(getStoreId(storeContext)),
+              emptyMap(), bodyData, storeContext, null);
 
     } catch (CommerceException e) {
       throw e;

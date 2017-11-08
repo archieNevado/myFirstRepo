@@ -3,7 +3,6 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.user.User;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -15,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.UUID;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,7 +31,7 @@ public class UserServiceImplIT extends IbmServiceTestBase {
   @Test
   public void testFindPerson() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(null);
+    UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
     User user = testling.findCurrentUser();
     assertNotNull(user);
@@ -52,83 +52,4 @@ public class UserServiceImplIT extends IbmServiceTestBase {
     assertTrue(StringUtils.isEmpty(user.getLogonPasswordVerify()));
     assertEquals("2", user.getUserId());
   }
-
-  /**
-   * Attention: This test is not intended to run with betamax. Technically spoken it succeeds automatically
-   * if it detects a betamax proxy mode. Only if betamax.ignoreHosts is set to "*" the function is tested.
-   * The reason is that it writes state on the server and it is not able to run concurrently.
-   */
-  @Test
-  public void testUpdatePerson() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts()) ||
-            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
-      return;
-    }
-
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(testConfig.getUser1Name());
-    UserContextHelper.setCurrentContext(userContext);
-
-    User tester = testling.findCurrentUser();
-    tester.setCity(tester.getCity().equalsIgnoreCase("Hamburg") ? "HH" : "Hamburg");
-
-    User user = testling.updateCurrentUser(tester);
-    assertNotNull(user);
-//    assertNotNull(person.getLogonId());
-//    assertNotNull(person.getCity().equals(city));
-  }
-
-  @Test
-  public void testRegisterPerson() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts()) ||
-            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
-      return;
-    }
-
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(null);
-    UserContextHelper.setCurrentContext(userContext);
-    String userName = "" + System.currentTimeMillis() + "-" + UUID.randomUUID();
-    String password = "passw0rd";
-    String email = "mail@bla.de";
-    User user = testling.registerUser(userName, password, email);
-    assertNotNull(user);
-    assertNotNull(user.getLogonId());
-    assertNotNull(user.getLogonId().equals(UserContextHelper.getForUserName(userContext)));
-  }
-
-  /**
-   * Attention: This test is not intended to run with betamax. Technically spoken it succeeds automatically
-   * if it detects a betamax proxy mode. Only if betamax.ignoreHost is set to "*" the function is tested.
-   * The reason is that it writes state on the server and it is not able to run concurrently.
-   */
-/*
-  @Test
-  public void testUpdatePassword() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts()) ||
-            StoreContextHelper.getWcsVersion(testConfig.getStoreContext()) < StoreContextHelper.WCS_VERSION_7_7)
-      return;
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext("userservicetest");
-    UserContextHelper.setCurrentContext(userContext);
-    testling.updateCurrentUserPassword("passw0rd", "userservicetest2", "userservicetest2", userContext, testConfig.getStoreContext());
-    testling.updateCurrentUserPassword("userservicetest2", "passw0rd", "passw0rd", userContext, testConfig.getStoreContext());
-  }
-*/
-
-  /**
-   * Attention: This test is not intended to run with betamax. Technically spoken it succeeds automatically
-   * if it detects a betamax proxy mode. Only if betamax.ignoreHosts is set to "*" the function is tested.
-   * The reason is that it writes state on the server and it is not able to run concurrently.
-   */
-/*
-  @Test
-  public void testResetPasswordForUser() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) return;
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(null);
-    UserContextHelper.setCurrentContext(userContext);
-    testling.resetPassword("userservicetest", null, testConfig.getStoreContext());
-  }
-*/
 }

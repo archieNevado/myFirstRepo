@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Sites/Calista/United States/English/Options/Settings" name="SiteSettings">
+<locale>en-US</locale>
+<master>
+</master>
+<settings>
+  <Struct xmlns="http://www.coremedia.com/2008/struct">
+<StructProperty Name="absoluteUrlPrefixes">
+<Struct>
+<StructListProperty Name="live">
+<Struct>
+<StringProperty Name="urlPrefix">${blueprint.site.mapping.helios}</StringProperty>
+</Struct>
+</StructListProperty>
+<StructListProperty Name="preview">
+<Struct>
+<StringProperty Name="urlPrefix">${blueprint.site.mapping.helios}</StringProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

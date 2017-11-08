@@ -7,7 +7,7 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.undoc.multisite.SitesService;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class ExternalPageContextStrategy implements ContextStrategy<String, Navi
   public List<Navigation> findContextsFor(@Nonnull final String pageId, @Nullable final Navigation rootChannel) {
     List<Navigation> result = new ArrayList<>();
     if (rootChannel instanceof CMObject) {
-      Site site = sitesService.getSiteFor(((CMObject) rootChannel).getContent());
+      Site site = sitesService.getContentSiteAspect(((CMObject) rootChannel).getContent()).getSite();
       if (site != null) {
         Content externalChannel = cache.get(new CMExternalPageCacheKey(pageId, site, treeRelation));
         if (externalChannel != null) {

@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.InputStream;
 
@@ -24,9 +24,10 @@ import static com.coremedia.elastic.social.api.users.CommunityUser.State.MODERAT
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class UserGeneratorTest {
   @InjectMocks
   private UserGenerator userGenerator = new UserGenerator();
@@ -53,7 +54,7 @@ public class UserGeneratorTest {
 
   @Before
   public void setup() {
-    when(blobService.put(any(InputStream.class), anyString(), eq("16.jpg"))).thenThrow(new RuntimeException());
+    when(blobService.put(nullable(InputStream.class), anyString(), eq("16.jpg"))).thenThrow(new RuntimeException());
     when(communityUserService.createUser(anyString(), anyString(), anyString())).thenReturn(communityUser);
 
     userGenerator.initialize();
@@ -80,7 +81,7 @@ public class UserGeneratorTest {
     verify(communityUserService).getUserByName(anyString());
     verify(communityUserService).createUser(anyString(), anyString(), anyString());
     verify(communityUser).setProperty("state", ACTIVATED_MODERATION_REQUIRED);
-    verify(communityUser).setImage(any(Blob.class));
+    verify(communityUser).setImage(nullable(Blob.class));
     verify(communityUser).setGivenName(anyString());
     verify(communityUser).setSurName(anyString());
     verify(communityUser).save();
@@ -99,7 +100,7 @@ public class UserGeneratorTest {
     verify(communityUserService).getUserByName(anyString());
     verify(communityUserService).createUser(anyString(), anyString(), anyString());
     verify(communityUser).setProperty("state", MODERATION_REQUIRED);
-    verify(communityUser).setImage(any(Blob.class));
+    verify(communityUser).setImage(nullable(Blob.class));
     verify(communityUser).setGivenName(anyString());
     verify(communityUser).setSurName(anyString());
     verify(communityUser).save();
@@ -119,7 +120,7 @@ public class UserGeneratorTest {
     verify(communityUserService).getUserByName(anyString());
     verify(communityUserService).createUser(anyString(), anyString(), anyString());
     verify(communityUser).setProperty("state", ACTIVATED);
-    verify(communityUser).setImage(any(Blob.class));
+    verify(communityUser).setImage(nullable(Blob.class));
     verify(communityUser).setGivenName(anyString());
     verify(communityUser).setSurName(anyString());
     verify(communityUser).save();
@@ -140,7 +141,7 @@ public class UserGeneratorTest {
     verify(communityUserService).getUserByName(anyString());
     verify(communityUserService, never()).createUser(anyString(), anyString(), anyString());
     verify(communityUser, never()).setProperty(eq("state"), any());
-    verify(communityUser, never()).setImage(any(Blob.class));
+    verify(communityUser, never()).setImage(nullable(Blob.class));
     verify(communityUser, never()).setGivenName(anyString());
     verify(communityUser, never()).setSurName(anyString());
     verify(communityUser, never()).save();
@@ -161,7 +162,7 @@ public class UserGeneratorTest {
     verify(communityUserService).getUserByName(anyString());
     verify(communityUserService, never()).createUser(anyString(), anyString(), anyString());
     verify(communityUser).setProperty("state", ACTIVATED_MODERATION_REQUIRED);
-    verify(communityUser, never()).setImage(any(Blob.class));
+    verify(communityUser, never()).setImage(nullable(Blob.class));
     verify(communityUser, never()).setGivenName(anyString());
     verify(communityUser, never()).setSurName(anyString());
     verify(communityUser).save();
@@ -181,7 +182,7 @@ public class UserGeneratorTest {
     verify(communityUserService).getUserByName(anyString());
     verify(communityUserService).createUser(anyString(), anyString(), anyString());
     verify(communityUser).setProperty("state", ACTIVATED_MODERATION_REQUIRED);
-    verify(communityUser).setImage(any(Blob.class));
+    verify(communityUser).setImage(nullable(Blob.class));
     verify(communityUser).setGivenName(anyString());
     verify(communityUser).setSurName(anyString());
     verify(communityUser).save();
@@ -201,7 +202,7 @@ public class UserGeneratorTest {
     verify(communityUserService).getUserByName(anyString());
     verify(communityUserService).createUser(anyString(), anyString(), anyString());
     verify(communityUser).setProperty("state", ACTIVATED_MODERATION_REQUIRED);
-    verify(communityUser).setImage(any(Blob.class));
+    verify(communityUser).setImage(nullable(Blob.class));
     verify(communityUser).setGivenName(anyString());
     verify(communityUser).setSurName(anyString());
     verify(communityUser).save();

@@ -2,8 +2,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.order;
 
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -32,11 +32,6 @@ public class CartImpl extends AbstractIbmCommerceBean implements Cart {
         orderItems.add(new OrderItemImpl(wcOrderItem));
       }
     }
-  }
-
-  @Override
-  public String getReference() {
-    return null;
   }
 
   @Override
@@ -123,7 +118,8 @@ public class CartImpl extends AbstractIbmCommerceBean implements Cart {
 
     @Override
     public Product getProduct() {
-      return getCatalogService().findProductById(CommerceIdHelper.formatProductTechId(getDelegate().getProductId()));
+      CommerceId productId = getCommerceIdProvider().formatProductTechId(getCatalogAlias(), getDelegate().getProductId());
+      return getCatalogService().findProductById(productId, getContext());
     }
 
     @Override

@@ -5,19 +5,19 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.of;
 
 /**
  * Enumeration type for WCS versions.
  */
 public enum WcsVersion {
 
-  WCS_VERSION_UNKNOWN(0.0f),
-  WCS_VERSION_7_6(7.6f),
-  WCS_VERSION_7_7(7.7f),
-  WCS_VERSION_7_8(7.8f),
-  WCS_VERSION_8_0(8.0f),
-  WCS_VERSION_8_1(8.1f);
+  WCS_VERSION_UNKNOWN(0.0F),
+  WCS_VERSION_7_6(7.6F),
+  WCS_VERSION_7_7(7.7F),
+  WCS_VERSION_7_8(7.8F),
+  WCS_VERSION_8_0(8.0F),
+  WCS_VERSION_8_1(8.1F);
 
   private final float version;
 
@@ -33,15 +33,14 @@ public enum WcsVersion {
    */
   @Nonnull
   public static Optional<WcsVersion> fromVersionString(@Nonnull String wcsVersion) {
-    Optional<Float> value = tryParseFloat(wcsVersion);
-    return value.isPresent() ? findWcsVersion(value.get()) : empty();
+    return tryParseFloat(wcsVersion).flatMap(WcsVersion::findWcsVersion);
   }
 
   @Nonnull
   private static Optional<Float> tryParseFloat(@Nonnull String wcsVersion) {
     try {
       float parsed = Float.parseFloat(wcsVersion);
-      return ofNullable(parsed);
+      return of(parsed);
     } catch (NumberFormatException ignored) {
       return empty();
     }

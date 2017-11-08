@@ -1,26 +1,25 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.elastic.social.api.mail.MailTemplateNotFoundException;
 import com.coremedia.elastic.social.api.registration.RegistrationService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
 import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.execution.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -48,15 +47,10 @@ public class PasswordResetHelperTest {
   @Mock
   private CommunityUser communityUser;
 
-  @Mock
-  private HttpServletRequest httpServletRequest;
-  
   @Before
   public void init() {
     when(requestContext.getMessageContext()).thenReturn(messageContext);
     when(requestContext.getExternalContext()).thenReturn(externalContext);
-    when(externalContext.getNativeRequest()).thenReturn(httpServletRequest);
-    when(externalContext.getLocale()).thenReturn(Locale.ENGLISH);
     CommunityUser user = mock(CommunityUser.class);
     when(registrationService.getUserByToken(TOKEN)).thenReturn(user);
     helper = new PasswordResetHelper();

@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.p13n.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 import java.util.Map;
@@ -56,7 +56,7 @@ public class CommerceSegmentTestContextExtractorTest {
     storeContext = newStoreContext();
     contextCollection = new ContextCollectionImpl();
 
-    DefaultConnection.set(commerceConnection);
+    CurrentCommerceConnection.set(commerceConnection);
 
     when(commerceConnection.getStoreContext()).thenReturn(storeContext);
     when(commerceConnection.getIdProvider()).thenReturn(new BaseCommerceIdProvider("vendor"));
@@ -64,7 +64,7 @@ public class CommerceSegmentTestContextExtractorTest {
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   @Test

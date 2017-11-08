@@ -13,14 +13,14 @@
 
   <bean class="com.coremedia.livecontext.preview.LiveContextExternalChannelPreviewHandler"
         parent="ecommerceHandlerBase">
-    <property name="resolveContextStrategy" ref="resolveCategoryContextStrategy"/>
+    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
     <property name="externalNavigationHandler" ref="externalNavigationHandler"/>
     <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
   </bean>
 
   <bean class="com.coremedia.livecontext.preview.LiveContextExternalProductPreviewHandler"
         parent="ecommerceHandlerBase">
-    <property name="resolveContextStrategy" ref="resolveCategoryContextStrategy"/>
+    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
   </bean>
 
   <!-- expose initializer as bean for spring-boot integration -->

@@ -4,7 +4,6 @@ import com.coremedia.elastic.core.api.settings.Settings;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
 import java.security.interfaces.RSAPrivateKey;
 
 import static com.coremedia.elastic.core.test.Injection.inject;
@@ -23,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -109,12 +107,7 @@ public class GuidFilterTest {
     filter.destroy();
 
     verify(filterChain).doFilter(request, response);
-    verify(response).addCookie(argThat(new ArgumentMatcher<Cookie>() {
-      public boolean matches(Object argument) {
-        Cookie cookie = (Cookie) argument;
-        return "guid".equals(cookie.getName());
-      }
-    }));
+    verify(response).addCookie(argThat(cookie -> "guid".equals(cookie.getName())));
   }
 
   @Test

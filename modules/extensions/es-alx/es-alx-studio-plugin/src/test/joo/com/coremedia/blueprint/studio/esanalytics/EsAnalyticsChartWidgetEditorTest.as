@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.studio.esanalytics {
 
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -67,17 +68,30 @@ public class EsAnalyticsChartWidgetEditorTest extends TestCase {
   }
 
   private function getSitesService():SitesService {
-    return {
+    return SitesService({
       'getSites': function ():Array {
         return [site1, site2];
       }
-    }
+    });
   }
 
   private function mockSites():void {
     var contentRepository:ContentRepository = beanFactory.getRemoteBean('content') as ContentRepository;
-    site1 = new SiteImpl(ID_1, null, null, null, {id: ID_1, name: NAME_1}, NAME_1, new Locale({'displayName': 'locale1'}), null, true, false);
-    site2 = new SiteImpl(ID_2, null, null, null, {id: ID_2, name: NAME_2}, NAME_2, new Locale({'displayName': 'locale2'}), null, true, false);
+    site1 = new SiteImpl(ID_1, null, null, null, mockContent({id: ID_1, name: NAME_1}), NAME_1, new Locale({'displayName': 'locale1'}), null, true, false);
+    site2 = new SiteImpl(ID_2, null, null, null, mockContent({id: ID_2, name: NAME_2}), NAME_2, new Locale({'displayName': 'locale2'}), null, true, false);
+  }
+
+  private static const MOCK_CONTENT_PROTOTYPE:Object = {
+    addPropertyChangeListener: Ext.emptyFn,
+    get: function(prop:String):* {
+      return this[prop];
+    },
+    getUriPath: function():String {
+      return this.id;
+    }
+  };
+  private static function mockContent(props:Object):Content {
+    return Content(Ext.apply(Object.create(MOCK_CONTENT_PROTOTYPE), props));
   }
 }
 }

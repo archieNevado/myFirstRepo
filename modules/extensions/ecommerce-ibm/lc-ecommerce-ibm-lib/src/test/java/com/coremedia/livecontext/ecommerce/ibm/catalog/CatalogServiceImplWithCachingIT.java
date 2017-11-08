@@ -6,10 +6,10 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -19,16 +19,17 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -51,11 +52,14 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
   @Inject
   CatalogServiceImpl testling;
 
+  @Inject
+  private IbmCommerceIdProvider ibmCommerceIdProvider;
+
   @Before
+  @Override
   public void setup() {
     super.setup();
     testling.getCommerceCache().setEnabled(true);
-    catalogWrapperService.clearLanguageMapping();
     commerceCache.setEnabled(true);
   }
 
@@ -63,9 +67,9 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
   @Test
   public void testProductCachingIsActive() throws Exception {
     testling.getCommerceCache().clear();
-    Product product1 = testling.findProductByExternalId(PRODUCT_CODE);
+    Product product1 = getTestProduct();
     assertEquals(PRODUCT_CODE, product1.getExternalId());
-    Product product2 = testling.findProductByExternalId(PRODUCT_CODE);
+    Product product2 = getTestProduct();
     assertEquals(PRODUCT_CODE, product2.getExternalId());
     assertEquals("product beans must be equal", product1, product2);
     assertNotSame("product beans must not be the same instance", product1, product2);
@@ -83,7 +87,7 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
    */
   @Test
   public void testProductCacheEntryIsCorrectlyTimedOut() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
 
@@ -95,12 +99,12 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
     tempCacheTimesInSeconds.put("Product", 3L);
     commerceCache.setCacheTimesInSeconds(tempCacheTimesInSeconds);
     try {
-      Product product1 = testling.findProductByExternalId(PRODUCT_CODE);
+      Product product1 = getTestProduct();
       assertEquals(PRODUCT_CODE, product1.getExternalId());
       Map<String, Object> productWrapper1 = (Map<String, Object>) getNotAccessibleMethodValue(product1, "getDelegate");
       // we assume a cache duration time of 30 seconds or lesser
       sleepForSeconds(5);
-      Product product2 = testling.findProductByExternalId(PRODUCT_CODE);
+      Product product2 = getTestProduct();
       Map<String, Object> productWrapper2 = (Map<String, Object>) getNotAccessibleMethodValue(product2, "getDelegate");
       assertEquals(PRODUCT_CODE, product2.getExternalId());
       assertNotSame("the first cache entry should be timed out in the meantime", productWrapper1, productWrapper2);
@@ -201,40 +205,41 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
   }
 
   private void accessProductByExternalId() throws Exception {
-    Product product = testling.findProductByExternalId(PRODUCT_CODE);
+    Product product = getTestProduct();
     accessProduct(product);
   }
 
+  private Product getTestProduct() {
+    return testling.findProductById(IbmCommerceIdProvider.commerceId(PRODUCT).withExternalId(PRODUCT_CODE).build(), getStoreContext());
+  }
+
   private void accessProductByExternalTechId() throws Exception {
-    Product product = testling.findProductByExternalId(PRODUCT_CODE);
+    Product product = getTestProduct();
     String techId = product.getExternalTechId();
     Product product2 = testling.findProductByExternalTechId(techId);
     accessProduct(product2);
   }
 
   private void accessProductBySeoSegment() throws Exception {
-    Product product = testling.findProductBySeoSegment(PRODUCT_SEO);
+    Product product = testling.findProductBySeoSegment(PRODUCT_SEO, getStoreContext());
     accessProduct(product);
   }
 
   private void accessProductVariantByExternalId() throws Exception {
-    ProductVariant sku = testling.findProductVariantById(CommerceIdHelper.formatProductVariantId(SKU_CODE));
+    CommerceId productVariantId = ibmCommerceIdProvider.formatProductVariantId(getStoreContext().getCatalogAlias(), SKU_CODE);
+    ProductVariant sku = testling.findProductVariantById(productVariantId, getStoreContext());
     accessProductVariant(sku);
   }
 
   private void accessProductVariantByExternalTechId() throws Exception {
-    ProductVariant sku = testling.findProductVariantById(CommerceIdHelper.formatProductVariantId(SKU_CODE));
+    StoreContext storeContext = getStoreContext();
+    CommerceId productVariantId = ibmCommerceIdProvider.formatProductVariantId(storeContext.getCatalogAlias(), SKU_CODE);
+    ProductVariant sku = testling.findProductVariantById(productVariantId, getStoreContext());
     String techId = sku.getExternalTechId();
-    ProductVariant sku2 = testling.findProductVariantById(CommerceIdHelper.formatProductVariantTechId(techId));
+    CommerceId productVariantTechId = ibmCommerceIdProvider.formatProductVariantTechId(storeContext.getCatalogAlias(), techId);
+    ProductVariant sku2 = testling.findProductVariantById(productVariantTechId, getStoreContext());
     accessProductVariant(sku2);
   }
-
-/*
-  private void accessProductVariantBySeoSegment() throws Exception {
-    ProductVariant sku = testling.findProductVariantBySeoSegment(SKU_SEO);
-    accessProductVariant(sku);
-  }
-*/
 
   private void accessProduct(Product product) throws Exception {
     product.getName();
@@ -263,19 +268,24 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
   }
 
   private void accessCategoryByExternalId() throws Exception {
-    Category category = testling.findCategoryById(CommerceIdHelper.formatCategoryId(CATEGORY_CODE));
+    StoreContext storeContext = getStoreContext();
+    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, storeContext);
     accessCategory(category);
   }
 
   private void accessCategoryByExternalTechId() throws Exception {
-    Category category = testling.findCategoryById(CommerceIdHelper.formatCategoryId(CATEGORY_CODE));
+    StoreContext storeContext = getStoreContext();
+    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, storeContext);
     String techId = category.getExternalTechId();
-    Category category2 = testling.findCategoryById(CommerceIdHelper.formatCategoryTechId(techId));
+    CommerceId categoryTechId = ibmCommerceIdProvider.formatCategoryTechId(storeContext.getCatalogAlias(), techId);
+    Category category2 = testling.findCategoryById(categoryTechId, storeContext);
     accessCategory(category2);
   }
 
   private void accessCategoryBySeoSegment() throws Exception {
-    Category category = testling.findCategoryBySeoSegment(CATEGORY_SEO);
+    Category category = testling.findCategoryBySeoSegment(CATEGORY_SEO, getStoreContext());
     accessCategory(category);
   }
 
@@ -286,17 +296,6 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
     for (Product product : products) {
       product.getName();
     }
-  }
-
-  private Object getNotAccessibleFieldValue(Object object, String fieldName) {
-    try {
-      Field field = object.getClass().getDeclaredField(fieldName);
-      field.setAccessible(true);
-      return field.get(object);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 
   private WcRestConnector instrumentConnector() {

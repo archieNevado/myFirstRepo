@@ -36,7 +36,7 @@
                 <h2>You can access our preview sites on the following URLs</h2>
                 <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
                 <%- node['blueprint']['proxy']['virtual_host']['preview']['server_aliases'].each do |server_alias| %>
-                  <li><a href="//<%= server_alias %>" target="_blank"><%= server_alias %></a></li>
+                  <li><a href="https://<%= server_alias %>" target="_blank"><%= server_alias %></a></li>
                 <%- end %>
                 </ul>
                 <%- end %>
@@ -46,7 +46,7 @@
                 <h2>You can access our sites on the following URLs</h2>
                 <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
                 <%- node['blueprint']['proxy']['virtual_host']['delivery']['sites'].keys.each do |site| %>
-                  <li><a href="//<%= node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['server_name'] %>" target="_blank"><%= site %></a></li>
+                  <li><a href="https://<%= node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['server_name'] %>" target="_blank"><%= site %></a></li>
                   <%- end %>
                 </ul>
                 <%- end %>
@@ -55,7 +55,7 @@
 
                 <h2>The management interfaces are available at</h2>
                 <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
-                  <li><a href="//studio.<%= host %>" target="_blank">CoreMedia Studio</a></li>
+                  <li><a href="https://studio.<%= host %>" target="_blank">CoreMedia Studio</a></li>
                 </ul>
 
                 <p><br/></p>

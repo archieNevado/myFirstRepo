@@ -5,11 +5,10 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +17,8 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for BOD REST interface.
@@ -36,13 +35,6 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
   @Import(XmlRepoConfiguration.class)
   @Profile(IbmServiceTestBase.LocalConfig.PROFILE)
   public static class LocalConfig {
-  }
-
-  @Before
-  public void setup() {
-    super.setup();
-    testling.getCatalogWrapperService().clearLanguageMapping();
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
   }
 
   @Betamax(tape = "csi_testFindCategoryById", match = {MatchRule.path, MatchRule.query})
@@ -71,13 +63,6 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
   @Override
   public void testFindProductByExternalTechIdIsNull() throws Exception {
     super.testFindProductByExternalTechIdIsNull();
-  }
-
-  @Betamax(tape = "csi_testFindProductByExternalIdReturns502", match = {MatchRule.path, MatchRule.query})
-  @Test
-  @Override
-  public void testFindProductByExternalIdReturns502() throws Exception {
-    super.testFindProductByExternalIdReturns502();
   }
 
   @Betamax(tape = "csi_testFindProductVariantById", match = {MatchRule.path, MatchRule.query})
@@ -207,7 +192,6 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
     super.testFindCategoryByIdIsNull();
   }
 
-
   @Betamax(tape = "csi_testWithStoreContext", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -274,7 +258,9 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
   @Test
   @Override
   public void testFindCategoryMultiSEOByExternalTechId() throws Exception {
-    Category category = testling.findCategoryById(CommerceIdHelper.formatCategoryId(CATEGORY1_WITH_MULTI_SEO));
+    StoreContext storeContext = getStoreContext();
+    CommerceId categoryId = getIdProvider().formatCategoryId(storeContext.getCatalogAlias(), CATEGORY1_WITH_MULTI_SEO);
+    Category category = testling.findCategoryById(categoryId, storeContext);
     String seoSegment = category.getSeoSegment();
     assertNotNull(seoSegment);
     assertFalse(seoSegment.contains(";"));

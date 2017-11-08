@@ -1,15 +1,17 @@
 package com.coremedia.livecontext.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.ecommerce.order.CartService;
+import com.coremedia.livecontext.ecommerce.order.CartService.OrderItemParam;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.objectserver.view.substitution.Substitution;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -36,12 +38,11 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.TARGETVIEW_PARAMETER;
@@ -50,6 +51,8 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
 import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMENT;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 
 /**
  * Handler for Commerce carts.
@@ -63,17 +66,19 @@ public class CartHandler extends LiveContextPageHandlerBase {
   /**
    * URI pattern, for URIs like "/service/cart/shopName"
    */
-  public static final String URI_PATTERN = '/' + PREFIX_SERVICE +
-          '/' + URI_PREFIX +
-          "/{" + SEGMENT_ROOT + '}';
+  public static final String URI_PATTERN =
+          '/' + PREFIX_SERVICE +
+                  '/' + URI_PREFIX +
+                  "/{" + SEGMENT_ROOT + '}';
 
   /**
    * URI pattern, for URIs like "/dynamic/fragment/cart/shopName"
    */
-  public static final String DYNAMIC_URI_PATTERN = '/' + PREFIX_DYNAMIC +
-          '/' + SEGMENTS_FRAGMENT +
-          '/' + URI_PREFIX +
-          "/{" + SEGMENT_ROOT + '}';
+  public static final String DYNAMIC_URI_PATTERN =
+          '/' + PREFIX_DYNAMIC +
+                  '/' + SEGMENTS_FRAGMENT +
+                  '/' + URI_PREFIX +
+                  "/{" + SEGMENT_ROOT + '}';
 
   private static final String PARAM_ACTION = "action";
 
@@ -94,17 +99,19 @@ public class CartHandler extends LiveContextPageHandlerBase {
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   @RequestMapping(value = URI_PATTERN, method = RequestMethod.GET)
-  public View handleRequest(@PathVariable(SEGMENT_ROOT) String context, HttpServletRequest request, HttpServletResponse response) {
-    CommerceConnection currentConnection = DefaultConnection.get();
+  public View handleRequest(@PathVariable(SEGMENT_ROOT) String context, HttpServletRequest request,
+                            HttpServletResponse response) {
+    CommerceConnection currentConnection = findCommerceConnection().orElse(null);
     if (currentConnection == null) {
       return null;
     }
 
     StoreContext storeContext = currentConnection.getStoreContext();
 
-    Map<String,Object> params = new HashMap<>();
+    Map<String, Object> params = new HashMap<>();
     params.put(URL_PROVIDER_STORE_CONTEXT, storeContext);
     params.put(URL_PROVIDER_IS_STUDIO_PREVIEW, isStudioPreview());
+
     UriComponents checkoutUrl = (UriComponents) checkoutRedirectUrlProvider.provideValue(params);
     String redirectUrl = checkoutUrl.toString();
     redirectUrl = applyLinkTransformers(redirectUrl, request, response, true);
@@ -120,19 +127,22 @@ public class CartHandler extends LiveContextPageHandlerBase {
   @RequestMapping(value = DYNAMIC_URI_PATTERN, method = RequestMethod.GET)
   public ModelAndView handleFragmentRequest(@PathVariable(SEGMENT_ROOT) String context,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view) {
-    // if no context available: return "not found"
+    // If no context is available: return "not found".
+
     Navigation navigation = getNavigation(context);
-    if (navigation != null) {
-      Cart cart = resolveCart();
-      if (cart != null) {
-        // add navigationContext as navigationContext request param
-        ModelAndView modelWithView = HandlerHelper.createModelWithView(cart, view);
-        NavigationLinkSupport.setNavigation(modelWithView, navigation);
-        return modelWithView;
-      }
+    if (navigation == null) {
+      return HandlerHelper.notFound();
     }
 
-    return HandlerHelper.notFound();
+    Cart cart = resolveCart();
+    if (cart == null) {
+      return HandlerHelper.notFound();
+    }
+
+    // Add navigationContext as navigationContext request param.
+    ModelAndView modelWithView = HandlerHelper.createModelWithView(cart, view);
+    NavigationLinkSupport.setNavigation(modelWithView, navigation);
+    return modelWithView;
   }
 
   @RequestMapping(value = DYNAMIC_URI_PATTERN, method = RequestMethod.POST, produces = {CONTENT_TYPE_JSON})
@@ -145,58 +155,76 @@ public class CartHandler extends LiveContextPageHandlerBase {
       case ACTION_ADD_ORDER_ITEM:
         return handleAddOrderItem(request, response);
       default:
-        throw new NotFoundException("unsupported action: " + action);
+        throw new NotFoundException("Unsupported action: " + action);
     }
   }
 
-  private Object handleRemoveOrderItem(HttpServletRequest request) {
+  @Nonnull
+  private Object handleRemoveOrderItem(@Nonnull HttpServletRequest request) {
     Cart cart = resolveCart();
-    if (cart != null) {
-      String orderItemId = request.getParameter(ORDER_ITEM_ID);
-      if (orderItemExist(cart, orderItemId)) {
-        deleteCartOrderItem(orderItemId);
-        return Collections.emptyMap();
-      }
-      throw new NotFoundException("Cannot remove " + orderItemId + " from cart");
+    if (cart == null) {
+      return emptyMap();
     }
-    return Collections.emptyMap();
+
+    String orderItemId = request.getParameter(ORDER_ITEM_ID);
+
+    if (!orderItemExist(cart, orderItemId)) {
+      throw new NotFoundException("Cannot remove order item with ID '" + orderItemId + "' from cart.");
+    }
+
+    deleteCartOrderItem(orderItemId);
+
+    return emptyMap();
   }
 
-  private Object handleAddOrderItem(HttpServletRequest request, HttpServletResponse response) {
+  @Nonnull
+  private Object handleAddOrderItem(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
     UserSessionService userSessionService = getUserSessionService();
-    if (userSessionService!=null && userSessionService.ensureGuestIdentity(request, response)) {
-      String externalTechId = request.getParameter(EXTERNAL_TECH_ID);
-      addCartOrderItem(externalTechId);
-      return Collections.emptyMap();
+
+    if (userSessionService == null || !userSessionService.ensureGuestIdentity(request, response)) {
+      throw new NotFoundException("Cannot switch to guest state");
     }
-    throw new NotFoundException("Cannot switch to guest state");
+
+    String externalTechId = request.getParameter(EXTERNAL_TECH_ID);
+    addCartOrderItem(externalTechId);
+
+    return emptyMap();
   }
 
   private void deleteCartOrderItem(String orderItemId) {
-    getCartService().deleteCartOrderItem(orderItemId);
+    getCartService().deleteCartOrderItem(orderItemId, CurrentCommerceConnection.get().getStoreContext());
   }
 
   private void addCartOrderItem(String orderItemId) {
-    List<CartService.OrderItemParam> items = Arrays.asList(new CartService.OrderItemParam(orderItemId, BigDecimal.valueOf(1)));
-    getCartService().addToCart(items);
+    BigDecimal quantity = BigDecimal.valueOf(1);
+    OrderItemParam orderItem = new OrderItemParam(orderItemId, quantity);
+
+    List<OrderItemParam> orderItems = singletonList(orderItem);
+
+    getCartService().addToCart(orderItems, CurrentCommerceConnection.get().getStoreContext());
   }
 
-  private boolean orderItemExist(Cart cart, String orderItemId) {
+  private static boolean orderItemExist(@Nonnull Cart cart, @Nullable String orderItemId) {
     return orderItemId != null && cart.findOrderItemById(orderItemId) != null;
   }
 
+  @Nullable
   public UserSessionService getUserSessionService() {
-    CommerceConnection connection = DefaultConnection.get();
-    return connection!=null ? connection.getUserSessionService() : null;
+    return findCommerceConnection().map(CommerceConnection::getUserSessionService).orElse(null);
+  }
+
+  @Nonnull
+  private Optional<CommerceConnection> findCommerceConnection() {
+    return CurrentCommerceConnection.find();
   }
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public static class NotFoundException extends RuntimeException {
+
     public NotFoundException(String msg) {
       super(msg);
     }
   }
-
 
   // --- LinkSchemes ---------------------------------------------------------------------------------------------------
 
@@ -205,42 +233,56 @@ public class CartHandler extends LiveContextPageHandlerBase {
    */
   @SuppressWarnings({"TypeMayBeWeakened", "UnusedParameters"})
   @Link(type = Cart.class, uri = URI_PATTERN)
-  public UriComponents buildLink(Cart cart, UriTemplate uriPattern, Map<String, Object> linkParameters, HttpServletRequest request) {
+  @Nonnull
+  public UriComponents buildLink(Cart cart, UriTemplate uriPattern, Map<String, Object> linkParameters,
+                                 HttpServletRequest request) {
     return buildLinkInternal(uriPattern, linkParameters);
   }
 
   @Link(type = Cart.class, view = VIEW_FRAGMENT, uri = DYNAMIC_URI_PATTERN)
-  public UriComponents buildFragmentLink(Cart cart, UriTemplate uriPattern, Map<String, Object> linkParameters, HttpServletRequest request) {
+  @Nonnull
+  public UriComponents buildFragmentLink(Cart cart, UriTemplate uriPattern, Map<String, Object> linkParameters,
+                                         HttpServletRequest request) {
     return buildLinkInternal(uriPattern, linkParameters);
   }
 
   @Link(type = Cart.class, view = "ajax", uri = DYNAMIC_URI_PATTERN)
-  public UriComponents buildDeleteCartOderItemLink(Cart cart, UriTemplate uriPattern, Map<String, Object> linkParameters, HttpServletRequest request) {
+  @Nonnull
+  public UriComponents buildDeleteCartOderItemLink(Cart cart, UriTemplate uriPattern,
+                                                   Map<String, Object> linkParameters, HttpServletRequest request) {
     return buildLinkInternal(uriPattern, linkParameters);
   }
 
-  private UriComponents buildLinkInternal(UriTemplate uriPattern, Map<String, Object> linkParameters) {
+  @Nonnull
+  private UriComponents buildLinkInternal(@Nonnull UriTemplate uriPattern, @Nonnull Map<String, Object> linkParameters) {
     Navigation context = getContextHelper().currentSiteContext();
-    UriComponentsBuilder result = UriComponentsBuilder.fromPath(uriPattern.toString());
-    result = addLinkParametersAsQueryParameters(result, linkParameters);
-    return result.buildAndExpand(ImmutableMap.of(
-            SEGMENT_ROOT, getPathSegments(context).get(0)
-    ));
+    String firstNavigationPathSegment = getPathSegments(context).get(0);
+
+    Map<String, String> uriVariables = ImmutableMap.of(SEGMENT_ROOT, firstNavigationPathSegment);
+
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath(uriPattern.toString());
+    uriBuilder = addLinkParametersAsQueryParameters(uriBuilder, linkParameters);
+    return uriBuilder.buildAndExpand(uriVariables);
   }
 
   public CartService getCartService() {
-    return DefaultConnection.get().getCartService();
+    return CurrentCommerceConnection.get().getCartService();
   }
-
 
   @Required
   public void setCheckoutRedirectUrlProvider(CommercePropertyProvider checkoutRedirectUrlProvider) {
     this.checkoutRedirectUrlProvider = checkoutRedirectUrlProvider;
   }
 
+  @Nullable
   private Cart resolveCart() {
     CartService cartService = getCartService();
-    return cartService != null ? cartService.getCart() : null;
+    return cartService != null ? cartService.getCart(CurrentCommerceConnection.get().getStoreContext()) : null;
+  }
+
+  @VisibleForTesting
+  boolean isStudioPreview() {
+    return isStudioPreviewRequest();
   }
 
   //====================================================================================================================
@@ -261,8 +303,15 @@ public class CartHandler extends LiveContextPageHandlerBase {
     }
 
     @Override
-    public String getId() {
+    @Nonnull
+    public CommerceId getId() {
       return getDelegate().getId();
+    }
+
+    @Override
+    @Nonnull
+    public CommerceId getReference() {
+      return getId();
     }
 
     @Override
@@ -273,11 +322,6 @@ public class CartHandler extends LiveContextPageHandlerBase {
     @Override
     public Locale getLocale() {
       return getDelegate().getLocale();
-    }
-
-    @Override
-    public String getReference() {
-      return getDelegate().getReference();
     }
 
     @Override
@@ -305,15 +349,6 @@ public class CartHandler extends LiveContextPageHandlerBase {
       return getDelegate().getExternalTechId();
     }
 
-    /**
-     * @return null
-     */
-    @Nullable
-    @Override
-    public String getStatus() {
-      return null;
-    }
-
     @Nonnull
     @Override
     public Map<String, Object> getCustomAttributes() {
@@ -327,8 +362,14 @@ public class CartHandler extends LiveContextPageHandlerBase {
     }
 
     @Override
-    public void load() throws CommerceException {
+    public void load() {
       getDelegate();
+    }
+
+    @Override
+    @Nonnull
+    public Optional<Catalog> getCatalog() {
+      return delegate.getCatalog();
     }
   }
 }

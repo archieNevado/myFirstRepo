@@ -6,6 +6,7 @@
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.premular.fields.LinkListViewDragZone;
     import com.coremedia.ecommerce.studio.dragdrop.CatalogDragDropVisualFeedback;
+    import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.skins.TableViewSkin;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.abstractCatalogList";
@@ -19,6 +20,12 @@
 
     private var config:AbstractCatalogList;
 
+    /**
+     * A value expression that specifies where to set the multiply selected items. This is mandatory.
+     */
+    [Bindable]
+    public var selectedItemsValueExpression:ValueExpression;
+
     public native function AbstractCatalogList(config:AbstractCatalogList = null);
     ]]></fx:Script>
   <fx:Declarations>
@@ -27,10 +34,6 @@
     -->
     <fx:String id="ddGroup"/>
 
-    <!--
-     A value expression that specifies where to set the multiply selected items. This is mandatory.
-    -->
-    <ui:ValueExpression id="selectedItemsValueExpression"/>
   </fx:Declarations>
 
   <plugins>

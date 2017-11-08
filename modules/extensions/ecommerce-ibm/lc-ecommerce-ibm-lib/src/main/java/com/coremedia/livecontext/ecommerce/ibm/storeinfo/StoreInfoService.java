@@ -18,33 +18,42 @@ public class StoreInfoService {
   private StoreInfoCacheKey storeInfoCacheKey;
 
   public String getStoreId(String storeName) {
-    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".storeId", String.class);
   }
 
   public String getDefaultCatalogId(String storeName) {
-    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".defaultCatalogId", String.class);
   }
 
+  public String getDefaultCatalogName(String storeName) {
+    Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
+    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".defaultCatalog", String.class);
+  }
+
   public String getCatalogId(String storeName, String catalogName) {
-    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".catalogs." + catalogName, String.class);
   }
 
+  public Map<String, Object> getStoreInfos() {
+    return commerceCache.get(storeInfoCacheKey);
+  }
+
   public TimeZone getTimeZone() {
-    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     String sTimeZoneId = DataMapHelper.getValueForPath(storeInfos, "serverTimezoneId", String.class);
     return TimeZone.getTimeZone(sTimeZoneId);
   }
 
   public String getWcsVersion() {
-    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     return DataMapHelper.getValueForPath(storeInfos, "wcsVersion", String.class);
   }
 
   public boolean isAvailable() {
-    Map<String, Object> storeInfos = (Map<String, Object>) commerceCache.get(storeInfoCacheKey);
+    Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     return !storeInfos.isEmpty();
   }
 
@@ -73,6 +82,6 @@ public class StoreInfoService {
 
   @PostConstruct
   void initialize() {
-    storeInfoCacheKey = new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache);
+    storeInfoCacheKey = new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache, delayOnError);
   }
 }

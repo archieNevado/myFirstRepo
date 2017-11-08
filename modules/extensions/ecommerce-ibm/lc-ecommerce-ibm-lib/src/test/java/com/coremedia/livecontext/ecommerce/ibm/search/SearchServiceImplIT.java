@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.search;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.search.SuggestionResult;
@@ -23,6 +24,7 @@ public class SearchServiceImplIT extends IbmServiceTestBase {
   SearchServiceImpl testling;
 
   @Before
+  @Override
   public void setup() {
     super.setup();
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
@@ -31,10 +33,11 @@ public class SearchServiceImplIT extends IbmServiceTestBase {
   @Test
   @Betamax(tape = "ssi_testGetAutocompleteSuggestions", match = {MatchRule.path, MatchRule.query})
   public void testGetAutocompleteSuggestions() {
-    if (StoreContextHelper.getWcsVersion(StoreContextHelper.getCurrentContext()).lessThan(WCS_VERSION_7_7)) {
+    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+    if (StoreContextHelper.getWcsVersion(currentContext).lessThan(WCS_VERSION_7_7)) {
       return;
     }
-    List<SuggestionResult> suggestions = testling.getAutocompleteSuggestions("dres");
+    List<SuggestionResult> suggestions = testling.getAutocompleteSuggestions("dres", currentContext);
     assertFalse(suggestions.isEmpty());
   }
 }

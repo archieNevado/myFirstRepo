@@ -2,9 +2,10 @@
 <#-- @ftlvariable name="islast" type="java.lang.Boolean" -->
 
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <div class="cm-medialist"<@cm.metadata self.content />>
-  <@bp.optionalLink href="${link}">
+  <@bp.optionalLink href="${link}" attr={"target":target}>
     <#-- picture -->
     <#if self.picture?has_content>
       <@cm.include self=self.picture params={

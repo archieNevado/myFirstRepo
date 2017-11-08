@@ -8,6 +8,7 @@ import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
+import com.coremedia.blueprint.cae.web.links.ThemeResourceLinkBuilder;
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
@@ -20,7 +21,6 @@ import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.navigation.HasViewTypeName;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
-import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -99,6 +99,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   private DataViewFactory dataViewFactory;
   private SettingsService settingsService;
   private ImageDimensionsExtractor imageDimensionsExtractor;
+  private ThemeResourceLinkBuilder themeResourceLinkBuilder;
   private TransformImageService transformImageService;
   private WordAbbreviator abbreviator;
   private MimeTypeService mimeTypeService;
@@ -140,6 +141,11 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   @Autowired
   public void setTransformImageService(TransformImageService transformImageService) {
     this.transformImageService = transformImageService;
+  }
+
+  @Autowired
+  public void setThemeResourceLinkBuilder(ThemeResourceLinkBuilder themeResourceLinkBuilder) {
+    this.themeResourceLinkBuilder = themeResourceLinkBuilder;
   }
 
   // --- functionality -------------------------------------------------------------------------------------------------
@@ -524,6 +530,18 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   public PageGridPlacement getPlacementByName(String name, PageGrid pageGrid) {
     return pageGrid.getPlacementForName(name);
+  }
+
+  /**
+   * Retrieves the URL path that belongs to a theme resource (image, webfont, etc.) defined by its path within the
+   * theme folder. The path must not contain any <strong>..</strong>
+   * descending path segments.
+   *
+   * @param pathToResource path to the resource within the theme folder
+   * @return the URL path that belongs to a theme resource or an empty link
+   */
+  public String getLinkToThemeResource(String pathToResource) {
+    return themeResourceLinkBuilder.getLinkToThemeResource(pathToResource, FreemarkerUtils.getCurrentRequest(), FreemarkerUtils.getCurrentResponse());
   }
 
   /**

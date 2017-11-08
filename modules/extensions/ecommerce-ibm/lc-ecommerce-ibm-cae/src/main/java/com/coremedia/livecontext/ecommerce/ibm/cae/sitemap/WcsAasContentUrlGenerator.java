@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae.sitemap;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.cae.sitemap.ContentUrlGenerator;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -26,7 +26,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Boolean.parseBoolean;
-import static java.util.Objects.requireNonNull;
 
 public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
   private static final Logger LOG = LoggerFactory.getLogger(WcsAasContentUrlGenerator.class);
@@ -64,13 +63,13 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
   }
 
   public String getUrlKeyword() {
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    return CommercePropertyHelper.replaceTokens(urlKeyword, connection.getStoreContext());
+    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
+    return CommercePropertyHelper.replaceTokens(urlKeyword, storeContext);
   }
 
   public String getWcsStorefrontUrl() {
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    return CommercePropertyHelper.replaceTokens(wcsStorefrontUrl, connection.getStoreContext());
+    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
+    return CommercePropertyHelper.replaceTokens(wcsStorefrontUrl, storeContext);
   }
 
   // --- features ---------------------------------------------------
@@ -122,7 +121,7 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
     }
 
     String language = site.getLocale().getLanguage();
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    CommerceConnection connection = CurrentCommerceConnection.get();
     StoreContext storeContext = connection.getStoreContextProvider().findContextBySite(site);
     if (storeContext == null) {
       LOG.warn("No store context found for site {}. Will not create an index url. Return null.", site.getName());

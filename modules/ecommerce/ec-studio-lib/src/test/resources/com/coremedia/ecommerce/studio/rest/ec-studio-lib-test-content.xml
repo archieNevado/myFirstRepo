@@ -31,6 +31,7 @@
                   <link id="16"/>
                   <link id="18"/>
                 </linkProperty>
+                <markupProperty name="placement" grammar="coremedia-struct-2008" url="20placement.xml"/>
               </version>
             </document>
             <document id="20" type="CMExternalChannel" name="catalogRoot">

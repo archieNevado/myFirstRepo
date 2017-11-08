@@ -15,7 +15,7 @@
 <StringProperty Name="userModerationType">NONE</StringProperty>
 <StringProperty Name="commentModerationType">PRE_MODERATION</StringProperty>
 <StringProperty Name="reviewModerationType">PRE_MODERATION</StringProperty>
-<StringProperty Name="tenant">helios</StringProperty>
+<StringProperty Name="tenant">aurora-b2b-de-de</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

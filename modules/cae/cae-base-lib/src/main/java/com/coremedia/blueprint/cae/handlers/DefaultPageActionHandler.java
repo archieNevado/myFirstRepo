@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_NAVIGATION;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -31,10 +32,8 @@ public class DefaultPageActionHandler extends WebflowHandlerBase {
           @Nonnull CMAction action,
           @Nonnull UriTemplate uriPattern,
           @Nonnull Map<String, Object> linkParameters) {
-    //noinspection ConstantConditions
-    if (action == null) {
-      throw new IllegalStateException("No action provided for building a link.");
-    }
+
+    Objects.requireNonNull(action, "No action provided for building a link.");
 
     String actionName = getVanityName(action);
     Navigation context = getNavigation(action);

@@ -35,7 +35,7 @@ public class SegmentsCacheKey extends AbstractCommerceCacheKey<Map<String, Objec
   @Override
   protected String getCacheIdentifier() {
     return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user +":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale() + ":" +
+            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
             storeContext.getWorkspaceId();
   }
 

@@ -1,31 +1,38 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
-import com.coremedia.cache.Cache;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmDocumentCacheKey;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
-public class MarketingSpotCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
+public class MarketingSpotCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
   private WcMarketingSpotWrapperService wrapperService;
 
-  public MarketingSpotCacheKey(String id,
+  public MarketingSpotCacheKey(@Nonnull CommerceId id,
                                StoreContext storeContext,
                                UserContext userContext,
                                WcMarketingSpotWrapperService wrapperService,
                                CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_MARKETING_SPOT, commerceCache);
     this.wrapperService = wrapperService;
+    if (!BaseCommerceBeanType.MARTETING_SPOT.equals(id.getCommerceBeanType())) {
+      throw new InvalidIdException(id + " is not a marketing spot id.");
+    }
   }
 
   @Override
   public Map<String, Object> computeValue(Cache cache) {
-    return wrapperService.findMarketingSpotById(id, storeContext, userContext);
+    return wrapperService.findMarketingSpotById(getCommerceId(), storeContext, userContext);
   }
 
   @Override

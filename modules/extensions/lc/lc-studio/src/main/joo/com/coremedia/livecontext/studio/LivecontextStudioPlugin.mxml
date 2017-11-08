@@ -27,6 +27,9 @@
     import com.coremedia.blueprint.studio.forms.CMImageMapForm;
     import com.coremedia.cms.editor.sdk.desktop.ActionsToolbar;
     import com.coremedia.cms.editor.sdk.desktop.HeaderToolbarUserMenu;
+    import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
+    import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
+    import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
     import com.coremedia.ecommerce.studio.library.EcCatalogTreeFilter;
     import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -50,6 +53,8 @@
     public static const CONTENT_TYPE_PRODUCT_TEASER:String = "CMProductTeaser";
 
     public static const CONTENT_TYPE_EXTERNAL_PRODUCT:String = "CMExternalProduct";
+
+    public static const  CONTENT_TYPE_PRODUCT_LIST:String = "CMProductList";
 
     public static const EXTERNAL_ID_PROPERTY:String = "externalId";
 
@@ -187,6 +192,7 @@
             <livecontext:CMExternalPageForm itemId="{CONTENT_TYPE_EXTERNAL_PAGE}"/>
             <livecontext:CMProductTeaserForm itemId="{CONTENT_TYPE_PRODUCT_TEASER}"/>
             <livecontext:CMExternalProductForm itemId="{CONTENT_TYPE_EXTERNAL_PRODUCT}"/>
+            <livecontext:CMProductListForm itemId="{CONTENT_TYPE_PRODUCT_LIST}"/>
           </editor:documentTabPanels>
         </editor:AddTabbedDocumentFormsPlugin>
       </editor:plugins>
@@ -257,7 +263,7 @@
       </editor:plugins>
     </editor:WorkArea>
 
-    <editor:WorkAreaTabContextMenu>
+    <editor:WorkAreaTabProxiesContextMenu>
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
@@ -274,25 +280,25 @@
             <MenuItem>
               <baseAction>
                 <livecontext:CreateProductTeaserAction
-                        catalogObjectVariableName="{WorkAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
+                        catalogObjectVariableName="{WorkAreaTabProxiesContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
               </baseAction>
             </MenuItem>
             <MenuItem>
               <baseAction>
                 <livecontext:AugmentCategoryAction
-                        catalogObjectVariableName="{WorkAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
+                        catalogObjectVariableName="{WorkAreaTabProxiesContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
               </baseAction>
             </MenuItem>
             <MenuItem>
               <baseAction>
                 <livecontext:AugmentProductAction
-                        catalogObjectVariableName="{WorkAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
+                        catalogObjectVariableName="{WorkAreaTabProxiesContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
               </baseAction>
             </MenuItem>
           </ui:items>
         </ui:AddItemsPlugin>
       </editor:plugins>
-    </editor:WorkAreaTabContextMenu>
+    </editor:WorkAreaTabProxiesContextMenu>
     <bpb-components:PreviewDateSelector>
       <bpb-components:plugins>
         <ui:AddItemsPlugin>

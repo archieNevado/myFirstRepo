@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.contract;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import java.util.Collection;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
+import static com.coremedia.livecontext.ecommerce.ibm.contract.ContractServiceImpl.toContractId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -32,7 +34,8 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
   @Test
   public void testFindContractIdsForUser() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-    UserContext userContext = userContextProvider.createContext(testConfig.getUser2Name());
+
+    UserContext userContext = UserContext.builder().withUserName(testConfig.getUser2Name()).build();
     UserContextHelper.setCurrentContext(userContext);
 
     Collection<Contract> contractIdsForUser = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
@@ -49,7 +52,7 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
   @Test
   public void testFindContractIdsForPreviewUser() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-    UserContext userContext = userContextProvider.createContext(testConfig.getPreviewUserName());
+    UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
     Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
@@ -59,7 +62,10 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
       assertEquals(3, contracts.size());
 
       for (Contract contract : contracts) {
-        assertTrue("contrat id has wrong format: " + contract.getId(), contract.getId().startsWith("ibm:///catalog/contract/4000"));
+        CommerceId contractId = contract.getId();
+        assertEquals("contract id has wrong format: " + contract.getId(), "ibm", contractId.getVendor());
+        assertEquals("contract id has wrong format: " + contract.getId(), "contract", contractId.getCommerceBeanType().type());
+        assertTrue("contract id has wrong format: " + contract.getId(), contractId.getExternalId().map(e -> e.startsWith("4000")).orElse(false));
       }
     }
   }
@@ -83,7 +89,7 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
   @Test
   public void testFindContractById() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-    UserContext userContext = userContextProvider.createContext(testConfig.getPreviewUserName());
+    UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
     Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
@@ -91,7 +97,8 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
 
     if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {
       for (Contract contract : contracts) {
-        Contract contractById = testling.findContractById(contract.getExternalId());
+        CommerceId contractId = toContractId(contract.getExternalId());
+        Contract contractById = testling.findContractById(contractId, testConfig.getB2BStoreContext());
         assertNotNull(contractById);
         assertEquals(contract.getExternalId(), contractById.getExternalId());
       }
@@ -102,7 +109,8 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
   @Test
   public void testInvalidContract() throws Exception {
     StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-    Contract testcontract = testling.findContractById("xxxx");
+    CommerceId contractId = toContractId("xxxx");
+    Contract testcontract = testling.findContractById(contractId, testConfig.getB2BStoreContext());
     assertNull(testcontract);
   }
 }

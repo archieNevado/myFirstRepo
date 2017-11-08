@@ -34,6 +34,7 @@
   <component class="com.coremedia.livecontext.studio.forms.CMExternalProductForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CMExternalPageForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CMMarketingSpotForm"/>
+  <component class="com.coremedia.livecontext.studio.forms.CMProductListForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CMProductTeaserForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CommerceAugmentedCategoryStructureForm"/>
   <component class="com.coremedia.livecontext.studio.forms.ProductAssignmentField"/>

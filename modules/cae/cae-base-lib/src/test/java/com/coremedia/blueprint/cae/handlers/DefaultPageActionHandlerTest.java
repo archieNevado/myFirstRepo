@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -27,11 +27,11 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPageActionHandler> {
   @Test
   public void handleRequestInternalActionDocDoesNotMatchRequestedAction() {
@@ -85,7 +85,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
   }
 
   @SuppressWarnings("ConstantConditions")
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = NullPointerException.class)
   public void buildLinkNoActionProvided() {
     testling.buildLinkInternal(null, null, null);
   }

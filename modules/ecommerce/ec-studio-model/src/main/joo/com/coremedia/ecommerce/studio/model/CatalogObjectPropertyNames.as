@@ -31,6 +31,36 @@ public class CatalogObjectPropertyNames {
   public static const STORE:String = 'store';
 
   /**
+   * @eventType catalog
+   * @see Product#getCatalog() or Category#getCatalog()
+   */
+  public static const CATALOG:String = 'catalog';
+
+  /**
+   * @eventType default
+   * @see Catalog#isDefault()
+   */
+  public static const DEFAULT:String = 'default';
+
+  /**
+   * @eventType defaultCatalog
+   * @see Store#getDefaultCatalog()
+   */
+  public static const DEFAULT_CATALOG:String = 'defaultCatalog';
+
+  /**
+   * @eventType catalogs
+   * @see Store#getCatalogs()
+   */
+  public static const CATALOGS:String = 'catalogs';
+
+  /**
+   * @eventType multiCatalog
+   * @see Store#isMultiCatalog()
+   */
+  public static const MULTI_CATALOG:String = 'multiCatalog';
+
+  /**
    * @eventType id
    * @see CatalogObject#getId()
    */

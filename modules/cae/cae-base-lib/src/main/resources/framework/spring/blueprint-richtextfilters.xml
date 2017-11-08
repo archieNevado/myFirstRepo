@@ -44,6 +44,7 @@
     <property name="idProvider" ref="idProvider"/>
     <property name="dataViewFactory" ref="dataViewFactory"/>
     <property name="validationService" ref="validationService"/>
+    <property name="renderLinkText" value="false"/>
   </bean>
 
   <bean id="cmDownloadLinkValidationFilter" class="com.coremedia.blueprint.cae.richtext.filter.CMDownloadLinkValidationFilter">

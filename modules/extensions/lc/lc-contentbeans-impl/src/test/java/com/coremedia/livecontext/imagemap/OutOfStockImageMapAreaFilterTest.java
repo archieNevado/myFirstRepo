@@ -11,23 +11,23 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 public class OutOfStockImageMapAreaFilterTest {
 
-  public static final String HIDE_OUT_OF_STOCK_PRODUCTS = "hideOutOfStockProducts";
-  public static final String OVERLAY = "overlay";
+  private static final String HIDE_OUT_OF_STOCK_PRODUCTS = "hideOutOfStockProducts";
+  private static final String OVERLAY = "overlay";
   private static final String LINKED_CONTENT = "linkedContent";
-  public static final boolean AVAILABLE = true;
-  public static final boolean NOT_AVAILABLE = false;
+
+  private static final boolean AVAILABLE = true;
+  private static final boolean NOT_AVAILABLE = false;
 
   private CMTeasable teasable;
   private CMProductTeaser productTeaser;
@@ -37,7 +37,6 @@ public class OutOfStockImageMapAreaFilterTest {
   private SettingsService settingsService;
   private CMImageMapImpl imageMap;
   private Map<String, Boolean> overlayConfiguration;
-
 
   @Before
   public void setup() {
@@ -62,7 +61,7 @@ public class OutOfStockImageMapAreaFilterTest {
     when(settingsService.setting("overlay", Map.class, imageMap)).thenReturn(overlayConfiguration);
 
     List<Map<String, Object>> filteredResult = areaFilter.filter(getAreasWithProductTeaserAndTeasable(), imageMap);
-    assertTrue(filteredResult.size() == 2);
+    assertThat(filteredResult).hasSize(2);
   }
 
   @Test
@@ -72,7 +71,7 @@ public class OutOfStockImageMapAreaFilterTest {
     when(settingsService.setting("overlay", Map.class, imageMap)).thenReturn(overlayConfiguration);
 
     List<Map<String, Object>> filteredResult = areaFilter.filter(getAreasWithProductTeaserAndTeasable(), imageMap);
-    assertTrue(filteredResult.size() == 1);
+    assertThat(filteredResult).hasSize(1);
   }
 
   @Test
@@ -82,7 +81,7 @@ public class OutOfStockImageMapAreaFilterTest {
     when(settingsService.setting("overlay", Map.class, imageMap)).thenReturn(overlayConfiguration);
 
     List<Map<String, Object>> filteredResult = areaFilter.filter(getAreasWithProductTeaserAndTeasable(), imageMap);
-    assertTrue(filteredResult.size() == 2);
+    assertThat(filteredResult).hasSize(2);
   }
 
   @Test
@@ -92,7 +91,7 @@ public class OutOfStockImageMapAreaFilterTest {
     when(settingsService.setting("overlay", Map.class, imageMap)).thenReturn(overlayConfiguration);
 
     List<Map<String, Object>> filteredResult = areaFilter.filter(getAreasWithProductTeaserAndTeasable(), imageMap);
-    assertTrue(filteredResult.size() == 1);
+    assertThat(filteredResult).hasSize(1);
   }
 
   @Test
@@ -101,20 +100,17 @@ public class OutOfStockImageMapAreaFilterTest {
     when(settingsService.setting(OVERLAY, Map.class, imageMap)).thenReturn(overlayConfiguration);
 
     List<Map<String, Object>> filteredResult = areaFilter.filter(getAreasWithProductTeaserAndTeasable(), imageMap);
-    assertTrue(filteredResult.size() == 2);
+    assertThat(filteredResult).hasSize(2);
   }
 
   private List<Map<String, Object>> getAreasWithProductTeaserAndTeasable() {
-    return getAreasFor(ImmutableList.of((Object) productTeaser, teasable));
+    ImmutableList<Object> contents = ImmutableList.of(productTeaser, teasable);
+    return getAreasFor(contents);
   }
 
   private List<Map<String, Object>> getAreasFor(List<Object> contents) {
-    List<Map<String, Object>> result = new ArrayList<>();
-    for (Object content : contents) {
-      final ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
-      builder.put(LINKED_CONTENT, content);
-      result.add(builder.build());
-    }
-    return result;
+    return contents.stream()
+            .map(content -> ImmutableMap.of(LINKED_CONTENT, content))
+            .collect(toList());
   }
 }

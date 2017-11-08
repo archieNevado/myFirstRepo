@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
 
 /**
  * A service that uses the getRestConnector() to poll invalidation events.
@@ -28,11 +28,11 @@ class WcInvalidationWrapperService extends AbstractWcWrapperService {
   Map<String, Object> getCacheInvalidations(long lastExecutionTimeStamp,
                                             long maxWaitInMilliseconds,
                                             long chunkSize,
-                                            @Nonnull StoreContext storeContext) throws CommerceException {
+                                            @Nonnull StoreContext storeContext) {
     //noinspection unchecked
     Map<String, Object> wcCommerceCacheInvalidations = getRestConnector().callService(
             GET_CACHE_INVALIDATION, asList(String.valueOf(lastExecutionTimeStamp), String.valueOf(maxWaitInMilliseconds), String.valueOf(chunkSize)),
-            Collections.emptyMap(), null, storeContext, null);
+            emptyMap(), null, storeContext, null);
     if (wcCommerceCacheInvalidations == null) {
       LOG.warn("Could not poll cache invalidations from commerce system");
       throw new CommerceException("Could not poll cache invalidations from commerce system");

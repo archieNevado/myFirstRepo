@@ -52,6 +52,19 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
     return get(CatalogObjectPropertyNames.WORKSPACES);
   }
 
+  public function getCatalogs():Array{
+    return get(CatalogObjectPropertyNames.CATALOGS);
+  }
+
+
+  public function getDefaultCatalog():Catalog {
+    return get(CatalogObjectPropertyNames.DEFAULT_CATALOG)
+  }
+
+  public function isMultiCatalog():Boolean {
+    return get(CatalogObjectPropertyNames.MULTI_CATALOG);
+  }
+
   public function getCurrentWorkspace():Workspace {
     if (!workspaceId || workspaceId === CatalogModel.NO_WS) {
       return undefined;

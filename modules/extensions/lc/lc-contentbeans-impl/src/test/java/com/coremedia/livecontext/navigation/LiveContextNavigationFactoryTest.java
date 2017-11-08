@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.navigation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -23,13 +23,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class LiveContextNavigationFactoryTest {
+
   private LiveContextNavigationFactory testling;
 
   @Mock
@@ -72,7 +73,7 @@ public class LiveContextNavigationFactoryTest {
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
 
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
 
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getCatalogService()).thenReturn(catalogService);
@@ -85,7 +86,7 @@ public class LiveContextNavigationFactoryTest {
     testling.setValidationService(validationService);
     when(site.getId()).thenReturn("deadbeef");
     when(sitesService.getContentSiteAspect(content)).thenReturn(contentSiteAspect);
-    when(contentSiteAspect.getSite()).thenReturn(site);
+    when(contentSiteAspect.findSite()).thenReturn(Optional.ofNullable(site));
 
     when(contentBeanFactory.createBeanFor(content)).thenReturn(externalChannel);
     when(validationService.validate(externalChannel)).thenReturn(true);
@@ -93,19 +94,23 @@ public class LiveContextNavigationFactoryTest {
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   @Test
   public void testCreateNavigationWithValidCategory() throws Exception {
     Category categoryToCreateFrom = mock(Category.class);
+
     LiveContextNavigation actual = testling.createNavigation(categoryToCreateFrom, site);
-    assertNotNull("The returned Navigation must not be null", actual);
+    assertThat(actual).as("The returned Navigation must not be null").isNotNull();
+
     Category categoryInNavigation = actual.getCategory();
-    assertSame("The created LiveContextNavigation is expected to contain the category given by the first parameter of this method", categoryToCreateFrom, categoryInNavigation);
+    assertThat(categoryInNavigation)
+            .as("The created LiveContextNavigation is expected to contain the category given by the first parameter of this method")
+            .isSameAs(categoryToCreateFrom);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testCreateNavigationWithCategoryIsNull() {
     testling.createNavigation(null, site);
   }
@@ -114,9 +119,10 @@ public class LiveContextNavigationFactoryTest {
   public void testCreateNavigationWithAugmentingContent() throws Exception {
     Category categoryToCreateFrom = mock(Category.class);
     when(augmentationService.getContent(categoryToCreateFrom)).thenReturn(content);
+
     LiveContextNavigation actual = testling.createNavigation(categoryToCreateFrom, site);
-    assertNotNull("The returned Navigation must not be null", actual);
-    assertTrue(actual instanceof LiveContextExternalChannelImpl);
+    assertThat(actual).as("The returned Navigation must not be null").isNotNull();
+    assertThat(actual).isInstanceOf(LiveContextExternalChannelImpl.class);
   }
 
   @Test
@@ -126,14 +132,16 @@ public class LiveContextNavigationFactoryTest {
     Category category = mock(Category.class);
 
     when(storeContextProvider.findContextByContent(content)).thenReturn(storeContext);
-    when(catalogService.findCategoryBySeoSegment(existingSeoSegment)).thenReturn(category);
+    when(catalogService.findCategoryBySeoSegment(existingSeoSegment, storeContext)).thenReturn(category);
 
     LiveContextNavigation actual = testling.createNavigationBySeoSegment(content, existingSeoSegment);
-    assertNotNull("The returned Navigation must not be null", actual);
-    assertSame("The created LiveContextNavigation is expected to contain the category given by the first parameter of this method", category, actual.getCategory());
+    assertThat(actual).as("The returned Navigation must not be null").isNotNull();
+    assertThat(actual.getCategory())
+            .as("The created LiveContextNavigation is expected to contain the category given by the first parameter of this method")
+            .isSameAs(category);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testCreateNavigationBySeoSegmentContentWithoutContext() throws Exception {
     Content content = mock(Content.class);
     String existingSeoSegment = "existingSeoSegment";
@@ -143,19 +151,19 @@ public class LiveContextNavigationFactoryTest {
     testling.createNavigationBySeoSegment(content, existingSeoSegment);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testCreateNavigationBySeoSegmentNoValidSeoSegment() throws Exception {
     Content content = mock(Content.class);
     String notExistingSeoSegment = "notExistingSeoSegment";
     StoreContext storeContext = mock(StoreContext.class);
 
     when(storeContextProvider.findContextByContent(content)).thenReturn(storeContext);
-    when(catalogService.findCategoryBySeoSegment(notExistingSeoSegment)).thenReturn(null);
+    when(catalogService.findCategoryBySeoSegment(notExistingSeoSegment, storeContext)).thenReturn(null);
 
     testling.createNavigationBySeoSegment(content, notExistingSeoSegment);
   }
 
-  @Test (expected = InvalidContextException.class)
+  @Test(expected = InvalidContextException.class)
   public void testCreateNavigationBySeoSegmentInvalidContextException() throws Exception {
     Content invalidContent = mock(Content.class);
     String anySeo = "anySeo";
@@ -163,14 +171,14 @@ public class LiveContextNavigationFactoryTest {
     testling.createNavigationBySeoSegment(invalidContent, anySeo);
   }
 
-  @Test (expected = CommerceException.class)
+  @Test(expected = CommerceException.class)
   public void testCreateNavigationBySeoSegmentCommerceException() throws Exception {
     Content content = mock(Content.class);
     String anySeoSegment = "anySeoSegment";
     StoreContext storeContext = mock(StoreContext.class);
 
     when(storeContextProvider.findContextByContent(content)).thenReturn(storeContext);
-    when(catalogService.findCategoryBySeoSegment(anySeoSegment)).thenThrow(CommerceException.class);
+    when(catalogService.findCategoryBySeoSegment(anySeoSegment, storeContext)).thenThrow(CommerceException.class);
 
     testling.createNavigationBySeoSegment(content, anySeoSegment);
   }

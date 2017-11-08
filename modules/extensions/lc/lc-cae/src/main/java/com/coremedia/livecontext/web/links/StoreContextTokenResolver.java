@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.web.links;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.objectserver.web.links.TokenResolver;
 import org.springframework.core.annotation.Order;
 
@@ -14,10 +14,10 @@ public class StoreContextTokenResolver implements TokenResolver {
 
   @Override
   public String resolveToken(String token, Object target, HttpServletRequest request) {
-    if (DefaultConnection.get() != null) {
-      StoreContext storeContext = DefaultConnection.get().getStoreContext();
-      return storeContext != null && storeContext.get(token) != null ? String.valueOf(storeContext.get(token)) : null;
-    }
-    return null;
+    return CurrentCommerceConnection.find()
+            .map(CommerceConnection::getStoreContext)
+            .map(storeContext -> storeContext.get(token))
+            .map(String::valueOf)
+            .orElse(null);
   }
 }

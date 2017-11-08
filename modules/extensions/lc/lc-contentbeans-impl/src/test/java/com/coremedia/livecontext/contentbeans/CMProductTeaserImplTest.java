@@ -57,7 +57,8 @@ public class CMProductTeaserImplTest {
 
     when(teaserOverlaySettings.isEnabled()).thenReturn(false);
 
-    when(settingsService.settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, Content.class)).thenReturn(emptyMap());
+    when(settingsService.settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, Content.class))
+            .thenReturn(emptyMap());
     when(settingsService.createProxy(TeaserOverlaySettings.class, Object.class)).thenReturn(teaserOverlaySettings);
 
     testling = new TestCMProductTeaserImpl(content, mock(Product.class));
@@ -109,7 +110,7 @@ public class CMProductTeaserImplTest {
 
     @Override
     public Product getProduct() {
-      return product==null ? super.getProduct() : product;
+      return product == null ? super.getProduct() : product;
     }
   }
 }

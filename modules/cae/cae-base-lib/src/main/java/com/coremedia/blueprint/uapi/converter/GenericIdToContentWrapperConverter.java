@@ -28,12 +28,11 @@ public class GenericIdToContentWrapperConverter implements GenericConverter {
   }
 
   @Override
-  public Object convert(@Nullable Object source, @Nullable TypeDescriptor sourceType, @Nonnull TypeDescriptor targetType) {
+  public Object convert(@Nullable Object source, @Nullable TypeDescriptor sourceType, TypeDescriptor targetType) {
     if (source == null) {
       return null;
     }
 
-    //noinspection ConstantConditions
     if (targetType == null) {
       throw new IllegalArgumentException("Target type must be given, for converting a \"" + source.getClass().getName() + "\"");
     }

@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.cache.Cache;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -16,34 +17,36 @@ public class ProductsByCategoryCacheKey extends AbstractCommerceCacheKey<List<Ma
   private WcCatalogWrapperService wrapperService;
 
   public ProductsByCategoryCacheKey(String id,
-                                    StoreContext storeContext,
+                                    CatalogAlias catalog, StoreContext storeContext,
                                     UserContext userContext,
                                     WcCatalogWrapperService wrapperService,
                                     CommerceCache commerceCache) {
-    super(id, storeContext, userContext, CONFIG_KEY_PRODUCTS_BY_CATEGORY, commerceCache);
+    super(id, catalog, storeContext, userContext, CONFIG_KEY_PRODUCTS_BY_CATEGORY, commerceCache);
     this.wrapperService = wrapperService;
   }
 
   @Override
   public List<Map<String, Object>> computeValue(Cache cache) {
-    return wrapperService.findProductsByCategoryId(id, storeContext, userContext);
+    return wrapperService.findProductsByCategoryId(id, catalogAlias, storeContext, userContext);
   }
 
   @Override
   public void addExplicitDependency(List<Map<String, Object>> wcProducts) {
-    if (wcProducts != null &&
-            !wcProducts.isEmpty() &&
-            DataMapHelper.getValueForKey(wcProducts.get(0), "parentCatalogGroupID[0]") != null) {
-      Cache.dependencyOn(DataMapHelper.getValueForKey(wcProducts.get(0), "parentCatalogGroupID[0]", String.class));
+    if (wcProducts == null || wcProducts.isEmpty()) {
+      return;
+    }
+
+    Map<String, Object> firstWcProduct = wcProducts.get(0);
+    if (DataMapHelper.getValueForKey(firstWcProduct, "parentCatalogGroupID[0]") != null) {
+      Cache.dependencyOn(DataMapHelper.getValueForKey(firstWcProduct, "parentCatalogGroupID[0]", String.class));
     }
   }
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency() + ":" +
+    return id + ":" + catalogAlias + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
+            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency() + ":" +
             storeContext.getWorkspaceId() + ":" + Arrays.toString(storeContext.getContractIds()) + ":" +
             Arrays.toString(storeContext.getContractIdsForPreview());
   }
-
 }

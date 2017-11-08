@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMCollection folder="/Sites/Calista/United States/English/Editorial/Content/Fashion" name="Summer Dresses Collection">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+<link href="../../../Options/Viewtypes/CMChannel/landscape.xml" path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/landscape"/>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<items>
+<link href="Fashions%20fade%2C%20style%20is%20eternal.xml" path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/Fashions%20fade%2C%20style%20is%20eternal"/>
+<link href="The%20difference%20between%20style%20and%20fashion.xml" path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion"/>
+</items>
+</CMCollection>

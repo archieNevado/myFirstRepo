@@ -1,37 +1,40 @@
 package com.coremedia.livecontext.ecommerce.ibm.event;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.event.InvalidationPropagator;
 import com.coremedia.livecontext.ecommerce.event.InvalidationService;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmService;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CATEGORY_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CLEAR_ALL_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.MARKETING_SPOT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.PRODUCT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.SEGMENT_EVENT;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findValueForKey;
 import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.getValueForKey;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Service bean for polling invalidations from WCS.
  * All invalidation events are propagated to a list of {@link InvalidationPropagator}
  */
-class InvalidationServiceImpl implements InvalidationService {
+class InvalidationServiceImpl extends AbstractIbmService implements InvalidationService {
 
   private static final Logger LOG = LoggerFactory.getLogger(InvalidationServiceImpl.class);
 
@@ -55,10 +58,9 @@ class InvalidationServiceImpl implements InvalidationService {
     this.chunkSize = chunkSize;
   }
 
+  @Override
   @Nonnull
-  public List<InvalidationEvent> getInvalidations(long timestamp) throws CommerceException {
-
-    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
+  public List<InvalidationEvent> getInvalidations(long timestamp, @Nonnull StoreContext storeContext) {
     // the invalidation thread would never be healthy again if a network error had occurred previously
     StoreContextHelper.setCommerceSystemIsUnavailable(storeContext, false);
 
@@ -71,31 +73,36 @@ class InvalidationServiceImpl implements InvalidationService {
     Map<String, Object> cacheInvalidations = wcInvalidationWrapperService.getCacheInvalidations(
             timestamp, maxWaitInMilliseconds, chunkSize, storeContext);
     List<Map<String, Object>> invalidations = getValueForKey(cacheInvalidations, "invalidations", List.class);
-    long lastInvalidationTimestamp = getValueForKey(cacheInvalidations, "lastInvalidation", -1L);
-    if (invalidations != null && !invalidations.isEmpty()) {
-      // the list to return using API classes
-      List<InvalidationEvent> commerceCacheInvalidations = new ArrayList<>();
-      for (Map<String, Object> invalidation : invalidations) {
-        commerceCacheInvalidations.add(convertEvent(invalidation, lastInvalidationTimestamp));
-      }
-      return commerceCacheInvalidations;
+    if (invalidations == null || invalidations.isEmpty()) {
+      return emptyList();
     }
-    return Collections.emptyList();
+
+    long lastInvalidationTimestamp = findValueForKey(cacheInvalidations, "lastInvalidation", Long.class).orElse(-1L);
+
+    // the list to return using API classes
+    return invalidations.stream()
+            .filter(Objects::nonNull)
+            .map(invalidation -> convertEvent(invalidation, lastInvalidationTimestamp))
+            .collect(toList());
   }
 
-  private StoreContext restoreStoreContext(StoreContext storeContext) {
+  @Nonnull
+  private static StoreContext restoreStoreContext(@Nonnull StoreContext storeContext) {
     String siteId = storeContext.getSiteId();
     LOG.debug("Invalid store context found for site: {}, trying to restore...", siteId);
     try {
-      CommerceConnection commerceConnection = DefaultConnection.get();
+      CommerceConnection commerceConnection = CurrentCommerceConnection.find().orElse(null);
       if (commerceConnection != null) {
         StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
         StoreContext storeContextNew = storeContextProvider.findContextBySiteId(siteId);
         StoreContextHelper.setCurrentContext(storeContextNew);
         LOG.debug("Store context restored: {}", storeContextNew);
+
+        // Store context won't be `null` here as `StoreContextHelper.setCurrentContext`
+        // would have raised an exception.
+        //noinspection ConstantConditions
         return storeContextNew;
-      }
-      else {
+      } else {
         LOG.warn("Store context restore was not successful, commerce connection is null for site {}", siteId);
       }
     } catch (InvalidContextException e) {
@@ -106,70 +113,45 @@ class InvalidationServiceImpl implements InvalidationService {
 
   @Nonnull
   @Override
-  public String getServiceEndpointId() {
-    String serviceEndpointId = null;
-    if (wcInvalidationWrapperService.getRestConnector() != null) {
-      serviceEndpointId = wcInvalidationWrapperService.getRestConnector().getServiceEndpoint(StoreContextHelper.getCurrentContext());
-    }
-    return serviceEndpointId != null ? serviceEndpointId : "unknown";
+  public String getServiceEndpointId(@Nonnull StoreContext storeContext) {
+    return Optional.ofNullable(wcInvalidationWrapperService.getRestConnector())
+            .map(restConnector -> restConnector.getServiceEndpoint(storeContext))
+            .orElse("unknown");
   }
 
-  InvalidationEvent convertEvent(Map<String, Object> event, long lastTimestamp) {
-    if (event != null) {
-      String timestampStr = getValueForKey(event, "timestamp", String.class);
-      long timestamp = lastTimestamp;
-      if (timestampStr != null) {
-        timestamp = Long.parseLong(timestampStr);
+  @Nonnull
+  InvalidationEvent convertEvent(@Nonnull Map<String, Object> event, long lastTimestamp) {
+    long timestamp = findValueForKey(event, "timestamp", String.class)
+            .map(Long::parseLong)
+            .orElse(lastTimestamp);
+
+    String contentType = getStringValueForKey(event, "contentType");
+    if (contentType != null) {
+      switch (contentType) {
+        case CONTENT_IDENTIFIER_CLEAR_ALL:
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), CLEAR_ALL_EVENT, timestamp
+          );
+        case CONTENT_IDENTIFIER_PRODUCT:
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), PRODUCT_EVENT, timestamp
+          );
+        case CONTENT_IDENTIFIER_CATEGORY: // same as top category
+        case CONTENT_IDENTIFIER_TOP_CATEGORY:
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), CATEGORY_EVENT, timestamp
+          );
+        case CONTENT_IDENTIFIER_MARKETING_SPOT:
+          return new InvalidationEvent(getStringValueForKey(event, "name"), MARKETING_SPOT_EVENT, timestamp
+          );
+        case CONTENT_IDENTIFIER_SEGMENT:
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), SEGMENT_EVENT, timestamp
+          );
       }
-      String contentType = getValueForKey(event, "contentType", String.class);
-      if (contentType != null) {
-        switch (contentType) {
-          case CONTENT_IDENTIFIER_CLEAR_ALL:
-            return new InvalidationEvent(
-                    getValueForKey(event, "techId", String.class),
-                    getValueForKey(event, "techId", String.class),
-                    getValueForKey(event, "name", String.class),
-                    CLEAR_ALL_EVENT, timestamp
-            );
-          case CONTENT_IDENTIFIER_PRODUCT:
-            return new InvalidationEvent(
-                    CommerceIdHelper.formatProductTechId(getValueForKey(event, "techId", String.class)),
-                    getValueForKey(event, "techId", String.class),
-                    getValueForKey(event, "name", String.class),
-                    PRODUCT_EVENT, timestamp
-            );
-          case CONTENT_IDENTIFIER_CATEGORY: // same as top category
-          case CONTENT_IDENTIFIER_TOP_CATEGORY:
-            return new InvalidationEvent(
-                    CommerceIdHelper.formatCategoryTechId(getValueForKey(event, "techId", String.class)),
-                    getValueForKey(event, "techId", String.class),
-                    getValueForKey(event, "name", String.class),
-                    CATEGORY_EVENT, timestamp
-            );
-          case CONTENT_IDENTIFIER_MARKETING_SPOT:
-            return new InvalidationEvent(
-                    CommerceIdHelper.formatMarketingSpotId(getValueForKey(event, "name", String.class)),
-                    getValueForKey(event, "name", String.class),
-                    getValueForKey(event, "name", String.class),
-                    MARKETING_SPOT_EVENT, timestamp
-            );
-          case CONTENT_IDENTIFIER_SEGMENT:
-            return new InvalidationEvent(
-                    CommerceIdHelper.formatSegmentId(getValueForKey(event, "techId", String.class)),
-                    getValueForKey(event, "techId", String.class),
-                    getValueForKey(event, "name", String.class),
-                    SEGMENT_EVENT, timestamp
-            );
-        }
-      }
-      return new InvalidationEvent(
-              getValueForKey(event, "techId", String.class),
-              getValueForKey(event, "techId", String.class),
-              getValueForKey(event, "name", String.class),
-              null, timestamp
-      );
     }
-    return null;
+
+    return new InvalidationEvent(getStringValueForKey(event, "techId"), null, timestamp);
   }
 
+  @Nullable
+  private static String getStringValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
+    return getValueForKey(map, key, String.class);
+  }
 }

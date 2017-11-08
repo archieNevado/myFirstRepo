@@ -26,9 +26,9 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.coremedia.livecontext.feeder.CommerceItemsPopulator.TYPE_LINKABLE;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -91,6 +91,6 @@ public class CommerceItemsPopulatorTest {
     when(CommerceReferenceHelper.getExternalIds(content)).thenReturn(Collections.<String>emptyList());
 
     testling.populate(feedable, content);
-    verify(feedable, never()).setElement(anyString(), anyObject(), anyMap());
+    verify(feedable, never()).setElement(anyString(), any(), anyMap());
   }
 }

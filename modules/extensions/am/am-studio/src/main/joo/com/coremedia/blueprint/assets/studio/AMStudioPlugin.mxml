@@ -60,11 +60,11 @@
             <editor:ListViewCreationDateColumn width="120"
                                                sortable="true"
                                                u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
+            <editor:FreshnessColumn sortable="true"
+                                    hidden="true"/>
             <editor:ListViewStatusColumn width="46"
                                          sortable="true"
                                          u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-            <editor:FreshnessColumn sortable="true"
-                                    hidden="true"/>
           </editor:repositoryListViewColumns>
 
           <editor:searchListViewColumns>
@@ -78,13 +78,13 @@
             <editor:ListViewCreationDateColumn sortable="true"
                                                width="120"
                                                u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
-            <editor:ListViewStatusColumn width="46"
-                                         sortable="true"
-                                         u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
             <editor:FreshnessColumn sortable="true"
                                     hidden="true"
                                     u:defaultSortColumn="true"
                                     u:defaultSortDirection="desc"/>
+            <editor:ListViewStatusColumn width="46"
+                                         sortable="true"
+                                         u:extendOrderBy="{BlueprintFormsStudioPluginBase.extendOrderByName}"/>
           </editor:searchListViewColumns>
         </editor:ConfigureListViewPlugin>
       </editor:plugins>

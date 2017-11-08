@@ -24,12 +24,11 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
@@ -89,8 +88,7 @@ public class AssetInvalidationWriteInterceptorTest {
     testling.intercept(contentWriteRequest);
 
     List<String> expected = Arrays.asList("d", "e", "b", "a");
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)),
-            eq(commerceConnection));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)));
   }
 
   @Test
@@ -104,7 +102,6 @@ public class AssetInvalidationWriteInterceptorTest {
     testling.intercept(contentWriteRequest);
 
     List<String> expected = Arrays.asList("a", "b", "c");
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)),
-            eq(commerceConnection));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)));
   }
 }

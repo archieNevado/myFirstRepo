@@ -17,11 +17,6 @@
           location="classpath:/com.coremedia.livecontext.ecommerce.ibm.service/test-commerce-services.properties"
           system-properties-mode="OVERRIDE"/>
 
-  <bean id="sitesService" class="com.coremedia.cap.multisite.impl.SitesServiceImpl">
-    <property name="capConnection" ref="connection"/>
-    <property name="siteModel" ref="siteModel"/>
-  </bean>
-
   <bean id="siteModel" class="com.coremedia.blueprint.base.multisite.BlueprintSiteModel">
     <property name="siteIndicatorDocumentType" value="CMSite"/>
     <property name="siteIndicatorDepth" value="1"/>
@@ -45,6 +40,10 @@
   </bean>
 
   <bean id="testConfig" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig"/>
+
+  <util:map id="aliasMapping">
+    <entry key="catalog" value="67890"/>
+  </util:map>
 
   <bean id="testStoreContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.StoreContextProviderImpl">
     <property name="sitesService" ref="sitesService"/>

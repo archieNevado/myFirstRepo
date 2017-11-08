@@ -1,14 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.contract;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
@@ -20,14 +18,19 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CONTRACT;
+import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 public class ContractServiceImpl implements ContractService {
+
   private static final Logger LOG = LoggerFactory.getLogger(ContractServiceImpl.class);
 
   private WcContractWrapperService contractWrapperService;
@@ -38,74 +41,86 @@ public class ContractServiceImpl implements ContractService {
   @Nullable
   @Override
   @SuppressWarnings("unchecked")
-  public Contract findContractById(@Nonnull String id) throws CommerceException {
-    Map<String, Object> contract = (Map<String, Object>) commerceCache.get(
-            new ContractCacheKey(CommerceIdHelper.formatContractId(id),
-                    StoreContextHelper.getCurrentContext(), UserContextHelper.getCurrentContext(),
-                    contractWrapperService, commerceCache));
+  public Contract findContractById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+    UserContext userContext = UserContextHelper.getCurrentContext();
+
+    ContractCacheKey contractCacheKey = new ContractCacheKey(id, storeContext, userContext,
+            contractWrapperService, commerceCache);
+
+    Map<String, Object> contract = commerceCache.get(contractCacheKey);
+    if (contract == null) {
+      return null;
+    }
+
     return createContractBeanFor(contract);
   }
 
+  @Nonnull
   @Override
-  public Collection<Contract> findContractIdsForUser(UserContext userContext, StoreContext storeContext) throws CommerceException {
+  public Collection<Contract> findContractIdsForUser(@Nonnull UserContext userContext, @Nonnull StoreContext storeContext) {
     return findContractIdsForUser(userContext, storeContext, null);
   }
 
+  @Nonnull
   @Override
-  public Collection<Contract> findContractIdsForUser(UserContext userContext, StoreContext storeContext, String organizationId) throws CommerceException {
-    if (storeContext == null)
-      storeContext = StoreContextHelper.getCurrentContext();
+  public Collection<Contract> findContractIdsForUser(@Nonnull UserContext userContext, @Nonnull StoreContext storeContext,
+                                                     @Nullable String organizationId) {
 
-    Map<String, Object> contractMap = (Map<String, Object>) commerceCache.get(new ContractsByUserCacheKey(userContext,
-            storeContext,
-            organizationId,
-            contractWrapperService,
-            commerceCache));
+    ContractsByUserCacheKey contractsByUserCacheKey = new ContractsByUserCacheKey(userContext, storeContext,
+            organizationId, contractWrapperService, commerceCache);
+    Map<String, Object> contractMap = commerceCache.get(contractsByUserCacheKey);
 
     Map contracts = DataMapHelper.getValueForKey(contractMap, "contracts", Map.class);
+    if (contracts == null) {
+      return emptyList();
+    }
+
     return createContractBeansFor(contracts);
   }
 
+  @Nonnull
   @Override
-  public Collection<Contract> findContractIdsForServiceUser(StoreContext storeContext) throws CommerceException {
-    if (contractPreviewServiceUserName != null){
-      return findContractIdsForUser(UserContextHelper.createContext(contractPreviewServiceUserName, null), storeContext);
-    } else {
+  public Collection<Contract> findContractIdsForServiceUser(StoreContext storeContext) {
+    if (contractPreviewServiceUserName == null) {
       LOG.warn("No service user for contract preview configured for ContractService");
+      return emptyList();
     }
-    return Collections.EMPTY_LIST;
+
+    UserContext userContext = UserContext.builder().withUserName(contractPreviewServiceUserName).build();
+    return findContractIdsForUser(userContext, storeContext);
   }
 
-  protected Contract createContractBeanFor(Map<String, Object> contractMap) {
-    if (contractMap != null && !contractMap.isEmpty()) {
-      String id = CommerceIdHelper.formatContractId(String.valueOf(contractMap.get("referenceNumber")));
-      if (CommerceIdHelper.isContractId(id)) {
-        Contract contract = (Contract) commerceBeanFactory.createBeanFor(id, StoreContextHelper.getCurrentContext());
-        ((AbstractIbmCommerceBean) contract).setDelegate(contractMap);
-        return contract;
-      }
+  @Nullable
+  private Contract createContractBeanFor(@Nonnull Map<String, Object> contractMap) {
+    if (contractMap.isEmpty()) {
+      return null;
     }
-    return null;
+
+    String externalId = String.valueOf(contractMap.get("referenceNumber"));
+    CommerceId commerceId = toContractId(externalId);
+    Contract contract = (Contract) commerceBeanFactory.createBeanFor(commerceId, StoreContextHelper.getCurrentContext());
+    ((AbstractIbmCommerceBean) contract).setDelegate(contractMap);
+    return contract;
   }
 
+  static CommerceId toContractId(String externalId) {
+    return commerceId(CONTRACT).withExternalId(externalId).build();
+  }
+
+  @Nonnull
   @SuppressWarnings("unchecked")
-  protected List<Contract> createContractBeansFor(Map<String, Object> contractsMap) {
-    if (contractsMap == null || contractsMap.isEmpty()) {
-      return Collections.emptyList();
+  private List<Contract> createContractBeansFor(@Nonnull Map<String, Object> contractsMap) {
+    if (contractsMap.isEmpty()) {
+      return emptyList();
     }
-    List<Contract> result = new ArrayList<>(contractsMap.size());
-    Iterator entries = contractsMap.entrySet().iterator();
-    while (entries.hasNext()) {
-      Map.Entry thisEntry = (Map.Entry) entries.next();
-      Object key = thisEntry.getKey();
 
-      String id = CommerceIdHelper.formatContractId(String.valueOf(key));
-      if (CommerceIdHelper.isContractId(id)) {
-        CommerceBean contractBean = commerceBeanFactory.createBeanFor(id, StoreContextHelper.getCurrentContext());
-        result.add((Contract) contractBean);
-      }
-    }
-    return Collections.unmodifiableList(result);
+    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+
+    return contractsMap.keySet().stream()
+            .map(ContractServiceImpl::toContractId)
+            .map(id -> commerceBeanFactory.createBeanFor(id, currentContext))
+            .map(Contract.class::cast)
+            .collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
 
   @Required
@@ -128,7 +143,7 @@ public class ContractServiceImpl implements ContractService {
   }
 
   @VisibleForTesting
-  public String getContractPreviewServiceUserName() {
+  String getContractPreviewServiceUserName() {
     return contractPreviewServiceUserName;
   }
 }

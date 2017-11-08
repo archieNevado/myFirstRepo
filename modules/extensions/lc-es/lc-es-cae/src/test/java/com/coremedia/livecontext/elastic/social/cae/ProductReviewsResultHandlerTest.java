@@ -1,7 +1,10 @@
 package com.coremedia.livecontext.elastic.social.cae;
 
+import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.i18n.PageResourceBundleFactory;
@@ -16,16 +19,12 @@ import com.coremedia.blueprint.elastic.social.cae.controller.ContributionMessage
 import com.coremedia.blueprint.elastic.social.cae.controller.HandlerInfo;
 import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
-import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
-import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
@@ -45,7 +44,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -60,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.coremedia.elastic.social.api.ContributionType.ANONYMOUS;
 import static com.coremedia.elastic.social.api.ContributionType.DISABLED;
 import static com.coremedia.elastic.social.api.ContributionType.REGISTERED;
@@ -67,21 +67,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyVararg;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ProductReviewsResultHandlerTest {
 
   private String contextId = "5678";
-  private String targetId = "1234";
+  private String targetId = "vendor:///catalog/product/1234";
   private String text = "test test test test test test test";
   private String title = "title";
   private int rating = 5;
@@ -208,7 +208,7 @@ public class ProductReviewsResultHandlerTest {
 
     String siteId = "123";
     when(site.getId()).thenReturn(siteId);
-    when(elasticSocialPlugin.getElasticSocialConfiguration(anyVararg())).thenReturn(elasticSocialConfiguration);
+    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
     when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
     when(elasticSocialConfiguration.isReviewingEnabled()).thenReturn(true);
@@ -216,15 +216,15 @@ public class ProductReviewsResultHandlerTest {
     when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(true);
 
     resourceBundle = new MockResourceBundle();
-    when(resourceBundleFactory.resourceBundle(any(Navigation.class), any(User.class))).thenReturn(resourceBundle);
+    when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
 
-    when(catalogService.findProductById(anyString())).thenReturn(product);
+    when(catalogService.findProductById(any(), any(StoreContext.class))).thenReturn(product);
     when(storeContext.getSiteId()).thenReturn(siteId);
     when(storeContextProvider.createContext(site)).thenReturn(storeContext);
 
     when(request.getAttribute(SiteHelper.SITE_KEY)).thenReturn(site);
 
-    DefaultConnection.set(commerceConnection);
+    CurrentCommerceConnection.set(commerceConnection);
     when(commerceConnection.getStoreContext()).thenReturn(storeContext);
     when(commerceConnection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(commerceConnection.getIdProvider()).thenReturn(new BaseCommerceIdProvider("vendor"));
@@ -235,7 +235,7 @@ public class ProductReviewsResultHandlerTest {
   @After
   public void cleanUp(){
     UserContext.clear();
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   @Test
@@ -269,7 +269,7 @@ public class ProductReviewsResultHandlerTest {
 
   @Test
   public void createReview() {
-    when(elasticSocialService.createReview(eq(user), any(Product.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyListOf(Blob.class), any(Navigation.class))).thenReturn(review);
+    when(elasticSocialService.createReview(eq(user), any(Product.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), nullable(List.class), any(Navigation.class))).thenReturn(review);
     when(elasticSocialConfiguration.getReviewModerationType()).thenReturn(ModerationType.POST_MODERATION);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
 
@@ -277,13 +277,13 @@ public class ProductReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertTrue(resultModel.isSuccess());
-    verify(elasticSocialService).createReview(eq(user), any(Product.class), eq(text),  eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService).createReview(eq(user), any(Product.class), eq(text),  eq(title), eq(rating), eq(ModerationType.POST_MODERATION), nullable(List.class), any(Navigation.class));
     verifyMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
   public void createReviewRatingNull() {
-    when(elasticSocialService.createReview(eq(user), any(Product.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyListOf(Blob.class), any(Navigation.class))).thenReturn(review);
+    when(elasticSocialService.createReview(eq(user), any(Product.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyList(), any(Navigation.class))).thenReturn(review);
     when(elasticSocialConfiguration.getReviewModerationType()).thenReturn(ModerationType.POST_MODERATION);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, null, request);
 
@@ -291,7 +291,7 @@ public class ProductReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
-    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
     verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
@@ -305,7 +305,7 @@ public class ProductReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
-    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
     verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
@@ -320,7 +320,7 @@ public class ProductReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
-    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
     verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
@@ -336,7 +336,7 @@ public class ProductReviewsResultHandlerTest {
   }
 
   @Test
-  public void buildFragmentLink() throws URISyntaxException {
+  public void buildLink() throws URISyntaxException {
     Map<String, Object> linkParameters = new HashMap<>();
     List<String> pathList = new ArrayList<>();
     String path = "path/" + contextId;
@@ -348,28 +348,10 @@ public class ProductReviewsResultHandlerTest {
     when(navigationSegmentsUriHelper.getPathList(cmNavigation)).thenReturn(pathList);
     URI uri = new URI(path);
     when(uriTemplate.expand(any(String.class), any(Integer.class), any())).thenReturn(uri);
+
+    when(product.getReference()).thenReturn(parseCommerceIdOrThrow(targetId));
     ProductReviewsResult productReviewsResult = new ProductReviewsResult(product);
-    UriComponents uriComponents = handler.buildFragmentLink(productReviewsResult, uriTemplate, linkParameters, request);
-
-    assertNotNull(uriComponents);
-    assertEquals(path, uriComponents.getPath());
-  }
-
-  @Test
-  public void buildReviewInfoLink() throws URISyntaxException {
-    List<String> pathList = new ArrayList<>();
-    String path = "path/" + contextId;
-    pathList.add(path);
-    when(productReviewsResult.getTarget()).thenReturn(product);
-    when(contextHelper.currentSiteContext()).thenReturn(cmNavigation);
-    when(cmNavigation.getContext()).thenReturn(context);
-    when(context.getContentId()).thenReturn(Integer.parseInt(contextId));
-    when(navigationSegmentsUriHelper.getPathList(cmNavigation)).thenReturn(pathList);
-    URI uri = new URI(path);
-    when(uriTemplate.expand(any(String.class), any(Integer.class), any())).thenReturn(uri);
-
-    ProductReviewsResult productReviewsResult = new ProductReviewsResult(product);
-    UriComponents uriComponents = handler.buildInfoLink(productReviewsResult, uriTemplate, request);
+    UriComponents uriComponents = handler.buildLink(productReviewsResult, uriTemplate, linkParameters, request);
 
     assertNotNull(uriComponents);
     assertEquals(path, uriComponents.getPath());

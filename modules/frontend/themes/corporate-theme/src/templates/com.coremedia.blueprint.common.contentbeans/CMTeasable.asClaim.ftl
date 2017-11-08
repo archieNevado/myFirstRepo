@@ -4,10 +4,11 @@
 
 <#assign cssClasses = cm.localParameter("cssClass", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <div class="cm-claim thumbnail ${cssClasses}"<@cm.metadata self.content />>
   <#-- picture -->
-  <@bp.optionalLink href="${link}">
+  <@bp.optionalLink href="${link}" attr={"target":target}>
     <#if self.picture?has_content>
       <@cm.include self=self.picture params={
       "limitAspectRatios": [ "portrait_ratio1x1" ],
@@ -23,7 +24,7 @@
   </@bp.optionalLink>
   <div class="caption">
     <#-- headline -->
-    <@bp.optionalLink href="${link}">
+    <@bp.optionalLink href="${link}" attr={"target":target}>
       <h3 class="cm-claim__headline thumbnail-label"<@cm.metadata "properties.teaserTitle" />>
         <span>
           <#if link?has_content>

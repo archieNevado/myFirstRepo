@@ -1,8 +1,9 @@
 package com.coremedia.catalog.studio.lib.validators;
 
 import com.coremedia.blueprint.base.ecommerce.catalog.CmsCategory;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -46,7 +47,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
@@ -67,13 +68,18 @@ public class RootCategoryInvalidationSourceTest {
   private ContentType cmCategory;
   private Content rootCategory;
   private Version initialRootDocumentVersion;
+  private MockCommerceEnvBuilder envBuilder;
 
   @Before
   public void setup() {
-    MockCommerceEnvBuilder.create().setupEnv();
-    DefaultConnection.get().getStoreContext().put(StoreContextImpl.SITE, "theSiteId");
+    envBuilder = MockCommerceEnvBuilder.create();
+    envBuilder.setupEnv();
+
+    CurrentCommerceConnection.get().getStoreContext().put(StoreContextImpl.SITE, "theSiteId");
+
     cmCategory = contentRepository.getContentType("CMCategory");
-    site = sitesService.getSite("theSiteId");
+    site = sitesService.findSite("theSiteId")
+            .orElseThrow(() -> new IllegalStateException("Site with ID 'theSiteId' is missing."));
     initialRootDocumentVersion = site.getSiteRootDocument().getCheckedInVersion();
     rootCategory = createAndConfigureRootCategory("rootCategory");
   }
@@ -101,6 +107,7 @@ public class RootCategoryInvalidationSourceTest {
     if(!rootCategory.isDestroyed()) {
       rootCategory.destroy();
     }
+    envBuilder.tearDownEnv();
   }
 
   @Test
@@ -157,7 +164,8 @@ public class RootCategoryInvalidationSourceTest {
     assertEquals(newRootCategory, ((CmsCategory) siteRootCategory).getContent());
     Set<String> uris = invalidations.getInvalidations();
     assertEquals(2, uris.size());
-    assertTrue(uris.contains(siteRootCategory.getId()));
+    String id = CommerceIdFormatterHelper.format(siteRootCategory.getId());
+    assertTrue(uris.contains(id));
   }
 
   @Configuration
@@ -189,7 +197,9 @@ public class RootCategoryInvalidationSourceTest {
         public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
           Object entity = invocationOnMock.getArguments()[0];
           if(entity instanceof Category) {
-            return new URI(((Category)entity).getId());
+            Category category = (Category) entity;
+            String format = CommerceIdFormatterHelper.format(category.getId());
+            return new URI(format);
           }
           return null;
         }

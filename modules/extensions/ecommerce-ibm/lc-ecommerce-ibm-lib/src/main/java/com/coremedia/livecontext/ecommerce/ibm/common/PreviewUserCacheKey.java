@@ -25,7 +25,7 @@ class PreviewUserCacheKey extends AbstractCommerceCacheKey<WcCredentials> {
 
   @Override
   public WcCredentials computeValue(Cache cache) {
-    return loginService.loginIdentity(username, password);
+    return loginService.loginIdentity(username, password, storeContext);
   }
 
   @Override

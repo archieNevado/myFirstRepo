@@ -1,6 +1,10 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 
@@ -30,7 +34,7 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
       throw new CatalogBeanNotFoundRestException("Could not load contract bean.");
     }
 
-    representation.setId(entity.getId());
+    representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setName(entity.getName());
     representation.setExternalId(entity.getExternalId());
     representation.setExternalTechId(entity.getExternalTechId());
@@ -39,34 +43,42 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
   @Override
   protected Contract doGetEntity() {
     ContractService contractService = getContractService();
-    if (contractService != null) {
-      //iterating all eligible contracts is a workaround since the findContractById call does not consider the storeId.
-      //therefor we make use of the eligible call since it does consider the storeId.
-      Collection<Contract> contracts = contractService.findContractIdsForServiceUser(getStoreContext());
+    if (contractService == null) {
+      return null;
+    }
+
+    String id = getId();
+
+    // Iterating all eligible contracts is a workaround since the
+    // `findContractById` call does not consider the store ID.
+    // Therefor we make use of the eligible call since it does consider
+    // the store ID.
+    StoreContext storeContext = getStoreContext();
+    if (storeContext != null) {
+      Collection<Contract> contracts = contractService.findContractIdsForServiceUser(storeContext);
       for (Contract contract : contracts) {
-        if (contract.getExternalId() != null && contract.getExternalId().equals(getId())) {
-          return contractService.findContractById(getId());
+        String externalId = contract.getExternalId();
+        if (externalId != null && externalId.equals(id)) {
+          return contractService.findContractById(contract.getId(), storeContext);
         }
       }
     }
+
     return null;
   }
 
   @Override
   public void setEntity(Contract contract) {
-    if (contract.getId() != null) {
-      String extId = getExternalIdFromId(contract.getId());
-      setId(extId);
-    } else {
-      setId(contract.getExternalId());
-    }
-    setSiteId(contract.getContext().getSiteId());
-    setWorkspaceId(contract.getContext().getWorkspaceId());
+    CommerceId contractId = contract.getId();
+    String externalId = CommerceIdHelper.getExternalIdOrThrow(contractId);
+    setId(externalId);
+
+    StoreContext context = contract.getContext();
+    setSiteId(context.getSiteId());
+    setWorkspaceId(context.getWorkspaceId());
   }
 
   public ContractService getContractService() {
-    return DefaultConnection.get().getContractService();
+    return CurrentCommerceConnection.get().getContractService();
   }
-
-
 }

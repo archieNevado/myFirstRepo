@@ -3,9 +3,12 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 class ProductAttributeImpl implements ProductAttribute {
 
@@ -58,18 +61,16 @@ class ProductAttributeImpl implements ProductAttribute {
 
   @Override
   public List<Object> getValues() {
-    List<Object> result = new ArrayList<>();
     //noinspection unchecked
     List<Map<String, Object>> valueForKey = DataMapHelper.getValueForKey(delegate, "values", List.class);
-    if (valueForKey != null && !valueForKey.isEmpty()) {
-      for (Map<String, Object> item : valueForKey) {
-        Object value = DataMapHelper.getValueForKey(item, "value");
-        if (value != null) {
-          result.add(value);
-        }
-      }
+    if (valueForKey == null || valueForKey.isEmpty()) {
+      return emptyList();
     }
-    return result;
+
+    return valueForKey.stream()
+            .map(item -> DataMapHelper.getValueForKey(item, "value"))
+            .filter(Objects::nonNull)
+            .collect(toList());
   }
 
   @Override

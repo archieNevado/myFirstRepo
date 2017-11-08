@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collection;
 import java.util.Map;
@@ -22,13 +22,13 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyCollectionOf;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyVararg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CMExternalChannelBySiteCacheKeyTest {
 
   @Mock
@@ -55,7 +55,7 @@ public class CMExternalChannelBySiteCacheKeyTest {
   }
 
   void channelsFulfilling(Collection<Content> externalChannels) {
-    when(contentRepository.getQueryService().getContentsFulfilling(anyCollectionOf(Content.class), anyString(), anyVararg()))
+    when(contentRepository.getQueryService().getContentsFulfilling(anyCollection(), anyString(), any()))
             .thenReturn(externalChannels);
   }
 

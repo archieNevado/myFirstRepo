@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
@@ -29,10 +28,12 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,10 +47,12 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
   public static final String URL_PROVIDER_QUERY_PARAMS = "queryParams";
   public static final String URL_PROVIDER_SEO_SEGMENT = "seoSegment";
   public static final String URL_PROVIDER_IS_STUDIO_PREVIEW = "isStudioPreview";
+  public static final String URL_PROVIDER_IS_INITIAL_STUDIO_REQUEST = "isInitialStudioRequest";
   public static final String HAS_PREVIEW_TOKEN = "hasPreviewToken";
   public static final String URL_PROVIDER_SEARCH_TERM = "searchTerm";
   private static final String PRODUCT_ID = "productId";
   private static final String CATEGORY_ID = "categoryId";
+  public static final String CATALOG_ID = "catalogId";
   public static final String P13N_URI_PARAMETER = "p13n_test";
 
   private ResolveContextStrategy resolveContextStrategy;
@@ -110,10 +113,10 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return settingsService;
   }
 
-  protected LiveContextNavigation getNavigationContext(Site site, String seoSegment) {
+  protected LiveContextNavigation getNavigationContext(@Nonnull Site site, @Nonnull CommerceBean commerceBean) {
     try {
-      return resolveContextStrategy.resolveContext(site, seoSegment);
-    } catch (Exception e) {
+      return resolveContextStrategy.resolveContext(site, commerceBean);
+    } catch (Exception ignored) {
       // Do not log, means actually just "not found", does not indicate a problem.
       return null;
     }
@@ -150,66 +153,92 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return UriComponentsHelper.prefixUri(absoluteUrlPrefix, null, originalUri);
   }
 
-  protected Object buildCommerceLinkFor(String urlTemplate, String seoSegments, Map<String, ?> queryParams) {
-    StoreContext currentContext = DefaultConnection.get().getStoreContext();
+  protected Object buildCommerceLinkFor(String urlTemplate, String seoSegments, Map<String, Object> queryParams, StoreContext context) {
     Map<String, Object> newQueryParams = new HashMap<>(queryParams);
 
     Map<String,Object> params = new HashMap<>();
     params.put(URL_PROVIDER_URL_TEMPLATE, urlTemplate);
-    params.put(URL_PROVIDER_STORE_CONTEXT, currentContext);
+    params.put(URL_PROVIDER_STORE_CONTEXT, context);
     params.put(URL_PROVIDER_QUERY_PARAMS, newQueryParams);
     params.put(URL_PROVIDER_SEO_SEGMENT, seoSegments);
     params.put(URL_PROVIDER_IS_STUDIO_PREVIEW, isStudioPreview());
+    params.put(URL_PROVIDER_IS_INITIAL_STUDIO_REQUEST, isInitialStudioRequest());
+    params.put(CATALOG_ID, queryParams.get(CATALOG_ID));
 
     return urlProvider.provideValue(params);
   }
 
   /**
-   * Builds complete, absolute WCS links with query parameters.
-   * Do not postprocess.
+   * To evaluate if the newPreviewSession query parameter has to be applied to a commerce url, the evaluator has to know
+   * if it's the first request triggered by a studio action (e.g. open in tab) or it's a follow up trigger by an author
+   * clicking in the preview.
+   * If it's a request triggered by a studio action an author want's to have a cleared session (no logged in user or
+   * p13n context). If he tests in studio the preview the author want to stay logged in and use the same p13n context.
+   *
+   * @return true if the request was triggered by a studio action.
    */
-  protected Object buildCommerceLinkFor(CommerceBean commerceBean, Map<String, ?> queryParams) {
-    String seoSegments = buildSeoSegmentsFor(commerceBean);
-    if (StringUtils.isBlank(seoSegments)) {
-      queryParams = updateQueryParams(commerceBean, queryParams, seoSegments);
-    }
-    return buildCommerceLinkFor(null, seoSegments, queryParams);
+  public static boolean isInitialStudioRequest() {
+    return PreviewHandler.isStudioPreviewRequest();
   }
 
-  protected Map<String, ?> updateQueryParams(CommerceBean commerceBean, Map<String, ?> queryParams, String seoSegments) {
-    String externalTechId = commerceBean.getExternalTechId();
-    if (queryParams.isEmpty()) {
-      queryParams = new HashMap<>();
-    }
-    Map externalMap = new HashMap<>();
-    if (commerceBean instanceof Category) {
-      externalMap.put(CATEGORY_ID, externalTechId);
-    } else if (commerceBean instanceof Product) {
-      externalMap.put(PRODUCT_ID, externalTechId);
-    }
-    queryParams.putAll(externalMap);
-    return queryParams;
-  }
-
-  protected boolean isPreview() {
-    return contentRepository.isContentManagementServer();
-  }
-
-  protected boolean isStudioPreview() {
-    if(isPreview()) {
+  private boolean isStudioPreview() {
+    if (isPreview()) {
       return isStudioPreviewRequest();
     }
 
     return false;
   }
 
+  /**
+   * Builds complete, absolute WCS links with query parameters.
+   * Do not postprocess.
+   */
+  protected Object buildCommerceLinkFor(CommerceBean commerceBean, Map<String, Object> queryParams) {
+    String seoSegments = buildSeoSegmentsFor(commerceBean);
+    Map<String, Object> params;
+    if (StringUtils.isBlank(seoSegments)) {
+      // build non-seo URL including category/product id
+      params = updateQueryParams(commerceBean, queryParams);
+    } else {
+      // add catalog id for seo URL
+      params = addCatalogIdQueryParam(commerceBean, queryParams);
+    }
+
+    return buildCommerceLinkFor(null, seoSegments, params, commerceBean.getContext());
+  }
+
+  protected Map<String, Object> updateQueryParams(@Nonnull CommerceBean commerceBean,
+                                                  @Nonnull Map<String, Object> queryParams) {
+    String externalTechId = commerceBean.getExternalTechId();
+    Map<String, Object> modifiableQueryParams = new LinkedHashMap<>(queryParams);
+    if (commerceBean instanceof Category) {
+      modifiableQueryParams.put(CATEGORY_ID, externalTechId);
+    } else if (commerceBean instanceof Product) {
+      modifiableQueryParams.put(PRODUCT_ID, externalTechId);
+    }
+    return addCatalogIdQueryParam(commerceBean, queryParams);
+  }
+
+  @Nonnull
+  private Map<String, Object> addCatalogIdQueryParam(@Nonnull CommerceBean commerceBean, @Nonnull Map<String, Object> queryParams) {
+    Map<String, Object> modifiableQueryParams = new LinkedHashMap<>(queryParams);
+    //check if commercebeanlink points to default catalog, if not add catalogId parameter
+    commerceBean.getCatalog().filter(c -> !c.isDefaultCatalog())
+            .ifPresent(catalog -> {
+              modifiableQueryParams.put(CATALOG_ID, catalog.getExternalId());
+            });
+    return modifiableQueryParams;
+  }
+
+  protected boolean isPreview() {
+    return contentRepository.isContentManagementServer();
+  }
+
   public static boolean isStudioPreviewRequest() {
     RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-    return isTrue(requestAttributes.getAttribute(PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW, 0))
-            ||
-            isTrue(requestAttributes.getAttribute(HAS_PREVIEW_TOKEN, 0))
-            ||
-            isTrue(((ServletRequestAttributes) requestAttributes).getRequest().getParameter(P13N_URI_PARAMETER));
+    return isInitialStudioRequest()
+           || isTrue(requestAttributes.getAttribute(HAS_PREVIEW_TOKEN, 0))
+           || isTrue(((ServletRequestAttributes) requestAttributes).getRequest().getParameter(P13N_URI_PARAMETER));
   }
 
   private static boolean isTrue(Object attribute) {

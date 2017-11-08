@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontService;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
@@ -20,7 +21,6 @@ import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -85,9 +85,6 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
   private String prepareStoreFrontUrl(@Nonnull String uri, @Nonnull HttpServletRequest sourceRequest){
     String fullQualifiedUrl = makeAbsolute(uri, !isEmpty(sourceRequest.getParameter(PREVIEW_TOKEN)));
     UriComponentsBuilder ucb = UriComponentsBuilder.fromUriString(fullQualifiedUrl);
-    if (fullQualifiedUrl.contains(CommerceUrlPropertyProvider.NEW_PREVIEW_SESSION_VARIABLE)){
-      ucb.replaceQueryParam(CommerceUrlPropertyProvider.NEW_PREVIEW_SESSION_VARIABLE, Boolean.FALSE.toString());
-    }
     if(sourceRequest.getParameterMap().containsKey(PREVIEW_TOKEN)){
       ucb.queryParam(PREVIEW_TOKEN, sourceRequest.getParameter(PREVIEW_TOKEN)).build().toUriString();
     }
@@ -103,6 +100,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     params.put(CommerceUrlPropertyProvider.URL_TEMPLATE, url);
     params.put(CommerceUrlPropertyProvider.STORE_CONTEXT, StoreContextHelper.getCurrentContext());
     params.put(CommerceUrlPropertyProvider.IS_STUDIO_PREVIEW, isPreview);
+    params.put(CommerceUrlPropertyProvider.IS_INITIAL_STUDIO_REQUEST, false);
     UriComponents uc = (UriComponents) urlProvider.provideValue(params);
     if (uc != null) {
       fullQualifiedUrl = uc.toUriString();
@@ -114,7 +112,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     return fullQualifiedUrl;
   }
 
-  private boolean isAbsoulte(@Nonnull String uri) {
+  private static boolean isAbsoulte(@Nonnull String uri) {
     try {
       return new URI(uri).isAbsolute();
     } catch (URISyntaxException e) {
@@ -125,7 +123,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     }
   }
 
-  private boolean isProtocolRelative(@Nonnull String uri) {
+  private static boolean isProtocolRelative(@Nonnull String uri) {
     return uri.startsWith("//");
   }
 
@@ -193,13 +191,16 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
   }
 
   protected String resolveStoreId() {
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    return connection.getStoreContext().getStoreId();
+    return getStoreContext().getStoreId();
   }
 
   protected String resolveCatalogId() {
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    return connection.getStoreContext().getCatalogId();
+    return getStoreContext().getCatalogId();
+  }
+
+  @Nullable
+  private static StoreContext getStoreContext() {
+    return CurrentCommerceConnection.get().getStoreContext();
   }
 
   private boolean isAnonymousUser(String cookieName, String cookieValue) {
@@ -212,7 +213,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
             && isValid(cookieValue, REGEXP_POSITIVE_NUMBER);
   }
 
-  private boolean isValid(String cookieValue, String validate) {
+  private static boolean isValid(String cookieValue, String validate) {
     if (isBlank(cookieValue)) {
       return false;
     }

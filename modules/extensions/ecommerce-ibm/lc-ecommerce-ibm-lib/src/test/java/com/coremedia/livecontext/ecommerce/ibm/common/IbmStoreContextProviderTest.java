@@ -7,8 +7,6 @@ import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
@@ -21,17 +19,21 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextProviderTest.LocalConfig.PROFILE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,13 +70,24 @@ public class IbmStoreContextProviderTest {
 
   @Test
   public void testFindContextBySiteNameAvailable() {
-    StoreContext context = testling.findContextBySiteName("Helios");
-    assertNotNull(context);
+    String siteName = "Helios";
+    Optional<StoreContext> storeContextOptional = getStoreContextBySiteName(siteName);
+    assertTrue(storeContextOptional.isPresent());
+    StoreContext context = storeContextOptional.get();
     assertEquals("PerfectChefESite", StoreContextHelper.getStoreName(context));
     assertEquals("10202", StoreContextHelper.getStoreId(context));
     assertEquals("10051", StoreContextHelper.getCatalogId(context));
     assertEquals(new Locale("en"), StoreContextHelper.getLocale(context));
     assertEquals(Currency.getInstance("USD"), StoreContextHelper.getCurrency(context));
+  }
+
+  @Nonnull
+  private Optional<StoreContext> getStoreContextBySiteName(String siteName) {
+    return sitesService.getSites()
+            .stream()
+            .filter(site -> siteName.equals(site.getName()))
+            .findFirst()
+            .map(testling::findContextBySite);
   }
 
   @Test
@@ -113,8 +126,8 @@ public class IbmStoreContextProviderTest {
 
   @Test
   public void testFindContextBySiteWrongSite() {
-    StoreContext context = testling.findContextBySiteName("not available");
-    assertNull(context);
+    Optional<StoreContext> storeContextOptional = getStoreContextBySiteName("not available");
+    assertFalse(storeContextOptional.isPresent());
   }
 
   @Test(expected = InvalidContextException.class)
@@ -140,12 +153,10 @@ public class IbmStoreContextProviderTest {
   }
 
   @Nullable
-  private Site getSite(final String siteName) {
-    return FluentIterable.from(sitesService.getSites()).firstMatch(new Predicate<Site>() {
-      @Override
-      public boolean apply(@Nullable Site site) {
-        return site != null && site.getName().equals(siteName);
-      }
-    }).orNull();
+  private Site getSite(String siteName) {
+    return sitesService.getSites().stream()
+            .filter(site -> site.getName().equals(siteName))
+            .findFirst()
+            .orElse(null);
   }
 }

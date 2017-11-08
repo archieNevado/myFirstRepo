@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -22,9 +23,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
+import static java.util.Collections.emptyList;
 
 /**
  * Catalog configuration helpter as a RESTful resource.
@@ -37,6 +40,7 @@ public class CatalogServiceResource {
   private static final String DEFAULT_SEARCH_LIMIT = "-1";
 
   private static final String SEARCH_PARAM_CATEGORY = "category";
+  private static final String SEARCH_PARAM_CATALOG_ALIAS = "catalogAlias";
   private static final String SEARCH_PARAM_SITE_ID = "siteId";
   private static final String SEARCH_PARAM_QUERY = "query";
   private static final String SEARCH_PARAM_LIMIT = "limit";
@@ -49,12 +53,12 @@ public class CatalogServiceResource {
 
   @Nullable
   public CatalogService getCatalogService() {
-    return DefaultConnection.get().getCatalogService();
+    return CurrentCommerceConnection.get().getCatalogService();
   }
 
   @Nullable
   public MarketingSpotService getMarketingSpotService() {
-    return DefaultConnection.get().getMarketingSpotService();
+    return CurrentCommerceConnection.get().getMarketingSpotService();
   }
 
   @GET
@@ -66,25 +70,35 @@ public class CatalogServiceResource {
                                                   @QueryParam(SEARCH_PARAM_ORDER_BY) String orderBy,
                                                   @QueryParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
                                                   @QueryParam(SEARCH_PARAM_CATEGORY) String category,
+                                                  @QueryParam(SEARCH_PARAM_CATALOG_ALIAS) String catalogAlias,
                                                   @QueryParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId) {
-    StoreContext newStoreContextForSite = getStoreContext(siteId, workspaceId);
+    // The site ID in the URL is ignored here, but the `SiteFilter`
+    // should have picked it up so the `CommerceConnectionFilter`
+    // provides a commerce connection based on the site ID.
+
+    StoreContext newStoreContextForSite = getStoreContext(workspaceId);
     if (newStoreContextForSite == null) {
       return null;
     }
 
     newStoreContextForSite.setWorkspaceId(workspaceId);
 
-    Map<String, String> params = getParams(category, limit);
+    Map<String, String> params = getParams(category, catalogAlias, newStoreContextForSite, limit);
     SearchResult<? extends CommerceBean> searchResult = search(query, searchType, newStoreContextForSite, params);
 
     return new CatalogSearchResultRepresentation(searchResult.getSearchResult(), searchResult.getTotalCount());
   }
 
-  private Map<String, String> getParams(String category, int limit) {
+  @Nonnull
+  private Map<String, String> getParams(String category, String catalogAlias, StoreContext storeContext, int limit) {
     Map<String, String> params = new HashMap<>();
 
-    if (!StringUtils.isEmpty(category) && !isRootCategory(category)) {
+    if (!StringUtils.isEmpty(category) && !isRootCategory(category, storeContext)) {
       params.put(CatalogService.SEARCH_PARAM_CATEGORYID, category);
+    }
+
+    if (!StringUtils.isEmpty(catalogAlias)) {
+      params.put(CatalogService.SEARCH_PARAM_CATALOG_ALIAS, catalogAlias);
     }
 
     if (limit > 0) {
@@ -94,7 +108,7 @@ public class CatalogServiceResource {
     return params;
   }
 
-  private boolean isRootCategory(@Nonnull String categoryParam) {
+  private boolean isRootCategory(@Nonnull String categoryParam, StoreContext storeContext) {
     // check if it is our symbolic URL segment for the root category
     // (independent of the particular commerce system)
     if (CategoryResource.ROOT_CATEGORY_ROLE_ID.equals(categoryParam)) {
@@ -103,24 +117,26 @@ public class CatalogServiceResource {
 
     // check if it is the actual id of the root category
     // (depends on the commerce implementation)
-    return categoryParam.equals(getCatalogService().findRootCategory().getId());
+    String rootCategoryId = CommerceIdFormatterHelper.format(getCatalogService().findRootCategory(DEFAULT_CATALOG_ALIAS, storeContext).getId());
+    return categoryParam.equals(rootCategoryId);
   }
 
   private SearchResult<? extends CommerceBean> search(String query, String searchType,
-                                                      StoreContext newStoreContextForSite, Map<String, String> params) {
+                                                      @Nonnull StoreContext newStoreContextForSite,
+                                                      @Nonnull Map<String, String> params) {
     if (searchType != null && searchType.equals(SEARCH_TYPE_PRODUCT_VARIANT)) {
-      return getCatalogService().withStoreContext(newStoreContextForSite).searchProductVariants(query, params);
+      return getCatalogService().searchProductVariants(query, params, newStoreContextForSite);
     } else if (searchType != null && searchType.equals(SEARCH_TYPE_MARKETING_SPOTS)) {
       if (getMarketingSpotService() == null) {
         SearchResult<? extends CommerceBean> searchResult = new SearchResult<>();
-        searchResult.setSearchResult(Collections.EMPTY_LIST);
+        searchResult.setSearchResult(emptyList());
         searchResult.setTotalCount(0);
         return searchResult;
       } else {
-        return getMarketingSpotService().searchMarketingSpots(query, params); //TODO switch store context check
+        return getMarketingSpotService().searchMarketingSpots(query, params, newStoreContextForSite);
       }
     } else {// default: Product
-      return getCatalogService().withStoreContext(newStoreContextForSite).searchProducts(query, params);
+      return getCatalogService().withStoreContext(newStoreContextForSite).searchProducts(query, params, newStoreContextForSite);
     }
   }
 
@@ -138,23 +154,16 @@ public class CatalogServiceResource {
   }
 
   @Nullable
-  protected StoreContext getStoreContext(String siteId, String workspaceId) {
-    CommerceConnection connection = getConnection(siteId);
-    if (connection == null) {
-      return null;
-    }
+  protected StoreContext getStoreContext(String workspaceId) {
+    StoreContext storeContext = CurrentCommerceConnection.find()
+            .map(CommerceConnection::getStoreContext)
+            .orElse(null);
 
-    StoreContext storeContext = connection.getStoreContext();
     if (storeContext == null) {
       return null;
     }
 
     storeContext.setWorkspaceId(workspaceId);
     return storeContext;
-  }
-
-  @Nullable
-  protected CommerceConnection getConnection(String siteId) {
-    return DefaultConnection.get();
   }
 }

@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.pagegrid;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGrid;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
 import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceImpl;
@@ -8,13 +9,13 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -90,11 +91,21 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
   @Nullable
   private Content getParentExternalChannelContent(@Nonnull Content content) {
     Site site = getSitesService().getContentSiteAspect(content).getSite();
-    String productId = content.getString(EXTERNAL_ID);
-
-    if (site == null || StringUtils.isEmpty(productId)) {
+    if (site == null) {
+      LOG.warn("Content '{}' has no site, cannot determine parent content.", content.getPath());
       return null;
     }
+
+    String reference = content.getString(EXTERNAL_ID);
+    Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(reference);
+
+    if (!commerceIdOptional.isPresent()) {
+      LOG.warn("Content '{}' provides invalid commerce reference '{}', cannot determine parent content.",
+              content.getPath(), reference);
+      return null;
+    }
+
+    CommerceId commerceId = commerceIdOptional.get();
 
     Optional<CommerceConnection> commerceConnectionOpt = commerceConnectionInitializer.findConnectionForSite(site);
 
@@ -106,7 +117,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
     CommerceConnection commerceConnection = commerceConnectionOpt.get();
 
     StoreContext storeContext = commerceConnection.getStoreContext();
-    Product product = (Product) commerceConnection.getCommerceBeanFactory().createBeanFor(productId, storeContext);
+    Product product = (Product) commerceConnection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
 
     if (product == null) {
       return null;

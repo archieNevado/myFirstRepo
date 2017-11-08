@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.navigation;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.navigation.Linkable;
@@ -11,15 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -29,6 +26,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class LiveContextCategoryNavigationTest {
+
   private static final String SITE_ID = "aSiteId";
 
   @Mock
@@ -51,15 +49,15 @@ public class LiveContextCategoryNavigationTest {
     when(site.getId()).thenReturn(SITE_ID);
     testling = new LiveContextCategoryNavigation(category, site, treeRelation);
     //Category must have an ID because it is used in equals
-    when(category.getId()).thenReturn("anyID");
+    when(category.getId()).thenReturn(CommerceIdParserHelper.parseCommerceIdOrThrow("test:///x/category/anyID"));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testConstructorParametersCategoryNull() {
     testling = new LiveContextCategoryNavigation(null, site, treeRelation);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testConstructorParametersTreeRelationNull() {
     testling = new LiveContextCategoryNavigation(category, site, null);
   }
@@ -67,27 +65,23 @@ public class LiveContextCategoryNavigationTest {
   @Test
   public void testGetCategory() throws Exception {
     Category actual = testling.getCategory();
-    assertSame("Category must be the one which is set by constructor", category, actual);
+    assertThat(actual).as("Category must be the one which is set by constructor").isSameAs(category);
   }
 
   @Test
   public void testGetChildren() throws Exception {
-    List<Linkable> children = new ArrayList<>();
-    List<Linkable> otherChildren = new ArrayList<>();
     Navigation navigation1 = mock(Navigation.class);
-    otherChildren.add(navigation1);
     Navigation navigation2 = mock(Navigation.class);
-    otherChildren.add(navigation2);
 
+    List<Linkable> children = newArrayList();
+    List<Linkable> otherChildren = newArrayList(navigation1, navigation2);
 
     when(treeRelation.getChildrenOf(testling)).thenReturn(children, otherChildren);
     List<? extends Linkable> actualChildren = testling.getChildren();
-    assertNotNull(actualChildren);
-    assertEquals("No Children returned from mock, so list is expected to be empty.", 0, actualChildren.size());
+    assertThat(actualChildren).as("No children returned from mock, so list is expected to be empty.").isEmpty();
 
     actualChildren = testling.getChildren();
-    assertNotNull(actualChildren);
-    assertEquals("Two children were added before so two children must exist", 2, actualChildren.size());
+    assertThat(actualChildren).as("Two children were added before, so two children must exist.").hasSize(2);
   }
 
   @Test
@@ -95,7 +89,7 @@ public class LiveContextCategoryNavigationTest {
     Navigation parentCalculatedByTreeRelation = mock(Navigation.class);
     when(treeRelation.getParentOf(testling)).thenReturn(parentCalculatedByTreeRelation);
     Navigation parentNavigation = testling.getParentNavigation();
-    assertSame(parentCalculatedByTreeRelation, parentNavigation);
+    assertThat(parentNavigation).isSameAs(parentCalculatedByTreeRelation);
   }
 
   @Test
@@ -103,70 +97,66 @@ public class LiveContextCategoryNavigationTest {
     CMExternalChannel contextCalculatedByTreeRelation = mock(CMExternalChannel.class);
     when(treeRelation.getNearestExternalChannelForCategory(category, site)).thenReturn(contextCalculatedByTreeRelation);
     CMContext context = testling.getContext();
-    assertSame(contextCalculatedByTreeRelation, context);
+    assertThat(context).isSameAs(contextCalculatedByTreeRelation);
   }
 
   @Test
   public void testGetParentNavigation2IsNull() throws Exception {
     when(treeRelation.getParentOf(testling)).thenReturn(null);
     Navigation parentNavigation = testling.getParentNavigation();
-    assertNull(parentNavigation);
+    assertThat(parentNavigation).isNull();
   }
 
   @Test
   public void testGetRootNavigation() throws Exception {
-    List<Linkable> navigations = new ArrayList<>();
-    navigations.add(rootNavigation);
-    navigations.add(testling);
+    List<Linkable> navigations = newArrayList(rootNavigation, testling);
     when(treeRelation.pathToRoot(testling)).thenReturn(navigations);
     CMNavigation result = testling.getRootNavigation();
-    assertSame("Wrong root navigation", rootNavigation, result);
+    assertThat(result).as("Wrong root navigation").isSameAs(rootNavigation);
   }
 
   @Test
   public void testGetRootNavigationNoRootFound() throws Exception {
-    List<Linkable> navigations = new ArrayList<>();
+    List<Linkable> navigations = newArrayList();
     when(treeRelation.pathToRoot(testling)).thenReturn(navigations);
-    assertNull(testling.getRootNavigation());
+    assertThat(testling.getRootNavigation()).isNull();
   }
 
   @Test
   public void testGetNavigationPathList() throws Exception {
     Navigation navigation1 = new LiveContextCategoryNavigation(category, site, treeRelation);
-    List<Linkable> pathToRoot = new ArrayList<>();
-    pathToRoot.add(testling);
-    pathToRoot.add(navigation1);
+    List<Linkable> pathToRoot = newArrayList(testling, navigation1);
 
     when(treeRelation.pathToRoot(testling)).thenReturn(pathToRoot);
 
     List<? extends Linkable> navigationPathList = testling.getNavigationPathList();
-    assertEquals(2, navigationPathList.size());
-    assertSame(testling, navigationPathList.get(0));
-    assertSame(navigation1, navigationPathList.get(1));
+    assertThat(navigationPathList).hasSize(2);
+    assertThat(navigationPathList.get(0)).isSameAs(testling);
+    assertThat(navigationPathList.get(1)).isSameAs(navigation1);
   }
 
   @Test
   public void testIsHidden() throws Exception {
-    assertFalse(testling.isHidden());
+    assertThat(testling.isHidden()).isFalse();
   }
 
   @Test
   public void testGetVisibleChildren() throws Exception {
     LiveContextCategoryNavigation testlingSpy = spy(testling);
-    doReturn(new ArrayList<Linkable>()).when(testlingSpy).getChildren();
+    doReturn(newArrayList()).when(testlingSpy).getChildren();
     testlingSpy.getVisibleChildren();
     verify(testlingSpy, times(1)).getChildren();
   }
 
   @Test
   public void testIsHiddenInSitemap() throws Exception {
-    assertFalse(testling.isHiddenInSitemap());
+    assertThat(testling.isHiddenInSitemap()).isFalse();
   }
 
   @Test
   public void testGetSitemapChildren() throws Exception {
     LiveContextCategoryNavigation testlingSpy = spy(testling);
-    doReturn(new ArrayList<Linkable>()).when(testlingSpy).getChildren();
+    doReturn(newArrayList()).when(testlingSpy).getChildren();
     testlingSpy.getSitemapChildren();
     verify(testlingSpy, times(1)).getChildren();
   }
@@ -176,7 +166,7 @@ public class LiveContextCategoryNavigationTest {
     String categoryName = "name";
     when(category.getName()).thenReturn(categoryName);
     String actual = testling.getTitle();
-    assertEquals(categoryName, actual);
+    assertThat(actual).isEqualTo(categoryName);
   }
 
   @Test
@@ -184,7 +174,7 @@ public class LiveContextCategoryNavigationTest {
     String anySeoSegment = "anySeoSegment";
     when(category.getSeoSegment()).thenReturn(anySeoSegment);
     String actual = testling.getSegment();
-    assertEquals(anySeoSegment, actual);
+    assertThat(actual).isEqualTo(anySeoSegment);
   }
 
   @Test
@@ -197,11 +187,11 @@ public class LiveContextCategoryNavigationTest {
     Locale expected = Locale.getDefault();
     when(category.getLocale()).thenReturn(expected);
     Locale actual = testling.getLocale();
-    assertSame(expected, actual);
+    assertThat(actual).isSameAs(expected);
   }
 
   @Test
   public void testGetViewTypeName() throws Exception {
-    assertNull(testling.getViewTypeName());
+    assertThat(testling.getViewTypeName()).isNull();
   }
 }

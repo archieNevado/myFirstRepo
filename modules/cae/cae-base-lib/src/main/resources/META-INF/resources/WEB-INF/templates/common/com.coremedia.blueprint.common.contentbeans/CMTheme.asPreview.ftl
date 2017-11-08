@@ -1,16 +1,18 @@
 <@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/>
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMTheme" -->
 
+<#--
+    Template Description:
+
+    This template renders a preview of a theme.
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <title>CoreMedia Theme Preview</title>
+  <title>CoreMedia Theme Preview for ${self.content.name!""}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <#-- include css -->
-  <#list self.css![] as css>
-    <@cm.include self=css view="asCSSLink"/>
-  </#list>
   <@preview.previewScripts />
 </head>
 
@@ -18,20 +20,17 @@
 
   <#-- simple preview of a theme -->
   <div class="cm-theme"<@cm.metadata self.content />>
+    <#-- theme name -->
     <h1 class="cm-theme__title">${self.content.name!""}</h1>
+    <#-- theme preview image -->
     <#if self.icon?has_content>
-     <img class="cm-theme__screenshot" src="${cm.getLink(self.icon)}"<@cm.metadata "properties.icon" />/>
+      <img class="cm-theme__screenshot" src="${cm.getLink(self.icon)}"<@cm.metadata "properties.icon" />/>
     </#if>
-    <div class="cm-theme__description"<@cm.metadata "properties.detailText" />><@cm.include self=self.detailText!cm.UNDEFINED /></div>
+    <#-- theme description-->
+    <div class="cm-theme__description"<@cm.metadata "properties.detailText" />>
+      <@cm.include self=self.detailText!cm.UNDEFINED />
+    </div>
   </div>
-
-  <#-- include javascript at bottom for performance -->
-  <#list self.javaScriptLibraries![] as js>
-    <@cm.include self=js view="asJSLink"/>
-  </#list>
-  <#list self.javaScripts![] as js>
-    <@cm.include self=js view="asJSLink"/>
-  </#list>
 
 </body>
 </html>

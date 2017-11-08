@@ -1,22 +1,27 @@
 package com.coremedia.livecontext.p13n;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
 import com.coremedia.personalization.context.collector.AbstractContextSource;
-import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A {@link com.coremedia.personalization.context.collector.ContextSource} that reads the commerce user id
@@ -37,12 +42,23 @@ public class CommerceSegmentSource extends AbstractContextSource {
 
   @Override
   public void preHandle(HttpServletRequest request, HttpServletResponse response, ContextCollection contextCollection) {
+    if (!hasCurrentCommerceConnection()) {
+      return;
+    }
 
-    if (DefaultConnection.get() == null ||
-            getStoreContext() == null ||
-            getUserContext() == null ||
-            StringUtils.isEmpty(getStoreContext().getUserSegments()) &&
-            getUserContext().getContextNames().isEmpty()) {
+    StoreContext storeContext = getStoreContext();
+    if (storeContext == null) {
+      return;
+    }
+
+    UserContext userContext = getUserContext();
+    if (userContext == null) {
+      return;
+    }
+
+    String userSegments = storeContext.getUserSegments();
+
+    if (isNullOrEmpty(userSegments) && isEmpty(userContext)) {
       return;
     }
 
@@ -50,7 +66,6 @@ public class CommerceSegmentSource extends AbstractContextSource {
     MapPropertyMaintainer segmentContext = new MapPropertyMaintainer();
 
     //UserSegments provided by LiveContext Fragment Connector
-    String userSegments = getStoreContext().getUserSegments();
     if (userSegments != null && !userSegments.isEmpty()) {
       segmentIdList = Arrays.asList(userSegments.split(","));
     }
@@ -59,49 +74,54 @@ public class CommerceSegmentSource extends AbstractContextSource {
     }
 
     if (segmentIdList != null) {
-      UserContext userContext = getUserContext();
-      userContext.put(SEGMENT_ID_LIST_CONTEXT_KEY, segmentIdList);
       StringBuilder segmentList = new StringBuilder();
       // The following format (comma seperated list if ids) demands that not a id can be part of another id (like
       // 1234 is part of 123456). This is guaranteed if all ids have the same length (as it is the case). If not,
       // the format of ids can be changed to a more robust one.
       for (String segment : segmentIdList) {
-        String segmentId = getCommerceIdProvider().formatSegmentId(segment);
-        if (segmentId != null){
-          segmentList.append(segmentId).append(",");
-        }
+        String segmentId = format(getCommerceIdProvider().formatSegmentId(segment));
+        segmentList.append(segmentId).append(",");
       }
       segmentContext.setProperty(SEGMENT_ID_LIST_CONTEXT_KEY, segmentList.toString());
       contextCollection.setContext(contextName, segmentContext);
     }
   }
 
+  private static boolean isEmpty(@Nonnull UserContext userContext) {
+    return Stream.of(userContext.getUserId(), userContext.getUserName(), userContext.getCookieHeader())
+            .allMatch(Objects::isNull);
+  }
+
   protected List<String> readSegmentIdListFromCommerceSystem() {
     SegmentService segmentService = getSegmentService();
-    if (segmentService != null) {
-      List<Segment> segments = segmentService.findSegmentsForCurrentUser();
-      List<String> segmentIdList = new ArrayList<>(segments.size());
-      for (Segment segment : segments) {
-        segmentIdList.add(segment.getId());
-      }
-      return segmentIdList;
+    if (segmentService == null) {
+      return emptyList();
     }
-    return Collections.emptyList();
+
+    return segmentService.findSegmentsForCurrentUser(getStoreContext()).stream()
+            .map(CommerceBean::getId)
+            .map(c -> c.getExternalId().orElse(null))
+            .filter(Objects::nonNull)
+            .collect(toList());
+  }
+
+  private static boolean hasCurrentCommerceConnection() {
+    return CurrentCommerceConnection.find().isPresent();
   }
 
   public StoreContext getStoreContext() {
-    return DefaultConnection.get().getStoreContext();
+    return CurrentCommerceConnection.get().getStoreContext();
   }
 
   public UserContext getUserContext() {
-    return DefaultConnection.get().getUserContext();
+    return CurrentCommerceConnection.get().getUserContext();
   }
 
   public SegmentService getSegmentService() {
-    return DefaultConnection.get().getSegmentService();
+    return CurrentCommerceConnection.get().getSegmentService();
   }
 
   public CommerceIdProvider getCommerceIdProvider() {
-    return DefaultConnection.get().getIdProvider();
+    return CurrentCommerceConnection.get().getIdProvider();
   }
 }

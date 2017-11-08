@@ -9,21 +9,30 @@ import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
+import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.IEditorContext;
+import com.coremedia.cms.editor.sdk.desktop.TabTooltipEntry;
+import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.preview.PreviewURI;
 import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.editor.sdk.sites.SitesService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
+import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
+import com.coremedia.ecommerce.studio.model.Category;
+import com.coremedia.ecommerce.studio.model.Product;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
 import com.coremedia.livecontext.studio.library.ShowInCatalogTreeHelper;
 import com.coremedia.livecontext.studio.pbe.StoreNodeRenderer;
+import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.UrlUtil;
@@ -86,6 +95,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
      * Register Content initializer
      */
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT, initMarketingSpot);
+    editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_LIST, initProductList);
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, initProductTeaser);
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL, initExternalChannel);
     editorContext.registerContentInitializer(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PRODUCT, initExternalProduct);
@@ -135,6 +145,66 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
             });
 
     CMChannelExtension.register(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE);
+
+    /**
+     * Register tab tooltip handler
+     */
+    EditorContextImpl(editorContext).registerTabTooltipHandler(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL, computeCatalogToolTip);
+    EditorContextImpl(editorContext).registerTabTooltipHandler(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PRODUCT, computeCatalogToolTip);
+    EditorContextImpl(editorContext).registerTabTooltipHandler(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, computeCatalogToolTip);
+
+    EditorContextImpl(editorContext).registerTooltipSkipFlagHandler(tooltipSkipFlagHandler);
+  }
+
+  private static function computeCatalogToolTip(content:Content):Array {
+    //this expression points to the catalog object
+    var catalogObjectExpression:ValueExpression = CatalogHelper.getInstance().getCatalogExpression(ValueExpressionFactory.createFromValue(content));
+    var catalog:Catalog = catalogObjectExpression.extendBy(CatalogObjectPropertyNames.CATALOG).getValue();
+    //null means there is no such a thing like catalog
+    if (catalog === null) {
+      return [];
+    }
+    if (catalog && catalog.getName()) {
+      return [new TabTooltipEntry(CatalogObjectPropertyNames.CATALOG,
+              resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_catalog_label'), catalog.getName())]
+    }
+    return undefined;
+  }
+
+  /**
+   * compute flags for the catalog tooltip entities
+   * and collect sites from non-content entities so that
+   * they are included in the site-dependent flag computation in EditorContextImpl#computeTooltipSkipFlags
+   * @param tooltipSkipFlags
+   * @param sites
+   * @param entities
+   */
+  private function tooltipSkipFlagHandler(tooltipSkipFlags:Bean, sites:Array, entities:Array):void {
+    var skipCatalog:Boolean = true;
+    entities.forEach(function(entity:Object):void {
+      var catalog:Catalog;
+      if (entity is Content) {
+        var content:Content = Content(entity);
+        //is the content type registered for the tooltip?
+        var tooltipEntries:Array = EditorContextImpl(editorContext).computeAdditionalTabTooltipEntries(content);
+        if (tooltipEntries && tooltipEntries.length > 0) {
+          var catalogObjectExpression:ValueExpression = CatalogHelper.getInstance().getCatalogExpression(ValueExpressionFactory.createFromValue(content));
+          catalog = catalogObjectExpression.extendBy(CatalogObjectPropertyNames.CATALOG).getValue();
+        }
+      } else if (entity is Product || entity is Category) {
+        var site:Site = editorContext.getSitesService().getSite(entity.getSiteId());
+        site && sites.push(site);
+        catalog = entity.get(CatalogObjectPropertyNames.CATALOG);
+      }
+      if (catalog && !catalog.isDefault()) {
+        skipCatalog = false;
+      }
+    });
+
+
+
+    tooltipSkipFlags.set(CatalogObjectPropertyNames.CATALOG, skipCatalog);
+
   }
 
   private static function initProductTeaser(content:Content):void {
@@ -146,6 +216,11 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   }
 
   private static function initMarketingSpot(content:Content):void {
+    ContentInitializer.initCMLinkable(content);
+    ContentInitializer.initCMLocalized(content);
+  }
+
+  private static function initProductList(content:Content):void {
     ContentInitializer.initCMLinkable(content);
     ContentInitializer.initCMLocalized(content);
   }

@@ -20,7 +20,6 @@ custom-topic-pages
 create-from-template
 lc
 corporate
-corporate-es
 lc-es
 lc-p13n
 lc-asset

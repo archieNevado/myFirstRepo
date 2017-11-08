@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -35,9 +35,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -113,7 +113,7 @@ public class DownloadPortalSearchServiceTest {
     when(subTaxonomy2.getValue()).thenReturn("A");
 
     when(category.getContentId()).thenReturn(123);
-    when(dataViewFactory.loadCached(any(), anyString())).then(returnsFirstArg());
+    when(dataViewFactory.loadCached(any(), nullable(String.class))).then(returnsFirstArg());
 
     doReturn( queryBean )
             .when(searchService)

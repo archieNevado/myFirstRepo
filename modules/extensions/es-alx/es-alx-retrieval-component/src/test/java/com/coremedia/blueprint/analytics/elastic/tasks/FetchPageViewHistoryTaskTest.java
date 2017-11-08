@@ -35,12 +35,12 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
 import static java.util.Arrays.asList;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyCollectionOf;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyMapOf;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -118,11 +118,11 @@ public class FetchPageViewHistoryTaskTest {
         }
         return null;
       }
-    }).when(modelService).saveAll(anyCollectionOf(ReportModel.class));
+    }).when(modelService).saveAll(anyCollection());
 
     when(analyticsServiceProvider.getServiceKey()).thenReturn(SERVICE_KEY);
     when(unconfigureAnalyticsServiceProvider.getServiceKey()).thenReturn(UNKNOWN_SERVICE);
-    when(resultItemValidationService.filterValidResultItems(anyCollectionOf(String.class), anyString())).thenReturn(asList(ARTICLE_CONTENT_ID));
+    when(resultItemValidationService.filterValidResultItems(anyCollection(), anyString())).thenReturn(asList(ARTICLE_CONTENT_ID));
   }
 
   public Content getContent(String contentId) {
@@ -136,7 +136,7 @@ public class FetchPageViewHistoryTaskTest {
     String today = dateFormat.format(new Date());
     pageViews.put(today, 13L);
     data.put(ARTICLE_CONTENT_ID, pageViews);
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(data);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
     when(taskReportModelService.getReportModel(channelContent, SERVICE_KEY)).thenReturn(taskModelForRoot);
     when(modelService.getReportModel(any(Content.class), eq(SERVICE_KEY))).thenReturn(pageViewReportModel);
 
@@ -155,7 +155,7 @@ public class FetchPageViewHistoryTaskTest {
   public void runButNoData() throws Exception {
 
     when(taskReportModelService.getReportModel(channelContent, SERVICE_KEY)).thenReturn(taskModelForRoot);
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(null);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(null);
 
     task.run();
 
@@ -172,7 +172,7 @@ public class FetchPageViewHistoryTaskTest {
     pageViews.put(today, 13L);
     data.put(NO_CONTENT_ID, pageViews);
 
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(data);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
     when(taskReportModelService.getReportModel(channelContent, SERVICE_KEY)).thenReturn(taskModelForRoot);
 
     task.run();
@@ -188,7 +188,7 @@ public class FetchPageViewHistoryTaskTest {
     pageViews.put(today, 13L);
     data.put("invalid", pageViews);
 
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(data);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
     when(taskReportModelService.getReportModel(channelContent, SERVICE_KEY)).thenReturn(taskModelForRoot);
 
     task.run();
@@ -203,7 +203,7 @@ public class FetchPageViewHistoryTaskTest {
     String today = dateFormat.format(new Date());
     pageViews.put(today, 13L);
     data.put(NON_LINKABLE_CONTENT_ID, pageViews);
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(data);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
     when(taskReportModelService.getReportModel(channelContent, SERVICE_KEY)).thenReturn(taskModelForRoot);
 
     task.run();
@@ -220,7 +220,7 @@ public class FetchPageViewHistoryTaskTest {
 
     task.run();
 
-    verify(analyticsServiceProvider, never()).fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class));
+    verify(analyticsServiceProvider, never()).fetchPageViews(any(Content.class), anyMap());
     verify(modelService, never()).getReportModel(articleContent, SERVICE_KEY);
   }
 
@@ -236,7 +236,7 @@ public class FetchPageViewHistoryTaskTest {
     String today = dateFormat.format(new Date());
     pageViews.put(today, 13L);
     data.put(ARTICLE_CONTENT_ID, pageViews);
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(data);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
 
     task.run();
 
@@ -262,7 +262,7 @@ public class FetchPageViewHistoryTaskTest {
     String today = dateFormat.format(new Date());
     pageViews.put(today, 13L);
     data.put(ARTICLE_CONTENT_ID, pageViews);
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class)))
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap()))
             .thenReturn(data);
 
     task.run();
@@ -287,7 +287,7 @@ public class FetchPageViewHistoryTaskTest {
 
     task.run();
 
-    verify(analyticsServiceProvider, never()).fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class));
+    verify(analyticsServiceProvider, never()).fetchPageViews(any(Content.class), anyMap());
   }
 
   @Test
@@ -300,7 +300,7 @@ public class FetchPageViewHistoryTaskTest {
 
     String keyOfUnconfiguredService = SERVICE_KEY + getClass().getName();
     when(analyticsServiceProvider.getServiceKey()).thenReturn(keyOfUnconfiguredService);
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(data);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
     when(taskReportModelService.getReportModel(channelContent, keyOfUnconfiguredService)).thenReturn(taskModelForRoot);
 
     task.run();

@@ -1,14 +1,17 @@
 package com.coremedia.livecontext.web.taglib;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentContext;
@@ -34,6 +37,8 @@ import static org.springframework.util.StringUtils.isEmpty;
  * A Facade for LiveContext utility functions used by FreeMarker templates.
  */
 public class LiveContextFreemarkerFacade extends MetadataTagSupport {
+  private static final long serialVersionUID = 577878275971542409L;
+
   private static final String CATALOG_ID = "catalogId";
   private static final String LANG_ID = "langId";
   private static final String SITE_ID = "siteId";
@@ -78,11 +83,10 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   public ProductInSite createProductInSite(Product product) {
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    return liveContextNavigationFactory.createProductInSite(product, connection.getStoreContext().getSiteId());
+    CommerceConnection connection = getCommerceConnection();
+    StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
+    return liveContextNavigationFactory.createProductInSite(product, storeContext.getSiteId());
   }
-
-
 
   public String getSecureScheme() {
     return secureScheme;
@@ -106,53 +110,67 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     }
 
     FragmentParameters parameters = fragmentContext().getParameters();
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    StoreContext currentContext = connection.getStoreContext();
+    CommerceConnection connection = getCommerceConnection();
+    StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
 
     ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
-    builder.put(CATALOG_ID, currentContext.getCatalogId())
-            .put(LANG_ID, "" + currentContext.getLocale())
-            .put(SITE_ID, currentContext.getSiteId())
+    builder.put(CATALOG_ID, parameters.getCatalogId().orElse(storeContext.getCatalogId()))
+            .put(LANG_ID, "" + storeContext.getLocale())
+            .put(SITE_ID, storeContext.getSiteId())
             .put(STORE_ID, parameters.getStoreId());
 
     boolean isAugmentedPage = isAugmentedPage(parameters);
 
     if (isAugmentedPage) {
       builder.put(PAGE_ID, parameters.getPageId())
-              .put(STORE_REF, currentContext);
+              .put(STORE_REF, storeContext);
     }
 
     return builder.build();
   }
 
+  /**
+   * Checks if the current fragment request targets an Augmented Page (NO Category Page, NO Product Page)
+   * @param parameters fragment parameters
+   * @return true if request targets an Augmented Page
+   */
   private boolean isAugmentedPage(FragmentParameters parameters) {
     return isEmpty(parameters.getCategoryId()) && isEmpty(parameters.getProductId());
   }
 
   public boolean isAugmentedContent() {
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    CommerceIdProvider idProvider = connection.getIdProvider();
+    CommerceConnection connection = getCommerceConnection();
+    CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
+    StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
     FragmentParameters parameters = fragmentContext().getParameters();
+    boolean isAugmentedPage = isAugmentedPage(parameters);
+
+    if (isAugmentedPage) {
+      return true;
+    }
+
+    CatalogService catalogService = requireNonNull(connection.getCatalogService(), "catalog service not available");
+
     String categoryId = parameters.getCategoryId();
     String productId = parameters.getProductId();
     Content content = null;
-    boolean isAugmentedPage = isAugmentedPage(parameters);
-    if (!isAugmentedPage) {
-      if (!isEmpty(productId))  {
-        Product product = (Product) connection.getCommerceBeanFactory().createBeanFor(idProvider.formatProductTechId(productId), connection.getStoreContext());
-        if (product != null && product.isVariant()) {
-          // variants are not augmented, we need to check its parent
-          ProductVariant productVariant = (ProductVariant) connection.getCommerceBeanFactory().createBeanFor(idProvider.formatProductVariantTechId(productId), connection.getStoreContext());
-          product = productVariant != null ? productVariant.getParent() : product;
-        }
-        content = productAugmentationService.getContent(product);
-      } else if (!isEmpty(categoryId)) {
-        Category category = (Category) connection.getCommerceBeanFactory().createBeanFor(idProvider.formatCategoryTechId(categoryId), connection.getStoreContext());
-        content = categoryAugmentationService.getContent(category);
+    CommerceBean commerceBean = null;
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+    if (!isEmpty(productId)) {
+      CommerceId productTechId = idProvider.formatProductTechId(catalogAlias, productId);
+      commerceBean = catalogService.findProductById(productTechId, storeContext);
+      if (commerceBean instanceof ProductVariant) {
+        // variants are not augmented, we need to check its parent
+        Product parent = ((ProductVariant) commerceBean).getParent();
+        commerceBean = parent != null ? parent : commerceBean;
       }
-      return (content != null);
+      content = productAugmentationService.getContent(commerceBean);
+    } else if (!isEmpty(categoryId)) {
+      CommerceId categoryTechId = idProvider.formatCategoryTechId(catalogAlias, categoryId);
+      commerceBean = catalogService.findCategoryById(categoryTechId, storeContext);
+      content = categoryAugmentationService.getContent(commerceBean);
     }
-    return true;
+    return content != null;
   }
 
   public FragmentContext fragmentContext() {
@@ -174,10 +192,11 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   public String getVendorName() {
-    CommerceConnection currentConnection = DefaultConnection.get();
-    if (currentConnection != null) {
-      return currentConnection.getVendorName();
-    }
-    return null;
+    return CurrentCommerceConnection.find().map(CommerceConnection::getVendorName).orElse(null);
+  }
+
+  @Nonnull
+  private static CommerceConnection getCommerceConnection() {
+    return CurrentCommerceConnection.get();
   }
 }

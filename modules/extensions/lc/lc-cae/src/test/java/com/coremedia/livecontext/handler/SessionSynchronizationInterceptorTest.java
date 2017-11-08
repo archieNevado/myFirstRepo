@@ -1,8 +1,7 @@
 package com.coremedia.livecontext.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.pricing.PriceService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.services.SessionSynchronizer;
 import org.junit.After;
@@ -10,19 +9,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class SessionSynchronizationInterceptorTest {
 
   private static final String OPTIONS = "OPTIONS";
@@ -58,7 +56,7 @@ public class SessionSynchronizationInterceptorTest {
   @Test
   public void getRequest() throws GeneralSecurityException, IOException {
     when(commerceConnection.getUserSessionService()).thenReturn(userSessionService);
-    DefaultConnection.set(commerceConnection);
+    CurrentCommerceConnection.set(commerceConnection);
     testling.preHandle(request, response, null);
 
     verify(request).getMethod();
@@ -76,7 +74,7 @@ public class SessionSynchronizationInterceptorTest {
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
 }

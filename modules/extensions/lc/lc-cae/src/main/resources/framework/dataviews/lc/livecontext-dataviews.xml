@@ -10,6 +10,7 @@
     <property name="locationTaxonomy" associationType="static"/>
     <property name="subjectTaxonomy" associationType="static"/>
     <property name="placement"/>
+    <property name="pdpPagegridStruct"/>
 
     <!--the following methods must be dynamic since they make use of the external catalog hierarchy,
     which may depend on workspaces and therfore can be volatile and request dependent.-->
@@ -18,9 +19,16 @@
     <property name="javaScript" associationType="dynamic"/>
     <property name="rootNavigation" associationType="dynamic"/>
     <property name="parentNavigation" associationType="dynamic"/>
-    <!--<property name="root"/>-->
     <property name="navigationPathList" associationType="dynamic"/>
     <property name="vanityUrlMapper" associationType="dynamic"/>
+  </dataview>
+
+  <dataview appliesTo="com.coremedia.livecontext.contentbeans.LiveContextExternalProductImpl">
+    <property name="site"/>
+    <property name="aspectByName" associationType="composition"/>
+    <property name="localSettings"/>
+    <property name="viewtype" associationType="aggregation"/>
+    <property name="pagegridStruct"/>
   </dataview>
 
   <dataview appliesTo="com.coremedia.livecontext.contentbeans.CMProductTeaserImpl">
@@ -34,6 +42,16 @@
   <dataview appliesTo="com.coremedia.livecontext.contentbeans.CMMarketingSpotImpl">
     <property name="aspectByName" associationType="composition"/>
     <property name="localSettings"/>
+    <property name="picturesUnfiltered" associationType="static"/>
+    <property name="contexts" associationType="static"/>
+    <property name="viewtype" associationType="aggregation"/>
+  </dataview>
+
+  <dataview appliesTo="com.coremedia.livecontext.contentbeans.CMProductListImpl">
+    <property name="aspectByName" associationType="composition"/>
+    <property name="localSettings"/>
+    <property name="productListSettings"/>
+    <property name="itemsUnfiltered" associationType="static"/>
     <property name="picturesUnfiltered" associationType="static"/>
     <property name="contexts" associationType="static"/>
     <property name="viewtype" associationType="aggregation"/>

@@ -14,11 +14,11 @@
       </div>
     <#elseif (searchResultHits?size == 0)>
       <div class="alert alert-warning" role="alert">
-        <@cm.unescape bp.getMessage("search_error_noresults", [self.form.query!""])/>
+        ${bp.getMessage("search_error_noresults", [self.form.query!""])?no_esc}
       </div>
     <#else>
       <div class="alert alert-success" role="alert">
-        <@cm.unescape bp.getMessage("search_searchTerm", [self.result.numHits, self.form.query!""])/>
+        ${bp.getMessage("search_searchTerm", [self.result.numHits, self.form.query!""])?no_esc}
       </div>
     </#if>
   </div>

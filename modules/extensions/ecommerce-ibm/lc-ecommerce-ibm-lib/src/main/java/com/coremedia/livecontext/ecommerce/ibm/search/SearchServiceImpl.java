@@ -1,10 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.search;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.search.SuggestionResult;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.search.SearchService;
+import com.coremedia.livecontext.ecommerce.search.SuggestionResult;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
@@ -21,10 +19,10 @@ public class SearchServiceImpl implements SearchService {
   private WcSearchWrapperService searchWrapperService;
 
   @Override
-  public List<SuggestionResult> getAutocompleteSuggestions(String term) throws CommerceException {
+  public List<SuggestionResult> getAutocompleteSuggestions(String term, @Nonnull StoreContext currentContext) {
     List<SuggestionResult> result = Collections.emptyList();
     List<WcSuggestion> wcSuggestions = searchWrapperService.
-            getKeywordSuggestionsByTerm(term, StoreContextHelper.getCurrentContext());
+            getKeywordSuggestionsByTerm(term, currentContext);
 
     if (wcSuggestions != null && !wcSuggestions.isEmpty()) {
       result = new ArrayList<>();

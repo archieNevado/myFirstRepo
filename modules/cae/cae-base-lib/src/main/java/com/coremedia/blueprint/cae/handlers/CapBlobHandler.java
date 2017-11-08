@@ -160,6 +160,16 @@ public class CapBlobHandler extends HandlerBase {
   }
 
   /**
+   * Convenience link handler that directly creates links to a CMImage's data property.
+   * @param image the CMImage
+   * @return the link to the CMImage's data property
+   */
+  @Link(type = CMImage.class)
+  public UriComponents buildLink(CMImage image) {
+    return buildLink((CapBlobRef) image.getData());
+  }
+
+  /**
    * Useful for custom link building.
    */
   public Map<String, String> linkParameters(CapBlobRef bean) {

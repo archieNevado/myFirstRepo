@@ -3,6 +3,7 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.cap.content.Content;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +16,7 @@ public abstract class CommerceBeanRepresentation extends AbstractCatalogRepresen
   private Content content;
   private Map<String, Object> customAttributes;
   private String previewUrl;
+  private List<Content> visuals;
 
   /*
     non-null if content backed commerce object
@@ -60,5 +62,14 @@ public abstract class CommerceBeanRepresentation extends AbstractCatalogRepresen
 
   public void setCustomAttributes(Map<String, Object> customAttributes) {
     this.customAttributes = customAttributes;
+  }
+
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+  public void setVisuals(List<Content> visuals) {
+    this.visuals = visuals;
+  }
+
+  public List<Content> getVisuals() {
+    return visuals;
   }
 }

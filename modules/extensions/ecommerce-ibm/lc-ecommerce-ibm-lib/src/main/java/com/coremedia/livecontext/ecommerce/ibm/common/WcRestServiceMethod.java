@@ -15,7 +15,7 @@ public class WcRestServiceMethod<T, P> {
   static {
     String betamaxMode = System.getProperty("betamax.defaultMode");
     String betamaxIgnoreHosts = System.getProperty("betamax.ignoreHosts");
-    insecure = !"*".equals(betamaxIgnoreHosts) && ("READ_WRITE".equals(betamaxMode) || "WRITE_ONLY".equals(betamaxMode));
+    insecure = !"*".equals(betamaxIgnoreHosts) && ("READ_WRITE".equals(betamaxMode) || "WRITE_ONLY".equals(betamaxMode) || "READ_ONLY".equals(betamaxMode));
   }
 
   private final HttpMethod method;

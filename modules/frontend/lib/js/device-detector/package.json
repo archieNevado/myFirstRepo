@@ -1,0 +1,10 @@
+{
+  "name": "@coremedia/js-device-detector",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "@coremedia/js-utils": "../utils"
+  },
+  "main": "src/index.js"
+}

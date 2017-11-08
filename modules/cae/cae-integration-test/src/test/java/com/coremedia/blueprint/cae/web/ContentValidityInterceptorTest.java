@@ -3,11 +3,10 @@ package com.coremedia.blueprint.cae.web;
 import com.coremedia.blueprint.cae.ContentBeanTestBase;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.cae.exception.InvalidContentException;
+import com.coremedia.blueprint.cae.services.validation.ValidationServiceImpl;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.blueprint.common.datevalidation.ValidityPeriod;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
-import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
 import java.util.Calendar;
+import java.util.Collections;
 
 import static org.mockito.Mockito.when;
 
@@ -29,10 +29,15 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
 
   @SuppressWarnings("SpringJavaAutowiringInspection")
   @Inject
-  private ValidationService<Object> validationService;
+  private ValidationServiceImpl<Object> validationService;
+
+  @Inject
+  private ValidityPeriodValidator validityPeriodValidator;
 
   @Before
   public void setUp() throws Exception {
+    //noinspection unchecked
+    validationService.setValidators(Collections.singletonList(validityPeriodValidator));
     interceptor = new ContentValidityInterceptor();
     interceptor.setValidationService(validationService);
   }

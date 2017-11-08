@@ -124,4 +124,12 @@ public class LinklistPageResourceBundleFactoryTest {
     assertEquals("localeFromBundle_en", resourceBundle.getString("locale"));
     assertEquals("str1", resourceBundle.getString("str1"));
   }
+
+  @Test
+  public void testOverrideInheritedTheme() {
+    Navigation navigation = contentTestHelper.getContentBean(226);
+    Page page = new PageImpl(navigation, navigation, false, new SitesServiceImpl(), null, null, null, null);
+    ResourceBundle resourceBundle = testling.resourceBundle(page, null);
+    assertEquals("locale_overridden", resourceBundle.getString("locale"));
+  }
 }

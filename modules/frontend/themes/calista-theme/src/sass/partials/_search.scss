@@ -1,0 +1,132 @@
+.#{$prefix}search {
+
+  // the WCS removes all classes from the input field. Therefore we cannot use "form-control" on the input.
+  // The workaround is to duplicate all bootstrap form-control styles:
+  &-form > input {
+    padding: 6px 12px;
+    color: #555555;
+    border: 1px solid #000;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+
+    &:focus {
+      border-color: $text-color;
+      outline: none;
+      box-shadow: inset 0 0 0 1px $body-bg, inset 0 0 0 2px $text-color;
+    }
+  }
+
+  @include breakpoint("md") {
+    padding-left: 0;
+  }
+
+  @include breakpoint("sm-and-down") {
+    display: none;
+
+    // mobile search
+    &.open {
+      display: block;
+      margin: 0;
+      padding: 0;
+      background-color: $body-bg;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+      border: none;
+
+      .form-group {
+        width: 100%;
+      }
+
+      .#{$prefix}search-form {
+        height: 50px;
+        border-bottom: 1px solid $text-color;
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        input#SimpleSearchForm_SearchTerm {
+          border: none;
+          flex-grow: 1;
+          font-size: 20px;
+          color: $text-color;
+          box-shadow: none;
+        }
+
+        .cm-search__magnifier {
+          margin: 0 10px 0 0;
+          position: relative;
+          top: inherit;
+          right: inherit;
+        }
+      }
+    }
+  }
+
+  & .form-control {
+    padding-right: 30px;
+  }
+
+  &__magnifier,
+  &__magnifier--large {
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+    margin-left: -37px;
+    border: none;
+    padding: 4px 11px 9px 9px;
+
+    & span {
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      border: 1px solid #000;
+      background-color: white;
+      position: relative;
+      display: block;
+
+      &:after {
+        height: 10px;
+        width: 2px;
+        background-color: #000;
+        display: block;
+        content: "";
+        transform: rotate(320deg);
+        transform-origin: top left;
+        margin: 9px 0 0 7px;
+        position: absolute;
+        z-index: -1;
+      }
+    }
+  }
+
+  &__magnifier--large,
+  &.open .cm-search__magnifier {
+    position: absolute;
+    right: 40px;
+    top: 10px;
+    display: none;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    @include breakpoint("sm-and-down") {
+      display: block;
+    }
+
+    & span {
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+
+      &:after {
+        height: 16px;
+        margin: 9px 0 0 7px;
+      }
+    }
+  }
+}

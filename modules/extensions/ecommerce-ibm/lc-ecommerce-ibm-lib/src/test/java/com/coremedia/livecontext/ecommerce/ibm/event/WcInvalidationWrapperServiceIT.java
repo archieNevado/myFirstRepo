@@ -2,11 +2,10 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import org.junit.After;
@@ -21,8 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.Map;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(classes = {
         WcInvalidationWrapperServiceIT.LocalConfig.class,
@@ -55,9 +54,10 @@ public class WcInvalidationWrapperServiceIT extends IbmServiceTestBase {
   private StoreContext storeContext;
 
   @Before
+  @Override
   public void setup() {
     super.setup();
-    storeContext = DefaultConnection.get().getStoreContext();
+    storeContext = CurrentCommerceConnection.get().getStoreContext();
     origServiceEndpoint = testling.getRestConnector().getServiceEndpoint(storeContext);
   }
 
@@ -68,9 +68,10 @@ public class WcInvalidationWrapperServiceIT extends IbmServiceTestBase {
 
   @Test
   public void testGetCacheInvalidations() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
+
     Map<String, Object> cacheInvalidations = testling.getCacheInvalidations(TIME_STAMP, 20000, 500, storeContext);
     assertNotNull(cacheInvalidations);
   }

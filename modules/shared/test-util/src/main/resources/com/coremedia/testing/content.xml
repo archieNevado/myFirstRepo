@@ -151,6 +151,16 @@
           <markupProperty name="localSettings" url="16localSettings.xml" grammar="coremedia-struct-2008"/>
         </version>
       </document>
+      <document id="162" type="CMPicture" name="pictureWithMovedFocusArea">
+        <version number="1">
+          <markupProperty name="localSettings" url="162localSettings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <document id="164" type="CMPicture" name="pictureWithMovedFocusAreaAndFocusPoint">
+        <version number="1">
+          <markupProperty name="localSettings" url="164localSettings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
       <document id="18" type="CMPicture" name="GIF">
         <version number="1">
           <blobProperty name="data" url="18data.gif" type="image/gif"/>

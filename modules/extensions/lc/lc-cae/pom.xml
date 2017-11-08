@@ -156,6 +156,10 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
+      <artifactId>cae-handlerservices-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-linkservices-impl</artifactId>
     </dependency>
     <dependency>
@@ -246,6 +250,16 @@
       <artifactId>freemarker</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito2</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-test-util</artifactId>
       <version>${project.version}</version>
@@ -288,6 +302,11 @@
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

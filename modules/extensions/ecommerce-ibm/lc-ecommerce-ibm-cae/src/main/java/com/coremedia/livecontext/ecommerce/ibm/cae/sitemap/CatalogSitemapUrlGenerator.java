@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae.sitemap;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.sitemap.SitemapUrlGenerator;
 import com.coremedia.blueprint.cae.sitemap.UrlCollector;
@@ -52,11 +52,11 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
   }
 
   public StoreContextProvider getStoreContextProvider() {
-    return DefaultConnection.get().getStoreContextProvider();
+    return CurrentCommerceConnection.get().getStoreContextProvider();
   }
 
   public CatalogService getCatalogService() {
-    return DefaultConnection.get().getCatalogService();
+    return CurrentCommerceConnection.get().getCatalogService();
   }
 
 
@@ -75,7 +75,7 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
         boolean deepLinksOnly = useCommerceCategoryLinks(site) && useCommerceProductLinks(site);
         if (!deepLinksOnly) {
           request.setAttribute(ABSOLUTE_URI_KEY, absoluteUrls);
-          List<Category> categories = getCatalogService().findTopCategories(site);
+          List<Category> categories = getCatalogService().findTopCategories(storeContext.getCatalogAlias(), storeContext);
           generateUrls(categories, site, request, response, protocol, urlCollector);
         } else {
           LOG.debug("Only deep links for {}", site);

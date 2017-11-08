@@ -3,10 +3,11 @@
 
 <#assign cssClasses = cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <div class="cm-text thumbnail ${cssClasses}"<@cm.metadata self.content />>
   <#-- headline -->
-  <@bp.optionalLink href="${link}">
+  <@bp.optionalLink href="${link}" attr={"target":target}>
     <h3 class="cm-text__headline"<@cm.metadata "properties.teaserTitle" />>
       <span>${self.teaserTitle!""}</span>
     </h3>

@@ -17,6 +17,7 @@
     [ResourceBundle('com.coremedia.livecontext.ibm.studio.EcommerceIbmStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
     import com.coremedia.livecontext.studio.*;
     import com.coremedia.ui.skins.ButtonSkin;
 
@@ -50,7 +51,7 @@
       </editor:plugins>
     </editor:ExtensionsMenuToolbar>
 
-    <editor:WorkAreaTabContextMenu>
+    <editor:WorkAreaTabProxiesContextMenu>
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
@@ -58,13 +59,13 @@
             <MenuItem itemId="{OPEN_IN_MCENTER_MENU_ITEM_ID}">
               <baseAction>
                 <livecontext:OpenInManagementCenterAction
-                        catalogObjectVariableName="{WorkAreaTabContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
+                        catalogObjectVariableName="{WorkAreaTabProxiesContextMenu.CONTEXT_CLICKED_TAB_ENTITY_VARIABLE_NAME}"/>
               </baseAction>
             </MenuItem>
           </ui:items>
         </ui:AddItemsPlugin>
       </editor:plugins>
-    </editor:WorkAreaTabContextMenu>
+    </editor:WorkAreaTabProxiesContextMenu>
 
     <lc:CommerceCatalogHierarchyForm>
       <lc:plugins>

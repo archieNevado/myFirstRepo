@@ -11,11 +11,12 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -26,15 +27,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ProductListSubstitutionServiceTest {
   private static final String SITE_ID = "asiteid";
   private ProductListSubstitutionService testling;
+  private MockCommerceEnvBuilder envBuilder;
 
   @Test
   public void getProductListPagesNavigationIsNoNoLiveContextNavigation() {
@@ -130,12 +131,8 @@ public class ProductListSubstitutionServiceTest {
     when(product3.getExternalTechId()).thenReturn("p3");
     when(product4.getExternalTechId()).thenReturn("p4");
 
-    connection = MockCommerceEnvBuilder.create().setupEnv();
-
-    when(connection.getCatalogService().findProductById(contains("p1"))).thenReturn(product1);
-    when(connection.getCatalogService().findProductById(contains("p2"))).thenReturn(product2);
-    when(connection.getCatalogService().findProductById(contains("p3"))).thenReturn(product3);
-    when(connection.getCatalogService().findProductById(contains("p4"))).thenReturn(product4);
+    envBuilder = MockCommerceEnvBuilder.create();
+    connection = envBuilder.setupEnv();
 
     when(page.getNavigation()).thenReturn(liveContextNavigation);
     when(liveContextNavigation.getCategory()).thenReturn(tablets);
@@ -143,6 +140,11 @@ public class ProductListSubstitutionServiceTest {
     when(liveContextNavigation.getSite()).thenReturn(site);
     when(site.getId()).thenReturn(SITE_ID);
     when(connection.getCatalogService().findProductsByCategory(tablets)).thenReturn(listOfTablets);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   private void assertProductList(ProductList result, List<Product> expectedProducts, int expectedTotalProductCount, int expectedStart, int expectedSteps) {

@@ -72,7 +72,9 @@
       <property name="includePatterns">
         <list>
           <util:constant static-field="com.coremedia.livecontext.asset.CategoryCatalogPictureHandler.IMAGE_URI_PATTERN"/>
+          <util:constant static-field="com.coremedia.livecontext.asset.CategoryCatalogPictureHandler.IMAGE_URI_PATTERN_FOR_CATALOG"/>
           <util:constant static-field="com.coremedia.livecontext.asset.ProductCatalogPictureHandler.IMAGE_URI_PATTERN"/>
+          <util:constant static-field="com.coremedia.livecontext.asset.ProductCatalogPictureHandler.IMAGE_URI_PATTERN_FOR_CATALOG"/>
         </list>
       </property>
     </bean>
@@ -91,6 +93,8 @@
            The payload is only reloaded, if the picture data realy changed. -->
       <entry key="#{T(com.coremedia.livecontext.asset.ProductCatalogPictureHandler).IMAGE_URI_PATTERN}" value="300"/>
       <entry key="#{T(com.coremedia.livecontext.asset.CategoryCatalogPictureHandler).IMAGE_URI_PATTERN}" value="300"/>
+      <entry key="#{T(com.coremedia.livecontext.asset.ProductCatalogPictureHandler).IMAGE_URI_PATTERN_FOR_CATALOG}" value="300"/>
+      <entry key="#{T(com.coremedia.livecontext.asset.CategoryCatalogPictureHandler).IMAGE_URI_PATTERN_FOR_CATALOG}" value="300"/>
     </map>
   </customize:prepend>
 

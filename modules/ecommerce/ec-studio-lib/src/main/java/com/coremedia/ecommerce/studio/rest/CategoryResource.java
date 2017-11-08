@@ -1,12 +1,15 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Store;
-import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,14 +26,15 @@ import java.util.Map;
  * A catalog {@link Category} object as a RESTful resource.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path(CategoryResource.LIVECONTEXT_CATEGORY_SITE_ID_WORKSPACE_ID_ID)
+@Path(CategoryResource.URI_PATH)
 public class CategoryResource extends CommerceBeanResource<Category> {
 
   /**
    * The Studio internal logical ID of the root category.
    */
   static final String ROOT_CATEGORY_ROLE_ID = "ROOT";
-  public static final String LIVECONTEXT_CATEGORY_SITE_ID_WORKSPACE_ID_ID = "livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
+  public static final String URI_PATH
+          = "livecontext/category/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
 
   @Override
   public CategoryRepresentation getRepresentation() {
@@ -52,17 +56,13 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setSubCategories(entity.getChildren());
     representation.setProducts(entity.getProducts());
     representation.setStore(new Store(entity.getContext()));
+    representation.setCatalog(entity.getCatalog().orElse(null));
     representation.setDisplayName(entity.getDisplayName());
 
     List<CommerceBean> children = new ArrayList<>();
     children.addAll(representation.getSubCategories());
     children.addAll(representation.getProducts());
     representation.setChildren(children);
-    // get visuals directly via AssetService to avoid fallback to default picture
-    AssetService assetService = getConnection().getAssetService();
-    if (null != assetService) {
-      representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
-    }
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
 
@@ -76,7 +76,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
         childRepresentation.setDisplayName(child.getExternalId());
       }
 
-      result.put(child.getId(), childRepresentation);
+      result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
     }
     representation.setChildrenByName(result);
 
@@ -86,21 +86,18 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   @Override
   protected Category doGetEntity() {
     CommerceConnection commerceConnection = getConnection();
-    String id = getId();
-    if (ROOT_CATEGORY_ROLE_ID.equals(id)) {
-      return commerceConnection.getCatalogService().findRootCategory();
-    }
+    CatalogService catalogService = commerceConnection.getCatalogService();
 
-    String categoryId = commerceConnection.getIdProvider().formatCategoryId(id);
-    return commerceConnection.getCatalogService().findCategoryById(categoryId);
+    StoreContext storeContext = getStoreContext();
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+    CommerceId commerceId = commerceConnection.getIdProvider().formatCategoryId(catalogAlias, getId());
+    return catalogService.findCategoryById(commerceId, storeContext);
   }
 
   @Override
   public void setEntity(Category category) {
+    super.setEntity(category);
     setId(category.isRoot() ? ROOT_CATEGORY_ROLE_ID : category.getExternalId());
-    StoreContext context = category.getContext();
-    setSiteId(context.getSiteId());
-    setWorkspaceId(context.getWorkspaceId());
   }
 
   @Override
@@ -109,5 +106,4 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   public void setAugmentationService(AugmentationService augmentationService) {
     super.setAugmentationService(augmentationService);
   }
-
 }

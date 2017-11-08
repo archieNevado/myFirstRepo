@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.studio.esanalytics {
 import com.coremedia.ui.components.SwitchingContainer;
-import com.coremedia.ui.exml.ValueExpression;
+import com.coremedia.ui.data.ValueExpression;
 
 import ext.Ext;
 import ext.form.FieldContainer;

@@ -1,0 +1,66 @@
+.#{$cm-hero-prefix} {
+  position: relative;
+
+  &__picture-box {
+    @include aspect-ratio-box(4, 3);
+
+    @include breakpoint(sm-and-up) {
+      @include aspect-ratio-box(16, 9);
+    }
+  }
+
+  &__picture {
+    background: $cm-hero-picture-background-color;
+    @include stretch-absolute();
+  }
+
+  &__dimmer {
+    display: #{$cm-hero-dimmer-display};
+    @include dimmer($cm-hero-dimmer-opacity);
+  }
+
+  &__banderole,
+  &__cta {
+    @include banderole($cm-hero-banderole-bottom);
+  }
+
+  &__button,
+  &__text,
+  &__headline {
+    margin-top: 0;
+    margin-bottom: $cm-hero-padding-base-horizontal;
+
+    @include breakpoint(sm-and-up) {
+      margin-bottom: $cm-hero-padding-large-horizontal;
+    }
+  }
+
+  &__headline,
+  &__text {
+    color: $cm-hero-headline-color;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  &--video {
+    .#{$cm-hero-prefix}__text {
+      display: none;
+
+      @include breakpoint(sm-and-up) {
+        display: block;
+      }
+    }
+  }
+
+  &__popup-opener {
+    display: block;
+  }
+
+  &__play {
+    @include center-absolute;
+    z-index: 1;
+
+    @include breakpoint(xs) {
+      max-width: 25%; // make sure there is space for headline
+    }
+  }
+}

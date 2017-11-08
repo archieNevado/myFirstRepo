@@ -2,11 +2,9 @@ package com.coremedia.livecontext.ecommerce.ibm.workspace;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
@@ -17,8 +15,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.WORKSPACE;
+import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -30,14 +31,13 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
   @Nonnull
   @Override
-  public List<Workspace> findAllWorkspaces() throws CommerceException {
-    StoreContext storeContext = StoreContextHelper.getCurrentContext();
+  public List<Workspace> findAllWorkspaces(@Nonnull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
 
     WorkspacesCacheKey cacheKey = new WorkspacesCacheKey(storeContext, userContext, workspaceWrapperService,
             commerceCache);
 
-    Map map = (Map) commerceCache.get(cacheKey);
+    Map map = commerceCache.get(cacheKey);
     if (map == null) {
       return emptyList();
     }
@@ -50,36 +50,19 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     return createWorkspaceBeansFor((List<Map>) workspacesObj, storeContext);
   }
 
-  @Nullable
-  @Override
-  public Workspace findWorkspaceByExternalTechId(@Nonnull String externalId) throws CommerceException {
-    return findAllWorkspaces().stream()
-            .filter(workspace -> externalId.equals(workspace.getExternalTechId()))
-            .findFirst()
-            .orElse(null);
-  }
-
   @Nonnull
   private List<Workspace> createWorkspaceBeansFor(@Nonnull List<Map> list, @Nonnull StoreContext context) {
     return list.stream()
-            .filter(this::notNull)
+            .filter(Objects::nonNull)
             .map(workspaceMap -> createWorkspaceBeanFor(workspaceMap, context))
-            .filter(this::notNull)
+            .filter(Objects::nonNull)
             .collect(toList());
-  }
-
-  private boolean notNull(Object o) {
-    return o != null;
   }
 
   @Nullable
   private Workspace createWorkspaceBeanFor(@Nonnull Map map, @Nonnull StoreContext context) {
-    String id = CommerceIdHelper.formatWorkspaceId((String) map.get("id"));
-    if (!CommerceIdHelper.isWorkspaceId(id)) {
-      return null;
-    }
-
-    Workspace workspace = (Workspace) commerceBeanFactory.createBeanFor(id, context);
+    CommerceId commerceId = commerceId(WORKSPACE).withExternalId((String) map.get("id")).build();
+    Workspace workspace = (Workspace) commerceBeanFactory.createBeanFor(commerceId, context);
     ((AbstractIbmCommerceBean) workspace).setDelegate(map);
     return workspace;
   }

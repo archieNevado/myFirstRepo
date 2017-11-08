@@ -65,7 +65,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
     } else {
       var node:RemoteBean = getNodeModel(nodeId) as RemoteBean;
       if (node is Category) {
-        return getCategoryName(node);
+        return getCategoryName(Category(node));
       }
       else if (node is Product) {
         return Product(node).getName();
@@ -81,9 +81,14 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
     return undefined;
   }
 
-  private function getCategoryName(node:RemoteBean):String {
-    return categoryTreeRelation.isRoot(node) ? ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_root_category') :
-            Category(node).getDisplayName();
+  private function getCategoryName(node:Category):String {
+    //when multi-catalog is not configured there will be only one root category. then the root category should called
+    // 'Product Catalog' for the sake of backward compatibility.
+    var isSingleRootCategory:Boolean = !node.getStore() || !node.getStore().getCatalogs() ||
+            node.getStore().getCatalogs().length <= 1;
+    return isSingleRootCategory && categoryTreeRelation.isRoot(node) ?
+            ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_root_category') :
+            node.getDisplayName();
   }
 
   public function getIconCls(nodeId:String):String {
@@ -192,7 +197,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
         nameByUriPath[getNodeId(child)] = ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_marketing_root');
       }
       else if (child is Category) {
-        nameByUriPath[getNodeId(child)] = getCategoryName(child);
+        nameByUriPath[getNodeId(child)] = getCategoryName(Category(child));
       }
       else if (child) {
         nameByUriPath[getNodeId(child)] = childrenByIds[childId].displayName;

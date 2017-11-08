@@ -16,7 +16,7 @@ public class AvailabilityInfoImpl implements AvailabilityInfo {
 
   @Override
   public float getQuantity() {
-    return DataMapHelper.getValueForKey(delegate, "availableQuantity", 0.0f);
+    return DataMapHelper.findValueForKey(delegate, "availableQuantity", Float.class).orElse(0.0F);
   }
 
   @Override

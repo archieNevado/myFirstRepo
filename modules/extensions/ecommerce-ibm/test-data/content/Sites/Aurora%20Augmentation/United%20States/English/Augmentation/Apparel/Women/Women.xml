@@ -48,7 +48,7 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Fashion/Editorial%20Blog%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Editorial%20Blog%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Startpage/Personalized%20Recommendation.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Startpage/Personalized%20Recommendation"/>
 </LinkListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/sidebar.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/sidebar"/>

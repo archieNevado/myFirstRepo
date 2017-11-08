@@ -2,13 +2,14 @@ package com.coremedia.livecontext.ecommerce.ibm.inventory;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,19 +36,18 @@ public class AvailabilityServiceImplIT extends IbmServiceTestBase {
   @Inject
   CatalogService catalogService;
 
-  @Before
-  public void setup() {
-    super.setup();
-    testling.getAvailabilityWrapperService().clearLanguageMapping();
-  }
+  @Inject
+  private IbmCommerceIdProvider ibmCommerceIdProvider;
 
   @Betamax(tape = "csi_testGetAvailabilityInfo", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetAvailabilityInfo() {
-    List<ProductVariant> variants = catalogService.findProductById(
-            DefaultConnection.get().getIdProvider().formatProductId(PRODUCT2_CODE)).getVariants();
+    CommerceId productId = CurrentCommerceConnection.get().getIdProvider().formatProductId(null, PRODUCT2_CODE);
+    List<ProductVariant> variants = catalogService.findProductById(productId, getStoreContext()).getVariants();
     ProductVariant productVariant = variants.get(0);
-    ProductVariant productVariant2 = (ProductVariant) testling.getCommerceBeanFactory().createBeanFor(CommerceIdHelper.formatProductVariantTechId(productVariant.getExternalTechId()), testConfig.getStoreContext());
+    StoreContext storeContext = getStoreContext();
+    CommerceId commerceId = ibmCommerceIdProvider.formatProductVariantTechId(storeContext.getCatalogAlias(), productVariant.getExternalTechId());
+    ProductVariant productVariant2 = (ProductVariant) testling.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
     assertEquals(productVariant, productVariant2);
 
     //test multiple variants

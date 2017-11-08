@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.InvocationHandler;
@@ -48,17 +48,16 @@ import static com.coremedia.blueprint.analytics.elastic.tasks.FetchPublicationsH
 import static com.coremedia.blueprint.analytics.elastic.tasks.FetchPublicationsHistoryTask.PUBLICATION_HISTORY_INTERVAL_KEY;
 import static com.coremedia.blueprint.analytics.elastic.tasks.PublicationsAggregator.QUERY_SERVICE_EXPRESSION_TEMPLATE;
 import static com.coremedia.blueprint.base.analytics.elastic.util.DateUtil.getDateWithoutTime;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyVararg;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class FetchPublicationsHistoryTaskTest {
 
   private static final String TENANT = "tenant";
@@ -152,7 +151,7 @@ public class FetchPublicationsHistoryTaskTest {
   }
 
   private void initQueryService(final ContentRepository contentRepository) {
-    when(queryService.poseVersionQuery(anyString(), anyVararg())).thenAnswer(new Answer<Collection<Version>>() {
+    when(queryService.poseVersionQuery(anyString(), any())).thenAnswer(new Answer<Collection<Version>>() {
       public Collection<Version> answer(InvocationOnMock invocation) {
         Object[] args = invocation.getArguments();
         final Collection<Content> contents = contentRepository.getQueryService().poseContentQuery((String) args[0], args[1], args[2]);

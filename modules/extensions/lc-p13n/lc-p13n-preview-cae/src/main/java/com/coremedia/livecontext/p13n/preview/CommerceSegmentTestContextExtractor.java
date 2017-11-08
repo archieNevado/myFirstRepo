@@ -1,9 +1,11 @@
 package com.coremedia.livecontext.p13n.preview;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.beans.ContentBean;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Required;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Extracts commerce usersegments from cmUserProfile and enriches the p13n ContextCollection and the StoreContext.
@@ -64,7 +67,8 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
   }
 
   private void addUserSegmentsToStoreContext(List<String> userSegmentList){
-    CommerceConnection currentConnection = DefaultConnection.get();
+    CommerceConnection currentConnection = CurrentCommerceConnection.find().orElse(null);
+
     StoreContext storeContext = currentConnection != null ? currentConnection.getStoreContext() : null;
     CommerceIdProvider commerceIdProvider = currentConnection != null ? currentConnection.getIdProvider() : null;
 
@@ -75,10 +79,8 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
 
     List<String> segmentIds = new ArrayList<>();
     for (String userSegment : userSegmentList) {
-      String segmentId = commerceIdProvider.parseExternalIdFromId(userSegment);
-      if (segmentId != null) {
-        segmentIds.add(segmentId);
-      }
+      Optional<CommerceId> commerceId = CommerceIdParserHelper.parseCommerceId(userSegment);
+      commerceId.flatMap(CommerceId::getExternalId).ifPresent(segmentIds::add);
     }
     storeContext.setUserSegments(StringUtils.join(segmentIds, ","));
   }

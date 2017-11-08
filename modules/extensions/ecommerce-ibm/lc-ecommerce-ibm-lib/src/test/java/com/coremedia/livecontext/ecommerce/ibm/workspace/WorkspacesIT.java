@@ -1,14 +1,13 @@
 package com.coremedia.livecontext.ecommerce.ibm.workspace;
 
-import co.freeside.betamax.Betamax;
-import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -21,9 +20,10 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
@@ -35,18 +35,22 @@ public class WorkspacesIT extends IbmServiceTestBase {
   @Inject
   CatalogService catalogService;
 
+  @Inject
+  private IbmCommerceIdProvider ibmCommerceIdProvider;
+
   @Test
   public void testFindAllWorkspaces() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
+
     Workspace workspace = findWorkspace("Anniversary");
-    assertTrue("segment id has wrong format", workspace.getId().startsWith("ibm:///catalog/workspace/"));
+    assertEquals("segment id has wrong format", BaseCommerceBeanType.WORKSPACE, workspace.getId().getCommerceBeanType());
   }
 
   @Test
   public void testFindTestContentInWorkspace() {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
 
@@ -56,7 +60,8 @@ public class WorkspacesIT extends IbmServiceTestBase {
     StoreContextHelper.setWorkspaceId(storeContext, workspace.getExternalTechId());
     StoreContextHelper.setCurrentContext(storeContext);
 
-    Category category0 = catalogService.findCategoryById(CommerceIdHelper.formatCategoryId("PC_ForTheCook"));
+    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), "PC_ForTheCook");
+    Category category0 = catalogService.findCategoryById(categoryId, storeContext);
     assertNotNull("category \"PC_ForTheCook\" not found", category0);
 
     List<Category> subCategories = catalogService.findSubCategories(category0);
@@ -84,10 +89,10 @@ public class WorkspacesIT extends IbmServiceTestBase {
 
   private Workspace findWorkspace(String name) {
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(null);
+    UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<Workspace> workspaces = workspaceService.findAllWorkspaces();
+    List<Workspace> workspaces = workspaceService.findAllWorkspaces(StoreContextHelper.getCurrentContext());
     assertNotNull(workspaces);
     assertFalse(workspaces.isEmpty());
 

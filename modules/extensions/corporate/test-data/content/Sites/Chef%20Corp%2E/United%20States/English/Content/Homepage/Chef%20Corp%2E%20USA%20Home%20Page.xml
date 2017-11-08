@@ -131,6 +131,7 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/For%20Consumers%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/For%20Consumers%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/News%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/News%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/News%20Query%20List.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/News%20Query%20List"/>
 <Link xlink:href="coremedia:///cap/resources/Company%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company%20Collection"/>

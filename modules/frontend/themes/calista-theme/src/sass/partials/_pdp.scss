@@ -1,0 +1,29 @@
+// Changes to default pdp styles
+.cm-product-assets {
+  .cm-slideshow--carousel-chooser {
+    margin-top: 12px;
+
+    .cycle-slide-active {
+      background-color: #fff;
+      border: 1px solid #000;
+      padding: 1px;
+    }
+
+    .cm-teasable {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+.cm-product-assets-downloads {
+  &__title {
+    font-size: 12px;
+    color: #000;
+    font-weight: bold;
+  }
+
+  &__item {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,12 @@
+// if multiple teasers are rendered next to each other simulate sidebar layout
+@include breakpoint(sm-and-up) {
+  .cm-preview-content > .content > .cm-teasable {
+    margin-top: 8px;
+    width: 33%;
+  }
+}
+
+// reset aurora margins
+.row.margin-true > div > .cm-preview-developer-mode {
+  margin: 0;
+}

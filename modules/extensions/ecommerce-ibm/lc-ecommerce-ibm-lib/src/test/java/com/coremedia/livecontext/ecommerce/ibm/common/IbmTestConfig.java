@@ -4,12 +4,12 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreCo
 import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_8_0;
 
 public class IbmTestConfig implements TestConfig {
@@ -21,7 +21,7 @@ public class IbmTestConfig implements TestConfig {
   private static final String B2B_STORE_ID_V80 = System.getProperty("lc.test.storeId", "715838085");
   private static final String B2B_STORE_NAME = System.getProperty("lc.test.storeName", "AuroraB2BESite");
 
-  private static String CATALOG_NAME = System.getProperty("lc.test.catalogName","Extended Sites Catalog Asset Store");
+  private static String CATALOG_NAME = System.getProperty("lc.test.catalogName", "Extended Sites Catalog Asset Store");
   private static String CATALOG_ID = System.getProperty("lc.test.catalogId", "10051");
 
   private static String CATALOG_ID_B2C_V78 = System.getProperty("lc.test.catalogId", "10152");
@@ -38,9 +38,9 @@ public class IbmTestConfig implements TestConfig {
   private static final String CONNECTION_ID = "wcs1";
 
   private static final String USER1_NAME = System.getProperty("lc.test.user1.name", "arover");
-  private static final String USER1_ID = System.getProperty("lc.test.user1.id","3");
+  private static final String USER1_ID = System.getProperty("lc.test.user1.id", "3");
   private static final String USER2_NAME = System.getProperty("lc.test.user2.name", "gstevens");
-  private static final String USER2_ID = System.getProperty("lc.test.user2.id","4");
+  private static final String USER2_ID = System.getProperty("lc.test.user2.id", "4");
   private static final String PREVIEW_USER_NAME = System.getProperty("lc.test.previewuser.name", "preview");
 
   private static final String USERSEGMENT1_ID = "8000000000000000551";
@@ -66,26 +66,37 @@ public class IbmTestConfig implements TestConfig {
     STORE_CONTEXT_WITH_WORKSPACE.setWorkspaceId(WORKSPACE_ID);
   }
 
+  @Nonnull
   public StoreContext getStoreContext() {
     return getStoreContext(CURRENCY);
   }
 
-  public StoreContext getStoreContext(String currency) {
-    StoreContext result = null;
-    if (WCS_VERSION_8_0 == wcsVersion) {
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, currency);
-    } else if (WCS_VERSION_7_8 == wcsVersion) {
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, currency);
-    } else {
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, currency);
-    }
+  @Nonnull
+  public StoreContext getStoreContext(@Nullable String currency) {
+    StoreContext result = createInitialStoreContext(currency);
+
     Map replacements = new HashMap<>();
     replacements.put("storeId", result.getStoreId());
     replacements.put("catalogId", result.getCatalogId());
     replacements.put("locale", result.getLocale());
     StoreContextHelper.setReplacements(result, replacements);
+
     result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, wcsVersion);
+    result.put("site", "mySiteIndicator");
+
     return result;
+  }
+
+  @Nonnull
+  private StoreContext createInitialStoreContext(@Nullable String currency) {
+    switch (wcsVersion) {
+      case WCS_VERSION_8_0:
+        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, currency);
+      case WCS_VERSION_7_8:
+        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, currency);
+      default:
+        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, currency);
+    }
   }
 
   @Override
@@ -93,30 +104,43 @@ public class IbmTestConfig implements TestConfig {
     return "wcs1";
   }
 
+  @Nonnull
   public StoreContext getGermanStoreContext() {
     StoreContext result = getStoreContext();
     StoreContextHelper.setLocale(result, "de_DE");
     return result;
   }
 
+  @Nonnull
   public StoreContext getB2BStoreContext() {
-    StoreContext result = null;
-    if (WCS_VERSION_8_0 == wcsVersion) {
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
-    } else if (WCS_VERSION_7_8 == wcsVersion) {
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
-    } else {
-      result = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
-    }
+    StoreContext context = createInitialB2BStoreContext();
+
     Map replacements = new HashMap<>();
-    replacements.put("storeId", result.getStoreId());
-    replacements.put("catalogId", result.getCatalogId());
-    replacements.put("locale", result.getLocale());
-    StoreContextHelper.setReplacements(result, replacements);
-    result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, wcsVersion);
-    return result;
+    replacements.put("storeId", context.getStoreId());
+    replacements.put("catalogId", context.getCatalogId());
+    replacements.put("locale", context.getLocale());
+    StoreContextHelper.setReplacements(context, replacements);
+
+    context.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, wcsVersion);
+    context.put("site", "myB2BSiteIndicator");
+    context.put("dynamicPricing.enabled", true);
+
+    return context;
   }
 
+  @Nonnull
+  private StoreContext createInitialB2BStoreContext() {
+    switch (wcsVersion) {
+      case WCS_VERSION_8_0:
+        return StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
+      case WCS_VERSION_7_8:
+        return StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
+      default:
+        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+    }
+  }
+
+  @Nonnull
   public StoreContext getStoreContextWithWorkspace() {
     StoreContext result = getStoreContext();
     result.setWorkspaceId(WORKSPACE_ID);

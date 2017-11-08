@@ -1,9 +1,10 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -18,8 +19,9 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ALIAS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.COMMERCE_SYSTEM_IS_UNAVAILABLE;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONFIG_ID;
@@ -34,6 +36,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.USER_SEGMENTS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Helper class to build an "IBM WCS conform" store context.
@@ -55,43 +58,59 @@ public class StoreContextHelper {
    * Read the current context with #getCurrentContext().
    *
    * @param context the current context
-   * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException
+   * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the context is invalid (missing or wrong typed values)
    */
-  public static void setCurrentContext(@Nullable StoreContext context) throws InvalidContextException {
+  public static void setCurrentContext(@Nullable StoreContext context) {
     validateContext(context);
-    DefaultConnection.get().setStoreContext(context);
+
+    CurrentCommerceConnection.get().setStoreContext(context);
+  }
+
+  /**
+   * Gets the current store context within the current request (thread),
+   * or nothing if not set.
+   * <p>
+   * Set the current context with #setCurrentContext();
+   *
+   * @return the current store context, or nothing
+   */
+  @Nonnull
+  public static Optional<StoreContext> findCurrentContext() {
+    return CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
   }
 
   /**
    * Gets the current store context within the current request (thread).
+   * <p>
    * Set the current context with #setCurrentContext();
    *
-   * @return the StoreContext
+   * @return the current store context, or {@code null}
    */
   @Nullable
   public static StoreContext getCurrentContext() {
-    CommerceConnection currentConnection = DefaultConnection.get();
-    return currentConnection != null ? currentConnection.getStoreContext() : null;
+    return findCurrentContext().orElse(null);
+  }
+
+  /**
+   * Gets the current store context within the current request (thread),
+   * or throws an exception if not set.
+   * <p>
+   * Set the current context with #setCurrentContext();
+   *
+   * @return the current store context
+   */
+  @Nonnull
+  public static StoreContext getCurrentContextOrThrow() {
+    return findCurrentContext().orElseThrow(() -> new InvalidContextException("Current store context not available"));
   }
 
   @Nonnull
-  public static StoreContext getCurrentContextOrThrow() {
-    StoreContext context = getCurrentContext();
-
-    if (context == null) {
-      throw new InvalidContextException("Current store context not available");
-    }
-
-    return context;
-  }
-
-  @Nullable
   public static StoreContext getCurrentContextFor(@Nullable Locale locale) {
-    StoreContext currentStoreContext = getCurrentContext();
+    StoreContext currentStoreContext = getCurrentContextOrThrow();
 
     // locale can be null if the default locale is not set for commerce beans
     // in such a case we return the current context (a warning should be logged from caller)
-    if (locale != null && currentStoreContext != null) {
+    if (locale != null) {
       StoreContext result = StoreContextHelper.createContext(
               currentStoreContext.getConfigId(),
               currentStoreContext.getStoreId(),
@@ -100,6 +119,8 @@ public class StoreContextHelper {
               locale.toString(),
               currentStoreContext.getCurrency().toString()
       );
+      setCatalogAlias(result, currentStoreContext.getCatalogAlias());
+      setSiteId(result, currentStoreContext.getSiteId());
       setWorkspaceId(result, currentStoreContext.getWorkspaceId());
       result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, getWcsVersion(currentStoreContext));
       return result;
@@ -123,8 +144,7 @@ public class StoreContextHelper {
   @Nonnull
   public static StoreContext createContext(@Nullable String configId, @Nullable String storeId,
                                            @Nullable String storeName, @Nullable String catalogId,
-                                           @Nullable String localeStr, @Nullable String currency)
-          throws InvalidContextException {
+                                           @Nullable String localeStr, @Nullable String currency) {
     StoreContext context = newStoreContext();
 
     addContextParameterIfNotBlank(context, CONFIG_ID, configId);
@@ -172,7 +192,7 @@ public class StoreContextHelper {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
   @Nonnull
-  public static String getStoreId(@Nonnull StoreContext context) throws InvalidContextException {
+  public static String getStoreId(@Nonnull StoreContext context) {
     Object value = context.get(STORE_ID);
 
     if (!(value instanceof String)) {
@@ -182,7 +202,7 @@ public class StoreContextHelper {
     return (String) value;
   }
 
-  public static String getLangId(@Nonnull StoreContext context){
+  public static String getLangId(@Nonnull StoreContext context) {
     return context.getReplacements().get(CONTEXT_LANG_ID);
   }
 
@@ -194,7 +214,7 @@ public class StoreContextHelper {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
   @Nonnull
-  public static String getStoreName(@Nonnull StoreContext context) throws InvalidContextException {
+  public static String getStoreName(@Nonnull StoreContext context) {
     Object value = context.get(STORE_NAME);
 
     if (!(value instanceof String)) {
@@ -212,7 +232,7 @@ public class StoreContextHelper {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
   @Nonnull
-  public static String getStoreNameInLowerCase(@Nonnull StoreContext context) throws InvalidContextException {
+  public static String getStoreNameInLowerCase(@Nonnull StoreContext context) {
     return StringUtils.lowerCase(getStoreName(context));
   }
 
@@ -224,7 +244,7 @@ public class StoreContextHelper {
    * @return the config id or null if not present
    */
   @Nullable
-  public static String getConfigId(@Nonnull StoreContext context) throws InvalidContextException {
+  public static String getConfigId(@Nonnull StoreContext context) {
     return (String) context.get(CONFIG_ID);
   }
 
@@ -236,7 +256,7 @@ public class StoreContextHelper {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
   @Nonnull
-  public static Locale getLocale(@Nonnull StoreContext context) throws InvalidContextException {
+  public static Locale getLocale(@Nonnull StoreContext context) {
     Object value = context.get(LOCALE);
 
     if (!(value instanceof Locale)) {
@@ -251,12 +271,8 @@ public class StoreContextHelper {
    */
   public static void setLocale(@Nullable StoreContext context, @Nullable String localeStr) {
     if (context != null && localeStr != null) {
-      Locale locale = LocaleHelper.getLocaleFromString(localeStr);
-
-      if (locale == null) {
-        throw new InvalidContextException("Locale " + localeStr + " is not valid.");
-      }
-
+      Locale locale = LocaleHelper.parseLocaleFromString(localeStr)
+              .orElseThrow(() -> new InvalidContextException("Locale '" + localeStr + "' is not valid."));
       context.put(LOCALE, locale);
     }
   }
@@ -269,7 +285,7 @@ public class StoreContextHelper {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or wrong type)
    */
   @Nonnull
-  public static Currency getCurrency(@Nonnull StoreContext context) throws InvalidContextException {
+  public static Currency getCurrency(@Nonnull StoreContext context) {
     Object value = context.get(CURRENCY);
 
     if (!(value instanceof Currency)) {
@@ -370,11 +386,13 @@ public class StoreContextHelper {
    * Gets the catalog id from the given store context.
    *
    * @param context the store context
-   * @return the catalog id or null if no workspace was set
+   * @return the catalog id or null
    */
   @Nullable
   public static String getCatalogId(@Nonnull StoreContext context) {
-    return (String) context.get(CATALOG_ID);
+    String catalogId = context.getCatalogId();
+
+    return catalogId;
   }
 
   /**
@@ -462,6 +480,12 @@ public class StoreContextHelper {
     }
   }
 
+  public static void setCatalogAlias(@Nullable StoreContext context, @Nullable CatalogAlias catalogAlias){
+    if (context != null) {
+      context.put(CATALOG_ALIAS, catalogAlias);
+    }
+  }
+
   /**
    * Gets true if the dynamic pricing is enabled that leads to separate personalized price calls.
    * Default: false (if not configured, it will be assumed it is not enabled)
@@ -493,7 +517,7 @@ public class StoreContextHelper {
    * @param context the store context
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the context is invalid (missing or wrong typed values)
    */
-  public static void validateContext(@Nullable StoreContext context) throws InvalidContextException {
+  public static void validateContext(@Nullable StoreContext context) {
     if (context == null) {
       throw new InvalidContextException("context is null");
     }
@@ -507,17 +531,18 @@ public class StoreContextHelper {
   public static boolean isValid(StoreContext storeContext) {
     try {
       validateContext(storeContext);
-    }
-    catch (InvalidContextException e) {
+    } catch (InvalidContextException e) {
       return false;
     }
     return true;
   }
 
   @Nonnull
-  private static String formatContext(@Nonnull final StoreContext context) {
+  private static String formatContext(@Nonnull StoreContext context) {
     List<String> keys = ImmutableList.of(CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY, WORKSPACE_ID);
 
-    return keys.stream().map(key -> key + ": " + context.get(key)).collect(Collectors.joining(", "));
+    return keys.stream()
+            .map(key -> key + ": " + context.get(key))
+            .collect(joining(", "));
   }
 }

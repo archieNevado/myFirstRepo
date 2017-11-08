@@ -1,0 +1,130 @@
+/* default teaser */
+.#{$cm-teasable-prefix} {
+
+  font-family: $font-family-serif;
+  padding: 0;
+  margin-bottom: 48px;
+
+  &__picture-box {
+    @include aspect-ratio-box(2.35, 1);
+
+    .cm-teasable__picture.cm-non-adaptive-content {
+      width: 100%;
+    }
+  }
+
+  &.teaser-overlay-enabled {
+    .cm-teasable__picture-box {
+      @include aspect-ratio-box(1, 1);
+    }
+  }
+
+  &__headline {
+    font-size: $font-size-large;
+    text-transform: uppercase;
+    padding-bottom: 12px;
+  }
+
+  &__caption {
+    position: relative;
+    transform: none;
+    font-size: inherit;
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 24px;
+
+    .glyphicon-download:before {
+      display: block;
+      width: 16px;
+      height: 14px;
+      margin-right: 8px;
+      content: "";
+      background: transparent url("../../img/download-icon.svg") center center no-repeat;
+    }
+
+    .cm-product-info {
+      display: inline-block;
+
+      &__title {
+        display: none;
+      }
+
+      .cm-price {
+        font-size: $font-size-large;
+        color: $text-color;
+
+        &--old {
+          font-size: $font-size-base;
+        }
+      }
+    }
+
+  }
+
+  &__text {
+    padding-bottom: 24px;
+    line-height: 24px;
+  }
+
+  & a:hover &__headline > span {
+    text-decoration: underline;
+  }
+
+  & a:hover {
+    text-decoration: none;
+  }
+
+  // hide shop-now on mobile
+  @include breakpoint(md){
+    &:hover {
+      .cm-button-group--shopnow {
+        display: block;
+      }
+    }
+  }
+
+  // only show shop-now buttons on hover
+  .cm-button-group--shopnow {
+    display: none;
+    position: absolute;
+    text-align: center;
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+
+  // make sure shop-now button is centered on the picture
+  .picture-wrapper {
+    position: relative;
+  }
+}
+
+/* portrait teaser */
+.cm-portrait-teaser {
+  .#{$cm-teasable-prefix} {
+    &__headline {
+      font-size: $font-size-base;
+    }
+
+    &__text {
+      padding-bottom: 12px;
+    }
+
+    &__picture-box {
+      @include aspect-ratio-box(20, 31);
+    }
+  }
+
+  .cm-price {
+    padding-top: 0;
+
+    &--special {
+      padding-left: 0 !important;
+    }
+    &--old {
+      padding-right: 0 !important;
+    }
+  }
+}

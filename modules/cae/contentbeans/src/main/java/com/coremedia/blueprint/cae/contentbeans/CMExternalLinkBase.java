@@ -57,5 +57,15 @@ public abstract class CMExternalLinkBase extends CMTeasableImpl implements CMExt
     return getContent().getString(CMExternalLink.URL);
   }
 
+  /**
+   * Checks whether the {@link #getUrl() target url} is opening in a new tab.
+   *
+   * @return <code>true</code> if the link should open in a new tab otherwise <code>false</code>
+   * @cm.template.api
+   */
+  @Override
+  public boolean isOpenInNewTab() {
+    return getContent().getBoolean(OPEN_IN_NEW_TAB);
+  }
 }
   

@@ -98,6 +98,33 @@ interactions:
       Date: Tue, 07 Feb 2017 18:47:09 GMT
       Expires: Tue, 07 Feb 2017 19:47:09 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/%2520?partNumber=GFR033_3303&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679373","singleSKUCatalogEntryID":"3074457345616679374","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679374","catalogEntryTypeCode":"ItemBean","name":"Mangoes","uniqueID":"3074457345616679374","storeID":"715837934","partNumber":"GFR033_330301"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679373","price":[{"description":"L","value":"3.29","usage":"Display","currency":"USD"},{"description":"I","value":"3.29","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3303.jpg","seo_token_ntk":"mangoes","shortDescription":"Succulent
       sweet mangoes.","manufacturer":"Sunshine","name":"Mangoes","buyable":"true","longDescription":"Mangoes are a delicious tropical delight. Rich in vitamins, antioxidants and minerals. Imported daily fresh from Peru.","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Medium","uniqueID":"7741124012283335021","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335041","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"Tropical","uniqueID":"7741124012283335053","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335030","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_mangoes","numberOfSKUs":1,"partNumber":"GFR033_3303"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-09-07T11:43:50.469Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 07 Sep 2017 11:43:50 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000eLa-rOOoRjiDYhaUImpQEfF:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":3,"resourceId":"http:\/\/toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
+      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
+      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
+      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'

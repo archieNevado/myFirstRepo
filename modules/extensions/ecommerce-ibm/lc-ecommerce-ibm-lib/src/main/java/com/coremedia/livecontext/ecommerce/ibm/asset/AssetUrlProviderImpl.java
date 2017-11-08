@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -27,6 +27,7 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
   private static final String PREVIEW_URL_PATTERN = "/preview/";
   private static final String CMS_HOST_PLACEHOLDER = "[cmsHost]";
   private static final String STORE_ID_PLACEHOLDER = "[storeId]";
+  private static final String CATALOG_ID_PLACEHOLDER = "[catalogId]";
 
   private String commercePreviewUrl;
   private String commerceProductionUrl;
@@ -98,7 +99,7 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
     //replace [cmsHost]
     resolvedUrl = resolvedUrl.replace(CMS_HOST_PLACEHOLDER, cmsHost);
 
-    CommerceConnection connection = DefaultConnection.get();
+    CommerceConnection connection = CurrentCommerceConnection.find().orElse(null);
     if (connection == null) {
       return resolvedUrl;
     }
@@ -107,6 +108,8 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
     if (storeContext != null) {
       //replace [storeId]
       resolvedUrl = resolvedUrl.replace(STORE_ID_PLACEHOLDER, storeContext.getStoreId());
+      //replace [catalogId]
+      resolvedUrl = resolvedUrl.replace(CATALOG_ID_PLACEHOLDER, storeContext.getCatalogId());
     }
 
     return resolvedUrl;

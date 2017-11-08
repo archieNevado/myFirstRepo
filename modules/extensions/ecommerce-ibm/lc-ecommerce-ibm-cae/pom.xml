@@ -19,6 +19,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>lc-ecommerce-ibm-lib</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-links-impl</artifactId>
       <scope>runtime</scope>

@@ -8,10 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Some sitemap features needed by various classes.
@@ -101,16 +104,20 @@ public class SitemapHelper implements ServletContextAware {
   }
 
   private StringBuilder buildSitemapUrlPrefix(Site site) {
-    String domain = urlPrefixResolver.getUrlPrefix(site.getId(), null, null);
-    if (domain == null) {
+    String urlPrefix = urlPrefixResolver.getUrlPrefix(site.getId(), null, null);
+    if (urlPrefix == null) {
       throw new IllegalStateException("Cannot determine URL prefix for site " + site.getId());
     }
 
+    // adjust protocol to the one configured for this site
     String protocol = sitemapProtocol(site);
-    StringBuilder sb = new StringBuilder();
-    sb.append(protocol);
-    sb.append(protocol.length()==0 ? "" : ":");
-    sb.append(domain);
+    if (!isBlank(protocol)) {
+      UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(urlPrefix);
+      uriComponentsBuilder.scheme(protocol);
+      urlPrefix = uriComponentsBuilder.build().toUriString();
+    }
+
+    StringBuilder sb = new StringBuilder(urlPrefix);
     if(prependBaseUri) {
       sb.append(servletContext.getContextPath());
       sb.append("/servlet");

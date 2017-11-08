@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyMapOf;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -55,7 +55,7 @@ public class ElasticBlobHandlerTest {
     when(blob.getId()).thenReturn(id);
     when(blob.getMd5()).thenReturn(md5);
     when(blob.getFileName()).thenReturn(fileName);
-    when(secureHashCodeGeneratorStrategy.generateSecureHashCode(anyMapOf(String.class, Object.class))).thenReturn(securityHash);
+    when(secureHashCodeGeneratorStrategy.generateSecureHashCode(anyMap())).thenReturn(securityHash);
   }
 
   protected void validateMap(Map<String, ?> expected, Map<String, ?> result) {

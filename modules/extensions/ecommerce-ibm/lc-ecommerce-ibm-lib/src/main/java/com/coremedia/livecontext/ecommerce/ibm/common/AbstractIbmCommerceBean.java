@@ -2,16 +2,21 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
+import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.xml.Markup;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
 
   private CommerceCache commerceCache;
+
+  private IbmCommerceIdProvider commerceIdProvider;
+
+  private AssetUrlProvider assetUrlProvider;
 
   protected CommerceCache getCommerceCache() {
     return commerceCache;
@@ -20,6 +25,30 @@ public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
   @Required
   public void setCommerceCache(CommerceCache commerceCache) {
     this.commerceCache = commerceCache;
+  }
+
+  protected IbmCommerceIdProvider getCommerceIdProvider() {
+    return commerceIdProvider;
+  }
+
+  @Nonnull
+  @Override
+  protected CatalogServiceImpl getCatalogService() {
+    return (CatalogServiceImpl) super.getCatalogService();
+  }
+
+  @Required
+  public void setCommerceIdProvider(IbmCommerceIdProvider commerceIdProvider) {
+    this.commerceIdProvider = commerceIdProvider;
+  }
+
+  protected AssetUrlProvider getAssetUrlProvider() {
+    return assetUrlProvider;
+  }
+
+  @Required
+  public void setAssetUrlProvider(AssetUrlProvider assetUrlProvider) {
+    this.assetUrlProvider = assetUrlProvider;
   }
 
   @Override
@@ -44,10 +73,6 @@ public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
    * @param delegate the arbitrarily backing object
    */
   public abstract void setDelegate(Object delegate);
-
-  protected AssetUrlProvider getAssetUrlProvider() {
-    return DefaultConnection.get().getAssetUrlProvider();
-  }
 
   protected static Markup toRichtext(String str) {
     return toRichtext(str, true);

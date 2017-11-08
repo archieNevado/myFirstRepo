@@ -65,7 +65,7 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
       return preferredSiteExpression.getValue();
     };
     //use SidePanelStudioPlugin to register the CollectionViewContainer
-    var plugin:SidePanelStudioPlugin = new SidePanelStudioPlugin({});
+    var plugin:SidePanelStudioPlugin = Ext.create(SidePanelStudioPlugin, {});
     plugin.init(editorContext);
     //use ECommerceStudioPlugin to add CatalogRepositoryListContainer, CatalogSearchListContainer etc.
     new ECommerceStudioPlugin();

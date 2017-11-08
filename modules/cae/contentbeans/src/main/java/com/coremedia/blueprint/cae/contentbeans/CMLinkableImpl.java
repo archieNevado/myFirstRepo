@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMSettings;
 import com.coremedia.blueprint.common.contentbeans.CMViewtype;
+import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.struct.StructBuilderMode;
@@ -66,5 +66,10 @@ public abstract class CMLinkableImpl extends CMLinkableBase {
       }
     }
     return null;
+  }
+
+  @Override
+  public boolean isOpenInNewTab() {
+    return false;
   }
 }

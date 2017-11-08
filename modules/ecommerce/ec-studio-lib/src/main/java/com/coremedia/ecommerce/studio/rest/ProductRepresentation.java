@@ -2,6 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.Store;
+import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
@@ -21,11 +22,11 @@ public class ProductRepresentation extends CommerceBeanRepresentation {
   private String thumbnailUrl;
   private Category category;
   private Store store;
+  private Catalog catalog;
   private BigDecimal offerPrice;
   private BigDecimal listPrice;
   private String currency;
   private List<ProductVariant> variants;
-  private List<Content> visuals;
   private List<Content> pictures;
   private List<Content> downloads;
   private List<ProductAttribute> describingAttributes;
@@ -69,10 +70,6 @@ public class ProductRepresentation extends CommerceBeanRepresentation {
 
   public List<ProductVariant> getVariants() {
     return variants;
-  }
-
-  public List<Content> getVisuals() {
-    return visuals;
   }
 
   public List<Content> getPictures() {
@@ -124,11 +121,6 @@ public class ProductRepresentation extends CommerceBeanRepresentation {
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-  public void setVisuals(List<Content> visuals) {
-    this.visuals = visuals;
-  }
-
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setPictures(List<Content> pictures) {
     this.pictures = pictures;
   }
@@ -145,6 +137,15 @@ public class ProductRepresentation extends CommerceBeanRepresentation {
 
   public void setStore(Store store) {
     this.store = store;
+  }
+
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+  public Catalog getCatalog() {
+    return catalog;
+  }
+
+  public void setCatalog(Catalog catalog) {
+    this.catalog = catalog;
   }
 
   public void setDescribingAttributes(List<ProductAttribute> describingAttributes) {

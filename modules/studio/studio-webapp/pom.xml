@@ -16,8 +16,8 @@
   <properties>
     <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
     <logging-properties.dir>${project.basedir}/../../../workspace-configuration/logging</logging-properties.dir>
-    <propertieslocations>classpath:/studio.properties,classpath:/wcs.properties,classpath:/hybris.properties</propertieslocations>
-    <!-- The relative path to the directory containing a .remote-packages folder with Sencha packages: -->
+    <propertieslocations>classpath:/studio.properties,classpath:/wcs.properties</propertieslocations>
+    <!-- The relative path to the dir with the workspace.json -->
     <sencha.workspace.root>${project.basedir}/../../..</sencha.workspace.root>
   </properties>
 
@@ -273,6 +273,14 @@ see https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-
   </build>
 
   <profiles>
+
+    <profile>
+      <id>dev</id>
+      <properties>
+        <sencha.workspace.root>${project.basedir}/../../../..</sencha.workspace.root>
+      </properties>
+    </profile>
+
     <profile>
       <id>turbojpeg</id>
       <dependencies>

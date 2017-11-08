@@ -76,13 +76,6 @@ public class TaxonomyResolverImpl implements TaxonomyResolver, InitializingBean 
 
   @Override
   public Collection<Taxonomy> getTaxonomies() {
-    Iterator<Map.Entry<String,Taxonomy>> it = strategies.entrySet().iterator();
-    while(it.hasNext()) {
-      Map.Entry<String,Taxonomy> entry = it.next();
-      if(!isValid(entry)) {
-        it.remove();
-      }
-    }
     return strategies.values();
   }
 

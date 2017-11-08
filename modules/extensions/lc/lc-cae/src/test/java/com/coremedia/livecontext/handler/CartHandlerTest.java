@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -8,8 +9,10 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.objectserver.web.HttpError;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,8 +30,9 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -55,6 +59,7 @@ public class CartHandlerTest {
   private ContentRepository contentRepository;
 
   private BaseCommerceConnection commerceConnection;
+  private MockCommerceEnvBuilder envBuilder;
 
   @Before
   public void beforeEachTest() {
@@ -64,10 +69,16 @@ public class CartHandlerTest {
     //testling.setCartService(cartService);
     testling.setSitesService(sitesService);
     testling.setCheckoutRedirectUrlProvider(checkoutRedirectPropertyProvider);
+    doReturn(false).when(testling).isStudioPreview();
     testling.setContentRepository(contentRepository);
-    when(contentRepository.isContentManagementServer()).thenReturn(false);
 
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    commerceConnection = envBuilder.setupEnv();
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   @Test
@@ -184,7 +195,7 @@ public class CartHandlerTest {
   }
 
   private void configureResolveCart(Cart cart) {
-    when(commerceConnection.getCartService().getCart()).thenReturn(cart);
+    when(commerceConnection.getCartService().getCart(any(StoreContext.class))).thenReturn(cart);
   }
 
   private void configureContext(Navigation navigation) {
@@ -208,7 +219,7 @@ public class CartHandlerTest {
   }
 
   private void checkCartServiceIsUsedCorrectly() {
-    verify(commerceConnection.getCartService(), times(1)).getCart();
+    verify(commerceConnection.getCartService(), times(1)).getCart(CurrentCommerceConnection.get().getStoreContext());
   }
 
   private void checkSelfIsHttpError(ModelAndView modelAndView) {
@@ -216,6 +227,6 @@ public class CartHandlerTest {
   }
 
   private void verifyCartDeleteOrderItem(String orderItemId) {
-    verify(commerceConnection.getCartService(), times(1)).deleteCartOrderItem(orderItemId);
+    verify(commerceConnection.getCartService(), times(1)).deleteCartOrderItem(orderItemId, CurrentCommerceConnection.get().getStoreContext());
   }
 }

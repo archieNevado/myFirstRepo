@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.ServletContext;
 import javax.xml.XMLConstants;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class SitemapIndexRendererTest {
   private static final String URL_PREFIX = "http://www.acme.com/";
   private static final String SITEMAP_ENTRY_FILENAME_1 = "sitemap1.xml.gz";

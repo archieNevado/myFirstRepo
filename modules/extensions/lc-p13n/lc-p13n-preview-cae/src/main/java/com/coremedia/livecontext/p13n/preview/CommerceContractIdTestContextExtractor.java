@@ -1,9 +1,11 @@
 package com.coremedia.livecontext.p13n.preview;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.beans.ContentBean;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Required;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Extracts commerce contractIds from cmUserProfile and enriches the the StoreContext.
@@ -60,7 +63,8 @@ public class CommerceContractIdTestContextExtractor implements TestContextExtrac
   }
 
   private void addContractIdsForPreviewToStoreContext(List<String> contractList) {
-    CommerceConnection currentConnection = DefaultConnection.get();
+    CommerceConnection currentConnection = CurrentCommerceConnection.find().orElse(null);
+
     StoreContext storeContext = currentConnection != null ? currentConnection.getStoreContext() : null;
     CommerceIdProvider commerceIdProvider = currentConnection != null ? currentConnection.getIdProvider() : null;
 
@@ -71,12 +75,10 @@ public class CommerceContractIdTestContextExtractor implements TestContextExtrac
 
     List<String> contractIds = new ArrayList<>();
     for (String contract : contractList) {
-      String contractId = commerceIdProvider.parseExternalIdFromId(contract);
-      if (contractId != null) {
-        contractIds.add(contractId);
-      }
+      Optional<CommerceId> commerceId = CommerceIdParserHelper.parseCommerceId(contract);
+      commerceId.flatMap(CommerceId::getExternalId).ifPresent(contractIds::add);
     }
-    storeContext.setContractIdsForPreview(contractIds.toArray((new String[0])));
+    storeContext.setContractIdsForPreview(contractIds.toArray(new String[0]));
   }
 
   private Object getProperty(Map<String, Object> profileExtensions, String propertyPath) {

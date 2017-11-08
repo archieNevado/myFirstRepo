@@ -1,0 +1,9 @@
+{
+  "name": "@coremedia/brick-cta",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@coremedia/brick-bootstrap": "file:../bootstrap"
+  },
+  "main": "src/js/index.js"
+}

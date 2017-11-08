@@ -154,7 +154,7 @@
 </StructProperty>
 <BooleanProperty Name="disablePreviewHoverFrames">false</BooleanProperty>
 <BooleanProperty Name="enablePreviewScrollbars">false</BooleanProperty>
-<StringProperty Name="locale">de</StringProperty>
+<StringProperty Name="locale">en</StringProperty>
 <StructProperty Name="dashboard">
 <Struct>
 <StructListProperty Name="widgets">
@@ -209,7 +209,6 @@
 <StringProperty Name="xclass">com.coremedia.cms.editor.sdk.dashboard.WidgetState</StringProperty>
 <StringProperty Name="widgetTypeId">com.coremedia.blueprint.studio.config.esanalytics.esAnalyticsChartWidget</StringProperty>
 <IntProperty Name="rowspan">3</IntProperty>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20B2B%20Augmentation/Germany/German/Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%2a6253b54.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%20Augmentation"/>
 <IntProperty Name="column">2</IntProperty>
 </Struct>
 </StructListProperty>
@@ -222,7 +221,6 @@
 <StringProperty Name="type">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
 <StructProperty Name="state">
 <Struct>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20B2B%20Augmentation/Germany/German/Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%2a6253b54.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%20Augmentation"/>
 </Struct>
 </StructProperty>
 </Struct>

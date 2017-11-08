@@ -294,6 +294,8 @@
       </editor:types>
     </editor:ConfigureDashboardPlugin>
 
+    <!-- Un-comment the following to enable Premular tab reusability. See Studio Manual for details. -->
+    <!-- <editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/> -->
   </local:configuration>
 
 

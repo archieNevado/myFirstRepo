@@ -1,5 +1,5 @@
 <#ftl strip_whitespace=true>
-<#escape x as x?html>
+
 <#import "util.ftl" as util>
 
 <#--
@@ -51,6 +51,7 @@
  * @param attr (optional) @see notification#attr
  * @nested (optional) nested content will be rendered between the text and dismiss output
  -->
+<#outputformat "plainText">
 <#macro notificationFromSpring path dismissable=false baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>
   <#local text="" />
@@ -58,7 +59,7 @@
     <#local text=spring.status.getErrorMessagesAsString("\n") />
   </#if>
   <#if !ignoreIfEmpty?is_boolean || !ignoreIfEmpty || text?has_content>
-    <@notification type=type dismissable=dismissable baseClass=baseClass additionalClasses=additionalClasses title=title attr=attr><#noescape>${text?html?replace("\n", "<br />")}</#noescape><#nested /></@notification>
+    <@notification type=type dismissable=dismissable baseClass=baseClass additionalClasses=additionalClasses title=title attr=attr>${text?replace("\n", "<br />")}<#nested /></@notification>
   </#if>
 </#macro>
-</#escape>
+</#outputformat>

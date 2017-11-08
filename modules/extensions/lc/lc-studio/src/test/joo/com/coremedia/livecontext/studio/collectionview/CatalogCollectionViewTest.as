@@ -80,7 +80,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
       return preferredSiteExpression.getValue();
     };
     //use SidePanelStudioPlugin to register the CollectionViewContainer
-    var plugin:SidePanelStudioPlugin = new SidePanelStudioPlugin({});
+    var plugin:SidePanelStudioPlugin = Ext.create(SidePanelStudioPlugin, {});
     plugin.init(editorContext);
     //use ECommerceStudioPlugin to add CatalogRepositoryListContainer, CatalogSearchListContainer etc.
     new ECommerceStudioPlugin();
@@ -113,7 +113,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
             createTestlingStep(),
 
             //test catalog repository thumbnail view
-            selectNode("livecontext/category/HeliosSiteId/NO_WS/Women"),
+            selectNode("livecontext/category/HeliosSiteId/catalog/NO_WS/Women"),
             waitUntilSwitchToListButtonIsPressed(),
             switchToThumbnailView(),
             waitUntilSwitchToListButtonIsUnpressed(),
@@ -122,7 +122,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
             //test context menu on the repository list and thumbnail view
             switchToListView(),
             waitUntilListViewIsActive(),
-            selectNode("livecontext/category/HeliosSiteId/NO_WS/Dresses"),
+            selectNode("livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"),
             waitUntilProductIsLoadedInRepositoryList(),
             waitUntilSearchProductVariantToolbarButtonIsHidden(),
             openContextMenuOnFirstItemOfRepositoryList(),

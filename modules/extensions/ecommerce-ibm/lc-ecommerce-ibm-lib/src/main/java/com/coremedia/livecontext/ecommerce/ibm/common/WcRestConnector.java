@@ -14,6 +14,7 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcPreviewToken;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.objectserver.dataviews.DataViewHelper;
 import com.coremedia.security.encryption.util.EncryptionServiceUtil;
 import com.coremedia.util.Base64;
 import com.google.common.annotations.VisibleForTesting;
@@ -26,7 +27,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
@@ -287,7 +287,9 @@ public class WcRestConnector {
                               @Nonnull Map<String, String[]> optionalParameters,
                               @Nullable P bodyData,
                               @Nullable StoreContext storeContext,
-                              @Nullable UserContext userContext) throws CommerceException {
+                              @Nullable UserContext userContext) {
+    DataViewHelper.warnIfCachedInDataview();
+
     StoreContext myStoreContext = storeContext != null ? storeContext : StoreContextHelper.getCurrentContext();
     if (myStoreContext == null) {
       throw new NoStoreContextAvailable("No store context available in Rest Connector while calling "
@@ -301,7 +303,7 @@ public class WcRestConnector {
     } catch (UnauthorizedException e) {
       LOG.info("Commerce connector responded with 'Unauthorized'. Will renew the session and retry.");
       StoreContextHelper.setCurrentContext(myStoreContext);
-      loginService.renewServiceIdentityLogin();
+      loginService.renewServiceIdentityLogin(myStoreContext);
       if (myStoreContext.getContractIdsForPreview() != null) {
         LOG.debug("invalidating preview user...");
         commerceCache.getCache().invalidate(PreviewUserCacheKey.class.getName());
@@ -345,8 +347,7 @@ public class WcRestConnector {
       }
     }
 
-    if (serviceMethod.isUserCookiesSupport() && additionalHeaders.containsKey(HEADER_COOKIE))
-    {
+    if (serviceMethod.isUserCookiesSupport() && additionalHeaders.containsKey(HEADER_COOKIE)) {
       // remove any forUser ("on behalf of") parameters as we already have a user cookie that should be used
       // a normal shop user cannot act on behalf of herself/himself and would cause a http 400 instead
       if (optionalParameters.remove(AbstractWcWrapperService.PARAM_FOR_USER) != null || optionalParameters.remove(AbstractWcWrapperService.PARAM_FOR_USER_ID) != null) {
@@ -482,7 +483,7 @@ public class WcRestConnector {
     }
 
     if (serviceMethod.isPreviewSupport() && storeContext != null && storeContext.hasPreviewContext()) {
-      WcPreviewToken previewToken = loginService.getPreviewToken();
+      WcPreviewToken previewToken = loginService.getPreviewToken(storeContext);
       if (previewToken != null) {
         return true;
       }
@@ -528,28 +529,27 @@ public class WcRestConnector {
   }
 
   protected static <T> T parseFromJson(@Nonnull Reader reader, @Nonnull Class<T> classOfT) throws IOException {
-    Gson gson = new GsonBuilder().registerTypeAdapter(Map.class, new MapDeserializer()).
-                                  registerTypeAdapter(List.class, new ListDeserializer()).
-                                  create();
+    Gson gson = new GsonBuilder().registerTypeAdapter(Map.class, new MapDeserializer())
+            .registerTypeAdapter(List.class, new ListDeserializer())
+            .create();
+
     return gson.fromJson(reader, classOfT);
   }
 
   /**
    * Returns true if REST request can be executed.
    */
-  private boolean isCommerceAvailable(HttpMethod method, URI uriComponents, @Nullable StoreContext storeContext) {
-    if (StoreContextHelper.isCommerceSystemUnavailable(storeContext)) {
-      if (LOG.isWarnEnabled()) {
-        LOG.warn("Dropped " + method + " " + uriComponents + " (commerce system is unavailable)");
-      }
-
-      return false;
+  private static boolean isCommerceAvailable(HttpMethod method, URI uriComponents, @Nullable StoreContext storeContext) {
+    if (!StoreContextHelper.isCommerceSystemUnavailable(storeContext)) {
+      return true;
     }
 
-    return true;
+    LOG.warn("Dropped {} {} (commerce system is unavailable)", method, uriComponents);
+
+    return false;
   }
 
-  private boolean isAuthenticationError(@Nullable WcServiceError remoteError) {
+  private static boolean isAuthenticationError(@Nullable WcServiceError remoteError) {
     String errorKey = getErrorKey(remoteError);
 
     return errorKey != null &&
@@ -598,7 +598,7 @@ public class WcRestConnector {
     }
 
     if (serviceMethod.isPreviewSupport() && storeContext.hasPreviewContext()) {
-      WcPreviewToken previewToken = loginService.getPreviewToken();
+      WcPreviewToken previewToken = loginService.getPreviewToken(storeContext);
       if (previewToken != null) {
         headers.put(HEADER_WC_PREVIEW_TOKEN, previewToken.getPreviewToken());
       }
@@ -639,7 +639,7 @@ public class WcRestConnector {
           headers.put(HEADER_WC_TOKEN, previewSession.getWCToken());
           headers.put(HEADER_WC_TRUSTED_TOKEN, previewSession.getWCTrustedToken());
         } else {
-          LOG.warn("could not get preview session from " + previewCredentials);
+          LOG.warn("could not get preview session from {}", previewCredentials);
         }
       } else {
         LOG.warn("could not get preview credentials from cache");
@@ -655,7 +655,7 @@ public class WcRestConnector {
         headers.put("Authorization", "Basic " + credentials);
       } else if (mustBeAuthenticated && !WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
         //use WCToken for wcsVersion < 7.8
-        applyWCTokens(headers, mustBeSecured, mustBeAuthenticated);
+        applyWCTokens(headers, mustBeSecured, mustBeAuthenticated, storeContext);
       }
     }
 
@@ -669,12 +669,12 @@ public class WcRestConnector {
 
     PreviewUserCacheKey cacheKey = new PreviewUserCacheKey(user, password, storeContext, commerceCache, loginService);
 
-    return (WcCredentials) commerceCache.get(cacheKey);
+    return commerceCache.get(cacheKey);
   }
 
-  private void applyWCTokens(@Nonnull Map<String, String> headers, boolean mustBeSecured, boolean mustBeAuthenticated) {
+  private void applyWCTokens(@Nonnull Map<String, String> headers, boolean mustBeSecured, boolean mustBeAuthenticated, @Nonnull StoreContext storeContext) {
     if (mustBeAuthenticated) {
-      WcCredentials credentials = loginService.loginServiceIdentity();
+      WcCredentials credentials = loginService.loginServiceIdentity(storeContext);
       if (credentials == null) {
         return;
       }
@@ -781,13 +781,17 @@ public class WcRestConnector {
 
   /**
    * Ensures that no passwords are logged.
+   *
    * @param json the json that should be logged
    */
-  protected String formatJsonForLogging(String json) {
-    if (json != null) {
-      return json.replaceAll("logonPassword\"\\s*:\\s*\"[^\"]+\"", "logonPassword\":\"***\""); // NOSONAR false positive: Credentials should not be hard-coded
+  @Nullable
+  @VisibleForTesting
+  static String formatJsonForLogging(@Nullable String json) {
+    if (json == null) {
+      return null;
     }
-    return null;
+
+    return json.replaceAll("logonPassword\"\\s*:\\s*\"[^\"]+\"", "logonPassword\":\"***\""); // NOSONAR false positive: Credentials should not be hard-coded
   }
 
   /**
@@ -963,7 +967,8 @@ public class WcRestConnector {
   }
 
   private static class MapDeserializer implements JsonDeserializer<Map<String, Object>> {
-    public Map<String, Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    @Override
+    public Map<String, Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
       Map<String, Object> m = new LinkedHashMap<>();
       JsonObject jo = json.getAsJsonObject();
       for (Map.Entry<String, JsonElement> mx : jo.entrySet()) {
@@ -976,14 +981,14 @@ public class WcRestConnector {
         } else if (v.isJsonObject()) {
           m.put(key, context.deserialize(v, typeOfT));
         }
-
       }
       return m;
     }
   }
 
   private static class ListDeserializer implements JsonDeserializer<List<Object>> {
-    public List<Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    @Override
+    public List<Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
       List<Object> m = new ArrayList<>();
       JsonArray arr = json.getAsJsonArray();
       for (JsonElement jsonElement : arr) {

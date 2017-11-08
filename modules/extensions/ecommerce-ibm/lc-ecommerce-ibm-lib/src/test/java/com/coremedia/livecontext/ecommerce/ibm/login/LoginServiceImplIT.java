@@ -27,6 +27,7 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   String origServicePassword;
 
   @Before
+  @Override
   public void setup() {
     super.setup();
     origServiceUser = testling.getServiceUser();
@@ -44,7 +45,7 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   @Test
   @Betamax(tape = "lsi_testLoginSuccess", match = {MatchRule.path, MatchRule.query})
   public void testLoginSuccess() throws Exception {
-    WcCredentials credentials = testling.loginServiceIdentity();
+    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
     assertNotNull(credentials);
     assertNotNull("WcSession is not available", credentials.getSession());
   }
@@ -66,7 +67,7 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
     }
     StoreContext storeContext = testConfig.getStoreContextWithWorkspace();
     StoreContextHelper.setCurrentContext(storeContext);
-    WcCredentials credentials = testling.loginServiceIdentity();
+    WcCredentials credentials = testling.loginServiceIdentity(storeContext);
     assertNotNull(credentials);
     assertNotNull("WcSession is not available", credentials.getSession());
   }
@@ -75,15 +76,15 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   @Betamax(tape = "lsi_testLoginFailure", match = {MatchRule.path, MatchRule.query, MatchRule.body})
   public void testLoginFailure() throws Exception {
     testling.setServicePassword("wrong password");
-    testling.loginServiceIdentity();
+    testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
   }
 
   @Test
   @Betamax(tape = "lsi_testLogout", match = {MatchRule.path, MatchRule.query})
   public void testLogout() throws Exception {
-    WcCredentials credentials = testling.loginServiceIdentity();
+    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
     assertNotNull(credentials);
-    boolean success = testling.logoutServiceIdentity();
+    boolean success = testling.logoutServiceIdentity(StoreContextHelper.getCurrentContext());
     assertTrue(success);
   }
 

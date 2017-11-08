@@ -8,7 +8,6 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<LinkProperty Name="mediaelementplayer_flash" LinkType="coremedia:///cap/contenttype/CMInteractive" xlink:href="coremedia:///cap/resources/../../../../../../../Themes/aurora/vendor/flashmediaelement%2Eswf.xml" cmexport:path="/Themes/aurora/vendor/flashmediaelement%2Eswf"/>
 <LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/CMPicture" xlink:href="coremedia:///cap/resources/../../../Pictures/Site-Wide/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Pictures/Site-Wide/Picture%20Missing%20Product%20Picture"/>
 <StringProperty Name="shopNow">disabled</StringProperty>
 </Struct>
@@ -28,7 +27,7 @@
 <segment>aurorab2b</segment>
 <title>Home</title>
 <htmlTitle></htmlTitle>
-<keywords>CoreMedia,Aurora,Aurora Augmentation,Demo,Blueprint,LiveContext,CoreMedia LiveContext 3.0 for IBM WebSphere Commerce</keywords>
+<keywords>CoreMedia,Aurora,Aurora Augmentation,Demo,Blueprint,LiveContext,CoreMedia LiveContext 3 for IBM WebSphere Commerce</keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
 </subjectTaxonomy>

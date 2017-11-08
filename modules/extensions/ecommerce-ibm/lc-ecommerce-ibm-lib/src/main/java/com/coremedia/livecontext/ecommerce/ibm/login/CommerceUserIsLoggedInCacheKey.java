@@ -33,7 +33,7 @@ public class CommerceUserIsLoggedInCacheKey extends AbstractCommerceCacheKey<Boo
   @Override
   protected String getCacheIdentifier() {
     return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale();
+            storeContext.getStoreId() + ":" + storeContext.getLocale();
   }
 
 }

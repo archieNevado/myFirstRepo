@@ -1,7 +1,6 @@
 package com.coremedia.lc.studio.lib.augmentation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -50,7 +49,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
       return null;
     }
 
-    CommerceConnection commerceConnection = DefaultConnection.get();
+    CommerceConnection commerceConnection = CurrentCommerceConnection.find().orElse(null);
     if (commerceConnection == null) {
       return null;
     }
@@ -97,7 +96,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
   @Nullable
   private Category getCategory(@Nonnull CommerceConnection connection, @Nonnull String externalId) {
     try {
-      return connection.getCatalogService().findCategoryBySeoSegment(externalId);
+      return connection.getCatalogService().findCategoryBySeoSegment(externalId, connection.getStoreContext());
     } catch (CommerceException e) {
       LOGGER.warn("Cannot resolve category for SEO segment (external ID: {}).", externalId);
       return null;

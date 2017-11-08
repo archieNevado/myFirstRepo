@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collection;
 
@@ -45,7 +45,7 @@ public class AssetChangesTest {
   @Test
   public void test() {
     // test the assetChanges is correctly filled
-    doReturn(of("a", "b")).when(assetChanges).getExternalReferences(content);
+    doReturn(of("a", "b")).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
     Collection<Content> contents = assetChanges.get("a", site);
     assertEquals(1, contents.size());
@@ -61,11 +61,11 @@ public class AssetChangesTest {
 
   @Test
   public void testMultipleUpdatesOnSameContent() {
-    doReturn(of("a", "b")).when(assetChanges).getExternalReferences(content);
+    doReturn(of("a", "b")).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
-    doReturn(of("a")).when(assetChanges).getExternalReferences(content);
+    doReturn(of("a")).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
-    doReturn(of()).when(assetChanges).getExternalReferences(content);
+    doReturn(of()).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
 
     Collection<Content> a = assetChanges.get("a", site);

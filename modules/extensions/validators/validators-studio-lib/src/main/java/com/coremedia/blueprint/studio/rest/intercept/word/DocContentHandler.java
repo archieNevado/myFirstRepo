@@ -32,14 +32,13 @@ public class DocContentHandler extends ContentHandlerDecorator implements IDocum
     xhtmlToRichtext.put("i", "em");
     xhtmlToRichtext.put("h1", "p,p--heading-1");
     xhtmlToRichtext.put("h1-title", "p,p--heading-1");
+    xhtmlToRichtext.put("h1-titel", "p,p--heading-1");
     xhtmlToRichtext.put("h2", "p,p--heading-2");
     xhtmlToRichtext.put("h2-subtitle", "p,p--heading-2");
     xhtmlToRichtext.put("h3", "p,p--heading-3");
     xhtmlToRichtext.put("h4", "p,p--heading-4");
     xhtmlToRichtext.put("h5", "p,p--heading-5");
     xhtmlToRichtext.put("h6", "p,p--heading-6");
-    xhtmlToRichtext.put("h1-titel", "p,p--heading-1");
-    xhtmlToRichtext.put("h1-title", "p,p--heading-1");
     xhtmlToRichtext.put("p", "p");
     xhtmlToRichtext.put("table", "table");
     xhtmlToRichtext.put("tbody", "tbody");

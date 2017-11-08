@@ -15,14 +15,14 @@ import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static freemarker.template.utility.Collections12.singletonList;
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static org.mockito.Matchers.contains;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -73,7 +73,7 @@ public class SeoSegmentExternalReferenceResolverTest {
   @Mock
   private VanityUrlMapper vanityUrlMapper;
 
-
+  @InjectMocks
   private SeoSegmentExternalReferenceResolver testling;
 
   private static final String ROOT_SEGMENT = "aurora";
@@ -81,25 +81,16 @@ public class SeoSegmentExternalReferenceResolverTest {
 
   @Before
   public void setUp() {
-    testling = new SeoSegmentExternalReferenceResolver();
-    testling.setUrlPathFormattingHelper(urlPathFormattingHelper);
-    testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
-    testling.setContentRepository(contentRepository);
-    testling.setContextHelper(contextHelper);
-
     when(contentRepository.getContent(contains("815"))).thenReturn(targetDocument);
-    when(contentRepository.getContent(contains("12345"))).thenReturn(null);
 
     when(targetDocument.getType()).thenReturn(targetType);
-    when(summer2017ChannelDocument.getType()).thenReturn(targetType);
+    when(targetType.isSubtypeOf(CMLinkable.NAME)).thenReturn(true);
 
     when(site.getSiteRootDocument()).thenReturn(siteRootDocument);
     when(urlPathFormattingHelper.getVanityName(siteRootDocument)).thenReturn(ROOT_SEGMENT);
     when(navigationSegmentsUriHelper.parsePath(singletonList(ROOT_SEGMENT))).thenReturn(rootChannel);
     when(navigationSegmentsUriHelper.parsePath(asList(ROOT_SEGMENT, "reisen", "tuerkei"))).thenReturn(tuerkeiChannel);
     when(navigationSegmentsUriHelper.parsePath(asList(ROOT_SEGMENT, "reisen", "tuerkei", "sommer-2017"))).thenReturn(summer2017Channel);
-    when(navigationSegmentsUriHelper.parsePath(asList(ROOT_SEGMENT, "reisen", "tuerkei", "sommer-12345"))).thenReturn(null);
-    when(navigationSegmentsUriHelper.parsePath(asList(ROOT_SEGMENT, "reisen", "tuerkei", "istanbul-0815"))).thenReturn(null);
     when(tuerkeiChannel.getContext()).thenReturn(tuerkeiChannel);
     when(tuerkeiChannel.getContent()).thenReturn(tuerkeiChannelDocument);
     when(summer2017Channel.getContext()).thenReturn(summer2017Channel);
@@ -110,14 +101,26 @@ public class SeoSegmentExternalReferenceResolverTest {
   }
 
   @Test
+  public void testResolveExternalRefInvalidType() {
+    when(targetType.isSubtypeOf(CMLinkable.NAME)).thenReturn(false);
+    String ref = "cm-seosegment:reisen--tuerkei--istanbul-0815";
+    FragmentParameters params = FragmentParametersFactory.create(URL);
+    params.setExternalReference(ref);
+    LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
+    assertThat(linkableAndNavigation).isNotNull();
+    assertThat(linkableAndNavigation.getNavigation()).isEqualTo(tuerkeiChannelDocument);
+    assertThat(linkableAndNavigation.getLinkable()).isNull();
+  }
+
+  @Test
   public void testResolveExternalRef() {
     String ref = "cm-seosegment:reisen--tuerkei--istanbul-0815";
     FragmentParameters params = FragmentParametersFactory.create(URL);
     params.setExternalReference(ref);
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
-    assertNotNull(linkableAndNavigation);
-    assertEquals(tuerkeiChannelDocument, linkableAndNavigation.getNavigation());
-    assertEquals(targetDocument, linkableAndNavigation.getLinkable());
+    assertThat(linkableAndNavigation).isNotNull();
+    assertThat(linkableAndNavigation.getNavigation()).isEqualTo(tuerkeiChannelDocument);
+    assertThat(linkableAndNavigation.getLinkable()).isEqualTo(targetDocument);
   }
 
   @Test
@@ -126,9 +129,9 @@ public class SeoSegmentExternalReferenceResolverTest {
     FragmentParameters params = FragmentParametersFactory.create(URL);
     params.setExternalReference(ref);
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
-    assertNotNull(linkableAndNavigation);
-    assertEquals(summer2017ChannelDocument, linkableAndNavigation.getNavigation());
-    assertEquals(summer2017ChannelDocument, linkableAndNavigation.getLinkable());
+    assertThat(linkableAndNavigation).isNotNull();
+    assertThat(linkableAndNavigation.getNavigation()).isEqualTo(summer2017ChannelDocument);
+    assertThat(linkableAndNavigation.getLinkable()).isEqualTo(summer2017ChannelDocument);
   }
 
   @Test
@@ -137,9 +140,9 @@ public class SeoSegmentExternalReferenceResolverTest {
     FragmentParameters params = FragmentParametersFactory.create(URL);
     params.setExternalReference(ref);
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
-    assertNotNull(linkableAndNavigation);
-    assertEquals(tuerkeiChannelDocument, linkableAndNavigation.getNavigation());
-    assertEquals(null, linkableAndNavigation.getLinkable());
+    assertThat(linkableAndNavigation).isNotNull();
+    assertThat(linkableAndNavigation.getNavigation()).isEqualTo(tuerkeiChannelDocument);
+    assertThat(linkableAndNavigation.getLinkable()).isNull();
   }
 
 
@@ -152,9 +155,9 @@ public class SeoSegmentExternalReferenceResolverTest {
     FragmentParameters params = FragmentParametersFactory.create(URL);
     params.setExternalReference(ref);
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
-    assertNotNull(linkableAndNavigation);
-    assertEquals(tuerkeiChannelDocument, linkableAndNavigation.getNavigation());
-    assertEquals(targetDocument, linkableAndNavigation.getLinkable());
+    assertThat(linkableAndNavigation).isNotNull();
+    assertThat(linkableAndNavigation.getNavigation()).isEqualTo(tuerkeiChannelDocument);
+    assertThat(linkableAndNavigation.getLinkable()).isEqualTo(targetDocument);
   }
 
 }

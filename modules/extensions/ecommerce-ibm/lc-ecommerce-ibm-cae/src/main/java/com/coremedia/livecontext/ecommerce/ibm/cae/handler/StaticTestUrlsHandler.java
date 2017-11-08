@@ -18,13 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.zip.GZIPOutputStream;
@@ -34,9 +37,9 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
 
 /**
  * Generates a list of static test URLs for a site.
- *
+ * <p>
  * Example URL: http://localhost:40980/blueprint/servlet/internal/aurora/statictesturls
- *
+ * <p>
  * Test URLs are configured via Spring on site basis. They may contain commerce related
  * tokens (like {storeId}, {locale} or {catalogId}) which will be replaced. As site
  * identifier the "vanity" site name (like "aurora" or the "real" site name (like
@@ -55,13 +58,13 @@ public class StaticTestUrlsHandler {
 
   private Map<String, List<String>> testUrlsMap;
 
-  public static final String URI_PATTERN =
-          '/' + PREFIX_INTERNAL +
-          "/{" + SEGMENT_ROOT + '}' +
-          '/' + TESTURLS;
+  public static final String URI_PATTERN
+          = '/' + PREFIX_INTERNAL
+          + "/{" + SEGMENT_ROOT + '}'
+          + '/' + TESTURLS;
 
   @RequestMapping(URI_PATTERN)
-  public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
+  public ModelAndView handleRequest(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
     try {
       Site site = siteByRequest(request);
 
@@ -73,80 +76,93 @@ public class StaticTestUrlsHandler {
       boolean gzipCompression = getBooleanParameter(request, SitemapRequestParams.PARAM_GZIP_COMPRESSION);
       writeResultToResponse(result, response, gzipCompression);
       response.setStatus(HttpServletResponse.SC_OK);
-
     } catch (IOException e) {
       String msg = "Error when creating url list: " + e.getMessage();
       handleError(response, msg, e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     } catch (IllegalRequestException e) {
       handleError(response, e.getMessage(), null, HttpServletResponse.SC_NOT_FOUND);
-    } catch(Exception e) {
+    } catch (Exception e) {
       handleError(response, e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
+
     return null;
   }
 
   // --- features ---------------------------------------------------
 
-  private String createUrls(Site site) {
-    Optional<CommerceConnection> commerceConnection = commerceConnectionInitializer.findConnectionForSite(site);
+  @Nonnull
+  private String createUrls(@Nonnull Site site) {
     StringBuilder testUrlsBuilder = new StringBuilder();
-    if (commerceConnection.isPresent()) {
-      StoreContext storeContext = commerceConnection.get().getStoreContext();
+
+    Optional<CommerceConnection> commerceConnection = commerceConnectionInitializer.findConnectionForSite(site);
+    commerceConnection.ifPresent(connection -> {
+      StoreContext storeContext = connection.getStoreContext();
+
       List<String> testUrls = testUrlsMap.get(getSiteVanityName(site));
       if (testUrls == null) {
         testUrls = testUrlsMap.get(site.getName());
       }
+
       if (testUrls != null) {
         for (String s : testUrls) {
           testUrlsBuilder.append(replaceTokens(s, storeContext)).append('\n');
         }
       }
-    }
+    });
+
     return testUrlsBuilder.toString();
   }
 
   // --- utilities --------------------------------------------------
 
-  private String replaceTokens(String url, StoreContext storeContext) {
+  @Nonnull
+  private static String replaceTokens(@Nonnull String url, @Nonnull StoreContext storeContext) {
+    Locale locale = storeContext.getLocale();
+
     Map<String, String> parameterMap = new HashMap<>();
     parameterMap.put("storeId", storeContext.getStoreId());
     parameterMap.put("storeName", storeContext.getStoreName());
     parameterMap.put("catalogId", storeContext.getCatalogId());
     parameterMap.put("siteId", storeContext.getSiteId());
-    parameterMap.put("locale", storeContext.getLocale() != null ? storeContext.getLocale().toLanguageTag() : null);
-    parameterMap.put("language", storeContext.getLocale().getLanguage()+"");
+    parameterMap.put("locale", locale != null ? locale.toLanguageTag() : null);
+    parameterMap.put("language", locale != null ? locale.getLanguage() : null);
+
     return TokenResolverHelper.replaceTokens(url, parameterMap, false, false);
   }
 
   @Nonnull
-  private Site siteByRequest(HttpServletRequest request) {
-    Site site = siteResolver.findSiteByPath(request.getPathInfo());
-    if (site==null) {
-      throw new IllegalRequestException("Cannot resolve a site from " + request.getPathInfo());
+  private Site siteByRequest(@Nonnull HttpServletRequest request) {
+    String pathInfo = request.getPathInfo();
+
+    Site site = siteResolver.findSiteByPath(pathInfo);
+
+    if (site == null) {
+      throw new IllegalRequestException("Cannot resolve a site from " + pathInfo);
     }
+
     return site;
   }
 
-  private String getSiteVanityName(Site site) {
+  @Nonnull
+  private String getSiteVanityName(@Nonnull Site site) {
     Content rootChannel = site.getSiteRootDocument();
     if (rootChannel != null) {
-      String vanityName = urlPathFormattingHelper.getVanityName(rootChannel);
-      if (vanityName != null) {
-        return vanityName;
-      }
+      return urlPathFormattingHelper.getVanityName(rootChannel);
     }
+
     return site.getName();
   }
 
-
   // --- internal ---------------------------------------------------
 
-  private void handleError(HttpServletResponse response, String msg, Exception e, int httpErrorCode) {
+  private static void handleError(@Nonnull HttpServletResponse response, String msg, @Nullable Exception e,
+                                  int httpErrorCode) {
     if (e != null) {
       LOG.error(msg, e);
     } else {
       LOG.info(msg);
     }
+
     try {
       response.sendError(httpErrorCode, msg);
     } catch (IOException e1) {
@@ -157,15 +173,17 @@ public class StaticTestUrlsHandler {
   /**
    * Writes the generated URLs to the response output stream
    *
-   * @param result renderer's result.
-   * @param response The http servlet response to write the urls into.
+   * @param result          renderer's result.
+   * @param response        The http servlet response to write the urls into.
    * @param gzipCompression compression flag
    * @throws IOException in case of an io error
    */
-  private void writeResultToResponse(String result, HttpServletResponse response, boolean gzipCompression) throws IOException {
+  private static void writeResultToResponse(@Nonnull String result, @Nonnull HttpServletResponse response,
+                                            boolean gzipCompression) throws IOException {
     OutputStream out = createOutputStream(response, gzipCompression);
+
     try {
-      out.write(result.getBytes("UTF-8"));
+      out.write(result.getBytes(StandardCharsets.UTF_8));
     } finally {
       IOUtils.closeQuietly(out);
     }
@@ -175,10 +193,10 @@ public class StaticTestUrlsHandler {
    * Helper for parsing boolean parameter values.
    *
    * @param request The request that contains the parameter
-   * @param param The name of the parameter
+   * @param param   The name of the parameter
    * @return A boolean param from the request
    */
-  private boolean getBooleanParameter(HttpServletRequest request, String param) {
+  private static boolean getBooleanParameter(@Nonnull HttpServletRequest request, @Nonnull String param) {
     String value = request.getParameter(param);
     return value != null && Boolean.parseBoolean(value);
   }
@@ -186,16 +204,19 @@ public class StaticTestUrlsHandler {
   /**
    * Creates the output stream for writing the response depending of passed parameters.
    *
-   * @param response The HttpServletResponse to write for.
+   * @param response        The HttpServletResponse to write for.
    * @param gzipCompression compression flag
    * @return The OutputStream
    * @throws IOException in case of io error
    */
-  private OutputStream createOutputStream(HttpServletResponse response, boolean gzipCompression) throws IOException {
+  @Nonnull
+  private static OutputStream createOutputStream(@Nonnull HttpServletResponse response, boolean gzipCompression)
+          throws IOException {
     if (gzipCompression) {
       response.setHeader("Content-Encoding", "gzip");
       return new GZIPOutputStream(response.getOutputStream());
     }
+
     return new BufferedOutputStream(response.getOutputStream());
   }
 

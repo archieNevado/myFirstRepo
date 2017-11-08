@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.fragment.links.transformers;
 
 import com.coremedia.blueprint.base.links.UriConstants;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.web.taglib.FindNavigationContext;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
@@ -61,12 +61,13 @@ public class LiveContextLinkTransformer implements LinkTransformer {
       return cmsLink;
     }
 
-    StoreContext storeContext = requireNonNull(DefaultConnection.get(), "no commerce connection available").getStoreContext();
-    Site site = sitesService.getSite(storeContext.getSiteId());
-    if (site == null) {
-      throw new IllegalStateException("Could not find a site for store id '" + storeContext.getStoreId() + "' and " +
-              "locale '" + storeContext.getLocale() + "'");
-    }
+    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
+
+    String siteId = requireNonNull(storeContext.getSiteId(), "Site ID must be set on store context.");
+    Site site = sitesService.findSite(siteId)
+            .orElseThrow(() -> new IllegalStateException(
+                    String.format("Could not find a site for store id '%s' and locale '%s'.",
+                            storeContext.getStoreId(), storeContext.getLocale())));
 
     boolean isContentLed = settingsService.settingWithDefault(LIVECONTEXT_CONTENT_LED, Boolean.class, false, site);
     if (isContentLed) {

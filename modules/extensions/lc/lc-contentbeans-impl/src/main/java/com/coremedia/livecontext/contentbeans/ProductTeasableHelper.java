@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.cap.multisite.Site;
@@ -9,6 +9,7 @@ import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.xml.Markup;
@@ -18,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceId;
 import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
-import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class ProductTeasableHelper {
 
@@ -73,16 +74,17 @@ public class ProductTeasableHelper {
   }
 
   public Product getProduct(LiveContextProductTeasable contentBean) {
-    String productId = contentBean.getExternalId();
+    Optional<CommerceId> productIdOptional = parseCommerceId(contentBean.getExternalId());
 
-    if (isEmpty(productId)) {
+    if (!productIdOptional.isPresent()) {
       return null;
     }
 
     try {
-      CommerceConnection commerceConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+      CommerceConnection commerceConnection = CurrentCommerceConnection.get();
       StoreContext storeContext = commerceConnection.getStoreContextProvider().findContextByContent(contentBean.getContent());
-      return commerceConnection.getCatalogService().withStoreContext(storeContext).findProductById(productId);
+      CommerceId commerceId = productIdOptional.get();
+      return commerceConnection.getCatalogService().withStoreContext(storeContext).findProductById(commerceId, storeContext);
     } catch (CommerceException e) {
       LOG.warn("Could not retrieve product for ProductTeaser {}.", this, e);
       return null;

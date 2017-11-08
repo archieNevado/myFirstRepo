@@ -4,7 +4,7 @@ import com.coremedia.cap.common.Blob;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;

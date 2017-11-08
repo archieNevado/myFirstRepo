@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
@@ -42,6 +42,7 @@ public class CommerceUrlPropertyProviderTest extends IbmServiceTestBase {
   private static final String SEARCH_TERM_WITH_UMLAUTS = "eté-küche";
   private static final String PRODUCT_ID = "1111";
   private static final String CATEGORY_ID = "2222";
+  private static final String CATALOG_ID = "3333";
 
   private static final String URL_TEMPLATE = "/SearchDisplay?storeId={storeId}&storeName={storeName}&seoSegment={seoSegment}&searchTerm={searchTerm}&language={language}&catalogId={catalogId}&langId={langId}&pageSize=12";
   private static final String DEFAULT_STOREFRONT = "//shop-preview-production-helios.blueprint-box.vagrant/webapp/wcs/stores/servlet";
@@ -55,6 +56,7 @@ public class CommerceUrlPropertyProviderTest extends IbmServiceTestBase {
   private CommerceUrlPropertyProvider testling;
 
   @Before
+  @Override
   public void setup(){
     super.setup();
     testling = new CommerceUrlPropertyProvider();
@@ -68,14 +70,14 @@ public class CommerceUrlPropertyProviderTest extends IbmServiceTestBase {
     CommerceConnection connection = Mockito.mock(CommerceConnection.class);
     CatalogServiceImpl catalogService = Mockito.mock(CatalogServiceImpl.class);
 
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
     when(connection.getCatalogService()).thenReturn(catalogService);
     when(catalogService.getLanguageId(any(Locale.class))).thenReturn("-1");
   }
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   @Test
@@ -182,7 +184,7 @@ public class CommerceUrlPropertyProviderTest extends IbmServiceTestBase {
     parametersMap.put(CommerceUrlPropertyProvider.PRODUCT_ID, PRODUCT_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
     if (locale != null) {
-      CatalogService catalogService = DefaultConnection.get().getCatalogService();
+      CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
       String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
       parametersMap.put(CommerceUrlPropertyProvider.PARAM_LANG_ID, languageId);
     }
@@ -209,7 +211,7 @@ public class CommerceUrlPropertyProviderTest extends IbmServiceTestBase {
     parametersMap.put(CommerceUrlPropertyProvider.CATEGORY_ID, CATEGORY_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
     if (locale != null) {
-      CatalogService catalogService = DefaultConnection.get().getCatalogService();
+      CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
       String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
       parametersMap.put(CommerceUrlPropertyProvider.PARAM_LANG_ID, languageId);
     }
@@ -217,5 +219,24 @@ public class CommerceUrlPropertyProviderTest extends IbmServiceTestBase {
 
     expectedUrl = TokenResolverHelper.replaceTokens(expectedUrl, parametersMap, false, false);
     assertEquals(expectedUrl, providedUrl);
+  }
+
+  @Test
+  public void testWithCatalogId(){
+    Map<String, Object> params = new HashMap<>();
+    params.put(CommerceUrlPropertyProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
+    StoreContext storeContext = testConfig.getStoreContext();
+    params.put(CommerceUrlPropertyProvider.SEO_SEGMENT, "simsalabim");
+    params.put(CommerceUrlPropertyProvider.STORE_CONTEXT, storeContext);
+    params.put(CommerceUrlPropertyProvider.SEO_SEGMENT, SEO_SEGMENT);
+
+    String providedUrlNoCatalogId = testling.provideValue(params).toString();
+    assertThat("catalogId param not contained",
+            providedUrlNoCatalogId, not(containsString("catalogId=" + CATALOG_ID)));
+
+    params.put(CommerceUrlPropertyProvider.CATALOG_ID, CATALOG_ID);
+    String providedUrlWithCatalogId = testling.provideValue(params).toString();
+    assertThat("catalogId param must be appended.",
+            providedUrlWithCatalogId, containsString("catalogId=" + CATALOG_ID));
   }
 }

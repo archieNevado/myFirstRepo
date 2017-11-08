@@ -231,18 +231,22 @@
 </Struct>
 </StructProperty>
 <StringProperty Name="locale">en</StringProperty>
-<LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_Deli/PC_Deli.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_Deli/PC_Deli"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_ForTheCook/PC_ForTheCook.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_ForTheCook/PC_ForTheCook"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_InTheKitchen/PC_InTheKitchen.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_InTheKitchen/PC_InTheKitchen"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_OnTheTable/PC_OnTheTable.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/PC_OnTheTable/PC_OnTheTable"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Apparel.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Apparel"/>
-</LinkListProperty>
+<StructListProperty Name="bookmarks">
+<Struct>
+<StringProperty Name="name">Apparel</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Apparel.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Apparel"/>
+</Struct>
+</StructListProperty>
 <StructProperty Name="workarea">
 <Struct>
 <StructListProperty Name="tabs">
 <Struct>
-<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.startTab</StringProperty>
+<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StructProperty Name="state">
+<Struct>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation"/>
+</Struct>
+</StructProperty>
 </Struct>
 </StructListProperty>
 <IntProperty Name="activeTabIndex">0</IntProperty>

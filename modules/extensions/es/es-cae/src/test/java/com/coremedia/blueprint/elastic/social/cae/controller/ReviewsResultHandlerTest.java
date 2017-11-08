@@ -1,7 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
+import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.i18n.PageResourceBundleFactory;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
@@ -13,16 +15,11 @@ import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
-import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.reviews.Review;
@@ -35,7 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -49,18 +46,17 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.elastic.social.api.ContributionType.ANONYMOUS;
-import static com.coremedia.elastic.social.api.ContributionType.DISABLED;
-import static com.coremedia.elastic.social.api.ContributionType.REGISTERED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyVararg;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -91,9 +87,6 @@ public class ReviewsResultHandlerTest {
   private ElasticSocialConfiguration elasticSocialConfiguration;
 
   @Mock
-  private SettingsService settingsService;
-
-  @Mock
   private PageResourceBundleFactory resourceBundleFactory;
 
   // @Mock   Möööp... ResourceBundle is all final, cannot be mocked
@@ -115,19 +108,10 @@ public class ReviewsResultHandlerTest {
   private CMLinkable contentBean;
 
   @Mock
-  private ContentType contentType;
-
-  @Mock
   private ContentBeanFactory contentBeanFactory;
 
   @Mock
-  private Navigation navigation;
-
-  @Mock
   private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
-
-  @Mock
-  private CMContext navigationContext;
 
   @Mock
   private CMNavigation cmNavigation;
@@ -155,9 +139,6 @@ public class ReviewsResultHandlerTest {
 
   @Before
   public void setup() {
-    String contextPath = "perfectchef";
-    String siteId = "123";
-
     handler.setElasticSocialUserHelper(new ElasticSocialUserHelper(communityUserService));
     handler.setContextHelper(contextHelper);
     handler.setElasticSocialPlugin(elasticSocialPlugin);
@@ -167,27 +148,18 @@ public class ReviewsResultHandlerTest {
     when(contentRepository.getContent(IdHelper.formatContentId(targetId))).thenReturn(content);
     when(contentBeanFactory.createBeanFor(content)).thenReturn(contentBean);
     when(contentBean.getContent()).thenReturn(content);
-    when(content.getType()).thenReturn(contentType);
     when(content.getId()).thenReturn(targetId);
-    when(navigation.getContext()).thenReturn(context);
-    when(context.getContent()).thenReturn(content);
-    when(site.getId()).thenReturn(siteId);
     when(contributionTargetHelper.getContentFromTarget(any(ContentWithSite.class))).thenReturn(content);
-    when(navigationSegmentsUriHelper.parsePath(contextPath)).thenReturn(navigation);
 
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
     when(contentBeanFactory.createBeanFor(navigationContent)).thenReturn(cmNavigation);
 
-    when(navigation.getContext()).thenReturn(navigationContext);
-    when(navigationContext.getContentId()).thenReturn(Integer.parseInt(contextId));
-
     resourceBundle = new MockResourceBundle();
-    when(resourceBundleFactory.resourceBundle(any(Navigation.class), any(User.class))).thenReturn(resourceBundle);
+    when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
 
-    when(elasticSocialPlugin.getElasticSocialConfiguration(anyVararg())).thenReturn(elasticSocialConfiguration);
+    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
 
     when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
-    when(elasticSocialConfiguration.isReviewingEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(true);
 
@@ -221,8 +193,7 @@ public class ReviewsResultHandlerTest {
 
   @Test
   public void createReview() {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
-    when(elasticSocialService.createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyListOf(Blob.class), any(Navigation.class))).thenReturn(review);
+    when(elasticSocialService.createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), isNull(), any(Navigation.class))).thenReturn(review);
     when(elasticSocialConfiguration.getReviewModerationType()).thenReturn(ModerationType.POST_MODERATION);
     UserContext.setUser(user);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
@@ -231,15 +202,12 @@ public class ReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertTrue(resultModel.isSuccess());
-    verify(elasticSocialService).createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService).createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), isNull(), any(Navigation.class));
     verifyMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
   public void createReviewRatingNull() {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
-    when(elasticSocialService.createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyListOf(Blob.class), any(Navigation.class))).thenReturn(review);
-    when(elasticSocialConfiguration.getReviewModerationType()).thenReturn(ModerationType.POST_MODERATION);
     UserContext.setUser(user);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, null, request);
 
@@ -247,13 +215,12 @@ public class ReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
-    verify(elasticSocialService, never()).createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService, never()).createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), nullable(List.class), any(Navigation.class));
     verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
   public void createReviewDisabled() {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(DISABLED);
     when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(false);
     UserContext.setUser(user);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
@@ -262,13 +229,12 @@ public class ReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
-    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(ContentWithSite.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(ContentWithSite.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
     verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
   public void createReviewAnonymousDisabled() {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(REGISTERED);
     when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(false);
     when(user.isAnonymous()).thenReturn(true);
     UserContext.setUser(user);
@@ -278,13 +244,12 @@ public class ReviewsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
-    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(ContentWithSite.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyListOf(Blob.class), any(Navigation.class));
+    verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(ContentWithSite.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
     verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
   public void buildFragmentLink() throws URISyntaxException {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
     Map<String, Object> linkParameters = new HashMap<>();
     List<String> pathList = new ArrayList<>();
     String path = "path/" + contextId;
@@ -305,7 +270,6 @@ public class ReviewsResultHandlerTest {
 
   @Test
   public void buildReviewInfoLink() throws URISyntaxException {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
     List<String> pathList = new ArrayList<>();
     String path = "path/" + contextId;
     pathList.add(path);

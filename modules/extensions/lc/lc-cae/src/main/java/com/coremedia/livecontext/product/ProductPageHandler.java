@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.product;
 
 import com.coremedia.blueprint.base.links.PostProcessorPrecendences;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
@@ -89,6 +89,8 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     // This handler is only responsible for CAE product links.
     // If the application runs in wcsProductLinks mode, we render native
     // WCS links, and this kind of link cannot occur.
+    // multi catalog support only for commerce-led implemented by now.
+
     Site site = getSiteResolver().findSiteBySegment(shopSegment);
     if (useCommerceProductLinks(site)) {
       return HandlerHelper.notFound("Unsupported link format");
@@ -104,10 +106,13 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   public ModelAndView getProducts(@PathVariable(SITE_CHANNEL_ID) CMNavigation context,
                                   @PathVariable(PRODUCT_SEO_SEGMENT) String productId,
                                   HttpServletRequest request) {
-    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    CommerceConnection currentConnection = CurrentCommerceConnection.get();
     Product product = requireNonNull(currentConnection.getCatalogService(), "No Catalog Service configured for product " + productId)
-            .findProductBySeoSegment(productId);
-    Site site = requireNonNull(getSitesService().getContentSiteAspect(context.getContent()).getSite(), "Site for context does not exist");
+            .findProductBySeoSegment(productId, currentConnection.getStoreContext());
+
+    Site site = getSitesService().getContentSiteAspect(context.getContent()).findSite()
+            .orElseThrow(() -> new IllegalArgumentException("Site for context does not exist"));
+
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
     ModelAndView modelAndView = HandlerHelper.createModelWithView(productInSite, QUICKINFO_VIEW);
 
@@ -118,7 +123,6 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
 
     return modelAndView;
   }
-
 
   // --- Linkscheme -------------------------------------------------
 
@@ -175,12 +179,11 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   }
 
   private ModelAndView createLiveContextPage(@Nonnull Site site, @Nonnull String seoSegment, String view, @Nullable User developer) {
-    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    Navigation context = getNavigationContext(site, seoSegment);
+    CommerceConnection currentConnection = CurrentCommerceConnection.get();
 
     CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service configured for seo segment \"" + seoSegment + '"');
-    String productSeoSegment = currentConnection.getIdProvider().formatProductSeoSegment(seoSegment);
-    Product product = requireNonNull(catalogService.findProductById(productSeoSegment), "no product found for id \"" + productSeoSegment + '\"');
+    Product product = requireNonNull(catalogService.findProductBySeoSegment(seoSegment, currentConnection.getStoreContext()), "No product found for seo segment '" + seoSegment + "'.");
+    Navigation context = getNavigationContext(site, product);
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
     PageImpl page = createPageImpl(productInSite, context, developer);
     page.setTitle(product.getTitle());

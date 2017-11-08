@@ -1,0 +1,37 @@
+// Basic Layouts
+// =====================================================================================================================
+
+.cm-heading2 {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #010F1C;
+}
+
+.cm-heading4 {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+}
+
+.cm-heading2--boxed,
+.cm-teaser--video .cm-heading2--boxed {
+  background-color: #F8F8F8;
+}
+
+.cm-teaser--hero .cm-teaser__title {
+  color: #4D4D4D;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.cm-collection--slideshow,
+.cm-carousel {
+  border: 1px solid #CCCBCB;
+
+  .cm-teasable,
+  .cm-teaser--hero {
+    border: none;
+  }
+}
+
+.cm-collection--marketingspot .cm-teaser {
+  border: none;
+}

@@ -4,7 +4,6 @@
   <component class="com.coremedia.blueprint.studio.externallibrary.ApplyFilterAction"/>
   <component class="com.coremedia.blueprint.studio.externallibrary.ExternalLibraryWindow"/>
   <component class="com.coremedia.blueprint.studio.externallibrary.FilterToolbar"/>
-  <component class="com.coremedia.blueprint.studio.externallibrary.HistoryAction"/>
   <component class="com.coremedia.blueprint.studio.externallibrary.IFrameWindow"/>
   <component class="com.coremedia.blueprint.studio.externallibrary.ListPanel"/>
   <component class="com.coremedia.blueprint.studio.externallibrary.OpenExternalLibraryAction"/>

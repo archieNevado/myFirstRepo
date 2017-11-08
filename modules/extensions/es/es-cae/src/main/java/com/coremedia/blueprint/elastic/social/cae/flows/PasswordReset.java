@@ -59,6 +59,7 @@ public class PasswordReset implements Serializable {
   public void validateResetForm(RequestContext context) {
     if (isBlank(password)) {
       MessageHelper.addErrorMessageWithSource(context, WebflowMessageKeys.CONFIRM_PASSWORD_RESET_PASSWORD_ERROR, PASSWORD);
+      return;
     }
 
     if (!password.equals(confirmPassword)) {

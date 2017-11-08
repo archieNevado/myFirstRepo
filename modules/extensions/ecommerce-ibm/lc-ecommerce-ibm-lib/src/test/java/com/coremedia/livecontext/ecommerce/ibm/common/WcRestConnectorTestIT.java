@@ -5,10 +5,9 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.ibm.SystemProperties;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
@@ -28,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrentContext;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
@@ -36,8 +36,8 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERS
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.isNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -73,12 +73,12 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     String wcsVersion = storeInfoService.getWcsVersion();
     testConfig.setWcsVersion(wcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
   }
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   /**
@@ -90,16 +90,15 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
    */
   @Test
   public void testReconnectForAuthorizedServiceCalls() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())
-            || WCS_VERSION_7_8.compareTo(testConfig.getWcsVersion()) <= 0) {
+    if (useBetamaxTapes() || WCS_VERSION_7_8.compareTo(testConfig.getWcsVersion()) <= 0) {
       return;
     }
 
     StoreContext storeContext = testConfig.getStoreContext();
     StoreContextHelper.setCurrentContext(storeContext);
-    UserContext userContext = userContextProvider.createContext(TEST_USER);
+    UserContext userContext = UserContext.builder().withUserName(TEST_USER).build();
 
-    WcCredentials credentials = loginService.loginServiceIdentity();
+    WcCredentials credentials = loginService.loginServiceIdentity(storeContext);
     credentials.getSession().setWCToken("1002%2cOeke6xduXJ%2ba1BTzBtkz1dYInKBdv5WLd5yBKF0NKe1BGCQivNu5r0uNrX5L8q1ibo8sLXxFXrk%2b%0d%0aFVEvfIZzytRYmjwqjAiryXQ8utp5G%2bcA4%2fg0s%2fGVRq7DiPbdBEUcvwhH6Tx3bJg%3d");
     StoreContextHelper.setCredentials(storeContext, credentials);
 
@@ -143,7 +142,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
 
     try {
       testling.setLoginService(loginServiceMock);
-      when(loginServiceMock.loginServiceIdentity()).thenReturn(wcCredentialsMock);
+      when(loginServiceMock.loginServiceIdentity(storeContext)).thenReturn(wcCredentialsMock);
 
       Map<String, String> requiredHeaders = testling.getRequiredHeaders(GET_CART, true, storeContext, userContext);
 
@@ -160,7 +159,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     String cookieHeader = "myCookieHeader";
 
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
-    DefaultConnection.set(commerceConnection);
+    CurrentCommerceConnection.set(commerceConnection);
 
     StoreContext storeContext = StoreContextHelper.createContext("configId", "storeId", "storeName", "catalogId", "de", "EUR");
     storeContext.setContractIds(new String[]{"contractA", "contractB"});
@@ -180,7 +179,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
 
     try {
       testling.setLoginService(loginServiceMock);
-      when(loginServiceMock.loginServiceIdentity()).thenReturn(wcCredentialsMock);
+      when(loginServiceMock.loginServiceIdentity(storeContext)).thenReturn(wcCredentialsMock);
 
       Map<String, String> requiredHeaders = testling.getRequiredHeaders(FIND_SUB_CATEGORIES_SEARCH, true, storeContext, userContext);
 
@@ -206,30 +205,6 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     String serviceEndpoint = System.getProperty("livecontext.ibm.wcs.secureUrl", "https://shop-ref.ecommerce.coremedia.com");
     assertEquals(serviceEndpoint + "/wcs/resources/store/param1value/person/param%20&%202%20%7Bvalue%7D@self?q=param3value&currency=EUR&forUser=mu%26rk%7Be%7Dl&langId=-1",
             requestUri.toString());
-  }
-
-
-  @Test
-  public void testFormatJsonForLogging() throws Exception {
-    String testJson = "{\"logonId\":\"coremedia\",\"logonPassword\":\"thepassword\"}";
-    String testJsonMasked = "{\"logonId\":\"coremedia\",\"logonPassword\":\"***\"}";
-    String result = wcRestConnector.formatJsonForLogging(testJson);
-    assertEquals(testJsonMasked, result);
-
-    // test with whitespaces before and after delimiter
-    testJson = "{\"logonId\":\"coremedia\",\"logonPassword\" : \"thepassword\"}";
-    result = wcRestConnector.formatJsonForLogging(testJson);
-    assertEquals(testJsonMasked, result);
-
-    // test with newlines before and after delimiter
-    testJson = "{\"logonId\":\"coremedia\",\"logonPassword\"\n:\n\"thepassword\"}";
-    result = wcRestConnector.formatJsonForLogging(testJson);
-    assertEquals(testJsonMasked, result);
-
-    // test non-greediness with more JSON elements after the password
-    String extraJson = ",\"foo\":\"bar\"}";
-    result = wcRestConnector.formatJsonForLogging(testJson+extraJson);
-    assertEquals(testJsonMasked+extraJson, result);
   }
 
   /**

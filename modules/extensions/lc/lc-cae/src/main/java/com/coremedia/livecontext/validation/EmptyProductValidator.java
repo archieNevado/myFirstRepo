@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.validation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -22,13 +22,15 @@ import javax.annotation.Nullable;
  * Hence, this validator does not filter those teasers if {@link #setPreview(boolean) configured properly}.
  */
 public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
-  private boolean isPreview = false;
+
   private static final Logger LOG = LoggerFactory.getLogger(EmptyProductPredicate.class);
+
+  private boolean isPreview = false;
 
   public void setPreview(boolean isPreview) {
     this.isPreview = isPreview;
   }
-  
+
   @Override
   protected Predicate createPredicate() {
     return new EmptyProductPredicate();
@@ -46,20 +48,16 @@ public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
         return (isPreview && !isInContextOfContracts()) || (productTeaser != null && productTeaser.getProduct() != null);
       } catch (NotFoundException e) {
         LOG.warn("Could not find a product for teaser {}",
-                 (productTeaser != null && productTeaser.getContent() != null ? productTeaser.getContent().getPath() : "null"));
+                (productTeaser != null && productTeaser.getContent() != null ? productTeaser.getContent().getPath() : "null"));
         return false;
       }
     }
   }
 
   private boolean isInContextOfContracts() {
-    CommerceConnection connection = DefaultConnection.get();
-    if (connection == null) {
-      return false;
-    }
+    StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
 
-    StoreContext storeContext = connection.getStoreContext();
-    return storeContext != null && (storeContext.getContractIds() != null || storeContext.getContractIdsForPreview() != null);
+    return storeContext != null
+            && (storeContext.getContractIds() != null || storeContext.getContractIdsForPreview() != null);
   }
-  
 }

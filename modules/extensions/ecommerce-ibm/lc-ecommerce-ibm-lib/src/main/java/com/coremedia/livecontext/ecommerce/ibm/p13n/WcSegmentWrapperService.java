@@ -1,9 +1,10 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
@@ -14,17 +15,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
-import java.util.Collections;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCatalogId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 
 /**
  * A service that uses the rest connector to get segment information from IBM WebSphere Commerce.
@@ -49,17 +52,18 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
    * @param userContext the current user context
    * @return A map which contains the JSON response data retrieved from the commerce server
    */
+  @Nullable
   @SuppressWarnings("unchecked")
-  public Map<String, Object> findAllSegments(final StoreContext storeContext, final UserContext userContext) {
+  public Map<String, Object> findAllSegments(@Nonnull StoreContext storeContext, UserContext userContext) {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
-        return Collections.emptyMap();
+        return emptyMap();
       }
-      return getRestConnector().callService(
-              FIND_ALL_SEGMENTS, Collections.singletonList(getStoreId(storeContext)),
-        createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext)),
-        null, storeContext, userContext);
 
+      return getRestConnector().callService(
+              FIND_ALL_SEGMENTS, singletonList(getStoreId(storeContext)),
+        createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
+        null, storeContext, userContext);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -76,16 +80,20 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
    * @return the segment map which contains the JSON response data retrieved from the commerce server or null if no spot was found
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
+  @Nullable
   @SuppressWarnings("unchecked")
-  public Map<String, Object> findSegmentByTechId(final String externalId, final StoreContext storeContext, final UserContext userContext) throws CommerceException {
+  public Map<String, Object> findSegmentByTechId(String externalId, @Nonnull StoreContext storeContext,
+                                                 UserContext userContext) {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
         return null;
       }
+
       Map<String, Object> data = getRestConnector().callService(
         FIND_SEGMENT_BY_ID, asList(getStoreId(storeContext), externalId),
-        createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext)),
+        createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
         null, storeContext, userContext);
+
       if (data != null) {
         List<Map<String, Object>> memberGroups = DataMapHelper.getValueForPath(data, "MemberGroup", List.class);
         if (memberGroups != null && !memberGroups.isEmpty()) {
@@ -96,8 +104,8 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
           }
         }
       }
-      return null;
 
+      return null;
     } catch (CommerceException e) {
       //ibm returns 403 or 500 instead of 404 for a unknown segment id
       LOG.warn("CommerceException", e);
@@ -117,10 +125,12 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidIdException if the id is in a wrong format
    */
+  @Nullable
   @SuppressWarnings("unused")
-  public Map<String, Object> findSegmentById(final String id, final StoreContext storeContext, final UserContext userContext) throws CommerceException {
+  public Map<String, Object> findSegmentById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext,
+                                             UserContext userContext) {
     try {
-      String externalId = CommerceIdHelper.parseExternalIdFromId(id);
+      String externalId = CommerceIdHelper.getExternalIdOrThrow(id);
       return findSegmentByTechId(externalId, storeContext, userContext);
     } catch (CommerceException e) {
       throw e;
@@ -136,25 +146,29 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
    * @param userContext the current user context
    * @return A map which contains the JSON response data retrieved from the commerce server.
    */
+  @Nullable
   @SuppressWarnings("unchecked")
-  public Map<String, Object> findSegmentsByUser(StoreContext storeContext, UserContext userContext) {
+  public Map<String, Object> findSegmentsByUser(@Nonnull StoreContext storeContext, UserContext userContext) {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
-        return Collections.emptyMap();
+        return emptyMap();
       }
+
       Integer forUserId = UserContextHelper.getForUserId(userContext);
       if (forUserId == null) {
-        return Collections.emptyMap();
+        return emptyMap();
       }
+
       Map<String, Object> data = getRestConnector().callService(
         FIND_SEGMENTS_BY_USER, asList(getStoreId(storeContext), forUserId+""),
-        createParametersMap(getCatalogId(storeContext), getLocale(storeContext), getCurrency(storeContext)),
+        createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
         null, storeContext, userContext);
+
       if (data != null) {
         return data;
       }
-      return null;
 
+      return null;
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {

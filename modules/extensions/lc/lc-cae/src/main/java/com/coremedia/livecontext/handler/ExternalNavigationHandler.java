@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.links.PostProcessorPrecendences;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.tree.TreeRelation;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -184,10 +184,15 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
         LOG.debug("ignoring commerce exception", e);
         return null;
       }
+
+      if (category == null) {
+        return null;
+      }
+
       if (forceCommerceLink || useCommerceCategoryLinks(site)) {
         String seoSegment = category.getSeoSegment();
-        linkParameters = (Map<String, Object>) updateQueryParams(category, linkParameters, seoSegment);
-        return buildCommerceLinkFor(null, seoSegment, linkParameters);
+        linkParameters = updateQueryParams(category, linkParameters);
+        return buildCommerceLinkFor(null, seoSegment, linkParameters, category.getContext());
       } else {
         return buildCaeLinkForCategory(navigation, viewName, linkParameters);
       }
@@ -195,9 +200,8 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return UriComponentsBuilder.newInstance().build();
   }
 
-  private boolean isStoreContextAvailable() {
-    CommerceConnection currentConnection = DefaultConnection.get();
-    return null != currentConnection && currentConnection.getStoreContext() != null;
+  private static boolean isStoreContextAvailable() {
+    return CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).isPresent();
   }
 
   private Object buildNonCatalogLink(CMExternalPage navigation, Map<String, Object> linkParameters) {
@@ -206,7 +210,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
       if (isEmpty(navigation.getExternalUriPath())){
         urlTemplate = SEO_URI_PREFIX + navigation.getExternalId();
       }
-      return buildCommerceLinkFor(urlTemplate, null, linkParameters);
+      return buildCommerceLinkFor(urlTemplate, null, linkParameters, CurrentCommerceConnection.get().getStoreContext());
     }
 
     return UriComponentsBuilder.newInstance().build();
@@ -218,8 +222,11 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
           final String view,
           @Nullable User developer) {
     Site site = getSiteResolver().findSiteBySegment(shopSegment);
-    Navigation context = getNavigationContext(site, segment);
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+    Category category = commerceConnection.getCatalogService().findCategoryBySeoSegment(segment, commerceConnection.getStoreContext());
+    Navigation context = getNavigationContext(site, category);
     if (context == null) {
+      LOG.warn("Cannot find category for seo segment '{}'", segment);
       return HandlerHelper.notFound("No such category");
     }
 

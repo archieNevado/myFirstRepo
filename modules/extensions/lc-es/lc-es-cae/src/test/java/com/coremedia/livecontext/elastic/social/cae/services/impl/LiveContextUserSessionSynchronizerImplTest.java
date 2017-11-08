@@ -12,9 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +26,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({SecurityContextHolder.class, UserContext.class})
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class LiveContextUserSessionSynchronizerImplTest {
+
+  private MockCommerceEnvBuilder envBuilder;
 
   @Test
   public void synchronizeUserSessionWithCommerceLogin() throws GeneralSecurityException {
@@ -92,7 +91,8 @@ public class LiveContextUserSessionSynchronizerImplTest {
     testling.setCommunityUserService(communityUserService);
 //    when(testling.getCommerceUserSessionService()).thenReturn(commerceUserSessionService);
 
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    commerceConnection = envBuilder.setupEnv();
 
     UserContext.clear();
   }
@@ -100,6 +100,7 @@ public class LiveContextUserSessionSynchronizerImplTest {
   @After
   public void cleanUp(){
     com.coremedia.blueprint.elastic.social.cae.user.UserContext.clear();
+    envBuilder.tearDownEnv();
   }
 
   private LiveContextUserSessionSynchronizerImpl testling;

@@ -1,10 +1,12 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
+import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
 import com.coremedia.elastic.core.api.blobs.BlobService;
@@ -27,12 +29,10 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.DefaultMessageResolver;
 import org.springframework.binding.message.MessageResolver;
@@ -50,7 +50,6 @@ import org.springframework.webflow.execution.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -63,10 +62,10 @@ import static com.coremedia.blueprint.elastic.social.cae.flows.WebflowMessageKey
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyVararg;
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -89,7 +88,7 @@ public class RegistrationHelperTest {
   private Registration registration;
 
   @InjectMocks
-  RegistrationHelper registrationHelper;
+  private RegistrationHelper registrationHelper;
 
   @Mock
   private RegistrationService registrationService;
@@ -164,9 +163,6 @@ public class RegistrationHelperTest {
   private SharedAttributeMap sessionMap;
 
   @Mock
-  private LocalizationContext localizationContext;
-
-  @Mock
   private PasswordPolicy passwordPolicy;
 
   @Mock
@@ -180,7 +176,10 @@ public class RegistrationHelperTest {
 
   @Mock
   private Enumeration<String> headerNames;
-  
+
+  @Mock
+  private Site site;
+
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SpringSocialConfiguration springSocialConfiguration;
 
@@ -203,9 +202,7 @@ public class RegistrationHelperTest {
     when(file.getInputStream()).thenReturn(inputStream);
     when(file.getContentType()).thenReturn(CONTENT_TYPE);
 
-    when(communityUser.getLocale()).thenReturn(LOCALE);
-
-    when(elasticSocialPlugin.getElasticSocialConfiguration(anyVararg())).thenReturn(elasticSocialConfiguration);
+    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
     when(elasticSocialConfiguration.getMaxImageFileSize()).thenReturn(512000);
 
     when(request.getAttribute("cmpage")).thenReturn(page);
@@ -227,7 +224,7 @@ public class RegistrationHelperTest {
     when(providerSignInAttempt.getConnection(any(ConnectionFactoryLocator.class))).thenReturn(connection);
     when(httpSession.getAttribute(ProviderSignInAttempt.class.getName())).thenReturn(providerSignInAttempt);
 
-    when(registrationService.getUserByToken(any(String.class))).thenReturn(communityUser);
+    when(registrationService.getUserByToken(nullable(String.class))).thenReturn(communityUser);
     when(loginHelper.authenticate(any(SocialAuthenticationToken.class), any(RequestContext.class))).thenReturn(true);
 
     when(request.getSession(false)).thenReturn(httpSession);
@@ -236,9 +233,6 @@ public class RegistrationHelperTest {
     when(headerNames.hasMoreElements()).thenReturn(false);
 
     when(attributes.getAttribute(ProviderSignInAttempt.class.getName(), RequestAttributes.SCOPE_SESSION)).thenReturn(providerSignInAttempt);
-    //when(request.getAttribute(LOCALIZATION_KEY)).thenReturn(localizationContext);
-
-    when(passwordPolicy.verify(PASSWORD)).thenReturn(true);
 
     registrationHelper.initialize();
   }
@@ -309,17 +303,37 @@ public class RegistrationHelperTest {
   }
 
   @Test
+  public void testRegisterWithSite() throws IOException {
+    HashMap<String, Object> properties = new HashMap<>();
+    properties.put("givenName", GIVENNAME);
+    properties.put("surName", SURNAME);
+    properties.put("site", site);
+
+    Locale locale = Locale.CANADA;
+    when(site.getLocale()).thenReturn(locale);
+
+    when(registrationService.register(USERNAME, PASSWORD, EMAIL, locale, TimeZone.getTimeZone("UTC"), properties)).thenReturn(communityUser);
+    when(request.getAttribute(SiteHelper.SITE_KEY)).thenReturn(site);
+
+    boolean userSaved = registrationHelper.register(registration, requestContext, file);
+    assertTrue(userSaved);
+
+    verify(registrationService).register(USERNAME, PASSWORD, EMAIL, locale, TimeZone.getTimeZone("UTC"), properties);
+    verify(messageContext, never()).addMessage(any(MessageResolver.class));
+  }
+
+  @Test
   public void registerWithAutomaticActivation() {
     when(registrationService.register(USERNAME, PASSWORD, EMAIL, Locale.ENGLISH, TimeZone.getTimeZone("UTC"), USER_PROPERTIES)).thenReturn(communityUser);
     when(settings.getBoolean("elastic.automatic.user.activation", false)).thenReturn(true);
-    when(registrationService.activateRegistration(anyString(), any(ModerationType.class))).thenReturn(true);
+    when(registrationService.activateRegistration(nullable(String.class), nullable(ModerationType.class))).thenReturn(true);
 
     registrationHelper.initialize();
     boolean isRegistered = registrationHelper.register(registration, requestContext, null);
 
     assertTrue(isRegistered);
     verify(registrationService).register(USERNAME, PASSWORD, EMAIL, Locale.ENGLISH, TimeZone.getTimeZone("UTC"), USER_PROPERTIES);
-    verify(registrationService).activateRegistration(anyString(), any(ModerationType.class));
+    verify(registrationService).activateRegistration(nullable(String.class), nullable(ModerationType.class));
     verify(messageContext, atLeastOnce()).addMessage(message(ACTIVATE_REGISTRATION_SUCCESS));
   }  
   
@@ -479,7 +493,7 @@ public class RegistrationHelperTest {
 
     verify(communityUserService).getUserByEmail(EMAIL);
     verify(communityUserService).getUserByName(USERNAME);
-    verify(messageContext, never()).addMessage(Matchers.<MessageResolver>any());
+    verify(messageContext, never()).addMessage(any());
     assertTrue(registration.isRegisteringWithProvider());
   }
 
@@ -491,7 +505,7 @@ public class RegistrationHelperTest {
     registrationHelper.preProcess(initRegistration(), requestContext);
     verify(communityUserService).getUserByEmail(EMAIL);
     verify(communityUserService).getUserByName(USERNAME);
-    verify(messageContext, times(2)).addMessage(Matchers.<MessageResolver>any());
+    verify(messageContext, times(2)).addMessage(any());
   }
 
   @Test
@@ -502,7 +516,7 @@ public class RegistrationHelperTest {
     registrationHelper.preProcess(initRegistration(), requestContext);
     verify(communityUserService, never()).getUserByEmail(anyString());
     verify(communityUserService, never()).getUserByName(anyString());
-    verify(messageContext, never()).addMessage(Matchers.<MessageResolver>any());
+    verify(messageContext, never()).addMessage(any());
   }
 
   @Test
@@ -512,7 +526,7 @@ public class RegistrationHelperTest {
     registrationHelper.preProcess(initRegistration(), requestContext);
     verify(communityUserService, never()).getUserByEmail(EMAIL);
     verify(communityUserService, never()).getUserByName(USERNAME);
-    verify(messageContext, never()).addMessage(Matchers.<MessageResolver>any());
+    verify(messageContext, never()).addMessage(any());
   }
 
   @Test
@@ -524,7 +538,7 @@ public class RegistrationHelperTest {
 
     registrationHelper.postProcessProviderRegistration(requestContext);
 
-    verify(messageContext).addMessage(Matchers.<MessageResolver>anyObject());
+    verify(messageContext).addMessage(any());
     verify(parameterMap).contains("error");
   }
 
@@ -537,7 +551,7 @@ public class RegistrationHelperTest {
 
     registrationHelper.postProcessProviderRegistration(requestContext);
 
-    verify(messageContext).addMessage(Matchers.<MessageResolver>anyObject());
+    verify(messageContext).addMessage(any());
     verify(parameterMap).contains("error");
   }
 
@@ -556,13 +570,6 @@ public class RegistrationHelperTest {
   }
 
   private static MessageResolver message(final String code) {
-    return argThat(new ArgumentMatcher<MessageResolver>() {
-
-      @Override
-      public boolean matches(Object argument) {
-        return argument instanceof DefaultMessageResolver && asList(((DefaultMessageResolver) argument).getCodes()).equals(asList(code));
-      }
-
-    });
+    return argThat(argument -> argument instanceof DefaultMessageResolver && asList(((DefaultMessageResolver) argument).getCodes()).equals(asList(code)));
   }
 }

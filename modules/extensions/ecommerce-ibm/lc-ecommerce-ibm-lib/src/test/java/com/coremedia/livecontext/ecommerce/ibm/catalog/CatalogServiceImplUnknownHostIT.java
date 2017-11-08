@@ -5,7 +5,9 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
@@ -19,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -41,24 +44,26 @@ public class CatalogServiceImplUnknownHostIT extends CatalogServiceBaseTest {
 
   @Inject
   private StoreInfoService storeInfoService;
+  private StoreContext storeContext;
 
   @Before
   @Override
   public void setup() {
     super.setup();
     testConfig.setWcsVersion(storeInfoService.getWcsVersion());
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
+    storeContext = testConfig.getStoreContext();
+    StoreContextHelper.setCurrentContext(storeContext);
   }
 
   @Betamax(tape = "csi_testFindProductByExternalIdReturns502_search", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindProductByExternalIdReturns502() throws Exception {
-    String endpoint = testling.getCatalogWrapperService().getCatalogConnector().getSearchServiceEndpoint(StoreContextHelper.getCurrentContext());
+  public void testFindProductByIdReturns502() throws Exception {
+    String endpoint = testling.getCatalogWrapperService().getCatalogConnector().getSearchServiceEndpoint(storeContext);
     testling.getCatalogWrapperService().getCatalogConnector().setSearchServiceEndpoint("http://unknownhost.unknowndomain/wcs/resources");
     Throwable exception = null;
     Product product = null;
     try {
-      product = testling.findProductByExternalId("UNCACHED_PRODUCT");
+      product = testling.findProductById(IbmCommerceIdProvider.commerceId(PRODUCT).withExternalId("UNCACHED_PRODUCT").build(), storeContext);
     } catch (Throwable e) {
       exception = e;
     } finally {

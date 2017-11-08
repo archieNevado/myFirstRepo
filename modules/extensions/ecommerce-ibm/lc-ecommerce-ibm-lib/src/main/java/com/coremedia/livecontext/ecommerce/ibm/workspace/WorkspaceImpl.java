@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.ecommerce.ibm.workspace;
 
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 
@@ -33,11 +32,6 @@ public class WorkspaceImpl extends AbstractIbmCommerceBean implements Workspace 
   @Override
   public String getExternalTechId() {
     return (String) delegate.get("id");
-  }
-
-  @Override
-  public String getReference() {
-    return CommerceIdHelper.formatWorkspaceId(getExternalId());
   }
 
 }

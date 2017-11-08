@@ -1,7 +1,7 @@
 package com.coremedia.lc.studio.lib.augmentation;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -9,19 +9,22 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class PbeShopUrlTargetResolverImplTest {
 
   @InjectMocks
@@ -38,16 +41,26 @@ public class PbeShopUrlTargetResolverImplTest {
 
   @Mock
   private Site site;
+  private MockCommerceEnvBuilder envBuilder;
+  private StoreContext storeContext;
 
   @Before
   public void setup() {
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    commerceConnection = envBuilder.setupEnv();
 
-    DefaultConnection.get().getStoreContext().put(StoreContextImpl.SITE, "theSiteId");
-    DefaultConnection.get().getStoreContext().put(StoreContextImpl.STORE_NAME, "storeName");
+    storeContext = CurrentCommerceConnection.get().getStoreContext();
+    storeContext.put(StoreContextImpl.SITE, "theSiteId");
+    storeContext.put(StoreContextImpl.STORE_NAME, "storeName");
+
     when(sitesService.getSite("theSiteId")).thenReturn(site);
 
-    when(commerceConnection.getCatalogService().findCategoryBySeoSegment(anyString())).thenReturn(null);
+    when(commerceConnection.getCatalogService().findCategoryBySeoSegment(anyString(), any(StoreContext.class))).thenReturn(null);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   @Test
@@ -55,7 +68,7 @@ public class PbeShopUrlTargetResolverImplTest {
     String testUrl = "http://anyhost/pc-on-the-table/pc-glasses#facet:&productBeginIndex:0&orderBy:&pageView:grid&minPrice:&maxPrice:&pageSize:&";
 
     Category category = mock(Category.class);
-    when(commerceConnection.getCatalogService().findCategoryBySeoSegment("pc-glasses")).thenReturn(category);
+    when(commerceConnection.getCatalogService().findCategoryBySeoSegment("pc-glasses", storeContext)).thenReturn(category);
 
     Object resolvedCategory = testling.resolveUrl(testUrl, "theSiteId");
 

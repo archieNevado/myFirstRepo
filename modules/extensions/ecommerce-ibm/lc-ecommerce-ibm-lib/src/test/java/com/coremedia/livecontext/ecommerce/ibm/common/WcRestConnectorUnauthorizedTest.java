@@ -1,8 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
@@ -27,7 +26,7 @@ import java.util.Map;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.apache.http.HttpVersion.HTTP_1_1;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
@@ -44,12 +43,12 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
     String wcsVersion = storeInfoService.getWcsVersion();
     testConfig.setWcsVersion(wcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
   }
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   @Test(expected = UnauthorizedException.class)

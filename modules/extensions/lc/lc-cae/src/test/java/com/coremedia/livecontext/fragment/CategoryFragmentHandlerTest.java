@@ -1,30 +1,35 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CategoryFragmentHandlerTest extends FragmentHandlerTestBase<CategoryFragmentHandler> {
 
   @Test
   public void handleCategoryViewFragmentNoLiveContextNavigationFound() {
-    when(getResolveContextStrategy().resolveContext(getSite(), CATEGORY_ID)).thenReturn(null);
-    ModelAndView result = getTestling().createModelAndView(getFragmentParameters4Product(), request);
+    when(getResolveContextStrategy().resolveContext(getSite(), category)).thenReturn(null);
+    ModelAndView result = getTestling().createModelAndView(getFragmentParameters4ProductWithCategory(), request);
     assertNotNull(result);
     assertTrue(HandlerHelper.isNotFound(result));
   }
 
   @Test
   public void handleCategoryViewFragment() {
-    ModelAndView result = getTestling().createModelAndView(getFragmentParameters4Product(), request);
+    when(connection.getCatalogService().findCategoryById(any(CommerceId.class), any(StoreContext.class))).thenReturn(category);
+    ModelAndView result = getTestling().createModelAndView(getFragmentParameters4ProductWithCategory(), request);
     assertDefaultPage(result);
     verifyDefault();
   }
@@ -38,5 +43,11 @@ public class CategoryFragmentHandlerTest extends FragmentHandlerTestBase<Categor
   public void defaultSetup() {
     super.defaultSetup();
     getTestling().setContextStrategy(resolveContextStrategy);
+    when(resolveContextStrategy.resolveContext(site, category)).thenReturn(navigation);
+  }
+
+  @After
+  public void tearDown() {
+    defaultTeardown();
   }
 }

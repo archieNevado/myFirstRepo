@@ -2,19 +2,15 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.tree.CommerceTreeRelation;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -52,6 +48,7 @@ public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
   private CatalogService catalogService;
 
   @Before
+  @Override
   public void setup() {
     super.setup();
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
@@ -71,7 +68,7 @@ public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
     Category rootCategory = testling.getParentOf(topCategory);
     assertNotNull(rootCategory);
     assertNull(rootCategory.getParent());
-    assertEquals(CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY, rootCategory.getExternalId());
+    assertEquals(CategoryImpl.ROOT_CATEGORY_ROLE_ID, rootCategory.getExternalId());
     assertTrue(testling.isRoot(rootCategory));
     assertNull(rootCategory.getTitle());
   }
@@ -88,10 +85,10 @@ public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
     assertEquals(3, pathToRoot.size());
     assertEquals(2, category2.getBreadcrumb().size());
 
-    assertEquals(CatalogServiceImpl.EXTERNAL_ID_ROOT_CATEGORY, pathToRoot.get(0).getExternalId());
+    assertEquals(CategoryImpl.ROOT_CATEGORY_ROLE_ID, pathToRoot.get(0).getExternalId());
   }
 
   private Category getCategory() {
-    return catalogService.findCategoryBySeoSegment(CATEGORY_SEO_SEGMENT);
+    return catalogService.findCategoryBySeoSegment(CATEGORY_SEO_SEGMENT, getStoreContext());
   }
 }

@@ -131,12 +131,6 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>lc-asset-services</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>ec-test-util</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>

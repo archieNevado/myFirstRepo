@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -314,7 +314,7 @@ public class IbmStoreFrontServiceTest {
     when(storeFrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
     when(commerceConnection.getStoreContext().getStoreId()).thenReturn(STORE_ID);
     when(commerceConnection.getStoreContext().getCatalogId()).thenReturn(CATALOG_ID);
-    DefaultConnection.set(commerceConnection);
+    CurrentCommerceConnection.set(commerceConnection);
 
     when(storeFrontResponse.getCookies()).thenReturn(Collections.emptyMap());
     initializeCookies(new String[]{
@@ -328,7 +328,7 @@ public class IbmStoreFrontServiceTest {
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   private void verifyNoCookiesAtAll() {

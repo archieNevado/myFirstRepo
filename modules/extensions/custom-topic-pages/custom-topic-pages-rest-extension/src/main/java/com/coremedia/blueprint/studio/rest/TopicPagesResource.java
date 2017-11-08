@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.lang.String.format;
@@ -177,7 +178,6 @@ public class TopicPagesResource {
 
     return representation;
   }
-
 
   /**
    * Returns a collection of topics to display in the topic pages editor.
@@ -389,7 +389,6 @@ public class TopicPagesResource {
     }
   }
 
-
   /**
    * Creates a new custom topic page for the given topic.
    *
@@ -417,7 +416,6 @@ public class TopicPagesResource {
       rep.setStatus(TopicRepresentation.STATUS_ERROR_CUSTOM_PAGE_EXISTS);
     }
   }
-
 
   /**
    * Updates the root channel.
@@ -490,12 +488,15 @@ public class TopicPagesResource {
     ContentType type = requireNonNull(capConnection.getContentRepository().getContentType(TOPIC_PAGE_CUSTOM_CONTENT_TYPE));
 
     Content newTopicPage = type.createByTemplate(rep.getTopicPagesFolder(), formatTopicPageName(topic), "{3} ({1})", properties);
+
     //apply locale afterwards, since we now have a content site aspect
     ContentSiteAspect contentSiteAspect = sitesService.getContentSiteAspect(newTopicPage);
-    Site site = contentSiteAspect.getSite();
-    if(site != null) {
-      contentSiteAspect.setLocale(site.getLocale());
+    Optional<Site> site = contentSiteAspect.findSite();
+    Locale locale = site.map(Site::getLocale).orElse(null);
+    if (locale != null) {
+      contentSiteAspect.setLocale(locale);
     }
+
     return newTopicPage;
   }
 
@@ -508,17 +509,13 @@ public class TopicPagesResource {
     return topic.getName() + " [Topic]";
   }
 
-
   /**
    * Resolves the name of the site, depending on the location of the topic
    * and which default site setting is passed.
    */
   private String resolveSite(Content topic, String defaultSiteId) {
-    Site site = sitesService.getContentSiteAspect(topic).getSite();
-    if (site != null) {
-      return site.getId();
-    }
-    return defaultSiteId;
+    Optional<Site> site = sitesService.getContentSiteAspect(topic).findSite();
+    return site.map(Site::getId).orElse(defaultSiteId);
   }
 
   /**
@@ -531,8 +528,8 @@ public class TopicPagesResource {
     List<Content> contexts = topic.getLinks(TOPIC_PAGE_CONTEXTS);
     for (Content context : contexts) {
       if (context.isInProduction()) {
-        Site topicSite = sitesService.getContentSiteAspect(context).getSite();
-        String topicSiteId = topicSite == null ? null : topicSite.getId();
+        Optional<Site> topicSite = sitesService.getContentSiteAspect(context).findSite();
+        String topicSiteId = topicSite.map(Site::getId).orElse(null);
         if (topicSiteId != null && topicSiteId.equals(siteId)) {
           return context;
         }
@@ -558,7 +555,6 @@ public class TopicPagesResource {
     return null;
   }
 
-
   private Content getTopicChanneFromStruct(Map<String, Object> struct) {
     if (struct != null) {
       return (Content) struct.get(STRUCT_PROPERTY_TOPIC_CHANNEL);
@@ -568,7 +564,9 @@ public class TopicPagesResource {
 
   private Content resolveSiteConfigurationFolder(String siteId, String siteConfigurationPath) {
     if (!Strings.isNullOrEmpty(siteId)) {
-      Site site = requireNonNull(sitesService.getSite(siteId), format("Site %s does not exist", siteId));
+      Site site = sitesService.findSite(siteId)
+              .orElseThrow(() -> new IllegalArgumentException(format("Site '%s' does not exist.", siteId)));
+
       Content root = site.getSiteRootFolder();
       Content configPath = root.getChild(siteConfigurationPath);
       if (configPath == null) {

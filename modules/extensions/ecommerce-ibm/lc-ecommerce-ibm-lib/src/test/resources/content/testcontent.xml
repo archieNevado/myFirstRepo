@@ -42,6 +42,28 @@
             </document>
           </folder>
         </folder>
+        <folder id="99" name="B2B">
+          <folder id="999" name="Navigation">
+            <!-- Site Helios EN with sub channel Helios-a1 -->
+            <document id="150" name="B2BSite" type="CMSite">
+              <version number="1">
+                <linkProperty name="root">
+                  <link id="1500"/>
+                </linkProperty>
+                <stringProperty name="locale" value="en"/>
+                <stringProperty name="id" value="myB2BSiteIndicator"/>
+                <stringProperty name="name" value="B2B"/>
+              </version>
+            </document>
+            <document id="1500" name="B2BRoot" type="CMChannel">
+              <version number="1">
+                <stringProperty name="segment" value="b2b"/>
+                <stringProperty name="locale" value="en"/>
+                <markupProperty name="localSettings" grammar="coremedia-struct-2008" url="b2bsettings.xml"/>
+              </version>
+            </document>
+          </folder>
+        </folder>
         <folder id="15" name="Media">
           <folder id="17" name="Navigation">
             <!-- Site Media EN with sub channel Media-a1 -->

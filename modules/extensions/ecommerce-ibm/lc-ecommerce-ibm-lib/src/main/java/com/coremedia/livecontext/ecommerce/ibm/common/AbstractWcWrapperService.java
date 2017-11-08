@@ -1,21 +1,21 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.google.common.annotations.VisibleForTesting;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.http.HttpMethod;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
+import javax.annotation.Nullable;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 public abstract class AbstractWcWrapperService {
-
-  private WcRestConnector restConnector;
-  private Map languageMapping;
 
   private static final String PARAM_CATALOG_ID = "catalogId";
   private static final String PARAM_CONTRACT_ID = "contractId";
@@ -24,10 +24,11 @@ public abstract class AbstractWcWrapperService {
   protected static final String PARAM_FOR_USER = "forUser";
   protected static final String PARAM_FOR_USER_ID = "forUserId";
 
-  private static final WcRestServiceMethod<Map, Void>
-          GET_LANGUAGE_MAPPING = WcRestConnector.createServiceMethod(HttpMethod.GET, "coremedia/languagemap", false, false, false, Map.class);
+  private WcRestConnector restConnector;
+  private WcLanguageMappingService wcLanguageMappingService;
+  private CatalogAliasTranslationService catalogAliasTranslationService;
 
-  @Required
+  @Autowired
   public void setRestConnector(WcRestConnector connector) {
     this.restConnector = connector;
   }
@@ -40,36 +41,48 @@ public abstract class AbstractWcWrapperService {
     return restConnector;
   }
 
-  @VisibleForTesting
-  public void clearLanguageMapping() {
-    languageMapping = null;
+  @Required
+  public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 
-  public Map getLanguageMapping() throws CommerceException {
-    if (languageMapping == null) {
-      //init language mapping
-      languageMapping = restConnector.callServiceInternal(GET_LANGUAGE_MAPPING, Collections.emptyList(), Collections.emptyMap(),
-              null, StoreContextHelper.getCurrentContext(), null);
-    }
-    return languageMapping;
+  protected WcLanguageMappingService getWcLanguageMappingService() {
+    return wcLanguageMappingService;
+  }
+
+  @Autowired
+  void setWcLanguageMappingService(WcLanguageMappingService wcLanguageMappingService) {
+    this.wcLanguageMappingService = wcLanguageMappingService;
+  }
+
+  public Map getLanguageMapping() {
+    return wcLanguageMappingService.getLanguageMapping();
   }
 
   /**
    * Adds the given parameters to a map.
    */
   @Nonnull
-  public Map<String, String[]> createParametersMap(String catalogId, Locale locale, Currency currency, Integer userId, String userName, String[] contractIds) {
+  public Map<String, String[]> createParametersMap(@Nullable CatalogAlias catalogAlias, @Nullable Locale locale,
+                                                   @Nullable Currency currency, @Nullable Integer userId,
+                                                   @Nullable String userName, @Nullable String[] contractIds,
+                                                   @Nonnull StoreContext storeContext) {
     Map<String, String[]> parameters = new TreeMap<>();
-    if (catalogId != null) {
-      parameters.put(PARAM_CATALOG_ID, new String[]{catalogId});
+
+    if (catalogAlias != null) {
+      Optional<CatalogId> catalogId = getCatalogId(catalogAlias, storeContext);
+      catalogId.ifPresent(catalogId1 -> parameters.put(PARAM_CATALOG_ID, new String[]{catalogId1.value()}));
     }
+
     if (locale != null) {
       String languageId = getLanguageId(locale);
       parameters.put(PARAM_LANG_ID, new String[]{languageId});
     }
+
     if (currency != null) {
       parameters.put(PARAM_CURRENCY, new String[]{currency.toString()});
     }
+
     if (userId != null) {
       parameters.put(PARAM_FOR_USER_ID, new String[]{String.valueOf(userId)});
     } else if (userName != null) {
@@ -77,23 +90,21 @@ public abstract class AbstractWcWrapperService {
     } else if (contractIds != null) {
       parameters.put(PARAM_CONTRACT_ID, contractIds);
     }
+
     return parameters;
   }
 
-  /**
-   * Convenience method
-   */
   @Nonnull
-  public Map<String, String[]> createParametersMap(String catalogId, Locale locale, Currency currency) {
-    return createParametersMap(catalogId, locale, currency, null, null, null);
+  public Map<String, String[]> createParametersMap(@Nullable CatalogAlias catalogAlias, @Nullable Locale locale,
+                                                   @Nullable Currency currency, StoreContext storeContext) {
+    return createParametersMap(catalogAlias, locale, currency, null, null, null, storeContext);
   }
 
-  /**
-   * Convenience method
-   */
   @Nonnull
-  public Map<String, String[]> createParametersMap(String catalogId, Locale locale, Currency currency, String[] contractIds) {
-    return createParametersMap(catalogId, locale, currency, null, null, contractIds);
+  public Map<String, String[]> createParametersMap(@Nullable CatalogAlias catalogAlias, @Nullable Locale locale,
+                                                   @Nullable Currency currency, @Nullable String[] contractIds,
+                                                   StoreContext storeContext) {
+    return createParametersMap(catalogAlias, locale, currency, null, null, contractIds, storeContext);
   }
 
   /**
@@ -102,20 +113,14 @@ public abstract class AbstractWcWrapperService {
    *
    * @param locale e.g. "en_US" "en" "de"
    */
-  public String getLanguageId(Locale locale) {
-    String result = "-1"; //default is english
-    if (locale != null) {
-      String language = locale.getLanguage();
-      Map mapping = getLanguageMapping();
-      if (mapping != null) {
-        String langId = mapping.containsKey(locale.toString()) ?
-                (String) mapping.get(locale.toString()) :
-                (String) mapping.get(language);
-        if (langId != null) {
-          result = langId;
-        }
-      }
-    }
-    return result;
+  @Nonnull
+  public String getLanguageId(@Nullable Locale locale) {
+    return getWcLanguageMappingService().getLanguageId(locale);
+  }
+
+  @Nonnull
+  private Optional<CatalogId> getCatalogId(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+    String siteId = storeContext.getSiteId();
+    return catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
   }
 }

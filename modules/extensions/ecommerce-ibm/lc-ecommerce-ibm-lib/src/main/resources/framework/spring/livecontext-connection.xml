@@ -17,7 +17,7 @@
     <property name="searchService" ref="searchService"/>
     <property name="workspaceService" ref="workspaceService"/>
     <property name="assetUrlProvider" ref="assetUrlProvider"/>
-    <property name="idProvider" ref="commerceIdProvider"/>
+    <property name="idProvider" ref="ibmCommerceIdProvider"/>
     <property name="contractService" ref="contractService"/>
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
     <property name="userSessionService" ref="commerceUserSessionService"/>

@@ -1,0 +1,10 @@
+{
+  "name": "@coremedia/brick-preview",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "@coremedia/js-basic": "file:../../js/basic"
+  },
+  "main": "src/js/index.js"
+}

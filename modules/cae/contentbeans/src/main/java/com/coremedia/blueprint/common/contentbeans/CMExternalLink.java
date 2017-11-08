@@ -56,4 +56,9 @@ public interface CMExternalLink extends CMTeasable {
    * @cm.template.api
    */
   String getUrl();
+
+  /**
+   * Name of the document property 'openInNewTab'
+   */
+  String OPEN_IN_NEW_TAB = "openInNewTab";
 }

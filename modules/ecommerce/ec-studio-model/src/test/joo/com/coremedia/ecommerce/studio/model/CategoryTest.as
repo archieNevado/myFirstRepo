@@ -10,9 +10,9 @@ public class CategoryTest extends AbstractCatalogModelTest {
 
   override public function setUp():void {
     super.setUp();
-    rootCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/NO_WS/ROOT") as Category;
-    topCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/NO_WS/Grocery") as Category;
-    leafCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/NO_WS/Fruit") as Category;
+    rootCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT") as Category;
+    topCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/Grocery") as Category;
+    leafCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit") as Category;
   }
 
   public function testTopCategory():void {

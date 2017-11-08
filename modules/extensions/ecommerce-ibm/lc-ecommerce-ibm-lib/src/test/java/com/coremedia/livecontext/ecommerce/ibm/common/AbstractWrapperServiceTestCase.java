@@ -3,7 +3,6 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 import co.freeside.betamax.Recorder;
 import com.coremedia.blueprint.lc.test.BetamaxTestHelper;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -21,7 +20,7 @@ import javax.inject.Inject;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {IbmServiceTestBase.LocalConfig.class, AbstractWrapperServiceTestCase.LocalConfig.class})
-@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+@ActiveProfiles({IbmServiceTestBase.LocalConfig.PROFILE})
 public abstract class AbstractWrapperServiceTestCase {
   @Configuration
   @ImportResource(
@@ -31,6 +30,7 @@ public abstract class AbstractWrapperServiceTestCase {
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
   public static class LocalConfig {
+
   }
 
   public static final String TEST_USER = "gstevens"; // Frequent Buyer, Male Customer
@@ -41,8 +41,6 @@ public abstract class AbstractWrapperServiceTestCase {
   @Rule
   public Recorder recorder = new Recorder(BetamaxTestHelper.updateSystemPropertiesWithBetamaxConfig());
 
-  @Inject
-  protected LoginService loginService;
   @Inject
   protected UserContextProvider userContextProvider;
   @Inject

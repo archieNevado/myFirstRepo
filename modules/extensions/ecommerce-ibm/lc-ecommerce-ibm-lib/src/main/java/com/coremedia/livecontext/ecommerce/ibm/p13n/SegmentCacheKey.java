@@ -1,18 +1,20 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
-import com.coremedia.cache.Cache;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmDocumentCacheKey;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
-public class SegmentCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
+public class SegmentCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
   private WcSegmentWrapperService wrapperService;
 
-  public SegmentCacheKey(String id,
+  public SegmentCacheKey(@Nonnull CommerceId id,
                          StoreContext storeContext,
                          UserContext userContext,
                          WcSegmentWrapperService wrapperService,
@@ -23,7 +25,7 @@ public class SegmentCacheKey extends AbstractCommerceCacheKey<Map<String, Object
 
   @Override
   public Map<String, Object> computeValue(Cache cache) {
-    return wrapperService.findSegmentById(id, storeContext, userContext);
+    return wrapperService.findSegmentById(getCommerceId(), storeContext, userContext);
   }
 
   @Override
@@ -33,8 +35,8 @@ public class SegmentCacheKey extends AbstractCommerceCacheKey<Map<String, Object
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user +":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale() + ":" +
+    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user + ":" +
+            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
             storeContext.getWorkspaceId();
   }
 

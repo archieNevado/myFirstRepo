@@ -109,7 +109,7 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
       siteToInverseMultimap.put(site, HashMultimap.<String, Content>create());
     }
 
-    List<String> externalIds = getExternalReferences(content);
+    List<String> externalIds = getExternalIds(content);
 
     if (externalIds != null) {
       Multimap<Content, String> multimap = siteToMultimap.get(site);
@@ -141,8 +141,8 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
   }
 
   @VisibleForTesting
-  List<String> getExternalReferences(Content content) {
-    return CommerceReferenceHelper.getExternalReferences(content);
+  List<String> getExternalIds(Content content) {
+    return CommerceReferenceHelper.getExternalIds(content);
   }
 
   @Nonnull

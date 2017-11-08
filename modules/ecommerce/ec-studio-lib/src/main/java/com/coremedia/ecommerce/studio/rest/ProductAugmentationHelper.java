@@ -6,6 +6,7 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
 
 /**
@@ -38,7 +40,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
     Category parentCategory = product.getCategory();
 
     // create folder hierarchy for category
-    Content categoryFolder = contentRepository.createSubfolders(computeFolderName(parentCategory));
+    Content categoryFolder = contentRepository.createSubfolders(computeFolderPath(parentCategory));
 
     if (categoryFolder == null) {
       return null;
@@ -53,14 +55,16 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
     return createContent(categoryFolder, getEscapedDisplayName(product), properties);
   }
 
-  private void initializeLayoutSettings(Product product, Map<String, Object> properties) {
+  @VisibleForTesting
+  void initializeLayoutSettings(Product product, Map<String, Object> properties) {
     Category rootCategory = getRootCategory(product);
     Content rootCategoryContent = getCategoryContent(rootCategory);
 
     if (rootCategoryContent == null) {
-      LOGGER.warn("Root category is not augmented (requested product is ' " + product.getId() +
-              "') , cannot set default layouts.");
-      return;
+      String msg= "Root category is not augmented (requested product is ' " + product.getId() +
+              "') , cannot set default layouts.";
+      LOGGER.warn(msg);
+      throw new CommerceAugmentationException(msg);
     }
 
     Content defaultProductLayoutSettings = getLayoutSettings(rootCategoryContent, CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY);
@@ -87,7 +91,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
    */
   private Map<String, Object> buildProductContentDocumentProperties(@Nonnull Product product) {
     Map<String, Object> properties = new HashMap<>();
-    properties.put(EXTERNAL_ID, product.getId());
+    properties.put(EXTERNAL_ID, format(product.getId()));
 
     return properties;
   }

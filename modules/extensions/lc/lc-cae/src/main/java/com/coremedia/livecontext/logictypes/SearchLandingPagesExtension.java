@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.logictypes;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.cap.content.Content;
@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,18 +36,12 @@ public class SearchLandingPagesExtension extends ExtensionBase {
   private TreeRelation<Content> navigationTreeRelation;
 
   public boolean isSearchLandingPage(CMChannel channel) {
-    boolean result = false;
+    Content content = channel.getContent();
 
-    Site site = getSitesService().getContentSiteAspect(channel.getContent()).getSite();
+    Optional<Site> site = findSite(content);
+    Content context = site.map(this::getNavigationContext).orElse(null);
 
-    if (site != null) {
-      Content context = getNavigationContext(site);
-      if (context != null) {
-        result = context.getLinks(CMChannel.CHILDREN).contains(channel.getContent());
-      }
-    }
-
-    return result;
+    return context != null && context.getLinks(CMChannel.CHILDREN).contains(content);
   }
 
   /**
@@ -54,21 +49,26 @@ public class SearchLandingPagesExtension extends ExtensionBase {
    * parameters that a read from a content property of the channel.
    */
   public Object createSearchLandingPageURLFor(CMChannel channel) {
-    Site site = getSitesService().getContentSiteAspect(channel.getContent()).getSite();
-    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    Site site = findSite(channel.getContent()).orElse(null);
+    CommerceConnection currentConnection = CurrentCommerceConnection.get();
     StoreContextProvider storeContextProvider = requireNonNull(currentConnection.getStoreContextProvider(), "no store context provider available on connection " + currentConnection);
     StoreContext storeContext = storeContextProvider.findContextBySite(site);
     String term = channel.getContent().getString(keywordsProperty);
 
     Map<String, Object> params = new HashMap<>();
     params.put(LiveContextPageHandlerBase.URL_PROVIDER_STORE_CONTEXT, storeContext);
-    params.put(LiveContextPageHandlerBase.URL_PROVIDER_IS_STUDIO_PREVIEW, isStudioPreview());
+    params.put(LiveContextPageHandlerBase.URL_PROVIDER_IS_STUDIO_PREVIEW, isStudioPreviewRequest());
     params.put(LiveContextPageHandlerBase.URL_PROVIDER_SEARCH_TERM, term);
 
     return searchResultRedirectUrlProvider.provideValue(params);
   }
 
   // ----------------- Helper -------------------------------
+
+  @Nonnull
+  private Optional<Site> findSite(@Nonnull Content content) {
+    return getSitesService().getContentSiteAspect(content).findSite();
+  }
 
   /**
    * Returns the navigation context configured with {@link #setSegmentPath(String)} relative to the

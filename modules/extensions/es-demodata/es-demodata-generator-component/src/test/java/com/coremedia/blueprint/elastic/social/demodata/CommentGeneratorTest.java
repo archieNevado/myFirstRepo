@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -27,10 +27,11 @@ import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -67,7 +68,7 @@ public class CommentGeneratorTest {
 
   @Before
   public void setup() {
-    when(blobService.put(any(InputStream.class), anyString(), eq("att16.jpg"))).thenThrow(new RuntimeException());
+    when(blobService.put(nullable(InputStream.class), anyString(), eq("att16.jpg"))).thenThrow(new RuntimeException());
     commentGenerator.initialize();
   }
 
@@ -128,7 +129,7 @@ public class CommentGeneratorTest {
   @Test
   public void createCommentPostModeration() {
     Collection<String> categories = new ArrayList<>();
-    when(commentService.createComment(eq(communityUser), anyString(), eq(target), eq(categories), any(Comment.class))).thenReturn(comment);
+    when(commentService.createComment(eq(communityUser), anyString(), eq(target), eq(categories), nullable(Comment.class))).thenReturn(comment);
 
     Comment createdComment = commentGenerator.createComment(POST_MODERATION, communityUser, "test", target, categories, true, false);
     assertNotNull(createdComment);
@@ -137,8 +138,8 @@ public class CommentGeneratorTest {
     assertEquals(0, commentGenerator.getPreModerationCommentCount());
     assertEquals(0, commentGenerator.getNoModerationCommentCount());
     assertEquals(1, commentGenerator.getCommentCount());
-    verify(commentService, never()).getComments(anyObject(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
-    verify(commentService).createComment(eq(communityUser), anyString(), eq(target), eq(categories), any(Comment.class));
+    verify(commentService, never()).getComments(any(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
+    verify(commentService).createComment(eq(communityUser), anyString(), eq(target), eq(categories), nullable(Comment.class));
     verify(commentService).save(comment, POST_MODERATION);
     verify(comment, never()).setAuthorName(anyString());
   }
@@ -146,7 +147,7 @@ public class CommentGeneratorTest {
   @Test
   public void createCommentPreModeration() {
     Collection<String> categories = new ArrayList<>();
-    when(commentService.createComment(eq(communityUser), anyString(), eq(target), eq(categories), any(Comment.class))).thenReturn(comment);
+    when(commentService.createComment(eq(communityUser), anyString(), eq(target), eq(categories), nullable(Comment.class))).thenReturn(comment);
 
     Comment createdComment = commentGenerator.createComment(PRE_MODERATION, communityUser, "test", target, categories, true, false);
     assertNotNull(createdComment);
@@ -155,8 +156,8 @@ public class CommentGeneratorTest {
     assertEquals(1, commentGenerator.getPreModerationCommentCount());
     assertEquals(0, commentGenerator.getNoModerationCommentCount());
     assertEquals(1, commentGenerator.getCommentCount());
-    verify(commentService, never()).getComments(anyObject(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
-    verify(commentService).createComment(eq(communityUser), anyString(), eq(target), eq(categories), any(Comment.class));
+    verify(commentService, never()).getComments(any(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
+    verify(commentService).createComment(eq(communityUser), anyString(), eq(target), eq(categories), nullable(Comment.class));
     verify(commentService).save(comment, PRE_MODERATION);
     verify(comment, never()).setAuthorName(anyString());
   }
@@ -165,7 +166,7 @@ public class CommentGeneratorTest {
   public void createCommentNoModerationEmptyReply() {
     Collection<String> categories = new ArrayList<>();
     categories.add("default");
-    when(commentService.createComment(eq(communityUser), anyString(), eq(target), eq(categories), any(Comment.class))).thenReturn(comment);
+    when(commentService.createComment(eq(communityUser), anyString(), eq(target), eq(categories), isNull())).thenReturn(comment);
     List<Blob> blobs = new ArrayList<>();
     blobs.add(blob);
     when(comment.getAttachments()).thenReturn(blobs);
@@ -178,7 +179,7 @@ public class CommentGeneratorTest {
     assertEquals(1, commentGenerator.getNoModerationCommentCount());
     assertEquals(1, commentGenerator.getCommentCount());
     verify(commentService).getComments(target, null, ASCENDING, Integer.MAX_VALUE);
-    verify(commentService).createComment(eq(communityUser), anyString(), eq(target), eq(categories), any(Comment.class));
+    verify(commentService).createComment(eq(communityUser), anyString(), eq(target), eq(categories), isNull());
     verify(commentService).save(comment, NONE);
     verify(comment, never()).setAuthorName(anyString());
   }

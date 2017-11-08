@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService.IBM_WC_USERACTIVITY_COOKIE_NAME;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService.IBM_WCP_USERACTIVITY_COOKIE_NAME;

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMProductTeaser folder="/Sites/Calista/United States/English/Editorial/Content/Eveningwear"
+                 name="Hermitage Pencil Cocktail Dress">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+<link href="../../../../../../../Settings/Taxonomies/Subject/Eveningwear.xml" path="/Settings/Taxonomies/Subject/Eveningwear"/>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+<link href="../../../Pictures/Product%20Pictures/Women/Dresses/Gusso%20Casual%20Strapless%20Dress%201.xml" path="/Sites/Calista/United%20States/English/Pictures/Product%20Pictures/Women/Dresses/Gusso%20Casual%20Strapless%20Dress%201"/>
+</pictures>
+<related>
+</related>
+<externalId>ibm:///catalog/product/AuroraWMDRS-23</externalId>
+</CMProductTeaser>

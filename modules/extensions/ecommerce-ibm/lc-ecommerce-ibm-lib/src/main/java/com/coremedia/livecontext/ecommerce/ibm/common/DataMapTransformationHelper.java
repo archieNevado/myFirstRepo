@@ -1,11 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.google.common.collect.ImmutableMap;
 import com.rits.cloning.Cloner;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,8 +27,6 @@ public class DataMapTransformationHelper {
           .put("parentProductID", "parentCatalogEntryID")
           .put("parentCategoryID", "parentCatalogGroupID")
           .build();
-
-  private static final Logger LOG = LoggerFactory.getLogger(DataMapTransformationHelper.class);
 
   private DataMapTransformationHelper() {
   }
@@ -150,34 +145,6 @@ public class DataMapTransformationHelper {
     replaceKeys(catalogGroupView);
   }
 
-  /**
-   * Formats the value of <code>parentCatalogGroupID</code> if required. Removes the catalog ids from a list of
-   * tuples of catalog_id and category_id, e.g. <code>10051_10031 -> 10031</code>.
-   * Only values will be accepted in the result list where the catalog id matches the current catalog id from
-   * the current store context.
-   *
-   * @param mapList The list containing the parent category ids within the current catalog
-   * @deprecated don't use anymore, logic has moved into CategoryImpl
-   */
-  @Deprecated
-  public static void formatParentCatGroupId(List<Map<String, Object>> mapList) {
-    for (Map<String, Object> listEntry : mapList) {
-      // parent catalog group ids
-      // when retrieved by the search servers, it is a list and the entries have the format catalogId_category_id
-      StoreContext storeContext = StoreContextHelper.getCurrentContext();
-      String currentCatalogId = null;
-      if (storeContext != null) {
-        // try to get current catalogId from StoreContext to filter parentCatalogGroupID correctly
-        currentCatalogId = storeContext.getCatalogId();
-      } else {
-        LOG.warn("no StoreContext available, cannot reliably determine parent category");
-      }
-      if (currentCatalogId != null) {
-        listEntry.put("parentCatalogGroupID", getParentCatGroupIdForSingleWrapper(listEntry, currentCatalogId));
-      }
-    }
-  }
-
   @Nonnull
   public static List<String> getParentCatGroupIdForSingleWrapper(@Nonnull Map<String, Object> delegate,
                                                                  @Nonnull String currentCatalogId) {
@@ -255,5 +222,4 @@ public class DataMapTransformationHelper {
       }
     }
   }
-
 }

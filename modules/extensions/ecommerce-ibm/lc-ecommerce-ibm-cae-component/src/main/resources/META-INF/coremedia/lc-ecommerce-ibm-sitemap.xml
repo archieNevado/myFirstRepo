@@ -28,9 +28,12 @@
     <property name="excludes">
       <list>
         <!--
-          Product teaser links are deep links of the shop domain and thus not
-          allowed in the sitemap of the CMS domain.
+          CMExternalChannel, CMExternalPage, CMExternalProduct and CMProductTeaser links are deep links of the
+          shop domain and thus not allowed in the sitemap of the CMS domain.
         -->
+        <value>CMExternalChannel</value>
+        <value>CMExternalPage</value>
+        <value>CMExternalProduct</value>
         <value>CMProductTeaser</value>
         <value>CMMedia</value>
         <value>CMExternalLink</value>
@@ -73,7 +76,7 @@
   </bean>
 
   <bean id="livecontextSitemapConfiguration" class="com.coremedia.blueprint.cae.sitemap.SitemapSetup">
-    <property name="protocol" value="http"/>
+    <property name="protocol" value="${blueprint.sitemap.protocol}"/>
     <property name="sitemapRendererFactory" ref="sitemapIndexRendererFactory"/>
     <property name="urlGenerators">
       <list>
@@ -129,4 +132,47 @@
   <bean id="sitemapWcsAasSetupFactory" class="com.coremedia.blueprint.cae.sitemap.SpringBasedSitemapSetupFactory">
     <property name="sitemapSetup" ref="sitemapWcsAasConfig"/>
   </bean>
+
+  <!--
+    Sitemap for CMS content in WCS search index, Calista-Mode
+  -->
+  <bean id="wcsCalistaSitemapDoctypePredicate" class="com.coremedia.blueprint.cae.sitemap.SitemapDoctypePredicate">
+    <property name="capConnection" ref="connection"/>
+    <property name="includes">
+      <list>
+        <value>CMArticle</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="wcsCalistaContentUrlGenerator" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsCalistaContentUrlGenerator" parent="abstractContentUrlGenerator">
+    <property name="predicates">
+      <list>
+        <ref bean="livecontextSitemapValidityPredicate"/>
+        <ref bean="wcsCalistaSitemapDoctypePredicate"/>
+        <ref bean="livecontextExcludeFromSearchPredicate"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="sitemapWcsCalistaRendererFactory" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.SitemapWcsCalistaRendererFactory"/>
+
+  <bean id="sitemapWcsCalistaConfig" class="com.coremedia.blueprint.cae.sitemap.SitemapSetup">
+    <property name="sitemapRendererFactory" ref="sitemapWcsCalistaRendererFactory"/>
+    <property name="urlGenerators">
+      <list>
+        <ref bean="wcsCalistaContentUrlGenerator"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="sitemapWcsCalistaController" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsCalistaSitemapGenerationHandler">
+    <property name="siteResolver" ref="siteResolver"/>
+    <property name="sitemapSetupFactory" ref="sitemapWcsCalistaSetupFactory"/>
+  </bean>
+
+  <bean id="sitemapWcsCalistaSetupFactory" class="com.coremedia.blueprint.cae.sitemap.SpringBasedSitemapSetupFactory">
+    <property name="sitemapSetup" ref="sitemapWcsCalistaConfig"/>
+  </bean>
+
 </beans>

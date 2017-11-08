@@ -22,12 +22,14 @@
   <import resource="classpath:META-INF/coremedia/context-services.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-beanfactory.xml"/>
   <import resource="classpath:META-INF/coremedia/livecontext-contentbeans.xml"/>
+  <import resource="classpath:/framework/spring/lc-ecommerce-services.xml"/>
 
   <bean id="fragmentPageHandler" class="com.coremedia.livecontext.fragment.FragmentPageHandler"
         parent="pageHandlerBase">
     <property name="fragmentHandlers" ref="fragmentHandlers"/>
     <property name="dataViewFactory" ref="dataViewFactory"/>
     <property name="preview" value="${cae.is.preview}"/>
+    <property name="catalogAliasTranslationService" ref="catalogAliasTranslationService"/>
   </bean>
 
   <bean id="fragmentHandler" class="com.coremedia.livecontext.fragment.FragmentHandler" abstract="true"
@@ -45,7 +47,7 @@
 
   <bean id="productFragmentHandler" class="com.coremedia.livecontext.fragment.ProductFragmentHandler"
         parent="fragmentHandler">
-    <property name="contextStrategy" ref="resolveProductFragmentContextStrategy"/>
+    <property name="contextStrategy" ref="resolveLivecontextContextStrategy"/>
     <property name="pageGridPlacementResolver" ref="pdpPageGridPlacementResolver" />
   </bean>
 
@@ -54,7 +56,7 @@
 
   <bean id="categoryFragmentHandler" class="com.coremedia.livecontext.fragment.CategoryFragmentHandler"
         parent="fragmentHandler">
-    <property name="contextStrategy" ref="resolveCategoryFragmentContextStrategy"/>
+    <property name="contextStrategy" ref="resolveLivecontextContextStrategy"/>
   </bean>
 
   <bean id="externalRefFragmentHandler" class="com.coremedia.livecontext.fragment.ExternalRefFragmentHandler"
@@ -117,20 +119,6 @@
     <property name="sitesService" ref="sitesService"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
     <property name="treeRelation" ref="childrenTreeRelation"/>
-  </bean>
-
-  <bean id="resolveCategoryFragmentContextStrategy"
-        class="com.coremedia.livecontext.fragment.CategoryFragmentContextStrategy" parent="abstractContextResolver">
-    <description>
-      Strategy for mapping a e-Commerce category to a CoreMedia channel.
-    </description>
-  </bean>
-
-  <bean id="resolveProductFragmentContextStrategy"
-        class="com.coremedia.livecontext.fragment.ProductFragmentContextStrategy" parent="abstractContextResolver">
-    <description>
-      Strategy for mapping a e-Commerce product to a CoreMedia channel.
-    </description>
   </bean>
 
   <!-- Former LC1 Integration-->

@@ -12,25 +12,33 @@ import java.util.concurrent.TimeUnit;
 public class StoreInfoCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
 
   private static final Logger LOG = LoggerFactory.getLogger(StoreInfoCacheKey.class);
-  private static final long DELAY_ON_ERROR_SECONDS = 20;
+  private final int delayOnError;
 
   private WcStoreInfoWrapperService wrapperService;
 
-  StoreInfoCacheKey(String id, WcStoreInfoWrapperService wrapperService, CommerceCache commerceCache) {
+  StoreInfoCacheKey(String id,
+                    WcStoreInfoWrapperService wrapperService,
+                    CommerceCache commerceCache, int delayOnError) {
     super(id, null, CONFIG_KEY_STORE_INFO, commerceCache);
     this.wrapperService = wrapperService;
+    this.delayOnError = delayOnError;
   }
 
   @Override
   public Map<String, Object> computeValue(Cache cache) {
-    return wrapperService.getStoreInfos();
+    Map<String, Object> storeInfos = wrapperService.getStoreInfos();
+    if (storeInfos.isEmpty()) {
+      LOG.warn("no store info provided by WCS, retrying in {} seconds", delayOnError);
+      Cache.cacheFor(delayOnError, TimeUnit.SECONDS);
+    }
+    return storeInfos;
   }
 
   @Override
   public void addExplicitDependency(Map<String, Object> storeInfos) {
     if (storeInfos.isEmpty()) {
-      LOG.warn("no store info provided by WCS, retrying in {} seconds", DELAY_ON_ERROR_SECONDS);
-      Cache.cacheFor(DELAY_ON_ERROR_SECONDS, TimeUnit.SECONDS);
+      LOG.warn("no store info provided by WCS, retrying in {} seconds", delayOnError);
+      Cache.cacheFor(delayOnError, TimeUnit.SECONDS);
     }
     Cache.dependencyOn(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO);
   }

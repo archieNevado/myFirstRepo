@@ -8,17 +8,21 @@ import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.asset.AssetSearchService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collection;
 import java.util.List;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,13 +30,15 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class AssetResolvingStrategyImplTest {
 
   private static final String EXTERNAL_ID = "externalId1";
   private static final String EXTERNAL_ID_SKU = "externalIdSKU";
-  private static final String COMMERCE_ID = "vendor:///catalog/product/" + EXTERNAL_ID;
-  private static final String COMMERCE_ID_SKU = "vendor:///catalog/sku/" + EXTERNAL_ID_SKU;
+  private static final String COMMERCE_ID_REF = "vendor:///catalog/product/" + EXTERNAL_ID;
+  private static final CommerceId COMMERCE_ID = parseCommerceIdOrThrow(COMMERCE_ID_REF);
+  private static final String COMMERCE_ID_SKU_REF = "vendor:///catalog/sku/" + EXTERNAL_ID_SKU;
+  private static final CommerceId COMMERCE_ID_SKU = parseCommerceIdOrThrow(COMMERCE_ID_SKU_REF);
 
   private static final String CMPICTURE_DOCTYPE_NAME = "CMPicture";
 
@@ -50,10 +56,19 @@ public class AssetResolvingStrategyImplTest {
   private Site site;
 
   private BaseCommerceConnection commerceConnection;
+  private MockCommerceEnvBuilder envBuilder;
+  private StoreContext storeContext;
 
   @Before
   public void setUp() throws Exception {
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    commerceConnection = envBuilder.setupEnv();
+    storeContext = commerceConnection.getStoreContext();
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   @Test
@@ -64,8 +79,8 @@ public class AssetResolvingStrategyImplTest {
     List<Content> cachedAssets = of();
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
-    returnCachedAssets(COMMERCE_ID, site, cachedAssets);
-    isUpToDateInCache(picture, COMMERCE_ID, site, false);
+    returnCachedAssets(COMMERCE_ID_REF, site, cachedAssets);
+    isUpToDateInCache(picture, COMMERCE_ID_REF, site, false);
 
     List<?> assets = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site);
     assertTrue(assets.isEmpty());
@@ -79,12 +94,12 @@ public class AssetResolvingStrategyImplTest {
 
     List<Content> indexedAssets = of(otherPicture, pictureUpToDate);
     List<Content> cachedAssets = of(otherPicture, pictureUpToDate);
-    List<String> referencedOnContent = of(COMMERCE_ID);
+    List<String> referencedOnContent = of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
-    returnCachedAssets(COMMERCE_ID, site, cachedAssets);
-    isUpToDateInCache(otherPicture, COMMERCE_ID, site, false);
-    isUpToDateInCache(pictureUpToDate, COMMERCE_ID, site, true);
+    returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
+    isUpToDateInCache(otherPicture, EXTERNAL_ID, site, false);
+    isUpToDateInCache(pictureUpToDate, EXTERNAL_ID, site, true);
     isReferencedInContent(pictureUpToDate, referencedOnContent);
 
     List<?> assets = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site);
@@ -99,12 +114,12 @@ public class AssetResolvingStrategyImplTest {
 
     List<Content> indexedAssets = of();
     List<Content> cachedAssets = of(picture);
-    List<String> referencedOnContent = of(COMMERCE_ID);
+    List<String> externalIdsOnContent = of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
-    returnCachedAssets(COMMERCE_ID, site, cachedAssets);
-    isUpToDateInCache(picture, COMMERCE_ID, site, true);
-    isReferencedInContent(picture, referencedOnContent);
+    returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
+    isUpToDateInCache(picture, EXTERNAL_ID, site, true);
+    isReferencedInContent(picture, externalIdsOnContent);
 
     List<?> assets = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site);
 
@@ -121,16 +136,16 @@ public class AssetResolvingStrategyImplTest {
 
     List<Content> indexedAssets = of(aPicture);
     List<Content> cachedAssets = of(aPicture, anotherPicture);
-    List<String> referencedOnContent = of(COMMERCE_ID);
+    List<String> externalIdsOnContent = of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
-    returnCachedAssets(COMMERCE_ID, site, cachedAssets);
+    returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
 
-    isUpToDateInCache(aPicture, COMMERCE_ID, site, true);
-    isReferencedInContent(aPicture, referencedOnContent);
+    isUpToDateInCache(aPicture, EXTERNAL_ID, site, true);
+    isReferencedInContent(aPicture, externalIdsOnContent);
 
-    isUpToDateInCache(anotherPicture, COMMERCE_ID, site, true);
-    isReferencedInContent(anotherPicture, referencedOnContent);
+    isUpToDateInCache(anotherPicture, EXTERNAL_ID, site, true);
+    isReferencedInContent(anotherPicture, externalIdsOnContent);
 
     List<?> assets = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site);
 
@@ -144,12 +159,12 @@ public class AssetResolvingStrategyImplTest {
     Content picture = createPictureMock("picture");
     List<Content> indexedAssets = of(picture);
     List<Content> cachedAssets = of(picture);
-    List<String> referencedOnContent = of(COMMERCE_ID);
+    List<String> externalIdsOnContent = of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
-    returnCachedAssets(COMMERCE_ID, site, cachedAssets);
-    isUpToDateInCache(picture, COMMERCE_ID, site, true);
-    isReferencedInContent(picture, referencedOnContent);
+    returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
+    isUpToDateInCache(picture, EXTERNAL_ID, site, true);
+    isReferencedInContent(picture, externalIdsOnContent);
 
     Collection<?> pictures = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site);
     assertEquals(1, pictures.size());
@@ -161,7 +176,7 @@ public class AssetResolvingStrategyImplTest {
     List<Content> cachedAssets = of();
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
-    returnCachedAssets(COMMERCE_ID, site, cachedAssets);
+    returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
 
     Collection<?> pictures = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site);
     assertTrue(pictures.isEmpty());
@@ -175,14 +190,14 @@ public class AssetResolvingStrategyImplTest {
     List<Content> indexedVariantAssets = of(variantPicture);
     List<Content> indexedProductAssets = of(productPicture);
     List<Content> cachedProductAssets = of(productPicture);
-    List<String> referencedOnProductContent = of(COMMERCE_ID);
+    List<String> referencedOnProductContent = of(EXTERNAL_ID);
 
-    returnProductVariantWithProduct(COMMERCE_ID_SKU, EXTERNAL_ID_SKU, COMMERCE_ID);
+    returnProductVariantWithProduct(COMMERCE_ID_SKU, EXTERNAL_ID_SKU, COMMERCE_ID_REF);
     returnIndexedAssets(EXTERNAL_ID_SKU, indexedVariantAssets);
 
     returnIndexedAssets(EXTERNAL_ID, indexedProductAssets);
-    returnCachedAssets(COMMERCE_ID, site, cachedProductAssets);
-    isUpToDateInCache(productPicture, COMMERCE_ID, site, true);
+    returnCachedAssets(EXTERNAL_ID, site, cachedProductAssets);
+    isUpToDateInCache(productPicture, EXTERNAL_ID, site, true);
     isReferencedInContent(productPicture, referencedOnProductContent);
 
     Collection<?> pictures = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_SKU, site);
@@ -197,30 +212,30 @@ public class AssetResolvingStrategyImplTest {
     List<Content> indexedVariantAssets = of(variantPicture);
     List<Content> cachedProductAssets = of(productPicture);
     List<Content> indexedProductAssets = of(productPicture);
-    List<String> referencedOnContent = of(COMMERCE_ID);
+    List<String> referencedOnContent = of(EXTERNAL_ID);
 
-    returnProductVariantWithProduct(COMMERCE_ID_SKU, EXTERNAL_ID_SKU, COMMERCE_ID);
+    returnProductVariantWithProduct(COMMERCE_ID_SKU, EXTERNAL_ID_SKU, COMMERCE_ID_REF);
     returnIndexedAssets(EXTERNAL_ID_SKU, indexedVariantAssets);
 
-    returnCachedAssets(COMMERCE_ID, site, cachedProductAssets);
+    returnCachedAssets(EXTERNAL_ID, site, cachedProductAssets);
     returnIndexedAssets(EXTERNAL_ID, indexedProductAssets);
-    isUpToDateInCache(productPicture, COMMERCE_ID, site, true);
+    isUpToDateInCache(productPicture, EXTERNAL_ID, site, true);
     isReferencedInContent(productPicture, referencedOnContent);
 
     Collection<?> pictures = testling.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_SKU, site);
     assertEquals(1, pictures.size());
   }
 
-  private void isUpToDateInCache(Content asset, String fullId, Site site, boolean isUpToDate) {
-    when(assetChanges.isUpToDate(asset, fullId, site)).thenReturn(isUpToDate);
+  private void isUpToDateInCache(Content asset, String externalId, Site site, boolean isUpToDate) {
+    when(assetChanges.isUpToDate(asset, externalId, site)).thenReturn(isUpToDate);
   }
 
-  private void returnCachedAssets(String fullId, Site site, List<Content> assets) {
-    when(assetChanges.get(fullId, site)).thenReturn(assets);
+  private void returnCachedAssets(String externalId, Site site, List<Content> assets) {
+    when(assetChanges.get(externalId, site)).thenReturn(assets);
   }
 
   private void isReferencedInContent(Content picture, List<String> referencesFromCommerceStruct) {
-    doReturn(referencesFromCommerceStruct).when(testling).getExternalReferences(picture);
+    doReturn(referencesFromCommerceStruct).when(testling).getExternalIds(picture);
   }
 
   private void returnIndexedAssets(String externalId, List<Content> picturesInSolrForExternalId) {
@@ -228,17 +243,17 @@ public class AssetResolvingStrategyImplTest {
             .thenReturn(picturesInSolrForExternalId);
   }
 
-  private void returnProductVariantWithProduct(String productVariantId,
+  private void returnProductVariantWithProduct(CommerceId productVariantId,
                                                String productVariantExternalId,
                                                String productId) {
     ProductVariant variant = mock(ProductVariant.class);
-    when(commerceConnection.getCatalogService().findProductById(productVariantId)).thenReturn(variant);
+    when(commerceConnection.getCatalogService().findProductById(productVariantId, storeContext)).thenReturn(variant);
     when(variant.getExternalId()).thenReturn(productVariantExternalId);
-    when(variant.getReference()).thenReturn(productVariantId);
+    when(variant.getId()).thenReturn(productVariantId);
     markAsSKU(productVariantId);
 
     Product product = mock(Product.class);
-    when(product.getReference()).thenReturn(productId);
+    when(product.getReference()).thenReturn(parseCommerceIdOrThrow(productId));
 
     when(variant.getParent()).thenReturn(product);
   }
@@ -252,7 +267,7 @@ public class AssetResolvingStrategyImplTest {
     return picture;
   }
 
-  private void markAsSKU(String id) {
+  private void markAsSKU(CommerceId id) {
     doReturn(true).when(testling).isSkuId(id);
   }
 }

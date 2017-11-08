@@ -50,8 +50,8 @@ import static com.google.common.collect.Maps.newHashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -136,10 +136,6 @@ public abstract class HandlerBaseTest {
     handlerMapping.setPathMatcher(pathMatcher);
     handlerMapping.initApplicationContext();
 
-    // setup link scheme
-    when(applicationContext.getBeansWithAnnotation(Link.class)).thenReturn(ImmutableMap.of(
-            beanName, handler
-    ));
     AnnotationLinkScheme linkScheme = new AnnotationLinkScheme();
     linkScheme.setApplicationContext(applicationContext);
     linkFormatter.addScheme(linkScheme);

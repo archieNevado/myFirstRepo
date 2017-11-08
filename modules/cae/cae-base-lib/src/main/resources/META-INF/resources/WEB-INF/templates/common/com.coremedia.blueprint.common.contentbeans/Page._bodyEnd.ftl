@@ -1,6 +1,14 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 <#-- @ftlvariable name="js" type="com.coremedia.blueprint.common.contentbeans.CMJavaScript" -->
 
+<#--
+    Template Description:
+
+    This template renders the javascripts and the hook VIEW_HOOK_END at the end of the body element. Additional
+    informations are added for developers.
+    Please check the brick "generic templates" for a more detailed version.
+-->
+
 <#-- include fragment preview javascript  -->
 <#if preview.isFragmentPreview()>
   <#assign fragmentPreviewJs=bp.setting(self, "fragmentPreviewJs", []) />

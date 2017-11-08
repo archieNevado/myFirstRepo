@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.product;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -10,11 +10,14 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
@@ -74,19 +77,25 @@ public class ProductAvailabilityHandler extends PageHandlerBase {
                                                    @PathVariable(PATH_VARIABLE_NAME_PRODUCT_TYPE) String productType,
                                                    @PathVariable(PATH_VARIABLE_NAME_EXTERNAL_ID) String productId,
                                                    @RequestParam(value = "targetView", required = false) String view) {
+    //[CMS-10523] for multi catalog support the bean specific catalog id must be provided by url. not implemented yet.
     Navigation navigationContext = getNavigation(shopName);
-    CommerceConnection currentConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    CommerceIdProvider idProvider = currentConnection.getIdProvider();
+
+    CommerceConnection currentConnection = CurrentCommerceConnection.get();
+
+    CommerceIdProvider idProvider = requireNonNull(currentConnection.getIdProvider(), "id provider not available");
+    StoreContext storeContext = requireNonNull(currentConnection.getStoreContext(), "store context not available");
+    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service available");
+
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
 
     ModelAndView model;
-    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service available");
     if ("variant".equals(productType)) {
-      String formattedProductVariantId = idProvider.formatProductVariantId(productId);
-      ProductVariant productVariant = catalogService.findProductVariantById(formattedProductVariantId);
+      CommerceId productVariantId = idProvider.formatProductVariantId(catalogAlias, productId);
+      ProductVariant productVariant = catalogService.findProductVariantById(productVariantId, storeContext);
       model = HandlerHelper.createModelWithView(productVariant, view);
     } else {
-      String formattedProductId = idProvider.formatProductId(productId);
-      Product product = catalogService.findProductById(formattedProductId);
+      CommerceId formattedProductId = idProvider.formatProductId(catalogAlias, productId);
+      Product product = catalogService.findProductById(formattedProductId, storeContext);
       model = HandlerHelper.createModelWithView(product, view);
     }
     NavigationLinkSupport.setNavigation(model, navigationContext);

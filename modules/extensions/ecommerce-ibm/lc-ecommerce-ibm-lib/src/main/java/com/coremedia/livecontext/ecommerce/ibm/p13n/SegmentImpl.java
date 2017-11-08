@@ -1,10 +1,11 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
+import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
-import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import java.util.Map;
 
@@ -13,15 +14,16 @@ public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
   private Map<String, Object> delegate;
   private WcSegmentWrapperService segmentWrapperService;
 
-  @SuppressWarnings("unchecked")
   public Map<String, Object> getDelegate() {
     if (delegate == null) {
-      delegate = (Map<String, Object>) getCommerceCache().get(new SegmentCacheKey(getId(), getContext(),
-              UserContextHelper.getCurrentContext(), getSegmentWrapperService(), getCommerceCache()));
-      if (delegate == null) {
-        throw new NotFoundException(getId() + " (segment not found in catalog)");
-      }
+      UserContext userContext = UserContextHelper.getCurrentContext();
+      SegmentCacheKey cacheKey = new SegmentCacheKey(getId(), getContext(), userContext, getSegmentWrapperService(),
+              getCommerceCache());
+
+      delegate = getCommerceCache().find(cacheKey)
+              .orElseThrow(() -> new NotFoundException(getId() + " (segment not found in catalog)"));
     }
+
     return delegate;
   }
 
@@ -39,11 +41,6 @@ public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
   @Override
   public String getDescription() {
     return DataMapHelper.getValueForKey(getDelegate(), "description.value", String.class);
-  }
-
-  @Override
-  public String getReference() {
-    return null;
   }
 
   @Override

@@ -39,13 +39,9 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   @Nullable
   @Override
   public Site findSiteFor(@Nonnull FragmentParameters fragmentParameters) {
-    String environment = fragmentParameters.getEnvironment();
-
-    if (!isNullOrEmpty(environment)) {
-      Site site = findSiteForEnvironment(fragmentParameters.getLocale(), environment);
-      if (site != null) {
-        return site;
-      }
+    Site site = findSiteForEnvironment(fragmentParameters.getLocale(), fragmentParameters.getEnvironment());
+    if (site != null) {
+      return site;
     }
 
     return findSiteFor(fragmentParameters.getStoreId(), fragmentParameters.getLocale());
@@ -94,10 +90,10 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
       return false;
     }
 
-    return storeId.equalsIgnoreCase(String.valueOf(storeContext.get("storeId")));
+    return storeId.equalsIgnoreCase(String.valueOf(storeContext.getStoreId()));
   }
 
-  private boolean localeMatchesSite(@Nonnull Site site, @Nonnull Locale locale) {
+  private static boolean localeMatchesSite(@Nonnull Site site, @Nonnull Locale locale) {
     Locale siteLocale = site.getLocale();
     return locale.equals(siteLocale) ||
             (isNullOrEmpty(siteLocale.getCountry()) && locale.getLanguage().equals(siteLocale.getLanguage()));
@@ -110,12 +106,13 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
    * @param environment The name of the environment which contains the site name to use.
    * @return The site that was resolved by the environment (name matching by default).
    */
-  private Site findSiteForEnvironment(@Nonnull Locale locale, @Nonnull String environment) {
-    if (!environment.contains("site:")) {
+  @Nullable
+  private Site findSiteForEnvironment(@Nonnull Locale locale, @Nullable String environment) {
+    @SuppressWarnings({"squid:S2259"})
+    String siteName = extractSiteNameFromEnvironment(environment);
+    if (siteName == null) {
       return null;
     }
-
-    String siteName = environment.split(":")[1];
 
     return sitesService.getSites().stream()
             .filter(matchesNameAndLocale(siteName, locale))

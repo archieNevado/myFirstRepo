@@ -19,5 +19,5 @@ end
   node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['livecontext.apache.preview.production.wcs.host'] = "candy-shop-preview-production-helios.#{node['blueprint']['hostname']}"
   node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['livecontext.apache.preview.wcs.host'] = "candy-shop-preview-helios.#{node['blueprint']['hostname']}"
   node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['livecontext.apache.live.production.wcs.host'] = "candy-shop-helios.#{node['blueprint']['hostname']}"
-  node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['blueprint.site.mapping.helios'] = "//candy-preview.#{node['blueprint']['hostname']}"
+  node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['blueprint.site.mapping.helios'] = "https://candy-preview.#{node['blueprint']['hostname']}"
 end

@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,13 +26,12 @@ import java.util.Set;
 
 import static com.coremedia.livecontext.studio.asset.SpinnerAssetInvalidationWriteInterceptor.SEQUENCE_SPINNER_PROPERTY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SpinnerAssetInvalidationWriteInterceptorTest {
@@ -288,7 +287,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   public void testInvalidateExternalReferences() throws Exception {
     testling.invalidateExternalReferences(content, null, null);
 
-    verify(invalidationSource, times(1)).invalidateReferences(Collections.<String>emptySet(), commerceConnection);
+    verify(invalidationSource, times(1)).invalidateReferences(Collections.<String>emptySet());
   }
 
   @Test
@@ -299,8 +298,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
     testling.invalidateExternalReferences(content, oldLocalSettings, null);
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(oldSettingsInvalidation)),
-            eq(commerceConnection));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(oldSettingsInvalidation)));
   }
 
   @Test
@@ -311,8 +309,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
     testling.invalidateExternalReferences(content, null, newLocalSettings);
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(newSettingsInvalidation)),
-            eq(commerceConnection));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(newSettingsInvalidation)));
   }
 
   @Test
@@ -329,8 +326,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
     testling.invalidateExternalReferences(content, oldLocalSettings, newLocalSettings);
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)),
-            eq(commerceConnection));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)));
   }
 
   @Test

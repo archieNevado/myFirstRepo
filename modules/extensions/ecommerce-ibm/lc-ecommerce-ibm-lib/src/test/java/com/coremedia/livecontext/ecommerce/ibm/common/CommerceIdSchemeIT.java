@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -33,7 +34,11 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
   @Inject
   CommerceIdScheme testling;
 
+  @Inject
+  private IbmCommerceIdProvider ibmCommerceIdProvider;
+
   @Before
+  @Override
   public void setup() {
     super.setup();
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
@@ -68,7 +73,7 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
     List<ProductVariant> variants = product.getVariants();
     ProductVariant sku = variants.get(0);
     String skuTechId = sku.getExternalTechId();
-    String skuId = CommerceIdHelper.formatProductVariantTechId(skuTechId);
+    String skuId = format(ibmCommerceIdProvider.formatProductVariantTechId(getStoreContext().getCatalogAlias(), skuTechId));
     ProductVariant sku2 = (ProductVariant) testling.parseId(skuId);
     assertNotNull("bean most not be null", sku2);
     assertEquals(sku, sku2);

@@ -1,0 +1,21 @@
+//fix CMS-7557
+body {
+  background-color: $page-background-color;
+}
+
+.cm-container {
+  * {
+    box-sizing: border-box;
+  }
+
+  &.container {
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.rowContainer > .row {
+  margin-left: 0;
+  margin-right: 0;
+}

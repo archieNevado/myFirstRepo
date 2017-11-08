@@ -10,7 +10,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -23,9 +25,6 @@ public class ProductTransformerTest {
 
   @Mock
   private Product product;
-
-  @Mock
-  private ProductInSite productInSite;
 
   @Mock
   private SitesService sitesService;
@@ -41,7 +40,7 @@ public class ProductTransformerTest {
     String siteId = "1234";
     when(product.getContext()).thenReturn(storeContext);
     when(storeContext.getSiteId()).thenReturn(siteId);
-    when(sitesService.getSite(siteId)).thenReturn(site);
+    when(sitesService.findSite(siteId)).thenReturn(Optional.of(site));
   }
 
   @Test

@@ -3,10 +3,11 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnknownUserException;
+import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWrapperServiceTestCase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
@@ -17,34 +18,32 @@ import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.BeanUtils;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.ReflectionUtils;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
+import static com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService.FIND_CATEGORY_BY_EXTERNAL_ID;
+import static com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService.FIND_CATEGORY_BY_EXTERNAL_ID_SEARCH;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
+@ActiveProfiles({IbmServiceTestBase.LocalConfig.PROFILE})
 public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
 
   private static final String PRODUCT_EXTERNAL_ID = System.getProperty("lc.test.product.externalId", "CLA022_2203");
-  private static final String CATALOG_ID = System.getProperty("lc.test.catalogId", "10001");
 
   @Inject
   private WcCatalogWrapperService testling;
@@ -56,16 +55,15 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
 
   @Before
   public void setup() {
-    testling.clearLanguageMapping();
     connection = commerce.getConnection("wcs1");
     testConfig.setWcsVersion(storeInfoService.getWcsVersion());
     connection.setStoreContext(testConfig.getStoreContext());
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
   }
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   @Betamax(tape = "wcws_testFindDynamicProductPriceByExternalId", match = {MatchRule.path, MatchRule.query})
@@ -90,29 +88,12 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
   @Betamax(tape = "wcws_testFindStaticProductPricesByExternalId", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindStaticProductPricesByExternalId() throws Exception {
-    WcPrices productPrice = testling.findStaticProductPricesByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
+    WcPrices productPrice = testling.findStaticProductPricesByExternalId(PRODUCT_EXTERNAL_ID, null, testConfig.getStoreContext(), CurrentCommerceConnection.get().getUserContext());
     assertNotNull(productPrice);
     assertTrue(productPrice.getPrices().containsKey("Offer"));
     if (WCS_VERSION_7_7 == StoreContextHelper.getWcsVersion(testConfig.getStoreContext())) {
       assertTrue(productPrice.getPrices().containsKey("Display"));
     }
-  }
-
-
-  @Betamax(tape = "wcws_testFindDynamicProductPriceByExternalIdForFrequentBuyer", match = {MatchRule.path, MatchRule.query})
-//  @Test
-  public void testFindDynamicProductPriceByExternalIdForFrequentBuyer() throws Exception {
-    WcPrices productPrice = testling.findStaticProductPricesByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
-    WcPrice staticOfferPrice = productPrice.getPrices().get("Offer");
-
-    String userName = TEST_USER;
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(userName);
-    WcPrice dynamicOfferPrice = testling.findDynamicProductPriceByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), userContext);
-
-    assertNotNull(staticOfferPrice);
-    assertNotNull(dynamicOfferPrice);
-    assertTrue(Double.valueOf(staticOfferPrice.getPriceValue()) > Double.valueOf(dynamicOfferPrice.getPriceValue()));
   }
 
   @Betamax(tape = "wcws_testUnknownUser", match = {MatchRule.path, MatchRule.query})
@@ -123,26 +104,8 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
       throw new UnknownUserException(userName, 401);
     }
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(userName);
+    UserContext userContext = UserContext.builder().withUserName(userName).build();
     testling.findDynamicProductPriceByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext(), userContext);
-  }
-
-  @Betamax(tape = "wcws_testLanguageMapping", match = {MatchRule.path, MatchRule.query})
-  @Test
-  public void testLanguageMapping() throws IOException {
-    assertNotNull(testling.getLanguageMapping());
-    Map<String, String[]> parametersMap = testling.createParametersMap(
-            CATALOG_ID, new Locale("en", "EN"), Currency.getInstance("USD"), null, "forUser", null);
-    assertTrue(parametersMap.get("langId")[0].equals("-1"));
-    parametersMap = testling.createParametersMap(
-            CATALOG_ID, new Locale("en"), Currency.getInstance("USD"), null, "forUser", null);
-    assertTrue(parametersMap.get("langId")[0].equals("-1"));
-    parametersMap = testling.createParametersMap(
-            CATALOG_ID, new Locale("de"), Currency.getInstance("USD"), null, "forUser", null);
-    assertTrue(parametersMap.get("langId")[0].equals("-3"));
-    parametersMap = testling.createParametersMap(
-            CATALOG_ID, new Locale("xx"), Currency.getInstance("USD"), null, "forUser", null);
-    assertTrue(parametersMap.get("langId")[0].equals("-1"));
   }
 
   @Test
@@ -164,48 +127,36 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     testlingSpy.setUseSearchRestHandlerProductIfAvailable(true);
     testlingSpy.setUseSearchRestHandlerCategoryIfAvailable(false);
 
-
-    Field categoryRestCallFieldSearch = ReflectionUtils.findField(testlingSpy.getClass(), "FIND_CATEGORY_BY_EXTERNAL_ID_SEARCH");
-    categoryRestCallFieldSearch.setAccessible(true);
-    Field CategoryRestCallFieldBod = ReflectionUtils.findField(testlingSpy.getClass(), "FIND_CATEGORY_BY_EXTERNAL_ID");
-    CategoryRestCallFieldBod.setAccessible(true);
     WcRestConnector restConnector = new WcRestConnector();
     BeanUtils.copyProperties(testlingSpy.getRestConnector(), restConnector);
     testlingSpy.getRestConnector();
     WcRestConnector restConnectorSpy = Mockito.spy(restConnector);
-
-    // mock language map
-    Map map = new HashMap();
-    Field languageMappingField = ReflectionUtils.findField(testlingSpy.getClass(), "languageMapping", Map.class);
-    languageMappingField.setAccessible(true);
-    languageMappingField.set(testlingSpy, map);
 
     // mock call for product in order to verify endpoint called
     doReturn(null).when(restConnectorSpy).callService(
             Mockito.any(WcRestServiceMethod.class),
             Mockito.anyList(),
             Mockito.anyMap(),
-            Mockito.anyObject(),
+            Mockito.any(),
             Mockito.any(StoreContext.class),
-            Mockito.any(UserContext.class));
+            nullable(UserContext.class));
     testlingSpy.setRestConnector(restConnectorSpy);
 
-    testlingSpy.findCategoryByExternalId("vanilla", testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
-
+    testlingSpy.findCategoryByExternalId("vanilla", null, testConfig.getStoreContext(), CurrentCommerceConnection.get().getUserContext());
     // BOD handler called
-    Mockito.verify(restConnectorSpy, times(1)).callService(eq((WcRestServiceMethod) CategoryRestCallFieldBod.get(null)),
+    Mockito.verify(restConnectorSpy, times(1)).callService(eq((WcRestServiceMethod) FIND_CATEGORY_BY_EXTERNAL_ID),
             Mockito.anyList(),
             Mockito.anyMap(),
-            Mockito.anyObject(),
+            Mockito.any(),
             Mockito.any(StoreContext.class),
-            Mockito.any(UserContext.class));
+            nullable(UserContext.class));
     // and not search handler
-    Mockito.verify(restConnectorSpy, never()).callService(eq((WcRestServiceMethod) categoryRestCallFieldSearch.get(null)),
+    Mockito.verify(restConnectorSpy, never()).callService(eq((WcRestServiceMethod) FIND_CATEGORY_BY_EXTERNAL_ID_SEARCH),
             Mockito.anyList(),
             Mockito.anyMap(),
-            Mockito.anyObject(),
+            Mockito.any(),
             Mockito.any(StoreContext.class),
-            Mockito.any(UserContext.class));
+            nullable(UserContext.class));
 
     Mockito.reset(testlingSpy, restConnectorSpy);
   }
@@ -226,40 +177,33 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     WcRestConnector restConnector = testlingSpy.getRestConnector();
     WcRestConnector restConnectorSpy = Mockito.spy(restConnector);
 
-    // mock language map
-    Map map = new HashMap();
-    Field languageMappingField = ReflectionUtils.findField(testlingSpy.getClass(), "languageMapping", Map.class);
-    languageMappingField.setAccessible(true);
-    languageMappingField.set(testlingSpy, map);
-
     // mock call for product in order to verify endpoint called
     doReturn(null).when(restConnectorSpy).callService(
             Mockito.any(WcRestServiceMethod.class),
             Mockito.anyList(),
             Mockito.anyMap(),
-            Mockito.anyObject(),
+            Mockito.any(),
             Mockito.any(StoreContext.class),
-            Mockito.any(UserContext.class));
+            nullable(UserContext.class));
     testlingSpy.setRestConnector(restConnectorSpy);
 
-    testlingSpy.findProductByExternalId("0815", testConfig.getStoreContext(), DefaultConnection.get().getUserContext());
+    testlingSpy.findProductByExternalId("0815", null, testConfig.getStoreContext(), CurrentCommerceConnection.get().getUserContext());
 
     // search handler called
     Mockito.verify(restConnectorSpy, times(1)).callService(eq((WcRestServiceMethod) productRestCallFieldSearch.get(null)),
             Mockito.anyList(),
             Mockito.anyMap(),
-            Mockito.anyObject(),
+            Mockito.any(),
             Mockito.any(StoreContext.class),
-            Mockito.any(UserContext.class));
+            nullable(UserContext.class));
     // and not BOD handler
     Mockito.verify(restConnectorSpy, never()).callService(eq((WcRestServiceMethod) productRestCallFieldBod.get(null)),
             Mockito.anyList(),
             Mockito.anyMap(),
-            Mockito.anyObject(),
+            Mockito.any(),
             Mockito.any(StoreContext.class),
-            Mockito.any(UserContext.class));
+            nullable(UserContext.class));
     Mockito.reset(testlingSpy, restConnectorSpy);
   }
-
 
 }

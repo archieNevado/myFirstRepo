@@ -35,6 +35,6 @@ public class WorkspacesCacheKey extends AbstractCommerceCacheKey<Map> {
   @Override
   protected String getCacheIdentifier() {
     return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale();
+            storeContext.getStoreId() + ":" + storeContext.getLocale();
   }
 }

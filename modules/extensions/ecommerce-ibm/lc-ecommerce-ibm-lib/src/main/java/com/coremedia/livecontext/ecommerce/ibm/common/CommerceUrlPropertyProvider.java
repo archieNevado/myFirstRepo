@@ -1,13 +1,17 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
@@ -15,6 +19,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
@@ -35,12 +40,14 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
   public static final String SEO_SEGMENT = "seoSegment";
   public static final String SEARCH_TERM = "searchTerm";
   public static final String IS_STUDIO_PREVIEW = "isStudioPreview";
+  public static final String IS_INITIAL_STUDIO_REQUEST = "isInitialStudioRequest";
   protected static final String NEW_PREVIEW_SESSION_VARIABLE = "newPreviewSession";
   private static final String REDIRECT_URL = "redirectUrl";
   private static final String PARAM_CONTRACT_ID_FOR_PREVIEW = "contractId";
   protected static final String QUERY_PARAMS = "queryParams";
   protected static final String PRODUCT_ID = "productId";
   protected static final String CATEGORY_ID = "categoryId";
+  public static final String CATALOG_ID = "catalogId";
 
   private String defaultStoreFrontUrl;
   private String previewStoreFrontUrl;
@@ -49,13 +56,15 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
   private String productNonSeoUrl;
   private String categoryNonSeoUrl;
 
+  private CatalogAliasTranslationService catalogAliasTranslationService;
+
   /**
    * The URL template is not mandatory and may be passed with the
    * parameter array of the "provideValue" method.
    */
   public String getUrlPattern() {
-      return urlPattern;
-    }
+    return urlPattern;
+  }
 
   public String getDefaultStoreFrontUrl() {
     return defaultStoreFrontUrl;
@@ -114,7 +123,7 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
       //optional URL template to overwrite the default Spring property
       resultUrl = urlTemplate != null ? urlTemplate : resultUrl;
 
-      if (isNullOrEmpty(resultUrl)){
+      if (isNullOrEmpty(resultUrl)) {
         return null;
       }
 
@@ -137,12 +146,22 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
     resultUrl = makeShopUrlAbsolute(resultUrl, isStudioPreview);
     resultUrl = applyParameters(resultUrl, parameters);
 
-    // always append "newPreviewSession=true" if request is initial studio preview request
-    if (isStudioPreview) {
-      resultUrl = UriComponentsBuilder.fromUriString(resultUrl).queryParam(NEW_PREVIEW_SESSION_VARIABLE, Boolean.TRUE.toString()).build().toUriString();
+    resultUrl = ensureNewSessionForNewStudioTabs(parameters, resultUrl);
+
+    //append catalogId for non default catalog urls
+    if (isNonDefaultCatalog(parameters) && !resultUrl.contains(CATALOG_ID + "=")) {
+      resultUrl = UriComponentsBuilder.fromUriString(resultUrl).queryParam(CATALOG_ID, parameters.get(CATALOG_ID)).build().toUriString();
     }
 
     return UriComponentsBuilder.fromUriString(resultUrl).build();
+  }
+
+  private String ensureNewSessionForNewStudioTabs(@Nonnull Map<String, Object> parameters, String resultUrl) {
+    boolean isInitialStudioRequest = isInitialStudioRequest(parameters);
+    if (isInitialStudioRequest) {
+      resultUrl = UriComponentsBuilder.fromUriString(resultUrl).queryParam(NEW_PREVIEW_SESSION_VARIABLE, Boolean.TRUE.toString()).build().toUriString();
+    }
+    return resultUrl;
   }
 
   @Nullable
@@ -172,7 +191,6 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
     Map<String, Object> parametersMap = new HashMap<>();
     StoreContext storeContext = (StoreContext) parameters.get(STORE_CONTEXT);
 
-
     //optional seo segment
     parametersMap.put(PARAM_SEO_SEGMENT, parameters.get(SEO_SEGMENT));
 
@@ -182,14 +200,25 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
     //optional redirect url
     parametersMap.put(REDIRECT_URL, parameters.get(REDIRECT_URL));
 
+    //map info from store context
     if (storeContext != null) {
-      String storeId = StoreContextHelper.getStoreId(storeContext);
-      String catalogId = StoreContextHelper.getCatalogId(storeContext);
+
+      //catalogId
+      String storeId = storeContext.getStoreId();
+      String catalogId = storeContext.getCatalogId();
+      if (catalogId == null) {
+        CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+        String siteId = storeContext.getSiteId();
+        Optional<CatalogId> catalogIdForAlias = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
+        catalogId = catalogIdForAlias.map(CatalogId::value).orElse(null);
+      }
+
+      //storeName
       String storeName = StoreContextHelper.getStoreNameInLowerCase(storeContext);
       String languageId = null;
-
       parametersMap.put(PARAM_STORE_NAME, storeName);
 
+      //langId
       //the language ID has to be transformed into the format of the commerce system
       Locale locale = StoreContextHelper.getLocale(storeContext);
       if (getCatalogService() instanceof CatalogServiceImpl) {
@@ -207,10 +236,15 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
         parametersMap.put(PARAM_STORE_ID, storeId);
         parametersMap.put(PARAM_CATALOG_ID, catalogId);
       }
+
     }
 
-    if (parameters.get(QUERY_PARAMS) != null && !((Map) parameters.get(QUERY_PARAMS)).isEmpty()) {
-      parametersMap.putAll((Map) parameters.get(QUERY_PARAMS));
+    Object queryParams = parameters.get(QUERY_PARAMS);
+    if (queryParams != null) {
+      Map queryParamsMap = (Map) queryParams;
+      if (!queryParamsMap.isEmpty()) {
+        parametersMap.putAll(queryParamsMap);
+      }
     }
 
     String commerceTokensReplacedUrl = CommercePropertyHelper.replaceTokens(url, storeContext);
@@ -242,15 +276,27 @@ public class CommerceUrlPropertyProvider implements CommercePropertyProvider {
     return parameters.containsKey(IS_STUDIO_PREVIEW) && (boolean) parameters.get(IS_STUDIO_PREVIEW);
   }
 
+  private static boolean isInitialStudioRequest(@Nonnull Map<String, Object> parameters) {
+    return parameters.containsKey(IS_INITIAL_STUDIO_REQUEST) && (boolean) parameters.get(IS_INITIAL_STUDIO_REQUEST);
+  }
+
+  private static boolean isNonDefaultCatalog(@Nonnull Map<String, Object> parameters) {
+    return parameters.containsKey(CATALOG_ID) && null != parameters.get(CATALOG_ID);
+  }
+
   private static boolean isContractPreview(@Nullable StoreContext storeContext, boolean isStudioPreview) {
     return storeContext != null && isStudioPreview && storeContext.getContractIdsForPreview() != null;
   }
 
+  @Nullable
   public CatalogService getCatalogService() {
-    CommerceConnection currentConnection = DefaultConnection.get();
-    if (currentConnection == null) {
-      return null;
-    }
-    return currentConnection.getCatalogService();
+    return CurrentCommerceConnection.find()
+            .map(CommerceConnection::getCatalogService)
+            .orElse(null);
+  }
+
+  @Autowired
+  public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 }

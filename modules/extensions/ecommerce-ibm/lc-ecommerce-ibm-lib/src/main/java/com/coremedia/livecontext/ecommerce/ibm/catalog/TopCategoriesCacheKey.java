@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cache.Cache;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
@@ -15,17 +15,18 @@ public class TopCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
 
   private WcCatalogWrapperService wrapperService;
 
-  public TopCategoriesCacheKey(StoreContext storeContext,
+  public TopCategoriesCacheKey(CatalogAlias catalogAlias,
+                               StoreContext storeContext,
                                UserContext userContext,
                                WcCatalogWrapperService wrapperService,
                                CommerceCache commerceCache) {
-    super("root", storeContext, userContext, CONFIG_KEY_TOP_CATEGORIES, commerceCache);
+    super("root", catalogAlias, storeContext, userContext, CONFIG_KEY_TOP_CATEGORIES, commerceCache);
     this.wrapperService = wrapperService;
   }
 
   @Override
   public List<Map<String, Object>> computeValue(Cache cache) {
-    return wrapperService.findTopCategories(storeContext, userContext);
+    return wrapperService.findTopCategories(catalogAlias, storeContext, userContext);
   }
 
   @Override
@@ -35,8 +36,8 @@ public class TopCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale() + ":" +
+    return id + ":" + catalogAlias + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
+            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
             storeContext.getWorkspaceId() + ":" + Arrays.toString(storeContext.getContractIds()) + ":" +
             Arrays.toString(storeContext.getContractIdsForPreview());
   }

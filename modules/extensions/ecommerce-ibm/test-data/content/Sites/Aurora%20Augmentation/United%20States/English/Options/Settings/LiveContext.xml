@@ -18,6 +18,12 @@
 <StringProperty Name="config.id">aurora</StringProperty>
 </Struct>
 </StructProperty>
+<StructProperty Name="livecontext.catalogAliases">
+<Struct>
+  <StringProperty Name="catalog">Extended Sites Catalog Asset Store Consumer Direct</StringProperty>
+  <StringProperty Name="master">Extended Sites Catalog Asset Store</StringProperty>
+</Struct>
+</StructProperty>
 </Struct>
 </settings>
 <identifier></identifier>

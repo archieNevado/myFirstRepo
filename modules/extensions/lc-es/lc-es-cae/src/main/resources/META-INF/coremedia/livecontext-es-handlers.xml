@@ -6,5 +6,11 @@
 
   <import resource="classpath:/META-INF/coremedia/livecontext-handlers.xml"/>
 
-  <bean id="productReviewsResultHandler" class="com.coremedia.livecontext.elastic.social.cae.ProductReviewsResultHandler" parent="handlerBase"/>
+  <bean id="productReviewsResultHandler" class="com.coremedia.livecontext.elastic.social.cae.ProductReviewsResultHandler" parent="handlerBase">
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>productId</value>
+      </list>
+    </property>
+  </bean>
 </beans>

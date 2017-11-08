@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.elastic.social.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.rest.api.JsonProperties;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
@@ -10,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ProductReviewJsonCustomizerTest {
 
   @InjectMocks
@@ -51,14 +52,14 @@ public class ProductReviewJsonCustomizerTest {
     String productName = "productName";
     when(product.getName()).thenReturn(productName);
     when(contentRepositoryResource.getPreviewControllerUrlPattern()).thenReturn("preview?id={0}");
-    when(product.getId()).thenReturn("productId");
+    when(product.getId()).thenReturn(CommerceIdParserHelper.parseCommerceIdOrThrow("test:///x/product/productId"));
     when(product.getContext()).thenReturn(storeContext);
     when(storeContext.getSiteId()).thenReturn("siteId");
 
     productReviewJsonCustomizer.customize(comment, serializedObject);
 
     assertEquals(productName, serializedObject.get(JsonProperties.SUBJECT));
-    assertEquals("preview?id=productId&site=siteId", serializedObject.get(JsonProperties.PREVIEW_URL));
+    assertEquals("preview?id=test:///catalog/product/productId&site=siteId", serializedObject.get(JsonProperties.PREVIEW_URL));
   }
 
   @Test

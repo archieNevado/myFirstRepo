@@ -44,7 +44,7 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
         String configId = StructUtil.getString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID);
 
         readStoreConfigFromSpring(configId, targetConfig);
-        updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig);
+        updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig, site);
         updateStoreConfigFromDynamicStoreInfo(site.getName(), targetConfig);
 
         result = StoreContextHelper.createContext(

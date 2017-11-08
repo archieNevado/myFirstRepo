@@ -5,6 +5,7 @@ import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import java.util.Map;
 import java.util.Objects;
@@ -15,15 +16,17 @@ public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
   private WcContractWrapperService contractWrapperService;
   private static int DEFAULT_CATALOG_IDENTIFIER = 0;
 
-  @SuppressWarnings("unchecked")
   public Map<String, Object> getDelegate() {
     if (delegate == null) {
-      delegate = (Map<String, Object>) getCommerceCache().get(new ContractCacheKey(getId(),
-              getContext(), UserContextHelper.getCurrentContext(),getContractWrapperService(), getCommerceCache()));
-      if (delegate == null) {
-        throw new NotFoundException(getId() + " (contract not found in catalog)");
-      }
+      UserContext userContext = UserContextHelper.getCurrentContext();
+
+      ContractCacheKey cacheKey = new ContractCacheKey(getId(), getContext(), userContext, getContractWrapperService(),
+              getCommerceCache());
+
+      delegate = getCommerceCache().find(cacheKey)
+              .orElseThrow(() -> new NotFoundException(getId() + " (contract not found in catalog)"));
     }
+
     return delegate;
   }
 
@@ -47,11 +50,6 @@ public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
   public boolean isDefaultContract() {
     Integer usageType = DataMapHelper.getValueForKey(getDelegate(), "usage", Integer.class);
     return Objects.equals(DEFAULT_CATALOG_IDENTIFIER, usageType);
-  }
-
-  @Override
-  public String getReference() {
-    return null;
   }
 
   @Override

@@ -34,6 +34,15 @@
   </customize:replace>
 -->
 
+  <bean id="themeResourceLinkBuilder" class="com.coremedia.blueprint.cae.web.links.ThemeResourceLinkBuilder">
+    <property name="useLocalResources" value="${cae.use.local.resources:false}"/>
+    <property name="linkFormatter" ref="linkFormatter"/>
+    <property name="contextService" ref="currentContextService"/>
+    <property name="repository" ref="contentRepository"/>
+    <property name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+  </bean>
+
   <bean id="previewDateAppendingLinkTransformer" class="com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer">
     <description>
       Creates a CAE LinkTransformer that rewrites all generated links

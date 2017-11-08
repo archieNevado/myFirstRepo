@@ -1,0 +1,166 @@
+.#{$prefix}header {
+  border-width: 0;
+  border-bottom: 1px solid $input-border;
+  background-color: $body-bg;
+  font-family: $font-family-sans-serif;
+
+  @include breakpoint("sm-and-down") {
+    margin: 0 -15px;
+  }
+
+  // Logo
+
+  &__logo {
+    margin-top: 5px;
+    width: 134px;
+    height: 41px;
+    display: block;
+    background: url("../../img/calista-logo.svg") no-repeat center center transparent;
+
+    @include breakpoint("sm-and-down") {
+      background-image: url("../../img/calista-logo-mobile.svg");
+      width: 81px;
+      margin: 4px auto 0;
+      float: none;
+    }
+  }
+
+  // Login
+
+  &__login {
+    #cm-login,
+    #cm-logout {
+      display: none;
+    }
+  }
+
+  // Navigation
+
+  .navbar-nav {
+
+    & > li > a {
+      text-transform: uppercase;
+      font-size: 12px;
+      @include breakpoint("sm-and-down") {
+        font-size: 16px;
+      }
+
+      display: inline-block;
+    }
+
+    @include breakpoint("md") {
+      .cm-language-chooser .dropdown-toggle {
+        display: none;
+      }
+    }
+
+    .dropdown {
+
+      &.open .caret {
+        transform: rotate(225deg);
+      }
+
+      &-toggle {
+        @include breakpoint("sm-and-down") {
+          position: absolute;
+        }
+        right: 15px;
+
+        .caret {
+          border: 0 solid #000000;
+          border-right-width: 2px;
+          border-bottom-width: 2px;
+          height: 8px;
+          width: 8px;
+          transform: rotate(45deg);
+
+          @include breakpoint("sm-and-down") {
+            border-color: #FFFFFF;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-toggle {
+    padding: 14px 10px;
+
+    .icon-bar {
+      display: none;
+    }
+
+    span:nth-child(2) {
+      background-color: transparent;
+      display: block;
+      margin: 0;
+      width: 22px;
+      height: 2px;
+      border-radius: 1px;
+      position: relative;
+
+      &:before,
+      &:after {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background-color: black;
+        border-radius: 1px;
+        position: absolute;
+        left: 0;
+        content: '';
+        transition: top .2s ease(in-out-quad), transform .2s .2s ease(in-out-quad);
+      }
+
+      &:before {
+        top: 0;
+        transform: rotate3d(0, 0, 1, 45deg);
+      }
+
+      &:after {
+        top: 0;
+        transform: rotate3d(0, 0, 1, -45deg);
+      }
+    }
+  }
+
+  .navbar-toggle.collapsed {
+
+    span:nth-child(2) {
+      background-color: black;
+
+      &:before,
+      &:after {
+        transition: top .2s .2s ease(in-out-quad), transform .2s ease(in-out-quad);
+      }
+
+      &:before {
+        top: -6px;
+        transform: rotate3d(0, 0, 0, 0deg);
+      }
+
+      &:after {
+        top: 6px;
+        transform: rotate3d(0, 0, 0, 0deg);
+      }
+    }
+  }
+}
+
+// fix to prevent bootstraps default focus state styling in mobile mode
+@include breakpoint("sm-and-down") {
+  .nav > li > a:focus,
+  .nav > li > a:hover,
+  .nav .open > a,
+  .nav .open > a:hover,
+  .nav .open > a:focus {
+    background-color: transparent;
+  }
+
+  .nav > li > a:hover {
+    text-decoration: underline;
+  }
+}
+
+.container-fluid > .navbar-header {
+  margin-left: -15px;
+}

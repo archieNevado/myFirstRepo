@@ -6,25 +6,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
-import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.execution.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-//import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.LOCALIZATION_KEY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -39,16 +35,7 @@ public class UserDetailsTest {
   private RequestContext requestContext;
 
   @Mock
-  private ExternalContext externalContext;
-
-  @Mock
-  private HttpServletRequest request;
-
-  @Mock
   private DefaultMessageContext messageContext;
-
-  @Mock
-  private LocalizationContext localizationContext;
 
   @Mock
   private PasswordPolicy passwordPolicy;
@@ -69,9 +56,6 @@ public class UserDetailsTest {
     userDetails.setTimeZoneId("UTC");
 
     when(requestContext.getMessageContext()).thenReturn(messageContext);
-    when(requestContext.getExternalContext()).thenReturn(externalContext);
-    when(externalContext.getNativeRequest()).thenReturn(request);
-    //when(request.getAttribute(LOCALIZATION_KEY)).thenReturn(localizationContext);
   }
 
 

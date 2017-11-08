@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.contentbeans;
 
-
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
@@ -34,7 +33,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ProductTeasableHelperTest {
 
-
   @Mock
   private Content content;
 
@@ -58,7 +56,8 @@ public class ProductTeasableHelperTest {
 
     when(teaserOverlaySettings.isEnabled()).thenReturn(false);
 
-    when(settingsService.settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, Content.class)).thenReturn(emptyMap());
+    when(settingsService.settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, Content.class))
+            .thenReturn(emptyMap());
     when(settingsService.createProxy(TeaserOverlaySettings.class, Object.class)).thenReturn(teaserOverlaySettings);
 
     when(productTeasable.getContent()).thenReturn(content);
@@ -142,15 +141,13 @@ public class ProductTeasableHelperTest {
     assertThat(teaserText).isNull();
   }
 
-
   static Markup createMarkup(String value) {
-    String markupData = "<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" +
-            "<p>" +
-            value +
-            "</p>" +
-            "</div>";
+    String markupData
+            = "<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
+            + "<p>"
+            + value
+            + "</p>"
+            + "</div>";
     return MarkupFactory.fromString(markupData);
   }
-
-
 }

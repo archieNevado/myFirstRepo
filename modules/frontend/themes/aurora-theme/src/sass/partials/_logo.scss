@@ -1,0 +1,11 @@
+#logo #contentRecommendationWidget_HeaderStoreLogo_Content .left_espot.centered > a > img {
+  background: url(../../img/logo_cm.png);
+  width: 0;
+  height: 0;
+  padding: 78px 195px 0 0;
+  background-size: 100%;
+
+  @include breakpoint(xs) {
+    padding: 53px 140px 0 0;
+  }
+}

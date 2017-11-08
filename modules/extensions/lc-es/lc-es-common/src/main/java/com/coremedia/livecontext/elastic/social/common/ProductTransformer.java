@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.elastic.social.common;
 
-
 import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetTransformer;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -8,15 +7,16 @@ import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
-import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static java.util.Objects.requireNonNull;
+
 @Named
-class ProductTransformer implements ContributionTargetTransformer<Product,ProductInSite> {
+class ProductTransformer implements ContributionTargetTransformer<Product, ProductInSite> {
 
   @Inject
   private SitesService sitesService;
@@ -25,16 +25,19 @@ class ProductTransformer implements ContributionTargetTransformer<Product,Produc
   @Nonnull
   public ProductInSite transform(@Nonnull Product target) {
     StoreContext context = target.getContext();
-    String siteId = context.getSiteId();
-    Site site = sitesService.getSite(siteId);
-    Assert.notNull(site);
+
+    String siteId = requireNonNull(context.getSiteId(), "Site ID must be set on store context.");
+    Site site = sitesService.findSite(siteId)
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Unknown site ID '%s'.", siteId)));
+
     return new ProductInSiteImpl(target, site);
   }
 
   @Override
   @Nullable
   public Site getSite(@Nonnull Product target) {
-    return sitesService.getSite(target.getContext().getSiteId());
+    String siteId = target.getContext().getSiteId();
+    return sitesService.findSite(siteId).orElse(null);
   }
 
   @Override

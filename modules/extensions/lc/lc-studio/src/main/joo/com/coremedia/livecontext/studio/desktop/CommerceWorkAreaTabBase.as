@@ -1,19 +1,24 @@
 package com.coremedia.livecontext.studio.desktop {
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cms.editor.sdk.desktop.TabTooltipInfo;
 import com.coremedia.cms.editor.sdk.desktop.WorkAreaTab;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
+import com.coremedia.ecommerce.studio.model.Category;
+import com.coremedia.ecommerce.studio.model.Product;
+import com.coremedia.ui.data.Locale;
+import com.coremedia.ui.util.EncodingUtil;
 
 import ext.Component;
-
 import ext.Ext;
-
 import ext.StringUtil;
 import ext.container.Container;
 
@@ -51,12 +56,53 @@ public class CommerceWorkAreaTabBase extends WorkAreaTab {
     catalogObject && catalogObject.addValueChangeListener(reloadPreview);
   }
 
-  override protected function calculateTitle():String {
+  override public function calculateTitle():String {
     var catalogObject:CatalogObject = getCatalogObject();
     return catalogObject && CatalogHelper.getInstance().getDisplayName(catalogObject);
   }
 
-  override protected function calculateIcon():String {
+  override public function calculateTooltip():TabTooltipInfo {
+    var tabTooltipInfo:TabTooltipInfo = new TabTooltipInfo();
+
+    var title:String = calculateTitle();
+    if (!title) return undefined;
+    tabTooltipInfo.addTooltipEntry(TabTooltipInfo.TITLE, null, title);
+
+    var site:Site = editorContext.getSitesService().getSite(getCatalogObject().getSiteId());
+    var siteName:String = site && site.getName();
+    var siteLocale:Locale = site && site.getLocale();
+
+    tabTooltipInfo.addTooltipEntry(TabTooltipInfo.SITE,
+            resourceManager.getString('com.coremedia.cms.editor.Editor', 'WorkArea_Premular_tooltip_siteName'),
+            siteName ? EncodingUtil.encodeForHTML(siteName) : resourceManager.getString('com.coremedia.cms.editor.Editor', 'WorkArea_Premular_tooltip_noSite'));
+
+    tabTooltipInfo.addTooltipEntry(TabTooltipInfo.LOCALE,
+            resourceManager.getString('com.coremedia.cms.editor.Editor', 'WorkArea_Premular_tooltip_locale'),
+            siteLocale.getDisplayName());
+
+    //add the catalog name
+    var catalog:Catalog;
+    if (getCatalogObject() is Category) {
+      catalog = Category(getCatalogObject()).getCatalog();
+    } else if (getCatalogObject() is Product) {
+      catalog = Product(getCatalogObject()).getCatalog();
+    }
+
+    if (catalog) {
+      var catalogName:String = catalog.getName();
+      //if there is a catalog then wait until the name is available
+      if (catalogName == undefined) {
+        return undefined;
+      }
+      tabTooltipInfo.addTooltipEntry(CatalogObjectPropertyNames.CATALOG,
+              resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_catalog_label'),
+              catalogName);
+    }
+
+    return tabTooltipInfo;
+  }
+
+  override public function calculateIcon():String {
     var catalogObject:CatalogObject = getCatalogObject();
     return catalogObject ? AugmentationUtil.getTypeCls(catalogObject) : super.calculateIcon();
   }

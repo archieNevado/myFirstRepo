@@ -27,7 +27,6 @@
         <ui:AddItemsPlugin>
           <ui:items>
             <am:AssetRepositoryListContainer selectionHolder="{selectionHolder}"
-                                             uploadDisabledExpression="{selectionHolder.getUploadDisabledValueExpression()}"
                                              selectedRepositoryItemsValueExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"
                                              createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"/>
           </ui:items>

@@ -3,8 +3,9 @@ package com.coremedia.blueprint.lc.test;
 import co.freeside.betamax.Recorder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +41,7 @@ public abstract class AbstractServiceTest {
     checkState(connection != null, "Commerce connection could not be obtained.");
 
     connection.setStoreContext(testConfig.getStoreContext());
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
 
     userContextProvider.clearCurrentContext();
 
@@ -50,10 +51,16 @@ public abstract class AbstractServiceTest {
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   public TestConfig getTestConfig() {
     return testConfig;
   }
+
+  protected StoreContext getStoreContext() {
+    return testConfig.getStoreContext();
+  }
+
+
 }

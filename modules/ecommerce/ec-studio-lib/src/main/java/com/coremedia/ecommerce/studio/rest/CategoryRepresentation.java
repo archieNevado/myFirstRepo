@@ -3,6 +3,7 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Store;
+import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
@@ -24,11 +25,11 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
   private List<Category> subCategories;
   private List<Product> products;
   private List<CommerceBean> children;
-  private List<Content> visuals;
   private List<Content> pictures;
   private List<Content> downloads;
   private Map<String, ChildRepresentation> childrenByName;
   private Store store;
+  private Catalog catalog;
   private String displayName;
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -95,15 +96,6 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-  public void setVisuals(List<Content> visuals) {
-    this.visuals = visuals;
-  }
-
-  public List<Content> getVisuals() {
-    return visuals;
-  }
-
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setPictures(List<Content> pictures) {
     this.pictures = pictures;
   }
@@ -132,6 +124,15 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
 
   public void setStore(Store store) {
     this.store = store;
+  }
+
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+  public Catalog getCatalog() {
+    return catalog;
+  }
+
+  public void setCatalog(Catalog catalog) {
+    this.catalog = catalog;
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)

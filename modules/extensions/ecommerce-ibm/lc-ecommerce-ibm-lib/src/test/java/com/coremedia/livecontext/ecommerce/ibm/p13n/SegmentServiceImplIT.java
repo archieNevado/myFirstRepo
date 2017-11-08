@@ -2,6 +2,9 @@ package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
@@ -14,11 +17,11 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SEGMENT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
@@ -30,44 +33,50 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
   @Betamax(tape = "ssi_testFindAllSegments", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindAllSegments() throws Exception {
-    if (StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
+    StoreContext storeContext = testConfig.getStoreContext();
+    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
       return;
     }
 
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(null);
+    StoreContextHelper.setCurrentContext(storeContext);
+    UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<Segment> segments = testling.findAllSegments();
+    List<Segment> segments = testling.findAllSegments(storeContext);
     assertNotNull(segments);
     assertFalse(segments.isEmpty());
 
     Segment lastSegment = segments.get(segments.size() - 1);
-    assertTrue("segment id has wrong format", lastSegment.getId().startsWith("ibm:///catalog/segment/"));
+    CommerceId commerceId = lastSegment.getId();
+    assertEquals("segment id has wrong format: " + commerceId, SEGMENT, commerceId.getCommerceBeanType());
     assertEquals("Repeat Customers", lastSegment.getName());
   }
 
   @Betamax(tape = "ssi_testFindSegmentById", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindSegmentById() throws Exception {
-    if (StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
+    StoreContext storeContext = testConfig.getStoreContext();
+    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
       return;
     }
 
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(null);
+    StoreContextHelper.setCurrentContext(storeContext);
+    UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<Segment> segments = testling.findAllSegments();
+    List<Segment> segments = testling.findAllSegments(storeContext);
     assertNotNull(segments);
 
     Segment segment = findSegmentByName(segments, "Registered Customers");
     assertNotNull(segment);
     assertNotNull(segment.getExternalTechId());
 
-    Segment segment2 = testling.findSegmentById(segment.getExternalTechId());
+    Segment segment2 = testling.findSegmentById(CommerceIdParserHelper.parseCommerceIdOrThrow("ibm:///x/segment/" + segment.getExternalTechId()), getStoreContext());
     assertNotNull(segment2);
-    assertTrue("segment2 id has wrong format", segment.getId().startsWith("ibm:///catalog/segment/"));
+
+    CommerceId commerceId = segment2.getId();
+    assertEquals("segment2 id has wrong format: " + commerceId, SEGMENT, commerceId.getCommerceBeanType());
+
     assertEquals("both segment names should be equal", segment.getName(), segment2.getName());
     assertEquals("both segments should be equal", segment, segment2);
   }
@@ -80,11 +89,13 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
     }
 
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-    UserContext userContext = userContextProvider.createContext(testConfig.getUser2Name());
-    userContext.put("forUserId", System.getProperty("lc.test.user2.id", "4"));
+    UserContext userContext = UserContext.builder()
+            .withUserId(System.getProperty("lc.test.user2.id", "4"))
+            .withUserName(testConfig.getUser2Name())
+            .build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<Segment> segments = testling.findSegmentsForCurrentUser();
+    List<Segment> segments = testling.findSegmentsForCurrentUser(getStoreContext());
     assertNotNull(segments);
     assertEquals(System.getProperty("lc.segments.user2.count", "3"), "" + segments.size());
 

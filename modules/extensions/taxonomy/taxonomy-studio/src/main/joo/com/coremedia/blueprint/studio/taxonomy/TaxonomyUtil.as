@@ -99,7 +99,7 @@ public class TaxonomyUtil {
     ValueExpressionFactory.createFromFunction(function():Array {
       return StudioConfigurationUtil.getConfiguration(TAXONOMY_SETTINGS, "administrationGroups", editorContext.getSitesService().getPreferredSite(), true);
     }).loadValue(function(groups:Array):void {
-      callback.call(null, groups);
+      callback.call(null, groups || []);
     });
   }
 

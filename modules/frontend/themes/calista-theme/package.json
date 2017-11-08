@@ -1,0 +1,42 @@
+{
+  "name": "@coremedia/calista-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "grunt build",
+    "production": "grunt build",
+    "start": "grunt monitor"
+  },
+  "dependencies": {
+    "@coremedia/brick-generic-templates": "file:../../lib/bricks/generic-templates",
+    "@coremedia/brick-bootstrap": "file:../../lib/bricks/bootstrap",
+    "@coremedia/brick-dynamic-include": "file:../../lib/bricks/dynamic-include",
+    "@coremedia/brick-footer": "file:../../lib/bricks/footer",
+    "@coremedia/brick-fragment-scenario": "file:../../lib/bricks/fragment-scenario",
+    "@coremedia/brick-livecontext": "file:../../lib/bricks/livecontext",
+    "@coremedia/brick-navigation": "file:../../lib/bricks/navigation",
+    "@coremedia/brick-pdp-augmentation": "file:../../lib/bricks/pdp-augmentation",
+    "@coremedia/brick-preview": "file:../../lib/bricks/preview",
+    "@coremedia/brick-responsive-images": "file:../../lib/bricks/responsive-images",
+    "@coremedia/brick-video": "file:../../lib/bricks/video",
+    "@coremedia/brick-default-teaser": "file:../../lib/bricks/default-teaser",
+    "@coremedia/brick-360-spinner": "file:../../lib/bricks/360-spinner",
+    "@coremedia/brick-hero-teaser": "file:../../lib/bricks/hero-teaser",
+    "@coremedia/js-logger": "file:../../lib/js/logger",
+    "@coremedia/sass-utils": "file:../../lib/sass/utils",
+    "bootstrap-sass": "3.3.7",
+    "grunt": "1.0.1",
+    "jquery": "3.2.1",
+    "magnific-popup": "1.1.0"
+  },
+  "main": "src/js/index.js",
+  "theme": {
+    "name": "calista"
+  },
+  "browserslist": [
+    "last 1 Chrome version",
+    "last 1 Firefox version",
+    "last 1 Edge version",
+    "Explorer >= 11"
+  ]
+}

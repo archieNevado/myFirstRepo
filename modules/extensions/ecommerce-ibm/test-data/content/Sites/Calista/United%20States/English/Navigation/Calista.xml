@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMChannel folder="/Sites/Calista/United States/English/Navigation" name="Calista" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<LinkProperty Name="livecontext.assets.default.picture" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Pictures/Picture%20Missing%20Product%20Picture.xml" cmexport:path="/Sites/Calista/United%20States/English/Pictures/Picture%20Missing%20Product%20Picture"/>
+</Struct>
+</localSettings>
+<linkedSettings>
+<link href="../Options/Settings/CAEConfig.xml" path="/Sites/Calista/United%20States/English/Options/Settings/CAEConfig"/>
+<link href="../Options/Settings/LiveContext.xml" path="/Sites/Calista/United%20States/English/Options/Settings/LiveContext"/>
+<link href="../Options/Settings/Responsive%20Image%20Settings.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Responsive%20Image%20Settings"/>
+<link href="../Options/Settings/Robots%2Etxt.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Robots%2Etxt"/>
+<link href="../Options/Settings/Studio%20Features.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Studio%20Features"/>
+<link href="../Options/Settings/Preview.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Preview"/>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment>calista</segment>
+<title>Home</title>
+<htmlTitle>Calista Homepage</htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<children>
+<link href="../Augmentation/Apparel/Women/Women.xml" path="/Sites/Calista/United%20States/English/Augmentation/Apparel/Women/Women"/>
+<link href="../Augmentation/Apparel/Men/Men.xml" path="/Sites/Calista/United%20States/English/Augmentation/Apparel/Men/Men"/>
+<link href="Microsites/Editorial%20Blog%20Microsite.xml" path="/Sites/Calista/United%20States/English/Navigation/Microsites/Editorial%20Blog%20Microsite"/>
+<link href="Blog/Fashion%20Trends%202017/Fashion%20Trends.xml" path="/Sites/Calista/United%20States/English/Navigation/Blog/Fashion%20Trends%202017/Fashion%20Trends"/>
+<link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
+<link href="Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages72667d05.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>
+<link href="Microsites/Microsite%20Root%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Microsites/Microsite%20Root%20Page"/>
+<link href="../Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
+<link href="../Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions.xml" path="/Sites/Calista/United%20States/English/Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions"/>
+</children>
+<javaScript>
+</javaScript>
+<css>
+</css>
+<theme>
+<link href="../../../../../Themes/calista/Calista%20Theme.xml" path="/Themes/calista/Calista%20Theme"/>
+</theme>
+<favicon md5="6fbce5dc5f9efe0455eda5d7138bc42b" size="15086" href="../../../../../__blob/6fbce5dc5f9efe0455eda5d7138bc42b.blob" mimetype="image/x-icon"/>
+<placement>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Layouts/Hero%20Layout.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Layouts/Hero%20Layout"/>
+<StructProperty Name="placements">
+<Struct>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/Fragments/Augmented%20Pages/Header/Wishlist%20Page.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Fragments/Augmented%20Pages/Header/Wishlist%20Page"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/header"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Imprint%20Article.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer/Imprint%20Article"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Terms%20of%20Use.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer/Terms%20of%20Use"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Privacy%20Policy.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer/Privacy%20Policy"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/footer"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Gender%20Specific%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Gender%20Specific%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion"/>
+<Link xlink:href="coremedia:///cap/resources/../Videos/Summer%20Dresses%20Video.xml" cmexport:path="/Sites/Calista/United%20States/English/Videos/Summer%20Dresses%20Video"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/hero"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/hero"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%27s%20Category.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Women%27s%20Category"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Shoes%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Women%20Shoes%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Men%27s%20Category.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Men%27s%20Category"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/landscape.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/landscape"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement1.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/placement1"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Accessories.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Women%20Accessories"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Handbags.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Women%20Handbags"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/landscape.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/landscape"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/placement2"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/The%20Black%20and%20White%20Collection.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/The%20Black%20and%20White%20Collection"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/portrait.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/portrait"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/placement3"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Women.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer%20Navigation/Women"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Men.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer%20Navigation/Men"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Accessories.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer%20Navigation/Accessories"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Contact.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/Footer%20Navigation/Contact"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/footer-navigation.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/footer-navigation"/>
+</Struct>
+</StructListProperty>
+</Struct>
+</placement>
+<header>
+</header>
+<footer>
+</footer>
+</CMChannel>

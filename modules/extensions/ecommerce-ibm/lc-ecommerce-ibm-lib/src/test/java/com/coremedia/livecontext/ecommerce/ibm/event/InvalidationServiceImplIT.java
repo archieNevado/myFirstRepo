@@ -2,17 +2,13 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import co.freeside.betamax.Recorder;
-import com.coremedia.blueprint.lc.test.BetamaxTestHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.google.common.collect.Iterables;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,7 +23,6 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,19 +30,16 @@ import static org.junit.Assert.assertTrue;
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public class InvalidationServiceImplIT extends IbmServiceTestBase {
 
-  static final long TEST_TIMESTAMP = 1403708220082L;
+  private static final long TEST_TIMESTAMP = 1403708220082L;
 
   @Inject
-  InvalidationServiceImpl invalidationService;
+  private InvalidationServiceImpl invalidationService;
 
   @Inject
-  WcRestConnector restConnector;
-  
-  @Rule
-  public Recorder recorder = new Recorder(BetamaxTestHelper.updateSystemPropertiesWithBetamaxConfig());
-  private StoreContext storeContext;
+  private WcRestConnector restConnector;
 
   @Before
+  @Override
   public void setup() {
     super.setup();
   }
@@ -55,7 +47,7 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
   @Betamax(tape = "commercecache_testPollCacheInvalidations", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testPollCacheInvalidations() throws Exception {
-    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(-1);
+    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(-1, getStoreContext());
     assertNotNull(commerceCacheInvalidations);
     assertTrue(!commerceCacheInvalidations.isEmpty());
   }
@@ -64,7 +56,7 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
   @Test
   public void testPollCacheInvalidationsWithEntries() throws Exception {
     //if you have to re-record this test, you should change the timestamp to now-1h or something similar
-    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(TEST_TIMESTAMP);
+    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(TEST_TIMESTAMP, getStoreContext());
 
     assertNotNull(commerceCacheInvalidations);
     assertFalse(commerceCacheInvalidations.isEmpty());
@@ -74,10 +66,6 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
     assertNotNull(commerceCacheInvalidation.getTechId());
     long lastInvalidationTimestamp = Iterables.getLast(commerceCacheInvalidations).getTimestamp();
 
-    if (!commerceCacheInvalidation.getContentType().equals(InvalidationEvent.CLEAR_ALL_EVENT)) {
-      assertNotNull(commerceCacheInvalidation.getId());
-    }
-
     assertTrue(lastInvalidationTimestamp > TEST_TIMESTAMP || lastInvalidationTimestamp <= 0);
   }
 
@@ -86,7 +74,7 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
     String origServiceEndpoint = restConnector.getServiceEndpoint(StoreContextHelper.getCurrentContext());
     try {
       restConnector.setServiceEndpoint("http://does.not.exists/blub");
-      invalidationService.getInvalidations(0);
+      invalidationService.getInvalidations(0, getStoreContext());
     } finally {
       restConnector.setServiceEndpoint(origServiceEndpoint);
     }
@@ -99,7 +87,6 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
     eventMap.put("techId", "4711");
     eventMap.put("name", "Filou");
     InvalidationEvent invalidationEvent = invalidationService.convertEvent(eventMap, 42L);
-    assertEquals("ibm:///catalog/product/techId:4711", invalidationEvent.getId());
     assertEquals(42L, invalidationEvent.getTimestamp());
 
     eventMap = new HashMap<>();
@@ -107,7 +94,6 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
     eventMap.put("techId", "4711");
     eventMap.put("name", "Filou");
     invalidationEvent = invalidationService.convertEvent(eventMap, 42L);
-    assertEquals("ibm:///catalog/category/techId:4711", invalidationEvent.getId());
     assertEquals(42L, invalidationEvent.getTimestamp());
 
     eventMap = new HashMap<>();
@@ -115,7 +101,6 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
     eventMap.put("techId", "4711");
     eventMap.put("name", "Filou");
     invalidationEvent = invalidationService.convertEvent(eventMap, 42L);
-    assertEquals("ibm:///catalog/category/techId:4711", invalidationEvent.getId());
     assertEquals(42L, invalidationEvent.getTimestamp());
 
     eventMap = new HashMap<>();
@@ -123,14 +108,12 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
     eventMap.put("techId", "4711");
     eventMap.put("name", "Filou");
     invalidationEvent = invalidationService.convertEvent(eventMap, 42L);
-    assertEquals("ibm:///catalog/segment/4711", invalidationEvent.getId());
     assertEquals(42L, invalidationEvent.getTimestamp());
 
     eventMap = new HashMap<>();
     eventMap.put("contentType", InvalidationServiceImpl.CONTENT_IDENTIFIER_MARKETING_SPOT);
     eventMap.put("name", "Filou");
     invalidationEvent = invalidationService.convertEvent(eventMap, 42L);
-    assertEquals("ibm:///catalog/marketingspot/Filou", invalidationEvent.getId());
     assertEquals(42L, invalidationEvent.getTimestamp());
   }
 
@@ -139,7 +122,6 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
     Map<String, Object> eventMap = new HashMap<>();
     eventMap.put("contentType", "invalidType");
     InvalidationEvent invalidationEvent = invalidationService.convertEvent(eventMap, 42L);
-    assertNull(invalidationEvent.getId());
     assertEquals(42L, invalidationEvent.getTimestamp());
   }
 }

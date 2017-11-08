@@ -11,6 +11,8 @@
 
     public static const STRUCTURE_TAB_ITEM_ID:String = "structureTab";
 
+    public static const SYSTEM_TAB_ITEM_ID:String = "systemTab";
+
     private var config:CommerceProductWorkAreaTab;
 
     public native function CommerceProductWorkAreaTab(config:CommerceProductWorkAreaTab = null);
@@ -20,7 +22,7 @@
     <livecontext:CommerceProductContentForm itemId="{CONTENT_TAB_ITEM_ID}"/>
     <livecontext:CommerceAttributesForm/>
     <livecontext:CommerceProductStructureForm itemId="{STRUCTURE_TAB_ITEM_ID}"/>
-    <livecontext:CommerceSystemForm autoHide="true"/>
+    <livecontext:CommerceSystemForm autoHide="true" itemId="{SYSTEM_TAB_ITEM_ID}"/>
   </livecontext:subTabs>
 
 </livecontext:CommerceWorkAreaTab>

@@ -18,7 +18,7 @@ public class SearchFacetImpl implements SearchFacet {
 
   @Override
   public int getCount() {
-    return DataMapHelper.getValueForKey(delegate, "count", 0);
+    return DataMapHelper.findValueForKey(delegate, "count", Integer.class).orElse(0);
   }
 
   @Nonnull
@@ -29,7 +29,7 @@ public class SearchFacetImpl implements SearchFacet {
 
   @Override
   public boolean isSelected() {
-    return DataMapHelper.getValueForKey(delegate, "selected", Boolean.FALSE);
+    return DataMapHelper.findValueForKey(delegate, "selected", Boolean.class).orElse(false);
   }
 
   @Nonnull

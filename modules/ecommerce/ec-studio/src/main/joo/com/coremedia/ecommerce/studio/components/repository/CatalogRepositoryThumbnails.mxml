@@ -50,7 +50,8 @@
           <ec:plugins exml:mode="append">
             <ui:ContextMenuPlugin>
               <ui:contextMenu>
-                <ec:CatalogRepositoryContextMenu selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
+                <ec:CatalogRepositoryContextMenu selectedItemsValueExpression="{getSelectedItemsValueExpression()}"
+                                                 selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
               </ui:contextMenu>
             </ui:ContextMenuPlugin>
           </ec:plugins>

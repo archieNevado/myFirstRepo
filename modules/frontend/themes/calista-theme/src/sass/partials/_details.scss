@@ -1,0 +1,78 @@
+.#{$cm-details-prefix} {
+  font-family: $font-family-serif;
+  margin-bottom: 96px;
+
+  &__headline {
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  &__media-box {
+    @include aspect-ratio-box(2.35, 1);
+  }
+
+  &__medias {
+    margin-bottom: 24px;
+
+    @include breakpoint(sm-and-up) {
+      margin-bottom: 48px;
+    }
+  }
+
+  &__text {
+    width: 100%;
+
+    @include breakpoint(sm-and-up) {
+      width: 80%;
+    }
+    margin-left: auto;
+    margin-right: auto;
+
+    h1, h2, h3 {
+      font-weight: bold;
+      margin: 30px 0 0 0;
+    }
+
+    @include breakpoint(xs) {
+      padding: 0;
+    }
+
+    & > *,
+    & > blockquote,
+    & > .rte--list {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    & p {
+      font-size: $font-size-base;
+      line-height: 24px;
+    }
+
+    .cm-teasable--embedded {
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 0;
+    }
+  }
+
+  .cm-richtext table {
+    border: none;
+  }
+}
+
+.#{$prefix}related {
+
+  &__title {
+    font-size: $font-size-large;
+    font-family: $font-family-serif;
+    text-transform: uppercase;
+  }
+
+  .cm-teasable {
+    &__picture-box {
+      @include aspect-ratio-box(2.35, 1);
+    }
+  }
+}

@@ -1,0 +1,182 @@
+.#{$prefix}header {
+  $_cart-item-width: 400px;
+  $_cart-item__image-width: 60px;
+
+  // Cart icon
+  &__cart {
+    margin: 22px 8px 0 10px;
+    position: relative;
+
+    @include breakpoint("md") {
+      margin-top: 19px;
+    }
+    
+    @include breakpoint("sm-and-down") {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    & > .cm-icon > .cm-popup-button--cart > i {
+      width: 18px;
+      height: 16px;
+      border: 1px solid #000;
+      border-radius: 0 0 3px 3px;
+      background-color: $body-bg;
+      position: relative;
+      margin: 0;
+
+      @include breakpoint("sm-and-down") {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      &:before {
+        content: "";
+        display: block;
+        width: 14px;
+        height: 7px;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        border: 2px solid $text-color;
+        border-bottom: 0;
+        position: absolute;
+        left: 1px;
+        top: -8px;
+      }
+
+      span {
+        font-family: $font-family-serif;
+        font-size: 12px;
+        line-height: 15px;
+        font-weight: bold;
+        border: 1px solid #000;
+        border-radius: 50%;
+        text-align: center;
+        background-color: $body-bg;
+        position: relative;
+        display: block;
+        width: 18px;
+        height: 18px;
+        top: -12px;
+        right: -6px;
+      }
+    }
+
+    .cm-popup--cart {
+      right: -8px;
+      top: 31px;
+      padding: 8px;
+      background-color: #FFFFFF;
+      border: 1px solid #000000;
+      
+      // do not display the cart popup on mobile since a click 
+      // on the icon will not open the overlay, but lead you to the cart page.
+      @include breakpoint("xs") {
+        display: none;
+      }
+    }
+
+    .cm-cart {
+
+      &__header {
+        display: none;
+      }
+
+      &__footer {
+        & .cm-button {
+          display: inline-block;
+        }
+      }
+
+      &__empty {
+        width: 200px;
+        padding: 12px 0;
+        font-family: $font-family-serif;
+        border-bottom: 1px solid #EEEEEE;
+      }
+
+      &__arrow {
+        position: absolute;
+        border: 11px solid transparent;
+        top: -11px;
+        right: 5px;
+        margin-left: -11px;
+        border-top-width: 0;
+        border-bottom-color: #000000;
+        &:after {
+          content: "";
+          position: absolute;
+          border: 10px solid transparent;
+          top:1px;
+          margin-left: -10px;
+          border-top-width: 0;
+          border-bottom-color: #FFFFFF;
+        }
+      }
+    }
+
+    .cm-cart-item {
+      width: $_cart-item-width;
+      padding: 10px 0;
+      border-bottom: 1px solid #EEE;
+      margin-bottom: 10px;
+
+      &__image {
+        vertical-align:top;
+        display:inline-block;
+        width: $_cart-item__image-width;
+
+        @include aspect-ratio-box(20,31);
+
+        & img {
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+
+      &__properties {
+        vertical-align:top;
+        display: inline-block;
+        position: relative;
+        width: $_cart-item-width - $_cart-item__image-width - 20px;
+        font-family: $font-family-serif;
+        text-align: left;
+
+        .cm-icon--cart-remove-item {
+          display: none;
+        }
+
+        .cm-property {
+          &--title {
+            font-size: $font-size-large;
+            margin-bottom: 6px;
+          }
+
+          &--description {
+            display: none;
+          }
+
+          &--price {
+            display: inline-block;
+            float: right;
+            font-size: $font-size-large;
+
+            & .cm-property__name {
+              display: none;
+            }
+          }
+
+          &__name,
+          &__value {
+            display: inline-block;
+          }
+        }
+
+      }
+    }
+  }
+}

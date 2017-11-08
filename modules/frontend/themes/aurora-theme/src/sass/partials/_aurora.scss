@@ -1,0 +1,89 @@
+// Aurora specific changes
+// =====================================================================================================================
+
+.cm-placement-header {
+  z-index: auto; // hotfix for CMS-4787
+}
+
+// --- preview for aurora
+.cm-preview-item__container {
+  display: block;
+  max-width: 1200px;
+  padding: 15px 20px 40px 20px;
+}
+
+// --- mobile
+@include breakpoint(xs) {
+
+  .cm-teaser .cm-teaser__title {
+    width: auto;
+  }
+}
+
+// --- tablet
+@include breakpoint(sm) {
+  // Teaser
+  .cm-teaser .cm-heading2 {
+    line-height: 1.6rem;
+  }
+
+  // Video Teaser
+  .cm-teaser--video .cm-visuallyhidden {
+    margin: 0;
+  }
+}
+
+// --- desktop
+@include breakpoint(md) {
+
+  .cm-frame--teaser > :not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  .cm-heading2--boxed {
+    padding: 0.433333rem 0.93333rem 0.566667rem 0.93333rem;
+  }
+}
+
+// --- reverts/fixes of Aurora problems
+#contentWrapper .cm-grid {
+  margin: 0 8px;
+}
+
+.button a {
+  color: #FFFFFF;
+}
+
+#footerRow1 > .section > ul > li > a {
+  color: #FFFFFF;
+}
+
+// CMS-5980: misaligned legend in AuroraESite
+.spanacce {
+  display: block;
+}
+
+.cm-price {
+  &.cm-price--special {
+    font-size: 1.2rem;
+    @include breakpoint(sm) {
+      font-size: 1.2rem;
+    }
+    @include breakpoint(md) {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.row.facetContainer {
+  margin: 0;
+}
+
+// CMS-7907: more than 100% width of landing page content
+#content .cm-placement {
+  box-sizing: border-box;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}

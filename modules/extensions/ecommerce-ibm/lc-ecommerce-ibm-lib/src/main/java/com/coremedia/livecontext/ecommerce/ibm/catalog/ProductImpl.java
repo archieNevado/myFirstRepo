@@ -1,12 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.ibm.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
@@ -19,7 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.util.Assert.notNull;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 public class ProductImpl extends ProductBase {
 
@@ -27,6 +30,7 @@ public class ProductImpl extends ProductBase {
   private List<ProductVariant> variants;
 
   private AvailabilityService availabilityService;
+
 
   @Override
   @SuppressWarnings("unchecked")
@@ -45,19 +49,13 @@ public class ProductImpl extends ProductBase {
    * @return detail data map
    */
   Map<String, Object> getDelegateFromCache() {
-    //noinspection unchecked
-    return (Map<String, Object>) getCommerceCache().get(
+    return getCommerceCache().get(
             new ProductCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));
   }
 
   @Override
-  public void load() throws CommerceException {
+  public void load() {
     getDelegate();
-  }
-
-  @Override
-  public String getReference() {
-    return CommerceIdHelper.formatProductId(getExternalId());
   }
 
   @Override
@@ -87,19 +85,20 @@ public class ProductImpl extends ProductBase {
         for (Map<String, Object> wcSku : wcSkus) {
           String technicalId = DataMapHelper.getValueForKey(wcSku, "uniqueID", String.class);
           if (technicalId != null) {
-            String variantTechId = CommerceIdHelper.formatProductVariantTechId(technicalId);
-            ProductVariant pv = (ProductVariant) getCommerceBeanFactory().createBeanFor(variantTechId, getContext());
+            CatalogAlias catalogAlias = getCatalogAlias();
+            CommerceId commerceId = getCommerceIdProvider().formatProductVariantTechId(catalogAlias, technicalId);
+            ProductVariant pv = (ProductVariant) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
             newVariants.add(pv);
           }
         }
       } else {
         //In some cases the initial load mechanism does not come with containing SKUs (e.g. findProductsByCategory).
         //Therefor the product is loaded again via #findProductById to make sure all product data is loaded.
-        String productTechId = CommerceIdHelper.formatProductTechId(getExternalTechId());
+        CatalogAlias catalogAlias = getCatalogAlias();
+        CommerceId productTechId = commerceId(PRODUCT).withCatalogAlias(catalogAlias).withTechId(getExternalTechId()).build();
         UserContext userContext = UserContextHelper.getCurrentContext();
         ProductCacheKey productCacheKey = new ProductCacheKey(productTechId, getContext(), userContext, getCatalogWrapperService(), getCommerceCache());
-        @SuppressWarnings("unchecked")
-        Map<String, Object> wcProduct = (Map<String, Object>) getCommerceCache().get(productCacheKey);
+        Map<String, Object> wcProduct = getCommerceCache().get(productCacheKey);
         if (wcProduct != null && wcProduct.containsKey("sKUs")) {
           setDelegate(wcProduct);
           //reset the fields after a new delegate is set.
@@ -141,11 +140,10 @@ public class ProductImpl extends ProductBase {
   @Nonnull
   public List<ProductVariant> getVariants(VariantFilter filter) {
     if (filter == null) {
-      return getVariants((List<VariantFilter>) null);
+      return getVariants(emptyList());
     }
-    List<VariantFilter> filters = new ArrayList<>();
-    filters.add(filter);
-    return getVariants(filters);
+
+    return getVariants(singletonList(filter));
   }
 
   @Override
@@ -179,10 +177,7 @@ public class ProductImpl extends ProductBase {
 
   @Override
   @Nonnull
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nullable List<VariantFilter> filters) {
-
-    notNull(axisName);
-
+  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nonnull List<VariantFilter> filters) {
     List<Object> result = new ArrayList<>();
 
     List<ProductVariant> availableProducts = getVariants(filters);
@@ -198,16 +193,11 @@ public class ProductImpl extends ProductBase {
   @Override
   @Nonnull
   public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nullable VariantFilter filter) {
-
-    notNull(axisName);
-
     if (filter == null) {
-      return getVariantAxisValues(axisName, (List<VariantFilter>) null);
+      return getVariantAxisValues(axisName, emptyList());
     }
 
-    List<VariantFilter> filters = new ArrayList<>();
-    filters.add(filter);
-    return getVariantAxisValues(axisName, filters);
+    return getVariantAxisValues(axisName, singletonList(filter));
   }
 
   @SuppressWarnings("unused")

@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.cache.Cache;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
@@ -15,17 +16,18 @@ public class SubCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
   private WcCatalogWrapperService wrapperService;
 
   public SubCategoriesCacheKey(String id,
+                               CatalogAlias catalog,
                                StoreContext storeContext,
                                UserContext userContext,
                                WcCatalogWrapperService wrapperService,
                                CommerceCache commerceCache) {
-    super(id, storeContext, userContext, CONFIG_KEY_SUB_CATEGORIES, commerceCache);
+    super(id, catalog, storeContext, userContext, CONFIG_KEY_SUB_CATEGORIES, commerceCache);
     this.wrapperService = wrapperService;
   }
 
   @Override
   public List<Map<String, Object>> computeValue(Cache cache) {
-    return wrapperService.findSubCategories(id, storeContext, userContext);
+    return wrapperService.findSubCategories(id, catalogAlias, storeContext, userContext);
   }
 
   @Override
@@ -35,8 +37,8 @@ public class SubCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getCatalogId() + ":" + storeContext.getLocale() + ":" +
+    return id + ":" + catalogAlias + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
+            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
             storeContext.getWorkspaceId() + ":" + Arrays.toString(storeContext.getContractIds()) + ":" +
             Arrays.toString(storeContext.getContractIdsForPreview());
   }

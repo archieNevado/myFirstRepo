@@ -27,7 +27,7 @@ public class ShowInCatalogTreeHelperTest extends AbstractLiveContextStudioTest {
   }
 
   private function setUpCatalog():void {
-    category = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/NO_WS/Fruit") as Category;
+    category = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit") as Category;
     entities = new Array(category);
     showInCatalogTreeHelper = new ShowInCatalogTreeHelper(entities);
     treeModel = ShowInCatalogTreeHelper.TREE_MODEL;

@@ -1,8 +1,13 @@
 package com.coremedia.blueprint.cae.web;
 
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.multisite.Site;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -16,12 +21,27 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ExposeCurrentNavigationInterceptor extends HandlerInterceptorAdapter {
 
+  private ContentBeanFactory contentBeanFactory;
+
+  @Autowired
+  void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
+    this.contentBeanFactory = contentBeanFactory;
+  }
+
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                          ModelAndView modelAndView) {
-    Page page = RequestAttributeConstants.getPage(request);
-    if (modelAndView != null && !modelAndView.wasCleared() && page != null) {
-      NavigationLinkSupport.setNavigation(modelAndView, page.getNavigation());
+    if (modelAndView != null && !modelAndView.wasCleared() && NavigationLinkSupport.getNavigation(modelAndView.getModel()) == null) {
+      Page page = RequestAttributeConstants.getPage(request);
+      if (page != null) {
+        NavigationLinkSupport.setNavigation(modelAndView, page.getNavigation());
+      } else {
+        // this is an error situation - but still, error views may be defined in a theme (which depends on a navigation)
+        Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
+        if (siteFromRequest != null) {
+          NavigationLinkSupport.setNavigation(modelAndView, contentBeanFactory.createBeanFor(siteFromRequest.getSiteRootDocument(), Navigation.class));
+        }
+      }
     }
   }
 }

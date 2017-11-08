@@ -61,5 +61,14 @@
 </header>
 <footer>
 </footer>
+<pdpPagegrid>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Layouts/Fragment%20PDP.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Options/Settings/Pagegrid/Layouts/Fragment%20PDP"/>
+</Struct>
+</StructProperty>
+</Struct>
+</pdpPagegrid>
 <externalId>ibm:///catalog/category/B2B_Kitchen_Products</externalId>
 </CMExternalChannel>

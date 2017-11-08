@@ -169,9 +169,16 @@
           <editor:mixins>
             <ui:BEMMixin bemElement="{LinkListBEMEntities.ELEMENT_TAIL}"/>
           </editor:mixins>
+          <editor:layout>
+            <layout_HBox/>
+          </editor:layout>
           <editor:items>
+            <ui:IconDisplayField iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'add')}"
+                                 width="16"
+                                 margin="0 0 0 8"/>
             <taxonomy:TaxonomySearchField itemId="{TAXONOMY_SEARCH_FIELD_ITEM_ID}"
                                           ui="{TextfieldSkin.EMBEDDED.getSkin()}"
+                                          flex="1"
                                           resetOnBlur="true"
                                           showSelectionPath="false"
                                           taxonomyId="{config.taxonomyId}"
@@ -185,7 +192,6 @@
                                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               </taxonomy:plugins>
             </taxonomy:TaxonomySearchField>
-
           </editor:items>
         </editor:LinkListDropArea>
       </taxonomy:dockedItems>

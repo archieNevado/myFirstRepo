@@ -1,14 +1,14 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.blueprint.base.elastic.common.ImageHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.common.contentbeans.Page;
-import com.coremedia.blueprint.base.elastic.common.ImageHelper;
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
 import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
@@ -178,11 +178,16 @@ public class RegistrationHelper {
       if (registration.getProfileImage() != null && !registration.isDeleteProfileImage()) {
         userProperties.put("image", blobService.get(registration.getProfileImage().getId()));
       }
+
+      Site siteFromRequest = SiteHelper.getSiteFromRequest((ServletRequest) (context.getExternalContext().getNativeRequest()));
+      if (siteFromRequest != null) {
+        userProperties.put("site", siteFromRequest);
+      }
+
       TimeZone timeZone = null;
       if (StringUtils.isNotBlank(registration.getTimeZoneId())) {
         timeZone = TimeZone.getTimeZone(registration.getTimeZoneId());
       }
-      final Site siteFromRequest = SiteHelper.getSiteFromRequest((ServletRequest) (context.getExternalContext().getNativeRequest()));
 
       CommunityUser user = registrationService.register(registration.getUsername(),
               registration.getPassword(),

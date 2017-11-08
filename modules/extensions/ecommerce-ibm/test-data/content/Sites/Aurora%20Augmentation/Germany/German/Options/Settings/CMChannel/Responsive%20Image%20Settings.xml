@@ -28,9 +28,9 @@
 <Struct>
 <IntProperty Name="widthRatio">20</IntProperty>
 <IntProperty Name="heightRatio">31</IntProperty>
-<IntProperty Name="minWidth">220</IntProperty>
-<IntProperty Name="minHeight">310</IntProperty>
-<IntProperty Name="previewWidth">310</IntProperty>
+<IntProperty Name="minWidth">646</IntProperty>
+<IntProperty Name="minHeight">1001</IntProperty>
+<IntProperty Name="previewWidth">400</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">200</IntProperty>
@@ -61,9 +61,9 @@
 <Struct>
 <IntProperty Name="widthRatio">3</IntProperty>
 <IntProperty Name="heightRatio">4</IntProperty>
-<IntProperty Name="minWidth">320</IntProperty>
-<IntProperty Name="minHeight">427</IntProperty>
-<IntProperty Name="previewWidth">320</IntProperty>
+<IntProperty Name="minWidth">1500</IntProperty>
+<IntProperty Name="minHeight">2000</IntProperty>
+<IntProperty Name="previewWidth">595</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -88,9 +88,9 @@
 <Struct>
 <IntProperty Name="widthRatio">1</IntProperty>
 <IntProperty Name="heightRatio">1</IntProperty>
-<IntProperty Name="minWidth">66</IntProperty>
-<IntProperty Name="minHeight">66</IntProperty>
-<IntProperty Name="previewWidth">66</IntProperty>
+<IntProperty Name="minWidth">1500</IntProperty>
+<IntProperty Name="minHeight">1500</IntProperty>
+<IntProperty Name="previewWidth">768</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -127,9 +127,9 @@
 <Struct>
 <IntProperty Name="widthRatio">4</IntProperty>
 <IntProperty Name="heightRatio">3</IntProperty>
-<IntProperty Name="minWidth">236</IntProperty>
-<IntProperty Name="minHeight">177</IntProperty>
-<IntProperty Name="previewWidth">236</IntProperty>
+<IntProperty Name="minWidth">2000</IntProperty>
+<IntProperty Name="minHeight">1500</IntProperty>
+<IntProperty Name="previewWidth">620</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">236</IntProperty>
@@ -190,9 +190,9 @@
 <Struct>
 <IntProperty Name="widthRatio">16</IntProperty>
 <IntProperty Name="heightRatio">9</IntProperty>
-<IntProperty Name="minWidth">320</IntProperty>
-<IntProperty Name="minHeight">180</IntProperty>
-<IntProperty Name="previewWidth">320</IntProperty>
+<IntProperty Name="minWidth">1024</IntProperty>
+<IntProperty Name="minHeight">576</IntProperty>
+<IntProperty Name="previewWidth">800</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -217,9 +217,9 @@
 <Struct>
 <IntProperty Name="widthRatio">5</IntProperty>
 <IntProperty Name="heightRatio">2</IntProperty>
-<IntProperty Name="minWidth">320</IntProperty>
-<IntProperty Name="minHeight">128</IntProperty>
-<IntProperty Name="previewWidth">320</IntProperty>
+<IntProperty Name="minWidth">1900</IntProperty>
+<IntProperty Name="minHeight">769</IntProperty>
+<IntProperty Name="previewWidth">1200</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>
@@ -244,9 +244,9 @@
 <Struct>
 <IntProperty Name="widthRatio">4</IntProperty>
 <IntProperty Name="heightRatio">1</IntProperty>
-<IntProperty Name="minWidth">320</IntProperty>
-<IntProperty Name="minHeight">80</IntProperty>
-<IntProperty Name="previewWidth">320</IntProperty>
+<IntProperty Name="minWidth">1200</IntProperty>
+<IntProperty Name="minHeight">300</IntProperty>
+<IntProperty Name="previewWidth">795</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">320</IntProperty>

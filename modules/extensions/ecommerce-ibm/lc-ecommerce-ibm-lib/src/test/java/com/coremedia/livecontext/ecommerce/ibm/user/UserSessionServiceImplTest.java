@@ -19,9 +19,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,16 +35,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class UserSessionServiceImplTest {
 
   private static final String USERNAME = "zaphod";
@@ -85,6 +86,7 @@ public class UserSessionServiceImplTest {
   private BaseCommerceConnection commerceConnection;
 
   private UserSessionServiceImpl testling;
+  private MockCommerceEnvBuilder envBuilder;
 
   @Test
   public void loginUserNoStoreId() {
@@ -106,7 +108,7 @@ public class UserSessionServiceImplTest {
 
   @Test
   public void loginUserNoCookiesFromWCS() throws GeneralSecurityException {
-    when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
+    when(urlProvider.provideValue(anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
     boolean loggedIn = testling.loginUser(sourceRequest, sourceResponse, USERNAME, PASSWORD);
 
     assertFalse(loggedIn);
@@ -124,7 +126,7 @@ public class UserSessionServiceImplTest {
 
   @Test
   public void loginUserIrrelevantCookies() throws GeneralSecurityException {
-    when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
+    when(urlProvider.provideValue(anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
     when(storeFrontResponse.isSuccess()).thenReturn(true);
     when(storeFrontResponse.getCookies()).thenReturn(ImmutableMap.of("Happy-Vertical-People-Transporter", "42", "Matter-transference-beams", "irrelevant"));
 
@@ -136,7 +138,7 @@ public class UserSessionServiceImplTest {
 
   @Test
   public void loginUserSuccessfully() throws GeneralSecurityException {
-    when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
+    when(urlProvider.provideValue(anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
     when(storeFrontResponse.isSuccess()).thenReturn(true);
     when(storeFrontResponse.getCookies()).thenReturn(ImmutableMap.of(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID, "42", "Matter-transference-beams", "irrelevant"));
 
@@ -153,7 +155,7 @@ public class UserSessionServiceImplTest {
             UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID, "42",
             UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + ANONYMOUS_USER_ID, "DEL",
             "Matter-transference-beams", "irrelevant"));
-    when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
+    when(urlProvider.provideValue(anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGON_URL).build());
 
     boolean loggedIn = testling.loginUser(sourceRequest, sourceResponse, USERNAME, PASSWORD);
     assertTrue(loggedIn);
@@ -163,7 +165,7 @@ public class UserSessionServiceImplTest {
 
   @Test
   public void logoutUserNoStoreId() throws GeneralSecurityException {
-    when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGOUT_URL).build());
+    when(urlProvider.provideValue(anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGOUT_URL).build());
     commerceConnection.getStoreContext().put(StoreContextImpl.STORE_ID, null);
     assertTrue(testling.logoutUser(sourceRequest, sourceResponse));
     verifyNoCookiesAtAll();
@@ -171,7 +173,7 @@ public class UserSessionServiceImplTest {
 
   @Test
   public void logoutUserSuccessfully() throws GeneralSecurityException {
-    when(urlProvider.provideValue(Matchers.anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGOUT_URL).build());
+    when(urlProvider.provideValue(anyMap())).thenReturn(UriComponentsBuilder.fromUriString(STOREFRONT_SECURE_URL + UserSessionServiceImpl.LOGOUT_URL).build());
     when(storeFrontResponse.isSuccess()).thenReturn(true);
     when(storeFrontResponse.getCookies()).thenReturn(ImmutableMap.of(
             UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID, "DEL",
@@ -221,7 +223,7 @@ public class UserSessionServiceImplTest {
 
   @Test
   public void isAnonymousUser() throws CredentialExpiredException {
-    UserContext userContext = UserContextHelper.createContext("", "");
+    UserContext userContext = UserContext.builder().withUserId("").withUserName("").build();
     UserContextHelper.setCurrentContext(userContext);
 
     assertFalse(testling.isLoggedIn());
@@ -236,9 +238,6 @@ public class UserSessionServiceImplTest {
     String resultingHeader = testling.addCookiesToCookieHeader(cookieHeader, cookies);
     assertTrue(resultingHeader.endsWith("; k1=v1"));
 
-    resultingHeader = testling.addCookiesToCookieHeader(cookieHeader, null);
-    assertEquals(cookieHeader, resultingHeader);
-
     resultingHeader = testling.addCookiesToCookieHeader(null, cookies);
     assertEquals("k1=v1", resultingHeader);
 
@@ -250,9 +249,12 @@ public class UserSessionServiceImplTest {
   @Before
   public void defaultSetup() throws GeneralSecurityException {
 
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
-    UserContext context = commerceConnection.getUserContext();
-    context.setUserId(USERID);
+    envBuilder = MockCommerceEnvBuilder.create();
+    commerceConnection = envBuilder.setupEnv();
+    UserContext userContext = UserContext.buildCopyOf(commerceConnection.getUserContext())
+                                             .withUserId(USERID)
+                                             .build();
+    commerceConnection.setUserContext(userContext);
 
     testling = new UserSessionServiceImpl();
     testling.setLoginWrapperService(wcLoginWrapperService);
@@ -263,8 +265,8 @@ public class UserSessionServiceImplTest {
     commerceCache.setCacheTimesInSeconds(Collections.EMPTY_MAP);
     testling.setCommerceCache(commerceCache);
 
-    when(storeFrontConnector.executeGet(Matchers.contains("Logon"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
-    when(storeFrontConnector.executeGet(Matchers.contains("Logoff"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
+    when(storeFrontConnector.executeGet(contains("Logon"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
+    when(storeFrontConnector.executeGet(contains("Logoff"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
 
     when(userActivityCookie.getName()).thenReturn(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID);
     when(userActivityCookie.getValue()).thenReturn("irrelevant");
@@ -282,6 +284,7 @@ public class UserSessionServiceImplTest {
   public void teardown() {
     commerceConnection.setUserContext(null);
     commerceConnection.setStoreContext(null);
+    envBuilder.tearDownEnv();
   }
 
   private void verifyNoCookiesAtAll() {

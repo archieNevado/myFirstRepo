@@ -18,8 +18,8 @@ public class CatalogRepositoryListTest extends AbstractCatalogStudioTest {
 
   override public function setUp():void {
     super.setUp();
-    category = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/NO_WS/Fruit") as Category;
-    product = beanFactory.getRemoteBean("livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID) as Product;
+    category = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit") as Category;
+    product = beanFactory.getRemoteBean("livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID) as Product;
 
     viewport = new CatalogRepositoryListTestView();
   }

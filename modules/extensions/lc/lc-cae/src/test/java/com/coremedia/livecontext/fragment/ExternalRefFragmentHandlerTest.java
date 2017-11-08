@@ -3,31 +3,32 @@ package com.coremedia.livecontext.fragment;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.fragment.resolver.LinkableAndNavigation;
 import com.coremedia.objectserver.web.HttpError;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<ExternalRefFragmentHandler> {
 
   @Mock
@@ -36,7 +37,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   @Test
   public void testWithoutMatchingResolver() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
-    ModelAndView result = getTestling().createModelAndView(params, null);
+    ModelAndView result = getTestling().createModelAndView(params, mock(HttpServletRequest.class));
     assertErrorPage(result, HttpServletResponse.SC_NOT_FOUND);
     verifyDefault();
   }
@@ -132,7 +133,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
 
     ExternalRefFragmentHandler testlingSpied = Mockito.spy(getTestling());
     testlingSpied.createModelAndView(params, request);
-    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString(), (User) anyObject());
+    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable(any(), any(), anyString(), any());
   }
 
   @Test
@@ -146,7 +147,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
 
     ExternalRefFragmentHandler testlingSpied = Mockito.spy(getTestling());
     testlingSpied.createModelAndView(params, request);
-    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable((Content) anyObject(), (Content) anyObject(), anyString(), (User) anyObject());
+    Mockito.verify(testlingSpied, times(1)).createModelAndViewForLinkable(any(), any(), anyString(), any());
   }
 
   @Test
@@ -184,6 +185,11 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
 
     getTestling().setExternalReferenceResolvers(resolvers);
 //    getTestling().setSitesService(getSitesService());
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    defaultTeardown();
   }
 
   private FragmentParameters getFragmentParametersWithExternalRef(String ref) {

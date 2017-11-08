@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.search;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.searchsuggestion.Suggestion;
 import com.coremedia.blueprint.cae.searchsuggestion.Suggestions;
@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
@@ -104,7 +105,7 @@ public class CommerceSearchHandler extends PageHandlerBase {
       throw new IllegalArgumentException("Could not get suggestions from shop search.");
     }
 
-    List<SuggestionResult> commerceSuggestions = getSearchService().getAutocompleteSuggestions(term);
+    List<SuggestionResult> commerceSuggestions = getSearchService().getAutocompleteSuggestions(term, storeContext);
     Suggestions suggestions = new Suggestions();
     List<Suggestion> suggestionList = new ArrayList<>();
     for (SuggestionResult commerceSuggestion : commerceSuggestions) {
@@ -123,7 +124,7 @@ public class CommerceSearchHandler extends PageHandlerBase {
    * @param context a path segment to find resolve navigation context
    * @param term the search term to search in commerce
    */
-  @RequestMapping(value = URI_PATTERN, params = {PARAMETER_QUERY}, method = RequestMethod.GET, produces = CONTENT_TYPE_JSON)
+  @RequestMapping(value = URI_PATTERN, params = {PARAMETER_QUERY}, method = RequestMethod.POST, produces = CONTENT_TYPE_JSON)
   public ModelAndView handleSearchRequest(
           @PathVariable(SEGMENT_ROOT) String context,
           @RequestParam(value = PARAMETER_QUERY) String term, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -170,22 +171,26 @@ public class CommerceSearchHandler extends PageHandlerBase {
   @SuppressWarnings("UnusedDeclaration") // NOSONAR
   @Link(type = CommerceSearchActionState.class, uri = URI_PATTERN)
   public UriComponents buildSearchActionLink(CommerceSearchActionState state, UriComponentsBuilder uri, Map<String, Object> linkParameters, HttpServletRequest request) {
-    UriComponentsBuilder result = addLinkParametersAsQueryParameters(uri, linkParameters);
-    Site site = sitesService.getContentSiteAspect(state.getAction().getContent()).getSite();
-    if(site != null) {
-      Navigation context = getContextHelper().currentSiteContext();
-      return result.buildAndExpand(ImmutableMap.of(
-        SEGMENT_ROOT, getPathSegments(context).get(0)));
+    UriComponentsBuilder builder = addLinkParametersAsQueryParameters(uri, linkParameters);
+
+    Content content = state.getAction().getContent();
+    Optional<Site> site = sitesService.getContentSiteAspect(content).findSite();
+    if (!site.isPresent()) {
+      return null;
     }
-    return null;
+
+    Navigation context = getContextHelper().currentSiteContext();
+    String firstPathSegment = getPathSegments(context).get(0);
+
+    return builder.buildAndExpand(ImmutableMap.of(SEGMENT_ROOT, firstPathSegment));
   }
 
   private SearchService getSearchService() {
-    return DefaultConnection.get().getSearchService();
+    return CurrentCommerceConnection.get().getSearchService();
   }
 
   private StoreContextProvider getStoreContextProvider() {
-    return DefaultConnection.get().getStoreContextProvider();
+    return CurrentCommerceConnection.get().getStoreContextProvider();
   }
 
   @Override

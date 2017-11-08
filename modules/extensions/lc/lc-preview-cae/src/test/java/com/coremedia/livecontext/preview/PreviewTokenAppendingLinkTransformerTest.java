@@ -4,24 +4,27 @@ package com.coremedia.livecontext.preview;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class PreviewTokenAppendingLinkTransformerTest {
 
+  @Spy
   private PreviewTokenAppendingLinkTransformer testling;
 
   @Mock
@@ -30,31 +33,35 @@ public class PreviewTokenAppendingLinkTransformerTest {
   @Mock
   private BaseCommerceConnection connection;
 
-
+  private MockCommerceEnvBuilder envBuilder;
 
   @Before
   public void setup(){
-    testling = new PreviewTokenAppendingLinkTransformer();
     testling.setPreview(true);
     testling.setPreviewTokenProvider(previewTokenProvider);
-    connection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    connection = envBuilder.setupEnv();
     connection.setVendorName("IBM");
 
+    doReturn(false).when(testling).isInitialStudioRequest();
+    doReturn(true).when(testling).isStudioPreviewRequest();
     when(previewTokenProvider.provideValue(anyMap())).thenReturn("aPreviewTokenStr");
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   @Test
   public void testLinkTransformerApply() {
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setParameter("p13n_test", "true");
-
-    String link = testling.transform("//url/to/shop", null, null, request, new MockHttpServletResponse(), false);
+    String link = testling.transform("//url/to/shop", null, null, mock(HttpServletRequest.class), new MockHttpServletResponse(), false);
     assertEquals("//url/to/shop?previewToken=aPreviewTokenStr", link);
 
-    link = testling.transform("http://url/to/shop", null, null, request, new MockHttpServletResponse(), false);
+    link = testling.transform("http://url/to/shop", null, null, mock(HttpServletRequest.class), new MockHttpServletResponse(), false);
     assertEquals("http://url/to/shop?previewToken=aPreviewTokenStr", link);
 
-    link = testling.transform("https://url/to/shop", null, null, request, new MockHttpServletResponse(), false);
+    link = testling.transform("https://url/to/shop", null, null, mock(HttpServletRequest.class), new MockHttpServletResponse(), false);
     assertEquals("https://url/to/shop?previewToken=aPreviewTokenStr", link);
   }
 
@@ -72,10 +79,9 @@ public class PreviewTokenAppendingLinkTransformerTest {
 
   @Test
   public void testLinkTransformerMiss() {
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setParameter("p13n_test", "true");
+    doReturn(false).when(testling).isStudioPreviewRequest();
 
-    String link = testling.transform("/blueprint/url", null, null, request, new MockHttpServletResponse(), false);
+    String link = testling.transform("/blueprint/url", null, null, mock(HttpServletRequest.class), new MockHttpServletResponse(), false);
     assertEquals("/blueprint/url", link);
   }
 
@@ -83,10 +89,8 @@ public class PreviewTokenAppendingLinkTransformerTest {
   public void testLinkTransformerNoStoreContextAvailable() {
     //previewTokenProvider returns null if no storeContext available
     when(previewTokenProvider.provideValue(anyMap())).thenReturn(null);
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setParameter("p13n_test", "true");
 
-    String link = testling.transform("//url/to/shop", null, null, request, new MockHttpServletResponse(), false);
+    String link = testling.transform("//url/to/shop", null, null, mock(HttpServletRequest.class), new MockHttpServletResponse(), false);
     assertEquals("//url/to/shop", link);
   }
 

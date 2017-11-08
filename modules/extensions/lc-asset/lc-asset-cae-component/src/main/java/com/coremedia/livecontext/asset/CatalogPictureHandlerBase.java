@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.asset;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.blueprint.cae.handlers.HandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
@@ -8,6 +9,10 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -19,10 +24,13 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 public class CatalogPictureHandlerBase extends HandlerBase {
 
@@ -31,13 +39,15 @@ public class CatalogPictureHandlerBase extends HandlerBase {
   public static final String FORMAT_KEY_THUMBNAIL = "thumbnail";
   public static final String FORMAT_KEY_FULL = "full";
 
-  private AssetService assetService;
+  protected AssetService assetService;
   private LiveContextSiteResolver siteResolver;
   private ContentBeanFactory contentBeanFactory;
   private Map<String, String> pictureFormats;
   private TransformImageService transformImageService;
+  protected CatalogAliasTranslationService catalogAliasTranslationService;
 
   protected static final String STORE_ID = "storeId";
+  protected static final String CATALOG_ID = "catalogId";
   protected static final String LOCALE = "locale";
   protected static final String PART_NUMBER = "partNumber";
   protected static final String FORMAT_NAME = "formatName";
@@ -47,23 +57,25 @@ public class CatalogPictureHandlerBase extends HandlerBase {
    * @param storeId the store id
    * @param locale the locale
    * @param formatName the picture format name
-   * @param id the reference id
+   * @param commerceId the reference id
    * @param extension the mime type extension
    * @param request the request
    */
+  @Nullable
   protected ModelAndView handleRequestWidthHeight(String storeId,
-                                                String locale,
-                                                String formatName,
-                                                String id,
-                                                String extension,
-                                                WebRequest request) throws IOException {
-    Site site = siteResolver.findSiteFor(storeId, LocaleHelper.getLocaleFromString(locale));
+                                                  String locale,
+                                                  String formatName,
+                                                  CommerceId commerceId,
+                                                  String extension,
+                                                  WebRequest request) throws IOException {
+    Locale localeObj = LocaleHelper.parseLocaleFromString(locale).orElse(null);
+    Site site = siteResolver.findSiteFor(storeId, localeObj);
     if (site == null) {
       //Site not found
       return HandlerHelper.notFound();
     }
 
-    Content catalogPictureObject  = findCatalogPictureFor(id, site);
+    Content catalogPictureObject = findCatalogPictureFor(commerceId, site);
 
     if (catalogPictureObject == null) {
       //Picture not found
@@ -100,15 +112,23 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     return HandlerHelper.createModel(transformedBlob);
   }
 
+  protected CatalogAlias resolveCatalogAliasFromId(@Nullable String catalogId, @Nonnull StoreContext storeContext) {
+    if (catalogId == null) {
+      return storeContext.getCatalogAlias();
+    }
+    Optional<CatalogAlias> catalogAliasForId = catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of(catalogId), storeContext.getSiteId());
+    return catalogAliasForId.orElse(storeContext.getCatalogAlias());
+  }
+
   /**
    * find the catalog picture of the given reference id and site
    * @param id the reference id
    * @param site the given site
    * @return the found catalog picture document
    */
-  private Content findCatalogPictureFor(String id, Site site) {
+  private Content findCatalogPictureFor(@Nonnull CommerceId id, @Nonnull Site site) {
     if(null != assetService) {
-      List<Content> pictureList = assetService.findPictures(id);
+      List<Content> pictureList = assetService.findPictures(id, true);
       if (pictureList.size() > 1) {
         LOG.debug("More than one CMPicture found for the catalog object with the id " + id + " in the site " + site.getName());
       }
@@ -137,6 +157,11 @@ public class CatalogPictureHandlerBase extends HandlerBase {
   @Autowired(required = false)
   public void setAssetService(AssetService assetService) {
     this.assetService = assetService;
+  }
+
+  @Autowired
+  public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 
   @Required

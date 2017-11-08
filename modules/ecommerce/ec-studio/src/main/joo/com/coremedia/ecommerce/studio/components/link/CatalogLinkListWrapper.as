@@ -95,12 +95,13 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
   }
 
   public function acceptsLinks(links:Array):Boolean {
+    var targetSiteId:String = getTargetSiteId();
     return links.every(function(link:Object):Boolean {
       var catalogObject:CatalogObject = getCatalogObject(link);
       if (!catalogObject) {
         return false;
       }
-      if (catalogObject.getSiteId() !== getSiteId()) {
+      if (catalogObject.getSiteId() !== targetSiteId) {
         return false;
       }
 
@@ -110,21 +111,27 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
     });
   }
 
-  private function getSiteId():String {
-    var siteId:String;
+  /**
+   * Return the site of the currently bound content or the preferred site.
+   * May be undefined.
+   */
+  private function getTargetSite():Site {
     if (bindTo) {
       var content:Content = bindTo.getValue() as Content;
       if (content) {
-        siteId = editorContext.getSitesService().getSiteFor(content).getId();
-      }
-    } else {
-      //no content there. so let's take the preferred site
-      var preferredSite:Site = editorContext.getSitesService().getPreferredSite();
-      if (preferredSite) {
-        siteId = preferredSite.getId();
+        return editorContext.getSitesService().getSiteFor(content);
       }
     }
-    return siteId;
+    //no content there. so let's take the preferred site
+    return editorContext.getSitesService().getPreferredSite();
+  }
+
+  /**
+   * Return the the target site id. May be undefined.
+   */
+  private function getTargetSiteId():String {
+    var site:Site = getTargetSite();
+    return site && site.getId();
   }
 
   private function getCatalogObject(link:Object):CatalogObject {

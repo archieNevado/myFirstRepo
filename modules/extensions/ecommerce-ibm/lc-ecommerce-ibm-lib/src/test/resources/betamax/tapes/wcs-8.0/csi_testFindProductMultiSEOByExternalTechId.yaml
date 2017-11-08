@@ -1,7 +1,7 @@
 !tape
 name: csi_testFindProductMultiSEOByExternalTechId
 interactions:
-- recorded: 2016-11-01T08:48:16.329Z
+- recorded: 2017-09-06T11:19:19.917Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -10,28 +10,53 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Tue, 01 Nov 2016 08:48:15 GMT
+      Date: Wed, 06 Sep 2017 11:19:22 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00002bOhDSlqx_nA8NKgQ0oacmQ:-1; HTTPOnly; Path=/; Domain=.toko-16-04.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000qykqsAAVutAEMwQ-z-oXoKe:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
-      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"PerfectChefESite":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676719"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
       Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
       Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
       Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
-      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
-- recorded: 2016-11-01T08:48:16.346Z
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-09-06T11:19:20.180Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 06 Sep 2017 11:19:22 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000472sVuDcAnl75iiXYSKS8zb:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":3,"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
+      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
+      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
+      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'
+- recorded: 2017-09-06T11:19:20.248Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -40,20 +65,20 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Tue, 01 Nov 2016 08:48:15 GMT
+      Date: Wed, 06 Sep 2017 11:19:22 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000K3yWhoxgjLezFEXA5kyL0SA:-1; HTTPOnly; Path=/; Domain=.toko-16-04.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000vKTrB3WdD_Hgw5Siio3zjts:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2016-11-01T08:48:16.481Z
+- recorded: 2017-09-06T11:19:20.370Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/PC_WALL_CLOCK?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -62,24 +87,24 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
   response:
     status: 200
     headers:
       Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Tue, 01 Nov 2016 08:48:15 GMT
-      Expires: Tue, 01 Nov 2016 09:48:15 GMT
-      Set-Cookie: JSESSIONID=0000VAoxRcNCnFktGmf3-EoemlO:-1; HTTPOnly; Path=/; Domain=.toko-16-04.coremedia.vm; HttpOnly
+      Date: Wed, 06 Sep 2017 11:19:22 GMT
+      Expires: Wed, 06 Sep 2017 12:19:22 GMT
+      Set-Cookie: JSESSIONID=0000F_miekXeoMibw6auq5Hpia3:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-16-04-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/PC_WALL_CLOCK?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","metaDescription":"Don\u2019t
-      rush, take your time. This handsome wall clock gives the time in style.","subscriptionType":"NONE","uniqueID":"3074457345616680637","parentCategoryID":"3074457345616676775","singleSKUUniqueID":"3074457345616680638","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_WALL_CLOCK.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-16-04-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680637","title":"Stylish
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/PC_WALL_CLOCK?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","metaDescription":"Don\u2019t
+      rush, take your time. This handsome wall clock gives the time in style.","subscriptionType":"NONE","uniqueID":"3074457345616680637","parentCategoryID":"3074457345616676775","singleSKUUniqueID":"3074457345616680638","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_WALL_CLOCK.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680637","title":"Stylish
       Wall Clock","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_WALL_CLOCK.jpg","SKUs":[{"SKUUniqueID":"3074457345616680638","Price":[{"SKUPriceValue":"44.99","SKUPriceDescription":"I","SKUPriceUsage":"Offer"}]}],"shortDescription":"Stylish
-      Wall Clock","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"44.99"}],"name":"Analog Wall Clock","longDescription":"Don\u2019t rush, take your time. This handsome wall clock gives the time in style.","buyable":"true","xcatentry_seoSegment":"pc-wall-clock-auroraesite;pc-wall-clock;pc-wall-clock-pcesite","metaKeyword":"
+      Wall Clock","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"44.99"}],"name":"Analog Wall Clock","longDescription":"Don\u2019t rush, take your time. This handsome wall clock gives the time in style.","buyable":"true","xcatentry_seoSegment":"pc-wall-clock-auroraesite;pc-wall-clock","metaKeyword":"
       ","storeID":"715837934","fullImageAltDescription":"Stylish Wall Clock","numberOfSKUs":"1","partNumber":"PC_WALL_CLOCK"}],"recordSetStartNumber":"0","resourceName":"productview"}'
-- recorded: 2016-11-01T08:48:16.532Z
+- recorded: 2017-09-06T11:19:20.524Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/PC_CANDELABRA?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -88,24 +113,24 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
   response:
     status: 200
     headers:
       Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Tue, 01 Nov 2016 08:48:15 GMT
-      Expires: Tue, 01 Nov 2016 09:48:16 GMT
-      Set-Cookie: JSESSIONID=0000G76bIt34k-Pv6R6tIq7XcRv:-1; HTTPOnly; Path=/; Domain=.toko-16-04.coremedia.vm; HttpOnly
+      Date: Wed, 06 Sep 2017 11:19:22 GMT
+      Expires: Wed, 06 Sep 2017 12:19:22 GMT
+      Set-Cookie: JSESSIONID=00008LTG-vYFxDuD5q6RdPrnkAe:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-16-04-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/PC_CANDELABRA?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","metaDescription":"Classic
-      ivory tapered candles set the mood for an intimate evening.","subscriptionType":"NONE","uniqueID":"3074457345616680624","parentCategoryID":"3074457345616676775","singleSKUUniqueID":"3074457345616680625","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_CANDELABRA.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-16-04-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680624","title":"Tall,
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/PC_CANDELABRA?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","metaDescription":"Classic
+      ivory tapered candles set the mood for an intimate evening.","subscriptionType":"NONE","uniqueID":"3074457345616680624","parentCategoryID":"3074457345616676775","singleSKUUniqueID":"3074457345616680625","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_CANDELABRA.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680624","title":"Tall,
       Elegant Silver Candelabra","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_CANDELABRA.jpg","SKUs":[{"SKUUniqueID":"3074457345616680625","Price":[{"SKUPriceValue":"139.99","SKUPriceDescription":"I","SKUPriceUsage":"Offer"}]}],"shortDescription":"Tall,
       Elegant Silver Candelabra","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"139.99"}],"name":"Silver Candelabra","longDescription":"Classic ivory tapered candles set the mood for an intimate evening.","buyable":"true","xcatentry_seoSegment":"pc-candelabra-auroraesite;pc-candelabra","metaKeyword":"
       ","storeID":"715837934","fullImageAltDescription":"Tall, Elegant Silver Candelabra","numberOfSKUs":"1","partNumber":"PC_CANDELABRA"}],"recordSetStartNumber":"0","resourceName":"productview"}'
-- recorded: 2016-11-01T08:48:16.581Z
+- recorded: 2017-09-06T11:19:20.617Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/PC_FRUITBOWL?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -114,22 +139,22 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
   response:
     status: 200
     headers:
       Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Tue, 01 Nov 2016 08:48:16 GMT
-      Expires: Tue, 01 Nov 2016 09:48:16 GMT
-      Set-Cookie: JSESSIONID=0000fFACdTbKBGFZaDCe4NBas4S:-1; HTTPOnly; Path=/; Domain=.toko-16-04.coremedia.vm; HttpOnly
+      Date: Wed, 06 Sep 2017 11:19:22 GMT
+      Expires: Wed, 06 Sep 2017 12:19:22 GMT
+      Set-Cookie: JSESSIONID=0000qDCZc7LtQEJb-8U6U65Ai2R:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-16-04-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/PC_FRUITBOWL?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","metaDescription":"You\u2019ll
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/PC_FRUITBOWL?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","metaDescription":"You\u2019ll
       enjoy the versatility of this lovely yet exceptionally durable melamine fruit bowl. Its lively spring color brightens any table, whether used to serve fresh strawberries in a cozy breakfast nook or a refreshing fruit salad on the patio. Virtually unbreakable,
-      it\u2019s suitable for both indoors and outdoors. 7.5in diameter, 2.5in high. Dishwasher-safe. Limited lifetime warranty.","subscriptionType":"NONE","uniqueID":"3074457345616680639","parentCategoryID":"3074457345616676774","singleSKUUniqueID":"3074457345616680640","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_FRUITBOWL.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/toko-16-04-wcs.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680639","title":"Melamine
+      it\u2019s suitable for both indoors and outdoors. 7.5in diameter, 2.5in high. Dishwasher-safe. Limited lifetime warranty.","subscriptionType":"NONE","uniqueID":"3074457345616680639","parentCategoryID":"3074457345616676774","singleSKUUniqueID":"3074457345616680640","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_FRUITBOWL.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680639","title":"Melamine
       Fruit Bowl","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_FRUITBOWL.jpg","SKUs":[{"SKUUniqueID":"3074457345616680640","Price":[{"SKUPriceValue":"11.99","SKUPriceDescription":"I","SKUPriceUsage":"Offer"}]}],"shortDescription":"Melamine
       Fruit Bowl","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"11.99"}],"name":"Fruit Bowl","longDescription":"You\u2019ll enjoy the versatility of this lovely yet exceptionally durable melamine fruit bowl. Its lively spring color brightens
       any table, whether used to serve fresh strawberries in a cozy breakfast nook or a refreshing fruit salad on the patio. Virtually unbreakable, it\u2019s suitable for both indoors and outdoors. 7.5in diameter, 2.5in high. Dishwasher-safe. Limited lifetime
-      warranty.","buyable":"true","xcatentry_seoSegment":"pc-fruitbowl-pcesite;pc-fruitbowl","metaKeyword":" ","storeID":"715837934","fullImageAltDescription":"Melamine Fruit Bowl","numberOfSKUs":"1","partNumber":"PC_FRUITBOWL"}],"recordSetStartNumber":"0","resourceName":"productview"}'
+      warranty.","buyable":"true","xcatentry_seoSegment":"pc-fruitbowl","metaKeyword":" ","storeID":"715837934","fullImageAltDescription":"Melamine Fruit Bowl","numberOfSKUs":"1","partNumber":"PC_FRUITBOWL"}],"recordSetStartNumber":"0","resourceName":"productview"}'
