@@ -1,0 +1,10 @@
+{
+  "name": "@coremedia/js-360-spinner",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "@coremedia/js-logger": "file:../logger"
+  },
+  "main": "src/index.js"
+}

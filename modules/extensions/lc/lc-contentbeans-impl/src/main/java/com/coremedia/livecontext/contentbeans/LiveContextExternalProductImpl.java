@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.layout.PageGrid;
@@ -11,6 +12,7 @@ import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import com.coremedia.xml.Markup;
 import com.google.common.base.MoreObjects;
@@ -24,7 +26,6 @@ import javax.annotation.Nullable;
 
 import static com.coremedia.livecontext.contentbeans.ProductTeasableHelper.isNullOrBlank;
 import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A LiveContext product which is backed by a CMExternalProduct content in the CMS repository.
@@ -79,11 +80,14 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
   @Override
   @Nullable
   public Product getProduct() {
-    if (StringUtils.isEmpty(getExternalId())) {
+    String productId = getExternalId();
+    if (StringUtils.isEmpty(productId)) {
       return null;
     }
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    return (Product) connection.getCommerceBeanFactory().createBeanFor(getExternalId(), connection.getStoreContext());
+
+    CommerceConnection connection = CurrentCommerceConnection.get();
+    CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(productId);
+    return (Product) connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
   }
 
   @Override

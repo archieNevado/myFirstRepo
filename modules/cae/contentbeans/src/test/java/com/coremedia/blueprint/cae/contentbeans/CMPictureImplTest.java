@@ -1,14 +1,22 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.testing.ContentBeanTestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Inject;
+import java.awt.geom.Point2D;
+
 public class CMPictureImplTest extends ContentBeanTestBase {
 
   private CMPicture contentBean;
+
+  @SuppressWarnings("SpringJavaAutowiringInspection")
+  @Inject
+  SettingsService settingsService;
 
   @Before
   public void setUp() throws Exception {
@@ -58,5 +66,16 @@ public class CMPictureImplTest extends ContentBeanTestBase {
   @Test
   public void testGetHeight() throws Exception {
     Assert.assertEquals(600, contentBean.getHeight().intValue());
+  }
+
+  @Test
+  public void testGetFocusPoint() throws Exception {
+    Assert.assertEquals(new Point2D.Double(0.6, 0.3), contentBean.getFocusPoint());
+
+    CMPicture pictureWithMovedFocusArea = getContentBean(162);
+    Assert.assertEquals(new Point2D.Double(0.4, 0.6), pictureWithMovedFocusArea.getFocusPoint());
+
+    CMPicture pictureWithMovedFocusAreaAndFocusPoint = getContentBean(164);
+    Assert.assertEquals(new Point2D.Double(0.6, 0.3), pictureWithMovedFocusAreaAndFocusPoint.getFocusPoint());
   }
 }

@@ -6,6 +6,10 @@ and tools.
 =end
 
 include_recipe 'sysctl::apply'
+if node['java_se'] && node['java_se']['java_home']
+  node.default_unless['blueprint']['tools']['java_home'] = node['java_se']['java_home']
+  node.default_unless['blueprint']['tomcat']['java_home'] = node['java_se']['java_home']
+end
 
 user node['blueprint']['user'] do
   home '/opt/coremedia'

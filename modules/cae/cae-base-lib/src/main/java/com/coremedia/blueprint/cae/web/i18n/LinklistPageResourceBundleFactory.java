@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -116,11 +117,23 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
 
   private Struct hierarchicalMergedResourceBundles(Navigation navigation, User developer) {
     Struct bundle = null;
+    // Naive idea: the navigation's locale.
+    // Just more complicated because there may be navigations w/o locale.
+    Locale mostSpecificLocale = null;
+    // Precedence:
+    // 1. child navigation over parent navigation
+    // 2. linked resource bundle over theme
     for (Navigation nav = navigation; nav!=null; nav = nav.getParentNavigation()) {
       if (nav instanceof CMNavigation) {
         Content navContent = ((CMNavigation)nav).getContent();
+        // Watch out for a locale along the channel path.
+        // Normally, the given navigation itself should have one.
+        if (mostSpecificLocale == null) {
+          mostSpecificLocale = sitesService.getContentSiteAspect(navContent).getLocale();
+        }
         bundle = StructUtil.mergeStructs(bundle, mergedResourceBundles(navContent));
-        bundle = StructUtil.mergeStructs(bundle, mergedResourceBundlesFromTheme(navContent, developer));
+        // Must stick to the original locale here, not this navContent's one.
+        bundle = StructUtil.mergeStructs(bundle, mergedResourceBundlesFromTheme(navContent, mostSpecificLocale, developer));
       }
     }
     return bundle;
@@ -145,15 +158,18 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
    * In case of a translation there is no need to link one specific bundle anymore.
    *
    * @param cmNavigation the navigation containing the theme and the locale
+   * @param locale the locale of the original navigation
    * @param developer considers the developer's work in progress resource bundles
    * @return a Struct containing the localizations.
    */
-  private Struct mergedResourceBundlesFromTheme(Content cmNavigation, @Nullable User developer) {
+  private Struct mergedResourceBundlesFromTheme(Content cmNavigation, Locale locale, @Nullable User developer) {
     List<Struct> structs = new ArrayList<>();
-    Content theme = themeService.theme(cmNavigation, developer);
+    // Consider only the direct theme here.
+    // In case of channels A/B/C, theme inheritance from A
+    // would break the precedence of B's linked resource bundles.
+    Content theme = themeService.directTheme(Collections.singletonList(cmNavigation), developer);
     if (theme != null) {
       List<Content> bundles = theme.getLinks(THEME_RESOURCEBUNDLES);
-      Locale locale = sitesService.getContentSiteAspect(cmNavigation).getLocale();
       structs.add(localizationService.resources(bundles, locale));
     }
     return StructUtil.mergeStructList(structs);

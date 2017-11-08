@@ -388,4 +388,13 @@ public interface CMLinkable extends Linkable, CMLocalized, BelowRootNavigation, 
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMResourceBundle} objects
    */
   List<CMResourceBundle> getResourceBundles2();
+
+  /**
+   * Always returns <code>false</code>. This method only serves the purpose to simplify template development. The actual
+   * functionality is part of {@link CMExternalLink}.
+   *
+   * @return always <code>false</code>
+   * @cm.template.api
+   */
+  boolean isOpenInNewTab();
 }

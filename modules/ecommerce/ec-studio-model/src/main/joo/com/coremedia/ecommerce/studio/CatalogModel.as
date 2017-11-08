@@ -9,6 +9,5 @@ public class CatalogModel {
   public static const TYPE_MARKETING:String = "Marketing";
   public static const TYPE_MARKETING_SPOT:String = "MarketingSpot";
 
-
 }
 }

@@ -2,13 +2,12 @@ package com.coremedia.blueprint.elastic.social.cae;
 
 import com.coremedia.blueprint.elastic.social.cae.controller.CommentWrapper;
 import com.coremedia.elastic.social.api.comments.Comment;
-import com.coremedia.elastic.social.impl.comments.CommentServiceImpl;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
@@ -18,9 +17,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WrapperHelperTest {
-
-  @Mock
-  private CommentServiceImpl commentService;
 
   @InjectMocks
   private WrapperHelper wrapperHelper;

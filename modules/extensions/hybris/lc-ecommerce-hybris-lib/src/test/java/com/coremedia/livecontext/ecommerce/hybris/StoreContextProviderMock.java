@@ -21,19 +21,9 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 
 public class StoreContextProviderMock implements StoreContextProvider {
 
-  @Override
-  @Nullable
-  public StoreContext findContextBySiteName(@Nonnull String siteName) {
-    if (!"Helios".equals(siteName)) {
-      throw new InvalidContextException("Could not find context for " + siteName);
-    }
-
-    return createContext();
-  }
-
   @Nullable
   @Override
-  public StoreContext findContextBySiteId(@Nonnull String siteId) throws InvalidContextException {
+  public StoreContext findContextBySiteId(@Nonnull String siteId) {
     if (!"Helios".equals(siteId)) {
       throw new InvalidContextException("Could not find context for " + siteId);
     }
@@ -43,7 +33,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @Override
   @Nullable
-  public StoreContext findContextBySite(Site site) throws InvalidContextException {
+  public StoreContext findContextBySite(Site site) {
     if (!"Helios".equals(site.getName())) {
       throw new InvalidContextException("Could not find context for " + site.getName());
     }
@@ -59,7 +49,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @Nullable
   @Override
-  public StoreContext createContext(@Nonnull Site site) throws InvalidContextException {
+  public StoreContext createContext(@Nonnull Site site) {
     return createContext();
   }
 
@@ -67,19 +57,8 @@ public class StoreContextProviderMock implements StoreContextProvider {
     return createContext("myConfigId", "10001", "aurora", "10001", "en_US", "USD");
   }
 
-  @Override
-  public void setCurrentContext(StoreContext context) throws InvalidContextException {
-    setCurrentContext(context);
-  }
-
-  @Override
-  public StoreContext getCurrentContext() {
-    return null;
-  }
-
   private StoreContext createContext(String configId, String storeId, String storeName, String catalogId, String locale,
-                                     String currency)
-          throws InvalidContextException {
+                                     String currency) {
     StoreContext context = StoreContextImpl.newStoreContext();
 
     if (configId != null) {

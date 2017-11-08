@@ -53,10 +53,8 @@ public class ViewTypeRenderNodeDecorator implements RenderNodeDecorator {
       if (result != null) {
         v.append(result);
       }
-      if (viewtype != null) {
-        if(result == null || !result.endsWith(VIEWTYPE_END)) {
-          v.append(viewtype);
-        }
+      if (viewtype != null && (result == null || !result.endsWith(VIEWTYPE_END))) {
+        v.append(viewtype);
       }
       result = v.toString();
     }

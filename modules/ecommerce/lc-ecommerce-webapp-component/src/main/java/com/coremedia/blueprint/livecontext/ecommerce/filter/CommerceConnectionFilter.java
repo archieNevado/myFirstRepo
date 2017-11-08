@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.livecontext.ecommerce.filter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -49,7 +49,7 @@ public class CommerceConnectionFilter implements Filter {
     try {
       chain.doFilter(request, response);
     } finally {
-      DefaultConnection.clear();
+      CurrentCommerceConnection.remove();
     }
   }
 
@@ -62,11 +62,11 @@ public class CommerceConnectionFilter implements Filter {
         return;
       }
 
-      DefaultConnection.set(connection.get());
+      CurrentCommerceConnection.set(connection.get());
     } catch (Exception e) {
       LOG.debug("Unable to set commerce connection for site '{}' (locale: '{}').", site.getName(), site.getLocale(),
               e);
-      DefaultConnection.clear();
+      CurrentCommerceConnection.remove();
     }
   }
 

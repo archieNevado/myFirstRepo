@@ -15,11 +15,23 @@ public abstract class Code extends Resource {
     this.ieExpression = ieExpression;
   }
 
+  /**
+   * @return if compression is disabled
+   * @deprecated We will be removing the compression of code from the CAE as the frontend workspace provides
+   *             options to compress the code before it is uploaded to the content repository.
+   */
+  @Deprecated
   public boolean isDisableCompress() {
     return disableCompress;
   }
 
+  /**
+   * @param disableCompress TRUE to disable compression, otherwise FALSE
+   * @deprecated We will be removing the compression of code from the CAE as the frontend workspace provides
+                 options to compress the code before it is uploaded to the content repository.
+   */
   @XmlAttribute
+  @Deprecated
   public void setDisableCompress(boolean disableCompress) {
     this.disableCompress = disableCompress;
   }

@@ -1,10 +1,11 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMTeasable" -->
 
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <div class="cm-gap" data-cm-module="gap"<@cm.metadata self.content />>
   <#-- picture -->
-  <@bp.optionalLink href="${link}"> 
+  <@bp.optionalLink href="${link}" attr={"target":target}>
     <#if self.picture?has_content>
       <div class="cm-gap__embed">
         <div class="cm-gap__embed-item">

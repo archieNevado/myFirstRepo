@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.assets.cae;
 
-
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.settings.SettingsService;
@@ -18,12 +17,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Optional;
 
 import static com.coremedia.blueprint.assets.cae.AMAssetPreviewHandler.ASSET_FRAGMENT_PREFIX;
 import static com.coremedia.blueprint.assets.cae.AMAssetPreviewHandler.STUDIO_PREFERRED_SITE_PARAMETER;
@@ -31,8 +32,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,10 +67,10 @@ public class AMAssetPreviewHandlerTest {
   @Mock
   private PageImpl pageImpl;
 
-  @Mock (answer = RETURNS_DEEP_STUBS)
+  @Mock(answer = RETURNS_DEEP_STUBS)
   private CMChannel cmChannel;
 
-  @Mock (answer = RETURNS_DEEP_STUBS)
+  @Mock(answer = RETURNS_DEEP_STUBS)
   private CMChannel downloadPortalChannel;
 
   @Mock
@@ -91,7 +92,8 @@ public class AMAssetPreviewHandlerTest {
     handler.setContentBeanFactory(contentBeanFactory);
     handler.setSitesService(sitesService);
     handler.setBeanFactory(beanFactory);
-    when(sitesService.getSite(preferredSiteId)).thenReturn(site);
+
+    when(sitesService.findSite(preferredSiteId)).thenReturn(Optional.of(site));
     when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(pageImpl);
     when(pageImpl.getNavigation()).thenReturn(navigation);
   }
@@ -134,12 +136,11 @@ public class AMAssetPreviewHandlerTest {
     verify(pageImpl).setContent(cmChannel);
   }
 
-
   @Test
   public void handleAssetRequest_downloadPortalContent() {
     when(site.getSiteRootDocument()).thenReturn(siteRootDocument);
     when(downloadPortalChannel.getContent().getType().getName()).thenReturn("type");
-    when(settingsService.nestedSetting(anyListOf(String.class), eq(Content.class), eq(siteRootDocument))).thenReturn(downloadPortalRootDocument);
+    when(settingsService.nestedSetting(anyList(), eq(Content.class), eq(siteRootDocument))).thenReturn(downloadPortalRootDocument);
     when(contentBeanFactory.createBeanFor(downloadPortalRootDocument, CMChannel.class)).thenReturn(downloadPortalChannel);
     ModelAndView modelAndView = handler.handleAssetRequest(asset, viewName, preferredSiteId, request);
 
@@ -165,5 +166,4 @@ public class AMAssetPreviewHandlerTest {
     assertEquals(asset, modelAndView.getModel().get(HandlerHelper.MODEL_ROOT));
     assertEquals(viewName, modelAndView.getViewName());
   }
-
 }

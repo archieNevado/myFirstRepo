@@ -43,14 +43,14 @@
 <related>
 </related>
 <children>
-<link href="Microsite%20Dummy/Microsite%20Dummy.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Microsite%20Dummy/Microsite%20Dummy"/>
 <link href="Action%20Goggles%20Microsite/Action%20Goggles%20Microsite.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Action%20Goggles%20Microsite/Action%20Goggles%20Microsite"/>
-<link href="Snowboard%20Newsletter/Snowboard%20Newsletter.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Snowboard%20Newsletter/Snowboard%20Newsletter"/>
 <link href="Blog/Editorial%20Blog.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Blog/Editorial%20Blog"/>
 <link href="Video%20Blog/Video%20Blog.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Video%20Blog/Video%20Blog"/>
 <link href="Twitter%20Hashtag%20Campaign/Twitter%20Hashtag%20Campaign.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Twitter%20Hashtag%20Campaign/Twitter%20Hashtag%20Campaign"/>
 <link href="Best%20Picture%20Contest/Best%20Picture%20Contest.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Best%20Picture%20Contest/Best%20Picture%20Contest"/>
 <link href="FAQ/FAQ.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/FAQ/FAQ"/>
+<link href="Microsite%20Dummy/Microsite%20Dummy.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Microsite%20Dummy/Microsite%20Dummy"/>
+<link href="Snowboard%20Newsletter/Snowboard%20Newsletter.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Snowboard%20Newsletter/Snowboard%20Newsletter"/>
 </children>
 <javaScript>
 </javaScript>

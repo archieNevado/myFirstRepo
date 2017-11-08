@@ -1,11 +1,9 @@
 package com.coremedia.livecontext.ecommerce.hybris.event;
 
-import com.coremedia.blueprint.lc.test.TestConfig;
+import com.coremedia.blueprint.lc.test.AbstractServiceTest;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
-import com.coremedia.livecontext.ecommerce.hybris.AbstractHybrisServiceTest;
 import com.coremedia.livecontext.ecommerce.hybris.HybrisTestConfig;
-import com.coremedia.livecontext.ecommerce.hybris.SystemProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,25 +12,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, HybrisTestConfig.class})
-public class InvalidationServiceImplIT extends AbstractHybrisServiceTest {
+public class InvalidationServiceImplIT extends AbstractServiceTest {
 
   @Inject
-  InvalidationServiceImpl testling;
-
-  @Inject
-  TestConfig testConfig;
+  private InvalidationServiceImpl testling;
 
   @Test
   public void testInvalidationsBootstrap() {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
 
-    List<InvalidationEvent> invalidations = testling.getInvalidations(-1);
+    List<InvalidationEvent> invalidations = testling.getInvalidations(-1, getStoreContext());
     assertThat(invalidations).isNotNull();
 
     if (!invalidations.isEmpty()) {
@@ -43,11 +39,11 @@ public class InvalidationServiceImplIT extends AbstractHybrisServiceTest {
 
   @Test
   public void testInvalidationsWithBigTimeStamp() {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
 
-    List<InvalidationEvent> invalidations = testling.getInvalidations(10000);
+    List<InvalidationEvent> invalidations = testling.getInvalidations(10000, getStoreContext());
     assertThat(invalidations).isEmpty();
   }
 }

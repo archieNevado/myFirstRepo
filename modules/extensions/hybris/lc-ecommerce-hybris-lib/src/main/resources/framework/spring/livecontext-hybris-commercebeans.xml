@@ -10,7 +10,6 @@
   <bean name="hybrisAbstractCommerceBean" scope="prototype" abstract="true"
         class="com.coremedia.livecontext.ecommerce.hybris.beans.AbstractHybrisCommerceBean">
     <property name="commerceBeanFactory" ref="hybrisCommerceBeanFactory"/>
-    <property name="commerceBeanHelper" ref="hybrisCommerceBeanHelper"/>
     <property name="catalogService" ref="hybrisCatalogService"/>
     <property name="defaultLocale" value="en_US"/>
     <property name="commerceCache" ref="hybrisCommerceCache"/>

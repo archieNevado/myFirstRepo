@@ -11,6 +11,8 @@ action :install do
     repository_url new_resource.maven_repository_url
     nexus_url new_resource.nexus_url unless new_resource.nexus_url.nil?
     nexus_repo new_resource.nexus_repo
+    username new_resource.nexus_username unless new_resource.nexus_username.nil?
+    password new_resource.nexus_password unless new_resource.nexus_password.nil?
     group new_resource.group
     owner new_resource.owner
     backup 1

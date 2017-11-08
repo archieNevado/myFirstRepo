@@ -26,8 +26,6 @@ import ext.Ext;
  */
 public class MetadataToEntitiesActionAdapterBase extends MetadataBeanAction {
 
-  internal native function get items():Array;
-
   private var backingAction:Action;
   private var store:Store;
   private var properties:Object;

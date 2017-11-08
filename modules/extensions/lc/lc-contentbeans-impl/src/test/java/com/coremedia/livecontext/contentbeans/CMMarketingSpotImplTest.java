@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -23,12 +23,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -89,48 +89,45 @@ public class CMMarketingSpotImplTest {
   @Before
   public void init() {
     initMocks(this);
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
 
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(storeContextProvider.findContextByContent(any(Content.class))).thenReturn(storeContext);
     when(connection.getCommerceBeanFactory()).thenReturn(commerceBeanFactory);
     when(connection.getMarketingSpotService()).thenReturn(marketingSpotService);
 
-    when(marketingSpotService.findMarketingSpotById(anyString())).thenReturn(marketingSpot);
+    when(marketingSpotService.findMarketingSpotById(any(), any(StoreContext.class))).thenReturn(marketingSpot);
     when(marketingSpotService.withStoreContext(storeContext)).thenReturn(marketingSpotService);
     when(marketingSpot.getName()).thenReturn(MY_MARKETING_SPOT_NAME);
 
-    when(content.getString(CMMarketingSpotImpl.EXTERNAL_ID)).thenReturn("myExternalId");
+    when(content.getString(CMMarketingSpotImpl.EXTERNAL_ID)).thenReturn("test:///me/marketingspot/myExternalId");
 
     testling = new TestCMMarketingSpotImpl();
     testling.setSitesService(sitesService);
     testling.setLiveContextNavigationFactory(liveContextNavigationFactory);
     when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
-    when(contentSiteAspect.getSite()).thenReturn(site);
+    when(contentSiteAspect.findSite()).thenReturn(Optional.ofNullable(site));
   }
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   @Test
   public void testGetItems() {
-    assertEquals("There should be no item", 0, testling.getItems().size());
+    assertThat(testling.getItems()).as("There should be no item").isEmpty();
 
-    List<CommerceObject> entities = new ArrayList<>();
-    entities.add(commerceObject);
-    entities.add(product);
-    entities.add(category);
+    List<CommerceObject> entities = newArrayList(commerceObject, product, category);
     when(marketingSpot.getEntities()).thenReturn(entities);
     when(liveContextNavigationFactory.createProductInSite(product, site)).thenReturn(productInSite);
     when(liveContextNavigationFactory.createCategoryInSite(category, site)).thenReturn(categoryInSite);
 
     List<CommerceObject> items = testling.getItems();
-    assertEquals("There should be 3 items", 3, items.size());
-    assertEquals(commerceObject, items.get(0));
-    assertEquals(productInSite, items.get(1));
-    assertEquals(categoryInSite, items.get(2));
+    assertThat(items).as("There should be 3 items").hasSize(3);
+    assertThat(items.get(0)).isEqualTo(commerceObject);
+    assertThat(items.get(1)).isEqualTo(productInSite);
+    assertThat(items.get(2)).isEqualTo(categoryInSite);
   }
 
   @Test
@@ -138,14 +135,15 @@ public class CMMarketingSpotImplTest {
     //teaser title is set
     String myTeaserTitle = "myTeaserTitle";
     when(content.getString(CMTeasable.TEASER_TITLE)).thenReturn(myTeaserTitle);
-    assertEquals("the teaser title of the CMMarketingSpot is the same as the teaserTitle string property of the content",
-            myTeaserTitle, testling.getTeaserTitle());
+    assertThat(testling.getTeaserTitle())
+            .as("the teaser title of the CMMarketingSpot is the same as the teaserTitle string property of the content")
+            .isEqualTo(myTeaserTitle);
 
     //teaser title is not set
     when(content.getString(CMTeasable.TEASER_TITLE)).thenReturn(null);
-    assertEquals("the teaser title of the CMMarketingSpot is the same as the teaserTitle string property of the content",
-            MY_MARKETING_SPOT_NAME, testling.getTeaserTitle());
-
+    assertThat(testling.getTeaserTitle())
+            .as("the teaser title of the CMMarketingSpot is the same as the teaserTitle string property of the content")
+            .isEqualTo(MY_MARKETING_SPOT_NAME);
   }
 
   private class TestCMMarketingSpotImpl extends CMMarketingSpotImpl {

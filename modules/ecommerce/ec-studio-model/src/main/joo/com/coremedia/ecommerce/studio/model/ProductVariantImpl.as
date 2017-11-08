@@ -1,5 +1,5 @@
 package com.coremedia.ecommerce.studio.model {
-[RestResource(uriTemplate="livecontext/sku/{siteId:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
+[RestResource(uriTemplate="livecontext/sku/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
 public class ProductVariantImpl extends ProductImpl implements ProductVariant {
   public function ProductVariantImpl(uri:String) {
     super(uri);

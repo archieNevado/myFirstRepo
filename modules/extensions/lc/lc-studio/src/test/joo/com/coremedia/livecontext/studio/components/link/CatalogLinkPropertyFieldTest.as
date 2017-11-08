@@ -114,9 +114,10 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
   private function checkProductLinkDisplaysValue(value:String):Step {
     return new Step("check if product is linked and data is displayed",
       function ():Boolean {
+        var linkDisplay:String = TableUtil.getCellAsDom(link, 0, 1)['textContent'];
         return link.getStore().getCount() === 1 &&
-          ORANGES_EXTERNAL_ID === TableUtil.getCellAsDom(link, 0, 2)['textContent'] &&
-          value === TableUtil.getCellAsDom(link, 0, 3)['textContent'];
+                linkDisplay.indexOf(ORANGES_EXTERNAL_ID) >= 0 &&
+                linkDisplay.indexOf(value) >= 0;
       }
     );
   }
@@ -124,9 +125,10 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
   private function checkSkuLinkDisplaysValue(value:String):Step {
     return new Step("check if sku is linked and data is displayed",
       function ():Boolean {
+        var linkDisplay:String = TableUtil.getCellAsDom(link, 0, 1)['textContent'];
         return link.getStore().getCount() === 1 &&
-          ORANGES_SKU_EXTERNAL_ID === TableUtil.getCellAsDom(link, 0, 2)['textContent'] &&
-          value === TableUtil.getCellAsDom(link, 0, 3)['textContent'];
+                linkDisplay.indexOf(ORANGES_SKU_EXTERNAL_ID) >= 0 &&
+                linkDisplay.indexOf(value) >= 0;
       }
     );
   }
@@ -135,7 +137,7 @@ public class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponent
     return new Step("check if broken product is linked and fallback data '" + value + "' is displayed",
       function ():Boolean {
         return link.getStore().getCount() === 1 &&
-          value === TableUtil.getCellAsDom(link, 0, 2)['textContent'];
+          TableUtil.getCellAsDom(link, 0, 1)['textContent'].indexOf(value) >= 0;
       }
     );
   }

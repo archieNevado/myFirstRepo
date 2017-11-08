@@ -71,7 +71,7 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
 
     //we delegate the invaliations to the write post processor
     //as the write interceptor has too old sequence number
-    commerceCacheInvalidationSource.invalidateReferences(references, commerceConnection.get());
+    commerceCacheInvalidationSource.invalidateReferences(references);
   }
 
   @Nonnull

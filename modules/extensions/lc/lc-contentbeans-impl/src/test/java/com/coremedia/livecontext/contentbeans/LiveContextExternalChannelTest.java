@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cache.Cache;
@@ -22,7 +22,6 @@ import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,9 +42,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -57,12 +55,15 @@ import static org.mockito.MockitoAnnotations.initMocks;
 })
 public class LiveContextExternalChannelTest {
 
+  private MockCommerceEnvBuilder envBuilder;
+
   @Configuration
   @ImportResource({
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:META-INF/coremedia/livecontext-contentbeans.xml",
           "classpath:META-INF/coremedia/livecontext-contentbeans-settings.xml",
-          "classpath:/META-INF/coremedia/lc-services.xml"
+          "classpath:/META-INF/coremedia/lc-services.xml",
+          "classpath:/framework/spring/lc-ecommerce-services.xml"
   })
   static class LocalConfig {
 
@@ -75,7 +76,6 @@ public class LiveContextExternalChannelTest {
     XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig("classpath:/com/coremedia/livecontext/contentbeans/contenttest.xml");
     }
-
   }
 
   private LiveContextExternalChannelImpl testling;
@@ -129,15 +129,17 @@ public class LiveContextExternalChannelTest {
     testling = getContentBean(100);
     setUpPreviewDate();
 
-    MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    envBuilder.setupEnv();
 
     initMocks(this);
 
     CatalogService catalogService = mock(CatalogService.class);
     when(catalogService.withStoreContext(any(StoreContext.class))).thenReturn(catalogService);
-    when(catalogService.findCategoryById(anyString())).thenReturn(category);
-    ((BaseCommerceConnection) DefaultConnection.get()).setCatalogService(catalogService);
-    when(liveContextNavigationFactory.createNavigation(any(Category.class), any(Site.class))).thenReturn(mock(LiveContextNavigation.class));
+    when(catalogService.findCategoryById(any(), any(StoreContext.class))).thenReturn(category);
+    ((BaseCommerceConnection) CurrentCommerceConnection.get()).setCatalogService(catalogService);
+    when(liveContextNavigationFactory.createNavigation(any(Category.class), any(Site.class)))
+            .thenReturn(mock(LiveContextNavigation.class));
     testling.setLiveContextNavigationFactory(liveContextNavigationFactory);
   }
 
@@ -145,23 +147,22 @@ public class LiveContextExternalChannelTest {
   public void teardown() {
     // make sure that tests do not interfere with each other via thread locals!
     RequestContextHolder.resetRequestAttributes();
-    DefaultConnection.clear();
+    envBuilder.tearDownEnv();
   }
 
   @Test
   public void testSettingsMechanism() throws Exception {
     Map setting = settingsService.setting(LiveContextExternalChannelImpl.COMMERCE_STRUCT, Map.class, testling);
-    Assert.assertNotNull(setting);
-    assertEquals(3, setting.size());
+    assertThat(setting).hasSize(3);
   }
 
   @Test
   public void testGetExternalChildrenWithSelectedCategories() throws Exception {
-    Assert.assertTrue(testling.isCommerceChildrenSelected());
+    assertThat(testling.isCommerceChildrenSelected()).isTrue();
     Site site = sitesService.getContentSiteAspect(testling.getContent()).getSite();
 
     List<Linkable> externalChildren = testling.getExternalChildren(site);
-    Assert.assertTrue(externalChildren.size() == 3);
+    assertThat(externalChildren).hasSize(3);
   }
 
   public Content getContent(int id) {
@@ -193,5 +194,4 @@ public class LiveContextExternalChannelTest {
   public Cache getCache() {
     return cache;
   }
-
 }

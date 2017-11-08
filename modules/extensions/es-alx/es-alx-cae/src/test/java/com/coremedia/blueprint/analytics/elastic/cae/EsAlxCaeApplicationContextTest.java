@@ -2,9 +2,8 @@ package com.coremedia.blueprint.analytics.elastic.cae;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -13,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
         "classpath:/spring/test/dummy-views.xml",
         "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
 })
-@Configuration
+@TestPropertySource(properties = "elastic.core.persistence=memory")
 public class EsAlxCaeApplicationContextTest {
 
   @Test

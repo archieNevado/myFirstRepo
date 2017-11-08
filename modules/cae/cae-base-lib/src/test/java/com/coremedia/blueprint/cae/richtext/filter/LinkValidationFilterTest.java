@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -68,10 +68,14 @@ public class LinkValidationFilterTest {
   public void testInvalidLink() {
     when(idProvider.parseId("coremedia:///cap/content/242")).thenReturn(contentBean);
     when(validationService.validate(contentBean)).thenReturn(false);
-
+    testling.setRenderLinkText(true);
     String tail = "<p>" + CONTENT_LINK + "</p></div>";
     String result = doFilter(DIV_NS + tail);
     assertTrue(result.endsWith("<p>linktext</p></div>"));
+    testling.setRenderLinkText(false);
+    tail = "<p>foo" + CONTENT_LINK + "</p>bar</div>";
+    result = doFilter(DIV_NS + tail);
+    assertTrue(result.endsWith("<p>foo</p>bar</div>"));
   }
 
   @Test

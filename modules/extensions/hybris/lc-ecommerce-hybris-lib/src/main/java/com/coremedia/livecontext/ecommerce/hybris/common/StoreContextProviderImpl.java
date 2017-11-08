@@ -41,7 +41,7 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
         String configId = StructUtil.getString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID);
 
         readStoreConfigFromSpring(configId, targetConfig);
-        updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig);
+        updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig, site);
 
         String catalogVersion = isPreviewContentRepository(site) ? previewDefaultCatalogVersion : liveDefaultCatalogVersion;
 
@@ -56,7 +56,6 @@ public class StoreContextProviderImpl extends AbstractStoreContextProvider {
         );
 
         StoreContextHelper.setSiteId(result, site.getId());
-
       } catch (NoSuchPropertyDescriptorException e) {
         throw new InvalidContextException("Missing properties in store configuration. ", e);
       }

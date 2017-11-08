@@ -6,7 +6,6 @@ import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.content.Version;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.transform.TransformedBeanBlob;
@@ -15,7 +14,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
@@ -25,9 +24,10 @@ import java.io.OutputStream;
 
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -40,9 +40,7 @@ import static org.mockito.Mockito.when;
 public class TransformedBlobHandlerTest extends HandlerBaseTest {
 
   private static final String URI = "/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/So/london.jpg";
-  public static final int CONTENT_ID = 1234;
-
-  final String propertyName = "propertyName";
+  private static final int CONTENT_ID = 1234;
 
   @Mock
   private TransformedBeanBlob transformedBlob;
@@ -89,41 +87,30 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     registerHandler(testling);
 
     // 2. --- mock content
-    Version version = mock(Version.class);
-    when(version.getId()).thenReturn("coremedia:///cap/version/1234/567");
-
     CapBlobRef capBlobRef = mock(CapBlobRef.class);
 
     when(content.getName()).thenReturn("London");
     when(content.getId()).thenReturn("coremedia:///cap/content/1234");
-    when(content.isCheckedIn()).thenReturn(true);
-    when(content.getCheckedInVersion()).thenReturn(version);
     when(content.isContent()).thenReturn(true);
     when(content.isContentObject()).thenReturn(true);
-    when(content.getBlobRef(propertyName)).thenReturn(capBlobRef);
 
     when(capBlobRef.getCapObject()).thenReturn(content);
     when(capBlobRef.getContentType()).thenReturn(new MimeType(mimeType));
-    when(capBlobRef.getPropertyName()).thenReturn(propertyName);
 
     when(transformedBlob.getOriginal()).thenReturn(capBlobRef);
-    when(transformedBlob.getContentType()).thenReturn(new MimeType(mimeType));
     when(transformedBlob.getETag()).thenReturn(DIGEST);
     when(transformedBlob.getTransformName()).thenReturn(TRANSFORM_NAME);
-    when(transformedBlob.getTransform()).thenReturn(TRANSFORM_NAME);
 
     // 3. --- mock content(-bean) related stuff
     when(cmMedia.getContent()).thenReturn(content);
     when(cmMedia.getContentId()).thenReturn(CONTENT_ID);
     when(cmMedia.getTransformedData(TRANSFORM_NAME)).thenReturn(transformedBlob);
     when(transformedBlob.getBean()).thenReturn(cmMedia);
-    when(transformImageService.transformWithDimensions(any(Content.class), any(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt())).thenReturn(transformedBlob);
+    when(transformImageService.transformWithDimensions(any(Content.class), nullable(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt())).thenReturn(transformedBlob);
 
     when(getIdContentBeanConverter().convert(String.valueOf(CONTENT_ID))).thenReturn(cmMedia);
 
     ContentRepository contentRepository = mock(ContentRepository.class);
-    when(content.getRepository()).thenReturn(contentRepository);
-    when(contentRepository.isContentManagementServer()).thenReturn(false);
   }
 
   /**
@@ -144,7 +131,6 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     String transformedMimeType = "image/png";
     registerMimeTypeWithExtensions(transformedMimeType, "png");
 
-    when(transformedBlob.getContentType()).thenReturn(new MimeType(transformedMimeType));
     when(dataViewFactory.loadCached(cmMedia, null)).thenReturn(cmMedia);
 
     assertModel(handleRequest(URI), transformedBlob);
@@ -181,7 +167,6 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
   @Test
   public void testMessingWithProtectedURLParts() throws Exception {
     when(dataViewFactory.loadCached(cmMedia, null)).thenReturn(cmMedia);
-    when(cmMedia.getTransformedData("transformXXX")).thenReturn(transformedBlob);
     when(getIdContentBeanConverter().convert("666")).thenReturn(cmMedia);
     when(cmMedia.getContentId()).thenReturn(666);
 
@@ -221,8 +206,6 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     // in this test case, the original JPEG is transformed to a PNG
     String transformedMimeType = "image/png";
     registerMimeTypeWithExtensions(transformedMimeType, "png");
-
-    when(transformedBlob.getContentType()).thenReturn(new MimeType(transformedMimeType));
 
     // expect extension .jpg, even though the transformed blob has a different extension
     assertEquals(URI, formatLink(transformedBlob, null, false, ImmutableMap.<String, Object>of(

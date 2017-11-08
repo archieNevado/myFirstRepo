@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
@@ -18,6 +19,7 @@ import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper
 import com.coremedia.livecontext.fragment.links.context.accessors.LiveContextContextAccessor;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Splitter;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -39,6 +40,8 @@ import java.util.Optional;
 import java.util.TimeZone;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
+import static com.coremedia.livecontext.handler.util.CaeStoreContextUtil.updateStoreContextWithFragmentParameters;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Suitable for URLs whose second segment denotes the store, e.g. /fragment/10001/...
@@ -54,8 +57,6 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
   // Names of context entries
   private String contextNameMemberGroup = "wc.preview.memberGroups";
-  private String contextNamePreviewMode = "wc.p13n_test";
-  private String contextNameTimeIsElapsing = "wc.preview.timeiselapsing";
   private String contextNameTimestamp = "wc.preview.timestamp";
   private String contextNamePreviewUserGroup = "wc.preview.usergroup";
   private String contextNameTimezone = "wc.preview.timezone";
@@ -64,6 +65,8 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   private String contextNameUserName = "wc.user.loginid";
   private String contextNameContractIds = "wc.preview.contractIds";
   private String contextNameUserGroupIds = "wc.user.membergroupids"; //TODO: mbi
+
+  private CatalogAliasTranslationService catalogAliasTranslationService;
 
   // --- AbstractCommerceContextInterceptor -------------------------
 
@@ -79,11 +82,16 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
           @Nonnull Site site, @Nonnull HttpServletRequest request) {
     Optional<CommerceConnection> connection = super.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    if (connection.isPresent() && isPreview()) {
-      Context fragmentContext = LiveContextContextHelper.fetchContext(request);
-      if (fragmentContext != null) {
-        StoreContext storeContext = connection.get().getStoreContext();
-        initStoreContextPreview(fragmentContext, storeContext, connection.get(), request);
+    if (connection.isPresent()) {
+      StoreContext storeContext = connection.get().getStoreContext();
+      FragmentParameters fragmentParameters = FragmentContextProvider.getFragmentContext(request).getParameters();
+      updateStoreContextWithFragmentParameters(catalogAliasTranslationService, storeContext, fragmentParameters, site);
+
+      if (isPreview()) {
+        Context fragmentContext = LiveContextContextHelper.fetchContext(request);
+        if (fragmentContext != null) {
+          initStoreContextPreview(fragmentContext, storeContext, connection.get(), request);
+        }
       }
     }
 
@@ -100,10 +108,19 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
       return;
     }
 
-    initUserContextNameAndId(fragmentContext, userContext);
+    StoreContext storeContext = commerceConnection.getStoreContext();
+
+    UserContext.Builder userContextBuilder = UserContext.buildCopyOf(userContext);
+    findStringValue(fragmentContext, contextNameUserId).ifPresent(userContextBuilder::withUserId);
+    findStringValue(fragmentContext, contextNameUserName).ifPresent(userContextBuilder::withUserName);
+    userContext = userContextBuilder.build();
+    commerceConnection.setUserContext(userContext);
+
+    //TODO: mbi
+    findStringValue(fragmentContext, contextNameUserGroupIds).ifPresent(storeContext::setUserSegments);
+
     if (contractsProcessingEnabled) {
       ContractService contractService = commerceConnection.getContractService();
-      StoreContext storeContext = commerceConnection.getStoreContext();
       initUserContextContractsProcessing(fragmentContext, storeContext, userContext, contractService);
     }
   }
@@ -143,11 +160,6 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     return Timestamp.valueOf(timestamp).getTime();
   }
 
-  protected boolean isTimeElapsing(@Nonnull Context fragmentContext) {
-    Object value = fragmentContext.get(contextNameTimeIsElapsing);
-    return value != null && Boolean.parseBoolean(value.toString());
-  }
-
   // --- configure --------------------------------------------------
 
   @Required
@@ -166,14 +178,6 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
   public void setContextNameMemberGroup(String contextNameMemberGroup) {
     this.contextNameMemberGroup = contextNameMemberGroup;
-  }
-
-  public void setContextNamePreviewMode(String contextNamePreviewMode) {
-    this.contextNamePreviewMode = contextNamePreviewMode;
-  }
-
-  public void setContextNameTimeIsElapsing(String contextNameTimeIsElapsing) {
-    this.contextNameTimeIsElapsing = contextNameTimeIsElapsing;
   }
 
   public void setContextNameTimestamp(String contextNameTimestamp) {
@@ -210,28 +214,26 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   }
 
   private void initStoreContextUserSegments(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext) {
-    String memberGroups = (String) fragmentContext.get(contextNameMemberGroup);
-    if (memberGroups != null) {
-      storeContext.setUserSegments(memberGroups);
-    }
+    findStringValue(fragmentContext, contextNameMemberGroup)
+            .ifPresent(storeContext::setUserSegments);
   }
 
   private void initStoreContextWorkspaceId(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext) {
-    String workspaceId = (String) fragmentContext.get(contextNameWorkspaceId);
-    if (workspaceId != null) {
-      storeContext.setWorkspaceId(workspaceId);
-    }
+    findStringValue(fragmentContext, contextNameWorkspaceId)
+            .ifPresent(storeContext::setWorkspaceId);
   }
 
   private void initStoreContextPreviewMode(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
                                            @Nonnull CommerceConnection connection, @Nonnull HttpServletRequest request) {
-    boolean previewMode = Boolean.valueOf(fragmentContext.get(contextNamePreviewMode) + "");
-    boolean timeIsElapsing = isTimeElapsing(fragmentContext);
-    // are we in a studio preview call?
-    request.setAttribute(PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW, timeIsElapsing || previewMode);
-    if (!timeIsElapsing) {
-      initStoreContextPreviewDate(fragmentContext, storeContext, connection, request);
+    if (!isStudioPreviewRequest()) {
+      return;
     }
+    initStoreContextPreviewDate(fragmentContext, storeContext, connection, request);
+  }
+
+  @VisibleForTesting
+  boolean isStudioPreviewRequest() {
+    return LiveContextPageHandlerBase.isStudioPreviewRequest();
   }
 
   private void initStoreContextPreviewDate(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
@@ -243,21 +245,19 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     }
 
     //TODO: mbi
-    Object previewUserGroupObj = fragmentContext.get(contextNamePreviewUserGroup);
-    if (null != previewUserGroupObj){
-      storeContext.setUserSegments((String) previewUserGroupObj);
-    }
+    findStringValue(fragmentContext, contextNamePreviewUserGroup)
+            .ifPresent(storeContext::setUserSegments);
   }
 
   private Calendar createPreviewCalendar(@Nonnull Context fragmentContext, @Nonnull CommerceConnection connection) {
-    String timestamp = (String) fragmentContext.get(contextNameTimestamp);
+    String timestamp = findStringValue(fragmentContext, contextNameTimestamp).orElse(null);
     if (timestamp == null) {
       return null;
     }
 
     //TODO mbi vendor specific krempel
     long timestampMillis;
-    if ("IBM".equals(connection.getVendorName())){
+    if ("IBM".equals(connection.getVendorName())) {
       try {
         timestampMillis = timestampToMillis(timestamp);
       } catch (IllegalArgumentException e) {
@@ -270,29 +270,10 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(roundToMinute(timestampMillis));
-    String timezone = (String) fragmentContext.get(contextNameTimezone);
-    if (timezone != null) {
-      calendar.setTimeZone(TimeZone.getTimeZone(timezone));
-    }
+    findStringValue(fragmentContext, contextNameTimezone)
+            .ifPresent(timezone -> calendar.setTimeZone(TimeZone.getTimeZone(timezone)));
+
     return calendar;
-  }
-
-  private void initUserContextNameAndId(@Nonnull Context fragmentContext, @Nonnull UserContext userContext) {
-    String userId = (String) fragmentContext.get(contextNameUserId);
-    if (userId != null) {
-      userContext.setUserId(userId);
-    }
-
-    String userName = (String) fragmentContext.get(contextNameUserName);
-    if (userName != null) {
-      userContext.setUserName(userName);
-    }
-    //TODO: mbi
-    String userGroupIds = (String) fragmentContext.get(contextNameUserGroupIds);
-    if (userGroupIds != null){
-      StoreContext storeContext = DefaultConnection.get().getStoreContext();
-      storeContext.setUserSegments(userGroupIds);
-    }
   }
 
   private void initUserContextContractsProcessing(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
@@ -305,8 +286,9 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
     // check if user is allowed to execute a call for the passed contracts
     if (contractService != null) {
-      Collection<String> contractIdsForUser = contractIds(contractService, storeContext, userContext,
-              (String) fragmentContext.get("user.organization.id"));
+      String organizationId = findStringValue(fragmentContext, "user.organization.id").orElse(null);
+
+      Collection<String> contractIdsForUser = contractIds(contractService, storeContext, userContext, organizationId);
       Collection intersection = CollectionUtils.intersection(contractIdsForUser, contractIdsFromContext);
       if (!intersection.isEmpty()) {
         storeContext.setContractIds(Arrays.copyOf(intersection.toArray(), intersection.size(), String[].class));
@@ -315,34 +297,32 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   }
 
   private Collection<String> contractIds(@Nonnull Context fragmentContext) {
-    String contractIdsStr = (String) fragmentContext.get(contextNameContractIds);
-    if (contractIdsStr == null || contractIdsStr.isEmpty()) {
-      return Collections.emptyList();
-    }
-    String[] contractIdsFromContext = contractIdsStr.split(" ");
-    return Arrays.asList(contractIdsFromContext);
+    Optional<String> contractIdsStr = findStringValue(fragmentContext, contextNameContractIds);
+
+    return contractIdsStr
+            .filter(str -> !str.isEmpty())
+            .map(Splitter.on(' ')::splitToList)
+            .orElseGet(Collections::emptyList);
   }
 
-  private Collection<String> contractIds(@Nonnull ContractService contractService,
-                                         StoreContext storeContext,
-                                         UserContext userContext,
-                                         String organizationId) {
-    Collection<String> contractIdsForUser = new ArrayList<>();
-    Collection<Contract> contractsForUser = contractService.findContractIdsForUser(userContext, storeContext, organizationId);
-    if (contractsForUser!=null) {
-      for (Contract contract : contractsForUser) {
-        contractIdsForUser.add(contract.getExternalTechId());
-      }
-    }
-    return contractIdsForUser;
+  private static Collection<String> contractIds(@Nonnull ContractService contractService, StoreContext storeContext,
+                                                @Nonnull UserContext userContext, @Nullable String organizationId) {
+    Collection<Contract> contractsForUser = contractService.findContractIdsForUser(userContext, storeContext,
+            organizationId);
+
+    return contractsForUser.stream()
+            .map(CommerceBean::getExternalTechId)
+            .collect(toList());
+  }
+
+  @Nonnull
+  private static Optional<String> findStringValue(@Nonnull Context fragmentContext, @Nonnull String name) {
+    String value = (String) fragmentContext.get(name);
+    return Optional.ofNullable(value);
   }
 
   @VisibleForTesting
-  static String convertToPreviewDateRequestParameterFormat(Calendar calendar) {
-    if (calendar == null) {
-      return null;
-    }
-
+  static String convertToPreviewDateRequestParameterFormat(@Nonnull Calendar calendar) {
     Format dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm ");
     return dateFormat.format(calendar.getTimeInMillis()) + calendar.getTimeZone().getID();
   }
@@ -350,5 +330,10 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   private static long roundToMinute(long millis) {
     millis += MILLISECONDS_PER_MINUTE / 2;
     return millis - millis % MILLISECONDS_PER_MINUTE;
+  }
+
+  @Required
+  public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 }

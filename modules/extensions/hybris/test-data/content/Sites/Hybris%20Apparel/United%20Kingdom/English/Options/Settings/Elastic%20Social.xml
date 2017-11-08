@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMSettings folder="/Sites/Hybris Apparel/United Kingdom/English/Options/Settings" name="Elastic Social" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale>en-US</locale>
+<locale>en-GB</locale>
 <master>
 </master>
 <settings>
@@ -8,7 +8,7 @@
 <StructProperty Name="elasticSocial">
 <Struct>
 <BooleanProperty Name="enabled">false</BooleanProperty>
-<StringProperty Name="tenant">hybris</StringProperty>
+<StringProperty Name="tenant">hybris-en-gb</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

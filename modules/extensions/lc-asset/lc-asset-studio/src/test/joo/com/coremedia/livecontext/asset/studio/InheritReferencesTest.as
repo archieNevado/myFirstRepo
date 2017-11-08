@@ -18,6 +18,7 @@ import com.coremedia.ui.util.TableUtil;
 
 import ext.Component;
 import ext.ComponentManager;
+import ext.Ext;
 import ext.button.Button;
 import ext.menu.Item;
 import ext.tip.QuickTipManager;
@@ -60,7 +61,7 @@ public class InheritReferencesTest extends AbstractCatalogAssetTest {
     //We have to mock QuickTips.getQuickTip as this returns undefined
     getQuickTip = QuickTipManager.getQuickTip;
     QuickTipManager.getQuickTip = function():StatefulQuickTip {
-      return new StatefulQuickTip({});
+      return Ext.create(StatefulQuickTip, {});
     };
 
     QtipUtil.registerQtipFormatter();

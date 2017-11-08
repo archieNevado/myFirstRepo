@@ -7,7 +7,7 @@
         itemId="externalPreviewButton"
         iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'external_preview')}"
         text="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_button_text')}"
-        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin', 'ExternalPreview_button_tooltip')}">
+>
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.externalpreview.ExternalPreviewStudioPlugin')]
     [ResourceBundle('com.coremedia.icons.CoreIcons')]

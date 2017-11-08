@@ -2,8 +2,6 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
-import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.content.ContentRepository;
@@ -25,9 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.verification.VerificationMode;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
@@ -38,7 +35,6 @@ import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.test.MockParameterMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -53,8 +49,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyVararg;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -138,19 +133,10 @@ public class UserDetailsHelperTest {
   private SharedAttributeMap sessionMap;
 
   @Mock
-  private LocalizationContext localizationContext;
-
-  @Mock
   private PasswordPolicy passwordPolicy;
 
   @Mock
   private StagingService stagingService;
-
-  @Mock
-  private CMLinkable cmLinkable;
-
-  @Mock
-  private CMNavigation cmNavigation;
 
   @Mock
   private FlowUrlHelper flowUrlHelper;
@@ -161,7 +147,6 @@ public class UserDetailsHelperTest {
   @Mock
   private ElasticSocialPlugin elasticSocialPlugin;
 
-
   @Before
   @SuppressWarnings("unchecked")
   public void setUp() throws IOException {
@@ -171,11 +156,10 @@ public class UserDetailsHelperTest {
     when(communityUser.getId()).thenReturn(id);
     UserContext.setUser(communityUser);
 
-    when(elasticSocialPlugin.getElasticSocialConfiguration(anyVararg())).thenReturn(elasticSocialConfiguration);
+    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
     when(elasticSocialConfiguration.getMaxImageFileSize()).thenReturn(512000);
 
     HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-    when(httpServletRequest.getAttribute("cmpage")).thenReturn(page);
     when(requestContext.getExternalContext()).thenReturn(externalContext);
     when(externalContext.getLocale()).thenReturn(Locale.ENGLISH);
     when(externalContext.getNativeRequest()).thenReturn(httpServletRequest);
@@ -290,7 +274,6 @@ public class UserDetailsHelperTest {
   @Test
   public void getIgnoredUserOnProduction() {
     userDetailsHelper.setPreview(true);
-    when(communityUser.isIgnored()).thenReturn(true);
     UserContext.clear();
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
@@ -302,7 +285,6 @@ public class UserDetailsHelperTest {
   @Test
   public void getBlockedUserOnProduction() {
     userDetailsHelper.setPreview(true);
-    when(communityUser.isBlocked()).thenReturn(true);
     UserContext.clear();
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
@@ -314,7 +296,6 @@ public class UserDetailsHelperTest {
   @Test
   public void getUnactivatedUserOnProduction() {
     userDetailsHelper.setPreview(true);
-    when(communityUser.isActivated()).thenReturn(false);
     UserContext.clear();
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
@@ -335,11 +316,8 @@ public class UserDetailsHelperTest {
 
   @Test
   public void testUserDetailsForUserFromContextOtherLoggedIn() {
-    String loggedInUserId = "12345";
     when(communityUser.isActivated()).thenReturn(true);
-    when(loggedInUser.getId()).thenReturn(loggedInUserId);
     UserContext.setUser(loggedInUser);
-    when(communityUserService.getUserById(loggedInUserId)).thenReturn(loggedInUser);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
     assertNotNull(details);
@@ -351,7 +329,6 @@ public class UserDetailsHelperTest {
   @Test
   public void testUserDetailsForNonExistentUserFromContextNotLoggedIn() {
     UserContext.clear();
-    when(communityUserService.getUserById(id)).thenReturn(null);
     when(communityUserService.getUserByName(userName)).thenReturn(null);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
@@ -363,9 +340,6 @@ public class UserDetailsHelperTest {
 
   @Test
   public void testUserDetailsForEmptyUserNameParam() {
-    when(communityUserService.getUserById(id)).thenReturn(null);
-    when(communityUserService.getUserByName(userName)).thenReturn(null);
-
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, "");
     assertNull(details);
 
@@ -743,11 +717,6 @@ public class UserDetailsHelperTest {
   @SuppressWarnings("unchecked")
   public void redirectOnLogout() {
     UserContext.clear();
-    when(page.getContent()).thenReturn(cmLinkable);
-    when(page.getNavigation()).thenReturn(cmNavigation);
-    when(cmNavigation.getRootNavigation()).thenReturn(cmNavigation);
-    Map map = new HashMap();
-    when(cmLinkable.getAspectByName()).thenReturn(map);
     when(flowUrlHelper.getRootPageUrl(requestContext)).thenReturn("link");
     userDetailsHelper.redirectOnLogout(requestContext, null);
     verify(externalContext).requestExternalRedirect("serverRelative:link");
@@ -795,7 +764,7 @@ public class UserDetailsHelperTest {
   public void testPostProcessProviderConnection() {
     userDetailsHelper.postProcessProviderConnection(requestContext);
 
-    verify(messageContext, never()).addMessage(Matchers.<MessageResolver>anyObject());
+    verify(messageContext, never()).addMessage(any());
   }
 
   @Test
@@ -804,7 +773,7 @@ public class UserDetailsHelperTest {
 
     userDetailsHelper.postProcessProviderConnection(requestContext);
 
-    verify(messageContext).addMessage(Matchers.<MessageResolver>anyObject());
+    verify(messageContext).addMessage(any());
   }
 
   @Test

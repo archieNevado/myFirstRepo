@@ -1,7 +1,8 @@
 package com.coremedia.livecontext.fragment;
 
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -9,9 +10,9 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.handler.util.CaeStoreContextUtil;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.collect.ImmutableList;
@@ -42,6 +43,7 @@ public class FragmentPageHandler extends PageHandlerBase {
   private static final String SEGMENT_STOREID = "storeId";
   private static final String SEGMENT_LOCALE = "locale";
   private static final String SEGMENT_MATRIX_PARAMS = "params";
+  private CatalogAliasTranslationService catalogAliasTranslationService;
 
   //parameter name used for putting the value of the matrix-parameter "parameter" into the request
   private static final String ATTR_NAME_FRAGMENT_PARAMETER = "fragmentParameter";
@@ -55,7 +57,6 @@ public class FragmentPageHandler extends PageHandlerBase {
 
   private boolean isPreview = false;
   private List<FragmentHandler> fragmentHandlers;
-
 
   // --- interface --------------------------------------------------
 
@@ -73,8 +74,7 @@ public class FragmentPageHandler extends PageHandlerBase {
                                      @PathVariable(SEGMENT_LOCALE) Locale locale,
                                      HttpServletRequest request,
                                      HttpServletResponse response) {
-    CommerceConnection connection = DefaultConnection.get();
-    StoreContext storeContext = connection != null ? connection.getStoreContext() : null;
+    StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
     if (storeContext == null) {
       return HandlerHelper.badRequest("Store context not initialized for fragment call " + request.getRequestURI());
     }
@@ -89,11 +89,14 @@ public class FragmentPageHandler extends PageHandlerBase {
     }
     SiteHelper.setSiteToRequest(site, request);
 
-    ModelAndView modelAndView = null;
+    //update store context with fragment parameters
+    CaeStoreContextUtil.updateStoreContextWithFragmentParameters(catalogAliasTranslationService, storeContext, fragmentParameters, site);
+
+    ModelAndView modelAndView;
     FragmentHandler handler = selectHandler(fragmentParameters);
-    if (handler!=null) {
+    if (handler != null) {
       modelAndView = handler.createModelAndView(fragmentParameters, request);
-      if (modelAndView==null) {
+      if (modelAndView == null) {
         return createErrorModelAndView(fragmentParameters, handler);
       }
     } else {
@@ -106,7 +109,6 @@ public class FragmentPageHandler extends PageHandlerBase {
     return modelAndView;
   }
 
-
   //-------------- Config --------------------
 
   @Required
@@ -118,6 +120,11 @@ public class FragmentPageHandler extends PageHandlerBase {
     this.isPreview = isPreview;
   }
 
+  @Required
+  public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
+  }
+
   // --- internal ---------------------------------------------------
 
   /**
@@ -125,12 +132,10 @@ public class FragmentPageHandler extends PageHandlerBase {
    * depending on the parameters.
    */
   private FragmentHandler selectHandler(FragmentParameters fragmentParameters) {
-    for (FragmentHandler handler : fragmentHandlers) {
-      if (handler.include(fragmentParameters)) {
-        return handler;
-      }
-    }
-    return null;
+    return fragmentHandlers.stream()
+            .filter(handler -> handler.include(fragmentParameters))
+            .findFirst()
+            .orElse(null);
   }
 
   /**

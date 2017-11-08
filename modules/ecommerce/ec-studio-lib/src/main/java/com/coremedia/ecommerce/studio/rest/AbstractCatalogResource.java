@@ -1,7 +1,12 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.livecontext.ecommerce.catalog.Catalog;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -9,13 +14,15 @@ import com.coremedia.rest.linking.EntityResource;
 import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
+import java.util.Optional;
 
-import static java.util.Objects.requireNonNull;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 
 /**
  * An abstract catalog object as a RESTful resource.
@@ -24,13 +31,29 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   protected static final Logger LOG = LoggerFactory.getLogger(AbstractCatalogResource.class);
 
+  private CatalogAliasTranslationService catalogAliasTranslationService;
+
   private static final String ID = "id";
   private static final String SITE_ID = "siteId";
+  protected static final String CATALOG_ALIAS = "catalogAlias";
   private static final String WORKSPACE_ID = "workspaceId";
 
   private String id;
   private String siteId;
+  protected CatalogAlias catalogAlias;
   private String workspaceId = StoreContextImpl.NO_WS_MARKER;
+
+  @Nullable
+  @Override
+  public Entity getEntity() {
+    if (getStoreContext() == null) {
+      return null;
+    }
+
+    return doGetEntity();
+  }
+
+  protected abstract Entity doGetEntity();
 
   @GET
   public AbstractCatalogRepresentation get() {
@@ -66,6 +89,17 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     this.siteId = siteId;
   }
 
+  public String getCatalogAlias() {
+    return catalogAlias != null ? catalogAlias.value() : null;
+  }
+
+  @PathParam(CATALOG_ALIAS)
+  public void setCatalogAlias(String catalogAliasValue) {
+    CatalogAlias.ofNullable(catalogAliasValue).ifPresent(catalogAlias -> {
+      this.catalogAlias = isDefaultCatalog(catalogAlias) ? DEFAULT_CATALOG_ALIAS : catalogAlias;
+    });
+  }
+
   public String getWorkspaceId() {
     return workspaceId;
   }
@@ -77,40 +111,49 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   @Nullable
   protected StoreContext getStoreContext() {
-    CommerceConnection connection = DefaultConnection.get();
-    if (connection == null) {
-      return null;
-    }
+    StoreContext storeContext = CurrentCommerceConnection.find()
+            .map(CommerceConnection::getStoreContext)
+            .map(StoreContext::getClone)
+            .orElse(null);
 
-    StoreContext storeContext = connection.getStoreContext();
     if (storeContext == null) {
       return null;
     }
 
     storeContext.setWorkspaceId(workspaceId);
+    if (catalogAlias != null && catalogAliasTranslationService != null) {
+      Optional<CatalogId> catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
+      storeContext.setCatalog(catalogAlias, catalogId.orElse(null));
+    }
+    storeContext.setSiteId(siteId);
     return storeContext;
   }
 
   @Nonnull
   protected CommerceConnection getConnection() {
-    return requireNonNull(DefaultConnection.get(), "no commerce connection available");
+    return CurrentCommerceConnection.get();
   }
 
-  @Nonnull
-  protected String getExternalIdFromId(@Nonnull String remoteBeanId) {
-    // we assume that the substring after the last '/' is the external id
-    return remoteBeanId.substring(remoteBeanId.lastIndexOf('/') + 1);
-  }
-
-  @Nullable
-  @Override
-  public Entity getEntity() {
-    if (getStoreContext() == null) {
-      return null;
+  private static boolean isDefaultCatalog(CatalogAlias catalogAlias) {
+    if (catalogAlias.equals(DEFAULT_CATALOG_ALIAS)) {
+      return true;
     }
 
-    return doGetEntity();
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
+    CatalogService catalogService = commerceConnection.getCatalogService();
+    StoreContext storeContext = commerceConnection.getStoreContext();
+
+    Optional<Catalog> catalog = catalogService.getCatalog(catalogAlias, storeContext);
+    return catalog.isPresent() && catalog.get().isDefaultCatalog();
   }
 
-  protected abstract Entity doGetEntity();
+  @Autowired
+  public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
+  }
+
+  protected CatalogAliasTranslationService getCatalogAliasTranslationService() {
+    return catalogAliasTranslationService;
+  }
 }

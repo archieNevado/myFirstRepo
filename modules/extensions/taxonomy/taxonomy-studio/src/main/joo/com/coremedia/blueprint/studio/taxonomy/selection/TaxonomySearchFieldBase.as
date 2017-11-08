@@ -95,7 +95,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       reader.rootProperty = NODES;
 
       //noinspection JSUnusedGlobalSymbols
-      httpProxy = new AjaxProxy({
+      httpProxy = Ext.create(AjaxProxy, {
         failure: function (response:XMLHttpRequest):void {
           Logger.info('Taxonomy search request failed:' + response.responseText);
         },

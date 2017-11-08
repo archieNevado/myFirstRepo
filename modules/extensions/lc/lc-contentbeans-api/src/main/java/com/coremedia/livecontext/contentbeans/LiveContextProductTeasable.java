@@ -4,6 +4,7 @@ import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,8 +50,13 @@ public interface LiveContextProductTeasable extends CMTeasable {
 
 
   /**
-   * Returns the product id (e.g. vendor:///catalog/product/Id)
+   * <p>
+   * Returns the content property {@link CMProductTeaser#EXTERNAL_ID}. The returned value is the full commerce id including
+   * prefix for vendor and bean type.
+   * </p>
+   * Note that {@link CommerceBean#getExternalId()} is the unprefixed ID format.
    *
+   * @return the formatted commerce id
    * @cm.template.api
    */
   @Nonnull

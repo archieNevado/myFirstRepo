@@ -62,7 +62,7 @@
 <LinkProperty Name="linkedContent" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../Products/Beacon%20Jacket%20glacier.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Beacon%20Jacket%20glacier"/>
 </Struct>
 </StructListProperty>
-<BooleanProperty Name="callToActionDisabled">false</BooleanProperty>
+<BooleanProperty Name="callToActionDisabled">true</BooleanProperty>
 <StringProperty Name="callToActionCustomText">Explore our Snowboards</StringProperty>
 </Struct>
 </localSettings>

@@ -160,11 +160,9 @@
 </Struct>
 <Struct>
 <StringProperty Name="name">Snowwear Women</StringProperty>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20women%2049d2ea58.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20women%20-%20200000/Snowwear%20Women"/>
 </Struct>
 <Struct>
 <StringProperty Name="name">Snowwear Men</StringProperty>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20men%20-%865cbb1e.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men"/>
 </Struct>
 <Struct>
 <StringProperty Name="name">Shoppable Video</StringProperty>

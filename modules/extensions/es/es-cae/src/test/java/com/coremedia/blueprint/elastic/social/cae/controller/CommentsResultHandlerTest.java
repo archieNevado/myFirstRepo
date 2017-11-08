@@ -1,7 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
+import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.i18n.PageResourceBundleFactory;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
@@ -12,19 +14,13 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
-import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.cms.ContentWithSite;
-import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.ModerationType;
-import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
@@ -33,16 +29,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -55,10 +49,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyVararg;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -86,17 +80,12 @@ public class CommentsResultHandlerTest {
   @Mock
   private NavigationSegmentsUriHelper uriHelper;
 
-  @Mock
-  private SettingsService settingsService;
 
   @Mock
   private PageResourceBundleFactory resourceBundleFactory;
 
   // @Mock   Möööp... ResourceBundle is all final, cannot be mocked
   private MockResourceBundle resourceBundle = new MockResourceBundle();
-
-  @Mock
-  private Comment comment;
 
   @Mock
   private CommunityUser user;
@@ -109,9 +98,6 @@ public class CommentsResultHandlerTest {
 
   @Mock
   private ContentWithSite contentWithSite;
-
-  @Mock
-  private ContentType contentType;
 
   @Mock
   private ContextHelper contextHelper;
@@ -133,9 +119,6 @@ public class CommentsResultHandlerTest {
 
   @Mock
   private HttpServletRequest request;
-
-  @Mock
-  private HttpServletResponse response;
 
   @Mock
   private UriTemplate uriTemplate;
@@ -162,12 +145,8 @@ public class CommentsResultHandlerTest {
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
     when(contentBeanFactory.createBeanFor(navigationContent)).thenReturn(navigation);
 
-    when(uriHelper.parsePath(context)).thenReturn(navigation);
     when(contentBean.getContent()).thenReturn(content);
-    when(navigation.getContent()).thenReturn(content);
-    when(content.getType()).thenReturn(contentType);
     when(content.getId()).thenReturn(targetId);
-    when(contentBean.getContentId()).thenReturn(Integer.parseInt(targetId));
 
     when(contentWithSite.getContent()).thenReturn(content);
     when(contributionTargetHelper.getContentFromTarget(any())).thenReturn(content);
@@ -180,13 +159,12 @@ public class CommentsResultHandlerTest {
     when(navigationContext.getContentId()).thenReturn(Integer.parseInt(contextId));
 
     resourceBundle = new MockResourceBundle();
-    when(resourceBundleFactory.resourceBundle(any(Navigation.class), any(User.class))).thenReturn(resourceBundle);
+    when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
 
-    when(elasticSocialPlugin.getElasticSocialConfiguration(anyVararg())).thenReturn(elasticSocialConfiguration);
+    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
 
     when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.getCommentType()).thenReturn(ANONYMOUS);
-    when(elasticSocialConfiguration.isCommentingEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.isWritingCommentsEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.isAnonymousCommentingEnabled()).thenReturn(true);
 
@@ -228,8 +206,6 @@ public class CommentsResultHandlerTest {
   @Test
   public void createComment() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(user);
-    when(elasticSocialService.createComment(Matchers.eq(user), isNull(String.class), eq(content), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), isNull(List.class))).thenReturn(comment);
 
     when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.POST_MODERATION);
 
@@ -239,8 +215,8 @@ public class CommentsResultHandlerTest {
     assertTrue(resultModel.getErrors().isEmpty());
     assertEquals(1, resultModel.getMessages().size());
 
-    verify(elasticSocialService).createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), any(List.class));  // NO_SONAR suppress warning
+    verify(elasticSocialService).createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(), any(List.class));  // NO_SONAR suppress warning
     verifyMessage(ContributionMessageKeys.COMMENT_FORM_SUCCESS);
   }
 
@@ -248,8 +224,6 @@ public class CommentsResultHandlerTest {
   public void createCommentForAnonymousNotAllowed() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(null);
 
-    when(elasticSocialConfiguration.getCommentType()).thenReturn(ContributionType.REGISTERED);
-    when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.POST_MODERATION);
     when(elasticSocialConfiguration.isAnonymousCommentingEnabled()).thenReturn(false);
 
     ModelAndView modelAndView = handler.createComment(contextId, targetId, text, authorName, replyTo, request);
@@ -258,8 +232,8 @@ public class CommentsResultHandlerTest {
     assertFalse(resultModel.isSuccess());
     assertEquals(1, resultModel.getMessages().size());
 
-    verify(elasticSocialService, never()).createComment(any(CommunityUser.class), isNull(String.class), eq(content), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), isNull(List.class));  // NO_SONAR suppress warning
+    verify(elasticSocialService, never()).createComment(any(CommunityUser.class), isNull(), eq(content), any(Navigation.class),
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(), isNull());  // NO_SONAR suppress warning
     verifyMessage(ContributionMessageKeys.COMMENT_FORM_NOT_LOGGED_IN);
   }
 
@@ -275,8 +249,6 @@ public class CommentsResultHandlerTest {
   @Test
   public void createCommentWithPreModeration() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(user);
-    when(elasticSocialService.createComment(Matchers.eq(user), isNull(String.class), eq(content), any(Navigation.class),
-            eq(text), eq(ModerationType.PRE_MODERATION), isNull(String.class), isNull(List.class))).thenReturn(comment);
 
     when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.PRE_MODERATION);
 
@@ -285,16 +257,16 @@ public class CommentsResultHandlerTest {
 
     assertEquals(1, resultModel.getMessages().size());
     assertTrue(resultModel.isSuccess());
-    verify(elasticSocialService).createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.PRE_MODERATION), isNull(String.class), any(List.class));  // NO_SONAR suppress warning
+    verify(elasticSocialService).createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
+            eq(text), eq(ModerationType.PRE_MODERATION), isNull(), any(List.class));  // NO_SONAR suppress warning
     verifyMessage(ContributionMessageKeys.COMMENT_FORM_SUCCESS_PREMODERATION);
   }
 
   @Test
   public void createCommentWithException() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(user);
-    when(elasticSocialService.createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), any(List.class))).thenThrow(new RuntimeException("intended"));
+    when(elasticSocialService.createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(), any(List.class))).thenThrow(new RuntimeException("intended"));
 
     when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.POST_MODERATION);
 
@@ -306,8 +278,8 @@ public class CommentsResultHandlerTest {
     assertFalse(resultModel.isSuccess());
     assertEquals(ERROR_MESSAGE, messages.get(0).getType());
 
-    verify(elasticSocialService).createComment(Matchers.eq(user), isNull(String.class), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(String.class), any(List.class));  // NO_SONAR suppress warning
+    verify(elasticSocialService).createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(), any(List.class));  // NO_SONAR suppress warning
     verifyMessage(ContributionMessageKeys.COMMENT_FORM_ERROR);
   }
 

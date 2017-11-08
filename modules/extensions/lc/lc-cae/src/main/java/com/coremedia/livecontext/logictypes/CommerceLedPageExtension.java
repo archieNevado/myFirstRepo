@@ -1,19 +1,20 @@
 package com.coremedia.livecontext.logictypes;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.SeoSegmentBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Link Builder for CMChannels that are supposed to link to the commerce system.
@@ -49,24 +50,35 @@ public class CommerceLedPageExtension extends ExtensionBase {
     try {
       if (isCommerceLed(channel)) {
         Site site = getSitesService().getContentSiteAspect(channel.getContent()).getSite();
-        CommerceConnection currentConnection = DefaultConnection.get();
-        StoreContextProvider storeContextProvider = currentConnection != null ? currentConnection.getStoreContextProvider() : null;
-        if (storeContextProvider == null) {
+        if (site == null) {
           return null;
         }
-        StoreContext storeContext = storeContextProvider.findContextBySite(site);
-        if (storeContext != null) {
-          String seoSegment = seoSegmentBuilder.asSeoSegment(channel, channel);
-          if (StringUtils.isNotEmpty(seoSegment)) {
-            seoSegment = seoSegment.replaceAll("--", "/");
-          }
-          return buildCommerceLinkFor(null, getContentURLKeyword() + "/" + seoSegment, Collections.EMPTY_MAP);
+
+        StoreContext storeContext = findStoreContextForSite(site).orElse(null);
+        if (storeContext == null) {
+          return null;
         }
+
+        String seoSegment = seoSegmentBuilder.asSeoSegment(channel, channel);
+        if (StringUtils.isNotEmpty(seoSegment)) {
+          seoSegment = seoSegment.replaceAll("--", "/");
+        }
+
+        return buildCommerceLinkFor(null, getContentURLKeyword() + "/" + seoSegment,
+                Collections.emptyMap(), CurrentCommerceConnection.get().getStoreContext());
       }
     } catch (Exception e) {
       LOG.error("Error determining URL for Channel", e);
     }
+
     return null;
+  }
+
+  @Nonnull
+  private static Optional<StoreContext> findStoreContextForSite(@Nonnull Site site) {
+    return CurrentCommerceConnection.find()
+            .map(CommerceConnection::getStoreContextProvider)
+            .map(storeContextProvider -> storeContextProvider.findContextBySite(site));
   }
 
   /**
@@ -78,13 +90,11 @@ public class CommerceLedPageExtension extends ExtensionBase {
   protected boolean isCommerceLed(CMChannel channel) {
     return getSettingsService().settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PAGE_LINKS, Boolean.class, false, channel)
             || getSettingsService().settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_MICROSITE_LINKS, Boolean.class, false, channel);
-
   }
 
   public String getSeoSegmentForChannel(CMChannel channel) {
     return seoSegmentBuilder.asSeoSegment(channel, channel);
   }
-
 
   @Required
   public void setSeoSegmentBuilder(ExternalSeoSegmentBuilder seoSegmentBuilder) {

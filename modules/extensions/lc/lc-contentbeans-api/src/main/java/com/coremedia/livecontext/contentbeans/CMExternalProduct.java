@@ -3,6 +3,7 @@ package com.coremedia.livecontext.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,9 +48,13 @@ public interface CMExternalProduct extends CMTeasable {
   List<? extends Aspect<? extends CMExternalProduct>> getAspects();
 
   /**
-   * Returns the external ID.
+   * <p>
+   * Returns the content property {@link #EXTERNAL_ID}. The returned value is the full commerce id including
+   * prefix for vendor and bean type.
+   * </p>
+   * Note that {@link CommerceBean#getExternalId()} is the unprefixed ID format.
    *
-   * @return the external ID.
+   * @return the formatted commerce id
    */
   String getExternalId();
 

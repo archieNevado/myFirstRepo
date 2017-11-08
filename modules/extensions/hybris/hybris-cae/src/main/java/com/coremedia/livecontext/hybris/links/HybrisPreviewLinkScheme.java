@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.hybris.links;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
@@ -13,6 +13,7 @@ import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProductImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.preview.PreviewTokenService;
@@ -96,7 +97,7 @@ public class HybrisPreviewLinkScheme {
       return null;
     }
 
-    return buildLinkInternal(category.getExternalId(), "category", previewTicketId);
+    return buildLinkInternal(category.getExternalId(), BaseCommerceBeanType.CATEGORY.type(), previewTicketId);
   }
 
   @Link(type = CategoryInSite.class, order = 2)
@@ -143,13 +144,13 @@ public class HybrisPreviewLinkScheme {
       return null;
     }
 
-    return buildLinkInternal(product.getExternalId(), "product", previewTicketId);
+    return buildLinkInternal(product.getExternalId(), BaseCommerceBeanType.PRODUCT.type(), previewTicketId);
   }
 
   @Link(type = {LiveContextExternalProduct.class, LiveContextExternalProductImpl.class}, order = 2)
   public Object buildPreviewLinkForAugmentedProduct(LiveContextExternalProduct augmentedProduct, String viewName,
-                                                     Map<String, Object> linkParameters, HttpServletRequest request,
-                                                     HttpServletResponse response) {
+                                                    Map<String, Object> linkParameters, HttpServletRequest request,
+                                                    HttpServletResponse response) {
     if (!isApplicable(request)) {
       return null;
     }
@@ -201,6 +202,7 @@ public class HybrisPreviewLinkScheme {
     if (!commerceLedPageExtension.isCommerceLedChannel(channel)) {
       return null;
     }
+
     // Display all channels in the shop preview
     String previewTicketId = previewTokenService.getPreviewTicketId();
     String seoSegmentForChannel = commerceLedPageExtension.getSeoSegmentForChannel(channel);
@@ -209,8 +211,8 @@ public class HybrisPreviewLinkScheme {
   }
 
   static boolean isHybris() {
-    CommerceConnection connection = DefaultConnection.get();
-    return connection != null && SAP_HYBRIS_VENDOR_ID.equals(connection.getVendorName());
+    String vendorName = CurrentCommerceConnection.find().map(CommerceConnection::getVendorName).orElse(null);
+    return SAP_HYBRIS_VENDOR_ID.equals(vendorName);
   }
 
   static boolean isStudioPreviewRequest(HttpServletRequest request) {
@@ -235,6 +237,7 @@ public class HybrisPreviewLinkScheme {
   private String replaceTokens(String pattern, String id, String type) {
     String result = pattern.replace("{storeId}", getCurrentStoreContext().getStoreId() + "");
     result = result.replace("{siteId}", getCurrentStoreContext().getSiteId() + "");
+    //TODO fetch catalogId from id parameter for multi catalog support
     result = result.replace("{catalogId}", getCurrentStoreContext().getCatalogId() + "");
     result = result.replace("{language}", getCurrentStoreContext().getLocale().getLanguage() + "");
     result = result.replace("{id}", id + "");
@@ -253,7 +256,7 @@ public class HybrisPreviewLinkScheme {
   }
 
   private StoreContext getCurrentStoreContext() {
-    return DefaultConnection.get().getStoreContext();
+    return CurrentCommerceConnection.get().getStoreContext();
   }
 
   @Required

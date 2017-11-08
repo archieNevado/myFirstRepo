@@ -47,11 +47,13 @@ public class AugmentCatalogObjectActionBase extends CreateCatalogObjectDocumentA
       var augmentCommerceBeanUri:String = catalogObject.getStore().getUriPath() + "/augment";
       var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod(augmentCommerceBeanUri, 'POST', true);
       remoteServiceMethod.request({$Ref: catalogObject.getUriPath()}, function (response:RemoteServiceMethodResponse):void {
-        var content:Content = Content(response.getResponseJSON());
-        content.load(function():void {
-          ContentCreationUtil.initialize(content);
-          editorContext.getWorkAreaTabManager().replaceTab(catalogObject, content);
-        });
+        if (response.success) {
+          var content:Content = Content(response.getResponseJSON());
+          content.load(function ():void {
+            ContentCreationUtil.initialize(content);
+            editorContext.getWorkAreaTabManager().replaceTab(catalogObject, content);
+          });
+        }
       });
     }
   }

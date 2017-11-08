@@ -1,8 +1,10 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -37,19 +39,21 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
       throw new CatalogBeanNotFoundRestException(errorMessage);
     }
 
-    representation.setId(entity.getId());
+    representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setExternalId(entity.getExternalId());
     representation.setExternalTechId(entity.getExternalTechId());
     representation.setCustomAttributes(entity.getCustomAttributes());
 
     // set preview url
     representation.setPreviewUrl(computePreviewUrl());
+
+    setVisuals(representation, entity);
   }
 
   @Nonnull
   String computePreviewUrl() {
     String previewControllerUriPattern = getContentRepositoryResource().getPreviewControllerUrlPattern();
-    String encodedEntityId = URLEncoder.encode(getEntity().getId());
+    String encodedEntityId = URLEncoder.encode(CommerceIdFormatterHelper.format(getEntity().getId()));
 
     return formatPreviewUrl(previewControllerUriPattern, encodedEntityId, getSiteId());
   }
@@ -66,6 +70,14 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     return contentRepositoryResource;
   }
 
+  protected void setVisuals(CommerceBeanRepresentation representation, CommerceBean entity) {
+    // get visuals directly via AssetService to avoid fallback to default picture
+    AssetService assetService = getConnection().getAssetService();
+    if (null != assetService) {
+      representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
+    }
+  }
+
   @Override
   public void setEntity(Entity entity) {
     setId(entity.getExternalId());
@@ -73,6 +85,7 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     StoreContext context = entity.getContext();
 
     setSiteId(context.getSiteId());
+    setCatalogAlias(context.getCatalogAlias().value());
     setWorkspaceId(context.getWorkspaceId());
   }
 

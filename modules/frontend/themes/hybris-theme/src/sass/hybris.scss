@@ -1,41 +1,66 @@
 /*! CoreMedia Blueprint - Theme Hybris */
 
-// Variables
-@import "base/variables";
+// ### VARIABLES ###
 
-// Utils
-@import "../../../../lib/sass/utils/imports";
+// Own variables (need to be loaded first, so default values can be overridden)
+// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
 
-//Vendor
-@import "vendor/media-element-player";
+@import "variables/variables";
+@import "variables/hero";
+@import "variables/quickinfo";
+@import "variables/shoppable-video";
 
-//Bricks
-@import "../../../../lib/bricks/fragment-scenario/sass/fragments";
-@import "../../../../lib/bricks/responsive-images/sass/non-adaptive-content";
-@import "../../../../lib/bricks/responsive-images/sass/images";
-@import "../../../../lib/bricks/generic-templates/sass/popup";
-@import "../../../../lib/bricks/generic-templates/sass/video";
-@import "../../../../lib/bricks/generic-templates/sass/_coremedia-richtext-1.0";
-@import "../../../../lib/bricks/livecontext/sass/font";
-@import "../../../../lib/bricks/livecontext/sass/notification";
-@import "../../../../lib/bricks/livecontext/sass/device-selector";
-@import "../../../../lib/bricks/livecontext/sass/price";
-@import "../../../../lib/bricks/livecontext/sass/helpers";
-@import "../../../../lib/bricks/livecontext/sass/marketingspots";
-@import "../../../../lib/bricks/livecontext/sass/spinner";
-@import "../../../../lib/bricks/livecontext/sass/product-info";
-@import "../../../../lib/bricks/livecontext/sass/accordion";
-@import "../../../../lib/bricks/livecontext/sass/icon";
-@import "../../../../lib/bricks/livecontext/sass/headings";
+// Dependency variables
 
-// Components
-@import "components/teaser";
-@import "components/hero";
-@import "components/grids";
-@import "components/detail";
-@import "components/carousel";
-@import "components/imagemap";
-@import "components/shoppable-video";
-@import "components/elastic-social";
-@import "components/pdp";
-@import "components/fixes";
+@import "~@coremedia/brick-360-spinner/src/sass/variables";
+@import "~@coremedia/brick-hero-teaser/src/sass/variables";
+@import "~@coremedia/brick-default-teaser/src/sass/variables";
+@import "~@coremedia/brick-responsive-images/src/sass/variables";
+@import "~@coremedia/brick-pdp-augmentation/src/sass/variables";
+@import "~@coremedia/brick-livecontext/src/sass/variables";
+@import "~@coremedia/brick-elastic-social/src/sass/variables";
+@import "~@coremedia/brick-shoppable-video/src/sass/variables";
+@import "~@coremedia/brick-video/src/sass/variables";
+@import "~@coremedia/brick-image-maps/src/sass/variables";
+@import "~@coremedia/brick-quick-info/src/sass/variables";
+@import "~@coremedia/brick-generic-templates/src/sass/variables";
+@import "~@coremedia/brick-dynamic-include/src/sass/variables";
+@import "~@coremedia/brick-bootstrap/src/sass/variables";
+@import "~@coremedia/sass-utils/src/variables";
+
+// ### PARTIALS ###
+
+// excludes
+
+@import "~@coremedia/brick-bootstrap/src/sass/partials/bootstrap-sass?exclude";
+
+// Dependency partials
+
+@import "~@coremedia/sass-utils/src/partials";
+@import "~@coremedia/brick-bootstrap/src/sass/partials";
+@import "~@coremedia/brick-dynamic-include/src/sass/partials";
+@import "~@coremedia/brick-generic-templates/src/sass/partials";
+@import "~@coremedia/brick-quick-info/src/sass/partials";
+@import "~@coremedia/brick-image-maps/src/sass/partials";
+@import "~@coremedia/brick-video/src/sass/partials";
+@import "~@coremedia/brick-shoppable-video/src/sass/partials";
+@import "~@coremedia/brick-elastic-social/src/sass/partials";
+@import "~@coremedia/brick-livecontext/src/sass/partials";
+@import "~@coremedia/brick-pdp-augmentation/src/sass/partials";
+@import "~@coremedia/brick-responsive-images/src/sass/partials";
+@import "~@coremedia/brick-default-teaser/src/sass/partials";
+@import "~@coremedia/brick-hero-teaser/src/sass/partials";
+@import "~@coremedia/brick-360-spinner/src/sass/partials";
+
+// Own partials
+
+@import "partials/teaser";
+@import "partials/hero";
+@import "partials/grids";
+@import "partials/detail";
+@import "partials/carousel";
+@import "partials/quickinfo";
+@import "partials/imagemap";
+@import "partials/shoppable-video";
+@import "partials/pdp";
+@import "partials/fixes";

@@ -159,7 +159,7 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
       return;
     }
 
-    commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences), commerceConnection.get());
+    commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences));
   }
 
   @Nonnull

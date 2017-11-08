@@ -12,6 +12,7 @@
   <properties>
     <coremedia.project.extension.for>workflow-server</coremedia.project.extension.for>
   </properties>
+  <packaging>pom</packaging>
   <dependencies>
     <dependency>
       <groupId>com.coremedia.cms</groupId>

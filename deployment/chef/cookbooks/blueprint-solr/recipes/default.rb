@@ -4,8 +4,7 @@
 #
 # Copyright 2016, CoreMedia AG
 #
-
-include_recipe 'java_se' if node['blueprint']['solr']['install_java']
+include_recipe 'blueprint-base'
 
 src_filename = ::File.basename(node['blueprint']['solr']['url'])
 src_filepath = "#{Chef::Config['file_cache_path']}/#{src_filename}"
@@ -21,6 +20,7 @@ remote_file src_filepath do
   checksum node['blueprint']['solr']['checksum']
   backup false
   action :create
+  notifies :create, 'ruby_block[restart_solr_service]', :immediately
 end
 
 group node['blueprint']['solr']['group']
@@ -94,6 +94,7 @@ template '/etc/default/solr.in.sh' do
     java_home: node['blueprint']['solr']['java_home']
   )
   only_if { !platform_family?('debian') }
+  notifies :create, 'ruby_block[restart_solr_service]', :immediately
 end
 
 link node['blueprint']['solr']['dir'] do
@@ -102,6 +103,12 @@ end
 
 link '/etc/init.d/solr' do
   to "#{extract_path}/bin/init.d/solr"
+end
+
+directory node['blueprint']['solr']['solr_home'] do
+  owner node['blueprint']['solr']['user']
+  group node['blueprint']['solr']['group']
+  recursive true
 end
 
 coremedia_maven "#{node['blueprint']['cache_dir']}/solr-config.zip" do
@@ -115,6 +122,22 @@ coremedia_maven "#{node['blueprint']['cache_dir']}/solr-config.zip" do
   group node['blueprint']['solr']['group']
   # overwrite all solr-home dir if artifact changed
   extract_force_clean node['blueprint']['solr']['clean_solr_home_on_update']
+  notifies :create, 'ruby_block[restart_solr_service]', :immediately
+end
+
+ruby_block 'restart_solr_service' do
+  block do
+
+    r = resources(:service => 'solr')
+    a = Array.new(r.action)
+
+    a << :restart unless a.include?(:restart)
+    a.delete(:start) if a.include?(:restart)
+
+    r.action(a)
+
+  end
+  action :nothing
 end
 
 service 'solr' do

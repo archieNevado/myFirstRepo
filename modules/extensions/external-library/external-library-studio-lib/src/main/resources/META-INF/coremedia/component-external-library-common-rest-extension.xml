@@ -17,9 +17,6 @@
     <property name="maxImages" value="5" />
   </bean>
 
-  <bean id="kalturaVideoProvider" class="com.coremedia.blueprint.studio.externallibraryproviders.KalturaVideoProvider" scope="prototype">
-    <property name="mimeTypeService" ref="mimeTypeService"/>
-  </bean>
-
+  <bean id="youTubeVideoProvider" class="com.coremedia.blueprint.studio.externallibraryproviders.YouTubeVideoProvider" scope="prototype" />
 
 </beans>

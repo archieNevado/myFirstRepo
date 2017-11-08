@@ -22,6 +22,9 @@
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
   </bean>
 
+  <bean name="contentBeanFactory:CMProductList" parent="abstractTeasable-blueprint-doctypes"
+        class="com.coremedia.livecontext.contentbeans.CMProductListImpl" scope="prototype"/>
+
   <bean name="contentBeanFactory:CMProductTeaser" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMProductTeaserImpl" scope="prototype">
   </bean>

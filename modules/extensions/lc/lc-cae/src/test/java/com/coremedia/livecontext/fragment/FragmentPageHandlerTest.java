@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,11 +34,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class FragmentPageHandlerTest {
 
   private final static String STORE_ID = "10001";
@@ -144,7 +144,7 @@ public class FragmentPageHandlerTest {
     testling.setContentBeanFactory(contentBeanFactory);
     testling.setSitesService(sitesService);
 
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getStoreContext()).thenReturn(storeContext);
 
@@ -175,7 +175,7 @@ public class FragmentPageHandlerTest {
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
 }

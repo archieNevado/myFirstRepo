@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 /**
- * Initialize Context for asset urls (e.g. {@link ProductCatalogPictureHandler#IMAGE_URI_PATTERN})
+ * Initialize Context for asset urls (e.g. {@link ProductCatalogPictureHandler#IMAGE_URI_PATTERN}
+ * and {@link ProductCatalogPictureHandler#IMAGE_URI_PATTERN_FOR_CATALOG}
  */
 public class AssetCommerceContextInterceptor extends AbstractCommerceContextInterceptor {
 
   LiveContextSiteResolver liveContextSiteResolver;
+
   @Nullable
   @Override
   protected Site getSite(HttpServletRequest request, String normalizedPath) {
@@ -25,22 +27,24 @@ public class AssetCommerceContextInterceptor extends AbstractCommerceContextInte
     return liveContextSiteResolver.findSiteFor(storeId, locale);
   }
 
-  private String extractStoreId(String path) {
+  private static String extractStoreId(String path) {
     return extractToken(path, 3);
   }
 
-
-  private Locale extractLocale(String path) {
+  @Nullable
+  private static Locale extractLocale(String path) {
     String localeToken = extractToken(path, 4);
-    return LocaleHelper.getLocaleFromString(localeToken);
+    return LocaleHelper.parseLocaleFromString(localeToken).orElse(null);
   }
 
-  private String extractToken(String path, int index) {
+  private static String extractToken(String path, int index) {
     String[] split = path.split("/");
-    if (split.length != 7) {
-      throw new IllegalArgumentException("Cannot handle path " + path);
+    //length == 7 no catalogId
+    //length == 8 with catalogId
+    if (split.length == 7 || split.length == 8) {
+      return split[index];
     }
-    return split[index];
+    throw new IllegalArgumentException("Cannot handle path " + path);
   }
 
   @Required

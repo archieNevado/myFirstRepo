@@ -1,7 +1,8 @@
 package com.coremedia.livecontext.asset;
 
-
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
@@ -9,16 +10,21 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.transform.TransformedBlob;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,18 +34,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
+import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CMCatalogPictureHandlerTest {
   @InjectMocks
   private ProductCatalogPictureHandler testling = new ProductCatalogPictureHandler();
@@ -60,15 +70,19 @@ public class CMCatalogPictureHandlerTest {
   private Content pictureContent;
   @Mock
   private TransformedBlob blob;
+  @Mock
+  private CatalogAliasTranslationService catalogAliasTranslationService;
 
 
   private BaseCommerceConnection commerceConnection;
 
-  private static final String PRODUCT_REFERENCE = "vendor:///catalog/product/PC_SUMMER_DRESS";
+  private static final CommerceId PRODUCT_REFERENCE = CommerceIdParserHelper.parseCommerceIdOrThrow("vendor:///catalog/product/PC_SUMMER_DRESS");
+  private MockCommerceEnvBuilder envBuilder;
 
   @Before
   public void setUp() throws Exception {
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    commerceConnection = envBuilder.setupEnv();
     commerceConnection.setAssetService(assetService);
 
     Map<String, String> pictureFormats = new HashMap<>();
@@ -81,6 +95,13 @@ public class CMCatalogPictureHandlerTest {
     when(picture.getTransformedData(anyString())).thenReturn(blob);
 
     testling.setTransformImageService(transformImageService);
+
+    testling.setCatalogAliasTranslationService(catalogAliasTranslationService);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   @Test
@@ -107,7 +128,7 @@ public class CMCatalogPictureHandlerTest {
   @Test
   public void testHandleRequestNoPictureFound() throws Exception {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
-    when(assetService.findPictures(anyString())).thenReturn(Collections.EMPTY_LIST);
+    when(assetService.findPictures(any())).thenReturn(emptyList());
 
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
@@ -128,7 +149,7 @@ public class CMCatalogPictureHandlerTest {
   @Test
   public void testHandleRequestSuccessCached() throws Exception {
     WebRequest request = mock(WebRequest.class);
-    when(request.checkNotModified(anyString())).thenReturn(true);
+    when(request.checkNotModified(nullable(String.class))).thenReturn(true);
 
     prepareSuccessRequest();
 
@@ -138,12 +159,26 @@ public class CMCatalogPictureHandlerTest {
     assert304(result);
   }
 
+  @Test
+  public void testResolveCatalogAliasFromId(){
+    StoreContext storeContext = mock(StoreContext.class);
+    when(storeContext.getSiteId()).thenReturn("siteId");
+    when(storeContext.getCatalogAlias()).thenReturn(DEFAULT_CATALOG_ALIAS);
+    when(catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of("catalogId"), "siteId")).thenReturn(Optional.of(CatalogAlias.of("catalogAlias")));
+
+    CatalogAlias catalogAlias = testling.resolveCatalogAliasFromId("catalogId", storeContext);
+    assertEquals(CatalogAlias.of("catalogAlias"), catalogAlias);
+
+    CatalogAlias catalogAliasNotFound = testling.resolveCatalogAliasFromId("unknownId", storeContext);
+    assertEquals(DEFAULT_CATALOG_ALIAS, catalogAliasNotFound);
+  }
+
   private void prepareSuccessRequest() {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
     List<Content> cmPictures = new ArrayList<>();
     cmPictures.add(pictureContent);
-    when(assetService.findPictures(PRODUCT_REFERENCE)).thenReturn(cmPictures);
-    when(transformImageService.transformWithDimensions(any(Content.class), any(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt()))
+    when(assetService.findPictures(PRODUCT_REFERENCE, true)).thenReturn(cmPictures);
+    when(transformImageService.transformWithDimensions(any(Content.class), nullable(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt()))
             .thenReturn(mock(Blob.class));
   }
 

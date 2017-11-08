@@ -63,7 +63,7 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
       return;
     }
 
-    commerceCacheInvalidationSource.invalidateReferences(productReferences, commerceConnection.get());
+    commerceCacheInvalidationSource.invalidateReferences(productReferences);
   }
 
   @Required

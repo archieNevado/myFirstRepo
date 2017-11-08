@@ -2,6 +2,8 @@ package com.coremedia.livecontext.tree;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +13,7 @@ import java.util.List;
  * Tree Relation based on an external category hierarchy.
  */
 public class CommerceTreeRelation implements TreeRelation<Category> {
+  private static final Logger LOG = LoggerFactory.getLogger(CommerceTreeRelation.class);
 
   @Override
   public Collection<Category> getChildrenOf(Category parent) {

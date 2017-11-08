@@ -7,22 +7,22 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class WebCommerceContextInterceptorTest {
 
   @Mock
@@ -38,10 +38,12 @@ public class WebCommerceContextInterceptorTest {
   private CommerceConnection connection;
 
   private WebCommerceContextInterceptor testling = new WebCommerceContextInterceptor();
+  private MockCommerceEnvBuilder envBuilder;
 
   @Before
   public void setup() {
-    connection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    connection = envBuilder.setupEnv();
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
 
     testling.setSiteResolver(siteLinkHelper);
@@ -50,6 +52,11 @@ public class WebCommerceContextInterceptorTest {
     testling.setPreview(false);
 
     when(siteLinkHelper.findSiteBySegment("helios")).thenReturn(site);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   // --- test base class features -----------------------------------
@@ -73,10 +80,11 @@ public class WebCommerceContextInterceptorTest {
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(path);
     when(testling.getSite(request, path)).thenReturn(null);
+    StoreContext storeContextBefore = connection.getStoreContext();
 
     testling.preHandle(request, null, null);
 
-    verify(connection.getStoreContextProvider(), never()).setCurrentContext(any(StoreContext.class));
+    assertThat(connection.getStoreContext()).isSameAs(storeContextBefore);
     assertThat(SiteHelper.getSiteFromRequest(request)).isNull();
   }
 }

@@ -53,7 +53,7 @@ public class ExpirationDateSelectorBase extends Container {
     });
   }
 
-  internal function comboboxEntryTransformer(keys:Array):Object {
+  internal function comboboxEntryTransformer(keys:Array):Array {
     return keys.map(function (key:String):Object {
       return {
         id: key,

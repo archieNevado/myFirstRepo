@@ -20,12 +20,13 @@
 <StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=30;y=0;width=967;height=1500</StringProperty>
 <StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=0;y=0;width=1123;height=1500</StringProperty>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=0;width=1501;height=1500</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=0;width=2000;height=1500</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=274;width=2000;height=1125</StringProperty>
 <StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=290;width=2000;height=1001</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=298;width=2000;height=800</StringProperty>
 <StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=294;width=2000;height=750</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=267;width=2000;height=498</StringProperty>
+<StringProperty Name="landscape_ratio3x1">b;a=0;c=1/crop;x=0;y=284;width=2000;height=667</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -39,6 +40,7 @@
 <StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.19845360824742267;x2=1;y2=0.7319587628865979</StringProperty>
 <StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.1958762886597938;x2=1;y2=0.6958762886597938</StringProperty>
 <StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.17785234899328858;x2=1;y2=0.5100671140939598</StringProperty>
+<StringProperty Name="landscape_ratio3x1">position;x1=0;y1=0.1892744479495268;x2=1;y2=0.6337188923939712</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="isDefault">
@@ -52,6 +54,7 @@
 <StringProperty Name="landscape_ratio5x2">false</StringProperty>
 <StringProperty Name="landscape_ratio8x3">false</StringProperty>
 <StringProperty Name="landscape_ratio4x1">false</StringProperty>
+<StringProperty Name="landscape_ratio3x1">false</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="reflection">

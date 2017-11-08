@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.ecommerce.hybris.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_VERSION;
@@ -43,8 +44,7 @@ public class StoreContextHelper {
   public static StoreContext createContext(@Nullable String configId, @Nullable String storeId,
                                            @Nullable String storeName, @Nullable String catalogId,
                                            @Nullable Locale locale, @Nullable String currency,
-                                           @Nullable String catalogVersion)
-          throws InvalidContextException {
+                                           @Nullable String catalogVersion) {
     StoreContext context = StoreContextImpl.newStoreContext();
 
     if (configId != null) {
@@ -99,36 +99,52 @@ public class StoreContextHelper {
 
   /**
    * Set the given store context in the current request (thread).
+   * <p>
    * Read the current context with #getCurrentContext().
    *
    * @param context the current context
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException
    */
-  public static void setCurrentContext(@Nonnull StoreContext context) throws InvalidContextException {
-    DefaultConnection.get().setStoreContext(context);
+  public static void setCurrentContext(@Nonnull StoreContext context) {
+    CurrentCommerceConnection.get().setStoreContext(context);
+  }
+
+  /**
+   * Gets the current store context within the current request (thread),
+   * or nothing if not set.
+   * <p>
+   * Set the current context with #setCurrentContext();
+   *
+   * @return the current store context, or nothing
+   */
+  @Nonnull
+  public static Optional<StoreContext> findCurrentContext() {
+    return CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
   }
 
   /**
    * Gets the current store context within the current request (thread).
+   * <p>
    * Set the current context with #setCurrentContext();
    *
-   * @return the StoreContext
+   * @return the current store context, or {@code null}
    */
   @Nullable
   public static StoreContext getCurrentContext() {
-    CommerceConnection currentConnection = DefaultConnection.get();
-    return currentConnection != null ? currentConnection.getStoreContext() : null;
+    return findCurrentContext().orElse(null);
   }
 
+  /**
+   * Gets the current store context within the current request (thread),
+   * or throws an exception if not set.
+   * <p>
+   * Set the current context with #setCurrentContext();
+   *
+   * @return the current store context
+   */
   @Nonnull
   public static StoreContext getCurrentContextOrThrow() {
-    StoreContext context = getCurrentContext();
-
-    if (context == null) {
-      throw new InvalidContextException("Current store context not available");
-    }
-
-    return context;
+    return findCurrentContext().orElseThrow(() -> new InvalidContextException("Current store context not available"));
   }
 
   public static String getCatalogId() {
@@ -154,7 +170,7 @@ public class StoreContextHelper {
   }
 
   @Nonnull
-  public static String getStoreId(@Nonnull StoreContext context) throws InvalidContextException {
+  public static String getStoreId(@Nonnull StoreContext context) {
     Object value = context.get(STORE_ID);
 
     if (!(value instanceof String)) {
@@ -170,12 +186,12 @@ public class StoreContextHelper {
   }
 
   @Nonnull
-  public static String getStoreNameInLowerCase(@Nonnull StoreContext context) throws InvalidContextException {
+  public static String getStoreNameInLowerCase(@Nonnull StoreContext context) {
     return getStoreName(context).toLowerCase();
   }
 
   @Nonnull
-  public static String getStoreName(@Nonnull StoreContext context) throws InvalidContextException {
+  public static String getStoreName(@Nonnull StoreContext context) {
     Object value = context.get(STORE_NAME);
 
     if (!(value instanceof String)) {
@@ -186,7 +202,7 @@ public class StoreContextHelper {
   }
 
   @Nonnull
-  public static Locale getLocale(@Nonnull StoreContext context) throws InvalidContextException {
+  public static Locale getLocale(@Nonnull StoreContext context) {
     Object value = context.get(LOCALE);
 
     if (!(value instanceof Locale)) {
@@ -197,7 +213,7 @@ public class StoreContextHelper {
   }
 
   @Nonnull
-  public static Locale getLocale() throws InvalidContextException {
+  public static Locale getLocale() {
     return getLocale(getCurrentContextOrThrow());
   }
 

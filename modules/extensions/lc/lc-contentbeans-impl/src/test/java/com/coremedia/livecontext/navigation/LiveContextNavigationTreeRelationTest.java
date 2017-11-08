@@ -18,21 +18,21 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class LiveContextNavigationTreeRelationTest {
+
   private static final String SITE_ID = "aSiteId";
 
   @Mock
@@ -65,8 +65,10 @@ public class LiveContextNavigationTreeRelationTest {
   @InjectMocks
   @Spy
   private ExternalChannelContentTreeRelation delegate;
+
   @InjectMocks
   private LiveContextNavigationFactory navigationFactory;
+
   @InjectMocks
   private LiveContextNavigationTreeRelation testling;
 
@@ -87,21 +89,19 @@ public class LiveContextNavigationTreeRelationTest {
     Category categoryChild1 = mock(Category.class);
     Category categoryChild2 = mock(Category.class);
 
-    List<Category> categoryChildren = new ArrayList<>();
-    categoryChildren.add(categoryChild1);
-    categoryChildren.add(categoryChild2);
+    List<Category> categoryChildren = newArrayList(categoryChild1, categoryChild2);
 
     when(augmentedCategory.getChildren()).thenReturn(categoryChildren);
 
     LiveContextNavigation testNavigation = navigationFactory.createNavigation(augmentedCategory, site);
     Collection<Linkable> childrenOf = testling.getChildrenOf(testNavigation);
+    assertThat(childrenOf).hasSize(2);
 
-    assertEquals(2, childrenOf.size());
     Iterator<Linkable> iterator = childrenOf.iterator();
     LiveContextNavigation firstChild = (LiveContextNavigation) iterator.next();
     LiveContextNavigation secondChild = (LiveContextNavigation) iterator.next();
-    assertSame(categoryChild1, firstChild.getCategory());
-    assertSame(categoryChild2, secondChild.getCategory());
+    assertThat(firstChild.getCategory()).isSameAs(categoryChild1);
+    assertThat(secondChild.getCategory()).isSameAs(categoryChild2);
   }
 
   /**
@@ -117,13 +117,12 @@ public class LiveContextNavigationTreeRelationTest {
 
     LiveContextNavigation testNavigation = navigationFactory.createNavigation(c3, site);
     Collection<Linkable> breadcrumb = testling.pathToRoot(testNavigation);
+    assertThat(breadcrumb).hasSize(4);
 
-    assertEquals(4, breadcrumb.size());
     /* TODO fixme
     Iterator<Linkable> iterator = breadcrumb.iterator();
-    assertSame(c1, ((LiveContextNavigation) iterator.next()).getCategory());
-    assertSame(c2, ((LiveContextNavigation) iterator.next()).getCategory());
+    assertThat(((LiveContextNavigation) iterator.next()).getCategory()).isSameAs(c1);
+    assertThat(((LiveContextNavigation) iterator.next()).getCategory()).isSameAs(c2);
     */
   }
-
 }

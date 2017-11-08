@@ -4,6 +4,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
 import javax.annotation.Nonnull;
@@ -18,32 +19,39 @@ public class AssetServiceMock implements AssetService {
 
   @Nonnull
   @Override
-  public CatalogPicture getCatalogPicture(String url) {
-    return null;
+  public CatalogPicture getCatalogPicture(@Nonnull String url, @Nonnull CommerceId commerceId) {
+    return mock(CatalogPicture.class);
   }
 
   @Nonnull
   @Override
-  public List<Content> findPictures(@Nonnull String id) {
+  public List<Content> findPictures(@Nonnull CommerceId id) {
     Content content = mock(Content.class);
     return singletonList(content);
   }
 
   @Nonnull
   @Override
-  public List<Content> findVisuals(@Nonnull String id, boolean withDefault) {
+  public List<Content> findPictures(@Nonnull CommerceId id, boolean withDefault) {
+    Content content = mock(Content.class);
+    return singletonList(content);
+  }
+
+  @Nonnull
+  @Override
+  public List<Content> findVisuals(@Nonnull CommerceId id, boolean withDefault) {
     return emptyList();
   }
 
   @Nonnull
   @Override
-  public List<Content> findVisuals(@Nonnull String id) {
+  public List<Content> findVisuals(@Nonnull CommerceId id) {
     return emptyList();
   }
 
   @Nonnull
   @Override
-  public List<Content> findDownloads(@Nullable String id) {
+  public List<Content> findDownloads(@Nullable CommerceId id) {
     return emptyList();
   }
 

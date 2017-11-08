@@ -1,9 +1,11 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.HttpClientFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
+import com.coremedia.objectserver.dataviews.DataViewHelper;
 import com.coremedia.util.Base64;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Stopwatch;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -79,30 +82,13 @@ public class HybrisRestConnector {
 
   private Map<String, HttpHeaders> authenticationHeaderMap = new HashMap<>();
 
-  public HybrisRestConnector() {
-    /*
-    Version version = new Version(0, 1, 0, "alpha", "com.coremedia.blueprint", "lc-ecommerce-hybris-lib");
-
-    SimpleModule module = new SimpleModule("CategoryModule", version);
-    module.addDeserializer(CategoriesDocument.class, new CategoryDeserializer());
-
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(module);
-
-    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-    mappingJackson2HttpMessageConverter.setObjectMapper(mapper);
-
-    List<HttpMessageConverter<?>> messageConverters = newArrayList(mappingJackson2HttpMessageConverter);
-
-    restTemplate.setMessageConverters(messageConverters);
-    */
-  }
-
+  @Nullable
   public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType) {
     List<String> templateParameters = new ArrayList<>();
     return performGet(resourcePath, storeContext, responseType, templateParameters, null, false);
   }
 
+  @Nullable
   public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType,
                           @Nullable List<String> uriTemplateParameters) {
     return performGet(resourcePath, storeContext, responseType, uriTemplateParameters, null, false);
@@ -112,6 +98,9 @@ public class HybrisRestConnector {
   public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType,
                           @Nullable List<String> uriTemplateParameters,
                           @Nullable MultiValueMap<String, String> queryParams, boolean isSecure) {
+    // Log if current code is executed in context of a stored DataView evaluation
+    DataViewHelper.warnIfCachedInDataview();
+
     // Need to generate auth headers first:
     generateAuthenticationHeader(storeContext);
 
@@ -130,7 +119,19 @@ public class HybrisRestConnector {
         stopwatch = Stopwatch.createStarted();
       }
 
-      ResponseEntity<T> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, responseType);
+      ResponseEntity<T> responseEntity;
+
+      try {
+        responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, responseType);
+      } catch (HttpClientErrorException ex) {
+        HttpStatus statusCode = ex.getStatusCode();
+        if (statusCode == HttpStatus.NOT_FOUND) {
+          LOG.trace("Result from '{}' (response code: {}) will be interpreted as 'no result found'.", uri, statusCode);
+          return null;
+        }
+
+        throw ex;
+      }
 
       if (LOG.isTraceEnabled() && stopwatch != null && stopwatch.isRunning()) {
         stopwatch.stop();
@@ -141,9 +142,10 @@ public class HybrisRestConnector {
       return responseEntity.getBody();
     } catch (Exception ex) {
       LOG.warn("REST call to '{}' failed. Exception:\n{}", uri, ex.getMessage());
+      throw new CommerceException(
+              String.format("REST call to '%s' failed. Exception: %s", uri, ex.getMessage()),
+              ex);
     }
-
-    return null;
   }
 
   public <T, P> T performPost(String resourcePath,
@@ -152,6 +154,9 @@ public class HybrisRestConnector {
                               @Nullable MultiValueMap<String, String> queryParams,
                               @Nullable P bodyData,
                               boolean isSecure) {
+    // Log if current code is executed in context of a stored DataView evaluation
+    DataViewHelper.warnIfCachedInDataview();
+
     UriComponentsBuilder uriComponentsBuilder = getBaseUri(resourcePath, queryParams, isSecure);
 
     Object[] vars = uriTemplateParameters != null ? uriTemplateParameters.toArray() : new Object[0];
@@ -163,7 +168,7 @@ public class HybrisRestConnector {
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-      HttpEntity<String> requestEntity = new HttpEntity<>(toJson(bodyData), headers);//TODO authentication?
+      HttpEntity<String> requestEntity = new HttpEntity<>(toJson(bodyData), headers);
 
       if (LOG.isTraceEnabled()) {
         stopwatch = Stopwatch.createStarted();
@@ -211,16 +216,6 @@ public class HybrisRestConnector {
       uriComponentsBuilder.queryParams(queryParams);
     }
 
-//    if (StringUtils.isNotBlank(storeId)) {
-//      uriComponentsBuilder.path("/" + storeId);
-//    }
-//
-//    uriComponentsBuilder.path("/" + apiVersion);
-
-//    if (queryParams != null) {
-//      uriComponentsBuilder.queryParams(queryParams);
-//    }
-
     // Add resource path
     uriComponentsBuilder.path(resourcePath);
 
@@ -248,8 +243,6 @@ public class HybrisRestConnector {
   }
 
   private void generateAuthenticationHeader(@Nonnull StoreContext storeContext) {
-    //TODO: add oauth
-
     String storeId = storeContext.getStoreId();
 
     HttpHeaders httpHeadersForCurrentStore = authenticationHeaderMap.get(storeId);
@@ -271,12 +264,16 @@ public class HybrisRestConnector {
         authenticationHeader.add(AUTHORIZATION_HEADER, "Basic " + basicAuthCredentials);
         authenticationHeader.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         authenticationHeader.add("Content-type", MediaType.APPLICATION_JSON_VALUE);
-        authenticationHeader.add("Accept-language", storeContext.getLocale().getLanguage());
+
+        Locale locale = storeContext.getLocale();
+        if (locale != null) {
+          authenticationHeader.add("Accept-language", locale.getLanguage());
+        }
+
         authenticationHeaderMap.put(storeId, authenticationHeader);
         break;
 
       case BEARER:
-        //TODO example header oauth2: Authorization: Bearer 8c6924a7-5b84-4457-a9c7-06eab0be7b52
 
         if (isNullOrEmpty(authToken)) {
           authToken = fetchAuthToken();

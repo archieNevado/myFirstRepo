@@ -3,31 +3,29 @@ package com.coremedia.blueprint.ecommerce.cae;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
-import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.PREVIEW_DATE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class AbstractCommerceContextInterceptorTest {
 
   @Mock
@@ -43,12 +41,14 @@ public class AbstractCommerceContextInterceptorTest {
   private SiteResolver siteResolver;
 
   private AbstractCommerceContextInterceptor testling;
+  private MockCommerceEnvBuilder envBuilder;
 
   // --- setup ------------------------------------------------------
 
   @Before
   public void setup() {
-    BaseCommerceConnection connection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    BaseCommerceConnection connection = envBuilder.setupEnv();
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
 
     testling = new NonAbstractTestling();
@@ -57,6 +57,11 @@ public class AbstractCommerceContextInterceptorTest {
     // Tests may override, so do not call afterPropertiesSet yet.
     testling.setSiteResolver(siteResolver);
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   // --- tests ------------------------------------------------------
@@ -106,13 +111,13 @@ public class AbstractCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    CommerceConnection currentConnection = DefaultConnection.get();
-    assertThat(currentConnection).isNotNull();
+    StoreContext context = CurrentCommerceConnection.find()
+            .map(CommerceConnection::getStoreContext)
+            .orElse(null);
 
-    StoreContext context = currentConnection.getStoreContext();
     assertThat(context).isNotNull();
-    assertThat(context.get(PREVIEW_DATE)).isNotNull();
-    assertThat(context.get(WORKSPACE_ID)).isNotNull();
+    assertThat(context.getPreviewDate()).isNotNull();
+    assertThat(context.getWorkspaceId()).isNotNull();
   }
 
   // --- internal ---------------------------------------------------

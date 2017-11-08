@@ -1,16 +1,18 @@
 package com.coremedia.ecommerce.studio.rest;
 
-
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
+import java.util.Map;
 
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonMap;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,16 +32,16 @@ public class StoreResourceTest {
 
   @Test
   public void handlePostNoData() {
-    Assertions.assertThat(storeResource.handlePost(Collections.<String, Object>emptyMap())).isNull();
+    Map<String, Object> rawJson = emptyMap();
+    assertThat(storeResource.handlePost(rawJson)).isNull();
   }
-
 
   @Test
   public void handlePost() {
     Object o = new Object();
     String url = "http://test.net";
     when(pbeShopUrlTargetResolver.resolveUrl(url, null)).thenReturn(o);
-    Assertions.assertThat(storeResource.handlePost(Collections.<String, Object>singletonMap("shopUrl", url))).isSameAs(o);
+    Map<String, Object> rawJson = singletonMap("shopUrl", url);
+    assertThat(storeResource.handlePost(rawJson)).isSameAs(o);
   }
-
 }

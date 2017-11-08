@@ -1,12 +1,12 @@
 package com.coremedia.blueprint.analytics.elastic.retrieval;
 
-import com.coremedia.blueprint.base.analytics.elastic.ReportModelService;
+import com.coremedia.blueprint.analytics.elastic.tasks.FetchPageViewHistoryTask;
+import com.coremedia.blueprint.analytics.elastic.tasks.FetchReportsTask;
 import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.PageViewTaskReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.ReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
-import com.coremedia.blueprint.analytics.elastic.tasks.FetchPageViewHistoryTask;
-import com.coremedia.blueprint.analytics.elastic.tasks.FetchReportsTask;
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
@@ -18,7 +18,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.context.ApplicationContextInitializer;
@@ -29,6 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
@@ -45,9 +45,10 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyMapOf;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -63,6 +64,7 @@ import static org.mockito.Mockito.when;
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"
 }, initializers = {EsAlxRetrievalApplicationContextTest.PropertySourcesInitializer.class})
 @Configuration
+@TestPropertySource(properties = "elastic.core.persistence=memory")
 public class EsAlxRetrievalApplicationContextTest {
 
   private static final String SERVICE = "service"; // compare with 12345settings.xml
@@ -175,8 +177,8 @@ public class EsAlxRetrievalApplicationContextTest {
     when(analyticsServiceProvider.fetchDataFor(eq(pageList), eq(EFFECTIVE_SETTINGS))).thenReturn(ARTICLES);
 
     fetchReportsTask.run();
-    verify(analyticsServiceProvider, never()).computeEffectiveRetrievalSettings(any(Content.class), Matchers.same(pageList));
-    verify(analyticsServiceProvider, never()).fetchDataFor(Matchers.same(pageList), anyMapOf(String.class, Object.class));
+    verify(analyticsServiceProvider, never()).computeEffectiveRetrievalSettings(any(Content.class), same(pageList));
+    verify(analyticsServiceProvider, never()).fetchDataFor(same(pageList), anyMap());
 
     final ReportModel reportModel = topNReportModelService.getReportModel(pageList, SERVICE);
     assertEquals(emptyList(), reportModel.getReportData());
@@ -188,7 +190,7 @@ public class EsAlxRetrievalApplicationContextTest {
     fetchPageViewHistoryTask.run();
 
     verify(analyticsServiceProvider, atLeast(1)).getServiceKey();
-    verify(analyticsServiceProvider).fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class));
+    verify(analyticsServiceProvider).fetchPageViews(any(Content.class), anyMap());
 
     // root model is saved
     final Query<ReportModel> query = pageViewTaskReportModelService.query();
@@ -206,12 +208,12 @@ public class EsAlxRetrievalApplicationContextTest {
     data.put("not_a_content_id", ImmutableMap.of(today, 13L));
     final String articleId = ARTICLES.get(0);
     data.put(articleId, ImmutableMap.of(today, 5L));
-    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class))).thenReturn(data);
+    when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
 
     fetchPageViewHistoryTask.run();
 
     verify(analyticsServiceProvider, atLeast(1)).getServiceKey();
-    verify(analyticsServiceProvider).fetchPageViews(any(Content.class), anyMapOf(String.class, Object.class));
+    verify(analyticsServiceProvider).fetchPageViews(any(Content.class), anyMap());
 
     // root model is saved
     final Query<ReportModel> query = pageViewTaskReportModelService.query();

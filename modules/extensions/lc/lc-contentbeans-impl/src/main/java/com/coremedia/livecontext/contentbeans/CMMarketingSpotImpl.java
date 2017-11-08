@@ -1,11 +1,13 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.cae.contentbeans.CMDynamicListImpl;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
@@ -20,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketingSpot {
@@ -72,7 +73,9 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
     List<CommerceObject> result = new ArrayList<>();
     MarketingSpot spot = getMarketingSpot();
     if (spot != null) {
-      Site site = requireNonNull(getSitesService().getContentSiteAspect(getContent()).getSite(), "Site must not be null");
+      Site site = getSitesService().getContentSiteAspect(getContent()).findSite()
+              .orElseThrow(() -> new NullPointerException("Site must not be null"));
+
       List<CommerceObject> entities = spot.getEntities();
       for (CommerceObject o : entities) {
         // consider the the max length of items
@@ -108,7 +111,7 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
   }
 
   public StoreContextProvider getStoreContextProvider() {
-    return DefaultConnection.get().getStoreContextProvider();
+    return CurrentCommerceConnection.get().getStoreContextProvider();
   }
 
   @Required
@@ -119,14 +122,15 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
   private MarketingSpot getMarketingSpot() {
     MarketingSpot marketingSpot = null;
     StoreContext storeContext = getStoreContextProvider().findContextByContent(getContent());
-    if (storeContext != null && getExternalId() != null && !getExternalId().trim().isEmpty()) {
-      MarketingSpotService marketingSpotService = DefaultConnection.get().getMarketingSpotService();
+    String marketingSpotId = getExternalId();
+    if (storeContext != null && marketingSpotId != null) {
+      MarketingSpotService marketingSpotService = CurrentCommerceConnection.get().getMarketingSpotService();
       if (marketingSpotService != null) {
-        marketingSpot = marketingSpotService.withStoreContext(storeContext).findMarketingSpotById(getExternalId());
+        CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(marketingSpotId);
+        marketingSpot = marketingSpotService.withStoreContext(storeContext).findMarketingSpotById(commerceId, storeContext);
       }
     }
 
     return marketingSpot;
   }
-
 }

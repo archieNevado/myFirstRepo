@@ -1,10 +1,11 @@
 package com.coremedia.livecontext.elastic.social.cae.services.impl;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.elastic.core.api.models.UniqueConstraintViolationException;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.user.User;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.GeneralSecurityException;
+import java.util.Optional;
 
 /**
  * Implements an UserService to integrate with a commerce system.
@@ -38,24 +40,28 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
   }
 
   private void synchronizeUserContext() {
-    UserService userService = getCommerceUserService();
-    com.coremedia.livecontext.ecommerce.user.User shopUser = userService != null ? userService.findCurrentUser() : null;
+    User shopUser = getCommerceUserService().map(UserService::findCurrentUser).orElse(null);
 
-    if (shopUser != null) {
-      //get community user
-      CommunityUser communityUser;
-      try {
-        communityUser = getOrCreateCommunityUser(shopUser);
-      } catch (UniqueConstraintViolationException ex) {
-        communityUser = getOrCreateCommunityUser(shopUser);
-      }
-      com.coremedia.blueprint.elastic.social.cae.user.UserContext.setUser(communityUser);
-    } else {
-      LOG.warn("Could not find current user {} in shop system", getUserContextProvider().getCurrentContext().getUserId());
+    if (shopUser == null) {
+      UserContextProvider userContextProvider = getUserContextProvider();
+      String currentUserId = userContextProvider != null ? userContextProvider.getCurrentContext().getUserId() : null;
+      LOG.warn("Could not find current user '{}' in shop system", currentUserId);
+      return;
+    }
+
+    CommunityUser communityUser = getOrCreateCommunityUserWithRetry(shopUser);
+    com.coremedia.blueprint.elastic.social.cae.user.UserContext.setUser(communityUser);
+  }
+
+  private CommunityUser getOrCreateCommunityUserWithRetry(User shopUser) {
+    try {
+      return getOrCreateCommunityUser(shopUser);
+    } catch (UniqueConstraintViolationException ex) {
+      return getOrCreateCommunityUser(shopUser);
     }
   }
 
-  private synchronized CommunityUser getOrCreateCommunityUser(com.coremedia.livecontext.ecommerce.user.User shopUser) {
+  private synchronized CommunityUser getOrCreateCommunityUser(User shopUser) {
     CommunityUser communityUser = communityUserService.getUserByName(shopUser.getLogonId());
     if (communityUser == null) {
       //register communityUser if not existing
@@ -71,18 +77,19 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
     this.communityUserService = communityUserService; //NOSONAR - the setter is called before the service is used.
   }
 
-  public UserContextProvider getUserContextProvider() {
-    CommerceConnection connection = DefaultConnection.get();
-    return connection != null ? connection.getUserContextProvider() : null;
+  private static UserContextProvider getUserContextProvider() {
+    return getCommerceConnection().map(CommerceConnection::getUserContextProvider).orElse(null);
   }
 
-  public UserSessionService getCommerceUserSessionService() {
-    CommerceConnection connection = DefaultConnection.get();
-    return connection != null ? connection.getUserSessionService() : null;
+  private static UserSessionService getCommerceUserSessionService() {
+    return getCommerceConnection().map(CommerceConnection::getUserSessionService).orElse(null);
   }
 
-  public UserService getCommerceUserService() {
-    CommerceConnection connection = DefaultConnection.get();
-    return connection != null ? connection.getUserService() : null;
+  private static Optional<UserService> getCommerceUserService() {
+    return getCommerceConnection().map(CommerceConnection::getUserService);
+  }
+
+  private static Optional<CommerceConnection> getCommerceConnection() {
+    return CurrentCommerceConnection.find();
   }
 }

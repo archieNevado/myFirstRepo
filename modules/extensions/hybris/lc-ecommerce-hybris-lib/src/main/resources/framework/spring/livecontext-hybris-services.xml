@@ -15,19 +15,13 @@
   <import resource="livecontext-hybris-cache.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml"/>
-
+  <import resource="classpath:/framework/spring/lc-ecommerce-services.xml"/>
 
   <bean id="hybrisCommerceBeanFactory" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.SpringCommerceBeanFactory"/>
 
-  <bean id="hybrisCommerceBeanHelper"
-        class="com.coremedia.livecontext.ecommerce.hybris.common.CommerceBeanHelper">
-    <property name="commerceBeanFactory" ref="hybrisCommerceBeanFactory"/>
-  </bean>
-
   <!-- === Providers === -->
-  <bean id="hybrisCommerceIdProvider" class="com.coremedia.livecontext.ecommerce.hybris.common.CommerceIdProviderImpl">
-    <property name="vendor" value="${livecontext.hybris.vendorPrefix}"/>
-  </bean>
+  <bean id="hybrisCommerceIdProvider"
+        class="com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider"/>
 
   <bean id="hybrisStoreContextProvider" class="com.coremedia.livecontext.ecommerce.hybris.common.StoreContextProviderImpl">
     <property name="settingsService" ref="settingsService"/>
@@ -40,15 +34,14 @@
 
   <!-- === Services === -->
   <bean id="hybrisAbstractCommerceService" abstract="true"
-        class="com.coremedia.livecontext.ecommerce.hybris.common.AbstractCommerceService">
-    <property name="commerceBeanHelper" ref="hybrisCommerceBeanHelper"/>
+        class="com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService">
+    <property name="commerceBeanFactory" ref="hybrisCommerceBeanFactory"/>
     <property name="commerceCache" ref="hybrisCommerceCache"/>
   </bean>
 
   <bean id="hybrisCatalogService" parent="hybrisAbstractCommerceService"
         class="com.coremedia.livecontext.ecommerce.hybris.catalog.CatalogServiceImpl">
     <property name="catalogResource" ref="hybrisCatalogResource"/>
-    <property name="commerceBeanFactory" ref="hybrisCommerceBeanFactory"/>
     <property name="maxProductSearchResults" value="${livecontext.hybris.productSearch.maxResults}"/>
   </bean>
 

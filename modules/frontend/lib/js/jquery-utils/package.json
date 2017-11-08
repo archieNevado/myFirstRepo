@@ -1,0 +1,9 @@
+{
+  "name": "@coremedia/js-jquery-utils",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1"
+  },
+  "main": "src/index.js"
+}

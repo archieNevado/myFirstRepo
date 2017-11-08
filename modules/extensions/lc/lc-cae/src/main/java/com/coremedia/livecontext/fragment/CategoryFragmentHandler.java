@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -7,6 +8,13 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
@@ -18,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Handles fragment request that depend on a category id.
@@ -26,6 +35,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
 
   private ResolveContextStrategy contextStrategy;
   private boolean useOriginalNavigationContext = false;
+  private boolean useStableIds = false;
 
   // --- FragmentHandler --------------------------------------------
 
@@ -48,11 +58,24 @@ public class CategoryFragmentHandler extends FragmentHandler {
               + request.getRequestURI());
     }
 
-    Navigation navigation = contextStrategy.resolveContext(site, parameters.getCategoryId());
+    CommerceConnection currentConnection = CurrentCommerceConnection.get();
+    StoreContext storeContext = currentConnection.getStoreContext();
+    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "No catalog service configured for commerce connection '" + currentConnection + "'.");
+    CommerceIdProvider idProvider = requireNonNull(currentConnection.getIdProvider(), "id provider not available");
+
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+
+    String categoryExtId= parameters.getCategoryId();
+    CommerceId formatCategoryId = useStableIds
+            ? idProvider.formatCategoryId(catalogAlias, categoryExtId)
+            : idProvider.formatCategoryTechId(catalogAlias, categoryExtId);
+    Category categoryById = catalogService.findCategoryById(formatCategoryId, storeContext);
+
+    Navigation navigation = contextStrategy.resolveContext(site, categoryById);
     if (navigation == null) {
       return HandlerHelper.notFound(getClass().getName() + " did not find a navigation for storeId \""
               + parameters.getStoreId() + "\", locale \"" + parameters.getLocale() + "\", category id \""
-              + parameters.getCategoryId() + "\"");
+              + categoryExtId + "\"");
     }
 
     String placement = parameters.getPlacement();
@@ -113,5 +136,9 @@ public class CategoryFragmentHandler extends FragmentHandler {
    */
   public void setUseOriginalNavigationContext(boolean useOriginalNavigationContext) {
     this.useOriginalNavigationContext = useOriginalNavigationContext;
+  }
+
+  public void setUseStableIds(boolean useStableIds) {
+    this.useStableIds = useStableIds;
   }
 }

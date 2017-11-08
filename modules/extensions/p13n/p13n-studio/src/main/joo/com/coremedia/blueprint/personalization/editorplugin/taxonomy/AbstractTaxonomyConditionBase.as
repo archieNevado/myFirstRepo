@@ -37,14 +37,14 @@ public class AbstractTaxonomyConditionBase extends AbstractCondition {
 
   {
     // introduce new vtypes for keywords and values
-    VTypes['keywordConditionKeywordVal'] = /^[a-zA-Z_][a-zA-Z_0-9\.]*$/;
-    VTypes['keywordConditionKeywordMask'] = /^[a-zA-Z_0-9\.]/;
+    VTypes['keywordConditionKeywordVal'] = /^[a-zA-Z_][a-zA-Z_0-9.]*$/;
+    VTypes['keywordConditionKeywordMask'] = /^[a-zA-Z_0-9.]/;
     VTypes['keywordConditionKeywordText'] = ResourceManager.getInstance().getString('com.coremedia.personalization.ui.Personalization', 'p13n_error_keywordText');
     VTypes['keywordConditionKeyword'] = function (v:*):* {
       return VTypes['keywordConditionKeywordVal'].test(v);
     };
     VTypes['keywordConditionValueVal'] = /^\d+(\.\d+)?$/;
-    VTypes['keywordConditionValueMask'] = /^[0-9\.]/;
+    VTypes['keywordConditionValueMask'] = /^[0-9.]/;
     VTypes['keywordConditionValueText'] = ResourceManager.getInstance().getString('com.coremedia.personalization.ui.Personalization', 'p13n_error_valueText');
     VTypes['keywordConditionValue'] = function (v:*):* {
       return VTypes['keywordConditionValueVal'].test(v);

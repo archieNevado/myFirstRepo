@@ -197,8 +197,8 @@
 </StructProperty>
 <StringProperty Name="locale">en</StringProperty>
 <LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml" cmexport:path="Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" cmexport:path="Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml"/>
+<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page"/>
 </LinkListProperty>
 <StructProperty Name="workarea">
 <Struct>

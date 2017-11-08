@@ -22,19 +22,9 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 
 public class StoreContextProviderMock implements StoreContextProvider {
 
-  @Override
-  @Nullable
-  public StoreContext findContextBySiteName(@Nonnull String siteName) {
-    if (siteName.equals("Helios")) {
-      return createContext();
-    } else {
-      throw new InvalidContextException("Could not find context for " + siteName);
-    }
-  }
-
   @Nullable
   @Override
-  public StoreContext findContextBySiteId(@Nonnull String siteId) throws InvalidContextException {
+  public StoreContext findContextBySiteId(@Nonnull String siteId) {
     if (siteId.equals("Helios")) {
       return createContext();
     } else {
@@ -44,7 +34,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @Override
   @Nullable
-  public StoreContext findContextBySite(Site site) throws InvalidContextException {
+  public StoreContext findContextBySite(Site site) {
     if ("Helios".equals(site.getName())) {
       return createContext();
     } else {
@@ -60,7 +50,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @Nullable
   @Override
-  public StoreContext createContext(@Nonnull Site site) throws InvalidContextException {
+  public StoreContext createContext(@Nonnull Site site) {
     return createContext();
   }
 
@@ -68,63 +58,54 @@ public class StoreContextProviderMock implements StoreContextProvider {
     return createContext("myConfigId", "10001", "aurora", "10001", "en_US", "USD");
   }
 
-  @Override
-  public void setCurrentContext(StoreContext context) throws InvalidContextException {
-    setCurrentContext(context);
-  }
-
-  @Override
-  @Nullable
-  public StoreContext getCurrentContext() {
-    return null;
-  }
-
   private StoreContext createContext(@Nullable String configId, @Nullable String storeId, @Nullable String storeName,
-                                     String catalogId, @Nullable String localeStr, @Nullable String currency)
-          throws InvalidContextException {
+                                     String catalogId, @Nullable String localeStr, @Nullable String currency) {
     StoreContext context = newStoreContext();
 
     if (configId != null) {
-      if (StringUtils.isBlank(configId)) {
-        throw new InvalidContextException("configId has wrong format: \"" + storeId + "\"");
-      }
-
-      context.put(CONFIG_ID, configId);
+      context.put(CONFIG_ID, parseString(configId, CONFIG_ID));
     }
 
     if (storeId != null) {
-      if (StringUtils.isBlank(storeId)) {
-        throw new InvalidContextException("storeId has wrong format: \"" + storeId + "\"");
-      }
-
-      context.put(STORE_ID, storeId);
+      context.put(STORE_ID, parseString(storeId, STORE_ID));
     }
 
     if (storeName != null) {
-      if (StringUtils.isBlank(storeName)) {
-        throw new InvalidContextException("storeName has wrong format: \"" + storeId + "\"");
-      }
-
-      context.put(STORE_NAME, storeName);
+      context.put(STORE_NAME, parseString(storeName, STORE_NAME));
     }
 
     if (localeStr != null) {
-      Locale locale = LocaleHelper.getLocaleFromString(localeStr);
-      if (null == locale) {
-        throw new InvalidContextException("Locale " + localeStr + " is not valid.");
-      }
-
-      context.put(LOCALE, locale);
+      context.put(LOCALE, parseLocale(localeStr));
     }
 
     if (currency != null) {
-      try {
-        context.put(CURRENCY, Currency.getInstance(currency));
-      } catch (IllegalArgumentException e) {
-        throw new InvalidContextException(e);
-      }
+      context.put(CURRENCY, parseCurrency(currency));
     }
 
     return context;
+  }
+
+  @Nonnull
+  private static String parseString(@Nonnull String str, @Nonnull String description) {
+    if (StringUtils.isBlank(str)) {
+      throw new InvalidContextException("'" + description + "' has wrong format: \"" + str + "\"");
+    }
+
+    return str;
+  }
+
+  @Nonnull
+  private static Locale parseLocale(@Nonnull String localeStr) {
+    return LocaleHelper.parseLocaleFromString(localeStr)
+            .orElseThrow(() -> new InvalidContextException("Locale '" + localeStr + "' is not valid."));
+  }
+
+  @Nonnull
+  private static Currency parseCurrency(@Nonnull String currencyStr) {
+    try {
+      return Currency.getInstance(currencyStr);
+    } catch (IllegalArgumentException e) {
+      throw new InvalidContextException(e);
+    }
   }
 }

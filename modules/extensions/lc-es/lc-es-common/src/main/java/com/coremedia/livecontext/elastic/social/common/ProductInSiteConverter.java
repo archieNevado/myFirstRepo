@@ -1,16 +1,19 @@
 package com.coremedia.livecontext.elastic.social.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
 import com.coremedia.elastic.core.base.serializer.AbstractTypeConverter;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
 
 import javax.annotation.Nonnull;
@@ -18,6 +21,9 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
+import static java.util.Objects.requireNonNull;
 
 @Named
 public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite> {
@@ -41,13 +47,19 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
 
   @Override
   public void serialize(ProductInSite productInSite, Map<String, Object> serializedObject) {
-    String externalProductId = productInSite.getProduct().getExternalId();
+    Product product = productInSite.getProduct();
     Site site = productInSite.getSite();
+    String productId = format(getNormalizeProductId(product, site));
 
-    CommerceConnection connection = getCommerceConnectionForSerialization(site, externalProductId);
-
-    serializedObject.put(ID, connection.getIdProvider().formatProductId(externalProductId));
+    serializedObject.put(ID, productId);
     serializedObject.put(SITE_ID, site.getId());
+  }
+
+  private CommerceId getNormalizeProductId(@Nonnull Product product, @Nonnull Site site){
+    CatalogAlias catalogAlias = product.getId().getCatalogAlias();
+    String externalId = product.getExternalId();
+    return getCommerceConnectionForSerialization(site, product.getExternalId()).getIdProvider()
+            .formatProductId(catalogAlias, externalId);
   }
 
   @Nonnull
@@ -69,11 +81,10 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
       throwUnresolvable(null, siteId);
     }
 
-    Site site = sitesService.getSite(siteId);
-
-    if (site == null) {
-      throw new UnresolvableReferenceException(String.format("Site ID %s could not be resolved", siteId));
-    }
+    requireNonNull(siteId, "Site ID must be set.");
+    Site site = sitesService.findSite(siteId)
+            .orElseThrow(() -> new UnresolvableReferenceException(
+                    String.format("Site ID %s could not be resolved.", siteId)));
 
     Product product = findProduct(site, productId);
 
@@ -90,20 +101,20 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
 
     // `CommerceConnectionFilter` does not recognize Elastic Social
     // Studio calls, so we have to setup the commerce connection.
-    CommerceConnection oldConnection = DefaultConnection.get();
+    CommerceConnection oldConnection = CurrentCommerceConnection.find().orElse(null);
     try {
       CommerceConnection myConnection = getCommerceConnectionForDeserialization(site, productId);
 
-      DefaultConnection.set(myConnection);
+      CurrentCommerceConnection.set(myConnection);
 
       product = findProduct(myConnection, productId);
     } catch (RuntimeException exception) {
       throwUnresolvable(productId, site.getId(), exception);
     } finally {
       if (oldConnection != null) {
-        DefaultConnection.set(oldConnection);
+        CurrentCommerceConnection.set(oldConnection);
       } else {
-        DefaultConnection.clear();
+        CurrentCommerceConnection.remove();
       }
     }
 
@@ -126,7 +137,7 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
       return null;
     }
 
-    return catalogService.findProductById(productId);
+    return catalogService.findProductById(CommerceIdParserHelper.parseCommerceIdOrThrow(productId), connection.getStoreContext());
   }
 
   private static void throwUnresolvable(String productId, String siteId) {

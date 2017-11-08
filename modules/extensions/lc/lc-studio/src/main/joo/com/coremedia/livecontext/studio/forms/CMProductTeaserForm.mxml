@@ -27,7 +27,7 @@
     private var catalogObjectExpression:ValueExpression;
 
     // called by generated constructor code
-    private function __initialize__(config:CMExternalChannelForm):void {
+    private function __initialize__(config:CMProductTeaserForm):void {
       catalogObjectExpression = CatalogHelper.getInstance().getCatalogExpression(config.bindTo);
     }
 
@@ -70,7 +70,7 @@
     <editor:DocumentForm
             title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
       <editor:items>
-        <bpforms:SEOForm/>
+        <bpforms:CategoryDocumentForm/>
       </editor:items>
     </editor:DocumentForm>
     <bpforms:MultiLanguageDocumentForm/>

@@ -64,7 +64,7 @@
 <Link xlink:href="coremedia:///cap/resources/../../Editorial/Microsite%20Dummy/Shoppable%20Video%20only%20Seperator.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Microsite%20Dummy/Shoppable%20Video%20only%20Seperator"/>
 <Link xlink:href="coremedia:///cap/resources/../../Videos/Bunny%20Slopes%20Video%20Shoppable.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Bunny%20Slopes%20Video%20Shoppable"/>
 <Link xlink:href="coremedia:///cap/resources/../../Editorial/Microsite%20Dummy/Video%20only%20Seperator.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Microsite%20Dummy/Video%20only%20Seperator"/>
-<Link xlink:href="coremedia:///cap/resources/../../Videos/Bunny%20Slopes%20Video.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Bunny%20Slopes%20Video"/>
+<Link xlink:href="coremedia:///cap/resources/../../Videos/Slopes%20Video.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Slopes%20Video"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>

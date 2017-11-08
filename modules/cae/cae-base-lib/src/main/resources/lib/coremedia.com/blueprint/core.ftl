@@ -93,3 +93,13 @@
 
 <#assign viewHookEventNames=blueprintFreemarkerFacade.getViewHookEventNames()/>
 
+<#--
+ * Retrieves the URL path that belongs to a theme resource (image, webfont, etc.) defined by its path within the
+ * theme folder. The path must not contain any <strong>..</strong>
+ * descending path segments.
+ *
+ * @param path to the resource within the theme folder
+ -->
+<#function getLinkToThemeResource path>
+  <#return blueprintFreemarkerFacade.getLinkToThemeResource(path)>
+</#function>

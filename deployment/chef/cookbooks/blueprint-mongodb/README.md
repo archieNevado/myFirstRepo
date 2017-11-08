@@ -19,7 +19,7 @@ This is the wrapper cookbook to install mongodb3.
 * `node['mongodb3']['mongod']['disable-transparent-hugepages']` - Disable Transparent Huge Pages (THP). Defaults to `false`.
 * `node['mongodb']['yum']['mirrorlist']` -  Defaults to `nil`.
 * `node['mongodb']['yum']['baseurl']` -  Defaults to `https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64`.
-* `node['mongodb3']['version']` - fixed version. Defaults to `3.4.2`.
+* `node['mongodb3']['version']` - fixed version. Defaults to `3.4.9`.
 * `node['mongodb3']['config']['mongod']['net']['bindIp']` - fixed configuration. Defaults to `0.0.0.0`.
 * `node['mongodb3']['config']['mongod']['net']['http']['RESTInterfaceEnabled']` -  Defaults to `true`.
 * `node['mongodb3']['config']['mongod']['security']['authorization']` -  Defaults to `nil`.

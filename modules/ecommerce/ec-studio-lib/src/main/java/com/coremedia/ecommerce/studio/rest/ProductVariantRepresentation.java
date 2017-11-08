@@ -2,6 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.Store;
+import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
@@ -18,17 +19,15 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
   private String name;
   private String shortDescription;
   private String longDescription;
-  private String externalId;
-  private String externalTechId;
   private String thumbnailUrl;
   private Product parent;
   private Category category;
   private String previewUrl;
   private Store store;
+  private Catalog catalog;
   private BigDecimal offerPrice;
   private BigDecimal listPrice;
   private String currency;
-  private List<Content> visuals;
   private List<Content> pictures;
   private List<Content> downloads;
   private List<ProductAttribute> definingAttributes;
@@ -47,16 +46,6 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public String getLongDescription() {
     return longDescription;
-  }
-
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-  public String getExternalId() {
-    return externalId;
-  }
-
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-  public String getExternalTechId(){
-    return externalTechId;
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -91,10 +80,6 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
     return currency;
   }
 
-  public List<Content> getVisuals() {
-    return visuals;
-  }
-
   public List<Content> getPictures() {
     return pictures;
   }
@@ -123,14 +108,6 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
     this.longDescription = longDescription;
   }
 
-  public void setExternalId(String externalId) {
-    this.externalId = externalId;
-  }
-
-  public void setExternalTechId(String externalTechId) {
-    this.externalTechId = externalTechId;
-  }
-
   public void setThumbnailUrl(String thumbnailUrl) {
     this.thumbnailUrl = thumbnailUrl;
   }
@@ -156,11 +133,6 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-  public void setVisuals(List<Content> visuals) {
-    this.visuals = visuals;
-  }
-
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setPictures(List<Content> pictures) {
     this.pictures = pictures;
   }
@@ -177,6 +149,15 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
 
   public void setStore(Store store) {
     this.store = store;
+  }
+
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+  public Catalog getCatalog() {
+    return catalog;
+  }
+
+  public void setCatalog(Catalog catalog) {
+    this.catalog = catalog;
   }
 
   public void setParent(Product parent) {

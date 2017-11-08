@@ -1,76 +1,30 @@
 'use strict';
 
+const themeutils = require('@coremedia/themeutils');
+
 module.exports = function (grunt) {
 
   // --- theme configuration -------------------------------------------------------------------------------------------
 
-  grunt.initConfig({
-    // define development mode
-    /*monitor: {
-     target: 'local' //default: remote
-     },*/
-    // load bricks into theme
-    bricks: {
-      src: [
-        'preview',
-        'responsive-images',
-        'bootstrap',
-        'generic-templates',
-        'cta',
-        'image-maps',
-        'elastic-social',
-        'fragment-scenario',
-        'livecontext',
-        'shoppable-video',
-        'pdp-augmentation'
-      ]
-    },
-    // copy js and vendor files
-    copy: {
-      basic: {
-        files: [{
-          expand: true,
-          cwd: '../../lib/js/legacy',
-          src: ['*.js'],
-          dest: '../../target/resources/themes/<%= themeConfig.name %>/js'
-        }]
-      },
-      imagesloaded: {
-        files: [{
-          expand: true,
-          cwd: 'node_modules/imagesloaded',
-          src: 'imagesloaded.pkgd.js',
-          dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
-        }]
-      },
-      mediaelement: {
-        files: [
-          {
-            expand: true,
-            cwd: 'node_modules/mediaelement/build',
-            src: ['flashmediaelement.swf', 'mediaelement-and-player.js'],
-            dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
-          },
-          {
-            expand: true,
-            cwd: 'node_modules/mediaelement/build',
-            src: ['*.png', '*.svg', '*.gif'],
-            dest: '../../target/resources/themes/<%= themeConfig.name %>/css/'
-          }]
-      }
-    }
-  });
+  // jquery and bootstrap are part of Hybris default shop, as it will be attached to jQuery use it as export
+  const webpackTheme = require("@coremedia/themeutils/webpack.config.js");
+  webpackTheme.externals = webpackTheme.externals || {};
+  webpackTheme.externals["jquery"] = "jQuery";
+  webpackTheme.externals["bootstrap-sass"] = "jQuery";
 
   // load CoreMedia initialization
-  require('@coremedia/grunt-utils')(grunt);
+  themeutils(grunt);
 
   // --- theme tasks ---------------------------------------------------------------------------------------------------
 
-  // Local Development Task.
-  grunt.registerTask('development', ['clean', 'copy', 'sass', 'webpack:jslib']);
-  // Full distribution task with templates.
-  grunt.registerTask('production', ['development', 'postcss', 'eslint', 'compress']);
+  // use task "monitor" for development. will be created by @coremedia/themeutils
 
-  // Default task = distribution.
-  grunt.registerTask('default', ['production']);
+  // deprecated, use "build" instead
+  grunt.registerTask('production', ['build']);
+
+  // build the theme. theme will be stored as zip file in <%= themeConfig.targetPath %>/themes
+  grunt.registerTask('build', ['clean', 'copy', 'sync', 'webpack', 'compress']);
+
+  // Default task = build
+  grunt.registerTask('default', ['build']);
 };

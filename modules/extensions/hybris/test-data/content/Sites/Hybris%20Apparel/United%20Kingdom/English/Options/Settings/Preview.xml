@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMSettings folder="/Sites/Hybris Apparel/United Kingdom/English/Options/Settings" name="Preview" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale>en-US</locale>
+<locale>en-GB</locale>
 <master>
 </master>
 <settings>
@@ -106,8 +106,8 @@
 <Link xlink:href="coremedia:///cap/resources/hybris-apparel-style%2Ecss.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Settings/hybris-apparel-style%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="fragmentPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
-<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/hybris/vendor/jquery%2Emin%2Ejs.xml" cmexport:path="/Themes/hybris/vendor/jquery%2Emin%2Ejs"/>
-<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/hybris/vendor/bootstrap/bootstrap%2Emin%2Ejs.xml" cmexport:path="/Themes/hybris/vendor/bootstrap/bootstrap%2Emin%2Ejs"/>
+<Link xlink:href="coremedia:///cap/resources/hybris-jquery%2Ejs.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Settings/hybris-jquery%2Ejs"/>
+<Link xlink:href="coremedia:///cap/resources/hybris-bootstrap%2Ejs.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Settings/hybris-bootstrap%2Ejs"/>
 </LinkListProperty>
 </Struct>
 </settings>

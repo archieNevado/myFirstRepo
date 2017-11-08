@@ -25,6 +25,7 @@
                 itemId="urlForm">
           <editor:items>
             <editor:StringPropertyField propertyName="url" hideLabel="true"/>
+            <editor:BooleanPropertyField propertyName="openInNewTab" hideLabel="true"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:TeaserDocumentForm/>

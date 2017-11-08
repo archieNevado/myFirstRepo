@@ -5,6 +5,7 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
+  <import resource="classpath:/framework/spring/lc-ecommerce-services.xml"/>
   <import resource="classpath:/META-INF/coremedia/lc-services.xml"/>
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
@@ -27,12 +28,25 @@
     <property name="contentType" value="CMMarketingSpot"/>
   </bean>
 
+  <bean id="productListExternalIdValidator" parent="catalogLinkValidator" class="com.coremedia.lc.studio.lib.validators.CatalogLinkValidator">
+    <property name="contentType" value="CMProductList"/>
+    <property name="optional" value="true"/>
+  </bean>
+
   <bean id="externalChannelExternalIdValidator" parent="catalogLinkValidator" class="com.coremedia.lc.studio.lib.validators.ExternalChannelValidator">
     <property name="contentType" value="CMExternalChannel"/>
   </bean>
 
   <bean id="externalPageExternalIdValidator" parent="catalogLinkValidator" class="com.coremedia.lc.studio.lib.validators.ExternalPageValidator">
     <property name="contentType" value="CMExternalPage"/>
+  </bean>
+
+  <bean id="productListSupportedValidator" class="com.coremedia.lc.studio.lib.validators.IsLiveContextTypeValidator">
+    <property name="connection" ref="connection"/>
+    <property name="validatingSubtypes" value="true"/>
+    <property name="sitesService" ref="sitesService"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+    <property name="contentType" value="CMProductList"/>
   </bean>
 
   <bean id="externalPagePartOfNavigationValidator" class="com.coremedia.lc.studio.lib.validators.ExternalPagePartOfNavigationValidator">

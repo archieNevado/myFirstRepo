@@ -11,7 +11,6 @@ import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
-import com.coremedia.ecommerce.studio.model.CategoryImpl;
 import com.coremedia.ecommerce.studio.model.Marketing;
 import com.coremedia.ecommerce.studio.model.MarketingSpot;
 import com.coremedia.ecommerce.studio.model.Product;
@@ -26,6 +25,7 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.error.NotExistsError;
 import com.coremedia.ui.data.error.RemoteError;
 import com.coremedia.ui.data.impl.RemoteErrorHandlerRegistryImpl;
+import com.coremedia.ui.logging.Logger;
 
 import ext.StringUtil;
 
@@ -41,9 +41,10 @@ public class CatalogHelper {
   public static const REFERENCES_LIST_NAME:String = 'references';
   public static const ORIGIN_REFERENCES_LIST_NAME:String = 'originReferences';
 
-  private static const CATEGORY_PREFIX:String = "//catalog/category/";
-  private static const PRODUCT_PREFIX:String = "//catalog/product/";
-  private static const PRODUCT_VARIANT_PREFIX:String = "//catalog/sku/";
+  private static const CATEGORY_TOKEN:String = "/category/";
+  private static const PRODUCT_TOKEN:String = "/product/";
+  private static const SKU_TOKEN:String = "/sku/";
+  private static const CATALOG_REGEX:RegExp = /(?:catalog:(\w+);(.*))/;
 
   public static const NO_WS:String = CatalogModel.NO_WS;
 
@@ -63,9 +64,12 @@ public class CatalogHelper {
   public static const COMMERCE_STRUCT_WORKSPACE:String = 'workspace';
 
   // lc rest error, see CatalogRestErrorCodes.java
-  public static const LC_ERROR_CODE_CATALOG_UNAVAILABLE = "LC-01001";
+  public static const LC_ERROR_CODE_CATALOG_ITEM_UNAVAILABLE = "LC-01000";
+  public static const LC_ERROR_CODE_CONNECTION_UNAVAILABLE = "LC-01001";
   public static const LC_ERROR_CODE_CATALOG_INTERNAL_ERROR = "LC-01002";
   public static const LC_ERROR_CODE_UNAUTHORIZED = "LC-01003";
+  public static const LC_ERROR_CODE_CATALOG_UNAVAILABLE = "LC-01004";
+  public static const COULD_NOT_FIND_STORE_BEAN = "LC-01006";
 
   private var storeExpression:ValueExpression;
 
@@ -146,15 +150,21 @@ public class CatalogHelper {
 
   public function getExternalIdFromId(id:String):String {
     //External ids of category can contain '/'. See CMS-5075
-    if (isCategoryId(id)) {
-      return id.substr(id.lastIndexOf(CATEGORY_PREFIX) + CATEGORY_PREFIX.length);
-    } else if (isProductId(id)) {
-      return id.substr(id.lastIndexOf(PRODUCT_PREFIX) + PRODUCT_PREFIX.length);
-    } else if (isProductVariantId(id)) {
-      return id.substr(id.lastIndexOf(PRODUCT_VARIANT_PREFIX) + PRODUCT_VARIANT_PREFIX.length);
+    var token:String = getToken(id);
+    var candidate:String;
+    if (token) {
+      candidate = id.substr(id.lastIndexOf(token) + token.length);
+    } else {
+      //we assume that the substring after the last '/' is the external id
+      candidate = id.substr(id.lastIndexOf('/') + 1);
     }
-    //we assume that the substring after the last '/' is the external id
-    return id.substr(id.lastIndexOf('/') + 1);
+    return stripCatalogFromExternalId(candidate);
+  }
+
+  static function stripCatalogFromExternalId(candidate:String):String {
+    // the candidate may include the catalog alias
+    var matches:Array = CATALOG_REGEX.exec(candidate);
+    return matches && matches.length === 3 ? matches[2] : candidate;
   }
 
   private function encodeForUri(externalId:String):String {
@@ -164,6 +174,25 @@ public class CatalogHelper {
     return encodeURIComponent(externalId).replace(/%2F/g, "/")
   }
 
+  public function getCatalogAliasFromId(id:String):String {
+    var groups:Array = CATALOG_REGEX.exec(id);
+    if (groups && groups.length > 1) {
+      return groups[1];
+    }
+    // the default catalog alias is 'catalog'
+    return 'catalog';
+  }
+
+  public function getToken(id:String):String {
+    var token:String;
+    if (isCategoryId(id)) {
+      return CATEGORY_TOKEN;
+    } else if (isProductId(id)) {
+      return PRODUCT_TOKEN;
+    } else if (isSkuId(id)) {
+      return SKU_TOKEN;
+    }
+  }
   public function isSubType(catalogObject:CatalogObject, catalogObjectType:String):Boolean {
     if (catalogObject is Category) {
       return catalogObjectType === TYPE_CATEGORY;
@@ -215,13 +244,14 @@ public class CatalogHelper {
     //must be uri encoded. see #encodeForUri for more details.
     var encodedSiteId:String = encodeForUri(siteId);
     var endocedExternalId = encodeForUri(getExternalIdFromId(catalogObjectId));
+    var catalogAlias:String = getCatalogAliasFromId(catalogObjectId);
     var uriPath:String;
     if (isCategoryId(catalogObjectId)) {
-      uriPath = "livecontext/category/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
-    } else if (isProductVariantId(catalogObjectId)) {
-      uriPath = "livecontext/sku/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
+      uriPath = "livecontext/category/" + encodedSiteId + "/" + catalogAlias + "/" + workspaceId + "/" + endocedExternalId;
+    } else if (isSkuId(catalogObjectId)) {
+      uriPath = "livecontext/sku/" + encodedSiteId + "/" + catalogAlias + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isProductId(catalogObjectId)) {
-      uriPath = "livecontext/product/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
+      uriPath = "livecontext/product/" + encodedSiteId + "/" + catalogAlias + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isSegmentId(catalogObjectId)) {
       uriPath = "livecontext/segment/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isContractId(catalogObjectId)) {
@@ -239,15 +269,18 @@ public class CatalogHelper {
 
   /**
    *
-   * @param bindTo value expression pointing to a document of which 'externalId' property as the product id
+   * @param bindTo value expression pointing to a document of which 'externalId' property as the id of a catalog object
    */
   public function getCatalogExpression(bindTo:ValueExpression):ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():* {
       var catalogObjectId:String = bindTo.extendBy('properties').extendBy('externalId').getValue();
+      if (catalogObjectId === undefined) {
+        return undefined;
+      }
       if (!catalogObjectId || catalogObjectId.length === 0) {
         return null;
       } else {
-        return getCatalogObject(catalogObjectId, bindTo) as Product;
+        return getCatalogObject(catalogObjectId, bindTo);
       }
     });
   }
@@ -278,16 +311,16 @@ public class CatalogHelper {
     return catalogObjectId.indexOf('livecontext/store') >= 0;
   }
 
-  private function isProductVariantId(catalogObjectId:String):Boolean {
-    return catalogObjectId.indexOf(PRODUCT_VARIANT_PREFIX) !== -1;
+  private function isSkuId(catalogObjectId:String):Boolean {
+    return catalogObjectId.indexOf(SKU_TOKEN) !== -1;
   }
 
   private function isProductId(catalogObjectId:String):Boolean {
-    return catalogObjectId.indexOf(PRODUCT_PREFIX) !== -1;
+    return catalogObjectId.indexOf(PRODUCT_TOKEN) !== -1;
   }
 
   private function isCategoryId(catalogObjectId:String):Boolean {
-    return catalogObjectId.indexOf(CATEGORY_PREFIX) !== -1;
+    return catalogObjectId.indexOf(CATEGORY_TOKEN) !== -1;
   }
 
   private function isSegmentId(catalogObjectId:String):Boolean {
@@ -379,7 +412,11 @@ public class CatalogHelper {
       var errorCode:String = error.errorCode;
       var errorMsg:String = error.message;
       // only process livecontext errors
-      if (errorCode === LC_ERROR_CODE_CATALOG_UNAVAILABLE) {
+      if (errorCode === LC_ERROR_CODE_CATALOG_ITEM_UNAVAILABLE) {
+        MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogItemNotFoundError_title'),
+                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogItemNotFoundError_message'), errorMsg));
+        doHandleError(error, source);
+      } else if (errorCode === LC_ERROR_CODE_CONNECTION_UNAVAILABLE) {
         MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceConnectionError_title'),
                 StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceConnectionError_message'), errorMsg));
         doHandleError(error, source);
@@ -390,6 +427,13 @@ public class CatalogHelper {
       } else if (errorCode === LC_ERROR_CODE_UNAUTHORIZED) {
         MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceUnauthorizedError_title'),
                 StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceUnauthorizedError_message'), errorMsg));
+        doHandleError(error, source);
+      } else if (errorCode === LC_ERROR_CODE_CATALOG_UNAVAILABLE) {
+        MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogNotFoundError_title'),
+                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogNotFoundError_message'), errorMsg));
+        doHandleError(error, source);
+      } else if (errorCode === COULD_NOT_FIND_STORE_BEAN) {
+        trace("[WARN]", StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceStoreItemNotFoundError_message'), errorMsg));
         doHandleError(error, source);
       }
     }

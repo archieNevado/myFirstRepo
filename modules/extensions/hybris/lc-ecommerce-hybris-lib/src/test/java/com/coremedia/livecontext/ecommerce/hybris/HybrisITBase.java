@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.hybris;
 
 import co.freeside.betamax.Recorder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.lc.test.BetamaxTestHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -32,12 +32,12 @@ public class HybrisITBase {
     CommerceConnection connection = new BaseCommerceConnection();
     connection.setStoreContext(storeContext);
 
-    DefaultConnection.set(connection);
+    CurrentCommerceConnection.set(connection);
   }
 
   @After
   public void teardown() {
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
   protected <T> T performGetWithStoreContext(@Nonnull String resourcePath, @Nonnull Class<T> responseType) {

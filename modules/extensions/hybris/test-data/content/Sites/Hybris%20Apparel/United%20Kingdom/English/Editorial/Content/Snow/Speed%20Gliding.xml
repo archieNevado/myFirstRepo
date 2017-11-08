@@ -21,11 +21,12 @@
 <StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=937;y=0;width=1003;height=1335</StringProperty>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=630;y=0;width=1335;height=1335</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=222;y=0;width=1778;height=1335</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=106;width=2000;height=1123</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=105;width=2000;height=1125</StringProperty>
 <StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=166;width=2000;height=1003</StringProperty>
 <StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=277;width=2000;height=801</StringProperty>
 <StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=292;width=2000;height=751</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=287;width=2000;height=499</StringProperty>
+<StringProperty Name="landscape_ratio3x1">b;a=0;c=1/crop;x=0;y=421;width=2000;height=667</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -39,6 +40,7 @@
 <StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.20754716981132076;x2=1;y2=0.8075471698113208</StringProperty>
 <StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.2188679245283019;x2=1;y2=0.7811320754716982</StringProperty>
 <StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.21509433962264152;x2=1;y2=0.5886792452830188</StringProperty>
+<StringProperty Name="landscape_ratio3x1">position;x1=0;y1=0.31560283687943264;x2=1;y2=0.8149786171540894</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="isDefault">
@@ -52,6 +54,7 @@
 <StringProperty Name="landscape_ratio5x2">false</StringProperty>
 <StringProperty Name="landscape_ratio8x3">true</StringProperty>
 <StringProperty Name="landscape_ratio4x1">false</StringProperty>
+<StringProperty Name="landscape_ratio3x1">false</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="reflection">

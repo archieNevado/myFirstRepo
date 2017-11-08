@@ -32,6 +32,14 @@
             <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.STORE + '.name')}"/>
           </plugins>
         </DisplayField>
+        <DisplayField itemId="catalog"
+                      fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_catalog_label')}"
+                      labelAlign="left"
+                      labelSeparator=":">
+          <plugins>
+            <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.CATALOG + '.name')}"/>
+          </plugins>
+        </DisplayField>
         <DisplayField itemId="id"
                       labelAlign="left"
                       fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_id_label')}"

@@ -2,6 +2,7 @@ package com.coremedia.livecontext.asset.impl;
 
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -21,6 +22,6 @@ public interface AssetResolvingStrategy {
    */
   @Nonnull
   List<Content> findAssets(@Nonnull String contentType,
-                           @Nonnull String id,
+                           @Nonnull CommerceId id,
                            @Nonnull Site site);
 }

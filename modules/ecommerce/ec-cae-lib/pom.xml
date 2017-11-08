@@ -17,6 +17,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>cae-base-lib</artifactId>
       <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -40,6 +41,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -111,25 +113,17 @@
   <build>
     <plugins>
       <plugin>
-        <!--
-          The "needs only constants" pattern again:
-          AbstractCommerceContextInterceptor needs UriConstants.Prefixes.PREFIX_DYNAMIC
-          and ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE
-        -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-cli</id>
-            <goals>
-              <goal>analyze-only</goal>
-            </goals>
-            <configuration>
-              <failOnWarning>false</failOnWarning>
-            </configuration>
-          </execution>
-        </executions>
+        <configuration>
+          <ignoredDependencies>
+            <!--Imported Constants required for inlining-->
+            <ignoredDependency>${project.groupId}:contentbeans</ignoredDependency>
+            <ignoredDependency>com.coremedia.blueprint.base:bpbase-links-api</ignoredDependency>
+          </ignoredDependencies>
+        </configuration>
       </plugin>
     </plugins>
   </build>
+
 </project>

@@ -99,6 +99,24 @@
               <version number="1"/>
             </document>
 
+            <document id="30" type="CMProductList" name="cmProductList">
+              <version number="1">
+                <stringProperty name="externalId" value="vendor:///catalog/category/WOMEN"/>
+              </version>
+            </document>
+
+            <document id="32" type="CMProductList" name="cmProductList">
+              <version number="1">
+                <stringProperty name="externalId" value=""/>
+              </version>
+            </document>
+
+            <document id="34" type="CMProductList" name="cmProductList">
+              <version number="1">
+                <stringProperty name="externalId" value="vendor:///catalog/product/SILVERBULLET"/>
+              </version>
+            </document>
+
           </folder>
         </folder>
       </folder>

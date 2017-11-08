@@ -21,6 +21,11 @@
 
     private var config:TaxonomyStudioPlugin;
 
+
+    public static var TAXONOMY_SEMANTIC_CALAIS_KEY:String = "semantic";
+    public static var TAXONOMY_NAME_MATCHING_KEY:String = "nameMatching";
+    public static var DEFAULT_SUGGESTION_KEY:String = TAXONOMY_NAME_MATCHING_KEY;
+
     public native function TaxonomyStudioPlugin(config:TaxonomyStudioPlugin = null);
     ]]></fx:Script>
 
@@ -135,5 +140,10 @@
       </editor:plugins>
     </editor:SearchFilters>
   </local:rules>
+
+  <local:configuration>
+    <taxonomy:AddTaggingStrategyPlugin serviceId="{TAXONOMY_NAME_MATCHING_KEY}" label="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_value_nameMatching_text')}" />
+    <taxonomy:AddTaggingStrategyPlugin serviceId="{TAXONOMY_SEMANTIC_CALAIS_KEY}" label="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_value_semantic_opencalais_text')}" />
+  </local:configuration>
 
 </local:TaxonomyStudioPluginBase>

@@ -1,9 +1,8 @@
 package com.coremedia.lc.studio.lib.validators;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -22,12 +21,14 @@ import com.coremedia.rest.validation.impl.Issue;
 import com.coremedia.rest.validation.impl.IssuesImpl;
 import org.hamcrest.CustomTypeSafeMatcher;
 import org.hamcrest.MatcherAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,8 +50,7 @@ import java.util.Properties;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -82,6 +82,9 @@ public class LcStudioValidatorsXmlRepoTest {
 
   @Inject
   private CatalogLinkValidator marketingSpotExternalIdValidator;
+
+  @Inject
+  private CatalogLinkValidator productListExternalIdValidator;
 
   @Inject
   private CatalogLinkValidator externalChannelExternalIdValidator;
@@ -121,12 +124,16 @@ public class LcStudioValidatorsXmlRepoTest {
     site = sitesService.getSite(siteId);
 
     commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
-    DefaultConnection.clear();
 
     commerceConnectionInitializer = mock(CommerceConnectionInitializer.class);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
     commerceConnection.getStoreContext().put(StoreContextImpl.SITE, siteId);
+  }
+
+  @After
+  public void teardown() {
+    CurrentCommerceConnection.remove();
   }
 
   @Test
@@ -160,20 +167,34 @@ public class LcStudioValidatorsXmlRepoTest {
   public void validateMarketingSpotWithNoIssues() {
     marketingSpotExternalIdValidator.setCommerceConnectionInitializer(commerceConnectionInitializer);
 
-    when(commerceConnection.getCommerceBeanFactory().loadBeanFor(anyString(), any(StoreContext.class)))
-            .then(new Answer<CommerceBean>() {
-              @Override
-              public CommerceBean answer(InvocationOnMock invocationOnMock) throws Throwable {
-                String externalId = BaseCommerceIdHelper.parseExternalIdFromId((String) invocationOnMock.getArguments()[0]);
-                if (externalId.contains("null")) {
-                  return null;
-                }
-
-                return mock(CommerceBean.class);
-              }
-            });
+    when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
+            .then(invocationOnMock -> mock(CommerceBean.class));
 
     Iterable<Issue> issues = validate(20);
+
+    assertNull(issues);
+  }
+
+  @Test
+  public void validateProductListWithCategory() {
+    productListExternalIdValidator.setCommerceConnectionInitializer(commerceConnectionInitializer);
+
+    when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
+            .then(invocationOnMock -> mock(CommerceBean.class));
+
+    Iterable<Issue> issues = validate(30);
+
+    assertNull(issues);
+  }
+
+  @Test
+  public void validateProductListWithoutCategory() {
+    productListExternalIdValidator.setCommerceConnectionInitializer(commerceConnectionInitializer);
+
+    when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
+            .then(invocationOnMock -> mock(CommerceBean.class));
+
+    Iterable<Issue> issues = validate(32);
 
     assertNull(issues);
   }
@@ -210,9 +231,16 @@ public class LcStudioValidatorsXmlRepoTest {
 
   @Test
   public void marketingSpotEmptyExternalId() {
+    marketingSpotExternalIdValidator.setCommerceConnectionInitializer(commerceConnectionInitializer);
     Iterable<Issue> issues = validate(26);
-
     assertIssueCode(issues, "CMMarketingSpot_EmptyExternalId");
+  }
+
+  @Test
+  public void productListInvalidExternalId() {
+    productListExternalIdValidator.setCommerceConnectionInitializer(commerceConnectionInitializer);
+    Iterable<Issue> issues = validate(34);
+    assertIssueCode(issues, "CMProductList_InvalidId");
   }
 
   @Test
@@ -227,14 +255,14 @@ public class LcStudioValidatorsXmlRepoTest {
     when(workspace1.getExternalTechId()).thenReturn(WORKSPACE_1);
     when(workspace2.getName()).thenReturn(WORKSPACE_2);
     when(workspace2.getExternalTechId()).thenReturn(WORKSPACE_2);
-    when(commerceConnection.getWorkspaceService().findAllWorkspaces()).thenReturn(asList(workspace1, workspace2));
+    when(commerceConnection.getWorkspaceService().findAllWorkspaces(any(StoreContext.class))).thenReturn(asList(workspace1, workspace2));
 
     StoreContext storeContext = commerceConnection.getStoreContext();
     storeContext.put("configId", "myConfigId");
     storeContext.put("catalogId", "10001");
     storeContext.setWorkspaceId(WORKSPACE_1);
 
-    when(commerceConnection.getCommerceBeanFactory().loadBeanFor(anyString(), any(StoreContext.class)))
+    when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
             .then(new Answer<CommerceBean>() {
               @Override
               public CommerceBean answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -263,7 +291,8 @@ public class LcStudioValidatorsXmlRepoTest {
 
   @Configuration
   @ImportResource(value = {
-          "classpath:/com/coremedia/lc/studio/lib/validators.xml"
+          "classpath:/com/coremedia/lc/studio/lib/validators.xml",
+          "classpath:/framework/spring/lc-ecommerce-services.xml"
   },
           reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
   public static class LocalConfig {
@@ -284,6 +313,11 @@ public class LcStudioValidatorsXmlRepoTest {
       Resource resource = applicationContext.getResource("classpath:/com/coremedia/rest/jerseyParameters.properties");
       EncodedResource encodedResource = new EncodedResource(resource);
       return PropertiesLoaderUtils.loadProperties(encodedResource);
+    }
+
+    @Bean
+    public static BeanPostProcessor commerceConnectionInitializerCustomizer() {
+      return new CommerceConnectionInitializerReplacer();
     }
   }
 

@@ -82,24 +82,25 @@
   </local:plugins>
   <local:store>
     <store_Json autoDestroy="true"
-                proxy="{getSearchSuggestionsDataProxy(config.taxonomyId)}" autoLoad="{true}">
+                proxy="{getSearchSuggestionsDataProxy(config.taxonomyId)}"
+                autoLoad="{true}">
       <fields>
         <data_AutoField name="{TaxonomyNode.PROPERTY_NAME}"/>
         <data_AutoField name="{TaxonomyNode.PROPERTY_REF}"/>
         <data_AutoField name="{TaxonomyNode.PROPERTY_PATH}"/>
         <data_AutoField name="{TaxonomyNode.PROPERTY_TAXONOMY_ID}"/>
-        <data_AutoField name="{TaxonomyNode.PROPERTY_HTML}" convert="{renderHTML}"/>
+        <data_AutoField name="{TaxonomyNode.PROPERTY_HTML}"
+                        convert="{renderHTML}"/>
         <data_NumberField name="{'size'}"/>
         <data_NumberField name="{SUGGESTION_COUNT}"/>
       </fields>
     </store_Json>
   </local:store>
   <local:listConfig>
-    <BoundList
-            loadingText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_loading_text')}"
-            itemTpl="{autoSuggestResultTpl}"
-            scrollable="vertical"
-            emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_no_hit')}"
-            itemSelector="div"/>
+    <BoundList loadingText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_loading_text')}"
+               itemTpl="{autoSuggestResultTpl}"
+               scrollable="vertical"
+               emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_no_hit')}"
+               itemSelector="div"/>
   </local:listConfig>
 </local:TaxonomySearchFieldBase>

@@ -19,4 +19,4 @@ find ${BASE_PATH} -type f \( -name pom.xml -or -name "*.rb" -or -name "*.md" -or
  -and -not \( -path "*/.git/*" -or -path "*/node_modules/*" \) \
  -exec sh -c '
  grep -l "${OLD_VERSION}" "$0" && sed -i "s#${OLD_VERSION}#${NEW_VERSION}#g" "$0"
-' {} ';'
+' {} ';' -prune

@@ -1,18 +1,22 @@
 package com.coremedia.livecontext.elastic.social.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +25,7 @@ import java.util.Optional;
 import static com.coremedia.livecontext.elastic.social.common.ProductInSiteConverter.ID;
 import static com.coremedia.livecontext.elastic.social.common.ProductInSiteConverter.SITE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -47,27 +50,29 @@ public class ProductInSiteConverterTest {
   @Mock
   private SitesService sitesService;
 
-  private BaseCommerceConnection commerceConnection;
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private CommerceConnection commerceConnection;
+
+  private final CommerceIdProvider idProvider = new BaseCommerceIdProvider("vendor");
 
   private ProductInSiteConverter converter;
 
   @Before
   public void setup() {
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
-
+    when(commerceConnection.getIdProvider()).thenReturn(idProvider);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
     commerceConnection.getStoreContext().put("site", siteId);
-    when(commerceConnection.getCatalogService().findProductById(anyString())).thenReturn(product);
+    when(commerceConnection.getCatalogService().findProductById(any(), any(StoreContext.class))).thenReturn(product);
 
     when(product.getExternalId()).thenReturn(productId);
-    when(product.getContext()).thenReturn(commerceConnection.getStoreContext());
-    when(commerceConnection.getStoreContextProvider().createContext(site)).thenReturn(commerceConnection.getStoreContext());
 
     when(productInSite.getProduct()).thenReturn(product);
     when(productInSite.getSite()).thenReturn(site);
 
-    when(sitesService.getSite(siteId)).thenReturn(site);
+    when(product.getId()).thenReturn(CommerceIdParserHelper.parseCommerceIdOrThrow(productReferenceId));
+
+    when(sitesService.findSite(siteId)).thenReturn(Optional.of(site));
 
     when(site.getId()).thenReturn(siteId);
 
@@ -88,8 +93,6 @@ public class ProductInSiteConverterTest {
     assertThat(serializedObject.entrySet()).hasSize(2);
     assertThat(serializedObject.get(ID)).isEqualTo(productReferenceId);
     assertThat(serializedObject.get(SITE_ID)).isEqualTo(siteId);
-
-    verify(product).getExternalId();
   }
 
   @Test
@@ -109,8 +112,6 @@ public class ProductInSiteConverterTest {
     Map<String, Object> serializedObject = new HashMap<>();
     serializedObject.put("id", "id");
     serializedObject.put("site", "site");
-
-    when(commerceConnection.getCatalogService().findProductById(anyString())).thenReturn(null);
 
     converter.deserialize(serializedObject);
   }

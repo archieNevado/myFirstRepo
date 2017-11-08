@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.product;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.transform;
-import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -68,12 +67,13 @@ public class ProductListSubstitutionService {
   public ProductList getProductList(@Nullable LiveContextNavigation navigation, int startIndex, int steps) {
     if (navigation != null) {
       try {
-        CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+        CommerceConnection connection = CurrentCommerceConnection.get();
+
         StoreContext context = connection.getStoreContext();
         notNull(context, "No default catalog default context set.");
 
         Category category = navigation.getCategory();
-        List<Product> list = DefaultConnection.get().getCatalogService().findProductsByCategory(category);
+        List<Product> list = connection.getCatalogService().findProductsByCategory(category);
         ProductList productList = new ProductList(navigation, startIndex, steps, list.size(), liveContextNavigationFactory);
 
         //apply the subset of products according to the passed parameters.

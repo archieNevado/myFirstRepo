@@ -105,7 +105,13 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
       final Site site = navigation.getSite();
       result.add((Linkable) contentBeanFactory.createBeanFor(site.getSiteRootDocument()));
 
-      List<Category> breadcrumb = navigation.getCategory().getBreadcrumb();
+      Category category = navigation.getCategory();
+      if (category == null) {
+        LOGGER.debug("Category for navigation {} is null", navigation);
+        return null;
+      }
+
+      List<Category> breadcrumb = category.getBreadcrumb();
       result.addAll(Lists.transform(breadcrumb, new CategoryToLiveContextNavigationTransformer(site)));
       LOGGER.trace("path to root for {}: {}", child, result);
       return result;

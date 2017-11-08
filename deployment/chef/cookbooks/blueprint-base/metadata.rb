@@ -12,3 +12,6 @@ depends 'chef_handler', '~> 1.2.0'
 # fixing the compat_resource cookbook that provides a compatibility layer for older chef versions and their concepts.
 # here it provides mainly the compatibility layer for the old LWRP dsl which has been replaced in 12.5
 depends 'compat_resource', '~> 12.16.3'
+# to automatically install java_se extract the `java_se.tgz` downloaded from https://supermarket.chef.io/cookbooks/java_se
+# to the `thirdparty-cookbooks` directory and add `java_se::default` at the beginning of your runlist.
+suggests 'java_se', '~> 8.0'

@@ -2,8 +2,8 @@ package com.coremedia.livecontext.ecommerce.hybris.rest.resources;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.blueprint.lc.test.AbstractServiceTest;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.livecontext.ecommerce.hybris.AbstractHybrisServiceTest;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupDocument;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, CatalogResourceIT.LocalConfig.class})
-public class CatalogResourceIT extends AbstractHybrisServiceTest {
+public class CatalogResourceIT extends AbstractServiceTest {
 
   @Inject
   private CatalogResource catalogResource;

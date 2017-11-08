@@ -16,14 +16,12 @@
     <property name="navigation" associationType="static"/>
     <property name="aspectByName" associationType="composition"/>
     <property name="pageGrid" associationType="static"/>
-    <property name="keywords"/>
-    <property name="favicon"/>
     <property name="locale"/>
   </dataview>
 
   <dataview appliesTo="com.coremedia.blueprint.cae.layout.PageGridImpl">
-    <property name="numcols"/>
-    <property name="rows" associationType="static"/>
+    <!--dynamic properties only, because #getContentBackedPageGrid may use dynamic commerce tree relation-->
+    <property name="rows" associationType="dynamic"/>
   </dataview>
 
   <dataview appliesTo="com.coremedia.blueprint.cae.layout.PageGridRowImpl">

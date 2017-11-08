@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMArticle folder="/Sites/Hybris Apparel/United Kingdom/English/Editorial/FAQ" name="FAQ Article" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale>en-US</locale>
+<locale>en-GB</locale>
 <master>
 </master>
 <viewtype>
@@ -34,6 +34,7 @@
 <teaserTitle></teaserTitle>
 <detailText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-3">Find here the most common questions regarding our complete product and service offerings.</p></div></detailText>
 <pictures>
+<link href="../../Pictures/Ischgl.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Pictures/Ischgl"/>
 </pictures>
 <related>
 </related>

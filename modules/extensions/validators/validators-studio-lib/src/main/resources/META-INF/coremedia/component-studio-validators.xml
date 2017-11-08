@@ -106,6 +106,15 @@
     <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
   </bean>
 
+  <bean id="cmChannelRootSegmentValidator"
+        class="com.coremedia.blueprint.base.rest.validators.RootChannelSegmentValidator">
+    <constructor-arg index="0" name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
+    <constructor-arg index="1" name="sitesService" ref="sitesService"/>
+    <property name="connection" ref="connection"/>
+    <property name="contentType" value="CMChannel"/>
+    <property name="validatingSubtypes" value="true"/>
+  </bean>
+
   <bean id="cmTeaserTargetValidator" class="com.coremedia.blueprint.base.rest.validators.TeaserLinkTargetValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMTeaser"/>

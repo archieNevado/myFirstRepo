@@ -13,6 +13,7 @@
             <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>
             <members>
               <user id="rickc" name="Rick C" home="/Home/Rick C"/>
+              <user id="colin" name="Colin" home="/Home/Colin"/>
             </members>
           </group>
         </members>
@@ -34,6 +35,7 @@
                   <user id="peterc" name="Peter C" home="/Home/Peter C"/>
                   <!-- Rick must be member of the master site group as translation workflow role. -->
                   <userref id="rickc"/>
+                  <userref id="colin"/>
                 </members>
               </group>
               <group name="manager-c-de-DE" contentgroup="true" livegroup="false" administrative="false">

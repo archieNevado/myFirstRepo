@@ -75,10 +75,10 @@ attribute :maven_repository_url, :kind_of => String, :default => 'http://repo1.m
 attribute :nexus_url, :kind_of => String, :default => nil
 #<> @attribute nexus_repo The repo name from which to resolve artifacts.
 attribute :nexus_repo, :kind_of => String, :default => 'releases'
-#<> @attribute username The username for the Maven repository, defaults to not set.
-attribute :username, :kind_of => String, :default => nil
-#<> @attribute password The password for the Maven repository, defaults to not set.
-attribute :password, :kind_of => String, :default => nil
+#<> @attribute nexus_username The user to access a protected nexus.
+attribute :nexus_username, :kind_of => String, :default => nil
+#<> @attribute nexus_password The password to access a protected nexus.
+attribute :nexus_password, :kind_of => String, :default => nil
 #<> @attribute owner User ownership (linux only), defaults to "root".
 attribute :owner, :kind_of => String, :default => 'root'
 #<> @attribute group Group membership (linux only), defaults to "root".

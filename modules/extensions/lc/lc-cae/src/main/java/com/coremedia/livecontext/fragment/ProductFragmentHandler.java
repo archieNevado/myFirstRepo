@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
@@ -15,17 +15,23 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
 import com.coremedia.livecontext.contentbeans.ProductDetailPage;
+import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.base.Splitter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
@@ -80,12 +86,9 @@ public class ProductFragmentHandler extends FragmentHandler {
     String externalTechId = params.getProductId();
     String view = params.getView();
     String placement = params.getPlacement();
+    String categoryTechId = params.getCategoryId();
 
-    Navigation navigation = contextStrategy.resolveContext(site, externalTechId);
-
-    if (navigation == null) {
-      throw buildExceptionForMissingNavigation(params);
-    }
+    LiveContextNavigation navigation = getLiveContextNavigation(params, site, externalTechId, categoryTechId);
 
     Content rootChannelContent = site.getSiteRootDocument();
     CMChannel rootChannel = getContentBeanFactory().createBeanFor(rootChannelContent, CMChannel.class);
@@ -106,6 +109,36 @@ public class ProductFragmentHandler extends FragmentHandler {
     }
 
     return createModelAndViewForProductPage(navigation, externalTechId, view, null, null, developer);
+  }
+
+  private LiveContextNavigation getLiveContextNavigation(@Nonnull FragmentParameters params, Site site, String externalTechId, String categoryTechId) {
+    CommerceConnection currentConnection = CurrentCommerceConnection.get();
+    StoreContext storeContext = currentConnection.getStoreContext();
+
+    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(),
+            "No catalog service configured for commerce connection '" + currentConnection + "'.");
+    CommerceIdProvider idProvider = requireNonNull(currentConnection.getIdProvider(),
+            "No commerce id provider configured for commerce connection '" + currentConnection + "'.");
+
+    CommerceBean commerceBean;
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+    if (StringUtils.isNotEmpty(categoryTechId)) {
+      commerceBean = catalogService.findCategoryById(idProvider.formatCategoryTechId(catalogAlias, categoryTechId), storeContext);
+    } else {
+      commerceBean = catalogService.findProductById(idProvider.formatProductTechId(catalogAlias, externalTechId), storeContext);
+    }
+
+    if (commerceBean == null) {
+      throw buildExceptionForMissingNavigation(params);
+    }
+
+    //noinspection ConstantConditions
+    LiveContextNavigation navigation = contextStrategy.resolveContext(site, commerceBean);
+
+    if (navigation == null) {
+      throw buildExceptionForMissingNavigation(params);
+    }
+    return navigation;
   }
 
   private static IllegalStateException buildExceptionForMissingNavigation(@Nonnull FragmentParameters params) {
@@ -147,16 +180,32 @@ public class ProductFragmentHandler extends FragmentHandler {
     return resultMV;
   }
 
-  private Content getAugmentedProductContent(Product product){
-    Content externalProductContent = productAugmentationService.getContent(product);
-    if (externalProductContent == null && product != null  && product.isVariant()) {
-      Product parentProduct = ((ProductVariant)product).getParent();
-      while (parentProduct != null && parentProduct.isVariant()){
-        parentProduct = ((ProductVariant)parentProduct).getParent();
-      }
-      externalProductContent = productAugmentationService.getContent(parentProduct);
+  @Nullable
+  private Content getAugmentedProductContent(@Nullable Product product) {
+    if (product == null) {
+      return null;
     }
-    return externalProductContent;
+
+    Content externalProductContent = productAugmentationService.getContent(product);
+    if (externalProductContent != null) {
+      return externalProductContent;
+    }
+
+    if (!product.isVariant()) {
+      return null;
+    }
+
+    Product parentProduct = ((ProductVariant) product).getParent();
+
+    while (parentProduct != null && parentProduct.isVariant()) {
+      parentProduct = ((ProductVariant) parentProduct).getParent();
+    }
+
+    if (parentProduct == null) {
+      return null;
+    }
+
+    return productAugmentationService.getContent(parentProduct);
   }
 
   @Nonnull
@@ -186,21 +235,25 @@ public class ProductFragmentHandler extends FragmentHandler {
       return null;
     }
 
-    CommerceConnection connection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
-    CommerceIdProvider idProvider = connection.getIdProvider();
+    CommerceConnection connection = CurrentCommerceConnection.get();
+    CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
+    StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
 
-    String beanId = useStableIds ? idProvider.formatProductId(productId) : idProvider.formatProductTechId(productId);
-    StoreContext storeContext = connection.getStoreContext();
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+
+    CommerceId commerceId = useStableIds
+            ? idProvider.formatProductId(catalogAlias, productId)
+            : idProvider.formatProductTechId(catalogAlias, productId);
 
     CommerceBeanFactory commerceBeanFactory = connection.getCommerceBeanFactory();
-    Product product = (Product) commerceBeanFactory.createBeanFor(beanId, storeContext);
+    Product product = (Product) commerceBeanFactory.createBeanFor(commerceId, storeContext);
 
     if (product.isVariant()) {
-      beanId = useStableIds
-              ? idProvider.formatProductVariantId(productId)
-              : idProvider.formatProductVariantTechId(productId);
+      commerceId = useStableIds
+              ? idProvider.formatProductVariantId(catalogAlias, productId)
+              : idProvider.formatProductVariantTechId(catalogAlias, productId);
 
-      return (ProductVariant) commerceBeanFactory.createBeanFor(beanId, storeContext);
+      return (ProductVariant) commerceBeanFactory.createBeanFor(commerceId, storeContext);
     }
 
     return product;

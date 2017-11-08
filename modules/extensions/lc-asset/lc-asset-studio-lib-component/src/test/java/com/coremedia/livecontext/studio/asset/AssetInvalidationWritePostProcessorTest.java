@@ -26,13 +26,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({CommerceReferenceHelper.class})
+@PrepareForTest({CommerceReferenceHelper.class, AssetHelper.class})
 public class AssetInvalidationWritePostProcessorTest {
 
   @InjectMocks
@@ -92,6 +92,6 @@ public class AssetInvalidationWritePostProcessorTest {
 
     testling.postProcess(report);
 
-    verify(invalidationSource).invalidateReferences(newHashSet(references), commerceConnection);
+    verify(invalidationSource).invalidateReferences(newHashSet(references));
   }
 }

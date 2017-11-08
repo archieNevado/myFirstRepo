@@ -32,7 +32,7 @@ public class SegmentsResource extends AbstractCatalogResource<Segments> {
     representation.setId(segments.getId());
     SegmentService segmentService = getConnection().getSegmentService();
     if (segmentService != null) {
-      representation.setSegments(segmentService.findAllSegments());
+      representation.setSegments(segmentService.findAllSegments(segments.getContext()));
     }
   }
 

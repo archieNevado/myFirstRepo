@@ -1,25 +1,25 @@
 package com.coremedia.livecontext.ecommerce.hybris.event;
 
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.event.InvalidationService;
-import com.coremedia.livecontext.ecommerce.hybris.common.AbstractCommerceService;
-import com.coremedia.livecontext.ecommerce.hybris.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CATEGORY_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CLEAR_ALL_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.PRODUCT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.SEGMENT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.UNKNOWN_TYPE_EVENT;
+import static java.util.Collections.emptyList;
 
-public class InvalidationServiceImpl extends AbstractCommerceService implements InvalidationService {
+public class InvalidationServiceImpl extends AbstractHybrisService implements InvalidationService {
 
   private static final String CLEAR_ALL_CONTENT_TYPE = "clearall";
   private static final String PRODUCT_CONTENT_TYPE = "product";
@@ -34,19 +34,21 @@ public class InvalidationServiceImpl extends AbstractCommerceService implements 
 
   @Override
   @Nonnull
-  public List<InvalidationEvent> getInvalidations(long lastExecutionTimeStamp) throws CommerceException {
+  public List<InvalidationEvent> getInvalidations(long lastExecutionTimeStamp, @Nonnull StoreContext storeContext) {
     InvalidationsDocument invalidationsDocument = invalidationResource.getInvalidations(lastExecutionTimeStamp, maxWaitInMilliseconds, chunkSize);
-    if (invalidationsDocument != null && invalidationsDocument.getInvalidations() != null) {
-      List<InvalidationEvent> commerceCacheInvalidations = new ArrayList<>();
-      for (InvalidationEvent sourceEvent: invalidationsDocument.getInvalidations()) {
-        InvalidationEvent convertedEvent = convertEvent(sourceEvent);
-        if (convertedEvent != null) {
-          commerceCacheInvalidations.add(convertedEvent);
-        }
-      }
-      return commerceCacheInvalidations;
+    if (invalidationsDocument == null) {
+      return emptyList();
     }
-    return Collections.emptyList();
+
+    List<JsonInvalidationEvent> invalidations = invalidationsDocument.getInvalidations();
+    if (invalidations == null) {
+      return emptyList();
+    }
+
+    return invalidations.stream()
+            .map(this::convertEvent)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
   }
 
   private InvalidationEvent convertEvent(InvalidationEvent sourceEvent) {
@@ -57,44 +59,32 @@ public class InvalidationServiceImpl extends AbstractCommerceService implements 
         switch (contentType) {
           case CLEAR_ALL_CONTENT_TYPE:
             return new InvalidationEvent(
-                    null,
                     techId,
-                    sourceEvent.getName(),
                     CLEAR_ALL_EVENT, sourceEvent.getTimestamp()
             );
           case PRODUCT_CONTENT_TYPE:
             return new InvalidationEvent(
-                    CommerceIdHelper.formatProductId(techId),
                     techId,
-                    sourceEvent.getName(),
                     PRODUCT_EVENT, sourceEvent.getTimestamp()
             );
           case SKU_CONTENT_TYPE:
             return new InvalidationEvent(
-                    CommerceIdHelper.formatProductVariantId(techId),
                     techId,
-                    sourceEvent.getName(),
                     PRODUCT_EVENT, sourceEvent.getTimestamp()
             );
           case CATEGORY_CONTENT_TYPE:
             return new InvalidationEvent(
-                    CommerceIdHelper.formatCategoryId(techId),
                     techId,
-                    sourceEvent.getName(),
                     CATEGORY_EVENT, sourceEvent.getTimestamp()
             );
           case SEGMENT_TYPE:
             return new InvalidationEvent(
-                    CommerceIdHelper.formatSegmentId(techId),
                     techId,
-                    sourceEvent.getName(),
                     SEGMENT_EVENT, sourceEvent.getTimestamp()
             );
           default:
             return new InvalidationEvent(
-                    contentType+":"+techId,
                     techId,
-                    sourceEvent.getName(),
                     UNKNOWN_TYPE_EVENT, sourceEvent.getTimestamp()
             );
         }
@@ -105,7 +95,7 @@ public class InvalidationServiceImpl extends AbstractCommerceService implements 
 
   @Nonnull
   @Override
-  public String getServiceEndpointId() {
+  public String getServiceEndpointId(@Nonnull StoreContext storeContext) {
     String serviceEndpointId = null;
     if (invalidationResource.getConnector() != null) {
       serviceEndpointId = invalidationResource.getConnector().getServiceEndpointId();

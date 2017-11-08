@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.ecommerce.hybris.pricing;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.beans.ProductImpl;
-import com.coremedia.livecontext.ecommerce.hybris.common.AbstractCommerceService;
+import com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.PriceDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.PriceRefDocument;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 
-public class PriceServiceImpl extends AbstractCommerceService implements PriceService {
+public class PriceServiceImpl extends AbstractHybrisService implements PriceService {
 
   private static final Logger LOG = LoggerFactory.getLogger(PriceServiceImpl.class);
 
@@ -52,7 +53,7 @@ public class PriceServiceImpl extends AbstractCommerceService implements PriceSe
   protected BigDecimal findOfferPriceForPrices(List<PriceDocument> prices) {
 
     // filter currency
-    StoreContext currentContext = DefaultConnection.get().getStoreContext();
+    StoreContext currentContext = CurrentCommerceConnection.get().getStoreContext();
     List<PriceDocument> filteredPriceDocuments = filterCurrency(prices, currentContext.getCurrency());
 
     // The offer price in Hybris is modeled as price.isGiveAwayPrice
@@ -79,7 +80,7 @@ public class PriceServiceImpl extends AbstractCommerceService implements PriceSe
   protected BigDecimal findListPriceForPrices(List<PriceDocument> prices) {
 
     // filter currency
-    StoreContext currentContext = DefaultConnection.get().getStoreContext();
+    StoreContext currentContext = CurrentCommerceConnection.get().getStoreContext();
     List<PriceDocument> filteredPriceDocuments = filterCurrency(prices, currentContext.getCurrency());
 
     // The list price in Hybris is modeled as !price.isGiveAwayPrice
@@ -149,13 +150,13 @@ public class PriceServiceImpl extends AbstractCommerceService implements PriceSe
 
   @Override
   public BigDecimal findOfferPriceForProduct(String productId) {
-    Product product = catalogService.findProductById(productId);
+    Product product = catalogService.findProductById(CommerceIdParserHelper.parseCommerceIdOrThrow(productId), StoreContextHelper.getCurrentContextOrThrow());
     return product.getOfferPrice();
   }
 
   @Override
   public BigDecimal findListPriceForProduct(String productId) {
-    Product product = catalogService.findProductById(productId);
+    Product product = catalogService.findProductById(CommerceIdParserHelper.parseCommerceIdOrThrow(productId), StoreContextHelper.getCurrentContextOrThrow());
     return product.getListPrice();
   }
 

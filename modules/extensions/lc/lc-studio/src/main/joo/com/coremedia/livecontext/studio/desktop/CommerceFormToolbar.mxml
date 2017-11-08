@@ -10,6 +10,7 @@
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.mixins.OverflowBehaviour;
     import com.coremedia.ui.skins.ButtonSkin;
     import com.coremedia.ui.skins.IconDisplayFieldSkin;
 
@@ -35,7 +36,7 @@
     <!--Locale name-->
     <ui:IconDisplayField itemId="{LOCALE_NAME_ITEM_ID}"
                          tooltipOnValue="true"
-                         overflowBehaviour="ellipsis"
+                         overflowBehaviour="{OverflowBehaviour.ELLIPSIS}"
                          ui="{IconDisplayFieldSkin.WORKAREA.getSkin()}">
       <ui:plugins>
         <ui:BindPlugin bindTo="{getLocaleValueExpression()}"
@@ -46,7 +47,7 @@
     <!--Document type-->
     <ui:IconDisplayField itemId="{DOCUMENT_TYPE_ITEM_ID}"
                          tooltipOnValue="true"
-                         overflowBehaviour="ellipsis"
+                         overflowBehaviour="{OverflowBehaviour.ELLIPSIS}"
                          ui="{IconDisplayFieldSkin.WORKAREA.getSkin()}">
       <ui:plugins>
         <ui:BindPlugin bindTo="{config.bindTo}"

@@ -1,13 +1,14 @@
 package com.coremedia.livecontext.ecommerce.hybris.beans;
 
 import com.coremedia.cap.content.Content;
+import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.hybris.cache.CategoryCacheKey;
-import com.coremedia.livecontext.ecommerce.hybris.common.CommerceIdHelper;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryRefDocument;
@@ -18,18 +19,24 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
+import static com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider.commerceId;
+import static java.util.Collections.emptyList;
 
 public class CategoryImpl extends AbstractHybrisCommerceBean implements Category {
 
+  public static final String ROOT_CATEGORY_ROLE_ID = "ROOT";
   private List<Category> children;
   private List<Product> products;
 
   @Override
-  public void load() throws CommerceException {
+  public void load() {
     if (isRoot()) {
       CategoryDocument delegate = new CategoryDocument();
-      delegate.setCode(CommerceIdHelper.ROOT_CATEGORY_ID);
+      delegate.setCode(ROOT_CATEGORY_ROLE_ID);
       setDelegate(delegate);
     } else {
       CategoryCacheKey cacheKey = new CategoryCacheKey(getId(), getContext(), getCatalogResource(), getCommerceCache());
@@ -61,7 +68,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
   @Override
   public String getThumbnailUrl() {
-    List<Content> pictures = getAssetService().findPictures(getId());
+    List<Content> pictures = getPictures();
 
     if (!pictures.isEmpty()) {
       return getAssetUrlProvider().getImageUrl("/catalogimage/category/" +
@@ -75,7 +82,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
   @Override
   public String getDefaultImageUrl() {
-    List<Content> pictures = getAssetService().findPictures(getId());
+    List<Content> pictures = getPictures();
 
     if (!pictures.isEmpty()) {
       return getAssetUrlProvider().getImageUrl("/catalogimage/category/" +
@@ -89,10 +96,11 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
   @Nonnull
   @Override
-  public List<Category> getChildren() throws CommerceException {
+  public List<Category> getChildren() {
     if (children == null) {
       if (isRoot()) {
-        return getCatalogService().findTopCategories(null);
+        CatalogAlias catalogAlias = getId().getCatalogAlias();
+        return getCatalogService().findTopCategories(catalogAlias, getContext());
       }
 
       List<Category> childrenNew = new ArrayList<>();
@@ -101,7 +109,9 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
       if (refDocuments != null) {
         for (CategoryRefDocument refDocument : refDocuments) {
           // lazy loading of subcategories
-          childrenNew.add(getCommerceBeanHelper().createBeanFor(refDocument.getCode(), Category.class));
+          String externalId = refDocument.getCode();
+          CommerceId commerceId = commerceId(CATEGORY).withExternalId(externalId).build();
+          childrenNew.add((Category) getCommerceBeanFactory().createBeanFor(commerceId, getContext()));
         }
       }
 
@@ -112,7 +122,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
   @Nonnull
   @Override
-  public List<Product> getProducts() throws CommerceException {
+  public List<Product> getProducts() {
     if (products == null) {
       products = getCatalogService().findProductsByCategory(this);
     }
@@ -122,7 +132,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
   @Nullable
   @Override
-  public Category getParent() throws CommerceException {
+  public Category getParent() {
     if (isRoot()) {
       return null;
     }
@@ -131,15 +141,16 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     CatalogService catalogService = getCatalogService();
 
     if (StringUtils.isBlank(parentId)) {
-      return catalogService.findRootCategory();
+      return catalogService.findRootCategory(getCatalogAlias(), getContext());
     }
 
-    return catalogService.findCategoryById(parentId);
+    CommerceId commerceId = commerceId(CATEGORY).withExternalId(parentId).build();
+    return catalogService.findCategoryById(commerceId, getContext());
   }
 
   @Nonnull
   @Override
-  public List<Category> getBreadcrumb() throws CommerceException {
+  public List<Category> getBreadcrumb() {
     List<Category> result = new ArrayList<>();
 
     Category parent = getParent();
@@ -193,26 +204,32 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
   @Override
   public List<Content> getPictures() {
-    return null;
+    AssetService assetService = getAssetService();
+
+    if (assetService == null) {
+      return emptyList();
+    }
+
+    return assetService.findPictures(getReference());
   }
 
   @Override
   public List<Content> getVisuals() {
-    return null;
+    return Collections.emptyList();
   }
 
   @Override
   public List<Content> getDownloads() {
-    return null;
+    return Collections.emptyList();
   }
 
   @Override
   public boolean isRoot() {
-    return CommerceIdHelper.isRootCategoryId(getId());
+    return isRootCategoryId(getId());
   }
 
-  @Override
-  public String getReference() {
-    return CommerceIdHelper.formatCategoryId(getExternalId());
+  public static boolean isRootCategoryId(@Nonnull CommerceId id) {
+    return id.getExternalId().map(ROOT_CATEGORY_ROLE_ID::equals).orElse(false);
   }
+
 }

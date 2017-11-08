@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.asset.impl;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -8,8 +8,9 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
-import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.apache.commons.lang3.StringUtils;
@@ -19,11 +20,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 public class AssetServiceImpl implements AssetService {
@@ -35,62 +38,74 @@ public class AssetServiceImpl implements AssetService {
   private AssetResolvingStrategy assetResolvingStrategy;
 
   @Nonnull
-  @Override
   public CatalogPicture getCatalogPicture(String url) {
-    String id = getReferenceIdFromUrl(url);
-    if (id == null) {
-      // Not a CMS URL
+      CommerceId referenceIdFromUrl = computeReferenceIdFromUrl(url);
+    if (referenceIdFromUrl == null) {
       return new CatalogPicture(url, null);
     }
+    return getCatalogPicture(url, referenceIdFromUrl);
+  }
 
-    // Make absolute and replace `{cmsHost}`
-    String imageUrl = getAssetUrlProvider().getImageUrl(url);
+  @Nonnull
+  @Override
+  public CatalogPicture getCatalogPicture(@Nonnull String url, @Nonnull CommerceId commerceId) {
 
-    List<Content> pictures = findPictures(id);
+    CommerceConnection connection = getCommerceConnection();
+    AssetUrlProvider assetUrlProvider = requireNonNull(connection.getAssetUrlProvider(), "asset url provider not available");
+
+    // Rewrite a given commerce url (make absolute and replace `{cmsHost}`)
+    String imageUrl = assetUrlProvider.getImageUrl(url);
+
+    // try to find assets related to the given commerce id
+    List<Content> pictures = findPictures(commerceId, false);
     Content picture = pictures.stream().findFirst().orElse(null);
     return new CatalogPicture(imageUrl, picture);
   }
 
   @Override
   @Nonnull
-  public List<Content> findPictures(@Nonnull String id) {
+  public List<Content> findPictures(@Nonnull CommerceId commerceId) {
+    return findPictures(commerceId, true);
+  }
+
+  @Nonnull
+  public List<Content> findPictures(@Nonnull CommerceId commerceId, boolean withDefault) {
     Site site = getSite();
     if (site == null) {
       return emptyList();
     }
 
-    List<Content> references = assetResolvingStrategy.findAssets("CMPicture", id, site);
+    List<Content> references = assetResolvingStrategy.findAssets("CMPicture", commerceId, site);
     if (!references.isEmpty()) {
       return references;
     }
 
-    Content defaultPicture = getDefaultPicture(site);
-    if (defaultPicture == null) {
-      return emptyList();
+    if (withDefault) {
+      Content defaultPicture = getDefaultPicture(site);
+      if (defaultPicture != null) {
+        return singletonList(defaultPicture);
+      }
     }
 
-    return singletonList(defaultPicture);
+    return emptyList();
   }
 
   @Override
   @Nonnull
-  public List<Content> findVisuals(@Nullable String id) {
+  public List<Content> findVisuals(@Nonnull CommerceId id) {
     return findVisuals(id, true);
   }
 
   @Override
   @Nonnull
-  public List<Content> findVisuals(@Nullable String id, boolean withDefault) {
-    if (id == null) {
-      return emptyList();
-    }
+  public List<Content> findVisuals(@Nonnull CommerceId commerceId, boolean withDefault) {
 
     Site site = getSite();
     if (site == null) {
       return emptyList();
     }
 
-    List<Content> visuals = assetResolvingStrategy.findAssets("CMVisual", id, site);
+    List<Content> visuals = assetResolvingStrategy.findAssets("CMVisual", commerceId, site);
 
     if (withDefault && visuals.isEmpty()) {
       Content defaultPicture = getDefaultPicture(site);
@@ -112,8 +127,8 @@ public class AssetServiceImpl implements AssetService {
   private static List<Content> removePicturesInSpinners(@Nonnull List<Content> allVisuals,
                                                         @Nonnull Set<Content> picturesInSpinners) {
     return allVisuals.stream()
-                     .filter(visual -> !picturesInSpinners.contains(visual))
-                     .collect(toList());
+            .filter(visual -> !picturesInSpinners.contains(visual))
+            .collect(toList());
   }
 
   @Nonnull
@@ -132,28 +147,24 @@ public class AssetServiceImpl implements AssetService {
   @Nonnull
   private static List<Content> findSpinners(@Nonnull List<Content> allVisuals) {
     return allVisuals.stream()
-                     .filter(visual -> visual.getType().isSubtypeOf("CMSpinner"))
-                     .collect(toList());
+            .filter(visual -> visual.getType().isSubtypeOf("CMSpinner"))
+            .collect(toList());
   }
 
   @Override
   @Nonnull
-  public List<Content> findDownloads(@Nullable String id) {
-    if (id == null) {
-      return emptyList();
-    }
-
+  public List<Content> findDownloads(@Nonnull CommerceId commerceId) {
     Site site = getSite();
     if (site == null) {
       return emptyList();
     }
 
-    return assetResolvingStrategy.findAssets("CMDownload", id, site);
+    return assetResolvingStrategy.findAssets("CMDownload", commerceId, site);
   }
 
   @Nullable
   private Site getSite() {
-    CommerceConnection connection = getCommerceConnection();
+    CommerceConnection connection = findCommerceConnection().orElse(null);
 
     if (connection == null) {
       return null;
@@ -170,31 +181,32 @@ public class AssetServiceImpl implements AssetService {
   }
 
   @Nullable
-  private static String getReferenceIdFromUrl(@Nullable String url) {
-    if (url == null || StringUtils.isBlank(url)) {
+  private static CommerceId computeReferenceIdFromUrl(@Nullable String url) {
+    if (StringUtils.isBlank(url)) {
       return null;
     }
 
-    CommerceIdProvider commerceIdProvider = getCommerceConnection().getIdProvider();
+    CommerceConnection connection = getCommerceConnection();
+
+    CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
+    StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
     String partNumber = parsePartNumberFromUrl(url);
 
+    if (partNumber == null) {
+      return null;
+    }
+
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+
     if (url.contains(CATEGORY_URI_PREFIX)) {
-      return commerceIdProvider.formatCategoryId(partNumber);
+      return idProvider.formatCategoryId(catalogAlias, partNumber);
     }
 
     if (!url.contains(PRODUCT_URI_PREFIX)) {
       return null;
     }
 
-    String productId = commerceIdProvider.formatProductId(partNumber);
-
-    CommerceConnection connection = getCommerceConnection();
-    if (connection == null || connection.getCatalogService() == null) {
-      return productId;
-    }
-
-    Product product = connection.getCatalogService().findProductById(productId);
-    return product != null ? product.getReference() : productId;
+    return idProvider.formatProductId(catalogAlias, partNumber);
   }
 
   @Nullable
@@ -237,8 +249,13 @@ public class AssetServiceImpl implements AssetService {
     return getCommerceConnection().getAssetUrlProvider();
   }
 
-  @Nullable
+  @Nonnull
+  private static Optional<CommerceConnection> findCommerceConnection() {
+    return CurrentCommerceConnection.find();
+  }
+
+  @Nonnull
   private static CommerceConnection getCommerceConnection() {
-    return DefaultConnection.get();
+    return CurrentCommerceConnection.get();
   }
 }

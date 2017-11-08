@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.navigation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -66,31 +66,29 @@ public class LiveContextNavigationFactory {
   @Nonnull
   public LiveContextNavigation createNavigationBySeoSegment(@Nonnull Content parentChannel, @Nonnull String seoSegment) {
     StoreContext storeContext = getStoreContextProvider().findContextByContent(parentChannel);
-    notNull(storeContext, "No StoreContext found for "+parentChannel.getName());
-    Category category = getCatalogService().findCategoryBySeoSegment(seoSegment);
-    notNull(category, "No category found for seo segment: "+seoSegment);
-    Site site = sitesService.getContentSiteAspect(parentChannel).getSite();
-    notNull(site, "No site found for " + parentChannel);
+    notNull(storeContext, "No StoreContext found for " + parentChannel.getName());
+
+    Category category = getCatalogService().findCategoryBySeoSegment(seoSegment, storeContext);
+    notNull(category, "No category found for seo segment: " + seoSegment);
+
+    Site site = sitesService.getContentSiteAspect(parentChannel).findSite()
+            .orElseThrow(() -> new IllegalArgumentException("No site found for " + parentChannel));
 
     return createNavigation(category, site);
   }
 
   @Nullable
   public CategoryInSite createCategoryInSite(@Nonnull Category category, @Nonnull String siteId) {
-    Site site = sitesService.getSite(siteId);
-    if(null != site) {
-      return createCategoryInSite(category, site);
-    }
-    return null;
+    return sitesService.findSite(siteId)
+            .map(site -> createCategoryInSite(category, site))
+            .orElse(null);
   }
 
   @Nullable
-  public ProductInSite createProductInSite(@Nonnull Product product, String siteId) {
-    Site site = sitesService.getSite(siteId);
-    if(null != site) {
-      return createProductInSite(product, site);
-    }
-    return null;
+  public ProductInSite createProductInSite(@Nonnull Product product, @Nonnull String siteId) {
+    return sitesService.findSite(siteId)
+            .map(site -> createProductInSite(product, site))
+            .orElse(null);
   }
 
   @Nonnull
@@ -112,11 +110,11 @@ public class LiveContextNavigationFactory {
   }
 
   public StoreContextProvider getStoreContextProvider() {
-    return DefaultConnection.get().getStoreContextProvider();
+    return CurrentCommerceConnection.get().getStoreContextProvider();
   }
 
   public CatalogService getCatalogService() {
-    return DefaultConnection.get().getCatalogService();
+    return CurrentCommerceConnection.get().getCatalogService();
   }
 
   @Required

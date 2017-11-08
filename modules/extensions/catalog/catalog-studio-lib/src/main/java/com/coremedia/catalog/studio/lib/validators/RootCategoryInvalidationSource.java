@@ -1,15 +1,14 @@
 package com.coremedia.catalog.studio.lib.validators;
 
 import com.coremedia.blueprint.base.ecommerce.catalog.CmsCatalogService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnectionIdProvider;
 import com.coremedia.rest.invalidations.SimpleInvalidationSource;
 import com.coremedia.rest.linking.Linker;
 import org.slf4j.Logger;
@@ -21,6 +20,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 class RootCategoryInvalidationSource extends SimpleInvalidationSource implements ApplicationListener<ContextRefreshedEvent> {
@@ -31,16 +31,13 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
   private Cache cache;
 
   @Autowired
-  Linker linker;
+  private Linker linker;
 
   @Autowired
   private SitesService sitesService;
 
   @Autowired
-  private Commerce commerce;
-
-  @Autowired
-  private CommerceConnectionIdProvider commerceConnectionIdProvider;
+  private CommerceConnectionInitializer connectionInitializer;
 
   @Autowired
   private CmsCatalogService catalogService;
@@ -91,12 +88,13 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
       Set<Site> sites = sitesService.getSites();
       for (Site site : sites) {
         try {
-          String connectionId = commerceConnectionIdProvider.findConnectionIdBySite(site);
-          if (connectionId != null) {
-            CommerceConnection connection = commerce.getConnection(connectionId);
-            if (connection != null && "coremedia".equals(connection.getVendorName())) {
+          Optional<CommerceConnection> connectionForSite = connectionInitializer.findConnectionForSite(site);
+          if (connectionForSite.isPresent()) {
+            CommerceConnection connection = connectionForSite.get();
+            if ("coremedia".equals(connection.getVendorName())) {
               connection.setStoreContext(connection.getStoreContextProvider().findContextBySite(site));
-              DefaultConnection.set(connection);
+              CurrentCommerceConnection.set(connection);
+
               RootCategoryCacheKey cacheKey = new RootCategoryCacheKey(connection, catalogService, linker,
                       rootCategoryInvalidationSource);
               Category rootCategory = cache.get(cacheKey);
@@ -110,7 +108,7 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
         } catch (Exception e) {
           LOG.debug("unable to determine root category for site '{}'", site.getId(), e);
         } finally {
-          DefaultConnection.clear();
+          CurrentCommerceConnection.remove();
         }
       }
       return rootCategories;

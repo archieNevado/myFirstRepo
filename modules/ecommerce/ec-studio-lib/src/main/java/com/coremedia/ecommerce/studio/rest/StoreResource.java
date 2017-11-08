@@ -1,7 +1,9 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.MappedCatalogsProvider;
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.Store;
+import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -27,12 +29,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A store {@link com.coremedia.ecommerce.studio.rest.model.Store} object as a RESTful resource.
@@ -56,6 +60,9 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   @Inject
   private ProductAugmentationHelper productAugmentationHelper;
 
+  @Inject
+  private MappedCatalogsProvider mappedCatalogsProvider;
+
   @PostConstruct
   void initialize() {
     if (pbeShopUrlTargetResolvers == null) {
@@ -71,8 +78,10 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   @Nullable
   public Object handlePost(@Nonnull Map<String, Object> rawJson) {
     String shopUrlStr = (String) rawJson.get(SHOP_URL_PBE_PARAM);
-
-    Object resolved = findFirstPbeShopUrlTargetResolver(shopUrlStr).orElse(null);
+    Object resolved = null;
+    if (shopUrlStr != null){
+      resolved = findFirstPbeShopUrlTargetResolver(shopUrlStr).orElse(null);
+    }
 
     if (resolved == null) {
       LOG.debug("Shop URL '{}' does not resolve to any known entity, returning null.", shopUrlStr);
@@ -121,38 +130,52 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     Store entity = getEntity();
 
     if (entity == null) {
-      throw new CatalogBeanNotFoundRestException("Could not load store bean.");
+      throw new StoreBeanNotFoundException(Response.Status.GONE, "Could not load store bean for site with ID '" + getSiteId() + "'.");
     }
+
+    String siteId = getSiteId();
 
     try {
       CommerceConnection connection = getConnection();
 
-      representation.setMarketingEnabled(hasMarketingSpots(connection));
+      StoreContext context = entity.getContext();
+      List<Catalog> configuredCatalogs = mappedCatalogsProvider.getConfiguredCatalogs(siteId, context);
+
+      representation.setMarketingEnabled(hasMarketingSpots(connection, context));
       representation.setId(entity.getId());
-      representation.setVendorUrl(entity.getVendorUrl());
-      representation.setVendorName(entity.getVendorName());
-      representation.setVendorVersion(entity.getVendorVersion());
+      representation.setVendorUrl(entity.getVendorUrl().orElse(null));
+      representation.setVendorName(entity.getVendorName().orElse(null));
+      representation.setVendorVersion(entity.getVendorVersion().orElse(null));
       representation.setContext(getStoreContext());
+      representation.setMultiCatalog(configuredCatalogs.size() > 1);
+      representation.setDefaultCatalog(entity.getDefaultCatalog().orElse(null));
+      representation.setCatalogs(configuredCatalogs);
+      //TODO uwk raise exception if one of many catalogs is not configured correctly
+      representation.setRootCategories(configuredCatalogs.stream()
+              .map(Catalog::getRootCategory)
+              .collect(toList()));
       representation.setRootCategory(RemoteBeanLink.create(rootCategoryUri(connection)));
     } catch (CommerceException e) {
-      LOG.warn("Error loading store bean: {} (site: {})", e.getMessage(), getSiteId());
+      LOG.warn("Error loading store bean: {} (site: {})", e.getMessage(), siteId);
       throw e;
     }
   }
 
-  private static boolean hasMarketingSpots(@Nonnull CommerceConnection connection) {
+  private static boolean hasMarketingSpots(@Nonnull CommerceConnection connection, @Nonnull StoreContext context) {
     MarketingSpotService marketingSpotService = connection.getMarketingSpotService();
-    return marketingSpotService != null && !marketingSpotService.findMarketingSpots().isEmpty();
+    return marketingSpotService != null && !marketingSpotService.findMarketingSpots(context).isEmpty();
   }
 
   @Nonnull
-  private static String rootCategoryUri(@Nonnull CommerceConnection connection) {
+  private String rootCategoryUri(@Nonnull CommerceConnection connection) {
     StoreContext storeContext = connection.getStoreContext();
 
-    String siteId = storeContext.getSiteId();
-    String workspaceId = storeContext.getWorkspaceId();
+    String siteId = getSiteId();
+    String workspaceId = getWorkspaceId();
+    String catalogAlias = storeContext.getCatalogAlias().value();
 
-    return "livecontext/category/" + siteId + "/" + workspaceId + "/" + CategoryResource.ROOT_CATEGORY_ROLE_ID;
+    //TODO Refactor
+    return "livecontext/category/" + siteId + "/" + catalogAlias + "/" + workspaceId + "/" + CategoryResource.ROOT_CATEGORY_ROLE_ID;
   }
 
   @Override

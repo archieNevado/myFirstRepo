@@ -25,18 +25,19 @@
     <compile.target.jdk>1.8</compile.target.jdk>
 
     <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
+    <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
     <google.api.client.version>1.19.0</google.api.client.version>
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1707.3</blueprint-base.version>
-    <cms.version>1707.3</cms.version>
-    <personalization.version>1707.3</personalization.version>
-    <elastic.version>1707.3</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1707.3</studio.version>
-    <caetoolbox.version>1707.3</caetoolbox.version>
-    <livecontext.version>1707.3</livecontext.version>
-    <jangaroo.version>4.0.50</jangaroo.version>
+    <blueprint-base.version>1710.1</blueprint-base.version>
+    <cms.version>1710.1</cms.version>
+    <personalization.version>1710.1</personalization.version>
+    <elastic.version>1710.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1710.1</studio.version>
+    <caetoolbox.version>1710.1</caetoolbox.version>
+    <livecontext.version>1710.1</livecontext.version>
+    <jangaroo.version>4.0.53</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
@@ -69,9 +70,6 @@
     <!-- possible values: console, file, logstash-tcp, logstash-file -->
     <log.appender>file</log.appender>
 
-    <!-- configure the control room persistence extensions here -->
-    <controlroom.persistence.extension>es</controlroom.persistence.extension>
-    <notification.persistence.extension>elastic</notification.persistence.extension>
     <caplist>com.coremedia.cotopaxi.list.elastic.mongodb.MongoCapListConnectorFactory</caplist>
 
     <!--
@@ -202,13 +200,6 @@
         <version>${livecontext.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-
-
-      <dependency>
-        <groupId>com.kaltura</groupId>
-        <artifactId>client</artifactId>
-        <version>3.1.5</version>
       </dependency>
 
       <dependency>
@@ -374,9 +365,9 @@
         <plugin>
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.5</version>
+          <version>1.6</version>
           <configuration>
-            <nodeVersion>v6.11.2</nodeVersion><!-- LTS -->
+            <nodeVersion>v6.11.5</nodeVersion><!-- LTS -->
           </configuration>
         </plugin>
         <plugin>
@@ -788,17 +779,13 @@
               <failOnWarning>${failOnWarning}</failOnWarning>
               <ignoreNonCompile>true</ignoreNonCompile>
               <outputXML>true</outputXML>
-              <analyzer>skipJangarooAnalyzer</analyzer>
+              <ignoredUnusedDeclaredDependencies>
+                <!--ignore analyzing swc-->
+                <ignoredUnusedDeclaredDependency>::swc</ignoredUnusedDeclaredDependency>
+              </ignoredUnusedDeclaredDependencies>
             </configuration>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>net.jangaroo</groupId>
-            <artifactId>jangaroo-maven-plugin</artifactId>
-            <version>${jangaroo.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
 
       <plugin>

@@ -1,5 +1,7 @@
 package com.coremedia.livecontext.asset.studio {
 
+import com.coremedia.cms.editor.sdk.IEditorContext;
+
 import flexunit.framework.TestSuite;
 
 //noinspection JSUnusedGlobalSymbols
@@ -11,7 +13,7 @@ public class TestSuite {
     suite.addTestSuite(InheritReferencesTest);
     suite.addTestSuite(SearchProductImagesTest);
     //execute livecontextAssetPlugin on current view port
-    new LivecontextAssetStudioPlugin().init({});
+    new LivecontextAssetStudioPlugin().init(IEditorContext({}));
 
     return suite;
   }

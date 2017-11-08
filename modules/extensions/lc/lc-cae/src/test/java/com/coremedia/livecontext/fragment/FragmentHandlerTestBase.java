@@ -22,9 +22,9 @@ import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
-import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
@@ -51,8 +51,8 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
@@ -76,10 +76,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   @Mock
   protected BeanFactory beanFactory;
 
-  @Mock
-  protected ModelAndView modelAndView;
-
-  @Mock
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   protected SitesService sitesService;
 
   @Mock
@@ -185,14 +182,15 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   protected CommerceConnection connection;
 
   @Mock
-  protected CommerceBeanFactory commerceBeanFactory;
+  protected Product product;
 
   @Mock
-  protected CommerceIdProvider idProvider;
+  protected Category category;
 
   private T testling;
 
   protected final Cache cache = new Cache("test");
+  private MockCommerceEnvBuilder envBuilder;
 
   protected void defaultSetup() {
     testling = createTestling();
@@ -225,10 +223,10 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(fragmentParameters.getParameter()).thenReturn(PLACEMENT);
 
     when(storeContextProvider.findContextBySite(site)).thenReturn(storeContext);
-    when(storeContext.get("storeId")).thenReturn(STORE_ID);
+    when(storeContext.getStoreId()).thenReturn(STORE_ID);
 
-    when(resolveContextStrategy.resolveContext(site, EXTERNAL_TECH_ID)).thenReturn(navigation);
-    when(resolveContextStrategy.resolveContext(site, CATEGORY_ID)).thenReturn(navigation);
+    when(resolveContextStrategy.resolveContext(any(Site.class), any(Product.class))).thenReturn(navigation);
+    when(resolveContextStrategy.resolveContext(any(Site.class), any(Category.class))).thenReturn(navigation);
     when(navigation.getContext()).thenReturn(cmContext);
 
     when(cmContext.getTitle()).thenReturn(TITLE);
@@ -265,8 +263,13 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(rootFolder.getRepository()).thenReturn(contentRepository);
     when(contentRepository.getContentType("CMExternalChannel")).thenReturn(externalChannelContentType);
 
-    connection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    connection = envBuilder.setupEnv();
     connection.getStoreContext().put(StoreContextImpl.SITE, SITE_ID);
+  }
+
+  protected void defaultTeardown() {
+    envBuilder.tearDownEnv();
   }
 
   protected void assertDefaultPage(ModelAndView result) {
@@ -279,17 +282,20 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   protected FragmentParameters getFragmentParameters4Product() {
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/" + STORE_ID + "/" + LOCALE_STRING + "/params;";
     FragmentParameters  params = FragmentParametersFactory.create(url);
-    params.setCategoryId(CATEGORY_ID);
     params.setProductId(EXTERNAL_TECH_ID);
     params.setExternalReference(EXTERNAL_REF);
-    params.setView(VIEW);
+    return params;
+  }
+
+  protected FragmentParameters getFragmentParameters4ProductWithCategory() {
+    FragmentParameters  params = getFragmentParameters4Product();
+    params.setCategoryId(CATEGORY_ID);
     return params;
   }
 
   protected FragmentParameters getFragmentParameters4ProductAssets() {
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/" + STORE_ID + "/" + LOCALE_STRING + "/params;view=asAssets;parameter=orientation%253Dportrait%252Ctypes%253Dall;";
     FragmentParameters  params = FragmentParametersFactory.create(url);
-    params.setCategoryId(CATEGORY_ID);
     params.setProductId(EXTERNAL_TECH_ID);
     params.setExternalReference(EXTERNAL_REF);
     return params;

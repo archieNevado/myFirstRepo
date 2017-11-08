@@ -15,7 +15,7 @@ import java.util.List;
 public class SitemapSetup {
   private List<SitemapUrlGenerator> urlGenerators;
   private SitemapRendererFactory sitemapRendererFactory;
-  private String protocol = "http";
+  private String protocol;
 
 
   // --- configuration ----------------------------------------------
@@ -31,7 +31,7 @@ public class SitemapSetup {
   }
 
   /**
-   * Defaults to "http".
+   * The protocol of the site URLs (should be http or https)
    */
   public void setProtocol(String protocol) {
     this.protocol = protocol;

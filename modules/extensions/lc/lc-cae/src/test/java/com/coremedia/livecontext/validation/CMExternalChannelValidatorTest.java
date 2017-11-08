@@ -2,57 +2,55 @@ package com.coremedia.livecontext.validation;
 
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-import org.junit.Before;
+import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CMExternalChannelValidatorTest {
 
-  private CMExternalChannelValidator testling;
+  @Mock
+  private CMExternalChannel channel;
 
-  @Before
-  public void setup() {
-    testling = new CMExternalChannelValidator();
-  }
+  @Mock
+  private Category category;
+
+  @InjectMocks
+  private CMExternalChannelValidator testling;
 
   @Test
   public void validCatalogRootCategory() {
-    CMExternalChannel channel = mock(CMExternalChannel.class);
     when(channel.isCatalogRoot()).thenReturn(true);
-    assertTrue(testling.validate(channel));
+    assertThat(testling.validate(channel)).isTrue();
   }
 
   @Test
   public void validCatalogCategory() {
-    CMExternalChannel channel = mock(CMExternalChannel.class);
-    when(channel.getExternalId()).thenReturn("externalId");
-    // partial mock
-    testling = spy(testling);
-    doReturn(mock(Category.class)).when(testling).getCategory(anyString());
+    String reference = "test:///catalog/category/TEST";
+    when(channel.getExternalId()).thenReturn(reference);
+    when(channel.getCategory()).thenReturn(category);
 
-    assertTrue(testling.validate(channel));
+    assertThat(testling.validate(channel)).isTrue();
   }
 
   @Test
   public void invalidCatalogCategory() {
-    CMExternalChannel channel = mock(CMExternalChannel.class);
     when(channel.getExternalId()).thenReturn("externalId");
+    when(channel.getCategory()).thenThrow(new InvalidIdException("invalid"));
     // category does not exist
-    assertFalse(testling.validate(channel));
+    assertThat(testling.validate(channel)).isFalse();
   }
 
   @Test
   public void emptyExternalId() {
-    CMExternalChannel channel = mock(CMExternalChannel.class);
     // external id is empty
-    assertFalse(testling.validate(channel));
+    assertThat(testling.validate(channel)).isFalse();
   }
 
 }

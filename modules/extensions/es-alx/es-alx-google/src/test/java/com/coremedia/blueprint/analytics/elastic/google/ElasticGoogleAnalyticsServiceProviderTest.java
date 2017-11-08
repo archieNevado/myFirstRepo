@@ -43,10 +43,11 @@ import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.KEY_LIMIT;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -169,7 +170,7 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     mockStatic(NetHttpTransport.class);
     mockStatic(JacksonFactory.class);
     mockStatic(SslUtils.class);
-    when(SecurityUtils.loadPrivateKeyFromKeyStore(any(KeyStore.class), any(InputStream.class), anyString(), anyString(), anyString())).thenReturn(privateKey);
+    when(SecurityUtils.loadPrivateKeyFromKeyStore(nullable(KeyStore.class), nullable(InputStream.class), anyString(), anyString(), anyString())).thenReturn(privateKey);
     when(GoogleNetHttpTransport.newTrustedTransport()).thenReturn(netHttpTransport);
     when(SslUtils.initSslContext(any(SSLContext.class), any(KeyStore.class), any(TrustManagerFactory.class))).thenReturn(sslContext);
     when(JacksonFactory.getDefaultInstance()).thenReturn(jacksonFactory);

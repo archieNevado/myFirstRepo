@@ -9,6 +9,7 @@
   <context:component-scan base-package="com.coremedia.ecommerce.studio.rest"/>
 
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
+  <import resource="classpath:/framework/spring/lc-ecommerce-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
   <import resource="classpath:/com/coremedia/ecommerce/studio/rest/validators/ecommerce-validators.xml"/>
 
@@ -25,6 +26,7 @@
   <bean id="segmentsResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.SegmentsResource" scope="prototype"/>
   <bean id="contractsResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.ContractsResource" scope="prototype"/>
   <bean id="storeResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.StoreResource" scope="prototype"/>
+  <bean id="catalogResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.CatalogResource" scope="prototype"/>
   <bean id="workspacesResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.WorkspacesResource" scope="prototype"/>
 
   <bean id="catalogConfig" class="com.coremedia.ecommerce.studio.rest.CatalogServiceResource" scope="prototype"/>

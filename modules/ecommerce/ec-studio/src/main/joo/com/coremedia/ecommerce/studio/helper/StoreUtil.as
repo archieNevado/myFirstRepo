@@ -3,6 +3,7 @@ package com.coremedia.ecommerce.studio.helper {
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ecommerce.studio.catalogHelper;
+import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.RemoteBeanUtil;
@@ -33,7 +34,14 @@ public class StoreUtil {
       return undefined;
     }
     if(store is Store) {
-      return store.getRootCategory();
+      var defaultCatalog:Catalog = store.getDefaultCatalog();
+      if (defaultCatalog === undefined) {
+        return undefined;
+      }
+      if (defaultCatalog === null) {
+        return store.getRootCategory();
+      }
+      return defaultCatalog.getRootCategory();
     }
     return null;
   }

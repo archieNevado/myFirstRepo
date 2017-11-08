@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.pagegrid;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
 import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceImpl;
 import com.coremedia.cap.content.Content;
@@ -18,8 +18,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * PageGridService merges content backed pageGrids along an external category hierarchy.
@@ -78,9 +76,10 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
   @Nullable
   private Content getRootCategoryContent(@Nullable Content content) {
     try {
-      CommerceConnection commerceConnection = requireNonNull(DefaultConnection.get(), "no commerce connection available");
+      CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
       StoreContext storeContext = commerceConnection.getStoreContextProvider().findContextByContent(content);
-      Category rootCategory = commerceConnection.getCatalogService().withStoreContext(storeContext).findRootCategory();
+      Category rootCategory = commerceConnection.getCatalogService().withStoreContext(storeContext).findRootCategory(storeContext.getCatalogAlias(), storeContext);
       return augmentationService.getContent(rootCategory);
     } catch (CommerceException e) {
       LOG.warn("Could not retrieve root category for Content {}.", content, e);

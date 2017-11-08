@@ -1,11 +1,15 @@
 package com.coremedia.blueprint.cae.sitemap;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOError;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Renders the URLs in sitemap XML format.
@@ -23,8 +27,7 @@ class SitemapXmlRenderer extends AbstractSitemapRenderer {
   private static final int SITEMAP_XML_MAX_SIZE = 10485760;
 
   private static final String CLOSING = "</urlset>";
-
-  private String absoluteUrlPrefix;
+  private final String urlHostForSite;
 
   private int availableSize;
 
@@ -36,8 +39,8 @@ class SitemapXmlRenderer extends AbstractSitemapRenderer {
    *
    * @param absoluteUrlPrefix format like in the site prefix mappings
    */
-  SitemapXmlRenderer(String absoluteUrlPrefix) {
-    this.absoluteUrlPrefix = absoluteUrlPrefix;
+  SitemapXmlRenderer(@Nonnull String absoluteUrlPrefix) {
+    urlHostForSite = getHostFromUrlString(absoluteUrlPrefix);
   }
 
 
@@ -61,9 +64,7 @@ class SitemapXmlRenderer extends AbstractSitemapRenderer {
 
   @Override
   public void appendUrl(String url) {
-    if (!url.contains(":"+absoluteUrlPrefix)) {
-      throw new IllegalArgumentException("URL \"" + url + "\" does not belong to the target domain " + absoluteUrlPrefix + ".");
-    }
+    validateUrlHost(url);
     if (currentCount()>=SITEMAP_XML_MAX_URLS) {
       throw new IllegalStateException("Sitemap is full (50,000 entries max).");
     }
@@ -81,6 +82,18 @@ class SitemapXmlRenderer extends AbstractSitemapRenderer {
     super.appendUrl(url);
     print(item);
     availableSize -= itemSize;
+  }
+
+  private void validateUrlHost(@Nonnull String url) {
+    String urlHost = getHostFromUrlString(url);
+    if (!Objects.equals(urlHost, urlHostForSite)) {
+      throw new IllegalArgumentException("URL \"" + url + "\" does not belong to the target domain " + urlHostForSite + ".");
+    }
+  }
+
+  @Nullable
+  private static String getHostFromUrlString(@Nonnull String url) {
+    return UriComponentsBuilder.fromUriString(url).build().getHost();
   }
 
   @Override

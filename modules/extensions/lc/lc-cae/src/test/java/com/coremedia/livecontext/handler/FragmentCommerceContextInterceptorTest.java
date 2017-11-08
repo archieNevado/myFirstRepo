@@ -1,28 +1,39 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.fragment.FragmentContext;
+import com.coremedia.livecontext.fragment.FragmentContextProvider;
+import com.coremedia.livecontext.fragment.FragmentParameters;
+import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.livecontext.fragment.links.context.Context;
 import com.coremedia.livecontext.fragment.links.context.ContextBuilder;
 import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.google.common.base.Strings;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.annotation.Nullable;
+import javax.servlet.ServletRequest;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,13 +46,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FragmentContextProvider.class})
 public class FragmentCommerceContextInterceptorTest {
 
   private static final String REQUEST_PATH_INFO = "/anyShop";
@@ -61,21 +78,50 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Mock
   private ContractService contractService;
+  private MockCommerceEnvBuilder envBuilder;
+
+  @Mock
+  private CatalogAliasTranslationService catalogAliasTranslationService;
+
+  FragmentContext fragmentContext;
 
   @Before
   public void setup() {
     initMocks(this);
 
-    connection = MockCommerceEnvBuilder.create().setupEnv();
+    envBuilder = MockCommerceEnvBuilder.create();
+    connection = envBuilder.setupEnv();
     connection.setVendorName("IBM");
     connection.getStoreContext().put(StoreContextImpl.SITE, "siteId");
     connection.setContractService(contractService);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
 
-    testling = new FragmentCommerceContextInterceptor();
+    testling = spy(new FragmentCommerceContextInterceptor());
     testling.setSiteResolver(siteLinkHelper);
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
-    testling.setPreview(false);
+    testling.setCatalogAliasTranslationService(catalogAliasTranslationService);
+    runTestlingInPreviewMode(false);
+
+    when(catalogAliasTranslationService.getCatalogAliasForId(any(CatalogId.class), any(String.class))).thenReturn(Optional.of(DEFAULT_CATALOG_ALIAS));
+
+    fragmentContext = new FragmentContext();
+    fragmentContext.setFragmentRequest(true);
+    String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;catalogId=catalog";
+    FragmentParameters  fragmentParameters  = FragmentParametersFactory.create(url);
+    fragmentContext.setParameters(fragmentParameters);
+
+    mockStatic(FragmentContextProvider.class);
+    when(FragmentContextProvider.getFragmentContext(any(ServletRequest.class))).thenReturn(fragmentContext);
+  }
+
+  private void runTestlingInPreviewMode(boolean previewMode) {
+    testling.setPreview(previewMode);
+    doReturn(previewMode).when(testling).isStudioPreviewRequest();
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    envBuilder.tearDownEnv();
   }
 
   @Test
@@ -88,14 +134,15 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.initUserContext(connection, request);
 
-    UserContext userContext = DefaultConnection.get().getUserContext();
+    UserContext userContext = CurrentCommerceConnection.get().getUserContext();
     assertThat(userContext.getUserId()).isEqualTo("userId");
     assertThat(userContext.getUserName()).isEqualTo("loginId");
   }
 
   @Test
   public void testInitStoreContextWithContractIds() {
-    testling.setPreview(true);
+    runTestlingInPreviewMode(true);
+
     Collection<Contract> contracts = new ArrayList<>();
     Contract contract1 = mock(Contract.class);
     Contract contract2 = mock(Contract.class);
@@ -103,7 +150,7 @@ public class FragmentCommerceContextInterceptorTest {
     when(contract2.getExternalTechId()).thenReturn("contract2");
     contracts.add(contract1);
     contracts.add(contract2);
-    when(contractService.findContractIdsForUser(any(UserContext.class), any(StoreContext.class), anyString()))
+    when(contractService.findContractIdsForUser(any(UserContext.class), any(StoreContext.class), nullable(String.class)))
             .thenReturn(contracts);
 
     MockHttpServletRequest request = new MockHttpServletRequest();
@@ -115,7 +162,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
     testling.initUserContext(connection, request);
-    String[] contractIdsInStoreContext = DefaultConnection.get().getStoreContext().getContractIds();
+    String[] contractIdsInStoreContext = CurrentCommerceConnection.get().getStoreContext().getContractIds();
     List storeContextList = Arrays.asList(contractIdsInStoreContext);
     Collections.sort(storeContextList);
     List expected = Arrays.asList("contract1", "contract2");
@@ -126,7 +173,8 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Test
   public void testInitStoreContextWithContractIdsButDisabledProcessing() {
-    testling.setPreview(true);
+    runTestlingInPreviewMode(true);
+
     testling.setContractsProcessingEnabled(false);
     Collection<Contract> contracts = new ArrayList<>();
     Contract contract1 = mock(Contract.class);
@@ -147,13 +195,14 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
     testling.initUserContext(connection, request);
-    String[] contractIdsInStoreContext = DefaultConnection.get().getStoreContext().getContractIds();
+    String[] contractIdsInStoreContext = CurrentCommerceConnection.get().getStoreContext().getContractIds();
     assertThat(contractIdsInStoreContext).isNull();
   }
 
   @Test
   public void testInitStoreContextProviderInPreview() {
-    testling.setPreview(true);
+    runTestlingInPreviewMode(true);
+
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(REQUEST_PATH_INFO);
 
@@ -185,7 +234,8 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Test
   public void testInitStoreContextProviderWithTimeShift() {
-    testling.setPreview(true);
+    runTestlingInPreviewMode(true);
+
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(REQUEST_PATH_INFO);
 
@@ -198,7 +248,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    StoreContext storeContext = DefaultConnection.get().getStoreContext();
+    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
     assertThat(storeContext.getPreviewDate()).isEqualTo("02-07-2014 17:57 US/Pacific");
 
     Calendar calendar = parsePreviewDateIntoCalendar(storeContext.getPreviewDate());
@@ -209,7 +259,8 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Test
   public void testConvertPreviewDate() {
-    testling.setPreview(true);
+    runTestlingInPreviewMode(true);
+
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(REQUEST_PATH_INFO);
 

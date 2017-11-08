@@ -12,6 +12,7 @@
                                     stateId="createFromTemplateDialogState"
                                     stateful="true"
                                     resizeHandles="e"
+                                    minHeight="600"
                                     minWidth="401"
                                     width="401"
                                     x="113"
@@ -37,7 +38,8 @@
     ]]></fx:Script>
 
   <local:items>
-    <Panel itemId="{EDITOR_CONTAINER_ITEM_ID}">
+    <Panel itemId="{EDITOR_CONTAINER_ITEM_ID}"
+           scrollable="y">
       <items>
         <ui:StatefulTextField name="{ProcessingData.NAME_PROPERTY}"
                               itemId="{NAME_FIELD_ID}"
@@ -54,13 +56,12 @@
             <ui:BlockEnterPlugin/>
           </ui:plugins>
         </ui:StatefulTextField>
-        <bpb-components:NavigationLinkFieldWrapper
-                label="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'parent_label')}"
-                doctype="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
-                model="{getModel()}"
-                labelAlign="top"
-                itemId="{PARENT_PAGE_FIELD_ID}"
-                propertyName="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property')}"/>
+        <bpb-components:NavigationLinkFieldWrapper label="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'parent_label')}"
+                                                   doctype="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
+                                                   model="{getModel()}"
+                                                   labelAlign="top"
+                                                   itemId="{PARENT_PAGE_FIELD_ID}"
+                                                   propertyName="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property')}"/>
 
         <FieldContainer
                 fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'choose_template_text')}">

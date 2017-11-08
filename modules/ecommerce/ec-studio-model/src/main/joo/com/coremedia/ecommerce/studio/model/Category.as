@@ -49,6 +49,15 @@ public interface Category extends CatalogObject, Previewable {
   function getParent():Category;
 
   /**
+   * Returns the catalog of this category
+   *
+   * @return the catalog
+   *
+   * @see CatalogObjectPropertyNames#CATALOG
+   */
+  function getCatalog():Catalog;
+
+  /**
    * @return The display name for a category
    * @see CatalogObjectPropertyNames#DISPLAY_NAME
    */

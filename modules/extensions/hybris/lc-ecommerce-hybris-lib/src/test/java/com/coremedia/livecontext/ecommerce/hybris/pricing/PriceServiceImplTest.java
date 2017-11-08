@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.hybris.pricing;
 
+import com.coremedia.blueprint.lc.test.AbstractServiceTest;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.livecontext.ecommerce.hybris.AbstractHybrisServiceTest;
 import com.coremedia.livecontext.ecommerce.hybris.HybrisTestConfig;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.PriceDocument;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, HybrisTestConfig.class})
-public class PriceServiceImplTest extends AbstractHybrisServiceTest {
+public class PriceServiceImplTest extends AbstractServiceTest {
 
   @Inject
   private PriceServiceImpl testling;

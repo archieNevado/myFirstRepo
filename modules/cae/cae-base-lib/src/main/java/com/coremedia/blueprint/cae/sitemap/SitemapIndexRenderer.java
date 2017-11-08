@@ -113,7 +113,7 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
     try {
       sitemapXmlRenderer.appendUrl(url);
     } catch (Exception e) {
-      LOG.error("Cannot render sitemap url " + url + ": " + e.getMessage() + ", omit and continue.");
+      LOG.warn("Cannot render sitemap url {}: {}, omit and continue.", url, e.getMessage());
     }
   }
 

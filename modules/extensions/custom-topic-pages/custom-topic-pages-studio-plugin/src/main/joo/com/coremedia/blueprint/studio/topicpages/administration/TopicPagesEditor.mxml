@@ -9,7 +9,6 @@
         closable="true"
         id_="{TopicPagesEditorBase.TOPIC_PAGES_EDITOR_ID}"
         iconCls="{resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_icon')}"
-        header="true"
         ui="{PanelSkin.FRAME.getSkin()}"
         constrainHeader="true"
         layout="fit">

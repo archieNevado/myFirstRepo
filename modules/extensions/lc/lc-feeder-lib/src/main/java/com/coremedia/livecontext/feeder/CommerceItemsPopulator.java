@@ -15,6 +15,7 @@ public class CommerceItemsPopulator implements FeedablePopulator<Content> {
 
   static final String TYPE_PRODUCT_TEASER = "CMProductTeaser";
   static final String TYPE_MARKETING_SPOT = "CMMarketingSpot";
+  static final String TYPE_PRODUCT_LIST = "CMProductList";
   static final String TYPE_LINKABLE = "CMLinkable";
   static final String TYPE_EXTERNAL_CHANNEL = "CMExternalChannel";
 
@@ -27,6 +28,7 @@ public class CommerceItemsPopulator implements FeedablePopulator<Content> {
     String contentTypeName = contentType.getName();
     if (contentTypeName.equals(TYPE_PRODUCT_TEASER)
             || contentTypeName.equals(TYPE_MARKETING_SPOT)
+            || contentTypeName.equals(TYPE_PRODUCT_LIST)
             || contentTypeName.equals(TYPE_EXTERNAL_CHANNEL)) {
       String externalId = content.getString(PROPERTY_PRODUCT_TEASER_EXTERNAL_ID);
       if (externalId != null && !externalId.isEmpty()) {

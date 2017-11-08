@@ -1,17 +1,21 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.ecommerce.common.ProductIdExtractor;
 import com.coremedia.livecontext.asset.util.AssetHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.google.common.annotations.VisibleForTesting;
@@ -84,12 +88,13 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
       // connection on the respective thread-local because the catalog
       // service needs it for now (and the commerce filter doesn't apply
       // in this upload scenario).
-      DefaultConnection.set(commerceConnection.get());
+      CurrentCommerceConnection.set(commerceConnection.get());
+
       List<String> productIds;
       try {
         productIds = getProductIds(commerceConnection.get(), request, blob);
       } finally {
-        DefaultConnection.clear();
+        CurrentCommerceConnection.remove();
       }
 
       properties.put(NAME_LOCAL_SETTINGS, assetHelper.updateCMPictureForExternalIds(request.getEntity(), productIds));
@@ -120,16 +125,14 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
   @Nonnull
   private List<String> getProductIds(@Nonnull CommerceConnection commerceConnection,
                                      @Nonnull ContentWriteRequest request, @Nonnull Blob blob) {
-    CommerceIdProvider idProvider = commerceConnection.getIdProvider();
-    CatalogService catalogService = commerceConnection.getCatalogService();
 
     List<String> productIds = new ArrayList<>();
 
     Iterable<String> xmpIds = getXmpIds(request, blob);
     for (String externalId : xmpIds) {
-      Product product = retrieveProductOrVariant(externalId, idProvider, catalogService);
+      Product product = retrieveProductOrVariant(externalId, commerceConnection);
       if (product != null) {
-        productIds.add(product.getId());
+        productIds.add(CommerceIdFormatterHelper.format(product.getId()));
       } else {
         LOG.debug("Product id {} not found in catalog; XMP data will not be persisted.", externalId);
       }
@@ -151,17 +154,28 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
 
   @Nullable
   @VisibleForTesting
-  Product retrieveProductOrVariant(String externalId, @Nonnull CommerceIdProvider idProvider,
-                                   @Nonnull CatalogService catalogService) {
-    String id = idProvider.formatProductId(externalId);
+  Product retrieveProductOrVariant(String externalId, @Nonnull CommerceConnection commerceConnection) {
+    CommerceIdProvider idProvider = commerceConnection.getIdProvider();
+    CatalogService catalogService = commerceConnection.getCatalogService();
+    StoreContext storeContext = commerceConnection.getStoreContext();
+
+    if (storeContext == null) {
+      LOG.warn("Store context not available in commerce connection {}", commerceConnection);
+      return null;
+    }
+
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+
+    CommerceId productId = commerceConnection.getIdProvider().formatProductId(catalogAlias, externalId);
+
     //the catalogservice allows to retrieve Categories, Products and/or ProductVariants by a single call of #findProductById
-    Product result = catalogService.findProductById(id);
+    Product result = catalogService.findProductById(productId, storeContext);
     if (result != null) {
       return result;
     } else {
       //for other catalog implementations an explicit request for ProductVariants
-      id = idProvider.formatProductVariantId(externalId);
-      result = catalogService.findProductVariantById(id);
+      productId = idProvider.formatProductVariantId(catalogAlias, externalId);
+      result = catalogService.findProductVariantById(productId, storeContext);
     }
     return result;
   }

@@ -4,11 +4,13 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
 import org.springframework.beans.factory.annotation.Required;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -46,8 +48,9 @@ public class SegmentFormatValidator extends ContentTypeValidatorBase {
     }
 
     //check if the content belongs to a livecontext site
-    Site site = sitesService.getContentSiteAspect(content).getSite();
-    if (site == null || !commerceConnectionInitializer.findConnectionForSite(site).isPresent()) {
+    Optional<Site> site = sitesService.getContentSiteAspect(content).findSite();
+    Optional<CommerceConnection> commerceConnection = site.flatMap(s -> commerceConnectionInitializer.findConnectionForSite(s));
+    if (!commerceConnection.isPresent()) {
       return;
     }
 

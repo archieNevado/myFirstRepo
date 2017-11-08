@@ -17,7 +17,7 @@ public class OpenAnalyticsDeepLinkUrlButtonBase extends OpenAnalyticsUrlButtonBa
   internal var contentExpression:ValueExpression;
   private var uriExpression:ValueExpression;
 
-  public function OpenAnalyticsDeepLinkUrlButtonBase(config:Button = null) {
+  public function OpenAnalyticsDeepLinkUrlButtonBase(config:OpenAnalyticsDeepLinkUrlButton = null) {
     const localBean:Bean = beanFactory.createLocalBean();
     uriExpression = ValueExpressionFactory.create('serviceUrl', localBean);
 

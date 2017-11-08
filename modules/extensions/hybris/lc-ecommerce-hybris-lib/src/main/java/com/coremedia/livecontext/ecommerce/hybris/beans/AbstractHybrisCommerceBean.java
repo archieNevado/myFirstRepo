@@ -1,13 +1,12 @@
 package com.coremedia.livecontext.ecommerce.hybris.beans;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.hybris.common.CommerceBeanHelper;
-import com.coremedia.livecontext.ecommerce.hybris.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.hybris.cache.AbstractHybrisDocumentCacheKey;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.AbstractHybrisDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.resources.CatalogResource;
 import com.coremedia.xml.Markup;
@@ -15,15 +14,11 @@ import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Locale;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 public abstract class AbstractHybrisCommerceBean extends AbstractCommerceBean {
 
   private AbstractHybrisDocument delegate;
 
   private CatalogResource catalogResource;
-
-  private CommerceBeanHelper commerceBeanHelper;
 
   private CommerceCache commerceCache;
 
@@ -36,15 +31,6 @@ public abstract class AbstractHybrisCommerceBean extends AbstractCommerceBean {
     this.commerceCache = commerceCache;
   }
 
-  public CommerceBeanHelper getCommerceBeanHelper() {
-    return commerceBeanHelper;
-  }
-
-  @Required
-  public void setCommerceBeanHelper(CommerceBeanHelper commerceBeanHelper) {
-    this.commerceBeanHelper = commerceBeanHelper;
-  }
-
   public AbstractHybrisDocument getDelegate() {
     if (delegate == null) {
       load();
@@ -54,7 +40,7 @@ public abstract class AbstractHybrisCommerceBean extends AbstractCommerceBean {
   }
 
   public AssetUrlProvider getAssetUrlProvider() {
-    return DefaultConnection.get().getAssetUrlProvider();
+    return CurrentCommerceConnection.get().getAssetUrlProvider();
   }
 
   /**
@@ -69,7 +55,8 @@ public abstract class AbstractHybrisCommerceBean extends AbstractCommerceBean {
   @Override
   public String getExternalId() {
     // do not call the getDelegate() method because it has consequences regarding a untimely loading of beans
-    return CommerceIdHelper.convertToExternalId(getId());
+    CommerceId commerceId = getId();
+    return commerceId.getExternalId().orElseGet(() -> commerceId.getTechId().orElse(null));
   }
 
   @Override
@@ -85,12 +72,9 @@ public abstract class AbstractHybrisCommerceBean extends AbstractCommerceBean {
     this.catalogResource = catalogResource;
   }
 
-  protected void loadCached(AbstractCommerceCacheKey cacheKey) {
-    AbstractHybrisDocument document = (AbstractHybrisDocument) getCommerceCache().get(cacheKey);
-
-    if (document == null) {
-      throw new NotFoundException("Commerce object not found with id '" + getId() + "'.");
-    }
+  protected <T extends AbstractHybrisDocument> void loadCached(AbstractHybrisDocumentCacheKey<T> cacheKey) {
+    AbstractHybrisDocument document = getCommerceCache().find(cacheKey)
+            .orElseThrow(() -> new NotFoundException("Commerce object not found with id '" + getId() + "'."));
 
     setDelegate(document);
   }

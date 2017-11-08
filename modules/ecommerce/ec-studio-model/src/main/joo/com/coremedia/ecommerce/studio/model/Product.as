@@ -10,6 +10,15 @@ public interface Product extends CatalogObject, Previewable{
    */
   function getCategory():Category;
 
+  /**
+   * Returns the catalog of this product
+   *
+   * @return the catalog
+   *
+   * @see CatalogObjectPropertyNames#CATALOG
+   */
+  function getCatalog():Catalog;
+
   function getThumbnailUrl():String;
 
   function getLongDescription():String;

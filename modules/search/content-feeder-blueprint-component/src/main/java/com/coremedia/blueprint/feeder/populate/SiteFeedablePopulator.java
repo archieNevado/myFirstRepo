@@ -11,8 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Optional;
+
 public class SiteFeedablePopulator implements FeedablePopulator<Content> {
+
   private static final Logger LOG = LoggerFactory.getLogger(SiteFeedablePopulator.class);
+
   private static final String SITE_SOLR_INDEX_FIELD = "site";
 
   private SitesService sitesService;
@@ -35,9 +42,17 @@ public class SiteFeedablePopulator implements FeedablePopulator<Content> {
       return;
     }
 
-    Site site = sitesService.getContentSiteAspect(content).getSite();
-    String siteName = site != null ? site.getName() : null;
+    String siteName = getSiteName(content);
+    Map<String, ?> parameters = TextParameters.NONE.asMap();
+
+    feedable.setStringElement(SITE_SOLR_INDEX_FIELD, siteName, parameters);
+  }
+
+  @Nullable
+  private String getSiteName(@Nonnull Content content) {
+    Optional<Site> site = sitesService.getContentSiteAspect(content).findSite();
+    String siteName = site.map(Site::getName).orElse(null);
     LOG.debug("Site for {}: {}", content, siteName);
-    feedable.setStringElement(SITE_SOLR_INDEX_FIELD, siteName, TextParameters.NONE.asMap());
+    return siteName;
   }
 }

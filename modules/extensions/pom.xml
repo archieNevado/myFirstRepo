@@ -33,7 +33,6 @@
     <module>create-from-template</module>
     <module>lc</module>
     <module>corporate</module>
-    <module>corporate-es</module>
     <module>lc-es</module>
     <module>lc-p13n</module>
     <module>lc-asset</module>

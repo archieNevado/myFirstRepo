@@ -1,5 +1,5 @@
 package com.coremedia.ecommerce.studio.model {
-[RestResource(uriTemplate="livecontext/category/{siteId:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
+[RestResource(uriTemplate="livecontext/category/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
 public class CategoryImpl extends CatalogObjectImpl implements Category {
   public function CategoryImpl(uri:String,vars:Object) {
     super(uri);
@@ -29,6 +29,10 @@ public class CategoryImpl extends CatalogObjectImpl implements Category {
 
   public function getParent():Category {
     return get(CatalogObjectPropertyNames.PARENT);
+  }
+
+  public function getCatalog():Catalog {
+    return get(CatalogObjectPropertyNames.CATALOG);
   }
 
   public function getDisplayName():String {

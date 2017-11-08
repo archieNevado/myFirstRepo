@@ -34,6 +34,8 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.util.EventUtil;
 
+import ext.Ext;
+
 import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
@@ -242,7 +244,7 @@ public class CatalogStudioPluginBase extends StudioPlugin {
       }
       else if (btn === 'no') {
         //show preferences
-        var prefWindow:PreferenceWindow = new PreferenceWindow({selectedTabItemId: 'contentCatalogPreferences'});
+        var prefWindow:PreferenceWindow = Ext.create(PreferenceWindow, {selectedTabItemId: 'contentCatalogPreferences'});
         prefWindow.show();
         //open the content in library if the user enable the show as content contentCatalogPreferences
         prefWindow.on('close', function ():void {

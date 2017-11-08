@@ -3,7 +3,8 @@ package com.coremedia.livecontext.ecommerce.hybris.beans;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.hybris.common.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.VariantAttributeDocument;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class ProductVariantImpl extends ProductImpl implements ProductVariant {
@@ -27,17 +29,13 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
       return null;
     }
 
-    return getCatalogService().findProductById(CommerceIdHelper.formatProductId(baseProductCode));
+    CommerceId commerceId = HybrisCommerceIdProvider.commerceId(PRODUCT).withExternalId(baseProductCode).build();
+    return getCatalogService().findProductById(commerceId, getContext());
   }
 
   @Override
   public ProductDocument getDelegate() {
     return super.getDelegate();
-  }
-
-  @Override
-  public String getReference() {
-    return CommerceIdHelper.formatProductVariantId(getExternalId());
   }
 
   @Nonnull

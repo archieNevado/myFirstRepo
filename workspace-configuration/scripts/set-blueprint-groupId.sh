@@ -20,4 +20,4 @@ find ${BASE_PATH} -type f \( -name pom.xml -or -name "*.rb" -or -name "*.md" -or
  -exec sh -c '
  grep -l "<groupId>${OLD_GROUP_ID}\|\"${OLD_GROUP_ID}\"\|\x27${OLD_GROUP_ID}\x27" "$0"
  sed -i -e "s#<groupId>${OLD_GROUP_ID}</groupId>#<groupId>${NEW_GROUP_ID}</groupId>#g" -e "s#\"${OLD_GROUP_ID}\"#\"${NEW_GROUP_ID}\"#g" -e "s#\x27${OLD_GROUP_ID}\x27#\x27${NEW_GROUP_ID}\x27#g" "$0"
-' {} ';'
+' {} ';' -prune

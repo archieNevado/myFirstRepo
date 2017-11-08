@@ -27,7 +27,7 @@
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <ec:CatalogRepositoryListContainer/>
+            <ec:CatalogRepositoryListContainer selectedItemsValueExpression="{selectionHolder.getSelectedItemsValueExpression()}"/>
           </ui:items>
         </ui:AddItemsPlugin>
       </editor:plugins>

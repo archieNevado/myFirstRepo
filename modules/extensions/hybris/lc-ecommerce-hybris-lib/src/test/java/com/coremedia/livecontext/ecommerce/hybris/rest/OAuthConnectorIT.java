@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest;
 
 import com.coremedia.livecontext.ecommerce.hybris.HybrisITBase;
-import com.coremedia.livecontext.ecommerce.hybris.SystemProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
@@ -10,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -22,7 +22,7 @@ public class OAuthConnectorIT extends HybrisITBase {
 
   @Test
   public void testGetOrRequestAccessToken() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
 

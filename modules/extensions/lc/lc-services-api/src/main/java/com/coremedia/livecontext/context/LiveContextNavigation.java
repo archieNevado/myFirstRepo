@@ -10,13 +10,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 public interface LiveContextNavigation extends Navigation {
 
   /**
-   * Returns the external id.
-   *
-   * @return the external id
-   */
-  String getExternalId();
-
-  /**
    * Returns the category.
    *
    * @return the category

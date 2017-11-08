@@ -1,0 +1,20 @@
+{
+  "name": "@coremedia/js-basic",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "@coremedia/js-jquery-utils": "../jquery-utils",
+    "@coremedia/js-logger": "../logger",
+    "@coremedia/js-node-decoration-service": "../node-decoration-service",
+    "@coremedia/js-utils": "../utils"
+  },
+  "devDependencies": {
+    "babel-preset-env": "1.6.0",
+    "jest": "21.2.1"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "main": "src/index.js"
+}

@@ -1,0 +1,15 @@
+/**
+ * Quickinfo
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+
+/**
+ * quickinfo is not visible by default (display: none is not used due to technical reasons)
+ */
+
+$cm-quickinfo-prefix: "cm-quickinfo" !default;
+$cm-quickinfo-background-color: #fff !default;
+$cm-quickinfo-image-aspect-ratio-x: 4 !default;
+$cm-quickinfo-image-aspect-ratio-y: 3 !default;

@@ -54,10 +54,7 @@ public class FragmentParametersFactory {
   }
 
   /**
-   * matrix tokens:
-   * dear developer who maintains this code: if you know the correct spring class for a parsing
-   * matrix parameters, feel free to replace this code, because I think its creepy to do this manually here.
-   *
+   * Manual parsing of of the matrix parameters
    * @param requestUrl the request URL to retrieve the matrix parameters from.
    */
   private static Map<String, String> getMatrixParams(String requestUrl) {

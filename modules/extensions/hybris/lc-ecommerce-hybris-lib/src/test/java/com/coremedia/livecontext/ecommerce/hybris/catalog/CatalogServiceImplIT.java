@@ -3,16 +3,16 @@ package com.coremedia.livecontext.ecommerce.hybris.catalog;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
-import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.hybris.HybrisTestConfig;
-import com.coremedia.livecontext.ecommerce.hybris.SystemProperties;
+import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +20,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -32,10 +36,7 @@ import static org.junit.Assert.assertEquals;
 public class CatalogServiceImplIT extends CatalogServiceBaseTest {
 
   @Inject
-  CatalogServiceImpl testling;
-
-  @Inject
-  TestConfig testConfig;
+  private CatalogServiceImpl testling;
 
   @Betamax(tape = "hy_testFindProductById", match = {MatchRule.path, MatchRule.query})
   @Test
@@ -92,7 +93,8 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   @Betamax(tape = "hy_testFindProductVariantsByProductId", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindProductVariantsByProductId() {
-    Product product = testling.findProductById(PRODUCT_CODE);
+    CommerceId productId = HybrisCommerceIdProvider.commerceId(PRODUCT).withExternalId(PRODUCT_CODE).build();
+    Product product = testling.findProductById(productId, getStoreContext());
     assertThat(product).isNotNull();
 
     List<ProductVariant> variants = product.getVariants();
@@ -102,7 +104,8 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   @Betamax(tape = "hy_testProductAxisFilters", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testProductAxisFilters() {
-    Product product = testling.findProductById(PRODUCT_CODE);
+    CommerceId productId = HybrisCommerceIdProvider.commerceId(PRODUCT).withExternalId(PRODUCT_CODE).build();
+    Product product = testling.findProductById(productId, getStoreContext());
     assertThat(product).isNotNull();
 
     List<String> variantAxisNames = product.getVariantAxisNames();
@@ -127,8 +130,8 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   @Betamax(tape = "hy_testFindProductsByCategoryCheckProductsOnly", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindProductsByCategoryCheckProductsOnly() throws Exception {
-    String productId = getIdProvider().formatProductId(PRODUCT_CODE);
-    Product product = testling.findProductById(productId);
+    CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE);
+    Product product = testling.findProductById(productId, getStoreContext());
     assertThat(product).isNotNull();
 
     Category category = product.getCategory();
@@ -221,12 +224,12 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   @Test
   @Override
   public void testSearchProducts() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
 
     //TODO: call super.testSearchProducts(), when hybris rest services are customized
-    SearchResult<Product> searchResult = testling.searchProducts(SEARCH_TERM_1, null);
+    SearchResult<Product> searchResult = testling.searchProducts(SEARCH_TERM_1, emptyMap(), getStoreContext());
     assertThat(searchResult).isNotNull();
     assertThat(searchResult.getSearchResult()).isNotEmpty();
 
@@ -236,10 +239,11 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     //TODO: fix in hybris rest implementation
 
     //search product below category
-    Category category = testling.findCategoryById(getIdProvider().formatCategoryId(LEAF_CATEGORY_CODE));
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
     Map<String, String> searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
-    SearchResult<Product> searchResultByCategory = testling.searchProducts(SEARCH_TERM_1, searchParams);
+    SearchResult<Product> searchResultByCategory = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
     assertThat(searchResultByCategory).isNotNull();
     assertThat(searchResultByCategory.getSearchResult().size()).isGreaterThanOrEqualTo(3);
     assertThat(searchResultByCategory.getTotalCount()).isLessThan(searchResult.getTotalCount());
@@ -249,12 +253,12 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     ignoredParam.put("blub", "10");
     ignoredParam.put(CatalogService.SEARCH_PARAM_PAGESIZE, "10");
     ignoredParam.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
-    SearchResult<Product> searchResultIgnoredParam = testling.searchProducts(SEARCH_TERM_1, ignoredParam);
+    SearchResult<Product> searchResultIgnoredParam = testling.searchProducts(SEARCH_TERM_1, ignoredParam, getStoreContext());
     assertThat(searchResultIgnoredParam).isNotNull();
     assertEquals("given page size has changed", searchResultIgnoredParam.getPageSize(), 10);
 
     //search product no hits
-    SearchResult<Product> searchResultEmpty = testling.searchProducts("schnasndasn", null);
+    SearchResult<Product> searchResultEmpty = testling.searchProducts("schnasndasn", emptyMap(), getStoreContext());
     assertThat(searchResultEmpty).isNotNull();
     assertThat(searchResultEmpty.getSearchResult()).isEmpty();
 
@@ -265,10 +269,119 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Test
-  public void testSearchFacetsProducts() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+  public void testSortedSearchProductsByNameAsc() throws Exception {
+    if (useBetamaxTapes()) {
       return;
     }
+
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_NAME_ASC");
+    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    int total = searchProducts.getTotalCount();
+    assertThat(total).isGreaterThan(0);
+    List<Product> products = searchProducts.getSearchResult();
+    int counter = 1;
+    while (counter < total) {
+      Product previousProduct = products.get(counter - 1);
+      Product currentProduct = products.get(counter);
+      String previousProductName = previousProduct.getName();
+      String currentProductName = currentProduct.getName();
+      assertThat(previousProductName.compareTo(currentProductName) < 0).isTrue();
+      counter++;
+    }
+  }
+
+  @Test
+  public void testSortedSearchProductsByNameDesc() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_NAME_DSC");
+    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    int total = searchProducts.getTotalCount();
+    assertThat(total).isGreaterThan(0);
+    List<Product> products = searchProducts.getSearchResult();
+    int counter = 1;
+    while (counter < total) {
+      Product previousProduct = products.get(counter - 1);
+      Product currentProduct = products.get(counter);
+      String previousProductName = previousProduct.getName();
+      String currentProductName = currentProduct.getName();
+      assertThat(previousProductName.compareTo(currentProductName) > 0).isTrue();
+      counter++;
+    }
+  }
+
+  @Test
+  public void testSortedSearchProductsByPriceAsc() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_PRICE_ASC");
+    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    int total = searchProducts.getTotalCount();
+    assertThat(total).isGreaterThan(0);
+    List<Product> products = searchProducts.getSearchResult();
+    int counter = 1;
+    while (counter < total) {
+      Product previousProduct = products.get(counter - 1);
+      Product currentProduct = products.get(counter);
+      BigDecimal previousProductListPrice = previousProduct.getListPrice();
+      BigDecimal currentProductListPrice = currentProduct.getListPrice();
+      assertThat(previousProductListPrice).isLessThanOrEqualTo(currentProductListPrice);
+      counter++;
+    }
+  }
+
+  @Test
+  public void testSortedSearchProductsByPriceDesc() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_PRICE_DSC");
+    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    int total = searchProducts.getTotalCount();
+    assertThat(total).isGreaterThan(0);
+    List<Product> products = searchProducts.getSearchResult();
+    int counter = 1;
+    while (counter < total) {
+      Product previousProduct = products.get(counter - 1);
+      Product currentProduct = products.get(counter);
+      BigDecimal previousProductListPrice = previousProduct.getListPrice();
+      BigDecimal currentProductListPrice = currentProduct.getListPrice();
+      assertThat(previousProductListPrice).isGreaterThanOrEqualTo(currentProductListPrice);
+      counter++;
+    }
+  }
+
+  @Test
+  public void testSearchFacetsProducts() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
     HashMap<String,String> searchParams = new HashMap<>();
     searchParams.put("fields", "DEFAULT,facets");
 
@@ -278,7 +391,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   @Test
   @Override
   public void testSearchProductVariants() throws Exception {
-    if (!"*".equals(SystemProperties.getBetamaxIgnoreHosts())) {
+    if (useBetamaxTapes()) {
       return;
     }
 
@@ -293,7 +406,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Betamax(tape = "hy_testWithStoreContextRethrowException", match = {MatchRule.path, MatchRule.query})
-  @Test
+  @Test(expected = CommerceException.class)
   @Override
   public void testWithStoreContextRethrowException() {
     super.testWithStoreContextRethrowException();

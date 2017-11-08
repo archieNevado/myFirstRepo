@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +29,9 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -187,7 +187,7 @@ public class DownloadPortalHandlerDownloadCollectionTest {
   @Test
   public void testDownloadRenditionCollectionFound() throws IOException {
     File file = File.createTempFile("amDownload", null);
-    when(downloadPortalFactory.getPreparedDownload(anyListOf(AMAssetRendition.class))).thenReturn(file);
+    when(downloadPortalFactory.getPreparedDownload(anyList())).thenReturn(file);
     handler.downloadRenditionCollection("{\"" + ASSET_CONTENT_ID_AVAILABLE + "\":[\"original\"]}", response);
     assertEquals(HttpServletResponse.SC_OK, response.getStatus());
   }

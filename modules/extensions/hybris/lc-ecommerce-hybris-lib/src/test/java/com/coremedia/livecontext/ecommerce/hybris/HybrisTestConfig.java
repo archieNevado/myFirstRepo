@@ -1,14 +1,23 @@
 package com.coremedia.livecontext.ecommerce.hybris;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.lc.test.TestConfig;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.Locale;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Configuration
 @PropertySource(
@@ -26,10 +35,14 @@ import java.util.Locale;
 )
 public class HybrisTestConfig implements TestConfig {
 
+  static final String CATALOG_ID = "apparelProductCatalog";
+
   @Override
   public StoreContext getStoreContext() {
-    return StoreContextHelper.createContext("configid", "apparel-uk", "Apparel-Catalog", "apparelProductCatalog",
+    StoreContext context = StoreContextHelper.createContext("configid", "apparel-uk", "Apparel-Catalog", CATALOG_ID,
             Locale.ENGLISH, "GBP", "Staged");
+    StoreContextHelper.setSiteId(context, "theSiteId");
+    return context;
   }
 
   @Override
@@ -45,5 +58,13 @@ public class HybrisTestConfig implements TestConfig {
   @Override
   public String getStoreName() {
     return null;
+  }
+
+  @Bean
+  @Primary
+  CatalogAliasTranslationService theCatalogAliasTranslationService() {
+    CatalogAliasTranslationService catalogAliasTranslationService = mock(CatalogAliasTranslationService.class);
+    when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any())).thenReturn(Optional.of(CatalogId.of(CATALOG_ID)));
+    return catalogAliasTranslationService;
   }
 }

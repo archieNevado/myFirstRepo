@@ -1,6 +1,16 @@
 <#ftl strip_whitespace=true>
 <#-- @ftlvariable name="liveContextFreemarkerFacade" type="com.coremedia.livecontext.web.taglib.LiveContextFreemarkerFacade" -->
+<#-- @ftlvariable name="liveContextLoginFreemarkerFacade" type="com.coremedia.livecontext.web.taglib.LiveContextLoginFreemarkerFacade" -->
 <#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
+
+<#macro getLoginLink linkClass="">
+  <#local cssClass=""/>
+  <#if linkClass?has_content>
+    <#local cssClass="class=\"" + linkClass + "\""/>
+  </#if>
+  <a id="cm-login" ${cssClass} data-loginstatus="${liveContextLoginFreemarkerFacade.getStatusUrl()}" href="${liveContextLoginFreemarkerFacade.getLoginFormUrl()}" style="display: none" title="Login">Login</a>
+  <a id="cm-logout" ${cssClass} data-loginstatus="${liveContextLoginFreemarkerFacade.getStatusUrl()}" href="${liveContextLoginFreemarkerFacade.getLogoutUrl()}" style="display: none" title="Logout">Logout</a>
+</#macro>
 
 <#--
  * Renders an addToCart button
@@ -33,7 +43,8 @@
     <#if (enableShopNow && (alwaysClickable || hasSingleSKU))>
       <#local cart=bp.substitute("cart", product)!cm.UNDEFINED />
       <#local buttonLabel=bp.getMessage("cart_add_item") />
-      <#local buttonData={"data-cm-cart-add-item": '{"id": "${product.externalTechId!""}", "link": "${cm.getLink(cart, "ajax")}", "cart": ".cm-cart" }'} />
+      <#local externalTechId=hasSingleSKU?then(product.variants[0].externalTechId, product.externalTechId)/>
+      <#local buttonData={"data-cm-cart-add-item": '{"id": "${externalTechId!""}", "link": "${cm.getLink(cart, "ajax")}", "cart": ".cm-cart" }'} />
       <#local iconClass="icon-none" />
     </#if>
   </#if>
@@ -79,5 +90,26 @@
 <#-- Returns name of eCommerce Vendor like IBM or SAP Hybris -->
 <#function getVendorName>
   <#return liveContextFreemarkerFacade.getVendorName()>
+</#function>
+
+<#--
+ * Builds the url for the status handler to retrieve the actual state (logged in/logged out) of the user.
+ -->
+<#function getStatusUrl>
+  <#return liveContextLoginFreemarkerFacade.getStatusUrl()>
+</#function>
+
+<#--
+ * Builds the absolute url to the login formular of a commerce system.
+ -->
+<#function getLoginFormUrl>
+  <#return liveContextLoginFreemarkerFacade.getLoginFormUrl()>
+</#function>
+
+<#--
+ * Builds a logout url of a commerce system to logout the current user.
+ -->
+<#function getLogoutUrl>
+  <#return liveContextLoginFreemarkerFacade.getLogoutUrl()>
 </#function>
 

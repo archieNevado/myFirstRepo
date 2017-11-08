@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ import static com.coremedia.elastic.social.api.ModerationType.POST_MODERATION;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -66,7 +66,7 @@ public class ReviewGeneratorTest {
 
   @Before
   public void setup() {
-    when(blobService.put(any(InputStream.class), anyString(), eq("att16.jpg"))).thenThrow(new RuntimeException());
+    when(blobService.put(nullable(InputStream.class), anyString(), eq("att16.jpg"))).thenThrow(new RuntimeException());
     reviewGenerator.initialize();
   }
 
@@ -82,7 +82,7 @@ public class ReviewGeneratorTest {
     assertEquals(0, reviewGenerator.getPreModerationCommentCount());
     assertEquals(0, reviewGenerator.getNoModerationCommentCount());
     assertEquals(1, reviewGenerator.getCommentCount());
-    verify(commentService, never()).getComments(anyObject(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
+    verify(commentService, never()).getComments(any(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
     verify(reviewService).createReview(eq(communityUser), anyString(), eq(target), eq(categories), anyString(), anyInt());
     verify(reviewService).save(review, POST_MODERATION);
     verify(review, never()).setAuthorName(anyString());
@@ -100,7 +100,7 @@ public class ReviewGeneratorTest {
     assertEquals(1, reviewGenerator.getPreModerationCommentCount());
     assertEquals(0, reviewGenerator.getNoModerationCommentCount());
     assertEquals(1, reviewGenerator.getCommentCount());
-    verify(commentService, never()).getComments(anyObject(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
+    verify(commentService, never()).getComments(any(), any(CommunityUser.class), eq(ASCENDING), eq(Integer.MAX_VALUE));
     verify(reviewService).createReview(eq(communityUser), anyString(), eq(target), eq(categories), anyString(), anyInt());
     verify(reviewService).save(review, PRE_MODERATION);
     verify(review, never()).setAuthorName(anyString());

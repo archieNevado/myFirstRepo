@@ -3,6 +3,8 @@ package com.coremedia.livecontext.contentbeans;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.ecommerce.common.contentbeans.CMAbstractCategory;
 import com.coremedia.cae.aspect.Aspect;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 
 import java.util.Collection;
 import java.util.List;
@@ -56,7 +58,24 @@ public interface CMExternalChannel extends CMAbstractCategory {
   @Override
   List<? extends Aspect<? extends CMExternalChannel>> getAspects();
 
+  /**
+   * <p>
+   * Returns the content property {@link #EXTERNAL_ID}. The returned value is the full commerce id including
+   * prefix for vendor and bean type.
+   * </p>
+   * Note that {@link CommerceBean#getExternalId()} is the unprefixed ID format.
+   *
+   * @return the formatted commerce id
+   */
   String getExternalId();
+
+  /**
+   * Returns the category.
+   *
+   * @return the category
+   * @cm.template.api
+   */
+  Category getCategory();
 
   PageGrid getPdpPagegrid();
 

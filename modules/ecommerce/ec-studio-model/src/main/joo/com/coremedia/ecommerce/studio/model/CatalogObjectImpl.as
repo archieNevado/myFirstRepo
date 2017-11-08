@@ -63,6 +63,11 @@ public class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, 
   }
 
   override public function invalidate(callback:Function = null):void {
+    if (!hasAnyListener()) {
+      super.invalidate();
+      return;
+    }
+
     super.invalidate(function () {
       var content:Content = getContent();
       if (content && content.getIssues()) {

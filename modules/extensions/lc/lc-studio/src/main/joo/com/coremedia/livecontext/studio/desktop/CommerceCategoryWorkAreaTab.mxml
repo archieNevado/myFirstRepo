@@ -19,6 +19,8 @@
 
     public static const STRUCTURE_TAB_ITEM_ID:String = "structureTab";
 
+    public static const SYSTEM_TAB_ITEM_ID:String = "systemTab";
+
     public static const PDP_PAGEGRID_TAB_ITEM_ID:String = "pdpPageGridTab";
 
     private var config:CommerceCategoryWorkAreaTab;
@@ -49,7 +51,7 @@
                                                    fallbackPageGridPropertyName="placement"/>
       </editor:items>
     </editor:DocumentForm>
-    <livecontext:CommerceSystemForm autoHide="true"/>
+    <livecontext:CommerceSystemForm autoHide="true" itemId="{SYSTEM_TAB_ITEM_ID}"/>
   </livecontext:subTabs>
 
 </livecontext:CommerceWorkAreaTab>

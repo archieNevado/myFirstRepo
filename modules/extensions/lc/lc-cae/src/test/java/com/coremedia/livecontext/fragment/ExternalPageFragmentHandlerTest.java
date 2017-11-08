@@ -9,24 +9,24 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
 
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<ExternalPageFragmentHandler> {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
@@ -47,7 +47,7 @@ public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<Ext
 
     getTestling().setContextStrategy(contextStrategy);
 
-    when(validationService.validate(anyObject())).thenReturn(true);
+    when(validationService.validate(any())).thenReturn(true);
     doReturn(Collections.singletonList(aboutUsPage)).when(getRootChannelBean()).getChildren();
     when(aboutUsPage.getExternalId()).thenReturn("aboutUs");
     when(aboutUsPage.getContext()).thenReturn(aboutUsPage);
@@ -56,6 +56,12 @@ public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<Ext
     when(contentBeanFactory.createBeanFor(aboutUsContent)).thenReturn(aboutUsPage);
 
     when(treeRelation.pathToRoot(any(Content.class))).thenReturn(singletonList(rootChannel));
+    when(sitesService.getContentSiteAspect(any()).getSite()).thenReturn(site);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    defaultTeardown();
   }
 
   @Override

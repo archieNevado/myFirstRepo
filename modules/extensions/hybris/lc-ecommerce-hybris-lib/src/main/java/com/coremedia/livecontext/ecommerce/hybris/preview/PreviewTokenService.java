@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.hybris.preview;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
-import com.coremedia.livecontext.ecommerce.hybris.common.AbstractCommerceService;
+import com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.hybris.rest.AccessToken;
 import com.coremedia.livecontext.ecommerce.hybris.rest.OAuthConnector;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PreviewTokenService extends AbstractCommerceService {
+public class PreviewTokenService extends AbstractHybrisService {
 
   private static final Logger LOG = LoggerFactory.getLogger(PreviewTokenService.class);
 
@@ -84,6 +84,9 @@ public class PreviewTokenService extends AbstractCommerceService {
             "userGroup" : "regulargroup"
     }*/
     HashMap<String, Object> result = new HashMap<String, Object>();
+
+    // fetch catalogId from specific bean for CMS-9516 (multi catalog support for hybris)
+
     result.put("catalog", storeContext.getCatalogId());
     result.put("catalogVersion", storeContext.getCatalogVersion());
     result.put("language", storeContext.getLocale().getLanguage());

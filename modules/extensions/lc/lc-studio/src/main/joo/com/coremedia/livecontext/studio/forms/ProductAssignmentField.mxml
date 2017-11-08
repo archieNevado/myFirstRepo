@@ -69,7 +69,12 @@
                                   openCollectionViewHandler="{openCollectionViewHandler}"
                                   propertyName="{'timeLine.' + Sequence.DEFAULT_TARGET_PROPERTY_NAME}"
                                   bindTo="{config.bindTo}"
-                                  maxCardinality="1"/>
+                                  maxCardinality="1">
+      <editor:linkSuggester>
+        <editor:SearchContentLinkSuggester content="{config.bindTo.getValue()}"
+                                           linkTypeName="CMProductTeaser"/>
+      </editor:linkSuggester>
+    </editor:LinkListPropertyField>
     <bpb-components:TimelineEditor propertyName="timeLine"
                                    searchType="CMProductTeaser"/>
   </editor:items>

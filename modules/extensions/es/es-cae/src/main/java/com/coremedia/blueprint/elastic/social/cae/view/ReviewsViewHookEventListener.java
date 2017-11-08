@@ -1,34 +1,34 @@
 package com.coremedia.blueprint.elastic.social.cae.view;
 
-import com.coremedia.blueprint.common.contentbeans.CMTeasable;
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResult;
-import com.coremedia.objectserver.view.RenderNode;
-import com.coremedia.objectserver.view.events.ViewHookEvent;
-import com.coremedia.objectserver.view.events.ViewHookEventListener;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Named;
+import java.util.List;
 
 /**
  * A {@link com.coremedia.objectserver.view.events.ViewHookEventListener} that
  * is responsible for adding the review widget to rendered views.
  */
 @Named
-public class ReviewsViewHookEventListener implements ViewHookEventListener<CMTeasable> {
+public class ReviewsViewHookEventListener extends AbstractESViewHookEventListener {
 
   @Override
-  public RenderNode onViewHook(ViewHookEvent<CMTeasable> event) {
-    // implemented only in corporate for CMProducts
-    /*
-    if (VIEW_HOOK_END.equals(event.getId())) {
-      return new RenderNode(getReviewsResult(event.getBean()), null);
-    }*/
-
-    return null;
+  protected boolean isEnabled(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration) {
+    return elasticSocialConfiguration.isReviewingEnabled();
   }
 
-  //====================================================================================================================
+  @Nonnull
+  @Override
+  protected List<String> getWhitelistTypes(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration) {
+    return elasticSocialConfiguration.getReviewDocumentTypes();
+  }
 
-  private ReviewsResult getReviewsResult(Object target) {
+  @Nullable
+  @Override
+  protected ReviewsResult getContribution(@Nonnull Object target) {
     return new ReviewsResult(target);
   }
 

@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.studio.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.blueprint.common.contentbeans.CMDownload;
@@ -11,6 +11,8 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.events.ContentEvent;
 import com.coremedia.cap.content.events.ContentRepositoryListenerBase;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
@@ -18,8 +20,13 @@ import org.springframework.context.SmartLifecycle;
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
 /**
  * A {@link com.coremedia.cap.content.events.ContentRepositoryListener}
@@ -121,13 +128,18 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
 
     List<String> externalReferences = CommerceReferenceHelper.getExternalReferences(event.getContent());
     for (String externalReference : externalReferences) {
-      if (BaseCommerceIdHelper.isCategoryId(externalReference)) {
+      Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(externalReference);
+      if (!commerceIdOptional.isPresent()) {
+        continue;
+      }
+      CommerceBeanType commerceBeanType = commerceIdOptional.get().getCommerceBeanType();
+      if (CATEGORY.equals(commerceBeanType)) {
         invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_CATEGORIES_URI_PATTERN);
-      } else if (BaseCommerceIdHelper.isProductId(externalReference)) {
+      } else if (PRODUCT.equals(commerceBeanType)) {
         invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN);
         //product variants inherit pictures from master product when they don't have assigend pictures.
         invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN);
-      } else if (BaseCommerceIdHelper.isSkuId(externalReference)) {
+      } else if (SKU.equals(commerceBeanType)) {
         invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN);
       }
     }

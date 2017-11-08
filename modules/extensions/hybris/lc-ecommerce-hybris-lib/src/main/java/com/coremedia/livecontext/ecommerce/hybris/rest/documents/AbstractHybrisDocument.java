@@ -1,7 +1,5 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest.documents;
 
-
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -40,13 +38,12 @@ public abstract class AbstractHybrisDocument {
    * Map containing all extension attributes.
    */
 //  @JsonProperty("extension_attributes")
-  private Map<String, Object> extensionAttributes = new HashMap<String, Object>();
+  private Map<String, Object> extensionAttributes = new HashMap<>();
 
   /**
    * Map containing all unmapped attributes.
    */
-  private Map<String, Object> unmappedAttributes = new HashMap<String, Object>();
-
+  private Map<String, Object> unmappedAttributes = new HashMap<>();
 
   public List<Object> getCustomAttributes() {
     return customAttributes;
@@ -86,7 +83,6 @@ public abstract class AbstractHybrisDocument {
     this.code = code;
   }
 
-
   public String getKey() {
     return key;
   }
@@ -94,7 +90,6 @@ public abstract class AbstractHybrisDocument {
   public void setKey(String key) {
     this.key = key;
   }
-
 
   public String getUri() {
     return uri;

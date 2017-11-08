@@ -100,15 +100,6 @@ public class PreviewContentContainerBase extends Container {
     return getVEContent(key, ve, 'dataContent');
   }
 
-  /**
-   * The action handler for the preview
-   */
-  protected static function previewActionHandler():void {
-    var urlToOpen:String = "http://kmc.kaltura.com/index.php/kmc#content|manage";
-    var wname:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.ExternalLibraryStudioPlugin', 'VideoAdminConsole_title');
-    var wfeatures:String = "menubar=yes,resizable=yes,scrollbars=yes,status=yes,location=yes";
-    window.open(urlToOpen, wname, wfeatures);
-  }
 
   protected function isPreviewHidden(ve:ValueExpression):Boolean {
     if (!previewHidden) {
@@ -137,12 +128,7 @@ public class PreviewContentContainerBase extends Container {
   }
 
   private function getVideoData(ve:ValueExpression):String {
-    var template:String = resourceManager.getString('com.coremedia.blueprint.studio.ExternalLibraryProviderSettings', 'preview_video_template');
-    var url:String = getContent('downloadUrl', ve) as String;
-    if (url) {
-      var htmlData:String = StringUtil.format(template, url);
-      return fixMediaWidth(htmlData, 'object');
-    }
+    return getContent('rawData', ve) as String;
   }
 
   private static function fixMediaWidth(htmlData:String, mediaType:String):String {
@@ -153,17 +139,6 @@ public class PreviewContentContainerBase extends Container {
         mediaTypes[0].setMaxWidth('100%');
         return html.dom.innerHTML;
       }
-    }
-    else if (html && mediaType === 'object') {
-      var first:Element = html.first();
-      html.setMaxWidth('100%');
-      html.setMaxHeight('100%');
-      first.setWidth('100%');
-      first.setHeight('100%');
-      first.setMinHeight(first.dom.getAttribute('height'));
-      first.dom.removeAttribute('width');
-      first.dom.removeAttribute('height');
-      return html.dom.outerHTML;
     }
     return htmlData;
   }
