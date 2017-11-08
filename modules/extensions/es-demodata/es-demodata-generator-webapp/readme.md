@@ -7,7 +7,7 @@
 3. right-click on `tomcat7:run` and
 4. select `Create 'es-demodata-generato...'...`
 
-Open the created run configurat ion and set the profiles: `test-system.coremedia`
+Open the created run configuration and set the profiles: `test-system.coremedia`
 This profile should fit the MongoDB server address, if you have a profile for this.
 
 ```
@@ -20,9 +20,8 @@ mvn tomcat7:run
     <properties>
       <installation.host>test-system.coremedia.vm</installation.host>
       <wcs.host>test-system-wcs.coremedia.vm</wcs.host>
-      <database.host>test-system.coremedia.vm</database.host>
-      <elastic.search.host>test-system.coremedia.vm</elastic.search.host>
-      <mongo.db.host>test-system.coremedia.vm</mongo.db.host>             
+      <db.host>test-system.coremedia.vm</db.host>
+      <mongoDb.host>test-system.coremedia.vm</mongoDb.host>             
       <skipZip>true</skipZip>
       <skipRpm>true</skipRpm>
     </properties>

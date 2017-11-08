@@ -4,6 +4,7 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.transform.Transformation;
 
+import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -76,4 +77,12 @@ public interface CMPicture extends CMVisual {
    * Returns the transformation for the give name.
    */
   Transformation getTransformation(String name);
+
+  /**
+   * Returns the focus point.
+   * The position is a value between 0 and 1, relative to the actual dimensions of the picture.
+   *
+   * @return the focus point
+   */
+  Point2D getFocusPoint();
 }

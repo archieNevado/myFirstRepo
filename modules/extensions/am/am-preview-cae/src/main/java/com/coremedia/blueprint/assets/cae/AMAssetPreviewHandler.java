@@ -25,6 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 @Link
@@ -41,6 +43,7 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
   private ContentBeanFactory contentBeanFactory;
   private SettingsService settingsService;
 
+  @Override
   @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
@@ -60,11 +63,11 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
     if (!StringUtils.isEmpty(viewName)) {
       uriBuilder.queryParam(RequestParameters.VIEW_PARAMETER, viewName);
     }
+
     String studioPreferredSiteId = request.getParameter(STUDIO_PREFERRED_SITE_PARAMETER);
     if (!StringUtils.isEmpty(studioPreferredSiteId)) {
       uriBuilder.queryParam(STUDIO_PREFERRED_SITE_PARAMETER, studioPreferredSiteId);
     }
-
 
     // append asset fragment which is required by the download portal scripts
     uriBuilder.fragment(ASSET_FRAGMENT_PREFIX + String.valueOf(asset.getContentId()));
@@ -77,7 +80,6 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
                                          @RequestParam(value = RequestParameters.VIEW_PARAMETER, required = false) String view,
                                          @RequestParam(value = STUDIO_PREFERRED_SITE_PARAMETER, required = false) String studioPreferredSiteId,
                                          HttpServletRequest webRequest) {
-
     ModelAndView modelAndView = HandlerHelper.createModelWithView(asset, view);
     Page assetContext = resolveAssetContextForPreferredSite(studioPreferredSiteId, webRequest);
     if (assetContext != null) {
@@ -86,38 +88,40 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
     return modelAndView;
   }
 
-  private Page resolveAssetContextForPreferredSite(String preferredSiteId, HttpServletRequest request) {
-
-    Site preferredSite = null;
-    if (null != preferredSiteId) {
-      preferredSite = getSitesService().getSite(preferredSiteId);
+  @Nullable
+  private Page resolveAssetContextForPreferredSite(@Nullable String preferredSiteId,
+                                                   @Nonnull HttpServletRequest request) {
+    if (preferredSiteId == null) {
+      return null;
     }
 
-    if (null != preferredSite) {
-      SiteHelper.setSiteToRequest(preferredSite, request);
-      Content rootDocument = preferredSite.getSiteRootDocument();
-      Content downloadPortalContent = AMUtils.getDownloadPortalRootDocument(settingsService, preferredSite);
-      if (null != downloadPortalContent) {
-        try {
-          CMChannel downloadPortalChannel = contentBeanFactory.createBeanFor(downloadPortalContent, CMChannel.class);
-          return asPage(downloadPortalChannel, downloadPortalChannel, UserVariantHelper.getUser(request));
-        } catch (IllegalArgumentException | UnexpectedBeanTypeException e) {
-          LOG.info("Could not create Download Portal page from content with id {}.", downloadPortalContent.getId(), e);
-        }
+    Site preferredSite = getSitesService().findSite(preferredSiteId).orElse(null);
+    if (preferredSite == null) {
+      return null;
+    }
+
+    SiteHelper.setSiteToRequest(preferredSite, request);
+
+    Content rootDocument = preferredSite.getSiteRootDocument();
+    Content downloadPortalContent = AMUtils.getDownloadPortalRootDocument(settingsService, preferredSite);
+    if (downloadPortalContent != null) {
+      try {
+        CMChannel downloadPortalChannel = contentBeanFactory.createBeanFor(downloadPortalContent, CMChannel.class);
+        return asPage(downloadPortalChannel, downloadPortalChannel, UserVariantHelper.getUser(request));
+      } catch (IllegalArgumentException | UnexpectedBeanTypeException e) {
+        LOG.info("Could not create Download Portal page from content with id {}.", downloadPortalContent.getId(), e);
+      }
 
       // if the preferred site has no download portal then use at least the root channel JS and CSS to display the fragments
-      } else if (rootDocument != null) {
-        try {
-          CMChannel rootChannel = contentBeanFactory.createBeanFor(rootDocument, CMChannel.class);
-          return asPage(rootChannel, rootChannel, UserVariantHelper.getUser(request));
-        } catch (IllegalArgumentException | UnexpectedBeanTypeException e) {
-          LOG.info("Could not create root page from content with id {}.", rootDocument.getId(), e);
-        }
-
+    } else if (rootDocument != null) {
+      try {
+        CMChannel rootChannel = contentBeanFactory.createBeanFor(rootDocument, CMChannel.class);
+        return asPage(rootChannel, rootChannel, UserVariantHelper.getUser(request));
+      } catch (IllegalArgumentException | UnexpectedBeanTypeException e) {
+        LOG.info("Could not create root page from content with id {}.", rootDocument.getId(), e);
       }
     }
 
     return null;
-
   }
 }

@@ -47,6 +47,14 @@ public class SitemapXmlRendererTest {
     }
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidUrlPrefix() {
+    SitemapXmlRenderer sxr = new SitemapXmlRenderer("###");
+    sxr.startUrlList();
+    sxr.appendUrl(NICE_URL);
+    fail("Must not accept invalid URL Prefix.");
+  }
+
   @Test
   public void testTooLongUrl() {
     SitemapXmlRenderer sxr = new SitemapXmlRenderer("//www.acme.com");

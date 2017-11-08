@@ -26,8 +26,8 @@ _Run this job with the command `themescripts test`._
 
 This job runs all tests of available themes by executing `npm test` in each theme directory. 
 
-### production
+### build
 
-_Run this job with the command `themescripts production`._
+_Run this job with the command `themescripts build`._
 
-This job builds all available themes by executing `npm run production` in each theme directory. 
+This job builds all available themes by executing `npm run build` in each theme directory. 

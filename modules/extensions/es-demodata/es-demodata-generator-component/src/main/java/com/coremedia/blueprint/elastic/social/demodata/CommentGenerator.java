@@ -181,7 +181,7 @@ public class CommentGenerator {
         }
       }
     } else {
-      LOG.info("Skipped complaining, because target does not allow it");
+      LOG.info("Could not create complaint, because complaining is not enabled for the comment target.");
     }
   }
 

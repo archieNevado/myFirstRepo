@@ -12,5 +12,5 @@ version          '1.0.0'
   supports os, '~> 7.0'
 end
 
-depends 'java_se', '~> 8.144.0'
+depends 'blueprint-base'
 depends 'coremedia_maven', '~> 2.0'

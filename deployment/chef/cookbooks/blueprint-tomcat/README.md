@@ -87,7 +87,6 @@ JMX Login (readwrite) = (control / control)
 * coremedia_tomcat (~> 2.1.0)
 * coremedia_maven (~> 2.0.4)
 * chef-sugar (~> 3.0)
-* java_se (~> 8.144.0)
 
 # Attributes
 

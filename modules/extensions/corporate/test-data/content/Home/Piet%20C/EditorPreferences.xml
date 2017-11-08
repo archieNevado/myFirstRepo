@@ -147,8 +147,8 @@
 <StringProperty Name="semanticSettings">semantic</StringProperty>
 <StringProperty Name="locale">de</StringProperty>
 <LinkListProperty Name="bookmarks" LinkType="coremedia:///cap/contenttype/Content_">
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/Germany/German/Content/" cmexport:path="Sites/Chef%20Corp%2E/Germany/German/Content/"/>
-<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml" cmexport:path="Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml"/>
+<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/Germany/German/Content/" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/"/>
+<Link xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Chef%20Corp%2E%20Deutschland%20Home%20Page"/>
 </LinkListProperty>
 <StructProperty Name="dashboard">
 <Struct>

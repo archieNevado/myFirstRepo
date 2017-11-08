@@ -110,6 +110,7 @@ public abstract class CMAbstractCodeBase extends CMLocalizedImpl implements CMAb
   }
 
   @Override
+  @Deprecated
   public boolean isCompressionDisabled() {
     return getContent().getBoolean(DISABLE_COMPRESSION);
   }

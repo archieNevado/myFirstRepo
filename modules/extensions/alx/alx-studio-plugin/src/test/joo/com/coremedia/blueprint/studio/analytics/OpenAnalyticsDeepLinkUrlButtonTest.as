@@ -1,7 +1,10 @@
 package com.coremedia.blueprint.studio.analytics {
+import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
+
+import ext.Ext;
 
 import ext.container.Viewport;
 
@@ -27,10 +30,10 @@ public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
     // Make sure that a new context manager is instantiated for each test.
     new ComponentContextManager();
 
-    button = new OpenAnalyticsDeepLinkUrlButton({
+    button = Ext.create(OpenAnalyticsDeepLinkUrlButton, {
       serviceName: "googleAnalytics"
     });
-    new Viewport({
+    Ext.create(Viewport, {
       items: [button]
     });
   }
@@ -47,12 +50,16 @@ public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
   }
 
   public function testDeepLinkReportUrl():void {
-    button.setContent({
+    button.setContent(Content({
       getNumericId: function ():int {
         return MY_ID;
       },
-      type: {name: 'typeWithPreview'}
-    });
+      get: function(prop:String):* {
+        if (prop === "type") {
+          return {name: 'typeWithPreview'};
+        }
+      }
+    }));
     waitUntil("button still disabled",
             function ():Boolean {
               return !button.disabled

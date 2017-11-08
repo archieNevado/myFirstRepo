@@ -9,8 +9,8 @@ public class ProductTest extends AbstractCatalogModelTest {
 
   override public function setUp():void {
     super.setUp();
-    product = beanFactory.getRemoteBean("livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID) as Product;
-    leafCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/NO_WS/Fruit") as Category;
+    product = beanFactory.getRemoteBean("livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID) as Product;
+    leafCategory = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit") as Category;
   }
 
   public function testProduct():void {

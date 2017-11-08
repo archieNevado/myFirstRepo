@@ -133,21 +133,21 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
             return contentRepository;
           },
           getWorkflowRepository: function():WorkflowRepository {
-            return {
+            return WorkflowRepository({
               getWorkflowContentService: function(): WorkflowContentService {
-                return {
+                return WorkflowContentService({
                   isLockedForUser: function(content:Content):Boolean {
                     return false;
                   }
-                };
+                });
               }
-            };
+            });
           }
         };
       },
       getUser:function ():User {
         //noinspection JSUnusedGlobalSymbols
-        return {
+        return User({
           isMemberOf:function (group:Group, callback:Function):void {
             EventUtil.invokeLater(callback, true);
           },
@@ -160,7 +160,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           isAdministrative: function():Boolean {
             return true;
           }
-        };
+        });
       }
     });
     preferredSiteExpression = ValueExpressionFactory.createFromValue('HeliosSiteId'); //HELIOS
@@ -281,11 +281,11 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         "id": "ibm:///catalog/store/10851",
         "topLevel": [
           {"$Ref": "livecontext/marketing/HeliosSiteId/NO_WS"},
-          {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/ROOT"}
+          {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT"}
         ],
         "vendorName" : "IBM",
         "childrenByName": {
-          "root-category": {"displayName":"Product Catalog", "child": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/ROOT"}},
+          "root-category": {"displayName":"Product Catalog", "child": {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT"}},
           "store-marketing": {"displayName":"store-marketing", "child": {"$Ref": "livecontext/marketing/HeliosSiteId/NO_WS"}}
         },
         "storeId": "10851",
@@ -331,36 +331,36 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
       }}
     },
     {
-      "request": { "uri": "livecontext/category/HeliosSiteId/NO_WS/ROOT", "method": "GET"},
+      "request": { "uri": "livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT", "method": "GET"},
       "response": { "body": {
         "id": "ibm:///catalog/category/ROOT",
         "store": {"$Ref": "livecontext/store/HeliosSiteId/NO_WS"},
         "storeId": "10851",
         "children": [
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Apparel"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Apparel"
           },
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Grocery"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Grocery"
           },
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Home%20Furnishings"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Home%20Furnishings"
           }
         ],
         "childrenByName": {
-          "Grocery": {"displayName":"Grocery", "child": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/Grocery"}},
-          "Home%20Furnishings": {"displayName":"Home & Furnishing", "child": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/Home%20Furnishings"}},
-          "Apparel": {"displayName":"Apparel", "child": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/Apparel"}}
+          "Grocery": {"displayName":"Grocery", "child": {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Grocery"}},
+          "Home%20Furnishings": {"displayName":"Home & Furnishing", "child": {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Home%20Furnishings"}},
+          "Apparel": {"displayName":"Apparel", "child": {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Apparel"}}
         },
         "subCategories": [
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Apparel"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Apparel"
           },
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Grocery"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Grocery"
           },
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Home%20Furnishings"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Home%20Furnishings"
           }
         ],
         "displayName" : "Product Catalog",
@@ -461,24 +461,24 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
 
 
     {
-      "request": { "uri": "livecontext/category/HeliosSiteId/NO_WS/Grocery", "method": "GET" },
+      "request": { "uri": "livecontext/category/HeliosSiteId/catalog/NO_WS/Grocery", "method": "GET" },
       "response": { "body": {
         "name": "Grocery",
         "id": "ibm:///catalog/category/Grocery",
         "children": [
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Fruit"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit"
           },
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Vegetables"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Vegetables"
           }
         ],
         "childrenByName": {
           "Vegetables": {"displayName":"Vegetables", "child": {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Vegetables"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Vegetables"
           }},
           "Fruit": {"displayName":"Fruit", "child": {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Fruit"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit"
           }}
         },
         "externalId": "Grocery",
@@ -488,19 +488,19 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         },
         "subCategories": [
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Fruit"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit"
           },
           {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Vegetables"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Vegetables"
           }
         ],
-        "parent": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/ROOT"},
+        "parent": {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT"},
         "content" : null
       }
       }
     },
     {
-      "request": { "uri": "livecontext/category/HeliosSiteId/NO_WS/Vegetables", "method": "GET" },
+      "request": { "uri": "livecontext/category/HeliosSiteId/catalog/NO_WS/Vegetables", "method": "GET" },
       "response": { "body": {
         "name": "Vegetables",
         "id": "ibm:///catalog/category/Vegetables",
@@ -514,21 +514,21 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         },
         "subCategories": [],
         "parent": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Grocery"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Grocery"
         }
       }
     },
     {
-      "request": { "uri": "livecontext/category/HeliosSiteId/NO_WS/Apparel", "method": "GET" },
+      "request": { "uri": "livecontext/category/HeliosSiteId/catalog/NO_WS/Apparel", "method": "GET" },
       "response": { "body": {
         "name": "Apparel",
         "id": "ibm:///catalog/category/Apparel",
         "children": [
-          {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/Women"}
+          {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Women"}
         ],
         "childrenByName": {"displayName":"Women", "child": {
           "Women": {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Women"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Women"
           }}
         },
         "externalId": "Apparel",
@@ -537,24 +537,24 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "subCategories": [
-          {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/Women"}
+          {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Women"}
         ],
-        "parent": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/ROOT"}
+        "parent": {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT"}
       }
       }
     },
 
     {
-      "request":{ "uri":"livecontext/category/HeliosSiteId/NO_WS/Women", "method":"GET" },
+      "request":{ "uri":"livecontext/category/HeliosSiteId/catalog/NO_WS/Women", "method":"GET" },
       "response":{ "body":{
         "name": "Women",
         "id": "ibm:///catalog/category/Women",
         "children": [
-          {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"}
+          {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"}
         ],
         "childrenByName": {
           "Dresses": {"displayName":"Dresses", "child": {
-            "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"
+            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"
           }}
         },
         "externalId": "Women",
@@ -563,26 +563,26 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "subCategories": [
-          {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"}
+          {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"}
         ],
         "parent": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Apparel"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Apparel"
         }
       }
       }
     },
 
     {
-      "request":{ "uri":"livecontext/category/HeliosSiteId/NO_WS/Dresses", "method":"GET" },
+      "request":{ "uri":"livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses", "method":"GET" },
       "response":{ "body":{
         "name": "Dresses",
         "id": "ibm:///catalog/category/Dresses",
         "children": [
-          {"$Ref": "livecontext/product/HeliosSiteId/NO_WS/AuroraWMDRS-1"}
+          {"$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/AuroraWMDRS-1"}
         ],
         "childrenByName": {
           "AuroraWMDRS-1": {"displayName":"AuroraWMDRS-1", "child": {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/AuroraWMDRS-1"
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/AuroraWMDRS-1"
           }}
         },
         "externalId": "Dresses",
@@ -593,14 +593,14 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         },
         "subCategories": [],
         "parent": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Women"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Women"
         }
       }
       }
     },
 
     {
-      "request":{ "uri":"livecontext/product/HeliosSiteId/NO_WS/AuroraWMDRS-1", "method":"GET" },
+      "request":{ "uri":"livecontext/product/HeliosSiteId/catalog/NO_WS/AuroraWMDRS-1", "method":"GET" },
       "response":{ "body":{
         "name": "Hermitage Ruched Bodice Cocktail Dress",
         "id": "ibm:///catalog/product/AuroraWMDRS-1",
@@ -609,7 +609,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"
         },
         "thumbnailUrl": "http://shop-ref.ecommerce.coremedia.com/wcsstore/ExtendedSitesCatalogAssetStore/images/catalog/apparel/women/wcl000_dresses/200x310/wcl000_0028_a_red.jpg"
       }
@@ -617,7 +617,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request":{ "uri":"livecontext/sku/HeliosSiteId/NO_WS/AuroraWMDRS-001", "method":"GET" },
+      "request":{ "uri":"livecontext/sku/HeliosSiteId/catalog/NO_WS/AuroraWMDRS-001", "method":"GET" },
       "response":{ "body":{
         "name": HERMITAGE_RUCHED_BODICE_COCKTAIL_DRESS,
         "id": "ibm:///catalog/sku/AuroraWMDRS-001",
@@ -627,7 +627,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"
         },
         "thumbnailUrl": "http://shop-ref.ecommerce.coremedia.com/wcsstore/ExtendedSitesCatalogAssetStore/images/catalog/apparel/women/wcl000_dresses/200x310/wcl000_0028_a_red.jpg"
       }
@@ -635,7 +635,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request":{ "uri":"livecontext/sku/HeliosSiteId/NO_WS/AuroraWMDRS-002", "method":"GET" },
+      "request":{ "uri":"livecontext/sku/HeliosSiteId/catalog/NO_WS/AuroraWMDRS-002", "method":"GET" },
       "response":{ "body":{
         "name": "Hermitage Ruched Bodice Cocktail Dress",
         "id": "ibm:///catalog/sku/AuroraWMDRS-002",
@@ -645,7 +645,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"
         },
         "thumbnailUrl": "http://shop-ref.ecommerce.coremedia.com/wcsstore/ExtendedSitesCatalogAssetStore/images/catalog/apparel/women/wcl000_dresses/200x310/wcl000_0028_a_red.jpg"
       }
@@ -653,7 +653,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request":{ "uri":"livecontext/category/HeliosSiteId/NO_WS/Home%20Furnishings", "method":"GET" },
+      "request":{ "uri":"livecontext/category/HeliosSiteId/catalog/NO_WS/Home%20Furnishings", "method":"GET" },
       "response":{ "body":{
         "name": "Home & Furnishing",
         "id": "ibm:///catalog/category/Home%20Furnishings",
@@ -665,37 +665,37 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "subCategories": [],
-        "parent": {"$Ref": "livecontext/category/HeliosSiteId/NO_WS/ROOT"}
+        "parent": {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT"}
       }
       }
     },
 
 
     {
-      "request": { "uri": "livecontext/category/HeliosSiteId/NO_WS/Fruit", "method": "GET" },
+      "request": { "uri": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit", "method": "GET" },
       "response": { "body": {
         "name": "Fruit",
         "id": "ibm:///catalog/category/Fruit",
         "children": [
           {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID
           },
           {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/GFR033_3302"
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/GFR033_3302"
           },
           {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/GFR033_3303"
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/GFR033_3303"
           }
         ],
         "childrenByName": {
           "Oranges": {"displayName":"Oranges", "child": {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID
           }},
           "Blackberries": {"displayName":"Blackberries", "child": {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/GFR033_3302"
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/GFR033_3302"
           }},
           "Mangoes": {"displayName":"Mangoes", "child": {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/GFR033_3303"
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/GFR033_3303"
           }}
         },
         "externalId": "Grocery Fruit",
@@ -705,7 +705,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         },
         "subCategories": [],
         "parent": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Grocery"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Grocery"
         },
         "content" : {
           "$Ref": "content/700"
@@ -716,7 +716,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
 
 
     {
-      "request": { "uri": "livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID, "method": "GET" },
+      "request": { "uri": "livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID, "method": "GET" },
       "response": { "body": {
         "name": ORANGES_NAME,
         "shortDescription": ORANGES_SHORT_DESC,
@@ -726,7 +726,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Fruit"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit"
         },
         "thumbnailUrl": ORANGES_IMAGE_URI
       }
@@ -735,7 +735,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
 
 
     {
-      "request": { "uri": "livecontext/sku/HeliosSiteId/NO_WS/" + ORANGES_SKU_EXTERNAL_ID, "method": "GET" },
+      "request": { "uri": "livecontext/sku/HeliosSiteId/catalog/NO_WS/" + ORANGES_SKU_EXTERNAL_ID, "method": "GET" },
       "response": { "body": {
         "name": ORANGES_SKU_NAME,
         "shortDescription": ORANGES_SKU_SHORT_DESC,
@@ -745,7 +745,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Fruit"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit"
         },
         "thumbnailUrl": ORANGES_IMAGE_URI
       }
@@ -753,7 +753,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request": { "uri": "livecontext/sku/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID + "02", "method": "GET" },
+      "request": { "uri": "livecontext/sku/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID + "02", "method": "GET" },
       "response": { "body": {
         "name": ORANGES_NAME,
         "id": SKU_ID_PREFIX + ORANGES_EXTERNAL_ID + "02",
@@ -762,7 +762,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Fruit"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit"
         },
         "thumbnailUrl": ORANGES_IMAGE_URI
       }
@@ -770,7 +770,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request": { "uri": "livecontext/sku/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID + "03", "method": "GET" },
+      "request": { "uri": "livecontext/sku/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID + "03", "method": "GET" },
       "response": { "body": {
         "name": ORANGES_NAME,
         "id": SKU_ID_PREFIX + ORANGES_EXTERNAL_ID + "03",
@@ -779,19 +779,19 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Fruit"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit"
         }
       }
       }
     },
 
     {
-      "request": { "uri": "livecontext/product/HeliosSiteId/NO_WS/" + BABY_SHOES_EXTERNAL_ID, "method": "GET" },
+      "request": { "uri": "livecontext/product/HeliosSiteId/catalog/NO_WS/" + BABY_SHOES_EXTERNAL_ID, "method": "GET" },
       "response": { "body": {
         "name": "Borsati Orange Baby Shoes",
         "externalId": "BSH016_1605",
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Boys%20Shoes"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Boys%20Shoes"
         },
         "store": {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
@@ -802,7 +802,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
       }
     },
     {
-      "request":{ "uri":"livecontext/product/HeliosSiteId/NO_WS/xmp1", "method":"GET" },
+      "request":{ "uri":"livecontext/product/HeliosSiteId/catalog/NO_WS/xmp1", "method":"GET" },
       "response":{ "body":{
         "name": "XMP 1",
         "id": "ibm:///catalog/product/xmp1",
@@ -811,14 +811,14 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"
         },
         "thumbnailUrl": "http://shop-ref.ecommerce.coremedia.com/wcsstore/ExtendedSitesCatalogAssetStore/images/catalog/apparel/women/wcl000_dresses/200x310/wcl000_0028_a_red.jpg"
       }
       }
     },
     {
-      "request":{ "uri":"livecontext/product/HeliosSiteId/NO_WS/xmp2", "method":"GET" },
+      "request":{ "uri":"livecontext/product/HeliosSiteId/catalog/NO_WS/xmp2", "method":"GET" },
       "response":{ "body":{
         "name": "XMP 2",
         "id": "ibm:///catalog/product/xmp2",
@@ -827,19 +827,19 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
           "$Ref": "livecontext/store/HeliosSiteId/NO_WS"
         },
         "category": {
-          "$Ref": "livecontext/category/HeliosSiteId/NO_WS/Dresses"
+          "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Dresses"
         },
         "thumbnailUrl": "http://shop-ref.ecommerce.coremedia.com/wcsstore/ExtendedSitesCatalogAssetStore/images/catalog/apparel/women/wcl000_dresses/200x310/wcl000_0028_a_red.jpg"
       }
       }
     },
     {
-      "request": { "uri": "livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID + 404, "method": "GET" },
+      "request": { "uri": "livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID + 404, "method": "GET" },
       "response": { "code": 404 }
     },
 
     {
-      "request": { "uri": "livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID + 503, "method": "GET" },
+      "request": { "uri": "livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID + 503, "method": "GET" },
       "response": { "code": 503 }
     },
 
@@ -857,10 +857,10 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
       "response": { "body": {
         "hits": [
           {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID
           },
           {
-            "$Ref": "livecontext/product/HeliosSiteId/NO_WS/BSH016_1605"
+            "$Ref": "livecontext/product/HeliosSiteId/catalog/NO_WS/BSH016_1605"
           }
         ],
         "total": 2
@@ -869,14 +869,14 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request":{ "uri":"livecontext/search/HeliosSiteId?workspaceId=NO_WS&siteId=HeliosSiteId&category=10006&query=AuroraWMDRS-1&searchType=ProductVariant&limit=-1", "method":"GET" },
+      "request":{ "uri":"livecontext/search/HeliosSiteId?workspaceId=NO_WS&siteId=HeliosSiteId&category=10006&catalogAlias=catalog&query=AuroraWMDRS-1&searchType=ProductVariant&limit=-1", "method":"GET" },
       "response":{ "body":{
         "hits": [
           {
-            "$Ref": "livecontext/sku/HeliosSiteId/NO_WS/AuroraWMDRS-001"
+            "$Ref": "livecontext/sku/HeliosSiteId/catalog/NO_WS/AuroraWMDRS-001"
           },
           {
-            "$Ref": "livecontext/sku/HeliosSiteId/NO_WS/AuroraWMDRS-002"
+            "$Ref": "livecontext/sku/HeliosSiteId/catalog/NO_WS/AuroraWMDRS-002"
           }
         ],
         "total": 2
@@ -889,13 +889,13 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
       "response": { "body": {
         "hits": [
           {
-            "$Ref": "livecontext/sku/HeliosSiteId/NO_WS/" + ORANGES_SKU_EXTERNAL_ID
+            "$Ref": "livecontext/sku/HeliosSiteId/catalog/NO_WS/" + ORANGES_SKU_EXTERNAL_ID
           },
           {
-            "$Ref": "livecontext/sku/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID + "02"
+            "$Ref": "livecontext/sku/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID + "02"
           },
           {
-            "$Ref": "livecontext/sku/HeliosSiteId/NO_WS/" + ORANGES_EXTERNAL_ID + "03"
+            "$Ref": "livecontext/sku/HeliosSiteId/catalog/NO_WS/" + ORANGES_EXTERNAL_ID + "03"
           }
         ],
         "total": 3

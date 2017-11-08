@@ -2,11 +2,10 @@ package com.coremedia.blueprint.ecommerce.cae;
 
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
-import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -103,8 +102,8 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
         return;
       }
 
-      DefaultConnection.set(commerceConnection.get());
-      
+      CurrentCommerceConnection.set(commerceConnection.get());
+
       request.setAttribute(STORE_CONTEXT_INITIALIZED, true);
 
       if (initUserContext) {
@@ -120,7 +119,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
           throws Exception {
     super.afterCompletion(request, response, handler, ex);
 
-    DefaultConnection.clear();
+    CurrentCommerceConnection.remove();
   }
 
 // --- abstract ---------------------------------------------------
@@ -189,7 +188,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
    */
   protected void initUserContext(@Nonnull CommerceConnection commerceConnection, @Nonnull HttpServletRequest request) {
     try {
-      UserContext userContext = commerceConnection.getUserContextProvider().createContext(request, null);
+      UserContext userContext = commerceConnection.getUserContextProvider().createContext(request);
       commerceConnection.setUserContext(userContext);
     } catch (CommerceException e) {
       LOG.warn("Error creating commerce user context: {}", e.getMessage(), e);

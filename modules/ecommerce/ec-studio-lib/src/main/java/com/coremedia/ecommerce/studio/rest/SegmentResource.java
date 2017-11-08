@@ -1,6 +1,9 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 
@@ -29,7 +32,7 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
       throw new CatalogBeanNotFoundRestException("Could not load segment bean.");
     }
 
-    representation.setId(entity.getId());
+    representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setName(entity.getName());
     representation.setExternalId(entity.getExternalId());
     representation.setExternalTechId(entity.getExternalTechId());
@@ -37,25 +40,28 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
 
   @Override
   protected Segment doGetEntity() {
+    StoreContext storeContext = getStoreContext();
+    if (storeContext == null) {
+      return null;
+    }
+
     SegmentService segmentService = getSegmentService();
-    return segmentService != null ? segmentService.findSegmentById(getId()): null;
+    CommerceId commerceId = getConnection().getIdProvider().formatSegmentId(getId());
+    return segmentService != null ? segmentService.findSegmentById(commerceId, storeContext) : null;
   }
 
   @Override
   public void setEntity(Segment segment) {
-    if (segment.getId() != null) {
-      String extId = getExternalIdFromId(segment.getId());
-      setId(extId);
-    } else {
-      setId(segment.getExternalId());
-    }
-    setSiteId(segment.getContext().getSiteId());
-    setWorkspaceId(segment.getContext().getWorkspaceId());
+    CommerceId segmentId = segment.getId();
+    String externalId = segmentId.getExternalId().orElseGet(segment::getExternalId);
+    setId(externalId);
+
+    StoreContext context = segment.getContext();
+    setSiteId(context.getSiteId());
+    setWorkspaceId(context.getWorkspaceId());
   }
 
   public SegmentService getSegmentService() {
-    return DefaultConnection.get().getSegmentService();
+    return CurrentCommerceConnection.get().getSegmentService();
   }
-
-
 }

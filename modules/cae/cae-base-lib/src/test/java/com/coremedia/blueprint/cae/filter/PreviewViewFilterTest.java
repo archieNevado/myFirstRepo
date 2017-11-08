@@ -4,7 +4,7 @@ import com.coremedia.cap.content.ContentRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

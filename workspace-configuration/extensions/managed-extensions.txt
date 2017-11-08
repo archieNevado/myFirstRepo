@@ -19,6 +19,5 @@ external-preview
 custom-topic-pages
 create-from-template
 corporate
-corporate-es
 taxonomy
 validators

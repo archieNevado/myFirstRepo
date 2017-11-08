@@ -300,9 +300,13 @@ public class ThemeImporterImpl implements ThemeImporter {
     }
   }
 
+  /**
+   * This method defines some conventions that the Studio configuration (the ThemeSelectorForm) and the CAE (the ThemeResourceLinkBuilder)
+   * rely on. Make sure to update them if you change something here.
+   */
   private Content createTheme(ThemeDefinition themeDefinition, String targetFolder, ThemeImporterContentHelper contentHelper, ImportData importData) {
     String themeName = themeDefinition.getName();
-    String baseFolder = targetFolder + themeName;
+    String baseFolder = targetFolder + themeName; // make sure to update the ThemeResourceLinkBuilder and ThemeSelectorForm accordingly
     Map<String, Object> properties = new HashMap<>();
 
     properties.put("viewRepositoryName", themeDefinition.getViewRepositoryName());
@@ -322,7 +326,7 @@ public class ThemeImporterImpl implements ThemeImporter {
     properties.put("resourceBundles", resourceBundles);
     properties.put("templateSets", templateSets);
 
-    String themeContentName = StringUtils.capitalize(themeName) + " Theme";
+    String themeContentName = StringUtils.capitalize(themeName) + " Theme"; // make sure to update the ThemeResourceLinkBuilder accordingly
     Content themeContent = contentHelper.updateContent(CM_THEME_DOCTYPE, baseFolder, themeContentName, properties);
     if (themeContent!=null) {
       LOGGER.info("Created Theme in {}", themeContent.getPath());

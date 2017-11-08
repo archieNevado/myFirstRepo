@@ -21,12 +21,9 @@ public class OpenExternalLibraryActionBase extends Action {
     super(config);
     this.dataIndex = config.dataIndex;
     dataSourceValueExpression = ValueExpressionFactory.create('dataSource', beanFactory.createLocalBean());
-    if (!config['handler']) {
-      setHandler(openLibrary, this);
-    }
   }
 
-  private function openLibrary() {
+  override protected function handle():void {
     var window:ExternalLibraryWindow = Ext.getCmp('externalLibrary') as ExternalLibraryWindow;
     if (!window) {
       window = new ExternalLibraryWindow(ExternalLibraryWindow({dataIndex:dataIndex}));

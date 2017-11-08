@@ -16,6 +16,7 @@ public class CMChannelCategoryResolver implements CategoryResolver {
   public static final String CMCHANNEL_SEGMENT = "segment";
   public static final String CMCHANNEL_TITLE = "title";
   public static final String CMCHANNEL_DOCTYPE = "CMChannel";
+  private static final String KEY_PREFIX = "key_";
 
   @Override
   public CategoryKeyAndDisplay resolve(@Nonnull Content content) {
@@ -23,7 +24,7 @@ public class CMChannelCategoryResolver implements CategoryResolver {
       String key = content.getString(CMCHANNEL_SEGMENT);
       //segment may be empty for category channels
       if(StringUtils.isEmpty(key)) {
-        key = String.valueOf(IdHelper.parseContentId(content.getId()));
+        key = KEY_PREFIX + String.valueOf(IdHelper.parseContentId(content.getId()));
       }
       return new CategoryKeyAndDisplay(key, content.getString(CMCHANNEL_TITLE));
     }

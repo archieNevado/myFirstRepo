@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Workspaces;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 
 import javax.ws.rs.Path;
@@ -31,8 +32,9 @@ public class WorkspacesResource extends AbstractCatalogResource<Workspaces> {
 
     representation.setId(workspaces.getId());
     WorkspaceService workspaceService = getConnection().getWorkspaceService();
-    if (workspaceService != null) {
-      representation.setWorkspaces(workspaceService.findAllWorkspaces());
+    StoreContext storeContext = getStoreContext();
+    if (workspaceService != null && storeContext != null) {
+      representation.setWorkspaces(workspaceService.findAllWorkspaces(storeContext));
     }
   }
 

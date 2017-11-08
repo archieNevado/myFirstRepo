@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,11 +22,12 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class AssetRenditionBlobHandlerTest {
 
   @InjectMocks
@@ -57,7 +58,7 @@ public class AssetRenditionBlobHandlerTest {
   public void setUp() {
     when(amAssetRendition.getBlob()).thenReturn(capBlobRef);
     when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.<String, String>emptyMap());
-    when(capBlobHandler.handleRequest(any(ContentBean.class), anyString(), anyString(), anyString(), any(WebRequest.class))).thenReturn(modelAndView);
+    when(capBlobHandler.handleRequest(any(ContentBean.class), nullable(String.class), anyString(), nullable(String.class), nullable(WebRequest.class))).thenReturn(modelAndView);
   }
 
 

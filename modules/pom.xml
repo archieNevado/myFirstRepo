@@ -22,10 +22,38 @@
     <module>server</module>
     <module>search</module>
     <module>ecommerce</module>
-    <module>extension-config</module>
     <module>extensions</module>
     <module>editor-components</module>
     <module>elastic-worker</module>
     <module>frontend</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>default-extensions</id>
+      <activation>
+        <property>
+          <name>!dev-extensions</name>
+        </property>
+      </activation>
+      <modules>
+        <module>extension-config</module>
+      </modules>
+    </profile>
+
+    <!--
+      Use an alternative set of extensions, for development purposes.
+    -->
+    <profile>
+      <id>dev-extensions</id>
+      <activation>
+        <property>
+          <name>dev-extensions</name>
+        </property>
+      </activation>
+      <modules>
+        <module>../workspace-configuration/extensions/tool/extension-config</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>

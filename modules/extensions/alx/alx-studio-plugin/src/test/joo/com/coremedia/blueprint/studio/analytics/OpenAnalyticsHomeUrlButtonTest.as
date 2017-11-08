@@ -5,6 +5,8 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.impl.BeanFactoryImpl;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
+import ext.Ext;
+
 import ext.container.Viewport;
 
 import joo.getOrCreatePackage;
@@ -46,9 +48,9 @@ public class OpenAnalyticsHomeUrlButtonTest extends AbstractRemoteTest {
     beanImplPrototype.isSubObject = isSubObject;
     window_open = window.open;
     window.open = function (... myArgs) : void { args = myArgs;};
-    button = new OpenAnalyticsHomeUrlButton({ serviceName: 'testService'});
+    button = Ext.create(OpenAnalyticsHomeUrlButton, { serviceName: 'testService'});
     // show buttons
-    new Viewport({
+    Ext.create(Viewport, {
       items: [ button ]
     });
   }

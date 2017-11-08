@@ -47,4 +47,24 @@ public class MergeableResourcesImpl implements MergeableResources {
   public String toString() {
     return getClass().getName() + "[" + codeResourcesModel + "]";
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    MergeableResourcesImpl that = (MergeableResourcesImpl) o;
+
+    return codeResourcesModel != null ? codeResourcesModel.equals(that.codeResourcesModel) : that.codeResourcesModel == null;
+  }
+
+  @Override
+  public int hashCode() {
+    return codeResourcesModel != null ? codeResourcesModel.hashCode() : 0;
+  }
+
 }

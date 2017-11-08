@@ -57,6 +57,7 @@
                 helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_helpText')}"/>
         <bpforms:PictureDocumentForm collapsed="true"
                                      maxCardinality="1"/>
+        <bpforms:RelatedDocumentForm collapsed="false"/>
         <bpforms:ViewTypeSelectorForm/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>

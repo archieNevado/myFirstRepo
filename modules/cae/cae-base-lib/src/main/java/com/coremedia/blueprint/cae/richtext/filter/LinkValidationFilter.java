@@ -21,6 +21,7 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
   private IdProvider idProvider;
   private ValidationService<Object> validationService;
   private DataViewFactory dataViewFactory;
+  private boolean renderLinkText = true;
 
   private boolean omittingA;
 
@@ -35,6 +36,14 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
   @Required
   public void setValidationService(ValidationService<Object> validationService) {
     this.validationService = validationService;
+  }
+
+  /**
+   * configuration switch if the link text to an filtered out content shall be shown
+   * @param renderLinkText (set true if link text shall be shown, default is true)
+   */
+  public void setRenderLinkText(boolean renderLinkText) {
+    this.renderLinkText = renderLinkText;
   }
 
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
@@ -61,6 +70,7 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
     instance.setDataViewFactory(dataViewFactory);
     instance.setIdProvider(idProvider);
     instance.setValidationService(validationService);
+    instance.setRenderLinkText(renderLinkText);
     return instance;
   }
 
@@ -109,6 +119,12 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
     }
   }
 
+  @Override
+  public void characters(char[] ch, int start, int length) throws SAXException {
+    if (!omittingA || renderLinkText) {
+      super.characters(ch, start, length);
+    }
+  }
 
   // --- internal ---------------------------------------------------
 

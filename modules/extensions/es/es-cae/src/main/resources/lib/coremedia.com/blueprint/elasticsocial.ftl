@@ -1,5 +1,4 @@
 <#ftl strip_whitespace=true>
-<#escape x as x?html>
 <#-- @ftlvariable name="elasticSocialFreemarkerFacade" type="com.coremedia.blueprint.elastic.social.cae.tags.ElasticSocialFreemarkerFacade" -->
 
 <#function getElasticSocialConfiguration page>
@@ -124,17 +123,14 @@
   </#if>
 </span>
 <#local complainUrl=cm.getLink("/elastic/social/complaint")/>
-<#noescape>
-<#escape x as x?js_string>
+<#outputformat "JavaScript">
 <script type="text/javascript">
   var c_${id} = new com.coremedia.rating.HtmlComplaintControl(
           '${complainUrl}', '${id}', '${collection}', '${itemId}', '${navigationId}',
           'complainAnchor_${id}', 'uncomplainAnchor_${id}');
   var complainerId = '${elasticSocialFreemarkerFacade.getCurrentGuid()}';
 </script>
-</#escape>
-</#noescape>
+</#outputformat>
 </#macro>
-</#escape>
 
 <#assign messageKeys=elasticSocialFreemarkerFacade.getElasticSocialMessageKeys()/>

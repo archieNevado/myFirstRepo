@@ -33,6 +33,8 @@ DEPENDENCIES
     path: thirdparty-cookbooks/chef-sugar
   chef_handler
     path: thirdparty-cookbooks/chef_handler
+  chef_nginx
+    path: thirdparty-cookbooks/chef_nginx
   compat_resource
     path: thirdparty-cookbooks/compat_resource
   coremedia-proxy
@@ -43,8 +45,8 @@ DEPENDENCIES
     path: coremedia-cookbooks/coremedia_tomcat
   fpm-tng
     path: thirdparty-cookbooks/fpm-tng
-  java_se
-    path: thirdparty-cookbooks/java_se
+  gpg
+    path: thirdparty-cookbooks/gpg
   mingw
     path: thirdparty-cookbooks/mingw
   mongodb3
@@ -59,6 +61,12 @@ DEPENDENCIES
     path: thirdparty-cookbooks/packagecloud
   postgresql
     path: thirdparty-cookbooks/postgresql
+  repository
+    path: thirdparty-cookbooks/repository
+  reprepro
+    path: thirdparty-cookbooks/reprepro
+  ruby_installer
+    path: thirdparty-cookbooks/ruby_installer
   runit
     path: thirdparty-cookbooks/runit
   seven_zip
@@ -75,8 +83,12 @@ DEPENDENCIES
     path: thirdparty-cookbooks/yum
   yum-centos
     path: thirdparty-cookbooks/yum-centos
+  yum-epel
+    path: thirdparty-cookbooks/yum-epel
   yum-pgdg
     path: thirdparty-cookbooks/yum-pgdg
+  zypper
+    path: thirdparty-cookbooks/zypper
 
 GRAPH
   apache2 (3.2.2)
@@ -118,25 +130,23 @@ GRAPH
     blueprint-tomcat (>= 0.0.0)
     coremedia-proxy (~> 0.3.2)
   blueprint-solr (1.0.0)
+    blueprint-base (>= 0.0.0)
     coremedia_maven (~> 2.0)
-    java_se (~> 8.144.0)
   blueprint-tomcat (1.0.0)
     blueprint-base (>= 0.0.0)
     chef-sugar (~> 3.0)
     coremedia_maven (~> 2.0.4)
     coremedia_tomcat (~> 2.1.0)
-    java_se (~> 8.144.0)
   blueprint-tools (1.0.0)
     blueprint-base (>= 0.0.0)
     coremedia_maven (~> 2.0)
-    java_se (~> 8.144.0)
   blueprint-yum (1.0.0)
     yum (~> 4.2)
     yum-centos (~> 2.3.0)
   build-essential (8.0.3)
     mingw (>= 1.1)
     seven_zip (>= 0.0.0)
-  chef-sugar (3.4.0)
+  chef-sugar (3.6.0)
   chef_handler (1.2.0)
   chef_nginx (6.2.0)
     build-essential (>= 0.0.0)
@@ -149,7 +159,7 @@ GRAPH
     apache2 (~> 3.2.0)
     chef-sugar (~> 3.0)
   coremedia_maven (2.0.4)
-  coremedia_tomcat (2.1.2)
+  coremedia_tomcat (2.1.4)
     coremedia_maven (~> 2.0)
     ulimit (~> 0.3)
   fpm-tng (0.1.7)
@@ -157,7 +167,6 @@ GRAPH
     reprepro (>= 0.0.0)
     ruby_installer (>= 0.0.0)
   gpg (0.2.2)
-  java_se (8.144.0)
   mingw (2.0.1)
     seven_zip (>= 0.0.0)
   mongodb3 (5.3.0)
@@ -193,7 +202,7 @@ GRAPH
     ohai (>= 0.0.0)
   ulimit (0.3.3)
   user (0.7.0)
-  windows (3.1.3)
+  windows (3.3.0)
     ohai (>= 4.0.0)
   yum (4.2.0)
   yum-centos (2.3.0)

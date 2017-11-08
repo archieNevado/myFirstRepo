@@ -120,14 +120,36 @@ public class TaxonomyExplorerPanelBase extends Panel {
         updateColumns(parent);
 
         getSelectedValueExpression().setValue(newChild);
-        selectNode(newChild, function ():void {
-          focusNameField();
 
-          // Preset location latitude/longitude for location taxonomy nodes
-          setInitialLocation(newChild, parent);
+        //callback is called after the grid selection was made
+        selectNode(newChild, function ():void {
+          waitForDocumentForm(newChild, function():void {
+            focusNameField();
+
+            // Preset location latitude/longitude for location taxonomy nodes
+            setInitialLocation(newChild, parent);
+          });
         });
       });
     });
+  }
+
+  /**
+   * Ensures that the document form for the given taxonomy node has been rendered.
+   * @param newChild the taxonomy child that has been selected/created
+   * @param callback the callback method to invoke afterwards, no parameters required
+   */
+  private function waitForDocumentForm(newChild:TaxonomyNode, callback:Function):void {
+    var bindTo:ValueExpression = getDisplayedTaxonomyContentExpression();
+    var restId:String = TaxonomyUtil.parseRestId(bindTo.getValue());
+    if(newChild.getRef() === restId) {
+      callback.call(null);
+    }
+    else {
+      EventUtil.invokeLater(function():void {
+        waitForDocumentForm(newChild, callback);
+      });
+    }
   }
 
   /**

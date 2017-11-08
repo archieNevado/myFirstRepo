@@ -342,8 +342,8 @@ To resolve the latest X-SNAPSHOT, RELEASE or LATEST version, you need to set `ne
 - maven_repository_url: The Url of the maven repository, supports all protocols of the remote_file resource. Defaults to Maven Central. Defaults to <code>"http://repo1.maven.org/maven2/"</code>.
 - nexus_url: Set this to the base url of your nexus to use the REST API for artifact resolution. If set this method has precedence to the repository_url attribute. Defaults to <code>nil</code>.
 - nexus_repo: The repo name from which to resolve artifacts. Defaults to <code>"releases"</code>.
-- username: The username for the Maven repository, defaults to not set. Defaults to <code>nil</code>.
-- password: The password for the Maven repository, defaults to not set. Defaults to <code>nil</code>.
+- nexus_username: The user to access a protected nexus. Defaults to <code>nil</code>.
+- nexus_password: The password to access a protected nexus. Defaults to <code>nil</code>.
 - owner: User ownership (linux only), defaults to "root". Defaults to <code>"root"</code>.
 - group: Group membership (linux only), defaults to "root". Defaults to <code>"root"</code>.
 - context: The context name under which to deploy the webapp, defaults to the name of the resource

@@ -1,0 +1,23 @@
+{
+  "author": {
+    "name": "CoreMedia",
+    "url": "http://www.coremedia.com"
+  },
+  "bin": {
+    "create-theme": "bin/themecreator.js"
+  },
+  "dependencies": {
+    "chalk": "2.1.0",
+    "shelljs": "0.7.8"
+  },
+  "description": "The CoreMedia command line tool for creating a blank, minimal theme.",
+  "name": "@coremedia/themecreator",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.1",
+  "engines": {
+    "node": ">=6"
+  }
+}

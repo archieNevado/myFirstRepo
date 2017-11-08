@@ -30,6 +30,7 @@
 <link href="Product%20Category.xml" path="/Settings/Taxonomies/Subject/Product%20Category"/>
 <link href="Attributes.xml" path="/Settings/Taxonomies/Subject/Attributes"/>
 <link href="Campaigns.xml" path="/Settings/Taxonomies/Subject/Campaigns"/>
+<link href="Style%281%29.xml" path="/Settings/Taxonomies/Subject/Style%281%29"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

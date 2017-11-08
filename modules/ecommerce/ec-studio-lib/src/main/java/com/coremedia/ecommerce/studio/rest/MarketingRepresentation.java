@@ -1,5 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 
@@ -29,7 +30,7 @@ public class MarketingRepresentation extends AbstractCatalogRepresentation {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
       childRepresentation.setDisplayName(child.getExternalId());
-      result.put(child.getId(), childRepresentation);
+      result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
     }
     return RepresentationHelper.sortChildren(result);
   }

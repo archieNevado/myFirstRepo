@@ -1,6 +1,9 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 
@@ -29,7 +32,7 @@ public class WorkspaceResource extends AbstractCatalogResource<Workspace> {
       throw new CatalogBeanNotFoundRestException("Could not load workspace bean.");
     }
 
-    representation.setId(entity.getId());
+    representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setName(entity.getName());
     representation.setExternalId(entity.getExternalId());
     representation.setExternalTechId(entity.getExternalTechId());
@@ -37,21 +40,27 @@ public class WorkspaceResource extends AbstractCatalogResource<Workspace> {
 
   @Override
   protected Workspace doGetEntity() {
-    return getWorkspaceService().findWorkspaceByExternalTechId(getId());
+    StoreContext storeContext = getStoreContext();
+    if (storeContext == null) {
+      return null;
+    }
+
+    return getWorkspaceService().findAllWorkspaces(storeContext).stream()
+            .filter(workspace -> getId().equals(workspace.getExternalTechId()))
+            .findFirst()
+            .orElse(null);
   }
 
   @Override
   public void setEntity(Workspace workspace) {
-    if (workspace.getId() != null) {
-      String extId = getExternalIdFromId(workspace.getId());
-      setId(extId);
-    } else {
-      setId(workspace.getExternalId());
-    }
+    CommerceId workspaceId = workspace.getId();
+    String externalId = workspaceId.getExternalId().orElseGet(workspace::getExternalId);
+    setId(externalId);
+
     setSiteId(workspace.getContext().getSiteId());
   }
 
-  public WorkspaceService getWorkspaceService() {
-    return DefaultConnection.get().getWorkspaceService();
+  private WorkspaceService getWorkspaceService() {
+    return CurrentCommerceConnection.get().getWorkspaceService();
   }
 }

@@ -1,5 +1,5 @@
 package com.coremedia.ecommerce.studio.model {
-[RestResource(uriTemplate="livecontext/product/{siteId:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
+[RestResource(uriTemplate="livecontext/product/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
 public class ProductImpl extends CatalogObjectImpl implements Product {
   public function ProductImpl(uri:String) {
     super(uri);
@@ -7,6 +7,10 @@ public class ProductImpl extends CatalogObjectImpl implements Product {
 
   public function getCategory():Category {
     return get(CatalogObjectPropertyNames.CATEGORY);
+  }
+
+  public function getCatalog():Catalog{
+    return get(CatalogObjectPropertyNames.CATALOG);
   }
 
   public function getThumbnailUrl():String {
@@ -55,6 +59,11 @@ public class ProductImpl extends CatalogObjectImpl implements Product {
   }
 
   override public function invalidate(callback:Function = null):void {
+    if (!hasAnyListener()) {
+      super.invalidate();
+      return;
+    }
+
     var thiz:* = this;
     super.invalidate(function():void {
       callback && callback(thiz);

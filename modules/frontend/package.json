@@ -1,25 +1,23 @@
 {
-  "name": "@coremedia/common",
+  "name": "@coremedia/frontend",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "postinstall": "themescripts install",
-    "test": "grunt test && themescripts test",
-    "production": "themescripts production",
+    "test": "themescripts test",
+    "build": "themescripts build",
+    "production": "themescripts build",
+    "create-theme": "create-theme",
     "apidoc": "grunt apidoc"
   },
-  "devDependencies": {
-    "@coremedia/grunt-utils": "file:lib/tools/grunt",
+  "dependencies": {
+    "@coremedia/themeutils": "file:lib/tools/themeutils",
     "@coremedia/themescripts": "file:lib/tools/themescripts",
+    "@coremedia/themecreator": "file:lib/tools/themecreator",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0"
   },
-  "dependencies": {
-    "bootstrap-carousel-swipe": "0.0.6",
-    "bootstrap-sass": "3.3.7",
-    "console-polyfill": "0.3.0",
-    "imagesloaded": "4.1.3",
-    "jquery": "3.2.1",
-    "magnific-popup": "1.1.0"
+  "engines": {
+    "node": ">=6"
   }
 }

@@ -1,0 +1,136 @@
+/* --- imagemap ----------------------------------------------------------------------------------------------------- */
+.#{$prefix}imagemap {
+  position: relative;
+
+  &__button-group {
+    display: none;
+  }
+
+  &__hotzone--icon {
+    border-radius: 12px;
+    font-size: 24px;
+    height: 24px;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+  }
+
+  &__hotzone--hover.#{$prefix}imagemap__hotzone--icon {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  &__hotzone--active.#{$prefix}imagemap__hotzone--icon {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  &__hotzone--icon > i {
+    display: block;
+  }
+
+  &__image.#{$prefix}aspect-ratio-box {
+    @include aspect-ratio-box(16, 9);
+  }
+}
+
+/*---OVERLAYs--*/
+
+.#{$prefix}overlay {
+  text-align: right;
+  font-style: normal;
+  font-size: 1.2rem;
+
+  &--theme-dark {
+    color: #373737;
+  }
+
+  &--theme-light {
+    color: #fff;
+  }
+
+  &--theme-light-on-dark {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.65);
+  }
+
+  &--theme-dark-on-light {
+    color: #373737;
+    background-color: rgba(255, 255, 255, 0.65);
+  }
+
+  & a {
+    display: block;
+    color: inherit;
+    padding: 2px 10px;
+  }
+
+  & a:hover {
+    text-decoration: none;
+  }
+
+  &:hover .#{$prefix}overlay__item--title {
+    text-decoration: underline;
+  }
+}
+
+/* DESKTOP.css*/
+
+/* --- teaser-hero ------------------------------------------------------------------------------------------------ */
+
+/* disable zoom effect for imagemaps having hotzone functionality (indicated by cm-imagemap__wrapper) */
+.#{$prefix}imagemap .#{$prefix}imagemap__wrapper .#{$prefix}teaser__content {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+.#{$prefix}imagemap:hover .#{$prefix}imagemap__wrapper .#{$prefix}teaser__content {
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+//Title and text
+.#{$prefix}quickinfo {
+
+  &__title {
+    color: white;
+  }
+
+  &__text {
+    margin: 0.5rem;
+    color: white;
+  }
+
+  &__text p {
+    margin: 0;
+  }
+
+  &__button {
+    color: white;
+    border-color: white;
+  }
+
+  .cm-teasable--alternative & {
+    &__title {
+      color: black;
+    }
+
+    &__text {
+      color: black;
+    }
+
+    &__button {
+      color: black;
+      border-color: black;
+    }
+  }
+
+  &--active {
+    position: static;
+  }
+}

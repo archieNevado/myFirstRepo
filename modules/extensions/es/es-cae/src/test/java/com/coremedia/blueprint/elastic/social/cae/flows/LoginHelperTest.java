@@ -2,7 +2,6 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 
 import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
-import com.coremedia.blueprint.elastic.social.cae.user.UserFilter;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
 import org.junit.Before;
@@ -10,9 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,10 +33,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -50,7 +47,7 @@ public class LoginHelperTest {
   private String password = "secret";
 
   @InjectMocks
-  private LoginHelper loginHelper = new LoginHelper();
+  private LoginHelper loginHelper;
 
   @Mock
   private CommunityUser communityUser;
@@ -113,7 +110,6 @@ public class LoginHelperTest {
   public void setup() {
     when(loginForm.getName()).thenReturn(name);
     when(loginForm.getPassword()).thenReturn(password);
-    when(principal.getUserId()).thenReturn("4711");
     when(requestContext.getMessageContext()).thenReturn(messageContext);
     when(requestContext.getExternalContext()).thenReturn(externalContext);
     when(externalContext.getNativeRequest()).thenReturn(request);
@@ -226,7 +222,7 @@ public class LoginHelperTest {
 
     loginHelper.postProcessProviderLogin(requestContext);
 
-    verify(messageContext, never()).addMessage(Matchers.<MessageResolver>anyObject());
+    verify(messageContext, never()).addMessage(any());
     verify(parameterMap).contains("error");
   }
 
@@ -239,7 +235,7 @@ public class LoginHelperTest {
 
     loginHelper.postProcessProviderLogin(requestContext);
 
-    verify(messageContext).addMessage(Matchers.<MessageResolver>anyObject());
+    verify(messageContext).addMessage(any());
     verify(parameterMap).contains("error");
   }
 
@@ -253,7 +249,7 @@ public class LoginHelperTest {
 
     loginHelper.postProcessProviderLogin(requestContext);
 
-    verify(messageContext).addMessage(Matchers.<MessageResolver>anyObject());
+    verify(messageContext).addMessage(any());
     verify(parameterMap).contains("error");
   }
 }

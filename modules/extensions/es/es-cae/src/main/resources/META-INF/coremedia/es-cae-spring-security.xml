@@ -14,12 +14,13 @@
     <property name="redirectStrategy" ref="logoutRedirectStrategy"/>
   </bean>
 
-  <security:http authentication-manager-ref="authenticationManager">
+  <security:http use-expressions="false" authentication-manager-ref="authenticationManager">
     <!-- the built-in form-login is unused, but spring-security requires at least one authentication entry point -->
     <security:form-login/>
     <security:logout success-handler-ref="logoutSuccessHandler"/>
 
-    <security:headers>
+    <security:csrf disabled="true"/><!-- using csrf protection from coremedia-security -->
+    <security:headers defaults-disabled="true">
       <security:cache-control />
     </security:headers>
   </security:http>

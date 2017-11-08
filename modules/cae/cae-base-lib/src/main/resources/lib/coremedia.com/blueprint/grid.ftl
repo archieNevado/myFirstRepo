@@ -1,3 +1,5 @@
+<#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
+
 <#function getPageMetadata page>
   <#return blueprintFreemarkerFacade.getPageContext(page).content />
 </#function>

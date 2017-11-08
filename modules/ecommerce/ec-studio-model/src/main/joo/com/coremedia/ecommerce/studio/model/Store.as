@@ -20,6 +20,12 @@ public interface Store extends CatalogObject {
 
   function getWorkspaces():Workspaces;
 
+  function getCatalogs():Array;
+
+  function isMultiCatalog():Boolean;
+
+  function getDefaultCatalog():Catalog;
+
   function getCurrentWorkspace():Workspace;
 
   /**

@@ -1,0 +1,31 @@
+/**
+ * Quickinfo
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * Basic styles to allow functionality to work
+ */
+
+/**
+ * quickinfo is not visible by default (display: none is not used due to technical reasons)
+ */
+
+.#{$cm-quickinfo-prefix} {
+  visibility: hidden;
+  background-color: $cm-quickinfo-background-color;
+
+  &__picture-link {
+    display: block;
+  }
+
+  &__picture-box {
+    @include aspect-ratio-box($cm-quickinfo-image-aspect-ratio-x, $cm-quickinfo-image-aspect-ratio-y);
+  }
+
+  &__picture {
+    @include stretch-absolute();
+  }
+
+  &--active {
+    visibility: visible;
+  }
+}

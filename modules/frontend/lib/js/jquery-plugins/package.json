@@ -1,0 +1,12 @@
+{
+  "name": "@coremedia/js-jquery-plugins",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "@coremedia/js-jquery-utils": "file:../jquery-utils",
+    "@coremedia/js-utils": "file:../utils",
+    "@coremedia/js-responsive-images": "file:../responsive-images"
+  },
+  "main": "src/index.js"
+}

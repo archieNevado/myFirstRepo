@@ -1,11 +1,13 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.Store;
-import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;
 
 import javax.inject.Inject;
@@ -19,8 +21,10 @@ import static java.util.Objects.requireNonNull;
  * A catalog {@link ProductVariant} object as a RESTful resource.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path("livecontext/sku/{siteId:[^/]+}/{workspaceId:[^/]+}/{id:.+}")
+@Path(ProductVariantResource.URI_PATH)
 public class ProductVariantResource extends CommerceBeanResource<ProductVariant> {
+
+  static final String URI_PATH = "livecontext/sku/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
 
   @Inject
   private ContentRepositoryResource contentRepositoryResource;
@@ -40,7 +44,7 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
       throw new CatalogBeanNotFoundRestException("Could not load sku bean");
     }
 
-    representation.setId(entity.getId());
+    representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setName(entity.getName());
     representation.setExternalId(entity.getExternalId());
     representation.setExternalTechId(entity.getExternalTechId());
@@ -53,16 +57,10 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
     representation.setParent(entity.getParent());
     representation.setCategory(entity.getCategory());
     representation.setStore(new Store(entity.getContext()));
+    representation.setCatalog(entity.getCatalog().orElse(null));
     representation.setOfferPrice(entity.getOfferPrice());
     representation.setListPrice(entity.getListPrice());
     representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
-
-    // get visuals directly via AssetService to avoid fallback to default picture
-    AssetService assetService = getConnection().getAssetService();
-    if (assetService != null) {
-      representation.setVisuals(assetService.findVisuals(entity.getReference(), false));
-    }
-
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
     representation.setDefiningAttributes(entity.getDefiningAttributes());
@@ -74,14 +72,8 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
     CommerceConnection connection = getConnection();
     CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
     CatalogService catalogService = requireNonNull(connection.getCatalogService(), "catalog service not available");
-    String productVariantId = idProvider.formatProductVariantId(getId());
-    return catalogService.findProductVariantById(productVariantId);
-  }
-
-  @Override
-  public void setEntity(ProductVariant productVariant) {
-    setId(productVariant.getExternalId());
-    setSiteId(productVariant.getContext().getSiteId());
-    setWorkspaceId(productVariant.getContext().getWorkspaceId());
+    StoreContext storeContext = getStoreContext();
+    CommerceId commerceId = idProvider.formatProductVariantId(storeContext.getCatalogAlias(), getId());
+    return catalogService.findProductVariantById(commerceId, storeContext);
   }
 }

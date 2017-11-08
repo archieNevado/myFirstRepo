@@ -80,7 +80,7 @@
                 </goals>
                 <phase>install</phase>
                 <configuration>
-                  <arguments>run production</arguments>
+                  <arguments>run build --production</arguments>
                 </configuration>
               </execution>
               <execution>

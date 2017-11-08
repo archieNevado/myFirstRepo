@@ -3,6 +3,7 @@
 <div class="cm-error">
   <style type="text/css">
     .cm-error {
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
       position: relative;
       display: block;
       background: #eeeeee;

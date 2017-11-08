@@ -27,10 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.elastic.core.test.Injection.inject;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -321,7 +322,7 @@ public class CuratedTransferResourceTest {
     );
 
     verify(imageGallery).set(CMGALLERY_PROPERTY_TITLE, imageGalleryName);
-    verify(imageGallery).set(eq(CONTENT_PROPERTY_TO_COPY_TO), anyString());
+    verify(imageGallery).set(eq(CONTENT_PROPERTY_TO_COPY_TO), any(Markup.class));
   }
 
   @Test
@@ -382,7 +383,7 @@ public class CuratedTransferResourceTest {
     // Created CMPicture linked to gallery?
     verify(imageGallery, times(1)).set(CMGALLERY_PROPERTY_TO_COPY_TO, Arrays.asList(cmPicture));
     verify(imageGallery).set(CMGALLERY_PROPERTY_TITLE, imageGalleryName);
-    verify(imageGallery).set(eq(CONTENT_PROPERTY_TO_COPY_TO), anyString());
+    verify(imageGallery).set(eq(CONTENT_PROPERTY_TO_COPY_TO), any(Markup.class));
   }
 
   @Test
@@ -593,7 +594,7 @@ public class CuratedTransferResourceTest {
   @SuppressWarnings("all")
   private ArgumentMatcher<Map<String, Object>> isMapContaining(final Map<String, Object> expectedProperties) {
     return new ArgumentMatcher<Map<String, Object>>() {
-      public boolean matches(Object argument) {
+      public boolean matches(Map<String, Object> argument) {
         Preconditions.checkArgument(expectedProperties.size() > 0, "Cannot compare with empty property map.");
 
         Map<String, Object> actualProperties = (Map<String, Object>) argument;

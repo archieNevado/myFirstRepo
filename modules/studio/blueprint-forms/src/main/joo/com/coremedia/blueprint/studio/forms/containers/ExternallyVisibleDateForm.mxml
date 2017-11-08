@@ -19,6 +19,8 @@
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.blueprint.base.components.sites.SiteAwareFeatures;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.externallyVisibleDateForm";
 
     private var config:ExternallyVisibleDateForm;
@@ -31,7 +33,7 @@
                            bindTo="{config.bindTo.extendBy('properties', 'extDisplayedDate')}"
                            componentProperty="externallyDisplayedDate"
                            componentEvent="externallyDisplayedDateChanged"/>
-    <bp-base:SiteAwareVisibilityPlugin feature="Corporation Form Components"
+    <bp-base:SiteAwareVisibilityPlugin feature="{SiteAwareFeatures.EXTERNALLY_VISIBLE_DATE_FORM}"
                                        contentValueExpression="{config.bindTo}"/>
     <editor:PropertyFieldPlugin propertyName="extDisplayedDate"/>
 

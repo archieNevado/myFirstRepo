@@ -9,7 +9,7 @@ coremedia.preview = (function (module) {
 }(coremedia.preview || {}));
 
 /**
- * Knows modules coremedia.preview and coremedia.blueprint.basic
+ * placement specific preview javascript
  */
 coremedia.preview.highlighting = (function (module) {
   var $ = coremedia.preview.$;

@@ -27,6 +27,10 @@
 </related>
 <value>Blog</value>
 <children>
+<link href="Cooking.xml" path="/Settings/Taxonomies/Subject/Cooking"/>
+<link href="Culture.xml" path="/Settings/Taxonomies/Subject/Culture"/>
+<link href="Gadget.xml" path="/Settings/Taxonomies/Subject/Gadget"/>
+<link href="Beauty.xml" path="/Settings/Taxonomies/Subject/Beauty"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

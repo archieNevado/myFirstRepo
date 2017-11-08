@@ -32,7 +32,6 @@
     <module>custom-topic-pages</module>
     <module>create-from-template</module>
     <module>corporate</module>
-    <module>corporate-es</module>
     <module>taxonomy</module>
     <module>validators</module>
   </modules>

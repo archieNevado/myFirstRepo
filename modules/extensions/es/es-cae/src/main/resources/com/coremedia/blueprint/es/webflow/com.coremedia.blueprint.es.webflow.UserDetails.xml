@@ -42,6 +42,6 @@
   </view-state>
 
   <end-state id="logout"
-             view="externalRedirect:contextRelative:/j_spring_security_logout?spring-security-redirect=#{nextUrl}"/>
+             view="externalRedirect:contextRelative:/logout?spring-security-redirect=#{nextUrl}"/>
 
 </flow>

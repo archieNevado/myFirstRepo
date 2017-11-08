@@ -1,67 +1,22 @@
+'use strict';
+
+const themeutils = require('@coremedia/themeutils');
+
 module.exports = function (grunt) {
-  'use strict';
-
-  // --- theme configuration -------------------------------------------------------------------------------------------
-
-  grunt.initConfig({
-    // define development mode
-    /*monitor: {
-     target: 'local' //default: remote
-     },*/
-    // load bricks into theme
-    bricks: {
-      src: [
-        'preview',
-        'responsive-images',
-        'bootstrap',
-        'cta',
-        'generic-templates',
-        'image-maps',
-        'elastic-social',
-        'fragment-scenario',
-        'download-portal'
-      ]
-    },
-    // copy js and vendor files
-    copy: {
-      basic: {
-        files: [{
-          expand: true,
-          cwd: '../../lib/js/legacy',
-          src: [
-            'jquery.coremedia.utils.js',
-            'jquery.coremedia.smartresize.js',
-            'jquery.coremedia.spinner.js',
-            'coremedia.blueprint.nodeDecorationService.js',
-            'coremedia.blueprint.basic.js',
-            'coremedia.blueprint.hashBasedFragment.js'
-          ],
-          dest: '../../target/resources/themes/<%= themeConfig.name %>/js'
-        }]
-      },
-      vendor: {
-        files: [{
-          expand: true,
-          cwd: 'node_modules',
-          src: [
-            'svg4everybody/dist/**',
-          ],
-          dest: '../../target/resources/themes/<%= themeConfig.name %>/vendor/'
-        }]
-      }
-    }
-  });
 
   // load CoreMedia initialization
-  require('@coremedia/grunt-utils')(grunt);
+  themeutils(grunt);
 
   // --- theme tasks ---------------------------------------------------------------------------------------------------
 
-  // Local Development Task.
-  grunt.registerTask('development', ['clean', 'copy', 'sass', 'webpack:jslib']);
-  // Full distribution task with templates.
-  grunt.registerTask('production', ['development', 'postcss', 'eslint', 'compress']);
+  // use task "monitor" for development. will be created by @coremedia/themeutils
 
-  // Default task = distribution.
-  grunt.registerTask('default', ['production']);
+  // deprecated, use "build" instead
+  grunt.registerTask('production', ['build']);
+
+  // build the theme. theme will be stored as zip file in <%= themeConfig.targetPath %>/themes
+  grunt.registerTask('build', ['clean', 'copy', 'sync', 'webpack', 'compress']);
+
+  // Default task = build
+  grunt.registerTask('default', ['build']);
 };

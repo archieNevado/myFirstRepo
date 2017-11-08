@@ -1,7 +1,15 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.Store;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
+import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,7 +36,7 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
       throw new CatalogBeanNotFoundRestException("Could not load spot bean");
     }
 
-    representation.setId(entity.getId());
+    representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setName(entity.getName());
     representation.setShortDescription(entity.getDescription());
     representation.setExternalId(entity.getExternalId());
@@ -38,17 +46,30 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
 
   @Override
   protected MarketingSpot doGetEntity() {
-    return getConnection().getMarketingSpotService().findMarketingSpotByExternalId(getId());
+    StoreContext storeContext = getStoreContext();
+    if (storeContext == null) {
+      return null;
+    }
+
+    CommerceConnection connection = getConnection();
+    MarketingSpotService marketingSpotService = connection.getMarketingSpotService();
+    if (marketingSpotService == null) {
+      return null;
+    }
+    CommerceIdProvider idProvider = connection.getIdProvider();
+    if (!(idProvider instanceof BaseCommerceIdProvider)) {
+      return null;
+    }
+    CommerceId commerceId = ((BaseCommerceIdProvider) idProvider).builder(BaseCommerceBeanType.MARTETING_SPOT).withExternalId(getId()).build();
+    return marketingSpotService.findMarketingSpotById(commerceId, storeContext);
   }
 
   @Override
   public void setEntity(MarketingSpot spot) {
-    if (spot.getId() != null){
-      String extId = getExternalIdFromId(spot.getId());
-      setId(extId);
-    } else {
-      setId(spot.getExternalId());
-    }
+    CommerceId commerceId = spot.getId();
+    String extId = commerceId.getExternalId()
+            .orElse(spot.getExternalId());
+    setId(extId);
     setSiteId(spot.getContext().getSiteId());
     setWorkspaceId(spot.getContext().getWorkspaceId());
   }

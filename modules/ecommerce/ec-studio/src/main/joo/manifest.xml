@@ -8,6 +8,7 @@
   <component class="com.coremedia.ecommerce.studio.components.CommerceObjectSelector"/>
   <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkContextMenu"/>
   <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField"/>
+  <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkListColumn"/>
   <component class="com.coremedia.ecommerce.studio.components.link.ReadOnlyCatalogLinkPropertyField"/>
   <component class="com.coremedia.ecommerce.studio.components.link.CatalogLinkToolbar"/>
   <component class="com.coremedia.ecommerce.studio.components.preferences.CatalogPreferenceWindowPlugin"/>

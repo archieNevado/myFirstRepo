@@ -38,7 +38,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.Map;
 
 import static com.coremedia.blueprint.cae.action.search.PageSearchActionHandler.ACTION_NAME;
@@ -55,8 +54,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
@@ -106,10 +105,10 @@ public class PageSearchActionHandlerTest {
       //replace SearchService with mocked version so that this test really only tests PageSearchActionHandler and can
       //check whether the objects returned by the SearchService are correctly merged into the ModelAndView
       SearchService searchService = mock(SearchService.class);
-      when(searchService.search(any(Page.class), any(SearchFormBean.class), org.mockito.Matchers.<Collection<String>>any()))
+      when(searchService.search(any(Page.class), any(SearchFormBean.class), any()))
               .thenReturn(resultBean);
-      when(searchService.getAutocompleteSuggestions(eq(String.valueOf(ROOT_NAVIGATION_ID)), eq(QUERY),
-              org.mockito.Matchers.<Collection<String>>any())).thenReturn(result);
+      when(searchService.getAutocompleteSuggestions(eq(String.valueOf(ROOT_NAVIGATION_ID)), eq(QUERY), any()))
+              .thenReturn(result);
       return searchService;
     }
 

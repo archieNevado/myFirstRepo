@@ -11,6 +11,7 @@
 <#assign additionalImgCssClass=""/>
 <#assign additionalTextCssClass=""/>
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <#if !hasEvenIndex>
   <#assign additionalVariantCssClass="cm-teasable--alternative" />
@@ -32,7 +33,7 @@
 <div class="cm-teasable ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@cm.metadata self.content />>
   <#if hasImage>
     <div class="col-xs-12 ${additionalImgCssClass}">
-      <@bp.optionalLink href=link>
+      <@bp.optionalLink href=link attr={"target":target}>
         <#-- picture -->
         <@cm.include self=self.picture params={
           "limitAspectRatios": [ "portrait_ratio1x1", "landscape_ratio16x9" ],
@@ -47,7 +48,7 @@
     <div class="cm-teasable__text-content-box">
       <div class="cm-teasable__text-content">
         <#-- headline -->
-        <@bp.optionalLink href="${link}">
+        <@bp.optionalLink href="${link}" attr={"target":target}>
           <h3 class="cm-teasable__headline"<@cm.metadata "properties.teaserTitle" />>
             <span>${self.teaserTitle!""}</span>
           </h3>

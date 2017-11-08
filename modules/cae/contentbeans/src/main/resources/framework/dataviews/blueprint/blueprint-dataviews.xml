@@ -78,9 +78,10 @@
 
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMImageMapImpl">
     <property name="aspectByName" associationType="composition"/>
-    <property name="localSettings"/>
     <property name="imageMapAreasUnfiltered" associationType="static"/>
     <property name="imageMapAreas" associationType="dynamic"/>
+    <!--dynamic only, because #getLocalSettings uses the validation service.-->
+    <property name="localSettings" associationType="dynamic"/>
   </dataview>
 
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMSiteImpl">
@@ -93,9 +94,10 @@
 
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMTeaserImpl">
     <property name="aspectByName" associationType="composition"/>
-    <property name="localSettings"/>
     <property name="contexts" associationType="static"/>
     <property name="viewtype" associationType="aggregation"/>
+    <!--dynamic only, because #getLocalSettings uses the validation service.-->
+    <property name="localSettings" associationType="dynamic"/>
   </dataview>
 
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMVideoImpl">

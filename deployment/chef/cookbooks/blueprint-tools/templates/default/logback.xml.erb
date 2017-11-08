@@ -34,6 +34,8 @@
 
   <!-- Avoid frequent ERRORs and WARNs from pdfbox when parsing text from PDFs for indexing -->
   <logger name="org.apache.pdfbox.pdmodel.font" additivity="false" level="off"/>
+  <!-- Avoid warning from Apache Tika 1.15 about missing library (TIKA-2389) -->
+  <logger name="org.apache.tika.parser.image.ImageParser" additivity="false" level="error"/>
 
   <root level="warn">
   <%- unless @config['appender'].nil? -%>

@@ -1,7 +1,7 @@
-/*! CoreMedia Studio - Styles for fragmented Preview */
+/*! CoreMedia Studio - Styles for Preview */
 
 .cm-page-preview {
-  background: none #f1f1f1;
+  background: none transparent; /* same color as Studio frame */
   margin: 0;
   padding: 0;
   height: auto; /* reset 100% height by themes to avoid scrollbars caused by margin of items */
@@ -82,9 +82,14 @@
   cursor: default;
 }
 
+.cm-preview-developer-mode:hover {
+  background-color: #892F25;
+  transition: background-color 0.3s ease-out;
+}
+
 .cm-preview-developer-mode__icon {
   display: block;
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAABGlBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+zRnCkAAAAXXRSTlMAAQIDBAUGBwgJCgsODxgaJicoKSotLzAxMzk7PUZKTE9QUVJUVVZZXF1eYWJjZmdoaWtsbXR4eX6FiYyPlJianZ6go6aorbK0tbe8vsXK2dze5ujp6/Hz9ff5+/1wsAonAAABHUlEQVQoz42S11KbYQxEz/djegmdGNMceoeEZqrBJHQw1Qb7vP9rcGEwP0OZ6Eqj1UirXcF/RpiZILlZ9xGo1ZWiPbHO8JIcW7IcVevr2gGQXCuP8dPd0QBEw4EzTdM8wLk2gloH0akXiyXNzxWcTWUcpN3cdIAB36Jcz7H3rzsO1ZvNgyd1iISuFe0GYEqzEbTk9QdheY7kfgPw5+TJQgKgXa+3uqpEVQ8BiFQz74C/nwHpnYLFBECH3mZ7Y/JMarYGWvPaRvg9T/9eIwA59W47V1LTJHTjsUI3GTvQJo6qB4Z/Xi6X9Gr6wYVUxiE6K5IQhiNOdZzm1DsRAVi1MrdvtfyLXndGXu350qi4tUsPcWvfnmGc7u36b97lGQOvSU4gttpoAAAAAElFTkSuQmCC') left center no-repeat;
+  background: url("theme-icon.svg") left center no-repeat;
   width: 24px;
   height: 24px;
 }

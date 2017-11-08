@@ -3,21 +3,45 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "production": "grunt production",
+    "build": "grunt build",
+    "production": "grunt build",
     "start": "grunt monitor"
   },
-  "devDependencies": {
-    "grunt": "1.0.1"
-  },
   "dependencies": {
-    "svg4everybody": "2.1.7"
+    "grunt": "1.0.1",
+    "jquery": "3.2.1",
+    "svg4everybody": "2.1.7",
+    "imagesloaded": "4.1.3",
+    "bootstrap-sass": "3.3.7",
+    "magnific-popup": "1.1.0",
+    "@coremedia/brick-generic-templates": "file:../../lib/bricks/generic-templates",
+    "@coremedia/js-utils": "file:../../lib/js/utils",
+    "@coremedia/js-logger": "file:../../lib/js/logger",
+    "@coremedia/js-node-decoration-service": "file:../../lib/js/node-decoration-service",
+    "@coremedia/sass-utils": "file:../../lib/sass/utils",
+    "@coremedia/brick-default-teaser": "file:../../lib/bricks/default-teaser",
+    "@coremedia/brick-hero-teaser": "file:../../lib/bricks/hero-teaser",
+    "@coremedia/brick-bootstrap": "file:../../lib/bricks/bootstrap",
+    "@coremedia/brick-fragment-scenario": "file:../../lib/bricks/fragment-scenario",
+    "@coremedia/brick-responsive-images": "file:../../lib/bricks/responsive-images",
+    "@coremedia/brick-quick-info": "file:../../lib/bricks/quick-info",
+    "@coremedia/brick-image-maps": "file:../../lib/bricks/image-maps",
+    "@coremedia/brick-video": "file:../../lib/bricks/video",
+    "@coremedia/brick-elastic-social": "file:../../lib/bricks/elastic-social",
+    "@coremedia/brick-download-portal": "file:../../lib/bricks/download-portal",
+    "@coremedia/brick-preview": "file:../../lib/bricks/preview",
+    "@coremedia/brick-search": "file:../../lib/bricks/search",
+    "@coremedia/brick-navigation": "file:../../lib/bricks/navigation",
+    "@coremedia/brick-360-spinner": "file:../../lib/bricks/360-spinner"
   },
+  "main": "src/js/index.js",
   "theme": {
-    "name": "corporate",
-    "supportedBrowsers": [
-      "last 2 versions",
-      "Firefox ESR",
-      "Explorer >= 9"
-    ]
-  }
+    "name": "corporate"
+  },
+  "browserslist": [
+    "last 1 Chrome version",
+    "last 1 Firefox version",
+    "last 1 Edge version",
+    "Explorer >= 11"
+  ]
 }

@@ -36,8 +36,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -53,15 +52,16 @@ import static com.google.common.collect.ImmutableMap.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class DownloadPortalHandlerTest {
 
   public static final int ASSET_CONTENT_ID = 60001;
@@ -419,7 +419,7 @@ public class DownloadPortalHandlerTest {
     handler.handlePaginatedSearchAssetsRequest(navigation, queryTooShort, 1, response);
 
     verify(factory).createEmptyPaginatedAssets();
-    verify(paginatedAssets).setBaseRequestParams(Mockito.anyMapOf(String.class, String.class));
+    verify(paginatedAssets).setBaseRequestParams(anyMap());
     verify(paginatedAssets).setNotification(notificationArgumentCaptor.capture());
 
     Notification notification = notificationArgumentCaptor.getValue();
@@ -439,7 +439,7 @@ public class DownloadPortalHandlerTest {
     handler.handlePaginatedSearchAssetsRequest(navigation, searchString, 1, response);
 
     verify(factory).createPaginatedSearchAssets(searchString, navigation, 1);
-    verify(paginatedAssets).setBaseRequestParams(Mockito.anyMapOf(String.class, String.class));
+    verify(paginatedAssets).setBaseRequestParams(anyMap());
     verify(paginatedAssets).setNotification(notificationArgumentCaptor.capture());
 
     Notification notification = notificationArgumentCaptor.getValue();
@@ -459,7 +459,7 @@ public class DownloadPortalHandlerTest {
     handler.handlePaginatedSearchAssetsRequest(navigation, searchString, 1, response);
 
     verify(factory).createPaginatedSearchAssets(searchString, navigation, 1);
-    verify(paginatedAssets).setBaseRequestParams(Mockito.anyMapOf(String.class, String.class));
+    verify(paginatedAssets).setBaseRequestParams(anyMap());
 
     verify(paginatedAssets).setNotification(notificationArgumentCaptor.capture());
 
@@ -479,7 +479,7 @@ public class DownloadPortalHandlerTest {
     handler.handlePaginatedSearchAssetsRequest(navigation, searchString, 1, response);
 
     verify(factory).createPaginatedSearchAssets(searchString, navigation, 1);
-    verify(paginatedAssets).setBaseRequestParams(Mockito.anyMapOf(String.class, String.class));
+    verify(paginatedAssets).setBaseRequestParams(anyMap());
 
     verify(paginatedAssets).setNotification(notificationArgumentCaptor.capture());
 
@@ -491,7 +491,7 @@ public class DownloadPortalHandlerTest {
 
   @Test
   public void testDownloadCollectionOverview() throws Exception {
-    when(factory.createDownloadCollectionOverview(anyListOf(AMAssetRendition.class))).thenReturn(downloadCollectionOverview);
+    when(factory.createDownloadCollectionOverview(anyList())).thenReturn(downloadCollectionOverview);
     ImmutableList<AMAssetRendition> assetRenditions = ImmutableList.of(assetRendition);
     when(asset.getPublishedRenditions()).thenReturn(assetRenditions);
     when(assetRendition.getName()).thenReturn("original");
@@ -506,7 +506,7 @@ public class DownloadPortalHandlerTest {
 
   @Test
   public void testDownloadCollectionOverviewRequest() {
-    when(factory.createDownloadCollectionOverview(anyListOf(AMAssetRendition.class))).thenReturn(downloadCollectionOverview);
+    when(factory.createDownloadCollectionOverview(anyList())).thenReturn(downloadCollectionOverview);
 
     handler.handleDownloadCollectionOverviewRequest(navigation);
 

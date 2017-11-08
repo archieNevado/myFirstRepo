@@ -306,12 +306,13 @@
   <bean id="exposeCurrentNavigationInterceptor"
         class="com.coremedia.blueprint.cae.web.ExposeCurrentNavigationInterceptor"/>
 
-  <customize:prepend id="blueprintControllerInterceptors" bean="handlerInterceptors">
+  <customize:append id="blueprintControllerInterceptors" bean="handlerInterceptors" order="9999998">
     <list>
+      <!-- this interceptor must run as early as possible in #postHandle - that is it must be last in the chain :( -->
       <ref bean="contentValidityInterceptor"/>
       <ref bean="exposeCurrentNavigationInterceptor"/>
     </list>
-  </customize:prepend>
+  </customize:append>
 
   <bean class="org.springframework.web.servlet.handler.MappedInterceptor" id="mappedCacheHeaderInterceptor">
     <description>

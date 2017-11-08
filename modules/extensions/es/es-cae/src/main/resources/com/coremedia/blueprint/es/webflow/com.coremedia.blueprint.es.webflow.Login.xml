@@ -29,7 +29,7 @@
     <transition on="submit" to="logout"/>
   </view-state>
 
-  <end-state id="logout" view="externalRedirect:contextRelative:/j_spring_security_logout?spring-security-redirect=#{nextUrl}" />
+  <end-state id="logout" view="externalRedirect:contextRelative:/logout?spring-security-redirect=#{nextUrl}" />
   <end-state id="success" view="externalRedirect:#{nextUrl}" />
 
 </flow>

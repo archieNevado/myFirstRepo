@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
 
 <#-- Image functions -->
 <#function responsiveImageLinksData picture aspectRatios=[]>

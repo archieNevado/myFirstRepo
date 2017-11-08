@@ -1,0 +1,13 @@
+{
+  "name": "@coremedia/brick-generic-templates",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "magnific-popup": "1.1.0",
+    "@coremedia/js-magnific-popup": "file:../../js/magnific-popup",
+    "@coremedia/sass-utils": "file:../../sass/utils",
+    "@coremedia/brick-responsive-images": "file:../responsive-images"
+  },
+  "main": "src/js/index.js"
+}

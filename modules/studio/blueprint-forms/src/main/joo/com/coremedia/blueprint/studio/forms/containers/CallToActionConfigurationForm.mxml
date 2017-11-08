@@ -20,6 +20,7 @@
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.blueprint.base.components.sites.SiteAwareFeatures;
     import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.callToActionConfigurationForm";
@@ -49,7 +50,7 @@
                 destination="ctaViewModel.CTAText"
                 twoWay="true"/>
 
-    <bp-base:SiteAwareVisibilityPlugin feature="Corporation Form Components"
+    <bp-base:SiteAwareVisibilityPlugin feature="{SiteAwareFeatures.CALL_TO_ACTION}"
                                        contentValueExpression="{config.bindTo}"/>
     <editor:PropertyFieldPlugin propertyName="callToActionConfiguration"/>
     <editor:ShowIssuesPlugin propertyName="callToActionConfiguration"

@@ -16,7 +16,12 @@
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
     import com.coremedia.cms.editor.sdk.desktop.HeaderToolbarUserMenu;
+    import com.coremedia.ecommerce.studio.model.Catalog;
+    import com.coremedia.ecommerce.studio.model.CatalogImpl;
+    import com.coremedia.ecommerce.studio.model.CatalogObject;
+    import com.coremedia.ecommerce.studio.model.Category;
     import com.coremedia.ecommerce.studio.model.CategoryImpl;
     import com.coremedia.ecommerce.studio.model.ContractImpl;
     import com.coremedia.ecommerce.studio.model.ContractsImpl;
@@ -26,9 +31,13 @@
     import com.coremedia.ecommerce.studio.model.ProductVariantImpl;
     import com.coremedia.ecommerce.studio.model.SegmentImpl;
     import com.coremedia.ecommerce.studio.model.SegmentsImpl;
+    import com.coremedia.ecommerce.studio.model.Store;
     import com.coremedia.ecommerce.studio.model.StoreImpl;
     import com.coremedia.ecommerce.studio.model.WorkspaceImpl;
     import com.coremedia.ecommerce.studio.model.WorkspacesImpl;
+    import com.coremedia.ui.data.Bean;
+
+    import ext.StringUtil;
 
     import mx.resources.ResourceManager;
 
@@ -77,6 +86,28 @@
     private var config:ECommerceStudioPlugin;
 
     public native function ECommerceStudioPlugin(config:ECommerceStudioPlugin = null);
+
+    private static function handleStoreOrCategory(mainStateBean:Bean):String {
+      var searchType:String = mainStateBean.get(CollectionViewModel.CONTENT_TYPE_PROPERTY);
+      if (searchType !== CatalogModel.TYPE_MARKETING_SPOT) {
+        var searchFolder:Object = mainStateBean.get(CollectionViewModel.FOLDER_PROPERTY);
+        var store:Store;
+        var catalog:Catalog;
+        if (searchFolder is Store) {
+          store = searchFolder as Store;
+          catalog = store.getDefaultCatalog();
+        } else if (searchFolder is Category) {
+          var category:Category = searchFolder as Category;
+          store = category.getStore();
+          catalog = category.getCatalog();
+        }
+
+        if (store && store.isMultiCatalog()) {
+          return StringUtil.format(resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_multiCatalog_emptySearch_text'), catalog.getName());
+        }
+      }
+      return null;
+    }
     ]]></fx:Script>
 
   <local:rules>
@@ -86,6 +117,16 @@
         <ec:ECommerceLibraryPlugin/>
       </editor:plugins>
     </editor:CollectionView>
+    <ec:CatalogSearchList>
+      <ec:plugins>
+        <editor:HandleEmptySearchResultPlugin additionalHandler="{handleStoreOrCategory}"/>
+      </ec:plugins>
+    </ec:CatalogSearchList>
+    <ec:CatalogSearchThumbnails>
+      <ec:plugins>
+        <editor:HandleEmptySearchResultPlugin additionalHandler="{handleStoreOrCategory}"/>
+      </ec:plugins>
+    </ec:CatalogSearchThumbnails>
 
     <!--Show the commerce store for the preferred site-->
     <editor:HeaderToolbarUserMenu>
@@ -130,6 +171,7 @@
 
     <editor:RegisterRestResource beanClass="{CategoryImpl}"/>
     <editor:RegisterRestResource beanClass="{StoreImpl}"/>
+    <editor:RegisterRestResource beanClass="{CatalogImpl}"/>
     <editor:RegisterRestResource beanClass="{ProductImpl}"/>
     <editor:RegisterRestResource beanClass="{ProductVariantImpl}"/>
     <editor:RegisterRestResource beanClass="{SegmentImpl}"/>

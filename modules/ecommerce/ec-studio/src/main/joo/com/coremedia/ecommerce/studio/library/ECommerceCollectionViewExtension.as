@@ -11,6 +11,7 @@ import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryToo
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchListContainer;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchToolbarContainer;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Marketing;
@@ -82,6 +83,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
 
     if (catalogObject is Category) {
       searchParameters['category'] = catalogObject.getExternalTechId() || catalogObject.getExternalId();
+      searchParameters['catalogAlias'] = CatalogHelper.getInstance().getCatalogAliasFromId(catalogObject.getId());
     }
 
     searchParameters.query = searchText || "*";
@@ -145,8 +147,12 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     }
     var namePath:Array = [];
     var store:Store = catalogObject.getStore();
+    var isSingleRootCategory:Boolean = !store || !store.getCatalogs() ||
+            store.getCatalogs().length <= 1;
     while (catalogObject) {
-      namePath.push(catalogObject is Category && categoryTreeRelation.isRoot(catalogObject) ?
+      //when multi-catalog is not configured there will be only one root category. then the root category should called
+      // 'Product Catalog' for the sake of backward compatibility.
+      namePath.push(isSingleRootCategory && catalogObject is Category && categoryTreeRelation.isRoot(catalogObject) ?
               ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_root_category') : catalogHelper.getDecoratedName(catalogObject));
       if (catalogObject is Product) {
         catalogObject = (catalogObject as Product).getCategory();

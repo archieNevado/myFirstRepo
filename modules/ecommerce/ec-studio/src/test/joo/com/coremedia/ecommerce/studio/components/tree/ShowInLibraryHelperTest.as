@@ -34,7 +34,7 @@ public class ShowInLibraryHelperTest extends AbstractCatalogStudioTest {
 
   private function setUpCatalog():void {
     treeModel = new CatalogTreeModel();
-    category = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/NO_WS/Fruit") as Category;
+    category = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit") as Category;
     entities = new Array(category);
     showInLibraryHelper = new ShowInLibraryHelper(entities, treeModel);
   }

@@ -28,7 +28,7 @@ public class BlobMetadataUtil {
   }
 
   public static function convertDirectoryTree(files:Array):NodeInterface {
-    var root = {
+    var root:* = {
       expanded: true,
       visible: true,
       leaf: false,

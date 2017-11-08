@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
@@ -42,6 +43,7 @@ import static org.mockito.Mockito.mock;
         "classpath:/META-INF/coremedia/es-p13n-contexts.xml",
         "classpath:/com/coremedia/blueprint/personalization/elastic/es-p13n-cae-test-context.xml"
 })
+@TestPropertySource(properties = "elastic.core.persistence=memory")
 public class InterestsServiceTest {
 
   @Inject

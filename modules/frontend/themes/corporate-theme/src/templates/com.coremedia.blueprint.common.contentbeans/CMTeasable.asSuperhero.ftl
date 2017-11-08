@@ -4,6 +4,7 @@
 
 <#assign index=cm.localParameters().index!0 />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <div class="cm-superhero ${additionalClass!""}"<@cm.metadata self.content /> data-cm-module="superhero">
   <#-- picture -->
@@ -14,7 +15,7 @@
     <div class="cm-superhero__banderole row">
       <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
         <#-- headline -->
-        <@bp.optionalLink href="${link}">
+        <@bp.optionalLink href="${link}" attr={"target":target}>
           <h1 class="cm-superhero__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
         </@bp.optionalLink>
         <#-- teaser text -->

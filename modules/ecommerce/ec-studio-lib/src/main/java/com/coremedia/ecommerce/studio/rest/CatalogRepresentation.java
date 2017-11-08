@@ -1,5 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -15,8 +16,11 @@ import java.util.Map;
  */
 public class CatalogRepresentation extends AbstractCatalogRepresentation {
 
+  private String name;
+  private boolean _default;
   private List<Category> topCategories;
   private Store store;
+  private Category rootCategory;
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Category> getTopCategories() {
@@ -35,7 +39,7 @@ public class CatalogRepresentation extends AbstractCatalogRepresentation {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
       childRepresentation.setDisplayName(child.getDisplayName());
-      result.put(child.getId(), childRepresentation);
+      result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
     }
     return result;
   }
@@ -47,4 +51,30 @@ public class CatalogRepresentation extends AbstractCatalogRepresentation {
   public void setStore(Store store) {
     this.store = store;
   }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setRootCategory(Category rootCategory) {
+    this.rootCategory = rootCategory;
+  }
+
+  public Category getRootCategory() {
+    return rootCategory;
+  }
+
+  public boolean isDefault() {
+    return _default;
+  }
+
+  public void setDefault(boolean _default) {
+    this._default = _default;
+  }
+
+
 }

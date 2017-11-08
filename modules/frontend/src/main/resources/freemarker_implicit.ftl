@@ -8,7 +8,7 @@
 [#import "/lib/coremedia.com/livecontext.ftl" as lc]
 [#-- elastic social --]
 [#import "/lib/coremedia.com/blueprint/elasticsocial.ftl" as es]
-[#import "/spring.ftl" as spring]
+[#import "/lib/coremedia.com/spring.ftl" as spring]
 [#-- asset managment download portal --]
 [#import "/lib/coremedia.com/blueprint/am.ftl" as am]
 

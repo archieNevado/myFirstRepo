@@ -1,4 +1,5 @@
 package com.coremedia.blueprint.studio.googleanalytics {
+import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 import com.coremedia.ui.util.createComponentSelector;
@@ -39,10 +40,14 @@ public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
 
     var button:GoogleAnalyticsReportPreviewButton =
             viewPort.down(createComponentSelector()._xtype(GoogleAnalyticsReportPreviewButton.xtype).build()) as GoogleAnalyticsReportPreviewButton;
-    button.setContent({
+    button.setContent(Content({
       getNumericId : function():int {return 42;},
-      type : {name : 'typeWithPreview'}
-    });
+      get: function(prop:String):* {
+        if (prop === "type") {
+          return {name: 'typeWithPreview'};
+        }
+      }
+    }));
     waitUntil("button still disabled",
             function():Boolean {
               return !button.disabled

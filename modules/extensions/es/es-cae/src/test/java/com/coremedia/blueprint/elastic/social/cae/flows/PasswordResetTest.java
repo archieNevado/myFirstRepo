@@ -4,19 +4,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
-import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.execution.RequestContext;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -30,23 +26,11 @@ public class PasswordResetTest {
   private RequestContext requestContext;
 
   @Mock
-  private ExternalContext externalContext;
-
-  @Mock
-  private HttpServletRequest request;
-  
-  @Mock
   private DefaultMessageContext messageContext;
 
-  @Mock
-  private LocalizationContext localizationContext;
-  
   @Before
   public void setup() {
     when(requestContext.getMessageContext()).thenReturn(messageContext);
-    when(requestContext.getExternalContext()).thenReturn(externalContext);
-    when(externalContext.getNativeRequest()).thenReturn(request);
-    when(request.getAttribute(javax.servlet.jsp.jstl.core.Config.FMT_LOCALIZATION_CONTEXT)).thenReturn(localizationContext);
   }
   
   @Test
@@ -117,16 +101,29 @@ public class PasswordResetTest {
   }
 
   @Test
-  public void testValidateResetFormFailure() {
+  public void testValidateResetFormFailureEmptyPassword() {
     PasswordPolicy passwordPolicy = mock(PasswordPolicy.class);
-    when(passwordPolicy.verify("")).thenReturn(false);
     PasswordReset passwordReset = new PasswordReset();
     passwordReset.setPasswordPolicy(passwordPolicy);
     passwordReset.setPassword("");
+    passwordReset.setConfirmPassword("");
+
+    passwordReset.validateResetForm(requestContext);
+
+    verify(messageContext).addMessage(any(MessageResolver.class));
+  }
+
+  @Test
+  public void testValidateResetFormFailureWeakAndDifferentPasswords() {
+    PasswordPolicy passwordPolicy = mock(PasswordPolicy.class);
+    when(passwordPolicy.verify("yyy")).thenReturn(false);
+    PasswordReset passwordReset = new PasswordReset();
+    passwordReset.setPasswordPolicy(passwordPolicy);
+    passwordReset.setPassword("yyy");
     passwordReset.setConfirmPassword("xxx");
 
     passwordReset.validateResetForm(requestContext);
 
-    verify(messageContext, times(3)).addMessage(any(MessageResolver.class));
+    verify(messageContext, times(2)).addMessage(any(MessageResolver.class));
   }
 }

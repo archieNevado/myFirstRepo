@@ -7,6 +7,7 @@ import com.coremedia.ui.data.impl.RemoteServiceMethod;
 import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 import com.coremedia.ui.store.BeanRecord;
 import com.coremedia.ui.util.EventUtil;
+import com.coremedia.ui.util.ObjectUtils;
 
 import ext.data.ArrayStore;
 import ext.data.Model;
@@ -72,12 +73,19 @@ public class ListPanelBase extends GridPanel {
    * @param ve
    */
   private function filterChanged(ve:ValueExpression):void {
-    var record:Model = dataSourceValueExpression.getValue();
     var filter:String = ve.getValue();
-    if (record) {
-      var index:int = record.data.index;
-      reload(index, filter);
+    var dataSourceIndex:Number = getDataSourceIndex();
+    if(dataSourceIndex) {
+      reload(dataSourceIndex, filter);
     }
+  }
+
+  private function getDataSourceIndex():Number {
+    var record:Model = dataSourceValueExpression.getValue();
+    if (record) {
+      return record.data.index;
+    }
+    return null;
   }
 
   /**
@@ -94,8 +102,22 @@ public class ListPanelBase extends GridPanel {
       if ((listStore.getCount() - 1) === record.data.index) {
         record.data.index = -1;
       }
+
+      var remoteServiceMethod:RemoteServiceMethod = new RemoteServiceMethod("externallibrary/item", 'GET');
+      var siteId:String = editorContext.getSitesService().getPreferredSiteId();
+      selectedValueExpression.setValue(null);
+      remoteServiceMethod.request({'id': record.data.id, 'index' : getDataSourceIndex(), 'preferredSite': siteId}, function(response:RemoteServiceMethodResponse):void {
+        var rec:Object = response.getResponseJSON();
+
+        //copy all values, including the lazy loaded
+        var publicProperties:Object = ObjectUtils.getPublicProperties(rec);
+        for (var name:String in publicProperties) {
+          record.data[name] = publicProperties[name];
+        }
+
       record.commit(false);
       selectedValueExpression.setValue(record);
+      }, null);
     }
     else {
       selectedValueExpression.setValue(null);

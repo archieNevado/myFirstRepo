@@ -1,4 +1,5 @@
 package com.coremedia.blueprint.studio.taxonomy {
+import com.coremedia.blueprint.studio.TaxonomyStudioPlugin;
 import com.coremedia.blueprint.studio.taxonomy.preferences.TaxonomyPreferencesBase;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
@@ -61,7 +62,7 @@ public class TaxonomyNodeFactory {
     var id:String = document.getId();
     var valueString:String = editorContext.getPreferences().get(TaxonomyPreferencesBase.PREFERENCE_SEMANTIC_SETTINGS_KEY);
     if (!valueString) {
-      valueString = TaxonomyPreferencesBase.TAXONOMY_NAME_MATCHING_KEY;
+      valueString = TaxonomyStudioPlugin.TAXONOMY_NAME_MATCHING_KEY;
     }
     var semanticService:String = valueString;
     var remoteBeanUrl:String = "taxonomies/suggestions?" + Ext.urlEncode({taxonomyId:taxonomyId, semanticStrategyId:semanticService, id:id, max:20});

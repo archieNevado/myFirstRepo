@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
@@ -87,7 +87,6 @@ public class CommentsResultTest {
   public void testSettingsAnonymousUserWithCommentTypeDisabled() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(true);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, true, DISABLED);
     validateInput(false, false, false, false, false, false);
@@ -97,7 +96,6 @@ public class CommentsResultTest {
   public void testSettingsRegisteredUserWithCommentTypeDisabled() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(false);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, true, DISABLED);
     validateInput(false, false, false, false, false, false);
@@ -115,7 +113,6 @@ public class CommentsResultTest {
   public void testSettingsAnonymousUserWithCommentTypeAnonymous() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(true);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, true, ANONYMOUS);
     validateInput(true, false, true, true, true, true);
@@ -125,7 +122,6 @@ public class CommentsResultTest {
   public void testSettingsRegisteredUserWithCommentTypeAnonymous() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(false);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, true, ANONYMOUS);
     validateInput(true, false, true, true, true, true);
@@ -163,7 +159,6 @@ public class CommentsResultTest {
   public void testSettingsRegisteredUserWithCommentTestRegisteredDisabled() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(false);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, false, REGISTERED);
     validateInput(false, false, true, false, false, false);
@@ -175,7 +170,6 @@ public class CommentsResultTest {
   public void testSettingsRegisteredUserWithCommentTestReadOnly() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(false);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, true, READONLY);
     validateInput(true, true, false, false, false, false);
@@ -187,7 +181,6 @@ public class CommentsResultTest {
   public void testSettingsAnonymousUserWithCommentTestReadOnly() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(true);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, true, READONLY);
     validateInput(true, true, false, false, false, false);
@@ -199,7 +192,6 @@ public class CommentsResultTest {
   public void testSettingsRegisteredUserWithCommentTestReadOnlyDisabled() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(false);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, false, READONLY);
     validateInput(false, false, false, false, false, false);
@@ -211,7 +203,6 @@ public class CommentsResultTest {
   public void testSettingsAnonymousUserWithCommentTestReadOnlyDisabled() {
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
-    when(user.isAnonymous()).thenReturn(true);
 
     commentsResult = new CommentsResult(target, user, elasticSocialService, false, READONLY);
     validateInput(false, false, false, false, false, false);

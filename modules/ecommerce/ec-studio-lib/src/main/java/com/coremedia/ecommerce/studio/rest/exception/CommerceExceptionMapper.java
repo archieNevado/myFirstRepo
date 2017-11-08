@@ -1,8 +1,12 @@
 package com.coremedia.ecommerce.studio.rest.exception;
 
 import com.coremedia.ecommerce.studio.rest.CatalogRestErrorCodes;
+import com.coremedia.ecommerce.studio.rest.CommerceAugmentationException;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
+import com.coremedia.livecontext.ecommerce.common.InvalidCatalogException;
+import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
+import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.rest.cap.util.ResponseUtil;
 import com.google.common.annotations.VisibleForTesting;
@@ -29,7 +33,11 @@ public class CommerceExceptionMapper implements ExceptionMapper<CommerceExceptio
   private static final Map<Class, ResultCodes> EXCEPTION_CLASSES_TO_RESULT_CODES = ImmutableMap
           .<Class, ResultCodes>builder()
           // alphabetic order of exception classes
+          .put(CommerceAugmentationException.class, new ResultCodes(CatalogRestErrorCodes.ROOT_CATEGORY_NOT_AUGMENTED, GONE))
           .put(CommerceRemoteException.class, new ResultCodes(CatalogRestErrorCodes.CATALOG_INTERNAL_ERROR, GONE))
+          .put(InvalidCatalogException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG, GONE))
+          .put(InvalidIdException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, GONE))
+          .put(NotFoundException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, GONE))
           .put(UnauthorizedException.class, new ResultCodes(CatalogRestErrorCodes.UNAUTHORIZED, GONE))
           .build();
 

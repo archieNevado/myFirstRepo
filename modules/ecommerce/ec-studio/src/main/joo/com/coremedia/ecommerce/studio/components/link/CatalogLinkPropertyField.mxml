@@ -17,11 +17,11 @@
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
   </fx:Metadata>
   <fx:Declarations>
-    <fx:Object id="model"/>
     <fx:String id="propertyName"/>
     <fx:Array id="additionalToolbarItems"/>
     <fx:Boolean id="hideOpenInTab"/>
     <fx:Boolean id="hideRemove"/>
+    <fx:Boolean id="hideCatalog"/>
     <fx:Array id="linkTypeNames"/>
     <fx:Function id="createStructFunction"/>
     <fx:Number id="maxCardinality"/>
@@ -30,10 +30,14 @@
     import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
     import com.coremedia.ecommerce.studio.dragdrop.CatalogDragDropVisualFeedback;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+    import com.coremedia.ui.data.Bean;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogLinkPropertyField";
 
     private var config:CatalogLinkPropertyField;
+
+    [Bindable]
+    public var model:Bean;
 
     public native function CatalogLinkPropertyField(config:CatalogLinkPropertyField = null);
     ]]></fx:Script>
@@ -56,26 +60,30 @@
     <ui:DataField name="id"
                   mapping=""
                   convert_="{convertIdLabel}"/>
+    <ui:DataField name="catalog"
+                  mapping="catalog.name"/>
+    <ui:DataField name="multiCatalog"
+                  mapping="store.multiCatalog"/>
     <ui:DataField name="name"
                   mapping=""
                   convert_="{convertNameLabel}"/>
+    <ui:DataField name="status"
+                  mapping=""
+                  convert_="{convertLifecycleStatus}"/>
     <ui:DataField name="thumbnailUrl"
                   mapping=""
-                  ifUnreadable=""/>
+                  ifUnreadable=""
+                  convert_="{convertThumbnail}" />
   </local:fields>
   <local:columns>
-    <editor:ThumbnailColumn hidden="{config.showThumbnails === false}"
-                            renderer="{thumbColRenderer}"/>
-    <editor:TypeIconColumn sortable="false"/>
-    <!--TODO: remove align after EXT FIX-->
-    <GridColumn align="left"
-                header="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'id_header')}"
-                stateId="id"
-                dataIndex="id"
-                sortable="false"
-                flex="1"/>
-    <editor:NameColumn flex="1"
-                       sortable="false"/>
+    <editor:ThumbnailColumn hidden="{config.showThumbnails === false}" />
+    <local:CatalogLinkListColumn catalogObjectIdDataIndex="id"
+                                 catalogObjectNameDataIndex="name"
+                                 catalogNameDataIndex="catalog"
+                                 multiCatalogDataIndex="multiCatalog"
+                                 hideCatalog="{config.hideCatalog}"
+                                 flex="1"/>
+    <editor:StatusColumn/>
   </local:columns>
   <local:tbar>
     <ec:CatalogLinkToolbar additionalToolbarItems="{config.additionalToolbarItems}"

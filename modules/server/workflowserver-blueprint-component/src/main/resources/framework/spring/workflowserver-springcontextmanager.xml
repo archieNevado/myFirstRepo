@@ -17,17 +17,9 @@
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-sitemodel.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/workflow/bpbase-workflowserver.xml"/>
   <import resource="classpath:/framework/spring/workflow-archive.xml"/>
+  <import resource="classpath:com/coremedia/cap/multisite/multisite-services.xml"/>
 
   <!-- Place your beans here  -->
-
-  <!--
-    Provide a SitesServices backed by the workflowserver's connection.
-    (The translation workflows need it.)
-  -->
-  <bean id="sitesService" class="com.coremedia.cap.multisite.impl.SitesServiceImpl">
-    <property name="capConnection" ref="connection"/>
-    <property name="siteModel" ref="siteModel"/>
-  </bean>
 
   <!--
     Regularly clean up "in translation" states left over by aborted workflows.

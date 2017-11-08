@@ -6,9 +6,10 @@
 <#if hasPicture>
   <#assign additionalClasses="cm-squarelist--dimmer" />
 </#if>
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <div class="cm-squarelist ${additionalClasses}"<@cm.metadata self.content />>
-  <@bp.optionalLink href="${link}">
+  <@bp.optionalLink href="${link}" attr={"target":target}>
     <#-- picture -->
     <#if hasPicture>
       <@cm.include self=self.picture params={

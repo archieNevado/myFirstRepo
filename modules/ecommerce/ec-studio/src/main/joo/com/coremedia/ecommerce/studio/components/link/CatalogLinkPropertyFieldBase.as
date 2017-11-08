@@ -1,9 +1,12 @@
 package com.coremedia.ecommerce.studio.components.link {
+import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.premular.fields.LinkListGridPanel;
+import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
 import com.coremedia.cms.editor.sdk.util.ImageLinkListRenderer;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
+import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.store.BeanRecord;
 
@@ -69,8 +72,18 @@ public class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
     return name;
   }
 
-  protected static function thumbColRenderer(value:Object, metaData:Object, record:BeanRecord):String {
-    return ImageLinkListRenderer.thumbColRenderer(value, metaData, record, "CatalogObject");
+  internal static function convertLifecycleStatus(v:String, catalogObject:CatalogObject):String {
+    if(catalogObject is CatalogObject) {
+      var augmentingContent:Content = catalogObject.get(CatalogObjectPropertyNames.CONTENT) as Content;
+      if (augmentingContent) { // the commerce object has been augmented
+        return augmentingContent.getLifecycleStatus();
+      }
+    }
+    return undefined;
+  }
+
+  public static function convertThumbnail(model:Object):String {
+    return ImageLinkListRenderer.convertThumbnailFor(model, "CatalogObject");
   }
 }
 }

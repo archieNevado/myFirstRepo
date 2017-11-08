@@ -9,9 +9,7 @@ coremedia.preview = (function (module) {
 }(coremedia.preview || {}));
 
 /**
- * basic-theme specific preview javascript
- *
- * Knows modules coremedia.preview and coremedia.blueprint.basic
+ * fragment preview javascript
  */
 coremedia.preview.basic = (function (module) {
   module.EVENT_LAYOUT_CHANGED = "coremedia.preview.layoutChanged";
@@ -143,31 +141,4 @@ coremedia.preview.$(function () {
   $(".toggle-item").each(function (index, toggleItem) {
     coremedia.preview.basic.toggle.init(toggleItem);
   });
-
-  // preview and blueprint work with different jQuery instances that do not share any events even if it has the
-  // same name and is triggered/listened to on the same DOM node.
-
-  // check if basic theme is loaded
-  if (coremedia.blueprint && coremedia.blueprint.basic && coremedia.blueprint.$ !== typeof undefined) {
-
-    // connect EVENT_LAYOUT_CHANGED of coremedia.preview.$ and coremedia.blueprint.basic.$
-    var $documentPreview = coremedia.preview.$(document);
-    var $documentBlueprint = coremedia.blueprint.$(document);
-
-    var SOURCE = "coremedia.preview.basic";
-
-    $documentPreview.on(coremedia.preview.basic.EVENT_LAYOUT_CHANGED, function (event, source) {
-      if (SOURCE === source) {
-        return;
-      }
-      $documentBlueprint.trigger(coremedia.blueprint.basic.EVENT_LAYOUT_CHANGED, [SOURCE]);
-    });
-
-    $documentBlueprint.on(coremedia.blueprint.basic.EVENT_LAYOUT_CHANGED, function (event, source) {
-      if (SOURCE === source) {
-        return;
-      }
-      $documentPreview.trigger(coremedia.preview.basic.EVENT_LAYOUT_CHANGED, [SOURCE]);
-    });
-  }
 });

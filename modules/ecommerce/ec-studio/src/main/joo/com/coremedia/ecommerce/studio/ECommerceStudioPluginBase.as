@@ -16,6 +16,9 @@ import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.helper.StoreUtil;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
+import com.coremedia.ecommerce.studio.model.Catalog;
+import com.coremedia.ecommerce.studio.model.CatalogObject;
+import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.ValueExpression;
@@ -155,30 +158,30 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
       return undefined;
     }
     if (ct.isSubtypeOf(EXTERNAL_CHANNEL_TYPE)) {
-      var site:Site = editorContext.getSitesService().getSiteFor(content);
-      if (!site) {
+      var category:Category = augmentationService.getCategory(content);
+      if (!category) {
         return undefined;
       }
-      var store:Store = StoreUtil.getStoreForSite(site);
-      if (store === undefined) {
+
+      var catalog:Catalog = category.get(CatalogObjectPropertyNames.CATALOG);
+      if (!catalog) {
         return undefined;
       }
-      if (store) {
-        var rootCategory:Category = StoreUtil.getRootCategoryForStore(store);
-        if (rootCategory === undefined) {
+      var rootCategory:Category = catalog.getRootCategory();
+
+      if (rootCategory === undefined) {
+        return undefined;
+      }
+      if (rootCategory) {
+        var rootCategoryContent:Content = augmentationService.getContent(rootCategory);
+        if (rootCategoryContent === undefined) {
           return undefined;
         }
-        if (rootCategory) {
-          var rootCategoryContent:Content = augmentationService.getContent(rootCategory);
-          if (rootCategoryContent === undefined) {
-            return undefined;
-          }
-          var layout:Content = PageGridUtil.getLayoutWithoutDefault(rootCategoryContent, pagegridProperty);
-          if (layout === undefined) {
-            return undefined;
-          }
-          return layout;
+        var layout:Content = PageGridUtil.getLayoutWithoutDefault(rootCategoryContent, pagegridProperty);
+        if (layout === undefined) {
+          return undefined;
         }
+        return layout;
       }
     }
     return null;

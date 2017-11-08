@@ -97,14 +97,14 @@ public class AugmentedCategoryTreeRelationTest extends AbstractCatalogStudioTest
   }
 
   private function getSitesService():SitesService {
-    return {
+    return SitesService({
       'getSiteRootDocument': function (siteId:String):* {
         return siteRootDocument;
       },
       'getSiteIdFor': function (content:Content):String {
         return HELIOS_SITE_ID;
       }
-    }
+    });
   }
 
 
