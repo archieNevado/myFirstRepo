@@ -16,7 +16,23 @@
   <properties>
     <development-properties.dir>${project.basedir}/../../../../workspace-configuration/development-properties/default</development-properties.dir>
     <logging-properties.dir>${project.basedir}/../../../../workspace-configuration/logging</logging-properties.dir>
+    <tomcat.embed.version>8.5.23</tomcat.embed.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-core</artifactId>
+        <version>${tomcat.embed.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-el</artifactId>
+        <version>${tomcat.embed.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -87,16 +103,12 @@
       <artifactId>spring-boot-starter-tomcat</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!-- required for Tomcat7 -->
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <scope>provided</scope>
-    </dependency>
+    <!-- required for Test -->
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
       <scope>provided</scope>
+      <version>${tomcat.embed.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -166,10 +178,6 @@
             <propertieslocations>classpath:/demodata-generator.properties</propertieslocations>
           </systemProperties>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

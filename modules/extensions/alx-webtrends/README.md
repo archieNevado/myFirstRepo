@@ -1,11 +1,11 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##Webtrends Analytics Extension
+## Webtrends Analytics Extension
 
-###Description
+### Description
 
 Analytics integration for Webtrends
 
-###Documentation
+### Documentation
 
 See the Analytics Connectors Manual.

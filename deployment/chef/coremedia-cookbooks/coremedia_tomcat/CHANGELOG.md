@@ -2,6 +2,10 @@ coremedia_tomcat Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia_tomcat cookbook.
 
+v2.2.0
+------
+- add toggle `keep_old_instances` on the `coremedia_tomcat` resource to trigger cleanup of old Tomcat installations.
+
 v.2.1.4
 -------
 - fix authentication on nexus access to download the webapp artifact.

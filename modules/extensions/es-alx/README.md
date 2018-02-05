@@ -1,11 +1,11 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##Elastic Analytics Cache Extension
+## Elastic Analytics Cache Extension
 
-###Description
+### Description
 
 Extension to retrieve and cache computed data from Analytics. The data is persisted using CoreMedia Elastic Social.
 
-###Documentation
+### Documentation
 
 See the "Retrieval" chapter of the Analytics Connectors Manual.

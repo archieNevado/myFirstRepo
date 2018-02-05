@@ -48,4 +48,31 @@ public interface CMTeaser extends CMTeasable {
    * Name of the document property 'target'.
    */
   String TARGET = "target";
+
+  /**
+   * Name of the document property 'targets'.
+   */
+  String TARGETS = "targets";
+
+  /**
+   * Returns a structure containing {@link CMLinkable} teaser targets and additional properties
+   * for each target.
+   *
+   * <p>The structure is as follows:
+   * <pre>
+   *   {
+   *     "links": [
+   *       {
+   *         "target": target1,
+   *         "ctaEnabled": true,
+   *         "ctaCustomText": "custom text"
+   *       },
+   *       ...
+   *     ]
+   *   }
+   * </pre>
+   *
+   * @cm.template.api
+   */
+  Map<String, List<Map<String, Object>>> getTargets();
 }

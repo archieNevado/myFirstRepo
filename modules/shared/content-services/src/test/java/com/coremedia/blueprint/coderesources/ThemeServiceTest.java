@@ -15,8 +15,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ThemeServiceTest {
+
   @Mock
   private Content nav1, noNav, nav2, nav3;
 
@@ -27,7 +28,7 @@ public class ThemeServiceTest {
   private ContentType cmNavigation, noNavigation;
 
   @Mock
-  TreeRelation<Content> treeRelation;
+  private TreeRelation<Content> treeRelation;
 
   private ThemeService testling;
 
@@ -45,17 +46,16 @@ public class ThemeServiceTest {
 
   @Test
   public void testDirectTheme() {
-    when(nav1.getLink("theme")).thenReturn(theme1);
     when(nav3.getLink("theme")).thenReturn(theme3);
     Content actual = testling.theme(nav3, null);
-    assertTrue(theme3==actual);
+    assertTrue(theme3 == actual);
   }
 
   @Test
   public void testInheritedTheme() {
     when(nav1.getLink("theme")).thenReturn(theme1);
     Content actual = testling.theme(nav3, null);
-    assertTrue(theme1==actual);
+    assertTrue(theme1 == actual);
   }
 
   @Test
@@ -66,6 +66,6 @@ public class ThemeServiceTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testNoNavigation() {
-    Content actual = testling.theme(noNav, null);
+    testling.theme(noNav, null);
   }
 }

@@ -16,12 +16,12 @@
     <div class="cm-form cm-form--registration well col-xs-12 col-md-6 col-md-push-3"<@cm.metadata data=[registrationAction.content!"", "properties.id"]/>>
       <h1 class="cm-form__headline"><@bp.message "registration_register" /></h1>
       <form method="post" enctype="multipart/form-data" data-cm-form--registration=""${(elasticSocialConfiguration.recaptchaForRegistrationRequired!false)?then(' onsubmit="substituteRecaptchaBindElement();"'?no_esc,'')}>
-        <input type="hidden" name="execution" value="${flowExecutionKey!""}"/>
+        <input type="hidden" name="execution" value="${flowExecutionKey!""}">
         <#--<input type="hidden" name="tenant" value="${elasticSocialConfiguration.tenant!""}">-->
-        <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-        <input type="hidden" name="_eventId_submit"/>
+        <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+        <input type="hidden" name="_eventId_submit">
         <@spring.bind path="bpRegistration.timeZoneId"/>
-        <input type="hidden" name="timeZoneId" id="timezone" value="${spring.stringStatusValue}"/>
+        <input type="hidden" name="timeZoneId" id="timezone" value="${spring.stringStatusValue}">
 
         <#-- notification-->
         <@bp.notificationFromSpring path="bpRegistration" additionalClasses=["alert alert-danger"] />
@@ -79,14 +79,14 @@
         <@spring.bind path="bpRegistration.profileImage"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
           <label for="imageFile"><@bp.message "registration_imageFile_label" /></label>
-          <input name="imageFile" type="file" value="" accept="image/*"/>
+          <input name="imageFile" type="file" value="" accept="image/*">
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
 
         <#if registration?has_content && bpRegistration.profileImage?has_content>
           <#assign imageUrl=cm.getLink(bpRegistration.profileImage)/>
           <div>
-            <img src="${imageUrl!""}" alt="userimage"/><br/>
+            <img src="${imageUrl!""}" alt="userimage"><br>
             <@spring.formCheckbox bp.getMessage("registration_deleteProfileImage") />
             <label for="deleteProfileImage"><@bp.message "registration_deleteProfileImage" /></label>
           </div>

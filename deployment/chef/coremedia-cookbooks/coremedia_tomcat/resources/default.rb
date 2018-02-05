@@ -177,4 +177,5 @@ attribute :context_template_cookbook, :kind_of => String, :default => 'coremedia
 attribute :clean_log_dir_on_start, :kind_of => [FalseClass, TrueClass], :default => false
 #<> @attribute access_log A toggle to switch on/off access logs
 attribute :access_log, :kind_of => [FalseClass, TrueClass], :default => true
-
+#<> @attribute keep_old_instances A toggle to clean up old tomcat istallations
+attribute :keep_old_instances, :kind_of => [FalseClass, TrueClass], :default => false

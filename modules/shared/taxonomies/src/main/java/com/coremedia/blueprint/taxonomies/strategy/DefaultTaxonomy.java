@@ -3,10 +3,15 @@ package com.coremedia.blueprint.taxonomies.strategy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyNodeList;
 import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
+import com.coremedia.cap.common.CapPropertyDescriptor;
+import com.coremedia.cap.common.CapPropertyDescriptorType;
+import com.coremedia.cap.common.descriptors.LinkPropertyDescriptor;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
+import com.coremedia.cap.content.Version;
 import com.coremedia.cap.content.publication.PublicationService;
+import com.coremedia.cap.struct.Struct;
 import com.coremedia.rest.cap.content.search.solr.SolrSearchService;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -73,7 +78,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   public TaxonomyNode getNodeByRef(String ref) {
     if (root.getRef().equals(ref)) {
       return root;
-    } else {
+    }
+    else {
       Content c = getContent(ref);
       return asNode(c);
     }
@@ -110,6 +116,61 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     TaxonomyNodeList list = asNodeList(path, -1, -1, true);
     node.setPath(list);
     return node;
+  }
+
+  @Override
+  public List<Content> getLinks(TaxonomyNode node, boolean recursive) {
+    List<Content> result = new ArrayList<>();
+    Content content = asContent(node);
+
+    //search recursively
+    List<Content> allChildren = new ArrayList<>();
+    if (recursive) {
+      collectChildren(content, allChildren);
+    }
+    else {
+      allChildren.add(content);
+    }
+
+    for (Content child : allChildren) {
+      for (Content ref : child.getReferrers()) {
+        if (!result.contains(ref)
+                && ref.isInProduction()
+                && !ref.getType().isSubtypeOf(taxonomyContentType)
+                && !ref.getType().isSubtypeOf("EditorPreferences")) {
+          result.add(ref);
+        }
+      }
+    }
+
+    return result;
+  }
+
+
+  @Override
+  public List<Content> getStrongLinks(TaxonomyNode node, boolean recursive) {
+    Content content = asContent(node);
+    List<Content> result = new ArrayList<>();
+
+    List<Content> allChildren = new ArrayList<>();
+    if (recursive) {
+      collectChildren(content, allChildren);
+    }
+    else {
+      allChildren.add(content);
+    }
+
+    for (Content child : allChildren) {
+      for (Content ref : child.getReferrers()) {
+        if (!result.contains(ref) && ref.isInProduction() && !ref.getType().isSubtypeOf(taxonomyContentType)) {
+          if(!isWeakLinked(child, ref)) {
+            result.add(ref);
+          }
+        }
+      }
+    }
+
+    return result;
   }
 
   @Override
@@ -210,59 +271,68 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     Content parent = getParent(deleteMe);
 
     LOG.info("Deleting taxonomy node {}", toDelete);
+    if (deleteMe.isCheckedOut()) {
+      deleteMe.checkIn();
+    }
 
+    //collect all sub nodes we have to delete
+    List<Content> allChildren = new ArrayList<>();
+    collectChildren(deleteMe, allChildren);
+    deleteChildren(allChildren);
+
+    unlinkFromParent(deleteMe, parent);
+
+    return (parent == null) ? root : asNode(parent);
+  }
+
+  /**
+   * Collects recursively all nodes of the given node
+   */
+  private void collectChildren(Content node, List<Content> allChildren) {
+    allChildren.add(node);
+    List<Content> children = getValidChildren(node);
+    allChildren.addAll(children);
+    for (Content child : children) {
+      collectChildren(child, allChildren);
+    }
+  }
+
+  /**
+   * Deletes the given taxonomy content respecting the current lifecycle.
+   *
+   * @param children the taxonomy contents to delete
+   */
+  private void deleteChildren(List<Content> children) {
+    PublicationService publicationService = contentRepository.getPublicationService();
+
+    for (Content child : children) {
+      if (publicationService.isPublished(child)) {
+        publicationService.toBeWithdrawn(child);
+        publicationService.approvePlace(child);
+        publicationService.publish(child);
+      }
+      child.delete();
+    }
+  }
+
+  /**
+   * Removes the given node from the parent
+   *
+   * @param child  the child to delete
+   * @param parent the parent to remove the child from
+   */
+  private void unlinkFromParent(Content child, Content parent) {
     if (parent != null) {
-      LOG.info("Removing node {} from {}", toDelete, parent);
       if (!parent.isCheckedOut()) {
         parent.checkOut();
       }
       List<Content> children = new ArrayList<>(getValidChildren(parent));
-      children.remove(deleteMe);
+      children.remove(child);
       parent.set(CHILDREN, children);
       parent.checkIn();
       if (contentRepository.getPublicationService().isPublished(parent)) {
         approveAndPublish(parent);
       }
-    }
-
-    if (deleteMe.isCheckedOut()) {
-      deleteMe.checkIn();
-    }
-
-    // check for referrers...
-    if (contentRepository.getPublicationService().isPublished(deleteMe)) {
-      Set<Content> referrers = deleteMe.getReferrers();
-      if (referrers.isEmpty()) {
-        contentRepository.getPublicationService().toBeDeleted(deleteMe);
-        approveAndPublish(deleteMe);
-      } else {
-        deleteWithReferrerCheck(deleteMe, referrers);
-      }
-    } else {
-      deleteMe.delete();
-    }
-
-    return (parent == null) ? root : asNode(parent);
-  }
-
-  private void deleteWithReferrerCheck(Content deleteMe, Set<Content> referrers) {
-    PublicationService publicationService = contentRepository.getPublicationService();
-    boolean published = false;
-    for (Content referrer : referrers) {
-      if(publicationService.isPublished(referrer)) {
-        published = true;
-        break;
-      }
-    }
-
-    if(!published) {
-      publicationService.toBeWithdrawn(deleteMe);
-      publicationService.approvePlace(deleteMe);
-      publicationService.publish(deleteMe);
-      deleteMe.delete();
-    }
-    else {
-      contentRepository.getPublicationService().approve(deleteMe.getCheckedInVersion());
     }
   }
 
@@ -280,6 +350,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     Content content = type.createByTemplate(folder, NEW_KEYWORD, "{3} ({1})", Collections.EMPTY_MAP);
     content.set(VALUE, Strings.isNullOrEmpty(defaultName) ? NEW_KEYWORD : defaultName);
     content.checkIn();
+
+    updateContentName(content, defaultName);
 
     if (parent != null) {
       if (!parent.isCheckedOut()) {
@@ -323,7 +395,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
         // publish parent if necessary...(publishing of parent must be done before publishing the child node, otherwise "An internal link of this document could not be published.")
         if (parent != null && parent.getCheckedInVersion() != null && !contentRepository.getPublicationService().isPublished(parent.getCheckedInVersion())) {
           LOG.info("Publishing parent {} of {}", parent, content);
-          if(parent.isCheckedOut()){
+          if (parent.isCheckedOut()) {
             parent.checkIn();
           }
           approveAndPublish(parent);
@@ -336,7 +408,6 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     }
     return asNode(content);
   }
-
 
   /**
    * Used for the name matching strategy to resolve all matching taxonomies for text
@@ -357,12 +428,94 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     return allChildren;
   }
 
+
   @Override
   public String getKeywordType() {
     return taxonomyContentType.getName();
   }
 
-  // === HELPER ===
+  // === HELPER ========================================================================================================
+
+  /**
+   * Returns true if the linked content is linked has weak link inside the linking content
+   */
+  private boolean isWeakLinked(Content linkedContent, Content linkingContent) {
+    //check all link descriptors....
+    List<CapPropertyDescriptor> descriptors = linkingContent.getType().getDescriptors();
+    for (CapPropertyDescriptor descriptor : descriptors) {
+      //..if they link the content and if they are not weak link
+      if(descriptor.getType().equals(CapPropertyDescriptorType.LINK)) {
+        LinkPropertyDescriptor linkPropertyDescriptor = (LinkPropertyDescriptor) descriptor;
+        List<Content> links = linkingContent.getLinks(descriptor.getName());
+        if(links.contains(linkedContent) && !linkPropertyDescriptor.isWeakLink()) {
+          return false;
+        }
+      }
+      else if(descriptor.getType().equals(CapPropertyDescriptorType.STRUCT)) {
+        Struct struct = linkingContent.getStruct(descriptor.getName());
+        if(struct != null && containsLink(struct, linkedContent)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Checks if the content is linked inside the struct
+   * @param struct the struct property to check
+   * @param linkedContent the content to search for
+   */
+  private boolean containsLink(Struct struct, Content linkedContent) {
+    Map<String, Object> properties = struct.toNestedMaps();
+    List<Content> result = new ArrayList<>();
+    collectStructReferences(properties, linkedContent, result);
+    return !result.isEmpty();
+  }
+
+  /**
+   * Helper for struct search
+   */
+  private void collectStructReferences(Map<String, Object> properties, Content linkedContent, List<Content> result) {
+    for (Map.Entry<String, Object> entry : properties.entrySet()) {
+      Object value = entry.getValue();
+      if(value instanceof Map) {
+        Map<String, Object> nestedMap = (Map<String, Object>) value;
+        collectStructReferences(nestedMap, linkedContent, result);
+      }
+      else if (value instanceof List) {
+        List<Object> list = (List<Object>) value;
+        for (Object listItem : list) {
+          if(listItem instanceof Map) {
+            collectStructReferences((Map<String, Object>) listItem, linkedContent, result);
+          }
+          else if(listItem instanceof Content) {
+            if(listItem.equals(linkedContent)) {
+              result.add((Content) listItem);
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  private void updateContentName(Content content, String defaultName) {
+    int index = 1;
+    String updatedName = defaultName;
+    while (content.getParent().getChild(updatedName) != null) {
+      updatedName = defaultName + " (" + index + ")";
+      index++;
+    }
+
+    try {
+      if (!content.getName().equals(defaultName)) {
+        content.rename(updatedName);
+      }
+    } catch (Exception e) {
+      LOG.warn("Failed to rename new taxonomy node, keeping default name (" + e.getMessage() + ")");
+    }
+  }
 
   /**
    * Content should be publish after each change.
@@ -421,13 +574,18 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    */
   private void approveAndPublish(Content content) {
     try {
+      if (content.isFolder()) {
+        return;
+      }
+
       LOG.info("Publishing taxonomy node {}", content);
       PublicationService publisher = contentRepository.getPublicationService();
-      publisher.approve(content.getCheckedInVersion());
+      Version checkedInVersion = content.getCheckedInVersion();
+      publisher.approve(checkedInVersion);
       publisher.approvePlace(content);
       //publish the folder containing the content
       Content parentFolder = content.getParent();
-      if(!publisher.isPublished(parentFolder)){
+      if (!publisher.isPublished(parentFolder)) {
         publisher.approvePlace(parentFolder);
         publisher.publish(parentFolder);
       }
@@ -543,7 +701,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     List<Content> topLevelContent = new ArrayList<>();
     findRootNodes(rootFolder, topLevelContent);
     for (Content c : topLevelContent) {
-      if(TaxonomyUtil.isTaxonomy(c, taxonomyContentType)) {
+      if (TaxonomyUtil.isTaxonomy(c, taxonomyContentType)) {
         list.add(asNode(c));
       }
     }
@@ -580,7 +738,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     for (Content child : nodes) {
       if (child.isFolder()) {
         findAll(child, matches);
-      } else if (!child.isDeleted()
+      }
+      else if (!child.isDeleted()
               && !child.isDestroyed()
               && !TaxonomyUtil.isCyclic(child, taxonomyContentType)
               && !contentRepository.getPublicationService().isToBeDeleted(child)) {

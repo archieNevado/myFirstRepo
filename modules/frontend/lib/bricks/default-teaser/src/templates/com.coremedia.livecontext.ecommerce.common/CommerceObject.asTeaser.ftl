@@ -2,4 +2,8 @@
 
 <#-- fallback template, nothing to render -->
 <#assign isLast=cm.localParameter("islast", false)/>
-<@cm.include self=self view="teaser" params={"isLast": isLast, "renderTeaserText": false, "renderCTA": false, "renderDimmer": false}/>
+<@cm.include self=self view="teaser" params={
+  "isLast": isLast,
+  "renderTeaserText": false,
+  "renderDimmer": false
+}/>

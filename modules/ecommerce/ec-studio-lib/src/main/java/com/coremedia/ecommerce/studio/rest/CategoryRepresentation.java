@@ -2,6 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
+import com.coremedia.ecommerce.studio.rest.model.Facets;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -31,6 +32,7 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
   private Store store;
   private Catalog catalog;
   private String displayName;
+  private Facets facets;
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public String getName() {
@@ -151,5 +153,13 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
 
   public void setLongDescription(String longDescription) {
     this.longDescription = longDescription;
+  }
+
+  public Facets getFacets() {
+    return facets;
+  }
+
+  public void setFacets(Facets facets) {
+    this.facets = facets;
   }
 }

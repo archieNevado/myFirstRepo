@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 import static com.coremedia.elastic.social.api.users.CommunityUser.State.ACTIVATED;
 import static com.google.common.collect.Maps.newHashMap;
 
@@ -76,7 +77,7 @@ public class DemoUserCreationService {
 
       for(Map<String, String> userProperties : usersByKey.values()) {
         final CommunityUser communityUser = getOrCreateCommunityUser(userProperties);
-        LOG.debug("Found demo user: {}", communityUser);
+        LOG.debug(PERSONAL_DATA, "Found demo user: {}", communityUser);
       }
     }
   }
@@ -93,7 +94,7 @@ public class DemoUserCreationService {
       }
       userConfig.put(propertyName, propertyValue);
     } else {
-      LOG.warn("cannot handle configured demo user value {} for key {}", propertyValue, keyString);
+      LOG.warn(PERSONAL_DATA, "cannot handle configured demo user value {} for key {}", propertyValue, keyString);
     }
   }
 
@@ -109,14 +110,14 @@ public class DemoUserCreationService {
         communityUser.setProperties(new HashMap<String, Object>(userProperties));
         communityUser.setLocale(Locale.getDefault());
         communityUser.save();
-        LOG.info("Created communityUser with name " + username + ": " + communityUser);
+        LOG.info(PERSONAL_DATA, "Created communityUser with name {}: {}", username, communityUser);
       } catch (DuplicateEmailException e) {
-        LOG.warn("User with duplicate email {}", e.getEmail());
+        LOG.warn(PERSONAL_DATA, "User with duplicate email {}", e.getEmail());
       } catch (DuplicateNameException e) {
-        LOG.warn("User with duplicate name {}", e.getName());
+        LOG.warn(PERSONAL_DATA, "User with duplicate name {}", e.getName());
       }
     } else {
-      LOG.info("User with name {} already exists", username);
+      LOG.info(PERSONAL_DATA, "User with name {} already exists", username);
     }
     return communityUser;
   }

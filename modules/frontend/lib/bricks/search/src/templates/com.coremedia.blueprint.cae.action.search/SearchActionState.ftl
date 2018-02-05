@@ -9,23 +9,29 @@
     <h1 class="cm-search__headline">${bp.getMessage("search_results")}</h1>
     <#-- box with infos about this search -->
     <#if self.queryTooShort!false>
-      <p>${bp.getMessage("search_error_belowMinQueryLength")}</p>
+      <div class="alert alert-warning" role="alert">
+        ${bp.getMessage("search_error_belowMinQueryLength")}
+      </div>
     <#elseif (searchResultHits?size == 0)>
-      <p>${bp.getMessage("search_error_noresults", [self.form.query!""])?no_esc}</p>
+      <div class="alert alert-warning" role="alert">
+        ${bp.getMessage("search_error_noresults", [self.form.query!""])?no_esc}
+      </div>
     <#else>
-      <p>${bp.getMessage("search_searchTerm", [self.result.numHits, self.form.query!""])?no_esc}</p>
+      <div class="alert alert-success" role="alert">
+        ${bp.getMessage("search_searchTerm", [self.result.numHits, self.form.query!""])?no_esc}
+      </div>
     </#if>
   </div>
 
-<#-- results -->
-<#if searchResultHits?has_content>
-  <div class="cm-search__results">
-    <#list searchResultHits as hit>
+  <#-- results -->
+  <#if searchResultHits?has_content>
+    <div class="cm-search__results">
+      <#list searchResultHits as hit>
         <@cm.include self=hit view="asSearchResult" params={
           "highlightingMap": self.result.highlightingResults,
           "isLast": hit?is_last
         } />
       </#list>
-  </div>
-</#if>
+    </div>
+  </#if>
 </div>

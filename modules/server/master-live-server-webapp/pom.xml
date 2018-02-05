@@ -12,7 +12,7 @@
   <packaging>war</packaging>
 
   <description>
-    To start the master-live-server-webapp run: mvn tomcat7:run
+    To start the master-live-server-webapp run: mvn tomcat7:run-war
   </description>
 
   <properties>
@@ -23,35 +23,17 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>contentserver-blueprint-component</artifactId>
+      <artifactId>master-live-server-blueprint-component</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>master-live-server-config</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>master-live-server-blueprint-config</artifactId>
+      <version>${project.version}</version>
       <type>coremedia-application</type>
       <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>master-live-server-config</artifactId>
-      <type>pom</type>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!-- required for Tomcat7 -->
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -67,8 +49,8 @@
           </nonFilteredFileExtensions>
           <overlays>
             <overlay>
-              <groupId>com.coremedia.cms</groupId>
-              <artifactId>master-live-server-config</artifactId>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>master-live-server-blueprint-config</artifactId>
               <type>coremedia-application</type>
               <targetPath>WEB-INF</targetPath>
             </overlay>
@@ -77,7 +59,7 @@
       </plugin>
 
       <!--
-         invoke "mvn tomcat7:run" for running this webapp locally but make sure that you run mvn:package first
+         invoke "mvn tomcat7:run-war" for running this webapp locally but make sure that you run mvn:package first
       -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
@@ -89,10 +71,6 @@
             <propertieslocations>classpath:/master-live-server.properties</propertieslocations>
           </systemProperties>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

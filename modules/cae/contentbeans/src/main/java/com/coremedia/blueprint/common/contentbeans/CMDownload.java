@@ -58,4 +58,17 @@ public interface CMDownload extends CMTeasable {
    */
   Blob getData();
 
+  /**
+   * Name of the document property 'filename'.
+   */
+  String FILENAME = "filename";
+
+  /**
+   * Returns the value of the document property {@link #FILENAME}.
+   *
+   * @return the value of the document property {@link #FILENAME}
+   * @cm.template.api
+   */
+  String getFilename();
+
 }

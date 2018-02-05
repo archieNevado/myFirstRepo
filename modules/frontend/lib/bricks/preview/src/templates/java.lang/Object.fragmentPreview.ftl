@@ -9,9 +9,9 @@
   <@cm.include self=cmpage view="_head"/>
 <#else>
   <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <title>CoreMedia Studio Preview</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <@preview.previewScripts />
   </head>
 </#if>

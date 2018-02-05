@@ -1538,7 +1538,8 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         ],
         "defaultTimeZone": "Europe/Berlin",
         "availableLocalesContentPath": "/Settings/Options/Settings/LocaleSettings",
-        "availableLocalesPropertyPath": "settings.availableLocales"
+        "availableLocalesPropertyPath": "settings.availableLocales",
+        "useStrictWorkflow": false
       }      }
     },
     {

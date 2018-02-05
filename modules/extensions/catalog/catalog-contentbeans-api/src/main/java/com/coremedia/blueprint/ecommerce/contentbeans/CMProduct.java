@@ -17,6 +17,7 @@ import java.util.Map;
  * Product features of the ecommerce API are available by the {@link #getProduct}
  * delegate.  Specific features of the CMS catalog are available directly from
  * the content bean.
+ * @cm.template.api
  */
 public interface CMProduct extends CMTeasable {
   /**
@@ -86,10 +87,11 @@ public interface CMProduct extends CMTeasable {
    *
    * @return the product bean representing the product in the commerce system
    */
-  Product getProduct() throws CommerceException;
+  Product getProduct();
 
   /**
    * Returns the product pictures.
+   * @cm.template.api
    */
   @Nonnull
   List<CatalogPicture> getProductPictures();
@@ -98,6 +100,7 @@ public interface CMProduct extends CMTeasable {
    * Returns a product picture.
    *
    * @return The first picture of {@link #getProductPictures()} or null if there is no picture.
+   * @cm.template.api
    */
   CatalogPicture getProductPicture();
 
@@ -105,6 +108,7 @@ public interface CMProduct extends CMTeasable {
    * Returns the downloads attached to the product.
    *
    * @return A list of CMDownload beans
+   * @cm.template.api
    */
   List<CMDownload> getDownloads();
 
@@ -112,6 +116,7 @@ public interface CMProduct extends CMTeasable {
    * Returns the product code.
    *
    * @return the product code
+   * @cm.template.api
    */
   String getProductCode();
 
@@ -119,6 +124,7 @@ public interface CMProduct extends CMTeasable {
    * Returns the product name.
    *
    * @return the name of the product
+   * @cm.template.api
    */
   String getProductName();
 }

@@ -143,7 +143,7 @@
   </script>
   <div class="cm-error__info">
       <span>An error occured in template <em>${template}</em>
-        <#if contentId?has_content> for Content with ID <b>${contentId}</b>.</#if><br/>
+        <#if contentId?has_content> for Content with ID <b>${contentId}</b>.</#if><br>
         <a href="#" onclick="cmError.showBox('${boxId}'); return false;">Show Details</a>
   </div>
   <div id="${boxId}" class="cm-error__background">

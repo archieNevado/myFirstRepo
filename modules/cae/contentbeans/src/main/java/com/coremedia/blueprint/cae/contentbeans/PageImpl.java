@@ -30,6 +30,7 @@ public class PageImpl extends AbstractPageImpl implements Page {
   private ContentBeanFactory contentBeanFactory;
   private DataViewFactory dataViewFactory;
   private User developer;
+  private Boolean mergeCodeResources;
 
   /**
    * Do not call this constructor yourself, this is only for {@link com.coremedia.objectserver.dataviews.DataView} usage,
@@ -37,6 +38,24 @@ public class PageImpl extends AbstractPageImpl implements Page {
    */
   public PageImpl() {
     super();
+  }
+
+  /**
+   * Return true if the code resources of a page (JavaScript and CSS) should be
+   *  merged into a single web resource, respectively. If null (which is the
+   * default), code resources are only merged when development mode is off.
+   */
+  public Boolean getMergeCodeResources() {
+    return mergeCodeResources;
+  }
+
+  /**
+   * This setting provides explicit control whether the code resources of a page (JavaScript and CSS)
+   * are merged into a single web resource, respectively. If not set or set to null (which is the
+   * default), code resources are only merged when development mode is off.
+   */
+  public void setMergeCodeResources(Boolean mergeCodeResources) {
+    this.mergeCodeResources = mergeCodeResources;
   }
 
   /**
@@ -152,12 +171,13 @@ public class PageImpl extends AbstractPageImpl implements Page {
     }
     PageImpl page = (PageImpl) o;
     return Objects.equals(contentTreeRelation, page.contentTreeRelation) &&
-           Objects.equals(developer, page.developer);
+           Objects.equals(developer, page.developer) &&
+           Objects.equals(mergeCodeResources, page.mergeCodeResources);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), contentTreeRelation, developer);
+    return Objects.hash(super.hashCode(), contentTreeRelation, developer, mergeCodeResources);
   }
 
   @Override
@@ -168,6 +188,7 @@ public class PageImpl extends AbstractPageImpl implements Page {
     contentBeanFactory = other.contentBeanFactory;
     dataViewFactory = other.dataViewFactory;
     developer = other.developer;
+    mergeCodeResources = other.mergeCodeResources;
   }
 
 
@@ -175,6 +196,7 @@ public class PageImpl extends AbstractPageImpl implements Page {
 
   private List<?> codeResourcesAsBeans(String codePropertyName, String htmlMode) {
     CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(getContext().getContent(), codePropertyName, isDeveloperMode(), contentTreeRelation, developer);
+    cacheKey.setMergeCodeResources(getMergeCodeResources());
     CodeResourcesModel codeResourcesModel = getCache().get(cacheKey).getModel(htmlMode);
     return codeResourcesModelToBeans(codeResourcesModel);
   }

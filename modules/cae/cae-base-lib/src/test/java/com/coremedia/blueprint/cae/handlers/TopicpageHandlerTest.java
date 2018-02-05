@@ -5,6 +5,7 @@ import com.coremedia.blueprint.common.contentbeans.CMCSS;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.blueprint.testing.ContentTestHelper;
@@ -187,7 +188,7 @@ public class TopicpageHandlerTest {
   @Test
   public void testBadSegmentRequest() throws Exception {
     ModelAndView mav = requestTestHelper.request("/media/topic/badsegment" + idSeparator + "4250");
-    HandlerTestUtil.checkError(mav, 404);
+    HandlerTestUtil.checkModelAndView(mav, "redirect:DEFAULT", CMTaxonomy.class);
   }
 
   @Test

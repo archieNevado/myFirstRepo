@@ -16,7 +16,6 @@ import com.coremedia.ui.util.EventUtil;
 import com.coremedia.ui.util.createComponentSelector;
 
 import ext.Component;
-
 import ext.EventManager;
 import ext.Ext;
 import ext.StringUtil;
@@ -164,7 +163,11 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
           content = initialConfig.linkListWrapper._bindTo.getValue();
         }
         TaxonomyUtil.loadTaxonomyPath(record, content, taxonomyId, function (updatedRecord:BeanRecord):void {
-          var renderer:TaxonomyRenderer = TaxonomyRenderFactory.createSelectedListRenderer(record.data.nodes, getId(), linkListWrapper.getLinks().length > 3);
+          //noinspection JSMismatchedCollectionQueryUpdate
+          var links:Array = linkListWrapper.getLinks() || [];
+          var renderer:TaxonomyRenderer = TaxonomyRenderFactory.createSelectedListRenderer(record.data.nodes, getId(), links.length > 3);
+          renderer.setRenderControl(!readOnlyValueExpression || !readOnlyValueExpression.getValue());
+
           renderer.doRender(function (html:String):void {
             if (record.data.html !== html) {
               record.data.html = html;

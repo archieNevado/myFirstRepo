@@ -3,17 +3,23 @@ package com.coremedia.blueprint.studio.taxonomy {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.content.ContentPropertyNames;
+import com.coremedia.cms.editor.sdk.desktop.EditorMainView;
 import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.cms.editor.sdk.util.StudioConfigurationUtil;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.data.impl.RemoteServiceMethod;
 import com.coremedia.ui.store.BeanRecord;
 import com.coremedia.ui.util.EventUtil;
 
 import ext.Ext;
+import ext.StringUtil;
+
+import mx.resources.ResourceManager;
 
 /**
  * Common utility methods for taxonomies.
@@ -63,23 +69,23 @@ public class TaxonomyUtil {
    * @param content content used for checking if the editor is editable
    */
   public static function isEditable(taxonomyId:String, callback:Function, content:Content = undefined):void {
-    if(!content) {
+    if (!content) {
       content = WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.getValue();
     }
-    if(!content) {
+    if (!content) {
       callback.call(null, true);
     }
-    else if(content.isCheckedOutByOther()) {
+    else if (content.isCheckedOutByOther()) {
       callback.call(null, false);
     }
-    else if(!content.getState().readable) {
+    else if (!content.getState().readable) {
       callback.call(null, false);
     }
     else {
-      ValueExpressionFactory.create(ContentPropertyNames.PATH, content).loadValue(function():void {
+      ValueExpressionFactory.create(ContentPropertyNames.PATH, content).loadValue(function ():void {
         var siteId:String = editorContext.getSitesService().getSiteIdFor(content);
-        TaxonomyNodeFactory.loadTaxonomyRoot(siteId, taxonomyId, function(parent:TaxonomyNode):void {
-          if(parent) {
+        TaxonomyNodeFactory.loadTaxonomyRoot(siteId, taxonomyId, function (parent:TaxonomyNode):void {
+          if (parent) {
             callback.call(null, true);
           }
           else {
@@ -96,9 +102,9 @@ public class TaxonomyUtil {
    * @param callback The callback the group names are passed to.
    */
   public static function loadSettings(callback:Function):void {
-    ValueExpressionFactory.createFromFunction(function():Array {
+    ValueExpressionFactory.createFromFunction(function ():Array {
       return StudioConfigurationUtil.getConfiguration(TAXONOMY_SETTINGS, "administrationGroups", editorContext.getSitesService().getPreferredSite(), true);
-    }).loadValue(function(groups:Array):void {
+    }).loadValue(function (groups:Array):void {
       callback.call(null, groups || []);
     });
   }
@@ -113,10 +119,14 @@ public class TaxonomyUtil {
   public static function loadTaxonomyPath(record:BeanRecord, content:Content, taxonomyId:String, callback:Function):void {
     var bean:Content = record.getBean() as Content;
     var siteId:String = null;
-    if(content) {
+    if (content && content is Content) {
       siteId = editorContext.getSitesService().getSiteIdFor(content);
     }
-    var url:String = 'taxonomies/path?' + Ext.urlEncode({taxonomyId: taxonomyId, nodeRef: parseRestId(bean), site: siteId});
+    var url:String = 'taxonomies/path?' + Ext.urlEncode({
+              taxonomyId: taxonomyId,
+              nodeRef: parseRestId(bean),
+              site: siteId
+            });
     var taxRemoteBean:RemoteBean = beanFactory.getRemoteBean(url);
     taxRemoteBean.invalidate(function ():void {
       EventUtil.invokeLater(function ():void {
@@ -133,6 +143,103 @@ public class TaxonomyUtil {
         }
       });
     });
+  }
+
+  /**
+   * Bulk operation to move all the sources nodes to the given target node
+   * @param sourceNodes
+   * @param targetNode
+   * @param callback
+   */
+  public static function bulkMove(sourceNodes:Array, targetNode:TaxonomyNode, callback:Function):void {
+    var url:String = 'taxonomies/bulkmove';
+    var bulkOperation:RemoteServiceMethod = new RemoteServiceMethod(url, 'POST');
+    bulkOperation.request({
+      'taxonomyId': targetNode.getTaxonomyId(),
+      'site': targetNode.getSite(),
+      'targetNodeRef': targetNode.getRef(),
+      'nodeRefs': getNodeRefs(sourceNodes)
+    }, function (result:Object):void {
+      var resultList:TaxonomyNodeList = new TaxonomyNodeList(result.getResponseJSON().nodes);
+      callback.call(null, resultList);
+    });
+  }
+
+  /**
+   * Bulk operation to delete the given nodes
+   * @param sourceNodes
+   * @param callback
+   */
+  public static function bulkDelete(sourceNodes:Array, callback:Function):void {
+    Ext.getCmp(EditorMainView.ID).getEl().setStyle('cursor', 'wait');
+    var url:String = 'taxonomies/bulkdelete';
+    var bulkOperation:RemoteServiceMethod = new RemoteServiceMethod(url, 'POST');
+    var node:TaxonomyNode = sourceNodes[0];
+    bulkOperation.request({
+      'taxonomyId': node.getTaxonomyId(),
+      'site': node.getSite(),
+      'nodeRefs': getNodeRefs(sourceNodes)
+    }, function (result:Object):void {
+      Ext.getCmp(EditorMainView.ID).getEl().setStyle('cursor', 'default');
+      var parentNode:TaxonomyNode = new TaxonomyNode(result.getResponseJSON());
+      callback.call(null, parentNode);
+    }, function (result:Object):void {
+      Ext.getCmp(EditorMainView.ID).getEl().setStyle('cursor', 'default');
+      var message:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_text');
+      message =  StringUtil.format(message, result.getResponseJSON());
+      var title:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_title');
+      MessageBoxUtil.showInfo(title, message);
+    });
+  }
+
+  /**
+   * Bulk operation to check all links to the given nodes
+   * @param sourceNodes
+   * @param callback called with an array of referred content
+   */
+  public static function bulkLinks(sourceNodes:Array, callback:Function):void {
+    var url:String = 'taxonomies/bulklinks';
+    var bulkOperation:RemoteServiceMethod = new RemoteServiceMethod(url, 'POST');
+    var node:TaxonomyNode = sourceNodes[0];
+    bulkOperation.request({
+      'taxonomyId': node.getTaxonomyId(),
+      'site': node.getSite(),
+      'nodeRefs': getNodeRefs(sourceNodes)
+    }, function (result:Object):void {
+      callback.call(null, result.getResponseJSON().items as Array);
+    });
+  }
+
+  /**
+   * Bulk operation to check strong links of the given nodes
+   * @param sourceNodes
+   * @param callback called with an array of referred content
+   */
+  public static function bulkStrongLinks(sourceNodes:Array, callback:Function):void {
+    var url:String = 'taxonomies/bulkstronglinks';
+    var bulkOperation:RemoteServiceMethod = new RemoteServiceMethod(url, 'POST');
+    var node:TaxonomyNode = sourceNodes[0];
+    bulkOperation.request({
+      'taxonomyId': node.getTaxonomyId(),
+      'site': node.getSite(),
+      'nodeRefs': getNodeRefs(sourceNodes)
+    }, function (result:Object):void {
+      callback.call(null, result.getResponseJSON().items as Array);
+    });
+  }
+
+
+  /**
+   * Helper method to join the ref values of the given nodes to a string
+   * @param sourceNodes the node to join the refs for
+   */
+  private static function getNodeRefs(sourceNodes:Array):String {
+    var result:Array = [];
+    for each(var node:TaxonomyNode in sourceNodes) {
+      result.push(node.getRef());
+    }
+
+    return result.join(",");
   }
 
   /**
@@ -154,7 +261,6 @@ public class TaxonomyUtil {
       selectionExpression.setValue(newSelection);
     });
   }
-
 
   /**
    * Removes the content represented by the given node from the list of the

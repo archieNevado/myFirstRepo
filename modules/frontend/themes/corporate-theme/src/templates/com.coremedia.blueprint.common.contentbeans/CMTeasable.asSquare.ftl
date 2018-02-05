@@ -13,9 +13,13 @@ More specific templates exist for:
 The CoreMedia ViewDispatcher will automatically select the proper template for you.
 
 The following parameters can be set:
- - additionalClass (String): to set a specific CSS class. It automatically defaults to "cm-teasable"
+ - blockClass (String): to set a specific CSS class. It automatically defaults to "cm-teasable"
+ - additionalClass (String): to add a specific class to the most outer element rendered by the template
  - isLast (boolean): to set the "is-last" CSS class for the last item. It automatically defaults to ""
 -->
 
 <#assign isLast=cm.localParameter("islast", false)/>
-<@cm.include self=self view="teaser" params={"isLast": isLast, "additionalClass": "cm-square"}/>
+<@cm.include self=self view="teaser" params={
+  "isLast": isLast,
+  "blockClass": "cm-square"
+}/>

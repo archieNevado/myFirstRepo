@@ -162,5 +162,19 @@ export function toggleQuickInfo($button, $config) {
     toggle($quickInfo);
     return false;
   });
+}
 
+/**
+ * Opens a quickinfo, if it is hidden or hides a quickinfo, if it is shown.
+ *
+ * @function switchQuickInfo
+ * @param {jQuery} $button - The button clicked to toggle the next oder previous quickinfo.
+ * @param {jQuery} $config - The given config.
+ */
+export function switchQuickInfo($button) {
+  $button.click(function(event){
+    event.stopPropagation();
+    const $nextQuickInfo = $('#' + $button.data('cm-target'));
+    show($nextQuickInfo);
+  });
 }

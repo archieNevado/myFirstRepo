@@ -111,8 +111,9 @@ public class ElasticContentHandler<T extends ContributionResult> extends Elastic
   }
 
   protected Object fetchContributionTarget(HttpServletRequest request, String targetId) {
-    Site site = SiteHelper.getSiteFromRequest(request);
-    return site==null ? null : getContributionTarget(targetId, site);
+    return SiteHelper.findSite(request)
+            .map(site -> getContributionTarget(targetId, site))
+            .orElse(null);
   }
 
   protected HandlerInfo createResult(HttpServletRequest request, Navigation navigation, CommunityUser author, Object contributionTarget) {

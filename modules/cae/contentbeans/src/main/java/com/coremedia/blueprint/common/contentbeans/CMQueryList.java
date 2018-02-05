@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.common.contentbeans;
 
+import com.coremedia.blueprint.common.navigation.Linkable;
+
 /**
  * <p>
  * CMQueryList documents utilize a struct in the localSettings property to store
@@ -9,7 +11,7 @@ package com.coremedia.blueprint.common.contentbeans;
  * Represents the document type {@link #NAME CMQueryList}.
  * </p>
  */
-public interface CMQueryList extends CMDynamicList<CMLinkable> {
+public interface CMQueryList extends CMDynamicList<Linkable> {
   /**
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMQueryList'
    */

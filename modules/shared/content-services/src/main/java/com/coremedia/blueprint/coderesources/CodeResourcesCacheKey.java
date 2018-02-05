@@ -39,6 +39,8 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
   private final String codePropertyName;
   private final CodeCarriers codeCarriers = new CodeCarriers();
 
+  private Boolean mergeCodeResources;
+
   /**
    * Constructor for link building.
    * <p>
@@ -77,9 +79,19 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
     codeCarriers.setCodeCarrier(channelWithCode);
   }
 
+  public Boolean getMergeCodeResources() {
+    return mergeCodeResources;
+  }
+
+  public void setMergeCodeResources(Boolean mergeCodeResources) {
+    this.mergeCodeResources = mergeCodeResources;
+  }
+
   @Override
   public CodeResources evaluate(Cache cache) {
-    return new CodeResourcesImpl(codeCarriers, codePropertyName, developerMode, developer);
+    CodeResourcesImpl codeResources = new CodeResourcesImpl(codeCarriers, codePropertyName, developerMode, developer);
+    codeResources.setMergeResources(mergeCodeResources);
+    return codeResources;
   }
 
   @Override
@@ -95,7 +107,8 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
     return developerMode==that.developerMode &&
            codePropertyName.equals(that.codePropertyName) &&
            codeCarriers.equals(that.codeCarriers) &&
-           Objects.equals(developer, that.developer);
+           Objects.equals(developer, that.developer) &&
+            Objects.equals(mergeCodeResources, that.mergeCodeResources);
   }
 
   @Override
@@ -104,6 +117,7 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
     result = 31 * result + codeCarriers.hashCode();
     result = 31 * result + codePropertyName.hashCode();
     result = 31 * result + (developer!=null ? developer.hashCode() : 0);
+    result = 31 * result + (mergeCodeResources!=null ? mergeCodeResources.hashCode() : 0);
     return result;
   }
 

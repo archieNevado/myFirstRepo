@@ -32,7 +32,7 @@ Contains styling definitions for all content types as cm-text.
   }
 
   // position the button
-  &__button {
+  &__cta {
     margin-top: $padding-large-vertical;
 
     @include breakpoint(sm-and-up) {

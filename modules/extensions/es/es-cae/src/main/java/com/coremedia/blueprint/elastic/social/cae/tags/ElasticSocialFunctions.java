@@ -30,6 +30,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.annotation.Nonnull;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.ExecutionException;
 
@@ -41,19 +42,35 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeEcmaScript;
 
 public final class ElasticSocialFunctions {
 
+  private static final LoadingCache<Class<?>, ?> CACHE = CacheBuilder
+          .newBuilder()
+          .build(new CacheLoader<Class, Object>() {
+            @Override
+            public Object load(@Nonnull Class clazz) throws Exception {
+              HttpServletRequest request = getServletRequestAttributes().getRequest();
+              ServletContext servletContext = request.getServletContext();
+
+              WebApplicationContext webAppContext = WebApplicationContextUtils
+                      .getRequiredWebApplicationContext(servletContext);
+
+              return webAppContext.getBean(clazz);
+            }
+
+            @Nonnull
+            private ServletRequestAttributes getServletRequestAttributes() {
+              ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
+                      .getRequestAttributes();
+
+              if (requestAttributes == null) {
+                throw new IllegalStateException("Servlet request attributes not available.");
+              }
+
+              return requestAttributes;
+            }
+          });
+
   private ElasticSocialFunctions() {
   }
-
-  private static final LoadingCache<Class<?>, ?> CACHE = CacheBuilder.newBuilder()
-          .build(
-                  new CacheLoader<Class, Object>() {
-                    @Override
-                    public Object load(@Nonnull Class clazz) throws Exception {
-                      final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-                      final WebApplicationContext webApplicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
-                      return webApplicationContext.getBean(clazz);
-                    }
-                  });
 
   private static <T> T getBeanOfType(@Nonnull Class<T> type) {
     try {
@@ -65,23 +82,28 @@ public final class ElasticSocialFunctions {
 
   /**
    * Checks if the current user of the web page is a logged-in user or it is an anonymous user.
+   *
    * @return <code>true</code> if the current user is not logged in otherwise <code>false</code>
    */
-  public static @Nonnull Boolean isAnonymousUser() {
-    return null == getUser();
+  @Nonnull
+  public static Boolean isAnonymousUser() {
+    return getUser() == null;
   }
 
   /**
    * Checks if the user choose not to publish its user name, profile image, and other personal information with
    * its contributions.
+   *
    * @param user the user to be checked
    * @return <code>true</code> if the user wants to remain anonymous otherwise <code>false</code>
    */
-  public static @Nonnull Boolean isAnonymous(@Nonnull CommunityUser user) {
+  @Nonnull
+  public static Boolean isAnonymous(@Nonnull CommunityUser user) {
     return user.isAnonymous();
   }
 
-  public static @Nonnull Boolean isActivated(@Nonnull CommunityUser user) {
+  @Nonnull
+  public static Boolean isActivated(@Nonnull CommunityUser user) {
     return user.isActivated() || user.isActivatedAndRequiresModeration();
   }
 
@@ -90,13 +112,13 @@ public final class ElasticSocialFunctions {
   }
 
   public static double getAverageRating(@Nonnull CMTeasable target) {
-    final ContentWithSite contentWithSite = getContentWithSite(target);
+    ContentWithSite contentWithSite = getContentWithSite(target);
     return getBeanOfType(RatingService.class).getAverageRating(contentWithSite);
   }
 
   public static Integer getRatingForCurrentUser(@Nonnull CMTeasable target) {
     CommunityUser user = getCurrentOrAnonymousUser();
-    final Rating ratingForUser = getBeanOfType(RatingService.class).getRatingForUser(user, getContentWithSite(target));
+    Rating ratingForUser = getBeanOfType(RatingService.class).getRatingForUser(user, getContentWithSite(target));
     return ratingForUser != null ? ratingForUser.getValue() : 0;
   }
 
@@ -109,12 +131,12 @@ public final class ElasticSocialFunctions {
   public static Boolean hasComplaintForCurrentUser(String id, String collection) {
     CommunityUser user = getCurrentOrAnonymousUser();
     if (collection.equals(COMMENTS_COLLECTION)) {
-      final CommentService commentService = getBeanOfType(CommentService.class);
-      final Comment comment = commentService.getComment(id);
+      CommentService commentService = getBeanOfType(CommentService.class);
+      Comment comment = commentService.getComment(id);
       return commentService.hasComplaintForUser(user, comment);
     } else if (collection.equals(USERS_COLLECTION)) {
-      final CommunityUserService communityUserService = getBeanOfType(CommunityUserService.class);
-      final CommunityUser communityUser = communityUserService.getUserById(id);
+      CommunityUserService communityUserService = getBeanOfType(CommunityUserService.class);
+      CommunityUser communityUser = communityUserService.getUserById(id);
       return communityUserService.hasComplaintForUser(user, communityUser);
     }
     return false;
@@ -157,9 +179,9 @@ public final class ElasticSocialFunctions {
   }
 
   public static ContentWithSite getContentWithSite(CMTeasable target) {
-    final SitesService sitesService = getBeanOfType(SitesService.class);
-    final Content content = target.getContent();
-    final Site site = sitesService.getContentSiteAspect(content).getSite();
+    SitesService sitesService = getBeanOfType(SitesService.class);
+    Content content = target.getContent();
+    Site site = sitesService.getContentSiteAspect(content).getSite();
     return new ContentWithSite(content, site);
   }
 

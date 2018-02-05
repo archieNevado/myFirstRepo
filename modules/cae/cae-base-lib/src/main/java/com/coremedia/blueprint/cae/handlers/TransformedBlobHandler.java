@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.cae.util.SecureHashCodeGeneratorStrategy;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
+import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.cap.common.IdHelper;
@@ -44,11 +45,13 @@ public class TransformedBlobHandler extends HandlerBase {
   private static final Logger LOG = LoggerFactory.getLogger(TransformedBlobHandler.class);
 
   private static final String URI_PREFIX = "image";
-  public static final String TRANSFORMATION_SEGMENT = "transformationName";
+  private static final String TRANSFORMATION_SEGMENT = "transformationName";
   private static final String DIGEST_SEGMENT = "digest";
   private static final String SECHASH_SEGMENT = "secHash";
   public static final String WIDTH_SEGMENT = "width";
   public static final String HEIGHT_SEGMENT = "height";
+
+  private ValidationService<ContentBean> validationService = null;
 
   private SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy;
   private TransformImageService transformImageService;
@@ -69,6 +72,10 @@ public class TransformedBlobHandler extends HandlerBase {
                   ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
   // --- spring config -------------------------------------------------------------------------------------------------
+
+  public void setValidationService(ValidationService<ContentBean> validationService) {
+    this.validationService = validationService;
+  }
 
   public void setSecureHashCodeGeneratorStrategy(SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy) {
     this.secureHashCodeGeneratorStrategy = secureHashCodeGeneratorStrategy;
@@ -91,35 +98,36 @@ public class TransformedBlobHandler extends HandlerBase {
                                     @PathVariable(SEGMENT_NAME) String name,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     WebRequest webRequest) {
+    if (!(contentBean instanceof CMMedia)) {
+      return HandlerHelper.notFound();
+    }
+    if (validationService != null && !validationService.validate(contentBean)) {
+      return HandlerHelper.notFound("The content item you are trying to preview is invalid and cannot be viewed.");
+    }
 
-    if (contentBean instanceof CMMedia) {
-      CMMedia media = getDataViewFactory().loadCached((CMMedia) contentBean, null);
-
-      // URL validation: segment must match and hash value must be correct
-      String segment = removeSpecialCharacters(media.getContent().getName());
-      if (name.equals(segment)) {
-        //name matches, make sure that secHash matches given URL
-        Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
-                .put(SEGMENT_ID, ((CMMedia) contentBean).getContentId())
-                .put(TRANSFORMATION_SEGMENT, transformationName)
-                .put(WIDTH_SEGMENT, width)
-                .put(HEIGHT_SEGMENT, height)
-                .put(DIGEST_SEGMENT, digest)
-                .put(SEGMENT_NAME, name)
-                .put(SEGMENT_EXTENSION, extension)
-                .build();
-
-        if (secureHashCodeGeneratorStrategy.matches(parameters, secHash)) {
-          //request is valid, resolve blob and return model
-          Blob transformedBlob = getTransformedBlob(media, transformationName, extension, width, height);
-
-          if (transformedBlob != null) {
-            if (webRequest.checkNotModified(transformedBlob.getETag())) {
-              // shortcut exit - no further processing necessary
-              return null;
-            }
-            return HandlerHelper.createModel(transformedBlob);
+    CMMedia media = getDataViewFactory().loadCached((CMMedia) contentBean, null);
+    // URL validation: segment must match and hash value must be correct
+    String segment = removeSpecialCharacters(media.getContent().getName());
+    if (name.equals(segment)) {
+      //name matches, make sure that secHash matches given URL
+      Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
+              .put(SEGMENT_ID, ((CMMedia) contentBean).getContentId())
+              .put(TRANSFORMATION_SEGMENT, transformationName)
+              .put(WIDTH_SEGMENT, width)
+              .put(HEIGHT_SEGMENT, height)
+              .put(DIGEST_SEGMENT, digest)
+              .put(SEGMENT_NAME, name)
+              .put(SEGMENT_EXTENSION, extension)
+              .build();
+      if (secureHashCodeGeneratorStrategy.matches(parameters, secHash)) {
+        //request is valid, resolve blob and return model
+        Blob transformedBlob = getTransformedBlob(media, transformationName, extension, width, height);
+        if (transformedBlob != null) {
+          if (webRequest.checkNotModified(transformedBlob.getETag())) {
+            // shortcut exit - no further processing necessary
+            return null;
           }
+          return HandlerHelper.createModel(transformedBlob);
         }
       }
     }
@@ -141,7 +149,7 @@ public class TransformedBlobHandler extends HandlerBase {
     int height = Integer.valueOf(linkParameters.get(HEIGHT_SEGMENT));
     int width = Integer.valueOf(linkParameters.get(WIDTH_SEGMENT));
 
-    /**
+    /*
      * create parameters map. This is more flexible than calling URI_TEMPLATE#expand with the parameters
      * since this way the parameter's sequence is not relevant and the URI_PATTERN can be changed easier
      */

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.view;
 
+import com.coremedia.blueprint.base.util.PairCacheKey;
 import com.coremedia.blueprint.cae.richtext.filter.ScriptFilter;
 import com.coremedia.blueprint.cae.richtext.filter.ScriptSerializer;
 import com.coremedia.blueprint.cae.view.processing.Minifier;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -45,7 +47,11 @@ public class MergeableResourcesView implements ServletView {
     this.xmlFilterFactory = xmlFilterFactory;
   }
 
-  @Required
+  /**
+   * If you set a cache, minified scripts will be cached.
+   * <p>
+   * If your minifier's results are not cacheable, do not set a cache.
+   */
   public void setCache(Cache cache) {
     this.cache = cache;
   }
@@ -55,7 +61,6 @@ public class MergeableResourcesView implements ServletView {
     this.contentType = contentType;
   }
 
-  @Required
   public void setMinifier(Minifier minifier) {
     this.minifier = minifier;
   }
@@ -119,9 +124,9 @@ public class MergeableResourcesView implements ServletView {
    */
   private void renderResource(HttpServletRequest request, HttpServletResponse response, CMAbstractCode code, Writer out) {
     String script = filterScriptMarkup(request, response, code);
-    if (!code.isCompressionDisabled()) {
-      CodeCacheKey cacheKey = new CodeCacheKey(script, code.getContent().getName(), minifier);
-      script = cache.get(cacheKey);
+    if (minifier != null && !code.isCompressionDisabled()) {
+      String name = code.getContent().getName();
+      script = cache != null ? cache.get(new MinifierCacheKey(script, name)) : minify(script, name);
     }
 
     try {
@@ -150,4 +155,25 @@ public class MergeableResourcesView implements ServletView {
     return writer.getBuffer().toString();
   }
 
+  private String minify(String script, String name)  {
+    try {
+      StringWriter resultStringWriter = new StringWriter();
+      minifier.minify(resultStringWriter, new StringReader(script), name);
+      return resultStringWriter.getBuffer().toString();
+    } catch (Exception e) {
+      LOG.info("Could not minify file {}. Will write unminified version. Cause: {}", name, e.getMessage());
+      return script;
+    }
+  }
+
+  private class MinifierCacheKey extends PairCacheKey<String, String, String> {
+    MinifierCacheKey(String script, String name) {
+      super(script, name);
+    }
+
+    @Override
+    protected String evaluate(Cache cache, String script, String name) {
+      return minify(script, name);
+    }
+  }
 }

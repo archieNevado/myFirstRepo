@@ -16,9 +16,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 import static com.coremedia.elastic.social.api.ModerationType.POST_MODERATION;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
-import static java.lang.String.format;
 
 @Scope("tenant")
 @Named
@@ -67,8 +67,8 @@ public class ReviewGenerator extends CommentGenerator {
 
     commentCount++;
 
-    LOG.debug(format("Created comment for %s with id=%s with %s attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
-            review.getId(), review.getAttachments().size()));
+    LOG.debug(PERSONAL_DATA, "Created comment for {} with id={} with {} attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
+            review.getId(), review.getAttachments().size());
     return review;
   }
 

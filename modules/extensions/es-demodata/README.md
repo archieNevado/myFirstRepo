@@ -1,8 +1,8 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##ES Demodata Generator
+## ES Demodata Generator
 
-###Description
+### Description
 
 Elastic Social Demo Data Generator. The Elastic Social Demo Data Generator is a tool to simulate actions of a website 
 online community.
@@ -15,6 +15,6 @@ It creates demo data like:
 * Ratings
 * Blacklist entries
 
-###Documentation
+### Documentation
 
 See the "Elastic Social Demo Data Generator" chapter of the CoreMedia Developer Manual.

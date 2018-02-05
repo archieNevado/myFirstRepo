@@ -16,6 +16,10 @@
       <artifactId>coremedia-common</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-logging</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.elastic.core</groupId>
       <artifactId>core-api</artifactId>
     </dependency>

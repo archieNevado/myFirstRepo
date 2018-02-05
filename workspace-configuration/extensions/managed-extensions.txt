@@ -21,3 +21,5 @@ create-from-template
 corporate
 taxonomy
 validators
+#memory-controlroom
+#notification-memory

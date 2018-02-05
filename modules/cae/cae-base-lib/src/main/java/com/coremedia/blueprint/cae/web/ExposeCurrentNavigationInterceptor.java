@@ -5,7 +5,7 @@ import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,17 +31,22 @@ public class ExposeCurrentNavigationInterceptor extends HandlerInterceptorAdapte
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                          ModelAndView modelAndView) {
-    if (modelAndView != null && !modelAndView.wasCleared() && NavigationLinkSupport.getNavigation(modelAndView.getModel()) == null) {
-      Page page = RequestAttributeConstants.getPage(request);
-      if (page != null) {
-        NavigationLinkSupport.setNavigation(modelAndView, page.getNavigation());
-      } else {
-        // this is an error situation - but still, error views may be defined in a theme (which depends on a navigation)
-        Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
-        if (siteFromRequest != null) {
-          NavigationLinkSupport.setNavigation(modelAndView, contentBeanFactory.createBeanFor(siteFromRequest.getSiteRootDocument(), Navigation.class));
-        }
-      }
+    if (modelAndView == null
+            || modelAndView.wasCleared()
+            || NavigationLinkSupport.getNavigation(modelAndView.getModel()) != null) {
+      return;
+    }
+
+    Page page = RequestAttributeConstants.getPage(request);
+    if (page != null) {
+      NavigationLinkSupport.setNavigation(modelAndView, page.getNavigation());
+    } else {
+      // this is an error situation - but still, error views may be defined in a theme (which depends on a navigation)
+      SiteHelper.findSite(request).ifPresent(siteFromRequest -> {
+        Content siteRootDocument = siteFromRequest.getSiteRootDocument();
+        Navigation bean = contentBeanFactory.createBeanFor(siteRootDocument, Navigation.class);
+        NavigationLinkSupport.setNavigation(modelAndView, bean);
+      });
     }
   }
 }

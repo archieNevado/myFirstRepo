@@ -23,13 +23,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-spring</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>base-component</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>studio-blueprint-component</artifactId>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -39,165 +35,8 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.ui.sdk</groupId>
-      <artifactId>editor-resources</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-lib-extension-dependencies</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>logging-config</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>content-services</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-uapi-client</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-multisite-impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-schema-bundle</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.ui</groupId>
-      <artifactId>editing-rest-component</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.ui</groupId>
-      <artifactId>editing-rest-security-component</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.ui.collaboration</groupId>
-      <artifactId>control-room-rest-component</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.ui</groupId>
-      <artifactId>collaboration-project-rest-component</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.elastic</groupId>
-      <artifactId>core-rest-impl-component</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet.jsp.jstl</groupId>
-      <artifactId>javax.servlet.jsp.jstl-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.management</groupId>
-      <artifactId>jmxremote_optional</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-client</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-image-struct-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-rest</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-pagegrid-rest-extension</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-metadata</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>image-transformation</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-autoconfigure</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!-- required for Tomcat7 -->
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-jasper</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -221,54 +60,6 @@
           </systemProperties>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <requiresUnpack>
-            <!--
- Due to https://java.net/jira/browse/JERSEY-2085 libraries that contain packages that are scanned for root resource
- and provider classes must be configured here.
-
-
-see http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-extract-specific-libraries-when-an-executable-jar-runs
-see https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes#jersey-classpath-scanning-limitations
-            -->
-            <dependency>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>ec-studio-lib</artifactId>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.cms</groupId>
-              <artifactId>coremedia-transform</artifactId>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.elastic</groupId>
-              <artifactId>core-rest-impl-component</artifactId>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.ui</groupId>
-              <artifactId>coremedia-rest-core</artifactId>
-            </dependency>
-            <dependency>
-              <groupId>com.coremedia.ui</groupId>
-              <artifactId>cap-rest-service</artifactId>
-            </dependency>
-            <dependency>
-              <groupId>com.sun.jersey</groupId>
-              <artifactId>jersey-server</artifactId>
-            </dependency>
-            <dependency>
-              <groupId>com.sun.jersey</groupId>
-              <artifactId>jersey-core</artifactId>
-            </dependency>
-            <dependency>
-              <groupId>com.sun.jersey</groupId>
-              <artifactId>jersey-servlet</artifactId>
-            </dependency>
-          </requiresUnpack>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
@@ -282,34 +73,11 @@ see https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-
     </profile>
 
     <profile>
-      <id>turbojpeg</id>
-      <dependencies>
-        <dependency>
-          <groupId>com.coremedia.com.sun.media.imageio</groupId>
-          <artifactId>jai-imageio</artifactId>
-          <version>1.1</version>
-          <scope>runtime</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.coremedia.org.libjpegturbo</groupId>
-          <artifactId>turbojpeg-wrapper</artifactId>
-          <version>1.2.1.1</version>
-          <scope>runtime</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.coremedia.it.geosolutions.imageio-ext</groupId>
-          <artifactId>imageio-ext-turbojpeg</artifactId>
-          <version>1.1.10</version>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>controlroom-memory</id>
+      <id>in-memory</id>
       <properties>
-        <enforcer.skip>true</enforcer.skip>
-        <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/controlroom-memory</development-properties.dir>
+        <development-properties.dir>
+          ${project.basedir}/../../../workspace-configuration/development-properties/in-memory
+        </development-properties.dir>
       </properties>
     </profile>
 

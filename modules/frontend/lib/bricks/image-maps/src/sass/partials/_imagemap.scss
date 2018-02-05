@@ -1,18 +1,21 @@
-@function imagemapicon($circle-background-color: rgba(0,0,0,0.5), $circle-color: '#FFFFFF', $color: '#FFFFFF') {
-  @return svg-url(#{'<svg viewBox="0 0 512 512"><style>.st0{fill:#{$circle-background-color};stroke:#{$circle-color};stroke-width:46;stroke-miterlimit:10;}.st1{fill:#FFFFFF;stroke:#{$color};stroke-width:50;stroke-miterlimit:10;}</style><circle cx="256" cy="256" r="233" class="st0"/><path d="M128 256h256M256 128v256" class="st1"/></svg>'});
-}
-
-
 .#{$cm-imagemap-prefix} {
+  @include clearfix;
+
   &__wrapper {
     position: relative;
     overflow: hidden;
   }
 
-  &__image {
+  // the default is 4x3 aspect ratio. this should be overwritten by a theme or view
+  &__picture-box {
+    @include aspect-ratio-box(4, 3);
+  }
+
+  &__picture {
     user-select: none;
   }
 
+  //hotzone will center the icon or text. top and left will be calculated by JS
   &__hotzone {
     position: absolute;
     z-index: 2;
@@ -20,72 +23,103 @@
     padding: 0;
     display: block;
     transform: translate(-50%, -50%);
-    &--text p {
-      margin: 0;
-      padding: 0;
-    }
 
     &--icon {
-      padding-right: 1em;
-      font-size: $cm-imagemap-hotzone-icon-size;
+      width: $cm-imagemap-hotzone-icon-size;
       height: $cm-imagemap-hotzone-icon-size;
-      background: transparent imagemapicon();
+      background: transparent url("../../img/imagemap-icon.svg") no-repeat center center;
+      border-radius: 50%;
       cursor: pointer;
-      & > i {
-        display: block;
-      }
     }
 
     &:hover.#{$cm-imagemap-prefix}__hotzone--icon,
     &--hover.#{$cm-imagemap-prefix}__hotzone--icon {
-      background-image: imagemapicon(rgba(0, 0, 0, 0.8));
+      background-image: url("../../img/imagemap-icon-hover.svg");
     }
 
     &--active.#{$cm-imagemap-prefix}__hotzone--icon {
-      background-image: imagemapicon(rgba(0, 0, 0, 0.9));
+      background-image: url("../../img/imagemap-icon-hover.svg");
     }
   }
 
+  // button alignment to bottom right
+  &__button {
+    &.cm-button {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+    }
+  }
+
+  // quickinfos are centered over the imagemap
   @if $cm-imagemap-quickinfo-as-overlay {
     &__quickinfo {
-      @include center-absolute();
       z-index: 4;
+      @include breakpoint("xs") {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        height: $cm-imagemap-mobile-overlay-size-in-percent;
+        width: $cm-imagemap-mobile-overlay-size-in-percent;
+        position: absolute;
+
+        & .content-container {
+          position: absolute;
+          left:0;
+          right:0;
+          bottom:0;
+          background-color: $cm-imagemap-mobile-quickinfo-overlay-color;
+        }
+      }
+      @include breakpoint("sm-and-up") {
+        @include center-absolute();
+      }
     }
   }
 
-  &__banderole {
-    pointer-events: none;
-
-    a {
-      pointer-events: auto;
+  @if $cm-imagemap-dimm-imagemap-on-quickinfo {
+    &__areas--active:after {
+      content: "";
+      display: block;
+      background-color: $cm-imagemap-dimm-imagemap-on-quickinfo-color;
+      height: 100%;
+      width: 100%;
+      z-index: 2;
+      top: 0;
+      position: absolute;
     }
   }
 }
 
-/**
- * Text-Overlay (part of ImageMap feature)
- * ---------------------------------------------------------------------------------------------------------------------
- *
- * Basic styling for each theme provided
- */
+// Text-Overlay (part of ImageMap feature)
 .#{$cm-imagemap-overlay-prefix} {
-  &--theme-dark {
+  &--theme-dark &__link {
     color: $cm-imagemap-overlay-color-dark;
     background-color: transparent;
+    padding: $cm-imagemap-overlay-padding;
+    display: block;
   }
 
-  &--theme-light {
+  &--theme-light &__link {
     color: $cm-imagemap-overlay-color-light;
     background-color: transparent;
+    padding: $cm-imagemap-overlay-padding;
+    display: block;
   }
 
-  &--theme-light-on-dark {
+  &--theme-light-on-dark &__link {
     color: $cm-imagemap-overlay-color-light;
     background-color: black;
+    padding: $cm-imagemap-overlay-padding;
+    display: block;
   }
 
-  &--theme-dark-on-light {
+  &--theme-dark-on-light &__link {
     color: $cm-imagemap-overlay-color-dark;
     background-color: white;
+    padding: $cm-imagemap-overlay-padding;
+    display: block;
   }
 }

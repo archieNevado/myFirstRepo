@@ -10,9 +10,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8">
   <title>CoreMedia Theme Preview for ${self.content.name!""}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <@preview.previewScripts />
 </head>
 
@@ -24,7 +24,7 @@
     <h1 class="cm-theme__title">${self.content.name!""}</h1>
     <#-- theme preview image -->
     <#if self.icon?has_content>
-      <img class="cm-theme__screenshot" src="${cm.getLink(self.icon)}"<@cm.metadata "properties.icon" />/>
+      <img class="cm-theme__screenshot" src="${cm.getLink(self.icon)}"<@cm.metadata "properties.icon" />>
     </#if>
     <#-- theme description-->
     <div class="cm-theme__description"<@cm.metadata "properties.detailText" />>

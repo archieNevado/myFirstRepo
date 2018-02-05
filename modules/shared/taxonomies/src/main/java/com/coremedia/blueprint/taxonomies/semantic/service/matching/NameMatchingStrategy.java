@@ -39,7 +39,7 @@ public class NameMatchingStrategy implements SemanticStrategy, InitializingBean 
 
 
   @Override
-  public Suggestions suggestions(Taxonomy taxonomy, String capId) {
+  public Suggestions suggestions(Taxonomy<?> taxonomy, String capId) {
     HashMap<String, TaxonomyNode> nameMapping = new HashMap<>();
     for (TaxonomyNode node : taxonomy.getAllChildren()) {
       nameMapping.put(node.getName().toLowerCase().trim(), node);    //NOSONAR

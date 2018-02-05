@@ -1,12 +1,12 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##Elastic Personalization Extension
+## Elastic Personalization Extension
 
-###Description
+### Description
 
 Extension to retrieve data from CoreMedia [Elastic Social](../es/README.md) for use in the 
 [Adaptive Personalization Extension](../p13n/README.md).
 
-###Documentation
+### Documentation
 
 See the "Adaptive Personalization Extensions" chapter of the CoreMedia Developer Manual.

@@ -50,7 +50,6 @@
     </div>
     <#-- display every aspect ratio as preview item -->
     <#assign allAspectRatios=bp.setting(cmpage, "responsiveImageSettings") />
-    <#assign maxPreviewImageWidth=bp.setting(cmpage, "maxPreviewImageWidth", "400") />
     <#list allAspectRatios?keys as ratio>
       <#-- id may not be generated using bp.generateId, as persisting toggle state in local storage will not work -->
       <#assign toggleId="toggle-" + (ratio_index + 2) + "-crop-" + ratio />
@@ -59,13 +58,11 @@
           <@bp.message "preview_image_"+ratio />
         </a>
         <div class="toggle-container cm-preview-item__container toggle-container-off">
-          <div style="max-width: ${maxPreviewImageWidth}px;">
-            <@cm.include self=self params={
-              "limitAspectRatios": [ratio],
-              "crop": ratio,
-              "classBox": "cm-preview__image"
-            }/>
-          </div>
+          <@cm.include self=self params={
+            "limitAspectRatios": [ratio],
+            "crop": ratio,
+            "classBox": "cm-preview__image"
+          }/>
         </div>
       </div>
     </#list>

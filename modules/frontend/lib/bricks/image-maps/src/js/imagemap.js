@@ -196,9 +196,9 @@ export function calculateBoundingBox(coordsAsPoints) {
  */
 export function update($imagemap, newRatio) {
   // get configuration of imagemap
-  const config = config || $.extend({coordsBaseWidth: 1}, $imagemap.data("cm-imagemap"));
+  const config = $.extend({coordsBaseWidth: 1}, $imagemap.data("cm-imagemap"));
   const $areas = $imagemap.find(".cm-imagemap__areas");
-  const $image = $imagemap.find(".cm-imagemap__image");
+  const $image = $imagemap.find(".cm-imagemap__picture");
   const $wrapper = $imagemap.find(".cm-imagemap__wrapper");
   newRatio = newRatio || undefined;
 
@@ -317,7 +317,7 @@ export function update($imagemap, newRatio) {
 export function init($imagemap) {
   // get configuration of imagemap
   const $areas = $imagemap.find(".cm-imagemap__areas");
-  const $image = $imagemap.find(".cm-imagemap__image");
+  const $image = $imagemap.find(".cm-imagemap__picture");
 
   // Handle responsive and non-responsive images
   if ($image.data("cm-responsive-image-state") !== undefined) {
@@ -379,8 +379,10 @@ export function init($imagemap) {
     $("#" + quickInfoId).on(quickInfo.EVENT_QUICKINFO_CHANGED, function (event, active) {
       if (active) {
         $button.addClass("cm-imagemap__hotzone--active");
+        $areas.addClass("cm-imagemap__areas--active");
       } else {
         $button.removeClass("cm-imagemap__hotzone--active");
+        $areas.removeClass("cm-imagemap__areas--active");
         openQuickInfoMain();
       }
     });

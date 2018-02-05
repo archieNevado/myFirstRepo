@@ -50,6 +50,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -171,6 +173,7 @@ public class UserDetailsHelperTest {
     when(reviewService.getNumberOfApprovedReviews(communityUser)).thenReturn(10L);
     when(communityUserService.getUserByName(userName)).thenReturn(communityUser);
     when(communityUserService.createFrom(communityUser)).thenReturn(communityUser);
+    when(communityUserService.getPasswordHashAlgorithm()).thenReturn("algorithm");
 
     when(communityUser.getLocale()).thenReturn(Locale.ENGLISH);
     when(communityUser.isReceiveCommentReplyEmails()).thenReturn(true);
@@ -528,7 +531,7 @@ public class UserDetailsHelperTest {
 
     verify(communityUserService).storeChanges(communityUser, ModerationType.NONE);
     verify(communityUser).validatePassword(password);
-    verify(communityUser).setPassword(newPassword);
+    verify(communityUser).setPassword(eq(newPassword), anyString());
     verify(mailTemplateService).sendMail("profileChanged", Locale.GERMAN, emailAddress, getProperties());
   }
 
@@ -544,7 +547,7 @@ public class UserDetailsHelperTest {
     assertFalse(userSaved);
 
     verify(communityUser).validatePassword(password);
-    verify(communityUser, never()).setPassword(newPassword);
+    verify(communityUser, never()).setPassword(eq(newPassword), anyString());
     verify(communityUserService, never()).storeChanges(communityUser, ModerationType.NONE);
     verify(mailTemplateService, never()).sendMail("profileChanged", locale, emailAddress, getProperties());
     verify(messageContext, times(1)).addMessage(any(MessageResolver.class));
@@ -562,7 +565,7 @@ public class UserDetailsHelperTest {
     assertFalse(userSaved);
 
     verify(communityUser).validatePassword(password);
-    verify(communityUser, never()).setPassword(newPassword);
+    verify(communityUser, never()).setPassword(eq(newPassword), anyString());
     verify(communityUserService, never()).storeChanges(communityUser, ModerationType.NONE);
     verify(mailTemplateService, never()).sendMail("profileChanged", locale, emailAddress, getProperties());
     verify(messageContext, times(1)).addMessage(any(MessageResolver.class));

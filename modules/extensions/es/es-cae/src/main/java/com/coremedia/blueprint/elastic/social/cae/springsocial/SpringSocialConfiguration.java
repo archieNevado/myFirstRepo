@@ -24,7 +24,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Configuration
 public class SpringSocialConfiguration {
-  
+
   @Value("${application.url:}")
   private String applicationUrl;
 
@@ -41,9 +41,11 @@ public class SpringSocialConfiguration {
   @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
   public ConnectionRepository connectionRepository() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
     if (authentication == null) {
       throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
     }
+
     return usersConnectionRepository().createConnectionRepository(authentication.getName());
   }
 
@@ -66,12 +68,15 @@ public class SpringSocialConfiguration {
 
   @Bean
   public ProviderSignInController providerSignInController() {
-    CustomProviderSignInController controller = new CustomProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), signInAdapter());
+    CustomProviderSignInController controller = new CustomProviderSignInController(connectionFactoryLocator(),
+            usersConnectionRepository(), signInAdapter());
+
     controller.setSignUpUrl("/servlet/signup");
     controller.setSignInUrl("/servlet/signin");
     if (isNotBlank(applicationUrl)) {
       controller.setApplicationUrl(applicationUrl);
     }
+
     return controller;
   }
 
@@ -88,9 +93,11 @@ public class SpringSocialConfiguration {
   @Bean
   public ConnectController connectController() {
     CustomConnectController controller = new CustomConnectController(connectionFactoryLocator(), connectionRepository());
+
     if (isNotBlank(applicationUrl)) {
       controller.setApplicationUrl(applicationUrl);
     }
+
     return controller;
   }
 

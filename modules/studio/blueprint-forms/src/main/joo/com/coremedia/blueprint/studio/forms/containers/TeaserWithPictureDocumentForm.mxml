@@ -50,7 +50,7 @@
                                                  bindTo="{config.bindTo}"/>
       </editor:additionalToolbarItems>
     </editor:LinkListPropertyField>
-    <bpforms:CallToActionConfigurationForm/>
+    <bpforms:CallToActionConfigurationForm useLegacyCTASettings="true"/>
   </editor:items>
 
 </editor:PropertyFieldGroup>

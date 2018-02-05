@@ -13,7 +13,6 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -53,7 +52,11 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
   @Override
   protected Catalog doGetEntity() {
     CatalogId catalogId = getCatalogId();
-    return getCatalogService().getCatalog(catalogId, getStoreContext()).orElse(null);
+    StoreContext storeContext = getStoreContext();
+    if (storeContext == null) {
+      return null;
+    }
+    return getCatalogService().getCatalog(catalogId, storeContext).orElse(null);
   }
 
   @Nullable
@@ -86,12 +89,6 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
 
   public CatalogService getCatalogService() {
     return CurrentCommerceConnection.get().getCatalogService();
-  }
-
-  @Override
-  @PathParam(CATALOG_ALIAS)
-  public void setCatalogAlias(String catalogAliasValue) {
-    this.catalogAlias = CatalogAlias.ofNullable(catalogAliasValue).orElse(null);
   }
 
   private CatalogId getCatalogId() {

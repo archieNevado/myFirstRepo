@@ -1,11 +1,11 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
 ## Catalog Extension
 
-###Description
+### Description
 
 This extensions adds the functionality for the internal CoreMedia catalog feature.
 
-##Documentation
+## Documentation
 
 See the CMS Catalog chapter in the product's developer manual.

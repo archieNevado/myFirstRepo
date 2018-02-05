@@ -2,6 +2,30 @@
 
 This file is used to list changes made in each version of the windows cookbook.
 
+## 3.4.4 (2018-01-19)
+
+- Fix undefined method for 'ipv4_address' in windows_printer_port
+
+## 3.4.3 (2018-01-04)
+
+- Added missing parentheses around PersistKeySet flag that was preventing PowerShell from creating X509Certificate2 object
+
+## 3.4.2 (2018-01-02)
+
+- Add deprecation warnings for windows_path and windows_task which are now included in Chef 13. These will be removed from this cookbook in Sept 2018.
+
+## 3.4.1 (2017-12-06)
+
+- Fix long-running filtering by replace LIKE with equality sign in the share resource
+- Use logical OR instead of AND when trying to detect share permissions changing in the share resource
+- Remove extra new_resource.updated_by_last_action in the windows_task resource that resulted in a Foodcritic warning
+
+## 3.4.0 (2017-11-14)
+
+- Add a root key property for the auto_run resource
+- Fix a resource typo where a name_property was still written name_attribute
+- Resolve FC108 warnings
+
 ## 3.3.0 (2017-11-06)
 
 - Add new dns resource. See readme for examples

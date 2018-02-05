@@ -1,23 +1,29 @@
 {
   "name": "@coremedia/frontend",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "themescripts install",
-    "test": "themescripts test",
-    "build": "themescripts build",
-    "production": "themescripts build",
-    "create-theme": "create-theme",
-    "apidoc": "grunt apidoc"
+    "test": "cross-var lerna run test --npm-client=\"$npm_execpath\"",
+    "build": "cross-var lerna run build --npm-client=\"$npm_execpath\"",
+    "create-theme": "node ./lib/tools/cm-cli/bin/cm-cli.js create-theme",
+    "apidoc": "cross-var lerna run apidoc --npm-client=\"$npm_execpath\"",
+    "lerna": "cross-var lerna --npm-client=\"$npm_execpath\""
+  },
+  "workspaces": [
+    "lib/bricks/*",
+    "lib/js/*",
+    "lib/sass/*",
+    "lib/tools/*",
+    "themes/*"
+  ],
+  "engines": {
+    "node": ">=8"
   },
   "dependencies": {
-    "@coremedia/themeutils": "file:lib/tools/themeutils",
-    "@coremedia/themescripts": "file:lib/tools/themescripts",
-    "@coremedia/themecreator": "file:lib/tools/themecreator",
-    "grunt": "1.0.1",
-    "grunt-cli": "1.2.0"
+    "lerna": "2.7.1",
+    "cross-var": "1.1.0"
   },
-  "engines": {
-    "node": ">=6"
+  "coremedia": {
+    "type": "workspace"
   }
 }

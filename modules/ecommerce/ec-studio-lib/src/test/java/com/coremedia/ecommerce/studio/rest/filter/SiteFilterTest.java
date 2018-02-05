@@ -12,6 +12,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletResponse;
+import java.util.Optional;
 
 import static com.coremedia.ecommerce.studio.rest.filter.SiteFilter.extractSiteId;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,11 +44,10 @@ public class SiteFilterTest {
 
     siteFilter.doFilter(request, response, filterChain);
 
-    Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
+    Optional<Site> siteFromRequest = SiteHelper.findSite(request);
+    assertThat(siteFromRequest).isNotPresent();
 
-    assertThat(siteFromRequest).isNull();
-
-    verify(sitesService, never()).getSite(anyString());
+    verify(sitesService, never()).findSite(anyString());
     verify(filterChain).doFilter(request, response);
   }
 
@@ -57,11 +57,10 @@ public class SiteFilterTest {
 
     siteFilter.doFilter(request, response, filterChain);
 
-    Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
+    Optional<Site> siteFromRequest = SiteHelper.findSite(request);
+    assertThat(siteFromRequest).isNotPresent();
 
-    assertThat(siteFromRequest).isNull();
-
-    verify(sitesService).getSite("2338907623496");
+    verify(sitesService).findSite("2338907623496");
     verify(filterChain).doFilter(request, response);
   }
 
@@ -69,39 +68,38 @@ public class SiteFilterTest {
   public void siteIsSetOnKnownSiteId() throws Exception {
     MockHttpServletRequest request = buildRequest("/livecontext/store/2338907623496/");
 
-    when(sitesService.getSite("2338907623496")).thenReturn(site);
+    when(sitesService.findSite("2338907623496")).thenReturn(Optional.of(site));
 
     siteFilter.doFilter(request, response, filterChain);
 
-    Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
-
-    assertThat(siteFromRequest).isEqualTo(site);
+    Optional<Site> siteFromRequest = SiteHelper.findSite(request);
+    assertThat(siteFromRequest).hasValue(site);
 
     verify(filterChain).doFilter(request, response);
   }
 
   @Test
   public void checkRegexWithoutSiteIsNotAcceptable() throws Exception {
-    String siteId = extractSiteId("/livecontext/store/");
-    assertThat(siteId).isNull();
+    Optional<String> siteId = extractSiteId("/livecontext/store/");
+    assertThat(siteId).isNotPresent();
   }
 
   @Test
   public void checkRegexWithoutTrailingSlashIsAcceptable() throws Exception {
-    String siteId = extractSiteId("/livecontext/store/2338907623496");
-    assertThat(siteId).isEqualTo("2338907623496");
+    Optional<String> siteId = extractSiteId("/livecontext/store/2338907623496");
+    assertThat(siteId).hasValue("2338907623496");
   }
 
   @Test
   public void checkRegexWithTrailingSlashIsAcceptable() throws Exception {
-    String siteId = extractSiteId("/livecontext/store/2338907623496/");
-    assertThat(siteId).isEqualTo("2338907623496");
+    Optional<String> siteId = extractSiteId("/livecontext/store/2338907623496/");
+    assertThat(siteId).hasValue("2338907623496");
   }
 
   @Test
   public void checkRegexAnythingElseBehindSiteIsAcceptable() throws Exception {
-    String siteId = extractSiteId("/livecontext/store/2338907623496/abcd");
-    assertThat(siteId).isEqualTo("2338907623496");
+    Optional<String> siteId = extractSiteId("/livecontext/store/2338907623496/abcd");
+    assertThat(siteId).hasValue("2338907623496");
   }
 
   private MockHttpServletRequest buildRequest(String pathInfo) {

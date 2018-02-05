@@ -25,6 +25,7 @@
     import com.coremedia.ecommerce.studio.model.CategoryImpl;
     import com.coremedia.ecommerce.studio.model.ContractImpl;
     import com.coremedia.ecommerce.studio.model.ContractsImpl;
+    import com.coremedia.ecommerce.studio.model.FacetsImpl;
     import com.coremedia.ecommerce.studio.model.MarketingImpl;
     import com.coremedia.ecommerce.studio.model.MarketingSpotImpl;
     import com.coremedia.ecommerce.studio.model.ProductImpl;
@@ -182,6 +183,7 @@
     <editor:RegisterRestResource beanClass="{WorkspacesImpl}"/>
     <editor:RegisterRestResource beanClass="{MarketingSpotImpl}"/>
     <editor:RegisterRestResource beanClass="{MarketingImpl}"/>
+    <editor:RegisterRestResource beanClass="{FacetsImpl}"/>
   </local:configuration>
 
 

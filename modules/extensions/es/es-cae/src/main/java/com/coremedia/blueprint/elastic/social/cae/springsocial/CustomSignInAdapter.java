@@ -10,10 +10,13 @@ import org.springframework.web.context.request.NativeWebRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static com.coremedia.blueprint.elastic.social.cae.springsocial.Requests.getServletRequest;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class CustomSignInAdapter implements SignInAdapter {
+
   private static final Logger LOG = getLogger(CustomSignInAdapter.class);
+
   private SignInAdapter delegate;
 
   public void setDelegate(SignInAdapter delegate) {
@@ -24,18 +27,22 @@ public class CustomSignInAdapter implements SignInAdapter {
   public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
     delegate.signIn(userId, connection, request);
 
-    HttpServletRequest httpServletRequest = request.getNativeRequest(HttpServletRequest.class);
+    HttpServletRequest httpServletRequest = getServletRequest(request);
     HttpSession session = httpServletRequest.getSession();
+
     String nextUrl = getAndRemoveAttribute(session, "nextUrl");
+
     if (SecurityContextHolder.getContext().getAuthentication() != null) {
       return removeContextPath(nextUrl, httpServletRequest);
     } else {
       session.setAttribute("providerLogin.messageKey", "error");
+
       String loginUrl = getAndRemoveAttribute(session, "loginUrl");
       if (StringUtils.isBlank(loginUrl)) {
         String registerUrl = getAndRemoveAttribute(session, "registerUrl");
         return appendParameter(removeContextPath(registerUrl, httpServletRequest), "next=" + nextUrl);
       }
+
       return appendParameter(removeContextPath(loginUrl, httpServletRequest), "next=" + nextUrl);
     }
   }

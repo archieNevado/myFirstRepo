@@ -15,7 +15,7 @@ public interface SemanticStrategy {
    * @param capId The capId that should be used to find suggestions for (this is not the node ref!!!)
    * @return The result items that are suggested to add to the node.
    */
-  Suggestions suggestions(Taxonomy taxonomy, String capId);
+  Suggestions suggestions(Taxonomy<?> taxonomy, String capId);
 
   /**
    * Returns the service id of this service.

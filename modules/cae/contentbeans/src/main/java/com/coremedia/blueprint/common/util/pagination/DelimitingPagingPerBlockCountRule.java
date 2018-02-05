@@ -65,10 +65,10 @@ class DelimitingPagingPerBlockCountRule implements PagingRule, DelimitingPagingR
 
     StringTokenizer tknzr = new StringTokenizer(classes, " ", false);
 
-    for (String delim1 : delims) {
-      while (tknzr.hasMoreTokens()) {
-
-        if (delim1.contentEquals(tknzr.nextToken())) {
+    while (tknzr.hasMoreTokens()) {
+      String token = tknzr.nextToken();
+      for (String delim1 : delims) {
+        if (delim1.contentEquals(token)) {
           return true;
         }
       }

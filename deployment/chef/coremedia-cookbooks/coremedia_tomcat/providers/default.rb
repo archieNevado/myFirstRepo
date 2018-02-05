@@ -49,6 +49,14 @@ action :install do
     to tomcat_dir
   end
 
+  execute "cleanup old tomcat installations for #{new_resource.name}" do
+    command "find #{new_resource.path} -type d -name \"apache-tomcat-*\" -not -name \"apache-tomcat-#{new_resource.version}\" -prune -exec rm -rf {} \\;"
+    user new_resource.user
+    group new_resource.group
+    new_resource.updated_by_last_action(false)
+    action new_resource.keep_old_instances ? :nothing : :run
+  end
+
   remote_file "#{new_resource.path}/current/lib/catalina-jmx-remote.jar" do
     source jmx_remote_url
     checksum new_resource.jmx_remote_jar_source_checksum unless new_resource.jmx_remote_jar_source_checksum.nil?

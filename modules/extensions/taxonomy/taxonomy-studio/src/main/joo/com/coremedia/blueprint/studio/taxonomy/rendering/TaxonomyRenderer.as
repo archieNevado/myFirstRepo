@@ -21,6 +21,8 @@ public class TaxonomyRenderer {
   public var componentId:String;
   public var nodes:Array;
 
+  private var renderControl:Boolean = true;
+
   public function TaxonomyRenderer(nodes:Array, componentId:String) {
     this.nodes = nodes;
     this.componentId = componentId;
@@ -53,6 +55,10 @@ public class TaxonomyRenderer {
 
   public function isScrollable():Boolean {
     return false;
+  }
+
+  public function setRenderControl(renderCtrl:Boolean):void {
+    this.renderControl = renderCtrl;
   }
 
   protected function getLeafName(node:TaxonomyNode):String {
@@ -186,7 +192,11 @@ public class TaxonomyRenderer {
     else {
       html += renderNodeName(node);
     }
-    html += renderPlusMinusControl(node, addButton);
+
+    if(renderControl) {
+      html += renderPlusMinusControl(node, addButton);
+    }
+
     html += '</span>';
     html += '</span>';
     return html;

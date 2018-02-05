@@ -55,5 +55,9 @@ public class CategoryImpl extends CatalogObjectImpl implements Category {
     return get(CatalogObjectPropertyNames.DOWNLOADS);
   }
 
+  public function getFacets():Facets {
+    return get(CatalogObjectPropertyNames.FACETS);
+  }
+
 }
 }

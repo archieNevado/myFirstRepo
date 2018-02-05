@@ -8,8 +8,8 @@
 
     <@bp.notification type="inactive" additionalClasses=["cm-form__notification"] attr={"data-cm-notification": '{"path": ""}'} />
 
-    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-    <input type="hidden" name="replyTo" value="" />
+    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+    <input type="hidden" name="replyTo" value="">
     <fieldset class="cm-form__fieldset cm-fieldset">
 
       <div class="cm-fieldset__item cm-field">
@@ -20,7 +20,7 @@
           <#list es.getReviewMaxRating()..1 as currentRating>
             <#assign radioAttr="" />
             <#assign radioId=bp.generateId("cm-review-rating-indicator-") />
-            <input name="rating" value="${currentRating}" id="${radioId}" type="radio"${radioAttr} /><label for="${radioId}" class="cm-rating__option cm-rating-indicator"></label>
+            <input name="rating" value="${currentRating}" id="${radioId}" type="radio"${radioAttr}><label for="${radioId}" class="cm-rating__option cm-rating-indicator"></label>
           </#list>
         </div>
       </div>
@@ -29,7 +29,7 @@
         <#assign idTitle=bp.generateId("cm-new-review__title-") />
         <@bp.notification type="inactive" additionalClasses=["cm-field__notification"] attr={"data-cm-notification": '{"path": "title"}'} />
         <label for="${idTitle}" class="cm-field__name"><@bp.message "reviewForm_label_title" /></label>
-        <input type="text" class="cm-field__value cm-textfield" name="title" id="${idTitle}" placeholder="${bp.getMessage("reviewForm_placeholder_title")}" />
+        <input type="text" class="cm-field__value cm-textfield" name="title" id="${idTitle}" placeholder="${bp.getMessage("reviewForm_placeholder_title")}">
       </div>
       <div class="cm-fieldset__item cm-field">
         <#assign idText=bp.generateId("cm-new-review__textarea-") />

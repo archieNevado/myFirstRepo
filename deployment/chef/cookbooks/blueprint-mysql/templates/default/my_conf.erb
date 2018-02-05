@@ -6,3 +6,6 @@ general-log = <%= @general_log ? '1' : '0' %>
 general_log_file = <%= @log_dir %>/mysql-general.log
 slow-query-log = <%= @slow_query_log ? '1' : '0' %>
 slow_query_log_file = <%= @log_dir %>/mysql-slowquery.log
+
+# avoid SSL Warning during startup
+skip_ssl

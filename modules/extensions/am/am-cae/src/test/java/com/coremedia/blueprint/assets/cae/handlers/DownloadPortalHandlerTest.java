@@ -160,15 +160,18 @@ public class DownloadPortalHandlerTest {
     when(contentRepository.getContent(eq(CATEGORY_CONTENT_ID + ""))).thenReturn(taxonomyContent);
     when(taxonomy.getContentId()).thenReturn(CATEGORY_CONTENT_ID);
     when(taxonomy.getContent()).thenReturn(taxonomyContent);
+    when(taxonomy.getContent().isInProduction()).thenReturn(true);
     when(contentBeanFactory.createBeanFor(eq(taxonomyContent))).thenReturn(taxonomy);
 
     when(contentRepository.getContent(eq(CATEGORY_CONTENT_ID_2 + ""))).thenReturn(taxonomyContent2);
     when(taxonomy2.getContentId()).thenReturn(CATEGORY_CONTENT_ID_2);
     when(taxonomy2.getContent()).thenReturn(taxonomyContent2);
+    when(taxonomy2.getContent().isInProduction()).thenReturn(true);
     when(contentBeanFactory.createBeanFor(eq(taxonomyContent2))).thenReturn(taxonomy2);
 
     when(asset.getContentId()).thenReturn(ASSET_CONTENT_ID);
     when(asset.getContent()).thenReturn(assetContent);
+    when(asset.getContent().isInProduction()).thenReturn(true);
     when(assetContent.getType()).thenReturn(assetContentType);
     when(assetContentType.isSubtypeOf(AMAsset.NAME)).thenReturn(true);
     when(contentRepository.getContent(eq(ASSET_CONTENT_ID + ""))).thenReturn(assetContent);

@@ -24,8 +24,8 @@
   <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix="cm-superhero" background=true/>
 
   <#if (self.teaserTitle?has_content || self.teaserText?has_content)>
-  <#-- with banderole -->
-    <div class="cm-superhero__banderole row">
+  <#-- with caption -->
+    <div class="cm-superhero__caption row">
       <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
         <#-- headline -->
         <h1 class="cm-superhero__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>

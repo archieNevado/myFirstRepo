@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="islast" type="java.lang.Boolean" -->
 
 <#assign cssClasses = cm.localParameter("cssClass", "") + cm.localParameter("islast", false)?then(" is-last", "") />
-<#assign link=cm.getLink(self.data!cm.UNDEFINED) />
+<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
 <div class="cm-claim thumbnail ${cssClasses}"<@cm.metadata self.content />>
   <#-- picture -->
@@ -35,7 +35,7 @@
     </@bp.optionalLink>
     <#-- teaser text, 3 lines ~ 120 chars -->
     <p class="cm-claim__text"<@cm.metadata "properties.teaserText" />>
-      <@cm.include self=self view="infos" /><br/>
+      <@cm.include self=self view="infos" /><br>
       <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "claim.max.length", 115)) />
     </p>
   </div>

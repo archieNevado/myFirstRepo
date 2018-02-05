@@ -30,6 +30,8 @@ import org.xml.sax.SAXException;
 
 import javax.activation.MimeTypeParseException;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -37,6 +39,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -463,7 +468,7 @@ public class ThemeImporterImpl implements ThemeImporter {
         return content;
       }
     } else {
-      String path = "external/" + getName(link) + "." + extension(link);
+      String path = "external/" + stringToDocumentName(link);
       // No corresponding theme internal resource, so this content is created
       // here when it occurs in a theme descriptor.
       return contentHelper.updateContent(contentType, normalize(baseFolder), path, codeProperties);
@@ -582,8 +587,21 @@ public class ThemeImporterImpl implements ThemeImporter {
       String path = matcher.group(CG_PATH);
       String suffix = matcher.group(CG_SUFFIX);
 
-      // replace url -> RichText (incl non-matching prefix)
-      String replacement = urlReplacement(uri, protocol, hostport, path, suffix, targetDocumentPath, contentHelper);
+      // Replace the "url(...)" by the according RichText snippet.
+      // If we don't understand the "url(...)" snippet, keep the original.
+      //
+      // Impl note: If "url(...)" contains nested parentheses like in
+      // "url("+i(181)+");", the regex terminates at the first closing ),
+      // i.e. in midst of the actual url value.  This works as long as
+      // #urlReplacement fails and we preserve the original text here.  If
+      // #urlReplacement ever succeeds in interpreting something like "+i(181",
+      // the '+")' would be lost here, leading to unexpected results.
+      String richtextifiedUrl = urlReplacement(uri, protocol, hostport, path, suffix, targetDocumentPath, contentHelper);
+      String replacement = richtextifiedUrl!=null ? richtextifiedUrl : XmlUtil5.escapeOrOmit(matcher.group(0));
+
+      // ... and append it to the result, incl the non-matching prefix.
+      // $s are magic to Matcher#appendReplacement, so we must escape them.
+      replacement = replacement.replace("$", "\\$");
       matcher.appendReplacement(appender, replacement);
 
       // extract the actual url replacement from the appendReplacement result
@@ -599,17 +617,24 @@ public class ThemeImporterImpl implements ThemeImporter {
     return result.toString();
   }
 
+  /**
+   * Try to interpret the given URL fragments and compose a suitable snippet
+   * for richtextified code.
+   *
+   * @return A richtext snippet that wraps the URL, or null if the URL looks meaningless.
+   */
+  @Nullable
   private String urlReplacement(String uri, String protocol, String hostport, String path, String suffix, String targetDocumentPath, ThemeImporterContentHelper contentHelper) {
     if (protocol == null && hostport == null) {
-      return toRichtextInternalLink(uri, path, targetDocumentPath, suffix, contentHelper);
+      return toRichtextInternalLink(path, targetDocumentPath, suffix, contentHelper);
     } else if (DATA_PROPERTY.equals(protocol)) {
-      return toRichtextPlain(protocol, path);
+      return null;
     } else {
       return toRichtextHref(uri, uri);
     }
   }
 
-  private String toRichtextInternalLink(String uri, String path, String targetDocumentPath, String suffix, ThemeImporterContentHelper contentHelper) {
+  private String toRichtextInternalLink(String path, String targetDocumentPath, String suffix, ThemeImporterContentHelper contentHelper) {
     try {
       boolean isSuitablePath = !StringUtils.isEmpty(path) && !path.startsWith("/");
       String linkPath = isSuitablePath ? PathUtil.concatPath(targetDocumentPath, path) : null;
@@ -627,7 +652,7 @@ public class ThemeImporterImpl implements ThemeImporter {
       } else {
         if (linkPath == null) {
           LOGGER.warn("Cannot handle invalid path '{}'", path);
-        } else if (linkPath.contains(" + ") || linkPath.contains("...")) {
+        } else if (linkPath.contains("+") || linkPath.contains("...")) {
           LOGGER.debug("Cannot resolve {}, looks like a pattern or expression", linkPath);
         } else {
           LOGGER.warn("Cannot resolve {}", linkPath);
@@ -636,12 +661,7 @@ public class ThemeImporterImpl implements ThemeImporter {
     } catch (Exception e) {
       LOGGER.error("Cannot handle {}, {}", path, targetDocumentPath, e);
     }
-    return toRichtextPlain(null, uri);
-  }
-
-  private String toRichtextPlain(String protocol, String uriMatch) {
-    String protocolPrefix = protocol == null ? "" : protocol + ":";
-    return "url(" + protocolPrefix + XmlUtil5.escapeOrOmit(uriMatch) + ")";
+    return null;
   }
 
   private String toRichtextImg(URI href) {
@@ -662,11 +682,57 @@ public class ThemeImporterImpl implements ThemeImporter {
     return slash > dot || dot < 0 || dot >= uri.length() ? "" : uri.substring(dot + 1);
   }
 
-  private static String getName(String uri) {
+  /**
+   * Convert a String into a valid CMS document name.
+   */
+  @VisibleForTesting
+  static String stringToDocumentName(@Nonnull String str) {
+    String hashStr = hashForUniqueDocumentName(str);
+
+    String name = str.trim();
+    name = name.replace("\\", "\\\\");
+    name = name.replace("|", "\\|");
+    name = name.replace('/', '|');
+    name = name.replace('.', '|');
+
+    // 233 chars (16 bit) is the limit of the contentserver. Do not increase!
+    int tooLong = name.length() - (233 - hashStr.length());
+    String postfix = tooLong <= 0 ? name : name.substring(tooLong);
+    // Make sure that you don't end up with half a UTF_16 char.
+    if (postfix.length() > 0 && Character.isLowSurrogate(postfix.charAt(0))) {
+      postfix = postfix.substring(1);
+    }
+
+    return hashStr + postfix;
+  }
+
+  private static String hashForUniqueDocumentName(String str) {
+    try {
+      // This hash is not a matter of security, but only of uniqueness.
+      // Therefore, MD5's 16 bytes should suffice.
+      byte[] md5s = MessageDigest.getInstance("MD5").digest(str.getBytes(StandardCharsets.UTF_8));
+      return DatatypeConverter.printHexBinary(md5s);
+    } catch (NoSuchAlgorithmException e) {
+      throw new IllegalStateException("Illegal JVM, MessageDigest is required to support MD5.", e);
+    }
+  }
+
+  /**
+   * Only for backward compatibility.
+   * <p>
+   * This method is buggy and works only for "nice" and "sufficiently unique"
+   * links that look pretty much like a file name, like
+   * http://example.org/path/mycode.js
+   * Otherwise it may fail with exceptions or may be not unique.
+   *
+   * @deprecated Use stringToDocumentName instead
+   */
+  @Deprecated
+  private static String legacyExternalLinkToDocumentName(String uri) {
     String name = uri;
     name = name.substring(name.lastIndexOf('/') + 1, name.length());
     name = name.substring(0, name.lastIndexOf('.'));
-    return name;
+    return name + "." + extension(uri);
   }
 
   private static String normalize(@Nonnull String folder) {

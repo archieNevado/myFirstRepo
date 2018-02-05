@@ -68,6 +68,7 @@ public class MetaDataDocumentFormBase extends PropertyFieldGroup {
 
   override protected function onDestroy():void {
     rawMetaDataExpression.removeChangeListener(transformRawData);
+    metaDataExpression.removeChangeListener(hideOrShow);
     super.onDestroy();
   }
 }

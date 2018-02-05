@@ -153,6 +153,7 @@ define :blueprint_tomcat_service, skip_lifecycle: false, base_service_name: nil 
   tomcat_shutdown_force = cm_tomcat_default(service_name, 'shutdown_force', base_service_name)
   tomcat_shutdown_wait = cm_tomcat_default(service_name, 'shutdown_wait', base_service_name)
   tomcat_clean_log_dir_on_start = cm_tomcat_default(service_name, 'clean_log_dir_on_start', base_service_name)
+  tomcat_keep_old_instances = cm_tomcat_default(service_name, 'keep_old_instances', base_service_name)
 
   webapp_group_id = node.deep_fetch('blueprint', 'webapps', service_name, 'group_id')
   webapp_group_id ||= node.deep_fetch('blueprint', 'webapps', base_service_name, 'group_id') if base_service_name
@@ -263,6 +264,7 @@ define :blueprint_tomcat_service, skip_lifecycle: false, base_service_name: nil 
     log_dir "#{node['blueprint']['log_dir']}/#{service_name}"
     context_config tomcat_context_config
     clean_log_dir_on_start tomcat_clean_log_dir_on_start
+    keep_old_instances tomcat_keep_old_instances
   end
 
   # download the webapp and outfit it with a context if desired.

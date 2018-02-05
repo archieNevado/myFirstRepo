@@ -3,13 +3,12 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
-import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.rest.linking.EntityResource;
 import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
@@ -22,8 +21,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
-
 /**
  * An abstract catalog object as a RESTful resource.
  */
@@ -35,7 +32,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   private static final String ID = "id";
   private static final String SITE_ID = "siteId";
-  protected static final String CATALOG_ALIAS = "catalogAlias";
+  private static final String CATALOG_ALIAS = "catalogAlias";
   private static final String WORKSPACE_ID = "workspaceId";
 
   private String id;
@@ -95,9 +92,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   @PathParam(CATALOG_ALIAS)
   public void setCatalogAlias(String catalogAliasValue) {
-    CatalogAlias.ofNullable(catalogAliasValue).ifPresent(catalogAlias -> {
-      this.catalogAlias = isDefaultCatalog(catalogAlias) ? DEFAULT_CATALOG_ALIAS : catalogAlias;
-    });
+    catalogAlias = CatalogAlias.ofNullable(catalogAliasValue).orElse(null);
   }
 
   public String getWorkspaceId() {
@@ -111,41 +106,29 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   @Nullable
   protected StoreContext getStoreContext() {
-    StoreContext storeContext = CurrentCommerceConnection.find()
-            .map(CommerceConnection::getStoreContext)
-            .map(StoreContext::getClone)
-            .orElse(null);
-
-    if (storeContext == null) {
+    CommerceConnection commerceConnection = CurrentCommerceConnection.find().orElse(null);
+    if (commerceConnection == null) {
       return null;
     }
 
-    storeContext.setWorkspaceId(workspaceId);
+    StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
+    StoreContext originalContext = commerceConnection.getStoreContext();
+
+    StoreContext clonedContext = storeContextProvider.cloneContext(originalContext);
+
+    clonedContext.setWorkspaceId(workspaceId);
     if (catalogAlias != null && catalogAliasTranslationService != null) {
       Optional<CatalogId> catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
-      storeContext.setCatalog(catalogAlias, catalogId.orElse(null));
+      clonedContext.setCatalog(catalogAlias, catalogId.orElse(null));
     }
-    storeContext.setSiteId(siteId);
-    return storeContext;
+    clonedContext.setSiteId(siteId);
+
+    return clonedContext;
   }
 
   @Nonnull
   protected CommerceConnection getConnection() {
     return CurrentCommerceConnection.get();
-  }
-
-  private static boolean isDefaultCatalog(CatalogAlias catalogAlias) {
-    if (catalogAlias.equals(DEFAULT_CATALOG_ALIAS)) {
-      return true;
-    }
-
-    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
-
-    CatalogService catalogService = commerceConnection.getCatalogService();
-    StoreContext storeContext = commerceConnection.getStoreContext();
-
-    Optional<Catalog> catalog = catalogService.getCatalog(catalogAlias, storeContext);
-    return catalog.isPresent() && catalog.get().isDefaultCatalog();
   }
 
   @Autowired

@@ -8,7 +8,6 @@
     <version>1-SNAPSHOT</version>
   </parent>
 
-
   <artifactId>cae-preview-webapp</artifactId>
   <packaging>war</packaging>
 
@@ -24,44 +23,9 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>cae-base-component</artifactId>
-      <version>${project.version}</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>logging-config</artifactId>
+      <artifactId>cae-preview-blueprint-component</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>preview-cae-extension-dependencies</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cae-preview-component</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!-- required for Tomcat7 -->
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-jasper</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -87,47 +51,10 @@
           </systemProperties>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <!--
-            build executable war that can be run like this:
-            JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
-
-            only set to 'true' if chef run won't fail on warning when unzipping the webapp
-          -->
-          <executable>false</executable>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
   <profiles>
-    <profile>
-      <id>turbojpeg</id>
-      <dependencies>
-        <dependency>
-          <groupId>com.coremedia.com.sun.media.imageio</groupId>
-          <artifactId>jai-imageio</artifactId>
-          <version>1.1</version>
-          <scope>runtime</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.coremedia.org.libjpegturbo</groupId>
-          <artifactId>turbojpeg-wrapper</artifactId>
-          <version>1.2.1.1</version>
-          <scope>runtime</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.coremedia.it.geosolutions.imageio-ext</groupId>
-          <artifactId>imageio-ext-turbojpeg</artifactId>
-          <version>1.1.10</version>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-
     <profile>
       <id>candy-preview</id>
       <build>

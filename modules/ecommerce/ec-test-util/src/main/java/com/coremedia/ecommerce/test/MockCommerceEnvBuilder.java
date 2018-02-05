@@ -1,8 +1,8 @@
 package com.coremedia.ecommerce.test;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
@@ -30,6 +30,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+/**
+ * @deprecated don't use, mock stuff yourself
+ */
+@Deprecated
 public class MockCommerceEnvBuilder {
 
   @Mock
@@ -94,13 +98,15 @@ public class MockCommerceEnvBuilder {
     storeContext.put(StoreContextImpl.CURRENCY, Currency.getInstance("USD"));
 
     when(storeContextProvider.findContextBySite(any())).thenReturn(storeContext);
+    when(storeContextProvider.buildContext(any())).thenReturn(new StoreContextBuilderImpl().from(storeContext));
+    when(storeContextProvider.cloneContext(any())).thenReturn(storeContext.getClone());
 
     UserContext userContext = UserContext.builder().build();
     when(userContextProvider.getCurrentContext()).thenReturn(userContext);
     when(userContextProvider.createContext(any())).thenReturn(userContext);
 
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
-    commerceConnection.setIdProvider(new BaseCommerceIdProvider(vendor));
+    commerceConnection.setIdProvider(TestVendors.getIdProvider(vendor));
     commerceConnection.setStoreContextProvider(storeContextProvider);
     commerceConnection.setUserContextProvider(userContextProvider);
     commerceConnection.setCatalogService(catalogService);

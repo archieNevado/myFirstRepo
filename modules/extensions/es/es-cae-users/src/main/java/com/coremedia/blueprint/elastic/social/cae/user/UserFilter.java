@@ -1,15 +1,16 @@
 package com.coremedia.blueprint.elastic.social.cae.user;
 
-import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
-import com.coremedia.cap.multisite.Site;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -24,21 +25,27 @@ public class UserFilter implements Filter {
 
   @Inject
   private CommunityUserService communityUserService;
+
   @Inject
   private ElasticSocialPlugin elasticSocialPlugin;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
+    // Nothing to do.
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+          throws IOException, ServletException {
     if (request instanceof HttpServletRequest) {
       HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
       CommunityUser communityUser = getLoggedInUser();
       if (communityUser != null) {
-        final boolean mayLogin = communityUser.isActivated() || communityUser.isActivatedAndRequiresModeration() || communityUser.isIgnored();
+        boolean mayLogin = communityUser.isActivated()
+                || communityUser.isActivatedAndRequiresModeration()
+                || communityUser.isIgnored();
+
         if (mayLogin && isFeedbackEnabled(request)) {
           UserContext.setUser(communityUser);
         } else {
@@ -47,6 +54,7 @@ public class UserFilter implements Filter {
         }
       }
     }
+
     try {
       chain.doFilter(request, response);
     } finally {
@@ -54,35 +62,45 @@ public class UserFilter implements Filter {
     }
   }
 
-  private boolean isFeedbackEnabled(ServletRequest request) {
-    Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
-    if(null != siteFromRequest) {
-      ElasticSocialConfiguration feedbackSettings = elasticSocialPlugin.getElasticSocialConfiguration(siteFromRequest);
-      return feedbackSettings.isFeedbackEnabled();
-    }
-    return true;
+  private boolean isFeedbackEnabled(@Nonnull ServletRequest request) {
+    return SiteHelper.findSite(request)
+            .map(elasticSocialPlugin::getElasticSocialConfiguration)
+            .map(ElasticSocialConfiguration::isFeedbackEnabled)
+            .orElse(true);
   }
 
   @Override
   public void destroy() {
+    // Nothing to do.
   }
 
+  @Nullable
   public CommunityUser getLoggedInUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return (authentication == null || authentication.getName().equals("anonymousUser")) ? null : getUser(authentication.getPrincipal());
+
+    if (authentication == null || authentication.getName().equals("anonymousUser")) {
+      return null;
+    }
+
+    return getUser(authentication.getPrincipal());
   }
 
+  @Nullable
   public CommunityUser getUser(Object principal) {
-    CommunityUser result = null;
     if (principal instanceof String) {
-      result = communityUserService.getUserByName((String) principal);
-      if (null == result) {
-        result = communityUserService.getUserByEmail((String) principal);
+      CommunityUser user = communityUserService.getUserByName((String) principal);
+      if (user != null) {
+        return user;
       }
-    } else if (principal instanceof UserPrincipal) {
-      UserPrincipal userPrincipal = (UserPrincipal) principal;
-      result = communityUserService.getUserById(userPrincipal.getUserId());
+
+      return communityUserService.getUserByEmail((String) principal);
     }
-    return result;
+
+    if (principal instanceof UserPrincipal) {
+      UserPrincipal userPrincipal = (UserPrincipal) principal;
+      return communityUserService.getUserById(userPrincipal.getUserId());
+    }
+
+    return null;
   }
 }

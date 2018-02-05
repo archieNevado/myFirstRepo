@@ -1,19 +1,29 @@
+<#ftl strip_whitespace=true>
+
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
+
 <#--
  * Renders an error page.
-
+ *
  * @param title Title of the error page
  * @param message Optional message to replace the default message
  * @param redirectUrl (optional) Optional redirection URL, must be HTML attribute escaped.
  * @nested (optional) nested content will be rendered inside the frame
- -->
+ * PRIVATE -->
 <#macro errorpage title message redirectUrl="/" language="en-US" icon="icon-compass">
   <#compress>
   <!DOCTYPE html>
   <html lang="${language}">
   <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <title>${title!"CoreMedia CMS - Error"}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
       html {
         height: 100%;
@@ -158,7 +168,7 @@
       ${title!""}
       </div>
       <div class="cm-errorbox__cause">
-      ${message}
+      ${message!""}
       </div>
       <#nested>
       <#if redirectUrl?has_content>

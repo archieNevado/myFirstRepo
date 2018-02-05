@@ -24,14 +24,14 @@
          <#if scalePicture>
            <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": false} />
          </#if>
-         />
+         >
   <#else>
     <div class="am-picture-box__picture ${classImage}"></div>
   </#if>
   <#if showBadge>
     <#-- document asset icon is default -->
     <#assign badgeIconModifier="am-icon--am-document-asset" />
-    <#assign assetTypeAsCSSClass=bp.asCSSClassName(am.getAssetType(self)) />
+    <#assign assetTypeAsCSSClass=bp.asCSSClassName(self.content.type.name!"") />
     <#if assetTypeAsCSSClass?has_content>
       <#assign badgeIconModifier="am-icon--" + assetTypeAsCSSClass />
     </#if>

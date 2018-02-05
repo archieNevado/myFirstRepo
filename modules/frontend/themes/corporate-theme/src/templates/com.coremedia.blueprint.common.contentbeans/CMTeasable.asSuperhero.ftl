@@ -11,8 +11,8 @@
   <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix="cm-superhero" background=true/>
 
   <#if (self.teaserTitle?has_content || self.teaserText?has_content)>
-    <#-- with banderole -->
-    <div class="cm-superhero__banderole row">
+    <#-- with caption -->
+    <div class="cm-superhero__caption row">
       <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
         <#-- headline -->
         <@bp.optionalLink href="${link}" attr={"target":target}>
@@ -23,14 +23,14 @@
           <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "superhero.max.length", 140)) />
         </p>
         <#-- custom call-to-action button -->
-        <@cm.include self=self view="_callToAction" params={"additionalClass": "cm-superhero__button cm-button--white "}/>
+        <@cm.include self=self view="_callToAction" params={
+          "additionalButtonClass": "cm-superhero__cta
+        "}/>
       </div>
     </div>
-  <#-- button without banderole -->
+  <#-- button without caption -->
   <#elseif link?has_content>
     <#-- custom call-to-action button -->
-    <div class="cm-superhero__cta">
-      <@cm.include self=self view="_callToAction" params={"additionalClass": "cm-button--white "}/>
-    </div>
+      <@cm.include self=self view="_callToAction" params={"additionalCLass": "cm-superhero__cta"}/>
   </#if>
 </div>

@@ -28,7 +28,7 @@
       <#if !isUserAnonymous && self.author.image?has_content>
         <#assign elasticSocialSettings=bp.setting(cmpage!cm.UNDEFINED, "elasticSocial")/>
         <#assign link=cm.getLink(self.author.image {"transform":true, "width":elasticSocialSettings.userImageThumbnailWidth!40?int, "height": elasticSocialSettings.userImageCommentThumbnailHeight!40?int})/>
-        <img src="${link}" class="cm-review__user-image"/>
+        <img src="${link}" class="cm-review__user-image">
       <#else>
         <div class="cm-review__user-image cm-review__user-image--default"></div>
       </#if>
@@ -41,8 +41,8 @@
             </#if>
             <div class="cm-rating__option cm-rating-indicator${classRatingIndicator}">${currentRating}</div>
           </#list>
-          <meta itemprop="value" content="${rating}" property="" />
-          <meta itemprop="best" content="${es.getReviewMaxRating()}" property="" />
+          <meta itemprop="value" content="${rating}" property="">
+          <meta itemprop="best" content="${es.getReviewMaxRating()}" property="">
         </span>
         <span class="cm-review__title" itemprop="summary">${title!""}</span>
       </div>

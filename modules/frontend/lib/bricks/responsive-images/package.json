@@ -4,10 +4,19 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
-    "@coremedia/js-basic": "file:../../js/basic",
-    "@coremedia/js-node-decoration-service": "file:../../js/node-decoration-service",
-    "@coremedia/js-responsive-images": "file:../../js/responsive-images",
-    "@coremedia/sass-utils": "file:../../sass/utils"
+    "@coremedia/js-basic": "^1.0.0",
+    "@coremedia/js-node-decoration-service": "^1.0.0",
+    "@coremedia/js-responsive-images": "^1.0.0",
+    "@coremedia/sass-utils": "^1.0.0"
   },
-  "main": "src/js/index.js"
+  "devDependencies": {
+    "jsdoc-to-markdown": "3.0.0"
+  },
+  "scripts": {
+    "apidoc": "jsdoc2md src/js/*.js > API.md"
+  },
+  "main": "src/js/index.js",
+  "coremedia": {
+    "type": "brick"
+  }
 }

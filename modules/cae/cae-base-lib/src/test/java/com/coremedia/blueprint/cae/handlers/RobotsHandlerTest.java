@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.base.links.impl.BaseUriPrepender;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.view.RobotsView;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
@@ -16,7 +15,6 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,6 +26,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,6 +56,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @ContextConfiguration(classes = RobotsHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 @DirtiesContext(classMode = AFTER_CLASS)
+@TestPropertySource(properties = "cae.is.standalone=false")
 public class RobotsHandlerTest {
 
   @Configuration
@@ -83,24 +83,6 @@ public class RobotsHandlerTest {
       return new XmlUapiConfig(CONTENT_REPOSITORY);
     }
 
-    @Bean
-    @Scope(SCOPE_SINGLETON)
-    public BeanPostProcessor disablePrependBaseUriForPrefixLinkPostProcessor() {
-      return new BeanPostProcessor() {
-        @Override
-        public Object postProcessBeforeInitialization(Object bean, String beanName) {
-          if (bean instanceof BaseUriPrepender) {
-            ((BaseUriPrepender) bean).setActive(false);
-          }
-          return bean;
-        }
-
-        @Override
-        public Object postProcessAfterInitialization(Object bean, String beanName) {
-          return bean;
-        }
-      };
-    }
   }
 
   private static final String SEGMENT_MEDIA = "media";

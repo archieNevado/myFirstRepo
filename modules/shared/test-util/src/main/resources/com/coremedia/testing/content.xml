@@ -151,16 +151,6 @@
           <markupProperty name="localSettings" url="16localSettings.xml" grammar="coremedia-struct-2008"/>
         </version>
       </document>
-      <document id="162" type="CMPicture" name="pictureWithMovedFocusArea">
-        <version number="1">
-          <markupProperty name="localSettings" url="162localSettings.xml" grammar="coremedia-struct-2008"/>
-        </version>
-      </document>
-      <document id="164" type="CMPicture" name="pictureWithMovedFocusAreaAndFocusPoint">
-        <version number="1">
-          <markupProperty name="localSettings" url="164localSettings.xml" grammar="coremedia-struct-2008"/>
-        </version>
-      </document>
       <document id="18" type="CMPicture" name="GIF">
         <version number="1">
           <blobProperty name="data" url="18data.gif" type="image/gif"/>
@@ -439,6 +429,7 @@
       <document id="88" name="Download" type="CMDownload">
         <version number="1">
           <blobProperty name="data" url="88data.jpg" type="image/jpeg"/>
+          <stringProperty name="filename" value="a-filename"/>
         </version>
       </document>
       <document id="90" name="Action" type="CMAction">
@@ -502,10 +493,8 @@
       <document id="150" type="CMQueryList" name="queryList">
         <version number="1">
           <stringProperty name="teaserTitle" value="teaserTitle"/>
-          <linkProperty name="items">
-            <link id="2"/>
-          </linkProperty>
           <markupProperty name="localSettings" url="150settings.xml" grammar="coremedia-struct-2008"/>
+          <markupProperty name="extendedItems" url="150extendedItems.xml" grammar="coremedia-struct-2008"/>
         </version>
       </document>
       <document id="110" type="CMHTML" name="html">
@@ -598,6 +587,58 @@
           <linkProperty name="pictures">
             <link id="20"/>
           </linkProperty>
+        </version>
+      </document>
+      <document id="160" type="CMTeaser" name="CMS-7649-teaser1">
+        <version number="1">
+          <linkProperty name="target">
+            <link id="4"/>
+          </linkProperty>
+        </version>
+      </document>
+      <document id="162" type="CMTeaser" name="CMS-7649-teaser2">
+        <version number="1">
+          <markupProperty name="localSettings" url="56settings.xml" grammar="coremedia-struct-2008"/>
+          <markupProperty name="targets" url="162targets.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <document id="164" type="CMTeaser" name="CMS-7649-teaser1">
+        <version number="1">
+          <markupProperty name="localSettings" url="164settings.xml" grammar="coremedia-struct-2008"/>
+          <linkProperty name="target">
+            <link id="144"/>
+          </linkProperty>
+        </version>
+      </document>
+      <document id="166" type="CMTeaser" name="CMS-7649-teaser1">
+        <version number="1">
+          <markupProperty name="localSettings" url="166settings.xml" grammar="coremedia-struct-2008"/>
+          <linkProperty name="target">
+            <link id="144"/>
+          </linkProperty>
+        </version>
+      </document>
+      <document id="168" type="CMTeaser" name="CMS-7649-teaser3">
+        <version number="1">
+          <markupProperty name="localSettings" url="56settings.xml" grammar="coremedia-struct-2008"/>
+          <markupProperty name="targets" url="168targets.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <document id="170" type="CMPicture" name="pictureWithMovedFocusArea">
+        <version number="1">
+          <markupProperty name="localSettings" url="170localSettings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <document id="172" type="CMPicture" name="pictureWithMovedFocusAreaAndFocusPoint">
+        <version number="1">
+          <markupProperty name="localSettings" url="172localSettings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <document id="174" type="CMQueryList" name="queryList">
+        <version number="1">
+          <stringProperty name="teaserTitle" value="teaserTitle"/>
+          <markupProperty name="localSettings" url="150settings.xml" grammar="coremedia-struct-2008"/>
+          <markupProperty name="extendedItems" url="174extendedItems.xml" grammar="coremedia-struct-2008"/>
         </version>
       </document>
     </folder>

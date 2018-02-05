@@ -19,6 +19,7 @@
     <module>blueprint-studio-theme</module>
     <module>controlroom-studio-plugin</module>
     <module>studio-app</module>
+    <module>studio-blueprint-component</module>
     <module>studio-webapp</module>
   </modules>
 

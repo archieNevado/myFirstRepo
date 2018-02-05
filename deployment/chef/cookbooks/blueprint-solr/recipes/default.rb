@@ -82,6 +82,7 @@ template '/etc/default/solr.in.sh' do
   group 'root'
   mode '0755'
   variables(
+    host_name: node['blueprint']['hostname'],
     solr_dir: solr_path,
     solr_home: node['blueprint']['solr']['solr_home'],
     solr_data_dir: node['blueprint']['solr']['solr_data_dir'],

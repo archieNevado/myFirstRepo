@@ -122,5 +122,12 @@
       <type>swc</type>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>validators-studio</artifactId>
+      <version>1-SNAPSHOT</version>
+      <type>swc</type>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -30,18 +30,24 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1710.1</blueprint-base.version>
-    <cms.version>1710.1</cms.version>
-    <personalization.version>1710.1</personalization.version>
-    <elastic.version>1710.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1710.1</studio.version>
-    <caetoolbox.version>1710.1</caetoolbox.version>
-    <livecontext.version>1710.1</livecontext.version>
-    <jangaroo.version>4.0.53</jangaroo.version>
+    <blueprint-base.version>1801.1</blueprint-base.version>
+    <cms.version>1801.1</cms.version>
+    <personalization.version>1801.1</personalization.version>
+    <elastic.version>1801.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1801.1</studio.version>
+    <caetoolbox.version>1801.1</caetoolbox.version>
+    <livecontext.version>1801.1</livecontext.version>
+    <jangaroo.version>4.0.55</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
-    <tomcat.version>7.0.79</tomcat.version>
+    <!--
+     | Version for WAR based deployment. Tomcat 7 and 8 are supported. Don't forget to set the Chef attributes in the
+     | Chef blueprint-tomcat cookbook accordingly
+    -->
+    <tomcat.version>7.0.82</tomcat.version>
+    <!-- Version for Maven tomcat7 plugin. Only Tomcat 7 is supported -->
+    <tomcat.maven.version>7.0.82</tomcat.maven.version>
     <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
@@ -57,6 +63,7 @@
     <content-management-server.host>${installation.host}</content-management-server.host>
     <workflow-server.host>${installation.host}</workflow-server.host>
     <master-live-server.host>${installation.host}</master-live-server.host>
+    <replication-live-server.host>${installation.host}</replication-live-server.host>
     <studio.host>${installation.host}</studio.host>
     <cae-preview.host>${installation.host}</cae-preview.host>
     <cae-live.host>${installation.host}</cae-live.host>
@@ -64,6 +71,7 @@
     <mongoDb.host>${installation.host}</mongoDb.host>
     <wcs.host>${installation.host}</wcs.host>
     <hybris.host>${installation.host}</hybris.host>
+    <sfcc.host>${installation.host}</sfcc.host>
     <proxy.host>${installation.host}</proxy.host>
 
     <!-- logback appender for maven tomcat plugin start -->
@@ -85,6 +93,7 @@
     <theme-importer.argument.folder>-Dthemes_folder=${project.build.directory}/themes</theme-importer.argument.folder>
     <theme-importer.argument.export-path>-Dexport_path=${project.build.directory}/content</theme-importer.argument.export-path>
     <theme-importer.argument.runner>com.coremedia.blueprint.themeimporter.client.ThemeImporterRunner</theme-importer.argument.runner>
+    <jooProxyPathSpec>/rest/*</jooProxyPathSpec>
   </properties>
 
   <profiles>
@@ -215,44 +224,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.apache.tomcat</groupId>
-        <artifactId>tomcat-coyote</artifactId>
-        <version>${tomcat.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.tomcat</groupId>
-        <artifactId>tomcat-catalina</artifactId>
-        <version>${tomcat.version}</version>
-      </dependency>
-
-      <!-- for spring boot -->
-      <dependency>
-        <groupId>org.apache.tomcat.embed</groupId>
-        <artifactId>tomcat-embed-core</artifactId>
-        <version>${tomcat.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.tomcat.embed</groupId>
-        <artifactId>tomcat-embed-el</artifactId>
-        <version>${tomcat.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.tomcat.embed</groupId>
-        <artifactId>tomcat-embed-logging-juli</artifactId>
-        <version>${tomcat.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.tomcat.embed</groupId>
-        <artifactId>tomcat-embed-websocket</artifactId>
-        <version>${tomcat.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.tomcat.embed</groupId>
-        <artifactId>tomcat-embed-jasper</artifactId>
-        <version>${tomcat.version}</version>
-      </dependency>
-
-      <dependency>
         <groupId>org.codehaus.janino</groupId>
         <artifactId>janino</artifactId>
         <version>2.6.1</version>
@@ -367,7 +338,8 @@
           <artifactId>frontend-maven-plugin</artifactId>
           <version>1.6</version>
           <configuration>
-            <nodeVersion>v6.11.5</nodeVersion><!-- LTS -->
+            <nodeVersion>v8.9.4</nodeVersion><!-- LTS -->
+            <yarnVersion>v1.3.2</yarnVersion>
           </configuration>
         </plugin>
         <plugin>
@@ -422,19 +394,6 @@
           <version>2.10.4</version>
           <configuration>
             <additionalparam>-Xdoclint:none</additionalparam>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.5.3</version>
-          <configuration>
-            <autoVersionSubmodules>true</autoVersionSubmodules>
-            <pushChanges>false</pushChanges>
-            <localCheckout>true</localCheckout>
-            <preparationGoals>clean verify</preparationGoals>
-            <releaseProfiles>postconfigure,repository-upload,rpm-release-repo</releaseProfiles>
-            <arguments>-Ppostconfigure</arguments>
           </configuration>
         </plugin>
         <plugin>
@@ -537,6 +496,7 @@
               <content-management-server.host>${content-management-server.host}</content-management-server.host>
               <workflow-server.host>${workflow-server.host}</workflow-server.host>
               <master-live-server.host>${master-live-server.host}</master-live-server.host>
+              <replication-live-server.host>${replication-live-server.host}</replication-live-server.host>
               <studio.host>${studio.host}</studio.host>
               <cae-preview.host>${cae-preview.host}</cae-preview.host>
               <cae-live.host>${cae-live.host}</cae-live.host>
@@ -544,6 +504,7 @@
               <mongoDb.host>${mongoDb.host}</mongoDb.host>
               <wcs.host>${wcs.host}</wcs.host>
               <hybris.host>${hybris.host}</hybris.host>
+              <sfcc.host>${sfcc.host}</sfcc.host>
               <proxy.host>${proxy.host}</proxy.host>
               <log.appender>${log.appender}</log.appender>
               <application.name>${project.build.finalName}</application.name>
@@ -558,121 +519,97 @@
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>org.apache.tomcat.embed</groupId>
-              <artifactId>tomcat-embed-core</artifactId>
-              <version>${tomcat.version}</version>
-            </dependency>
-            <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-util</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-coyote</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jdbc</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-dbcp</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-servlet-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jsp-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jasper</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-jasper-el</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-el-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-catalina</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-tribes</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-catalina-ha</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-annotations-api</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat</groupId>
               <artifactId>tomcat-juli</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
+            </dependency>
+            <!--These versions are correct here, even though the dependencies are "embed" ones-->
+            <dependency>
+              <groupId>org.apache.tomcat.embed</groupId>
+              <artifactId>tomcat-embed-core</artifactId>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat.embed</groupId>
               <artifactId>tomcat-embed-logging-juli</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
             <dependency>
               <groupId>org.apache.tomcat.embed</groupId>
               <artifactId>tomcat-embed-logging-log4j</artifactId>
-              <version>${tomcat.version}</version>
+              <version>${tomcat.maven.version}</version>
             </dependency>
           </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
-          <version>${spring.boot.version}</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>repackage</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <!--
-              build executable war that can be run like this:
-              JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
-              only set to 'true' if chef run won't fail on warning when unzipping the webapp
-            -->
-            <executable>false</executable>
-            <!--
-              common main class
-            -->
-            <mainClass>com.coremedia.springframework.web.SpringBootWebappConfiguration</mainClass>
-            <addResources>true</addResources>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -721,6 +658,9 @@
           <groupId>net.jangaroo</groupId>
           <artifactId>jangaroo-maven-plugin</artifactId>
           <version>${jangaroo.version}</version>
+          <configuration>
+            <jooProxyPathSpec>${jooProxyPathSpec}</jooProxyPathSpec>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>net.jangaroo</groupId>
@@ -806,6 +746,23 @@
                 <myCustomRule implementation="com.coremedia.maven.enforcer.OneRepoEnforcerRule"/>
               </rules>
               <fail>${coremedia.enforcer.fail}</fail>
+            </configuration>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>validate</phase>
+          </execution>
+          <execution>
+            <id>enforce-no-web-fragments</id>
+            <!-- web-fragments have been converted to java (spring) config -->
+            <configuration>
+              <rules>
+                <requireFilesDontExist>
+                  <files>
+                    <file>${project.basedir}/src/main/resources/META-INF/web-fragment.xml</file>
+                  </files>
+                </requireFilesDontExist>
+              </rules>
             </configuration>
             <goals>
               <goal>enforce</goal>

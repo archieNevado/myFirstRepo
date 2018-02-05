@@ -28,14 +28,14 @@ import responsiveImages from "@coremedia/js-responsive-images";
  *    "ratioWidth" : 2,
  *    "ratioHeight" : 1,
  *    "linksForWidth" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}
- *  }]" />
+ *  }]" >
  * ```
  *
  * Deprecated legacy format:
  * ```html
  * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="{
  *    "3x1" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"},
- *    "2x1" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}}" />
+ *    "2x1" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}}" >
  * ```
  */
 $.fn.responsiveImages = function () {

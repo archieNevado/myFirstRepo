@@ -1,7 +1,7 @@
 # Cookbook Name:: blueprint-mongodb
 # Recipe:: default
 #
-# Copyright (c) 2016-2017 Coremedia, All Rights Reserved.
+# Copyright (c) 2016-2018 Coremedia, All Rights Reserved.
 
 # -----------------------------------------------------------------------
 

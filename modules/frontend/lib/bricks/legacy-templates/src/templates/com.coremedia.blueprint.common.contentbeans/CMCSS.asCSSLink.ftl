@@ -10,7 +10,7 @@
 <#assign cssLink=cm.getLink(self)/>
 
 <#if self.ieExpression?has_content>
-  <!--[if ${self.ieExpression}]><link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />/><![endif]-->
+  <!--[if ${self.ieExpression}]><link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />><![endif]-->
 <#else>
-  <link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />/>
+  <link rel="stylesheet" href="${cssLink}"<@cm.metadata self.content />>
 </#if>

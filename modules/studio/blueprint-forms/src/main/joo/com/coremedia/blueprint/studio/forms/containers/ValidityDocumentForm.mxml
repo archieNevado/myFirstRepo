@@ -32,5 +32,9 @@
                                   propertyName="validTo"
                                   timeZoneHidden="false"/>
   </editor:items>
+  <!-- autolayout keeps validityForm from breaking when additional data is added to the documentForm, see CMS-9884 -->
+  <editor:layout>
+    <layout_Auto />
+  </editor:layout>
 
 </editor:PropertyFieldGroup>

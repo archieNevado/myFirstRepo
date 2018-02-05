@@ -1,7 +1,7 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##Corporate Extension
+## Corporate Extension
 
-###Description
+### Description
 
 Provides all classes, templates, test data etc. for the Brand Blueprint

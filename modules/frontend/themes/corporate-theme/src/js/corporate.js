@@ -3,7 +3,6 @@ import "imagesloaded/imagesloaded.pkgd.js";
 import $ from "jquery";
 import { debounce } from "@coremedia/js-utils";
 import * as logger from "@coremedia/js-logger";
-import * as nodeDecorationService from "@coremedia/js-node-decoration-service";
 
 /**
  * Decode hex strings back to normal
@@ -602,11 +601,6 @@ $(function () {
   const $document = $(document);
 
   logger.log("Corporate DOM RDY");
-
-  // append to dom ready (will be executed after all dom ready functions have finished)
-  $(function () {
-    nodeDecorationService.decorateNode(document);
-  });
 
   // remove the spinner and event listener, when images are loaded
   $(".cm-image--loading").each(function () {

@@ -22,7 +22,9 @@
     <module>cae-base-lib</module>
     <module>contentbeans</module>
     <module>cae-base-component</module>
+    <module>cae-live-blueprint-component</module>
     <module>cae-live-webapp</module>
+    <module>cae-preview-blueprint-component</module>
     <module>cae-preview-webapp</module>
     <module>cae-performance-test</module>
     <module>cae-integration-test</module>

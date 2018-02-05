@@ -5,7 +5,6 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,17 +21,6 @@ public class TaxonomyNodeList {
   public TaxonomyNodeList(List<TaxonomyNode> nodes) {
     super();
     setNodes(nodes);
-  }
-
-  public void removeNode(TaxonomyNode node) {
-    Iterator<TaxonomyNode> it = nodes.iterator();
-    while (it.hasNext()) {
-      TaxonomyNode next = it.next();
-      if (next.getRef().equals(node.getRef()) && next.getTaxonomyId().equals(node.getTaxonomyId())) {
-        it.remove();
-        break;
-      }
-    }
   }
 
   public void sortByName() {

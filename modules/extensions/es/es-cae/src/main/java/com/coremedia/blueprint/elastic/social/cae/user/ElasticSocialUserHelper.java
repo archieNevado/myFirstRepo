@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import static com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter.extractUuidFromGuid;
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 
 @Named
 public class ElasticSocialUserHelper {
@@ -49,7 +50,7 @@ public class ElasticSocialUserHelper {
       user = communityUserService.createAnonymousUser(userId);
     }
     user.save();
-    LOGGER.info("created new community user {}", user);
+    LOGGER.info(PERSONAL_DATA, "created new community user {}", user);
     return user;
   }
 

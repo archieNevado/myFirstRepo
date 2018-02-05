@@ -18,7 +18,6 @@
     <property name="interestsService" ref="interestsService"/>
   </bean>
 
-  <!-- expose initializer as bean for spring-boot integration -->
-  <bean class="com.coremedia.blueprint.personalization.EsP13nCaeWebComponentInitializer"/>
+  <bean class="com.coremedia.blueprint.personalization.EsP13nCaeConfiguration"/>
 
 </beans>

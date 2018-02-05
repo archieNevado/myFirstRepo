@@ -81,6 +81,8 @@
         <ref bean="conversionFailedExceptionHandler"/>
         <ref bean="accessDeniedExceptionHandler"/>
         <ref bean="illegalArgumentExceptionHandler"/>
+        <ref bean="illegalStateExceptionHandler"/>
+        <ref bean="missingServletRequestParameterExceptionHandler"/>
       </util:list>
     </property>
   </bean>
@@ -89,7 +91,22 @@
         class="com.coremedia.blueprint.cae.exception.handler.CyclicDependencyExceptionHandler"/>
 
   <bean id="illegalArgumentExceptionHandler"
-        class="com.coremedia.blueprint.cae.exception.handler.IllegalArgumentExceptionHandler"/>
+        class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">
+    <property name="exceptionType" value="#{T(java.lang.IllegalArgumentException)}"/>
+    <property name="statusCode" value="404"/>
+  </bean>
+
+  <bean id="illegalStateExceptionHandler"
+        class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">
+    <property name="exceptionType" value="#{T(java.lang.IllegalStateException)}"/>
+    <property name="statusCode" value="400"/>
+  </bean>
+
+  <bean id="missingServletRequestParameterExceptionHandler"
+        class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">
+    <property name="exceptionType" value="#{T(org.springframework.web.bind.MissingServletRequestParameterException)}"/>
+    <property name="statusCode" value="400"/>
+  </bean>
 
   <bean id="invalidContentException"
         class="com.coremedia.blueprint.cae.exception.handler.InvalidContentExceptionHandler"/>
@@ -103,9 +120,24 @@
   </bean>
 
   <bean id="accessDeniedExceptionHandler"
-        class="com.coremedia.blueprint.cae.exception.handler.AccessDeniedExceptionHandler">
+        class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">
     <description>
       Handles org.springframework.security.access.AccessDeniedException by responding with FORBIDDEN (403).
     </description>
+    <property name="exceptionType" value="#{T(org.springframework.security.access.AccessDeniedException)}"/>
+    <property name="statusCode" value="403"/>
   </bean>
+
+  <bean id="repositoryNotAvailableExceptionHandler"
+        class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">
+    <property name="exceptionType" value="#{T(com.coremedia.cap.common.RepositoryNotAvailableException)}"/>
+    <property name="statusCode" value="503"/>
+  </bean>
+
+  <bean id="capObjectDestroyedExceptionHandler"
+        class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">
+    <property name="exceptionType" value="#{T(com.coremedia.cap.common.CapObjectDestroyedException)}"/>
+    <property name="statusCode" value="410"/>
+  </bean>
+
 </beans>

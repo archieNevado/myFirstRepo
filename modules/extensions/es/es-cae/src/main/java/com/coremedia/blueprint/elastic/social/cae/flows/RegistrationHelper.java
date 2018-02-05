@@ -16,6 +16,7 @@ import com.coremedia.elastic.core.api.blobs.BlobService;
 import com.coremedia.elastic.core.api.settings.Settings;
 import com.coremedia.elastic.core.api.users.DuplicateEmailException;
 import com.coremedia.elastic.core.api.users.DuplicateNameException;
+import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.mail.MailException;
 import com.coremedia.elastic.social.api.registration.RegistrationService;
 import com.coremedia.elastic.social.api.registration.TokenExpiredException;
@@ -23,6 +24,7 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.SocialAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -37,6 +39,7 @@ import org.springframework.webflow.core.collection.SharedAttributeMap;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,22 +50,31 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addErrorMessage;
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addErrorMessageWithSource;
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addInfoMessage;
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
+import static com.coremedia.common.logging.BaseMarker.UNCLASSIFIED_PERSONAL_DATA;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 /**
  * A helper used by the registration web flow
  */
 @Named
 public class RegistrationHelper {
+
   private static final Logger LOG = getLogger(RegistrationHelper.class);
+
   private static final String PROFILE_IMAGE_ID = "profileImage";
+
   public static final String ELASTIC_AUTOMATIC_USER_ACTIVATION = "elastic.automatic.user.activation";
 
   @Inject
@@ -82,7 +94,7 @@ public class RegistrationHelper {
 
   @Inject
   private ElasticSocialPlugin elasticSocialPlugin;
-  
+
   @Inject
   private SpringSocialConfiguration springSocialConfiguration;
 
@@ -91,12 +103,15 @@ public class RegistrationHelper {
   @Inject
   @Named("httpClientAutoRedirect")
   private HttpClient httpClient;
+
   private boolean automaticActivationEnabled;
 
   @PostConstruct
   void initialize() {
     automaticActivationEnabled = settings.getBoolean(ELASTIC_AUTOMATIC_USER_ACTIVATION, false);
-    providerSignInUtils = new ProviderSignInUtils(springSocialConfiguration.connectionFactoryLocator(), springSocialConfiguration.usersConnectionRepository());
+
+    providerSignInUtils = new ProviderSignInUtils(springSocialConfiguration.connectionFactoryLocator(),
+            springSocialConfiguration.usersConnectionRepository());
   }
 
   public void preProcess(Registration registration, RequestContext context) {
@@ -116,16 +131,17 @@ public class RegistrationHelper {
       if (imageUrl != null) {
         getProfileImage(connection, context, registration, userProfile.getUsername(), imageUrl);
       }
-      /** CMS-2581 */
+
+      // CMS-2581
       if (StringUtils.isNotBlank(email) && communityUserService.getUserByEmail(email) != null) {
         addErrorMessageWithSource(context, "registration.emailAddress.notAvailable", "emailAddress");
       }
+
       if (StringUtils.isNotBlank(userName) && communityUserService.getUserByName(userName) != null) {
         addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_USERNAME_NOT_AVAILABLE, "username");
       }
-    }
-    else if(UserContext.getUser() != null) {
-      //the user may already exists during a dual registration
+    } else if (UserContext.getUser() != null) {
+      // The user may already exist during a dual registration.
       CommunityUser user = UserContext.getUser();
       registration.setUsername(user.getName());
       registration.setGivenname(user.getGivenName());
@@ -134,80 +150,86 @@ public class RegistrationHelper {
     }
   }
 
-  private void getProfileImage(Connection<?> connection, RequestContext context, Registration registration, String userName, String imageUrl) {
+  private void getProfileImage(Connection<?> connection, RequestContext context, Registration registration,
+                               String userName, String imageUrl) {
     try {
       HttpGet request = new HttpGet(new URI(imageUrl));
-      final HttpResponse response = httpClient.execute(request);
+      HttpResponse response = httpClient.execute(request);
       try {
-        if (org.apache.http.HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
-          Blob profileImage = blobService.put(response.getEntity().getContent(), response.getEntity().getContentType().getValue(), userName);
+        if (response.getStatusLine().getStatusCode() == org.apache.http.HttpStatus.SC_OK) {
+          HttpEntity entity = response.getEntity();
+          Blob profileImage = blobService.put(entity.getContent(), entity.getContentType().getValue(), userName);
           registration.setProfileImage(new BlobRefImpl(profileImage.getId()));
         }
-      } finally{
+      } finally {
         request.releaseConnection();
       }
-    } catch (URISyntaxException e) {
+    } catch (URISyntaxException | IOException e) {
       addErrorMessage(context, "registration.imageFetch.error", connection.getKey().getProviderId());
-      LOG.error("error while retrieving profile image from " + imageUrl, e);
-    } catch (IOException e) {
-      addErrorMessage(context, "registration.imageFetch.error", connection.getKey().getProviderId());
-      LOG.error("error while retrieving profile image from " + imageUrl, e);
+      LOG.error(UNCLASSIFIED_PERSONAL_DATA, "error while retrieving profile image from {}", imageUrl, e);
     }
   }
 
   /**
    * Register a new user.
    *
-   * @param registration the flow model
-   * @param context      the calling flow's {@link RequestContext}
-   * @param userProfileImage         the user's profile image
+   * @param registration         the flow model
+   * @param context              the calling flow's {@link RequestContext}
+   * @param userProfileImage     the user's profile image
    * @param additionalProperties additional user properties
    * @return true if registering the user succeeded, false otherwise.
    */
-  public CommunityUser register(Registration registration, RequestContext context, CommonsMultipartFile userProfileImage, Map<String, Object> additionalProperties) {
+  public CommunityUser register(Registration registration, RequestContext context,
+                                CommonsMultipartFile userProfileImage, Map<String, Object> additionalProperties) {
     if (context.getMessageContext().hasErrorMessages()) {
       return null;
     }
+
     try {
       Map<String, Object> userProperties = new HashMap<>();
-      if(additionalProperties != null) {
+
+      if (additionalProperties != null) {
         userProperties.putAll(additionalProperties);
       }
+
       userProperties.put("givenName", registration.getGivenname());
       userProperties.put("surName", registration.getSurname());
       if (registration.getProfileImage() != null && !registration.isDeleteProfileImage()) {
         userProperties.put("image", blobService.get(registration.getProfileImage().getId()));
       }
 
-      Site siteFromRequest = SiteHelper.getSiteFromRequest((ServletRequest) (context.getExternalContext().getNativeRequest()));
-      if (siteFromRequest != null) {
-        userProperties.put("site", siteFromRequest);
-      }
+      ServletRequest servletRequest = (ServletRequest) context.getExternalContext().getNativeRequest();
+      Optional<Site> siteFromRequest = SiteHelper.findSite(servletRequest);
+
+      siteFromRequest.ifPresent(site -> userProperties.put("site", site));
+
+      Locale locale = siteFromRequest
+              .map(Site::getLocale)
+              .orElseGet(() -> context.getExternalContext().getLocale());
 
       TimeZone timeZone = null;
       if (StringUtils.isNotBlank(registration.getTimeZoneId())) {
         timeZone = TimeZone.getTimeZone(registration.getTimeZoneId());
       }
 
-      CommunityUser user = registrationService.register(registration.getUsername(),
-              registration.getPassword(),
-              registration.getEmailAddress(),
-              siteFromRequest != null ? siteFromRequest.getLocale() : context.getExternalContext().getLocale(),
-              timeZone,
-              userProperties);
+      CommunityUser user = registrationService.register(registration.getUsername(), registration.getPassword(),
+              registration.getEmailAddress(), locale, timeZone, userProperties);
+
       saveProfileImage(context, userProfileImage, user);
       providerSignInUtils.doPostSignUp(user.getId(), getRequestAttributes(context));
+
       if (isAutomaticActivationEnabled(context)) {
-        LOG.info("Automatically activate user '{}'", registration.getUsername());
+        LOG.info(PERSONAL_DATA, "Automatically activate user '{}'", registration.getUsername());
         activate(user.getProperty("token", String.class), context);
       }
+
       return user;
     } catch (DuplicateEmailException e) {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_EMAIL_ADDRESS_NOT_AVAILABLE, "emailAddress");
     } catch (DuplicateNameException e) {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_USERNAME_NOT_AVAILABLE, "username");
     } catch (MailException e) {
-      LOG.warn("Exception during Registration",e);
+      LOG.warn(UNCLASSIFIED_PERSONAL_DATA, "Exception during Registration", e);
       addErrorMessage(context, WebflowMessageKeys.REGISTRATION_ACTIVATION_MESSAGE_ERROR);
     }
     return null;
@@ -225,24 +247,30 @@ public class RegistrationHelper {
     return register(registration, context, file, new HashMap<String, Object>()) != null;
   }
 
-  private boolean isAutomaticActivationEnabled(RequestContext context) {
+  private boolean isAutomaticActivationEnabled(@Nonnull RequestContext context) {
     RequestAttributes requestAttributes = getRequestAttributes(context);
-    if(Arrays.asList(requestAttributes.getAttributeNames(RequestAttributes.SCOPE_REQUEST)).contains(ELASTIC_AUTOMATIC_USER_ACTIVATION)) {
-      return Boolean.valueOf(requestAttributes.getAttribute(ELASTIC_AUTOMATIC_USER_ACTIVATION, RequestAttributes.SCOPE_REQUEST) + "");
+    List<String> scopeAttributeNames = Arrays.asList(requestAttributes.getAttributeNames(SCOPE_REQUEST));
+
+    if (scopeAttributeNames.contains(ELASTIC_AUTOMATIC_USER_ACTIVATION)) {
+      Object attributeValue = requestAttributes.getAttribute(ELASTIC_AUTOMATIC_USER_ACTIVATION, SCOPE_REQUEST);
+      return Boolean.valueOf(attributeValue + "");
     }
+
     return automaticActivationEnabled;
   }
 
-  private void saveProfileImage(RequestContext context, CommonsMultipartFile file, CommunityUser user) {
+  private void saveProfileImage(@Nonnull RequestContext context, CommonsMultipartFile file,
+                                @Nonnull CommunityUser user) {
     if (file != null && file.getSize() > 0) {
+      ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(context);
 
-      Page page = RequestAttributeConstants.getPage((HttpServletRequest) context.getExternalContext().getNativeRequest());
-      ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin.getElasticSocialConfiguration(page);
-
-      if (file.getSize() > elasticSocialConfiguration.getMaxImageFileSize()) {
-        addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_IMAGE_FILE_TOO_BIG_ERROR, PROFILE_IMAGE_ID, ImageHelper.getBytesAsKBString(elasticSocialConfiguration.getMaxImageFileSize()));
+      int maxImageFileSize = elasticSocialConfiguration.getMaxImageFileSize();
+      if (file.getSize() > maxImageFileSize) {
+        addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_IMAGE_FILE_TOO_BIG_ERROR, PROFILE_IMAGE_ID,
+                ImageHelper.getBytesAsKBString(maxImageFileSize));
       } else if (!ImageHelper.isSupportedMimeType(file.getContentType())) {
-        addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_IMAGE_FILE_UNSUPPORTED_CONTENT_TYPE, PROFILE_IMAGE_ID, ImageHelper.getSupportedMimeTypesString());
+        addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_IMAGE_FILE_UNSUPPORTED_CONTENT_TYPE,
+                PROFILE_IMAGE_ID, ImageHelper.getSupportedMimeTypesString());
       } else {
         try {
           user.setImage(blobService.put(file.getInputStream(), file.getContentType(), file.getOriginalFilename()));
@@ -251,7 +279,6 @@ public class RegistrationHelper {
           addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_IMAGE_FILE_ERROR, PROFILE_IMAGE_ID);
         }
       }
-
     }
   }
 
@@ -262,19 +289,22 @@ public class RegistrationHelper {
    * @param context       the executing flow's {@link RequestContext}
    * @return true if the activation succeeded, false otherwise
    */
-  public boolean activate(String activationKey, RequestContext context) {
+  public boolean activate(String activationKey, @Nonnull RequestContext context) {
     try {
       CommunityUser user = registrationService.getUserByToken(activationKey);
 
       RequestContext requestContext = RequestContextHolder.getRequestContext();
-      Page page = RequestAttributeConstants.getPage((HttpServletRequest) requestContext.getExternalContext().getNativeRequest());
-      ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin.getElasticSocialConfiguration(page);
-      boolean success = registrationService.activateRegistration(activationKey, elasticSocialConfiguration.getUserModerationType());
+      ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(requestContext);
+      ModerationType userModerationType = elasticSocialConfiguration.getUserModerationType();
+
+      boolean success = registrationService.activateRegistration(activationKey, userModerationType);
+
       if (!success) {
         addErrorMessage(context, WebflowMessageKeys.ACTIVATE_REGISTRATION_REGISTRATION_KEY_NOT_FOUND);
         return false;
       }
-      if (elasticSocialConfiguration.getUserModerationType() == PRE_MODERATION) {
+
+      if (userModerationType == PRE_MODERATION) {
         addInfoMessage(context, WebflowMessageKeys.ACTIVATE_REGISTRATION_SUCCESS_PREMODERATION_REQUIRED);
       } else {
         addInfoMessage(context, WebflowMessageKeys.ACTIVATE_REGISTRATION_SUCCESS);
@@ -293,24 +323,38 @@ public class RegistrationHelper {
    *
    * @param context the executing flow's {@link RequestContext}
    */
-  public void redirectLoggedInUserToHomePage(RequestContext context) {
+  public void redirectLoggedInUserToHomePage(@Nonnull RequestContext context) {
     if (UserContext.getUser() != null) {
       context.getExternalContext().requestExternalRedirect("contextRelative:");
     }
   }
 
-  public static RequestAttributes getRequestAttributes(RequestContext context) {
-    return new ServletRequestAttributes((HttpServletRequest) context.getExternalContext().getNativeRequest());
+  @Nonnull
+  public static RequestAttributes getRequestAttributes(@Nonnull RequestContext context) {
+    HttpServletRequest servletRequest = getServletRequest(context);
+    return new ServletRequestAttributes(servletRequest);
   }
 
-  public void postProcessProviderRegistration(RequestContext context) {
+  public void postProcessProviderRegistration(@Nonnull RequestContext context) {
     if (context.getRequestParameters().contains("error")) {
       addErrorMessage(context, WebflowMessageKeys.REGISTRATION_PROVIDER_ERROR);
     }
+
     SharedAttributeMap sessionMap = context.getExternalContext().getSessionMap();
     String messageKey = (String) sessionMap.remove("providerLogin.messageKey");
     if (messageKey != null) {
       addErrorMessage(context, WebflowMessageKeys.REGISTRATION_ACCOUNT_DEACTIVATED_ERROR);
     }
+  }
+
+  @Nonnull
+  private ElasticSocialConfiguration getElasticSocialConfiguration(@Nonnull RequestContext context) {
+    HttpServletRequest servletRequest = getServletRequest(context);
+    Page page = RequestAttributeConstants.getPage(servletRequest);
+    return elasticSocialPlugin.getElasticSocialConfiguration(page);
+  }
+
+  private static HttpServletRequest getServletRequest(@Nonnull RequestContext context) {
+    return (HttpServletRequest) context.getExternalContext().getNativeRequest();
   }
 }

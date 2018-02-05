@@ -17,6 +17,7 @@
 
   <modules>
     <module>validators-studio-lib</module>
+    <module>validators-studio</module>
   </modules>
 
 </project>

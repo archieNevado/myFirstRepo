@@ -8,7 +8,7 @@
   <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": ""}>
     <#-- picture -->
     <#if self.picture?has_content>
-      <#if hasVideo> <!-- include a wrapper for positioning if image and video are present -->
+      <#if hasVideo> <#-- include a wrapper for positioning if image and video are present -->
         <div class="cm-medialist__wrapper">
       </#if>
       <@cm.include self=self.picture params={
@@ -24,7 +24,7 @@
     </#if>
 
     <#-- play overlay icon-->
-    <@cm.include self=self view="_playButton" params={"additionalClass": "cm-medialist"}/>
+    <@cm.include self=self view="_playButton" params={"blockClass": "cm-medialist"}/>
 
     <#-- caption -->
     <div class="cm-medialist__caption">
