@@ -23,7 +23,7 @@ public abstract class AbstractHybrisDocumentCacheKey<T extends AbstractHybrisDoc
                                  StoreContext storeContext,
                                  String configKey, CommerceCache commerceCache) {
     super(CommerceIdFormatterHelper.format(id), storeContext, configKey, commerceCache);
-    if (!HybrisCommerceIdProvider.HYBRIS_VENDOR_PREFIX.equals(id.getVendor())) {
+    if (!HybrisCommerceIdProvider.isHybrisId(id)) {
       throw new InvalidIdException(id + " is not a hybris id.");
     }
     this.commerceId = id;

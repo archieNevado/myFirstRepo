@@ -7,7 +7,6 @@
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <BooleanProperty Name="enableRetinaImages">false</BooleanProperty>
-<IntProperty Name="maxPreviewImageWidth">400</IntProperty>
 <StructProperty Name="responsiveImageSettings">
 <Struct>
 <StructProperty Name="portrait_ratio20x31">

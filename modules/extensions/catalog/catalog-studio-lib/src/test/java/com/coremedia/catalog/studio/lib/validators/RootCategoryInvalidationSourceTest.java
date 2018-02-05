@@ -25,10 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -49,7 +46,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @WebAppConfiguration
@@ -63,6 +59,11 @@ public class RootCategoryInvalidationSourceTest {
   private SitesService sitesService;
   @Inject
   private RootCategoryInvalidationSource testling;
+  @Inject
+  private Cache cache;
+
+  @MockBean
+  private Linker linker;
 
   private Site site;
   private ContentType cmCategory;
@@ -72,6 +73,10 @@ public class RootCategoryInvalidationSourceTest {
 
   @Before
   public void setup() {
+    configureLinker();
+
+    cache.setCapacity(Object.class.getName(), 100);
+
     envBuilder = MockCommerceEnvBuilder.create();
     envBuilder.setupEnv();
 
@@ -82,6 +87,18 @@ public class RootCategoryInvalidationSourceTest {
             .orElseThrow(() -> new IllegalStateException("Site with ID 'theSiteId' is missing."));
     initialRootDocumentVersion = site.getSiteRootDocument().getCheckedInVersion();
     rootCategory = createAndConfigureRootCategory("rootCategory");
+  }
+
+  private void configureLinker() {
+    doAnswer(invocationOnMock -> {
+      Object entity = invocationOnMock.getArguments()[0];
+      if(entity instanceof Category) {
+        Category category = (Category) entity;
+        String format = CommerceIdFormatterHelper.format(category.getId());
+        return new URI(format);
+      }
+      return null;
+    }).when(linker).link(any(Category.class));
   }
 
   Content createAndConfigureRootCategory(String name) {
@@ -187,42 +204,6 @@ public class RootCategoryInvalidationSourceTest {
       RootCategoryInvalidationSource rootCategoryInvalidationSource = new RootCategoryInvalidationSource();
       rootCategoryInvalidationSource.setCapacity(3);
       return rootCategoryInvalidationSource;
-    }
-
-    @Bean
-    Linker linker() {
-      Linker linker = mock(Linker.class);
-      doAnswer(new Answer() {
-        @Override
-        public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-          Object entity = invocationOnMock.getArguments()[0];
-          if(entity instanceof Category) {
-            Category category = (Category) entity;
-            String format = CommerceIdFormatterHelper.format(category.getId());
-            return new URI(format);
-          }
-          return null;
-        }
-      }).when(linker).link(any(Category.class));
-      return linker;
-    }
-
-    @Bean
-    static BeanPostProcessor cacheCapacityConfigurer() {
-      return new BeanPostProcessor() {
-        @Override
-        public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-          return bean;
-        }
-
-        @Override
-        public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-          if(bean instanceof Cache) {
-            ((Cache)bean).setCapacity(Object.class.getName(), 100);
-          }
-          return bean;
-        }
-      };
     }
 
   }

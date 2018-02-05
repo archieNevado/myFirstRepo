@@ -3,14 +3,14 @@
 <#-- @ftlvariable name="liveContextLoginFreemarkerFacade" type="com.coremedia.livecontext.web.taglib.LiveContextLoginFreemarkerFacade" -->
 <#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
 
-<#macro getLoginLink linkClass="">
-  <#local cssClass=""/>
-  <#if linkClass?has_content>
-    <#local cssClass="class=\"" + linkClass + "\""/>
-  </#if>
-  <a id="cm-login" ${cssClass} data-loginstatus="${liveContextLoginFreemarkerFacade.getStatusUrl()}" href="${liveContextLoginFreemarkerFacade.getLoginFormUrl()}" style="display: none" title="Login">Login</a>
-  <a id="cm-logout" ${cssClass} data-loginstatus="${liveContextLoginFreemarkerFacade.getStatusUrl()}" href="${liveContextLoginFreemarkerFacade.getLogoutUrl()}" style="display: none" title="Logout">Logout</a>
-</#macro>
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
+
 
 <#--
  * Renders an addToCart button
@@ -49,7 +49,7 @@
     </#if>
   </#if>
 
-  <#local attr=bp.extendSequenceInMap(attr, "classes", buttonClasses) />
+  <#local attr=bp._extendSequenceInMap(attr, "classes", buttonClasses) />
 
   <#local link="" />
   <#if (withLink?has_content && ((!alwaysClickable && !hasSingleSKU) || !enableShopNow))>
@@ -67,14 +67,6 @@
   <#return liveContextFreemarkerFacade.createProductInSite(product)/>
 </#function>
 
-<#function fragmentContext>
-  <#return liveContextFreemarkerFacade.fragmentContext()>
-</#function>
-
-<#function getSecureScheme>
-  <#return liveContextFreemarkerFacade.getSecureScheme() />
-</#function>
-
 <#function previewMetaData>
   <#return liveContextFreemarkerFacade.getPreviewMetadata()>
 </#function>
@@ -83,9 +75,6 @@
   <#return liveContextFreemarkerFacade.isAugmentedContent()>
 </#function>
 
-<#function fragmentHighlightingMetaData placement>
-  <#return blueprintFreemarkerFacade.getPlacementHighlightingMetaData(placement)>
-</#function>
 
 <#-- Returns name of eCommerce Vendor like IBM or SAP Hybris -->
 <#function getVendorName>
@@ -113,3 +102,31 @@
   <#return liveContextLoginFreemarkerFacade.getLogoutUrl()>
 </#function>
 
+
+
+<#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
+
+<#-- DEPRECATED, use bp.getPlacementHighlightingMetaData instead -->
+<#function fragmentHighlightingMetaData placement>
+  <#return blueprintFreemarkerFacade.getPlacementHighlightingMetaData(placement)>
+</#function>
+
+<#-- UNUSED -->
+<#function fragmentContext>
+  <#return liveContextFreemarkerFacade.fragmentContext()>
+</#function>
+
+<#-- DEPRECATED -->
+<#function getSecureScheme>
+  <#return liveContextFreemarkerFacade.getSecureScheme() />
+</#function>
+
+<#-- DEPRECATED, UNUSED -->
+<#macro getLoginLink linkClass="">
+  <#local cssClass=""/>
+  <#if linkClass?has_content>
+    <#local cssClass="class=\"" + linkClass + "\""/>
+  </#if>
+  <a id="cm-login" ${cssClass} data-loginstatus="${liveContextLoginFreemarkerFacade.getStatusUrl()}" href="${liveContextLoginFreemarkerFacade.getLoginFormUrl()}" style="display: none" title="Login">Login</a>
+  <a id="cm-logout" ${cssClass} data-loginstatus="${liveContextLoginFreemarkerFacade.getStatusUrl()}" href="${liveContextLoginFreemarkerFacade.getLogoutUrl()}" style="display: none" title="Logout">Logout</a>
+</#macro>

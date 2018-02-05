@@ -27,7 +27,6 @@
   <import resource="classpath:META-INF/coremedia/livecontext-contentbeans.xml"/>
   <import resource="classpath:META-INF/coremedia/livecontext-navigation.xml"/>
 
-  <!-- expose initializer as bean for spring-boot integration -->
-  <bean class="com.coremedia.livecontext.web.LcCaeWebApplicationInitializer"/>
+  <bean id="fragmentContextProvider" class="com.coremedia.livecontext.fragment.FragmentContextProvider"/>
 
 </beans>

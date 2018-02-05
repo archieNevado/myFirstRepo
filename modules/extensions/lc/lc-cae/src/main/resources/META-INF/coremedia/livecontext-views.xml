@@ -2,8 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
   <description>
     View registration.
@@ -38,11 +37,6 @@
   </bean>
 
   <bean id="liveContextLoginFreemarkerFacade" class="com.coremedia.livecontext.web.taglib.LiveContextLoginFreemarkerFacade">
-    <constructor-arg index="0" name="urlProviderByVendor" ref="liveContextLoginUrlProviderByVendor"/>
   </bean>
-
-  <util:map id="liveContextLoginUrlProviderByVendor"
-            key-type="java.lang.String"
-            value-type="com.coremedia.livecontext.web.taglib.LiveContextLoginUrlsProvider"/>
 
 </beans>

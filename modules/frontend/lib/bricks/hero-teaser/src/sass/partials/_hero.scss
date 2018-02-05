@@ -19,12 +19,19 @@
     @include dimmer($cm-hero-dimmer-opacity);
   }
 
-  &__banderole,
-  &__cta {
-    @include banderole($cm-hero-banderole-bottom);
+  &__caption {
+    @include caption($cm-hero-caption-bottom);
+    padding: 0 8%;
+    // disable any pointer events, so e.g. when the overlay is placed over a link, the link can be clicked
+    pointer-events: none;
   }
 
-  &__button,
+  &__cta > .cm-cta-button {
+    // make ctas clickable again
+    pointer-events: auto;
+  }
+
+  &__cta,
   &__text,
   &__headline {
     margin-top: 0;

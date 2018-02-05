@@ -7,5 +7,5 @@
 <ieExpression></ieExpression>
 <include>
 </include>
-<dataUrl>//{hybris.host}/yacceleratorstorefront/_ui/responsive/common/js/jquery-2.1.1.min.js</dataUrl>
+<dataUrl>//{hybris.host}/yacceleratorstorefront/_ui/responsive/common/js/jquery-3.2.1.min.js</dataUrl>
 </CMJavaScript>

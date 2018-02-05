@@ -47,12 +47,13 @@
                               showThumbnails="true"
                               selectedValuesExpression="{getSelectedExpression()}"
                               hideDropArea="true"
-                              readOnlyValueExpression="{ValueExpressionFactory.createFromValue(true)}">
+                              readOnlyValueExpression="{getReadOnlyVE()}">
       <editor:linkListWrapper>
         <local:CatalogAssetsLinkListWrapper bindTo="{config.bindTo}"
                                             linksVE="{config.bindTo.extendBy(config.propertyName)}"
                                             assetContentTypes="{config.assetContentTypes}"
-                                            maxCardinality="{config.maxCardinality}"/>
+                                            maxCardinality="{config.maxCardinality}"
+                                            readOnlyVE="{getReadOnlyVE()}"/>
       </editor:linkListWrapper>
       <editor:tbar>
         <Toolbar itemId="catalogAssetsToolbar" ui="{ToolbarSkin.FIELD.getSkin()}">

@@ -9,6 +9,7 @@
   <component class="com.coremedia.livecontext.studio.action.MetadataToEntitiesActionAdapter"/>
   <component class="com.coremedia.livecontext.studio.action.OpenCreateExternalPageDialogAction"/>
   <component class="com.coremedia.livecontext.studio.action.SearchProductVariantsAction"/>
+  <component class="com.coremedia.livecontext.studio.components.CommercePricesPropertyFieldGroup"/>
   <component class="com.coremedia.livecontext.studio.components.CommerceWorkspaceSelector"/>
   <component class="com.coremedia.livecontext.studio.components.ProductAttributeLabel"/>
   <component class="com.coremedia.livecontext.studio.components.SelectSubCategoriesRadioGroup"/>

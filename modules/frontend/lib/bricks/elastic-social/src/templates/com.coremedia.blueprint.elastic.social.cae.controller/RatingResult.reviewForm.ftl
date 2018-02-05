@@ -7,8 +7,8 @@
 
     <@bp.notification type="inactive" text="" dismissable=false additionalClasses=["cm-form__notification"] attr={"data-cm-notification": '{"path": ""}'} />
 
-    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-    <input type="hidden" name="replyTo" value="" />
+    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+    <input type="hidden" name="replyTo" value="">
     <fieldset class="cm-form__fieldset cm-fieldset">
 
       <div class="cm-fieldset__item cm-field">
@@ -19,7 +19,7 @@
           <#list es.getReviewMaxRating()..1 as currentRating>
             <#assign radioAttr="" />
             <#assign radioId=bp.generateId("cm-review-rating-indicator-") />
-            <input name="rating" value="${currentRating}" id="${radioId}" type="radio"${radioAttr} /><label for="${radioId}" class="cm-rating__option cm-rating-indicator"></label>
+            <input name="rating" value="${currentRating}" id="${radioId}" type="radio"${radioAttr}><label for="${radioId}" class="cm-rating__option cm-rating-indicator"></label>
           </#list>
         </fieldset>
       </div>

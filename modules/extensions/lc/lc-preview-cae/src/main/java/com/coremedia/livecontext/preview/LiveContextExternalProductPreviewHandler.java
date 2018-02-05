@@ -12,6 +12,7 @@ import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public class LiveContextExternalProductPreviewHandler extends LiveContextPageHan
   @SuppressWarnings("unused")
   @Link(type = LiveContextExternalProduct.class)
   public Object buildLinkForExternalProduct(LiveContextExternalProduct externalProduct, String viewName,
-                                            Map<String, Object> linkParameters) {
+                                            Map<String, Object> linkParameters, HttpServletRequest request) {
     Optional<StoreContext> storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
     if (!storeContext.isPresent()) {
       // not responsible
@@ -44,7 +45,7 @@ public class LiveContextExternalProductPreviewHandler extends LiveContextPageHan
       return null;
     }
 
-    return buildCommerceLinkFor(product, linkParameters);
+    return buildCommerceLinkFor(product, linkParameters, request);
   }
 
   private boolean useCommerceProductLinks(Site site) {

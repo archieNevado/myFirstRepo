@@ -245,31 +245,11 @@ public class TaxonomyNode {
   }
 
   /**
-   * Moves the node to the target node.
-   * @param node The node to move.
-   * @param target The target the node should be moved to.
-   * @param callback The callback passing the updated node.
-   */
-  public function moveTo(targetRef:String, callback:Function):void {
-    var url:String = "taxonomies/move?" + toNodeQuery() + '&' + Ext.urlEncode({targetNodeRef:targetRef});
-    executeNodeOperation(url, callback);
-  }
-
-  /**
    * Creates a new taxonomy node, using the given parent for type and parent.
    * @param callback
    */
   public function createChild(callback:Function):void {
     var url:String = "taxonomies/createChild?" + toNodeQuery() + "&" + Ext.urlEncode({defaultName:ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_default_name')});
-    executeNodeOperation(url, callback);
-  }
-
-  /**
-   * Deletes this node, the callback is parameterized with the parent node.
-   * @param callback
-   */
-  public function deleteNode(callback:Function):void {
-    var url:String = "taxonomies/delete?" + toNodeQuery();
     executeNodeOperation(url, callback);
   }
 

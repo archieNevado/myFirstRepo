@@ -7,7 +7,7 @@
 <#assign hasImage=self.picture?has_content />
 <#assign hasEvenIndex=(index % 2 == 0) />
 <#assign additionalVariantCssClass="" />
-<#assign additionalButtonCssClass="" />
+<#assign additionalButtonCssClass="cm-button " />
 <#assign additionalNoImageCssClass="" />
 <#assign additionalImgCssClass=""/>
 <#assign additionalTextCssClass=""/>

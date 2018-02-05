@@ -1,10 +1,12 @@
 package com.coremedia.livecontext.ecommerce.hybris;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -102,5 +104,17 @@ public class StoreContextProviderMock implements StoreContextProvider {
     }
 
     return context;
+  }
+
+  @Nonnull
+  @Override
+  public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
+    return new StoreContextBuilderImpl().from(source);
+  }
+
+  @Nonnull
+  @Override
+  public StoreContext cloneContext(@Nonnull StoreContext source) {
+    return source.getClone();
   }
 }

@@ -71,7 +71,6 @@ public interface CMChannel extends CMContext, KnowsVanityUrls {
    * Returns the value of the document property {@link #HEADER}.
    *
    * @return a list of {@link CMLinkable} objects
-   * @cm.template.api
    */
   List<? extends Linkable> getHeader();
 
@@ -84,7 +83,6 @@ public interface CMChannel extends CMContext, KnowsVanityUrls {
    * Returns the value of the document property {@link #FOOTER}.
    *
    * @return a list of {@link CMLinkable} objects
-   * @cm.template.api
    */
   List<? extends Linkable> getFooter();
 

@@ -14,10 +14,11 @@ public class PasteKeywordActionBase extends Action {
 
   private var selectionExpression:ValueExpression;
   private var clipboardValueExpression:ValueExpression;
+
   internal native function get items():Array;
 
   public function PasteKeywordActionBase(config:PasteKeywordAction = null) {
-    config.handler = pasteNode;
+    config.handler = pasteNodes;
     config.text = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_paste_button_label');
     config.disabled = true;
     super(config);
@@ -33,23 +34,42 @@ public class PasteKeywordActionBase extends Action {
   }
 
   private function updateDisabled():void {
-    var selection:TaxonomyNode = selectionExpression.getValue();
-    setDisabled(!selection ||
-      !clipboardValueExpression.getValue() ||
-      (selection.getTaxonomyId() !== clipboardValueExpression.getValue().getTaxonomyId()) ||
-      clipboardValueExpression.getValue().getRef() === selection.getRef());
+    var selection:Array = selectionExpression.getValue();
+    var disabled:Boolean = !clipboardValueExpression.getValue() || clipboardValueExpression.getValue().length === 0;
+
+    for each(var node:TaxonomyNode in selection) {
+      if (isNotPasteable(node)) {
+        disabled = true;
+        break;
+      }
+
+    }
+    setDisabled(disabled);
   }
 
+  private function isNotPasteable(node:TaxonomyNode):Boolean {
+    if (clipboardValueExpression.getValue()) {
+      for each(var clipboardNode:TaxonomyNode in clipboardValueExpression.getValue()) {
+        if (clipboardNode.getRef() === node.getRef()) {
+          return true;
+        }
+        if (clipboardNode.getTaxonomyId() !== node.getTaxonomyId()) {
+          return true
+        }
+      }
+    }
+    return false;
+  }
 
   /**
    * Copies the cutted node as a child of the selected node.
    */
-  protected function pasteNode():void {
-    var targetNode:TaxonomyNode = selectionExpression.getValue();
-    var sourceNode:TaxonomyNode = clipboardValueExpression.getValue();
-    if (sourceNode && targetNode) {
+  protected function pasteNodes():void {
+    var targetNodes:Array = selectionExpression.getValue();
+    var sourceNodes:Array = clipboardValueExpression.getValue();
+    if (sourceNodes.length > 0 && targetNodes.length > 0) {
       var taxonomyExplorer:TaxonomyExplorerPanel = Ext.getCmp('taxonomyExplorerPanel') as TaxonomyExplorerPanel;
-      taxonomyExplorer.moveNode(sourceNode, targetNode);
+      taxonomyExplorer.moveNodes(sourceNodes, targetNodes[0]);
     }
   }
 

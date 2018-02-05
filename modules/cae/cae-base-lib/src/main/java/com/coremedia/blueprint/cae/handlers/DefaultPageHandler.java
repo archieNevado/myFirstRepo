@@ -80,8 +80,11 @@ public class DefaultPageHandler extends PageHandlerBase {
     }
 
     // not a vanity or channel url, try to resolve URL for CMLinkable
-    if (linkable == null || !validSegment(linkable, vanity)) {
+    if (linkable == null) {
       return HandlerHelper.notFound();
+    }
+    if (!validSegment(linkable, vanity)) {
+      return HandlerHelper.redirectTo(linkable, view);
     }
     Navigation navigation = navigationResolver.getNavigation(linkable, navigationPath);
     if (navigation == null) {

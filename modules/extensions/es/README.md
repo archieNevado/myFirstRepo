@@ -1,8 +1,8 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##Elastic Social Extension
+## Elastic Social Extension
 
-###Description
+### Description
 
 Extensions which integrates CoreMedia Elastic Social into CoreMedia Blueprint.
 
@@ -16,6 +16,6 @@ Wich features amongst others:
 * User Management
 * etc.
 
-###Documentation
+### Documentation
 
 See the "Elastic Social" chapter of the CoreMedia Developer Manual.

@@ -25,10 +25,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,11 +41,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptySet;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,7 +94,7 @@ public class LcStudioValidatorsXmlRepoTest {
 
   Iterable<Issue> validate(int contentId) {
     Content content = contentRepository.getContent(String.valueOf(contentId));
-    IssuesImpl issues = new IssuesImpl<>(content, Collections.<String>emptySet());
+    IssuesImpl issues = new IssuesImpl<>(content, emptySet());
 
     testling.validate(content, issues);
 
@@ -110,7 +108,7 @@ public class LcStudioValidatorsXmlRepoTest {
 
   Iterable<Issue> validate(CapTypeValidator validator, int contentId, @Nullable String propertyName) {
     Content content = contentRepository.getContent(String.valueOf(contentId));
-    IssuesImpl issues = new IssuesImpl<>(content, Collections.<String>emptySet());
+    IssuesImpl issues = new IssuesImpl<>(content, emptySet());
 
     validator.validate(content, issues);
 
@@ -263,15 +261,12 @@ public class LcStudioValidatorsXmlRepoTest {
     storeContext.setWorkspaceId(WORKSPACE_1);
 
     when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
-            .then(new Answer<CommerceBean>() {
-              @Override
-              public CommerceBean answer(InvocationOnMock invocationOnMock) throws Throwable {
-                if (WORKSPACE_1.equals(((StoreContext) invocationOnMock.getArguments()[1]).getWorkspaceId())) {
-                  return mock(CommerceBean.class);
-                }
-
-                return null;
+            .then((Answer<CommerceBean>) invocationOnMock -> {
+              if (WORKSPACE_1.equals(((StoreContext) invocationOnMock.getArguments()[1]).getWorkspaceId())) {
+                return mock(CommerceBean.class);
               }
+
+              return null;
             });
 
     // validate
@@ -308,16 +303,10 @@ public class LcStudioValidatorsXmlRepoTest {
     }
 
     @Bean
-    @Inject
     public Properties jerseyParameters(ApplicationContext applicationContext) throws IOException {
       Resource resource = applicationContext.getResource("classpath:/com/coremedia/rest/jerseyParameters.properties");
       EncodedResource encodedResource = new EncodedResource(resource);
       return PropertiesLoaderUtils.loadProperties(encodedResource);
-    }
-
-    @Bean
-    public static BeanPostProcessor commerceConnectionInitializerCustomizer() {
-      return new CommerceConnectionInitializerReplacer();
     }
   }
 

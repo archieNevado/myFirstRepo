@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/brick-bootstrap": "file:../bootstrap"
+    "@coremedia/brick-bootstrap": "^1.0.0"
   },
-  "main": "src/js/index.js"
+  "main": "src/js/index.js",
+  "coremedia": {
+    "type": "brick"
+  }
 }

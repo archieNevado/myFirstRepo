@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.elastic.tenant;
 
-import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.core.api.tenant.TenantService;
@@ -61,10 +61,15 @@ public class TenantFilter implements Filter {
           return null;
         }
       }
-      Site site = SiteHelper.getSiteFromRequest(request);
-      if (site != null) {
-        Content siteRootDocument = site.getSiteRootDocument();
-        ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin.getElasticSocialConfiguration(siteRootDocument);
+
+      Content siteRootDocument = SiteHelper.findSite(request)
+              .map(Site::getSiteRootDocument)
+              .orElse(null);
+
+      if (siteRootDocument != null) {
+        ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin
+                .getElasticSocialConfiguration(siteRootDocument);
+
         String tenantName = elasticSocialConfiguration.getTenant();
         if (tenantName != null) {
           LOG.debug("tenant for request {} is {}", toString(request), tenantName);

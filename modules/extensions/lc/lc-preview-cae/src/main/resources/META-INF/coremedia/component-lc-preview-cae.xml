@@ -23,7 +23,6 @@
     <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
   </bean>
 
-  <!-- expose initializer as bean for spring-boot integration -->
-  <bean class="com.coremedia.livecontext.preview.LcPreviewCaeWebApplicationInitializer"/>
+  <bean class="com.coremedia.livecontext.preview.LiveContextPreviewCaeConfiguration"/>
 
 </beans>

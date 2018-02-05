@@ -14,6 +14,7 @@
 @import "variables/images";
 @import "variables/hero";
 @import "variables/elastic-social";
+@import "variables/quickinfo";
 @import "variables/square";
 @import "variables/tags";
 @import "variables/video";
@@ -56,6 +57,7 @@
 @import "partials/360-spinner";
 @import "partials/grid";
 @import "partials/container";
+@import "partials/cta"; // load before buttons, so button classes can be used to override colors in content...
 @import "partials/buttons";
 @import "partials/images";
 @import "partials/fonts";
@@ -71,6 +73,7 @@
 @import "partials/helpers";
 @import "partials/hero";
 @import "partials/medialist";
+@import "partials/quickinfo";
 @import "partials/placeholder";
 @import "partials/search";
 @import "partials/square";
@@ -80,5 +83,4 @@
 @import "partials/teaser";
 @import "partials/text";
 @import "partials/video";
-@import "partials/imagemap";
 @import "partials/print";

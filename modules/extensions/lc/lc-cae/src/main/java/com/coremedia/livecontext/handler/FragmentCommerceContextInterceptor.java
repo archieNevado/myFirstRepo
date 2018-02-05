@@ -2,7 +2,6 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
-import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.cap.multisite.Site;
@@ -21,6 +20,7 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Splitter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -49,6 +49,7 @@ import static java.util.stream.Collectors.toList;
 public class FragmentCommerceContextInterceptor extends AbstractCommerceContextInterceptor {
 
   private static final Logger LOG = LoggerFactory.getLogger(FragmentCommerceContextInterceptor.class);
+
   private static final long MILLISECONDS_PER_MINUTE = 60 * 1000L;
 
   private LiveContextContextAccessor fragmentContextAccessor;
@@ -64,7 +65,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   private String contextNameUserId = "wc.user.id";
   private String contextNameUserName = "wc.user.loginid";
   private String contextNameContractIds = "wc.preview.contractIds";
-  private String contextNameUserGroupIds = "wc.user.membergroupids"; //TODO: mbi
+  private String contextNameUserGroupIds = "wc.user.membergroupids";
 
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
@@ -90,7 +91,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
       if (isPreview()) {
         Context fragmentContext = LiveContextContextHelper.fetchContext(request);
         if (fragmentContext != null) {
-          initStoreContextPreview(fragmentContext, storeContext, connection.get(), request);
+          initStoreContextPreview(fragmentContext, storeContext, request);
         }
       }
     }
@@ -116,7 +117,6 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     userContext = userContextBuilder.build();
     commerceConnection.setUserContext(userContext);
 
-    //TODO: mbi
     findStringValue(fragmentContext, contextNameUserGroupIds).ifPresent(storeContext::setUserSegments);
 
     if (contractsProcessingEnabled) {
@@ -129,7 +129,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   @Nullable
   protected Site getSite(@Nonnull HttpServletRequest request, String normalizedPath) {
     FragmentParameters parameters = FragmentContextProvider.getFragmentContext(request).getParameters();
-    return liveContextSiteResolver.findSiteFor(parameters);
+    return parameters != null ? liveContextSiteResolver.findSiteFor(parameters) : null;
   }
 
   @Override
@@ -207,9 +207,9 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   // --- internal ---------------------------------------------------
 
   private void initStoreContextPreview(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
-                                       @Nonnull CommerceConnection connection, @Nonnull HttpServletRequest request) {
+                                       @Nonnull HttpServletRequest request) {
     initStoreContextUserSegments(fragmentContext, storeContext);
-    initStoreContextPreviewMode(fragmentContext, storeContext, connection, request);
+    initStoreContextPreviewMode(fragmentContext, storeContext, request);
     initStoreContextWorkspaceId(fragmentContext, storeContext);
   }
 
@@ -224,48 +224,46 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   }
 
   private void initStoreContextPreviewMode(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
-                                           @Nonnull CommerceConnection connection, @Nonnull HttpServletRequest request) {
-    if (!isStudioPreviewRequest()) {
+                                           @Nonnull HttpServletRequest request) {
+    if (!isStudioPreviewRequest(request)) {
       return;
     }
-    initStoreContextPreviewDate(fragmentContext, storeContext, connection, request);
+    initStoreContextPreviewDate(fragmentContext, storeContext, request);
   }
 
   @VisibleForTesting
-  boolean isStudioPreviewRequest() {
-    return LiveContextPageHandlerBase.isStudioPreviewRequest();
+  boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+    return LiveContextPageHandlerBase.isStudioPreviewRequest(request);
   }
 
   private void initStoreContextPreviewDate(@Nonnull Context fragmentContext, @Nonnull StoreContext storeContext,
-                                           @Nonnull CommerceConnection connection, @Nonnull HttpServletRequest request) {
-    Calendar calendar = createPreviewCalendar(fragmentContext, connection);
+                                           @Nonnull HttpServletRequest request) {
+    Calendar calendar = createPreviewCalendar(fragmentContext);
     if (calendar != null) {
       storeContext.setPreviewDate(convertToPreviewDateRequestParameterFormat(calendar));
       request.setAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE, calendar);
     }
 
-    //TODO: mbi
     findStringValue(fragmentContext, contextNamePreviewUserGroup)
             .ifPresent(storeContext::setUserSegments);
   }
 
-  private Calendar createPreviewCalendar(@Nonnull Context fragmentContext, @Nonnull CommerceConnection connection) {
+  private Calendar createPreviewCalendar(@Nonnull Context fragmentContext) {
     String timestamp = findStringValue(fragmentContext, contextNameTimestamp).orElse(null);
     if (timestamp == null) {
       return null;
     }
 
-    //TODO mbi vendor specific krempel
     long timestampMillis;
-    if ("IBM".equals(connection.getVendorName())) {
+    if (NumberUtils.isNumber(timestamp)) {
+      timestampMillis = Long.valueOf(timestamp);
+    } else {
       try {
         timestampMillis = timestampToMillis(timestamp);
       } catch (IllegalArgumentException e) {
         LOG.warn("Cannot convert timestamp \"{}\", ignore", timestamp, e);
         return null;
       }
-    } else {
-      timestampMillis = Long.valueOf(timestamp);
     }
 
     Calendar calendar = Calendar.getInstance();

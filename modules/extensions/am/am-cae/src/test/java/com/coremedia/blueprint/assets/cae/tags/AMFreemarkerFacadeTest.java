@@ -16,6 +16,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.inject.Inject;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -26,6 +28,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AMUtils.class, SiteHelper.class, FreemarkerUtils.class})
 public class AMFreemarkerFacadeTest {
+
   @Inject
   private MockHttpServletRequest request;
 
@@ -39,7 +42,7 @@ public class AMFreemarkerFacadeTest {
     mockStatic(AMUtils.class);
     mockStatic(FreemarkerUtils.class);
     when(FreemarkerUtils.getCurrentRequest()).thenReturn(request);
-    when(SiteHelper.getSiteFromRequest(request)).thenReturn(site);
+    when(SiteHelper.findSite(request)).thenReturn(Optional.of(site));
     when(AMUtils.getDownloadPortalRootDocument(settingsService, site)).thenReturn(content);
 
     AMFreemarkerFacade facade = new AMFreemarkerFacade();
@@ -52,7 +55,7 @@ public class AMFreemarkerFacadeTest {
     mockStatic(SiteHelper.class);
     mockStatic(FreemarkerUtils.class);
     when(FreemarkerUtils.getCurrentRequest()).thenReturn(request);
-    when(SiteHelper.getSiteFromRequest(request)).thenReturn(null);
+    when(SiteHelper.findSite(request)).thenReturn(Optional.empty());
     AMFreemarkerFacade facade = new AMFreemarkerFacade();
     assertFalse(facade.hasDownloadPortal());
   }

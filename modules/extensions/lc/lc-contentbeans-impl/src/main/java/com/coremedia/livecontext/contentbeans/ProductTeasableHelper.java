@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.cap.multisite.Site;
@@ -16,6 +16,7 @@ import com.coremedia.xml.Markup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +35,7 @@ public class ProductTeasableHelper {
   private LiveContextNavigationFactory liveContextNavigationFactory;
   private SitesService sitesService;
   private SettingsService settingsService;
-
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   /**
    * Returns the underlying Product in this content's site.
@@ -80,11 +81,19 @@ public class ProductTeasableHelper {
       return null;
     }
 
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(contentBean.getContent());
+
+    if (!commerceConnection.isPresent()) {
+      return null;
+    }
+
+    CommerceConnection connection = commerceConnection.get();
+
+    StoreContext storeContext = connection.getStoreContext();
+    CommerceId commerceId = productIdOptional.get();
+
     try {
-      CommerceConnection commerceConnection = CurrentCommerceConnection.get();
-      StoreContext storeContext = commerceConnection.getStoreContextProvider().findContextByContent(contentBean.getContent());
-      CommerceId commerceId = productIdOptional.get();
-      return commerceConnection.getCatalogService().withStoreContext(storeContext).findProductById(commerceId, storeContext);
+      return connection.getCatalogService().findProductById(commerceId, storeContext);
     } catch (CommerceException e) {
       LOG.warn("Could not retrieve product for ProductTeaser {}.", this, e);
       return null;
@@ -127,7 +136,6 @@ public class ProductTeasableHelper {
     return tt;
   }
 
-
   static boolean isNullOrBlank(@Nullable String s) {
     return s == null || s.trim().isEmpty();
   }
@@ -145,5 +153,10 @@ public class ProductTeasableHelper {
   @Autowired
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
+  }
+
+  @Required
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 }

@@ -431,6 +431,8 @@
 <StructProperty Name="CMExternalPage">
 <Struct>
 <BooleanProperty Name="content-2976">false</BooleanProperty>
+<BooleanProperty Name="content-3376">false</BooleanProperty>
+<BooleanProperty Name="content-3374">false</BooleanProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="CMChannel">
@@ -486,7 +488,8 @@
 <StringProperty Name="xclass">com.coremedia.cms.editor.sdk.dashboard.WidgetState</StringProperty>
 <StringProperty Name="widgetTypeId">com.coremedia.cms.editor.sdk.config.translationStatusWidget</StringProperty>
 <IntProperty Name="rowspan">1</IntProperty>
-<StringProperty Name="title">Translation State</StringProperty>
+<StringProperty Name="targetSiteId">d9e18920c4f0fb5ab3b68ef9ad788b18</StringProperty>
+<StringProperty Name="title">Hybris Apparel - German (Germany)</StringProperty>
 <IntProperty Name="column">1</IntProperty>
 </Struct>
 <Struct>
@@ -504,6 +507,7 @@
 <BooleanProperty Name="showAssets">true</BooleanProperty>
 </Struct>
 </StructProperty>
+<BooleanProperty Name="translationWorkflowRemoveEditedContents">false</BooleanProperty>
 <StructListProperty Name="bookmarks">
 <Struct>
 <StringProperty Name="name">Hybris Apparel UK</StringProperty>
@@ -534,6 +538,22 @@
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Shoppable%20Video.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Shoppable%20Video"/>
 </Struct>
 </StructListProperty>
+<BooleanProperty Name="publicationWorkflowRemoveEditedContents">true</BooleanProperty>
+<StructProperty Name="workarea">
+<Struct>
+<StructListProperty Name="tabs">
+<Struct>
+<StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StructProperty Name="state">
+<Struct>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Hybris%20Apparel%20UK.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Hybris%20Apparel%20UK"/>
+</Struct>
+</StructProperty>
+</Struct>
+</StructListProperty>
+<IntProperty Name="activeTabIndex">0</IntProperty>
+</Struct>
+</StructProperty>
 </Struct>
 </data>
 </EditorPreferences>

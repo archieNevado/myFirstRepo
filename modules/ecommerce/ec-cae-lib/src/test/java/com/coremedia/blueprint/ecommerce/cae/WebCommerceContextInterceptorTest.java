@@ -71,7 +71,7 @@ public class WebCommerceContextInterceptorTest {
     testling.preHandle(request, null, null);
 
     verify(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
-    assertThat(SiteHelper.getSiteFromRequest(request)).isNotNull();
+    assertThat(SiteHelper.findSite(request)).isPresent();
   }
 
   @Test
@@ -85,6 +85,6 @@ public class WebCommerceContextInterceptorTest {
     testling.preHandle(request, null, null);
 
     assertThat(connection.getStoreContext()).isSameAs(storeContextBefore);
-    assertThat(SiteHelper.getSiteFromRequest(request)).isNull();
+    assertThat(SiteHelper.findSite(request)).isNotPresent();
   }
 }

@@ -159,6 +159,7 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
       newTaxonomies.push(content);
       propertyValueExpression.setValue(newTaxonomies);
       searchField.focus();
+      getSelectedValuesVE().setValue([content]);
     }
   }
 
@@ -187,5 +188,11 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
     selectedValuesVE.setValue(contents);
   }
 
+  protected function getSiteId(bindTo:ValueExpression):String {
+    if(bindTo.getValue() is Content) {
+      return editorContext.getSitesService().getSiteIdFor(bindTo.getValue());
+    }
+    return null;
+  }
 }
 }

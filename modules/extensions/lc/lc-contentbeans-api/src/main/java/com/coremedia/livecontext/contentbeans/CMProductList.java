@@ -1,10 +1,9 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.common.contentbeans.CMDynamicList;
+import com.coremedia.blueprint.common.contentbeans.CMQueryList;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.catalog.Product;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.Map;
  * </p>
  *
  */
-public interface CMProductList extends CMDynamicList {
+public interface CMProductList extends CMQueryList {
   /**
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMProductList'.
    */

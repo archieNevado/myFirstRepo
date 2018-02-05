@@ -55,4 +55,9 @@ public interface CMCollection<T> extends CMTeasable, FeedSource<T>, Container<T>
    * Name of the document property 'items'.
    */
   String ITEMS = "items";
+
+  /**
+   * Name of the document property 'extendedItems'.
+   */
+  String EXTENDED_ITEMS = "extendedItems";
 }

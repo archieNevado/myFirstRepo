@@ -1,6 +1,14 @@
 <#ftl strip_whitespace=true>
-
 <#import "util.ftl" as util>
+
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
+
 
 <#--
  * Renders a notification element
@@ -18,7 +26,7 @@
  -->
 <#macro notification type baseClass="cm-notification" additionalClasses=[] title="" text="" dismissable=false iconClass="" attr={}>
   <#local classes=[baseClass, baseClass + "--" + type] + additionalClasses />
-  <#local attr=util.extendSequenceInMap(attr, "classes", classes) />
+  <#local attr=util._extendSequenceInMap(attr, "classes", classes) />
   <div<@util.renderAttr attr=attr />>
     <#if iconClass?has_content>
       <i class="${iconClass}" aria-hidden="true"></i>
@@ -50,6 +58,7 @@
  * @param bindPath (optional) false prevents the rebinding of the path, e.g. if you already know that the path is bound
  * @param attr (optional) @see notification#attr
  * @nested (optional) nested content will be rendered between the text and dismiss output
+ * todo: CMS-11137 move to elasticsocial
  -->
 <#outputformat "plainText">
 <#macro notificationFromSpring path dismissable=false baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
@@ -59,7 +68,7 @@
     <#local text=spring.status.getErrorMessagesAsString("\n") />
   </#if>
   <#if !ignoreIfEmpty?is_boolean || !ignoreIfEmpty || text?has_content>
-    <@notification type=type dismissable=dismissable baseClass=baseClass additionalClasses=additionalClasses title=title attr=attr>${text?replace("\n", "<br />")}<#nested /></@notification>
+    <@notification type=type dismissable=dismissable baseClass=baseClass additionalClasses=additionalClasses title=title attr=attr>${text?replace("\n", "<br>")}<#nested /></@notification>
   </#if>
 </#macro>
 </#outputformat>

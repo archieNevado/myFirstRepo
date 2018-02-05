@@ -9,7 +9,7 @@
 
 <form class="cm-search cm-search--form" action="${searchLink}" role="search">
   <label for="searchterm" class="cm-search__label sr-only">${bp.getMessage("search_label")}</label>
-  <input id="searchterm" type="search" class="cm-search__input${cssClass}" name="query" value="${searchQuery}" placeholder="${bp.getMessage("search_placeholder")}" minlength="3" />
+  <input id="searchterm" type="search" class="cm-search__input${cssClass}" name="query" value="${searchQuery}" placeholder="${bp.getMessage("search_placeholder")}" minlength="3">
   <button class="cm-search__button">
     <i class="glyphicon glyphicon-search"></i>
     <span class="cm-icon__info sr-only">${self.action.title!""}</span>

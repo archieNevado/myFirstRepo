@@ -1,123 +1,135 @@
 package com.coremedia.blueprint.elastic.social.cae.action;
 
-import com.coremedia.blueprint.base.links.ContentLinkBuilder;
-import com.coremedia.blueprint.cae.contentbeans.PageImpl;
-import com.coremedia.blueprint.cae.handlers.HandlerBaseTest;
-import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.cache.Cache;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
-import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.objectserver.beans.ContentBeanIdConverter;
+import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.blueprint.testing.ContentTestHelper;
+import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.HttpError;
+import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.google.common.collect.ImmutableMap;
+import org.assertj.core.groups.Tuple;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.BeanFactory;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.servlet.ModelAndView;
 
-import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+
+import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_NAME_CMNAVIGATION;
+import static com.coremedia.objectserver.view.ViewUtils.DEFAULT_VIEW;
+import static java.util.Collections.emptyMap;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class AuthenticationHandlerTest extends HandlerBaseTest {
+@RunWith(SpringRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = AuthenticationHandlerTestConfiguration.class)
+public class AuthenticationHandlerTest {
 
-  private static final String ID = "4711";
-  private static final String SOME_ACTION = "someAction";
-  private static final String CONTEXT_NAME = "root";
-
-  @Mock
-  private BeanFactory beanFactory;
-
-  @Mock
-  private SitesService sitesService;
-
-  @Mock
-  private Content actionContent;
-
-  @Mock
-  private ContentType actionContentType;
-
-  @Mock
+  private AuthenticationState authenticationState;
   private CMAction action;
 
-  @Mock
-  private AuthenticationState authenticationState;
+  @Inject
+  private MockMvc mockMvc;
+  @Inject
+  private LinkFormatter linkFormatter;
+  @Inject
+  private ContentTestHelper contentTestHelper;
 
-  @Mock
-  private CMNavigation rootNavigation;
+  @Before
+  public void setUp() {
+    authenticationState = mock(AuthenticationState.class);
+  }
 
-  @Mock
-  private ContentBeanFactory contentBeanFactory;
-
-  @Mock
-  private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
-
-  @Mock
-  private ContentBeanIdConverter converter;
-
-  @Mock
-  private ContentLinkBuilder contentLinkBuilder;
+  @After
+  public void tearDown() {
+    RequestContextHolder.resetRequestAttributes();
+  }
 
   @Test
   public void testShowPageForUnknownActionWhereTheActionNameEqualsTheVanityName() throws Exception {
-    when(contentLinkBuilder.getVanityName(actionContent)).thenReturn("unknownAction");
-
-    assertModelWithPageBean(handleRequest('/'+ PREFIX_DYNAMIC+"/auth/--/root/4711/unknownAction"), rootNavigation, action);
+    setAction(22);
+    assertModelWithPageBean(handleRequest("/dynamic/auth/--/root/22/22"), contentTestHelper.getContentBean(4), action);
   }
 
   @Test
   public void testNotFoundForUnknownActionWithSegmentMismatch() throws Exception {
-    assertNotFound("segment mismatch for unknown action", handleRequest('/'+ PREFIX_DYNAMIC+"/auth/--/root/4711/unknownAction"));
+    setAction(22);
+    ModelAndView modelAndView = handleRequest("/dynamic/auth/--/root/22/unknown");
+
+    assertThat(modelAndView)
+            .extracting(HandlerHelper::getRootModel)
+            .allMatch(HttpError.class::isInstance)
+            .extracting(HttpError.class::cast)
+            .extracting(HttpError::getErrorCode)
+            .containsExactly(HttpServletResponse.SC_NOT_FOUND);
   }
 
   @Test
   public void testGenerateActionLink() {
-    when(contentLinkBuilder.getVanityName(actionContent)).thenReturn(SOME_ACTION);
-    assertEquals(
-            '/'+ PREFIX_DYNAMIC+"/auth/--/root/4711/" + SOME_ACTION,
-            formatLink(authenticationState, null, false, ImmutableMap.<String, Object>of("action", SOME_ACTION)));
+    setAction(24);
+    assertThat(formatLink(authenticationState, ImmutableMap.of("action", "login")))
+            .isEqualTo("/dynamic/auth/--/root/24/login");
   }
 
   @Test
   public void testGenerateGenericActionLink() {
-    when(contentLinkBuilder.getVanityName(actionContent)).thenReturn(SOME_ACTION);
-    assertEquals('/'+ PREFIX_DYNAMIC+"/auth/--/root/4711/" + SOME_ACTION, formatLink(authenticationState, null, false));
+    setAction(24);
+    assertThat(formatLink(authenticationState, emptyMap()))
+            .isEqualTo("/dynamic/auth/--/root/24/login");
   }
 
-  @Before
-  public void setUp() throws Exception {
-    super.setUp();
+  private ModelAndView handleRequest(String path) throws Exception {
+    MockHttpServletRequestBuilder req = MockMvcRequestBuilders
+            .get(path)
+            .requestAttr(ATTR_NAME_CMNAVIGATION, contentTestHelper.getContentBean(4))
+            .characterEncoding("UTF-8");
+    return mockMvc.perform(req).andReturn().getModelAndView();
+  }
 
-    AuthenticationHandler testling = new AuthenticationHandler();
-    testling.setBeanFactory(beanFactory);
-    testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
-    testling.setContentBeanIdConverter(converter);
-    testling.setContextHelper(getContextHelper());
-    testling.setUrlPathFormattingHelper(getUrlPathFormattingHelper());
-    testling.setContentBeanFactory(contentBeanFactory);
-    testling.setSitesService(getSitesService());
-    testling.setContentLinkBuilder(contentLinkBuilder);
+  /*
+   * common assertions after controller parses link into model for controllers that generate pages
+   */
+  private void assertModelWithPageBean(ModelAndView modelAndView, CMNavigation navigation, CMLinkable content) {
+    assertThat(modelAndView)
+            .isNotNull()
+            .extracting(ModelAndView::getViewName)
+            .containsOnly(DEFAULT_VIEW);
 
-    registerHandler(testling);
+    assertThat(modelAndView)
+            .extracting(HandlerHelper::getRootModel)
+            .allMatch(Page.class::isInstance)
+            .extracting(Page.class::cast)
+            .extracting(Page::getContent, Page::getNavigation)
+            .containsExactly(new Tuple(content, navigation));
+  }
 
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
+  private String formatLink(Object bean, Map<String, Object> parameters) {
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/");
+    request.setCharacterEncoding("UTF-8");
+    request.setAttribute(ViewUtils.PARAMETERS, parameters);
+    return linkFormatter.formatLink(bean, null, request, new MockHttpServletResponse(), false);
+  }
+
+  private void setAction(int id) {
+    action = contentTestHelper.getContentBean(id);
     when(authenticationState.getAction()).thenReturn(action);
-    when(navigationSegmentsUriHelper.parsePath(eq(asList(CONTEXT_NAME)))).thenReturn(rootNavigation);
-    when(converter.convert(action)).thenReturn(ID);
-    when(navigationSegmentsUriHelper.getPathList(rootNavigation)).thenReturn(asList(CONTEXT_NAME));
-    when(getIdActionDocConverter().convert("4711")).thenReturn(action);
-    when(action.getContent()).thenReturn(actionContent);
-    when(actionContent.getType()).thenReturn(actionContentType);
-
-    setContextFor(action, rootNavigation);
   }
 
 }

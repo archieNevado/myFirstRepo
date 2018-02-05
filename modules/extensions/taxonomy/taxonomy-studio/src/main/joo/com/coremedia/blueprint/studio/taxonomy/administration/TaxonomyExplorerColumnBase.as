@@ -67,18 +67,21 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     super.afterRender();
     addKeyNavigation();
 
+
     taxonomyExplorerColumnDropTarget = new TaxonomyExplorerColumnDropTarget(this);
 
     var ddPlugin:GridViewDragDropPlugin = getView().getPlugin(DRAG_DROP_PLUGIN_ID) as GridViewDragDropPlugin;
-    ddPlugin.dragZone['getDragText'] = getDragText;
-    //DnD is causing focus issues, so we skip the focus handling here and simply call the parent
-    ddPlugin.dragZone['onValidDrop'] = function (target:*, e:*, id:*):void {
-      this.callParent([target, e, id]);
-    };
-    ddPlugin.dropZone.addToGroup('taxonomies');
-    ddPlugin.dropZone.onNodeOver = taxonomyExplorerColumnDropTarget.notifyOnNodeOver;
-    ddPlugin.dropZone.onNodeDrop = taxonomyExplorerColumnDropTarget.notifyOnNodeDrop;
-    ddPlugin.dropZone.onContainerOver = taxonomyExplorerColumnDropTarget.notifyOnContainerOver;
+    if(ddPlugin && ddPlugin.dragZone) {
+      ddPlugin.dragZone['getDragText'] = getDragText;
+      //DnD is causing focus issues, so we skip the focus handling here and simply call the parent
+      ddPlugin.dragZone['onValidDrop'] = function (target:*, e:*, id:*):void {
+        this.callParent([target, e, id]);
+      };
+      ddPlugin.dropZone.addToGroup('taxonomies');
+      ddPlugin.dropZone.onNodeOver = taxonomyExplorerColumnDropTarget.notifyOnNodeOver;
+      ddPlugin.dropZone.onNodeDrop = taxonomyExplorerColumnDropTarget.notifyOnNodeDrop;
+      ddPlugin.dropZone.onContainerOver = taxonomyExplorerColumnDropTarget.notifyOnContainerOver;
+    }
   }
 
   /**
@@ -93,7 +96,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     if (key === KeyEvent.DOM_VK_LEFT) {
       if (globalSelectedNodeExpression && parentNode) {
         activeNode = parentNode;
-        globalSelectedNodeExpression.setValue(parentNode);
+        globalSelectedNodeExpression.setValue([parentNode]);
         getExplorerPanel().getColumnContainer(parentNode).selectNode(parentNode);
       }
     }
@@ -101,7 +104,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
       activeNode.loadChildren(function (list:TaxonomyNodeList):void {
         if (list.size() > 0) {
           var selectNode:TaxonomyNode = list.getNodes()[0];
-          globalSelectedNodeExpression.setValue(selectNode);
+          globalSelectedNodeExpression.setValue([selectNode]);
           getExplorerPanel().getColumnContainer(selectNode).selectNode(selectNode);
         }
       });
@@ -112,7 +115,6 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
    * Triggered when the reload button is pressed.
    */
   public function reload():void {
-    //mpf, bind list plugin can't handle a regular reload, so force resetting the whole list
     getEntriesValueExpression().setValue(undefined);
     initColumn(true);
   }
@@ -135,10 +137,9 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
 
   protected function selectionChanged():void {
     var selections:Array = (getSelectionModel() as RowSelectionModel).getSelection();
-    var selection:Model = selections && selections.length > 0 && selections[0];
-    var selectedNode:TaxonomyNode = undefined;
-    if (selection) {
-      selectedNode = TaxonomyNode.forValues(selection.data.name,
+    var selectionResult:Array = [];
+    for each(var selection:Model in selections) {
+      var selectedNode:TaxonomyNode = TaxonomyNode.forValues(selection.data.name,
               selection.data.type,
               selection.data.ref,
               selection.data.siteId,
@@ -148,11 +149,15 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
               selection.data.taxonomyId,
               selection.data.selectable,
               selection.data.extendable);
+      selectionResult.push(selectedNode);
     }
 
     if (globalSelectedNodeExpression) {
-      activeNode = selectedNode;
-      globalSelectedNodeExpression.setValue(selectedNode);
+      activeNode = null;
+      if(selectionResult.length > 0) {
+        activeNode = selectionResult[0];
+      }
+      globalSelectedNodeExpression.setValue(selectionResult);
     }
   }
 
@@ -173,13 +178,13 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
    * @param callback optional callback method
    */
   private function doSelect(callback:Function = undefined):void {
-    ValueExpressionFactory.createFromFunction(function():Boolean {
+    ValueExpressionFactory.createFromFunction(function ():Boolean {
       if (!getStore().isLoaded()) {
         DependencyTracker.dependOnObservable(getStore(), "load");
         return undefined;
       }
       return true;
-    }).loadValue(function(loaded:Boolean):void {
+    }).loadValue(function (loaded:Boolean):void {
       if (activeNode) {
         for (var i:int = 0; i < getStore().getCount(); i++) {
           var nodeRecord:Model = getStore().getAt(i);
@@ -193,7 +198,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
         (getSelectionModel() as RowSelectionModel).deselectRange(0, getStore().getCount() - 1);
       }
 
-      if(callback) {
+      if (callback) {
         callback.call(null);
       }
     });
@@ -249,8 +254,17 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
   }
 
   private function getDragText():String {
-    var node:TaxonomyNode = globalSelectedNodeExpression.getValue();
-    return node.getName();
+    var selection:Array = globalSelectedNodeExpression.getValue();
+    var names:Array = [];
+    for each(var node:TaxonomyNode in selection) {
+      names.push(node.getName());
+    }
+    var text:String = names.join(", ");
+    if(text.length > 100) {
+      text = text.substr(0, 100) + "...";
+    }
+
+    return text;
   }
 
   //noinspection JSUnusedLocalSymbols

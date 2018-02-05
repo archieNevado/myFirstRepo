@@ -19,15 +19,43 @@
   //embedded stuff
   .cm-teasable--embedded {
 
+    .cm-collection--tiles- {
+      &50-50- {
+        &portrait {
+          .cm-teasable__picture-box {
+            @include aspect-ratio-box(3, 4);
+          }
+        }
+
+        &landscape {
+          .cm-teasable__picture-box {
+            @include aspect-ratio-box(16, 9);
+          }
+        }
+      }
+
+      &landscape {
+        .cm-teasable__picture-box {
+          @include aspect-ratio-box(4, 3);
+        }
+      }
+
+      &portrait {
+        .cm-teasable__picture-box {
+          @include aspect-ratio-box(3, 4);
+        }
+      }
+    }
+
     .cm-teasable__picture-box {
-      @include aspect-ratio-box(1, 1);
+      @include aspect-ratio-box(16, 9);
     }
 
     @include breakpoint(sm-and-up) {
       max-width: 50%;
     }
     @include breakpoint(lg) {
-      max-width: 25%;
+      max-width: 75%;
     }
   }
 }

@@ -11,6 +11,7 @@ import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.testing.ContentTestHelper;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -19,16 +20,12 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.Scope;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,6 +35,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.cae.action.search.PageSearchActionHandler.ACTION_NAME;
@@ -56,9 +55,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 /**
  * Tests {@link PageSearchActionHandler}
@@ -68,7 +65,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = PageSearchActionHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class PageSearchActionHandlerTest {
-  private static final Logger LOG = LoggerFactory.getLogger(PageSearchActionHandlerTest.class);
 
   @Configuration
   @ImportResource(
@@ -86,54 +82,18 @@ public class PageSearchActionHandlerTest {
     private static final String CONTENT_REPOSITORY = "classpath:/com/coremedia/blueprint/cae/action/search/pagesearchactionhandler/content.xml";
 
     @Bean
-    @Scope(SCOPE_SINGLETON)
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig(CONTENT_REPOSITORY);
     }
 
     @Bean
-    @Scope(SCOPE_SINGLETON)
     public SearchResultBean searchResultBean() {
       return new SearchResultBean();
     }
 
-    private SearchService searchService(SearchResultBean resultBean) {
-      Suggestion suggestion = new Suggestion("a", "a", 1L);
-      Suggestions result = new Suggestions();
-      result.addAll(ImmutableList.of(suggestion));
-
-      //replace SearchService with mocked version so that this test really only tests PageSearchActionHandler and can
-      //check whether the objects returned by the SearchService are correctly merged into the ModelAndView
-      SearchService searchService = mock(SearchService.class);
-      when(searchService.search(any(Page.class), any(SearchFormBean.class), any()))
-              .thenReturn(resultBean);
-      when(searchService.getAutocompleteSuggestions(eq(String.valueOf(ROOT_NAVIGATION_ID)), eq(QUERY), any()))
-              .thenReturn(result);
-      return searchService;
-    }
-
-    @Bean
-    @Scope(SCOPE_SINGLETON)
-    public BeanPostProcessor searchServiceReplacer(final SearchResultBean resultBean) {
-      return new BeanPostProcessor() {
-        @Override
-        public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-          if ("searchActionService".equals(beanName)) {
-            LOG.info("Replaced bean {} ({}) with mocked bean.", beanName, bean);
-            // Replace with mocked search service.
-            return searchService(resultBean);
-          }
-          return bean;
-        }
-
-        @Override
-        public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-          return bean;
-        }
-      };
-    }
   }
 
+  private static final Cache TEST_CACHE = new Cache("test");
   private static final String URI = '/'+ PREFIX_SERVICE+"/search/root/22";
   private static final String WRONG_URI = '/'+ PREFIX_SERVICE+"/search/wrongSegment/22";
   private static final String QUERY = "testQuery";
@@ -168,18 +128,35 @@ public class PageSearchActionHandlerTest {
   @Inject
   private PageSearchActionHandler testling;
 
+  @MockBean
+  private SearchService searchActionService;
+
   @Before
   public void setUp() throws Exception {
+    configureSearchActionService();
+
     CMChannel navigation = contentTestHelper.getContentBean(ROOT_NAVIGATION_ID);
     action = contentTestHelper.getContentBean(ACTION_ID);
-    page = new PageImpl(navigation, action, true, sitesService, null, null, null, null);
+    page = new PageImpl(navigation, action, true, sitesService, TEST_CACHE, null, null, null);
 
     //create SearchActionState for linkscheme test
     searchActionState = testling.createActionState(action, null);
   }
 
+  private void configureSearchActionService() {
+    Suggestion suggestion = new Suggestion("a", "a", 1L);
+    Suggestions result = new Suggestions();
+    result.addAll(ImmutableList.of(suggestion));
+
+    List<String> searchDocTypes = Collections.singletonList("CMArticle");
+    when(searchActionService.search(any(Page.class), any(SearchFormBean.class), eq(searchDocTypes)))
+            .thenReturn(resultBean);
+    when(searchActionService.getAutocompleteSuggestions(eq(String.valueOf(ROOT_NAVIGATION_ID)), eq(QUERY), eq(searchDocTypes)))
+            .thenReturn(result);
+  }
+
   /**
-   * Tests {@link PageSearchActionHandler#handleSearchAction(CMAction, String, SearchFormBean)} with a query that is long enough.
+   * Tests {@link PageSearchActionHandler#handleSearchAction} with a query that is long enough.
    * Expects a successful search.
    */
   @SuppressWarnings("unchecked")
@@ -200,7 +177,7 @@ public class PageSearchActionHandlerTest {
   }
 
   /**
-   * Tests {@link PageSearchActionHandler#handleSearchAction(CMAction, String, SearchFormBean)} with a short query.
+   * Tests {@link PageSearchActionHandler#handleSearchAction} with a short query.
    * Expects an errormessage in the {@link SearchActionState}
    */
   @SuppressWarnings("unchecked")
@@ -238,7 +215,7 @@ public class PageSearchActionHandlerTest {
 
   /**
    * Test "not found" for a non-existent root segment on both handler methods
-   * {@link PageSearchActionHandler#handleSearchAction(CMAction, String, SearchFormBean)}
+   * {@link PageSearchActionHandler#handleSearchAction}
    * {@link PageSearchActionHandler#handleSearchSuggestionAction(com.coremedia.blueprint.common.contentbeans.CMAction, String, String, String)}
    */
   @Test

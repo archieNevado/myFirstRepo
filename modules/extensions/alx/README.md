@@ -1,11 +1,11 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##Analytics Extension
+## Analytics Extension
 
-###Description
+### Description
 
 Aggregation module providing base classes, configurations and Studio extensions for analytics tracking plugins.
 
-##Documentation
+## Documentation
 
 See the Analytics Connectors Manual.

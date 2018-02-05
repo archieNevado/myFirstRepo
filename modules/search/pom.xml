@@ -17,6 +17,8 @@
     <module>caefeeder-preview-webapp</module>
     <module>caefeeder-lib</module>
     <module>caefeeder-blueprint-component</module>
+    <module>caefeeder-live-blueprint-component</module>
+    <module>caefeeder-preview-blueprint-component</module>
     <module>content-feeder-blueprint-component</module>
     <module>content-feeder-webapp</module>
   </modules>

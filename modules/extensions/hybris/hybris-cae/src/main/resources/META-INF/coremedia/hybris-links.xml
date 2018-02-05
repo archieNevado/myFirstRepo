@@ -7,7 +7,6 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd">
 
-  <import resource="classpath:/META-INF/coremedia/livecontext-cae-vendor-placeholders.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
   <import resource="classpath:/framework/spring/livecontext-hybris-services.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-handlers.xml"/>
@@ -18,7 +17,7 @@
     <property name="previewStoreFrontUrl" value="${livecontext.hybris.storeFrontUrl}"/>
     <property name="hybrisPreviewServiceUrl" value="${livecontext.hybris.previewServiceUrl}"/>
     <property name="previewTokenService" ref="hybrisPreviewTokenService"/>
-    <property name="commerceLedPageExtension" ref="commerceLedPageExtension"/>
+    <property name="commerceLedLinkBuilderHelper" ref="commerceLedLinkBuilderHelper"/>
   </bean>
 
   <bean id="hybrisLiveLinkSchemes" class="com.coremedia.livecontext.hybris.links.HybrisLiveLinkSchemes"/>

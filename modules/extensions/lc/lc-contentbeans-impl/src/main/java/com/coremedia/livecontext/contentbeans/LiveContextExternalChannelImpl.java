@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridService;
@@ -12,7 +13,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
@@ -20,12 +20,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A LiveContextNavigation which is backed by a CMExternalChannel content
@@ -38,26 +39,25 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   private LiveContextNavigationFactory liveContextNavigationFactory;
   private Site site;
   private PageGridService pdpPageGridService;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
+  private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Override
   public Category getCategory() {
-    CommerceConnection currentConnection = CurrentCommerceConnection.find().orElse(null);
-    if (currentConnection == null) {
+    Optional<CommerceConnection> connectionForContent = commerceConnectionSupplier.findConnectionForContent(this.getContent());
+
+    if (!connectionForContent.isPresent()) {
       return null;
     }
 
-    StoreContextProvider storeContextProvider = currentConnection.getStoreContextProvider();
-    if (storeContextProvider == null) {
-      return null;
-    }
+    CommerceConnection connection = connectionForContent.get();
 
     Content content = getContent();
     String externalId = getExternalId();
 
-    StoreContext storeContext = requireNonNull(storeContextProvider.findContextByContent(content),
-            "Store context not available.");
+    StoreContext storeContext = connection.getStoreContext();
 
-    CatalogService catalogService = getCatalogService(storeContext);
+    CatalogService catalogService = getCatalogService(connection);
 
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(externalId);
     if (!commerceIdOptional.isPresent()) {
@@ -102,27 +102,20 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   @Override
   protected List<Linkable> getExternalChildren(Site site) {
     if (isCommerceChildrenSelected()) {
-      StoreContext storeContext = findStoreContextForSite(site);
+      Optional<CommerceConnection> commerceConnection = commerceConnectionInitializer.findConnectionForSite(site);
+      if (commerceConnection.isPresent()) {
+        CommerceConnection connection = commerceConnection.get();
 
-      if (storeContext != null) {
-        CatalogService catalogService = getCatalogService(storeContext);
+        StoreContext storeContext = connection.getStoreContext();
 
-        List<Category> subCategories = new ArrayList<>();
+        CatalogService catalogService = getCatalogService(connection);
 
-        List<String> commerceChildrenIds = getCommerceChildrenIds();
-        for (String commerceChildrenId : commerceChildrenIds) {
-          CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(commerceChildrenId);
-          Category category = catalogService.findCategoryById(commerceId, storeContext);
-          if (category != null) {
-            subCategories.add(category);
-          }
-        }
-
-        List<Linkable> result = new ArrayList<>();
-        for (Category subCategory : subCategories) {
-          result.add(liveContextNavigationFactory.createNavigation(subCategory, site));
-        }
-        return result;
+        return getCommerceChildrenIds().stream()
+                .map(CommerceIdParserHelper::parseCommerceIdOrThrow)
+                .map(commerceId -> catalogService.findCategoryById(commerceId, storeContext))
+                .filter(Objects::nonNull)
+                .map(subCategory -> liveContextNavigationFactory.createNavigation(subCategory, site))
+                .collect(toList());
       }
     }
 
@@ -130,22 +123,12 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
     return new ArrayList<>(treeRelation.getChildrenOf(this));
   }
 
-  @Nullable
-  private static StoreContext findStoreContextForSite(@Nullable Site site) {
-    return CurrentCommerceConnection.find()
-            .map(CommerceConnection::getStoreContextProvider)
-            .map(storeContextProvider -> storeContextProvider.findContextBySite(site))
-            .orElse(null);
-  }
-
   @Nonnull
-  private static CatalogService getCatalogService(StoreContext storeContext) {
-    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
-
-    CatalogService catalogService = requireNonNull(commerceConnection.getCatalogService(),
+  private static CatalogService getCatalogService(@Nonnull CommerceConnection connection) {
+    CatalogService catalogService = requireNonNull(connection.getCatalogService(),
             "No catalog service available.");
 
-    return catalogService.withStoreContext(storeContext);
+    return catalogService;
   }
 
   @Override
@@ -167,6 +150,16 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   @Required
   public void setPdpPageGridService(PageGridService pdpPageGridService) {
     this.pdpPageGridService = pdpPageGridService;
+  }
+
+  @Required
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
+  }
+
+  @Required
+  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
+    this.commerceConnectionInitializer = commerceConnectionInitializer;
   }
 
   @Override

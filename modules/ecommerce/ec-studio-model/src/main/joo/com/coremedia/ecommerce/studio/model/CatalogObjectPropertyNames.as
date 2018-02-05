@@ -198,6 +198,11 @@ public class CatalogObjectPropertyNames {
   public static const CUSTOM_ATTRIBUTES:String = "customAttributes";
 
   /**
+   * Name of the facets attribute
+   */
+  public static const FACETS:String = 'facets';
+
+  /**
    * @private
    * This class only defines constants.
    */

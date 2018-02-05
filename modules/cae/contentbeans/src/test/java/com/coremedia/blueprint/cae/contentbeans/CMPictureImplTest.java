@@ -72,10 +72,10 @@ public class CMPictureImplTest extends ContentBeanTestBase {
   public void testGetFocusPoint() throws Exception {
     Assert.assertEquals(new Point2D.Double(0.6, 0.3), contentBean.getFocusPoint());
 
-    CMPicture pictureWithMovedFocusArea = getContentBean(162);
+    CMPicture pictureWithMovedFocusArea = getContentBean(170);
     Assert.assertEquals(new Point2D.Double(0.4, 0.6), pictureWithMovedFocusArea.getFocusPoint());
 
-    CMPicture pictureWithMovedFocusAreaAndFocusPoint = getContentBean(164);
+    CMPicture pictureWithMovedFocusAreaAndFocusPoint = getContentBean(172);
     Assert.assertEquals(new Point2D.Double(0.6, 0.3), pictureWithMovedFocusAreaAndFocusPoint.getFocusPoint());
   }
 }

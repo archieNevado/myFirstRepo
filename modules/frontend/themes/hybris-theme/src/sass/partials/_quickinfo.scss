@@ -1,7 +1,8 @@
 // quickinfos
 .#{$cm-quickinfo-prefix} {
 
-  width: 306px;
+  background-color: $cm-quickinfo-background-color;
+  flex-direction: column;
   box-shadow: 0 0 10px #000;
 
   // do not show main quick info

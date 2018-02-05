@@ -12,37 +12,27 @@
   <packaging>war</packaging>
 
   <description>
-    To start the content-management-server-watchdog-webapp run: mvn tomcat7:run
+    To start the content-management-server-watchdog-webapp run: mvn tomcat7:run-war
   </description>
+
+  <properties>
+    <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
+    <logging-properties.dir>${project.basedir}/../../../workspace-configuration/logging</logging-properties.dir>
+  </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-spring</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>watchdog-component</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>content-management-server-watchdog-blueprint-component</artifactId>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>database-drivers</artifactId>
+      <artifactId>content-management-server-watchdog-blueprint-config</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
+      <type>coremedia-application</type>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!-- required for Tomcat7 -->
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -51,13 +41,24 @@
 
     <plugins>
       <plugin>
-        <groupId>com.coremedia.maven</groupId>
-        <artifactId>coremedia-application-maven-plugin</artifactId>
-        <extensions>true</extensions>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <nonFilteredFileExtensions>
+            <fileExtension>zip</fileExtension>
+          </nonFilteredFileExtensions>
+          <overlays>
+            <overlay>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>content-management-server-watchdog-blueprint-config</artifactId>
+              <type>coremedia-application</type>
+              <targetPath>WEB-INF</targetPath>
+            </overlay>
+          </overlays>
+        </configuration>
       </plugin>
 
       <!--
-         invoke "mvn tomcat7:run" for running this webapp locally
+         invoke "mvn tomcat7:run-war" for running this webapp locally
       -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
@@ -68,19 +69,6 @@
           <systemProperties>
             <coremedia.logging.directory>${project.build.directory}/logs</coremedia.logging.directory>
           </systemProperties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <!--
-            build executable war that can be run like this:
-            JAVA_OPTS="<PUT_SYSTEM_PROPS_HERE>" $(PATH_TO_MODULE_ARTIFACT)
-
-            only set to 'true' if chef run won't fail on warning when unzipping the webapp
-          -->
-          <executable>false</executable>
         </configuration>
       </plugin>
     </plugins>

@@ -4,12 +4,23 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
-    "@coremedia/js-jquery-utils": "file:../../js/jquery-utils",
-    "@coremedia/js-node-decoration-service": "file:../../js/node-decoration-service",
-    "@coremedia/js-basic": "file:../../js/basic",
-    "@coremedia/sass-utils": "file:../../sass/utils",
-    "@coremedia/brick-responsive-images": "file:../responsive-images",
-    "@coremedia/brick-quick-info": "file:../quick-info"
+    "@coremedia/js-jquery-utils": "^1.0.0",
+    "@coremedia/js-node-decoration-service": "^1.0.0",
+    "@coremedia/js-basic": "^1.0.0",
+    "@coremedia/sass-utils": "^1.0.0",
+    "@coremedia/brick-bootstrap": "^1.0.0",
+    "@coremedia/brick-cta": "^1.0.0",
+    "@coremedia/brick-responsive-images": "^1.0.0",
+    "@coremedia/brick-quick-info": "^1.0.0"
   },
-  "main": "src/js/index.js"
+  "devDependencies": {
+    "jsdoc-to-markdown": "3.0.0"
+  },
+  "scripts": {
+    "apidoc": "jsdoc2md src/js/*.js > API.md"
+  },
+  "main": "src/js/index.js",
+  "coremedia": {
+    "type": "brick"
+  }
 }

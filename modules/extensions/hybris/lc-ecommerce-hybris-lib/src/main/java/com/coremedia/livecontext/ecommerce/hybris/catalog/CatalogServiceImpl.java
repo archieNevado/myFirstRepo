@@ -24,7 +24,11 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductDocument
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductRefDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductSearchDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.resources.CatalogResource;
+import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -37,8 +41,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATALOG;
@@ -47,6 +53,8 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PR
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 import static com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider.commerceId;
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toMap;
 
 public class CatalogServiceImpl extends AbstractHybrisService implements CatalogService {
 
@@ -103,11 +111,15 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   public List<Product> findProductsByCategory(@Nonnull Category category) {
     CategoryImpl categoryImpl = (CategoryImpl) category;
     CategoryDocument categoryDocument = categoryImpl.getDelegate();
-    List<ProductRefDocument> productRefDocuments = filterProductRefs(categoryDocument.getProducts());
+    List<ProductRefDocument> productRefs = categoryDocument.getProducts();
+
+    List<ProductRefDocument> productRefDocuments = productRefs != null ? filterProductRefs(productRefs) : emptyList();
+
     return resolveProductRefs(productRefDocuments, category.getContext());
   }
 
   @Nonnull
+  @Override
   public List<Category> findTopCategories(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
     String catalogId = StoreContextHelper.getCatalogId(storeContext);
@@ -214,6 +226,24 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
 
   @Nonnull
   @Override
+  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@Nonnull Category category,
+                                                                  @Nonnull StoreContext storeContext) {
+    String categoryId = category.getExternalTechId();
+    Map<String, String> searchParams = ImmutableMap.of(
+            CatalogService.SEARCH_PARAM_CATEGORYID, categoryId,
+            "fields", "DEFAULT,facets",
+            CatalogService.SEARCH_PARAM_PAGESIZE, "1",
+            CatalogService.SEARCH_PARAM_PAGENUMBER, "1",
+            CatalogService.SEARCH_PARAM_TOTAL, "1");
+
+    SearchResult<Product> searchResult = searchProducts("*", searchParams, storeContext);
+
+    return searchResult.getFacets().stream()
+            .collect(toMap(SearchFacet::getLabel, SearchFacet::getChildFacets));
+  }
+
+  @Nonnull
+  @Override
   public SearchResult<ProductVariant> searchProductVariants(@Nonnull String searchTerm,
                                                             @Nonnull Map<String, String> searchParams,
                                                             @Nonnull StoreContext storeContext) {
@@ -269,6 +299,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     return Optional.empty();
   }
 
+  @Nonnull
   @SuppressWarnings("unchecked")
   private <T> SearchResult<T> searchProductsPaginated(@Nonnull String searchTerm,
                                                       @Nonnull Map<String, String> searchParams,
@@ -291,28 +322,40 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
             Integer.parseInt(params.get(CatalogService.SEARCH_PARAM_OFFSET)) : 1;
     int offset = startPosition > 1 ? startPosition - 1 : 0;
 
-
     ProductSearchDocument productSearchDocument = null;
     while (pageCount < pages && resultSet.size() < maxItems) {
       params.put(CatalogService.SEARCH_PARAM_PAGENUMBER, Integer.toString(pageCount));
       params.put(CatalogService.SEARCH_PARAM_PAGESIZE, Integer.toString(pageSize));
 
-      productSearchDocument = catalogResource.searchProducts(
-              searchTerm, params, storeContext);
+      productSearchDocument = catalogResource.searchProducts(searchTerm, params, storeContext);
       if (productSearchDocument == null) {
         break;
       }
 
-      List<Product> productsFromPage = resolveProductRefs(productSearchDocument.getProducts(), storeContext);
-      productsFromPage = returnType == ProductVariant.class ?
-              filterProductVariants(productsFromPage) :
-              convertToProducts(productsFromPage);
+      List<ProductRefDocument> productRefDocuments = productSearchDocument.getProducts();
+      if (productRefDocuments == null) {
+        break;
+      }
 
-      for (Product p : productsFromPage) {
-        if (resultSet.size() < maxItems + offset) {
-          resultSet.add((T) p);
-        } else {
+      for (ProductRefDocument productRefDocument : productRefDocuments) {
+        if (productRefDocument == null) {
+          continue;
+        }
+
+        if (resultSet.size() >= maxItems + offset) {
           break;
+        }
+
+        Product product = resolveProductRef(productRefDocument, storeContext).orElse(null);
+        if (product != null) {
+          if (returnType == ProductVariant.class) {
+            if (product.isVariant()) {
+              resultSet.add((T) product);
+            }
+          } else {
+            convertToProduct(product)
+                    .ifPresent(productConverted -> resultSet.add((T) productConverted));
+          }
         }
       }
 
@@ -326,10 +369,11 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     SearchResult<T> result = new SearchResult<>();
     result.setSearchResult(subList);
     if (productSearchDocument != null) {
-      result.setTotalCount(subList.size() <= maxItems ?
-              subList.size() : productSearchDocument.getPagination().getTotalResults());
-      result.setPageSize(productSearchDocument.getPagination().getPageSize());
-      result.setPageNumber(productSearchDocument.getPagination().getCurrentPage());
+      // we cannot take the values in the productSearchDocument.pagination structure
+      // because it may take multiple calls to get the desired amount of products
+      result.setTotalCount(subList.size());
+      result.setPageSize(Math.max(productSearchDocument.getPagination().getPageSize(), subList.size()));
+      result.setPageNumber(1);
       result.setFacets(productSearchDocument.getFacets());
     }
     return result;
@@ -338,77 +382,90 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   /**
    * Resolve a list of products and variant refs and turn it into a list of products and variants.
    */
-  private List<Product> resolveProductRefs(List<ProductRefDocument> productRefDocuments, @Nonnull StoreContext context) {
-    List<Product> result = new ArrayList<>();
-    if (productRefDocuments != null) {
-      for (ProductRefDocument productRefDocument : productRefDocuments) {
-        String externalId = productRefDocument.getCode();
-        CommerceId commerceId = commerceId(PRODUCT).withExternalId(externalId).build();
-        Product product = findProductById(commerceId, context); //this is expensive but necessary to filter out product variants
-        if (product == null) {
-          LOG.warn("Cannot find product '{}'.", externalId);
-        } else {
-          result.add(product);
-        }
-      }
+  @Nonnull
+  private List<Product> resolveProductRefs(@Nonnull List<ProductRefDocument> productRefDocuments,
+                                           @Nonnull StoreContext context) {
+    return productRefDocuments.stream()
+            .filter(Objects::nonNull)
+            .map(productRefDocument -> resolveProductRef(productRefDocument, context))
+            .flatMap(Streams::stream)
+            .collect(Collectors.toList());
+  }
+
+  /**
+   * Resolve a product or variant ref and turn it into a product or variant bean.
+   */
+  @Nonnull
+  private Optional<Product> resolveProductRef(@Nonnull ProductRefDocument productRefDocument,
+                                              @Nonnull StoreContext context) {
+    String externalId = productRefDocument.getCode();
+    CommerceId commerceId = commerceId(PRODUCT).withExternalId(externalId).build();
+
+    Product product = findProductById(commerceId, context); // Expensive but necessary to filter out product variants.
+
+    if (product == null) {
+      LOG.warn("Cannot find product '{}'.", externalId);
+      return Optional.empty();
     }
-    return result;
+
+    return Optional.of(product);
   }
 
   /**
    * Filters product refs in a list of product and variant refs.
    */
-  private static List<ProductRefDocument> filterProductRefs(List<ProductRefDocument> productRefs) {
-    Set<ProductRefDocument> result = new LinkedHashSet<>();
-    if (productRefs != null) {
-      for (ProductRefDocument productRef : productRefs) {
-        if (productRef.getType() == null) {
-          result.add(productRef);
-        }
-      }
-    }
-    return new ArrayList<>(result);
+  @Nonnull
+  private static List<ProductRefDocument> filterProductRefs(@Nonnull List<ProductRefDocument> productRefs) {
+    Set<ProductRefDocument> uniqueProductRefsWithoutType = productRefs.stream()
+            .filter(productRef -> productRef.getType() == null)
+            // Use `LinkedHashSet` to keep order of products. Order might be irrelevant, though.
+            .collect(toCollection(LinkedHashSet::new));
+
+    return new ArrayList<>(uniqueProductRefsWithoutType);
   }
 
   /**
    * Filters products from a list with variants and products.
    * Variants will be additionally converted to products.
    */
-  private static List<Product> convertToProducts(List<Product> products) {
-    Set<Product> result = new LinkedHashSet<>();
-    for (Product product : products) {
-      if (!product.isVariant()) {
-        result.add(product);
-      } else if (product instanceof ProductVariant) {
-        Product parent = ((ProductVariant) product).getParent();
-        while (parent instanceof ProductVariant && ((ProductVariant) parent).getParent() != null) {
-          parent = ((ProductVariant) parent).getParent();
-        }
-        if (parent != null) {
-          result.add(parent);
-        }
-      }
-    }
-    return new ArrayList<>(result);
+  @Nonnull
+  private static List<Product> convertToProducts(@Nonnull List<Product> products) {
+    Set<Product> result = products.stream()
+            .map(CatalogServiceImpl::convertToProduct)
+            .flatMap(Streams::stream)
+            // Use `LinkedHashSet` to keep order of products.
+            .collect(toCollection(LinkedHashSet::new));
+
+    return ImmutableList.copyOf(result);
   }
 
-  /**
-   * Filters variants from a list with variants and products.
-   */
-  private static List<Product> filterProductVariants(List<Product> products) {
-    Set<ProductVariant> result = new LinkedHashSet<>();
-    for (Product product : products) {
-      if (product.isVariant()) {
-        result.add((ProductVariant) product);
+  @Nonnull
+  private static Optional<Product> convertToProduct(@Nonnull Product product) {
+    if (!product.isVariant()) {
+      return Optional.of(product);
+    }
+
+    if (product instanceof ProductVariant) {
+      Product parent = ((ProductVariant) product).getParent();
+      while (parent instanceof ProductVariant && ((ProductVariant) parent).getParent() != null) {
+        parent = ((ProductVariant) parent).getParent();
+      }
+      if (parent != null) {
+        return Optional.of(parent);
       }
     }
-    return new ArrayList<>(result);
+
+    return Optional.empty();
   }
 
   @Nonnull
   @Override
   public Category findRootCategory(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
-    CommerceId commerceId = commerceId(CATEGORY).withExternalId(CategoryImpl.ROOT_CATEGORY_ROLE_ID).withCatalogAlias(catalogAlias).build();
+    CommerceId commerceId = commerceId(CATEGORY)
+            .withExternalId(CategoryImpl.ROOT_CATEGORY_ROLE_ID)
+            .withCatalogAlias(catalogAlias)
+            .build();
+
     Category rootCategoryBean = (Category) getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
     if (rootCategoryBean == null) {
       throw new NotFoundException("Cannot create root category for id " + commerceId);

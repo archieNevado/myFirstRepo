@@ -66,6 +66,7 @@
 
 .cm-quickinfo {
   &--shoppable {
+    flex-direction: column;
     visibility: visible;
     width: 100%;
     height: inherit;

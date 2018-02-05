@@ -11,13 +11,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 
-import static com.google.common.base.Preconditions.checkState;
-
 @RunWith(SpringJUnit4ClassRunner.class)
+@TestPropertySource(properties = "livecontext.cache.invalidation.enabled:false")
 public abstract class AbstractServiceTest {
 
   @Inject
@@ -37,8 +37,8 @@ public abstract class AbstractServiceTest {
 
   @Before
   public void setup() {
-    CommerceConnection connection = commerce.getConnection(testConfig.getConnectionId());
-    checkState(connection != null, "Commerce connection could not be obtained.");
+    CommerceConnection connection = commerce.findConnection(testConfig.getConnectionId())
+            .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
     connection.setStoreContext(testConfig.getStoreContext());
     CurrentCommerceConnection.set(connection);
@@ -61,6 +61,4 @@ public abstract class AbstractServiceTest {
   protected StoreContext getStoreContext() {
     return testConfig.getStoreContext();
   }
-
-
 }

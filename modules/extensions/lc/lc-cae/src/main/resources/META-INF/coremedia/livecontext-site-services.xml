@@ -10,6 +10,6 @@
   <bean id="liveContextSiteResolver" class="com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl">
     <property name="delegate" ref="siteResolver"/>
     <property name="sitesService" ref="sitesService"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 </beans>

@@ -229,7 +229,9 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     }
 
     //TODO: call super.testSearchProducts(), when hybris rest services are customized
-    SearchResult<Product> searchResult = testling.searchProducts(SEARCH_TERM_1, emptyMap(), getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "3");
+    SearchResult<Product> searchResult = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
     assertThat(searchResult).isNotNull();
     assertThat(searchResult.getSearchResult()).isNotEmpty();
 
@@ -241,21 +243,24 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     //search product below category
     CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
     Category category = testling.findCategoryById(categoryId, getStoreContext());
-    Map<String, String> searchParams = new HashMap<>();
+    searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "3");
     SearchResult<Product> searchResultByCategory = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
     assertThat(searchResultByCategory).isNotNull();
     assertThat(searchResultByCategory.getSearchResult().size()).isGreaterThanOrEqualTo(3);
-    assertThat(searchResultByCategory.getTotalCount()).isLessThan(searchResult.getTotalCount());
+    assertThat(searchResultByCategory.getTotalCount()).isLessThanOrEqualTo(searchResult.getTotalCount());
 
     //search product with invalid param
-    Map<String, String> ignoredParam = new HashMap<>();
-    ignoredParam.put("blub", "10");
-    ignoredParam.put(CatalogService.SEARCH_PARAM_PAGESIZE, "10");
-    ignoredParam.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
-    SearchResult<Product> searchResultIgnoredParam = testling.searchProducts(SEARCH_TERM_1, ignoredParam, getStoreContext());
+    searchParams = new HashMap<>();
+    searchParams.put("blub", "10");
+    searchParams.put(CatalogService.SEARCH_PARAM_PAGESIZE, "10");
+    searchParams.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "3");
+    SearchResult<Product> searchResultIgnoredParam = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
     assertThat(searchResultIgnoredParam).isNotNull();
     assertEquals("given page size has changed", searchResultIgnoredParam.getPageSize(), 10);
+    assertThat(searchResultIgnoredParam.getTotalCount()).isEqualTo(searchResult.getTotalCount());
 
     //search product no hits
     SearchResult<Product> searchResultEmpty = testling.searchProducts("schnasndasn", emptyMap(), getStoreContext());
@@ -279,13 +284,16 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     Map<String, String> searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_NAME_ASC");
+
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "7");
+
     SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
     assertThat(searchProducts).isNotNull();
-    int total = searchProducts.getTotalCount();
-    assertThat(total).isGreaterThan(0);
+    int size = searchProducts.getSearchResult().size();
+    assertThat(size).isGreaterThan(0);
     List<Product> products = searchProducts.getSearchResult();
     int counter = 1;
-    while (counter < total) {
+    while (counter < size) {
       Product previousProduct = products.get(counter - 1);
       Product currentProduct = products.get(counter);
       String previousProductName = previousProduct.getName();
@@ -308,11 +316,11 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_NAME_DSC");
     SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
     assertThat(searchProducts).isNotNull();
-    int total = searchProducts.getTotalCount();
-    assertThat(total).isGreaterThan(0);
+    int size = searchProducts.getSearchResult().size();
+    assertThat(size).isGreaterThan(0);
     List<Product> products = searchProducts.getSearchResult();
     int counter = 1;
-    while (counter < total) {
+    while (counter < size) {
       Product previousProduct = products.get(counter - 1);
       Product currentProduct = products.get(counter);
       String previousProductName = previousProduct.getName();
@@ -333,13 +341,14 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     Map<String, String> searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_PRICE_ASC");
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "7");
     SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
     assertThat(searchProducts).isNotNull();
-    int total = searchProducts.getTotalCount();
-    assertThat(total).isGreaterThan(0);
+    int size = searchProducts.getSearchResult().size();
+    assertThat(size).isGreaterThan(0);
     List<Product> products = searchProducts.getSearchResult();
     int counter = 1;
-    while (counter < total) {
+    while (counter < size) {
       Product previousProduct = products.get(counter - 1);
       Product currentProduct = products.get(counter);
       BigDecimal previousProductListPrice = previousProduct.getListPrice();
@@ -360,13 +369,14 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     Map<String, String> searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_PRICE_DSC");
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "7");
     SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
     assertThat(searchProducts).isNotNull();
-    int total = searchProducts.getTotalCount();
-    assertThat(total).isGreaterThan(0);
+    int size = searchProducts.getSearchResult().size();
+    assertThat(size).isGreaterThan(0);
     List<Product> products = searchProducts.getSearchResult();
     int counter = 1;
-    while (counter < total) {
+    while (counter < size) {
       Product previousProduct = products.get(counter - 1);
       Product currentProduct = products.get(counter);
       BigDecimal previousProductListPrice = previousProduct.getListPrice();
@@ -374,6 +384,85 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
       assertThat(previousProductListPrice).isGreaterThanOrEqualTo(currentProductListPrice);
       counter++;
     }
+  }
+
+  @Test
+  public void testSearchProductsWithOffset() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    int start = 3;
+    int total = 5;
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    List<Product> originalProducts = searchProducts.getSearchResult();
+    assertThat(originalProducts).isNotNull();
+    Product firstProduct = originalProducts.get(start - 1);
+    Product lastProduct = originalProducts.get(start + total - 2);
+
+    searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, Integer.toString(start));
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, Integer.toString(total));
+    SearchResult<Product> searchProductsWithOffset = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProductsWithOffset).isNotNull();
+    assertThat(searchProductsWithOffset.getTotalCount()).isEqualTo(total);
+    List<Product> limitedProducts = searchProductsWithOffset.getSearchResult();
+    assertThat(limitedProducts).isNotNull();
+    assertThat(limitedProducts.size()).isEqualTo(total);
+    assertThat(firstProduct.getName()).isEqualTo(limitedProducts.get(0).getName());
+    assertThat(lastProduct.getName()).isEqualTo(limitedProducts.get(total - 1).getName());
+
+    start = 5;
+    total = 2;
+    firstProduct = originalProducts.get(start - 1);
+    lastProduct = originalProducts.get(start + total - 2);
+    searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, Integer.toString(start));
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, Integer.toString(total));
+    searchProductsWithOffset = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProductsWithOffset).isNotNull();
+    assertThat(searchProductsWithOffset.getTotalCount()).isEqualTo(total);
+    limitedProducts = searchProductsWithOffset.getSearchResult();
+    assertThat(limitedProducts).isNotNull();
+    assertThat(limitedProducts.size()).isEqualTo(total);
+    assertThat(firstProduct.getName()).isEqualTo(limitedProducts.get(0).getName());
+    assertThat(lastProduct.getName()).isEqualTo(limitedProducts.get(total - 1).getName());
+  }
+
+  @Test
+  public void testSearchProductsWithFacet() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, TOP_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_FACET, ":relevance:category:220000:price:£100-£199.99");
+    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    assertThat(searchProducts.getTotalCount()).isEqualTo(4);
+    List<Product> searchResult = searchProducts.getSearchResult();
+    assertThat(searchResult).isNotNull();
+    for (Product product : searchResult) {
+      BigDecimal listPrice = product.getListPrice();
+      assertThat(listPrice.floatValue()).isGreaterThanOrEqualTo(100);
+      assertThat(listPrice.floatValue()).isLessThan(200);
+    }
+
+    searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_FACET, ":relevance:category:220000:brand:Burton");
+    searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    assertThat(searchProducts.getTotalCount()).isEqualTo(7);
+    searchResult = searchProducts.getSearchResult();
+    assertThat(searchResult).isNotNull();
+    assertThat(searchResult.size()).isEqualTo(7);
   }
 
   @Test
@@ -386,6 +475,15 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     searchParams.put("fields", "DEFAULT,facets");
 
     super.testSearchFacetsProducts(SEARCH_TERM_1, searchParams);
+  }
+
+  @Test
+  public void testGetFacetSearchProducts() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    super.testGetFacetSearchProducts();
   }
 
   @Test

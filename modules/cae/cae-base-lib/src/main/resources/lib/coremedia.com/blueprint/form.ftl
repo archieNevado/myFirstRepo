@@ -1,9 +1,14 @@
 <#ftl strip_whitespace=true>
 <#import "util.ftl" as util>
 
-<#function _getIdFromExpression expression>
-  <#return expression?replace("[", "")?replace("]", "") />
-</#function>
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
+
 
 <#--
  * Renders a label associated to spring forms
@@ -12,11 +17,25 @@
  * @param text (optional) the text of the label. By default localization for the bound field will be applied.
  * @param bindPath (optional) prevents the rebinding of the path, e.g. if you already know that the path is bound
  * @param attr (optional) additional attributes for label tag
+ * todo: CMS-11137 move to elasticsocial
  -->
 <#macro labelFromSpring path text="" bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>
   <label for="${_getIdFromExpression(spring.status.expression)}" <@util.renderAttr attr />>${text}</label>
 </#macro>
+
+
+<#-- --- PRIVATE --------------------------------------------------------------------------------------------------- -->
+
+
+<#-- PRIVATE -->
+<#function _getIdFromExpression expression>
+  <#return expression?replace("[", "")?replace("]", "") />
+</#function>
+
+
+<#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
+
 
 <#--
  * Renders an input field associated to spring forms
@@ -29,6 +48,7 @@
  * @param placeholder (optional) specifies a placeholder
  * @param bindPath (optional) false prevents the rebinding of the path, e.g. if you already know that the path is bound
  * @param attr (optional) additional attributes for rendered label tag
+ * DEPRECATED, PRIVATE
  -->
 <#macro inputFromSpring path showErrors=true type="text" placeholder="" bindPath=true attr={}>
   <#local classes=[] />
@@ -40,7 +60,7 @@
 
   <#if type == "checkbox">
     <#local classes=classes + ["cm-checkbox"] />
-    <input type="hidden" name="_${spring.status.expression}" value="on"/>
+    <input type="hidden" name="_${spring.status.expression}" value="on">
     <#if spring.status.value?has_content
          && ((spring.status.value?is_string && spring.status.value == "true")
              || (spring.status.value?is_boolean && spring.status.value))>
@@ -63,15 +83,16 @@
       <#local attr={"placeholder": placeholder} + attr />
     </#if>
   </#if>
-  <#local attr=util.extendSequenceInMap(attr, "classes", classes) />
+  <#local attr=util._extendSequenceInMap(attr, "classes", classes) />
 
-  <input<@util.renderAttr attr /> />
+  <input<@util.renderAttr attr />>
 </#macro>
 
+<#-- DEPRECATED, UNUSED -->
 <#macro hiddenFieldFromSpring path bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>
   <#local attr={"type": "hidden", "name": spring.status.expression, "id": _getIdFromExpression(spring.status.expression), "value": spring.stringStatusValue} + attr />
-  <input<@util.renderAttr attr /> />
+  <input<@util.renderAttr attr />>
 </#macro>
 
 <#--
@@ -89,6 +110,7 @@
  * @param inputPlaceholder(optional) inputFromSpring#placeholder
  * @param inputAttr (optional) @see inputFromSpring#attr
  * @nested (optional) nested content will be placed inside the field before the label and input elements are rendered
+ * DEPRECATED, UNUSED
  -->
 <#macro fieldFromSpring path baseClass="cm-field" additionalClasses=[] bindPath=true attr={} labelText="" labelAttr={} inputShowErrors=true inputType="text" inputPlaceholder="" inputAttr={}>
   <#if bindPath><@spring.bind path=path /></#if>
@@ -97,12 +119,12 @@
   <#if spring.status.error>
     <#local classes=classes +  [baseClass + "--error"] />
   </#if>
-  <#local attr=util.extendSequenceInMap(attr, "classes", classes) />
+  <#local attr=util._extendSequenceInMap(attr, "classes", classes) />
   <div<@util.renderAttr attr />>
     <#nested />
 
-    <#local labelAttr=util.extendSequenceInMap(labelAttr, "classes", [baseClass + "__name"]) />
-    <#local inputAttr=util.extendSequenceInMap(inputAttr, "classes", [baseClass + "__value"]) />
+    <#local labelAttr=util._extendSequenceInMap(labelAttr, "classes", [baseClass + "__name"]) />
+    <#local inputAttr=util._extendSequenceInMap(inputAttr, "classes", [baseClass + "__value"]) />
 
     <#if inputType != "checkbox">
       <@labelFromSpring path=path text=labelText bindPath=false attr=labelAttr />

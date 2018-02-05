@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Required;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,10 +88,6 @@ public class TaxonomyResolverImpl implements TaxonomyResolver, InitializingBean 
   public void setContentType(String contentType) {
     this.contentType = contentType;
   }
-
-  protected Map<String, Taxonomy> getStrategies() {
-    return strategies;
-  }  
 
   @Override
   public Taxonomy getTaxonomy(String siteId, String taxonomyId) {
@@ -278,6 +273,5 @@ public class TaxonomyResolverImpl implements TaxonomyResolver, InitializingBean 
   private boolean isValid(Map.Entry<String, Taxonomy> entry) {
     return entry.getValue().isValid();
   }
-
 
 }

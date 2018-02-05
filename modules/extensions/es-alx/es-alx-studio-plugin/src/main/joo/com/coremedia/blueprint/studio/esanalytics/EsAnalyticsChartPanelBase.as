@@ -74,19 +74,19 @@ public class EsAnalyticsChartPanelBase extends PropertyFieldGroup {
     return esChart;
   }
 
-  public function getAlxData(serviceName:String, propertyName:String):ValueExpression {
-    return ValueExpressionFactory.createFromFunction(function (serviceName1:String, propertyName1:String):RemoteBean {
+  public function getAlxData(propertyName:String):ValueExpression {
+    return ValueExpressionFactory.createFromFunction(function (propertyName1:String):RemoteBean {
       var currentContent:Content = getCurrentContent();
       if (validContent(currentContent) && getTenantVE() && getTenantVE().getValue()) {
-        var alxPageViewsVE:ValueExpression = EsAnalyticsImpl.getAlxPageViews(getTenantVE().getValue(), serviceName1, propertyName1, currentContent.getId(), getTimeRangeValueExpression().getValue());
+        var alxPageViewsVE:ValueExpression = EsAnalyticsImpl.getAlxPageViews(getTenantVE().getValue(),
+                propertyName1, currentContent.getId(), getTimeRangeValueExpression().getValue());
         if (alxPageViewsVE) {
           return alxPageViewsVE.getValue();
         }
       }
       // must not be undefined to trigger the BindPropertyPlugin in ExChart
       return null;
-    }, serviceName, propertyName);
-
+    }, propertyName);
   }
 
   private static function validContent(content:Content):Boolean {

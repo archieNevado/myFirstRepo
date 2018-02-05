@@ -52,17 +52,18 @@ public class EsAnalyticsChartWidgetBase extends Container {
     return widgetToolbar.down("tbtext") as TextItem;
   }
 
-  public function getAlxData(serviceName:String, propertyName:String):ValueExpression {
-    return ValueExpressionFactory.createFromFunction(function (serviceName1:String, propertyName1:String):Object {
+  public function getAlxData(propertyName:String):ValueExpression {
+    return ValueExpressionFactory.createFromFunction(function (propertyName1:String):Object {
 
       if (content && content.getId() && getTenantVE().getValue()) {
-        var alxPageViewsVE:ValueExpression = EsAnalyticsImpl.getAlxPageViews(getTenantVE().getValue(), serviceName1, propertyName1, content.getId(), getTimeRangeValueExpression().getValue());
+        var alxPageViewsVE:ValueExpression = EsAnalyticsImpl.getAlxPageViews(getTenantVE().getValue(),
+                propertyName1, content.getId(), getTimeRangeValueExpression().getValue());
         if (alxPageViewsVE) {
           return alxPageViewsVE.getValue();
         }
       }
       return null;
-    }, serviceName, propertyName);
+    }, propertyName);
   }
 
   public function getPublicationData(propertyName:String):ValueExpression {

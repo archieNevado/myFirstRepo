@@ -1,15 +1,18 @@
 package com.coremedia.livecontext.asset.impl;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.asset.AssetSearchService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,15 +25,17 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Collection;
 import java.util.List;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssetResolvingStrategyImplTest {
 
   private static final String EXTERNAL_ID = "externalId1";
@@ -55,20 +60,32 @@ public class AssetResolvingStrategyImplTest {
   @Mock
   private Site site;
 
+  @Mock
+  private StoreContextProvider storeContextProvider;
+
+  @Mock
+  private CatalogService catalogService;
+
   private BaseCommerceConnection commerceConnection;
-  private MockCommerceEnvBuilder envBuilder;
   private StoreContext storeContext;
 
   @Before
   public void setUp() throws Exception {
-    envBuilder = MockCommerceEnvBuilder.create();
-    commerceConnection = envBuilder.setupEnv();
+    storeContext = newStoreContext();
+    when(storeContextProvider.findContextBySite(any())).thenReturn(storeContext);
+
+    commerceConnection = new BaseCommerceConnection();
+    commerceConnection.setStoreContextProvider(storeContextProvider);
+    commerceConnection.setCatalogService(catalogService);
+    commerceConnection.setStoreContext(storeContext);
+    CurrentCommerceConnection.set(commerceConnection);
+
     storeContext = commerceConnection.getStoreContext();
   }
 
   @After
   public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
+    CurrentCommerceConnection.remove();
   }
 
   @Test
@@ -192,7 +209,7 @@ public class AssetResolvingStrategyImplTest {
     List<Content> cachedProductAssets = of(productPicture);
     List<String> referencedOnProductContent = of(EXTERNAL_ID);
 
-    returnProductVariantWithProduct(COMMERCE_ID_SKU, EXTERNAL_ID_SKU, COMMERCE_ID_REF);
+    returnProductVariantWithProduct(COMMERCE_ID_SKU, COMMERCE_ID_REF);
     returnIndexedAssets(EXTERNAL_ID_SKU, indexedVariantAssets);
 
     returnIndexedAssets(EXTERNAL_ID, indexedProductAssets);
@@ -214,7 +231,7 @@ public class AssetResolvingStrategyImplTest {
     List<Content> indexedProductAssets = of(productPicture);
     List<String> referencedOnContent = of(EXTERNAL_ID);
 
-    returnProductVariantWithProduct(COMMERCE_ID_SKU, EXTERNAL_ID_SKU, COMMERCE_ID_REF);
+    returnProductVariantWithProduct(COMMERCE_ID_SKU, COMMERCE_ID_REF);
     returnIndexedAssets(EXTERNAL_ID_SKU, indexedVariantAssets);
 
     returnCachedAssets(EXTERNAL_ID, site, cachedProductAssets);
@@ -243,13 +260,9 @@ public class AssetResolvingStrategyImplTest {
             .thenReturn(picturesInSolrForExternalId);
   }
 
-  private void returnProductVariantWithProduct(CommerceId productVariantId,
-                                               String productVariantExternalId,
-                                               String productId) {
+  private void returnProductVariantWithProduct(CommerceId productVariantId, String productId) {
     ProductVariant variant = mock(ProductVariant.class);
     when(commerceConnection.getCatalogService().findProductById(productVariantId, storeContext)).thenReturn(variant);
-    when(variant.getExternalId()).thenReturn(productVariantExternalId);
-    when(variant.getId()).thenReturn(productVariantId);
     markAsSKU(productVariantId);
 
     Product product = mock(Product.class);

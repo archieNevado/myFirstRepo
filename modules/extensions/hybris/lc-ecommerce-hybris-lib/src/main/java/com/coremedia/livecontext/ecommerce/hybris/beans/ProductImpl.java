@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.hybris.beans;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cap.content.Content;
-import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
@@ -28,6 +27,7 @@ import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 import java.util.Map;
@@ -142,17 +142,20 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return getCatalogService().findCategoryById(commerceId, getContext());
   }
 
+  @Nonnull
   @Override
   public List<Category> getCategories() {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
-    return null;
+    return emptyList();
   }
 
+  @Nullable
   @Override
   public String getDefaultImageAlt() {
     return null;
   }
 
+  @Nullable
   @Override
   public String getDefaultImageUrl() {
     List<Content> pictures = getPictures();
@@ -166,6 +169,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return getAssetUrlProvider().getImageUrl(getDelegate().getPictureDownloadUrl());
   }
 
+  @Nullable
   @Override
   public String getThumbnailUrl() {
     List<Content> pictures = getPictures();
@@ -351,15 +355,17 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return getDelegate().getBaseProduct() != null;
   }
 
+  @Nonnull
   @Override
   public CatalogPicture getCatalogPicture() {
-    AssetService assetService = getAssetService();
+    return findAssetService()
+            .map(assetService -> assetService.getCatalogPicture(getCatalogPictureDefaultImageUrl(), getReference()))
+            .orElseGet(() -> new CatalogPicture("#", null));
+  }
 
-    if (assetService == null) {
-      return new CatalogPicture("#", null);
-    }
-
+  private String getCatalogPictureDefaultImageUrl() {
     String defaultImageUrl = getDefaultImageUrl();
+
     ProductDocument delegate = getDelegate();
     if (isNullOrEmpty(defaultImageUrl) || isNullOrEmpty(delegate.getPictureDownloadUrl())) {
       ProductRefDocument baseProduct = delegate.getBaseProduct();
@@ -372,45 +378,36 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
       }
     }
 
-    return assetService.getCatalogPicture(defaultImageUrl, getReference());
+    return defaultImageUrl;
   }
 
+  @Nullable
   @Override
   public Content getPicture() {
     return null;
   }
 
+  @Nonnull
   @Override
   public List<Content> getPictures() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return emptyList();
-    }
-
-    return assetService.findPictures(getReference());
+    return findAssetService()
+            .map(assetService -> assetService.findPictures(getReference()))
+            .orElseGet(Collections::emptyList);
   }
 
+  @Nonnull
   @Override
   public List<Content> getVisuals() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return emptyList();
-    }
-
-    return assetService.findVisuals(getReference(), false);
+    return findAssetService()
+            .map(assetService -> assetService.findVisuals(getReference(), false))
+            .orElseGet(Collections::emptyList);
   }
 
+  @Nonnull
   @Override
   public List<Content> getDownloads() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return emptyList();
-    }
-
-    return assetService.findDownloads(getReference());
+    return findAssetService()
+            .map(assetService -> assetService.findDownloads(getReference()))
+            .orElseGet(Collections::emptyList);
   }
-
 }

@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMDownload" -->
 <#-- @ftlvariable name="islast" type="java.lang.Boolean" -->
 
-<#assign link=cm.getLink(self.data!cm.UNDEFINED) />
+<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
 <div class="cm-medialist"<@cm.metadata self.content />>
   <@bp.optionalLink href="${link}">
@@ -35,7 +35,7 @@
       </#if>
       <#-- teaser text, 3 lines ~ 160 chars -->
       <p class="cm-medialist__text"<@cm.metadata "properties.teaserText" />>
-        <@cm.include self=self view="infos" /><br/>
+        <@cm.include self=self view="infos" /><br>
         <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "medialist.max.length", 160)) />
       </p>
     </div>

@@ -5,16 +5,17 @@ import com.coremedia.ui.data.beanFactory;
 
 public class EsAnalyticsImpl {
   public static const TENANT_URI_SEGMENT:String = "tenant";
+  public static const ES_ALX_CHART:String = "esAlxChartItemId";
 
   public static const ELASTIC_API_BASE_URL:String = "elastic/";
   public static const ALX_API_BASE_URL:String = ELASTIC_API_BASE_URL + "alx/";
   private static const ALX_PAGEVIEWS_API_BASE_URL:String = "pageviews/";
   private static const PUBLICATIONS_API_BASE_URL:String = "publications/";
 
-  public static function getAlxPageViews(tenant:String, serviceName:String, propertyName:String, contentId:String, timeRange:String):ValueExpression {
+  public static function getAlxPageViews(tenant:String, propertyName:String, contentId:String, timeRange:String):ValueExpression {
     var pageviewsUriPrefix:String = getTenantAwareAlxPageviewsUriPrefix(tenant);
     if (pageviewsUriPrefix) {
-      return ValueExpressionFactory.create(propertyName, beanFactory.getRemoteBean(pageviewsUriPrefix + convertIdField(contentId) + "/" + serviceName
+      return ValueExpressionFactory.create(propertyName, beanFactory.getRemoteBean(pageviewsUriPrefix + convertIdField(contentId)
               + "?timeRange=" + timeRange));
     }
     return null;

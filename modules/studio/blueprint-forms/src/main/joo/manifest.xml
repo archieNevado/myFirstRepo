@@ -44,6 +44,8 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.DataDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.DetailsDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ExternallyVisibleDateForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.FixedIndexConfigurationForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.FixedIndexItemsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ItemsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.LinkedSettingsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.LocalSettingsForm"/>

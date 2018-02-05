@@ -33,7 +33,7 @@
                   <a href="${cm.getLink(productInSite)}">
                       <img class="cm-aspect-ratio-box__content"
                         <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": true} />
-                           src="${item.product.defaultImageUrl}" alt="${item.product.defaultImageAlt!""}"/>
+                           src="${item.product.defaultImageUrl}" alt="${item.product.defaultImageAlt!""}">
                   </a>
               </div>
           </#if>

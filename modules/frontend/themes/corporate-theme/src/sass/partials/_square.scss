@@ -3,7 +3,8 @@
 
   &__dimmer,
   &__text,
-  &__headline {
+  &__headline,
+  &__cta {
     transition: all $transition-duration ease(in-out-quad);
   }
 
@@ -31,7 +32,7 @@
       }
     }
 
-    &__button {
+    &__cta {
       transform: translate3d(0, -5px, 0);
     }
   }
@@ -42,7 +43,7 @@
       transform: translate3d(0, 10px, 0);
     }
 
-    &__button {
+    &__cta {
       transform: translate3d(0, -10px, 0);
     }
   }
@@ -60,7 +61,7 @@
       }
     }
 
-    &__button {
+    &__cta {
       transform: none;
     }
   }

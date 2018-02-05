@@ -4,36 +4,4 @@
     margin: auto;
     width: inherit;
   }
-
-  .facebookPicture + table {
-    width: 400px;
-  }
-
-  & > .cm-teaser {
-    overflow: inherit;
-  }
-
-  .cm-teaser:not(.cm-teaser--hero) {
-
-
-    .cm-teaser__title {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 2rem;
-      text-align: center;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 1rem;
-      margin: 0;
-      color: $hybris-text;
-      font-size: 2rem;
-      line-height: 1;
-
-      span {
-        font-weight: bold;
-        text-transform: uppercase;
-        margin-bottom: 1rem;
-      }
-    }
-  }
 }

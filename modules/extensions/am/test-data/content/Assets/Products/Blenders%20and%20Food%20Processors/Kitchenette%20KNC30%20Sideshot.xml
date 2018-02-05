@@ -59,7 +59,7 @@
 <StringListProperty Name="regions">
 <String>Europe</String>
 </StringListProperty>
-<DateProperty Name="expirationDate" TimeZone="GMT+01:00">2017-12-31T00:00:00+01:00</DateProperty>
+<DateProperty Name="expirationDate" TimeZone="GMT+01:00">2018-12-31T00:00:00+01:00</DateProperty>
 </Struct>
 </metadata>
 <keywords></keywords>

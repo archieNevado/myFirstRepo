@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class EmptyProductValidatorTest {
   @Test
   public void supports() {
@@ -58,7 +58,6 @@ public class EmptyProductValidatorTest {
   @Test
   public void predicateIsPreviewNoProduct() {
     testling.setPreview(true);
-    when(productTeaser.getProduct()).thenReturn(null);
     assertTrue(predicate.apply(productTeaser));
     verify(productTeaser, never()).getProduct();
   }
@@ -73,7 +72,6 @@ public class EmptyProductValidatorTest {
   @Test
   public void predicateIsPreviewNotFoundException() {
     testling.setPreview(true);
-    when(productTeaser.getProduct()).thenThrow(NotFoundException.class);
     assertTrue(predicate.apply(productTeaser));
     verify(productTeaser, never()).getProduct();
   }

@@ -16,6 +16,7 @@ import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CATEGO
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CLEAR_ALL_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.PRODUCT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.SEGMENT_EVENT;
+import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.SKU_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.UNKNOWN_TYPE_EVENT;
 import static java.util.Collections.emptyList;
 
@@ -70,7 +71,7 @@ public class InvalidationServiceImpl extends AbstractHybrisService implements In
           case SKU_CONTENT_TYPE:
             return new InvalidationEvent(
                     techId,
-                    PRODUCT_EVENT, sourceEvent.getTimestamp()
+                    SKU_EVENT, sourceEvent.getTimestamp()
             );
           case CATEGORY_CONTENT_TYPE:
             return new InvalidationEvent(

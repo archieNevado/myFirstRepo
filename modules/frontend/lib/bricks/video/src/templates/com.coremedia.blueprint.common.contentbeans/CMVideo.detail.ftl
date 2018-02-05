@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMVideo" -->
-<#assign additionalClass=cm.localParameters().additionalClass!"cm-details" />
+<#assign blockClass=cm.localParameters().blockClass!"cm-details" />
 <#assign relatedView=cm.localParameters().relatedView!"related" />
 <#assign hasVideo=self.data?has_content || self.dataUrl?has_content />
 
@@ -7,17 +7,17 @@
 <#assign renderTags=cm.localParameter("renderTags", true) />
 <#assign renderRelated=cm.localParameter("renderRelated", true) />
 
-<article class="${additionalClass} ${additionalClass}--video"<@cm.metadata self.content />>
+<article class="${blockClass} ${blockClass}--video"<@cm.metadata self.content />>
 
   <#-- title -->
-  <h1 class="${additionalClass}__headline"<@cm.metadata "properties.title"/>>${self.title!""}</h1>
+  <h1 class="${blockClass}__headline"<@cm.metadata "properties.title"/>>${self.title!""}</h1>
 
   <#-- video or picture -->
-  <div class="${additionalClass}__medias">
+  <div class="${blockClass}__medias">
     <#if hasVideo>
-      <div class="${additionalClass}__video-box">
+      <div class="${blockClass}__video-box">
         <@cm.include self=self view="video" params={
-          "classVideo": "${additionalClass}__video",
+          "classVideo": "${blockClass}__video",
           "hideControls": false,
           "autoplay": false,
           "loop": false,
@@ -31,23 +31,23 @@
       </div>
       <@cm.include self=self.picture params={
         "limitAspectRatios": ["landscape_ratio16x9"],
-        "classBox": "${additionalClass}__video-box",
-        "classImage": "${additionalClass}__video"
+        "classBox": "${blockClass}__video-box",
+        "classImage": "${blockClass}__video"
       }/>
     </#if>
   </div>
 
   <#-- text -->
   <#if self.detailText?has_content>
-    <div class="${additionalClass}__text cm-richtext"<@cm.metadata "properties.detailText"/>>
+    <div class="${blockClass}__text cm-richtext"<@cm.metadata "properties.detailText"/>>
       <@cm.include self=self.detailText!cm.UNDEFINED />
     </div>
   </#if>
 
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
-    <div class="${additionalClass}__date"<@cm.metadata "properties.externallyDisplayedDate"/>>
-      <@bp.renderDate self.externallyDisplayedDate.time "${additionalClass}__time" />
+    <div class="${blockClass}__date"<@cm.metadata "properties.externallyDisplayedDate"/>>
+      <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
     </div>
   </#if>
 

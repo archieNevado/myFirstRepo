@@ -19,8 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Named;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.common.logging.BaseMarker.UNCLASSIFIED_PERSONAL_DATA;
 import static com.coremedia.elastic.social.rest.api.ElasticSocialRestConstants.ELASTIC_SOCIAL_REST_PREFIX;
 
 /**
@@ -225,7 +226,7 @@ public class CuratedTransferResource extends AbstractLinkingResource {
       try {
         anonymous = author.isAnonymous();
       } catch (ModelException e) {
-        LOG.warn("Could not resolve reference from comment/review {} to author: {}", comment.getId(), e.getMessage());
+        LOG.warn(UNCLASSIFIED_PERSONAL_DATA, "Could not resolve reference from comment/review {} to author: {}", comment.getId(), e.getMessage());
       }
       if (!anonymous) {
         name = author.getName();
@@ -252,12 +253,10 @@ public class CuratedTransferResource extends AbstractLinkingResource {
         if (comment != null) {
           comments.add(comment);
         } else {
-          if (LOG.isInfoEnabled()) {
-            LOG.info("Could not create comment/review for ID {}. Skipping.", commentId);
-          }
+          LOG.info("Could not create comment/review for ID {}. Skipping.", commentId);
         }
       } catch (RuntimeException ex) {
-        LOG.error(String.format("Error creating comment/review for ID %s. Skipping.", commentId), ex);
+        LOG.error("Error creating comment/review for ID {}. Skipping.", commentId, ex);
       }
     }
 

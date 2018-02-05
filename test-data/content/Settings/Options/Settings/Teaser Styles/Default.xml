@@ -7,6 +7,7 @@
 <StringProperty Name="description">The default style</StringProperty>
 <StructProperty Name="style">
 <Struct>
+<StringProperty Name="textCls">cm-richtext--dark-shadow</StringProperty>
 <StringProperty Name="color">#000</StringProperty>
 <StringProperty Name="backgroundColor">#FFF</StringProperty>
 </Struct>

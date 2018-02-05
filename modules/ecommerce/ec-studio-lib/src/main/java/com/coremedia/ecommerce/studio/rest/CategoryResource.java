@@ -2,6 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
+import com.coremedia.ecommerce.studio.rest.model.Facets;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -81,6 +82,10 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setChildrenByName(result);
 
     representation.setContent(getContent());
+
+    Facets facets = new Facets(entity.getContext());
+    facets.setId(entity.getExternalId());
+    representation.setFacets(facets);
   }
 
   @Override

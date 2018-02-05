@@ -166,7 +166,7 @@ public class UserDetailsHelper {
       boolean hasChanges = false;
       if (validatePassword(user, context, userDetails.getPassword(), userDetails.getNewPassword())) {
         hasChanges = true;
-        user.setPassword(userDetails.getNewPassword());
+        user.setPassword(userDetails.getNewPassword(), communityUserService.getPasswordHashAlgorithm());
       }
       if (userDetails.hasChangesWhichDoNotNeedModeration(user)) {
         hasChanges = true;

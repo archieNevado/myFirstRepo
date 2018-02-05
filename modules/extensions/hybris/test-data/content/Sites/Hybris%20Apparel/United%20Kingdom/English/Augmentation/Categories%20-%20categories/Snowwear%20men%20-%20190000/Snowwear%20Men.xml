@@ -5,6 +5,20 @@
 </master>
 <viewtype>
 </viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="commerce">
+<Struct>
+<BooleanProperty Name="selectChildren">true</BooleanProperty>
+<StringListProperty Name="children">
+<String>hybris:///catalog/category/190700</String>
+<String>hybris:///catalog/category/190100</String>
+<String>hybris:///catalog/category/190300</String>
+</StringListProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</localSettings>
 <linkedSettings>
 </linkedSettings>
 <resourceBundles2>

@@ -15,9 +15,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @cm.template.api
- */
 public class AnalyticsProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(AnalyticsProvider.class);
@@ -76,7 +73,6 @@ public class AnalyticsProvider {
    * The path is represented as an Array of numeric <i>content IDs</i>.
    *
    * @return string array of numeric content ids for rendering
-   * @cm.template.api
    */
   public String[] getNavigationPathIds() {
     return transformNavigationPath(new NavigationToNumericId());
@@ -87,7 +83,6 @@ public class AnalyticsProvider {
    * The path is represented as an Array of <i>segments names</i>
    *
    * @return string array of segment names for rendering
-   * @cm.template.api
    */
   public String[] getNavigationPathSegments() {
     return transformNavigationPath(new NavigationToSegment());
@@ -97,7 +92,6 @@ public class AnalyticsProvider {
    * The id of the content being rendered on the aggregator, e.g. the numeric content id of a CMS document
    *
    * @return the content id
-   * @cm.template.api
    * @see com.coremedia.blueprint.common.contentbeans.CMObject#getContentId()
    */
   public String getContentId() {
@@ -106,16 +100,11 @@ public class AnalyticsProvider {
 
   /**
    * The type or classifier of the content being rendered
-   *
-   * @cm.template.api
    */
   public String getContentType() {
     return aggregator.getContentType();
   }
 
-  /**
-   * @cm.template.api
-   */
   public Object getContent() {
     return aggregator.getContent();
   }
@@ -132,7 +121,6 @@ public class AnalyticsProvider {
    * </ul>
    *
    * @return true if and only if all the conditions above match
-   * @cm.template.api
    */
   public final boolean isEnabled() {
     final Object o = getSettings().get(DISABLED);

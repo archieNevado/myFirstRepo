@@ -3,11 +3,9 @@ package com.coremedia.livecontext.fragment;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,17 +26,15 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CMExternalChannelBySiteCacheKeyTest {
 
   @Mock
-  Site site;
+  private Site site;
   @Mock
-  Content rootFolder;
+  private Content rootFolder;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  ContentRepository contentRepository;
-  @Mock
-  ContentType externalChannelContentType;
+  private ContentRepository contentRepository;
 
   private Cache cache;
 
@@ -49,19 +45,17 @@ public class CMExternalChannelBySiteCacheKeyTest {
 
     when(site.getSiteRootFolder()).thenReturn(rootFolder);
     when(rootFolder.getRepository()).thenReturn(contentRepository);
-    when(contentRepository.getContentType("CMExternalChannel")).thenReturn(externalChannelContentType);
     Collection<Content> externalChannels = emptyList();
     channelsFulfilling(externalChannels);
   }
 
-  void channelsFulfilling(Collection<Content> externalChannels) {
+  private void channelsFulfilling(Collection<Content> externalChannels) {
     when(contentRepository.getQueryService().getContentsFulfilling(anyCollection(), anyString(), any()))
             .thenReturn(externalChannels);
   }
 
   @Test
   public void contentTypeMissing() throws Exception {
-    when(contentRepository.getContentType("CMExternalChannel")).thenReturn(null);
     assertEquals(emptyMap(), cache.get(new CMExternalPageBySiteCacheKey(site)));
     assertEquals(emptyMap(), cache.get(new CMExternalPageBySiteCacheKey(site)));
   }
@@ -79,10 +73,9 @@ public class CMExternalChannelBySiteCacheKeyTest {
     Content content2 = mock(Content.class);
     when(content1.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn("hi");
     when(content2.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn("ho");
-    when(externalChannelContentType.getInstances()).thenReturn(ImmutableSet.of(content1, content2));
     channelsFulfilling(asList(content1, content2));
 
-    Map<String, Object> expected = ImmutableMap.<String, Object>of("hi", content1, "ho", content2);
+    Map<String, Object> expected = ImmutableMap.of("hi", content1, "ho", content2);
     assertEquals(expected, cache.get(new CMExternalPageBySiteCacheKey(site)));
     assertEquals(expected, cache.get(new CMExternalPageBySiteCacheKey(site)));
   }

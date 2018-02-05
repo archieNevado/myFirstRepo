@@ -22,26 +22,10 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-spring</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>caefeeder-blueprint-component</artifactId>
+      <artifactId>caefeeder-live-blueprint-component</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!-- required for Tomcat7 -->
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -62,10 +46,6 @@
             <propertieslocations>classpath:/caefeeder-live.properties</propertieslocations>
           </systemProperties>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 import static com.coremedia.elastic.core.api.SortOrder.ASCENDING;
 import static com.coremedia.elastic.social.api.ModerationType.POST_MODERATION;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
@@ -164,8 +165,8 @@ public class CommentGenerator {
       noModerationCommentCount++;
     }
     commentCount++;
-    LOG.debug(format("Created comment for %s with id=%s with %s attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
-            comment.getId(), comment.getAttachments().size()));
+    LOG.debug(PERSONAL_DATA, "Created comment for {} with id={} with {} attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
+            comment.getId(), comment.getAttachments().size());
     return comment;
   }
 

@@ -1,11 +1,11 @@
 # CoreMedia Blueprint Extensions
 
-##Google Analytics Extension
+## Google Analytics Extension
 
-###Description
+### Description
 
 Analytics integration for Google Analytics
 
-###Documentation
+### Documentation
 
 See the Analytics Connectors Manual.

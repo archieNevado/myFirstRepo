@@ -22,3 +22,5 @@ config/
 
 # generated files
 API.md
+yarn.lock
+package-lock.json

@@ -1,8 +1,8 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##nugg.ad Extension
+## nugg.ad Extension
 
-###Description
+### Description
 
 The Nugg.ad integration is supposed to enhance the Adaptive Personalisation module through predictive behavioral 
 targeting. Nugg.ad provides predictions about user demographics already on the first visit to a CoreMedia personalized 

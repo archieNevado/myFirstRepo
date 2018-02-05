@@ -1,8 +1,8 @@
 # CoreMedia Blueprint Extensions
 
-##Taxonomy Blueprint Extension
+## Taxonomy Blueprint Extension
 
-###Description
+### Description
 An extension for managing taxonomy trees in the Studio.
 
-###Documentation
+### Documentation

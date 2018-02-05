@@ -68,9 +68,14 @@ public class DownloadPortalFactoryTest {
   private AMAsset asset2;
 
 
-
   @Mock
   private Content content;
+
+  @Mock
+  private Content navigationContent;
+
+  @Mock
+  private Content categoryContent;
 
   @Mock
   private CMChannel navigation;
@@ -81,10 +86,26 @@ public class DownloadPortalFactoryTest {
   @Before
   public void setUp() {
     when(dataViewFactory.loadAllCached(anyList(), nullable(String.class))).then(returnsFirstArg());
+
+    when(navigation.getContent()).thenReturn(navigationContent);
+    when(navigationContent.isInProduction()).thenReturn(true);
+
+    when(category.getContent()).thenReturn(categoryContent);
+    when(categoryContent.isInProduction()).thenReturn(true);
+
+    when(content.isInProduction()).thenReturn(true);
+
     when(category.getContentId()).thenReturn(123);
+    when(category.getContent()).thenReturn(content);
+    when(category.getContent().isInProduction()).thenReturn(true);
 
     when(asset1.getTitle()).thenReturn("asset1");
     when(asset2.getTitle()).thenReturn("asset2");
+    when(asset1.getContent()).thenReturn(content);
+    when(asset2.getContent()).thenReturn(content);
+
+    when(asset1.getContent().isInProduction()).thenReturn(true);
+    when(asset2.getContent().isInProduction()).thenReturn(true);
   }
 
   @Test
@@ -123,7 +144,8 @@ public class DownloadPortalFactoryTest {
   public void testCreateAssetDetails_assetDetailPageWithIllegalCategory_returnsNull() throws Exception {
     AMTaxonomy illegalCategory = mock(AMTaxonomy.class, "Illegal Category");
     AMAsset requestedAsset = mock(AMAsset.class, "Requested Asset");
-
+    when(requestedAsset.getContent()).thenReturn(content);
+    when(illegalCategory.getContent()).thenReturn(categoryContent);
     when(requestedAsset.getAssetCategories()).thenReturn(Collections.singletonList(category));
 
     final AssetDetails assetDetails = factory.createAssetDetails(navigation, requestedAsset, illegalCategory);
@@ -143,7 +165,8 @@ public class DownloadPortalFactoryTest {
     metadataProperties.put("test", "string");
     when(struct.getProperties()).thenReturn(metadataProperties);
     when(requestedAsset.getMetadata()).thenReturn(struct);
-
+    when(requestedAsset.getContent()).thenReturn(content);
+    when(anotherCategory.getContent()).thenReturn(categoryContent);
     final AssetDetails assetDetails = factory.createAssetDetails(navigation, requestedAsset, anotherCategory);
 
     assertNotNull("The assetDetails should not be null for legal params", assetDetails);
@@ -155,6 +178,7 @@ public class DownloadPortalFactoryTest {
   @Test
   public void testCreateAssetDetails_assetDetailPageWithNullCategory_returnsAssetWithPrimaryCategory() throws Exception {
     AMAsset requestedAsset = mock(AMAsset.class, "Requested Asset");
+    when(requestedAsset.getContent()).thenReturn(content);
     when(requestedAsset.getPrimaryCategory()).thenReturn(category);
     when(requestedAsset.getAssetCategories()).thenReturn(Collections.singletonList(category));
     when(requestedAsset.getMetadata()).thenReturn(struct);

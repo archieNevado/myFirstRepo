@@ -4,11 +4,11 @@ import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -18,6 +18,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,7 @@ public class SiteFilter implements Filter {
 
   private static final Logger LOG = LoggerFactory.getLogger(SiteFilter.class);
 
-  private static final Pattern SITE_ID_URL_PATTERN = Pattern.compile("/livecontext/.+?/(.+?)((/.*)|$)");
+  private static final Pattern SITE_ID_URL_PATTERN = Pattern.compile(".*?/livecontext/.+?/(?<siteId>.+?)((/.*)|$)");
 
   @Inject
   @SuppressWarnings("squid:S3306") //squid:S3306 Constructor injection should be used instead of field injection
@@ -44,66 +45,58 @@ public class SiteFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
           throws IOException, ServletException {
-    Site site = getSite(request);
-
-    if (site != null) {
-      SiteHelper.setSiteToRequest(site, request);
-    }
+    findSite(request).ifPresent(site -> SiteHelper.setSiteToRequest(site, request));
 
     chain.doFilter(request, response);
   }
 
-  @Nullable
-  private Site getSite(@Nonnull ServletRequest request) {
-    String pathInfo = getPathInfo(request);
-
-    if (pathInfo == null) {
-      return null;
-    }
-
-    String siteId = extractSiteId(pathInfo);
-
-    if (siteId == null) {
-      return null;
-    }
-
-    return findSiteById(siteId);
+  @Nonnull
+  private Optional<Site> findSite(@Nonnull ServletRequest request) {
+    return findPathInfo(request)
+            .flatMap(SiteFilter::extractSiteId)
+            .flatMap(this::findSiteById);
   }
 
-  @Nullable
-  private static String getPathInfo(@Nonnull ServletRequest request) {
+  @Nonnull
+  private static Optional<String> findPathInfo(@Nonnull ServletRequest request) {
     if (!(request instanceof HttpServletRequest)) {
-      return null;
+      return Optional.empty();
     }
 
-    return ((HttpServletRequest) request).getPathInfo();
+    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+
+    String pathInfo = httpServletRequest.getPathInfo();
+    if (StringUtils.isEmpty(pathInfo)) {
+      pathInfo = httpServletRequest.getServletPath();
+    }
+
+    return Optional.ofNullable(pathInfo);
   }
 
-  @Nullable
+  @Nonnull
   @VisibleForTesting
-  static String extractSiteId(@Nonnull CharSequence pathInfo) {
+  static Optional<String> extractSiteId(@Nonnull CharSequence pathInfo) {
     Matcher matcher = SITE_ID_URL_PATTERN.matcher(pathInfo);
 
     if (!matcher.matches()) {
-      return null;
+      return Optional.empty();
     }
 
-    String siteId = matcher.group(1);
+    String siteId = matcher.group("siteId");
 
     if (siteId == null) {
       LOG.debug("Unable to extract site ID from URL path info '{}'.", pathInfo);
     }
 
-    return siteId;
+    return Optional.ofNullable(siteId);
   }
 
-  @Nullable
-  private Site findSiteById(@Nonnull String siteId) {
-    Site site = sitesService.getSite(siteId);
+  @Nonnull
+  private Optional<Site> findSiteById(@Nonnull String siteId) {
+    Optional<Site> site = sitesService.findSite(siteId);
 
-    if (site == null) {
+    if (!site.isPresent()) {
       LOG.debug("Unknown site ID '{}'.", siteId);
-      return null;
     }
 
     return site;

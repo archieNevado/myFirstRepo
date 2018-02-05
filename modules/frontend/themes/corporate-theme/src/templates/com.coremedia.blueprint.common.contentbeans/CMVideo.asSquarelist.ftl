@@ -22,7 +22,7 @@
     </#if>
 
     <#-- play overlay icon-->
-    <@cm.include self=self view="_playButton" params={"additionalClass": "cm-squarelist"}/>
+    <@cm.include self=self view="_playButton" params={"blockClass": "cm-squarelist"}/>
 
     <#-- headline -->
     <#if self.teaserTitle?has_content>

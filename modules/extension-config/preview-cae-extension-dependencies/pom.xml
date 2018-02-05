@@ -18,13 +18,6 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-demodata-preview-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>pom</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>external-preview-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>

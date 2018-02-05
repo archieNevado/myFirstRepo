@@ -6,7 +6,7 @@ package com.coremedia.blueprint.studio.taxonomy {
 public class TaxonomyNodeList {
 
   private var nodes:Array;
-	private var json:Array;
+  private var json:Array;
 
   public function TaxonomyNodeList(object:Array) {
     nodes = [];
@@ -43,9 +43,9 @@ public class TaxonomyNodeList {
   }
 
   public function getNodeForDisplayName(name:String):TaxonomyNode {
-    for(var i:int = 0; i<nodes.length; i++) {
+    for (var i:int = 0; i < nodes.length; i++) {
       var hit:TaxonomyNode = nodes[i];
-      if(hit.getDisplayName() === TaxonomyUtil.escapeHTML(name)) {
+      if (hit.getDisplayName() === TaxonomyUtil.escapeHTML(name)) {
         return hit;
       }
     }

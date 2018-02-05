@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static com.coremedia.blueprint.elastic.social.cae.springsocial.Requests.getServletRequest;
+
 public class CustomProviderSignInController extends ProviderSignInController {
+
   /**
    * Creates a new provider sign-in controller.
    *
@@ -28,17 +30,21 @@ public class CustomProviderSignInController extends ProviderSignInController {
    *                                  instance.
    * @param signInAdapter             handles user sign-in
    */
-  public CustomProviderSignInController(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository, SignInAdapter signInAdapter) {
+  public CustomProviderSignInController(ConnectionFactoryLocator connectionFactoryLocator,
+                                        UsersConnectionRepository usersConnectionRepository,
+                                        SignInAdapter signInAdapter) {
     super(connectionFactoryLocator, usersConnectionRepository, signInAdapter);
   }
 
   @Override
   public RedirectView signIn(@PathVariable String providerId, NativeWebRequest request) {
-    HttpSession session = request.getNativeRequest(HttpServletRequest.class).getSession();
+    HttpSession session = getServletRequest(request).getSession();
+
     session.setAttribute("nextUrl", request.getParameter("nextUrl"));
     session.setAttribute("registerUrl", request.getParameter("registerUrl"));
     session.setAttribute("loginUrl", request.getParameter("loginUrl"));
     session.setAttribute("providerId", providerId);
+
     return super.signIn(providerId, request);
   }
 }

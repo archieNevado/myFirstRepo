@@ -39,8 +39,8 @@
                 </members>
               </group>
               <group name="manager-h-b2c-de-DE" contentgroup="true" livegroup="false" administrative="false">
-                <!--rule content="/Sites/Hybris Apparel/Germany/German" type="CMObject" rights="RMDAP"/>
-                <rule content="/Sites/Hybris Apparel/Germany/German" type="Folder_" rights="RMDAP"/-->
+                <rule content="/Sites/Hybris Apparel/Germany/German" type="CMObject" rights="RMDAP"/>
+                <rule content="/Sites/Hybris Apparel/Germany/German" type="Folder_" rights="RMDAP"/>
                 <members>
                   <user id="pieth" name="Piet H" home="/Home/Piet H"/>
                 </members>
@@ -86,7 +86,7 @@
             </members>
           </group> <!-- online-editor-h-b2c-en-GB -->
           <group name="online-editor-h-b2c-de-DE" contentgroup="true" livegroup="false" administrative="false">
-            <!--rule content="/Sites/Hybris Apparel/Germany/German" type="CMObject" rights="R"/>
+            <rule content="/Sites/Hybris Apparel/Germany/German" type="CMObject" rights="R"/>
             <rule content="/Sites/Hybris Apparel/Germany/German" type="Folder_" rights="R"/>
             <rule content="/Sites/Hybris Apparel/Germany/German/Editorial/Content" type="CMObject" rights="RMD"/>
             <rule content="/Sites/Hybris Apparel/Germany/German/Editorial/Content" type="Folder_" rights="RMD"/>
@@ -95,7 +95,7 @@
             <rule content="/Sites/Hybris Apparel/Germany/German/Pictures" type="CMObject" rights="RMD"/>
             <rule content="/Sites/Hybris Apparel/Germany/German/Pictures" type="Folder_" rights="RMD"/>
             <rule content="/Sites/Hybris Apparel/Germany/German/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Hybris Apparel/Germany/German/Videos" type="Folder_" rights="RMD"/-->
+            <rule content="/Sites/Hybris Apparel/Germany/German/Videos" type="Folder_" rights="RMD"/>
             <members>
               <user id="georgh" name="Georg H" home="/Home/Georg H"/>
             </members>
@@ -118,12 +118,12 @@
             </members>
           </group> <!-- media-editor-h-b2c-en-GB -->
           <group name="media-editor-h-b2c-de-DE" contentgroup="true" livegroup="false" administrative="false">
-            <!--rule content="/Sites/Hybris Apparel/Germany/German" type="CMObject" rights="R"/>
+            <rule content="/Sites/Hybris Apparel/Germany/German" type="CMObject" rights="R"/>
             <rule content="/Sites/Hybris Apparel/Germany/German" type="Folder_" rights="R"/>
             <rule content="/Sites/Hybris Apparel/Germany/German/Pictures" type="CMObject" rights="RMD"/>
             <rule content="/Sites/Hybris Apparel/Germany/German/Pictures" type="Folder_" rights="RMD"/>
             <rule content="/Sites/Hybris Apparel/Germany/German/Videos" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/Hybris Apparel/Germany/German/Videos" type="Folder_" rights="RMD"/-->
+            <rule content="/Sites/Hybris Apparel/Germany/German/Videos" type="Folder_" rights="RMD"/>
             <members>
               <user id="markush" name="Markus H" home="/Home/Markus H"/>
               <userref id="amy"/>

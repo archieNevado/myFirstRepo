@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.studio.taxonomy.action {
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNode;
+import com.coremedia.blueprint.studio.taxonomy.TaxonomyNode;
 import com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyExplorerPanel;
 import com.coremedia.ui.data.ValueExpression;
 
@@ -32,8 +33,15 @@ public class CutKeywordActionBase extends Action {
   }
 
   private function updateDisabled():void {
-    var selection:TaxonomyNode = selectionExpression.getValue();
-    var disable:Boolean = !selection || selection.isRoot() || (clipboardValueExpression.getValue() && clipboardValueExpression.getValue().getRef() === selection.getRef());
+    var selections:Array = selectionExpression.getValue();
+    var disable = selections.length === 0;
+    for each(var node:TaxonomyNode in selections) {
+      if(node.isRoot()) {
+        disable = true;
+        break;
+      }
+    }
+
     setDisabled(disable);
   }
 
@@ -41,16 +49,25 @@ public class CutKeywordActionBase extends Action {
    * Remembers the node for a cut'n paste action
    */
   private function cutNode():void {
-    var node:TaxonomyNode = selectionExpression.getValue();
-    var previousSelection:TaxonomyNode = clipboardValueExpression.getValue();
     var taxonomyExplorer:TaxonomyExplorerPanel = Ext.getCmp('taxonomyExplorerPanel') as TaxonomyExplorerPanel;
-    clipboardValueExpression.setValue(node);
+
+    var previousSelection:Array = clipboardValueExpression.getValue();
+    var selections:Array = selectionExpression.getValue();
+    clipboardValueExpression.setValue(selections);
+
     if (previousSelection) {
-      if (taxonomyExplorer.getColumnContainer(previousSelection)) {
-        taxonomyExplorer.getColumnContainer(previousSelection).updateNode(previousSelection);
+      for each(var prevSelection:TaxonomyNode in previousSelection) {
+        if (taxonomyExplorer.getColumnContainer(prevSelection)) {
+          taxonomyExplorer.getColumnContainer(prevSelection).updateNode(prevSelection);
+        }
       }
     }
-    taxonomyExplorer.getColumnContainer(node).updateNode(node);
+
+
+    for each(var selection:TaxonomyNode in selections) {
+      taxonomyExplorer.getColumnContainer(selection).updateNode(selection);
+    }
+
     updateDisabled();
   }
 

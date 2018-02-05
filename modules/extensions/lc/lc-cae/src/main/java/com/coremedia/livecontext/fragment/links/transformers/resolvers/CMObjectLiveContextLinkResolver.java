@@ -11,13 +11,14 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.SeoSegmentBuilder;
 import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
-import com.coremedia.livecontext.logictypes.CommerceLedPageExtension;
+import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,12 +54,12 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
 
   private SeoSegmentBuilder seoSegmentBuilder;
 
-  private CommerceLedPageExtension commerceLedPageExtension;
+  private CommerceLedLinkBuilderHelper commerceLedLinkBuilderHelper;
   private ExternalNavigationHandler externalNavigationHandler;
 
   @Required
-  public void setCommerceLedPageExtension(CommerceLedPageExtension commerceLedPageExtension) {
-    this.commerceLedPageExtension = commerceLedPageExtension;
+  public void setCommerceLedLinkBuilderHelper(CommerceLedLinkBuilderHelper commerceLedLinkBuilderHelper) {
+    this.commerceLedLinkBuilderHelper = commerceLedLinkBuilderHelper;
   }
 
   @Required
@@ -89,11 +90,12 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
    * @param bean       Bean for which URL is to be rendered
    * @param variant    Link variant
    * @param navigation Current navigation of bean for which URL is to be rendered
+   * @param request
    * @return The JSON object send to commerce.
    * @throws JSONException
    */
   @Override
-  protected JSONObject resolveUrlInternal(Object bean, String variant, CMNavigation navigation) throws JSONException {
+  protected JSONObject resolveUrlInternal(Object bean, String variant, CMNavigation navigation, HttpServletRequest request) throws JSONException {
     JSONObject out = new JSONObject();
     out.put(KEY_RENDER_TYPE, RENDER_TYPE_URL);
 
@@ -155,7 +157,7 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
         if (isNotEmpty(externalChannel.getExternalUriPath())) {
           //pass the fully qualified url to shop system
           out.put(EXTERNAL_URI_PATH_PARAMETER_NAME,
-                  externalNavigationHandler.buildLinkForExternalPage(externalChannel, Collections.<String, Object>emptyMap()));
+                  externalNavigationHandler.buildLinkForExternalPage(externalChannel, Collections.<String, Object>emptyMap(), request));
         } else {
           out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalChannel.getExternalId());
         }
@@ -170,8 +172,8 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
         out.put(CONTENT_ID, contentId);
 
         // read url prefix for coremedia content
-        if (commerceLedPageExtension.isCommerceLedChannel(contentBean)) {
-          String contentURLKeyword = commerceLedPageExtension.getContentURLKeyword();
+        if (commerceLedLinkBuilderHelper.isCommerceLedChannel(contentBean)) {
+          String contentURLKeyword = commerceLedLinkBuilderHelper.getContentURLKeyword();
           if (StringUtils.isNotBlank(contentURLKeyword)) {
             out.put("staticContentURLKeyword", contentURLKeyword);
           }

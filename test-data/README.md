@@ -1,6 +1,6 @@
-#CoreMedia Blueprint
+# CoreMedia Blueprint
 
-##Example Content and Users
+## Example Content and Users
 
 This folder is the place where you can put content that should be imported automatically, when using the content import of the Chef development tooling cookbook.
 Place content below the `content` folder and a `users.xml` below the `users` folder to import predefined users.

@@ -54,12 +54,22 @@ public abstract class AbstractHybrisService {
    * @return {@link CommerceBean}
    */
   @Nullable
-  protected  <T extends CommerceBean> T createBeanFor(@Nonnull AbstractHybrisDocument delegate,
-                                                      @Nonnull StoreContext storeContext,
-                                                      @Nonnull CommerceBeanType beanType,
-                                                      @Nonnull Class<T> aClass) {
-    CommerceId commerceId = HybrisCommerceIdProvider.commerceId(beanType).withExternalId(delegate.getCode()).build();
-    AbstractHybrisCommerceBean bean = (AbstractHybrisCommerceBean) commerceBeanFactory.createBeanFor(commerceId, storeContext);
+  protected <T extends CommerceBean> T createBeanFor(@Nonnull AbstractHybrisDocument delegate,
+                                                     @Nonnull StoreContext storeContext,
+                                                     @Nonnull CommerceBeanType beanType,
+                                                     @Nonnull Class<T> aClass) {
+    CommerceId commerceId = HybrisCommerceIdProvider
+            .commerceId(beanType)
+            .withExternalId(delegate.getCode())
+            .build();
+
+    AbstractHybrisCommerceBean bean = (AbstractHybrisCommerceBean) commerceBeanFactory
+            .createBeanFor(commerceId, storeContext);
+
+    if (bean == null) {
+      throw new IllegalStateException(String.format("Could not create commerce bean for commerce ID '%s'.", commerceId));
+    }
+
     bean.setDelegate(delegate);
     LOG.debug("Created commerce bean for '{}'", commerceId);
 
@@ -75,10 +85,10 @@ public abstract class AbstractHybrisService {
    * @return {@link CommerceBean}
    */
   @Nonnull
-  protected  <T extends CommerceBean> List<T> createBeansFor(@Nonnull List<? extends AbstractHybrisDocument> delegates,
-                                                         @Nonnull StoreContext storeContext,
-                                                         @Nonnull CommerceBeanType beanType,
-                                                         @Nonnull Class<T> aClass) {
+  protected <T extends CommerceBean> List<T> createBeansFor(@Nonnull List<? extends AbstractHybrisDocument> delegates,
+                                                            @Nonnull StoreContext storeContext,
+                                                            @Nonnull CommerceBeanType beanType,
+                                                            @Nonnull Class<T> aClass) {
     if (delegates.isEmpty()) {
       return Collections.emptyList();
     }

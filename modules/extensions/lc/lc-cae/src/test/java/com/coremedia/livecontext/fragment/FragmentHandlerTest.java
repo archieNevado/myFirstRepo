@@ -1,20 +1,16 @@
 package com.coremedia.livecontext.fragment;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
-import com.coremedia.blueprint.common.contentbeans.CMSite;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -28,7 +24,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.coremedia.livecontext.fragment.FragmentHandler.PLACEMENT_NAME_MAV_KEY;
@@ -38,19 +33,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class FragmentHandlerTest {
 
-  private final static String SITE_ID = "123456789";
   private final static String PLACEMENT = "main";
   private final static String VIEW = "asTeaser";
-  private final static String SITE_ATTRIBUTE_NAME = SiteHelper.class.getName() + "site";
 
   private FragmentHandler testling;
-  private FragmentParameters fragmentParameters;
-
-  @Mock
-  private StoreContext storeContext;
 
   @Mock
   private SitesService sitesService;
@@ -59,16 +48,10 @@ public class FragmentHandlerTest {
   private PageGridPlacementResolver pageGridPlacementResolver;
 
   @Mock
-  private Site site;
-
-  @Mock
   private Content rootChannel;
 
   @Mock
   private ContentType rootChannelType;
-
-  @Mock
-  private Content siteIndicator;
 
   @Mock
   private ContentBeanFactory contentBeanFactory;
@@ -90,9 +73,6 @@ public class FragmentHandlerTest {
 
   @Mock
   private CMChannel channelBean;
-
-  @Mock
-  private HttpServletRequest request;
 
   @Mock
   private CommerceConnection connection;
@@ -120,7 +100,6 @@ public class FragmentHandlerTest {
 
     HttpError error = (HttpError) result.getModel().get(HandlerHelper.MODEL_ROOT);
     assertEquals(HttpServletResponse.SC_NOT_FOUND, error.getErrorCode());
-    when(validationService.validate(channelBean)).thenReturn(true);
   }
 
   @Test
@@ -168,28 +147,19 @@ public class FragmentHandlerTest {
     testling.setValidationService(validationService);
 
     CurrentCommerceConnection.set(connection);
-    when(connection.getStoreContext()).thenReturn(storeContext);
 
-    when(storeContext.getSiteId()).thenReturn(SITE_ID);
-    when(sitesService.getSite(SITE_ID)).thenReturn(site);
-
-    when(site.getSiteIndicator()).thenReturn(siteIndicator);
-    when(siteIndicator.getLink(CMSite.ROOT)).thenReturn(rootChannel);
-    when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
     when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, cache, null, null, null));
     when(validationService.validate(any())).thenReturn(true);
 
     FragmentContext context = new FragmentContext();
     context.setFragmentRequest(true);
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;";
-    this.fragmentParameters = FragmentParametersFactory.create(url);
-    context.setParameters(this.fragmentParameters);
-    when(request.getAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE)).thenReturn(context);
+    FragmentParameters fragmentParameters = FragmentParametersFactory.create(url);
+    context.setParameters(fragmentParameters);
 
     when(channelBean.getContent()).thenReturn(rootChannel);
     when(rootChannel.getType()).thenReturn(rootChannelType);
     when(rootChannelType.getName()).thenReturn("contentTypeName");
-    when(contentBeanFactory.createBeanFor(rootChannel, CMChannel.class)).thenReturn(channelBean);
 
     when(placementChannel.getType()).thenReturn(placementChannelType);
     when(placementChannelType.getName()).thenReturn("contentTypeName");

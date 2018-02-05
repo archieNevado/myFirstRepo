@@ -39,8 +39,8 @@ public class CodeResourcesImplTest {
   private Content code42;
   private Content code50;
 
-  private CodeResources jsTestling;
-  private CodeResources cssTestling;
+  private CodeResourcesImpl jsTestling;
+  private CodeResourcesImpl cssTestling;
 
   @Inject
   private ContentRepository contentRepository;
@@ -87,6 +87,26 @@ public class CodeResourcesImplTest {
     assertEquals("list does not match", expectedBody, actualBody);
     List<?> actualIE = cssTestling.getModel("ie").getLinkTargetList();
     assertEquals("list does not match", expectedIE, actualIE);
+  }
+
+  @Test
+  public void testMergeCodeResourcesSetting() {
+    List<?> expectedBody = Arrays.asList(code40, code34, code38, code32, code30);
+    List<?> expectedIE = Arrays.asList(code36, code42);
+
+    // should be the same outcome as in testMultipleLinkedCodes() where developerMode=true:
+    cssTestling.setMergeResources(false);
+    List<?> actualBody = cssTestling.getModel("body").getLinkTargetList();
+    assertEquals("list does not match", expectedBody, actualBody);
+    List<?> actualIE = cssTestling.getModel("ie").getLinkTargetList();
+    assertEquals("list does not match", expectedIE, actualIE);
+
+    cssTestling.setMergeResources(true);
+    expectedBody = Arrays.asList(code40, Arrays.asList(code34, code38, code32, code30));
+    actualBody = cssTestling.getModel("body").getLinkTargetList();
+    assertEquals("merged list does not match", expectedBody, actualBody);
+    actualIE = cssTestling.getModel("ie").getLinkTargetList();
+    assertEquals("merged list does not match", expectedIE, actualIE);
   }
 
   //--- test hashes ----------------------------------------------------------------------------------------------------

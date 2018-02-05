@@ -15,6 +15,7 @@ import java.util.List;
  * Base class for beans of document type "AMAsset".
  */
 public abstract class AMAssetBase extends AbstractContentBean implements AMAsset {
+  private static final String IS_IN_PRODUCTION = "isInProduction";
 
   @Override
   public int getContentId() {
@@ -37,7 +38,7 @@ public abstract class AMAssetBase extends AbstractContentBean implements AMAsset
 
   @Override
   public List<AMTaxonomy> getAssetCategories() {
-    List<Content> contents = getContent().getLinks(ASSET_TAXONOMY);
+    List<Content> contents = getContent().getLinksFulfilling(ASSET_TAXONOMY, IS_IN_PRODUCTION);
     return createBeansFor(contents, AMTaxonomy.class);
   }
 
@@ -48,13 +49,13 @@ public abstract class AMAssetBase extends AbstractContentBean implements AMAsset
 
   @Override
   public List<CMTaxonomy> getSubjectTaxonomy() {
-    List<Content> contents = getContent().getLinks(SUBJECT_TAXONOMY);
+    List<Content> contents = getContent().getLinksFulfilling(SUBJECT_TAXONOMY, IS_IN_PRODUCTION);
     return createBeansFor(contents, CMTaxonomy.class);
   }
 
   @Override
   public List<CMLocTaxonomy> getLocationTaxonomy() {
-    List<Content> contents = getContent().getLinks(LOCATION_TAXONOMY);
+    List<Content> contents = getContent().getLinksFulfilling(LOCATION_TAXONOMY, IS_IN_PRODUCTION);
     return createBeansFor(contents, CMLocTaxonomy.class);
   }
 

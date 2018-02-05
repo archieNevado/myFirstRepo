@@ -4,11 +4,16 @@ import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService
 import com.coremedia.blueprint.base.analytics.elastic.PageViewResult;
 import com.coremedia.blueprint.base.analytics.elastic.PublicationReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
+import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -45,9 +50,16 @@ public class AlxResource {
   private static final Logger LOG = LoggerFactory.getLogger(AlxResource.class);
 
   private static final String PARAM_ID = "id";
-  private static final String PARAM_SERVICE = "service";
   public static final int DEFAULT_TIME_RANGE = 7;
+  public static final String CMLINKABLE = "CMLinkable";
   public static final String PARAM_TIME_RANGE = "timeRange";
+  private static final String GOOGLE_ALX = "googleAnalytics";
+
+  @Inject
+  private ContentRepository contentRepository;
+
+  @Inject
+  private SettingsService settingsService;
 
   @Inject
   private PageViewReportModelService pageViewReportModelService;
@@ -57,16 +69,31 @@ public class AlxResource {
   private PublicationReportModelService publicationReportModelService;
 
   @Inject
-  private ContentRepository contentRepository;
+  @Qualifier("contentContextStrategy")
+  private ContextStrategy<Content, Content> contextStrategy;
 
   @GET
-  @Path("/pageviews/{id}/{service}")
-  public ReportResult getAlxData(@PathParam(PARAM_ID) String id, @PathParam(PARAM_SERVICE) String service, @QueryParam(PARAM_TIME_RANGE) Integer timeRange) {
+  @Path("/pageviews/{id}")
+  public ReportResult getAlxData(@PathParam(PARAM_ID) String id, @QueryParam(PARAM_TIME_RANGE) Integer timeRange) {
     int realTimeRange = timeRange == null || timeRange < 1 ? DEFAULT_TIME_RANGE : timeRange;
     Content content = contentRepository.getContent(id);
     if (content != null) {
-      if (content.getType().isSubtypeOf("CMLinkable")) {
-        PageViewResult result = pageViewReportModelService.getPageViewResult(content, service);
+      if (content.getType().isSubtypeOf(CMLINKABLE)) {
+        List<Content> channels = contextStrategy.findContextsFor(content);
+        List<Content> contents = new ArrayList<>();
+        contents.add(content);
+        for (Content channel : channels) {
+          if (!content.equals(channel)) {
+            contents.add(channel);
+          }
+        }
+
+        String analyticsProvider = settingsService.setting(RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER, String.class, contents.toArray());
+        if (StringUtils.isEmpty(analyticsProvider)) {
+          analyticsProvider = GOOGLE_ALX;
+        }
+
+        PageViewResult result = pageViewReportModelService.getPageViewResult(content, analyticsProvider);
         if (result.getTimeStamp() == null) {
           return new ReportResult(Collections.<AlxData>emptyList(), null);
         }

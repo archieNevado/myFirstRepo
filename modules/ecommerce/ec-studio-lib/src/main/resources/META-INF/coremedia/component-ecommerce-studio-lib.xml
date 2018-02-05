@@ -28,11 +28,11 @@
   <bean id="storeResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.StoreResource" scope="prototype"/>
   <bean id="catalogResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.CatalogResource" scope="prototype"/>
   <bean id="workspacesResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.WorkspacesResource" scope="prototype"/>
+  <bean id="facetsResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.FacetsResource" scope="prototype"/>
 
   <bean id="catalogConfig" class="com.coremedia.ecommerce.studio.rest.CatalogServiceResource" scope="prototype"/>
 
-  <bean id="siteFilter" class="com.coremedia.ecommerce.studio.rest.filter.SiteFilter"/>
-  <bean class="com.coremedia.ecommerce.studio.rest.filter.EcStudioWebApplicationInitializer"/>
+  <bean class="com.coremedia.ecommerce.studio.rest.filter.EcStudioFilters"/>
 
   <customize:append id="commerceExceptionMapperConfigurer" bean="jerseyConfigPropertyPackages"
                     custom-value="com.coremedia.ecommerce.studio.rest.exception"/>

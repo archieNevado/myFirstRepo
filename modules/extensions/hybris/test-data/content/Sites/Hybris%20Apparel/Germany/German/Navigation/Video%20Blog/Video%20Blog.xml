@@ -49,15 +49,14 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Snow/Snowboarders%20Group%20Image%20Map.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Snowboarders%20Group%20Image%20Map"/>
+<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Blog/Video%20Blog%20Query%20List.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Blog/Video%20Blog%20Query%20List"/>
+<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Snow/Top%20Products%20Collection.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Top%20Products%20Collection"/>
 </LinkListProperty>
-<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Viewtypes/CMChannel/carousel"/>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement1.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/placement1"/>
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Blog/Video%20Blog%20Query%20List.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Blog/Video%20Blog%20Query%20List"/>
-<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Snow/Top%20Products%20Collection.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Top%20Products%20Collection"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>
@@ -67,6 +66,13 @@
 </LinkListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Viewtypes/CMChannel/hero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/placement3"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Snow/Snowboarders%20Group%20Image%20Map.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Snowboarders%20Group%20Image%20Map"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../Options/Viewtypes/CMChannel/carousel.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Viewtypes/CMChannel/carousel"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 </StructListProperty>
 </Struct>

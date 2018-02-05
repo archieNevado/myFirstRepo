@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.product;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
@@ -55,7 +55,7 @@ public class ProductAvailabilityHandlerTest {
   @Mock
   private CommerceConnection connection;
 
-  private final CommerceIdProvider idProvider = new BaseCommerceIdProvider("test");
+  private final CommerceIdProvider idProvider = TestVendors.getIdProvider("test");
 
   @Before
   public void setUp() throws Exception {

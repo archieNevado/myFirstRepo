@@ -1,12 +1,11 @@
 package com.coremedia.livecontext.ecommerce.hybris.beans;
 
 import com.coremedia.cap.content.Content;
-import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.hybris.cache.CategoryCacheKey;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
@@ -24,7 +23,6 @@ import java.util.List;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider.commerceId;
-import static java.util.Collections.emptyList;
 
 public class CategoryImpl extends AbstractHybrisCommerceBean implements Category {
 
@@ -192,32 +190,33 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     return getName();
   }
 
+  @Nullable
   @Override
   public CatalogPicture getCatalogPicture() {
     return null;
   }
 
+  @Nullable
   @Override
   public Content getPicture() {
     return null;
   }
 
+  @Nonnull
   @Override
   public List<Content> getPictures() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return emptyList();
-    }
-
-    return assetService.findPictures(getReference());
+    return findAssetService()
+            .map(assetService -> assetService.findPictures(getReference()))
+            .orElseGet(Collections::emptyList);
   }
 
+  @Nonnull
   @Override
   public List<Content> getVisuals() {
     return Collections.emptyList();
   }
 
+  @Nonnull
   @Override
   public List<Content> getDownloads() {
     return Collections.emptyList();
@@ -231,5 +230,4 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
   public static boolean isRootCategoryId(@Nonnull CommerceId id) {
     return id.getExternalId().map(ROOT_CATEGORY_ROLE_ID::equals).orElse(false);
   }
-
 }

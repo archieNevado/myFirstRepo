@@ -17,13 +17,15 @@
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-services.xml"/>
 
-  <bean id="hybrisCommerceBeanFactory" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.SpringCommerceBeanFactory"/>
+  <bean id="hybrisCommerceBeanFactory" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.SpringCommerceBeanFactory">
+    <property name="storeContextProvider" ref="hybrisStoreContextProvider"/>
+  </bean>
 
   <!-- === Providers === -->
   <bean id="hybrisCommerceIdProvider"
         class="com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider"/>
 
-  <bean id="hybrisStoreContextProvider" class="com.coremedia.livecontext.ecommerce.hybris.common.StoreContextProviderImpl">
+  <bean id="hybrisStoreContextProvider" class="com.coremedia.livecontext.ecommerce.hybris.common.HybrisStoreContextProvider">
     <property name="settingsService" ref="settingsService"/>
     <property name="sitesService" ref="sitesService"/>
     <property name="cache" ref="cache"/>

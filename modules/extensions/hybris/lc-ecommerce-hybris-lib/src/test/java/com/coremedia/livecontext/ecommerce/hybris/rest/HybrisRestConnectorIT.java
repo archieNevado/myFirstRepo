@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest;
 
-import co.freeside.betamax.Betamax;
-import co.freeside.betamax.MatchRule;
+import com.coremedia.blueprint.lc.test.BetamaxTestHelper;
 import com.coremedia.livecontext.ecommerce.hybris.HybrisITBase;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
 import org.junit.Test;
@@ -15,54 +14,66 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = TestConfiguration.class)
 public class HybrisRestConnectorIT extends HybrisITBase {
 
-  @Betamax(tape = "hy_testListCatalogs", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testListCatalogs() {
+    if (BetamaxTestHelper.useBetamaxTapes()) {
+      return;
+    }
     String responseValue = performGetWithStoreContext("/catalogs", String.class);
 
     assertThat(responseValue).isNotNull();
   }
 
-  @Betamax(tape = "hy_testMainCatalog", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testMainCatalog() {
-    String responseValue = performGetWithStoreContext("/catalogs/electronicsProductCatalog", String.class);
+    if (BetamaxTestHelper.useBetamaxTapes()) {
+      return;
+    }
+    String responseValue = performGetWithStoreContext("/catalogs/apparelProductCatalog", String.class);
 
     assertThat(responseValue).isNotNull();
   }
 
-  @Betamax(tape = "hy_testMainCatalogStagedVersion", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testMainCatalogStagedVersion() {
-    String responseValue = performGetWithStoreContext("/catalogs/electronicsProductCatalog/catalogversions/Staged",
+    if (BetamaxTestHelper.useBetamaxTapes()) {
+      return;
+    }
+    String responseValue = performGetWithStoreContext("/catalogs/apparelProductCatalog/catalogversions/Staged",
             String.class);
 
     assertThat(responseValue).isNotNull();
   }
 
-  @Betamax(tape = "hy_testRootCategory", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testRootCategory() {
+    if (BetamaxTestHelper.useBetamaxTapes()) {
+      return;
+    }
     String responseValue = performGetWithStoreContext(
-            "/catalogs/electronicsProductCatalog/catalogversions/Staged/categories/brands", String.class);
+            "/catalogs/apparelProductCatalog/catalogversions/Staged/categories/brands", String.class);
 
     assertThat(responseValue).isNotNull();
   }
 
-  @Betamax(tape = "hy_testSubCategory", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testSubCategory() {
+    if (BetamaxTestHelper.useBetamaxTapes()) {
+      return;
+    }
     CategoryDocument responseValue = performGetWithStoreContext(
-            "/catalogs/electronicsProductCatalog/catalogversions/Staged/categories/575", CategoryDocument.class);
+            "/catalogs/apparelProductCatalog/catalogversions/Staged/categories/400000", CategoryDocument.class);
 
     assertThat(responseValue).isNotNull();
   }
 
-  @Betamax(tape = "hy_testProduct", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testProduct() {
+    if (BetamaxTestHelper.useBetamaxTapes()) {
+      return;
+    }
     String responseValue = performGetWithStoreContext(
-            "/catalogs/electronicsProductCatalog/catalogversions/Staged/products/492274", String.class);
+            "/catalogs/apparelProductCatalog/catalogversions/Staged/products/300044600", String.class);
 
     assertThat(responseValue).isNotNull();
   }

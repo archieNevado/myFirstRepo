@@ -1,11 +1,11 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##Personalization Analytics Plugin
+## Personalization Analytics Plugin
 
-###Description
+### Description
 
 Exposes personalization info (e.g. segment) for tracking
 
-###Documentation
+### Documentation
 
 See the Analytics Connectors Manual.

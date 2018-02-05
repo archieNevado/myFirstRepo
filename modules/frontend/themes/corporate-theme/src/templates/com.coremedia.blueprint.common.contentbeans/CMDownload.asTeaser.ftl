@@ -7,11 +7,11 @@
 <#assign hasImage=self.picture?has_content />
 <#assign hasEvenIndex=(index % 2 == 0) />
 <#assign additionalVariantCssClass="" />
-<#assign additionalButtonCssClass="cm-teasable__button " />
+<#assign additionalButtonCssClass="cm-button " />
 <#assign additionalNoImageCssClass="" />
 <#assign additionalImgCssClass=""/>
 <#assign additionalTextCssClass=""/>
-<#assign link=cm.getLink(self.data!cm.UNDEFINED) />
+<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
 <#if !hasEvenIndex>
   <#assign additionalVariantCssClass="cm-teasable--alternative" />
@@ -59,11 +59,14 @@
         <#-- teaser text -->
         <#assign truncatedTeaserText=bp.truncateText(self.teaserText!"", bp.setting(cmpage, "teaser.max.length", 140)) />
         <p class="cm-teasable__text"<@cm.metadata "properties.teaserText" />>
-          <@cm.include self=self view="infos" /><br/>
+          <@cm.include self=self view="infos" /><br>
           <@bp.renderWithLineBreaks truncatedTeaserText!"" />
         </p>
         <#-- custom call-to-action button -->
-        <@cm.include self=self view="_callToAction" params={"additionalClass": additionalButtonCssClass}/>
+        <@cm.include self=self view="_callToAction" params={
+          "additionalClass": "cm-teasable__cta",
+          "additionalButtonClass": additionalButtonCssClass}
+        />
       </div>
     </div>
   </div>

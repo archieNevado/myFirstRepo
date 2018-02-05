@@ -27,11 +27,12 @@ public class CommercePreviewHandlerTest {
   private static final String KNOWN_SITE_ID = "4711";
 
   @InjectMocks
-  private PreviewHandler previewHandler = new PreviewHandler();
+  private PreviewHandler previewHandler;
 
   @Mock
   private IdProvider idProvider;
 
+  @SuppressWarnings("unused") // injected into Preview Handler, don't remove
   @Mock
   private LinkFormatter linkFormatter;
 
@@ -46,7 +47,6 @@ public class CommercePreviewHandlerTest {
   public void handleProductPreview() throws IOException {
     String productReferenceId = "vendor:///catalog/product/123";
     when(idProvider.parseId(productReferenceId)).thenReturn(mock(Product.class));
-    //doNothing().when(response).sendRedirect("");
     ModelAndView modelAndView = previewHandler.handleId(productReferenceId, "", KNOWN_SITE_ID, "", request);
     assertTrue(modelAndView.getModel().get("self") instanceof Product);
     assertTrue(modelAndView.getViewName().contains("redirect:"));
@@ -56,7 +56,6 @@ public class CommercePreviewHandlerTest {
   public void handleCategoryPreview() throws IOException {
     String categoryReferenceId = "vendor:///catalog/category/456";
     when(idProvider.parseId(categoryReferenceId)).thenReturn(mock(Category.class));
-    //doNothing().when(response).sendRedirect("");
     ModelAndView modelAndView = previewHandler.handleId(categoryReferenceId, "", KNOWN_SITE_ID, "", request);
     assertTrue(modelAndView.getModel().get("self") instanceof Category);
     assertTrue(modelAndView.getViewName().contains("redirect:"));
@@ -65,7 +64,6 @@ public class CommercePreviewHandlerTest {
   @Test
   public void handleNoBean() throws IOException {
     when(idProvider.parseId("unknown_id")).thenReturn(mock(IdProvider.UnknownId.class));
-    //doNothing().when(response).sendRedirect("");
     ModelAndView modelAndView = previewHandler.handleId("unknown_id", "", KNOWN_SITE_ID, "", request);
     assertTrue(modelAndView.getModel().get("self") instanceof HttpError);
   }

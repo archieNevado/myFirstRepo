@@ -1,4 +1,14 @@
+<#ftl strip_whitespace=true>
 <#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
+
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
+
 
 <#function getPageMetadata page>
   <#return blueprintFreemarkerFacade.getPageContext(page).content />
@@ -37,13 +47,6 @@
  -->
 <#function getContainerFromBase baseContainer items=[]>
   <#return blueprintFreemarkerFacade.getContainer(baseContainer, items) />
-</#function>
-<#function getPlacementByName name pagegrid>
-  <#return blueprintFreemarkerFacade.getPlacementByName(name, pagegrid) />
-</#function>
-
-<#function getPageLanguage object>
-  <#return blueprintFreemarkerFacade.getLanguage(object) />
 </#function>
 
 <#function getPageLanguageTag object>
@@ -101,4 +104,18 @@
 
 <#function getPlacementHighlightingMetaData placement>
   <#return blueprintFreemarkerFacade.getPlacementHighlightingMetaData(placement)>
+</#function>
+
+
+<#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
+
+
+<#-- DEPRECATED -->
+<#function getPlacementByName name pagegrid>
+  <#return blueprintFreemarkerFacade.getPlacementByName(name, pagegrid) />
+</#function>
+
+<#-- DEPRECATED, use bp.getLanguageTag instead -->
+<#function getPageLanguage object>
+  <#return blueprintFreemarkerFacade.getLanguage(object) />
 </#function>

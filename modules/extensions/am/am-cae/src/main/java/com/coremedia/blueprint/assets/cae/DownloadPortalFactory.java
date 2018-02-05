@@ -107,6 +107,14 @@ public class DownloadPortalFactory {
   public AssetDetails createAssetDetails(@Nonnull CMChannel navigation, @Nonnull AMAsset asset, @Nullable AMTaxonomy category) {
     // double check if the given category is really linked to the given asset to prevent URL manipulation
     // category may be null (required for preview)
+    if(category != null && !category.getContent().isInProduction()) {
+      return null;
+    }
+
+    if(!asset.getContent().isInProduction()) {
+      return null;
+    }
+
     if (category == null || asset.getAssetCategories().contains(category)) {
       AMTaxonomy actualCategory = category != null ? category : asset.getPrimaryCategory();
       AssetDetails assetDetails = new AssetDetails(asset, actualCategory);
@@ -263,7 +271,7 @@ public class DownloadPortalFactory {
    */
   @Nonnull
   public PaginatedAssets createPaginatedCategoryAssets(@Nullable AMTaxonomy category, @Nonnull CMChannel navigation, int pageNo) {
-    if (category == null) {
+    if (category == null || !category.getContent().isInProduction()) {
       return new PaginatedAssets();
     }
     int assetsPerPage = getAssetsPerPage(navigation);
@@ -286,7 +294,7 @@ public class DownloadPortalFactory {
   public PaginatedAssets createPaginatedSubjectAssets(@Nullable CMTaxonomy subject,
                                                       @Nonnull CMChannel navigation,
                                                       int pageNo) {
-    if (subject == null) {
+    if (subject == null || !subject.getContent().isInProduction()) {
       return new PaginatedAssets();
     }
     int assetsPerPage = getAssetsPerPage(navigation);

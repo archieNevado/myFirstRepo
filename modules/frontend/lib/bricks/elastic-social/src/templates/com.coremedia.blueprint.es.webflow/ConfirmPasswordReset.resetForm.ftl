@@ -8,10 +8,10 @@
     <div class="cm-form cm-form--resetpassword well col-xs-12 col-md-6 col-md-push-3"<@cm.metadata data=[self.action.content!"", "properties.id"]/>>
       <h1 class="cm-form__headline"><@bp.message "passwordReset_title" /></h1>
       <form method="post" data-cm-form--reset="">
-        <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-        <input type="hidden" name="execution" value="${flowExecutionKey!""}"/>
-        <input type="hidden" name="nextUrl" value="${nextUrl!""}"/>
-        <input type="hidden" name="_eventId_submit"/>
+        <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+        <input type="hidden" name="execution" value="${flowExecutionKey!""}">
+        <input type="hidden" name="nextUrl" value="${nextUrl!""}">
+        <input type="hidden" name="_eventId_submit">
 
         <@bp.notification type="info" title=bp.getMessage("confirmPasswordReset_title") />
 

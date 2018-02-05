@@ -29,19 +29,18 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CMExternalChannelCacheKeyTest {
 
   @Mock
-  Site site;
+  private Site site;
   @Mock
-  Content rootFolder;
+  private Content rootFolder;
   @Mock
-  Content rootDocument;
+  private Content rootDocument;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  ContentRepository contentRepository;
-  @Mock
-  ContentType externalChannelContentType;
+  private ContentRepository contentRepository;
+
   @Mock
   private TreeRelation<Content> treeRelation;
 
@@ -55,12 +54,11 @@ public class CMExternalChannelCacheKeyTest {
     when(site.getSiteRootFolder()).thenReturn(rootFolder);
     when(site.getSiteRootDocument()).thenReturn(rootDocument);
     when(rootFolder.getRepository()).thenReturn(contentRepository);
-    when(contentRepository.getContentType("CMExternalChannel")).thenReturn(externalChannelContentType);
     Collection<Content> externalChannels = emptyList();
     channelsFulfilling(externalChannels);
   }
 
-  void channelsFulfilling(Collection<Content> externalChannels) {
+  private void channelsFulfilling(Collection<Content> externalChannels) {
     channelsFulfilling(externalChannels, this.contentRepository);
   }
 
@@ -81,7 +79,6 @@ public class CMExternalChannelCacheKeyTest {
     Content content2 = mock(Content.class);
     when(content1.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn("hi");
     when(content2.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn("ho");
-    when(externalChannelContentType.getInstances()).thenReturn(ImmutableSet.of(content1, content2));
     channelsFulfilling(asList(content1, content2));
 
     when(treeRelation.pathToRoot(any(Content.class))).thenReturn(singletonList(mock(Content.class)));

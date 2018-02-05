@@ -18,7 +18,7 @@
 
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
-  <import resource="classpath:/com/coremedia/cae/view-services.xml"/>
+  <import resource="classpath:/com/coremedia/cae/view-services-lifecycle.xml"/>
   <import resource="classpath:/com/coremedia/cae/view-error-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
@@ -167,6 +167,7 @@
         <entry key="com.coremedia.blueprint.common.contentbeans.MergeableResources#css" value-ref="mergedCssResourcesView"/>
         <entry key="com.coremedia.xml.Markup#plain" value-ref="plainView"/>
         <entry key="com.coremedia.objectserver.web.HttpError" value-ref="blueprintHttpErrorView"/>
+        <entry key="com.coremedia.objectserver.web.HttpError#asError" value-ref="blueprintHttpErrorView"/>
         <entry key="com.coremedia.blueprint.cae.web.HttpHead" value-ref="httpHeadView"/>
         <entry key="com.coremedia.blueprint.common.robots.RobotsBean" value-ref="robotsView"/>
         <entry key="com.coremedia.blueprint.common.feeds.FeedSource#asFeed" value-ref="feedView"/>
@@ -323,6 +324,7 @@
     </description>
     <list>
       <value>CMTemplateSet</value>
+      <value>CMTheme</value>
     </list>
   </customize:append>
   

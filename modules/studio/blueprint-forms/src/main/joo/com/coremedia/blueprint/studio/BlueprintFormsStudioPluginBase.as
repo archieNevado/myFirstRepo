@@ -1,16 +1,26 @@
 package com.coremedia.blueprint.studio {
 
-import com.coremedia.blueprint.base.components.sites.SiteAwareVisibilityPluginBase;
+import com.coremedia.blueprint.base.components.sites.SiteAwareFeatureUtil;
 import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
-import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
+import com.coremedia.ui.data.validation.Issue;
+import com.coremedia.ui.data.validation.Issues;
 
 public class BlueprintFormsStudioPluginBase extends StudioPlugin {
+
+  /**
+   * suppress preview if content has issue with at least one of the codes listed here
+   */
+  internal static const ISSUE_CODES_WITHOUT_PREVIEW:Array = [
+    'not_in_navigation'
+  ];
+
   public function BlueprintFormsStudioPluginBase(config:BlueprintFormsStudioPlugin = null) {
     super(config);
   }
@@ -27,7 +37,7 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
     //Enable advanced tabs
     TabExpandPlugin.ADVANCED_TABS_ENABLED = true;
 
-    SiteAwareVisibilityPluginBase.preLoadConfiguration();
+    SiteAwareFeatureUtil.preLoadConfiguration();
 
     ContentInitializer.applyInitializers();
 
@@ -58,10 +68,27 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
   }
 
   /**
-   * Prevents global downloads to be previewed.
+   * Check if the given content is a CMLinkable and has no error issues.
    */
-  protected function mayPreviewDownload(content:Content):Boolean {
-    return editorContext.getSitesService().getSiteFor(content);
+  protected function isValidCMLinkable(content:Content):Boolean {
+    var contentType:ContentType = content.getType();
+    if (contentType === undefined) {
+      return undefined;
+    }
+    if (!contentType.isSubtypeOf("CMLinkable")) {
+      return false;
+    }
+    var issues:Issues = content.getIssues();
+    if (issues === undefined) {
+      return undefined;
+    }
+    var all:Array = issues.getAll();
+    if (all === undefined) {
+      return undefined;
+    }
+    return !all.some(function (issue:Issue):Boolean {
+      return ISSUE_CODES_WITHOUT_PREVIEW.indexOf(issue.code) > -1;
+    });
   }
 
 }

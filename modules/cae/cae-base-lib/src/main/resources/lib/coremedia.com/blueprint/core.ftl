@@ -1,39 +1,34 @@
 <#ftl strip_whitespace=true>
 <#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
 <#-- @ftlvariable name="cmFacade" type="com.coremedia.objectserver.view.freemarker.CAEFreemarkerFacade" -->
-<#-- @ftlvariable name="cmpage" type="com.coremedia.blueprint.common.contentbeans.Page" -->
-<#-- @ftlvariable name="settingsService" type="com.coremedia.blueprint.base.settings.SettingsService" -->
 
-<#-- createBeanFor -->
-<#function createBeanFor content>
-  <#return blueprintFreemarkerFacade.createBeanFor(content)>
-</#function>
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
 
-<#-- createBeansFor -->
-<#function createBeansFor contents>
-  <#return blueprintFreemarkerFacade.createBeansFor(contents)>
-</#function>
 
+<#assign viewHookEventNames=blueprintFreemarkerFacade.getViewHookEventNames()/>
+
+<#-- NAVIGATION -->
 <#function isActiveNavigation navigation navigationPathList>
     <#return blueprintFreemarkerFacade.isActiveNavigation(navigation, navigationPathList)>
 </#function>
 
-<#-- SettingsFunction -->
+<#-- SETTINGSFUNCTION -->
 <#function setting self key default=cm.UNDEFINED>
   <#return blueprintFreemarkerFacade.setting(self, key, default)>
 </#function>
 
-<#-- TransformationsFunction -->
-<#function transformations self>
-  <#return blueprintFreemarkerFacade.getTransformations(self)>
-</#function>
-
-<#-- GenerateUniqueId -->
+<#-- GENERATEUNIQUEID -->
 <#function generateId prefix="">
   <#return blueprintFreemarkerFacade.generateId(prefix)>
 </#function>
 
-<#-- Truncate Text -->
+<#-- TRUNCATE TEXT -->
 <#function truncateText text maxLength>
   <#return blueprintFreemarkerFacade.truncateText(text, maxLength)>
 </#function>
@@ -43,12 +38,13 @@
   <#return blueprintFreemarkerFacade.truncateHighlightedText(text, maxLength)>
 </#function>
 
-<#-- Get fragments for Preview -->
+<#-- GET FRAGMENTS FOR PREVIEW -->
 <#function previewTypes page self defaultFragmentViews=[]>
   <#return blueprintFreemarkerFacade.getPreviewViews(self, page, defaultFragmentViews)>
 </#function>
 
 <#--
+ * todo: CMS-11124 move to bean
  * Builds a link to Video.
  * dataUrl is default, if dataUrl is empty blob-data is used
  * @param CMVideo
@@ -61,7 +57,7 @@
   <#return videoLink />
 </#function>
 
-<#-- deprecated -->
+<#-- todo: CMS-11122 move to cm -->
 <#function substitute id original>
   <#return cmFacade.substitute(id, original)>
 </#function>
@@ -91,8 +87,6 @@
   <#return blueprintFreemarkerFacade.isDisplayableVideo(blob) />
 </#function>
 
-<#assign viewHookEventNames=blueprintFreemarkerFacade.getViewHookEventNames()/>
-
 <#--
  * Retrieves the URL path that belongs to a theme resource (image, webfont, etc.) defined by its path within the
  * theme folder. The path must not contain any <strong>..</strong>
@@ -102,4 +96,23 @@
  -->
 <#function getLinkToThemeResource path>
   <#return blueprintFreemarkerFacade.getLinkToThemeResource(path)>
+</#function>
+
+
+<#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
+
+
+<#-- DEPRECATED, UNUSED -->
+<#function transformations self>
+  <#return blueprintFreemarkerFacade.getTransformations(self)>
+</#function>
+
+<#-- DEPRECATED -->
+<#function createBeanFor content>
+  <#return blueprintFreemarkerFacade.createBeanFor(content)>
+</#function>
+
+<#-- DEPRECATED -->
+<#function createBeansFor contents>
+  <#return blueprintFreemarkerFacade.createBeansFor(contents)>
 </#function>

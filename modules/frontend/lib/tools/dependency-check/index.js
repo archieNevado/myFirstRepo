@@ -1,7 +1,8 @@
 const closestPackage = require("closest-package");
 const deepmerge = require("deepmerge");
+const { getInstalledPathSync } = require('get-installed-path');
 const nodeSass = require("node-sass");
-const resolveFrom = require("resolve-from");
+const path = require("path");
 
 function getPkgName(file) {
   const pkg = require(closestPackage.sync(file));
@@ -76,7 +77,7 @@ function getMissingDependencyErrorMessage(sourceFile, sourcePackage, requiredFil
   return `'${sourceFile}'\nModule:\t\t\t'${sourcePackage}'\nFile To Import:\t\t'${requiredFile}'\nMissing Dependency:\t'${requiredPackage}'`;
 }
 
-function gatherDependenciesNotManagedByNpm(sourceModule) {
+function gatherUnmanagedDependencies(sourceModule) {
 
   const result = [];
   const sourceFile = sourceModule && sourceModule.resource;
@@ -121,15 +122,15 @@ class DependencyCheckWebpackPlugin {
       const modules = stats.compilation.modules;
 
       for (let module of modules) {
-        const dependenciesNotManagedByNpm = gatherDependenciesNotManagedByNpm(module);
-        for (let dependencyNotManagedByNpm of dependenciesNotManagedByNpm) {
-          if (isIncluded(dependencyNotManagedByNpm.sourceFile, plugin.includes, plugin.excludes)) {
+        const unmanagedDependencies = gatherUnmanagedDependencies(module);
+        for (let unmanagedDependency of unmanagedDependencies) {
+          if (isIncluded(unmanagedDependency.sourceFile, plugin.includes, plugin.excludes)) {
             stats.compilation.errors.push(
                     new Error(getMissingDependencyErrorMessage(
-                            dependencyNotManagedByNpm.sourceFile,
-                            dependencyNotManagedByNpm.sourcePackage,
-                            dependencyNotManagedByNpm.requiredFile,
-                            dependencyNotManagedByNpm.requiredPackage
+                            unmanagedDependency.sourceFile,
+                            unmanagedDependency.sourcePackage,
+                            unmanagedDependency.requiredFile,
+                            unmanagedDependency.requiredPackage
                     ))
             );
           }
@@ -168,17 +169,18 @@ function getDependencyCheckNodeSassImporter(options) {
         const modulePattern = /^((@[^\/]+\/)*[^\/])+/;
         if (modulePattern.test(url)) {
           const moduleName = modulePattern.exec(url)[0];
+          const nodeModulePaths = [path.join(path.dirname(closestPackage.sync(prev)), "node_modules")].concat(process.mainModule.paths);
           try {
-            const mainJsFile = resolveFrom(process.cwd(), moduleName);
-            if (mainJsFile) {
+            const moduleInstallationPath = getInstalledPathSync(moduleName, { paths: nodeModulePaths });
+            if (moduleInstallationPath) {
               // check if dependency is specified
-              if (!hasPkgDependencyTo(prev, mainJsFile)) {
+              if (!hasPkgDependencyTo(prev, moduleInstallationPath)) {
                 done(new Error(getMissingDependencyErrorMessage(prev, url, getPkgName(prev), moduleName)));
                 return;
               }
             }
           } catch (e) {
-            done(new Error(`Could not resolve path for module: "${moduleName}"`));
+            done(new Error(`Could not find installation folder for dependency '${moduleName}' of '${prev}', searched in ${nodeModulePaths}`));
             return;
           }
         }

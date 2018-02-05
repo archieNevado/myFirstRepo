@@ -32,6 +32,7 @@
             <editor:BlobPropertyField bindTo="{config.bindTo}"
                                       hideLabel="true"
                                       propertyName="data"/>
+            <editor:StringPropertyField propertyName="filename"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:PictureDocumentForm collapsed="true"

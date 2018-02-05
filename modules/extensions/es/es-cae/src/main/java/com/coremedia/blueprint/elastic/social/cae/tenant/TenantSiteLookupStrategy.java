@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.tenant;
 
-import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.core.api.servlet.TenantLookupStrategy;
 import org.slf4j.Logger;
@@ -27,12 +27,13 @@ public class TenantSiteLookupStrategy implements TenantLookupStrategy {
 
   @Override
   public String getTenant(ServletRequest request) {
-    final Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
-    if (null != siteFromRequest) {
-      return elasticSocialPlugin.getElasticSocialConfiguration(siteFromRequest).getTenant();
-    } else {
+    Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
+
+    if (siteFromRequest == null) {
       LOG.trace("no navigation content found for request {}", request);
+      return null;
     }
-    return null;
+
+    return elasticSocialPlugin.getElasticSocialConfiguration(siteFromRequest).getTenant();
   }
 }

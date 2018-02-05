@@ -5,12 +5,12 @@ import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.cms.editor.sdk.collectionview.*;
 import com.coremedia.cms.editor.sdk.collectionview.sort.RepositoryListSorter;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.upload.UploadSettings;
 import com.coremedia.ecommerce.studio.*;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryListContainer;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryToolbarContainer;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchListContainer;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchToolbarContainer;
-import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
@@ -127,6 +127,10 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
   public function isUploadDisabledFor(folder:Object):Boolean {
     return true;
   }
+
+  public function upload(files:Array, folder:Object, settings:UploadSettings):void {
+  }
+
 
   public function getSearchToolbarItemId():String {
     return CatalogSearchToolbarContainer.CATALOG_SEARCH_TOOLBAR_ITEM_ID;

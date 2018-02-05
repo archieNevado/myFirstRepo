@@ -1,11 +1,11 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
-##MongoDB Controlroom
+## MongoDB Controlroom
 
-###Description
+### Description
 
 Extension that enables the collaborative features and supports MongoDB as the database for collaborative components. 
 
-##Documentation
+## Documentation
 
 See the "Collaborative Components" chapter of the Operations Basics Manual.

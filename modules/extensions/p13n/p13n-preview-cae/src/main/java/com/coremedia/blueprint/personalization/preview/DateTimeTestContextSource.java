@@ -33,26 +33,37 @@ import java.util.TimeZone;
  * to the {@ink ContextCollection}
  */
 public class DateTimeTestContextSource extends AbstractContextSource {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(DateTimeTestContextSource.class);
 
-  /** default personalization context name to read/write context data */
+  /**
+   * default personalization context name to read/write context data
+   */
   public static String DEFAULT_CONTEXT_NAME = "system";
 
   private String contextName = DEFAULT_CONTEXT_NAME;
 
-  /** name of the request parameter for timetravel */
+  /**
+   * name of the request parameter for timetravel
+   */
   public static final String REQUEST_PARAMETER_PREVIEW_DATE = "previewDate";
 
   @Override
   public void preHandle(HttpServletRequest request, HttpServletResponse response, ContextCollection contextCollection) {
     ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-    // first try to get preview date and time from a set timetravel URL parameter
-    Calendar now = getPreviewDateFromRequestParameter(attributes.getRequest());
 
-    // if not set as timetravel, try to get preview dateandtime from already parsed p13n (test) context - concrete: from a persona
+    Calendar now = null;
+
+    // first try to get preview date and time from a set timetravel URL parameter
+    if (attributes != null) {
+      now = getPreviewDateFromRequestParameter(attributes.getRequest());
+    }
+
+    // if not set as timetravel, try to get preview dateandtime from
+    // already parsed p13n (test) context - concrete: from a persona
     if (now == null && contextCollection != null) {
       Object o = contextCollection.getContext(contextName);
-      if (o != null && o instanceof PropertyProvider) {
+      if (o instanceof PropertyProvider) {
         PropertyProvider systemContext = (PropertyProvider) o;
         now = (Calendar) systemContext.getProperty("dateandtime");
       }
@@ -71,6 +82,7 @@ public class DateTimeTestContextSource extends AbstractContextSource {
 
   /**
    * override context name to read/write date and time data from/to
+   *
    * @param contextName the name of the perso context (default: {@link #DEFAULT_CONTEXT_NAME})
    */
   public void setContextName(String contextName) {
@@ -82,14 +94,14 @@ public class DateTimeTestContextSource extends AbstractContextSource {
    * @return null if no preview date is set
    */
   private Calendar getPreviewDateFromRequestParameter(HttpServletRequest request) {
-
     Calendar calendar = null;
 
     if (StringUtils.isNotEmpty(request.getParameter(REQUEST_PARAMETER_PREVIEW_DATE))) {
       String dateAsString = request.getParameter(REQUEST_PARAMETER_PREVIEW_DATE);
-      if (dateAsString != null && dateAsString.length() > 0) {
+      if (dateAsString != null && !dateAsString.isEmpty()) {
         SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         sdb.setTimeZone(TimeZone.getTimeZone(dateAsString.substring(dateAsString.lastIndexOf(' ') + 1)));
+
         try {
           Date date = sdb.parse(dateAsString.substring(0, dateAsString.lastIndexOf(' ')));
           calendar = Calendar.getInstance();
@@ -99,6 +111,7 @@ public class DateTimeTestContextSource extends AbstractContextSource {
         }
       }
     }
+
     return calendar;
   }
 }

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.Map;
  * Strings ordered by decreasing priority) of the current context.
  */
 public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNameProvider {
+
   private static final Logger LOG = LoggerFactory.getLogger(BlueprintViewRepositoryNameProvider.class);
 
   /**
@@ -49,20 +51,21 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
   private SettingsService settingsService;
   private ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider;
 
-
   // --- ViewRepositoryNameProvider ---------------------------------
 
+  @Nonnull
   @Override
   public List<String> getViewRepositoryNames(String viewName, Map model, Locale locale, HttpServletRequest request) {
     @SuppressWarnings("unchecked")
     List<String> viewRepositoryNames = (List<String>) request.getAttribute(VIEW_REPOSITORY_NAMES_ATTR); //NOSONAR
+
     if (viewRepositoryNames == null) {
       viewRepositoryNames = doGetViewRepositoryNames(model, UserVariantHelper.getUser(request));
       request.setAttribute(VIEW_REPOSITORY_NAMES_ATTR, viewRepositoryNames);
     }
+
     return viewRepositoryNames;
   }
-
 
   // --- internal ---------------------------------------------------
 
@@ -75,31 +78,37 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
    * @param developer Refer to the developer's work in progress templates
    * @return a list of view repositories ordered by decreasing priority
    */
-  private List<String> doGetViewRepositoryNames(Map model, @Nullable User developer) {
+  @Nonnull
+  private List<String> doGetViewRepositoryNames(@Nonnull Map model, @Nullable User developer) {
     List<String> result = new ArrayList<>();
+
     // 1. From current request: get the view repositories configured on the current context
     Navigation navigation = NavigationLinkSupport.getNavigation(model);
     if (navigation != null) {
+
       // 1a. view repository names from theme, developer specific
       CMTheme theme = navigation.getTheme(developer);
       if (theme != null) {
         result.addAll(themeTemplateViewRepositoryProvider.viewRepositoryNames(theme.getContent(), developer));
       }
+
       // 1b. view repository names by setting
       List<? extends String> vrNames = settingsService.settingAsList(VIEW_REPOSITORY_NAMES, String.class, navigation);
       result.addAll(vrNames);
     }
+
     // 2. From configuration: get list of the basic configured repositories valid for all contexts
     result.addAll(commonViewRepositoryNames);
     LOG.debug("Found view repository names: {}", result);
+
     return result;
   }
-
 
   // --- configure --------------------------------------------------
 
   /**
-   * @param commonViewRepositoryNames list of   {@link #getViewRepositoryNames(String, java.util.Map, java.util.Locale, javax.servlet.http.HttpServletRequest)}.
+   * @param commonViewRepositoryNames list of
+   *                                  {@link #getViewRepositoryNames(String, java.util.Map, java.util.Locale, javax.servlet.http.HttpServletRequest)}.
    */
   public void setCommonViewRepositoryNames(List<String> commonViewRepositoryNames) {
     this.commonViewRepositoryNames = commonViewRepositoryNames;

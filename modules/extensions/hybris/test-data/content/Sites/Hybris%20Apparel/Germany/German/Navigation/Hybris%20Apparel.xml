@@ -44,6 +44,8 @@
 <related>
 </related>
 <children>
+<link href="../Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men.xml" path="/Sites/Hybris%20Apparel/Germany/German/Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men"/>
+<link href="../Augmentation/Categories%20-%20categories/Snowwear%20women%20-%20200000/Snowwear%20Women.xml" path="/Sites/Hybris%20Apparel/Germany/German/Augmentation/Categories%20-%20categories/Snowwear%20women%20-%20200000/Snowwear%20Women"/>
 <link href="Action%20Goggles%20Microsite/Action%20Goggles%20Microsite.xml" path="/Sites/Hybris%20Apparel/Germany/German/Navigation/Action%20Goggles%20Microsite/Action%20Goggles%20Microsite"/>
 <link href="Blog/Editorial%20Blog.xml" path="/Sites/Hybris%20Apparel/Germany/German/Navigation/Blog/Editorial%20Blog"/>
 <link href="Video%20Blog/Video%20Blog.xml" path="/Sites/Hybris%20Apparel/Germany/German/Navigation/Video%20Blog/Video%20Blog"/>
@@ -52,6 +54,7 @@
 <link href="FAQ/FAQ.xml" path="/Sites/Hybris%20Apparel/Germany/German/Navigation/FAQ/FAQ"/>
 <link href="Microsite%20Dummy/Microsite%20Dummy.xml" path="/Sites/Hybris%20Apparel/Germany/German/Navigation/Microsite%20Dummy/Microsite%20Dummy"/>
 <link href="Snowboard%20Newsletter/Snowboard%20Newsletter.xml" path="/Sites/Hybris%20Apparel/Germany/German/Navigation/Snowboard%20Newsletter/Snowboard%20Newsletter"/>
+<link href="../Options/Settings/Templates/CMChannel/Seitenvorlagen.xml" path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Templates/CMChannel/Seitenvorlagen"/>
 </children>
 <javaScript>
 </javaScript>
@@ -74,16 +77,14 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Perso/Personalized%20Banner.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Perso/Personalized%20Banner"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Snow/Speed%20Riding%20Challenge%20in%20Chamonix.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Speed%20Riding%20Challenge%20in%20Chamonix"/>
-<Link xlink:href="coremedia:///cap/resources/../Videos/Snowboarding%20in%20Action.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Videos/Snowboarding%20in%20Action"/>
+<Link xlink:href="coremedia:///cap/resources/../Augmentation/Categories%20-%20categories/Snowwear%20women%20-%20200000/Snowwear%20Women.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Augmentation/Categories%20-%20categories/Snowwear%20women%20-%20200000/Snowwear%20Women"/>
+<Link xlink:href="coremedia:///cap/resources/../Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men"/>
 </LinkListProperty>
-<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Viewtypes/CMChannel/hero"/>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Viewtypes/CMChannel/tiles-layout-50-50-portrait"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement1.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/placement1"/>
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Snow/Top%20Category%20Collection.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Top%20Category%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Snow/Top%20Products%20Collection.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Top%20Products%20Collection"/>
 <Link xlink:href="coremedia:///cap/resources/../Videos/Shoppable%20Video.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Videos/Shoppable%20Video"/>
 <Link xlink:href="coremedia:///cap/resources/AddThis%20Social%20Sharing%20HTML%20Fragment.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Navigation/AddThis%20Social%20Sharing%20HTML%20Fragment"/>
@@ -104,6 +105,16 @@
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/footer"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Perso/Personalized%20Banner.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Perso/Personalized%20Banner"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Snow/Speed%20Riding%20Challenge%20in%20Chamonix.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Snow/Speed%20Riding%20Challenge%20in%20Chamonix"/>
+<Link xlink:href="coremedia:///cap/resources/../Videos/Snowboarding%20in%20Action.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Videos/Snowboarding%20in%20Action"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Men%20and%20Women%20Teaser.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Content/Men%20and%20Women%20Teaser"/>
+</LinkListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Viewtypes/CMChannel/hero"/>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 </StructListProperty>
 </Struct>

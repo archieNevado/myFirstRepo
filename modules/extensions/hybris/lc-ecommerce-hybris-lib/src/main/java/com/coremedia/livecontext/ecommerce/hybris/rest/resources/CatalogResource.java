@@ -14,10 +14,10 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupRefDoc
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupsDocument;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +38,7 @@ public class CatalogResource extends AbstractHybrisResource {
 
   private static final String USER_GROUPS_PATH = "/usergroups/";
   private static final String USER_GROUP_BY_ID_PATH = "/usergroups/{groupId}";
+  private static final String FIELDS_PARAM = "fields";
 
   @Nullable
   public CatalogDocument getCatalog(@Nonnull StoreContext storeContext) {
@@ -111,6 +112,9 @@ public class CatalogResource extends AbstractHybrisResource {
     if (searchParams.containsKey(CatalogService.SEARCH_PARAM_CATEGORYID)) {
       queryParams.add(CatalogServiceImpl.SEARCH_PARAM_CATEGORYID, searchParams.get(CatalogService.SEARCH_PARAM_CATEGORYID));
     }
+    if (searchParams.containsKey(FIELDS_PARAM)) {
+      queryParams.add(FIELDS_PARAM, searchParams.get(FIELDS_PARAM));
+    }
 
     StringBuilder queryTerm = new StringBuilder("*".equals(searchTerm) ? "" : searchTerm);
     queryTerm.append(":");
@@ -122,6 +126,15 @@ public class CatalogResource extends AbstractHybrisResource {
         queryTerm.append(key);
         queryTerm.append(":");
         queryTerm.append(value);
+      }
+    }
+    if (searchParams.containsKey(CatalogService.SEARCH_PARAM_FACET)) {
+      String facet = searchParams.get(CatalogService.SEARCH_PARAM_FACET);
+      if (!StringUtils.isEmpty(facet)) {
+        if (facet.contains(OrderByType.ORDER_BY_DEFAULT.getValue())) {
+          facet = facet.replace(":" + OrderByType.ORDER_BY_DEFAULT.getValue(), "");
+        }
+        queryTerm.append(facet);
       }
     }
 

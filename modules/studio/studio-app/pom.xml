@@ -115,6 +115,7 @@
         <artifactId>jangaroo-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
+          <jooProxyPathSpec>/rest/*</jooProxyPathSpec>
           <theme>${project.groupId}:blueprint-studio-theme</theme>
           <applicationClass>com.coremedia.cms.editor.StudioApplication</applicationClass>
           <additionalLocales>

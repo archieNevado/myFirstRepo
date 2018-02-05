@@ -38,8 +38,9 @@
               <#if useQuickinfo>
                 data-quickinfo="${quickInfoId}"
               </#if>
-              alt="${imageMapArea.alt!""}"/>
-        <#-- quickinfo marker-->
+              alt="${imageMapArea.alt!""}">
+
+        <#-- quickinfo text overlay -->
         <#if imageMapArea.displayAsInlineOverlay!false>
           <#assign classOverlay="" />
           <#assign theme=imageMapArea.inlineOverlayTheme!"" />
@@ -54,6 +55,7 @@
             "overlay": bp.setting(self, "overlay", {})
             } />
           </div>
+        <#-- quickinfo icon -->
         <#else>
           <#assign parameters={"class": "cm-imagemap__hotzone cm-imagemap__hotzone--icon"}/>
           <#if linkedContent.content?has_content>
@@ -68,6 +70,6 @@
     </#if>
   <#else>
     <#assign target=(self.target?has_content && self.target.openInNewTab)?then(' target="_blank"', "") />
-    <area shape="default" href="${cm.getLink(self.target!cm.UNDEFINED)}"${target?no_esc} class="cm-imagemap__area"/>
+    <area shape="default" href="${cm.getLink(self.target!cm.UNDEFINED)}"${target?no_esc} class="cm-imagemap__area">
   </#list>
 </map>

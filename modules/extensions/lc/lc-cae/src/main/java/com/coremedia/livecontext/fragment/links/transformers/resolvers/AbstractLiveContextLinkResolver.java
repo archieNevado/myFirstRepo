@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Map;
 
-import static java.lang.String.valueOf;
-
 /**
  * Base class for all LiveContext link resolvers.
  */
@@ -44,7 +42,7 @@ public abstract class AbstractLiveContextLinkResolver implements LiveContextLink
 
     try {
 
-      JSONObject json = resolveUrlInternal(bean, variant, navigation);
+      JSONObject json = resolveUrlInternal(bean, variant, navigation, request);
       // Special handling for Links that are resolved directly,
       // i.e. for com.coremedia.blueprint.common.contentbeans.CMExternalLink
       if (json.has(KEY_PLAIN_LINK)) {
@@ -68,32 +66,11 @@ public abstract class AbstractLiveContextLinkResolver implements LiveContextLink
    * @param bean       Bean for which URL is to be rendered
    * @param variant    Link variant
    * @param navigation Current navigation of bean for which URL is to be rendered
+   * @param request
    * @return JSON object containing all relevant details for URL rendering, except for "type":"URL", which
    * will be added by {@link AbstractLiveContextLinkResolver} automatically.
    */
-  protected abstract JSONObject resolveUrlInternal(Object bean, String variant, CMNavigation navigation) throws JSONException;
-
-  /**
-   * Resolves view for the current bean.
-   *
-   * @param bean       current content
-   * @param variant    parameter can be provided as param via link-tag. variants are configured within a settings-dokument in the repository.
-   * @param navigation current navigation context
-   * @return view (request-param: $innerView)
-   */
-  @Override
-  public String resolveView(Object bean, String variant, CMNavigation navigation) {
-    if (!(bean instanceof CMObject)) {
-      return null;
-    }
-
-    Map subSettings = getSettingsMap(getContentType(bean), variant, navigation);
-    if (subSettings == null) {
-      return null;
-    }
-
-    return valueOf(subSettings.get("view"));
-  }
+  protected abstract JSONObject resolveUrlInternal(Object bean, String variant, CMNavigation navigation, HttpServletRequest request) throws JSONException;
 
   protected Map getSettingsMap(String type, String variant, CMNavigation navigation) {
     CMNavigation context = navigation;

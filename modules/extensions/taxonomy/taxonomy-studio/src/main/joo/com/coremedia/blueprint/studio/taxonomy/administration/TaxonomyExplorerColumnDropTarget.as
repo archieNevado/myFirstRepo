@@ -38,8 +38,7 @@ public class TaxonomyExplorerColumnDropTarget extends DropTarget {
   }
 
   override public function notifyOver(source:DragSource, e:Event, data:Object):String {
-    var json:* = data.records[0].data;
-    var sourceNode:TaxonomyNode = new TaxonomyNode(json);
+    var sourceNodes:Array = getSourceNodes(data);
     var targetNode:TaxonomyNode = isWriteable(data, e);
     if(!targetNode) {
       if(expander) {
@@ -50,6 +49,7 @@ public class TaxonomyExplorerColumnDropTarget extends DropTarget {
     }
 
     //display the new columns if a node (not leaf) is hovered long enough
+    var sourceNode:TaxonomyNode = sourceNodes[0];
     if(targetNode.getLevel() >= sourceNode.getLevel() && !isAlreadyExpanded(targetNode)) { //=>we can not destroy our drag source, so we can only expand child columns
       expand(targetNode);
     }
@@ -94,17 +94,31 @@ public class TaxonomyExplorerColumnDropTarget extends DropTarget {
   }
 
   override public function notifyDrop(source:DragSource, e:Event, data:Object):Boolean {
-    var json:* = data.records[0].data;
-    var sourceNode:TaxonomyNode = new TaxonomyNode(json);
-
+    var sourceNodes:Array = getSourceNodes(data);
     var targetNode:TaxonomyNode = isWriteable(data, e);
     if(!targetNode) {
       return false;
     }
 
     var taxonomyExplorer:TaxonomyExplorerPanel = Ext.getCmp('taxonomyExplorerPanel') as TaxonomyExplorerPanel;
-    taxonomyExplorer.moveNode(sourceNode, targetNode);
+    taxonomyExplorer.moveNodes(sourceNodes, targetNode);
     return true;
+  }
+
+  /**
+   *
+   * @param data
+   * @return
+   */
+  private static function getSourceNodes(data:Object):Array {
+    var result:Array = [];
+    var records:Array = data.records;
+    for each(var record:Object in records) {
+      var json:* = record.data;
+      var sourceNode:TaxonomyNode = new TaxonomyNode(json);
+      result.push(sourceNode);
+    }
+    return result;
   }
 
   /**
@@ -114,8 +128,7 @@ public class TaxonomyExplorerColumnDropTarget extends DropTarget {
    * @return
    */
   private function isWriteable(data:Object, e:Event):TaxonomyNode {
-    var json:* = data.records[0].data;
-    var sourceNode:TaxonomyNode = new TaxonomyNode(json);
+    var sourceNodes:Array = getSourceNodes(data);
 
     //check if the mouse if over a region with records
     var target:* = e.getTarget();
@@ -145,20 +158,24 @@ public class TaxonomyExplorerColumnDropTarget extends DropTarget {
     var targetJson:* = column.getStore().getAt(rowIndex).data;
     var targetNode:TaxonomyNode = new TaxonomyNode(targetJson);
 
-    //check if the mouse is still inside the dragged record
-    if (sourceNode.getRef() === targetNode.getRef()) {
-      return null;
+
+    for each(var s1:TaxonomyNode in sourceNodes) {
+      //check if the mouse is still inside the dragged record
+      if (s1.getRef() === targetNode.getRef()) {
+        return null;
+      }
+
+      //check if we are still inside the same taxonomy tree
+      if (s1.getTaxonomyId() !== targetNode.getTaxonomyId()) {
+        return null;
+      }
+
+      //check if the dragged node is a parent of the entered node
+      if(targetNode.getLevel() > s1.getLevel()) {
+        return null;
+      }
     }
 
-    //check if we are still inside the same taxonomy tree
-    if (sourceNode.getTaxonomyId() !== targetNode.getTaxonomyId()) {
-      return null;
-    }
-
-    //check if the dragged node is a parent of the entered node
-    if(targetNode.getLevel() > sourceNode.getLevel()) {
-      return null;
-    }
 
     //check if the mouse is on the immediate parent, so dropping makes no sense (and also leads to errors)
     //We using the fact here that the parent must be the selected node of the corresponding column since
@@ -166,8 +183,11 @@ public class TaxonomyExplorerColumnDropTarget extends DropTarget {
     var taxonomyExplorer:TaxonomyExplorerPanel = Ext.getCmp('taxonomyExplorerPanel') as TaxonomyExplorerPanel;
     var targetColumn:TaxonomyExplorerColumn = taxonomyExplorer.getColumnContainer(targetNode);
     var selected:Model = (targetColumn.getSelectionModel() as RowSelectionModel).getSelection()[0];
-    if(targetNode.getLevel() === sourceNode.getLevel()-1 && selected.data.ref === targetNode.getRef()) { //direct parent and selected check
-      return null;
+
+    for each(var s4:TaxonomyNode in sourceNodes) {
+      if(targetNode.getLevel() === s4.getLevel()-1 && selected.data.ref === targetNode.getRef()) { //direct parent and selected check
+        return null;
+      }
     }
     DragDropManager.refreshCache({taxonomies:true}); //new drop zones are not registered during a drag!!!!!
     return targetNode;

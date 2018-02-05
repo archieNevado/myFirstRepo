@@ -54,7 +54,7 @@
 
     public static const CONTENT_TYPE_EXTERNAL_PRODUCT:String = "CMExternalProduct";
 
-    public static const  CONTENT_TYPE_PRODUCT_LIST:String = "CMProductList";
+    public static const CONTENT_TYPE_PRODUCT_LIST:String = "CMProductList";
 
     public static const EXTERNAL_ID_PROPERTY:String = "externalId";
 
@@ -376,6 +376,15 @@
                                    exclude="true"/>
     <editor:ConfigureDocumentTypes names="{CONTENT_TYPE_EXTERNAL_PRODUCT}"
                                    exclude="true"/>
+    <editor:ConfigureDocumentTypes names="{CONTENT_TYPE_PRODUCT_LIST}"
+                                   includeSubtypes="true"
+                                   mayCreate="{mayCreateProductList}"/>
+    <editor:ConfigureDocumentTypes names="{CONTENT_TYPE_PRODUCT_TEASER}"
+                                   includeSubtypes="true"
+                                   mayCreate="{mayCreateProductTeaser}"/>
+    <editor:ConfigureDocumentTypes names="{CONTENT_TYPE_MARKETING_SPOT}"
+                                   includeSubtypes="true"
+                                   mayCreate="{mayCreateESpot}"/>
     <editor:RegisterLibraryTreeFilter filter="{new EcCatalogTreeFilter('Augmentation')}"/>
   </local:configuration>
 

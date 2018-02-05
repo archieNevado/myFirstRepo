@@ -222,10 +222,15 @@ public class HybrisRestConnector {
     return uriComponentsBuilder;
   }
 
-  private static boolean isAuthenticationError(Exception ex, int statusCode) {
+  private static boolean isAuthenticationError(@Nonnull Exception ex, int statusCode) {
     return statusCode == HttpStatus.UNAUTHORIZED.value()
             || ex instanceof HttpClientErrorException
-            && ex.getMessage().contains(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            && hasMessageThatContains(ex, HttpStatus.UNAUTHORIZED.getReasonPhrase());
+  }
+
+  private static boolean hasMessageThatContains(@Nonnull Exception ex, @Nonnull CharSequence messageSubstring) {
+    String message = ex.getMessage();
+    return message != null && message.contains(messageSubstring);
   }
 
   /**
@@ -319,7 +324,14 @@ public class HybrisRestConnector {
       return null;
     }
 
-    return response.getBody().replaceAll("\"", "");
+    String body = response.getBody();
+
+    if (body == null) {
+      LOG.warn("Unable to request authentication token. Response body was empty.");
+      return null;
+    }
+
+    return body.replaceAll("\"", "");
   }
 
   @Nonnull

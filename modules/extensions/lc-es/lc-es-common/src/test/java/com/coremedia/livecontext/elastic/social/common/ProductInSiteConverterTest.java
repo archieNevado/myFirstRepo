@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.elastic.social.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
@@ -53,7 +53,7 @@ public class ProductInSiteConverterTest {
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private CommerceConnection commerceConnection;
 
-  private final CommerceIdProvider idProvider = new BaseCommerceIdProvider("vendor");
+  private final CommerceIdProvider idProvider = TestVendors.getIdProvider("vendor");
 
   private ProductInSiteConverter converter;
 

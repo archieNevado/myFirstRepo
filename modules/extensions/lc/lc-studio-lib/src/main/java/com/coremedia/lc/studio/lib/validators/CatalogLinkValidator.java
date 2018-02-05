@@ -18,6 +18,7 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
@@ -147,7 +148,7 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
       CommerceBeanFactory commerceBeanFactory = commerceConnection.getCommerceBeanFactory();
 
       // clear the workspace id before validating
-      StoreContext storeContextWithoutWorkspaceId = cloneStoreContext(storeContext);
+      StoreContext storeContextWithoutWorkspaceId = cloneStoreContext(commerceConnection, storeContext);
       storeContextWithoutWorkspaceId.setWorkspaceId(null);
 
       boolean commerceBeanWithoutWorkspaceExists = hasCommerceBean(commerceBeanFactory, commerceId,
@@ -201,21 +202,24 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
                     String.format("No commerce connection available for site '%s'.", site.getName())));
   }
 
-  private static StoreContext cloneStoreContext(@Nonnull StoreContext source) {
-    return source.getClone();
+  @Nonnull
+  private static StoreContext cloneStoreContext(@Nonnull CommerceConnection commerceConnection,
+                                                @Nonnull StoreContext source) {
+    StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
+    return storeContextProvider.cloneContext(source);
   }
 
   /**
    * Return the first workspace for which a commerce bean exists.
    */
   @Nullable
-  private static Workspace findWorkspaceWithExistingCommerceBean(CommerceConnection commerceConnection,
+  private static Workspace findWorkspaceWithExistingCommerceBean(@Nonnull CommerceConnection commerceConnection,
                                                                  StoreContext storeContext,
                                                                  CommerceBeanFactory commerceBeanFactory,
                                                                  CommerceId commerceId) {
     // This will be modified throughout the loop (to avoid potentially
     // costly context recreation). Drop afterwards/don't keep it around.
-    StoreContext storeContextClone = cloneStoreContext(storeContext);
+    StoreContext storeContextClone = cloneStoreContext(commerceConnection, storeContext);
 
     List<Workspace> allWorkspaces = getWorkspaces(commerceConnection, storeContextClone);
 

@@ -128,7 +128,7 @@
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:after>
-            <Button itemId="{FavoritesToolbar.LAST_EDITED_BUTTON_ITEM_ID}"/>
+            <Button itemId="{FavoritesToolbar.NEW_MENU_BUTTON_ITEM_ID}" />
           </ui:after>
         </ui:AddItemsPlugin>
       </editor:plugins>
@@ -227,13 +227,13 @@
                                    excludeFromSearch="true"/>
 
     <!-- there is no preview available for these DocTypes -->
-    <editor:ConfigureDocumentTypes names="CMAction,CMCSS,CMExternalLink,CMFolderProperties,CMImage,CMJavaScript,
+    <editor:ConfigureDocumentTypes names="CMAction,CMCSS,CMExternalLink,CMFolderProperties,CMImage,CMInteractive,CMJavaScript,
                                             CMPlaceholder,CMResourceBundle,CMSettings,CMSite,CMSymbol,EditorPreferences,
                                             CMTemplateSet,CMViewtype,CMTaxonomy,CMLocTaxonomy"
                                    preview="false"/>
     <!-- there may be no preview available for these DocTypes -->
-    <editor:ConfigureDocumentTypes names="CMDownload"
-                                   mayPreview="{mayPreviewDownload}"/>
+    <editor:ConfigureDocumentTypes names="CMObject"
+                                   mayPreview="{isValidCMLinkable}"/>
 
     <!-- All CMHasContexts documents (essentially non-CMContext/CMChannel) are shown in "fragment preview" -->
     <editor:ConfigureDocumentTypes names="CMHasContexts">
@@ -294,8 +294,7 @@
       </editor:types>
     </editor:ConfigureDashboardPlugin>
 
-    <!-- Un-comment the following to enable Premular tab reusability. See Studio Manual for details. -->
-    <!-- <editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/> -->
+    <editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/>
   </local:configuration>
 
 

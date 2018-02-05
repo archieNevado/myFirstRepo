@@ -6,6 +6,7 @@ import com.coremedia.blueprint.studio.CMChannelExtension;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
@@ -23,6 +24,7 @@ import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.helper.StoreUtil;
 import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
@@ -49,6 +51,11 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   internal static const CONTENT_LED_PROPERTY:String = 'livecontext.contentLed';
   internal static const MANAGE_NAVIGATION_PROPERTY:String = 'livecontext.manageNavigation';
   internal static const EXTERNAL_ID_PROPERTY:String = 'externalId';
+
+  internal static const LOCAL_SETTINGS_STRUCT_NAME:String = 'localSettings';
+  internal static const PRODUCT_LIST_STRUCT_NAME:String = 'productList';
+  internal static const OFFSET_NAME:String = 'offset';
+  internal static const MAX_LENGTH_NAME:String = 'maxLength';
 
   public function LivecontextStudioPluginBase(config:LivecontextStudioPlugin = null) {
     if (UrlUtil.getHashParam('livecontext') === 'false') {
@@ -221,6 +228,17 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   }
 
   private static function initProductList(content:Content):void {
+    var localSettings:Struct = content.getProperties().get(LOCAL_SETTINGS_STRUCT_NAME);
+    if (!localSettings.get(PRODUCT_LIST_STRUCT_NAME)) {
+      localSettings.getType().addStructProperty(PRODUCT_LIST_STRUCT_NAME);
+    }
+    var productListStruct:Struct = localSettings.get(PRODUCT_LIST_STRUCT_NAME);
+    if (!productListStruct.get(OFFSET_NAME)) {
+      productListStruct.getType().addIntegerProperty(OFFSET_NAME, 1);
+    }
+    if (!productListStruct.get(MAX_LENGTH_NAME)) {
+      productListStruct.getType().addIntegerProperty(MAX_LENGTH_NAME, 10);
+    }
     ContentInitializer.initCMLinkable(content);
     ContentInitializer.initCMLocalized(content);
   }
@@ -324,6 +342,28 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
       }
       return false;
     });
+  }
+
+  private static function mayCreate(selection:Content, vendorName:String, isBelongsTo:Boolean):Boolean {
+    var site:Site = editorContext.getSitesService().getSiteFor(selection);
+    if (!site) {
+      return false;
+    }
+    var store:Store = StoreUtil.getStoreForSite(site);
+    return isBelongsTo ? CatalogHelper.getInstance().isVendor(store, vendorName) :
+            CatalogHelper.getInstance().isNotVendor(store, vendorName);
+  }
+
+  internal static function mayCreateProductList(selection:Content):Boolean {
+    return mayCreate(selection, "coremedia", false) && mayCreate(selection, "Demandware, Inc.", false);
+  }
+
+  internal static function mayCreateProductTeaser(selection:Content):Boolean {
+    return mayCreate(selection, "IBM", true) || mayCreate(selection, "SAP Hybris", true);
+  }
+
+  internal static function mayCreateESpot(selection:Content):Boolean {
+    return mayCreate(selection, "IBM", true);
   }
 }
 }

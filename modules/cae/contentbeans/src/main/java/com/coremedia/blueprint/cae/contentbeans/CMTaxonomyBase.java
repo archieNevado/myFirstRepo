@@ -51,7 +51,7 @@ public abstract class CMTaxonomyBase extends CMTeasableImpl implements CMTaxonom
    */
   @Override
   public List<? extends CMTaxonomy> getChildren() {
-    List<Content> contents = getContent().getLinks(CHILDREN);
+    List<Content> contents = getContent().getLinksFulfilling(CHILDREN, IS_IN_PRODUCTION);
     return createBeansFor(contents, CMTaxonomy.class);
   }
 

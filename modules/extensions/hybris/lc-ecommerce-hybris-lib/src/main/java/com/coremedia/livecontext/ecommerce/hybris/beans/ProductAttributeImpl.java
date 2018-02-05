@@ -3,6 +3,8 @@ package com.coremedia.livecontext.ecommerce.hybris.beans;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.VariantAttributeDocument;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -65,6 +67,7 @@ public class ProductAttributeImpl implements ProductAttribute {
     return getId();
   }
 
+  @Nullable
   @Override
   public Object getValue() {
     if (value == null && delegate != null) {
@@ -74,6 +77,7 @@ public class ProductAttributeImpl implements ProductAttribute {
     return value;
   }
 
+  @Nonnull
   @Override
   public List<Object> getValues() {
     Object value = getValue();

@@ -1,11 +1,9 @@
 package com.coremedia.blueprint.assets.cae.tags;
 
-import com.coremedia.blueprint.assets.cae.DownloadPortal;
 import com.coremedia.blueprint.assets.cae.AMUtils;
+import com.coremedia.blueprint.assets.cae.DownloadPortal;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -30,11 +28,8 @@ public class AMFreemarkerFacade {
   }
 
   public boolean hasDownloadPortal() {
-    Site siteFromRequest = SiteHelper.getSiteFromRequest(FreemarkerUtils.getCurrentRequest());
-    if (null == siteFromRequest) {
-      return false;
-    }
-    Content downloadPortalRootDocument = AMUtils.getDownloadPortalRootDocument(settingsService, siteFromRequest);
-    return null != downloadPortalRootDocument;
+    return SiteHelper.findSite(FreemarkerUtils.getCurrentRequest())
+            .map(site -> AMUtils.getDownloadPortalRootDocument(settingsService, site))
+            .isPresent();
   }
 }

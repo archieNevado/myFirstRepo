@@ -137,6 +137,13 @@
     <property name="themeImporter" ref="themeImporter"/>
   </bean>
 
+  <bean id="blobFilenameWriteInterceptor"
+        class="com.coremedia.blueprint.studio.rest.intercept.BlobFilenameWriteInterceptor">
+    <property name="type" value="CMDownload"/>
+    <property name="blobProperty" value="data"/>
+    <property name="filenameProperty" value="filename"/>
+  </bean>
+
   <!--
     Makes the theme upload configuration available on client at
     editorContext.getConfiguration().themeUpload
@@ -156,4 +163,5 @@
     <property name="priority" value="1"/>
     <property name="repository" ref="contentRepository"/>
   </bean>
+
 </beans>

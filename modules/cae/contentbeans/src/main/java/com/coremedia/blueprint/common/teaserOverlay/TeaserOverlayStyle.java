@@ -25,6 +25,11 @@ public interface TeaserOverlayStyle {
   /**
    * @cm.template.api
    */
+  String getTextCls();
+
+  /**
+   * @cm.template.api
+   */
   String getCtaCls();
 
   /**

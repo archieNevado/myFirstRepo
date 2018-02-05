@@ -17,7 +17,7 @@
   </properties>
 
   <modules>
-    <module>elastic-worker-component</module>
+    <module>elastic-worker-blueprint-component</module>
     <module>elastic-worker-webapp</module>
   </modules>
 

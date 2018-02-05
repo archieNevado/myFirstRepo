@@ -17,12 +17,12 @@ default['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['sites']['app
 
 default['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['server_name'] = "shop-preview-apparel.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['time_travel_alias'] = "shop-preview-apparel.#{node['blueprint']['hostname']}"
-default['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['server_aliases'] = ["shop-preview-apparel-uk.#{node['blueprint']['hostname']}", "shop-preview-apparel-de.#{node['blueprint']['hostname']}"]
+default['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['server_aliases'] = []
 default['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['rewrite_log_level'] = rewrite_log_level
 
 default['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['server_name'] = "shop-apparel.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['time_travel_alias'] = "shop-apparel.#{node['blueprint']['hostname']}"
-default['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['server_aliases'] = ["shop-apparel-uk.#{node['blueprint']['hostname']}", "shop-apparel-de.#{node['blueprint']['hostname']}"]
+default['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['server_aliases'] = []
 default['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['rewrite_log_level'] = rewrite_log_level
 
 # set this to true to disable SSLProxyVerify, SSLProxyCheckPeerCN, SSLProxyCheckPeerName

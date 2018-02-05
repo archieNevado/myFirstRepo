@@ -1,8 +1,8 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
 These modules are integrated into CoreMedia Blueprint to enhance CoreMedia CMS and the example websites and add extended functionality to their default features. 
 
-##List of Extensions
+## List of Extensions
 
 - [Analytics Extension](alx/README.md)
 - [Google Analytics Extension](alx-google/README.md)
@@ -31,7 +31,7 @@ These modules are integrated into CoreMedia Blueprint to enhance CoreMedia CMS a
 - [Adaptive Personalization Extension](p13n/README.md)
 - [Upload Extension] (upload/README.md)
 
-##Documentation
+## Documentation
 
 See the product's development manual for details about the extension mechanism.
 

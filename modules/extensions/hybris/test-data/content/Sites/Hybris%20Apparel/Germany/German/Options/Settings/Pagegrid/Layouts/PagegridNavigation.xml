@@ -37,7 +37,7 @@
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>
 </StructListProperty>
-<StringProperty Name="name">LiveContext Single Column Layout</StringProperty>
+<StringProperty Name="name">Single Column Layout</StringProperty>
 <StringProperty Name="description">A single column layout with "main", "header" and "footer" placements.</StringProperty>
 </Struct>
 </settings>

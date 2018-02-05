@@ -6,7 +6,7 @@ import java.util.List;
  * To support a new taxonomy type, classes must implement this interface
  * and a bean definition has to be added to the web application's spring configuration.
  */
-public interface Taxonomy {
+public interface Taxonomy<T> {
 
   /**
    * Returns the taxonomy id of the strategy, must be unique.
@@ -131,4 +131,20 @@ public interface Taxonomy {
    * @return true if valid
    */
   boolean isValid();
+
+  /**
+   * Returns the list of all objects this tag is used in, except taxonomy documents
+   * @param node the node to check the links for
+   * @param recursive true to check the child nodes of the given node too
+   * @return the list of items referencing the given node
+   */
+  List<T> getLinks(TaxonomyNode node, boolean recursive);
+
+  /**
+   * Returns the list of items that are linking to the given node
+   * and would block a deletion of it.
+   * @param node the node to check
+   * @return the list of items referencing the node
+   */
+  List<T> getStrongLinks(TaxonomyNode node, boolean recursive);
 }

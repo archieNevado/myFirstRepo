@@ -54,6 +54,7 @@ public class OutOfStockImageMapAreaFilterTest {
     overlayConfiguration.put(HIDE_OUT_OF_STOCK_PRODUCTS, true);
   }
 
+  @SuppressWarnings("Duplicates")
   @Test
   public void testProductInStock() {
     when(productTeaser.getProduct()).thenReturn(product);
@@ -64,6 +65,7 @@ public class OutOfStockImageMapAreaFilterTest {
     assertThat(filteredResult).hasSize(2);
   }
 
+  @SuppressWarnings("Duplicates")
   @Test
   public void testProductOutOfStock() {
     when(productTeaser.getProduct()).thenReturn(product);
@@ -74,6 +76,7 @@ public class OutOfStockImageMapAreaFilterTest {
     assertThat(filteredResult).hasSize(1);
   }
 
+  @SuppressWarnings("Duplicates")
   @Test
   public void testProductVariantInStock() {
     when(productTeaser.getProduct()).thenReturn(productVariant);

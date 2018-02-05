@@ -1,100 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>CoreMedia CMS</title>
-  <link rel="stylesheet" type="text/css" href="assets/overview.css">
+  <meta charset="UTF-8"/>
+  <%- title = 'CoreMedia CMS' -%>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="stylesheet" href="assets/overview.css">
 </head>
-<body>
-<div class="page_margins" id="top">
-  <div class="page">
-    <div id="header">
-      <div id="header_content" class="clearfix">
-        <div class="logoBox">
-          <h1><a href="//coremedia.com/">CoreMedia</a></h1>
-        </div>
-      </div>
-    </div>
-    <div id="nav">
-      <div id="nav_content" class="clearfix">
-        <div
-        class="primaryNav">
-          <div class="content"></div>
-        </div>
-      </div>
-    </div>
-    <%- host = node['blueprint']['hostname'] -%>
-    <div id="main" class="maintenance">
-      <div id="col3" style="margin:auto;width:65%">
-        <div id="col3_content" class="clearfix">
-          <div class="floatbox">
-            <div class="detailView articleDetails">
-              <h1>Welcome to CoreMedia</h1>
-              <hr>
-              <div>
-                <%- if node['blueprint']['proxy']['virtual_host']['preview'] -%>
-                <h2>You can access our preview sites on the following URLs</h2>
-                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
-                <%- node['blueprint']['proxy']['virtual_host']['preview']['server_aliases'].each do |server_alias| %>
-                  <li><a href="https://<%= server_alias %>" target="_blank"><%= server_alias %></a></li>
-                <%- end %>
-                </ul>
-                <%- end %>
-                <p><br/></p>
+<body id="top">
+<div class="cm-grid container">
 
-                <%- if node['blueprint']['proxy']['virtual_host']['delivery'] -%>
-                <h2>You can access our sites on the following URLs</h2>
-                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
-                <%- node['blueprint']['proxy']['virtual_host']['delivery']['sites'].keys.each do |site| %>
-                  <li><a href="https://<%= node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['server_name'] %>" target="_blank"><%= site %></a></li>
+  <%- host = node['blueprint']['hostname'] -%>
+  <%= render "overview/header-partial.erb", :cookbook => 'blueprint-proxy', :variables => { :host => host, :title => title } %>
+
+  <div class="cm-row row">
+    <div id="main" class="cm-container">
+      <article class="cm-details">
+
+        <h2>Sites</h2>
+        <table>
+          <thead>
+          <tr>
+            <th>Preview</th>
+            <th>Live</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              <%- if node['blueprint']['proxy']['virtual_host']['preview'] -%>
+                  <%- node['blueprint']['proxy']['virtual_host']['preview']['server_aliases'].each do |server_alias| %>
+                    <a href="https://<%= server_alias %>" target="_blank"><%= server_alias %></a>
                   <%- end %>
-                </ul>
-                <%- end %>
+              <%- end %>
+            </td>
+            <td>
+              <%- if node['blueprint']['proxy']['virtual_host']['delivery'] -%>
+                  <%- node['blueprint']['proxy']['virtual_host']['delivery']['sites'].keys.each do |site| %>
+                    <a href="https://<%= node['blueprint']['proxy']['virtual_host']['delivery']['sites'][site]['server_name'] %>" target="_blank"><%= site %></a>
+                  <%- end %>
+              <%- end %>
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
-                <p><br/></p>
+        <h2>Management Interfaces</h2>
+        <ul>
+          <li><a href="https://studio.<%= host %>" target="_blank">CoreMedia Studio</a></li>
+        </ul>
 
-                <h2>The management interfaces are available at</h2>
-                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
-                  <li><a href="https://studio.<%= host %>" target="_blank">CoreMedia Studio</a></li>
-                </ul>
+        <%= render 'other-links',
+                   :source => @other_links_source ? @other_links_source : 'overview/other-links-partial.erb',
+                   :cookbook => @other_links_cookbook ? @other_links_cookbook : 'blueprint-proxy',
+                   :variables => { :host => host }
+        %>
 
-                <p><br/></p>
-                <h2>Development URLs</h2>
-                <p>
-                  If you deployed the test system using the chef <code>development</code> environment, you will automatically get extra apache
-                  virtual hosts installed. These <em>candy</em> hosts provide some dev-sugar to sweeten up your daily work.
-                </p>
-                <p>
-                  A <em>candy</em> host returns the favor, i.e. it redirects the callers request to the caller itself. This allows
-                  the developer to start his webapps using the maven tomcat plugin and work with portless https URLs, without having
-                  the need to start and configure any reverse proxy such as apache or nginx.
-                </p>
+        <h2>Development URLs</h2>
+        <p>
+          If you deployed the test system using the chef <em>development</em> environment, you will automatically get extra apache
+          virtual hosts installed. These <em>candy</em> hosts provide some dev-sugar to sweeten up your daily work.
+        </p>
+        <p>
+          A <em>candy</em> host returns the favor, i.e. it redirects the callers request to the caller itself. This allows
+          the developer to start his webapps using the maven tomcat plugin and work with portless https URLs, without having
+          the need to start and configure any reverse proxy such as apache or nginx.
+        </p>
 
-                <ul style="list-style: square; margin: 1em 0; padding-left: 40px; line-height: 1.6;">
-                  <li><a href="//candy-studio.<%= host %>" target="_blank">Candy Studio</a></li>
-                  <li><a href="//candy-preview.<%= host %>" target="_blank">Candy Preview</a></li>
-                </ul>
+        <ul>
+          <li><a href="https://candy-studio.<%= host %>" target="_blank">Candy Studio</a></li>
+          <li><a href="https://candy-preview.<%= host %>" target="_blank">Candy Preview</a></li>
+        </ul>
 
-                <%= render "overview/candy-profiles-partial.erb", :cookbook => 'blueprint-proxy', :variables => { :host => host } %>
+        <%= render "overview/candy-profiles-partial.erb", :cookbook => 'blueprint-proxy', :variables => { :host => host } %>
 
-                <p><br/></p>
-
-                <%= render 'other-links',
-                           :source => @other_links_source ? @other_links_source : 'overview/other-links-partial.erb',
-                           :cookbook => @other_links_cookbook ? @other_links_cookbook : 'blueprint-proxy',
-                           :variables => { :host => host }
-                %>
-
-                Enjoy!
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="ie_clearing">&nbsp;</div>
-      </div>
+        <p>Enjoy!</p>
+      </article>
     </div>
-    <%= render "overview/footer-partial.erb", :cookbook => 'blueprint-proxy' %>
   </div>
+
+  <%= render "overview/footer-partial.erb", :cookbook => 'blueprint-proxy' %>
+
 </div>
 </body>
 </html>

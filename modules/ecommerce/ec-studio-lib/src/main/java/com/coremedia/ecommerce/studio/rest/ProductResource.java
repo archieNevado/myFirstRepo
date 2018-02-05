@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Currency;
+import java.util.Locale;
 
 import static java.util.Objects.requireNonNull;
 
@@ -24,9 +26,9 @@ import static java.util.Objects.requireNonNull;
 @Path(ProductResource.URI_PATH)
 public class ProductResource extends CommerceBeanResource<Product> {
 
-
   public static final String URI_PATH
           = "livecontext/product/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
+
   @Override
   protected ProductRepresentation getRepresentation() {
     ProductRepresentation representation = new ProductRepresentation();
@@ -36,22 +38,27 @@ public class ProductResource extends CommerceBeanResource<Product> {
 
   protected void fillRepresentation(ProductRepresentation representation) {
     super.fillRepresentation(representation);
+
     Product entity = getEntity();
+
     representation.setName(entity.getName());
-    String shortDescription = entity.getShortDescription().asXml();
-    representation.setShortDescription(shortDescription);
-    String longDescription = entity.getLongDescription().asXml();
-    representation.setLongDescription(longDescription);
+    representation.setShortDescription(entity.getShortDescription().asXml());
+    representation.setLongDescription(entity.getLongDescription().asXml());
     String thumbnailUrl = entity.getThumbnailUrl();
-    representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, getContentRepositoryResource().getEntity()));
+    representation.setThumbnailUrl(
+            RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, getContentRepositoryResource().getEntity()));
     representation.setCategory(entity.getCategory());
-    representation.setStore((new Store(entity.getContext())));
+    representation.setStore(new Store(entity.getContext()));
     representation.setCatalog(entity.getCatalog().orElse(null));
     representation.setOfferPrice(entity.getOfferPrice());
     representation.setListPrice(entity.getListPrice());
-    if(entity.getCurrency() != null && entity.getLocale() != null) {
-      representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
+
+    Currency currency = entity.getCurrency();
+    Locale locale = entity.getLocale();
+    if (currency != null && locale != null) {
+      representation.setCurrency(currency.getSymbol(locale));
     }
+
     representation.setVariants(entity.getVariants());
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
@@ -64,8 +71,10 @@ public class ProductResource extends CommerceBeanResource<Product> {
     CommerceConnection connection = getConnection();
     CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
     CatalogService catalogService = requireNonNull(connection.getCatalogService(), "catalog service not available");
+
     StoreContext storeContext = getStoreContext();
     CommerceId commerceId = idProvider.formatProductId(storeContext.getCatalogAlias(), getId());
+
     return catalogService.findProductById(commerceId, storeContext);
   }
 
@@ -74,6 +83,4 @@ public class ProductResource extends CommerceBeanResource<Product> {
   public void setAugmentationService(AugmentationService augmentationService) {
     super.setAugmentationService(augmentationService);
   }
-
-
 }

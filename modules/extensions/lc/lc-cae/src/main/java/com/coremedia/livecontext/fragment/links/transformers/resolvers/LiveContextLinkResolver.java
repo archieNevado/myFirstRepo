@@ -25,5 +25,4 @@ public interface LiveContextLinkResolver {
    */
   String resolveUrl(Object bean, String variant, CMNavigation navigation, HttpServletRequest request);
 
-  String resolveView(Object bean, String variant, CMNavigation navigation);
 }

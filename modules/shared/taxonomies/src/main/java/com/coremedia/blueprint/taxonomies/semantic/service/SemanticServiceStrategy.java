@@ -32,6 +32,7 @@ public class SemanticServiceStrategy implements SemanticStrategy {
   private ContentRepository contentRepository;
   private String serviceId;
   private String referencePropertyName;
+  private String nameMatchingPropertyName;
 
   @Required
   public void setServiceId(String serviceId) {
@@ -58,8 +59,13 @@ public class SemanticServiceStrategy implements SemanticStrategy {
     this.referencePropertyName = property;
   }
 
+  @Required
+  public void setNameMatchingPropertyName(String nameMatchingPropertyName) {
+    this.nameMatchingPropertyName = nameMatchingPropertyName;
+  }
+
   @Override
-  public Suggestions suggestions(Taxonomy taxonomy, String capId) {
+  public Suggestions suggestions(Taxonomy<?> taxonomy, String capId) {
     String taxonomyType = taxonomy.getKeywordType();
     List<ContentType> types = new ArrayList<>();
     types.add(contentRepository.getContentType(taxonomyType));
@@ -110,11 +116,12 @@ public class SemanticServiceStrategy implements SemanticStrategy {
       for (SemanticEntity entity : entities) {
         for (Content match : allContentChildren) {
           if (entity.getId().equals(match.getString(referencePropertyName))) {
-            if(LOG.isDebugEnabled()) {
-              LOG.debug(match + "/" + match.getName() + " does match with " + entity.getName() + "/" + entity.getId());
-            }
             addSuggestionNode(suggestions, entity, content, match);
           }
+          else if(entity.getName().equals(match.get(nameMatchingPropertyName))) {
+            addSuggestionNode(suggestions, entity, content, match);
+          }
+
 
           if (suggestions.size() >= LIMIT) {
             break;
@@ -171,5 +178,4 @@ public class SemanticServiceStrategy implements SemanticStrategy {
     }
     return false;
   }
-
 }

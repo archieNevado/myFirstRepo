@@ -239,7 +239,7 @@ public class DownloadPortalHandler {
   @RequestMapping(value = DYNAMIC_PATTERN_PORTAL, method = RequestMethod.GET, params = SUBJECT_REQUEST_PARAMETER_NAME)
   public ModelAndView handleSubjectAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
                                                  @RequestParam(value = SUBJECT_REQUEST_PARAMETER_NAME) CMTaxonomy subjectBean) {
-    if (null != subjectBean) {
+    if (null != subjectBean && subjectBean.getContent().isInProduction()) {
       TaxonomyOverview subjectOverview = downloadPortalFactory.createSubjectOverview(subjectBean);
       return getModelAndViewWithNavigation(subjectOverview, navigation, null);
     } else {
@@ -532,7 +532,7 @@ public class DownloadPortalHandler {
    * @return false if the given bean exists for a given non null id and in case it does whether it has valid content
    */
   private boolean isInvalidBean(String beanId, ContentBean bean) {
-    return beanId != null && bean == null || bean != null && !validationService.validate(bean);
+    return beanId != null && bean == null || bean != null && !validationService.validate(bean) || bean != null && !bean.getContent().isInProduction();
   }
 
   private void addModifiedParamsHeader(HttpServletResponse response, String paramName, String modifiedValue) {

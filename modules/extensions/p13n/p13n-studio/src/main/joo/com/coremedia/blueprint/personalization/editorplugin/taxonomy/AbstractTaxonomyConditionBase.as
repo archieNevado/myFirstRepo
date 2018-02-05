@@ -174,6 +174,7 @@ public class AbstractTaxonomyConditionBase extends AbstractCondition {
     var btnCfg:IconButton = IconButton({});
     btnCfg.iconCls = resourceManager.getString('com.coremedia.icons.CoreIcons', 'add_tag');
     btnCfg.tooltip = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip');
+    btnCfg.ariaLabel = btnCfg.tooltip;
     btnCfg.baseAction = openChooserAction;
     var btn:IconButton = new IconButton(btnCfg);
     add(btn);

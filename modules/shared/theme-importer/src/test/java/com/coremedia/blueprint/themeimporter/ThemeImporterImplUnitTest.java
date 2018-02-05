@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ThemeImporterImplUnitTest {
@@ -29,6 +31,8 @@ public class ThemeImporterImplUnitTest {
   MimeTypeService mimeTypeService;
   @Mock
   LocalizationService localizationService;
+  @Mock
+  ThemeImporterContentHelper contentHelper;
 
 
   // --- Tests ------------------------------------------------------
@@ -159,6 +163,29 @@ public class ThemeImporterImplUnitTest {
   }
 
   @Test
+  public void testDollarInUrl() {
+    when(contentHelper.fetchContent(anyString())).thenReturn(null);
+    String js = "var value = \"url($2$foo$)\";";
+    String expected = "var value = &quot;url($2$foo$)&quot;;";
+    ThemeImporterImpl testling = new ThemeImporterImpl(capConnection, mimeTypeService, localizationService);
+    String actual = testling.urlsToXlinks(js, "irrelevant, but not null", contentHelper);
+    assertEquals(expected, actual);
+  }
+
+  // Customers and/or Thirdparties do such nasty things.
+  // This url() expression is from the real world, we must be able to
+  // preserve such text.
+  @Test
+  public void testMixedQuotes() {
+    when(contentHelper.fetchContent(anyString())).thenReturn(null);
+    String charSalad = "$image.attr(\"style\", \"background-image: url(\"+i(181)+');\");";
+    String expected = "$image.attr(&quot;style&quot;, &quot;background-image: url(&quot;+i(181)+&apos;);&quot;);";
+    ThemeImporterImpl testling = new ThemeImporterImpl(capConnection, mimeTypeService, localizationService);
+    String actual = testling.urlsToXlinks(charSalad, "irrelevant, but not null", contentHelper);
+    assertEquals(expected, actual);
+  }
+
+  @Test
   public void testFormatDescription() {
     assertEquals("single line", ThemeImporterImpl.formatDescription("single line", 512));
     assertEquals("One line Another line", ThemeImporterImpl.formatDescription("One line\n  Another line", 512));
@@ -169,10 +196,63 @@ public class ThemeImporterImplUnitTest {
     assertEquals("desparatelyshortened...", ThemeImporterImpl.formatDescription("desparatelyshortenedhere", 23));
   }
 
+  @Test
+  public void testStringToDocumentName() {
+    // Ensure reproducibility of hash, and ignore the hash in the remaining tests.
+    assertEquals(ThemeImporterImpl.stringToDocumentName("foo"), ThemeImporterImpl.stringToDocumentName("foo"));
+    // If this turns out to fail with different JVMs, just delete it.
+    // The actual hash value does not really matter, would just be nice to be
+    // reliable, though, so give it a try.
+    checkStringToDocumentName("ACBD18DB4CC2F85CEDEF654FCCC4A4D8foo", null, -1, "foo");
+
+    // Simple string
+    checkStringToDocumentName(null, "foo", -1, "foo");
+    // A value from the real world
+    checkStringToDocumentName(null, "https:||maps|googleapis|com|maps|api|js?key=ABCDEFG&amp;libraries=places", -1,
+            "https://maps.googleapis.com/maps/api/js?key=ABCDEFG&amp;libraries=places");
+    // Bastard value from hell
+    checkStringToDocumentName(null, "|||||| \"<'#!§$%&)(=?`>´\\|\\\\", -1, " ../.// \"<'#!§$%&)(=?`>´|\\ ");
+    // No use, but robust
+    checkStringToDocumentName(null, "", -1, " ");
+
+    // Size corner cases
+    String justInSize = "abc---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------xyz";
+    checkStringToDocumentName(null, justInSize, 233, justInSize);
+    String oneTooLong = "abc----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------xyz";
+    checkStringToDocumentName(null, oneTooLong.substring(1), 233, oneTooLong);
+    String explodingTooLong = "abc|||g||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||xyz";
+    String expectedExclHash = "|g\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|\\|xyz";
+    checkStringToDocumentName(null, expectedExclHash, 233, explodingTooLong);
+
+    // Beyond FFFF
+    String smile = "\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00z";
+    checkStringToDocumentName(null, smile, 233, smile);
+    String halfACharTooLong = "\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00";
+    checkStringToDocumentName(null, halfACharTooLong.substring(2), 232, halfACharTooLong);
+  }
+
 
   // --- internal ---------------------------------------------------
 
-  private void checkNameOnly(Matcher matcher) {
+  private static void checkStringToDocumentName(String expected, String expectedExclHash, int expectedLength, String value) {
+    String actual = ThemeImporterImpl.stringToDocumentName(value);
+
+    // Developer's intention
+    if (expected != null) {
+      assertEquals(expected, actual);
+    }
+    if (expectedExclHash != null) {
+      assertEquals(expectedExclHash, actual.substring(32));
+    }
+    if (expectedLength >= 0) {
+      assertEquals(expectedLength, actual.length());
+    }
+
+    // Database constraint
+    assertTrue(actual.length() <= 233);
+  }
+
+  private static void checkNameOnly(Matcher matcher) {
     assertTrue(matcher.find());
     assertEquals("bigplay.svg", matcher.group(CG_URL));
     assertNull(matcher.group(CG_PROTOCOL));

@@ -181,6 +181,34 @@ $(function () {
   // init jquery.elevateZoom
   nodeDecorationService.addNodeDecoratorBySelector(".cm-product-assets__slideshow", function ($target) {
 
+    let magnifierPluginEventsInitialized = false;
+
+    // prepare functions, to be used when event listeners are added and removed
+    const instance = {};
+    instance.findZoomImage = function () {
+      const $activeImg = $(this).find(".cycle-slide-active").find("img[data-zoom-image]");
+      resetMagnifierPlugin($activeImg);
+    };
+    instance.findZoomImageByTarget = debounce(function () {
+      const $activeSlide = $target.find(".cycle-slide-active").find("img[data-zoom-image]");
+      resetMagnifierPlugin($activeSlide);
+    });
+    instance.findZoomImageBySlide = function (event, optionHash, outgoingSlideEl, incomingSlideEl) {
+      const $activeImg = $(incomingSlideEl).find("img[data-zoom-image]");
+      const $prevImg = $(outgoingSlideEl).find("img[data-zoom-image]");
+      resetMagnifierPlugin($activeImg, $prevImg);
+    };
+    instance.disablePointerEvents = function() {
+      // disabling pointer events for zoomWindow means enabling them for the image
+      $(this).css("pointer-events", "none");
+    };
+    instance.enablePointerEvents = function() {
+      // re-enable pointer-events after finishing the click on the image
+      $(".zoomContainer").css("pointer-events","");
+    };
+    $target.data("cm-product-assets", instance);
+
+
     if (deviceDetector.getLastDevice().isTouch && deviceDetector.getLastDevice().type !== "desktop") { // do not use zoom plugin on touch devices
       return;
     }
@@ -194,7 +222,11 @@ $(function () {
      * @returns {*}
      */
     function calculateZoomWindowDimension($img) {
-      const $row = $img.closest(".row");
+      let $row = $img.closest(".row");
+      //fix for sfcc: no class row exists
+      if ($row.offset() === undefined) {
+        $row = $img.closest(".pdp-main");
+      }
       const imgPos = $img[0].getBoundingClientRect();
       return $.extend({}, {
         width: ($row.width() + $row.offset().left ) - (imgPos.right + borderSize * 2), // also remove the 20px offset
@@ -241,43 +273,35 @@ $(function () {
           });
         }
 
-        // disable mouse click events on zoom window to support PDE and saving of images
-        $("body").on("mousedown", ".zoomContainer",function() {
-          $(this).css("pointer-events", "none"); } // disabling pointer events for zoomWindow means enabling them for the image
-        );
-        $img.on("click", function() {
-          $(".zoomContainer").css("pointer-events",""); // re-enable pointer-events after finishing the click on the image
-        });
-
+        if (!magnifierPluginEventsInitialized) {
+          // disable mouse click events on zoom window to support PDE and saving of images
+          $("body").on("mousedown", ".zoomContainer", instance.disablePointerEvents);
+          $img.on("click", instance.enablePointerEvents);
+          magnifierPluginEventsInitialized = true;
+        }
       }
     }
 
     // trigger initialization after cycle has been fully initialized. Only then the dimension of the zoom window
     // can be calculated
-    $target.on(PDP_ASSET_READY_EVENT, function () {
-      const $activeImg = $(this).find(".cycle-slide-active").find("img[data-zoom-image]");
-      resetMagnifierPlugin($activeImg);
-    });
+    $target.on(PDP_ASSET_READY_EVENT, instance.findZoomImage);
 
-    $window.on("scroll", {}, debounce(function () {
-      const $activeSlide = $target.find(".cycle-slide-active").find("img[data-zoom-image]");
-      resetMagnifierPlugin($activeSlide);
-    }));
+    $window.on("scroll", {}, instance.findZoomImageByTarget);
 
     // when resizing the window the dimensions of the slideshow image and the image itself might change and as such
     // the zoom window has to be recalculated
-    $window.on("resize", {}, debounce(function (/*event*/) {
-      const $activeSlide = $target.find(".cycle-slide-active").find("img[data-zoom-image]");
-      resetMagnifierPlugin($activeSlide);
-    }));
+    $window.on("resize", {}, instance.findZoomImageByTarget);
 
     // trigger re-init after the image of the slideshow has changed
-    $target.on('cycle-after', function (event, optionHash, outgoingSlideEl, incomingSlideEl) {
-      const $activeImg = $(incomingSlideEl).find("img[data-zoom-image]");
-      const $prevImg = $(outgoingSlideEl).find("img[data-zoom-image]");
-      resetMagnifierPlugin($activeImg, $prevImg);
-    });
+    $target.on('cycle-after', instance.findZoomImageBySlide);
 
+  }, function ($target) {
+    const instance = $target.data("cm-product-assets");
+    $("body").off("mousedown", ".zoomContainer", instance.disablePointerEvents);
+    $target.off(PDP_ASSET_READY_EVENT, instance.findZoomImage);
+    $window.off("scroll", instance.findZoomImageByTarget);
+    $window.off("resize", instance.findZoomImageByTarget);
+    $target.off("cycle-after", instance.findZoomImageBySlide);
   });
 
 

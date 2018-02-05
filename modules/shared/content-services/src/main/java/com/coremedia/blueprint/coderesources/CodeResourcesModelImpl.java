@@ -71,10 +71,10 @@ class CodeResourcesModelImpl implements CodeResourcesModel {
     // 2. ordinary code resources
     List<Content> mergeableResources = filterMergeableResources();
     if (!mergeableResources.isEmpty()) {
-      if (codeResources.isDeveloperMode()) {
-        result.addAll(mergeableResources);  // add as single resources
-      } else {
+      if (codeResources.mergeResources()) {
         result.add(mergeableResources);  // add as mergeable resources
+      } else {
+        result.addAll(mergeableResources);  // add as single resources
       }
     }
 

@@ -3,6 +3,7 @@
   <component class="com.coremedia.blueprint.studio.TaxonomyStudioPlugin"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.action.AddKeywordAction"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.action.CutKeywordAction"/>
+  <component class="com.coremedia.blueprint.studio.taxonomy.action.DeleteKeywordAction"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.action.EditTaxonomyAction"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.action.OpenTaxonomyChooserAction"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.action.OpenTaxonomyEditorAction"/>

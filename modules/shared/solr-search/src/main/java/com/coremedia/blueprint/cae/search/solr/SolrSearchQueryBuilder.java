@@ -188,11 +188,12 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
   }
 
   /**
-   * Escapes LocalParams {!...} in query string
-   * https://cwiki.apache.org/confluence/display/solr/Local+Parameters+in+Queries
+   * Escapes LocalParams {!...} in query string.
    *
    * @param query the query string
    * @return the escaped query string
+   * @see <a href="https://lucene.apache.org/solr/guide/6_6/local-parameters-in-queries.html">
+   *   Solr Reference Guide: Local Parameters in Queries</a>
    */
   private static String escapeLocalParamsQueryString(String query) {
     return query.startsWith("{!") ? "\\" + query : query;

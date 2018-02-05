@@ -8,7 +8,6 @@
 
   <import resource="classpath:/META-INF/coremedia/livecontext-handler-interceptors.xml"/>
   <import resource="classpath:/framework/spring/blueprint-links.xml"/>
-  <import resource="classpath:/META-INF/coremedia/livecontext-cae-vendor-placeholders.xml"/>
 
   <context:component-scan base-package="com.coremedia.livecontext.preview"/>
 
@@ -23,13 +22,6 @@
           Creates a CAE LinkTransformer that rewrites all generated links
           and adds the request parameter for a given workspace id of a commerce system.
         </description>
-      </bean>
-      <bean class="com.coremedia.livecontext.preview.PreviewTokenAppendingLinkTransformer">
-        <description>
-          Creates a CAE LinkTransformer that rewrites all generated links
-          and adds the request parameter for a given preview token id of a commerce system.
-        </description>
-        <property name="previewTokenProvider" ref="previewTokenProvider"/>
       </bean>
     </list>
   </customize:append>

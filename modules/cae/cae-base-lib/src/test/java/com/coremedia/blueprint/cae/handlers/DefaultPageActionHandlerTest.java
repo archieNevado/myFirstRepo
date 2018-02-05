@@ -84,12 +84,6 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
     assertEquals(DEFAULT_FLOW_ID, state.getCustomType().getName());
   }
 
-  @SuppressWarnings("ConstantConditions")
-  @Test(expected = NullPointerException.class)
-  public void buildLinkNoActionProvided() {
-    testling.buildLinkInternal(null, null, null);
-  }
-
   @Test(expected = IllegalStateException.class)
   public void buildLinkInternalPathListOfProvidedContextIsEmpty() {
     when(navigationSegmentsUriHelper.getPathList(defaultNavigation)).thenReturn(Collections.<String>emptyList());

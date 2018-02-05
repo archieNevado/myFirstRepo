@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static com.coremedia.blueprint.elastic.social.cae.springsocial.Requests.getServletRequest;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Controller
@@ -22,7 +22,7 @@ public class SignInFailedController {
 
   @RequestMapping(method = RequestMethod.GET)
   public RedirectView signIn(NativeWebRequest request) {
-    HttpSession session = request.getNativeRequest(HttpServletRequest.class).getSession();
+    HttpSession session = getServletRequest(request).getSession();
 
     LOG.warn("Sign in with provider {} failed. Fix configuration.", session.getAttribute("providerId"));
 
@@ -35,6 +35,7 @@ public class SignInFailedController {
     } else if (!isBlank(registerUrl)) {
       nextUrl = URIBuilder.fromUri(registerUrl).queryParam("error", "provider").build().toString();
     }
+
     return new RedirectView(nextUrl);
   }
 }

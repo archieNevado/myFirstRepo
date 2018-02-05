@@ -1,29 +1,44 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy;
-import com.coremedia.blueprint.common.contentbeans.CMMedia;
+import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
-import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.transform.TransformImageService;
-import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.HttpError;
+import com.coremedia.objectserver.web.links.LinkFormatter;
+import com.coremedia.transform.NamedTransformBeanBlobTransformer;
 import com.coremedia.transform.TransformedBeanBlob;
 import com.coremedia.transform.TransformedBlob;
 import com.google.common.collect.ImmutableMap;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
-import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
-import static org.junit.Assert.assertEquals;
+import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_NAME_CMNAVIGATION;
+import static com.google.common.collect.Maps.newHashMap;
+import static java.util.Collections.emptyMap;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -36,81 +51,39 @@ import static org.mockito.Mockito.when;
 /**
  * Tests {@link TransformedBlobHandler}
  */
-@RunWith(MockitoJUnitRunner.class)
-public class TransformedBlobHandlerTest extends HandlerBaseTest {
+@RunWith(SpringRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = TransformedBlobHandlerTestConfiguration.class)
+public class TransformedBlobHandlerTest {
 
-  private static final String URI = "/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/So/london.jpg";
-  private static final int CONTENT_ID = 1234;
-
-  @Mock
   private TransformedBeanBlob transformedBlob;
 
-  @Mock
-  private CMMedia cmMedia;
-
-  @Mock
-  private DataViewFactory dataViewFactory;
-
-  @Mock
-  private Content content;
-
-  @Mock
+  @MockBean
   private TransformImageService transformImageService;
+  @MockBean
+  private NamedTransformBeanBlobTransformer namedTransformBeanBlobTransformer;
+
+  @Inject
+  private MockMvc mockMvc;
+  @Inject
+  private LinkFormatter linkFormatter;
+  @Inject
+  private ContentTestHelper contentTestHelper;
 
   //----
   private static final String DIGEST = "digest";
   private static final String TRANSFORM_NAME = "transformName";
   private static final String WIDTH = "100";
   private static final String HEIGHT = "100";
-  private static final String NAME = "london";
-  private static final String EXTENSION = "jpg";
 
-  @Override
-  public void setUp() throws Exception {
-
-    // 1. --- set up testling.
-    String mimeType = "image/jpeg";
-    registerMimeTypeWithExtensions(mimeType, EXTENSION);
-
-    when(getUrlPathFormattingHelper().tidyUrlPath("London")).thenReturn(NAME);
-
-    DefaultSecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy = new DefaultSecureHashCodeGeneratorStrategy();
-    secureHashCodeGeneratorStrategy.setEncoding("UTF-8");
-
-    TransformedBlobHandler testling = new TransformedBlobHandler();
-    testling.setMimeTypeService(getMimeTypeService());
-    testling.setUrlPathFormattingHelper(getUrlPathFormattingHelper());
-    testling.setSecureHashCodeGeneratorStrategy(secureHashCodeGeneratorStrategy);
-    testling.setDataViewFactory(dataViewFactory);
-    testling.setTransformImageService(transformImageService);
-
-    registerHandler(testling);
-
-    // 2. --- mock content
-    CapBlobRef capBlobRef = mock(CapBlobRef.class);
-
-    when(content.getName()).thenReturn("London");
-    when(content.getId()).thenReturn("coremedia:///cap/content/1234");
-    when(content.isContent()).thenReturn(true);
-    when(content.isContentObject()).thenReturn(true);
-
-    when(capBlobRef.getCapObject()).thenReturn(content);
-    when(capBlobRef.getContentType()).thenReturn(new MimeType(mimeType));
-
-    when(transformedBlob.getOriginal()).thenReturn(capBlobRef);
+  @Before
+  public void setUp() {
+    transformedBlob = mock(TransformedBeanBlob.class);
     when(transformedBlob.getETag()).thenReturn(DIGEST);
     when(transformedBlob.getTransformName()).thenReturn(TRANSFORM_NAME);
 
-    // 3. --- mock content(-bean) related stuff
-    when(cmMedia.getContent()).thenReturn(content);
-    when(cmMedia.getContentId()).thenReturn(CONTENT_ID);
-    when(cmMedia.getTransformedData(TRANSFORM_NAME)).thenReturn(transformedBlob);
-    when(transformedBlob.getBean()).thenReturn(cmMedia);
     when(transformImageService.transformWithDimensions(any(Content.class), nullable(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt())).thenReturn(transformedBlob);
-
-    when(getIdContentBeanConverter().convert(String.valueOf(CONTENT_ID))).thenReturn(cmMedia);
-
-    ContentRepository contentRepository = mock(ContentRepository.class);
+    when(namedTransformBeanBlobTransformer.transform(any(), any())).thenReturn(transformedBlob);
   }
 
   /**
@@ -119,21 +92,20 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
    */
   @Test
   public void testBean() throws Exception {
+    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
+    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
 
-    when(dataViewFactory.loadCached(cmMedia, null)).thenReturn(cmMedia);
-
-    assertModel(handleRequest(URI), transformedBlob);
+    assertModel(handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg"), transformedBlob);
   }
 
   @Test
   public void acceptUrlWithOriginalExtensionInsteadOfTransformedExtension() throws Exception {
     // in this test case, the original JPEG is transformed to a PNG
-    String transformedMimeType = "image/png";
-    registerMimeTypeWithExtensions(transformedMimeType, "png");
+    when(transformedBlob.getContentType()).thenReturn(new MimeType("image/png"));
+    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
+    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
 
-    when(dataViewFactory.loadCached(cmMedia, null)).thenReturn(cmMedia);
-
-    assertModel(handleRequest(URI), transformedBlob);
+    assertModel(handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg"), transformedBlob);
   }
 
   /**
@@ -145,18 +117,19 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     // Java literals use UTF-16 code points (requiring 2 bytes per character), whereas in the URL,
     // the segment will be encoded in UTF-8, requiring three bytes per character.
     // The UTF-8, URL encoded segment equivalent to these four characters, is "%E8%A9%A6%E9%A8%93%E7%94%BB%E5%83%8F".
-    String japaneseName = "\u8A66\u9A13\u753B\u50CF";
-    String urlEncodedName = "%E8%A9%A6%E9%A8%93%E7%94%BB%E5%83%8F";
+    String japaneseName = "\u8A66\u9A13\u753B\u50CF-jpg";
+    String url = "/resource/image/20/transformName/100/100/digest/dw/" + japaneseName + ".jpg";
 
-    String urlWithJapaneseSegment = "/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/aW/" + urlEncodedName + ".jpg";
+    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(20));
+    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(20).getBlobRef("data"));
+    String link = formatLink(transformedBlob, null, false, ImmutableMap.of(
+            TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
+            TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
+    ));
 
-    // for now, assume that the path formatting helper does not mangle any of the Japanese characters
-    when(getUrlPathFormattingHelper().tidyUrlPath(japaneseName)).thenReturn(japaneseName);
-    when(content.getName()).thenReturn(japaneseName);
+    System.out.println(link);
 
-    when(dataViewFactory.loadCached(cmMedia, null)).thenReturn(cmMedia);
-
-    ModelAndView modelAndView = handleRequest(urlWithJapaneseSegment);
+    ModelAndView modelAndView = handleRequest(url);
     assertModel(modelAndView, transformedBlob);
   }
 
@@ -166,20 +139,18 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
    */
   @Test
   public void testMessingWithProtectedURLParts() throws Exception {
-    when(dataViewFactory.loadCached(cmMedia, null)).thenReturn(cmMedia);
-    when(getIdContentBeanConverter().convert("666")).thenReturn(cmMedia);
-    when(cmMedia.getContentId()).thenReturn(666);
+    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
+    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
+    assertNotFound("extension", handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.png"));
+    assertNotFound("name", handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg-broken.jpg"));
+    assertNotFound("digest", handleRequest("/resource/image/16/transformName/100/100/digest/xxxxx/nae-me-jpg.jpg"));
+    assertNotFound("width", handleRequest("/resource/image/16/transformName/101/100/digest/tw/nae-me-jpg.jpg"));
+    assertNotFound("height", handleRequest("/resource/image/16/transformName/100/101/digest/tw/nae-me-jpg.jpg"));
+    assertNotFound("transform", handleRequest("/resource/image/16/invalid/100/100/digest/tw/nae-me-jpg.jpg"));
+    assertNotFound("id", handleRequest("/resource/image/18/transformName/100/100/digest/tw/nae-me-jpg.jpg"));
+    assertNotFound("hash", handleRequest("/resource/image/16/transformName/100/100/digest/XXX/nae-me-jpg.jpg"));
 
-    assertNotFound("extension", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/So/london.png"));
-    assertNotFound("name", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/So/london-broken.jpg"));
-    assertNotFound("digest", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/xxxxx/So/london.jpg"));
-    assertNotFound("width", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/101/100/digest/So/london.jpg"));
-    assertNotFound("height", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/101/digest/So/london.jpg"));
-    assertNotFound("transform", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformXXX/100/100/digest/So/london.jpg"));
-    assertNotFound("id", handleRequest("/" + PREFIX_RESOURCE + "/image/666/transformName/100/100/digest/So/london.jpg"));
-    assertNotFound("hash", handleRequest("/" + PREFIX_RESOURCE + "/image/1234/transformName/100/100/digest/XXX/london.jpg"));
-
-    verify(cmMedia, never()).getTransformedData(anyString());
+    verify(namedTransformBeanBlobTransformer, never()).transform(any(), any());
     verify(transformImageService, never()).transformWithDimensions(any(Content.class), any(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt());
   }
 
@@ -189,10 +160,14 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
    */
   @Test
   public void testGenerateLink() {
-    assertEquals(URI, formatLink(transformedBlob, null, false, ImmutableMap.<String, Object>of(
-      TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
-      TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
-    )));
+    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
+    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
+
+    String link = formatLink(transformedBlob, null, false, ImmutableMap.of(
+            TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
+            TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
+    ));
+    assertThat(link).isEqualTo("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg");
   }
 
   /**
@@ -202,16 +177,16 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
    */
   @Test
   public void useOriginalExtensionWhenTransformationChangesExtension() throws MimeTypeParseException {
-
     // in this test case, the original JPEG is transformed to a PNG
-    String transformedMimeType = "image/png";
-    registerMimeTypeWithExtensions(transformedMimeType, "png");
+    when(transformedBlob.getContentType()).thenReturn(new MimeType("image/png"));
+    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
+    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
 
     // expect extension .jpg, even though the transformed blob has a different extension
-    assertEquals(URI, formatLink(transformedBlob, null, false, ImmutableMap.<String, Object>of(
-      TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
-      TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
-    )));
+    assertThat(formatLink(transformedBlob, null, false, ImmutableMap.of(
+            TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
+            TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
+    ))).isEqualTo("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg");
   }
 
   /**
@@ -219,13 +194,8 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
    * as this would trigger the costly transformation to be performed. Link generation must be inexpensive.
    */
   @Test
-  public void linkGenerationDoesNotTriggerTransformation() throws MimeTypeParseException, IOException {
-
-    // generate the link
-    assertEquals(URI, formatLink(transformedBlob, null, false, ImmutableMap.<String, Object>of(
-      TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
-      TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
-    )));
+  public void linkGenerationDoesNotTriggerTransformation() throws IOException {
+    testGenerateLink();
 
     // make sure the "expensive" methods triggering the transformation are never called
     verify(transformedBlob, never()).asBytes();
@@ -233,5 +203,49 @@ public class TransformedBlobHandlerTest extends HandlerBaseTest {
     verify(transformedBlob, never()).writeOn(any(OutputStream.class));
     verify(transformedBlob, never()).getContentType();
     verify(transformedBlob, never()).getSize();
+  }
+
+  // --- internal ---------------------------------------------------
+
+  private ModelAndView handleRequest(String path) throws Exception {
+    MockHttpServletRequestBuilder req = MockMvcRequestBuilders
+            .get(path)
+            .requestAttr(ATTR_NAME_CMNAVIGATION, contentTestHelper.getContentBean(4))
+            .characterEncoding("UTF-8");
+    return handleRequest(req);
+  }
+
+  private ModelAndView handleRequest(MockHttpServletRequestBuilder req) throws Exception {
+    return mockMvc.perform(req).andReturn().getModelAndView();
+  }
+
+  private void assertNotFound(@Nonnull String message, ModelAndView modelAndView) {
+    assertThat(modelAndView)
+            .as(message)
+            .extracting(HandlerHelper::getRootModel)
+            .allMatch(HttpError.class::isInstance)
+            .extracting(HttpError.class::cast)
+            .extracting(HttpError::getErrorCode)
+            .containsExactly(HttpServletResponse.SC_NOT_FOUND);
+  }
+
+  private void assertModel(ModelAndView modelAndView, Object bean) {
+    assertThat(modelAndView)
+            .extracting(HandlerHelper::getRootModel)
+            .containsExactly(bean);
+
+  }
+
+  protected String formatLink(Object bean, String viewName, boolean forRedirect, Map<String, Object> parameters) {
+    MockHttpServletRequest request = newRequest(emptyMap());
+    request.setAttribute(ViewUtils.PARAMETERS, newHashMap(parameters));
+    return linkFormatter.formatLink(bean, viewName, request, new MockHttpServletResponse(), forRedirect);
+  }
+
+  private MockHttpServletRequest newRequest(Map<String, String> parameters) {
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/");
+    request.setParameters(parameters);
+    request.setCharacterEncoding("UTF-8");
+    return request;
   }
 }

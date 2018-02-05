@@ -53,7 +53,6 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
 
   private Cache cache;
 
-
   // --- configuration ----------------------------------------------
 
   @Override
@@ -85,7 +84,6 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
   public void setCache(Cache cache) {
     this.cache = cache;
   }
-
 
   // --- features ---------------------------------------------------
 

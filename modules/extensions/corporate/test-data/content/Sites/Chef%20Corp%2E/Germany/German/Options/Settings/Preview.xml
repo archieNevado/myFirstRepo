@@ -15,7 +15,6 @@
 <IntProperty Name="width">375</IntProperty>
 <IntProperty Name="height">667</IntProperty>
 <IntProperty Name="order">1</IntProperty>
-<BooleanProperty Name="isDefault">true</BooleanProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="mobile_landscape">

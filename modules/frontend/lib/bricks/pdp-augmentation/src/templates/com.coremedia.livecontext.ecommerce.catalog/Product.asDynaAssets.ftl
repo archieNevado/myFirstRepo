@@ -45,13 +45,11 @@
               <#list visuals![] as visual>
                   <div class="cycle-slide">
                     <@cm.include self=visual!cm.UNDEFINED view="teaser" params={
-                    "renderLink": false,
-                    "renderTeaserTitle": false,
-                    "renderTeaserText": false,
-                    "renderCTA": false,
-                    "renderDimmer": false,
-                    "renderType": "plain",
-                    "limitAspectRatios": ["portrait_ratio1x1"]
+                      "renderTeaserTitle": false,
+                      "renderTeaserText": false,
+                      "renderDimmer": false,
+                      "renderType": "plain",
+                      "limitAspectRatios": ["portrait_ratio1x1"]
                     } />
                   </div>
               </#list>

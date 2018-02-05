@@ -81,11 +81,11 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
   @Override
   public void setEntity(Entity entity) {
     setId(entity.getExternalId());
+    setCatalogAlias(entity.getId().getCatalogAlias().value());
 
     StoreContext context = entity.getContext();
 
     setSiteId(context.getSiteId());
-    setCatalogAlias(context.getCatalogAlias().value());
     setWorkspaceId(context.getWorkspaceId());
   }
 

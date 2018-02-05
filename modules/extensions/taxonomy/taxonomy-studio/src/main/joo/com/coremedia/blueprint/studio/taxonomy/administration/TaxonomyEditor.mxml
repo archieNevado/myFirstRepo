@@ -13,8 +13,6 @@
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.ui.skins.ToolbarSkin;
-
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyEditor";
 
     private var config:TaxonomyEditor;

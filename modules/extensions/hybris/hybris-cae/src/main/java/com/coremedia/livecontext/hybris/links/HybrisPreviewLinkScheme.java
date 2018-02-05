@@ -14,10 +14,10 @@ import com.coremedia.livecontext.contentbeans.LiveContextExternalProductImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceConnection;
 import com.coremedia.livecontext.ecommerce.hybris.preview.PreviewTokenService;
-import com.coremedia.livecontext.logictypes.CommerceLedPageExtension;
+import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Required;
@@ -57,11 +57,9 @@ import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.P13N_
 @Link
 public class HybrisPreviewLinkScheme {
 
-  private static final String SAP_HYBRIS_VENDOR_ID = "SAP Hybris";
-
   private String previewStoreFrontUrl;
   private String hybrisPreviewServiceUrl;
-  private CommerceLedPageExtension commerceLedPageExtension;
+  private CommerceLedLinkBuilderHelper commerceLedLinkBuilderHelper;
 
   private PreviewTokenService previewTokenService;
 
@@ -199,31 +197,32 @@ public class HybrisPreviewLinkScheme {
       return null;
     }
 
-    if (!commerceLedPageExtension.isCommerceLedChannel(channel)) {
+    if (!commerceLedLinkBuilderHelper.isCommerceLedChannel(channel)) {
       return null;
     }
 
     // Display all channels in the shop preview
     String previewTicketId = previewTokenService.getPreviewTicketId();
-    String seoSegmentForChannel = commerceLedPageExtension.getSeoSegmentForChannel(channel);
+    String seoSegmentForChannel = commerceLedLinkBuilderHelper.getSeoSegmentForChannel(channel);
 
     return buildLinkInternal(seoSegmentForChannel, "content", previewTicketId);
   }
 
   static boolean isHybris() {
-    String vendorName = CurrentCommerceConnection.find().map(CommerceConnection::getVendorName).orElse(null);
-    return SAP_HYBRIS_VENDOR_ID.equals(vendorName);
+    return CurrentCommerceConnection.find()
+            .filter(HybrisCommerceConnection.class::isInstance)
+            .isPresent();
   }
 
-  static boolean isStudioPreviewRequest(HttpServletRequest request) {
-    return PreviewHandler.isStudioPreviewRequest() || "true".equals(request.getParameter(P13N_URI_PARAMETER));
+  private static boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+    return PreviewHandler.isStudioPreviewRequest(request) || "true".equals(request.getParameter(P13N_URI_PARAMETER));
   }
 
-  static boolean isApplicable(HttpServletRequest request) {
+  private static boolean isApplicable(@Nonnull HttpServletRequest request) {
     return isHybris() && isStudioPreviewRequest(request);
   }
 
-  String buildLinkInternal(String id, String type, String previewTicketId) {
+  private String buildLinkInternal(String id, String type, String previewTicketId) {
     String adjustedHybrisPreviewServiceUrl = previewStoreFrontUrl.endsWith("/") && hybrisPreviewServiceUrl.startsWith("/")
             ? hybrisPreviewServiceUrl.substring(1)
             : hybrisPreviewServiceUrl;
@@ -275,7 +274,7 @@ public class HybrisPreviewLinkScheme {
   }
 
   @Required
-  public void setCommerceLedPageExtension(CommerceLedPageExtension commerceLedPageExtension) {
-    this.commerceLedPageExtension = commerceLedPageExtension;
+  public void setCommerceLedLinkBuilderHelper(CommerceLedLinkBuilderHelper commerceLedLinkBuilderHelper) {
+    this.commerceLedLinkBuilderHelper = commerceLedLinkBuilderHelper;
   }
 }

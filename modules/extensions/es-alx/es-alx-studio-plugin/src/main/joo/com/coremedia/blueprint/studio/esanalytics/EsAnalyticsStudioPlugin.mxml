@@ -33,6 +33,7 @@
     <editor:ConfigureDashboardPlugin>
       <editor:widgets>
         <esalx:EsAnalyticsChartWidgetState rowspan="3"
+                                           column="2"
                                            content="{null}"/>
       </editor:widgets>
       <editor:types>

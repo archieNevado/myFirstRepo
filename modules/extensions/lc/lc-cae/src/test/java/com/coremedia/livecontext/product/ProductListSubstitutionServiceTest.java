@@ -1,15 +1,17 @@
 package com.coremedia.livecontext.product;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.context.LiveContextNavigation;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -30,12 +33,69 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+
+@RunWith(MockitoJUnitRunner.class)
 public class ProductListSubstitutionServiceTest {
-  private static final String SITE_ID = "asiteid";
+
   private ProductListSubstitutionService testling;
-  private MockCommerceEnvBuilder envBuilder;
+
+  private BaseCommerceConnection connection;
+
+  private List<Product> listOfTablets;
+
+  @Mock
+  private HttpServletRequest httpRequest;
+
+  @Mock
+  private Page page;
+
+  @Mock
+  private Site site;
+
+  @Mock
+  private Navigation noLiveContextNavigation;
+
+  @Mock
+  private LiveContextNavigation liveContextNavigation;
+
+  @Mock
+  private Category tablets;
+
+  @Mock
+  private Product product1, product2, product3, product4;
+
+  @Mock
+  private CatalogService catalogService;
+
+  @Before
+  public void defaultSetup() {
+    testling = new ProductListSubstitutionService();
+    testling.setLiveContextNavigationFactory(new LiveContextNavigationFactory());
+
+    listOfTablets = new ArrayList<>();
+    listOfTablets.add(product1);
+    listOfTablets.add(product2);
+    listOfTablets.add(product3);
+    listOfTablets.add(product4);
+
+    StoreContext storeContext = newStoreContext();
+    connection = new BaseCommerceConnection();
+    connection.setCatalogService(catalogService);
+    connection.setStoreContext(storeContext);
+    CurrentCommerceConnection.set(connection);
+
+    when(page.getNavigation()).thenReturn(liveContextNavigation);
+    when(liveContextNavigation.getCategory()).thenReturn(tablets);
+    when(liveContextNavigation.getChildren()).thenReturn(null);
+    when(liveContextNavigation.getSite()).thenReturn(site);
+    when(connection.getCatalogService().findProductsByCategory(tablets)).thenReturn(listOfTablets);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    CurrentCommerceConnection.remove();  }
 
   @Test
   public void getProductListPagesNavigationIsNoNoLiveContextNavigation() {
@@ -99,7 +159,7 @@ public class ProductListSubstitutionServiceTest {
     int steps = 10;
     ProductList result = testling.getProductList(liveContextNavigation, listOfTablets.size(), steps);
 
-    assertProductList(result, Collections.<Product>emptyList(), listOfTablets.size(), start, steps);
+    assertProductList(result, Collections.emptyList(), listOfTablets.size(), start, steps);
   }
 
   @Test
@@ -113,38 +173,6 @@ public class ProductListSubstitutionServiceTest {
   public void getProductListSuccessfully() {
     ProductList result = testling.getProductList(page, httpRequest);
     checkListItems(listOfTablets, result);
-  }
-
-  @Before
-  public void defaultSetup() {
-    testling = new ProductListSubstitutionService();
-    testling.setLiveContextNavigationFactory(new LiveContextNavigationFactory());
-
-    listOfTablets = new ArrayList<>();
-    listOfTablets.add(product1);
-    listOfTablets.add(product2);
-    listOfTablets.add(product3);
-    listOfTablets.add(product4);
-
-    when(product1.getExternalTechId()).thenReturn("p1");
-    when(product2.getExternalTechId()).thenReturn("p2");
-    when(product3.getExternalTechId()).thenReturn("p3");
-    when(product4.getExternalTechId()).thenReturn("p4");
-
-    envBuilder = MockCommerceEnvBuilder.create();
-    connection = envBuilder.setupEnv();
-
-    when(page.getNavigation()).thenReturn(liveContextNavigation);
-    when(liveContextNavigation.getCategory()).thenReturn(tablets);
-    when(liveContextNavigation.getChildren()).thenReturn(null);
-    when(liveContextNavigation.getSite()).thenReturn(site);
-    when(site.getId()).thenReturn(SITE_ID);
-    when(connection.getCatalogService().findProductsByCategory(tablets)).thenReturn(listOfTablets);
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
   }
 
   private void assertProductList(ProductList result, List<Product> expectedProducts, int expectedTotalProductCount, int expectedStart, int expectedSteps) {
@@ -168,28 +196,5 @@ public class ProductListSubstitutionServiceTest {
   }
 
 
-  @Mock
-  private HttpServletRequest httpRequest;
 
-  @Mock
-  private Page page;
-
-  @Mock
-  private Site site;
-
-  @Mock
-  private Navigation noLiveContextNavigation;
-
-  @Mock
-  private LiveContextNavigation liveContextNavigation;
-
-  @Mock
-  private Category tablets;
-
-  private CommerceConnection connection;
-
-  private List<Product> listOfTablets;
-
-  @Mock
-  private Product product1, product2, product3, product4;
 }

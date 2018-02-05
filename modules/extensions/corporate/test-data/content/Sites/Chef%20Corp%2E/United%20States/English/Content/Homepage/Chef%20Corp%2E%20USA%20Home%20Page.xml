@@ -125,7 +125,7 @@
 <Link xlink:href="coremedia:///cap/resources/../Site-Wide/Personalization/Personalized%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Site-Wide/Personalization/Personalized%20Teaser"/>
 <Link xlink:href="coremedia:///cap/resources/Professionals/Product%20Overview/Products%20Overview%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
 <Link xlink:href="coremedia:///cap/resources/Product%20Highlights%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Product%20Highlights%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/Professionals/Service/Services%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Service/Services%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/Services%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Services%20Teaser"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>

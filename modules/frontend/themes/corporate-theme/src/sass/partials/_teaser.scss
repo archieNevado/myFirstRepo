@@ -49,7 +49,7 @@ Contains styling definitions for all content types as cm-teasable.
         }
       }
 
-      .#{$prefix}teasable__button {
+      .#{$prefix}teasable__cta {
         transform: translate3d(0, -5px, 0);
       }
     }
@@ -113,13 +113,13 @@ Contains styling definitions for all content types as cm-teasable.
   /* reset element margins */
   &__headline,
   &__text,
-  &__button {
+  &__cta {
     margin: 0;
   }
 
   /* headline does always exist */
   &__text,
-  &__button {
+  &__cta {
     margin-top: $line-height-computed;
   }
 
@@ -148,7 +148,7 @@ Contains styling definitions for all content types as cm-teasable.
     }
   }
 
-  &__button {
+  &__cta {
     transition: all $transition-duration ease(in-out-quad);
   }
 

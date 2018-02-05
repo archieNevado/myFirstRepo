@@ -2,15 +2,15 @@
 # Cookbook Name:: solr
 # Attributes:: default
 #
-# Copyright 2017, CoreMedia AG
+# Copyright 2018, CoreMedia AG
 #
 
 # <> define solr version to use
-default['blueprint']['solr']['version'] = '6.6.0'
+default['blueprint']['solr']['version'] = '6.6.2'
 # <> define solr download url
 default['blueprint']['solr']['url'] = "http://archive.apache.org/dist/lucene/solr/#{node['blueprint']['solr']['version']}/solr-#{node['blueprint']['solr']['version']}.tgz"
 # <> define artifact checksum
-default['blueprint']['solr']['checksum'] = '6b1d1ed0b74aef320633b40a38a790477e00d75b56b9cdc578533235315ffa1e'
+default['blueprint']['solr']['checksum'] = 'a41594888a30394df8819c36ceee727dd2ed0a7cd18b41230648f1ef1a8b0cd2'
 # <> define solr home
 default['blueprint']['solr']['solr_home'] = '/opt/coremedia/solr-home'
 #<> clean solr home on update

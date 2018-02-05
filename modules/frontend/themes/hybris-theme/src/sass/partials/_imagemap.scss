@@ -18,6 +18,13 @@
       transform: translateY(180px);
     }
 
+    &.cm-quickinfo--no-image {
+      .cm-quickinfo__title {
+        position: static;
+        transform: none;
+      }
+    }
+
     .cm-quickinfo__price {
       position: absolute;
       top: 0;

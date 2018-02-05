@@ -2,6 +2,8 @@
 <#-- @ftlvariable name="classQuickInfo" type="java.lang.String" -->
 <#-- @ftlvariable name="metadata" type="java.util.List" -->
 <#-- @ftlvariable name="quickInfoId" type="java.lang.String" -->
+<#-- @ftlvariable name="quickInfoNextId" type="java.lang.String" -->
+<#-- @ftlvariable name="quickInfoPreviousId" type="java.lang.String" -->
 <#-- @ftlvariable name="quickInfoModal" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="quickInfoGroup" type="java.lang.String" -->
 <#-- @ftlvariable name="overlay" type="java.util.Map" -->
@@ -20,34 +22,50 @@
   <#assign quickInfoData=quickInfoData + {"group": quickInfoGroup!""} />
 </#if>
 
-<div id="${quickInfoId!bp.generateId("quickinfo")}" class="cm-quickinfo ${classQuickInfo!""}" <@cm.dataAttribute name="data-cm-quickinfo" data=quickInfoData /><@cm.metadata data=(metadata![])+[self.content]/>>
+<div id="${quickInfoId!bp.generateId("quickinfo")}" class="cm-quickinfo <#if !overlay.displayPicture>cm-quickinfo--no-image</#if> ${classQuickInfo!""}" <@cm.dataAttribute name="data-cm-quickinfo" data=quickInfoData /><@cm.metadata data=(metadata![])+[self.content]/>>
 
   <#-- image -->
   <#if overlay.displayPicture>
-    <#assign target=(self.target?has_content && self.target.openInNewTab)?then(' target="_blank"', "") />
-    <a href="${cm.getLink(self.target!cm.UNDEFINED)}"${target?no_esc} class="cm-quickinfo__picture-link">
-      <@cm.include self=self.picture!cm.UNDEFINED params={
-        "limitAspectRatios": [ "portrait_ratio1x1", "landscape_ratio4x3" ],
-        "classBox": "cm-quickinfo__picture-box",
-        "classImage": "cm-quickinfo__picture",
-        "metadata": ["properties.pictures"]
-      }/>
-    </a>
+    <div class="cm-quickinfo__container">
+      <#assign target=(self.target?has_content && self.target.openInNewTab)?then(' target="_blank"', "") />
+      <a href="${cm.getLink(self.target!cm.UNDEFINED)}"${target?no_esc} class="cm-quickinfo__picture-link">
+        <@cm.include self=self.picture!cm.UNDEFINED params={
+          "classBox": "cm-quickinfo__picture-box",
+          "classImage": "cm-quickinfo__picture",
+          "metadata": ["properties.pictures"]
+        }/>
+      </a>
+    </div>
   </#if>
-  <#-- title -->
-  <#assign showTitle=self.teaserTitle?has_content && overlay.displayTitle />
-  <#assign showTeaserText=self.teaserText?has_content && overlay.displayShortText />
-  <#-- title -->
-  <#if showTitle>
-    <h5 class="cm-quickinfo__title cm-heading5"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
+  <div class="cm-quickinfo__container content-container">
+    <div class="cm-quickinfo__content">
+      <#-- title -->
+      <#assign showTitle=self.teaserTitle?has_content && overlay.displayTitle />
+      <#assign showTeaserText=self.teaserText?has_content && overlay.displayShortText />
+      <#-- title -->
+
+      <div class="cm-quickinfo__header">
+        <#if showTitle>
+          <h5 class="cm-quickinfo__title cm-heading5"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
+        </#if>
+        <@bp.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
+      </div>
+
+      <#-- teaserText -->
+      <#if showTeaserText>
+        <div class="cm-quickinfo__text"<@cm.metadata "properties.teaserText" />><@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", 265) /></div>
+      <#else>
+        <div class="cm-quickinfo__text"></div>
+      </#if>
+
+      <@bp.button text=bp.getMessage("button_read_more") href=cm.getLink(self.target!cm.UNDEFINED) attr={"classes": ["cm-quickinfo__controls", "cm-button-group__button", "cm-button--linked-large"]} />
+    </div>
+  </div>
+  <#-- next/previous buttons -->
+  <#if (quickInfoNextId?? && quickInfoPreviousId??)>
+    <#if (quickInfoNextId?length > 0 && quickInfoPreviousId?length > 0)>
+      <@bp.button baseClass="" iconClass="cm-icon__symbol icon-next" iconText=bp.getMessage("button_next") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--next", "data-cm-target": quickInfoNextId}/>
+      <@bp.button baseClass="" iconClass="cm-icon__symbol icon-prev" iconText=bp.getMessage("button_prev") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--prev", "data-cm-target": quickInfoPreviousId}/>
+    </#if>
   </#if>
-
-  <#-- teaserText -->
-  <#if showTeaserText>
-    <div class="cm-quickinfo__text"<@cm.metadata "properties.teaserText" />><@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", 265) /></div>
-  </#if>
-
-  <@bp.button text=bp.getMessage("button_read_more") href=cm.getLink(self.target!cm.UNDEFINED) attr={"classes": ["cm-quickinfo__controls", "cm-button-group__button", "cm-button--linked-large"]} />
-
-  <@bp.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
 </div>

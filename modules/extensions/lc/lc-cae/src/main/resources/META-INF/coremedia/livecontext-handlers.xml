@@ -15,21 +15,20 @@
   <import resource="livecontext-cae-services.xml"/>
   <import resource="livecontext-site-services.xml"/>
   <import resource="livecontext-fragment.xml"/>
-  <import resource="livecontext-cae-vendor-placeholders.xml"/>
   <import resource="classpath:META-INF/coremedia/lc-services.xml"/>
 
   <bean id="ecommerceHandlerBase" abstract="true" parent="pageHandlerBase" class="com.coremedia.livecontext.handler.LiveContextPageHandlerBase">
     <property name="dataViewFactory" ref="dataViewFactory"/>
     <property name="urlPrefixResolver" ref="ruleUrlPrefixResolver"/>
-    <property name="wcsStorefrontMaxUrlSegments" value="${livecontext.max-category-segments}" />
     <property name="sitesService" ref="sitesService"/>
     <property name="siteResolver" ref="liveContextSiteResolver" />
-    <property name="urlProvider" ref="pageHandlerUrlProvider"/>
     <property name="settingsService" ref="settingsService" />
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
     <property name="contentRepository" ref="contentRepository"/>
-    <property name="linkFormatter" ref="linkFormatter"/>
   </bean>
+
+  <bean id="liveContextProductSeoLinkBuilderHelper"
+        class="com.coremedia.livecontext.handler.LiveContextProductSeoLinkBuilderHelper"/>
 
   <bean id="externalNavigationHandler" class="com.coremedia.livecontext.handler.ExternalNavigationHandler" parent="ecommerceHandlerBase">
     <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
@@ -52,8 +51,8 @@
   </bean>
 
   <bean id="commerceSearchHandler" class="com.coremedia.livecontext.search.CommerceSearchHandler" parent="pageHandlerBase">
-    <property name="searchResultRedirectUrlProvider" ref="searchResultRedirectUrlProvider"/>
     <property name="linkFormatter" ref="linkFormatter"/>
+    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
   <bean id="restClientSchemeRegistry" class="com.coremedia.livecontext.handler.SchemeRegistryFactory">
@@ -80,21 +79,11 @@
     </property>
   </bean>
 
-  <bean id="cartHandler" class="com.coremedia.livecontext.handler.CartHandler" parent="ecommerceHandlerBase">
-    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
-    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
-    <property name="checkoutRedirectUrlProvider" ref="checkoutRedirectUrlProvider" />
-    <property name="permittedLinkParameterNames">
-      <list>
-        <value>targetView</value>
-      </list>
-    </property>
-  </bean>
-
   <bean id="microSiteHandler" class="com.coremedia.livecontext.handler.LiveContextChannelLinkBuilder" parent="ecommerceHandlerBase">
     <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>  <!-- ## actually not needed -->
-    <property name="commerceLedPageExtension" ref="commerceLedPageExtension"/>
-    <property name="searchLandingPagesExtension" ref="searchLandingPagesExtension" />
+    <property name="commerceLedLinkBuilderHelper" ref="commerceLedLinkBuilderHelper"/>
+    <property name="searchLandingPagesLinkBuilderHelper" ref="searchLandingPagesLinkBuilderHelper" />
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 
   <bean id="marketingSpotHandler" class="com.coremedia.livecontext.marketingspot.CMMarketingSpotHandler" parent="pageHandlerBase">
@@ -106,18 +95,17 @@
     <property name="contentRepository" ref="contentRepository"/>
   </bean>
 
-  <bean id="commerceLedPageExtension" class="com.coremedia.livecontext.logictypes.CommerceLedPageExtension" parent="ecommerceHandlerBase">
-    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
+  <bean id="commerceLedLinkBuilderHelper" class="com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper">
     <property name="contentURLKeyword" value="${livecontext.content-url-prefix}"/>
     <!--Use legacyExternalSeoSegmentBuilder for the legacy format-->
     <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder" />
+    <property name="settingsService" ref="settingsService"/>
   </bean>
 
-  <bean id="searchLandingPagesExtension" class="com.coremedia.livecontext.logictypes.SearchLandingPagesExtension" parent="ecommerceHandlerBase">
-    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
-    <property name="searchResultRedirectUrlProvider" ref="searchResultRedirectUrlProvider"/>
+  <bean id="searchLandingPagesLinkBuilderHelper" class="com.coremedia.livecontext.handler.SearchLandingPagesLinkBuilderHelper">
     <property name="navigationTreeRelation" ref="navigationTreeRelation"/>
     <property name="segmentPath" value="${livecontext.slp.segmentPath}" />
     <property name="keywordsProperty" value="keywords" />
   </bean>
+
 </beans>
