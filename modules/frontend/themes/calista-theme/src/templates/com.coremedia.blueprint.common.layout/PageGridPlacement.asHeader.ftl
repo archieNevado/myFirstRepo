@@ -28,11 +28,21 @@
 
     <#-- search widget -->
     <#if searchAction?has_content>
-      <div class="cm-search__magnifier--large mobile-search">
+      <div class="cm-search__open-mobile-search-button">
         <span></span>
       </div>
       <div id="cmSearchWrapper" class="cm-search navbar-form navbar-right">
-        <@cm.include self=searchAction view="asHeader" />
+        <button type="button" class="navbar-toggle pull-left cm-search-form__close">
+          <span class="sr-only">${bp.getMessage('search_close')}</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <#assign substitution=bp.substitute(searchAction.id!"", searchAction)!cm.UNDEFINED />
+        <@cm.include self=substitution view="asHeader" params={
+        "formMethod": "POST",
+        "renderAsPopup": false
+        }/>
       </div>
     </#if>
 

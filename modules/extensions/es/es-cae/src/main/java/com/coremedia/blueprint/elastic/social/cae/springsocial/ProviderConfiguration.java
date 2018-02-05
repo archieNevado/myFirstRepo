@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.elastic.social.cae.springsocial;
 
+import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.tenant.TenantService;
@@ -13,15 +13,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Optional;
 
 @Named
 public class ProviderConfiguration {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProviderConfiguration.class);
+
   private static final String FACEBOOK_CLIENT_ID = "facebook.clientId";
   private static final String FACEBOOK_CLIENT_SECRET = "facebook.clientSecret";
   private static final String FACEBOOK_CLIENT_NAMESPACE = "facebook.clientNamespace";
@@ -31,8 +34,10 @@ public class ProviderConfiguration {
 
   @Inject
   private SitesService sitesService;
+
   @Inject
   private TenantService tenantService;
+
   @Inject
   private SettingsService settingsService;
 
@@ -61,15 +66,21 @@ public class ProviderConfiguration {
     if (StringUtils.isBlank(tenant)) {
       currentTenant = tenantService.getCurrent();
     }
+
     Site site = getCurrentNavigation();
-    if(null != site) {
-      Map elasticSocialSettings = settingsService.settingAsMap(ElasticSocialPlugin.SETTINGS_STRUCT, String.class, Object.class, site);
+    if (site != null) {
+      Map elasticSocialSettings = settingsService.settingAsMap(ElasticSocialPlugin.SETTINGS_STRUCT, String.class,
+              Object.class, site);
       if (currentTenant.equals(elasticSocialSettings.get(TENANT)) && elasticSocialSettings.containsKey(keySuffix)) {
         return (String) elasticSocialSettings.get(keySuffix);
       }
-      LOG.info("no provider config found for site '{}', checking fallback configuration for tenant '{}' and provider '{}'", site, currentTenant, keySuffix);
+
+      LOG.info("No provider config found for site '{}', checking fallback configuration for tenant '{}' and provider '{}'.",
+              site, currentTenant, keySuffix);
     } else {
-      LOG.warn("site not available for request {}", getHttpServletRequest().getRequestURI());
+      if (LOG.isWarnEnabled()) {
+        LOG.warn("Site not available for request '{}'.", getRequestURI().orElse(null));
+      }
     }
 
     return null;
@@ -77,17 +88,24 @@ public class ProviderConfiguration {
 
   @VisibleForTesting
   protected Site getCurrentNavigation() {
-    ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-    Object sessionAttribute = sra.getAttribute(SiteHelper.SITE_KEY, ServletRequestAttributes.SCOPE_GLOBAL_SESSION);
-    if(sessionAttribute instanceof String) {
-      return sitesService.getSite((String) sessionAttribute);
-    }
-    return null;
+    return getRequestAttributes()
+            .map(attributes -> attributes.getAttribute(SiteHelper.SITE_KEY, ServletRequestAttributes.SCOPE_SESSION))
+            .filter(String.class::isInstance)
+            .map(String.class::cast)
+            .flatMap(sitesService::findSite)
+            .orElse(null);
   }
 
-  private HttpServletRequest getHttpServletRequest() {
-    ServletRequestAttributes sra1 = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-    return sra1.getRequest();
+  @Nonnull
+  private static Optional<String> getRequestURI() {
+    return getRequestAttributes()
+            .map(ServletRequestAttributes::getRequest)
+            .map(HttpServletRequest::getRequestURI);
   }
 
+  @Nonnull
+  private static Optional<ServletRequestAttributes> getRequestAttributes() {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    return Optional.ofNullable(attributes);
+  }
 }

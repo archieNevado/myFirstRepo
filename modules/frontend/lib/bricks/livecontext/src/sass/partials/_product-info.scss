@@ -32,3 +32,7 @@
 
 }
 
+// make sure shop now buttons are always clickable
+.cm-button-group--shopnow {
+  pointer-events: auto;
+}

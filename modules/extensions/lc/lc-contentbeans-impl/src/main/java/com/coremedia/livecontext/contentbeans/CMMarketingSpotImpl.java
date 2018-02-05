@@ -1,16 +1,16 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.cae.contentbeans.CMDynamicListImpl;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -29,6 +30,8 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
   public static final String EXTERNAL_ID = "externalId";
 
   private LiveContextNavigationFactory liveContextNavigationFactory;
+
+  CommerceConnectionSupplier commerceConnectionSupplier;
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -110,24 +113,27 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
     return teaserTitle;
   }
 
-  public StoreContextProvider getStoreContextProvider() {
-    return CurrentCommerceConnection.get().getStoreContextProvider();
-  }
-
   @Required
   public void setLiveContextNavigationFactory(LiveContextNavigationFactory liveContextNavigationFactory) {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
 
+  @Required
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
+  }
+
   private MarketingSpot getMarketingSpot() {
     MarketingSpot marketingSpot = null;
-    StoreContext storeContext = getStoreContextProvider().findContextByContent(getContent());
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
     String marketingSpotId = getExternalId();
-    if (storeContext != null && marketingSpotId != null) {
-      MarketingSpotService marketingSpotService = CurrentCommerceConnection.get().getMarketingSpotService();
+    if (commerceConnection.isPresent() && marketingSpotId != null) {
+      CommerceConnection connection = commerceConnection.get();
+      StoreContext storeContext = connection.getStoreContext();
+      MarketingSpotService marketingSpotService = connection.getMarketingSpotService();
       if (marketingSpotService != null) {
         CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(marketingSpotId);
-        marketingSpot = marketingSpotService.withStoreContext(storeContext).findMarketingSpotById(commerceId, storeContext);
+        marketingSpot = marketingSpotService.findMarketingSpotById(commerceId, storeContext);
       }
     }
 

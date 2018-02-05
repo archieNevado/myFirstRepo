@@ -3,10 +3,11 @@
 
 <#assign content=self.content>
 <#assign augmentedContent = lc.augmentedContent()>
-
 <#if !augmentedContent>
   <!--CM { "objectType":"page","renderType":"metadata","title":"","description":"","keywords":"","pageName":"" } CM-->
 <#else>
-  <!--CM { "objectType":"page","renderType":"metadata","title":"${content.htmlTitle}","description":"${content.htmlDescription}",
-  "keywords":"${content.keywords}","pageName":"${content.title}" } CM-->
+<#noautoesc>
+  <!--CM { "objectType":"page","renderType":"metadata","title":"${content.htmlTitle?json_string}","description":"${content.htmlDescription?json_string}",
+  "keywords":"${content.keywords?json_string}","pageName":"${content.title?json_string}" } CM-->
+</#noautoesc>
 </#if>

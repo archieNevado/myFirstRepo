@@ -21,6 +21,7 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000FauWbyFMSvjA4ElgDCNoRct:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
@@ -49,6 +50,7 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000XfuagLo0eM35qGL_2KKp44a:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
 - recorded: 2017-09-06T11:18:25.291Z
@@ -71,6 +73,7 @@ interactions:
       Expires: Wed, 06 Sep 2017 12:18:27 GMT
       Set-Cookie: JSESSIONID=0000H2GPtfxeDhGK3gzULutGhYO:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":"47","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/bySearchTerm\/shoe?currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=2","recordSetCount":"47","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"uniqueID":"3074457345616678615","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678615","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","shortDescription":"Slip-on
       shoe in aged Cognac leather","name":"Leo Currency Dress Shoe","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"119.0"}],"buyable":"true","longDescription":"This classic dress shoe features a bicycle toe and micro-thin twin gores for
@@ -192,7 +195,6 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000YkeRSYVU0nNZ7xV_MxtgLy9:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":3,"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
       Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
@@ -218,6 +220,7 @@ interactions:
       Expires: Wed, 06 Sep 2017 12:18:28 GMT
       Set-Cookie: JSESSIONID=0000otcTX9sHO1_n6XEspJAVWaA:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":"1","CatalogGroupView":[{"parentCatalogGroupID":["3074457345616676669"],"metaDescription":"Shoes","uniqueID":"3074457345616676686","xcatgroup_seoSegment":"shoes-3074457345616676686--1","fullImage":"images\/catalog\/apparel\/men\/category\/catr_msh_shoes.png","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676686","title":"Shoes
       | AuroraESite","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676686","thumbnail":"images\/catalog\/apparel\/men\/category\/catr_msh_shoes.png","shortDescription":"Shoes","name":"Shoes","metaKeyword":"casual,
@@ -297,7 +300,6 @@ interactions:
       Expires: Wed, 06 Sep 2017 12:18:29 GMT
       Set-Cookie: JSESSIONID=0000kDFvFXzuwE08LizxjKN5Gzz:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":"47","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/bySearchTerm\/shoe?currency=USD&langId=-1&pageNumber=1&pageSize=10&searchType=2","recordSetCount":"10","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"false","CatalogEntryView":[{"uniqueID":"3074457345616678615","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678615","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","shortDescription":"Slip-on
       shoe in aged Cognac leather","name":"Leo Currency Dress Shoe","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"119.0"}],"buyable":"true","longDescription":"This classic dress shoe features a bicycle toe and micro-thin twin gores for
@@ -343,6 +345,7 @@ interactions:
       Expires: Wed, 06 Sep 2017 12:18:29 GMT
       Set-Cookie: JSESSIONID=0000Gbli7gXLnW7t5IjmwIGDm8H:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":"47","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/bySearchTerm\/shoe?currency=USD&langId=-1&pageNumber=2&pageSize=9&searchType=2","recordSetCount":"9","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"false","CatalogEntryView":[{"uniqueID":"3074457345616679103","parentCategoryID":"3074457345616676693","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bsh016_shoes\/646x1000\/bsh016_1601.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679103","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bsh016_shoes\/200x310\/bsh016_1601.jpg","shortDescription":"Black
       canvas shoes","name":"Albini Black Canvas Shoes","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"30.0"}],"buyable":"true","longDescription":"Which boy wouldn ''t love black canvas shoes?  The greatest of all sports shoes, these trainers
@@ -386,6 +389,7 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000zCtx0I05rik3Gkz-tRPXYZ7:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: ''
 - recorded: 2017-09-06T11:18:27.308Z
@@ -408,6 +412,7 @@ interactions:
       Expires: Wed, 06 Sep 2017 12:18:29 GMT
       Set-Cookie: JSESSIONID=0000NL_RV2-I1tMKslHyj4IJANO:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/bySearchTerm\/shoe sport?currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=2","recordSetCount":"1","SuggestionView":[{"label":"shoe
       short","identifier":"shoe short"},{"label":"short","identifier":"short"},{"label":"skirt","identifier":"skirt"}],"MetaData":[{"metaKey":"price","metaData":"1"},{"metaKey":"spellcheck","metaData":"shoe short,short,skirt"}],"recordSetComplete":"true","CatalogEntryView":[{"uniqueID":"3074457345616678687","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678687","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","shortDescription":"An
@@ -435,5 +440,44 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000vA9fXA6V0L-jtUkRETzK2wj:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: ''
+- recorded: 2018-01-15T15:27:55.601Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/bySearchTerm/shoe?categoryId=3074457345616676686&currency=USD&langId=-1&pageNumber=1&pageSize=7&searchType=2
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_144)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 15 Jan 2018 15:27:54 GMT
+      Expires: Mon, 15 Jan 2018 16:27:55 GMT
+      Set-Cookie: JSESSIONID=0000poE6AHQcP100Bp2qSpr0C_m:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-malchin-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"15","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/bySearchTerm\/shoe?categoryId=3074457345616676686&currency=USD&langId=-1&pageNumber=1&pageSize=7&searchType=2","recordSetCount":"7","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"false","CatalogEntryView":[{"uniqueID":"3074457345616678615","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1202.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678615","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1202.jpg","shortDescription":"Slip-on
+      shoe in aged Cognac leather","name":"Leo Currency Dress Shoe","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"119.0"}],"buyable":"true","longDescription":"This classic dress shoe features a bicycle toe and micro-thin twin gores for
+      comfort. Black stitch detail adds pizzazz to the all-leather upper.","xcatentry_seoSegment":"leo-currency-dress-shoe","storeID":"715837934","partNumber":"MSH012_1202"},{"uniqueID":"3074457345616678687","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678687","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","shortDescription":"An
+      athletic shoe with style to spare","name":"Baril Goforit Sport Shoe","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"59.0"}],"buyable":"true","longDescription":"With Italian-inspired styling, this sneaker looks great on or off the court.  Offers
+      a breathable upper and a cushioned collar for extra support.","xcatentry_seoSegment":"baril-goforit-sport-shoe","storeID":"715837934","partNumber":"MSH012_1216"},{"uniqueID":"3074457345616678705","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1218.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678705","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1218.jpg","shortDescription":"Tone
+      while you walk with these ultra-comfortable shoes","name":"Leo Toner Walking Shoes","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"105.0"}],"buyable":"true","longDescription":"Walk circles around your mates with these high-end walking
+      shoes.  Balance-ball-like pods keep you in shape with each stride. With a breathable lining and durable rubber outsole.","xcatentry_seoSegment":"leo-toner-walking-shoes","storeID":"715837934","partNumber":"MSH012_1218"},{"uniqueID":"3074457345616678714","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1219.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678714","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1219.jpg","shortDescription":"A
+      high-performance running shoe","name":"Cassetti Demon Running Shoe","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"95.0"}],"buyable":"true","longDescription":"These shoes offer comfort, fit, and unbeatable performance. The synthetic
+      mesh upper lets your feet breath while providing all the support you need. Features a washable anti-bacterial liner.","xcatentry_seoSegment":"cassetti-demon-running-shoe","storeID":"715837934","partNumber":"MSH012_1219"},{"uniqueID":"3074457345616678723","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1220.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678723","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1220.jpg","shortDescription":"Shocking
+      blue suede comfort sneaker","name":"Meso Suede Pancake Shoe","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"72.0"}],"buyable":"true","longDescription":"Nobody will dare to step on these shoes. They look too good. Dance like a king
+      in these super-comfortable suede sneakers.","xcatentry_seoSegment":"meso-suede-pancake-shoe","storeID":"715837934","partNumber":"MSH012_1220"},{"uniqueID":"3074457345616678606","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1201.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678606","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1201.jpg","shortDescription":"Black
+      slip-on dress shoe in a wide fit","name":"Borsati Fife Dress Loafer","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"89.0"}],"buyable":"true","longDescription":"Unbeatable comfort in a loafer with twin gore sides for a custom fit. Exhaust
+      vents keep your feet dry and comfortable.","xcatentry_seoSegment":"borsati-fife-dress-loafer","storeID":"715837934","partNumber":"MSH012_1201"},{"uniqueID":"3074457345616678642","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1208.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-ci-01-malchin-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678642","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1208.jpg","shortDescription":"Rich
+      tan leather shoe with dark stitching","name":"Baril Sidestep Oxford","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"200.0"}],"buyable":"true","longDescription":"Make a statement in these chic oxfords with a touch of vertical stitching.
+      Great for the office or a night out.","xcatentry_seoSegment":"baril-sidestep-oxford","storeID":"715837934","partNumber":"MSH012_1208"}],"recordSetStartNumber":"0","FacetView":[{"Entry":[{"count":"10","label":"({* 100} 100)","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"count":"4","label":"({100
+      200} 200)","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"count":"1","label":"({200 300} 300)","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"count":"0","label":"({300 400} 400)","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"count":"0","label":"({400
+      500} 500)","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"count":"0","label":"({500 *})","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD","value":"price_USD"},{"Entry":[{"count":"3","label":"Baril","entryValue":"mfName_ntk_cs%3A%22Baril%22"},{"count":"3","label":"Borsati","entryValue":"mfName_ntk_cs%3A%22Borsati%22"},{"count":"3","label":"Cassetti","entryValue":"mfName_ntk_cs%3A%22Cassetti%22"},{"count":"3","label":"Leo","entryValue":"mfName_ntk_cs%3A%22Leo%22"},{"count":"3","label":"Meso","entryValue":"mfName_ntk_cs%3A%22Meso%22"}],"name":"ManufacturerName","value":"mfName_ntk_cs"}],"BreadCrumbTrailEntryView":[{"value":"3074457345616676668","label":"Apparel","type":"FACET_ENTRY_CATEGORY"},{"value":"3074457345616676669","label":"Men","type":"FACET_ENTRY_CATEGORY"},{"value":"3074457345616676686","label":"Shoes","type":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview"}'

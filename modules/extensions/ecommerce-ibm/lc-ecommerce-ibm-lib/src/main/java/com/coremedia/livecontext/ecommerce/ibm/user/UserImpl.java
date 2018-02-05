@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
+import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.user.User;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
-
-import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.getValueForKey;
 
 public class UserImpl extends AbstractIbmCommerceBean implements User {
 
@@ -23,27 +24,27 @@ public class UserImpl extends AbstractIbmCommerceBean implements User {
 
   @Override
   public String getFirstName() {
-    return getValueForKey(getDelegate(), "firstName", String.class);
+    return getStringValue(getDelegate(), "firstName");
   }
 
   @Override
   public String getLastName() {
-    return getValueForKey(getDelegate(), "lastName", String.class);
+    return getStringValue(getDelegate(), "lastName");
   }
 
   @Override
   public String getLogonId() {
-    return getValueForKey(getDelegate(), "logonId", String.class);
+    return getStringValue(getDelegate(), "logonId");
   }
 
   @Override
   public String getUserId() {
-    return getValueForKey(getDelegate(), "userId", String.class);
+    return getStringValue(getDelegate(), "userId");
   }
 
   @Override
   public String getExternalId() {
-    return getValueForKey(getDelegate(), "logonId", String.class);
+    return getStringValue(getDelegate(), "logonId");
   }
 
   @Override
@@ -53,46 +54,51 @@ public class UserImpl extends AbstractIbmCommerceBean implements User {
 
   @Override
   public String getEmail1() {
-    return getValueForKey(getDelegate(), "email1", String.class);
+    return getStringValue(getDelegate(), "email1");
   }
 
   @Override
   public String getEmail2() {
-    return getValueForKey(getDelegate(), "email2", String.class);
+    return getStringValue(getDelegate(), "email2");
   }
 
   @Override
   public String getEmail3() {
-    return getValueForKey(getDelegate(), "email3", String.class);
+    return getStringValue(getDelegate(), "email3");
   }
 
   @Override
   public String getCity() {
-    return getValueForKey(getDelegate(), "city", String.class);
+    return getStringValue(getDelegate(), "city");
   }
 
   @Override
   public String getCountry() {
-    return getValueForKey(getDelegate(), "country", String.class);
+    return getStringValue(getDelegate(), "country");
   }
 
   @Override
   public String getLogonPassword() {
-    return getValueForKey(getDelegate(), "logonPassword", String.class);
+    return getStringValue(getDelegate(), "logonPassword");
   }
 
   @Override
   public String getLogonPasswordVerify() {
-    return getValueForKey(getDelegate(), "logonPasswordVerify", String.class);
+    return getStringValue(getDelegate(), "logonPasswordVerify");
   }
 
   @Override
   public String getChallengeAnswer() {
-    return getValueForKey(getDelegate(), "challengeAnswer", String.class);
+    return getStringValue(getDelegate(), "challengeAnswer");
   }
 
   @Override
   public String getChallengeQuestion() {
-    return getValueForKey(getDelegate(), "challengeQuestion", String.class);
+    return getStringValue(getDelegate(), "challengeQuestion");
+  }
+
+  @Nullable
+  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

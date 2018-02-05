@@ -9,39 +9,35 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=57;y=0;width=1935;height=3000</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=0;y=0;width=2049;height=2732</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=0;width=2049;height=2049</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=0;width=2049;height=1537</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=19;width=2049;height=1153</StringProperty>
-<StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=19;width=2049;height=1025</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=28;width=2049;height=820</StringProperty>
-<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=38;width=2049;height=768</StringProperty>
-<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=161;width=2049;height=512</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=848;y=0;width=1549;height=2401</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=742;y=129;width=1704;height=2272</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=333;y=0;width=2401;height=2401</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=0;width=3201;height=2401</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=136;width=3201;height=1801</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=121;width=3201;height=1280</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=110;width=3201;height=800</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="focusPoint">
+<Struct>
+<StringProperty Name="x">0.47635933806146574</StringProperty>
+<StringProperty Name="y">0.20977917981072555</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="isDefault">
 <Struct>
+<StringProperty Name="portrait_ratio20x31">false</StringProperty>
 <StringProperty Name="portrait_ratio3x4">false</StringProperty>
-<StringProperty Name="portrait_ratio1x1">false</StringProperty>
-<StringProperty Name="landscape_ratio4x3">false</StringProperty>
 <StringProperty Name="landscape_ratio16x9">false</StringProperty>
-<StringProperty Name="landscape_ratio2x1">false</StringProperty>
 <StringProperty Name="landscape_ratio5x2">false</StringProperty>
-<StringProperty Name="landscape_ratio8x3">false</StringProperty>
-<StringProperty Name="landscape_ratio4x1">false</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
 <Struct>
-<StringProperty Name="portrait_ratio3x4">position;x1=0;y1=0;x2=1;y2=0.9106666666666667</StringProperty>
-<StringProperty Name="portrait_ratio1x1">position;x1=0;y1=0;x2=1;y2=0.683</StringProperty>
-<StringProperty Name="landscape_ratio4x3">position;x1=0;y1=0;x2=1;y2=0.5122500000000001</StringProperty>
-<StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0.006329113924050633;x2=1;y2=0.3905166139240506</StringProperty>
-<StringProperty Name="landscape_ratio2x1">position;x1=0;y1=0.006329113924050633;x2=1;y2=0.34782911392405064</StringProperty>
-<StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.00949367088607595;x2=1;y2=0.28269367088607594</StringProperty>
-<StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.012658227848101266;x2=1;y2=0.2687832278481013</StringProperty>
-<StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.05379746835443038;x2=1;y2=0.2245474683544304</StringProperty>
+<StringProperty Name="portrait_ratio20x31">position;x1=0.2647754137115839;y1=0;x2=0.7486967689332384;y2=1</StringProperty>
+<StringProperty Name="portrait_ratio3x4">position;x1=0.23167848699763594;y1=0.05362776025236593;x2=0.764068306030923;y2=1</StringProperty>
+<StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0.056782334384858045;x2=1;y2=0.8067042419233836</StringProperty>
+<StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.050473186119873815;x2=1;y2=0.5837509870361587</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -69,9 +65,9 @@
 <alt>portrait of beautiful happy sweet smiling blonde woman</alt>
 <copyright>Shutterstock 353822519</copyright>
 <dataUrl></dataUrl>
-<width>2049</width>
-<height>3000</height>
-<data md5="baae9fc50406472dfeceb416be5fc073" size="2056282" href="../../../../../../../__blob/baae9fc50406472dfeceb416be5fc073.blob" mimetype="image/jpeg"/>
+<width>3201</width>
+<height>2401</height>
+<data md5="8156831303b04683c1b7d8f15ff7d280" size="5660812" href="../../../../../../../__blob/8156831303b04683c1b7d8f15ff7d280.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

@@ -7,6 +7,9 @@
          xmlns:u="exml:untyped"
          ui="{ToolbarSkin.FIELD.getSkin()}">
   <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.actions.LinkListRemoveAction;
+    import com.coremedia.cms.editor.sdk.actions.OpenEntitiesInTabsAction;
+    import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
     import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
     import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.skins.ToolbarSkin;
@@ -16,6 +19,9 @@
     private var config:CatalogLinkToolbar;
 
     public native function CatalogLinkToolbar(config:CatalogLinkToolbar = null);
+
+    [Bindable]
+    public var linkListWrapper:ILinkListWrapper;
 
     /**
      * A property path expression leading to the Bean whose property is edited.
@@ -36,18 +42,6 @@
     [Bindable]
     public var readOnlyValueExpression:ValueExpression;
 
-    /**
-     * A ValueExpression whose value is set to the array of selected items.
-     */
-    [Bindable]
-    public var selectedValuesExpression:ValueExpression;
-
-    /**
-     * A ValueExpression whose value is set to the array of indexes of selected items.
-     * The array is empty if nothing is selected. The change of the value doesn't update the selection of the grid.
-     */
-    [Bindable]
-    public var selectedPositionsExpression:ValueExpression;
     ]]></fx:Script>
   <fx:Declarations>
     <!---
@@ -73,6 +67,7 @@
     <ui:AddItemsPlugin items="{config.additionalToolbarItems}"/>
     <ui:HideObsoleteSeparatorsPlugin/>
   </plugins>
+
   <defaults>
     <editor:PropertyField bindTo="{config.bindTo}"
                           u:readOnlyValueExpression="{config.readOnlyValueExpression}"
@@ -83,18 +78,15 @@
     <ui:IconButton itemId="{ECommerceStudioPlugin.REMOVE_LINK_BUTTON_ITEM_ID}"
                    hidden="{config.hideRemove}">
       <ui:baseAction>
-        <editor:DeleteSelectedLinksAction contentValueExpression="{config.bindTo}"
-                                          propertyName="{config.propertyName}"
-                                          selectedPositionsExpression="{config.selectedPositionsExpression}"
-                                          forceReadOnlyValueExpression="{config.readOnlyValueExpression || config.forceReadOnlyValueExpression}"/>
+        <ActionRef actionId="{LinkListRemoveAction.ACTION_ID}"/>
       </ui:baseAction>
     </ui:IconButton>
+
     <ui:IconButton itemId="{ECommerceStudioPlugin.OPEN_IN_TAB_BUTTON_ITEM_ID}"
                    hidden="{config.hideOpenInTab}">
       <ui:baseAction>
-        <editor:OpenEntitiesInTabsAction entitiesValueExpression="{config.selectedValuesExpression}"/>
+        <ActionRef actionId="{OpenEntitiesInTabsAction.ACTION_ID}"/>
       </ui:baseAction>
     </ui:IconButton>
   </items>
-
 </Toolbar>

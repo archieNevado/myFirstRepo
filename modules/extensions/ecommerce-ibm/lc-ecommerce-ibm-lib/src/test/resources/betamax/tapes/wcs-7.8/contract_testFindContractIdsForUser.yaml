@@ -1,7 +1,7 @@
 !tape
 name: contract_testFindContractIdsForUser
 interactions:
-- recorded: 2016-08-31T15:52:03.853Z
+- recorded: 2017-11-14T15:39:36.590Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -10,16 +10,16 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 31 Aug 2016 15:52:05 GMT
+      Date: Tue, 14 Nov 2017 15:39:36 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000RQi1TBGHVk9D4HUdOQKDQSm:-1; Path=/; Domain=.toko-75-01.coremedia.vm
+      Set-Cookie: JSESSIONID=0000KTuT3cSrs-1eDfRNJXyNm2p:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
       X-Betamax: PLAY
@@ -32,7 +32,7 @@ interactions:
       Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
       Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
       Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
-- recorded: 2016-08-31T15:52:08.963Z
+- recorded: 2017-11-14T15:39:36.612Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -41,87 +41,64 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 31 Aug 2016 15:52:11 GMT
+      Date: Tue, 14 Nov 2017 15:39:36 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000pRXxtiH4GhL1K0mAE_S-K3G:-1; Path=/; Domain=.toko-75-01.coremedia.vm
-      Surrogate-Control: no-store
-      Vary: Accept
-    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
-- recorded: 2016-08-31T15:52:09.149Z
-  request:
-    method: POST
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/loginidentity
-    headers:
-      Accept-Encoding: text/plain
-      Content-Length: '60'
-      Content-Type: application/json
-      Host: shop-ref.ecommerce.coremedia.com
-      Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-    body: '{"logonId":"cmadmin","logonPassword":"VTJjyo0AYSnXFHI201yo"}'
-  response:
-    status: 201
-    headers:
-      Cache-Control: no-cache="set-cookie, set-cookie2"
-      Content-Language: en-US
-      Content-Type: application/json
-      Date: Wed, 31 Aug 2016 15:52:11 GMT
-      Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000lt7hm5l8Xg8R_TDsYlemDWD:-1; Path=/; Domain=.toko-75-01.coremedia.vm
+      Set-Cookie: JSESSIONID=0000UCEqOPNbZYrH-Y5LYp0llNl:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
       X-Betamax: PLAY
-    body: '{"userId":"2","WCToken":"2%2Cle9rSnKOUUERlOt1WNnOC%2FH0X54%2F0cFvLjv%2FjyD7iX6V0Yfa7Hu3ODsu%2BkmEWBaeOAizViM5abFeDK96UcTp%2BvQY3MPgQsCC8rSYNS2IFXrVYWAYZF6f3SEP%2B2e6dzhMdbT4t0WB7j5eJejHNO%2F7gl%2BJzDLvRv9DzXk6pCAnnRfCOh2vOGd%2FZIIX7fT3Ed4VtrUCYP4xveMX2HhcLwtd1A%3D%3D","WCTrustedToken":"2%2C8vPITnQTATKfUQ2IsSs7sOk%2B4LI%3D","personalizationID":"1472653271632-1"}'
-- recorded: 2016-08-31T15:52:09.186Z
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:39:36.650Z
   request:
     method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/contract?q=eligible&catalogId=10151&currency=USD&forUser=preview&langId=-1
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/contract?q=eligible&currency=USD&forUser=gstevens&langId=-1
     headers:
       Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-      WCToken: 2%2Cle9rSnKOUUERlOt1WNnOC%2FH0X54%2F0cFvLjv%2FjyD7iX6V0Yfa7Hu3ODsu%2BkmEWBaeOAizViM5abFeDK96UcTp%2BvQY3MPgQsCC8rSYNS2IFXrVYWAYZF6f3SEP%2B2e6dzhMdbT4t0WB7j5eJejHNO%2F7gl%2BJzDLvRv9DzXk6pCAnnRfCOh2vOGd%2FZIIX7fT3Ed4VtrUCYP4xveMX2HhcLwtd1A%3D%3D
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 31 Aug 2016 15:52:11 GMT
+      Date: Tue, 14 Nov 2017 15:39:36 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000gpe5eBPGV3hxmWFdboXQx-f:-1; Path=/; Domain=.toko-75-01.coremedia.vm
-      Surrogate-Control: no-store
-      Vary: Accept
-    body: '{"contracts":{"4000000000000001010":"Appliances Expert (Preview-Contract)","4000000000000001011":"Restaurant Chain (Preview-Contract)","4000000000000001009":"Interior Designer (Preview-Contract)"}}'
-- recorded: 2016-08-31T16:00:18.359Z
-  request:
-    method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/contract?q=eligible&catalogId=10151&currency=USD&forUser=gstevens&langId=-1
-    headers:
-      Accept-Encoding: text/plain
-      Content-Type: application/json
-      Host: shop-ref.ecommerce.coremedia.com
-      Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-      WCToken: 2%2Cle9rSnKOUUERlOt1WNnOC%2FH0X54%2F0cFvLjv%2FjyD7iX6V0Yfa7Hu3ODsu%2BkmEWBaeOAizViM5abFeDK96UcTp%2BvQY3MPgQsCC8rSYNS2IFXrVYWAYZF6f3SEP%2B2e6dzhMdbT4t0WB7j5eJejHNO%2F7gl%2BJzDLvRv9DzXk6pCAnnRfCOh2vOGd%2FZIIX7fT3Ed4VtrUCYP4xveMX2HhcLwtd1A%3D%3D
-  response:
-    status: 200
-    headers:
-      Cache-Control: no-cache="set-cookie, set-cookie2"
-      Content-Language: en-US
-      Content-Type: application/json
-      Date: Wed, 31 Aug 2016 16:00:20 GMT
-      Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000AwuyRBe4juB29hItPbceBCD:-1; Path=/; Domain=.toko-75-01.coremedia.vm
+      Set-Cookie: JSESSIONID=0000-4_Iqk7aidH-SKgI1ndG6B1:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"contracts":{"4000000000000000512":"Default Contract for AuroraB2BESite"}}'
+- recorded: 2017-11-14T15:39:36.872Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10303/contract?q=eligible&currency=USD&forUser=preview&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:36 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000h2_JUtzPbPjZPLaK4FL4hBA:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"contracts":{"4000000000000001010":"Appliances Expert Preview (Lighting products 40%, Nuts and bolts 30%, others 15% off)","4000000000000001011":"Restaurant Chain Preview (kitchen products 47%, lighting 52%, decorating 28%, others 12% off)","4000000000000001009":"Interior
+      Designer Preview (lighting products 20%, others 15% off)"}}'

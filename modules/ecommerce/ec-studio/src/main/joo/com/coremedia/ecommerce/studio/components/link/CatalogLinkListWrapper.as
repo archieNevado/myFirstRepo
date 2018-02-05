@@ -2,7 +2,7 @@ package com.coremedia.ecommerce.studio.components.link {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
-import com.coremedia.cms.editor.sdk.util.*;
+import com.coremedia.cms.editor.sdk.util.LinkListWrapperBase;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -14,7 +14,7 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.logging.Logger;
 
-public class CatalogLinkListWrapper implements ILinkListWrapper {
+public class CatalogLinkListWrapper extends LinkListWrapperBase {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -34,11 +34,14 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
   [Bindable]
   public var createStructFunction:Function;
 
-  private var ve:ValueExpression;
+  [Bindable]
+  public var readOnlyVE:ValueExpression;
+
+  private var linksVE:ValueExpression;
   private var propertyExpression:ValueExpression;
   private var catalogObjRemoteBean:RemoteBean;
 
-  public function CatalogLinkListWrapper(config:CatalogLinkListWrapper = null):void {
+  public function CatalogLinkListWrapper(config:CatalogLinkListWrapper = null) {
     super(config);
     bindTo = config.bindTo;
     propertyName = config.propertyName;
@@ -46,23 +49,22 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
     maxCardinality = config.maxCardinality || 0;
     model = config.model;
     createStructFunction = config.createStructFunction;
+    readOnlyVE = config.readOnlyVE;
   }
 
-  public function getVE():ValueExpression {
-    if (!ve) {
-      ve = ValueExpressionFactory.createTransformingValueExpression(getPropertyExpression(),
+  override public function getVE():ValueExpression {
+    if (!linksVE) {
+      linksVE = ValueExpressionFactory.createTransformingValueExpression(getPropertyExpression(),
               transformer, reverseTransformer, []);
     }
-    return ve;
+    return linksVE;
   }
 
   private function invalidateIssues(event:PropertyChangeEvent):void {
     if (event.newState === BeanState.NON_EXISTENT || event.oldState === BeanState.NON_EXISTENT) {
       var content:Content = bindTo.getValue() as Content;
-      if (content) {
-        if (content.getIssues()) {
-          content.getIssues().invalidate();
-        }
+      if (content && content.getIssues()) {
+        content.getIssues().invalidate();
       }
     }
   }
@@ -82,19 +84,20 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
     return propertyExpression;
   }
 
-  public function getTotalCapacity():int {
+  override public function getTotalCapacity():int {
     return maxCardinality > 0 ? maxCardinality : int.MAX_VALUE;
   }
 
-  public function getFreeCapacity():int {
+  override public function getFreeCapacity():int {
     if (!maxCardinality) {
       return int.MAX_VALUE;
     }
+    //noinspection JSMismatchedCollectionQueryUpdate
     var catalogItems:Array = getVE().getValue() as Array;
     return maxCardinality - catalogItems.length;
   }
 
-  public function acceptsLinks(links:Array):Boolean {
+  override public function acceptsLinks(links:Array):Boolean {
     var targetSiteId:String = getTargetSiteId();
     return links.every(function(link:Object):Boolean {
       var catalogObject:CatalogObject = getCatalogObject(link);
@@ -134,7 +137,7 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
     return site && site.getId();
   }
 
-  private function getCatalogObject(link:Object):CatalogObject {
+  private static function getCatalogObject(link:Object):CatalogObject {
     var catalogObject:CatalogObject = link as CatalogObject;
     if (!catalogObject) {
       var content:Content = link as Content;
@@ -145,16 +148,17 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
     return catalogObject;
   }
 
-  public function getLinks():Array {
+  override public function getLinks():Array {
     return getVE().getValue();
   }
 
-  public function setLinks(links:Array):void {
+  override public function setLinks(links:Array):void {
     if (createStructFunction) {
       createStructFunction.apply();
     }
     var myLinks:Array = links.map(getCatalogObject);
     //are some links yet not loaded?
+    //noinspection JSMismatchedCollectionQueryUpdate
     var notLoadedLinks:Array = myLinks.filter(function(myLink:CatalogObject):Boolean {
       return !myLink.isLoaded();
     });
@@ -164,9 +168,13 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
       notLoadedLinks.every(function(notLoadedLink:CatalogObject):void {
         notLoadedLink.load(function():void {
           setLinks(myLinks);
-        })
+        });
       });
     }
+  }
+
+  override public function isReadOnly():Boolean {
+    return readOnlyVE ? readOnlyVE.getValue() : false;
   }
 
   private function transformer(value:*):Array {
@@ -212,7 +220,7 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
   }
 
   private function reverseTransformer(value:Array):* {
-    if (value) {
+    if (value && value.length > 0) {
       if (maxCardinality === 1) {
         return CatalogObject(value[0]).getId();
       } else {
@@ -221,7 +229,7 @@ public class CatalogLinkListWrapper implements ILinkListWrapper {
         })
       }
     }
-    return value;
+    return maxCardinality === 1 ? "" : [];
   }
 
 }

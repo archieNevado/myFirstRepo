@@ -101,9 +101,9 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   public String getName() {
     switch (getResourceName()) {
       case "spot":
-        return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].spotName", String.class);
+        return DataMapHelper.findStringValue(getDelegate(), "MarketingSpot[0].spotName").orElse(null);
       case "espot":
-        return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpotData[0].eSpotName", String.class);
+        return DataMapHelper.findStringValue(getDelegate(), "MarketingSpotData[0].eSpotName").orElse(null);
       default:
         return null;
     }
@@ -114,7 +114,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   public String getDescription() {
     switch (getResourceName()) {
       case "spot":
-        return DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].description", String.class);
+        return DataMapHelper.findStringValue(getDelegate(), "MarketingSpot[0].description").orElse(null);
       case "espot":
         return getName();
       default:
@@ -125,16 +125,17 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
   @Override
   public String getExternalTechId() {
     if (externalTechId == null) {
-      externalTechId = DataMapHelper.getValueForPath(getDelegate(), "MarketingSpotData[0].marketingSpotIdentifier", String.class);
+      externalTechId = DataMapHelper.findStringValue(getDelegate(), "MarketingSpotData[0].marketingSpotIdentifier")
+              .orElse(null);
     }
     if (externalTechId == null) {
-      externalTechId = DataMapHelper.getValueForPath(getDelegate(), "MarketingSpot[0].spotId", String.class);
+      externalTechId = DataMapHelper.findStringValue(getDelegate(), "MarketingSpot[0].spotId").orElse(null);
     }
     return externalTechId;
   }
 
   protected String getResourceName() {
-    return DataMapHelper.getValueForKey(getDelegate(), "resourceName", String.class);
+    return DataMapHelper.findStringValue(getDelegate(), "resourceName").orElse(null);
   }
 
   @Nonnull
@@ -193,7 +194,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
 
   @Nullable
   protected CommerceObject readMarketingContent(@Nonnull Map<String, Object> activity) {
-    String contentFormatName = DataMapHelper.getValueForPath(activity, "contentFormatName", String.class);
+    String contentFormatName = DataMapHelper.findStringValue(activity, "contentFormatName").orElse(null);
     switch (!StringUtils.isEmpty(contentFormatName) ? contentFormatName : "") {
       case CONTENT_FORMAT_FILE:
         return getMarketingImage(activity);
@@ -207,12 +208,13 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
 
   @Nonnull
   protected MarketingImage getMarketingImage(@Nonnull Map<String, Object> activity) {
-    String name = DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentName", String.class);
-    String shortText = DataMapHelper.getValueForPath(activity, "attachmentDescription.attachmentShortDescription", String.class);
-    Locale currentLocale = StoreContextHelper.getLocale(StoreContextHelper.getCurrentContext());
+    String name = DataMapHelper.findStringValue(activity, "attachmentDescription.attachmentName").orElse(null);
+    String shortText = DataMapHelper.findStringValue(activity, "attachmentDescription.attachmentShortDescription")
+            .orElse(null);
+    Locale currentLocale = StoreContextHelper.getLocale(StoreContextHelper.getCurrentContextOrThrow());
     String currentLanguageId = "-1";
 
-    String value = ((CatalogServiceImpl) getCatalogService()).getLanguageId(currentLocale);
+    String value = getCatalogService().getLanguageId(currentLocale);
     if (!value.isEmpty()) {
       currentLanguageId = value;
     }
@@ -242,10 +244,10 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
 
   @Nonnull
   protected MarketingText getMarketingText(@Nonnull Map<String, Object> activity) {
-    String text = DataMapHelper.getValueForPath(activity, "marketingContentDescription.marketingText", String.class);
+    String text = DataMapHelper.findStringValue(activity, "marketingContentDescription.marketingText").orElse(null);
     if (text == null) {
       //"makingText" is a typo by IBM in fep7...
-      text = DataMapHelper.getValueForPath(activity, "marketingContentDescription.maketingText", String.class);
+      text = DataMapHelper.findStringValue(activity, "marketingContentDescription.maketingText").orElse(null);
     }
     return new MarketingText(text);
   }
@@ -261,7 +263,7 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
         URL assetUrl = new URL(suffix);
         return assetUrl.toExternalForm();
       } else {
-        URL baseUrl = new URL(((CatalogServiceImpl) getCatalogService()).getWcsAssetsUrl());
+        URL baseUrl = new URL(getCatalogService().getWcsAssetsUrl(getContext()));
         URL assetUrl = new URL(baseUrl, suffix);
         return assetUrl.toExternalForm();
       }
@@ -271,5 +273,4 @@ public class MarketingSpotImpl extends AbstractIbmCommerceBean implements Market
 
     return null;
   }
-
 }

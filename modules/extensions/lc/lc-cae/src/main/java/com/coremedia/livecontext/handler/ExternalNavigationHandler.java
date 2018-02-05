@@ -17,6 +17,7 @@ import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.livecontext.product.ProductList;
 import com.coremedia.livecontext.product.ProductListSubstitutionService;
@@ -39,6 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_SEGMENTS;
@@ -47,7 +49,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_R
 import static com.coremedia.blueprint.cae.constants.RequestAttributeConstants.setPage;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static org.springframework.util.Assert.hasText;
-import static org.springframework.util.StringUtils.isEmpty;
 
 @Link
 @RequestMapping
@@ -64,7 +65,6 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   private static final String PARAM_STEPS = "steps";
   private static final String PAGING_VIEW = "productPaging";
   private static final String DEFAULT_STEPS = "" + ProductListSubstitutionService.DEFAULT_STEPS;
-  private static final String SEO_URI_PREFIX = "/{language}/{storeName}/";
 
   private ProductListSubstitutionService productListSubstitutionService;
   private TreeRelation<Content> treeRelation;
@@ -121,34 +121,43 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
 
   @Link(type = LiveContextExternalChannelImpl.class)
   public Object buildLinkForExternalChannel(
-          final LiveContextExternalChannelImpl navigation,
-          final String viewName,
-          final Map<String, Object> linkParameters) {
+          LiveContextExternalChannelImpl navigation,
+          String viewName,
+          Map<String, Object> linkParameters,
+          HttpServletRequest request) {
     // only responsible in non-preview mode
     if(!isPreview()) {
-      return buildCatalogLink(navigation, viewName, linkParameters, false);
+      return buildCatalogLink(navigation, viewName, linkParameters, request);
     }
     return null;
   }
 
   @Link(type = CMExternalPage.class)
   public Object buildLinkForExternalPage(
-          final CMExternalPage navigation,
-          final Map<String, Object> linkParameters) {
-    return buildNonCatalogLink(navigation, linkParameters);
+          CMExternalPage navigation,
+          Map<String, Object> linkParameters,
+          HttpServletRequest request) {
+    Optional<StoreContext> storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
+    return findCommercePropertyProvider()
+            .flatMap(p -> storeContext.map(s -> p.buildPageLink(navigation, linkParameters, request, s)))
+            // make sure that no further link schemes are asked to build a link for an external page
+            .orElseGet(UriComponentsBuilder::newInstance);
   }
 
   @Link(type = LiveContextCategoryNavigation.class)
   public Object buildLinkForCategoryImpl(
-          final LiveContextCategoryNavigation navigation,
-          final String viewName,
-          final Map<String, Object> linkParameters) {
-    return buildCatalogLink(navigation, viewName, linkParameters, false);
+          LiveContextCategoryNavigation navigation,
+          String viewName,
+          Map<String, Object> linkParameters,
+          HttpServletRequest request) {
+    return buildCatalogLink(navigation, viewName, linkParameters, request);
   }
 
   @Link(type = CategoryInSite.class)
-  public Object buildLinkFor(CategoryInSite categoryInSite, String viewName, Map<String, Object> linkParameters, HttpServletRequest request) {
-    return buildCatalogLink(getLiveContextNavigationFactory().createNavigation(categoryInSite.getCategory(), categoryInSite.getSite()), viewName, linkParameters, false);
+  public Object buildLinkFor(CategoryInSite categoryInSite,
+                             String viewName, Map<String, Object> linkParameters,
+                             HttpServletRequest request) {
+    return buildCatalogLink(getLiveContextNavigationFactory().createNavigation(categoryInSite.getCategory(), categoryInSite.getSite()), viewName, linkParameters, request);
   }
 
   @LinkPostProcessor(type = LiveContextExternalChannelImpl.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
@@ -174,46 +183,33 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return absoluteUri(originalUri, liveContextNavigation, site, linkParameters, request);
   }
 
-  private Object buildCatalogLink(LiveContextNavigation navigation, String viewName, Map<String, Object> linkParameters, boolean forceCommerceLink) {
-    if (isStoreContextAvailable()) {
-      Site site = navigation.getSite();
-      Category category;
-      try {
-        category = navigation.getCategory();
-      } catch (NotFoundException e) {
-        LOG.debug("ignoring commerce exception", e);
-        return null;
-      }
+  private Object buildCatalogLink(@Nonnull LiveContextNavigation navigation, String viewName, Map<String, Object> linkParameters, HttpServletRequest request) {
+    Category category = findCategory(navigation).orElse(null);
 
-      if (category == null) {
-        return null;
-      }
-
-      if (forceCommerceLink || useCommerceCategoryLinks(site)) {
-        String seoSegment = category.getSeoSegment();
-        linkParameters = updateQueryParams(category, linkParameters);
-        return buildCommerceLinkFor(null, seoSegment, linkParameters, category.getContext());
-      } else {
-        return buildCaeLinkForCategory(navigation, viewName, linkParameters);
-      }
-    }
-    return UriComponentsBuilder.newInstance().build();
-  }
-
-  private static boolean isStoreContextAvailable() {
-    return CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).isPresent();
-  }
-
-  private Object buildNonCatalogLink(CMExternalPage navigation, Map<String, Object> linkParameters) {
-    if (isStoreContextAvailable()) {
-      String urlTemplate = navigation.getExternalUriPath();
-      if (isEmpty(navigation.getExternalUriPath())){
-        urlTemplate = SEO_URI_PREFIX + navigation.getExternalId();
-      }
-      return buildCommerceLinkFor(urlTemplate, null, linkParameters, CurrentCommerceConnection.get().getStoreContext());
+    if (category == null) {
+      return null;
     }
 
-    return UriComponentsBuilder.newInstance().build();
+    Site site = navigation.getSite();
+    if (useCommerceCategoryLinks(site)) {
+      return findCommercePropertyProvider()
+              .map(p -> p.buildCategoryLink(category, linkParameters, request))
+              .orElse(null);
+    } else {
+      return buildCaeLinkForCategory(navigation, viewName, linkParameters);
+    }
+  }
+
+  @Nonnull
+  public static Optional<Category> findCategory(@Nonnull LiveContextNavigation navigation) {
+    Optional<Category> category;
+    try {
+      category = Optional.ofNullable(navigation.getCategory());
+    } catch (NotFoundException e) {
+      LOG.debug("ignoring commerce exception", e);
+      category = Optional.empty();
+    }
+    return category;
   }
 
   private ModelAndView createLiveContextPage(
@@ -236,10 +232,9 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return modelAndView;
   }
 
-  public UriComponents buildCaeLinkForCategory(
-          final LiveContextNavigation navigation,
-          final String viewName,
-          final Map<String, Object> linkParameters) {
+  public UriComponents buildCaeLinkForCategory(@Nonnull LiveContextNavigation navigation,
+                                               String viewName,
+                                               Map<String, Object> linkParameters) {
 
     // If there is no root navigation for the given category, it must be a category that is not reachable
     // via the (content based) navigation. This is not an invalid state. There might be another
@@ -248,14 +243,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     Site site = navigation.getSite();
     if (site != null) {
       String siteSegment = getSiteSegment(site);
-      Category category;
-      try {
-        category = navigation.getCategory();
-      } catch (NotFoundException e) {
-        //if current category is only available in a workspace
-        LOG.debug("ignoring commerce exception", e);
-        return null;
-      }
+      Category category = findCategory(navigation).orElse(null);
       if (category != null) {
         String navigationSegment = category.getSeoSegment();
         if (StringUtils.hasText(navigationSegment)) {

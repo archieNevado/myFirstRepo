@@ -9,41 +9,31 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=1629;y=0;width=1721;height=2667</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=1485;y=0;width=2000;height=2667</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=1333;y=0;width=2667;height=2667</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=447;y=0;width=3553;height=2665</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=1638;y=0;width=1721;height=2667</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=1495;y=0;width=2000;height=2667</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=1162;y=0;width=2667;height=2667</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=446;y=0;width=3554;height=2665</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=0;width=4000;height=2250</StringProperty>
-<StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=0;width=4000;height=2000</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=0;width=4000;height=1600</StringProperty>
-<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=42;width=4000;height=1500</StringProperty>
-<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=34;width=4000;height=1000</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=42;width=4000;height=1600</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=50;width=4000;height=1000</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="focusPoint">
+<Struct>
+<StringProperty Name="x">0.6221052631578947</StringProperty>
+<StringProperty Name="y">0.3864353312302839</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="isDefault">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">false</StringProperty>
-<StringProperty Name="portrait_ratio3x4">false</StringProperty>
-<StringProperty Name="portrait_ratio1x1">false</StringProperty>
-<StringProperty Name="landscape_ratio4x3">false</StringProperty>
-<StringProperty Name="landscape_ratio16x9">false</StringProperty>
-<StringProperty Name="landscape_ratio2x1">false</StringProperty>
 <StringProperty Name="landscape_ratio5x2">false</StringProperty>
-<StringProperty Name="landscape_ratio8x3">false</StringProperty>
 <StringProperty Name="landscape_ratio4x1">false</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">position;x1=0.4071729957805907;y1=0;x2=0.8373342861031713;y2=1</StringProperty>
-<StringProperty Name="portrait_ratio3x4">position;x1=0.3713080168776371;y1=0;x2=0.8713705168776371;y2=1</StringProperty>
-<StringProperty Name="portrait_ratio1x1">position;x1=0.3333333333333333;y1=0;x2=1;y2=0.9998750156230471</StringProperty>
-<StringProperty Name="landscape_ratio4x3">position;x1=0.11181434599156118;y1=0;x2=0.9999999999999999;y2=0.9990839752625859</StringProperty>
-<StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0;x2=0.9999999999999999;y2=0.843644544431946</StringProperty>
-<StringProperty Name="landscape_ratio2x1">position;x1=0;y1=0;x2=0.9999999999999999;y2=0.7499062617172854</StringProperty>
-<StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0;x2=0.9999999999999999;y2=0.5999250093738282</StringProperty>
-<StringProperty Name="landscape_ratio8x3">position;x1=0;y1=0.015822784810126583;x2=0.9999999999999999;y2=0.5782524810980906</StringProperty>
-<StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.012658227848101266;x2=0.9999999999999999;y2=0.38761135870674396</StringProperty>
+<StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.015772870662460567;x2=1;y2=0.6156978800362889</StringProperty>
+<StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.01892744479495268;x2=1;y2=0.39388057565359536</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -73,7 +63,7 @@
 <dataUrl></dataUrl>
 <width>4000</width>
 <height>2667</height>
-<data md5="31ec51305eb70b5eb3f720e09e85343e" size="741977" href="../../../../../../../__blob/31ec51305eb70b5eb3f720e09e85343e.blob" mimetype="image/jpeg"/>
+<data md5="8b3776b2911ff30d71c098308c78705b" size="778947" href="../../../../../../../__blob/8b3776b2911ff30d71c098308c78705b.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

@@ -28,10 +28,9 @@
 
   <bean id="catalogServiceBod" class="com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl">
     <property name="catalogWrapperService" ref="catalogWrapperServiceBod"/>
+    <property name="storeInfoService" ref="storeInfoService"/>
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
     <property name="commerceCache" ref="commerceCache"/>
-    <property name="wcsUrl" value="${livecontext.ibm.wcs.url}"/>
-    <property name="wcsStoreUrl" value="${livecontext.ibm.wcs.store.url}"/>
     <property name="wcsAssetsUrl" value="${livecontext.ibm.wcs.assets.url}"/>
     <property name="catalogAliasTranslationService" ref="catalogAliasTranslationService"/>
   </bean>

@@ -42,7 +42,6 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   //local variables to avoid contentbean dependency
   private static final String EXTERNAL_ID = "externalId";
   private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
-  private static final Logger LOGGER = LoggerFactory.getLogger(ExternalChannelContentTreeRelation.class);
 
   private AugmentationService augmentationService;
   private CommerceTreeRelation commerceTreeRelation;

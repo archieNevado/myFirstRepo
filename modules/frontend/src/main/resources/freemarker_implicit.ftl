@@ -4,11 +4,11 @@
 [#import "/lib/coremedia.com/cae.ftl" as cm]
 [#import "/lib/coremedia.com/preview.ftl" as preview]
 [#import "/lib/coremedia.com/blueprint.ftl" as bp]
-[#-- additional imports for livecontext and corporate --]
+[#import "/lib/coremedia.com/spring.ftl" as spring]
+[#-- additional imports for livecontext --]
 [#import "/lib/coremedia.com/livecontext.ftl" as lc]
 [#-- elastic social --]
 [#import "/lib/coremedia.com/blueprint/elasticsocial.ftl" as es]
-[#import "/lib/coremedia.com/spring.ftl" as spring]
 [#-- asset managment download portal --]
 [#import "/lib/coremedia.com/blueprint/am.ftl" as am]
 

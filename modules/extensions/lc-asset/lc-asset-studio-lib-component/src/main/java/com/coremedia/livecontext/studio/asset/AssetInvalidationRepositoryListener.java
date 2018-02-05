@@ -1,7 +1,5 @@
 package com.coremedia.livecontext.studio.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
-import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.blueprint.common.contentbeans.CMDownload;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
@@ -11,19 +9,19 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.events.ContentEvent;
 import com.coremedia.cap.content.events.ContentRepositoryListenerBase;
-import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
-import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
+import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
 import javax.annotation.Nonnull;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider.commerceId;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
@@ -38,10 +36,11 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SK
  */
 class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase implements SmartLifecycle {
 
-  private static final Set<String> INVALIDATION_ALL = ImmutableSet.of(
-          CommerceCacheInvalidationSource.INVALIDATE_CATEGORIES_URI_PATTERN,
-          CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN,
-          CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN
+  private static final String ANY = "any";
+  private static final Set<String> INVALIDATION_ALL_REFERENCES = ImmutableSet.of(
+          format(commerceId(Vendor.of(ANY), CATEGORY).withTechId(ANY).build()),
+          format(commerceId(Vendor.of(ANY), PRODUCT).withTechId(ANY).build()),
+          format(commerceId(Vendor.of(ANY), SKU).withTechId(ANY).build())
   );
 
   private static final Set<String> EVENT_WHITELIST = ImmutableSet.of(
@@ -65,10 +64,21 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
     }
 
     Content content = event.getContent();
-    if (content != null && !content.isDestroyed() && isRelevantType(content)) {
-      Set<String> invalidations = getInvalidations(event);
-      commerceCacheInvalidationSource.triggerDelayedInvalidation(invalidations);
+    if (content == null || content.isDestroyed() || !isRelevantType(content)) {
+      return;
     }
+
+    commerceCacheInvalidationSource.invalidateReferences(getReferences(event, content));
+  }
+
+  @Nonnull
+  private Collection<String> getReferences(@Nonnull ContentEvent event, @Nonnull Content content) {
+    if (event.getType().equals(ContentEvent.CONTENT_REVERTED)) {
+      //when a content ist reverted we don't know the old external references.
+      // So we have to invalidate all relevant catalog types
+      return INVALIDATION_ALL_REFERENCES;
+    }
+    return CommerceReferenceHelper.getExternalReferences(content);
   }
 
   @Override
@@ -114,37 +124,6 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
   @Autowired
   public void setRepository(ContentRepository repository) {
     this.repository = repository;
-  }
-
-  @Nonnull
-  private static Set<String> getInvalidations(@Nonnull ContentEvent event) {
-    if (event.getType().equals(ContentEvent.CONTENT_REVERTED)) {
-      //when a content ist reverted we don't know the old external references.
-      // So we have to invalidate all relevant catalog types
-      return INVALIDATION_ALL;
-    }
-
-    Set<String> invalidations = new HashSet<>();
-
-    List<String> externalReferences = CommerceReferenceHelper.getExternalReferences(event.getContent());
-    for (String externalReference : externalReferences) {
-      Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(externalReference);
-      if (!commerceIdOptional.isPresent()) {
-        continue;
-      }
-      CommerceBeanType commerceBeanType = commerceIdOptional.get().getCommerceBeanType();
-      if (CATEGORY.equals(commerceBeanType)) {
-        invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_CATEGORIES_URI_PATTERN);
-      } else if (PRODUCT.equals(commerceBeanType)) {
-        invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN);
-        //product variants inherit pictures from master product when they don't have assigend pictures.
-        invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN);
-      } else if (SKU.equals(commerceBeanType)) {
-        invalidations.add(CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN);
-      }
-    }
-
-    return invalidations;
   }
 
   /**

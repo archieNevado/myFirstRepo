@@ -6,7 +6,7 @@
 <#assign hasImage=self.picture?has_content />
 <#assign hasEvenIndex=(index % 2 == 0) />
 <#assign additionalVariantCssClass="" />
-<#assign additionalButtonCssClass="cm-teasable__button " />
+<#assign additionalButtonCssClass="cm-button " />
 <#assign additionalNoImageCssClass="" />
 <#assign additionalImgCssClass=""/>
 <#assign additionalTextCssClass=""/>
@@ -61,7 +61,10 @@
           </p>
         </#if>
         <#-- custom call-to-action button -->
-        <@cm.include self=self view="_callToAction" params={"additionalClass": additionalButtonCssClass}/>
+        <@cm.include self=self view="_callToAction" params={
+          "additionalClass": "cm-teasable__cta",
+          "additionalButtonClass": additionalButtonCssClass}
+        />
       </div>
     </div>
   </div>

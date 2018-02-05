@@ -8,20 +8,21 @@ import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.invalidations.SimpleInvalidationSource;
 import com.coremedia.rest.linking.Linker;
+import com.google.common.collect.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 class RootCategoryInvalidationSource extends SimpleInvalidationSource implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -84,34 +85,30 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
 
     @Override
     public Collection<Category> evaluate(Cache cache) throws Exception {
-      Collection<Category> rootCategories = new LinkedList<>();
-      Set<Site> sites = sitesService.getSites();
-      for (Site site : sites) {
-        try {
-          Optional<CommerceConnection> connectionForSite = connectionInitializer.findConnectionForSite(site);
-          if (connectionForSite.isPresent()) {
-            CommerceConnection connection = connectionForSite.get();
-            if ("coremedia".equals(connection.getVendorName())) {
-              connection.setStoreContext(connection.getStoreContextProvider().findContextBySite(site));
-              CurrentCommerceConnection.set(connection);
+      return sitesService.getSites().stream()
+              .map(this::findRootCategory)
+              .flatMap(Streams::stream)
+              .collect(toList());
+    }
 
-              RootCategoryCacheKey cacheKey = new RootCategoryCacheKey(connection, catalogService, linker,
-                      rootCategoryInvalidationSource);
-              Category rootCategory = cache.get(cacheKey);
-              if (rootCategory != null) {
-                rootCategories.add(rootCategory);
-              } else {
-                LOG.debug("connection {} has no root category", connection);
-              }
-            }
-          }
-        } catch (Exception e) {
-          LOG.debug("unable to determine root category for site '{}'", site.getId(), e);
-        } finally {
-          CurrentCommerceConnection.remove();
-        }
+    @Nonnull
+    private Optional<Category> findRootCategory(@Nonnull Site site) {
+      try {
+        return connectionInitializer.findConnectionForSite(site)
+                .filter(connection -> "cms".equals(connection.getVendor().value()))
+                .map(connection -> {
+                  CurrentCommerceConnection.set(connection);
+
+                  RootCategoryCacheKey cacheKey = new RootCategoryCacheKey(connection, catalogService, linker,
+                          rootCategoryInvalidationSource);
+                  return cache.get(cacheKey);
+                });
+      } catch (Exception e) {
+        LOG.debug("unable to determine root category for site '{}'", site.getId(), e);
+      } finally {
+        CurrentCommerceConnection.remove();
       }
-      return rootCategories;
+      return Optional.empty();
     }
 
     @Override

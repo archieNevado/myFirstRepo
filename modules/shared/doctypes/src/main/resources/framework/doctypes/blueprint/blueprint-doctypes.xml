@@ -107,8 +107,8 @@
     <!--
       Taxonomies
     -->
-    <LinkListProperty Name="subjectTaxonomy" LinkType="CMTaxonomy"/>
-    <LinkListProperty Name="locationTaxonomy" LinkType="CMLocTaxonomy"/>
+    <LinkListProperty Name="subjectTaxonomy" LinkType="CMTaxonomy" extensions:weakLink="true"/>
+    <LinkListProperty Name="locationTaxonomy" LinkType="CMLocTaxonomy" extensions:weakLink="true"/>
   </DocType>
 
   <!--
@@ -151,6 +151,7 @@
   <DocType Name="CMTeaser" Parent="CMTeasable">
     <LinkListProperty Name="master" Max="1" LinkType="CMTeaser" Override="true" extensions:weakLink="true"/>
     <LinkListProperty Name="target" Max="1" LinkType="CMLinkable"/>
+    <XmlProperty Name="targets" Grammar="coremedia-struct-2008" extensions:translatable="true"/>
   </DocType>
 
 
@@ -240,6 +241,7 @@
   <DocType Name="CMCollection" Parent="CMTeasable">
     <LinkListProperty Name="master" Max="1" LinkType="CMCollection" Override="true" extensions:weakLink="true"/>
     <LinkListProperty Name="items" LinkType="CMTeasable"/>
+    <XmlProperty Name="extendedItems" Grammar="coremedia-struct-2008" extensions:translatable="true"/>
   </DocType>
 
   <!-- Dynamic content -->
@@ -336,14 +338,14 @@
 
   <DocType Name="CMTaxonomy" Parent="CMTeasable">
     <StringProperty Name="value" Length="256" extensions:translatable="true"/>
-    <LinkListProperty Name="children" LinkType="CMTaxonomy"/>
+    <LinkListProperty Name="children" LinkType="CMTaxonomy" extensions:weakLink="true"/>
     <StringProperty Name="externalReference" Length="256"/>
   </DocType>
 
   <DocType Name="CMLocTaxonomy" Parent="CMTaxonomy">
     <StringProperty Name="postcode" Length="10"/>
     <StringProperty Name="latitudeLongitude" Length="100"/>
-    <LinkListProperty Name="children" LinkType="CMLocTaxonomy" Override="true"/>
+    <LinkListProperty Name="children" LinkType="CMLocTaxonomy" Override="true" extensions:weakLink="true"/>
   </DocType>
 
   <DocType Name="CMSettings" Parent="CMLocalized">
@@ -433,6 +435,7 @@
   <DocType Name="CMDownload" Parent="CMTeasable">
     <LinkListProperty Name="master" Max="1" LinkType="CMDownload" Override="true" extensions:weakLink="true"/>
     <BlobProperty Name="data" MimeType="*/*"/>
+    <StringProperty Name="filename" Length="128"/>
   </DocType>
 
   <DocType Name="CMHTML" Parent="CMMedia">

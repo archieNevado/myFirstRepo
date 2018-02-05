@@ -7,6 +7,11 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
  * An IBM specific connection class. Manages the IBM vendor specific properties.
  */
 public class CommerceConnectionImpl extends BaseCommerceConnection {
+
+  public CommerceConnectionImpl() {
+    setVendor(IbmCommerceIdProvider.IBM);
+  }
+
   @Override
   public String getVendorVersion() {
     StoreContext storeContext = getStoreContext();

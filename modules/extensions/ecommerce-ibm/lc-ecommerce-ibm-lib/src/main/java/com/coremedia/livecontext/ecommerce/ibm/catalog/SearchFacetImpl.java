@@ -8,34 +8,37 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
+
 public class SearchFacetImpl implements SearchFacet {
+
+  protected Map<String, Object> delegate;
 
   public SearchFacetImpl(@Nonnull Map<String, Object> delegate) {
     this.delegate = delegate;
   }
 
-  protected Map<String, Object> delegate;
-
   @Override
   public int getCount() {
-    return DataMapHelper.findValueForKey(delegate, "count", Integer.class).orElse(0);
+    return DataMapHelper.findValue(delegate, "count", Integer.class).orElse(0);
   }
 
   @Nonnull
   @Override
   public String getLabel() {
-    return DataMapHelper.getValueForKey(delegate, "label", String.class);
+    return DataMapHelper.findStringValue(delegate, "label")
+            .orElseGet(() -> DataMapHelper.findStringValue(delegate, "name").orElse(null));
   }
 
   @Override
   public boolean isSelected() {
-    return DataMapHelper.findValueForKey(delegate, "selected", Boolean.class).orElse(false);
+    return DataMapHelper.findValue(delegate, "selected", Boolean.class).orElse(false);
   }
 
   @Nonnull
   @Override
   public String getQuery() {
-    return DataMapHelper.getValueForKey(delegate, "value", String.class);
+    return DataMapHelper.findStringValue(delegate, "value").orElse(null);
   }
 
   @Override
@@ -46,13 +49,16 @@ public class SearchFacetImpl implements SearchFacet {
   @Nonnull
   @Override
   public Map<String, Object> getExtendedData() {
-    return DataMapHelper.getValueForKey(delegate, "extendedData", Map.class);
+    return DataMapHelper.findValue(delegate, "extendedData", Map.class)
+            .orElseGet(Collections::emptyMap);
   }
 
   @Nonnull
   @Override
   public List<SearchFacet> getChildFacets() {
-    return Collections.emptyList();
+    List<Map<String, Object>> entry = DataMapHelper.getListValue(delegate, "entry");
+
+    return entry.stream().map(SearchFacetImpl::new).collect(toList());
   }
 
   public void setDelegate(Map<String, Object> delegate) {

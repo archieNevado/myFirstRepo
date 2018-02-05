@@ -1,25 +1,45 @@
 !tape
 name: csiwc_testCategoryIsCached3
 interactions:
-- recorded: 2016-05-19T09:27:21.459Z
+- recorded: 2017-11-14T15:39:22.403Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/medicine?profileName=CoreMedia_findCategoryBySeoSegment&locale=en_US
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/medicine?profileName=CoreMedia_findCategoryBySeoSegment&locale=en_US","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Medicine","cm_seo_token_ntk":"10101_medicine","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10139","identifier":"Medicine","parentCatalogGroupID":["10101_10138","10152_10138"],"name":"Medicine","uniqueID":"10139","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png","seo_token_ntk":"medicine"}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:39:22.492Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:22 GMT
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000G23Kl0aKBifUj-_95856ROK:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=00002rqEIsHx1Cor1dC3z-4c4N-:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
@@ -31,121 +51,314 @@ interactions:
       Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
       Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
       Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
-- recorded: 2016-05-19T09:27:21.482Z
-  request:
-    method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/bySeo/en/auroraesite/medicine
-    headers:
-      Accept-Encoding: gzip,deflate
-      Content-Type: application/json
-      Host: shop-ref.ecommerce.coremedia.com
-      Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
-  response:
-    status: 200
-    headers:
-      Cache-Control: no-transform, no-cache=set-cookie
-      Content-Language: en-US
-      Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:22 GMT
-      Expires: Thu, 19 May 2016 10:27:22 GMT
-      Set-Cookie: JSESSIONID=0000S6FmEKG3aPHQxVphGG1ZWwx:-1; Path=/; Domain=.toko-test-06.coremedia.vm
-      Vary: Accept
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/bySeo\/en\/auroraesite\/medicine?categoryview_forward=true&langId=-1&categoryId=10139","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Medicine","metaKeyword":"Medicine","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10139","identifier":"Medicine","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10139","parentCatalogGroupID":["10138"],"name":"Medicine","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png","uniqueID":"10139","xcatgroup_seoSegment":"medicine","metaDescription":"Medicine","title":"Medicine
-      | AuroraESite","xcatgroup_cmSeoSegment":"10101_medicine","fullImageAltDescription":"Image for Medicine from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
-- recorded: 2016-05-19T09:27:21.492Z
+- recorded: 2017-11-14T15:39:22.531Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:22 GMT
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000ooVcqL6AsX6QfaulQFuCEFv:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000tyU4GLd3v6d31tt5NjWzHqf:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
-- recorded: 2016-05-19T09:27:21.514Z
+- recorded: 2017-11-14T15:39:22.552Z
   request:
     method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10138?catalogId=10152&langId=-1
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10138?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
-      Host: shop-ref.ecommerce.coremedia.com
+      Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:22 GMT
-      Expires: Thu, 19 May 2016 10:27:22 GMT
-      Set-Cookie: JSESSIONID=0000yLgUjA9iwai0f4HSxPSnpEy:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
       Vary: Accept
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10138?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Health","metaKeyword":"Health","identifier":"Health","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10138","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10138","name":"Health","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png","uniqueID":"10138","xcatgroup_seoSegment":"health","metaDescription":"Health","title":"Health
-      | AuroraESite","xcatgroup_cmSeoSegment":"10101_health","fullImageAltDescription":"Image for Health from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
-- recorded: 2016-05-19T09:27:21.543Z
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10138?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Health","cm_seo_token_ntk":"10101_health","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10138","identifier":"Health","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Health","uniqueID":"10138","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png","seo_token_ntk":"health","childCatalogGroupID":["10101_10139","10101_10140","10152_10139","10152_10140"]}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:39:22.581Z
   request:
     method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byCategory/10139?catalogId=10152&currency=USD&langId=-1
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byCategory/10139?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
-      Host: shop-ref.ecommerce.coremedia.com
+      Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:22 GMT
-      Expires: Thu, 19 May 2016 10:27:22 GMT
-      Set-Cookie: JSESSIONID=0000aQR0rr0bDO_RvhOwSMEX3kj:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
       Vary: Accept
-    body: '{"recordSetTotal":"10","BreadCrumbTrailEntryView":[{"value":"10138","label":"Health","type":"FACET_ENTRY_CATEGORY"},{"value":"10139","label":"Medicine","type":"FACET_ENTRY_CATEGORY"}],"resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10139?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetStartNumber":"0","recordSetComplete":"true","FacetView":[{"value":"price_USD","Entry":[{"label":"({*
-      100} 100)","count":"10","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"label":"({100 200} 200)","count":"0","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"label":"({200 300} 300)","count":"0","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"label":"({300
-      400} 400)","count":"0","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"label":"({400 500} 500)","count":"0","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"label":"({500 *})","count":"0","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","Entry":[{"label":"Healthy
-      Boost","count":"7","entryValue":"mfName_ntk_cs%3A%22Healthy+Boost%22"},{"label":"Cold-Be-Gone","count":"2","entryValue":"mfName_ntk_cs%3A%22Cold-Be-Gone%22"},{"label":"All-In-One","count":"1","entryValue":"mfName_ntk_cs%3A%22All-In-One%22"}],"name":"ManufacturerName"}],"CatalogEntryView":[{"longDescription":"Cold-Be-Gone''s
-      lozenges provide instant relief from sore throats due to cold and help boost your immune system by providing it with vitamins and minerals. Each lozenge contains 10 mg of Zinc.","buyable":"true","shortDescription":"Immune booster and soothing relief for
-      your sore throat.","xcatentry_seoSegment":"cold-be-gone-vitamin-c-and-zinc-lozenges","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16736","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"8.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_cold-be-gone-vitamin-c-and-zinc-lozenges","name":"Cold
-      Be-Gone Vitamin C and Zinc Lozenges","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3701.jpg","uniqueID":"16736","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3701.jpg","storeID":"10101","partNumber":"HME037_3701"},{"longDescription":"Iron
-      is essential for normal thyroid hormone metabolism. Healthy Boost''s Blood booster contains iron (ferrous sulphate) as well as Vitamin C which helps in the absorption of iron.","buyable":"true","shortDescription":"Boost your energy and lower reduce the
-      risk of anemia.","xcatentry_seoSegment":"healthy-boost-blood-booster-hme037-3702--1","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16738","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"8.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_healthy-boost-blood-booster-hme037-3702--1","name":"Healthy
-      Boost Blood Booster","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3702.jpg","uniqueID":"16738","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3702.jpg","storeID":"10101","partNumber":"HME037_3702"},{"longDescription":"Healthy
-      Boost''s multivitamin for women is designed specifically to strengthen bones, improve kidney and liver functioning, reduce stress, and improve skin tone.","buyable":"true","shortDescription":"One a day pill to improve overall health for women.","xcatentry_seoSegment":"healthy-boost-one-a-day-multi-vitamin-for-women","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16740","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"12.99"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_healthy-boost-one-a-day-multi-vitamin-for-women","name":"Healthy
-      Boost One a Day Multi-Vitamin for Women","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3703.jpg","uniqueID":"16740","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3703.jpg","storeID":"10101","partNumber":"HME037_3703"},{"longDescription":"Golden
-      Root has long been known to increase circulation thereby promoting energy, decreasing general malaise, and naturally increasing libido. Each package contains 12 capsules with each capsule containing 300 mg.","buyable":"true","shortDescription":"Designed
-      especially for men! Golden Root Complex improves circulation, energy, and libido.","xcatentry_seoSegment":"healthy-boost-golden-root-complex-hme037-3704--1","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16742","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"23.55"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_healthy-boost-golden-root-complex-hme037-3704--1","name":"Healthy
-      Boost Golden Root Complex","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3704.jpg","uniqueID":"16742","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3704.jpg","storeID":"10101","partNumber":"HME037_3704"},{"longDescription":"For
-      quick acting pain relief. Each pill contains 325 mg of acetaminophen. Each bottle contains 140 pills.","buyable":"true","shortDescription":"Doctor recommended pain relief.","xcatentry_seoSegment":"regular-strength-acetaminophen-hme037-3705--1","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16744","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"8.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_regular-strength-acetaminophen-hme037-3705--1","name":"Regular
-      Strength Acetaminophen","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3705.jpg","uniqueID":"16744","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3705.jpg","storeID":"10101","partNumber":"HME037_3705"},{"longDescription":"For
-      effective relief of congestion, sinus pain, headache, sore throat and fever. Active Ingredients  150 mg solubilized ibuprofen \/ Pseudoephedrine HCI 60 mg Analgesic \/ Decongestant. Each bottle contains 140 gel caps.","buyable":"true","shortDescription":"Fast
-      acting cold and sinus relief.","xcatentry_seoSegment":"cold-be-gone-cold-and-sinus-gel-caps","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16746","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"7.79"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_cold-be-gone-cold-and-sinus-gel-caps","name":"Cold-Be-Gone
-      Cold and Sinus Gel Caps","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3706.jpg","uniqueID":"16746","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3706.jpg","storeID":"10101","partNumber":"HME037_3706"},{"longDescription":"For
-      over 500 years, St. John''s wort has been used to treat depression, insomnia, and general irritability. St. John''s wort is a natural anti-depressant that promotes a balanced emotional well being.","buyable":"true","shortDescription":"For serenity and
-      more.","xcatentry_seoSegment":"healthy-boost-st-johns-wort-oil","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16748","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"14.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_healthy-boost-st-johns-wort-oil","name":"Healthy
-      Boost St. John''s Wort Oil","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3707.jpg","uniqueID":"16748","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3707.jpg","storeID":"10101","partNumber":"HME037_3707"},{"longDescription":"Increases
-      oxygen absorption into blood as well as general blood circulation. Rich in antioxidants, Ginkgo Biloba is also powerful against the effects of arthritis and atherosclerosis. Each bottle contains 25 capsules.","buyable":"true","shortDescription":"Promotes
-      blood circulation and provides relief from arthritic pain.","xcatentry_seoSegment":"healthy-boost-ginkgo-biloba-hme037-3708--1","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16750","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"7.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_healthy-boost-ginkgo-biloba-hme037-3708--1","name":"Healthy
-      Boost Ginkgo Biloba","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3708.jpg","uniqueID":"16750","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3708.jpg","storeID":"10101","partNumber":"HME037_3708"},{"longDescription":"Bismuth
-      subsalicylate is used to treat nausea, heartburn, diarrhea, and indigestion. The liquid form is fast acting as it is absorbed quicker than pill form. Available in a 240 ml bottle. Cherry flavored.","buyable":"true","shortDescription":"Fast acting relief
-      for heartburn and nausea.","xcatentry_seoSegment":"healthy-boost-bismuth-subsalicylate","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16752","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"9.29"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_healthy-boost-bismuth-subsalicylate","name":"Healthy
-      Boost Bismuth Subsalicylate","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3709.jpg","uniqueID":"16752","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3709.jpg","storeID":"10101","partNumber":"HME037_3709"},{"longDescription":"Our
-      All-In-One Cold and Flu formula provides effective relief from  dry cough, chills, congestion, sore throat, fever, sinus pain and a runny nose. Grape flavored. Bottle is 180 ml.","buyable":"true","shortDescription":"Fast acting relief for cold and flu
-      symptoms.","xcatentry_seoSegment":"all-in-one-cold-and-flu-syrup","parentCategoryID":"10139","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16754","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"8.49"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_all-in-one-cold-and-flu-syrup","name":"All-In-One
-      Cold and Flu Syrup","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3710.jpg","uniqueID":"16754","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3710.jpg","storeID":"10101","partNumber":"HME037_3710"}],"recordSetCount":"10","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+    body: '{"recordSetTotalMatches":10,"recordSetTotal":10,"breadCrumbTrailEntryView":[{"value":"10138","label":"Health","type_":"FACET_ENTRY_CATEGORY"},{"value":"10139","label":"Medicine","type_":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byCategory\/10139?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","facetView":[{"value":"price_USD","entry":[{"value":"price_USD%3A%28%7B*+100%7D+100%29","extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"label":"({*
+      100} 100)","count":10},{"value":"price_USD%3A%28%7B100+200%7D+200%29","extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"label":"({100 200} 200)","count":0},{"value":"price_USD%3A%28%7B200+300%7D+300%29","extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"label":"({200
+      300} 300)","count":0},{"value":"price_USD%3A%28%7B300+400%7D+400%29","extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"label":"({300 400} 400)","count":0},{"value":"price_USD%3A%28%7B400+500%7D+500%29","extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"label":"({400
+      500} 500)","count":0},{"value":"price_USD%3A%28%7B500+*%7D%29","extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"label":"({500 *})","count":0}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","entry":[{"value":"mfName_ntk_cs%3A%22Healthy+Boost%22","extendedData":{"uniqueId":"-100272101971081161041213266111111115116"},"label":"Healthy
+      Boost","count":"7"},{"value":"mfName_ntk_cs%3A%22Cold-Be-Gone%22","extendedData":{"uniqueId":"-10026711110810045661014571111110101"},"label":"Cold-Be-Gone","count":"2"},{"value":"mfName_ntk_cs%3A%22All-In-One%22","extendedData":{"uniqueId":"-10026510810845731104579110101"},"label":"All-In-One","count":"1"}],"extendedData":{"propertyname":"facet","facet_id":"-1000","displaySequence":"0.0","maximumValuesToDisplay":"20","srchattr_id":"-1002","max_display":"20","zero_display":"0","selection":"0","sortorder":"0","storeent_id":"0","fname":"Brand","allValuesReturned":true,"allowMultipleValueSelection":"false","fdesc":"The
+      manufacturer","groupId":"0","group_id":"0","displayable":"1","propertyvalue":"mfName_ntk_cs","srchattridentifier":"_cat.ManufacturerName","keyword_search":"1"},"name":"ManufacturerName"}],"breadCrumbTrailEntryViewExtended":[{"0":{"value":"10138","label":"Health","type_":"FACET_ENTRY_CATEGORY"},"1":{"value":"10139","label":"Medicine","type_":"FACET_ENTRY_CATEGORY"}}],"recordSetCount":10,"catalogEntryView":[{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_cold-be-gone-vitamin-c-and-zinc-lozenges","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16736","singleSKUCatalogEntryID":"16737","hasSingleSKU":true,"partNumber":"HME037_3701","uniqueID":"16736","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3701.jpg","seo_token_ntk":"cold-be-gone-vitamin-c-and-zinc-lozenges"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_healthy-boost-blood-booster-hme037-3702--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16738","singleSKUCatalogEntryID":"16739","hasSingleSKU":true,"partNumber":"HME037_3702","uniqueID":"16738","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3702.jpg","seo_token_ntk":"healthy-boost-blood-booster-hme037-3702--1"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_healthy-boost-one-a-day-multi-vitamin-for-women","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16740","singleSKUCatalogEntryID":"16741","hasSingleSKU":true,"partNumber":"HME037_3703","uniqueID":"16740","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3703.jpg","seo_token_ntk":"healthy-boost-one-a-day-multi-vitamin-for-women"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_healthy-boost-golden-root-complex-hme037-3704--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16742","singleSKUCatalogEntryID":"16743","hasSingleSKU":true,"partNumber":"HME037_3704","uniqueID":"16742","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3704.jpg","seo_token_ntk":"healthy-boost-golden-root-complex-hme037-3704--1"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_regular-strength-acetaminophen-hme037-3705--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16744","singleSKUCatalogEntryID":"16745","hasSingleSKU":true,"partNumber":"HME037_3705","uniqueID":"16744","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3705.jpg","seo_token_ntk":"regular-strength-acetaminophen-hme037-3705--1"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_cold-be-gone-cold-and-sinus-gel-caps","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16746","singleSKUCatalogEntryID":"16747","hasSingleSKU":true,"partNumber":"HME037_3706","uniqueID":"16746","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3706.jpg","seo_token_ntk":"cold-be-gone-cold-and-sinus-gel-caps"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_healthy-boost-st-johns-wort-oil","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16748","singleSKUCatalogEntryID":"16749","hasSingleSKU":true,"partNumber":"HME037_3707","uniqueID":"16748","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3707.jpg","seo_token_ntk":"healthy-boost-st-johns-wort-oil"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_healthy-boost-ginkgo-biloba-hme037-3708--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16750","singleSKUCatalogEntryID":"16751","hasSingleSKU":true,"partNumber":"HME037_3708","uniqueID":"16750","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3708.jpg","seo_token_ntk":"healthy-boost-ginkgo-biloba-hme037-3708--1"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_healthy-boost-bismuth-subsalicylate","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16752","singleSKUCatalogEntryID":"16753","hasSingleSKU":true,"partNumber":"HME037_3709","uniqueID":"16752","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3709.jpg","seo_token_ntk":"healthy-boost-bismuth-subsalicylate"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_all-in-one-cold-and-flu-syrup","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16754","singleSKUCatalogEntryID":"16755","hasSingleSKU":true,"partNumber":"HME037_3710","uniqueID":"16754","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3710.jpg","seo_token_ntk":"all-in-one-cold-and-flu-syrup"}]}'
+- recorded: 2017-11-14T15:39:22.627Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16736?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16736?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Cold-Be-Gone''s
+      lozenges provide instant relief from sore throats due to cold and help boost your immune system by providing it with vitamins and minerals. Each lozenge contains 10 mg of Zinc.","shortDescription":"Immune booster and soothing relief for your sore throat.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_cold-be-gone-vitamin-c-and-zinc-lozenges","price":[{"value":"9.0","currency":"USD","usage":"Display","description":"L"},{"value":"8.49","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16736","singleSKUCatalogEntryID":"16737","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Cold
+      Be-Gone Vitamin C and Zinc Lozenges","uniqueID":"16736","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3701.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3701.jpg","manufacturer":"Cold-Be-Gone","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16737","name":"Cold-Be-Gone
+      Vitamin C and Zinc Lozenges","hasSingleSKU":false,"partNumber":"HME037_370101","uniqueID":"16737","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"Cardboard
+      packet","unitOfMeasure":"","identifier":"HME037_3701","uniqueID":"7000000000000004860","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"Lozenge","unitOfMeasure":"","identifier":"HME037_3701","uniqueID":"7000000000000004850","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"Cold
+      Relief","unitOfMeasure":"","identifier":"HME037_3701","uniqueID":"7000000000000004840","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3701","storeID":"10101","seo_token_ntk":"cold-be-gone-vitamin-c-and-zinc-lozenges"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.651Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16738?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16738?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Iron
+      is essential for normal thyroid hormone metabolism. Healthy Boost''s Blood booster contains iron (ferrous sulphate) as well as Vitamin C which helps in the absorption of iron.","shortDescription":"Boost your energy and lower reduce the risk of anemia.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_healthy-boost-blood-booster-hme037-3702--1","price":[{"value":"9.0","currency":"USD","usage":"Display","description":"L"},{"value":"8.49","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16738","singleSKUCatalogEntryID":"16739","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Healthy
+      Boost Blood Booster","uniqueID":"16738","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3702.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3702.jpg","manufacturer":"Healthy
+      Boost","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16739","name":"Healthy Boost Blood Booster","hasSingleSKU":false,"partNumber":"HME037_370201","uniqueID":"16739","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"Cardboard
+      packet","unitOfMeasure":"","identifier":"HME037_3702","uniqueID":"7000000000000004861","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Tablet","unitOfMeasure":"","identifier":"HME037_3702","uniqueID":"7000000000000004851","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Immune
+      Booster","unitOfMeasure":"","identifier":"HME037_3702","uniqueID":"7000000000000004841","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3702","storeID":"10101","seo_token_ntk":"healthy-boost-blood-booster-hme037-3702--1"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.674Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16740?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16740?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Healthy
+      Boost''s multivitamin for women is designed specifically to strengthen bones, improve kidney and liver functioning, reduce stress, and improve skin tone.","shortDescription":"One a day pill to improve overall health for women.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_healthy-boost-one-a-day-multi-vitamin-for-women","price":[{"value":"14.0","currency":"USD","usage":"Display","description":"L"},{"value":"12.99","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16740","singleSKUCatalogEntryID":"16741","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Healthy
+      Boost One a Day Multi-Vitamin for Women","uniqueID":"16740","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3703.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3703.jpg","manufacturer":"Healthy
+      Boost","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16741","name":"Healthy Boost One a Day Multi-Vitamin for Women","hasSingleSKU":false,"partNumber":"HME037_370301","uniqueID":"16741","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"Cardboard
+      packet","unitOfMeasure":"","identifier":"HME037_3703","uniqueID":"7000000000000004862","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"Pill","unitOfMeasure":"","identifier":"HME037_3703","uniqueID":"7000000000000004852","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"Naturopathic","unitOfMeasure":"","identifier":"HME037_3703","uniqueID":"7000000000000004842","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3703","storeID":"10101","seo_token_ntk":"healthy-boost-one-a-day-multi-vitamin-for-women"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.693Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16742?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16742?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Golden
+      Root has long been known to increase circulation thereby promoting energy, decreasing general malaise, and naturally increasing libido. Each package contains 12 capsules with each capsule containing 300 mg.","shortDescription":"Designed especially for
+      men! Golden Root Complex improves circulation, energy, and libido.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_healthy-boost-golden-root-complex-hme037-3704--1","price":[{"value":"26.0","currency":"USD","usage":"Display","description":"L"},{"value":"23.55","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16742","singleSKUCatalogEntryID":"16743","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Healthy
+      Boost Golden Root Complex","uniqueID":"16742","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3704.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3704.jpg","manufacturer":"Healthy
+      Boost","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16743","name":"Healthy Boost Golden Root Complex","hasSingleSKU":false,"partNumber":"HME037_370401","uniqueID":"16743","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"Cardboard
+      packet","unitOfMeasure":"","identifier":"HME037_3704","uniqueID":"7000000000000004863","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"4.00000","value":"Capsule","unitOfMeasure":"","identifier":"HME037_3704","uniqueID":"7000000000000004854","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"Naturopathic","unitOfMeasure":"","identifier":"HME037_3704","uniqueID":"7000000000000004843","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3704","storeID":"10101","seo_token_ntk":"healthy-boost-golden-root-complex-hme037-3704--1"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.713Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16744?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16744?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"For
+      quick acting pain relief. Each pill contains 325 mg of acetaminophen. Each bottle contains 140 pills.","shortDescription":"Doctor recommended pain relief.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_regular-strength-acetaminophen-hme037-3705--1","price":[{"value":"9.0","currency":"USD","usage":"Display","description":"L"},{"value":"8.49","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16744","singleSKUCatalogEntryID":"16745","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Regular
+      Strength Acetaminophen","uniqueID":"16744","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3705.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3705.jpg","manufacturer":"Healthy
+      Boost","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16745","name":"Regular Strength Acetaminophen","hasSingleSKU":false,"partNumber":"HME037_370501","uniqueID":"16745","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Plastic","unitOfMeasure":"","identifier":"HME037_3705","uniqueID":"7000000000000004864","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"Pill","unitOfMeasure":"","identifier":"HME037_3705","uniqueID":"7000000000000004853","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"4.00000","value":"Pain
+      relief","unitOfMeasure":"","identifier":"HME037_3705","uniqueID":"7000000000000004846","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3705","storeID":"10101","seo_token_ntk":"regular-strength-acetaminophen-hme037-3705--1"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.737Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16746?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16746?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"For
+      effective relief of congestion, sinus pain, headache, sore throat and fever. Active Ingredients  150 mg solubilized ibuprofen \/ Pseudoephedrine HCI 60 mg Analgesic \/ Decongestant. Each bottle contains 140 gel caps.","shortDescription":"Fast acting cold
+      and sinus relief.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_cold-be-gone-cold-and-sinus-gel-caps","price":[{"value":"8.0","currency":"USD","usage":"Display","description":"L"},{"value":"7.79","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16746","singleSKUCatalogEntryID":"16747","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Cold-Be-Gone
+      Cold and Sinus Gel Caps","uniqueID":"16746","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3706.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3706.jpg","manufacturer":"Cold-Be-Gone","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16747","name":"Cold-Be-Gone
+      Cold and Sinus Gel Caps","hasSingleSKU":false,"partNumber":"HME037_370601","uniqueID":"16747","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Plastic","unitOfMeasure":"","identifier":"HME037_3706","uniqueID":"7000000000000004865","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"4.00000","value":"Capsule","unitOfMeasure":"","identifier":"HME037_3706","uniqueID":"7000000000000004855","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"5.00000","value":"Cold
+      and sinus relief","unitOfMeasure":"","identifier":"HME037_3706","uniqueID":"7000000000000004848","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3706","storeID":"10101","seo_token_ntk":"cold-be-gone-cold-and-sinus-gel-caps"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.761Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16748?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16748?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"For
+      over 500 years, St. John''s wort has been used to treat depression, insomnia, and general irritability. St. John''s wort is a natural anti-depressant that promotes a balanced emotional well being.","shortDescription":"For serenity and more.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_healthy-boost-st-johns-wort-oil","price":[{"value":"16.0","currency":"USD","usage":"Display","description":"L"},{"value":"14.49","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16748","singleSKUCatalogEntryID":"16749","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Healthy
+      Boost St. John''s Wort Oil","uniqueID":"16748","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3707.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3707.jpg","manufacturer":"Healthy
+      Boost","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16749","name":"Healthy Boost St. John''s Wort Oil","hasSingleSKU":false,"partNumber":"HME037_370701","uniqueID":"16749","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"Glass","unitOfMeasure":"","identifier":"HME037_3707","uniqueID":"7000000000000004869","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"5.00000","value":"Liquid","unitOfMeasure":"","identifier":"HME037_3707","uniqueID":"7000000000000004857","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"Naturopathic","unitOfMeasure":"","identifier":"HME037_3707","uniqueID":"7000000000000004844","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3707","storeID":"10101","seo_token_ntk":"healthy-boost-st-johns-wort-oil"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.785Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16750?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16750?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Increases
+      oxygen absorption into blood as well as general blood circulation. Rich in antioxidants, Ginkgo Biloba is also powerful against the effects of arthritis and atherosclerosis. Each bottle contains 25 capsules.","shortDescription":"Promotes blood circulation
+      and provides relief from arthritic pain.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_healthy-boost-ginkgo-biloba-hme037-3708--1","price":[{"value":"8.0","currency":"USD","usage":"Display","description":"L"},{"value":"7.49","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16750","singleSKUCatalogEntryID":"16751","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Healthy
+      Boost Ginkgo Biloba","uniqueID":"16750","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3708.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3708.jpg","manufacturer":"Healthy
+      Boost","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16751","name":"Healthy Boost Ginkgo Biloba","hasSingleSKU":false,"partNumber":"HME037_370801","uniqueID":"16751","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Plastic","unitOfMeasure":"","identifier":"HME037_3708","uniqueID":"7000000000000004866","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"4.00000","value":"Capsule","unitOfMeasure":"","identifier":"HME037_3708","uniqueID":"7000000000000004856","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"Naturopathic","unitOfMeasure":"","identifier":"HME037_3708","uniqueID":"7000000000000004845","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3708","storeID":"10101","seo_token_ntk":"healthy-boost-ginkgo-biloba-hme037-3708--1"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.815Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16752?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16752?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Bismuth
+      subsalicylate is used to treat nausea, heartburn, diarrhea, and indigestion. The liquid form is fast acting as it is absorbed quicker than pill form. Available in a 240 ml bottle. Cherry flavored.","shortDescription":"Fast acting relief for heartburn and
+      nausea.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_healthy-boost-bismuth-subsalicylate","price":[{"value":"10.0","currency":"USD","usage":"Display","description":"L"},{"value":"9.29","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16752","singleSKUCatalogEntryID":"16753","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"Healthy
+      Boost Bismuth Subsalicylate","uniqueID":"16752","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3709.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3709.jpg","manufacturer":"Healthy
+      Boost","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16753","name":"Healthy Boost Bismuth Subsalicylate","hasSingleSKU":false,"partNumber":"HME037_370901","uniqueID":"16753","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Plastic","unitOfMeasure":"","identifier":"HME037_3709","uniqueID":"7000000000000004867","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"5.00000","value":"Liquid","unitOfMeasure":"","identifier":"HME037_3709","uniqueID":"7000000000000004858","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"4.00000","value":"Pain
+      relief","unitOfMeasure":"","identifier":"HME037_3709","uniqueID":"7000000000000004847","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3709","storeID":"10101","seo_token_ntk":"healthy-boost-bismuth-subsalicylate"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:22.841Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16754?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:22 GMT
+      Expires: Tue, 14 Nov 2017 16:39:22 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16754?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Our
+      All-In-One Cold and Flu formula provides effective relief from  dry cough, chills, congestion, sore throat, fever, sinus pain and a runny nose. Grape flavored. Bottle is 180 ml.","shortDescription":"Fast acting relief for cold and flu symptoms.","catalogEntryTypeCode":"ProductBean","buyable":"true","cm_seo_token_ntk":"10101_all-in-one-cold-and-flu-syrup","price":[{"value":"9.0","currency":"USD","usage":"Display","description":"L"},{"value":"8.49","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16754","singleSKUCatalogEntryID":"16755","parentCatalogGroupID":["10101_10139","10152_10139"],"name":"All-In-One
+      Cold and Flu Syrup","uniqueID":"16754","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/646x1000\/hme037_3710.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/hme037_medicine\/200x310\/hme037_3710.jpg","manufacturer":"All-In-One","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16755","name":"All-In-One
+      Cold and Flu Syrup","hasSingleSKU":false,"partNumber":"HME037_371001","uniqueID":"16755","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Plastic","unitOfMeasure":"","identifier":"HME037_3710","uniqueID":"7000000000000004868","unitID":""}],"searchable":false,"identifier":"Packaging","comparable":false,"name":"Packaging","uniqueID":"7000000000000000309","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceType","comparable":true,"name":"Type","uniqueID":"7000000000000000311","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"MedicinceCategory","comparable":true,"name":"Category","uniqueID":"7000000000000000310","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"5.00000","value":"Liquid","unitOfMeasure":"","identifier":"HME037_3710","uniqueID":"7000000000000004859","unitID":""}],"searchable":false,"identifier":"Type","comparable":false,"name":"Type","uniqueID":"7000000000000000299","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"6.00000","value":"Cold
+      and flu relief","unitOfMeasure":"","identifier":"HME037_3710","uniqueID":"7000000000000004849","unitID":""}],"searchable":false,"identifier":"Category","comparable":false,"name":"Category","uniqueID":"7000000000000000298","displayable":true}],"hasSingleSKU":true,"partNumber":"HME037_3710","storeID":"10101","seo_token_ntk":"all-in-one-cold-and-flu-syrup"}],"metaData":{"price":"1"}}'

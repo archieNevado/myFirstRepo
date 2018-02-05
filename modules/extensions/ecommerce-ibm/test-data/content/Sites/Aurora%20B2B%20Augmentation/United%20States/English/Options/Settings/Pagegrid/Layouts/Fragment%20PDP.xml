@@ -4,7 +4,8 @@
 <master>
 </master>
 <masterVersion>0</masterVersion>
-<settings><Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <IntProperty Name="colCount">2</IntProperty>
 <IntProperty Name="rowCount">5</IntProperty>
 <StringProperty Name="cssClass">lc-two-column</StringProperty>
@@ -66,6 +67,7 @@
 </StructListProperty>
 <StringProperty Name="name">Fragment PDP</StringProperty>
 <StringProperty Name="description">A two column fragment layout for product detail pages (PDP) with "header", "footer", "banner" and "additional" placement.</StringProperty>
-</Struct></settings>
+</Struct>
+</settings>
 <identifier></identifier>
 </CMSettings>

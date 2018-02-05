@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.cae.web.ExposeCurrentNavigationInterceptor;
 import com.coremedia.blueprint.cae.web.i18n.ResourceBundleInterceptor;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ public class HandlerInterceptorsListTest {
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
-  @Import(HandlerTestConfiguration.class)
+  @Import(XmlRepoConfiguration.class)
   @Profile("HandlerInterceptorsListTest")
   static class LocalConfig {
   }

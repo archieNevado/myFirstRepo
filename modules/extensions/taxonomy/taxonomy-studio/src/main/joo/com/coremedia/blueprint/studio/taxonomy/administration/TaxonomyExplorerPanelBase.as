@@ -13,13 +13,13 @@ import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
 import com.coremedia.cms.editor.sdk.premular.StandAloneDocumentView;
 import com.coremedia.cms.editor.sdk.premular.TabbedDocumentFormDispatcher;
 import com.coremedia.cms.editor.sdk.premular.fields.StringPropertyField;
+import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.skins.LoadMaskSkin;
 import com.coremedia.ui.util.EventUtil;
-import com.coremedia.ui.util.IdUtil;
 import com.coremedia.ui.util.createComponentSelector;
 
 import ext.Component;
@@ -80,6 +80,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
     if (!selectedValueExpression) {
       var selectedValuesBean:Bean = beanFactory.createLocalBean();
       selectedValueExpression = ValueExpressionFactory.create("value", selectedValuesBean);
+      selectedValueExpression.setValue([]);
       selectedValueExpression.addChangeListener(selectedNodeChanged);
     }
     return selectedValueExpression;
@@ -113,17 +114,18 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   protected function createChildNode():void {
     setBusy(true);
-    var parent:TaxonomyNode = getSelectedValueExpression().getValue() as TaxonomyNode;
+    var selections:Array = getSelectedValueExpression().getValue();
+    var parent:TaxonomyNode = selections[0];
     parent.createChild(function (newChild:TaxonomyNode):void {
       parent.invalidate(function ():void {
         refreshNode(parent);
         updateColumns(parent);
 
-        getSelectedValueExpression().setValue(newChild);
+        getSelectedValueExpression().setValue([newChild]);
 
         //callback is called after the grid selection was made
         selectNode(newChild, function ():void {
-          waitForDocumentForm(newChild, function():void {
+          waitForDocumentForm(newChild, function ():void {
             focusNameField();
 
             // Preset location latitude/longitude for location taxonomy nodes
@@ -142,11 +144,11 @@ public class TaxonomyExplorerPanelBase extends Panel {
   private function waitForDocumentForm(newChild:TaxonomyNode, callback:Function):void {
     var bindTo:ValueExpression = getDisplayedTaxonomyContentExpression();
     var restId:String = TaxonomyUtil.parseRestId(bindTo.getValue());
-    if(newChild.getRef() === restId) {
+    if (newChild.getRef() === restId) {
       callback.call(null);
     }
     else {
-      EventUtil.invokeLater(function():void {
+      EventUtil.invokeLater(function ():void {
         waitForDocumentForm(newChild, callback);
       });
     }
@@ -173,58 +175,52 @@ public class TaxonomyExplorerPanelBase extends Panel {
   /**
    * Handler implementation of the delete button.
    */
-  protected function deleteNode():void {
-    var node:TaxonomyNode = getSelectedValueExpression().getValue();
+  public function deleteNodes():void {
+    var selection:Array = getSelectedValueExpression().getValue();
 
-    var uriPath:String = node.getRef();
-    var taxononmyId:int = IdUtil.parseContentBean(uriPath);
-    if (taxononmyId === IdUtil.MISSING_CONTENT_ID) {
-      return;
-    }
-
-    var nodeRef:Content = SESSION.getConnection().getContentRepository().getContent(uriPath);
-    var referrerDoctype:String = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_referrer_doctype');
-    var referrerProperties:Array = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_referrer_properties').split(",");
-
-    ValueExpressionFactory.createFromFunction(function ():Array {
-      var referrers:Array = [];
-      for (var i:int = 0; i < referrerProperties.length; i++) {
-        var taxonomyReferrers:Array = nodeRef.getReferrersWithNamedDescriptor(referrerDoctype, referrerProperties[i], Ext.emptyFn);
-        if (undefined === taxonomyReferrers) {
-          return undefined;
-        }
-
-        referrers = referrers.concat(taxonomyReferrers);
+    //check if the given node is deleteable at all
+    TaxonomyUtil.bulkStrongLinks(selection, function(result:Array):void {
+      if(result.length > 0) {
+        var title:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_title');
+        var msg:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_blocked_text');
+        msg = StringUtil.format(msg, result.length);
+        MessageBoxUtil.showError(title, msg);
+        return;
       }
 
-      return referrers;
-    }).loadValue(function (referrers:Array):void {
-      doDeletion(node, referrers.length > 0);
+      //next check referrers
+      TaxonomyUtil.bulkLinks(selection, function(result:Array):void {
+        doDeletion(selection, result);
+      });
     });
   }
 
-  private function doDeletion(node:TaxonomyNode, referrered:Boolean):void {
+  private function doDeletion(selection:Array, referrers:Array):void {
     var message:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_text');
     var icon:String = MessageBoxWindow.INFO;
-    if (referrered) {
+    if (referrers.length > 0) {
       message = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_text_referrer_warning');
+      message = StringUtil.format(message, referrers.length);
       icon = MessageBoxWindow.ERROR;
     }
 
     MessageBox.show({
       title: resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_title'),
-      msg: StringUtil.format(message, node.getName() || resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerColumn_undefined')),
+      msg: message,
       icon: icon,
       minWidth: 300,
       buttons: MessageBoxWindow.OKCANCEL,
       fn: function (btn:*):void {
         if (btn === 'ok') {
           setBusy(true);
-          node.deleteNode(function (parent:TaxonomyNode):void {
-            var parentContent:Content = SESSION.getConnection().getContentRepository().getContent(node.getRef()).getParent();
-            if (parentContent) {
-              parentContent.invalidate();
+          TaxonomyUtil.bulkDelete(selection, function (parent:TaxonomyNode):void {
+            for each(var sel:TaxonomyNode in selection) {
+              var parentContent:Content = SESSION.getConnection().getContentRepository().getContent(sel.getRef()).getParent();
+              if (parentContent) {
+                parentContent.invalidate();
+              }
             }
+
             //checks if return value is defined, otherwise the node could not be deleted.
             if (parent) {
               parent.invalidate(function ():void { //reload the inner content too!!
@@ -233,13 +229,12 @@ public class TaxonomyExplorerPanelBase extends Panel {
                   parentCC.updateNode(parent);
                   updateColumns(parent);
                 }
-                getSelectedValueExpression().setValue(parent);
+                getSelectedValueExpression().setValue([parent]);
               });
             }
             else {
               setBusy(false);
               var msg:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_text');
-              msg = StringUtil.format(msg, node.getName());
               MessageBox.alert(resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_title'), msg);
             }
 
@@ -256,7 +251,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   protected function reload():void {
     setBusy(true);
-    selectedValueExpression.setValue(null);
+    selectedValueExpression.setValue([]);
     getRootColumnPanel().reload();
     setBusy(false);
   }
@@ -318,7 +313,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       else {
         addColumn(nodes[i - 1]);
         if (i === nodes.length - 1) {
-          selectedValueExpression.setValue(node);
+          selectedValueExpression.setValue([node]);
         }
       }
     }
@@ -346,26 +341,29 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   private function selectedNodeChanged():void {
     commitTaxonomyNodeForm();
-    var newNode:TaxonomyNode = selectedValueExpression.getValue() as TaxonomyNode;
-    changeSelectedNode(newNode);
+    var selection:Array = selectedValueExpression.getValue();
+    changeSelectedNode(selection);
 
     //only remove the tabs for the root nodes, all others have a tabbed form
-    if (!newNode || newNode.isRoot()) {
+    if (selection.length === 0 || selection[0].isRoot()) {
       clearTabs();
     }
   }
 
   /**
    * Updates the ui depending on the selected node.
-   * @param newNode The selected node.
    */
-  private function changeSelectedNode(newNode:TaxonomyNode):void {
-    TaxonomyUtil.setLatestSelection(newNode);
-    updateActions(newNode);
-    updateTaxonomyNodeForm(newNode);
-    updateColumns(newNode);
-    if (!newNode) {
+  private function changeSelectedNode(newNodes:Array):void {
+    if (newNodes.length > 0) {
+      var newNode:TaxonomyNode = newNodes[0];
+      TaxonomyUtil.setLatestSelection(newNode);
+      updateActions(newNode);
+      updateTaxonomyNodeForm(newNode);
+      updateColumns(newNode);
+    }
+    else {
       getRootColumnPanel().selectNode(null);
+      getColumnsContainer().removeAll(true);
     }
   }
 
@@ -379,7 +377,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
     addButton.setDisabled(!newNode || !newNode.isExtendable());//disable add button if node is not extendable
 
     var deleteButton:Button = queryById('delete') as Button;
-    deleteButton.setDisabled(!newNode || newNode.isRoot() || !newNode.isLeaf());
+    deleteButton.setDisabled(!newNode || newNode.isRoot());
   }
 
   /**
@@ -442,7 +440,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
     setBusy(true);
     EventUtil.invokeLater(function ():void {
       setBusy(true);
-      var node:TaxonomyNode = getSelectedValueExpression().getValue();
+      var selections:Array = getSelectedValueExpression().getValue();
+      var node:TaxonomyNode = selections[0];
       var content:Content = SESSION.getConnection().getContentRepository().getContent(node.getRef());
       content.invalidate(function ():void {
         //mmh, not the best check, but the node name is already escaped
@@ -469,7 +468,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
     var newName:String = contentDisplayNameVE.getValue();
     //A regular reload is fired once the selected node changes. So we only have too
     //update the node name without reloading the complete node.
-    var node:TaxonomyNode = getSelectedValueExpression().getValue();
+    var selections:Array = getSelectedValueExpression().getValue();
+    var node:TaxonomyNode = selections[0];
     if (node && node.getName() !== newName) {
       node.setName(newName);
       var column:TaxonomyExplorerColumn = getColumnContainer(node);
@@ -558,21 +558,28 @@ public class TaxonomyExplorerPanelBase extends Panel {
 
   /**
    * Moves the source node to the target node and updates the UI.
-   * @param sourceNode
+   * @param sourceNodes
    * @param targetNode
    */
-  public function moveNode(sourceNode:TaxonomyNode, targetNode:TaxonomyNode):void {
+  public function moveNodes(sourceNodes:Array, targetNode:TaxonomyNode):void {
     setBusy(true);
-    clipboardValueExpression.setValue(null);
-    sourceNode.moveTo(targetNode.getRef(), function (updatedNode:TaxonomyNode):void {
+    clipboardValueExpression.setValue([]);
+
+    TaxonomyUtil.bulkMove(sourceNodes, targetNode, function (result:TaxonomyNodeList):void {
       targetNode.invalidate(function ():void {
         getColumnContainer(targetNode).updateNode(targetNode);
-        TaxonomyNodeFactory.loadPath(updatedNode.getTaxonomyId(), updatedNode.getRef(), updatedNode.getSite(),
-                function (nodeList:TaxonomyNodeList):void {
-                  var taxonomyAdminTab:TaxonomyEditor = Ext.getCmp('taxonomyEditor') as TaxonomyEditor;
-                  taxonomyAdminTab.selectNode(nodeList);
-                });
+
+        for each(var updatedNode:TaxonomyNode in result.getNodes()) {
+          TaxonomyNodeFactory.loadPath(updatedNode.getTaxonomyId(), updatedNode.getRef(), updatedNode.getSite(),
+                  function (nodeList:TaxonomyNodeList):void {
+                    var taxonomyAdminTab:TaxonomyEditor = Ext.getCmp('taxonomyEditor') as TaxonomyEditor;
+                    taxonomyAdminTab.selectNode(nodeList);
+                  });
+          //only select first node of moved set
+          break;
+        }
       });
+      setBusy(false);
     });
   }
 
@@ -606,8 +613,15 @@ public class TaxonomyExplorerPanelBase extends Panel {
    * @return
    */
   public function isMarkedForCopying(id:String):Boolean {
-    var selection:TaxonomyNode = getClipboardValueExpression().getValue();
-    return selection && selection.getRef() === id;
+    var selection:Array = getClipboardValueExpression().getValue();
+    if(selection) {
+      for each(var node:TaxonomyNode in selection) {
+        if(node.getRef() === id) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**

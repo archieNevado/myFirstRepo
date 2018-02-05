@@ -1,5 +1,13 @@
 <#ftl strip_whitespace=true>
-<#-- @ftlvariable name="cmpage" type="com.coremedia.blueprint.common.contentbeans.Page" -->
+
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
+
 
 <#--
  * Renders a map of attributes as html attribute, e.g.:
@@ -43,8 +51,8 @@
  * Use message instead of spring.message/spring.messageArgs to avoid rendering of exceptions
  *
  * @param key @see spring.message#key
- * @param args @see spring.messageArgs#args
- * @param highlightErrors specifies if errors should be highlighted, default: true (for macro variant)
+ * @param (optional) args @see spring.messageArgs#args
+ * @param (optional) highlightErrors specifies if errors should be highlighted, default: true (for macro variant)
  -->
 <#outputformat "plainText">
 <#macro message key args=[] highlightErrors=true>
@@ -91,34 +99,27 @@
   <#return messageText?has_content />
 </#function>
 
-<#function extendSequenceInMap map={} key="" extendBy=[]>
-  <#local newSequence=extendBy />
-  <#if map?keys?seq_contains(key) && map[key]?is_sequence>
-    <#local newSequence=map[key] + extendBy />
-  </#if>
-  <#return map + {key: newSequence} />
-</#function>
-
 <#--
  * Renders nested content inside a link if href is not empty.
  *
  * @param href The href attribute of the link
  * @param attr (optional) additional attributes for link tag
- * @param render (optional) Setting this parameter to false will skip rendering the link
+ * @param render (optional) Setting this parameter to false will skip rendering the link. DEPRECATED: provide an empty href instead.
  * @nested (optional) nested content will be rendered inside the link
  -->
 <#macro optionalLink href attr={} render=true>
   <#if render && href?has_content><a href="${href}"<@renderAttr attr />></#if>
-  <#nested />
+  <#nested>
   <#if href?has_content></a></#if>
 </#macro>
 
 <#--
  * Renders nested content inside a frame if its title is not empty.
  *
- * @param title The title of the frame
- * @param attr additional attributes for the container representing the frame
- * @param attr additional attributes for the container representing the frame title
+ * @param (optional) title The title of the frame
+ * @param (optional) classFrame additional CSS class name for the container representing the frame
+ * @param (optional) attr additional attributes for the container representing the frame
+ * @param (optional) attrTitle additional attributes for the headline representing the frame title
  * @nested (optional) nested content will be rendered inside the frame
  -->
 <#macro optionalFrame title="" classFrame="" attr={} attrTitle={}>
@@ -132,7 +133,48 @@
   </#if>
 </#macro>
 
-<#--TODO mbi-->
+<#--
+ * Renders given text with line breaks as <br>
+ *
+ * @param text String with line breaks
+ -->
+<#macro renderWithLineBreaks text>
+  <#noautoesc>
+    ${text?trim?replace("\n\n", "<br>")?replace("\n", "<br>")}
+  </#noautoesc>
+</#macro>
+
+<#--
+ * returns a given identifier as css class name
+ * - Illegal characters will be removed
+ * - camel case will be replaced with dashes
+ *
+ * @param identifier the identifier to use as css class name
+ todo: CMS-11143 move to download portal (am)
+ -->
+<#function asCSSClassName identifier>
+  <#local cleanedUpIdentifier=identifier?replace("[!\"#$%&'\\(\\)\\*\\+,\\.\\/:;<=>\\?@\\[\\\\\\]\\^`\\{\\|}~\\s]", "", "r") />) />
+  <#return cleanedUpIdentifier?replace("([A-Z][a-z])|([A-Z]$)", " $0", "r")?lower_case?replace(" ", "-") />
+</#function>
+
+
+<#-- --- PRIVATE --------------------------------------------------------------------------------------------------- -->
+
+
+<#-- PRIVATE -->
+<#function _extendSequenceInMap map={} key="" extendBy=[]>
+  <#local newSequence=extendBy />
+  <#if map?keys?seq_contains(key) && map[key]?is_sequence>
+    <#local newSequence=map[key] + extendBy />
+  </#if>
+  <#return map + {key: newSequence} />
+</#function>
+
+
+<#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
+
+
+<#-- DEPRECATED, UNUSED -->
 <#macro optionalFrameForObject self="" classFrame="" attr={}>
   <#if self.teaserTitle?has_content  || self.teaserText?has_content>
   <div class="cm-frame ${classFrame}"<@renderAttr attr />>
@@ -148,26 +190,3 @@
   </div>
   </#if>
 </#macro>
-
-<#--
- * Renders given text with line breaks as <br/>
- *
- * @param text String with line breaks
- -->
-<#macro renderWithLineBreaks text>
-  <#noautoesc>
-    ${text?trim?replace("\n\n", "<br/>")?replace("\n", "<br/>")}
-  </#noautoesc>
-</#macro>
-
-<#--
- * returns a given identifier as css class name
- * - Illegal characters will be removed
- * - camel case will be replaced with dashes
- *
- * @param identifier the identifier to use as css class name
- -->
-<#function asCSSClassName identifier>
-  <#local cleanedUpIdentifier=identifier?replace("[!\"#$%&'\\(\\)\\*\\+,\\.\\/:;<=>\\?@\\[\\\\\\]\\^`\\{\\|}~\\s]", "", "r") />) />
-  <#return cleanedUpIdentifier?replace("([A-Z][a-z])|([A-Z]$)", " $0", "r")?lower_case?replace(" ", "-") />
-</#function>

@@ -3,11 +3,13 @@ package com.coremedia.livecontext.ecommerce.ibm.inventory;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-
 public class AvailabilityInfoImpl implements AvailabilityInfo {
+
   private final Map<String, Object> delegate;
 
   public AvailabilityInfoImpl(Map<String, Object> delegate) {
@@ -16,17 +18,17 @@ public class AvailabilityInfoImpl implements AvailabilityInfo {
 
   @Override
   public float getQuantity() {
-    return DataMapHelper.findValueForKey(delegate, "availableQuantity", Float.class).orElse(0.0F);
+    return DataMapHelper.findValue(delegate, "availableQuantity", Float.class).orElse(0.0F);
   }
 
   @Override
   public String getInventoryStatus() {
-    return DataMapHelper.getValueForKey(delegate, "inventoryStatus", String.class);
+    return getStringValue(delegate, "inventoryStatus");
   }
 
   @Override
   public String getUnitOfMeasure() {
-    return DataMapHelper.getValueForKey(delegate, "unitOfMeasure", String.class);
+    return getStringValue(delegate, "unitOfMeasure");
   }
 
   @Override
@@ -40,12 +42,18 @@ public class AvailabilityInfoImpl implements AvailabilityInfo {
 
     AvailabilityInfoImpl that = (AvailabilityInfoImpl) o;
 
-    return !(delegate != null ? !java.util.Objects.equals(DataMapHelper.getValueForKey(delegate, "productId", String.class), DataMapHelper.getValueForKey(that.delegate, "productId", String.class)) : that.delegate != null);
-
+    return !(delegate != null
+            ? !java.util.Objects.equals(getStringValue(delegate, "productId"), getStringValue(that.delegate, "productId"))
+            : that.delegate != null);
   }
 
   @Override
   public int hashCode() {
-    return delegate != null ? Objects.hash(DataMapHelper.getValueForKey(delegate, "productId", String.class)) : 0;
+    return delegate != null ? Objects.hash(getStringValue(delegate, "productId")) : 0;
+  }
+
+  @Nullable
+  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

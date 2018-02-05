@@ -15,14 +15,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ContainerFlattenerTest {
+
   @Mock
-  Container outerCollection;
+  private Container outerCollection;
+
   @Mock
-  Container innerCollection;
+  private Container innerCollection;
+
   @Mock
-  CMGallery gallery;
+  private CMGallery gallery;
 
   @Test
   public void testEmptyCollection() {
@@ -81,7 +84,6 @@ public class ContainerFlattenerTest {
 
   @Test
   public void testGalleryIncluded() {
-    when(gallery.getItems()).thenReturn(ImmutableList.of(new Object(), new Object()));
     when(outerCollection.getItems()).thenReturn(ImmutableList.of(new Object(), gallery, new Object()));
     List<Object> result = ContainerFlattener.flatten(outerCollection, Object.class);
     assertEquals(3, result.size());

@@ -136,7 +136,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   public Object buildLinkFor(ProductInSite productInSite, String viewName, Map<String, Object> linkParameters, HttpServletRequest request) {
     Site site = productInSite.getSite();
     Product product = productInSite.getProduct();
-    return useCommerceProductLinks(site) ? buildCommerceLinkFor(product, linkParameters) : buildCaeLinkFor(productInSite, viewName, linkParameters);
+    return useCommerceProductLinks(site) ? buildCommerceLinkFor(product, linkParameters, request) : buildCaeLinkFor(productInSite, viewName, linkParameters);
   }
 
   /**

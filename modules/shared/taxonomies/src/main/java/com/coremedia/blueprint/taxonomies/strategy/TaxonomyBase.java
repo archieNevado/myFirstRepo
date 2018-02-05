@@ -2,12 +2,13 @@ package com.coremedia.blueprint.taxonomies.strategy;
 
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
+import com.coremedia.cap.content.Content;
 
 /**
  * The abstract base class of taxonomy strategies, implementing some
  * default behaviours of the taxonomy strategy interface.
  */
-public abstract class TaxonomyBase implements Taxonomy {
+public abstract class TaxonomyBase implements Taxonomy<Content> {
 
   private String taxonomyId;
   private String siteId;

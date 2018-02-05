@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 import static com.coremedia.elastic.social.api.ModerationType.POST_MODERATION;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
 import static com.coremedia.elastic.social.api.users.CommunityUser.State.ACTIVATED;
@@ -145,25 +146,25 @@ public class UserGenerator {
         user.setSurName(surNameList.get(random.nextInt(surNameList.size())));
         user.setLocale(getRandomLocale());
         user.save();
-        LOG.debug("Created user with name " + userName + ": " + user);
+        LOG.debug(PERSONAL_DATA, "Created user with name {}: {}", userName, user);
         userCount++;
       } catch (DuplicateEmailException e) {
-        LOG.warn("User with duplicate email " + e.getEmail());
+        LOG.warn(PERSONAL_DATA, "User with duplicate email {}", e.getEmail());
         return null;
       } catch (DuplicateNameException e) {
-        LOG.warn("User with duplicate name " + e.getName());
+        LOG.warn(PERSONAL_DATA, "User with duplicate name {}", e.getName());
         return null;
       }
     } else {
-      LOG.info("User with name " + userName + " already exists");
+      LOG.info(PERSONAL_DATA, "User with name {} already exists", userName);
       if (!userState.equals(user.getState())) {
         user.setProperty("state", userState);
         try {
           user.save();
         } catch (DuplicateEmailException e) {
-          LOG.warn("User with duplicate email " + e.getEmail());
+          LOG.warn(PERSONAL_DATA, "User with duplicate email {}", e.getEmail());
         } catch (DuplicateNameException e) {
-          LOG.warn("User with duplicate name " + e.getName());
+          LOG.warn(PERSONAL_DATA, "User with duplicate name {}", e.getName());
         }
       }
     }
@@ -178,7 +179,7 @@ public class UserGenerator {
   public CommunityUser createAnonymousUser() {
     CommunityUser user = communityUserService.createAnonymousUser();
     user.save();
-    LOG.debug("Created anonymous user with id: " + user.getId());
+    LOG.debug(PERSONAL_DATA, "Created anonymous user with id: {}", user.getId());
     return user;
   }
 
@@ -187,13 +188,13 @@ public class UserGenerator {
     for (int i=0;i<count;i++) {
       CommunityUser user = communityUserService.createAnonymousUser();
       user.save();
-      LOG.trace("Created anonymous user with id: " + user.getId());
+      LOG.trace(PERSONAL_DATA, "Created anonymous user with id: {}", user.getId());
     }
   }
 
   public void changeUserDetails(ModerationType userModerationType, CommunityUser user) {
     user.setGivenName(user.getGivenName() + random.nextInt());
-    LOG.debug("Change given name of user {} in with moderation type {} to {}", user.getName(), userModerationType, user.getGivenName());
+    LOG.debug(PERSONAL_DATA, "Change given name of user {} in with moderation type {} to {}", user.getName(), userModerationType, user.getGivenName());
     communityUserService.storeChanges(user, userModerationType);
     user.save();
 
@@ -209,7 +210,7 @@ public class UserGenerator {
       CommunityUser author = createAnonymousUser();
       communityUserService.addComplaint(author, user);
       userComplaintCount++;
-      LOG.debug("Created complaint from {}, anonymous {} for user with id: {}", author.getId(),author.isAnonymous(), user.getId());
+      LOG.debug(PERSONAL_DATA, "Created complaint from {}, anonymous {} for user with id: {}", author.getId(),author.isAnonymous(), user.getId());
     }
   }
 

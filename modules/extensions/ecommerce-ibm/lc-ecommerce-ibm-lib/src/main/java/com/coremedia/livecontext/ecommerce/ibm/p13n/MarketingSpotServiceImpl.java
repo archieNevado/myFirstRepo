@@ -97,7 +97,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
             toMarketingSpotTechId(getStringValueForKey(marketingSpotWrapper,
                     isESpotResult(marketingSpotWrapper) ? "MarketingSpotData[0].marketingSpotIdentifier" : "MarketingSpot[0].spotId"));
 
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+    StoreContext currentContext = StoreContextHelper.getCurrentContextOrThrow();
 
     final MarketingSpotImpl spot = (MarketingSpotImpl) commerceBeanFactory.createBeanFor(id, currentContext);
     Transformer transformer = null;
@@ -158,12 +158,12 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
 
   @Nullable
   private static List getListValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
-    return DataMapHelper.getValueForKey(map, key, List.class);
+    return DataMapHelper.findValue(map, key, List.class).orElse(null);
   }
 
   @Nullable
   private static String getStringValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
-    return DataMapHelper.getValueForKey(map, key, String.class);
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 
   public CommerceCache getCommerceCache() {

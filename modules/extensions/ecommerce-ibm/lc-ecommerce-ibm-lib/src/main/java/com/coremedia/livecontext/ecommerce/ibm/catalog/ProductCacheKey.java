@@ -65,7 +65,7 @@ class ProductCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
   @Override
   public void addExplicitDependency(Map<String, Object> wcProduct) {
     if (wcProduct != null && wcProduct.containsKey(UNIQUE_ID)) {
-      Cache.dependencyOn(DataMapHelper.getValueForKey(wcProduct, UNIQUE_ID, String.class));
+      Cache.dependencyOn(DataMapHelper.findStringValue(wcProduct, UNIQUE_ID).orElse(null));
     }
   }
 

@@ -37,7 +37,7 @@
 <Struct>
 <IntProperty Name="index">3</IntProperty>
 <StringProperty Name="name">YouTube - CoreMedia</StringProperty>
-<StringProperty Name="credentialsJson"></StringProperty>
+<StringProperty Name="credentialsJson"/>
 <StringProperty Name="channel.id">UCGolQX0D38klvQj3ACENBSw</StringProperty>
 <StringProperty Name="providerId">youTubeVideoProvider</StringProperty>
 <StringProperty Name="previewType">video</StringProperty>

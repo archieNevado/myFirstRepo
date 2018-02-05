@@ -80,16 +80,15 @@ public class ProductImpl extends ProductBase {
     if (variants == null) {
       List<ProductVariant> newVariants = new ArrayList<>();
       @SuppressWarnings("unchecked")
-      List<HashMap<String, Object>> wcSkus = DataMapHelper.getValueForKey(getDelegate(), "sKUs", List.class);
+      List<HashMap<String, Object>> wcSkus = DataMapHelper.findValue(getDelegate(), "sKUs", List.class).orElse(null);
       if (wcSkus != null && !wcSkus.isEmpty()) {
         for (Map<String, Object> wcSku : wcSkus) {
-          String technicalId = DataMapHelper.getValueForKey(wcSku, "uniqueID", String.class);
-          if (technicalId != null) {
+          DataMapHelper.findStringValue(wcSku, "uniqueID").ifPresent(technicalId -> {
             CatalogAlias catalogAlias = getCatalogAlias();
             CommerceId commerceId = getCommerceIdProvider().formatProductVariantTechId(catalogAlias, technicalId);
             ProductVariant pv = (ProductVariant) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
             newVariants.add(pv);
-          }
+          });
         }
       } else {
         //In some cases the initial load mechanism does not come with containing SKUs (e.g. findProductsByCategory).

@@ -21,6 +21,17 @@
       <#assign index=imageMapArea?index/>
       <#assign quickInfoId=quickInfoIdList[index]/>
 
+      <#-- ids for next/previous button -->
+      <#assign quickInfoNextId=quickInfoIdList[index + 1]!""/>
+      <#assign quickInfoPreviousId=quickInfoIdList[index - 1]!""/>
+      <#if (quickInfoIdList?size > 1 ) >
+        <#if (index == 0)>
+          <#assign quickInfoPreviousId=quickInfoIdList?last />
+        <#elseif (index == (imageMapAreas?size - 1))>
+          <#assign quickInfoNextId=quickInfoIdList?first />
+        </#if>
+      </#if>
+
       <#if imageMapArea.linkedContent?has_content>
         <#assign linkedContent=imageMapArea.linkedContent />
       <#-- include quickinfo popup -->
@@ -28,23 +39,12 @@
         "classQuickInfo": "cm-imagemap__quickinfo cm-quickinfo--imagemap",
         "metadata": ["properties.localSettings"],
         "quickInfoId": quickInfoId,
+        "quickInfoNextId": quickInfoNextId,
+        "quickInfoPreviousId": quickInfoPreviousId,
         "quickInfoGroup": imageMapId,
         "overlay": overlay
         } />
       </#if><#-- imageMapArea.linkedContent?has_content -->
     </#if>
   </#list>
-</#if>
-<#-- add main target as quickinfo and button -->
-<#if self.target?has_content>
-  <div class="cm-imagemap__button-group cm-button-group cm-button-group--overlay">
-    <@bp.button href=cm.getLink(self.target!cm.UNDEFINED) text=bp.getMessage("button_more_info") attr={"classes": ["cm-button-group__button"], "metadata": ["properties.target", self.target.content]} />
-  </div>
-    <@cm.include self=self.target!cm.UNDEFINED view="asQuickInfo" params={
-      "classQuickInfo": "cm-imagemap__quickinfo cm-quickinfo--main cm-quickinfo--imagemap",
-      "metadata": ["properties.target"],
-      "quickInfoId": quickInfoMainId,
-      "quickInfoGroup": imageMapId,
-      "overlay": overlay
-    } />
 </#if>

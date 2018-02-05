@@ -1,5 +1,6 @@
 import $ from "jquery";
 import * as logger from "@coremedia/js-logger";
+import * as deviceDetector from "@coremedia/js-device-detector";
 
 const EVENT_PREFIX = "coremedia.blueprint.calista.";
 const EVENT_CHECK_LOGIN_STATUS = EVENT_PREFIX + "loginStatusChecked";
@@ -87,6 +88,9 @@ $(function () {
 
   logger.log("Welcome to CoreMedia Calista Integration");
 
+  // init device detection
+  deviceDetector.init();
+
   /* --- Touch detection --- */
   const deviceAgent = navigator.userAgent.toLowerCase();
   let isTouchDevice = (deviceAgent.match(/(iphone|ipod|ipad)/) || deviceAgent.match(/(android)/) || deviceAgent.match(/(iemobile)/) || deviceAgent.match(/iphone/i) || deviceAgent.match(/ipad/i) || deviceAgent.match(/ipod/i) || deviceAgent.match(/blackberry/i) || deviceAgent.match(/bada/i));
@@ -95,6 +99,10 @@ $(function () {
   const $navbar = $('#navbar');
   const $navigationEntry = $('.cm-navigation > .cm-navigation-item__list > .cm-navigation-item');
   const $navigationRoot = $(".cm-navigation > ul.cm-navigation-item__list");
+
+  function isMobileOrTablet() {
+    return deviceDetector.getLastDevice().type !== "desktop";
+  }
 
   $navbar.on('show.bs.collapse', function () {
     $('body').addClass('fixed');
@@ -109,7 +117,10 @@ $(function () {
     $navigationRoot.removeClass("cm-navigation--hovered");
   });
   $navigationEntry.on('click', function (e) {
-    if (isTouchDevice) {
+    // prevent further code from beeing executed if a sublist of the list is clicked
+    if (e.target.parentNode !== this) return;
+    // ignore click on touch devices. we don't want to trigger the link, just display the subnavigation
+    if (isTouchDevice && !isMobileOrTablet()) {
       e.preventDefault();
     }
   });
@@ -129,7 +140,7 @@ $(function () {
   /* --- Mobile Search --- */
   const $search = $('#cmSearchWrapper');
   const $searchInput = $('.search_input');
-  $('.mobile-search, .cm-search-form__close').on('click', function () {
+  $('.cm-search__open-mobile-search-button, .cm-search-form__close').on('click', function () {
     $search.toggleClass('open');
     if ($search.hasClass('open')) {
       $searchInput.focus();

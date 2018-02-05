@@ -12,12 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Add request attribute "hasPreviewToken" for the request with query parameter "previewToken"
+ * Add request attribute {@link LiveContextPageHandlerBase#HAS_PREVIEW_TOKEN} for the request if
+ * preview request is detected. This class is vendor agnostic.
+ *
+ * The preview request header information is provided by ContextProviders deployed in commerce system.
  */
 public class PreviewTokenMarkerFilter implements Filter {
 
   private static final String WC_P13N_TEST = "wc.p13n_test";
-  public static final String WC_PREVIEW_MODE_ENABLED = "wc.preview.mode.enabled";
+  private static final String WC_PREVIEW_MODE_ENABLED = "wc.preview.mode.enabled";
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,13 +28,13 @@ public class PreviewTokenMarkerFilter implements Filter {
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-    if (request.getParameterMap().containsKey(PreviewTokenAppendingLinkTransformer.QUERY_PARAMETER_PREVIEW_TOKEN) || isPreviewFragmentRequest(request)) {
+    if (isPreviewFragmentRequest(request)) {
       request.setAttribute(LiveContextPageHandlerBase.HAS_PREVIEW_TOKEN, true);
     }
     chain.doFilter(request, response);
   }
 
-  private boolean isPreviewFragmentRequest(ServletRequest request) {
+  private static boolean isPreviewFragmentRequest(ServletRequest request) {
     if(request instanceof HttpServletRequest) {
       HttpServletRequest httpRequest = (HttpServletRequest) request;
       String wcInPreviewMode = httpRequest.getHeader(WC_PREVIEW_MODE_ENABLED);

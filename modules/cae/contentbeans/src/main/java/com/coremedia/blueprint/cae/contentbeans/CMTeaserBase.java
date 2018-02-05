@@ -2,20 +2,29 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTeaser;
-import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cae.aspect.Aspect;
-import com.coremedia.cap.content.Content;
+import com.coremedia.cap.struct.Struct;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.coremedia.cap.common.CapStructHelper.getBoolean_;
+import static com.coremedia.cap.common.CapStructHelper.getString;
+import static com.coremedia.cap.common.CapStructHelper.isEmpty;
+
 /**
  * Generated base class for immutable beans of document type CMTeaser.
  * Should not be changed.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public abstract class CMTeaserBase extends CMTeasableImpl implements CMTeaser {
+
+  private static final String LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME = "callToActionDisabled";
+
+  private static final String ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME = "callToActionEnabled";
+  private static final String ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME = "callToActionCustomText";
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -58,9 +67,36 @@ public abstract class CMTeaserBase extends CMTeasableImpl implements CMTeaser {
    */
   @Override
   public CMLinkable getTarget() {
-    Content targetValue = getContent().getLink(TARGET);
-    CMLinkable bean = createBeanFor(targetValue, CMLinkable.class);
-    return bean != null && getValidationService().validate(bean) ? bean : null;
+    return getLegacyAnnotatedLink(TARGETS, TARGET);
   }
+
+  @Override
+  public Map<String, List<Map<String, Object>>> getTargets() {
+    return getAnnotatedLinkList(TARGETS, TARGET);
+  }
+
+  @Override
+  protected List<Map<String, Object>> convertLinkListToAnnotatedLinkList(String linkListPropertyName) {
+    List<Map<String, Object>> annotatedLinkList = super.convertLinkListToAnnotatedLinkList(linkListPropertyName);
+    if (CMTeaser.TARGET.equals(linkListPropertyName) && !annotatedLinkList.isEmpty()) {
+      Map<String, Object> targetStructMap = annotatedLinkList.get(0);
+      boolean ctaEnabled = false;
+      String ctaCustomText = null;
+      Struct localSettings = getLocalSettings();
+      if (!isEmpty(localSettings)) {
+        Boolean ctaDisabled = getBoolean_(localSettings, LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME);
+        ctaEnabled = ctaDisabled != null && !ctaDisabled;
+        ctaCustomText = getString(localSettings, ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME);
+      }
+      if (ctaEnabled) {
+        targetStructMap.put(ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME, true);
+      }
+      if (ctaCustomText != null && !ctaCustomText.isEmpty()) {
+        targetStructMap.put(ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, ctaCustomText);
+      }
+    }
+    return annotatedLinkList;
+  }
+
 }
   

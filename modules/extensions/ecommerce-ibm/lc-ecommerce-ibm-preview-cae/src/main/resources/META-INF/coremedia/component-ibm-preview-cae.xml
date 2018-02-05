@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+
+  <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
+  <import resource="classpath:/framework/spring/blueprint-links.xml"/>
+  <import resource="classpath:/framework/spring/livecontext-services.xml"/>
+
+  <import resource="classpath:/META-INF/coremedia/livecontext-handlers.xml"/>
+  <import resource="classpath:META-INF/coremedia/lc-services.xml"/>
+
+  <import resource="classpath:/META-INF/coremedia/livecontext-handler-interceptors.xml"/>
+
+  <bean id="previewTokenAppendingLinkTransformer" class="com.coremedia.livecontext.ecommerce.ibm.preview.PreviewTokenAppendingLinkTransformer">
+    <description>
+      Creates a CAE LinkTransformer that rewrites all generated links
+      and adds the request parameter for a given preview token id of a commerce system.
+    </description>
+    <property name="loginService" ref="userLoginService"/>
+  </bean>
+
+  <customize:append id="previewTokenAddingLinkTransformerCustomizer" bean="linkTransformers">
+    <list>
+      <ref bean="previewTokenAppendingLinkTransformer"/>
+    </list>
+  </customize:append>
+
+  <bean class="com.coremedia.livecontext.ecommerce.ibm.preview.IbmPreviewCaeConfiguration"/>
+
+</beans>

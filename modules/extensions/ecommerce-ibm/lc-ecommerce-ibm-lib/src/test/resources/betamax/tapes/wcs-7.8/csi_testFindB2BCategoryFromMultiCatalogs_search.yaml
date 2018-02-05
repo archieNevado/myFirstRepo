@@ -1,0 +1,230 @@
+!tape
+name: csi_testFindB2BCategoryFromMultiCatalogs_search
+interactions:
+- recorded: 2017-11-14T15:39:00.696Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:00 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000D9JrDbTG-_eFFs5_ydluyaw:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:39:00.779Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:00 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00004Q0RCppp7bu4A0kfiT6xSjv:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:39:00.811Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/%2520?categoryIdentifier=Hardware%20Lighting&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10151&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:00 GMT
+      Expires: Tue, 14 Nov 2017 16:39:00 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/%2520?categoryIdentifier=Hardware%20Lighting&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10151&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Light
+      bulbs in every shape and size","cm_seo_token_ntk":"10101_lighting-10153--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10153","identifier":"Hardware Lighting","parentCatalogGroupID":["10101_10151","10151_-1"],"name":"Lighting","uniqueID":"10153","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","seo_token_ntk":"lighting-10153--1"}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:39:00.886Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byParentCategory/10153?profileName=CoreMedia_findSubCategories&catalogId=10151&depthAndLimit=-1&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:00 GMT
+      Expires: Tue, 14 Nov 2017 16:39:00 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":0,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byParentCategory\/10153?profileName=CoreMedia_findSubCategories&catalogId=10151&depthAndLimit=-1&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[],"recordSetCount":0}'
+- recorded: 2017-11-14T15:39:00.906Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byCategory/10153?profileName=CoreMedia_findProductsByCategory&catalogId=10151&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:00 GMT
+      Expires: Tue, 14 Nov 2017 16:39:00 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":10,"recordSetTotal":10,"breadCrumbTrailEntryView":[{"value":"10153","label":"Lighting","type_":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byCategory\/10153?profileName=CoreMedia_findProductsByCategory&catalogId=10151&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","facetView":[{"value":"price_USD","entry":[{"value":"price_USD%3A%28%7B*+100%7D+100%29","extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"label":"({*
+      100} 100)","count":10},{"value":"price_USD%3A%28%7B100+200%7D+200%29","extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"label":"({100 200} 200)","count":0},{"value":"price_USD%3A%28%7B200+300%7D+300%29","extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"label":"({200
+      300} 300)","count":0},{"value":"price_USD%3A%28%7B300+400%7D+400%29","extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"label":"({300 400} 400)","count":0},{"value":"price_USD%3A%28%7B400+500%7D+500%29","extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"label":"({400
+      500} 500)","count":0},{"value":"price_USD%3A%28%7B500+*%7D%29","extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"label":"({500 *})","count":0}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","entry":[{"value":"mfName_ntk_cs%3A%22Baddeck+Worldwide%22","extendedData":{"uniqueId":"-10026697100100101991073287111114108100119105100101"},"label":"Baddeck
+      Worldwide","count":"3"},{"value":"mfName_ntk_cs%3A%22Glomor+Lighting%22","extendedData":{"uniqueId":"-1002711081111091111143276105103104116105110103"},"label":"Glomor Lighting","count":"3"},{"value":"mfName_ntk_cs%3A%22Pirini+Inc.%22","extendedData":{"uniqueId":"-10028010511410511010532731109946"},"label":"Pirini
+      Inc.","count":"3"}],"extendedData":{"propertyname":"facet","facet_id":"-1000","displaySequence":"0.0","maximumValuesToDisplay":"20","srchattr_id":"-1002","max_display":"20","zero_display":"0","selection":"0","sortorder":"0","storeent_id":"0","fname":"Brand","allValuesReturned":true,"allowMultipleValueSelection":"false","fdesc":"The
+      manufacturer","groupId":"0","group_id":"0","displayable":"1","propertyvalue":"mfName_ntk_cs","srchattridentifier":"_cat.ManufacturerName","keyword_search":"1"},"name":"ManufacturerName"}],"breadCrumbTrailEntryViewExtended":[{"0":{"value":"10153","label":"Lighting","type_":"FACET_ENTRY_CATEGORY"}}],"recordSetCount":10,"catalogEntryView":[{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_ChefSupply-RGB-LED-Strip","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/18401","singleSKUCatalogEntryID":"18402","hasSingleSKU":true,"partNumber":"ChefSupply_RGB_LED_Strip","uniqueID":"18401","storeID":"10101","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/ChefSupply_RGB_LED_Strip.jpg","seo_token_ntk":"ChefSupply-RGB-LED-Strip"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_compact-fluorescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17792","hasSingleSKU":false,"partNumber":"LA042_4201","uniqueID":"17792","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4201.jpg","seo_token_ntk":"compact-fluorescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_medium-base-chandelier-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17801","hasSingleSKU":false,"partNumber":"LA042_4202","uniqueID":"17801","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4202.jpg","seo_token_ntk":"medium-base-chandelier-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_standard-incandescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17804","hasSingleSKU":false,"partNumber":"LA042_4203","uniqueID":"17804","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4203.jpg","seo_token_ntk":"standard-incandescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_dual-tube-ultraviolet-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17821","singleSKUCatalogEntryID":"17822","hasSingleSKU":true,"partNumber":"LA042_4204","uniqueID":"17821","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4204.jpg","seo_token_ntk":"dual-tube-ultraviolet-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_screw-in-led-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17823","hasSingleSKU":false,"partNumber":"LA042_4205","uniqueID":"17823","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4205.jpg","seo_token_ntk":"screw-in-led-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_halogen-floodlight-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17828","hasSingleSKU":false,"partNumber":"LA042_4206","uniqueID":"17828","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4206.jpg","seo_token_ntk":"halogen-floodlight-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_candelabra-incandescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17833","hasSingleSKU":false,"partNumber":"LA042_4207","uniqueID":"17833","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4207.jpg","seo_token_ntk":"candelabra-incandescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_linear-fluorescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17842","hasSingleSKU":false,"partNumber":"LA042_4209","uniqueID":"17842","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4209.jpg","seo_token_ntk":"linear-fluorescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_neon-indicator-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17861","hasSingleSKU":false,"partNumber":"LA042_4210","uniqueID":"17861","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4210.jpg","seo_token_ntk":"neon-indicator-bulb"}]}'
+- recorded: 2017-11-14T15:39:01.027Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/%2520?categoryIdentifier=Hardware%20Lighting&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10101&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/%2520?categoryIdentifier=Hardware%20Lighting&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10101&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Light
+      bulbs in every shape and size","cm_seo_token_ntk":"10101_lighting-10153--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10153","identifier":"Hardware Lighting","parentCatalogGroupID":["10101_10151","10151_-1"],"name":"Lighting","uniqueID":"10153","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","seo_token_ntk":"lighting-10153--1"}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:39:01.069Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byParentCategory/10153?profileName=CoreMedia_findSubCategories&catalogId=10101&depthAndLimit=-1&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":0,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byParentCategory\/10153?profileName=CoreMedia_findSubCategories&catalogId=10101&depthAndLimit=-1&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[],"recordSetCount":0}'
+- recorded: 2017-11-14T15:39:01.098Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byCategory/10153?profileName=CoreMedia_findProductsByCategory&catalogId=10101&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":10,"recordSetTotal":10,"breadCrumbTrailEntryView":[{"value":"10151","label":"Hardware","type_":"FACET_ENTRY_CATEGORY"},{"value":"10153","label":"Lighting","type_":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byCategory\/10153?profileName=CoreMedia_findProductsByCategory&catalogId=10101&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","facetView":[{"value":"price_USD","entry":[{"value":"price_USD%3A%28%7B*+100%7D+100%29","extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"label":"({*
+      100} 100)","count":10},{"value":"price_USD%3A%28%7B100+200%7D+200%29","extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"label":"({100 200} 200)","count":0},{"value":"price_USD%3A%28%7B200+300%7D+300%29","extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"label":"({200
+      300} 300)","count":0},{"value":"price_USD%3A%28%7B300+400%7D+400%29","extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"label":"({300 400} 400)","count":0},{"value":"price_USD%3A%28%7B400+500%7D+500%29","extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"label":"({400
+      500} 500)","count":0},{"value":"price_USD%3A%28%7B500+*%7D%29","extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"label":"({500 *})","count":0}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","entry":[{"value":"mfName_ntk_cs%3A%22Baddeck+Worldwide%22","extendedData":{"uniqueId":"-10026697100100101991073287111114108100119105100101"},"label":"Baddeck
+      Worldwide","count":"3"},{"value":"mfName_ntk_cs%3A%22Glomor+Lighting%22","extendedData":{"uniqueId":"-1002711081111091111143276105103104116105110103"},"label":"Glomor Lighting","count":"3"},{"value":"mfName_ntk_cs%3A%22Pirini+Inc.%22","extendedData":{"uniqueId":"-10028010511410511010532731109946"},"label":"Pirini
+      Inc.","count":"3"}],"extendedData":{"propertyname":"facet","facet_id":"-1000","displaySequence":"0.0","maximumValuesToDisplay":"20","srchattr_id":"-1002","max_display":"20","zero_display":"0","selection":"0","sortorder":"0","storeent_id":"0","fname":"Brand","allValuesReturned":true,"allowMultipleValueSelection":"false","fdesc":"The
+      manufacturer","groupId":"0","group_id":"0","displayable":"1","propertyvalue":"mfName_ntk_cs","srchattridentifier":"_cat.ManufacturerName","keyword_search":"1"},"name":"ManufacturerName"}],"breadCrumbTrailEntryViewExtended":[{"0":{"value":"10151","label":"Hardware","type_":"FACET_ENTRY_CATEGORY"},"1":{"value":"10153","label":"Lighting","type_":"FACET_ENTRY_CATEGORY"}}],"recordSetCount":10,"catalogEntryView":[{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_ChefSupply-RGB-LED-Strip","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/18401","singleSKUCatalogEntryID":"18402","hasSingleSKU":true,"partNumber":"ChefSupply_RGB_LED_Strip","uniqueID":"18401","storeID":"10101","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/ChefSupply_RGB_LED_Strip.jpg","seo_token_ntk":"ChefSupply-RGB-LED-Strip"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_compact-fluorescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17792","hasSingleSKU":false,"partNumber":"LA042_4201","uniqueID":"17792","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4201.jpg","seo_token_ntk":"compact-fluorescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_medium-base-chandelier-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17801","hasSingleSKU":false,"partNumber":"LA042_4202","uniqueID":"17801","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4202.jpg","seo_token_ntk":"medium-base-chandelier-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_standard-incandescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17804","hasSingleSKU":false,"partNumber":"LA042_4203","uniqueID":"17804","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4203.jpg","seo_token_ntk":"standard-incandescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_dual-tube-ultraviolet-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17821","singleSKUCatalogEntryID":"17822","hasSingleSKU":true,"partNumber":"LA042_4204","uniqueID":"17821","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4204.jpg","seo_token_ntk":"dual-tube-ultraviolet-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_screw-in-led-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17823","hasSingleSKU":false,"partNumber":"LA042_4205","uniqueID":"17823","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4205.jpg","seo_token_ntk":"screw-in-led-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_halogen-floodlight-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17828","hasSingleSKU":false,"partNumber":"LA042_4206","uniqueID":"17828","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4206.jpg","seo_token_ntk":"halogen-floodlight-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_candelabra-incandescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17833","hasSingleSKU":false,"partNumber":"LA042_4207","uniqueID":"17833","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4207.jpg","seo_token_ntk":"candelabra-incandescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_linear-fluorescent-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17842","hasSingleSKU":false,"partNumber":"LA042_4209","uniqueID":"17842","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4209.jpg","seo_token_ntk":"linear-fluorescent-bulb"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_neon-indicator-bulb","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17861","hasSingleSKU":false,"partNumber":"LA042_4210","uniqueID":"17861","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4210.jpg","seo_token_ntk":"neon-indicator-bulb"}]}'
+- recorded: 2017-11-14T15:39:01.325Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10151?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10101&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10151?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10101&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"An
+      extensive selection of lighting and fasteners","cm_seo_token_ntk":"10101_hardware-10151--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10151","identifier":"Hardware","parentCatalogGroupID":"-1","name":"Hardware","uniqueID":"10151","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/fasteners\/category\/catr_fbo_bolts.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/fasteners\/category\/catr_fbo_bolts.png","seo_token_ntk":"hardware-10151--1","childCatalogGroupID":["10101_10152","10101_10153"]}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:39:01.365Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/%2520?categoryIdentifier=Hardware%20Lighting&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":0,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/%2520?categoryIdentifier=Hardware%20Lighting&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[],"recordSetCount":0}'

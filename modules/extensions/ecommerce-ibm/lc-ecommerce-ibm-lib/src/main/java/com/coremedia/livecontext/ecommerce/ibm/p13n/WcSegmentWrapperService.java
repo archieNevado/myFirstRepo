@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static java.util.Arrays.asList;
@@ -60,10 +58,10 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
         return emptyMap();
       }
 
+      Map<String, String[]> parameters = getOptionalParameters(storeContext);
+
       return getRestConnector().callService(
-              FIND_ALL_SEGMENTS, singletonList(getStoreId(storeContext)),
-        createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
-        null, storeContext, userContext);
+              FIND_ALL_SEGMENTS, singletonList(getStoreId(storeContext)), parameters, null, storeContext, userContext);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -89,17 +87,17 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
         return null;
       }
 
+      Map<String, String[]> parameters = getOptionalParameters(storeContext);
+
       Map<String, Object> data = getRestConnector().callService(
-        FIND_SEGMENT_BY_ID, asList(getStoreId(storeContext), externalId),
-        createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
-        null, storeContext, userContext);
+              FIND_SEGMENT_BY_ID, asList(getStoreId(storeContext), externalId), parameters, null, storeContext, userContext);
 
       if (data != null) {
         List<Map<String, Object>> memberGroups = DataMapHelper.getValueForPath(data, "MemberGroup", List.class);
         if (memberGroups != null && !memberGroups.isEmpty()) {
           Map<String, Object> firstSegment = memberGroups.get(0);
-          String segmentId = DataMapHelper.getValueForPath(firstSegment, "id", String.class);
-          if (segmentId != null && !segmentId.isEmpty()) {
+          String segmentId = DataMapHelper.findStringValue(firstSegment, "id").orElse("");
+          if (!segmentId.isEmpty()) {
             return firstSegment;
           }
         }
@@ -159,10 +157,11 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
         return emptyMap();
       }
 
+      Map<String, String[]> parameters = getOptionalParameters(storeContext);
+
       Map<String, Object> data = getRestConnector().callService(
-        FIND_SEGMENTS_BY_USER, asList(getStoreId(storeContext), forUserId+""),
-        createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
-        null, storeContext, userContext);
+              FIND_SEGMENTS_BY_USER, asList(getStoreId(storeContext), forUserId + ""), parameters, null, storeContext,
+              userContext);
 
       if (data != null) {
         return data;
@@ -176,4 +175,11 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
     }
   }
 
+  @Nonnull
+  private Map<String, String[]> getOptionalParameters(@Nonnull StoreContext storeContext) {
+    return buildParameterMap()
+            .withCurrency(storeContext)
+            .withLanguageId(storeContext)
+            .build();
+  }
 }

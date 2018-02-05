@@ -45,7 +45,7 @@
     <entry key="catalog" value="67890"/>
   </util:map>
 
-  <bean id="testStoreContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.StoreContextProviderImpl">
+  <bean id="testStoreContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextProvider">
     <property name="sitesService" ref="sitesService"/>
     <property name="settingsService" ref="settingsService"/>
     <property name="storeConfigurations" ref="testStoreConfigurations"/>

@@ -7,7 +7,6 @@ import java.util.Calendar;
  * until {@link #getValidTo()}.
  *
  * @see ValidityPeriodValidator
- * @cm.template.api
  */
 public interface ValidityPeriod {
 
@@ -15,7 +14,6 @@ public interface ValidityPeriod {
    * Returns the valid from date or {@code null} if there is no such constraint
    *
    * @return the valid from date or {@code null} if there is no such constraint
-   * @cm.template.api
    */
   Calendar getValidFrom();
 
@@ -23,7 +21,6 @@ public interface ValidityPeriod {
    * Returns the valid to date or {@code null} if there is no such constraint
    *
    * @return the valid to date or {@code null} if there is no such constraint
-   * @cm.template.api
    */
   Calendar getValidTo();
 

@@ -9,7 +9,7 @@
 <#assign teaserText=bp.truncateHighlightedText((highlightedItem["teaserText"][0])!self.teaserText!"", teaserLength) />
 
 <div class="cm-search__item ${cssClasses}"<@cm.metadata self.content />>
-  <a href="${cm.getLink(self.data!self.target)}">
+  <a href="${cm.getLink(self.target)}">
     <#-- image -->
     <#if self.picture?has_content>
       <@cm.include self=self.picture params={

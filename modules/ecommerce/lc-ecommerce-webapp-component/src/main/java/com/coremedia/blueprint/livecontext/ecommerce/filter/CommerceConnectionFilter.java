@@ -40,11 +40,7 @@ public class CommerceConnectionFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
           throws IOException, ServletException {
-    Site site = SiteHelper.getSiteFromRequest(request);
-
-    if (site != null) {
-      setCommerceConnection(site);
-    }
+    SiteHelper.findSite(request).ifPresent(this::setCommerceConnection);
 
     try {
       chain.doFilter(request, response);

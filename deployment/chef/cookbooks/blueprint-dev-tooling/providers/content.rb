@@ -58,7 +58,7 @@ action :publishall_content do
     subscribes :create, content_publish, :immediately
   end
 end
-
+  
 action :bulkpublish_content do
   raise "Cannot publish content, content dir does not exist at #{new_resource.content_dir}" unless ::File.exist?(new_resource.content_dir)
   raise "Cannot publish content, Content Management Server Tools not found at #{new_resource.cms_tools_dir}" unless ::File.exist?("#{new_resource.cms_tools_dir}/bin/publishall.jpif")

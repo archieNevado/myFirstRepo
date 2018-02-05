@@ -134,7 +134,7 @@
                        disabled="true"
                        text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_remove_button_label')}"
                        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_remove_button_label')}"
-                       handler="{deleteNode}"
+                       handler="{deleteNodes}"
                        iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'trash_bin')}"/>
         <ui:IconButton itemId="add"
                        disabled="true"

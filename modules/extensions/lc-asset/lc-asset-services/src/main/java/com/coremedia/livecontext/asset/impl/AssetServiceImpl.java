@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +28,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class AssetServiceImpl implements AssetService {
 
@@ -39,11 +40,9 @@ public class AssetServiceImpl implements AssetService {
 
   @Nonnull
   public CatalogPicture getCatalogPicture(String url) {
-      CommerceId referenceIdFromUrl = computeReferenceIdFromUrl(url);
-    if (referenceIdFromUrl == null) {
-      return new CatalogPicture(url, null);
-    }
-    return getCatalogPicture(url, referenceIdFromUrl);
+    return computeReferenceIdFromUrl(url)
+            .map(referenceIdFromUrl -> getCatalogPicture(url, referenceIdFromUrl))
+            .orElseGet(() -> new CatalogPicture(url, null));
   }
 
   @Nonnull
@@ -51,7 +50,10 @@ public class AssetServiceImpl implements AssetService {
   public CatalogPicture getCatalogPicture(@Nonnull String url, @Nonnull CommerceId commerceId) {
 
     CommerceConnection connection = getCommerceConnection();
-    AssetUrlProvider assetUrlProvider = requireNonNull(connection.getAssetUrlProvider(), "asset url provider not available");
+    AssetUrlProvider assetUrlProvider = connection.getAssetUrlProvider();
+    if (assetUrlProvider == null) {
+      return new CatalogPicture(url, null);
+    }
 
     // Rewrite a given commerce url (make absolute and replace `{cmsHost}`)
     String imageUrl = assetUrlProvider.getImageUrl(url);
@@ -62,15 +64,16 @@ public class AssetServiceImpl implements AssetService {
     return new CatalogPicture(imageUrl, picture);
   }
 
-  @Override
   @Nonnull
+  @Override
   public List<Content> findPictures(@Nonnull CommerceId commerceId) {
     return findPictures(commerceId, true);
   }
 
   @Nonnull
+  @Override
   public List<Content> findPictures(@Nonnull CommerceId commerceId, boolean withDefault) {
-    Site site = getSite();
+    Site site = findSite().orElse(null);
     if (site == null) {
       return emptyList();
     }
@@ -90,17 +93,16 @@ public class AssetServiceImpl implements AssetService {
     return emptyList();
   }
 
-  @Override
   @Nonnull
+  @Override
   public List<Content> findVisuals(@Nonnull CommerceId id) {
     return findVisuals(id, true);
   }
 
-  @Override
   @Nonnull
+  @Override
   public List<Content> findVisuals(@Nonnull CommerceId commerceId, boolean withDefault) {
-
-    Site site = getSite();
+    Site site = findSite().orElse(null);
     if (site == null) {
       return emptyList();
     }
@@ -133,45 +135,26 @@ public class AssetServiceImpl implements AssetService {
 
   @Nonnull
   private static Set<Content> extractPicturesInSpinners(@Nonnull List<Content> allVisuals) {
-    Set<Content> allPictures = new HashSet<>();
-
-    List<Content> spinners = findSpinners(allVisuals);
-    for (Content spinner : spinners) {
-      List<Content> sequence = (List<Content>) spinner.getList("sequence");
-      allPictures.addAll(sequence);
-    }
-
-    return allPictures;
-  }
-
-  @Nonnull
-  private static List<Content> findSpinners(@Nonnull List<Content> allVisuals) {
     return allVisuals.stream()
             .filter(visual -> visual.getType().isSubtypeOf("CMSpinner"))
-            .collect(toList());
+            .flatMap(spinner -> ((List<Content>) spinner.getList("sequence")).stream())
+            .collect(toSet());
   }
 
-  @Override
   @Nonnull
+  @Override
   public List<Content> findDownloads(@Nonnull CommerceId commerceId) {
-    Site site = getSite();
-    if (site == null) {
-      return emptyList();
-    }
-
-    return assetResolvingStrategy.findAssets("CMDownload", commerceId, site);
+    return findSite()
+            .map(site -> assetResolvingStrategy.findAssets("CMDownload", commerceId, site))
+            .orElseGet(Collections::emptyList);
   }
 
-  @Nullable
-  private Site getSite() {
-    CommerceConnection connection = findCommerceConnection().orElse(null);
-
-    if (connection == null) {
-      return null;
-    }
-
-    String siteId = connection.getStoreContext().getSiteId();
-    return sitesService.getSite(siteId);
+  @Nonnull
+  private Optional<Site> findSite() {
+    return findCommerceConnection()
+            .map(CommerceConnection::getStoreContext)
+            .map(StoreContext::getSiteId)
+            .flatMap(sitesService::findSite);
   }
 
   @Nullable
@@ -180,47 +163,52 @@ public class AssetServiceImpl implements AssetService {
     return settingsService.setting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site.getSiteRootDocument());
   }
 
-  @Nullable
-  private static CommerceId computeReferenceIdFromUrl(@Nullable String url) {
+  @Nonnull
+  private static Optional<CommerceId> computeReferenceIdFromUrl(@Nullable String url) {
     if (StringUtils.isBlank(url)) {
-      return null;
+      return Optional.empty();
     }
 
     CommerceConnection connection = getCommerceConnection();
 
     CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
     StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
-    String partNumber = parsePartNumberFromUrl(url);
 
+    String partNumber = parsePartNumberFromUrl(url).orElse(null);
     if (partNumber == null) {
-      return null;
+      return Optional.empty();
     }
 
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
 
     if (url.contains(CATEGORY_URI_PREFIX)) {
-      return idProvider.formatCategoryId(catalogAlias, partNumber);
+      CommerceId categoryId = idProvider.formatCategoryId(catalogAlias, partNumber);
+      return Optional.of(categoryId);
     }
 
-    if (!url.contains(PRODUCT_URI_PREFIX)) {
-      return null;
+    if (url.contains(PRODUCT_URI_PREFIX)) {
+      CommerceId productId = idProvider.formatProductId(catalogAlias, partNumber);
+      return Optional.of(productId);
     }
 
-    return idProvider.formatProductId(catalogAlias, partNumber);
+    return Optional.empty();
   }
 
-  @Nullable
-  private static String parsePartNumberFromUrl(@Nonnull String urlStr) {
+  @Nonnull
+  private static Optional<String> parsePartNumberFromUrl(@Nonnull String urlStr) {
     int index = urlStr.lastIndexOf('.');
-    if (index >= 0) {
-      String fileName = urlStr.substring(0, index);
-      index = fileName.lastIndexOf('/');
-      if (index >= 0) {
-        return fileName.substring(index + 1);
-      }
+    if (index < 0) {
+      return Optional.empty();
     }
 
-    return null;
+    String fileName = urlStr.substring(0, index);
+    index = fileName.lastIndexOf('/');
+    if (index < 0) {
+      return Optional.empty();
+    }
+
+    String partNumber = fileName.substring(index + 1);
+    return Optional.of(partNumber);
   }
 
   @Autowired

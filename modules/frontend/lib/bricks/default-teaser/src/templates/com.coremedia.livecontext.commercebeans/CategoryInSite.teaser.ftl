@@ -2,16 +2,17 @@
 <#-- @ftlvariable name="metadata" type="java.util.List" -->
 
 <#assign cssClasses = cm.localParameter("islast", false)?then(" is-last", "") />
-<#assign additionalClass=cm.localParameters().additionalClass!"cm-teasable" />
+<#assign blockClass=cm.localParameters().blockClass!"cm-teasable" />
+<#assign additionalClass=cm.localParameters().additionalClass!"" />
 <#assign link=cm.getLink(self) />
 
-<div class="${additionalClass} ${additionalClass}--category"<@cm.metadata metadata![] />>
-  <div class="${additionalClass}__wrapper">
+<div class="${blockClass} ${blockClass}--category ${additionalClass}"<@cm.metadata metadata![] />>
+  <div class="${blockClass}__wrapper">
     <@bp.optionalLink href="${link}">
       <#-- picture -->
-      <div class="${additionalClass}__caption caption">
-        <@cm.include self=self.category view="_picture" params={"additionalClass":additionalClass}/>
-          <h3 class="${additionalClass}__headline">
+      <div class="${blockClass}__caption">
+        <@cm.include self=self.category view="_picture" params={"blockClass":blockClass}/>
+          <h3 class="${blockClass}__headline">
             <span>${(self.category.name)!""}</span>
           </h3>
       </div>

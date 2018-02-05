@@ -38,7 +38,7 @@ public class BlueprintFlowUrlHandler extends DefaultFlowUrlHandler {
   public String createFlowDefinitionUrl(String flwId, AttributeMap input, HttpServletRequest request) {
     //re-request the flowId here since we want the URL and not the id of the flow that may have executed a redirect
     String flowId = getFlowId(request);
-    StringBuffer url = new StringBuffer();
+    StringBuilder url = new StringBuilder();
     if (request.getPathInfo() != null && prependBaseUri) {
       url.append(request.getContextPath());
       url.append(request.getServletPath());

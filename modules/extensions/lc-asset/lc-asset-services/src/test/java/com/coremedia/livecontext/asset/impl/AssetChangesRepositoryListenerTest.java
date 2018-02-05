@@ -14,10 +14,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssetChangesRepositoryListenerTest {
 
-  private static final String CMPICTURE_DOCTYPE_NAME = "CMPicture";
   private static final String CMVISUAL_DOCTYPE_NAME = "CMVisual";
 
   @InjectMocks
@@ -40,10 +39,7 @@ public class AssetChangesRepositoryListenerTest {
     testling.setAssetChanges(assetChanges);
     testling.start();
     when(event.getContent()).thenReturn(content);
-    when(event.getType()).thenReturn(ContentEvent.CONTENT_CREATED);
     when(content.getType()).thenReturn(cmPictureType);
-    when(content.getRepository()).thenReturn(repository);
-    when(cmPictureType.isSubtypeOf(CMPICTURE_DOCTYPE_NAME)).thenReturn(true);
     when(cmPictureType.isSubtypeOf(CMVISUAL_DOCTYPE_NAME)).thenReturn(true);
   }
 

@@ -6,7 +6,7 @@
 
 Currently supports JavaScript modules bundled with webpack by providing a DependencyCheckWebpackPlugin and SCSS compiler with node-sass by providing a custom importer via getDependencyCheckNodeSassImporter.
 
-Both integrations check if a file contains dependencies to a file that is not in the same npm module and will check the package.json for an explicit dependency to the other npm module. If the dependency is missing and the file is not filtered using the "include"/"exclude" options an error will be thrown to indicate that the dependency needs to be added to the package.json of its npm module.
+Both integrations check if a file contains dependencies to a file that is not in the same package and will check the package.json for an explicit dependency to the other package. If the dependency is missing and the file is not filtered using the "include"/"exclude" options an error will be thrown to indicate that the dependency needs to be added to the package.json of its package.
 
 ### Using the DependencyCheckWebpackPlugin
  

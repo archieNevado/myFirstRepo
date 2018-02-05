@@ -1,9 +1,15 @@
 package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.cae.contentbeans.CMDynamicListImpl;
+import com.coremedia.blueprint.cae.contentbeans.CMQueryListImpl;
+import com.coremedia.blueprint.common.contentbeans.CMCollection;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.blueprint.cae.contentbeans.CMQueryListImpl;
+import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -14,7 +20,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,7 +42,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-public class CMProductListImpl extends CMDynamicListImpl implements CMProductList {
+public class CMProductListImpl extends CMQueryListImpl implements CMProductList {
 
   private static final Logger LOG = LoggerFactory.getLogger(CMProductListImpl.class);
 
@@ -45,6 +50,15 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
 
   public static final int MAX_LENGTH_DEFAULT = 10;
   public static final int OFFSET_DEFAULT = 0;
+  public static final String DIGIT_PATTERN = "[0-9]*";
+  public static final String EMPTY_STRING = "";
+  public static final String ALL_QUERY = "*";
+  public static final String CATALOG_SERVICE_NOT_AVAILABLE = "catalog service not available";
+
+  private String overrideCategoryId;
+
+  @Inject
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -84,23 +98,6 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
     return getContent().getString(EXTERNAL_ID);
   }
 
-  /**
-   * @return the value of the document property "teaserTitle".
-   * If it is empty then fallback to the document property "title".
-   * If it is still empty then fallback to the name of the category.
-   */
-  @Override
-  public String getTeaserTitle() {
-    String teaserTitle = super.getTeaserTitle();
-    if (isBlank(teaserTitle)) {
-      Category category = getCategory();
-      if (category != null && category.getName() != null) {
-        teaserTitle = category.getName();
-      }
-    }
-    return teaserTitle;
-  }
-
   public Category getCategory() {
     Optional<CommerceId> categoryIdOptional = parseCommerceId(getExternalId());
 
@@ -108,12 +105,20 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
       return null;
     }
 
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
+
+    if (!commerceConnection.isPresent()) {
+      return null;
+    }
+
+    CommerceConnection connection = commerceConnection.get();
+
+    StoreContext storeContext = connection.getStoreContext();
+    CommerceId commerceId = categoryIdOptional.get();
+
     try {
-      CommerceConnection commerceConnection = CurrentCommerceConnection.get();
-      StoreContext storeContext = commerceConnection.getStoreContextProvider().findContextByContent(getContent());
-      CommerceId commerceId = categoryIdOptional.get();
-      CatalogService catalogService = requireNonNull(CurrentCommerceConnection.get().getCatalogService(), "catalog service not available");
-      return catalogService.withStoreContext(storeContext).findCategoryById(commerceId, storeContext);
+      CatalogService catalogService = requireNonNull(connection.getCatalogService(), "catalog service not available");
+      return catalogService.findCategoryById(commerceId, storeContext);
     } catch (CommerceException e) {
       LOG.warn("Could not retrieve category for Product List {}.", this, e);
       return null;
@@ -121,14 +126,12 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
   }
 
   @Override
-  public List getItems() {
-    List<Object> result = new ArrayList<>();
-    List contents = super.getItems();
-    result.addAll(contents);
-    List<ProductInSite> products = getProducts();
-    result.addAll(products);
-    return result;
+  public List<Linkable> getItems() {
+    List<Map<String, Object>> fixedItemsStructList = getFixedItemsStructList();
+    List products = getProducts(); // Products should be Linkables
+    return mergeFixedItems(fixedItemsStructList, products, getMaxLength());
   }
+
 
   public String getOrderBy() {
     Object value = getProductListSettings().get("orderBy");
@@ -137,13 +140,13 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
 
   public int getOffset() {
     Object value = getProductListSettings().get("offset");
-    return value instanceof String ? Integer.parseInt((String)value) : OFFSET_DEFAULT;
+    return value instanceof String ? Integer.parseInt((String) value) : OFFSET_DEFAULT;
   }
 
   @Override
   public int getMaxLength() {
-    int maxLength = super.getMaxLength();
-    return maxLength >= 0 ? maxLength : MAX_LENGTH_DEFAULT;
+    Object value = getProductListSettings().get("maxLength");
+    return value instanceof String ? Integer.parseInt((String)value) : MAX_LENGTH_DEFAULT;
   }
 
   public List<ProductInSite> getProducts() {
@@ -153,14 +156,21 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
       return Collections.emptyList();
     }
 
+    String facet = getFacet();
     Category category = getCategory();
     CatalogAlias catalogAlias = category != null ? category.getReference().getCatalogAlias() : null;
 
-    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
-    CatalogService catalogService = requireNonNull(commerceConnection.getCatalogService(), "catalog service not available");
-    SearchResult<Product> searchResult = catalogService.searchProducts(getQuery(),
-            getSearchParams(category, catalogAlias, getOrderBy(), getMaxLength(), getOffset()), commerceConnection.getStoreContext());
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
 
+    if (!commerceConnection.isPresent()) {
+      return Collections.emptyList();
+    }
+
+    CommerceConnection connection = commerceConnection.get();
+
+    CatalogService catalogService = requireNonNull(connection.getCatalogService(), "catalog service not available");
+    SearchResult<Product> searchResult = catalogService.searchProducts(getQuery(),
+            getSearchParams(category, catalogAlias, getOrderBy(), getMaxLength(), getOffset(), facet), connection.getStoreContext());
     return searchResult.getSearchResult().stream()
             .map(product -> new ProductInSiteImpl(product, site))
             .collect(toList());
@@ -168,12 +178,21 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
 
   @Override
   public String getFacet() {
-    return null;
+    Object value = getProductListSettings().get("selectedFacetValue");
+    String strValue = EMPTY_STRING;
+    if (value != null) {
+      strValue = (String) value;
+      if (strValue.matches(DIGIT_PATTERN)) {
+        overrideCategoryId = strValue;
+        return "";
+      }
+    }
+    return strValue;
   }
 
   @Override
   public String getQuery() {
-    return "*";
+    return ALL_QUERY;
   }
 
   @Override
@@ -183,24 +202,26 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
       if (getLocalSettings() != null) {
         Map<String, Object> structMap = getLocalSettings().getStruct("productList").getProperties();
         //copy struct because it may be cached and the cache MUST NEVER be modified.
-        for(Map.Entry<String, Object> entry : structMap.entrySet()) {
-          if(entry.getValue() != null) {
-            result.put(entry.getKey(),entry.getValue().toString());
+        for (Map.Entry<String, Object> entry : structMap.entrySet()) {
+          if (entry.getValue() != null) {
+            result.put(entry.getKey(), entry.getValue().toString());
           }
         }
       }
-    }
-    catch (NoSuchPropertyDescriptorException e) {
+    } catch (NoSuchPropertyDescriptorException e) {
       //no struct configured for current content, empty map will be returned.
     }
     return result;
   }
 
   @Nonnull
-  private Map<String, String> getSearchParams(@Nullable Category category, @Nullable CatalogAlias catalogAlias, String orderBy, int limit, int offset) {
+  private Map<String, String> getSearchParams(@Nullable Category category, @Nullable CatalogAlias catalogAlias,
+                                              String orderBy, int limit, int offset, String facet) {
     Map<String, String> params = new HashMap<>();
 
-    if (category != null && !category.isRoot()) {
+    if (!StringUtils.isEmpty(overrideCategoryId)) {
+      params.put(CatalogService.SEARCH_PARAM_CATEGORYID, overrideCategoryId);
+    } else if (category != null && !category.isRoot()) {
       params.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     }
 
@@ -220,10 +241,10 @@ public class CMProductListImpl extends CMDynamicListImpl implements CMProductLis
       params.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(offset));
     }
 
-    return params;
-  }
+    if (StringUtils.isNotEmpty(facet)) {
+      params.put(CatalogService.SEARCH_PARAM_FACET, facet);
+    }
 
-  public StoreContextProvider getStoreContextProvider() {
-    return CurrentCommerceConnection.get().getStoreContextProvider();
+    return params;
   }
 }

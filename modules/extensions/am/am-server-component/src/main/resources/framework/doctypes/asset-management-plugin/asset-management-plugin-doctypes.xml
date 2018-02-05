@@ -32,9 +32,9 @@
   Taxonomies
     -->
     <StringProperty Name="keywords" Length="1024" extensions:translatable="true"/>
-    <LinkListProperty Name="subjectTaxonomy" LinkType="CMTaxonomy"/>
-    <LinkListProperty Name="locationTaxonomy" LinkType="CMLocTaxonomy"/>
-    <LinkListProperty Name="assetTaxonomy" LinkType="AMTaxonomy"/>
+    <LinkListProperty Name="subjectTaxonomy" LinkType="CMTaxonomy" extensions:weakLink="true"/>
+    <LinkListProperty Name="locationTaxonomy" LinkType="CMLocTaxonomy" extensions:weakLink="true"/>
+    <LinkListProperty Name="assetTaxonomy" LinkType="AMTaxonomy" extensions:weakLink="true"/>
   </DocType>
 
   <!--

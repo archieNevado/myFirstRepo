@@ -15,8 +15,7 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -39,7 +38,7 @@ public class SegmentPathResolverTest {
 
   @Inject
   private SegmentPathResolver testling;
-  @Inject
+  @MockBean
   private SegmentResolver segmentResolver;
   @Inject
   private ContentRepository contentRepository;
@@ -172,25 +171,6 @@ public class SegmentPathResolverTest {
     @Bean
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig(SegmentPathResolverTest.CONTENT_REPOSITORY_URL);
-    }
-
-
-    @Bean
-    public static BeanPostProcessor segmentResolverReplacer() {
-      return new BeanPostProcessor() {
-        @Override
-        public Object postProcessBeforeInitialization(Object o, String s) throws BeansException {
-          return o;
-        }
-
-        @Override
-        public Object postProcessAfterInitialization(Object o, String s) throws BeansException {
-          if("segmentResolver".equals(s)) {
-            return mock(SegmentResolver.class);
-          }
-          return o;
-        }
-      };
     }
 
     @Bean

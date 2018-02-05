@@ -23,10 +23,5 @@
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-lc-studio</artifactId>
-      <scope>runtime</scope>
-    </dependency>
   </dependencies>
 </project>

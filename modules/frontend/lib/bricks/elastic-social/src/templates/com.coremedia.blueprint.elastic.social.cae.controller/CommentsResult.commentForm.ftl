@@ -5,8 +5,8 @@
   <form method="post" enctype="multipart/form-data" class="cm-new-comment__form cm-form" action="${cm.getLink(self)}" data-cm-es-ajax-form=''>
     <@bp.notification type="inactive" text="" dismissable=false additionalClasses=["cm-form__notification"] attr={"data-cm-notification": '{"path": ""}'} />
 
-    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-    <input type="hidden" name="replyTo" value="" />
+    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+    <input type="hidden" name="replyTo" value="">
     <fieldset class="cm-form__fieldset cm-fieldset">
       <div class="cm-fieldset__item cm-field cm-field--detail">
         <@bp.notification type="inactive" text="" dismissable=false additionalClasses=["cm-field__notification"] attr={"data-cm-notification": '{"path": "comment"}'} />

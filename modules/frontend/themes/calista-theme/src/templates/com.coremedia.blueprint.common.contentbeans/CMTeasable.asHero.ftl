@@ -3,6 +3,5 @@
 <@cm.include self=self view="hero" params={
   "renderTeaserText": true,
   "renderEmptyImage": true,
-  "renderCTA": true,
   "renderDimmer": true
 }/>

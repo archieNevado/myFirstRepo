@@ -15,7 +15,6 @@
 <link href="../Options/Settings/LiveContext.xml" path="/Sites/Calista/United%20States/English/Options/Settings/LiveContext"/>
 <link href="../Options/Settings/Responsive%20Image%20Settings.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Responsive%20Image%20Settings"/>
 <link href="../Options/Settings/Robots%2Etxt.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Robots%2Etxt"/>
-<link href="../Options/Settings/Studio%20Features.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Studio%20Features"/>
 <link href="../Options/Settings/Preview.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Preview"/>
 </linkedSettings>
 <resourceBundles2>
@@ -85,7 +84,7 @@
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 <Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Gender%20Specific%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Gender%20Specific%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map"/>
 <Link xlink:href="coremedia:///cap/resources/../Videos/Summer%20Dresses%20Video.xml" cmexport:path="/Sites/Calista/United%20States/English/Videos/Summer%20Dresses%20Video"/>
 </LinkListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/hero"/>

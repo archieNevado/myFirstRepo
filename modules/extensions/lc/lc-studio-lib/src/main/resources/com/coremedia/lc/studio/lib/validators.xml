@@ -17,7 +17,7 @@
     <property name="validatingSubtypes" value="true"/>
     <property name="propertyName" value="externalId"/>
     <property name="sitesService" ref="sitesService"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 
   <bean id="productTeaserExternalIdValidator" parent="catalogLinkValidator" class="com.coremedia.lc.studio.lib.validators.CatalogLinkValidator">
@@ -45,8 +45,17 @@
     <property name="connection" ref="connection"/>
     <property name="validatingSubtypes" value="true"/>
     <property name="sitesService" ref="sitesService"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
     <property name="contentType" value="CMProductList"/>
+  </bean>
+
+  <bean id="productListIndexValidator" class="com.coremedia.rest.cap.validators.StructLinkListIndexValidator">
+    <property name="connection" ref="connection"/>
+    <property name="contentType" value="CMProductList"/>
+    <property name="propertyName" value="extendedItems"/>
+    <property name="listPropertyName" value="links"/>
+    <property name="indexPropertyName" value="index"/>
+    <property name="maxLengthPropertyName" value="maxLength"/>
   </bean>
 
   <bean id="externalPagePartOfNavigationValidator" class="com.coremedia.lc.studio.lib.validators.ExternalPagePartOfNavigationValidator">
@@ -68,7 +77,7 @@
     <property name="propertyName" value="segment"/>
     <property name="fallbackPropertyName" value="title"/>
     <property name="sitesService" ref="sitesService"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 
   <bean id="cmExternalChannelNavigationValidator"

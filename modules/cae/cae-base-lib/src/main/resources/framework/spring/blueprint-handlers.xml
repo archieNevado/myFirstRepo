@@ -35,6 +35,7 @@
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/transform/transform-services.xml"/>
+  <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
   <import resource="blueprint-i18n.xml"/>
   <import resource="blueprint-search.xml"/>
 
@@ -168,6 +169,7 @@
     <description>
       Handles scaled/transformed images/blobs
     </description>
+    <property name="validationService" ref="validationService"/>
     <property name="secureHashCodeGeneratorStrategy" ref="secureHashCodeGeneratorStrategy"/>
     <property name="transformImageService" ref="transformImageService"/>
   </bean>
@@ -191,6 +193,7 @@
     <property name="localResourcesEnabled" value="${cae.use.local.resources:false}"/>
     <property name="cache" ref="cache"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="sitesService" ref="sitesService"/>
   </bean>
 
   <bean id="themeHandler" class="com.coremedia.blueprint.cae.handlers.ThemeHandler" parent="handlerBase"/>

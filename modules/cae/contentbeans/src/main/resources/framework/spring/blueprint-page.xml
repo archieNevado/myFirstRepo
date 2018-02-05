@@ -16,5 +16,6 @@
     <constructor-arg index="3" name="contentTreeRelation" ref="navigationTreeRelation"/>
     <constructor-arg index="4" name="contentBeanFactory" ref="contentBeanFactory"/>
     <constructor-arg index="5" name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="mergeCodeResources" value="${cae.mergeCodeResources:#{null}}"/>
   </bean>
 </beans>

@@ -142,14 +142,6 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
     super.testFindSubCategories();
   }
 
-  @Betamax(tape = "csi_testFindSubCategoriesWithContract", match = {MatchRule.path, MatchRule.query})
-  @Test
-  @Override
-  @Ignore("TW-151 - flaky on firefox // Resolve with CMS-8632")
-  public void testFindSubCategoriesWithContract() throws Exception {
-    super.testFindSubCategoriesWithContract();
-  }
-
   @Betamax(tape = "csi_testFindSubCategoriesIsEmpty", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override

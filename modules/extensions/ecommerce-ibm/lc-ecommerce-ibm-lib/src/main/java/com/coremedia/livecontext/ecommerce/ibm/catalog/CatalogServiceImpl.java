@@ -22,8 +22,12 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmService;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
+import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
+import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.map.LazyMap;
 import org.slf4j.Logger;
@@ -35,6 +39,8 @@ import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -46,22 +52,23 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CA
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrentContextOrThrow;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class CatalogServiceImpl extends AbstractIbmService implements CatalogService {
 
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
 
   private WcCatalogWrapperService catalogWrapperService;
+  private StoreInfoService storeInfoService;
   private CommerceBeanFactory commerceBeanFactory;
   private CommerceCache commerceCache;
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
-  private String wcsUrl;
-  private String wcsStoreUrl;
   private String wcsAssetsUrl;
 
   private boolean useExternalIdForBeanCreation;
@@ -73,6 +80,14 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   @Required
   public void setCatalogWrapperService(WcCatalogWrapperService catalogWrapperService) {
     this.catalogWrapperService = catalogWrapperService;
+  }
+
+  public StoreInfoService getStoreInfoService() {
+    return storeInfoService;
+  }
+
+  public void setStoreInfoService(StoreInfoService storeInfoService) {
+    this.storeInfoService = storeInfoService;
   }
 
   public CommerceBeanFactory getCommerceBeanFactory() {
@@ -99,39 +114,11 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   }
 
   @Required
-  public void setWcsUrl(String wcsUrl) {
-    this.wcsUrl = wcsUrl;
-  }
-
-  /**
-   * The base url to the commerce system as can bee seen by an end user. This must not be any kind
-   * of internal url that may be used as part of the hidden backend communication between CAE and
-   * commerce system.
-   *
-   * @return the publicly known base url to the commerce system
-   */
-  public String getWcsUrl() {
-    StoreContext storeContext = getStoreContext();
-    return CommercePropertyHelper.replaceTokens(wcsUrl, storeContext);
-  }
-
-  @Required
-  public void setWcsStoreUrl(String wcsStoreUrl) {
-    this.wcsStoreUrl = wcsStoreUrl;
-  }
-
-  public String getWcsStoreUrl() {
-    StoreContext storeContext = getStoreContext();
-    return CommercePropertyHelper.replaceTokens(wcsStoreUrl, storeContext);
-  }
-
-  @Required
   public void setWcsAssetsUrl(String wcsAssetsUrl) {
     this.wcsAssetsUrl = wcsAssetsUrl;
   }
 
-  public String getWcsAssetsUrl() {
-    StoreContext storeContext = getStoreContext();
+  public String getWcsAssetsUrl(@Nonnull StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(wcsAssetsUrl, storeContext);
   }
 
@@ -142,7 +129,6 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   @PostConstruct
   void initialize() {
     initializeWcsAssetsUrl();
-    initializeWcsStoreUrl();
   }
 
   private void initializeWcsAssetsUrl() {
@@ -155,18 +141,6 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     }
 
     validateUrlString(this.wcsAssetsUrl, "wcsAssetsUrl");
-  }
-
-  private void initializeWcsStoreUrl() {
-    if (wcsStoreUrl == null) {
-      return;
-    }
-
-    if (!wcsStoreUrl.endsWith("/")) {
-      this.wcsStoreUrl = wcsStoreUrl + "/";
-    }
-
-    validateUrlString(wcsStoreUrl, "wcsStoreUrl");
   }
 
   private static void validateUrlString(String string, String urlPropertyName) {
@@ -228,7 +202,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
     String id = category.getExternalTechId();
     CatalogAlias catalogAlias = category.getId().getCatalogAlias();
-    StoreContext storeContext = getStoreContext();
+    StoreContext storeContext = category.getContext();
     UserContext userContext = getUserContext();
 
     List<Map<String, Object>> wcProductsMap = commerceCache.get(
@@ -257,7 +231,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   @Override
   @Nullable
   public Category findCategoryBySeoSegment(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
-    CatalogAlias catalogAlias = getStoreContext().getCatalogAlias();
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
     CommerceId commerceId = commerceId(CATEGORY).withCatalogAlias(catalogAlias).withSeo(seoSegment).build();
     return findCategoryById(commerceId, storeContext);
   }
@@ -348,43 +322,53 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return result;
   }
 
-  private List<Map<String, Object>> processOffset(@Nonnull Map<String, String> searchParams, List<Map<String, Object>> searchResult,
-                                                  int startNumber) {
-    if (searchParams.containsKey(CatalogService.SEARCH_PARAM_OFFSET)) {
-      int offset = searchParams.get(CatalogService.SEARCH_PARAM_OFFSET) != null ?
-              Integer.parseInt(searchParams.get(CatalogService.SEARCH_PARAM_OFFSET)) - 1 : 0;
-      int total = searchParams.get(CatalogService.SEARCH_PARAM_TOTAL) != null ?
-              Integer.parseInt(searchParams.get(CatalogService.SEARCH_PARAM_TOTAL)) : searchResult.size();
-      if (searchResult != null) {
-        if (startNumber == offset) {
-          if (total >= searchResult.size()) {
-            return searchResult;
-          }
-          searchResult = searchResult.subList(0, total);
-        } else {
-          searchResult = searchResult.subList(offset, searchResult.size());
-        }
-      }
-    }
-    return searchResult;
+  @Nonnull
+  @Override
+  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@Nonnull Category category,
+                                                                  @Nonnull StoreContext storeContext) {
+    String categoryId = category.getExternalTechId();
+    Map<String, String> searchParams = ImmutableMap.of(
+            CatalogService.SEARCH_PARAM_CATEGORYID, categoryId,
+            CatalogService.SEARCH_PARAM_PAGESIZE, "1",
+            CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
+
+    SearchResult<Product> searchResult = searchProducts("*", searchParams, storeContext);
+
+    return searchResult.getFacets().stream()
+            .collect(toMap(
+                    SearchFacet::getLabel,
+                    searchFacet -> OfferPriceFormattingHelper.tryFormatOfferPrice(searchFacet).getChildFacets()
+            ));
   }
 
-/*
-  private List<Map<String, Object>> cutResult(@Nonnull Map<String, String> searchParams, List<Map<String, Object>> searchResult) {
-    if (searchResult != null && !searchParams.isEmpty() && searchParams.containsKey(CatalogService.SEARCH_PARAM_OFFSET)) {
-      int offset = searchParams.get(CatalogService.SEARCH_PARAM_OFFSET) != null ?
-              Integer.parseInt(searchParams.get(CatalogService.SEARCH_PARAM_OFFSET)) - 1 : 0;
-      int total = searchParams.get(CatalogService.SEARCH_PARAM_TOTAL) != null ?
-              Integer.parseInt(searchParams.get(CatalogService.SEARCH_PARAM_TOTAL)) : searchResult.size();
-      int start = offset > searchResult.size() ? 0 : offset;
-      int end = total+offset > searchResult.size() ? searchResult.size() : total+offset;
-      if (start != 0 || end != searchResult.size()) {
-        return searchResult.subList(start, end);
-      }
+  @Nullable
+  private static List<Map<String, Object>> processOffset(@Nonnull Map<String, String> searchParams,
+                                                         @Nullable List<Map<String, Object>> searchResult,
+                                                         int startNumber) {
+    if (searchResult == null) {
+      return null;
     }
-    return searchResult;
+
+    if (!searchParams.containsKey(CatalogService.SEARCH_PARAM_OFFSET)) {
+      return searchResult;
+    }
+
+    String offsetSearchParam = searchParams.get(CatalogService.SEARCH_PARAM_OFFSET);
+    int offset = offsetSearchParam != null ? Integer.parseInt(offsetSearchParam) - 1 : 0;
+
+    String totalSearchParam = searchParams.get(CatalogService.SEARCH_PARAM_TOTAL);
+    int total = totalSearchParam != null ? Integer.parseInt(totalSearchParam) : searchResult.size();
+
+    if (startNumber != offset && offset < searchResult.size()) {
+      return searchResult.subList(offset, searchResult.size());
+    }
+
+    if (total >= searchResult.size()) {
+      return searchResult;
+    }
+
+    return searchResult.subList(0, total);
   }
-*/
 
   /**
    * Search for ProductVariants
@@ -428,21 +412,21 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Nonnull
   public String getLanguageId(@Nullable Locale locale) {
-    StoreContext storeContext = getStoreContext();
-    if (storeContext != null) {
-      String langId = StoreContextHelper.getLangId(storeContext);
-      if (langId != null) {
-        return langId;
-      }
-    }
-
-    return getCatalogWrapperService().getLanguageId(locale);
+    return StoreContextHelper.findCurrentContext()
+            .map(StoreContextHelper::getLangId)
+            .orElseGet(() -> getCatalogWrapperService().getLanguageId(locale));
   }
 
   @Nonnull
   @Override
   public List<Catalog> getCatalogs(@Nonnull StoreContext storeContext) {
-    Map<String, Object> responseMap = commerceCache.get(new CatalogsForStoreCacheKey(storeContext, catalogWrapperService, commerceCache));
+    WcsVersion wcsVersion = StoreContextHelper.getWcsVersion(storeContext);
+    Map<String, Object> responseMap;
+    if (WCS_VERSION_7_8.lessThan(wcsVersion)) {
+      responseMap = commerceCache.get(new CatalogsForStoreCacheKey(storeContext, catalogWrapperService, commerceCache));
+    } else {
+      responseMap = storeInfoService.getStoreInfos();
+    }
     return createCatalogBeansFor(responseMap, storeContext);
   }
 
@@ -605,7 +589,27 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
       return emptyList();
     }
 
-    List<Map<String, Object>> catalogs = (List<Map<String, Object>>) DataMapHelper.getValueForPath(jsonResult, "resultList");
+    List<Map<String, Object>> catalogs = new ArrayList<>();;
+
+    WcsVersion wcsVersion = StoreContextHelper.getWcsVersion(context);
+    if (WCS_VERSION_7_8.lessThan(wcsVersion)) {
+      catalogs = (List<Map<String, Object>>) DataMapHelper.getValueForPath(jsonResult, "resultList");
+    } else {
+      Map<String, Object> catalogsMap = (Map<String, Object>) DataMapHelper.getValueForPath(jsonResult, "stores." + context.getStoreName() + ".catalogs");
+      String defaultCatalog = (String) DataMapHelper.getValueForPath(jsonResult, "stores." + context.getStoreName() + ".defaultCatalog");
+      for (Map.Entry<String, Object> entry : catalogsMap.entrySet())
+      {
+        Map<String, Object> catalogEntry = new HashMap<>();
+        String catalogName = entry.getKey();
+        catalogEntry.put("catalogIdentifier", catalogName);
+        String catalogId = (String) entry.getValue();
+        catalogEntry.put("catalogId", catalogId);
+        if (catalogName.equals(defaultCatalog)) {
+          catalogEntry.put("default", true);
+        }
+        catalogs.add(catalogEntry);
+      }
+    }
 
     List<Catalog> result = catalogs.stream()
             .map(catalogWrapper -> createCatalogBeanFor(catalogWrapper, context))
@@ -620,16 +624,12 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return getServiceProxyForStoreContext(storeContext, this, CatalogService.class);
   }
 
-  private static StoreContext getStoreContext() {
-    return StoreContextHelper.getCurrentContext();
-  }
-
   private static UserContext getUserContext() {
     return UserContextHelper.getCurrentContext();
   }
 
   @Nullable
   private static String getStringValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
-    return DataMapHelper.getValueForKey(map, key, String.class);
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

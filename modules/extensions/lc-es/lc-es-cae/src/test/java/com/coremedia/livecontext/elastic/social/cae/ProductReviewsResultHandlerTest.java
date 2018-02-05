@@ -25,6 +25,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
+import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
@@ -33,7 +34,6 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
@@ -53,16 +53,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.coremedia.elastic.social.api.ContributionType.ANONYMOUS;
-import static com.coremedia.elastic.social.api.ContributionType.DISABLED;
-import static com.coremedia.elastic.social.api.ContributionType.REGISTERED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -77,7 +73,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ProductReviewsResultHandlerTest {
 
   private String contextId = "5678";
@@ -108,16 +104,10 @@ public class ProductReviewsResultHandlerTest {
   private CommunityUserService communityUserService;
 
   @Mock
-  private Content content;
-
-  @Mock
   private Content navigationContent;
 
   @Mock
   private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
-
-  @Mock
-  private Navigation navigation;
 
   @Mock
   private CommunityUser user;
@@ -144,9 +134,6 @@ public class ProductReviewsResultHandlerTest {
   private HttpServletRequest request;
 
   @Mock
-  private ProductReviewsResult productReviewsResult;
-
-  @Mock
   private Product product;
 
   @Mock
@@ -154,9 +141,6 @@ public class ProductReviewsResultHandlerTest {
 
   @Mock
   private StoreContext storeContext;
-
-  @Mock
-  private StoreContextProvider storeContextProvider;
 
   @Mock
   private ContributionTargetHelper contributionTargetHelper;
@@ -171,9 +155,6 @@ public class ProductReviewsResultHandlerTest {
   private CMNavigation cmNavigation;
 
   @Mock
-  private Enumeration<String> headerNames;
-
-  @Mock
   private CommerceConnection commerceConnection;
 
   @Before
@@ -184,9 +165,6 @@ public class ProductReviewsResultHandlerTest {
     handler.setContributionTargetHelper(contributionTargetHelper);
     handler.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
 
-    when(request.getHeaderNames()).thenReturn(headerNames);
-    when(headerNames.hasMoreElements()).thenReturn(false);
-
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;productId=1234";
     FragmentContext fragmentContext = new FragmentContext();
     FragmentParameters fragmentParameters = FragmentParametersFactory.create(url);
@@ -196,22 +174,14 @@ public class ProductReviewsResultHandlerTest {
 
     GuidFilter.setCurrentGuid("1234+5678");
     when(communityUserService.getUserById("1234")).thenReturn(user);
-    String contextPath = "perfectchef";
-    when(navigationSegmentsUriHelper.parsePath(Arrays.asList(contextPath))).thenReturn(navigation);
-    when(navigationSegmentsUriHelper.parsePath(contextPath)).thenReturn(navigation);
 
-    when(navigation.getContext()).thenReturn(context);
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
     when(contentBeanFactory.createBeanFor(navigationContent)).thenReturn(cmNavigation);
     when(cmNavigation.getContext()).thenReturn(context);
-    when(context.getContent()).thenReturn(content);
 
-    String siteId = "123";
-    when(site.getId()).thenReturn(siteId);
     when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
     when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
-    when(elasticSocialConfiguration.isReviewingEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(true);
 
@@ -219,17 +189,14 @@ public class ProductReviewsResultHandlerTest {
     when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
 
     when(catalogService.findProductById(any(), any(StoreContext.class))).thenReturn(product);
-    when(storeContext.getSiteId()).thenReturn(siteId);
-    when(storeContextProvider.createContext(site)).thenReturn(storeContext);
 
     when(request.getAttribute(SiteHelper.SITE_KEY)).thenReturn(site);
 
     CurrentCommerceConnection.set(commerceConnection);
     when(commerceConnection.getStoreContext()).thenReturn(storeContext);
-    when(commerceConnection.getStoreContextProvider()).thenReturn(storeContextProvider);
-    when(commerceConnection.getIdProvider()).thenReturn(new BaseCommerceIdProvider("vendor"));
+    BaseCommerceIdProvider idProvider = TestVendors.getIdProvider("vendor");
+    when(commerceConnection.getIdProvider()).thenReturn(idProvider);
     when(commerceConnection.getCatalogService()).thenReturn(catalogService);
-    when(catalogService.withStoreContext(storeContext)).thenReturn(catalogService);
   }
 
   @After
@@ -283,8 +250,6 @@ public class ProductReviewsResultHandlerTest {
 
   @Test
   public void createReviewRatingNull() {
-    when(elasticSocialService.createReview(eq(user), any(Product.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), anyList(), any(Navigation.class))).thenReturn(review);
-    when(elasticSocialConfiguration.getReviewModerationType()).thenReturn(ModerationType.POST_MODERATION);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, null, request);
 
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
@@ -297,7 +262,6 @@ public class ProductReviewsResultHandlerTest {
 
   @Test
   public void createReviewDisabled() {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(DISABLED);
     when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(false);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
 
@@ -311,7 +275,6 @@ public class ProductReviewsResultHandlerTest {
 
   @Test
   public void createReviewAnonymousDisabled() {
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(REGISTERED);
     when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(false);
     when(user.isAnonymous()).thenReturn(true);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
@@ -326,9 +289,6 @@ public class ProductReviewsResultHandlerTest {
 
   @Test
   public void getReviewsPlaceholder() {
-    StringBuffer requestUrl = new StringBuffer("requestUrl/12345/en-US/params;productId=1234");
-    when(request.getRequestURL()).thenReturn(requestUrl);
-    when(page.getContent()).thenReturn(content);
     ProductReviewsResult reviewsResult = handler.getReviews(page, request);
 
     assertNotNull(reviewsResult);
@@ -341,7 +301,6 @@ public class ProductReviewsResultHandlerTest {
     List<String> pathList = new ArrayList<>();
     String path = "path/" + contextId;
     pathList.add(path);
-    when(productReviewsResult.getTarget()).thenReturn(product);
     when(contextHelper.currentSiteContext()).thenReturn(cmNavigation);
     when(cmNavigation.getContext()).thenReturn(context);
     when(context.getContentId()).thenReturn(Integer.parseInt(contextId));

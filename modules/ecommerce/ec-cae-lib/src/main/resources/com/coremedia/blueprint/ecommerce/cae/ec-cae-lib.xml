@@ -21,7 +21,7 @@
 
   <bean id="storeContextInterceptor" class="com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor" abstract="true">
     <property name="siteResolver" ref="siteResolver"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 
   <bean id="webCommerceContextInterceptor" parent="storeContextInterceptor" class="com.coremedia.blueprint.ecommerce.cae.WebCommerceContextInterceptor">

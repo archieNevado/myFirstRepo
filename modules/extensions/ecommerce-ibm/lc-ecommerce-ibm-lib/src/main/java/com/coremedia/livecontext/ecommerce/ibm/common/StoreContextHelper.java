@@ -110,23 +110,25 @@ public class StoreContextHelper {
 
     // locale can be null if the default locale is not set for commerce beans
     // in such a case we return the current context (a warning should be logged from caller)
-    if (locale != null) {
-      StoreContext result = StoreContextHelper.createContext(
-              currentStoreContext.getConfigId(),
-              currentStoreContext.getStoreId(),
-              currentStoreContext.getStoreName(),
-              currentStoreContext.getCatalogId(),
-              locale.toString(),
-              currentStoreContext.getCurrency().toString()
-      );
-      setCatalogAlias(result, currentStoreContext.getCatalogAlias());
-      setSiteId(result, currentStoreContext.getSiteId());
-      setWorkspaceId(result, currentStoreContext.getWorkspaceId());
-      result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, getWcsVersion(currentStoreContext));
-      return result;
+    if (locale == null) {
+      return currentStoreContext;
     }
 
-    return currentStoreContext;
+    StoreContext result = StoreContextHelper.createContext(
+            currentStoreContext.getConfigId(),
+            currentStoreContext.getStoreId(),
+            currentStoreContext.getStoreName(),
+            currentStoreContext.getCatalogId(),
+            locale.toString(),
+            currentStoreContext.getCurrency().toString()
+    );
+
+    setCatalogAlias(result, currentStoreContext.getCatalogAlias());
+    setSiteId(result, currentStoreContext.getSiteId());
+    setWorkspaceId(result, currentStoreContext.getWorkspaceId());
+    result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, getWcsVersion(currentStoreContext));
+
+    return result;
   }
 
   /**
@@ -163,13 +165,15 @@ public class StoreContextHelper {
 
   private static void addContextParameterIfNotBlank(@Nonnull StoreContext context, @Nonnull String key,
                                                     @Nullable String value) {
-    if (value != null) {
-      if (StringUtils.isBlank(value)) {
-        throw new InvalidContextException("Value for key '" + key + "' must not be blank.");
-      }
-
-      context.put(key, value);
+    if (value == null) {
+      return;
     }
+
+    if (StringUtils.isBlank(value)) {
+      throw new InvalidContextException("Value for key '" + key + "' must not be blank.");
+    }
+
+    context.put(key, value);
   }
 
   private static void setCurrency(@Nonnull StoreContext context, @Nonnull String currencyCode) {
@@ -202,6 +206,7 @@ public class StoreContextHelper {
     return (String) value;
   }
 
+  @Nullable
   public static String getLangId(@Nonnull StoreContext context) {
     return context.getReplacements().get(CONTEXT_LANG_ID);
   }
@@ -270,11 +275,14 @@ public class StoreContextHelper {
    * Sets locale to storeContext
    */
   public static void setLocale(@Nullable StoreContext context, @Nullable String localeStr) {
-    if (context != null && localeStr != null) {
-      Locale locale = LocaleHelper.parseLocaleFromString(localeStr)
-              .orElseThrow(() -> new InvalidContextException("Locale '" + localeStr + "' is not valid."));
-      context.put(LOCALE, locale);
+    if (context == null || localeStr == null) {
+      return;
     }
+
+    Locale locale = LocaleHelper.parseLocaleFromString(localeStr)
+            .orElseThrow(() -> new InvalidContextException("Locale '" + localeStr + "' is not valid."));
+
+    context.put(LOCALE, locale);
   }
 
   /**
@@ -313,28 +321,30 @@ public class StoreContextHelper {
    * @param workspaceId the given workspaceId
    */
   public static void setWorkspaceId(@Nullable StoreContext context, @Nullable String workspaceId) {
-    if (context != null) {
-      if (workspaceId != null) {
-        if (StringUtils.isBlank(workspaceId)) {
-          throw new InvalidContextException("workspaceId has wrong format: \"" + workspaceId + "\"");
-        }
+    if (context == null) {
+      return;
+    }
 
-        context.put(WORKSPACE_ID, workspaceId);
-      } else {
-        context.put(WORKSPACE_ID, NO_WS_MARKER);
+    if (workspaceId != null) {
+      if (StringUtils.isBlank(workspaceId)) {
+        throw new InvalidContextException("workspaceId has wrong format: \"" + workspaceId + "\"");
       }
+
+      context.put(WORKSPACE_ID, workspaceId);
+    } else {
+      context.put(WORKSPACE_ID, NO_WS_MARKER);
     }
   }
 
   /**
-   * Gets the contract ids from the given store context.
+   * Returns the contract ids from the given store context, if any.
    *
    * @param context the store context
-   * @return the contract ids or null if no contract was set
+   * @return the contract ids, or nothing if no contract was set
    */
-  @Nullable
-  public static String[] getContractIds(@Nonnull StoreContext context) {
-    return (String[]) context.get(CONTRACT_IDS);
+  @Nonnull
+  public static Optional<String[]> findContractIds(@Nonnull StoreContext context) {
+    return Optional.ofNullable((String[]) context.get(CONTRACT_IDS));
   }
 
   /**
@@ -374,11 +384,13 @@ public class StoreContextHelper {
    * @param wcsVersion the version as String
    */
   public static void setWcsVersion(@Nonnull StoreContext context, @Nullable String wcsVersion) {
-    if (wcsVersion != null) {
-      WcsVersion version = WcsVersion.fromVersionString(wcsVersion).orElse(null);
-      if (version != null) {
-        context.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, version);
-      }
+    if (wcsVersion == null) {
+      return;
+    }
+
+    WcsVersion version = WcsVersion.fromVersionString(wcsVersion).orElse(null);
+    if (version != null) {
+      context.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, version);
     }
   }
 
@@ -390,9 +402,7 @@ public class StoreContextHelper {
    */
   @Nullable
   public static String getCatalogId(@Nonnull StoreContext context) {
-    String catalogId = context.getCatalogId();
-
-    return catalogId;
+    return context.getCatalogId();
   }
 
   /**
@@ -480,7 +490,7 @@ public class StoreContextHelper {
     }
   }
 
-  public static void setCatalogAlias(@Nullable StoreContext context, @Nullable CatalogAlias catalogAlias){
+  public static void setCatalogAlias(@Nullable StoreContext context, @Nullable CatalogAlias catalogAlias) {
     if (context != null) {
       context.put(CATALOG_ALIAS, catalogAlias);
     }

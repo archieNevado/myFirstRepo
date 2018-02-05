@@ -19,8 +19,8 @@
 
     <#-- headline -->
     <#if self.teaserTitle?has_content>
-      <#-- with banderole -->
-      <div class="cm-gap--mini__banderole row">
+      <#-- with caption -->
+      <div class="cm-gap--mini__caption row">
         <div class="col-xs-10 col-xs-push-1">
           <h1 class="cm-gap--mini__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
         </div>

@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
-import com.coremedia.cache.Cache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
 import java.util.Map;
@@ -25,7 +25,10 @@ public class FindCommercePersonCacheKey extends AbstractCommerceCacheKey<Map<Str
 
   @Override
   public Map<String, Object> computeValue(Cache cache) {
-    return wrapperService.findPerson(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
+    UserContext userContext = UserContextHelper.getCurrentContext();
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
+
+    return wrapperService.findPerson(userContext, storeContext);
   }
 
   @Override
@@ -38,5 +41,4 @@ public class FindCommercePersonCacheKey extends AbstractCommerceCacheKey<Map<Str
     return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user + ":" +
             storeContext.getStoreId() + ":" + storeContext.getLocale();
   }
-
 }

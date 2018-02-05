@@ -19,22 +19,22 @@ public class StoreInfoService {
 
   public String getStoreId(String storeName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".storeId", String.class);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".storeId").orElse(null);
   }
 
   public String getDefaultCatalogId(String storeName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".defaultCatalogId", String.class);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".defaultCatalogId").orElse(null);
   }
 
   public String getDefaultCatalogName(String storeName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".defaultCatalog", String.class);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".defaultCatalog").orElse(null);
   }
 
   public String getCatalogId(String storeName, String catalogName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.getValueForPath(storeInfos, "stores." + storeName + ".catalogs." + catalogName, String.class);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".catalogs." + catalogName).orElse(null);
   }
 
   public Map<String, Object> getStoreInfos() {
@@ -43,13 +43,13 @@ public class StoreInfoService {
 
   public TimeZone getTimeZone() {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    String sTimeZoneId = DataMapHelper.getValueForPath(storeInfos, "serverTimezoneId", String.class);
+    String sTimeZoneId = DataMapHelper.findStringValue(storeInfos, "serverTimezoneId").orElse(null);
     return TimeZone.getTimeZone(sTimeZoneId);
   }
 
   public String getWcsVersion() {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.getValueForPath(storeInfos, "wcsVersion", String.class);
+    return DataMapHelper.findStringValue(storeInfos, "wcsVersion").orElse(null);
   }
 
   public boolean isAvailable() {

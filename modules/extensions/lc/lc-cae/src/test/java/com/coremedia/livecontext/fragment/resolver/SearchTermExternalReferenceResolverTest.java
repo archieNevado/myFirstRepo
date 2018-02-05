@@ -54,7 +54,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SearchTermExternalReferenceResolverTest {
 
   private static final String SEGMENT_PATH = "search-landing-pages";
@@ -262,9 +262,7 @@ public class SearchTermExternalReferenceResolverTest {
 
   @Test
   public void testResolveNotFoundFallback() {
-    final Content fallback = mock(Content.class);
     SearchTermExternalReferenceResolver resolver = spy(new SearchTermExternalReferenceResolver());
-    doReturn(fallback).when(resolver).getFallbackLinkable(any(Site.class));
     configureResolver(resolver);
     resolver.afterPropertiesSet();
     mockSearchResult();

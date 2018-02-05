@@ -4,8 +4,11 @@ import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService
 import com.coremedia.blueprint.base.analytics.elastic.PageViewResult;
 import com.coremedia.blueprint.base.analytics.elastic.PublicationReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
@@ -32,6 +35,7 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -43,13 +47,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AlxResourceTest.LocalConfig.class)
 public class AlxResourceTest {
-  public static final String SERVICE_PROVIDER = "service";
+
+  public static final String DEFAULT_SERVICE_PROVIDER = "googleAnalytics";
+
   @InjectMocks
   private AlxResource alxResource = new AlxResource();
 
@@ -70,6 +78,15 @@ public class AlxResourceTest {
 
   @Mock
   private Content content;
+
+  @Mock
+  private Content navigation;
+
+  @Mock
+  private ContextStrategy<Content, Content> contentContextStrategy;
+
+  @Mock
+  private SettingsService settingsService;
 
   @Mock
   private PublicationReportModelService publicationReportModelService;
@@ -94,18 +111,25 @@ public class AlxResourceTest {
     inject(alxResource, contentRepository);
     inject(alxResource, publicationReportModelService);
     inject(alxResource, pageViewReportModelService);
+    inject(alxResource, settingsService);
 
     inject(siteResolver, contentRepository);
     inject(siteResolver, sitesService);
     inject(siteResolver, urlPathFormattingHelper);
 
-    when(pageViewReportModelService.getPageViewResult(any(Content.class), eq(SERVICE_PROVIDER))).thenReturn(pageViewResult);
+    when(settingsService.setting(eq(RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), anyObject())).thenReturn("");
+
+    when(pageViewReportModelService.getPageViewResult(any(Content.class), eq(DEFAULT_SERVICE_PROVIDER))).thenReturn(pageViewResult);
     when(pageViewResult.getReportModel()).thenReturn(pageViewReportModel);
     when(pageViewResult.getTimeStamp()).thenReturn(new Date());
 
     when(publicationReportModelService.getReportModel(any(Content.class))).thenReturn(publicationReportModel);
     when(pageViewReportModel.getReportMap()).thenReturn(reportMap);
     when(publicationReportModel.getReportMap()).thenReturn(reportMap);
+
+    List<Content> navigations = new ArrayList<>();
+    navigations.add(navigation);
+    doReturn(navigations).when(contentContextStrategy).findContextsFor(content);
   }
 
   @Test
@@ -113,7 +137,7 @@ public class AlxResourceTest {
     when(publicationReportModelService.getReportModel(null, null)).thenReturn(publicationReportModel);
     when(reportMap.get(any(String.class))).thenReturn(0L);
 
-    ReportResult result = alxResource.getAlxData("4", SERVICE_PROVIDER, null);
+    ReportResult result = alxResource.getAlxData("4", null);
 
     assertNotNull(result.getData());
     assertEquals(7, result.getData().size());
@@ -124,7 +148,7 @@ public class AlxResourceTest {
   public void getAlxDataNoTimeStamp() {
     when(reportMap.get(any(String.class))).thenReturn(0L);
     when(pageViewResult.getTimeStamp()).thenReturn(null);
-    ReportResult result = alxResource.getAlxData("4", SERVICE_PROVIDER, null);
+    ReportResult result = alxResource.getAlxData("4", null);
     assertNotNull(result.getData());
     assertEquals(0, result.getData().size());
     assertNull(result.getTimeStamp());
@@ -133,7 +157,7 @@ public class AlxResourceTest {
   @Test
   public void getAlxData() {
     when(reportMap.get(any(String.class))).thenReturn(3L);
-    ReportResult result = alxResource.getAlxData("4", SERVICE_PROVIDER, null);
+    ReportResult result = alxResource.getAlxData("4", null);
     List<AlxData> alxData = result.getData();
     assertNotNull(result.getData());
     assertEquals(7, result.getData().size());
@@ -149,7 +173,7 @@ public class AlxResourceTest {
   @Test
   public void getAlxDataWithInvalidRange() {
     when(reportMap.get(any(String.class))).thenReturn(3L);
-    ReportResult result = alxResource.getAlxData("4", SERVICE_PROVIDER, 0);
+    ReportResult result = alxResource.getAlxData("4", 0);
     List<AlxData> alxData = result.getData();
     assertNotNull(alxData);
     assertEquals(7, alxData.size());
@@ -165,7 +189,7 @@ public class AlxResourceTest {
   @Test
   public void getAlxDataForTimeRange() {
     when(reportMap.get(any(String.class))).thenReturn(3L);
-    ReportResult result = alxResource.getAlxData("4", SERVICE_PROVIDER, 3);
+    ReportResult result = alxResource.getAlxData("4", 3);
     List<AlxData> alxData = result.getData();
     assertNotNull(alxData);
     assertEquals(3, alxData.size());
@@ -180,7 +204,7 @@ public class AlxResourceTest {
 
   @Test(expected = WebApplicationException.class)
   public void getAlxDataNotCMLinkable() {
-    alxResource.getAlxData("123456", SERVICE_PROVIDER, null);
+    alxResource.getAlxData("123456", null);
   }
 
   @Test

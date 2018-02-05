@@ -18,7 +18,7 @@
   <dependencies>
     <dependency>
       <groupId>com.coremedia.ui.collaboration</groupId>
-      <artifactId>workflow-notifications-component</artifactId>
+      <artifactId>workflow-notifications-lib</artifactId>
       <scope>runtime</scope>
     </dependency>
 

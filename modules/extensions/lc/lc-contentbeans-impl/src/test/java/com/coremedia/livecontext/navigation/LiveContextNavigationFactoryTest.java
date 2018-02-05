@@ -61,13 +61,13 @@ public class LiveContextNavigationFactoryTest {
   private CommerceConnection connection;
 
   @Mock
-  AugmentationService augmentationService;
+  private AugmentationService augmentationService;
 
   @Mock
-  ContentBeanFactory contentBeanFactory;
+  private ContentBeanFactory contentBeanFactory;
 
   @Mock
-  ValidationService validationService;
+  private ValidationService validationService;
 
   @Before
   public void setUp() throws Exception {

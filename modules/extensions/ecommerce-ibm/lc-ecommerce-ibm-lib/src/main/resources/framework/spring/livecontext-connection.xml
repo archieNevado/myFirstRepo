@@ -20,7 +20,6 @@
     <property name="idProvider" ref="ibmCommerceIdProvider"/>
     <property name="contractService" ref="contractService"/>
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
-    <property name="userSessionService" ref="commerceUserSessionService"/>
     <property name="userService" ref="commerceUserService"/>
     <property name="vendorUrl" value="${livecontext.managementtool.web.url}"/>
     <property name="vendorVersion" value="${livecontext.ibm.wcs.version}"/>
@@ -28,15 +27,4 @@
     <property name="invalidationService" ref="invalidationService"/>
   </bean>
 
-  <bean id="wcsSearchResultRedirectUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider">
-    <property name="defaultStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.url}"/>
-    <property name="previewStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.preview.url}"/>
-    <property name="urlPattern" value="${livecontext.ibm.wcs.search-result-redirect.url}"/>
-  </bean>
-
-  <bean id="wcsCheckoutRedirectUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider">
-    <property name="defaultStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.url}"/>
-    <property name="previewStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.preview.url}"/>
-    <property name="urlPattern" value="${livecontext.ibm.wcs.checkout-redirect.url}"/>
-  </bean>
 </beans>

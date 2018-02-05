@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class LiveContextNavigationTreeRelationTest {
 
   private static final String SITE_ID = "aSiteId";
@@ -79,7 +79,6 @@ public class LiveContextNavigationTreeRelationTest {
     navigationFactory.setTreeRelation(testling);
     delegate.setCommerceTreeRelation(treeRelation);
 
-    when(sitesService.getSite(SITE_ID)).thenReturn(site);
     when(augmentationService.getContent(augmentedCategory)).thenReturn(content);
     when(contentBeanFactory.createBeanFor(content)).thenReturn(externalChannel);
   }

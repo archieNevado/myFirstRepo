@@ -28,7 +28,7 @@
 <segment>aurora-de-de</segment>
 <title>Home</title>
 <htmlTitle></htmlTitle>
-<keywords>CoreMedia,Aurora,Aurora Augmentation,Demo,Blueprint,LiveContext,CoreMedia LiveContext 2.0 for IBM WebSphere Commerce</keywords>
+<keywords>CoreMedia,Aurora,Aurora Augmentation,Demo,Blueprint,LiveContext,CoreMedia LiveContext 3.0 for IBM WebSphere Commerce</keywords>
 <htmlDescription></htmlDescription>
 <subjectTaxonomy>
 </subjectTaxonomy>
@@ -45,6 +45,7 @@
 <link href="../Augmentation/Apparel/Women/Damen.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Augmentation/Apparel/Women/Damen"/>
 <link href="../Augmentation/Apparel/Men/Herren.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Augmentation/Apparel/Men/Herren"/>
 <link href="Microsites/Editorial%20Blog/Editorial%20Blog%20Microsite.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Navigation/Microsites/Editorial%20Blog/Editorial%20Blog%20Microsite"/>
+<link href="Microsites/Paris%20Fashion%20Week%20Trends/Paris%20Fashion%20Week%20Trends.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Navigation/Microsites/Paris%20Fashion%20Week%20Trends/Paris%20Fashion%20Week%20Trends"/>
 <link href="../Augmentation/Aurora%20B2C%20Catalog%20Root.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Augmentation/Aurora%20B2C%20Catalog%20Root"/>
 <link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
 <link href="Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20afefb4a9.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Navigation/Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>

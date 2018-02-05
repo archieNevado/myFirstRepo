@@ -10,6 +10,8 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
@@ -163,23 +165,34 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
     }
 
     if (preview) {
-      // configure store context for preview and workspace
-      prepareStoreContextForPreview(request, connection.get().getStoreContext());
+      StoreContext originalStoreContext = connection.get().getStoreContext();
+      StoreContextProvider storeContextProvider = connection.get().getStoreContextProvider();
+
+      StoreContextBuilder storeContextBuilder = storeContextProvider.buildContext(originalStoreContext);
+
+      StoreContext clonedStoreContext = prepareStoreContextForPreview(request, storeContextBuilder)
+              .build();
+
+      connection.get().setStoreContext(clonedStoreContext);
     }
 
     return connection;
   }
 
-  private static void prepareStoreContextForPreview(@Nonnull HttpServletRequest request,
-                                                    @Nonnull StoreContext storeContext) {
+  @Nonnull
+  @SuppressWarnings("AssignmentToMethodParameter")
+  private static StoreContextBuilder prepareStoreContextForPreview(@Nonnull HttpServletRequest request,
+                                                                   @Nonnull StoreContextBuilder storeContextBuilder) {
     // search for an existing workspace param and put it in the store context
     String workspaceId = request.getParameter(QUERY_PARAMETER_WORKSPACE_ID);
-    storeContext.setWorkspaceId(workspaceId);
+    storeContextBuilder = storeContextBuilder.withWorkspaceId(workspaceId);
 
     String previewDate = request.getParameter(ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE);
     if (previewDate != null) {
-      storeContext.setPreviewDate(previewDate);
+      storeContextBuilder = storeContextBuilder.withPreviewDate(previewDate);
     }
+
+    return storeContextBuilder;
   }
 
   /**

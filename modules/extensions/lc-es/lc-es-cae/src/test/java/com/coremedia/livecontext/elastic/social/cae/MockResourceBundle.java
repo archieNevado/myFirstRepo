@@ -8,7 +8,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 class MockResourceBundle extends ResourceBundle {
-  Collection<String> invokedForKeys = new HashSet<>();
+  private Collection<String> invokedForKeys = new HashSet<>();
 
   @Override
   protected Object handleGetObject(String key) {
@@ -21,7 +21,7 @@ class MockResourceBundle extends ResourceBundle {
     return Collections.emptyEnumeration();
   }
 
-  public boolean invokedFor(String key) {
+  boolean invokedFor(String key) {
     return invokedForKeys.contains(key);
   }
 }

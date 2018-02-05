@@ -11,10 +11,18 @@
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
+    import com.coremedia.ui.data.ValueExpression;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.commerceSystemForm";
 
     private var config:CommerceSystemForm;
+
+    private var catalogNameExpression:ValueExpression;
+
+    // called by generated constructor code
+    private function __initialize__(config:CommerceSystemForm):void {
+      catalogNameExpression = config.bindTo.extendBy(CatalogObjectPropertyNames.CATALOG + '.name');
+    }
 
     public native function CommerceSystemForm(config:CommerceSystemForm = null);
     ]]></fx:Script>
@@ -37,7 +45,8 @@
                       labelAlign="left"
                       labelSeparator=":">
           <plugins>
-            <ui:BindPropertyPlugin bindTo="{config.bindTo.extendBy(CatalogObjectPropertyNames.CATALOG + '.name')}"/>
+            <ui:BindPropertyPlugin bindTo="{catalogNameExpression}"/>
+            <ui:BindVisibilityPlugin bindTo="{catalogNameExpression}"/>
           </plugins>
         </DisplayField>
         <DisplayField itemId="id"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMTeaser folder="/Sites/Calista/United States/English/Editorial/Content/Fashion" name="Editorial Blog Teaser">
+<CMTeaser folder="/Sites/Calista/United States/English/Editorial/Content/Fashion" name="Editorial Blog Teaser" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>

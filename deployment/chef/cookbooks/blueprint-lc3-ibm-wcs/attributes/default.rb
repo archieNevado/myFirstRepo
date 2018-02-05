@@ -13,6 +13,7 @@ default['blueprint']['lc3-ibm-wcs']['application.properties']['livecontext.ibm.w
 default['blueprint']['lc3-ibm-wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora'] = 'ibm'
 
 #<> convenience property to workaround CMS-9339
+default['blueprint']['lc3-ibm-wcs']['application.properties']['blueprint.host.calista'] = "preview.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-ibm-wcs']['application.properties']['blueprint.host.helios'] = "preview.#{node['blueprint']['hostname']}"
 
 # The following properties are derived from `livecontext.ibm.wcs.host`, if you need to set them explicitly comment in the lines below

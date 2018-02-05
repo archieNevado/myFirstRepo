@@ -2,6 +2,5 @@
 
 <@cm.include self=self view="asGrid" params={
   "additionalClass": "container cm-landscape-teaser",
-  "showHeadline": true,
   "itemsPerRowSM": 3
 } />

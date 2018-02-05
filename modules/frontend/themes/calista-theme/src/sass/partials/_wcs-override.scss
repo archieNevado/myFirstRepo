@@ -641,8 +641,7 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
     border-color: $wcs-primary-button-hover-background-color;
     text-decoration: none;
   }
-  &:active,
-  &:focus {
+  &:active, &:focus {
     text-decoration: none;
     @include cm-dark-background-focus-state;
   }
@@ -661,8 +660,7 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
   &:hover {
     background-color: $wcs-primary-button-select-hover-background-color;
   }
-  &:active,
-  &:focus {
+  &:active, &:focus {
     @include cm-light-background-focus-state;
   }
   > .button_text {
@@ -679,6 +677,7 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
     border: none;
   }
 }
+
 
 #MiniShopCartProductAdded {
   @include breakpoint("xs") {
@@ -724,15 +723,6 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
   }
 }
 
-// shipping method details
-.shipping_method_content {
-  span.checkbox {
-    display: inline;
-  }
-  input[type="checkbox"].checkbox {
-    display: inline-block;
-  }
-}
 // fix slot12 on pdp
 .product_pageDesign_pageGroup > .row {
   float: none;

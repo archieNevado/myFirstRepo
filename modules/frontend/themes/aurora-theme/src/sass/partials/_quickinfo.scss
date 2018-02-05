@@ -1,210 +1,38 @@
-// Quickinfos
-// =====================================================================================================================
-// Uses CSS grids as long as there is an IE11 supported equivalent.
-// So no use of grid-areas here for now.
-
 .#{$cm-quickinfo-prefix} {
 
-  $_aurora-quickinfo-grid-gap-md: 3px;
-
-  box-sizing: border-box;
-  background-color: #fff;
-
-  @include breakpoint(sm) {
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    grid-template-rows: auto 1fr;
-
-    padding: 8px;
+  &__content {
+    box-sizing: border-box;
   }
 
-  @include breakpoint(md) {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-rows: auto auto 1fr auto;
-
-    padding: 3px;
-    width: 306px;
-    box-shadow: 0 0 10px #000;
+  &__close i{
+    width: auto;
   }
 
-  &__title {
+  &__price,
+  &__text {
+    margin-top: 6px;
+  }
 
-    @include breakpoint(sm) {
-      grid-column: 2;
-      grid-row: 1;
-
-      padding-left: 20px;
-    }
-
-    @include breakpoint(md) {
-      grid-column-start: 1;
-      -ms-grid-column-span: 2; // autoprefixer won't generate this
-      grid-column-end: 3;
-      grid-row: 1;
-
-      margin: $_aurora-quickinfo-grid-gap-md;
-      font-weight: normal;
-    }
+  &__price .cm-price--old{
+    float: left;
+    margin-right: 12px;
   }
 
   &__text {
-
-    @include breakpoint(sm) {
-      grid-column: 2;
-      grid-row: 2;
-
-      padding-left: 20px;
-    }
-
-    @include breakpoint(md) {
-      grid-column-start: 1;
-      -ms-grid-column-span: 3; // autoprefixer won't generate this
-      grid-column-end: 4;
-      grid-row: 3;
-
-      margin: $_aurora-quickinfo-grid-gap-md;
-    }
-
-    p {
-      @include breakpoint(md) {
-        margin: 0;
-      }
-    }
+    font-size: 14px;
+    line-height: 22px;
   }
 
-  &__close {
-    @include breakpoint(sm) {
-      display: none;
-    }
+  .cm-button-group__button {
+    display: table;
+    width: auto;
+    margin-top: 6px;
+    margin-left: auto;
 
-    @include breakpoint(md) {
-      grid-column: 3;
-      grid-row: 1;
-      align-self: flex-start;
-
-      border: none;
-      background: transparent;
-      padding: 0;
-      margin: max(7px, $_aurora-quickinfo-grid-gap-md);
-      height: 20px;
-      cursor: pointer;
-    }
-
-    .cm-icon__symbol {
-      content: "";
-      margin: 0;
-      width: 20px;
-      height: 20px;
-      font-size: 1.2rem;
-      background-color: transparent;
-      color: #373737;
-      z-index: 2;
-      &:before {
-        line-height: 1;
-      }
-    }
-  }
-
-  &__picture-link {
-    @include breakpoint(sm) {
-      grid-column: 1;
-      grid-row-start: 1;
-      -ms-grid-row-span: 2; // autoprefixer won't generate this
-      grid-row-end: 3;
-    }
-
-    @include breakpoint(md) {
-      grid-column-start: 1;
-      -ms-grid-column-span: 3; // autoprefixer won't generate this
-      grid-column-end: 4;
-      grid-row: 2;
-
-      margin: $_aurora-quickinfo-grid-gap-md;
-    }
-  }
-
-  &__picture-box {
-    width: 100%;
-    overflow: hidden;
-
-    @include breakpoint(sm) {
-      margin-left: 0;
-      width: 100px;
-      vertical-align: top;
-    }
-  }
-
-  &__price {
-    align-self: center;
-    display: flex;
-    flex-direction: column;
-
-    @include breakpoint(sm) {
-      grid-column: 3;
-      grid-row-start: 1;
-      -ms-grid-row-span: 2; // autoprefixer won't generate this
-      grid-row-end: 3;
-    }
-
-    @include breakpoint(md) {
-      grid-column: 1;
-      grid-row: 4;
-
-      margin: $_aurora-quickinfo-grid-gap-md;
-    }
-  }
-
-  &__listprice,
-  &__offerprice {
-    white-space: nowrap;
-
-    @include breakpoint(sm) {
-      text-align: right;
-      margin: 0 0.5rem;
-    }
-
-    @include breakpoint(md) {
-      margin: $_aurora-quickinfo-grid-gap-md max(8px, $_aurora-quickinfo-grid-gap-md);
-    }
-  }
-
-  &__controls {
-    align-self: center;
-
-    @include breakpoint(sm) {
-      grid-column: 4;
-      grid-row-start: 1;
-      -ms-grid-row-span: 2; // autoprefixer won't generate this
-      grid-row-end: 3;
-      padding-left: 20px;
-    }
-
-    @include breakpoint(md) {
-      grid-column-start: 2;
-      -ms-grid-column-span: 2; // autoprefixer won't generate this
-      grid-column-end: 4;
-      grid-row: 4;
-
-      margin: $_aurora-quickinfo-grid-gap-md;
-      width: auto;
-    }
-  }
-
-  &--main {
-    // hide the main quick info for medium devices and up
-    @include breakpoint(md) {
-      display: none;
-    }
-  }
-}
-
-/* in two-column-layout the quickinfo has to be smaller */
-.cm-grid--lc-two-column, .col8 {
-  .#{$cm-quickinfo-prefix} {
-    width: 246px;
-    &__text {
-      display: none;
+    &,
+    & .cm-button__text {
+        font-size: 14px;
+        line-height: 29px;
     }
   }
 }

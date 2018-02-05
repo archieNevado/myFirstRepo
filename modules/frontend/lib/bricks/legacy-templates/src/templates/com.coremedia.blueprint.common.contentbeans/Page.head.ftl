@@ -7,26 +7,26 @@
 
 <head<@cm.metadata data=studioExtraFilesMetadata/>>
 <#-- add encoding first! -->
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
 <#-- SEO: title -->
     <title<@cm.metadata "properties.htmlTitle" />>${self.content.htmlTitle!"CoreMedia CMS - No Page Title"}${' ' + titleSuffix}</title>
 <#-- SEO: description -->
 <#if self.content.htmlDescription?has_content>
-    <meta name="description" content="${self.content.htmlDescription}" />
+    <meta name="description" content="${self.content.htmlDescription}">
 </#if>
 <#-- SEO: keywords -->
 <#if self.content.keywords?has_content>
-  <meta name="keywords" content="${self.content.keywords}" />
+  <meta name="keywords" content="${self.content.keywords}">
 </#if>
 <#-- viewport for responsive design -->
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <#-- favicon -->
 <#if self.favicon?has_content>
-    <link rel="shortcut icon" href="${cm.getLink(self.favicon)}"<@cm.metadata "properties.favicon" /> />
+    <link rel="shortcut icon" href="${cm.getLink(self.favicon)}"<@cm.metadata "properties.favicon" />>
 </#if>
 <#-- SEO: canonical -->
 <#if self.content?has_content>
-    <link rel="canonical" href="${cm.getLink(self.content, {"absolute":true})}" />
+    <link rel="canonical" href="${cm.getLink(self.content, {"absolute":true})}">
 </#if>
 <#-- SEO: i18n -->
 <#if (self.content.localizations)?has_content>
@@ -36,7 +36,7 @@
     <#if localization.locale != self.content.locale>
       <#assign variantLink=cm.getLink(localization) />
       <#if variantLink?has_content>
-          <link rel="alternate" hreflang="${bp.getPageLanguageTag(localization)}" href="${variantLink}" title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}" />
+          <link rel="alternate" hreflang="${bp.getPageLanguageTag(localization)}" href="${variantLink}" title="${localization.locale.getDisplayName(self.content.locale)} | ${localization.locale.getDisplayName()}">
       </#if>
     </#if>
   </#list>

@@ -11,7 +11,7 @@
 } + overlay!{} />
 
 <div class="cm-overlay ${classOverlay}"<@cm.metadata data=(metadata![]) + [self.content] />>
-  <@bp.optionalLink href=cm.getLink(self.productInSite!(cm.UNDEFINED))>
+  <@bp.optionalLink href=cm.getLink(self.productInSite!(cm.UNDEFINED)) attr={"class":"cm-overlay__link"}>
     <#if overlay.displayTitle && self.teaserTitle?has_content>
       <div class="cm-overlay__item cm-overlay__item--title"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</div>
     <#else>

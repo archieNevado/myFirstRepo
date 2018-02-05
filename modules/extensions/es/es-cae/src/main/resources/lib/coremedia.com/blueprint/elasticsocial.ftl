@@ -1,16 +1,17 @@
 <#ftl strip_whitespace=true>
 <#-- @ftlvariable name="elasticSocialFreemarkerFacade" type="com.coremedia.blueprint.elastic.social.cae.tags.ElasticSocialFreemarkerFacade" -->
 
+<#-- -------------------------------------------------------------------------------------------------------------------
+ *
+ * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
+ * for the following directives.
+ * Any changes, additions or removals need to be documented in the manual.
+ *
+ ------------------------------------------------------------------------------------------------------------------- -->
+
+
 <#function getElasticSocialConfiguration page>
   <#return elasticSocialFreemarkerFacade.getElasticSocialConfiguration(page)>
-</#function>
-
-<#function isLoginAction bean>
-  <#return elasticSocialFreemarkerFacade.isLoginAction(bean)>
-</#function>
-
-<#function getCurrentUser>
-  <#return elasticSocialFreemarkerFacade.getCurrentUser()>
 </#function>
 
 <#function isAnonymousUser>
@@ -23,22 +24,6 @@
 
 <#function getCurrentTenant>
   <#return elasticSocialFreemarkerFacade.getCurrentTenant()>
-</#function>
-
-<#function hasComplaintForCurrentUser id collection>
-  <#return elasticSocialFreemarkerFacade.hasComplaintForCurrentUser(id, collection)>
-</#function>
-
-<#function getCommentsResult target>
-  <#return elasticSocialFreemarkerFacade.getCommentsResult(target)>
-</#function>
-
-<#function getReviewsResult target>
-  <#return elasticSocialFreemarkerFacade.getReviewsResult(target)>
-</#function>
-
-<#function getNumberOfComments target>
-  <#return elasticSocialFreemarkerFacade.getNumberOfComments(target)>
 </#function>
 
 <#function hasUserWrittenReview target>
@@ -83,10 +68,11 @@
   <#return view />
 </#function>
 
+<#-- same as getCommentView -->
 <#function getReviewView review>
-  <#-- TODO -->
   <#return getCommentView(review) />
 </#function>
+
 
 <#function getMaxRating>
   <#return 5 />
@@ -133,4 +119,45 @@
 </#outputformat>
 </#macro>
 
+<#-- add messageKeys for elastic social to global variables -->
 <#assign messageKeys=elasticSocialFreemarkerFacade.getElasticSocialMessageKeys()/>
+
+
+<#-- --- INTERNAL/PRIVATE ------------------------------------------------------------------------------------------ -->
+
+
+<#-- PRIVATE -->
+<#function getCurrentUser>
+  <#return elasticSocialFreemarkerFacade.getCurrentUser()>
+</#function>
+
+
+<#-- --- DEPRECATED/UNUSED ----------------------------------------------------------------------------------------- -->
+
+
+<#-- UNUSED -->
+<#function hasComplaintForCurrentUser id collection>
+  <#return elasticSocialFreemarkerFacade.hasComplaintForCurrentUser(id, collection)>
+</#function>
+
+<#-- UNUSED -->
+<#function getCommentsResult target>
+  <#return elasticSocialFreemarkerFacade.getCommentsResult(target)>
+</#function>
+
+<#-- UNUSED -->
+<#function getReviewsResult target>
+  <#return elasticSocialFreemarkerFacade.getReviewsResult(target)>
+</#function>
+
+<#-- UNUSED -->
+<#function getNumberOfComments target>
+  <#return elasticSocialFreemarkerFacade.getNumberOfComments(target)>
+</#function>
+
+<#-- UNUSED -->
+<#function isLoginAction bean>
+  <#return elasticSocialFreemarkerFacade.isLoginAction(bean)>
+</#function>
+
+

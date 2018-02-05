@@ -8,6 +8,7 @@ import com.coremedia.xml.Markup;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
@@ -74,7 +75,8 @@ public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
    */
   public abstract void setDelegate(Object delegate);
 
-  protected static Markup toRichtext(String str) {
+  @Nullable
+  protected static Markup toRichtext(@Nullable String str) {
     return toRichtext(str, true);
   }
 }

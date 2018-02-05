@@ -1,19 +1,28 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
-import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
-@ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
-public class UserContextHelperTest extends IbmServiceTestBase {
+public class UserContextHelperTest {
+
+  @Before
+  public void setup() {
+   CurrentCommerceConnection.set(new BaseCommerceConnection());
+  }
+
+  @After
+  public void teardown() {
+    CurrentCommerceConnection.remove();
+  }
 
   @Test
   public void testNullContext() {

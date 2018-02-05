@@ -10,7 +10,7 @@ if node.deep_fetch('blueprint', 'tomcat', 'cae-live', 'instances')
   node.rm_default('blueprint', 'lc3-ibm-wcs', 'virtual_host', 'delivery', 'cluster', 'default')
   (1..node['blueprint']['tomcat']['cae-live']['instances']).to_a.each do |i|
     node.default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']["cae-live-#{i}"]['host'] = node['fqdn']
-    node.default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']["cae-live-#{i}"]['port'] = "#{node['blueprint']['tomcat']["cae-live-#{i}"]['port_prefix']}80"
+    node.default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']["cae-live-#{i}"]['port'] = "42#{i}80"
   end
 end
 

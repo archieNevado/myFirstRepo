@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSymbol folder="/Sites/Calista/United States/English/Options/Settings/Templates/CMChannel/Dynamic" name="Descriptor">
+<CMSymbol folder="/Sites/Calista/United States/English/Options/Settings/Templates/CMChannel/Dynamic" name="Descriptor" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>

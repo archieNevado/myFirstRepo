@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSpinner folder="/Sites/Calista/United States/English/Pictures/Product 360 Pictures/Pink Jacket" name="Pink-Jacket Spinview">
+<CMSpinner folder="/Sites/Calista/United States/English/Pictures/Product 360 Pictures/Pink Jacket" name="Pink-Jacket Spinview" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>
 <viewtype>
 </viewtype>
 <localSettings>
-<Struct xmlns="http://www.coremedia.com/2008/struct">
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
 <BooleanProperty Name="inherit">true</BooleanProperty>
@@ -38,8 +38,7 @@
 <contexts>
 </contexts>
 <teaserTitle>Pink Jacket Spinview</teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0">
-  <div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p/></div></teaserText>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p/></div></teaserText>
 <pictures>
 <link href="Pink-Jacket%20Frontshot.xml" path="/Sites/Calista/United%20States/English/Pictures/Product%20360%20Pictures/Pink%20Jacket/Pink-Jacket%20Frontshot"/>
 </pictures>

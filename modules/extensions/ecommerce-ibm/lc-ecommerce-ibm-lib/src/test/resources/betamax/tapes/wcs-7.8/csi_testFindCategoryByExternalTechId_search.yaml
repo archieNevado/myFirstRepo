@@ -1,25 +1,25 @@
 !tape
 name: csi_testFindCategoryByExternalTechId_search
 interactions:
-- recorded: 2016-05-19T09:27:06.804Z
+- recorded: 2017-11-14T15:39:08.288Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:07 GMT
+      Date: Tue, 14 Nov 2017 15:39:08 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000AofJFnu16L0sgBVxd06cIys:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000t9Gs2vN8iQ02SAm-GQJ9uyP:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
@@ -31,88 +31,132 @@ interactions:
       Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
       Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
       Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
-- recorded: 2016-05-19T09:27:06.816Z
+- recorded: 2017-11-14T15:39:08.338Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:07 GMT
+      Date: Tue, 14 Nov 2017 15:39:08 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000RWrtsvHEbTOZZheL_bfzMXA:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000R5asbHaqBfLLgGdA2Te5-nf:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
-- recorded: 2016-05-19T09:27:06.830Z
+- recorded: 2017-11-14T15:39:08.377Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/%2520?categoryIdentifier=Furniture&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:07 GMT
-      Expires: Thu, 19 May 2016 10:27:07 GMT
+      Date: Tue, 14 Nov 2017 15:39:08 GMT
+      Expires: Tue, 14 Nov 2017 16:39:08 GMT
       Vary: Accept
     body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/%2520?categoryIdentifier=Furniture&profileName=CoreMedia_findCategoryByIdentifier&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Furniture","cm_seo_token_ntk":"10101_furniture","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10143","identifier":"Furniture","parentCatalogGroupID":["10101_10141","10152_10141"],"name":"Furniture","uniqueID":"10143","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","seo_token_ntk":"furniture"}],"recordSetCount":1}'
-- recorded: 2016-05-19T09:27:06.847Z
+- recorded: 2017-11-14T15:39:08.419Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10143?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:07 GMT
-      Expires: Thu, 19 May 2016 10:27:07 GMT
+      Date: Tue, 14 Nov 2017 15:39:08 GMT
+      Expires: Tue, 14 Nov 2017 16:39:08 GMT
       Vary: Accept
     body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10143?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Furniture","cm_seo_token_ntk":"10101_furniture","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10143","identifier":"Furniture","parentCatalogGroupID":["10101_10141","10152_10141"],"name":"Furniture","uniqueID":"10143","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","seo_token_ntk":"furniture"}],"recordSetCount":1}'
-- recorded: 2016-05-19T09:27:06.861Z
+- recorded: 2017-11-14T15:39:08.458Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byParentCategory/10143?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:08 GMT
+      Expires: Tue, 14 Nov 2017 16:39:08 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":0,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byParentCategory\/10143?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[],"recordSetCount":0}'
+- recorded: 2017-11-14T15:39:08.492Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byCategory/10143?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:08 GMT
+      Expires: Tue, 14 Nov 2017 16:39:08 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":33,"recordSetTotal":33,"breadCrumbTrailEntryView":[{"value":"10141","label":"Home & Furnishing","type_":"FACET_ENTRY_CATEGORY"},{"value":"10143","label":"Furniture","type_":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byCategory\/10143?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","facetView":[{"value":"price_USD","entry":[{"value":"price_USD%3A%28%7B*+100%7D+100%29","extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"label":"({*
+      100} 100)","count":7},{"value":"price_USD%3A%28%7B100+200%7D+200%29","extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"label":"({100 200} 200)","count":7},{"value":"price_USD%3A%28%7B200+300%7D+300%29","extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"label":"({200
+      300} 300)","count":8},{"value":"price_USD%3A%28%7B300+400%7D+400%29","extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"label":"({300 400} 400)","count":0},{"value":"price_USD%3A%28%7B400+500%7D+500%29","extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"label":"({400
+      500} 500)","count":3},{"value":"price_USD%3A%28%7B500+*%7D%29","extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"label":"({500 *})","count":8}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","entry":[{"value":"mfName_ntk_cs%3A%22Stonehenge%22","extendedData":{"uniqueId":"-100283116111110101104101110103101"},"label":"Stonehenge","count":"14"},{"value":"mfName_ntk_cs%3A%22StyleHome%22","extendedData":{"uniqueId":"-10028311612110810172111109101"},"label":"StyleHome","count":"14"},{"value":"mfName_ntk_cs%3A%22SleepyHead%22","extendedData":{"uniqueId":"-1002831081011011121217210197100"},"label":"SleepyHead","count":"3"},{"value":"mfName_ntk_cs%3A%22Supreme%22","extendedData":{"uniqueId":"-100283117112114101109101"},"label":"Supreme","count":"2"}],"extendedData":{"propertyname":"facet","facet_id":"-1000","displaySequence":"0.0","maximumValuesToDisplay":"20","srchattr_id":"-1002","max_display":"20","zero_display":"0","selection":"0","sortorder":"0","storeent_id":"0","fname":"Brand","allValuesReturned":true,"allowMultipleValueSelection":"false","fdesc":"The
+      manufacturer","groupId":"0","group_id":"0","displayable":"1","propertyvalue":"mfName_ntk_cs","srchattridentifier":"_cat.ManufacturerName","keyword_search":"1"},"name":"ManufacturerName"}],"breadCrumbTrailEntryViewExtended":[{"0":{"value":"10141","label":"Home
+      & Furnishing","type_":"FACET_ENTRY_CATEGORY"},"1":{"value":"10143","label":"Furniture","type_":"FACET_ENTRY_CATEGORY"}}],"recordSetCount":33,"catalogEntryView":[{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-modern-rimmed-3-piece-sofa-set","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16786","singleSKUCatalogEntryID":"16787","hasSingleSKU":true,"partNumber":"HFU032_3201","uniqueID":"16786","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3201.jpg","seo_token_ntk":"stylehome-modern-rimmed-3-piece-sofa-set"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-modern-plain-single-large-sofa","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16788","singleSKUCatalogEntryID":"16789","hasSingleSKU":true,"partNumber":"HFU032_3202","uniqueID":"16788","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3202.jpg","seo_token_ntk":"stylehome-modern-plain-single-large-sofa"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-inoffice-double-sofa","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16790","singleSKUCatalogEntryID":"16791","hasSingleSKU":true,"partNumber":"HFU032_3203","uniqueID":"16790","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3203.jpg","seo_token_ntk":"stylehome-inoffice-double-sofa"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-inoffice-single-sofa","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16792","singleSKUCatalogEntryID":"16793","hasSingleSKU":true,"partNumber":"HFU032_3204","uniqueID":"16792","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3204.jpg","seo_token_ntk":"stylehome-inoffice-single-sofa"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_supreme-giantscorner-sofa-set","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16794","singleSKUCatalogEntryID":"16795","hasSingleSKU":true,"partNumber":"HFU032_3205","uniqueID":"16794","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3205.jpg","seo_token_ntk":"supreme-giantscorner-sofa-set"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_supreme-loungestyle-double-sofa","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16796","singleSKUCatalogEntryID":"16797","hasSingleSKU":true,"partNumber":"HFU032_3206","uniqueID":"16796","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3206.jpg","seo_token_ntk":"supreme-loungestyle-double-sofa"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-loom-large-artists-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16798","singleSKUCatalogEntryID":"16799","hasSingleSKU":true,"partNumber":"HFU032_3207","uniqueID":"16798","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3207.jpg","seo_token_ntk":"stylehome-loom-large-artists-table"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-origami-japanese-dining-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16800","singleSKUCatalogEntryID":"16801","hasSingleSKU":true,"partNumber":"HFU032_3208","uniqueID":"16800","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3208.jpg","seo_token_ntk":"stonehenge-origami-japanese-dining-table"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-modern-steelet-single-sofa","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16802","singleSKUCatalogEntryID":"16803","hasSingleSKU":true,"partNumber":"HFU032_3209","uniqueID":"16802","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3209.jpg","seo_token_ntk":"stonehenge-modern-steelet-single-sofa"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-rocoz-double-legged-leaning-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16804","singleSKUCatalogEntryID":"16805","hasSingleSKU":true,"partNumber":"HFU032_3210","uniqueID":"16804","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3210.jpg","seo_token_ntk":"stonehenge-rocoz-double-legged-leaning-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-ultracozy-single-sofa","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16806","singleSKUCatalogEntryID":"16807","hasSingleSKU":true,"partNumber":"HFU032_3211","uniqueID":"16806","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3211.jpg","seo_token_ntk":"stylehome-ultracozy-single-sofa"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-ultracozy-large-sofa","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16808","singleSKUCatalogEntryID":"16809","hasSingleSKU":true,"partNumber":"HFU032_3212","uniqueID":"16808","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3212.jpg","seo_token_ntk":"stylehome-ultracozy-large-sofa"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-workman-working-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16810","singleSKUCatalogEntryID":"16811","hasSingleSKU":true,"partNumber":"HFU032_3213","uniqueID":"16810","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3213.jpg","seo_token_ntk":"stonehenge-workman-working-table"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-large-double-door-mahogany-wardrobe","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16812","singleSKUCatalogEntryID":"16813","hasSingleSKU":true,"partNumber":"HFU032_3214","uniqueID":"16812","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3214.jpg","seo_token_ntk":"stylehome-large-double-door-mahogany-wardrobe"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-kcloth-multi-compartment-wardrobe","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16814","singleSKUCatalogEntryID":"16815","hasSingleSKU":true,"partNumber":"HFU032_3215","uniqueID":"16814","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3215.jpg","seo_token_ntk":"stonehenge-kcloth-multi-compartment-wardrobe"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-large-mahogany-wardrobe","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16816","singleSKUCatalogEntryID":"16817","hasSingleSKU":true,"partNumber":"HFU032_3216","uniqueID":"16816","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3216.jpg","seo_token_ntk":"stonehenge-large-mahogany-wardrobe"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_sleepyhead-storytime-double-bed","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16818","singleSKUCatalogEntryID":"16819","hasSingleSKU":true,"partNumber":"HFU032_3217","uniqueID":"16818","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3217.jpg","seo_token_ntk":"sleepyhead-storytime-double-bed"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_sleepyhead-elegent-queen-bed","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16820","singleSKUCatalogEntryID":"16821","hasSingleSKU":true,"partNumber":"HFU032_3218","uniqueID":"16820","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3218.jpg","seo_token_ntk":"sleepyhead-elegent-queen-bed"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_sleepyhead-lowkey-double-bed","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16822","singleSKUCatalogEntryID":"16823","hasSingleSKU":true,"partNumber":"HFU032_3219","uniqueID":"16822","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3219.jpg","seo_token_ntk":"sleepyhead-lowkey-double-bed"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-clodit-chest-of-drawer","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16824","singleSKUCatalogEntryID":"16825","hasSingleSKU":true,"partNumber":"HFU032_3220","uniqueID":"16824","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3220.jpg","seo_token_ntk":"stonehenge-clodit-chest-of-drawer"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-lodraw-chest-of-drawer","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16826","singleSKUCatalogEntryID":"16827","hasSingleSKU":true,"partNumber":"HFU032_3221","uniqueID":"16826","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3221.jpg","seo_token_ntk":"stonehenge-lodraw-chest-of-drawer"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-large-ash-wood-chest-of-drawer","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16828","singleSKUCatalogEntryID":"16829","hasSingleSKU":true,"partNumber":"HFU032_3222","uniqueID":"16828","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3222.jpg","seo_token_ntk":"stylehome-large-ash-wood-chest-of-drawer"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-intree-chest-of-drawer","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16830","singleSKUCatalogEntryID":"16831","hasSingleSKU":true,"partNumber":"HFU032_3223","uniqueID":"16830","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3223.jpg","seo_token_ntk":"stylehome-intree-chest-of-drawer"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-comfy-dining-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16832","singleSKUCatalogEntryID":"16833","hasSingleSKU":true,"partNumber":"HFU032_3224","uniqueID":"16832","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3224.jpg","seo_token_ntk":"stylehome-comfy-dining-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-rigg-dining-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16834","singleSKUCatalogEntryID":"16835","hasSingleSKU":true,"partNumber":"HFU032_3225","uniqueID":"16834","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3225.jpg","seo_token_ntk":"stylehome-rigg-dining-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-woodek-dining-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16836","singleSKUCatalogEntryID":"16837","hasSingleSKU":true,"partNumber":"HFU032_3226","uniqueID":"16836","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3226.jpg","seo_token_ntk":"stylehome-woodek-dining-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-cheper-dining-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16838","singleSKUCatalogEntryID":"16839","hasSingleSKU":true,"partNumber":"HFU032_3227","uniqueID":"16838","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3227.jpg","seo_token_ntk":"stonehenge-cheper-dining-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-offtone-office-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16840","singleSKUCatalogEntryID":"16841","hasSingleSKU":true,"partNumber":"HFU032_3228","uniqueID":"16840","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3228.jpg","seo_token_ntk":"stonehenge-offtone-office-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-fil-e-office-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16842","singleSKUCatalogEntryID":"16843","hasSingleSKU":true,"partNumber":"HFU032_3229","uniqueID":"16842","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3229.jpg","seo_token_ntk":"stonehenge-fil-e-office-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stongehenge-bolds-dining-chair","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16844","singleSKUCatalogEntryID":"16845","hasSingleSKU":true,"partNumber":"HFU032_3230","uniqueID":"16844","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3230.jpg","seo_token_ntk":"stongehenge-bolds-dining-chair"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-booktop-study-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16846","singleSKUCatalogEntryID":"16847","hasSingleSKU":true,"partNumber":"HFU032_3231","uniqueID":"16846","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3231.jpg","seo_token_ntk":"stonehenge-booktop-study-table"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stonehenge-bookelf-study-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16848","singleSKUCatalogEntryID":"16849","hasSingleSKU":true,"partNumber":"HFU032_3232","uniqueID":"16848","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3232.jpg","seo_token_ntk":"stonehenge-bookelf-study-table"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_stylehome-sturdy-study-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16850","singleSKUCatalogEntryID":"16851","hasSingleSKU":true,"partNumber":"HFU032_3233","uniqueID":"16850","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3233.jpg","seo_token_ntk":"stylehome-sturdy-study-table"}]}'
+- recorded: 2017-11-14T15:39:08.787Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10141?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:07 GMT
-      Expires: Thu, 19 May 2016 10:27:07 GMT
+      Date: Tue, 14 Nov 2017 15:39:08 GMT
+      Expires: Tue, 14 Nov 2017 16:39:08 GMT
       Vary: Accept
-
     body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10141?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Home
       & Furnishing","cm_seo_token_ntk":"10101_home---furnishing","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10141","identifier":"Home Furnishings","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Home
       & Furnishing","uniqueID":"10141","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","seo_token_ntk":"home---furnishing","childCatalogGroupID":["10101_10142","10101_10143","10101_10144","10101_10145","10101_10146","10101_10147","10152_10142","10152_10143","10152_10144","10152_10145","10152_10146","10152_10147"]}],"recordSetCount":1}'

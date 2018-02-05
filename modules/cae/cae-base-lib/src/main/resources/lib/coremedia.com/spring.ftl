@@ -294,7 +294,7 @@ ${stringStatusValue}</textarea>
             <input type="checkbox" id="${id}" name="${status.expression}" value="${value}"<#if isSelected> checked="checked"</#if> ${attributes?no_esc}<@closeTag/>
     <label for="${id}">${options[value]}</label>${separator}
     </#list>
-<input type="hidden" name="_${status.expression}" value="on"/>
+<input type="hidden" name="_${status.expression}" value="on">
 </#macro>
 
 <#--
@@ -310,8 +310,8 @@ ${stringStatusValue}</textarea>
     <@bind path />
     <#assign id="${status.expression?replace('[','')?replace(']','')}">
     <#assign isSelected = status.value?? && status.value?string=="true">
-<input type="hidden" name="_${status.expression}" value="on"/>
-<input type="checkbox" id="${id}" name="${status.expression}"<#if isSelected> checked="checked"</#if> ${attributes?no_esc}/>
+<input type="hidden" name="_${status.expression}" value="on">
+<input type="checkbox" id="${id}" name="${status.expression}"<#if isSelected> checked="checked"</#if> ${attributes?no_esc}>
 </#macro>
 
 <#--

@@ -11,17 +11,19 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.themeimporter.ThemeImporterResultImpl;
 import com.google.common.annotations.VisibleForTesting;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.StringTokenizer;
+import java.util.Properties;
 
 /**
  * Some theme importer related pure content utilities.
@@ -82,17 +84,7 @@ class ThemeImporterContentHelper {
 
   Struct propertiesToStruct(String text) {
     StructBuilder structBuilder = capConnection.getStructService().createStructBuilder();
-    for (StringTokenizer st = new StringTokenizer(text, "\n"); st.hasMoreTokens(); ) {
-      String line = st.nextToken();
-      try {
-        KeyValue property = parseProperty(line);
-        if (property != null) {
-          structBuilder.declareString(property.key, Integer.MAX_VALUE, property.value);
-        }
-      } catch (Exception e) {
-        LOGGER.error("Cannot handle property line \"{}\", ignore.", line, e);
-      }
-    }
+    propertiesToStructBuilder(text, structBuilder);
     return structBuilder.build();
   }
 
@@ -179,18 +171,15 @@ class ThemeImporterContentHelper {
   }
 
   @VisibleForTesting
-  KeyValue parseProperty(String line) {
-    String trimmed = line.trim();
-    if (trimmed.isEmpty() || trimmed.startsWith("#")) {
-      return null;
+  void propertiesToStructBuilder(String text, StructBuilder structBuilder) {
+    try {
+      Properties props = new Properties();
+      props.load(new ByteArrayInputStream(text.getBytes(StandardCharsets.ISO_8859_1)));
+      props.forEach((key, value) -> structBuilder.declareString(key.toString(), Integer.MAX_VALUE, value.toString().trim()));
+    } catch (IOException e) {
+      String snippet = text.length()<30 ? text : text.substring(0, 30)+"...";
+      throw new IllegalArgumentException("Cannot parse properties \"" + snippet + "\"", e);
     }
-    int index = line.indexOf('=');
-    if (index<0) {
-      throw new IllegalArgumentException("Illegal line in properties file: \"" + line + "\"");
-    }
-    String key = StringEscapeUtils.unescapeJava(line.substring(0, index).trim());
-    String value = StringEscapeUtils.unescapeJava(line.substring(index+1).trim());
-    return new KeyValue(key, value);
   }
 
   /**

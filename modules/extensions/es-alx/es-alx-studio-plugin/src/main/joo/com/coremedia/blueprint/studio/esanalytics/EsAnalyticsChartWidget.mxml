@@ -15,10 +15,6 @@
 
     public static const ES_ALX_CHART:String = "esAlxChartItemId";
 
-    public static const ES_ALX_SERVICE_PROVIDER:String = "googleAnalytics";
-
-    public static const EMPTY_TIME_STAMP_ITEM_ID:String = "emptyTimeStampItemId";
-
     private var config:EsAnalyticsChartWidget;
 
     public native function EsAnalyticsChartWidget(config:EsAnalyticsChartWidget = null);
@@ -26,10 +22,10 @@
 
   <local:items>
     <esalx:EsAnalyticsChart itemId="{ES_ALX_CHART}"
-                            bindTo="{getAlxData(ES_ALX_SERVICE_PROVIDER,'data')}"
+                            bindTo="{getAlxData('data')}"
                             timeRangeValueExpression="{getTimeRangeValueExpression()}"
                             chartTitle="{resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_title_page_views')}"
-                            timeStampValueExpression="{getAlxData(ES_ALX_SERVICE_PROVIDER,'timeStamp')}"
+                            timeStampValueExpression="{getAlxData('timeStamp')}"
                             chartHeight="240"/>
 
     <esalx:EsChart bindTo="{getPublicationData('data')}"

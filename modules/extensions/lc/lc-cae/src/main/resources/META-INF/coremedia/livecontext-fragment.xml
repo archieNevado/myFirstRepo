@@ -152,7 +152,7 @@
   </bean>
 
   <bean id="lcCMObjectLinkResolver" parent="abstractLinkResolver" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.CMObjectLiveContextLinkResolver">
-    <property name="commerceLedPageExtension" ref="commerceLedPageExtension"/>
+    <property name="commerceLedLinkBuilderHelper" ref="commerceLedLinkBuilderHelper"/>
     <!--Use legacyExternalSeoSegmentBuilder for the legacy format-->
     <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder" />
     <property name="externalNavigationHandler" ref="externalNavigationHandler"/>

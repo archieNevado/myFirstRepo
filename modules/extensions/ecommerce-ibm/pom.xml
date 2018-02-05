@@ -25,6 +25,7 @@
     <module>lc-ecommerce-ibm-studio-lib</module>
     <module>lc-ecommerce-ibm-cae</module>
     <module>lc-ecommerce-ibm-cae-component</module>
+    <module>lc-ecommerce-ibm-preview-cae</module>
     <module>test-data</module>
   </modules>
 </project>

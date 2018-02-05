@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.contract;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
@@ -63,7 +64,7 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
 
       for (Contract contract : contracts) {
         CommerceId contractId = contract.getId();
-        assertEquals("contract id has wrong format: " + contract.getId(), "ibm", contractId.getVendor());
+        assertEquals("contract id has wrong format: " + contract.getId(), Vendor.of("ibm"), contractId.getVendor());
         assertEquals("contract id has wrong format: " + contract.getId(), "contract", contractId.getCommerceBeanType().type());
         assertTrue("contract id has wrong format: " + contract.getId(), contractId.getExternalId().map(e -> e.startsWith("4000")).orElse(false));
       }

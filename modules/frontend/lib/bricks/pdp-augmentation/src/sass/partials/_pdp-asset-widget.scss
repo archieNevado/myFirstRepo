@@ -23,6 +23,10 @@
       &__picture-box {
         @include aspect-ratio-box(1, 1);
       }
+      a {
+        // disable any inner links or other functionality, otherwise the slideshow will not work
+        pointer-events: none;
+      }
     }
   }
 }

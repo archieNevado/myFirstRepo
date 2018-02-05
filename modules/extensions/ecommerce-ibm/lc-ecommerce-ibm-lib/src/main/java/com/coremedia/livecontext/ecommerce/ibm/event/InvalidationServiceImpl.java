@@ -25,8 +25,9 @@ import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CLEAR_
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.MARKETING_SPOT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.PRODUCT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.SEGMENT_EVENT;
-import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findValueForKey;
-import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.getValueForKey;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findStringValue;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findValue;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.getListValue;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -72,12 +73,12 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
 
     Map<String, Object> cacheInvalidations = wcInvalidationWrapperService.getCacheInvalidations(
             timestamp, maxWaitInMilliseconds, chunkSize, storeContext);
-    List<Map<String, Object>> invalidations = getValueForKey(cacheInvalidations, "invalidations", List.class);
-    if (invalidations == null || invalidations.isEmpty()) {
+    List<Map<String, Object>> invalidations = getListValue(cacheInvalidations, "invalidations");
+    if (invalidations.isEmpty()) {
       return emptyList();
     }
 
-    long lastInvalidationTimestamp = findValueForKey(cacheInvalidations, "lastInvalidation", Long.class).orElse(-1L);
+    long lastInvalidationTimestamp = findValue(cacheInvalidations, "lastInvalidation", Long.class).orElse(-1L);
 
     // the list to return using API classes
     return invalidations.stream()
@@ -121,7 +122,7 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
 
   @Nonnull
   InvalidationEvent convertEvent(@Nonnull Map<String, Object> event, long lastTimestamp) {
-    long timestamp = findValueForKey(event, "timestamp", String.class)
+    long timestamp = findStringValue(event, "timestamp")
             .map(Long::parseLong)
             .orElse(lastTimestamp);
 
@@ -152,6 +153,6 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
 
   @Nullable
   private static String getStringValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
-    return getValueForKey(map, key, String.class);
+    return findStringValue(map, key).orElse(null);
   }
 }

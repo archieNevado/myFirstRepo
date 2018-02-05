@@ -1,15 +1,15 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
+import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
@@ -21,27 +21,21 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.coremedia.livecontext.ecommerce.user.UserSessionService;
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
@@ -53,6 +47,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
@@ -73,29 +69,29 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
 
   @Inject
   @Named(BEAN_NAME_CATALOG_SERVICE)
-  CatalogServiceImpl testling;
+  protected CatalogServiceImpl testling;
 
   @Inject
-  ContractService contractService;
+  protected ContractService contractService;
 
   @Inject
-  UserSessionService userSessionService;
+  protected IbmTestConfig testConfig;
 
   @Inject
-  IbmTestConfig testConfig;
-
-  @Inject
-  StoreInfoService storeInfoService;
+  protected StoreInfoService storeInfoService;
 
   @Inject
   private IbmCommerceIdProvider ibmCommerceIdProvider;
 
+  @MockBean
+  private CommerceConnectionInitializer commerceConnectionInitializer;
+
   @Before
   @Override
   public void setup() {
-    super.setup();
+    doAnswer(invocationOnMock -> Optional.of(CurrentCommerceConnection.get())).when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
     testConfig.setWcsVersion(storeInfoService.getWcsVersion());
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
+    super.setup();
   }
 
   protected void testFindProductVariantByExternalIdWithContractSupport() throws Exception {
@@ -149,7 +145,8 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     assertTrue(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
     product = getTestProductByExternalId(PRODUCT3_WITH_MULTI_SEO);
     assertNotNull(product.getSeoSegment());
-    assertFalse(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));;
+    assertFalse(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    ;
   }
 
   protected void testFindProductVariantByExternalTechId() throws Exception {
@@ -182,36 +179,6 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     int topCategoriesContractCount = topCategoriesContract.size();
 
     assertTrue("Contract filter for b2b topcategories not working", topCategoriesCount > topCategoriesContractCount);
-  }
-
-  protected void testFindSubCategoriesWithContract() throws Exception {
-    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
-      return;
-    }
-
-    StoreContext storeContext = testConfig.getB2BStoreContext();
-    StoreContextHelper.setCurrentContext(storeContext);
-
-    Category category = findAndAssertCategory("Lighting", null, storeContext);
-    assertNotNull(category);
-
-    category = findAndAssertCategory("Fasteners", null, storeContext);
-    assertNotNull(category);
-
-    List<Category> subCategoriesNoContract = testling.findSubCategories(category);
-    assertTrue(subCategoriesNoContract.size() >= 3);
-
-    //test b2b categories with contract
-    String[] contractIds = getContractIdsForUser( "bmiller", "passw0rd");
-
-    storeContext.setContractIds(contractIds);
-    category = findAndAssertCategory("Fasteners", null, storeContext);
-
-    List<Category> subCategoriesWithContract = testling.findSubCategories(category);
-    assertEquals(2, subCategoriesWithContract.size());
-    assertEquals(BaseCommerceBeanType.CATEGORY, subCategoriesWithContract.get(0).getId().getCommerceBeanType());
-    assertEquals("Bolts", subCategoriesWithContract.get(0).getName());
-    assertEquals("Screws", subCategoriesWithContract.get(1).getName());
   }
 
   protected void testFindCategoryByExternalTechId() throws Exception {
@@ -253,7 +220,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
             storeContext);
     assertNotNull(contracts);
 
-    Iterator<Contract> iterator  = contracts.iterator();
+    Iterator<Contract> iterator = contracts.iterator();
     Contract contract = null;
     while (iterator.hasNext()) {
       contract = iterator.next();
@@ -269,34 +236,8 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     return storeContext;
   }
 
-  private String[] getContractIdsForUser(String user, String password){
-    HttpServletRequest request = new MockHttpServletRequest();
-    HttpServletResponse response = new MockHttpServletResponse();
-
-    UserContext userContextBeforeLogin = UserContext.builder().withUserId(user).withUserName(user).build();
-    UserContextHelper.setCurrentContext(userContextBeforeLogin);
-
-    boolean loginSuccess = userSessionService.loginUser(request, response, user, password);
-    assertTrue(loginSuccess);
-
-    UserContext userContextAfterLogin = CurrentCommerceConnection.get().getUserContext();
-    assertNotNull(userContextAfterLogin.getCookieHeader());
-
-    Collection<Contract> contractIdsForUser = contractService.findContractIdsForUser(userContextAfterLogin,
-            CurrentCommerceConnection.get().getStoreContext());
-    String[] contractIdsArr = Iterables.toArray(Iterables.transform(contractIdsForUser, new Function<Contract, String>() {
-      @Nullable
-      @Override
-      public String apply(@Nullable Contract contract) {
-        assert contract != null;
-        return contract.getExternalTechId();
-      }
-    }), String.class);
-    return contractIdsArr;
-  }
-
   @Override
-  protected void assertProduct(Product product) throws CommerceException {
+  protected void assertProduct(Product product) {
     super.assertProduct(product);
     //test attributes
     List<ProductAttribute> definingAttributes = product.getDefiningAttributes();
@@ -314,14 +255,14 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
 
     //test axis filter
     List<String> variantAxisNames = product.getVariantAxisNames();
-    if (!variantAxisNames.isEmpty()){
+    if (!variantAxisNames.isEmpty()) {
       List<ProductVariant> filteredVariants = product.getVariants(new AxisFilter(variantAxisNames.get(0), "*"));
       assertTrue(variants.size() >= filteredVariants.size());
     }
   }
 
   @Override
-  protected void assertProductVariant(ProductVariant productVariant) throws CommerceException {
+  protected void assertProductVariant(ProductVariant productVariant) {
     super.assertProductVariant(productVariant);
     List<ProductAttribute> describingAttributes = productVariant.getDescribingAttributes();
     assertThat(describingAttributes.isEmpty(), is(false));

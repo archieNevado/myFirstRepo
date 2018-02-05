@@ -3,32 +3,36 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "grunt build",
-    "production": "grunt build",
-    "start": "grunt monitor"
+    "build": "webpack",
+    "start": "cm monitor",
+    "theme-importer": "cm theme-importer"
   },
   "dependencies": {
-    "grunt": "1.0.1",
-    "@coremedia/sass-utils": "file:../../lib/sass/utils",
-    "@coremedia/brick-bootstrap": "file:../../lib/bricks/bootstrap",
-    "@coremedia/brick-dynamic-include": "file:../../lib/bricks/dynamic-include",
-    "@coremedia/brick-fragment-scenario": "file:../../lib/bricks/fragment-scenario",
-    "@coremedia/brick-responsive-images": "file:../../lib/bricks/responsive-images",
-    "@coremedia/brick-default-teaser": "file:../../lib/bricks/default-teaser",
-    "@coremedia/brick-hero-teaser": "file:../../lib/bricks/hero-teaser",
-    "@coremedia/brick-generic-templates": "file:../../lib/bricks/generic-templates",
-    "@coremedia/brick-quick-info": "file:../../lib/bricks/quick-info",
-    "@coremedia/brick-image-maps": "file:../../lib/bricks/image-maps",
-    "@coremedia/brick-video": "file:../../lib/bricks/video",
-    "@coremedia/brick-shoppable-video": "file:../../lib/bricks/shoppable-video",
-    "@coremedia/brick-elastic-social": "file:../../lib/bricks/elastic-social",
-    "@coremedia/brick-livecontext": "file:../../lib/bricks/livecontext",
-    "@coremedia/brick-pdp-augmentation": "file:../../lib/bricks/pdp-augmentation",
-    "@coremedia/brick-preview": "file:../../lib/bricks/preview",
-    "@coremedia/brick-360-spinner": "file:../../lib/bricks/360-spinner"
+    "@coremedia/sass-utils": "^1.0.0",
+    "@coremedia/brick-bootstrap": "^1.0.0",
+    "@coremedia/brick-cta": "^1.0.0",
+    "@coremedia/brick-dynamic-include": "^1.0.0",
+    "@coremedia/brick-fragment-scenario": "^1.0.0",
+    "@coremedia/brick-responsive-images": "^1.0.0",
+    "@coremedia/brick-default-teaser": "^1.0.0",
+    "@coremedia/brick-hero-teaser": "^1.0.0",
+    "@coremedia/brick-generic-templates": "^1.0.0",
+    "@coremedia/brick-quick-info": "^1.0.0",
+    "@coremedia/brick-image-maps": "^1.0.0",
+    "@coremedia/brick-video": "^1.0.0",
+    "@coremedia/brick-shoppable-video": "^1.0.0",
+    "@coremedia/brick-elastic-social": "^1.0.0",
+    "@coremedia/brick-livecontext": "^1.0.0",
+    "@coremedia/brick-pdp-augmentation": "^1.0.0",
+    "@coremedia/brick-preview": "^1.0.0",
+    "@coremedia/brick-360-spinner": "^1.0.0",
+    "@coremedia/cm-cli": "^2.0.0",
+    "@coremedia/theme-utils": "^3.0.0",
+    "webpack": "3.10.0"
   },
   "main": "src/js/index.js",
-  "theme": {
+  "coremedia": {
+    "type": "theme",
     "name": "aurora"
   },
   "browserslist": [

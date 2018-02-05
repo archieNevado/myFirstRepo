@@ -3,11 +3,11 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -96,46 +96,46 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   @Override
   public String getExternalId() {
-    return DataMapHelper.getValueForKey(getDelegate(), "partNumber", String.class);
+    return getStringValue(getDelegate(), "partNumber");
   }
 
   @Override
   public String getExternalTechId() {
-    return DataMapHelper.getValueForKey(getDelegate(), "uniqueID", String.class);
+    return getStringValue(getDelegate(), "uniqueID");
   }
 
   @Override
   public String getName() {
-    return DataMapHelper.getValueForKey(getDelegate(), "name", String.class);
+    return getStringValue(getDelegate(), "name");
   }
 
   @Override
   public Markup getShortDescription() {
-    String shortDescription = DataMapHelper.getValueForKey(getDelegate(), "shortDescription", String.class);
+    String shortDescription = getStringValue(getDelegate(), "shortDescription");
     //short description by WCS is pure text.
     return toRichtext(shortDescription);
   }
 
   @Override
   public Markup getLongDescription() {
-    String longDescription = DataMapHelper.getValueForKey(getDelegate(), "longDescription", String.class);
+    String longDescription = getStringValue(getDelegate(), "longDescription");
     //long description by WCS is already html and encoded
     return toRichtext(longDescription, false);
   }
 
   @Override
   public String getTitle() {
-    return DataMapHelper.getValueForKey(getDelegate(), "title", String.class);
+    return getStringValue(getDelegate(), "title");
   }
 
   @Override
   public String getMetaDescription() {
-    return DataMapHelper.getValueForKey(getDelegate(), "metaDescription", String.class);
+    return getStringValue(getDelegate(), "metaDescription");
   }
 
   @Override
   public String getMetaKeywords() {
-    return DataMapHelper.getValueForKey(getDelegate(), "metaKeyword", String.class);
+    return getStringValue(getDelegate(), "metaKeyword");
   }
 
   @Override
@@ -177,7 +177,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     }
 
     WcPrice offerPrice = prices.get("Offer");
-    if (offerPrice != null && !offerPrice.getPriceValue().isEmpty())  {
+    if (offerPrice != null && !offerPrice.getPriceValue().isEmpty()) {
       return convertStringToBigDecimal(offerPrice.getPriceValue());
     } else {
       return getPersonalizedOfferPrice();
@@ -199,7 +199,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   @Nullable
   private String getCmSeoSegment() {
-    String cmLocalizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "cm_seo_token_ntk", String.class);
+    String cmLocalizedSeoSegment = getStringValue(getDelegate(), "cm_seo_token_ntk");
     cmLocalizedSeoSegment = processCmLocalizedSeoSegment(cmLocalizedSeoSegment);
 
     if (cmLocalizedSeoSegment == null) {
@@ -245,7 +245,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
   public String getSeoSegment() {
     String localizedSeoSegment = getCmSeoSegment();
     if (isBlank(localizedSeoSegment)) {
-      localizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "seo_token_ntk", String.class);
+      localizedSeoSegment = getStringValue(getDelegate(), "seo_token_ntk");
       localizedSeoSegment = processLocalizedSeoSegment(localizedSeoSegment);
 
       if (localizedSeoSegment == null) {
@@ -282,38 +282,43 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     return localizedSeoSegment;
   }
 
+  @Nullable
   @Override
   public String getDefaultImageAlt() {
-    return DataMapHelper.getValueForKey(getDelegate(), "fullImageAltDescription", String.class);
+    return getStringValue(getDelegate(), "fullImageAltDescription");
   }
 
+  @Nullable
   @Override
   public String getDefaultImageUrl() {
-    return DataMapHelper.findValueForKey(getDelegate(), "fullImage", String.class)
+    return DataMapHelper.findStringValue(getDelegate(), "fullImage")
             .map(fullImage -> getAssetUrlProvider().getImageUrl(fullImage))
             .orElse(null);
   }
 
+  @Nullable
   @Override
   public String getThumbnailUrl() {
-    return DataMapHelper.findValueForKey(getDelegate(), "thumbnail", String.class)
+    return DataMapHelper.findStringValue(getDelegate(), "thumbnail")
             .map(thumbnail -> getAssetUrlProvider().getImageUrl(thumbnail))
             .orElse(null);
   }
 
+  @Nonnull
   @Override
-  public CatalogPicture getCatalogPicture(){
+  public CatalogPicture getCatalogPicture() {
     return findAssetService()
             .map(assetService -> assetService.getCatalogPicture(getDefaultImageUrl(), getReference()))
             .orElseGet(() -> new CatalogPicture("#", null));
   }
 
+  @Nullable
   @Override
   public Content getPicture() {
-    List<Content> pictures = getPictures();
-    return pictures != null && !pictures.isEmpty() ? pictures.get(0) : null;
+    return getPictures().stream().findFirst().orElse(null);
   }
 
+  @Nonnull
   @Override
   public List<Content> getPictures() {
     return findAssetService()
@@ -321,6 +326,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .orElseGet(Collections::emptyList);
   }
 
+  @Nonnull
   @Override
   public List<Content> getVisuals() {
     return findAssetService()
@@ -328,6 +334,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .orElseGet(Collections::emptyList);
   }
 
+  @Nonnull
   @Override
   public List<Content> getDownloads() {
     return findAssetService()
@@ -335,11 +342,13 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .orElseGet(Collections::emptyList);
   }
 
+  @Nullable
   @Override
   public Category getCategory() {
     return doGetCategory();
   }
 
+  @Nonnull
   @Override
   public List<Category> getCategories() {
     Category category = doGetCategory();
@@ -353,7 +362,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   @Override
   public boolean isVariant() {
-    return DataMapHelper.findValueForKey(getDelegate(), "parentCatalogEntryID", String.class)
+    return DataMapHelper.findStringValue(getDelegate(), "parentCatalogEntryID")
             .isPresent();
   }
 
@@ -412,11 +421,13 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     // load attributes in local member variables if available in delegate
     definingAttributes = new ArrayList<>();
     describingAttributes = new ArrayList<>();
-    List<Map<String, Object>> wcAttributes = DataMapHelper.getValueForKey(getDelegate(), "attributes", List.class);
-    if (wcAttributes != null && ! wcAttributes.isEmpty()) {
+
+    List<Map<String, Object>> wcAttributes = DataMapHelper.findValue(getDelegate(), "attributes", List.class)
+            .orElse(null);
+    if (wcAttributes != null && !wcAttributes.isEmpty()) {
       for (Map<String, Object> wcAttribute : wcAttributes) {
         ProductAttribute pa = new ProductAttributeImpl(wcAttribute);
-        if (USAGE_DEFINING.equals(DataMapHelper.getValueForKey(wcAttribute, "usage", String.class))) {
+        if (USAGE_DEFINING.equals(getStringValue(wcAttribute, "usage"))) {
           definingAttributes.add(pa);
         } else {
           describingAttributes.add(pa);
@@ -434,7 +445,6 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     return NumberUtils.createBigDecimal(value);
   }
 
-
   // --- internal ---------------------------------------------------
 
   @Nullable
@@ -443,6 +453,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     if (!catalog.isPresent()) {
       throw new IllegalStateException("Product '" + this + "' does not have a catalog category.");
     }
+
     String catalogId = catalog.get().getExternalId();
     List<String> parentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(getDelegate(), catalogId);
     if (parentCategoryIds.isEmpty()) {
@@ -456,5 +467,10 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
     CommerceId commerceId = getCommerceIdProvider().formatCategoryTechId(getCatalogAlias(), parentCategoryID);
     return (Category) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
+  }
+
+  @Nullable
+  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

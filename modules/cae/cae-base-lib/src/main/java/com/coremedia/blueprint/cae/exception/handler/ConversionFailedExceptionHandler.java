@@ -45,8 +45,7 @@ public class ConversionFailedExceptionHandler extends AbstractErrorAndExceptionH
 
   @Override
   public void handleExceptionInternal(ConversionFailedException exception, ModelAndView modelAndView, String viewName, HttpServletRequest request) {
-    LOG.debug("Failed to convert value '{}' to {} for {} (responding with 404, NOT_FOUND)",
-      new Object[] { exception.getValue(), exception.getTargetType(), request.getRequestURI(), exception });
+    LOG.debug("Failed to convert value '{}' to {} for {} (responding with 404, NOT_FOUND)", exception.getValue(), exception.getTargetType(), request.getRequestURI(), exception);
   }
 
   @Override

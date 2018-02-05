@@ -5,9 +5,12 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropert
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommercePropertyProvider;
+import com.coremedia.livecontext.ecommerce.common.ForVendor;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
+import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
+import com.coremedia.livecontext.ecommerce.ibm.login.WcPreviewToken;
 import com.coremedia.livecontext.handler.NextURLRedirectHandler;
 import com.coremedia.livecontext.web.taglib.LiveContextLoginUrlsProvider;
 import com.coremedia.objectserver.web.links.LinkFormatter;
@@ -23,8 +26,8 @@ import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.isStudioPreviewRequest;
 import static java.util.Objects.requireNonNull;
@@ -32,11 +35,12 @@ import static java.util.Objects.requireNonNull;
 /**
  * Provides URLs to WCS Login Form and logout handlers.
  */
+@ForVendor("ibm")
 public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
 
   private static final String QUERY_PARAMETER_PREVIEW_TOKEN = "previewToken";
 
-  private final CommercePropertyProvider previewTokenProvider;
+  private final LoginService loginService;
   private final LinkFormatter linkFormatter;
 
   private String defaultStoreFrontUrl;
@@ -44,10 +48,10 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
   private String loginFormUrlTemplate;
   private String logoutUrlTemplate;
 
-  public WcsLoginUrlsProvider(@Nonnull CommercePropertyProvider previewTokenProvider,
+  public WcsLoginUrlsProvider(@Nonnull LoginService loginService,
                               @Nonnull LinkFormatter linkFormatter) {
-    this.previewTokenProvider = requireNonNull(previewTokenProvider);
-    this.linkFormatter = requireNonNull(linkFormatter);
+    this.loginService = loginService;
+    this.linkFormatter = linkFormatter;
   }
 
   @Required
@@ -70,22 +74,28 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
     this.logoutUrlTemplate = requireNonNull(logoutUrlTemplate);
   }
 
+  @Nonnull
   @Override
-  public String buildLoginFormUrl() {
-    return buildUrl(loginFormUrlTemplate);
+  public String buildLoginFormUrl(@Nonnull HttpServletRequest request) {
+    return buildUrl(loginFormUrlTemplate, request);
   }
 
+  @Nonnull
   @Override
-  public String buildLogoutUrl() {
-    return buildUrl(logoutUrlTemplate);
+  public String buildLogoutUrl(@Nonnull HttpServletRequest request) {
+    return buildUrl(logoutUrlTemplate, request);
   }
 
+  @Nonnull
   @Override
-  public String transformLoginStatusUrl(String url) {
+  public String transformLoginStatusUrl(@Nonnull String url, @Nonnull HttpServletRequest request) {
+    if (!isStudioPreviewRequest(request)) {
+      return url;
+    }
     return appendPreviewToken(url);
   }
 
-  private String buildUrl(String urlTemplate) {
+  private String buildUrl(String urlTemplate, HttpServletRequest request) {
     CommerceConnection connection = CurrentCommerceConnection.get();
     StoreContext storeContext = connection.getStoreContext();
     CatalogServiceImpl catalogService = getCatalogService(connection);
@@ -99,10 +109,12 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
             "nexturl", nexturl
     );
     String relativeUrl = TokenResolverHelper.replaceTokens(commerceTokensReplacedUrl, parametersMap, false, false);
-    String storeFrontUrl = isStudioPreviewRequest() ? previewStoreFrontUrl : defaultStoreFrontUrl;
+    boolean studioPreviewRequest = isStudioPreviewRequest(request);
+    String storeFrontUrl = studioPreviewRequest ? previewStoreFrontUrl : defaultStoreFrontUrl;
 
     String result = concatUrls(storeFrontUrl, relativeUrl);
-    return appendPreviewToken(result);
+
+    return studioPreviewRequest ? appendPreviewToken(result) : result;
   }
 
   @Nonnull
@@ -120,11 +132,13 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
     return (ServletRequestAttributes) requestAttributes;
   }
 
-  private String appendPreviewToken(String url) {
-    if (!isStudioPreviewRequest()) {
-      return url;
-    }
-    String previewToken = (String) previewTokenProvider.provideValue(new HashMap<>());
+  @Nonnull
+  private String appendPreviewToken(@Nonnull String url) {
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
+
+    String previewToken = Optional.ofNullable(loginService.getPreviewToken(storeContext))
+            .map(WcPreviewToken::getPreviewToken)
+            .orElse(null);
     if (previewToken == null) {
       return url;
     }

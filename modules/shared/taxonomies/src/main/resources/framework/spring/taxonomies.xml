@@ -63,6 +63,7 @@
     <property name="contentRepository" ref="contentRepository"/>
     <property name="solrSearchService" ref="solrSearchService"/>
     <property name="referencePropertyName" value="externalReference"/>
+    <property name="nameMatchingPropertyName" value="value"/>
   </bean>
 
   <util:list id="semanticServiceStrategies">

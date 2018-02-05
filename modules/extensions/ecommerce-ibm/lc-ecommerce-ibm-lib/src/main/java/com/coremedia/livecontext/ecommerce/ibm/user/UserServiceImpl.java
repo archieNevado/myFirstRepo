@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public User findCurrentUser() {
     UserContext userContext = UserContextHelper.getCurrentContext();
-    StoreContext storeContext = StoreContextHelper.getCurrentContext();
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
 
     Map<String, Object> personWrapper = commerceCache.get(
             new FindCommercePersonCacheKey("" + userContext.getUserId(), storeContext, userContext,
@@ -56,18 +56,19 @@ public class UserServiceImpl implements UserService {
 
   // ----- Helper -----------------------------
 
-  protected User createUserBeanFor(Map<String, Object> personWrapper, StoreContext context) {
+  protected User createUserBeanFor(Map<String, Object> personWrapper, @Nonnull StoreContext storeContext) {
     if (personWrapper == null) {
       return null;
     }
 
-    String userId = DataMapHelper.getValueForKey(personWrapper, "userId", String.class);
+    String userId = DataMapHelper.findStringValue(personWrapper, "userId").orElse(null);
     if (userId == null) {
       return null;
     }
 
     CommerceId commerceId = commerceId(BaseCommerceBeanType.USER).withExternalId(userId).build();
-    User user = (User) commerceBeanFactory.createBeanFor(commerceId, context);
+
+    User user = (User) commerceBeanFactory.createBeanFor(commerceId, storeContext);
     ((AbstractIbmCommerceBean) user).setDelegate(personWrapper);
     return user;
   }

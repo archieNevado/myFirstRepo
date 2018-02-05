@@ -260,6 +260,8 @@ public class CatalogHelper {
       uriPath = "livecontext/marketingspot/" + encodedSiteId + "/" + workspaceId + "/" + endocedExternalId;
     } else if (isMarketing(catalogObjectId)) {
       uriPath = "livecontext/marketing/" + encodedSiteId + "/" + workspaceId + "/";
+    } else if (isFacets(catalogObjectId)) {
+      uriPath = "livecontext/facets/" + encodedSiteId + "/" + catalogAlias + "/" + workspaceId + "/" + endocedExternalId;
     }
 
     if(uriPath) {
@@ -339,6 +341,10 @@ public class CatalogHelper {
     return catalogObjectId.indexOf("/marketing/") !== -1;
   }
 
+  public static function isFacets(catalogObjectId:String):Boolean {
+    return catalogObjectId.indexOf("/facets/") !== -1;
+  }
+
   public function getActiveStoreExpression():ValueExpression {
     if (storeExpression) {
       return storeExpression;
@@ -362,13 +368,25 @@ public class CatalogHelper {
   }
 
   public function isCoreMediaStore(store:Store):Boolean {
+    return isVendor(store, "coremedia");
+  }
+
+  public function isVendor(store:Store, vendorName:String):Boolean {
+    return vendor(store, vendorName, true);
+  }
+
+  public function isNotVendor(store:Store, vendorName:String):Boolean {
+    return vendor(store, vendorName, false);
+  }
+
+  private function vendor(store:Store, vendorName:String, isBelongsTo:Boolean): Boolean {
     if (store === undefined) {
       return undefined;
     }
     if (!store) {
       return false;
     }
-    return store.getVendorName() && store.getVendorName().toLowerCase() === "coremedia";
+    return store.getVendorName() && isBelongsTo === (store.getVendorName().toLowerCase() === vendorName.toLowerCase());
   }
 
   public function getExtractedWorkspaceId():String {

@@ -31,7 +31,8 @@ To enable WCS deployment overwrite the default roles with the ones found here be
 * `node['blueprint']['lc3-ibm-wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora']` -  Defaults to `AuroraESite`.
 * `node['blueprint']['lc3-ibm-wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora']` -  Defaults to `USD`.
 * `node['blueprint']['lc3-ibm-wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora']` -  Defaults to `ibm`.
-* `node['blueprint']['lc3-ibm-wcs']['application.properties']['blueprint.host.helios']` - convenience property to workaround CMS-9339. Defaults to `preview.#{node['blueprint']['hostname']}`.
+* `node['blueprint']['lc3-ibm-wcs']['application.properties']['blueprint.host.calista']` - convenience property to workaround CMS-9339. Defaults to `preview.#{node['blueprint']['hostname']}`.
+* `node['blueprint']['lc3-ibm-wcs']['application.properties']['blueprint.host.helios']` -  Defaults to `preview.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-ibm-wcs']['ssl_proxy_verify']` -  Defaults to `true`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']['default']['host']` -  Defaults to `node['blueprint']['lc3-ibm-wcs']['cms_host']`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']['default']['port']` -  Defaults to `42180`.
@@ -40,7 +41,11 @@ To enable WCS deployment overwrite the default roles with the ones found here be
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['server_name']` -  Defaults to `helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['server_aliases']` -  Defaults to `[ ... ]`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['default_site']` -  Defaults to `aurora`.
-* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['site_id']` - The id property of the CMSite content associated with this site. Defaults to `99c8ef576f385bc322564d5694df6fc2`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['site_id']` -  Defaults to `99c8ef576f385bc322564d5694df6fc2`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['calista']['server_name']` -  Defaults to `calista.#{node['blueprint']['hostname']}`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['calista']['server_aliases']` -  Defaults to `[ ... ]`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['calista']['default_site']` -  Defaults to `calista`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['calista']['site_id']` -  Defaults to `ced8921aa7b7f9b736b90e19afc2dd2a`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['server_name']` -  Defaults to `shop-helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['server_aliases']` -  Defaults to `[ ... ]`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.

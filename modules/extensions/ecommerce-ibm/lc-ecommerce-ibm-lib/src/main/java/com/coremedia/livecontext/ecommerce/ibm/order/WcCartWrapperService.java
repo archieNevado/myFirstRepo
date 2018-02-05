@@ -10,11 +10,10 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.springframework.http.HttpMethod;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Collections.singletonList;
 
@@ -43,23 +42,16 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     try {
       Integer userId = UserContextHelper.getForUserId(userContext);
 
-      if (!UserContextHelper.isAnonymousId(userId)) {
-        List<String> variableValues = singletonList(getStoreId(storeContext));
-
-        Map<String, String[]> optionalParameters = createParametersMap(
-                null,
-                getLocale(storeContext),
-                getCurrency(storeContext),
-                UserContextHelper.getForUserId(userContext),
-                UserContextHelper.getForUserName(userContext),
-                null,
-                storeContext);
-
-        return getRestConnector().callService(GET_CART, variableValues, optionalParameters, null, storeContext,
-                userContext);
+      if (UserContextHelper.isAnonymousId(userId)) {
+        return null;
       }
 
-      return null;
+      List<String> variableValues = singletonList(getStoreId(storeContext));
+
+      Map<String, String[]> optionalParameters = getOptionalParameters(storeContext, userContext);
+
+      return getRestConnector().callService(GET_CART, variableValues, optionalParameters, null, storeContext,
+              userContext);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -71,14 +63,7 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     try {
       List<String> variableValues = singletonList(getStoreId(storeContext));
 
-      Map<String, String[]> optionalParameters = createParametersMap(
-              null,
-              getLocale(storeContext),
-              getCurrency(storeContext),
-              UserContextHelper.getForUserId(userContext),
-              UserContextHelper.getForUserName(userContext),
-              null,
-              storeContext);
+      Map<String, String[]> optionalParameters = getOptionalParameters(storeContext, userContext);
 
       getRestConnector().callService(UPDATE_CART, variableValues, optionalParameters, updateCartParam, storeContext,
               userContext);
@@ -93,14 +78,7 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     try {
       List<String> variableValues = singletonList(getStoreId(storeContext));
 
-      Map<String, String[]> optionalParameters = createParametersMap(
-              null,
-              getLocale(storeContext),
-              getCurrency(storeContext),
-              UserContextHelper.getForUserId(userContext),
-              UserContextHelper.getForUserName(userContext),
-              null,
-              storeContext);
+      Map<String, String[]> optionalParameters = getOptionalParameters(storeContext, userContext);
 
       getRestConnector().callService(ADD_TO_CART, variableValues, optionalParameters, addToCartParam, storeContext,
               userContext);
@@ -115,14 +93,7 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     try {
       List<String> variableValues = singletonList(getStoreId(storeContext));
 
-      Map<String, String[]> optionalParameters = createParametersMap(
-              null,
-              getLocale(storeContext),
-              getCurrency(storeContext),
-              UserContextHelper.getForUserId(userContext),
-              UserContextHelper.getForUserName(userContext),
-              null,
-              storeContext);
+      Map<String, String[]> optionalParameters = getOptionalParameters(storeContext, userContext);
 
       getRestConnector().callService(CANCEL_CART, variableValues, optionalParameters, null, storeContext, userContext);
     } catch (CommerceException e) {
@@ -130,5 +101,15 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     } catch (Exception e) {
       throw new CommerceException(e);
     }
+  }
+
+  @Nonnull
+  private Map<String, String[]> getOptionalParameters(@Nonnull StoreContext storeContext,
+                                                      @Nullable UserContext userContext) {
+    return buildParameterMap()
+            .withCurrency(storeContext)
+            .withLanguageId(storeContext)
+            .withUserIdOrName(userContext)
+            .build();
   }
 }

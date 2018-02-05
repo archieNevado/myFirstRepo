@@ -1,0 +1,26 @@
+.cm-cta-button {
+  white-space: normal; //overwrite bootstraps nowrap for CTAs with long text
+  outline: none !important; //remove bootstrap's blue shadow
+  text-decoration: underline;
+  background-color: rgba(255, 255, 255, 0.75);
+  border: none;
+  border-radius: 0;
+  //padding: 0 21px;
+  // quick-fix for CMS-9915
+  // but we really should not share class names with aurora esite...
+  pointer-events: auto;
+  text-transform: uppercase;
+  padding: 14px;
+
+  &:hover {
+    // important is needed to show the underline on shop-now buttons
+    text-decoration: underline !important;
+    background-color: rgba(255, 255, 255, 1);
+  }
+
+  &:active, &:focus {
+    text-decoration: underline;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: inset 0 0 0 1px $btn-primary-color, inset 0 0 0 2px $btn-primary-bg;
+  }
+}

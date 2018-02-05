@@ -5,6 +5,5 @@
   "itemsPerRowXS": 2,
   "itemsPerRowSM": 3,
   "itemsPerRowMD": 6,
-  "showHeadline": true,
   "viewItems": "asPortrait"
 }/>

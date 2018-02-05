@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
-import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -12,7 +12,6 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
@@ -34,11 +33,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class FragmentPageHandlerTest {
 
   private final static String STORE_ID = "10001";
@@ -51,9 +49,6 @@ public class FragmentPageHandlerTest {
 
   @Mock
   private BeanFactory beanFactory;
-
-  @Mock
-  private StoreContextProvider storeContextProvider;
 
   @Mock
   private StoreContext storeContext;
@@ -74,15 +69,6 @@ public class FragmentPageHandlerTest {
   private ContentBeanFactory contentBeanFactory;
 
   @Mock
-  private Content placementChannel;
-
-  @Mock
-  private ContentType placementChannelType;
-
-  @Mock
-  private CMChannel placementChannelBean;
-
-  @Mock
   private CMChannel channelBean;
 
   @Mock
@@ -95,7 +81,8 @@ public class FragmentPageHandlerTest {
   private CommerceConnection connection;
 
   @Mock
-  private ValidationService validationService;
+  private CatalogAliasTranslationService catalogAliasTranslationService;
+
 
   private final Cache cache = new Cache("test");
 
@@ -140,21 +127,20 @@ public class FragmentPageHandlerTest {
   public void setUp() {
     testling = new FragmentPageHandler();
     testling.setBeanFactory(beanFactory);
-    testling.setFragmentHandlers(new ArrayList<FragmentHandler>());
+    testling.setFragmentHandlers(new ArrayList<>());
     testling.setContentBeanFactory(contentBeanFactory);
     testling.setSitesService(sitesService);
+    testling.setCatalogAliasTranslationService(catalogAliasTranslationService);
+
 
     CurrentCommerceConnection.set(connection);
-    when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getStoreContext()).thenReturn(storeContext);
 
     when(storeContext.getSiteId()).thenReturn(SITE_ID);
     when(sitesService.getSite(SITE_ID)).thenReturn(site);
 
     when(site.getSiteRootDocument()).thenReturn(rootChannel);
-    when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
     when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, cache, null, null, null));
-    when(validationService.validate(any())).thenReturn(true);
 
     FragmentContext context = new FragmentContext();
     context.setFragmentRequest(true);
@@ -168,9 +154,6 @@ public class FragmentPageHandlerTest {
     when(rootChannelType.getName()).thenReturn("contentTypeName");
     when(contentBeanFactory.createBeanFor(rootChannel, CMChannel.class)).thenReturn(channelBean);
 
-    when(placementChannel.getType()).thenReturn(placementChannelType);
-    when(placementChannelType.getName()).thenReturn("contentTypeName");
-    when(placementChannelBean.getContent()).thenReturn(placementChannel);
   }
 
   @After

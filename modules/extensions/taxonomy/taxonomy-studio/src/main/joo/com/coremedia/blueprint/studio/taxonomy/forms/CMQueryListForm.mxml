@@ -51,7 +51,7 @@
             <dcqe:ModificationDateConditionEditor bindTo="{config.bindTo}"
                                                   propertyName="freshness"
                                                   group="attributes"
-                                                  documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
+                                                  documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
                                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                                   sortable="true">
               <dcqe:timeSlots>
@@ -70,24 +70,24 @@
                                          propertyName="documents"
                                          group="attributes"
                                          contentType="CMChannel"
-                                         documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
+                                         documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <taxonomy:TaxonomyConditionEditor bindTo="{config.bindTo}"
                                               propertyName="subjecttaxonomy"
                                               group="attributes"
                                               contentType="CMTaxonomy"
-                                              documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
+                                              documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
                                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <taxonomy:LocationTaxonomyConditionEditor bindTo="{config.bindTo}"
                                                       propertyName="locationtaxonomy"
                                                       group="attributes"
                                                       contentType="CMLocTaxonomy"
-                                                      documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
+                                                      documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
                                                       forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <dcqe:LinkingTaxonomyConditionEditor bindTo="{config.bindTo}"
                                                  group="attributes"
                                                  propertyName="contextTaxonomies"
-                                                 documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery']}"
+                                                 documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
                                                  forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
           </dcqe:conditions>
         </dcqe:ContentQueryForm>
@@ -97,7 +97,7 @@
             title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
       <editor:items>
         <bpforms:TeaserDocumentForm/>
-        <bpforms:ItemsForm/>
+        <bpforms:FixedIndexItemsForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMQueryList_extendedItems_title')}"/>
         <bpforms:ViewTypeSelectorForm
                 paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
                 collapsed="false"/>

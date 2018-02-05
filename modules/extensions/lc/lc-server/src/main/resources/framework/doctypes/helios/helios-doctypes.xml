@@ -7,6 +7,7 @@
   <ImportGrammar Name="coremedia-struct-2008"/>
 
   <ImportDocType Name="CMDynamicList"/>
+  <ImportDocType Name="CMQueryList"/>
   <ImportDocType Name="CMTeasable"/>
   <ImportDocType Name="CMChannel"/>
   <ImportDocType Name="CMAbstractCategory"/>
@@ -40,7 +41,7 @@
     <StringProperty Name="externalId" Length="256" Index="true"/>
   </DocType>
 
-  <DocType Name="CMProductList" Parent="CMDynamicList">
+  <DocType Name="CMProductList" Parent="CMQueryList">
     <LinkListProperty Name="master" Max="1" LinkType="CMProductList" Override="true" extensions:weakLink="true"/>
     <StringProperty Name="externalId" Length="256" Index="true"/>
   </DocType>

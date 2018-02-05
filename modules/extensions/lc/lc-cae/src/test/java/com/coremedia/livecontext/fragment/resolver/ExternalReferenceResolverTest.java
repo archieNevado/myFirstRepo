@@ -1,14 +1,12 @@
 package com.coremedia.livecontext.fragment.resolver;
 
 
-import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -19,10 +17,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ExternalReferenceResolverTest {
 
   @Mock
@@ -38,9 +35,6 @@ public class ExternalReferenceResolverTest {
   private Content navigation;
 
   @Mock
-  private Content siteRoot;
-
-  @Mock
   private Content folder;
 
   @Mock
@@ -49,13 +43,6 @@ public class ExternalReferenceResolverTest {
   @Mock
   private ContextHelper contextHelper;
 
-
-  @Before
-  public void beforeEachTest() {
-    when(site.getSiteRootFolder()).thenReturn(siteRootFolder);
-    when(siteRootFolder.getRepository()).thenReturn(contentRepository);
-    when(contextHelper.contextFor(any(CMLinkable.class))).thenReturn(null);
-  }
 
   @Test
   public void testContentCapIdExternalReferenceResolver() throws Exception {
@@ -98,7 +85,6 @@ public class ExternalReferenceResolverTest {
     String ref = "cm-path!!action!content";
 
     when(site.getSiteRootFolder()).thenReturn(siteRootFolder);
-    when(siteRootFolder.getRepository()).thenReturn(contentRepository);
     when(contentRepository.getChild("action/content")).thenReturn(linkable);
 
     ContentPathExternalReferenceResolver testling = new ContentPathExternalReferenceResolver();
@@ -118,7 +104,6 @@ public class ExternalReferenceResolverTest {
     String ref = "cm-path!action!content";
 
     when(site.getSiteRootFolder()).thenReturn(siteRootFolder);
-    when(siteRootFolder.getRepository()).thenReturn(contentRepository);
     when(siteRootFolder.getChild("action/content")).thenReturn(linkable);
 
     ContentPathExternalReferenceResolver testling = new ContentPathExternalReferenceResolver();
@@ -138,7 +123,6 @@ public class ExternalReferenceResolverTest {
     String ref = "cm-path!";
 
     when(site.getSiteRootFolder()).thenReturn(siteRootFolder);
-    when(siteRootFolder.getRepository()).thenReturn(contentRepository);
     when(siteRootFolder.getChild("")).thenReturn(folder);
     when(folder.isFolder()).thenReturn(true);
 
@@ -182,7 +166,6 @@ public class ExternalReferenceResolverTest {
   public void testContentNumericIdWithChannelIdExternalReferenceResolver() throws Exception {
     String ref = ExternalReferenceResolver.CONTENT_ID_FRAGMENT_PREFIX + "1234-5678";
 
-    when(siteRootFolder.getRepository()).thenReturn(contentRepository);
     when(contentRepository.getContent("coremedia:///cap/content/5678")).thenReturn(linkable);
     when(contentRepository.getContent("coremedia:///cap/content/1234")).thenReturn(navigation);
 

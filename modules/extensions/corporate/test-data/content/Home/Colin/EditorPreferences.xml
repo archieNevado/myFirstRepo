@@ -146,11 +146,24 @@
 <StringProperty Name="semanticSettings">nameMatching</StringProperty>
 <StringProperty Name="locale">en</StringProperty>
 <StringProperty Name="preferredSite">abffe57734feeee</StringProperty>
+<StructListProperty Name="bookmarks">
+<Struct>
+<StringProperty Name="name">Chef Corp. USA Home Page</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page"/>
+</Struct>
+</StructListProperty>
+<StructProperty Name="forms">
+</StructProperty>
 <StructProperty Name="workarea">
 <Struct>
 <StructListProperty Name="tabs">
 <Struct>
-<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.startTab</StringProperty>
+<StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StructProperty Name="state">
+<Struct>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page"/>
+</Struct>
+</StructProperty>
 </Struct>
 </StructListProperty>
 <IntProperty Name="activeTabIndex">0</IntProperty>

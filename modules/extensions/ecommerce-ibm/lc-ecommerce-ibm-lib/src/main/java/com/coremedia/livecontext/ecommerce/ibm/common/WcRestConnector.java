@@ -288,6 +288,7 @@ public class WcRestConnector {
                               @Nullable P bodyData,
                               @Nullable StoreContext storeContext,
                               @Nullable UserContext userContext) {
+    // the result of the service call may depend on dynamic data and is unlikely to be a good fit for DV caching
     DataViewHelper.warnIfCachedInDataview();
 
     StoreContext myStoreContext = storeContext != null ? storeContext : StoreContextHelper.getCurrentContext();
@@ -735,9 +736,17 @@ public class WcRestConnector {
       }
     }
 
+    boolean plusCharacterFound = variableValues.stream().anyMatch(s -> s.indexOf('+') > -1);
+
     Object[] vars = myVariableValues.toArray(new Object[myVariableValues.size()]);
     UriComponents uriComponents = uriBuilder.buildAndExpand(vars);
-    return uriComponents.encode().toUri();
+    UriComponents encodedUriComponents = uriComponents.encode();
+    if (!plusCharacterFound) {
+      return encodedUriComponents.toUri();
+    }
+
+    encodedUriComponents = UriEncodingHelper.fixPlusEncoding(encodedUriComponents);
+    return encodedUriComponents.toUri();
   }
 
   /**

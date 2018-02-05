@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSettings folder="/Sites/Calista/United States/English/Options/Settings" name="Responsive Image Settings">
+<CMSettings folder="/Sites/Calista/United States/English/Options/Settings" name="Responsive Image Settings" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>
 <settings>
-  <Struct xmlns="http://www.coremedia.com/2008/struct">
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StringListProperty Name="default_aspect_ratios_for_teaser">
 <String>portrait_ratio1x1</String>
 <String>portrait_ratio20x31</String>

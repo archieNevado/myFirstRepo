@@ -13,7 +13,7 @@
     <#if self.title?has_content && overlay.displayTitle>
       <div class="cm-overlay__item cm-overlay__item--title"<@cm.metadata "properties.teaserTitle" />>${self.title}</div>
     <#else>
-        <div class="cm-overlay__item cm-overlay__item--title"><@bp.message "button_quickinfo" /></div>
+      <div class="cm-overlay__item cm-overlay__item--title"><@bp.message "button_quickinfo" /></div>
     </#if>
   </@bp.optionalLink>
 </div>

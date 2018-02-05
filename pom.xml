@@ -26,8 +26,6 @@
 
     <customer>Blueprint</customer>
 
-    <jangaroo.version>4.0.53</jangaroo.version>
-
     <!-- Some values for the ThemeImporter exec-maven-plugin configuration -->
     <theme-importer.argument.folder>-Dthemes_folder=${project.build.directory}/themes</theme-importer.argument.folder>
     <theme-importer.argument.export-path>-Dexport_path=${project.build.directory}/content</theme-importer.argument.export-path>
@@ -87,11 +85,6 @@
         <artifactId>coremedia-application-maven-plugin</artifactId>
         <version>2.7.10</version>
         <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>net.jangaroo</groupId>
-        <artifactId>jangaroo-maven-plugin</artifactId>
-        <version>${jangaroo.version}</version>
       </plugin>
     </plugins>
   </build>

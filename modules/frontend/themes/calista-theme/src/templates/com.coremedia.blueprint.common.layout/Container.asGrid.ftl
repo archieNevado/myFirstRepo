@@ -7,11 +7,11 @@
 <#assign itemsPerRowSM=cm.localParameter("itemsPerRowSM", 0) />
 <#assign itemsPerRowMD=cm.localParameter("itemsPerRowMD", 0) />
 <#assign itemsPerRowLG=cm.localParameter("itemsPerRowLG", 0) />
-<#assign additionalClass=cm.localParameters().additionalClass!"cm-container--default" />
+<#assign additionalClass=cm.localParameters().additionalClass!"" />
 <#assign viewItemCssClass=cm.localParameters().viewItemCssClass!"" />
 <#assign columnCssClass=cm.localParameters().columnCssClass!"" />
 <#assign center=cm.localParameters().center!true />
-<#assign showHeadline=cm.localParameters().showHeadline!false />
+<#assign showHeadline=cm.localParameters().showHeadline!true />
 
 <div class="cm-container ${additionalClass}" <@cm.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
   <#if showHeadline && self.teaserTitle?has_content>

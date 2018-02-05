@@ -7,7 +7,7 @@
       <div class="am-overlay__checkboxes">
         <#list self.publishedRenditions as rendition>
           <div class="am-overlay__checkbox">
-            <input id="checkbox-${rendition.name}-${self.contentId}" type="checkbox" <@cm.dataAttribute name="data-am-overlay__checkbox" data={"assetId" : "${self.contentId}", "rendition" : "${rendition.name}"}/>/>
+            <input id="checkbox-${rendition.name}-${self.contentId}" type="checkbox" <@cm.dataAttribute name="data-am-overlay__checkbox" data={"assetId" : "${self.contentId}", "rendition" : "${rendition.name}"}/>>
             <label for="checkbox-${rendition.name}-${self.contentId}"><span class="label-text">${bp.getMessage("am_rendition_${rendition.name}")}</span></label>
           </div>
         </#list>

@@ -22,4 +22,9 @@ $(function () {
   }, "cm-button--quickinfo", function ($button, config) {
     quickInfo.toggleQuickInfo($button, config);
   });
+
+  // switch through quickinfos
+  nodeDecorationService.addNodeDecoratorBySelector(".cm-quickinfo__switch", function ($target, config) {
+    quickInfo.switchQuickInfo($target, config);
+  });
 });

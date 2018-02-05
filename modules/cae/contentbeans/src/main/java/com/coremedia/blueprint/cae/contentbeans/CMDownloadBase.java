@@ -59,5 +59,9 @@ public abstract class CMDownloadBase extends CMTeasableImpl implements CMDownloa
     return getContent().getBlobRef(CMDownload.DATA);
   }
 
+  public String getFilename() {
+    return getContent().getString(CMDownload.FILENAME);
+  }
+
 }
   

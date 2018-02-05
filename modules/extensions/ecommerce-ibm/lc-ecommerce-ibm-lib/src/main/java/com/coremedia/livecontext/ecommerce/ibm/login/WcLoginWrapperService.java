@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
@@ -62,9 +60,14 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   @SuppressWarnings("unchecked")
   public boolean isLoggedIn(String logonId, StoreContext storeContext, UserContext userContext) {
     try {
+      Map<String, String[]> parameters = buildParameterMap()
+              .withCurrency(storeContext)
+              .withLanguageId(storeContext)
+              .build();
+
       Map userContextData = getRestConnector().callServiceInternal(USER_CONTEXT_DATA, asList(getStoreId(storeContext)),
-              createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext),
-              null, storeContext, userContext);
+              parameters, null, storeContext, userContext);
+
       if (userContextData != null && hasText(logonId)) {
         Double value = DataMapHelper.getValueForPath(userContextData, "basicInfo.callerId", Double.class);
         if(value != null) {

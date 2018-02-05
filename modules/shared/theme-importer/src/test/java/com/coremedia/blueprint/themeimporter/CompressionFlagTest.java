@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -24,6 +25,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,13 +49,17 @@ public class CompressionFlagTest {
   private InputStream compressionTheme;
   private ThemeImporterImpl themeImporter;
 
+  @Mock
+  private LocalizationService localizationService;
+
   @Before
   public void setUp() throws Exception {
+    initMocks(this);
     compressionTheme = getClass().getResource("./compression-theme.zip").openStream();
 
     TikaMimeTypeService tikaMimeTypeService = new TikaMimeTypeService();
     tikaMimeTypeService.init();
-    themeImporter = new ThemeImporterImpl(capConnection, tikaMimeTypeService, new LocalizationService(null, null, null));
+    themeImporter = new ThemeImporterImpl(capConnection, tikaMimeTypeService, localizationService);
   }
 
   @After

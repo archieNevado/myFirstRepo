@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
+
 /**
  * A {@link com.coremedia.personalization.context.collector.ContextSource} that stores and retrieves
  * contexts to and from CoreMedia's "Elastic Social".<br />
@@ -123,7 +125,7 @@ public final class ElasticSocialContextSource extends AbstractContextSource {
         final Object context = codec.contextFromString(serializedContext);
         contextCollection.setContext(contextName, context);
       } else {
-        LOGGER.debug("no existing context of name '{}' found for Elastic Social user '{}'; creating new context.", contextName, user);
+        LOGGER.debug(PERSONAL_DATA, "no existing context of name '{}' found for Elastic Social user '{}'; creating new context.", contextName, user);
         contextCollection.setContext(contextName, codec.createNewContext());
       }
     } else {

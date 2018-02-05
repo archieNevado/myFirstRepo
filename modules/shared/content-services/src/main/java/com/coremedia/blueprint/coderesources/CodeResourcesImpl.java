@@ -43,6 +43,8 @@ class CodeResourcesImpl implements CodeResources {
   private final boolean developerMode;
   private final DeveloperPaths development;
 
+  private Boolean mergeResources;
+
   private final CodeCarriers codeCarriers;
   private final String codePropertyName;
 
@@ -75,6 +77,9 @@ class CodeResourcesImpl implements CodeResources {
     contentHash = String.format("%01x", new BigInteger(1, digest.digest()));
   }
 
+  public void setMergeResources(Boolean mergeResources) {
+    this.mergeResources = mergeResources;
+  }
 
   // --- features ---------------------------------------------------
 
@@ -102,10 +107,12 @@ class CodeResourcesImpl implements CodeResources {
     return externalLinks;
   }
 
-  boolean isDeveloperMode() {
-    return developerMode;
+  /**
+   * Return true if the resources contained within this instance should be merged into a single resource
+   */
+  boolean mergeResources() {
+    return mergeResources == null ? !developerMode : mergeResources;
   }
-
 
   // --- CodeResources ----------------------------------------------
 
@@ -121,7 +128,6 @@ class CodeResourcesImpl implements CodeResources {
     String codeType = CMNAVIGATION_CSS.equals(codePropertyName) ? CodeResourcesModel.TYPE_CSS : CodeResourcesModel.TYPE_JS;
     return new CodeResourcesModelImpl(codeType, htmlMode, this);
   }
-
 
   // --- Object -----------------------------------------------------
 

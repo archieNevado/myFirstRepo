@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.ecommerce.ibm.workspace;
 
-import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpMethod;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 
 /**
@@ -33,12 +30,15 @@ public class WcWorkspaceWrapperService extends AbstractWcWrapperService {
    */
   public Map<String, Object> findAllWorkspaces(StoreContext storeContext, UserContext userContext) {
     try {
-      //noinspection unchecked
-     return getRestConnector().callService(
-             FIND_ALL_WORKSPACES, Collections.singletonList(getStoreId(storeContext)),
-        createParametersMap((CatalogAlias) null, getLocale(storeContext), getCurrency(storeContext), storeContext),
-        null, storeContext, userContext);
+      Map<String, String[]> parameters = buildParameterMap()
+              .withCurrency(storeContext)
+              .withLanguageId(storeContext)
+              .build();
 
+      //noinspection unchecked
+      return getRestConnector().callService(
+              FIND_ALL_WORKSPACES, Collections.singletonList(getStoreId(storeContext)), parameters, null, storeContext,
+              userContext);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {

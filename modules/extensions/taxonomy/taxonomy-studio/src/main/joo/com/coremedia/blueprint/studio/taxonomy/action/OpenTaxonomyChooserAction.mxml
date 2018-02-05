@@ -7,6 +7,8 @@
   <fx:Script><![CDATA[
     import com.coremedia.ui.data.ValueExpression;
 
+    public static const ACTION_ID:String = "openTaxonomyChooserAction";
+
     private var config:OpenTaxonomyChooserAction;
 
     public native function OpenTaxonomyChooserAction(config:OpenTaxonomyChooserAction = null);
@@ -19,5 +21,4 @@
 
     <fx:String id="taxonomyId"/>
   </fx:Declarations>
-
 </local:OpenTaxonomyChooserActionBase>

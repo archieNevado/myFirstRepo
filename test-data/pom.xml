@@ -102,14 +102,13 @@
               <execution>
                 <id>copy-content</id>
                 <goals>
-                  <goal>copy-dependencies</goal>
+                  <goal>unpack-dependencies</goal>
                 </goals>
                 <phase>package</phase>
                 <configuration>
                   <includeClassifiers>content</includeClassifiers>
                   <includeTypes>zip</includeTypes>
-                  <outputDirectory>${project.build.directory}/content-zips</outputDirectory>
-                  <stripVersion>true</stripVersion>
+                  <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
               </execution>
             </executions>
@@ -124,14 +123,11 @@
                 <goals>
                   <goal>run</goal>
                 </goals>
-                <phase>
-                  package
-                </phase>
+                <phase>package</phase>
                 <configuration>
                   <target>
                     <zip destfile="${project.build.directory}/content-users.zip"
                          whenempty="fail" duplicate="preserve" keepcompression="false" compress="false">
-                      <zipgroupfileset dir="${project.build.directory}/content-zips" includes="*-content.zip"/>
                       <fileset dir="${project.build.directory}" includes="content/**,users/**"/>
                     </zip>
                   </target>

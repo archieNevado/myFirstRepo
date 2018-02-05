@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.cap.content.Content;
-import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -13,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
-import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapTransformationHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
@@ -33,8 +31,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findStringValue;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class CategoryImpl extends AbstractIbmCommerceBean implements Category, CommerceObject {
@@ -96,12 +94,12 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
       return ROOT_CATEGORY_ROLE_ID;
     }
 
-    return DataMapHelper.getValueForKey(getDelegate(), "identifier", String.class);
+    return getStringValueFromDelegate("identifier");
   }
 
   @Override
   public String getExternalTechId() {
-    return DataMapHelper.getValueForKey(getDelegate(), "uniqueID", String.class);
+    return getStringValueFromDelegate("uniqueID");
   }
 
   @Override
@@ -110,31 +108,31 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
       return ROOT_CATEGORY_ROLE_ID;
     }
 
-    return DataMapHelper.getValueForKey(getDelegate(), "name", String.class);
+    return getStringValueFromDelegate("name");
   }
 
   @Override
   public Markup getShortDescription() {
-    String shortDescription = DataMapHelper.getValueForKey(getDelegate(), "shortDescription", String.class);
+    String shortDescription = getStringValueFromDelegate("shortDescription");
     return toRichtext(shortDescription);
   }
 
   @Override
   public Markup getLongDescription() {
-    String longDescription = DataMapHelper.getValueForKey(getDelegate(), "longDescription", String.class);
+    String longDescription = getStringValueFromDelegate("longDescription");
     return toRichtext(longDescription, false);
   }
 
   @Override
   public String getThumbnailUrl() {
-    return DataMapHelper.findValueForKey(getDelegate(), "thumbnail", String.class)
+    return findStringValue(getDelegate(), "thumbnail")
             .map(thumbnailUri -> getAssetUrlProvider().getImageUrl(thumbnailUri, true))
             .orElse(null);
   }
 
   @Override
   public String getDefaultImageUrl() {
-    return DataMapHelper.findValueForKey(getDelegate(), "fullImage", String.class)
+    return findStringValue(getDelegate(), "fullImage")
             .map(defaultImageUri -> getAssetUrlProvider().getImageUrl(defaultImageUri))
             .orElse(null);
   }
@@ -171,7 +169,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
 
     if (!parentCategoryIds.isEmpty()) {
       String parentCatalogGroupID = parentCategoryIds.get(0);
-      if (!isNullOrEmpty(parentCatalogGroupID) && !parentCatalogGroupID.equals("-1")) {
+      if (!isNullOrEmpty(parentCatalogGroupID) && !"-1".equals(parentCatalogGroupID)) {
         CommerceId commerceId = getCommerceIdProvider().formatCategoryTechId(catalogAlias, parentCatalogGroupID);
         return (Category) getCommerceBeanFactory().createBeanFor(commerceId, context);
       }
@@ -199,7 +197,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
   }
 
   private String getCmSeoSegment() {
-    String cmLocalizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "cm_seo_token_ntk", String.class);
+    String cmLocalizedSeoSegment = getStringValueFromDelegate("cm_seo_token_ntk");
     cmLocalizedSeoSegment = processCmLocalizedSeoSegment(cmLocalizedSeoSegment);
 
     if (cmLocalizedSeoSegment == null) {
@@ -209,7 +207,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     String[] localizedSeoSegments = cmLocalizedSeoSegment.split(";");
     List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
     if (localizedSeoSegmentList.size() <= 1) {
-      return cmLocalizedSeoSegment.substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+      return cmLocalizedSeoSegment.substring(cmLocalizedSeoSegment.indexOf('_') + 1);
     }
 
     String storeId = getStoreId();
@@ -219,10 +217,11 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
       }
     }
 
-    return localizedSeoSegmentList.get(0).substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+    return localizedSeoSegmentList.get(0).substring(cmLocalizedSeoSegment.indexOf('_') + 1);
   }
 
-  private String processCmLocalizedSeoSegment(String cmLocalizedSeoSegment) {
+  @Nullable
+  private String processCmLocalizedSeoSegment(@Nullable String cmLocalizedSeoSegment) {
     if (!isBlank(cmLocalizedSeoSegment)) {
       return cmLocalizedSeoSegment;
     }
@@ -261,7 +260,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
       return localizedSeoSegment;
     }
 
-    localizedSeoSegment = DataMapHelper.getValueForKey(getDelegate(), "seo_token_ntk", String.class);
+    localizedSeoSegment = getStringValueFromDelegate("seo_token_ntk");
     localizedSeoSegment = processLocalizedSeoSegment(localizedSeoSegment);
 
     if (localizedSeoSegment == null) {
@@ -277,7 +276,8 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return localizedSeoSegment;
   }
 
-  private String processLocalizedSeoSegment(String localizedSeoSegment) {
+  @Nullable
+  private String processLocalizedSeoSegment(@Nullable String localizedSeoSegment) {
     if (!isBlank(localizedSeoSegment)) {
       return localizedSeoSegment;
     }
@@ -305,17 +305,17 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
 
   @Override
   public String getMetaDescription() {
-    return DataMapHelper.getValueForKey(getDelegate(), "metaDescription", String.class);
+    return getStringValueFromDelegate("metaDescription");
   }
 
   @Override
   public String getMetaKeywords() {
-    return DataMapHelper.getValueForKey(getDelegate(), "metaKeyword", String.class);
+    return getStringValueFromDelegate("metaKeyword");
   }
 
   @Override
   public String getTitle() {
-    return DataMapHelper.getValueForKey(getDelegate(), "title", String.class);
+    return getStringValueFromDelegate("title");
   }
 
   @Nonnull
@@ -336,54 +336,42 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return DEFAULT_CATALOG_ALIAS.equals(getCatalogAlias()) ? catalogName + " (Default)" : catalogName;
   }
 
+  @Nullable
   @Override
   public CatalogPicture getCatalogPicture() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return new CatalogPicture("#", null);
-    }
-
-    return assetService.getCatalogPicture(getDefaultImageUrl(), getReference());
+    return findAssetService()
+            .map(assetService -> assetService.getCatalogPicture(getDefaultImageUrl(), getReference()))
+            .orElseGet(() -> new CatalogPicture("#", null));
   }
 
+  @Nullable
   @Override
   public Content getPicture() {
-    List<Content> pictures = getPictures();
-    return pictures != null && !pictures.isEmpty() ? pictures.get(0) : null;
+    return getPictures().stream().findFirst().orElse(null);
   }
 
+  @Nonnull
   @Override
   public List<Content> getPictures() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return emptyList();
-    }
-
-    return assetService.findPictures(getReference());
+    return findAssetService()
+            .map(assetService -> assetService.findPictures(getReference()))
+            .orElseGet(Collections::emptyList);
   }
 
+  @Nonnull
   @Override
   public List<Content> getVisuals() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return emptyList();
-    }
-
-    return assetService.findVisuals(getReference());
+    return findAssetService()
+            .map(assetService -> assetService.findVisuals(getReference()))
+            .orElseGet(Collections::emptyList);
   }
 
+  @Nonnull
   @Override
   public List<Content> getDownloads() {
-    AssetService assetService = getAssetService();
-
-    if (assetService == null) {
-      return emptyList();
-    }
-
-    return assetService.findDownloads(getReference());
+    return findAssetService()
+            .map(assetService -> assetService.findDownloads(getReference()))
+            .orElseGet(Collections::emptyList);
   }
 
   public boolean isRoot() {
@@ -394,4 +382,8 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return id.getExternalId().map(ROOT_CATEGORY_ROLE_ID::equals).orElse(false);
   }
 
+  @Nullable
+  private String getStringValueFromDelegate(@Nonnull String key) {
+    return findStringValue(getDelegate(), key).orElse(null);
+  }
 }

@@ -16,6 +16,6 @@
   }/>
 <#else>
   <div class="${classBox}">
-    <img class="${classImage}" <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": overflow} /> src="${self.url!""}" />
+    <img class="${classImage}" <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": overflow} /> src="${self.url!""}">
   </div>
 </#if>

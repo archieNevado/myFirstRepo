@@ -1,13 +1,13 @@
-#CoreMedia Blueprint Extensions
+# CoreMedia Blueprint Extensions
 
 ## External Library Extension
 
-###Description
+### Description
 
 Adds the external library functionality in Studio. The external library is a Studio utility that supports to 
 view external content, for example from an RSS feed, in Studio and create CMS content from the external content.
 
-###Documentation
+### Documentation
 
 Depending on the type, each external library provider configuration must provide different attributes in the
 settings document 'ExternalLibraries'. The examples below show an example of how to configure an RSS or YouTube provider.

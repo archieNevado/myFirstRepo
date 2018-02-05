@@ -3,11 +3,12 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 class ProductAttributeImpl implements ProductAttribute {
@@ -20,52 +21,51 @@ class ProductAttributeImpl implements ProductAttribute {
 
   @Override
   public String getId() {
-    return DataMapHelper.getValueForKey(delegate, "identifier", String.class);
+    return getStringValue(delegate, "identifier");
   }
 
   @Override
   public String getType() {
-    return DataMapHelper.getValueForKey(delegate, "dataType", String.class);
+    return getStringValue(delegate, "dataType");
   }
 
   @Override
   public String getUnit() {
-    return DataMapHelper.getValueForKey(delegate, "unit", String.class);
+    return getStringValue(delegate, "unit");
   }
 
   @Override
   public String getExternalId() {
-    return DataMapHelper.getValueForKey(delegate, "uniqueID", String.class);
+    return getStringValue(delegate, "uniqueID");
   }
 
   @Override
   public String getDisplayName() {
-    return DataMapHelper.getValueForKey(delegate, "name", String.class);
+    return getStringValue(delegate, "name");
   }
 
   @Override
   public String getDescription() {
-    return DataMapHelper.getValueForKey(delegate, "description", String.class);
+    return getStringValue(delegate, "description");
   }
 
+  @Nullable
   @Override
   public Object getValue() {
-    Object value = null;
     //noinspection unchecked
-    List<Map<String, Object>> valueForKey = DataMapHelper.getValueForKey(delegate, "values", List.class);
-    if (valueForKey != null && !valueForKey.isEmpty()) {
-      value = DataMapHelper.getValueForKey(valueForKey.get(0), "value");
-    }
-    return value;
+    List<Map<String, Object>> valueForKey = DataMapHelper.getListValue(delegate, "values");
+
+    return valueForKey.stream()
+            .findFirst()
+            .map(firstValueForKey -> DataMapHelper.getValueForKey(firstValueForKey, "value"))
+            .orElse(null);
   }
 
+  @Nonnull
   @Override
   public List<Object> getValues() {
     //noinspection unchecked
-    List<Map<String, Object>> valueForKey = DataMapHelper.getValueForKey(delegate, "values", List.class);
-    if (valueForKey == null || valueForKey.isEmpty()) {
-      return emptyList();
-    }
+    List<Map<String, Object>> valueForKey = DataMapHelper.getListValue(delegate, "values");
 
     return valueForKey.stream()
             .map(item -> DataMapHelper.getValueForKey(item, "value"))
@@ -75,7 +75,7 @@ class ProductAttributeImpl implements ProductAttribute {
 
   @Override
   public boolean isDefining() {
-    return "Defining".equals(DataMapHelper.getValueForKey(delegate, "usage", String.class));
+    return "Defining".equals(getStringValue(delegate, "usage"));
   }
 
   @Override
@@ -99,5 +99,10 @@ class ProductAttributeImpl implements ProductAttribute {
   @Override
   public int hashCode() {
     return delegate != null ? getId().hashCode() : 0;
+  }
+
+  @Nullable
+  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

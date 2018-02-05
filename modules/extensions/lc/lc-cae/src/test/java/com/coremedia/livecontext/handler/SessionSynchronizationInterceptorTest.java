@@ -20,7 +20,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SessionSynchronizationInterceptorTest {
 
   private static final String OPTIONS = "OPTIONS";
@@ -45,7 +45,6 @@ public class SessionSynchronizationInterceptorTest {
 
   @Test
   public void optionsRequest() throws GeneralSecurityException, IOException {
-    when(request.getScheme()).thenReturn("https");
     when(request.getMethod()).thenReturn(OPTIONS);
     testling.preHandle(request, response, null);
 
@@ -69,7 +68,6 @@ public class SessionSynchronizationInterceptorTest {
     testling.setSessionSynchronizer(sessionSynchronizer);
 
     when(request.getMethod()).thenReturn(GET);
-    when(request.getScheme()).thenReturn("https");
   }
 
   @After

@@ -20,10 +20,6 @@ public class ExternallyVisibleDateFormBase extends PropertyFieldGroup {
 
   public function ExternallyVisibleDateFormBase(config:ExternallyVisibleDateForm = null) {
     super(config);
-
-    getModel().addPropertyChangeListener("externallyDisplayDate", externallyDisplayDateChangeListener);
-    getModel().get("properties").addPropertyChangeListener("innerExternallyDisplayedDate", innerExternallyDisplayedDateListener);
-    getModel().addPropertyChangeListener("innerUseCustomExternalDisplayedDate", innerUseCustomExternalDisplayedDateListener);
   }
 
   private function externallyDisplayDateChangeListener(event:PropertyChangeEvent):void {
@@ -65,6 +61,10 @@ public class ExternallyVisibleDateFormBase extends PropertyFieldGroup {
       var innerModel:Bean = beanFactory.createLocalBean();
       innerModel.set("innerExternallyDisplayedDate", null);
       model.set("properties", innerModel);
+
+      model.addPropertyChangeListener("externallyDisplayDate", externallyDisplayDateChangeListener);
+      innerModel.addPropertyChangeListener("innerExternallyDisplayedDate", innerExternallyDisplayedDateListener);
+      model.addPropertyChangeListener("innerUseCustomExternalDisplayedDate", innerUseCustomExternalDisplayedDateListener);
     }
     return model;
   }

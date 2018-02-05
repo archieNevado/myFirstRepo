@@ -1,35 +1,35 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMImageMap" -->
 
-<#assign limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_teaser", [])/>
-<#assign additionalClass=cm.localParameters().additionalClass!"cm-teasable" />
-<#assign renderDimmer=cm.localParameter("renderDimmer", true) />
+<#assign blockClass=cm.localParameters().blockClass!"cm-teasable" />
+<#assign renderDimmer=cm.localParameter("renderDimmer", false) />
 <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
-<#assign limitAspectRatios=cm.localParameter("limitAspectRatios", []) />
 <#assign imageMapId=cm.localParameter("imageMapId", "") />
 <#assign quickInfoMainId=cm.localParameter("quickInfoMainId", "") />
 <#assign quickInfoIdList=cm.localParameter("quickInfoIdList", "") />
 <#assign useQuickinfo=cm.localParameter("useQuickinfo", true) />
 
+<#-- display imagemap only if an image exist -->
 <#if self.picture?has_content>
-<div class="cm-imagemap__wrapper">
-    <a class="cm-imagemap__link">
+  <div class="cm-imagemap__wrapper">
     <#-- include image -->
-          <@cm.include self=self.picture params={
-    "limitAspectRatios": limitAspectRatios,
-    "classBox": "${additionalClass}__picture-box",
-    "classImage":  "${additionalClass}__picture cm-imagemap__image",
-    "metadata": ["properties.pictures"],
-    "additionalAttr": {"useMap": "#" + imageMapId!"", "unselectable": "on"}
+    <@cm.include self=self.picture params={
+      "classBox": "${blockClass}__picture-box cm-imagemap__picture-box",
+      "classImage":  "${blockClass}__picture cm-imagemap__picture",
+      "metadata": ["properties.pictures"],
+      "additionalAttr": {"useMap": "#" + imageMapId!"", "unselectable": "on"}
     }/>
-    </a>
-  <#-- include imagemap -->
-  <@cm.include self=self view="_areasMap" params={"imageMapId": imageMapId, "quickInfoMainId": quickInfoMainId, "quickInfoIdList": quickInfoIdList, "useQuickinfo": useQuickinfo}/>
-</div>
-<#if renderDimmer>
-  <div class="${additionalClass}__dimmer"></div>
-</#if>
+    <#-- include map -->
+    <@cm.include self=self view="_areasMap" params={"imageMapId": imageMapId, "quickInfoMainId": quickInfoMainId, "quickInfoIdList": quickInfoIdList, "useQuickinfo": useQuickinfo}/>
+  </div>
+
+  <#-- display optional dimmer -->
+  <#if renderDimmer>
+    <div class="${blockClass}__dimmer"></div>
+  </#if>
+
+<#-- display missing-image placeholder-->
 <#elseif renderEmptyImage>
-<div class="${additionalClass}__picture-box" <@cm.metadata "properties.pictures" />>
-    <div class="${additionalClass}__picture"></div>
-</div>
+  <div class="${blockClass}__picture-box cm-imagemap__picture-box" <@cm.metadata "properties.pictures" />>
+    <div class="${blockClass}__picture cm-imagemap__picture"></div>
+  </div>
 </#if>

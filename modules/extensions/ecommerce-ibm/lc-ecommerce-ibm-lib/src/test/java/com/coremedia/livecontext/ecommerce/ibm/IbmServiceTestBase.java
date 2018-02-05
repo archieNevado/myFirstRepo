@@ -1,17 +1,18 @@
 package com.coremedia.livecontext.ecommerce.ibm;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.lc.test.AbstractServiceTest;
+import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
-import com.coremedia.livecontext.ecommerce.ibm.user.UserContextProviderImpl;
-import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -22,9 +23,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
 import static com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase.LocalConfig.PROFILE;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -60,12 +64,10 @@ public abstract class IbmServiceTestBase extends AbstractServiceTest {
       return new XmlUapiConfig("classpath:/content/testcontent.xml");
     }
 
-    @Bean
-    public static BeanPostProcessor commerceConnectionInitializerCustomizer() {
-      return new CommerceConnectionInitializerReplacer();
-    }
-
   }
+
+  @MockBean
+  private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Inject
   protected StoreInfoService storeInfoService;
@@ -76,16 +78,13 @@ public abstract class IbmServiceTestBase extends AbstractServiceTest {
   @Inject
   protected IbmTestConfig testConfig;
 
-  @Inject
-  protected UserSessionService commerceUserSessionService;
-
   @Override
   @Before
   public void setup() {
+    doAnswer(invocationOnMock -> Optional.of(CurrentCommerceConnection.get())).when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
     testConfig.setWcsVersion(storeInfoService.getWcsVersion());
     super.setup();
     loginService.clearIdentityCache();
-    ((UserContextProviderImpl) userContextProvider).setUserSessionService(commerceUserSessionService);
   }
 
 }

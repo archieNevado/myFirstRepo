@@ -54,7 +54,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   @Override
   @Nullable
   public Product getParent() {
-    String parentProductID = DataMapHelper.getValueForKey(getDelegate(), "parentCatalogEntryID", String.class);
+    String parentProductID = DataMapHelper.findStringValue(getDelegate(), "parentCatalogEntryID").orElse(null);
     if (parentProductID != null) {
       CatalogAlias catalogAlias = getCatalogAlias();
       CommerceId commerceId = getCommerceIdProvider().formatProductTechId(catalogAlias, parentProductID);
@@ -161,7 +161,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   @Override
   public boolean isAvailable() {
     AvailabilityInfo availabilityInfo = getAvailabilityInfo();
-    return Boolean.parseBoolean(DataMapHelper.getValueForKey(getDelegate(), "buyable", String.class))
+    return Boolean.parseBoolean(DataMapHelper.findStringValue(getDelegate(), "buyable").orElse(null))
             && availabilityInfo != null && availabilityInfo.getQuantity() > 0;
   }
 

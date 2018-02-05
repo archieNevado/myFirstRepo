@@ -1,12 +1,12 @@
 package com.coremedia.livecontext.studio.asset;
 
-import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.events.ContentEvent;
+import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +16,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.List;
-import java.util.Set;
 
-import static com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource.INVALIDATE_PRODUCTS_URI_PATTERN;
-import static com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource.INVALIDATE_PRODUCTVARIANTS_URI_PATTERN;
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -71,7 +67,6 @@ public class AssetInvalidationRepositoryListenerTest {
     testling.handleContentEvent(event);
 
     // then all products and product variants should be invalidated.
-    Set<String> invalidations = newHashSet(INVALIDATE_PRODUCTS_URI_PATTERN, INVALIDATE_PRODUCTVARIANTS_URI_PATTERN);
-    verify(invalidationSource).triggerDelayedInvalidation(invalidations);
+    verify(invalidationSource).invalidateReferences(externalReferences);
   }
 }

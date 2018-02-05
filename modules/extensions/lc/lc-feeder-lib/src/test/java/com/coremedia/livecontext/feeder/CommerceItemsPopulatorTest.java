@@ -1,19 +1,11 @@
 package com.coremedia.livecontext.feeder;
 
+import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.blueprint.cae.search.SearchConstants;
-import com.coremedia.cap.common.CapConnection;
-import com.coremedia.cap.common.CapType;
-import com.coremedia.cap.common.descriptors.StringPropertyDescriptor;
-import com.coremedia.cap.common.descriptors.StructPropertyDescriptor;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.feeder.MutableFeedable;
 import com.coremedia.cap.feeder.TextParameters;
-import com.coremedia.cap.struct.Struct;
-import com.coremedia.cap.struct.StructService;
-import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
-import com.coremedia.xml.Markup;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,26 +32,12 @@ public class CommerceItemsPopulatorTest {
 
   @Mock
   private MutableFeedable feedable;
+
   @Mock
   private Content content;
+
   @Mock
   private ContentType contentType;
-  @Mock
-  private ContentRepository repository;
-  @Mock
-  private CapConnection connection;
-  @Mock
-  private StructService structService;
-  @Mock
-  private Struct struct, commerceStruct;
-  @Mock
-  private CapType structType, commerceType;
-  @Mock
-  private StructPropertyDescriptor commerceDescriptor;
-  @Mock
-  private StringPropertyDescriptor productsDescriptor;
-  @Mock
-  private Markup markup;
 
   private CommerceItemsPopulator testling;
 

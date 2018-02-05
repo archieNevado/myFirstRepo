@@ -10,6 +10,7 @@
 <StructProperty Name="style">
 <Struct>
 <StringProperty Name="color">#fff</StringProperty>
+<StringProperty Name="textCls">cm-richtext--light-shadow</StringProperty>
 <StringProperty Name="ctaCls">cm-button--white</StringProperty>
 </Struct>
 </StructProperty>

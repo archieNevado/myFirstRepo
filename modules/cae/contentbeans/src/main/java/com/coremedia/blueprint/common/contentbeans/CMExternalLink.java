@@ -61,4 +61,13 @@ public interface CMExternalLink extends CMTeasable {
    * Name of the document property 'openInNewTab'
    */
   String OPEN_IN_NEW_TAB = "openInNewTab";
+
+  /**
+   * Checks whether the {@link #getUrl() target url} is opening in a new tab.
+   *
+   * @return <code>true</code> if the link should open in a new tab otherwise <code>false</code>
+   * @cm.template.api
+   */
+  @Override
+  boolean isOpenInNewTab();
 }

@@ -18,35 +18,35 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=129;y=19;width=762;height=1181</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=113;y=19;width=886;height=1181</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=89;y=0;width=1201;height=1200</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=290;width=1600;height=898</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=556;width=1600;height=640</StringProperty>
-<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=785;width=1600;height=399</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=0;y=-1601;width=4000;height=6201;bg=FFFFFFFF</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=0;y=-1167;width=4000;height=5334;bg=FFFFFFFF</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=-501;width=4000;height=4001;bg=FFFFFFFF</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=-1;width=4000;height=3001;bg=FFFFFFFF</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=-666;y=0;width=5332;height=2999;bg=FFFFFFFF</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=-1749;y=0;width=7498;height=2999;bg=FFFFFFFF</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=-3998;y=0;width=11997;height=2999;bg=FFFFFFFF</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">position;x1=0.08037825059101655;y1=0.015772870662460567;x2=0.5566171841414389;y2=1</StringProperty>
-<StringProperty Name="portrait_ratio3x4">position;x1=0.07092198581560283;y1=0.015772870662460567;x2=0.6245497460679688;y2=1</StringProperty>
-<StringProperty Name="portrait_ratio1x1">position;x1=0.055415617128463476;y1=0;x2=0.8060453400503779;y2=1</StringProperty>
+<StringProperty Name="portrait_ratio20x31">position;x1=0.07582938388625582;y1=0.03470031545741325;x2=1;y2=0.9876472941303992</StringProperty>
+<StringProperty Name="portrait_ratio3x4">position;x1=0.18039624608967675;y1=0.19390304847576212;x2=0.7928962460896769;y2=0.8060969515242379</StringProperty>
+<StringProperty Name="portrait_ratio1x1">position;x1=0.1042654028436019;y1=0.4794952681388012;x2=0.8108141375167697;y2=0.949526813880126</StringProperty>
 <StringProperty Name="landscape_ratio4x3">position;x1=0;y1=0;x2=1;y2=1</StringProperty>
 <StringProperty Name="landscape_ratio16x9">position;x1=0;y1=0.24161073825503357;x2=1;y2=0.9899328859060402</StringProperty>
 <StringProperty Name="landscape_ratio5x2">position;x1=0;y1=0.46308724832214765;x2=1;y2=0.9966442953020134</StringProperty>
-<StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.6543624161073825;x2=1;y2=0.9865771812080537</StringProperty>
+<StringProperty Name="landscape_ratio4x1">position;x1=0;y1=0.6403785488958991;x2=1;y2=0.806691048895899</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="isDefault">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">false</StringProperty>
-<StringProperty Name="portrait_ratio3x4">false</StringProperty>
-<StringProperty Name="portrait_ratio1x1">false</StringProperty>
-<StringProperty Name="landscape_ratio4x3">false</StringProperty>
-<StringProperty Name="landscape_ratio16x9">false</StringProperty>
-<StringProperty Name="landscape_ratio5x2">false</StringProperty>
-<StringProperty Name="landscape_ratio4x1">false</StringProperty>
+<StringProperty Name="portrait_ratio20x31">true</StringProperty>
+<StringProperty Name="portrait_ratio3x4">true</StringProperty>
+<StringProperty Name="portrait_ratio1x1">true</StringProperty>
+<StringProperty Name="landscape_ratio4x3">true</StringProperty>
+<StringProperty Name="landscape_ratio16x9">true</StringProperty>
+<StringProperty Name="landscape_ratio5x2">true</StringProperty>
+<StringProperty Name="landscape_ratio4x1">true</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="reflection">
@@ -69,10 +69,30 @@
 </StructProperty>
 <StructProperty Name="commerce">
 <Struct>
+<BooleanProperty Name="inherit">false</BooleanProperty>
+<StringListProperty Name="originReferences">
+</StringListProperty>
 <StringListProperty Name="references">
 <String>ibm:///catalog/product/WBG006_0612</String>
 <String>ibm:///catalog/sku/WBG006_061201</String>
 </StringListProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="focusPoint">
+<Struct>
+<StringProperty Name="x">0.5</StringProperty>
+<StringProperty Name="y">0.5</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="enlarge">
+<Struct>
+<BooleanProperty Name="portrait_ratio3x4">true</BooleanProperty>
+<BooleanProperty Name="portrait_ratio20x31">true</BooleanProperty>
+<BooleanProperty Name="portrait_ratio1x1">true</BooleanProperty>
+<BooleanProperty Name="landscape_ratio4x3">true</BooleanProperty>
+<BooleanProperty Name="landscape_ratio16x9">true</BooleanProperty>
+<BooleanProperty Name="landscape_ratio5x2">true</BooleanProperty>
+<BooleanProperty Name="landscape_ratio4x1">true</BooleanProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -99,11 +119,11 @@
 <related>
 </related>
 <alt>Gusso Cloth Satchel Bag (shutterstock_111120167)</alt>
-<copyright>Oleg Gekman/Shutterstock 111120167</copyright>
+<copyright>Oleg Gekman/shutterstock_402269182</copyright>
 <dataUrl></dataUrl>
-<width>1600</width>
-<height>1200</height>
-<data md5="df72d9e6fda25beff4a6a3f766d96aa1" size="389215" href="../../../../../../../__blob/df72d9e6fda25beff4a6a3f766d96aa1.blob" mimetype="image/jpeg"/>
+<width>4000</width>
+<height>2999</height>
+<data md5="d5137d26d85d2c2db3d9cbe0256a51d2" size="2070673" href="../../../../../../../__blob/d5137d26d85d2c2db3d9cbe0256a51d2.blob" mimetype="image/jpeg"/>
 <asset>
 </asset>
 </CMPicture>

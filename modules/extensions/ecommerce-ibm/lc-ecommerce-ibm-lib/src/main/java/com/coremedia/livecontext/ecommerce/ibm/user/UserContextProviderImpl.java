@@ -5,9 +5,10 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ public class UserContextProviderImpl implements UserContextProvider {
 
   private static final String STUDIO_PREVIEW_TEST_PARAM = "p13n_test";
 
+  @Nullable
   private UserSessionService userSessionService;
 
   @Override
@@ -48,6 +50,9 @@ public class UserContextProviderImpl implements UserContextProvider {
 
   @Nonnull
   private Optional<String> findUserId(@Nonnull HttpServletRequest request) {
+    if (userSessionService == null) {
+      return Optional.empty();
+    }
     StoreContext storeContext = StoreContextHelper.getCurrentContext();
     StoreContextHelper.validateContext(storeContext);
 
@@ -72,7 +77,7 @@ public class UserContextProviderImpl implements UserContextProvider {
 
   // ------------ Config -----------------------
 
-  @Required
+  @Autowired(required = false)
   public void setUserSessionService(UserSessionService userSessionService) {
     this.userSessionService = userSessionService;
   }

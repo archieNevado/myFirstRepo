@@ -26,3 +26,5 @@ lc-asset
 ecommerce-ibm
 taxonomy
 validators
+#memory-controlroom
+#notification-memory

@@ -8,5 +8,6 @@ import "@coremedia/brick-pdp-augmentation";
 import "@coremedia/brick-footer";
 import "@coremedia/brick-preview";
 import "@coremedia/brick-360-spinner";
+import "@coremedia/brick-image-maps";
 
 import "./calista";

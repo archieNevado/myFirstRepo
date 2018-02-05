@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +21,8 @@ import java.util.Map;
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SEGMENT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 public class SegmentServiceImpl implements SegmentService {
 
@@ -72,7 +73,7 @@ public class SegmentServiceImpl implements SegmentService {
   public List<Segment> findSegmentsForCurrentUser(@Nonnull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
     Map<String, Object> segments = commerceCache.get(
-          new SegmentsByUserCacheKey(storeContext, userContext, segmentWrapperService, commerceCache));
+            new SegmentsByUserCacheKey(storeContext, userContext, segmentWrapperService, commerceCache));
 
     return createSegmentBeansFor(segments, storeContext);
   }
@@ -82,7 +83,7 @@ public class SegmentServiceImpl implements SegmentService {
       return null;
     }
 
-    String segmentId = DataMapHelper.getValueForKey(segmentMap, "id", String.class);
+    String segmentId = DataMapHelper.findStringValue(segmentMap, "id").orElse(null);
     CommerceId commerceId = commerceId(SEGMENT).withExternalId(segmentId).build();
     Segment segment = (Segment) commerceBeanFactory.createBeanFor(commerceId, storeContext);
     ((AbstractIbmCommerceBean) segment).setDelegate(segmentMap);
@@ -95,12 +96,12 @@ public class SegmentServiceImpl implements SegmentService {
       return Collections.emptyList();
     }
 
-    List<Segment> result = new ArrayList<>(segmentsMap.size());
-    List<Map<String, Object>> memberGroups = DataMapHelper.getValueForPath(segmentsMap, "MemberGroup", List.class);
-    for (Map<String, Object> memberGroup : memberGroups) {
-      result.add(createSegmentBeanFor(memberGroup, storeContext));
-    }
-    return Collections.unmodifiableList(result);
+    List<Map<String, Object>> memberGroups = DataMapHelper.findValue(segmentsMap, "MemberGroup", List.class)
+            .orElseGet(Collections::emptyList);
+
+    return memberGroups.stream()
+            .map(memberGroup -> createSegmentBeanFor(memberGroup, storeContext))
+            .collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
 
   @Nonnull

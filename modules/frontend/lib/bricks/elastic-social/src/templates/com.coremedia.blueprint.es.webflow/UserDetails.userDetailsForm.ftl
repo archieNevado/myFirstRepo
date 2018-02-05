@@ -17,9 +17,9 @@
 
       <#if userDetails?has_content>
         <form method="post" enctype="multipart/form-data">
-          <input type="hidden" name="_CSRFToken" value="${_CSRFToken}"/>
-          <input type="hidden" name="execution" value="${flowExecutionKey}"/>
-          <input type="hidden" name="_eventId_saveUser"/>
+          <input type="hidden" name="_CSRFToken" value="${_CSRFToken}">
+          <input type="hidden" name="execution" value="${flowExecutionKey}">
+          <input type="hidden" name="_eventId_saveUser">
           <@bp.notificationFromSpring path="userDetails" />
 
           <#-- username -->
@@ -76,7 +76,7 @@
                 <#if userDetails.profileImage?has_content>
                 <div class="col-xs-12 col-sm-4">
                   <#assign link=cm.getLink(userDetails.profileImage {"transform":true, "width":elasticSocialConfiguration.userImageWidth!60?int, "height": elasticSocialConfiguration.userImageHeight!60?int})/>
-                  <img class="cm-form__image" src="${link}" title="" alt="userimage"/>
+                  <img class="cm-form__image" src="${link}" title="" alt="userimage">
 
                   <@spring.bind path="userDetails.deleteProfileImage"/>
                   <div class="checkbox">
@@ -87,7 +87,7 @@
                 </div>
                 </#if>
                 <div class="col-xs-12 col-sm-8">
-                  <input type="file" accept="image/*" name="imageFile" id="imageFile"/>
+                  <input type="file" accept="image/*" name="imageFile" id="imageFile">
                 </div>
               </div>
             </div>

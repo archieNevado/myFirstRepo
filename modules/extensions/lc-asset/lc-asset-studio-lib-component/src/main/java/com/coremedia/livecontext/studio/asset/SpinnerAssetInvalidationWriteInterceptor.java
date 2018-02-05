@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
-import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
 import com.coremedia.livecontext.asset.util.AssetWriteSettingsHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;

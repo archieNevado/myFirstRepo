@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Nonnull;
@@ -39,7 +40,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = IbmStoreContextProviderTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
+@TestPropertySource(properties = "livecontext.cache.invalidation.enabled:false")
 public class IbmStoreContextProviderTest {
+
   @Configuration
   @ImportResource(
           value = {
@@ -63,7 +66,7 @@ public class IbmStoreContextProviderTest {
 
   @Inject
   @Named("testStoreContextProvider")
-  private StoreContextProviderImpl testling;
+  private IbmStoreContextProvider testling;
 
   @Inject
   private SitesService sitesService;

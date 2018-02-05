@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -34,6 +35,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,16 +56,20 @@ public class ThemeImporterImplTest {
     }
   }
 
+  @Mock
+  private LocalizationService localizationService;
+
   private InputStream corporateTheme;
   private ThemeImporterImpl themeImporter;
 
   @Before
   public void setUp() throws Exception {
+    initMocks(this);
     corporateTheme = getClass().getResource("./corporate-theme.zip").openStream();
 
     TikaMimeTypeService tikaMimeTypeService = new TikaMimeTypeService();
     tikaMimeTypeService.init();
-    themeImporter = new ThemeImporterImpl(capConnection, tikaMimeTypeService, new LocalizationService(null, null, null));
+    themeImporter = new ThemeImporterImpl(capConnection, tikaMimeTypeService, localizationService);
   }
 
   @After

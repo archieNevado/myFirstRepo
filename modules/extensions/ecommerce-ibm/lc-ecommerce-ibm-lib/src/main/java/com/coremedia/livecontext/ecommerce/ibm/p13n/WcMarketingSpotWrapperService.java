@@ -9,19 +9,17 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
-import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
 import static java.util.Arrays.asList;
@@ -64,15 +62,15 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
   @SuppressWarnings("unchecked")
-  protected Map<String, Object> findMarketingSpotByExternalTechId(String technicalId, StoreContext storeContext,
+  protected Map<String, Object> findMarketingSpotByExternalTechId(String technicalId, @Nonnull StoreContext storeContext,
                                                                   UserContext userContext) {
     try {
-      Map<String, Object> data = getRestConnector().callService(
-              FIND_MARKETING_SPOT_BY_TECH_ID, asList(getStoreId(storeContext), technicalId),
-              createParametersMap(null, getLocale(storeContext), getCurrency(storeContext),
-                      UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null,
-                      storeContext),
-              null, storeContext, userContext);
+      List<String> variableValues = asList(getStoreId(storeContext), technicalId);
+
+      Map<String, String[]> parameters = getOptionalParameters(storeContext, userContext);
+
+      Map<String, Object> data = getRestConnector().callService(FIND_MARKETING_SPOT_BY_TECH_ID, variableValues,
+              parameters, null, storeContext, userContext);
 
       if (data == null || StringUtils.isEmpty(DataMapHelper.getValueForPath(data, "MarketingSpot[0].spotName"))) {
         return null;
@@ -115,20 +113,19 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
   public Map<String, Object> findMarketingSpots(StoreContext storeContext, UserContext userContext) {
     try {
       Map<String, Object> spotsWrapperMap;
+
+      List<String> variableValues = singletonList(getStoreId(storeContext));
+
+      Map<String, String[]> parameters = getOptionalParameters(storeContext, userContext);
+
       if (WCS_VERSION_7_6 == StoreContextHelper.getWcsVersion(storeContext)) {
         //noinspection unchecked
-        spotsWrapperMap = getRestConnector().callService(
-                FIND_MARKETING_SPOTS_V7_6, singletonList(getStoreId(storeContext)),
-                createParametersMap(null, getLocale(storeContext), getCurrency(storeContext),
-                        UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext),
-                        null, storeContext), null, storeContext, userContext);
+        spotsWrapperMap = getRestConnector().callService(FIND_MARKETING_SPOTS_V7_6, variableValues, parameters, null,
+                storeContext, userContext);
       } else {
         //noinspection unchecked
-        spotsWrapperMap = getRestConnector().callService(
-                FIND_MARKETING_SPOTS, singletonList(getStoreId(storeContext)),
-                createParametersMap(null, getLocale(storeContext), getCurrency(storeContext),
-                        UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext),
-                        null, storeContext), null, storeContext, userContext);
+        spotsWrapperMap = getRestConnector().callService(FIND_MARKETING_SPOTS, variableValues, parameters, null,
+                storeContext, userContext);
       }
       return spotsWrapperMap;
     } catch (CommerceException e) {
@@ -146,20 +143,20 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
    * @param userContext  the current user context
    * @return Map&lt;String, Object&gt; representing the REST response of WCS
    */
-  public Map<String, Object> findMarketingSpotsBySearchTerm(String searchTerm, StoreContext storeContext,
+  public Map<String, Object> findMarketingSpotsBySearchTerm(String searchTerm, @Nonnull StoreContext storeContext,
                                                             UserContext userContext) {
     if (searchTerm == null || searchTerm.trim().isEmpty() || "*".equals(searchTerm)) {
       return findMarketingSpots(storeContext, userContext);
     }
 
     try {
+      List<String> variableValues = asList(getStoreId(storeContext), searchTerm);
+
+      Map<String, String[]> parameters = getOptionalParameters(storeContext, userContext);
+
       //noinspection unchecked
-      return getRestConnector().callService(
-              FIND_MARKETING_SPOTS_BY_SEARCH_TERM, asList(getStoreId(storeContext), searchTerm),
-              createParametersMap(null, getLocale(storeContext), getCurrency(storeContext),
-                      UserContextHelper.getForUserId(userContext), UserContextHelper.getForUserName(userContext), null,
-                      storeContext),
-              null, storeContext, userContext);
+      return getRestConnector().callService(FIND_MARKETING_SPOTS_BY_SEARCH_TERM, variableValues, parameters, null,
+              storeContext, userContext);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -177,15 +174,15 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
   @SuppressWarnings("unchecked")
-  private Map<String, Object> findMarketingSpotByExternalIdCae(String externalId, StoreContext storeContext,
+  private Map<String, Object> findMarketingSpotByExternalIdCae(String externalId, @Nonnull StoreContext storeContext,
                                                                UserContext userContext) {
     try {
-      Map<String, Object> data = getRestConnector().callService(
-              FIND_MARKETING_SPOT_BY_EXTERNAL_ID_CAE, asList(getStoreId(storeContext), externalId),
-              createParametersMap(null, getLocale(storeContext), getCurrency(storeContext),
-                      UserContextHelper.getForUserId(userContext),
-                      UserContextHelper.getForUserName(userContext), null, storeContext),
-              null, storeContext, userContext);
+      List<String> variableValues = asList(getStoreId(storeContext), externalId);
+
+      Map<String, String[]> parameters = getOptionalParameters(storeContext, userContext);
+
+      Map<String, Object> data = getRestConnector().callService(FIND_MARKETING_SPOT_BY_EXTERNAL_ID_CAE, variableValues,
+              parameters, null, storeContext, userContext);
 
       if (data == null || StringUtils.isEmpty(DataMapHelper.getValueForPath(data, "MarketingSpotData[0].eSpotName"))) {
         return null;
@@ -210,8 +207,9 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
     marketingSpotWrappedHit.put("resourceName", resourceName);
 
     //noinspection unchecked
-    List<Map<String, Object>> marketingSpotsFromHits = DataMapHelper.getValueForKey(marketingSpotHits,
-            "espot".equals(resourceName) ? "MarketingSpotData" : "MarketingSpot", List.class);
+    List<Map<String, Object>> marketingSpotsFromHits = DataMapHelper.findValue(marketingSpotHits,
+            "espot".equals(resourceName) ? "MarketingSpotData" : "MarketingSpot", List.class)
+            .orElse(null);
 
     if (marketingSpotsFromHits == null) {
       return null;
@@ -250,14 +248,15 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
         Map<String, Object> allMarketingSpots = findMarketingSpots(storeContext, userContext);
 
         //noinspection unchecked
-        List<Map<String, Object>> wrappedSpots = DataMapHelper.getValueForKey(allMarketingSpots, "MarketingSpots",
-                List.class);
+        List<Map<String, Object>> wrappedSpots = DataMapHelper.findValue(allMarketingSpots, "MarketingSpots",
+                List.class)
+                .orElse(null);
 
         if (wrappedSpots != null) {
           for (Map<String, Object> spot : wrappedSpots) {
-            String spotName = DataMapHelper.getValueForKey(spot, "eSpotName", String.class);
+            String spotName = DataMapHelper.findStringValue(spot, "eSpotName").orElse("");
             if (StringUtils.isEmpty(searchTerm) || "*".equals(searchTerm) ||
-                    (!StringUtils.isEmpty(spotName) && spotName.toLowerCase().contains(searchTerm.toLowerCase()))) {
+                    (!spotName.isEmpty() && spotName.toLowerCase().contains(searchTerm.toLowerCase()))) {
               result.add(spot);
             }
           }
@@ -286,5 +285,14 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
   public boolean isUseServiceCallsForStudio() {
     return useServiceCallsForStudio;
   }
-}
 
+  @Nonnull
+  private Map<String, String[]> getOptionalParameters(@Nonnull StoreContext storeContext,
+                                                      @Nullable UserContext userContext) {
+    return buildParameterMap()
+            .withCurrency(storeContext)
+            .withLanguageId(storeContext)
+            .withUserIdOrName(userContext)
+            .build();
+  }
+}

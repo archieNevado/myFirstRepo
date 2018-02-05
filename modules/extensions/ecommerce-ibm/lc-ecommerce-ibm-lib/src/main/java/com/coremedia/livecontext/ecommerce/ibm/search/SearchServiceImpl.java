@@ -6,11 +6,11 @@ import com.coremedia.livecontext.ecommerce.search.SuggestionResult;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * IBM Commerce Service implementation.
@@ -20,19 +20,16 @@ public class SearchServiceImpl implements SearchService {
 
   @Override
   public List<SuggestionResult> getAutocompleteSuggestions(String term, @Nonnull StoreContext currentContext) {
-    List<SuggestionResult> result = Collections.emptyList();
-    List<WcSuggestion> wcSuggestions = searchWrapperService.
-            getKeywordSuggestionsByTerm(term, currentContext);
+    List<WcSuggestion> wcSuggestions = searchWrapperService.getKeywordSuggestionsByTerm(term, currentContext);
 
-    if (wcSuggestions != null && !wcSuggestions.isEmpty()) {
-      result = new ArrayList<>();
-      for (WcSuggestion wcSuggestion : wcSuggestions) {
-        result.add(new SuggestionResult(wcSuggestion.getTerm(), term, wcSuggestion.getFrequency()));
-      }
+    if (wcSuggestions == null || wcSuggestions.isEmpty()) {
+      return emptyList();
     }
-    return result;
-  }
 
+    return wcSuggestions.stream()
+            .map(wcSuggestion -> new SuggestionResult(wcSuggestion.getTerm(), term, wcSuggestion.getFrequency()))
+            .collect(toList());
+  }
 
   public WcSearchWrapperService getSearchWrapperService() {
     return searchWrapperService;

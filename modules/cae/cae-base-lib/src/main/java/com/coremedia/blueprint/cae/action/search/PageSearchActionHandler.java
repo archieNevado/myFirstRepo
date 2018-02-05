@@ -143,7 +143,6 @@ public class PageSearchActionHandler extends PageHandlerBase {
     return notFound();
   }
 
-
   /**
    * Performs suggestion search and provides a JSON object containing the suggestions.
    *
@@ -156,9 +155,10 @@ public class PageSearchActionHandler extends PageHandlerBase {
                                                @PathVariable(SEGMENT_ROOT) String context,
                                                @RequestParam(value = PARAMETER_ROOT_NAVIGATION_ID) String rootNavigationId,
                                                @RequestParam(value = PARAMETER_QUERY) String term) {
-    if (getValidNavigation(action, context, ACTION_NAME) != null) {
-      Collection<String> docTypes = settingsService.settingAsList(DOCTYPE_SELECT, String.class, action);
-      Suggestions suggestions = searchService.getAutocompleteSuggestions(rootNavigationId, term, docTypes);
+    Navigation navigation = getValidNavigation(action, context, ACTION_NAME);
+     if (navigation != null) {
+       Collection<String> docTypes = settingsService.settingAsList(DOCTYPE_SELECT, String.class, navigation);
+       Suggestions suggestions = searchService.getAutocompleteSuggestions(rootNavigationId, term, docTypes);
 
       return suggestions.delegate();
     }

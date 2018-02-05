@@ -424,11 +424,31 @@
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Fashion/Women%27s%20Dresses%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Fashion/Women%27s%20Dresses%20Image%20Map"/>
 </Struct>
 </StructListProperty>
+<BooleanProperty Name="translationWorkflowRemoveEditedContents">false</BooleanProperty>
+<StructProperty Name="forms">
+<Struct>
+<StructProperty Name="CMChannel">
+<Struct>
+<BooleanProperty Name="content-4234">false</BooleanProperty>
+<BooleanProperty Name="content-4314">false</BooleanProperty>
+<BooleanProperty Name="content-4230">false</BooleanProperty>
+<BooleanProperty Name="content-4312">false</BooleanProperty>
+<BooleanProperty Name="content-4158">false</BooleanProperty>
+<BooleanProperty Name="content-4306">false</BooleanProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="CMArticle">
+<Struct>
+<BooleanProperty Name="teaserDocumentForm">false</BooleanProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
 <StructProperty Name="workarea">
 <Struct>
 <StructListProperty Name="tabs">
 <Struct>
-<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
 <StructProperty Name="state">
 <Struct>
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/Germany/German/Navigation/Aurora%20Augmentation.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Navigation/Aurora%20Augmentation"/>

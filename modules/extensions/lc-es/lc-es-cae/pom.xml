@@ -95,6 +95,10 @@
       <artifactId>cae-viewservices-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-logging</artifactId>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>ec-test-util</artifactId>
       <version>${project.version}</version>

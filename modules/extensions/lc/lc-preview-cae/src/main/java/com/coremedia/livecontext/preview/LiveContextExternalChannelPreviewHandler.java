@@ -9,8 +9,6 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
-import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
@@ -66,30 +64,28 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   @SuppressWarnings("unused")
   @Link(type = LiveContextExternalChannelImpl.class)
   public Object buildLinkForExternalChannel(LiveContextExternalChannelImpl navigation, String viewName,
-                                            Map<String, Object> linkParameters) {
+                                            Map<String, Object> linkParameters, HttpServletRequest request) {
     Optional<StoreContext> storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
     if (!storeContext.isPresent()) {
       // not responsible
       return null;
     }
 
-    Category category;
-    try {
-      category = navigation.getCategory();
-      // in case of the root category another link scheme should build the link
-      // ...and that should lead to a fragment preview of the page grid
-      if (category != null && category.isRoot()) {
-        return null;
-      }
-    } catch (NotFoundException | InvalidIdException e) {
-      LOG.debug("ignoring exception while checking category of {}", navigation, e);
+    Category category = ExternalNavigationHandler.findCategory(navigation).orElse(null);
+    if (category == null) {
       return null;
     }
 
-    if (useCommerceCategoryLinks(navigation.getSite()) && category != null) {
-      String seoSegment = category.getSeoSegment();
-      Map<String, Object> updateParameters = updateQueryParams(category, linkParameters);
-      return buildCommerceLinkFor(null, seoSegment, updateParameters, category.getContext());
+    // in case of the root category another link scheme should build the link
+    // ...and that should lead to a fragment preview of the page grid
+    if (category.isRoot()) {
+      return null;
+    }
+
+    if (useCommerceCategoryLinks(navigation.getSite())) {
+      return findCommercePropertyProvider()
+              .map(p -> p.buildCategoryLink(category, linkParameters, request))
+              .orElse(null);
     } else {
       return externalNavigationHandler.buildCaeLinkForCategory(navigation, viewName, linkParameters);
     }

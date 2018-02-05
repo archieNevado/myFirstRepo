@@ -33,7 +33,7 @@
             <div class="form-group">
               <label><@bp.message "userDetails_profileImage" /></label>
               <#assign link=cm.getLink(userDetails.profileImage {"transform":true, "width":elasticSocialConfiguration.userImageWidth!100?int, "height": elasticSocialConfiguration.userImageHeight!100?int})/>
-              <img class="cm-form__image" src="${link}" title="" alt="userimage"/>
+              <img class="cm-form__image" src="${link}" title="" alt="userimage">
             </div>
           </#if>
 
@@ -62,9 +62,9 @@
 
           <#if userDetails.viewOwnProfile>
             <form method="post" enctype="multipart/form-data">
-              <input type="hidden" name="execution" value="${flowExecutionKey!""}"/>
-              <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-              <input type="hidden" name="_eventId_editUser"/>
+              <input type="hidden" name="execution" value="${flowExecutionKey!""}">
+              <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+              <input type="hidden" name="_eventId_editUser">
 
               <div class="form-group text-right">
                 <@bp.button text=bp.getMessage("userDetails_editProfile") attr={"type": "submit", "id": "saveUser", "classes": ["btn","btn-primary"]} />
@@ -108,12 +108,12 @@
               <#if elasticSocialConfiguration.facebookAuthenticationEnabled>
                 <#assign facebookUrl=cm.getLink('/signin/facebook_' + tenant)/>
                 <form action="${facebookUrl!""}" method="post" class="cm-form-facebook pull-left">
-                  <input type="hidden" name="nextUrl" value="${nextUrl!""}"/>
-                  <input type="hidden" name="registerUrl" value="${loginUrl!""}"/>
-                  <input type="hidden" name="loginUrl" value="${loginUrl!""}"/>
-                  <input type="hidden" name="scope" value="email"/>
-                  <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-                  <input type="hidden" name="forceRegister" value="false"/>
+                  <input type="hidden" name="nextUrl" value="${nextUrl!""}">
+                  <input type="hidden" name="registerUrl" value="${loginUrl!""}">
+                  <input type="hidden" name="loginUrl" value="${loginUrl!""}">
+                  <input type="hidden" name="scope" value="email">
+                  <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+                  <input type="hidden" name="forceRegister" value="false">
                   <@bp.button text=bp.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default"]} />
                 </form>
               </#if>
@@ -121,11 +121,11 @@
               <#if elasticSocialConfiguration.twitterAuthenticationEnabled>
                 <#assign twitterUrl=cm.getLink('/signin/twitter_' + tenant)/>
                 <form action="${twitterUrl!""}" method="post" class="cm-form-twitter pull-right">
-                  <input type="hidden" name="nextUrl" value="${nextUrl!""}"/>
-                  <input type="hidden" name="registerUrl" value="${loginUrl!""}"/>
-                  <input type="hidden" name="loginUrl" value="${loginUrl!""}"/>
-                  <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}"/>
-                  <input type="hidden" name="forceRegister" value="false"/>
+                  <input type="hidden" name="nextUrl" value="${nextUrl!""}">
+                  <input type="hidden" name="registerUrl" value="${loginUrl!""}">
+                  <input type="hidden" name="loginUrl" value="${loginUrl!""}">
+                  <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+                  <input type="hidden" name="forceRegister" value="false">
                   <@bp.button text=bp.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default"]} />
                 </form>
               </#if>

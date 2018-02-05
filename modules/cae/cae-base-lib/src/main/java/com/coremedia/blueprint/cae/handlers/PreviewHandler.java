@@ -5,17 +5,21 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.IdRedirectHandlerBase;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -32,6 +36,7 @@ public class PreviewHandler extends IdRedirectHandlerBase {
    * e.g. /preview?id=123&view=fragmentPreview
    */
   public static final String URI_PATTERN = "/preview";
+
   public static final String REQUEST_ATTR_IS_STUDIO_PREVIEW = "isStudioPreview";
 
   private LinkFormatter linkFormatter;
@@ -47,14 +52,21 @@ public class PreviewHandler extends IdRedirectHandlerBase {
     request.setAttribute(REQUEST_ATTR_IS_STUDIO_PREVIEW, true);
     storeSite(request, siteId);
     storeTaxonomy(request, taxonomyId);
-    ModelAndView redirectModel = super.handleId(id, view);
-    Object rootModel = requireNonNull(HandlerHelper.getRootModel(redirectModel));
+
+    ModelAndView modelAndView = super.handleId(id, view);
+    String viewName = modelAndView.getViewName();
+    if (viewName == null || !viewName.startsWith(UrlBasedViewResolver.REDIRECT_URL_PREFIX)) {
+      // not a redirect view - may occur in case of errors
+      return modelAndView;
+    }
+
+    Object rootModel = requireNonNull(HandlerHelper.getRootModel(modelAndView));
 
     // check if link to root model can be build - let common spring MVC exception handling kick in if link building fails
     // note that this is necessary because exceptions during rendering of RedirectView cannot be handled anymore
     String link = linkFormatter.formatLink(rootModel, view, request, null, true);
     LOG.debug("redirecting '{}' with view '{}' for bean '{}' to '{}'", id, view, rootModel, link);
-    return redirectModel;
+    return modelAndView;
   }
 
   @Required
@@ -62,9 +74,14 @@ public class PreviewHandler extends IdRedirectHandlerBase {
     this.linkFormatter = linkFormatter;
   }
 
-  public static boolean isStudioPreviewRequest(){
-    return Boolean.valueOf(RequestContextHolder.getRequestAttributes().getAttribute(
-                  PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW, 0)+"");
+  public static boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+    Object attributeValue = request.getAttribute(PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW);
+
+    if (attributeValue == null) {
+      return false;
+    }
+
+    return Boolean.valueOf(attributeValue + "");
   }
 
   @Override
@@ -76,26 +93,30 @@ public class PreviewHandler extends IdRedirectHandlerBase {
    * Stores the site parameter into the request.
    * The site parameter is used to resolve the context of a content if it does not belong to a specific site.
    * Therefore the studio default site will be passed as parameter to resolve the context.
+   *
    * @param siteId The id of the site
    */
-  private void storeSite(HttpServletRequest request, String siteId) {
-    if (StringUtils.isNotEmpty(siteId)) {
-      request.getSession(true).setAttribute(RequestAttributeConstants.ATTR_NAME_PAGE_SITE, siteId);
-    }
-    else {
-      request.getSession(true).setAttribute(RequestAttributeConstants.ATTR_NAME_PAGE_SITE, null);
-    }
+  private static void storeSite(@Nonnull HttpServletRequest request, @Nullable String siteId) {
+    String attributeValue = emptyToNull(siteId);
+    setSessionAttribute(request, RequestAttributeConstants.ATTR_NAME_PAGE_SITE, attributeValue);
   }
 
   /**
    * Stores the taxonomy content into the request.
    * The taxonomy parameter is used for the custom topic pages.
+   *
    * @param taxonomyId The numeric content id of the taxonomy node.
    */
-  private void storeTaxonomy(HttpServletRequest request, String taxonomyId) {
-    if (StringUtils.isNotEmpty(taxonomyId)) {
+  private static void storeTaxonomy(@Nonnull HttpServletRequest request, @Nullable String taxonomyId) {
+    if (!isNullOrEmpty(taxonomyId)) {
       String id = IdHelper.formatContentId(taxonomyId);
-      request.getSession(true).setAttribute(RequestAttributeConstants.ATTR_NAME_PAGE_MODEL, id);
+      setSessionAttribute(request, RequestAttributeConstants.ATTR_NAME_PAGE_MODEL, id);
     }
+  }
+
+  private static void setSessionAttribute(@Nonnull HttpServletRequest request, @Nonnull String name,
+                                          @Nullable String value) {
+    HttpSession session = request.getSession(true);
+    session.setAttribute(name, value);
   }
 }

@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.io.File;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -69,10 +71,12 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
   @Override
   public void run(String... strings) {
     try {
-      if (env.getProperty(THEMEIMPORTER_DEVELOPMENT_MODE, Boolean.class)) {
+      if (isDevelopmentMode()) {
         LOG.info("Theme importer runs in development mode.");
       }
+
       work();
+
       if (getExitCode().get() != 0) {
         LOG.warn("Done, with errors.");
       } else {
@@ -96,17 +100,23 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
 
   // --- properties -------------------------------------------------
 
+  private boolean isDevelopmentMode() {
+    return getProperty(THEMEIMPORTER_DEVELOPMENT_MODE, Boolean.class).orElse(false);
+  }
+
   private String getFolder() {
     String originalFolder = env.getProperty(THEMEIMPORTER_FOLDER);
-    if (!env.getProperty(THEMEIMPORTER_DEVELOPMENT_MODE, Boolean.class)) {
+
+    if (!isDevelopmentMode()) {
       return originalFolder;
     }
+
     User developer = capConnection.getSession().getUser();
     return themeService.developerPath(originalFolder, developer);
   }
 
   private boolean cleanBeforeImport() {
-    return env.getProperty(THEMEIMPORTER_CLEAN, Boolean.class);
+    return getProperty(THEMEIMPORTER_CLEAN, Boolean.class).orElse(false);
   }
 
   private List<String> getThemes() {
@@ -180,5 +190,11 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
     export.setPrettyPrint(true);
     export.setRecursive(true);
     export.doExport();
+  }
+
+  @Nonnull
+  private <T> Optional<T> getProperty(@Nonnull String key, @Nonnull Class<T> targetType) {
+    T property = env.getProperty(key, targetType);
+    return Optional.ofNullable(property);
   }
 }

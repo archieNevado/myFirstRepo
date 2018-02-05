@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
-import com.coremedia.blueprint.base.livecontext.studio.cache.CommerceCacheInvalidationSource;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.coremedia.livecontext.studio.asset.SpinnerAssetInvalidationWriteInterceptor.SEQUENCE_SPINNER_PROPERTY;
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -142,12 +143,6 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
     when(contentWriteRequest.getProperties()).thenReturn(newProperties);
 
     assertThat(testling.sequencePropertyChanged(contentWriteRequest)).isFalse();
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void resolveAllSpinnerPictures() throws Exception {
-    //noinspection ConstantConditions
-    testling.resolveAllSpinnerPictures(null, null);
   }
 
   @Test
@@ -285,7 +280,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Test
   public void testInvalidateExternalReferences() throws Exception {
-    testling.invalidateExternalReferences(content, null, null);
+    testling.invalidateExternalReferences(content, emptyMap(), emptyMap());
 
     verify(invalidationSource, times(1)).invalidateReferences(Collections.<String>emptySet());
   }
@@ -296,7 +291,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
     when(assetReadSettingsHelper.getCommerceReferences(oldLocalSettings)).thenReturn(oldSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(oldLocalSettings)).thenReturn(Boolean.TRUE);
 
-    testling.invalidateExternalReferences(content, oldLocalSettings, null);
+    testling.invalidateExternalReferences(content, oldLocalSettings, emptyMap());
 
     verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(oldSettingsInvalidation)));
   }
@@ -307,7 +302,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
     when(assetReadSettingsHelper.getCommerceReferences(newLocalSettings)).thenReturn(newSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(newLocalSettings)).thenReturn(Boolean.TRUE);
 
-    testling.invalidateExternalReferences(content, null, newLocalSettings);
+    testling.invalidateExternalReferences(content, emptyMap(), newLocalSettings);
 
     verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(newSettingsInvalidation)));
   }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Calista/United States/English/Editorial/Content/Fashion" name="Photo Shooting in Prague - Teasing">
+<CMPicture folder="/Sites/Calista/United States/English/Editorial/Content/Fashion" name="Photo Shooting in Prague - Teasing" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>
 <viewtype>
 </viewtype>
 <localSettings>
-<Struct xmlns="http://www.coremedia.com/2008/struct">
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="focusArea">
 <Struct>
 <StringProperty Name="x1">0</StringProperty>
@@ -88,8 +88,7 @@
 <contexts>
 </contexts>
 <teaserTitle></teaserTitle>
-<detailText grammarName="coremedia-richtext-1.0">
-  <div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p/></div></detailText>
+<detailText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p/></div></detailText>
 <pictures>
 </pictures>
 <related>

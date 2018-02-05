@@ -1,7 +1,6 @@
 # Description
 
-This is the wrapper cookbook to deploy CoreMedia Blueprint
-Livecontext for SAP Hybris.
+This is the wrapper cookbook to deploy this CoreMedia Blueprint variant.
 
 # Requirements
 
@@ -27,8 +26,6 @@ Livecontext for SAP Hybris.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['server_name']` -  Defaults to `corporate.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['default_site']` -  Defaults to `corporate`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['site_id']` - The id property of the CMSite content associated with this site. Defaults to `abffe57734feeee`.
-* `node['blueprint']['proxy']['candy_properties']['preview']['blueprint.site.mapping.corporate']` -  Defaults to `//candy-preview.#{node['blueprint']['hostname']}`.
-* `node['blueprint']['proxy']['candy_properties']['studio-preview']['blueprint.site.mapping.corporate']` -  Defaults to `//candy-preview.#{node['blueprint']['hostname']}`.
 
 # Recipes
 

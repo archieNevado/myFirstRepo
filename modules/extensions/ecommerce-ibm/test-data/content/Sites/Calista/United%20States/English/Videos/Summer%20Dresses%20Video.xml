@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMVideo folder="/Sites/Calista/United States/English/Videos" name="Summer Dresses Video">
+<CMVideo folder="/Sites/Calista/United States/English/Videos" name="Summer Dresses Video" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>
 <viewtype>
 </viewtype>
 <localSettings>
-<Struct xmlns="http://www.coremedia.com/2008/struct">
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="references">
@@ -41,7 +41,7 @@
 <dataUrl></dataUrl>
 <data md5="72abe0d12c5b05f97a7a3047074a156c" size="17213599" href="../../../../../__blob/72abe0d12c5b05f97a7a3047074a156c.blob" mimetype="video/mp4"/>
 <timeLine>
-  <Struct xmlns="http://www.coremedia.com/2008/struct">
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <LinkProperty Name="defaultTarget" LinkType="coremedia:///cap/contenttype/CMTeasable"/>
 <StructListProperty Name="sequences">
 </StructListProperty>

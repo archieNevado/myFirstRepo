@@ -2,12 +2,14 @@ package com.coremedia.livecontext.studio.components.link {
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.cms.editor.sdk.util.*;
+import com.coremedia.cms.editor.sdk.util.LinkListUtil;
+import com.coremedia.cms.editor.sdk.util.LinkListWrapperBase;
+import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-public class CatalogAssetsLinkListWrapper implements ILinkListWrapper {
+public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -21,18 +23,23 @@ public class CatalogAssetsLinkListWrapper implements ILinkListWrapper {
   [Bindable]
   public var maxCardinality:int;
 
+  [Bindable]
+  public var readOnlyVE:ValueExpression;
+
   public function CatalogAssetsLinkListWrapper(config:CatalogAssetsLinkListWrapper = null) {
+    super(config);
     bindTo = config.bindTo;
     linksVE = config.linksVE;
     assetContentTypes = config.assetContentTypes || [];
     maxCardinality = config.maxCardinality || 0;
+    readOnlyVE = config.readOnlyVE;
   }
 
-  public function getVE():ValueExpression {
+  override public function getVE():ValueExpression {
     return linksVE;
   }
 
-  public function acceptsLinks(links:Array):Boolean {
+  override public function acceptsLinks(links:Array):Boolean {
     for each (var asset:Content in links) {
       if (!(asset is Content)) {
         return false;
@@ -53,12 +60,12 @@ public class CatalogAssetsLinkListWrapper implements ILinkListWrapper {
     return true;
   }
 
-  public function getLinks():Array {
-    var value:* = linksVE.getValue();
+  override public function getLinks():Array {
+    var value:* = getVE().getValue();
     return value === undefined ? undefined : value as Array;
   }
 
-  public function setLinks(links:Array):void {
+  override public function setLinks(links:Array):void {
     if (links) {
       for each (var content:Content in links) {
         if (!PropertyEditorUtil.isReadOnly(content)) {
@@ -69,12 +76,16 @@ public class CatalogAssetsLinkListWrapper implements ILinkListWrapper {
     }
   }
 
-  public function getTotalCapacity():int {
+  override public function getTotalCapacity():int {
     return maxCardinality > 0 ? maxCardinality : int.MAX_VALUE;
   }
 
-  public function getFreeCapacity():int {
-    return getTotalCapacity() - getLinks().length;
+  override public function getFreeCapacity():int {
+    return getTotalCapacity() - (getLinks() ? getLinks().length : 0);
+  }
+
+  override public function isReadOnly():Boolean {
+    return readOnlyVE ? readOnlyVE.getValue() : false;
   }
 
   private static function getContentType(linkTypeName:String):ContentType {

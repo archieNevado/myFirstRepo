@@ -1,16 +1,25 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.layout.Container" -->
+<#-- @ftlvariable name="viewItems" type="java.lang.String" -->
+<#-- @ftlvariable name="itemsPerRow" type="java.lang.Integer" -->
+<#-- @ftlvariable name="itemsPerMobileRow" type="java.lang.Integer" -->
+<#-- @ftlvariable name="additionalClass" type="java.lang.String" -->
+<#-- @ftlvariable name="viewItemCssClass" type="java.lang.String" -->
+<#-- @ftlvariable name="columnCssClass" type="java.lang.String" -->
+<#-- @ftlvariable name="center" type="java.lang.Boolean" -->
+<#-- @ftlvariable name="addRows" type="java.lang.Boolean" -->
+<#-- @ftlvariable name="showHeadline" type="java.lang.Boolean" -->
 
 <#assign viewItems=cm.localParameter("viewItems", "asTeaser") />
 <#assign items=self.flattenedItems![] />
 <#assign numberOfItems=items?size />
 <#assign itemsPerRow=cm.localParameter("itemsPerRow", 3) />
 <#assign itemsPerMobileRow=cm.localParameter("itemsPerMobileRow", 1) />
-<#assign additionalClass=cm.localParameters().additionalClass!"cm-container--default" />
+<#assign additionalClass=cm.localParameters().additionalClass!"" />
 <#assign viewItemCssClass=cm.localParameters().viewItemCssClass!"" />
 <#assign columnCssClass=cm.localParameters().columnCssClass!"" />
 <#assign center=cm.localParameters().center!true />
 <#assign addRows=cm.localParameters().addRows!true />
-<#assign showHeadline=cm.localParameters().showHeadline!false />
+<#assign showHeadline=cm.localParameters().showHeadline!true />
 
 <div class="cm-container ${additionalClass}" <@cm.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
   <#if showHeadline && self.teaserTitle?has_content>

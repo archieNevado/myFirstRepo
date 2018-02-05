@@ -14,7 +14,6 @@
 <IntProperty Name="width">375</IntProperty>
 <IntProperty Name="height">667</IntProperty>
 <IntProperty Name="order">1</IntProperty>
-<BooleanProperty Name="isDefault">true</BooleanProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="mobile_landscape">
@@ -98,6 +97,7 @@
 <LinkListProperty Name="studioPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>
 <LinkListProperty Name="previewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
+<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/calista/css/preview%2Ecss.xml" cmexport:path="/Themes/calista/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 <Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/calista/js/preview%2Ejs.xml" cmexport:path="/Themes/calista/js/preview%2Ejs"/>

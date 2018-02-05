@@ -7,6 +7,8 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,28 +40,28 @@ public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
 
   @Override
   public String getName() {
-    return DataMapHelper.getValueForKey(getDelegate(), "name", String.class);
+    return getStringValue(getDelegate(), "name");
   }
 
   @Override
   public String getDescription() {
-    return DataMapHelper.getValueForKey(getDelegate(), "name", String.class);
+    return getStringValue(getDelegate(), "name");
   }
 
   @Override
   public boolean isDefaultContract() {
-    Integer usageType = DataMapHelper.getValueForKey(getDelegate(), "usage", Integer.class);
+    Integer usageType = DataMapHelper.findValue(getDelegate(), "usage", Integer.class).orElse(null);
     return Objects.equals(DEFAULT_CATALOG_IDENTIFIER, usageType);
   }
 
   @Override
   public String getExternalId() {
-    return DataMapHelper.getValueForKey(getDelegate(), "referenceNumber", String.class);
+    return getStringValue(getDelegate(), "referenceNumber");
   }
 
   @Override
   public String getExternalTechId() {
-    return DataMapHelper.getValueForKey(getDelegate(), "referenceNumber", String.class);
+    return getStringValue(getDelegate(), "referenceNumber");
   }
 
   public void setContractWrapperService(WcContractWrapperService contractWrapperService) {
@@ -68,5 +70,10 @@ public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
 
   public WcContractWrapperService getContractWrapperService() {
     return contractWrapperService;
+  }
+
+  @Nullable
+  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

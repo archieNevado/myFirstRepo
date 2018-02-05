@@ -69,5 +69,7 @@ public interface Category extends CatalogObject, Previewable {
 
   function getDownloads():Array;
 
+  function getFacets():Facets;
+
 }
 }

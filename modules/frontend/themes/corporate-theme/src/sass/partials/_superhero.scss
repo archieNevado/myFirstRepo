@@ -16,12 +16,11 @@ Contains styling definitions for all content types as cm-superhero.
     @include dimmer($dimmer-opacity);
   }
 
-  &__banderole,
-  &__cta {
-    @include banderole(3%);
+  &__caption {
+    @include caption(3%);
   }
 
-  &__button,
+  &__cta,
   &__text,
   &__headline {
     color: palette(white);

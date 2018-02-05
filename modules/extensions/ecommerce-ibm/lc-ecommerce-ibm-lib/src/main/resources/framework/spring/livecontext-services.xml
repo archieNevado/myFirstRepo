@@ -88,10 +88,9 @@
 
   <bean id="catalogService" class="com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl">
     <property name="catalogWrapperService" ref="catalogWrapperService"/>
+    <property name="storeInfoService" ref="storeInfoService"/>
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
     <property name="commerceCache" ref="commerceCache"/>
-    <property name="wcsUrl" value="http:${livecontext.apache.wcs.url}"/>
-    <property name="wcsStoreUrl" value="${livecontext.ibm.wcs.store.url}"/>
     <property name="wcsAssetsUrl" value="${livecontext.ibm.wcs.assets.url}"/>
     <property name="catalogAliasTranslationService" ref="catalogAliasTranslationService"/>
   </bean>
@@ -143,43 +142,17 @@
     <property name="workspaceWrapperService" ref="workspaceWrapperService"/>
   </bean>
 
-  <bean id="storeFrontService" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreFrontService"
-        abstract="true">
-    <property name="storeFrontConnector" ref="storeFrontConnector"/>
-    <property name="urlProvider" ref="wcsPageHandlerUrlProvider"/>
-  </bean>
-
   <bean id="commerceUserService" class="com.coremedia.livecontext.ecommerce.ibm.user.UserServiceImpl">
     <property name="personWrapperService" ref="personWrapperService"/>
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
     <property name="commerceCache" ref="commerceCache"/>
   </bean>
 
-  <bean id="commerceUserSessionService" class="com.coremedia.livecontext.ecommerce.ibm.user.UserSessionServiceImpl"
-        parent="storeFrontService">
-    <property name="commerceCache" ref="commerceCache"/>
-    <property name="urlProvider" ref="wcsPageHandlerUrlProvider"/>
-    <property name="wcsStorefrontUrl" value="${livecontext.ibm.wcs.default.url}"/>
-    <property name="loginWrapperService" ref="loginWrapperService"/>
-    <property name="userService" ref="commerceUserService" />
-  </bean>
-
-  <bean id="userContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.user.UserContextProviderImpl">
-    <property name="userSessionService" ref="commerceUserSessionService" />
-  </bean>
+  <bean id="userContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.user.UserContextProviderImpl"/>
 
   <bean id="ibmCommerceIdProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider"/>
 
-  <bean id="wcsPageHandlerUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.CommerceUrlPropertyProvider">
-    <property name="defaultStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.url}"/>
-    <property name="previewStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.preview.url}"/>
-    <property name="urlPattern" value="{language}/{storeName}/{seoSegment}"/>
-    <property name="shoppingFlowUrlForContractPreview" value="${livecontext.ibm.contract.preview.url}"/>
-    <property name="productNonSeoUrl" value="${livecontext.ibm.product.non-seo.url}"/>
-    <property name="categoryNonSeoUrl" value="${livecontext.ibm.category.non-seo.url}"/>
-  </bean>
-
-  <bean id="storeContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.StoreContextProviderImpl">
+  <bean id="storeContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextProvider">
     <property name="sitesService" ref="sitesService"/>
     <property name="settingsService" ref="settingsService"/>
     <property name="storeConfigurations" ref="ibmStoreConfigurations"/>
@@ -194,13 +167,13 @@
     <property name="catalogPathPrefix" value="${livecontext.ibm.wcs.store.catalog.asset.path}"/>
   </bean>
 
-  <bean id="wcsPreviewTokenProvider" class="com.coremedia.livecontext.ecommerce.ibm.login.PreviewTokenProvider">
-    <property name="loginService" ref="userLoginService"/>
-  </bean>
-
   <bean id="storeInfoService" class="com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService"/>
 
   <bean id="storeInfoWrapperService" class="com.coremedia.livecontext.ecommerce.ibm.storeinfo.WcStoreInfoWrapperService"
         parent="abstractWcWrapperService"/>
+
+  <bean id="commerceBeanFactory" class="com.coremedia.blueprint.base.livecontext.ecommerce.common.SpringCommerceBeanFactory">
+    <property name="storeContextProvider" ref="storeContextProvider"/>
+  </bean>
 
 </beans>

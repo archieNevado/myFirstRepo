@@ -8,13 +8,11 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.After;
 import org.junit.Before;
@@ -24,21 +22,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ExternalChannelContentTreeRelationTest {
 
   private static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT_CATEGORY_ID";
@@ -60,22 +56,22 @@ public class ExternalChannelContentTreeRelationTest {
   private Content siteRootChannel;
 
   @Mock
-  Category rootCategory;
+  private Category rootCategory;
 
   @Mock
   private Content catalogRootContent;
 
   @Mock
-  Category topCategory; //no content assigned
+  private Category topCategory; //no content assigned
 
   @Mock
-  Category childCategory;
+  private Category childCategory;
 
   @Mock
   private Content childContent;
 
   @Mock
-  Category leafCategory;
+  private Category leafCategory;
 
   @Mock
   private Content leafContent;
@@ -83,14 +79,22 @@ public class ExternalChannelContentTreeRelationTest {
   @Mock
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
+  @Mock
+  private CommerceBeanFactory commerceBeanFactory;
+
   @InjectMocks
-  ExternalChannelContentTreeRelation testling;
-  private MockCommerceEnvBuilder envBuilder;
+  private ExternalChannelContentTreeRelation testling;
 
   @Before
   public void setup() {
-    envBuilder = MockCommerceEnvBuilder.create();
-    BaseCommerceConnection commerceConnection = envBuilder.setupEnv();
+
+    StoreContext storeContext = newStoreContext();
+
+    BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
+    commerceConnection.setCommerceBeanFactory(commerceBeanFactory);
+    commerceConnection.setStoreContext(storeContext);
+    CurrentCommerceConnection.set(commerceConnection);
+
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
     initContentMock();
@@ -99,7 +103,7 @@ public class ExternalChannelContentTreeRelationTest {
 
   @After
   public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
+    CurrentCommerceConnection.remove();
   }
 
   @Test
@@ -139,26 +143,23 @@ public class ExternalChannelContentTreeRelationTest {
     assertThat(testling.getNearestContentForCategory(topCategory, site)).isEqualTo(catalogRootContent);
 
     Category category = mock(Category.class);
-    when(category.getExternalId()).thenReturn("bluzb");
     assertThat(testling.getNearestContentForCategory(category, site)).isNull();
   }
 
   @Test
-  public void testIsApplicable(){
+  public void testIsApplicable() {
     //test valid external channel contents
     assertThat(testling.isApplicable(leafContent)).isTrue();
     assertThat(testling.isApplicable(siteRootChannel)).isFalse();
 
     //test broken category link (e.g. category is in workspace only)
     Content contentWithBrokenCategoryLink = mock(Content.class);
-    Category brokenCategory = mock(Category.class);
 
     ContentType typeExternalChannel = mock(ContentType.class);
     when(typeExternalChannel.isSubtypeOf(CMExternalChannel.NAME)).thenReturn(true);
     when(contentWithBrokenCategoryLink.getType()).thenReturn(typeExternalChannel);
 
     when(contentWithBrokenCategoryLink.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(REFERENCE_PREFIX + "does_not_exsist");
-    doReturn(brokenCategory).when(getCommerceBeanFactory()).createBeanFor(endsWith("does_not_exsist"), any(StoreContext.class));
     doReturn(null).when(getCommerceBeanFactory()).loadBeanFor(endsWith("does_not_exsist"), any(StoreContext.class));
 
     assertThat(testling.isApplicable(contentWithBrokenCategoryLink)).isFalse();
@@ -173,28 +174,15 @@ public class ExternalChannelContentTreeRelationTest {
 
   private void initCategoryTreeMock() {
     when(rootCategory.isRoot()).thenReturn(true);
-    when(rootCategory.getChildren()).thenReturn(Collections.singletonList(topCategory));
     String idPrefix = "test:///s/category/";
-    when(rootCategory.getId()).thenReturn(parseCommerceIdOrThrow(idPrefix + EXTERNAL_ID_ROOT_CATEGORY));
-    doReturn(rootCategory).when(getCommerceBeanFactory()).createBeanFor(endsWith(EXTERNAL_ID_ROOT_CATEGORY), any(StoreContext.class));
     doReturn(rootCategory).when(getCommerceBeanFactory()).loadBeanFor(endsWith(EXTERNAL_ID_ROOT_CATEGORY), any(StoreContext.class));
 
-    when(topCategory.isRoot()).thenReturn(false);
-    when(topCategory.getChildren()).thenReturn(Collections.singletonList(childCategory));
     when(commerceTreeRelation.getParentOf(topCategory)).thenReturn(rootCategory);
-    doReturn(topCategory).when(getCommerceBeanFactory()).createBeanFor(endsWith("topCategory"), any(StoreContext.class));
-    doReturn(topCategory).when(getCommerceBeanFactory()).loadBeanFor(endsWith("topCategory"), any(StoreContext.class));
 
-    when(childCategory.isRoot()).thenReturn(false);
-    when(childCategory.getId()).thenReturn(parseCommerceIdOrThrow(idPrefix + "childCategory"));
     when(commerceTreeRelation.getParentOf(childCategory)).thenReturn(topCategory);
-    doReturn(childCategory).when(getCommerceBeanFactory()).createBeanFor(endsWith("childCategory"), any(StoreContext.class));
     doReturn(childCategory).when(getCommerceBeanFactory()).loadBeanFor(endsWith("childCategory"), any(StoreContext.class));
 
-    when(leafCategory.isRoot()).thenReturn(false);
-    when(leafCategory.getId()).thenReturn(parseCommerceIdOrThrow(idPrefix + "leafCategory"));
     when(commerceTreeRelation.getParentOf(leafCategory)).thenReturn(childCategory);
-    doReturn(leafCategory).when(getCommerceBeanFactory()).createBeanFor(endsWith("leafCategory"), any(StoreContext.class));
     doReturn(leafCategory).when(getCommerceBeanFactory()).loadBeanFor(endsWith("leafCategory"), any(StoreContext.class));
 
     // augmentation is not defined for topCategory

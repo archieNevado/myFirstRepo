@@ -21,7 +21,7 @@
 
         <div class="cm-dropdown-image">
           <@bp.optionalLink href=cm.getLink(self!cm.UNDEFINED)>
-                  <@cm.include self=self view="asPicture" params={"additionalClass": "cm-teaser--megamenu"}/>
+                  <@cm.include self=self view="asPicture" params={"blockClass": "cm-teaser--megamenu"}/>
                 </@bp.optionalLink>
         </div>
 

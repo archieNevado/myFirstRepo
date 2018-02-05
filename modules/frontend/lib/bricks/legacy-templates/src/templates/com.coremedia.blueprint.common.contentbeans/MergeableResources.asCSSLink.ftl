@@ -2,4 +2,4 @@
 
 <#-- This template is used for merged (and minified) css files -->
 
-<link rel="stylesheet" href="${cm.getLink(self)}"/>
+<link rel="stylesheet" href="${cm.getLink(self)}">

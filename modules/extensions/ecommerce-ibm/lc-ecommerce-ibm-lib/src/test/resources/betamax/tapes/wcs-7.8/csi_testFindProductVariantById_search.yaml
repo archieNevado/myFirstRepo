@@ -1,0 +1,137 @@
+!tape
+name: csi_testFindProductVariantById_search
+interactions:
+- recorded: 2017-11-14T15:39:03.282Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:03 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000leIr2Rm4OB7LFOsPyqbwY-2:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:39:03.321Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:03 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=000039VdlqaPpk5IzmN8L5yJSZ1:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:39:03.349Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/%2520?partNumber=CLA022_220301&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:03 GMT
+      Expires: Tue, 14 Nov 2017 16:39:03 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/%2520?partNumber=CLA022_220301&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      tiny laptop is made with portability and battery life in mind, so that you can take it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel
+      companion.","shortDescription":"A lightweight and portable laptop with excellent battery life.","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_travel-laptop-cla022-220301","price":[{"value":"600.0","currency":"USD","usage":"Display","description":"L"},{"value":"575.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16615","parentCatalogGroupID":["10101_10130","10152_10130"],"name":"Travel
+      Laptop","uniqueID":"16615","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","manufacturer":"DVR
+      Technics","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":".00000","facetable":false,"values":[{"sequence":"3.00000","value":"DVR Technics","unitOfMeasure":"one","identifier":"DVR Technics","uniqueID":"7000000000000004523","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsBrand","comparable":false,"name":"Brand","uniqueID":"7000000000000000285","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      GB","unitOfMeasure":"one","identifier":"2 GB","uniqueID":"7000000000000004528","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsMemory","comparable":true,"name":"Memory","uniqueID":"7000000000000000287","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"2.00000","facetable":false,"values":[{"sequence":"3.00000","value":"6
+      hours","unitOfMeasure":"one","identifier":"6 hours","uniqueID":"7000000000000004526","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsBattery Life","comparable":true,"name":"Battery Life","uniqueID":"7000000000000000286","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"3.00000","facetable":false,"values":[{"sequence":"1.00000","value":"1
+      lb","unitOfMeasure":"one","identifier":"1 lb","uniqueID":"7000000000000004531","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsWeight","comparable":true,"name":"Weight","uniqueID":"7000000000000000288","displayable":true}],"hasSingleSKU":false,"partNumber":"CLA022_220301","storeID":"10101","seo_token_ntk":"travel-laptop-cla022-220301","parentCatalogEntryID":"16614"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:03.422Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16614?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:03 GMT
+      Expires: Tue, 14 Nov 2017 16:39:03 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16614?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      tiny laptop is made with portability and battery life in mind, so that you can take it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel
+      companion.","shortDescription":"A lightweight and portable laptop with excellent battery life.","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_travel-laptop","price":[{"value":"600.0","currency":"USD","usage":"Display","description":"L"},{"value":"575.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16614","singleSKUCatalogEntryID":"16615","parentCatalogGroupID":["10101_10130","10152_10130"],"name":"Travel
+      Laptop","uniqueID":"16614","disallowRecurringOrder":"1","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","manufacturer":"DVR
+      Technics","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16615","name":"Travel Laptop","hasSingleSKU":false,"partNumber":"CLA022_220301","uniqueID":"16615","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      GB","unitOfMeasure":"","identifier":"CLA022_2203","uniqueID":"7000000000000004535","unitID":""}],"searchable":false,"identifier":"Memory","comparable":false,"name":"Memory","uniqueID":"7000000000000000283","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsMemory","comparable":true,"name":"Memory","uniqueID":"7000000000000000287","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsBrand","comparable":false,"name":"Brand","uniqueID":"7000000000000000285","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"1
+      lb","unitOfMeasure":"","identifier":"CLA022_2203","uniqueID":"7000000000000004547","unitID":""}],"searchable":false,"identifier":"Weight","comparable":false,"name":"Weight","uniqueID":"7000000000000000290","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsWeight","comparable":true,"name":"Weight","uniqueID":"7000000000000000288","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"6
+      hours","unitOfMeasure":"","identifier":"CLA022_2203","uniqueID":"7000000000000004544","unitID":""}],"searchable":false,"identifier":"Battery Life","comparable":false,"name":"Battery Life","uniqueID":"7000000000000000289","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsBattery
+      Life","comparable":true,"name":"Battery Life","uniqueID":"7000000000000000286","displayable":true}],"hasSingleSKU":true,"partNumber":"CLA022_2203","storeID":"10101","seo_token_ntk":"travel-laptop"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:03.493Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16615?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:03 GMT
+      Expires: Tue, 14 Nov 2017 16:39:03 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16615?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      tiny laptop is made with portability and battery life in mind, so that you can take it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel
+      companion.","shortDescription":"A lightweight and portable laptop with excellent battery life.","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_travel-laptop-cla022-220301","price":[{"value":"600.0","currency":"USD","usage":"Display","description":"L"},{"value":"575.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16615","parentCatalogGroupID":["10101_10130","10152_10130"],"name":"Travel
+      Laptop","uniqueID":"16615","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","manufacturer":"DVR
+      Technics","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":".00000","facetable":false,"values":[{"sequence":"3.00000","value":"DVR Technics","unitOfMeasure":"one","identifier":"DVR Technics","uniqueID":"7000000000000004523","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsBrand","comparable":false,"name":"Brand","uniqueID":"7000000000000000285","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      GB","unitOfMeasure":"one","identifier":"2 GB","uniqueID":"7000000000000004528","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsMemory","comparable":true,"name":"Memory","uniqueID":"7000000000000000287","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"2.00000","facetable":false,"values":[{"sequence":"3.00000","value":"6
+      hours","unitOfMeasure":"one","identifier":"6 hours","uniqueID":"7000000000000004526","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsBattery Life","comparable":true,"name":"Battery Life","uniqueID":"7000000000000000286","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"3.00000","facetable":false,"values":[{"sequence":"1.00000","value":"1
+      lb","unitOfMeasure":"one","identifier":"1 lb","uniqueID":"7000000000000004531","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsWeight","comparable":true,"name":"Weight","uniqueID":"7000000000000000288","displayable":true}],"hasSingleSKU":false,"partNumber":"CLA022_220301","storeID":"10101","seo_token_ntk":"travel-laptop-cla022-220301","parentCatalogEntryID":"16614"}],"metaData":{"price":"1"}}'

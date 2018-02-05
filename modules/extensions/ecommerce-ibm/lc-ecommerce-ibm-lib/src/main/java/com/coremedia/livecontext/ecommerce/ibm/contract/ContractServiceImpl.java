@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CONTRACT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
@@ -70,12 +71,10 @@ public class ContractServiceImpl implements ContractService {
             organizationId, contractWrapperService, commerceCache);
     Map<String, Object> contractMap = commerceCache.get(contractsByUserCacheKey);
 
-    Map contracts = DataMapHelper.getValueForKey(contractMap, "contracts", Map.class);
-    if (contracts == null) {
-      return emptyList();
-    }
+    Optional<List<Contract>> contracts = DataMapHelper.findValue(contractMap, "contracts", Map.class)
+            .map(this::createContractBeansFor);
 
-    return createContractBeansFor(contracts);
+    return contracts.orElseGet(Collections::emptyList);
   }
 
   @Nonnull
@@ -98,7 +97,9 @@ public class ContractServiceImpl implements ContractService {
 
     String externalId = String.valueOf(contractMap.get("referenceNumber"));
     CommerceId commerceId = toContractId(externalId);
-    Contract contract = (Contract) commerceBeanFactory.createBeanFor(commerceId, StoreContextHelper.getCurrentContext());
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
+
+    Contract contract = (Contract) commerceBeanFactory.createBeanFor(commerceId, storeContext);
     ((AbstractIbmCommerceBean) contract).setDelegate(contractMap);
     return contract;
   }
@@ -114,7 +115,7 @@ public class ContractServiceImpl implements ContractService {
       return emptyList();
     }
 
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+    StoreContext currentContext = StoreContextHelper.getCurrentContextOrThrow();
 
     return contractsMap.keySet().stream()
             .map(ContractServiceImpl::toContractId)

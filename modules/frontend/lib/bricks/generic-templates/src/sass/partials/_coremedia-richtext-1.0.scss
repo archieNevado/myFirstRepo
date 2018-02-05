@@ -380,4 +380,12 @@
   .list-item--disc {
     list-style-type: disc;
   }
+
+  &--dark-shadow {
+    text-shadow: -1px 0 $cm-richtext-dark-shadow-color, 0 1px $cm-richtext-dark-shadow-color, 1px 0 $cm-richtext-dark-shadow-color, 0 -1px $cm-richtext-dark-shadow-color;
+  }
+
+  &--light-shadow {
+    text-shadow: 0 0 30px $cm-richtext-light-shadow-color;
+  }
 }

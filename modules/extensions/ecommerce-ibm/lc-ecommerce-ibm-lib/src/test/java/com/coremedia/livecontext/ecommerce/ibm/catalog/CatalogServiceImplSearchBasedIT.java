@@ -2,25 +2,29 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyMap;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for Search REST interface.
  */
-@ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
   @Betamax(tape = "csi_testFindProductById_search", match = {MatchRule.path, MatchRule.query})
@@ -168,6 +172,26 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
   @Override
   public void testSortedSearchProducts() throws Exception {
     super.testSortedSearchProducts();
+
+    //additional tests
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_CATEGORY_ASC");
+    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    int total = searchProducts.getTotalCount();
+    List<Product> products = searchProducts.getSearchResult();
+    int counter = 1;
+    while (counter < total) {
+      Product previousProduct = products.get(counter - 1);
+      Product currentProduct = products.get(counter);
+      String previousProductName = previousProduct.getName();
+      String currentProductName = currentProduct.getName();
+      assertThat(previousProductName.compareTo(currentProductName) < 0).isTrue();
+      counter++;
+    }
   }
 
   @Betamax(tape = "csi_testSearchProductsWithOffset_search", match = {MatchRule.path, MatchRule.query})
@@ -175,6 +199,20 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
   @Override
   public void testSearchProductsWithOffset() throws Exception {
     super.testSearchProductsWithOffset();
+  }
+
+  @Betamax(tape = "csi_testGetFacetSearchProducts_search", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testGetFacetSearchProducts() throws Exception {
+    super.testGetFacetSearchProducts();
+  }
+
+  @Betamax(tape = "csi_testSearchProductsWithFacet_search", match = {MatchRule.path, MatchRule.query})
+  @Test
+  @Override
+  public void testSearchProductsWithFacet() throws Exception {
+    super.testSearchProductsWithFacet();
   }
 
   @Test
@@ -207,13 +245,13 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
     List<SearchFacet> facets = searchResult.getFacets();
     assertNotNull(facets);
     assertTrue(!facets.isEmpty());
-    testSearchFacet(facets.get(0));
+    assertSearchFacet(facets.get(0));
   }
 
   @Test
   @Betamax(tape = "csi_testSearchProducts_search", match = {MatchRule.path, MatchRule.query})
   public void testSearchFacetsProducts() throws Exception {
-    super.testSearchFacetsProducts(SEARCH_TERM_1, emptyMap());
+    super.testSearchFacetsProducts(SEARCH_TERM_1, new HashMap<>());
   }
 
   @Betamax(tape = "csi_testFindTopCategories_search", match = {MatchRule.path, MatchRule.query})
@@ -235,13 +273,6 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
   @Override
   public void testFindSubCategories() throws Exception {
     super.testFindSubCategories();
-  }
-
-  @Test
-  @Betamax(tape = "csi_testFindSubCategoriesWithContract_search", match = {MatchRule.path, MatchRule.query})
-  @Override
-  public void testFindSubCategoriesWithContract() throws Exception {
-    super.testFindSubCategoriesWithContract();
   }
 
   @Betamax(tape = "csi_testFindSubCategoriesIsEmpty_search", match = {MatchRule.path, MatchRule.query})

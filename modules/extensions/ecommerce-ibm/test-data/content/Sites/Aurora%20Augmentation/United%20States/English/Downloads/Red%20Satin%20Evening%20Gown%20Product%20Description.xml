@@ -10,6 +10,8 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="references">
+<String>ibm:///catalog/sku/AuroraWMDRS-656</String>
+<String>ibm:///catalog/product/AuroraWMDRS-19</String>
 </StringListProperty>
 </Struct>
 </StructProperty>
@@ -37,4 +39,5 @@
 <related>
 </related>
 <data md5="e4a62b80868f038fbb3145f62181732e" size="354082" href="../../../../../__blob/e4a62b80868f038fbb3145f62181732e.blob" mimetype="application/pdf"/>
+<filename></filename>
 </CMDownload>

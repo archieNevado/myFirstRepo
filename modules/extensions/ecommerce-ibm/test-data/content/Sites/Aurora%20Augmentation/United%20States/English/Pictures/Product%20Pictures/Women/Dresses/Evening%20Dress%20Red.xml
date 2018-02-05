@@ -35,6 +35,7 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="references">
+<String>ibm:///catalog/product/AuroraWMDRS-19</String>
 <String>ibm:///catalog/product/AuroraWMDRS-38</String>
 <String>ibm:///catalog/sku/AuroraWMDRS-654</String>
 <String>ibm:///catalog/sku/AuroraWMDRS-655</String>

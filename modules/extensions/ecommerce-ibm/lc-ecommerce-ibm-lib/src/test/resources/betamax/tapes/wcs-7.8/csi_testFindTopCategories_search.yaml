@@ -1,25 +1,25 @@
 !tape
 name: csi_testFindTopCategories_search
 interactions:
-- recorded: 2016-05-19T09:27:15.473Z
+- recorded: 2017-11-14T15:39:13.258Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
+      Date: Tue, 14 Nov 2017 15:39:13 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000xAom46nOcIB_FWZHU7JCeh4:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000VEjO-4r4plpzkHs42Kll99a:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
@@ -31,48 +31,47 @@ interactions:
       Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
       Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
       Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
-- recorded: 2016-05-19T09:27:15.483Z
+- recorded: 2017-11-14T15:39:13.307Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
+      Date: Tue, 14 Nov 2017 15:39:13 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000C_tniR7O-D7w86k3oJ05MUw:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000cRxSCLWXpwgcg3HQbtvwIgi:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
-- recorded: 2016-05-19T09:27:15.496Z
+- recorded: 2017-11-14T15:39:13.326Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/@top?profileName=CoreMedia_findSubCategories&catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com:3737
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform
+      Cache-Control: no-transform, max-age=3600
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:27:16 GMT
-      Expires: Thu, 19 May 2016 10:27:16 GMT
+      Date: Tue, 14 Nov 2017 15:39:13 GMT
+      Expires: Tue, 14 Nov 2017 16:39:13 GMT
       Vary: Accept
-      X-Betamax: PLAY
     body: '{"recordSetTotal":10,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/@top?profileName=CoreMedia_findSubCategories&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"On
       The Table","sequence":["10101_-1_1.10000","10152_-1_.10000"],"cm_seo_token_ntk":"10101_pc-on-the-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10201","identifier":"PC_OnTheTable","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"On
       The Table","uniqueID":"10201","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","seo_token_ntk":"pc-on-the-table","childCatalogGroupID":["10101_10205","10101_10206","10101_10207","10101_10208","10101_10209","10152_10205","10152_10206","10152_10207","10152_10208","10152_10209"]},{"shortDescription":"In
@@ -85,3 +84,73 @@ interactions:
       & Furnishing","uniqueID":"10141","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","seo_token_ntk":"home---furnishing","childCatalogGroupID":["10101_10142","10101_10143","10101_10144","10101_10145","10101_10146","10101_10147","10152_10142","10152_10143","10152_10144","10152_10145","10152_10146","10152_10147"]},{"shortDescription":"Newsletters
       & Magazines","sequence":["10101_-1_10.00000","10152_-1_6.00000"],"cm_seo_token_ntk":"10101_newsletters---magazines","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10148","identifier":"NewslettersAndMagazines","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Newsletters
       & Magazines","uniqueID":"10148","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","seo_token_ntk":"newsletters---magazines","childCatalogGroupID":["10101_10149","10101_10150","10152_10149","10152_10150"]}],"recordSetCount":10}'
+- recorded: 2017-11-14T15:39:13.416Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10201?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:13 GMT
+      Expires: Tue, 14 Nov 2017 16:39:13 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10201?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"On
+      The Table","longDescription":"Find everything to make your table special and unforgettable.","cm_seo_token_ntk":"10101_pc-on-the-table","identifier":"PC_OnTheTable","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10201","name":"On
+      The Table","parentCatalogGroupID":["10101_-1","10152_-1"],"thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","uniqueID":"10201","storeID":"10101","childCatalogGroupID":["10101_10205","10101_10206","10101_10207","10101_10208","10101_10209","10152_10205","10152_10206","10152_10207","10152_10208","10152_10209"],"seo_token_ntk":"pc-on-the-table"}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:39:13.443Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byParentCategory/10201?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:13 GMT
+      Expires: Tue, 14 Nov 2017 16:39:13 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":4,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byParentCategory\/10201?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Glasses","sequence":["10101_10201_1.00000","10152_10201_1.00000"],"cm_seo_token_ntk":"10101_pc-glasses;10302_pc-glasses-pcesite","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10205","identifier":"PC_Glasses","parentCatalogGroupID":["10101_10201","10152_10201"],"name":"Glasses","uniqueID":"10205","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Glasses.jpg","seo_token_ntk":"pc-glasses;pc-glasses-pcesite"},{"shortDescription":"Plates
+      and Tableware","sequence":["10101_10201_3.00000","10152_10201_3.00000"],"cm_seo_token_ntk":"10101_pc-tableware","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10207","identifier":"PC_Tableware","parentCatalogGroupID":["10101_10201","10152_10201"],"name":"Tableware","uniqueID":"10207","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Tableware.jpg","seo_token_ntk":"pc-tableware"},{"shortDescription":"Decoration
+      and Trinkets","sequence":["10101_10201_4.00000","10152_10201_4.00000"],"cm_seo_token_ntk":"10101_pc-decoration","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10208","identifier":"PC_Decoration","parentCatalogGroupID":["10101_10201","10152_10201"],"name":"Decoration","uniqueID":"10208","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Decoration.jpg","seo_token_ntk":"pc-decoration"},{"shortDescription":"Outdoor
+      Dining","sequence":["10101_10201_5.00000","10152_10201_5.00000"],"cm_seo_token_ntk":"10101_pc-outdoor-dining","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10209","identifier":"PC_Outdoor","parentCatalogGroupID":["10101_10201","10152_10201"],"name":"Outdoor
+      Dining","uniqueID":"10209","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Outdoor.jpg","seo_token_ntk":"pc-outdoor-dining"}],"recordSetCount":4}'
+- recorded: 2017-11-14T15:39:13.507Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byCategory/10201?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:13 GMT
+      Expires: Tue, 14 Nov 2017 16:39:13 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":4,"recordSetTotal":4,"breadCrumbTrailEntryView":[{"value":"10201","label":"On The Table","type_":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byCategory\/10201?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","facetView":[{"value":"price_USD","entry":[{"value":"price_USD%3A%28%7B*+100%7D+100%29","extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"label":"({*
+      100} 100)","count":4},{"value":"price_USD%3A%28%7B100+200%7D+200%29","extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"label":"({100 200} 200)","count":0},{"value":"price_USD%3A%28%7B200+300%7D+300%29","extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"label":"({200
+      300} 300)","count":0},{"value":"price_USD%3A%28%7B300+400%7D+400%29","extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"label":"({300 400} 400)","count":0},{"value":"price_USD%3A%28%7B400+500%7D+500%29","extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"label":"({400
+      500} 500)","count":0},{"value":"price_USD%3A%28%7B500+*%7D%29","extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"label":"({500 *})","count":0}],"name":"OfferPrice_USD"}],"breadCrumbTrailEntryViewExtended":[{"0":{"value":"10201","label":"On
+      The Table","type_":"FACET_ENTRY_CATEGORY"}}],"recordSetCount":4,"catalogEntryView":[{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_pc-pepper-mill","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17976","singleSKUCatalogEntryID":"17977","hasSingleSKU":true,"partNumber":"PC_PEPPER_MILL","uniqueID":"17976","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/646x1000\/PC_PEPPER_MILL.jpg","seo_token_ntk":"pc-pepper-mill"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_pc-tea-pot","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/17984","singleSKUCatalogEntryID":"17985","hasSingleSKU":true,"partNumber":"PC_TEA_POT","uniqueID":"17984","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/646x1000\/PC_TEA_POT.jpg","seo_token_ntk":"pc-tea-pot"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_pc-tea-press","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/18012","singleSKUCatalogEntryID":"18013","hasSingleSKU":true,"partNumber":"PC_TEA_PRESS","uniqueID":"18012","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/646x1000\/PC_TEA_PRESS.jpg","seo_token_ntk":"pc-tea-press"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_pc-french-press","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/18014","singleSKUCatalogEntryID":"18015","hasSingleSKU":true,"partNumber":"PC_FRENCH_PRESS","uniqueID":"18014","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/perfectchef\/646x1000\/PC_FRENCH_PRESS.jpg","seo_token_ntk":"pc-french-press"}]}'

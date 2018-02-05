@@ -262,7 +262,7 @@ $(function () {
                         const downloadUrl = config.downloadUrl;
 
                         const $form = $('<form></form>');
-                        const $input = $('<input />');
+                        const $input = $('<input>');
                         const downloadCollectionDataString = JSON.stringify(downloadCollection.getDownloadCollection());
                         $input.attr("type", "hidden");
                         $input.attr("name", "download-collection-data");

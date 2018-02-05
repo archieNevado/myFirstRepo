@@ -14,5 +14,5 @@
 </#if>
 <#-- make the crawler index the coremedia content id -->
 <#if self.content.content?has_content && self.content.contentId?has_content>
-  <meta name="coremedia_content_id" content="${self.content.contentId!""}"<@cm.metadata data=[self.content.content!bp.getPageMetadata(cmpage)!""]/>/>
+  <meta name="coremedia_content_id" content="${self.content.contentId!""}"<@cm.metadata data=[self.content.content!bp.getPageMetadata(cmpage)!""]/>>
 </#if>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -148,18 +149,21 @@ public class ElasticBlobHandler extends HandlerBase {
             .build();
   }
 
-  private String getSiteId(HttpServletRequest request) {
-    String result = "-";
+  private static String getSiteId(@Nonnull HttpServletRequest request) {
+    String absentSiteId = "-";
+
     Site siteFromRequest = SiteHelper.getSiteFromRequest(request);
-    if (null != siteFromRequest) {
-      Content siteRootDocument = siteFromRequest.getSiteRootDocument();
-      if (null != siteRootDocument) {
-        result = siteRootDocument.getString(SEGMENT_PROPERTY);
-      }
-    } else {
+    if (siteFromRequest == null) {
       LOG.warn("No site available for request path {}, check your configuration", request.getPathInfo());
+      return absentSiteId;
     }
-    return result;
+
+    Content siteRootDocument = siteFromRequest.getSiteRootDocument();
+    if (siteRootDocument == null) {
+      return absentSiteId;
+    }
+
+    return siteRootDocument.getString(SEGMENT_PROPERTY);
   }
 
   public Map<String, ?> buildLinkMapWithTransformation(Blob bean, Map<String, Object> linkParameters, HttpServletRequest request) {

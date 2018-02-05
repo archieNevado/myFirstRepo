@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
 import com.coremedia.blueprint.coderesources.CodeResourcesCacheKey;
 import com.coremedia.blueprint.coderesources.CodeResourcesModel;
@@ -13,6 +14,8 @@ import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.Version;
+import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -46,6 +49,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
@@ -76,6 +81,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   private ApplicationContext applicationContext;
   private Cache cache;
   private ContentBeanFactory contentBeanFactory;
+  private SitesService sitesService;
 
   // --- various constants ---
   @VisibleForTesting static final String MARKUP_PROGRAMMED_VIEW_NAME = "script";
@@ -189,6 +195,11 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     this.contentBeanFactory = contentBeanFactory;
   }
 
+  @Required
+  public void setSitesService(SitesService sitesService) {
+    this.sitesService = sitesService;
+  }
+
   @Override
   public void afterPropertiesSet() {
     if(!developerModeEnabled && localResourcesEnabled) {
@@ -219,6 +230,13 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
                                     WebRequest webRequest) {
     Content cwtContent = channelWithTheme==null ? null : channelWithTheme.getContent();
     Content cwcContent = channelWithCode==null ? null : channelWithCode.getContent();
+    // Provide the site for absolute link building.  The linked documents
+    // (typically fonts and technical images) belong to themes and thus have
+    // no inherent site.
+    Site site = fetchSite(cwcContent, cwtContent);
+    if (site != null) {
+      SiteHelper.setSiteToRequest(site, servletRequest);
+    }
     User developer = UserVariantHelper.getUser(servletRequest);
     CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(cwtContent, cwcContent, codePropertyName(extension), developerModeEnabled, developer);
     CodeResourcesModel codeResourcesModel = cache.get(cacheKey).getModel(mode);
@@ -329,6 +347,12 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
 
 
   // --- internal ---------------------------------------------------
+
+  private Site fetchSite(Content... contents) {
+    return Stream.of(contents).filter(Objects::nonNull)
+            .map(c -> sitesService.getContentSiteAspect(c).getSite())
+            .filter(Objects::nonNull).findFirst().orElse(null);
+  }
 
   // creates a Markup/script model
   private ModelAndView contentResource(String extension, CMAbstractCode cmAbstractCode, String name,

@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
+
   private static final Logger LOG = LoggerFactory.getLogger(ReferrerContext.class);
 
   private static final String URL_PROP = "url";
@@ -31,7 +32,7 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
   private static final Pattern BING_REGEXP = Pattern.compile("^http://(\\w+\\.)+bing.*(\\?|&)q=([^&]+).*");
   private static final Pattern YAHOO_REGEXP = Pattern.compile("^http://(\\w+\\.)+yahoo.*(\\?|&)p=([^&]+).*");
   private static final int REGEXP_URL_POSITION = 3;
-  
+
   private boolean isDirty = true;
   private final Map<String, String> referrers = new HashMap<>();
 
@@ -39,6 +40,7 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
    * Encodes/decodes ScoringContexts from and to Strings.
    */
   public static final class CoDec implements ContextCoDec {
+
     private final ObjectMapper objectMapper;
 
     /**
@@ -49,34 +51,38 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
     }
 
     @Override
-    public Object contextFromString(final String str) {
+    public Object contextFromString(String str) {
       if (str == null) {
         throw new IllegalArgumentException("supplied str must not be null");
       }
 
       try {
-        final Map props = objectMapper.readValue(str, Map.class);
-        final ReferrerContext context = (ReferrerContext) createNewContext();
+        Map props = objectMapper.readValue(str, Map.class);
+        ReferrerContext context = (ReferrerContext) createNewContext();
         context.referrers.putAll(props);
         context.isDirty = false;
         return context;
-      } catch (final IOException ex) {
+      } catch (IOException ex) {
         throw new CoDecException("unable to decode context", ex);
       }
     }
 
-
     @Override
-    public String stringFromContext(final Object context) {
+    public String stringFromContext(Object context) {
       if (!(context instanceof ReferrerContext)) {
         throw new IllegalArgumentException("supplied context is not of required type ScoringContext: " + context);
       }
-      try {
-        final ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        final HttpServletRequest request = attr.getRequest();
 
-        ReferrerContext ctx = (ReferrerContext)context;
-        final String referer = request.getHeader("referer");
+      try {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes == null) {
+          throw new IllegalStateException("Servlet request attributes not available.");
+        }
+
+        HttpServletRequest request = attributes.getRequest();
+
+        ReferrerContext ctx = (ReferrerContext) context;
+        String referer = request.getHeader("referer");
         if (referer != null) {
           ctx.referrers.put(URL_PROP, referer);
           if (!addGoogleProperties(ctx.referrers, referer) && !addBingProperties(ctx.referrers, referer)) {
@@ -84,13 +90,13 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
           }
         }
         return objectMapper.writeValueAsString(((ReferrerContext) context).referrers);
-      } catch (final Exception ex) { // NOSONAR
+      } catch (Exception ex) { // NOSONAR
         throw new CoDecException("unable to encode context", ex);
       }
     }
 
-    private boolean addGoogleProperties(final Map<String,String> context, final String referer) {
-      final Matcher match = GOOGLE_REGEXP.matcher(referer);
+    private boolean addGoogleProperties(Map<String, String> context, String referer) {
+      Matcher match = GOOGLE_REGEXP.matcher(referer);
       if (match.matches()) {
         context.put(SEARCHENGINE_PROP, "google");
         context.put(QUERY_PROP, urlDecode(match.group(REGEXP_URL_POSITION)));
@@ -100,8 +106,8 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
       }
     }
 
-    private boolean addBingProperties(final Map<String,String> context, final String referer) {
-      final Matcher match = BING_REGEXP.matcher(referer);
+    private boolean addBingProperties(Map<String, String> context, String referer) {
+      Matcher match = BING_REGEXP.matcher(referer);
       if (match.matches()) {
         context.put(SEARCHENGINE_PROP, "bing");
         context.put(QUERY_PROP, urlDecode(match.group(REGEXP_URL_POSITION)));
@@ -111,8 +117,8 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
       }
     }
 
-    private boolean addYahooProperties(final Map<String,String> context, final String referer) {
-      final Matcher match = YAHOO_REGEXP.matcher(referer);
+    private boolean addYahooProperties(Map<String, String> context, String referer) {
+      Matcher match = YAHOO_REGEXP.matcher(referer);
       if (match.matches()) {
         context.put(SEARCHENGINE_PROP, "yahoo");
         context.put(QUERY_PROP, urlDecode(match.group(REGEXP_URL_POSITION)));
@@ -122,11 +128,11 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
       }
     }
 
-    private String urlDecode(final String str) {
-      assert (str != null);
+    private String urlDecode(String str) {
+      assert str != null;
       try {
         return URLDecoder.decode(str, "UTF-8");
-      } catch (final UnsupportedEncodingException ex) {
+      } catch (UnsupportedEncodingException ex) {
         LOG.error("UTF-8 encoding not supported! Are you kidding me?!?", ex);
         return null;
       }
@@ -139,10 +145,7 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
      */
     @Override
     public String toString() {
-      final StringBuilder builder = new StringBuilder();
-      builder.append('[').append(getClass().getName()).
-              append(']');
-      return builder.toString();
+      return "[" + getClass().getName() + ']';
     }
 
     @Override
@@ -172,13 +175,13 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
 
   @Override
   public <T> T getProperty(String key, T defaultValue) {
-    final T score = (T) referrers.get(key);
+    T score = (T) referrers.get(key);
     return score != null ? score : defaultValue;
   }
 
   @Override
   public Collection<String> getPropertyNames() {
-    return referrers.keySet();  //To change body of implemented methods use File | Settings | File Templates.
+    return referrers.keySet();
   }
 
   /**
@@ -188,9 +191,6 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
    */
   @Override
   public String toString() {
-    final StringBuilder builder = new StringBuilder();
-    builder.append('[').append(getClass().getName()).
-            append(']');
-    return builder.toString();
+    return "[" + getClass().getName() + ']';
   }
 }

@@ -10,7 +10,6 @@
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns:bp-base="com.coremedia.blueprint.base.components.sites.*"
         itemId="callToActionConfigurationForm"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTeasable_callToActionConfiguration_text')}"
         propertyNames="{[]}"
@@ -29,10 +28,6 @@
 
     public native function CallToActionConfigurationForm(config:CallToActionConfigurationForm = null);
 
-    private static function invert(value:Boolean):Boolean {
-      return !value;
-    }
-
     private function transformEnabledToEmptyText(enabled:Boolean):String {
       return enabled
               ? resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTeasable_CTAText_emptyText')
@@ -41,17 +36,12 @@
     ]]></fx:Script>
 
   <local:plugins exml:mode="append">
-    <ui:Binding source="ctaSettings.callToActionDisabled"
+    <ui:Binding source="ctaSettings.callToActionEnabled"
                 destination="ctaViewModel.CTAEnabled"
-                twoWay="true"
-                transformer="{invert}"
-                reverseTransformer="{invert}"/>
+                twoWay="true"/>
     <ui:Binding source="ctaSettings.callToActionCustomText"
                 destination="ctaViewModel.CTAText"
                 twoWay="true"/>
-
-    <bp-base:SiteAwareVisibilityPlugin feature="{SiteAwareFeatures.CALL_TO_ACTION}"
-                                       contentValueExpression="{config.bindTo}"/>
     <editor:PropertyFieldPlugin propertyName="callToActionConfiguration"/>
     <editor:ShowIssuesPlugin propertyName="callToActionConfiguration"
                              bindTo="{config.bindTo}"/>
@@ -81,8 +71,7 @@
                                bidirectional="true"/>
         <!-- Do not use BindDisablePlugin here, as it expects content as a value of bindTo.getValue() -->
         <ui:BindPropertyPlugin componentProperty="disabled"
-                               bindTo="{ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, ctaViewModel)}"
-                               transformer="{invert}"/>
+                               bindTo="{getTextDisabledVE()}"/>
         <ui:BindPropertyPlugin componentProperty="emptyText"
                                bindTo="{ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, ctaViewModel)}"
                                transformer="{transformEnabledToEmptyText}"/>

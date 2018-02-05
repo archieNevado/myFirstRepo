@@ -6,23 +6,14 @@ import com.coremedia.livecontext.handler.LoginStatusHandler;
 import com.coremedia.objectserver.util.RequestServices;
 import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Provides URLs and parameter values for requests to the {@link LoginStatusHandler}.
  */
 public class LiveContextLoginFreemarkerFacade {
-
-  private final Map<String, LiveContextLoginUrlsProvider> urlProviderByVendor;
-
-  public LiveContextLoginFreemarkerFacade(@Nonnull Map<String, LiveContextLoginUrlsProvider> urlProviderByVendor) {
-    this.urlProviderByVendor = ImmutableMap.copyOf(urlProviderByVendor);
-  }
 
   /**
    * Builds the url for the status handler to retrieve the actual state (logged in/logged out) of the user.
@@ -31,7 +22,8 @@ public class LiveContextLoginFreemarkerFacade {
    */
   public String getStatusUrl() {
     String link = buildLink(LoginStatusHandler.LinkType.STATUS);
-    return getLiveContextLoginUrlsProvider().transformLoginStatusUrl(link);
+    HttpServletRequest request = FreemarkerUtils.getCurrentRequest();
+    return getLiveContextLoginUrlsProvider().transformLoginStatusUrl(link, request);
   }
 
   /**
@@ -40,7 +32,9 @@ public class LiveContextLoginFreemarkerFacade {
    * @return absolute url to a formular of a commerce system.
    */
   public String getLoginFormUrl() {
-    return getUrl(LiveContextLoginUrlsProvider::buildLoginFormUrl);
+    LiveContextLoginUrlsProvider provider = getLiveContextLoginUrlsProvider();
+    HttpServletRequest request = FreemarkerUtils.getCurrentRequest();
+    return provider.buildLoginFormUrl(request);
   }
 
   /**
@@ -49,21 +43,17 @@ public class LiveContextLoginFreemarkerFacade {
    * @return absolute url to logout the current user.
    */
   public String getLogoutUrl() {
-    return getUrl(LiveContextLoginUrlsProvider::buildLogoutUrl);
+    HttpServletRequest request = FreemarkerUtils.getCurrentRequest();
+    return getLiveContextLoginUrlsProvider().buildLogoutUrl(request);
   }
 
-  private String getUrl(@Nonnull Function<LiveContextLoginUrlsProvider, String> urlProviderFunction) {
-    LiveContextLoginUrlsProvider provider = getLiveContextLoginUrlsProvider();
-    return urlProviderFunction.apply(provider);
-  }
-
+  @Nonnull
   private LiveContextLoginUrlsProvider getLiveContextLoginUrlsProvider() {
     CommerceConnection connection = CurrentCommerceConnection.get();
-    LiveContextLoginUrlsProvider provider = urlProviderByVendor.get(connection.getVendorName());
-    if (provider == null) {
-      throw new IllegalStateException("No LiveContextLoginUrlsProvider configured for " + connection);
-    }
-    return provider;
+    return connection.getServiceForVendor(LiveContextLoginUrlsProvider.class)
+            .orElseThrow(() ->
+                    new IllegalStateException("No LiveContextLoginUrlsProvider configured for " + connection + ".")
+            );
   }
 
   private static String buildLink(LoginStatusHandler.LinkType bean) {

@@ -80,6 +80,13 @@
                                              selectionExpression="{config.selectedNodeExpression}"/>
               </baseAction>
             </MenuItem>
+            <MenuSeparator />
+            <MenuItem itemId="deleteNode"
+                      iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'remove')}">
+              <baseAction>
+                <taxonomy:DeleteKeywordAction selectionExpression="{config.selectedNodeExpression}" />
+              </baseAction>
+            </MenuItem>
           </items>
         </Menu>
       </ui:contextMenu>
@@ -100,7 +107,7 @@
                 renderer="{pointerColRenderer}"/>
   </local:columns>
   <local:selModel>
-    <selection_RowModel mode="SINGLE"/>
+    <selection_RowModel mode="MULTI"/>
   </local:selModel>
   <local:view>
     <GridView deferEmptyText="false"
@@ -108,6 +115,8 @@
               ui="{TableViewSkin.LIGHT.getSkin()}">
       <plugins>
         <plugin_GridViewDragDrop ddGroup="taxonomies"
+                                 enableDrag="{config.parentNode !== undefined}"
+                                 enableDrop="{config.parentNode !== undefined}"
                                  pluginId="{DRAG_DROP_PLUGIN_ID}"/>
       </plugins>
     </GridView>

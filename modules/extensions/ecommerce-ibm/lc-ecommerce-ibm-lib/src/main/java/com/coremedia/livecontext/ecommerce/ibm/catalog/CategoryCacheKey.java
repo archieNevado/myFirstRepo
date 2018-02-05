@@ -38,7 +38,7 @@ class CategoryCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> 
   @Override
   public void addExplicitDependency(Map<String, Object> wcCategory) {
     if (wcCategory != null){
-      Cache.dependencyOn(DataMapHelper.getValueForKey(wcCategory, "uniqueID", String.class));
+      Cache.dependencyOn(DataMapHelper.findStringValue(wcCategory, "uniqueID").orElse(null));
     }
   }
 

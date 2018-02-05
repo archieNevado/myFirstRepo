@@ -6,6 +6,6 @@
 
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
 
-  <bean id="commerceConnectionFilter" class="com.coremedia.blueprint.livecontext.ecommerce.filter.CommerceConnectionFilter"/>
+  <bean class="com.coremedia.blueprint.livecontext.ecommerce.filter.LcCommonWebApplicationFilters"/>
 
 </beans>

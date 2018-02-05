@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
@@ -23,13 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.contentbeans.ProductTeasableHelper.isNullOrBlank;
 import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
 
 /**
  * A LiveContext product which is backed by a CMExternalProduct content in the CMS repository.
- *
  */
 public class LiveContextExternalProductImpl extends CMExternalProductBase implements LiveContextExternalProduct {
   private static final Logger LOG = LoggerFactory.getLogger(LiveContextExternalProductImpl.class);
@@ -37,15 +37,11 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
   private PageGridService pageGridService;
   private ExternalChannelContentTreeRelation externalChannelContentTreeRelation;
   private ProductTeasableHelper productTeasableHelper;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Override
   public PageGrid getPageGrid() {
     return pageGridService.getContentBackedPageGrid(this);
-  }
-
-  @Required
-  public void setPageGridService(PageGridService pageGridService) {
-    this.pageGridService = pageGridService;
   }
 
   @Override
@@ -58,9 +54,9 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
 
   @Override
   @Nullable
-  public Category getCategory(){
+  public Category getCategory() {
     Product product = getProduct();
-    if (product == null){
+    if (product == null) {
       return null;
     }
     return product.getCategory();
@@ -85,7 +81,14 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
       return null;
     }
 
-    CommerceConnection connection = CurrentCommerceConnection.get();
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
+
+    if (!commerceConnection.isPresent()) {
+      return null;
+    }
+
+    CommerceConnection connection = commerceConnection.get();
+
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(productId);
     return (Product) connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
   }
@@ -126,6 +129,16 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
   @Override
   public CMNavigation getContext() {
     return getChannel();
+  }
+
+  @Required
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
+  }
+
+  @Required
+  public void setPageGridService(PageGridService pageGridService) {
+    this.pageGridService = pageGridService;
   }
 
   @Autowired

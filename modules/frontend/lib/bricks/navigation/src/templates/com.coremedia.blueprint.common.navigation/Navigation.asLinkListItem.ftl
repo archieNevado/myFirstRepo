@@ -8,6 +8,7 @@
 <#assign isRoot=(isRoot!true)/>
 <#assign isTopLevel=cm.localParameters().isTopLevel!false/>
 <#assign showNavigationLabel=cm.localParameters().showNavigationLabel!false/>
+<#assign contentData=self.content!{}/>
 
 <#if isRoot || (!((self.hidden)!false))>
 
@@ -17,7 +18,7 @@
   </#if>
 
   <#if self.visibleChildren?has_content>
-    <li class="${cssClass} cm-navigation-item dropdown" <@preview.metadata data=["properties.children", self.content]/>>
+    <li class="${cssClass} cm-navigation-item dropdown" <@preview.metadata data=["properties.children", contentData]/>>
       <#--link to this item in navigation and render children in dropdown list -->
       <@cm.include self=self view="asLink"/>
       <#if isTopLevel>
@@ -30,7 +31,7 @@
       }/>
     </li>
   <#else>
-    <li class="${cssClass} cm-navigation-item" <@preview.metadata data=["properties.children", self.content]/>>
+    <li class="${cssClass} cm-navigation-item" <@preview.metadata data=["properties.children", contentData]/>>
       <#-- link to this item in navigation -->
       <@cm.include self=self view="asLink"/>
     </li>

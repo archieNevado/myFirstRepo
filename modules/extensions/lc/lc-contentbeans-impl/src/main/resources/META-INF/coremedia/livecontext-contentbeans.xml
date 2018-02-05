@@ -20,10 +20,14 @@
   <bean name="contentBeanFactory:CMMarketingSpot" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMMarketingSpotImpl" scope="prototype">
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
+    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
   <bean name="contentBeanFactory:CMProductList" parent="abstractTeasable-blueprint-doctypes"
-        class="com.coremedia.livecontext.contentbeans.CMProductListImpl" scope="prototype"/>
+        class="com.coremedia.livecontext.contentbeans.CMProductListImpl" scope="prototype">
+    <property name="treeRelation" ref="liveContextNavigationTreeRelation"/>
+    <property name="contentRepository" ref="contentRepository"/>
+  </bean>
 
   <bean name="contentBeanFactory:CMProductTeaser" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMProductTeaserImpl" scope="prototype">
@@ -44,6 +48,9 @@
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
     <property name="pageGridService" ref="extCategoryPageGridService"/>
     <property name="pdpPageGridService" ref="pdpPageGridService"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
+    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
+
   </bean>
 
   <bean name="contentBeanFactory:CMExternalProduct"
@@ -51,9 +58,12 @@
         class="com.coremedia.livecontext.contentbeans.LiveContextExternalProductImpl"
         scope="prototype">
     <property name="pageGridService" ref="productPageGridService"/>
+    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
-  <bean id="productTeasableHelper" class="com.coremedia.livecontext.contentbeans.ProductTeasableHelper"/>
+  <bean id="productTeasableHelper" class="com.coremedia.livecontext.contentbeans.ProductTeasableHelper">
+    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
+  </bean>
 
   <bean id="pdpPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="pdpContentBackedPageGridService"/>

@@ -20,12 +20,8 @@
   </templateSets>
 
   <resourceBundles>
-    <resourceBundle>l10n/Bootstrap_en.properties</resourceBundle>
-    <resourceBundle>l10n/CTA_en.properties</resourceBundle>
-    <resourceBundle>l10n/Livecontext_en.properties</resourceBundle>
-    <resourceBundle>l10n/Preview_en.properties</resourceBundle>
-    <resourceBundle>l10n/Video_en.properties</resourceBundle>
     <resourceBundle>l10n/Calista_en.properties</resourceBundle>
+    <resourceBundle>l10n/Bricks_en.properties</resourceBundle>
   </resourceBundles>
 
 </themeDefinition>

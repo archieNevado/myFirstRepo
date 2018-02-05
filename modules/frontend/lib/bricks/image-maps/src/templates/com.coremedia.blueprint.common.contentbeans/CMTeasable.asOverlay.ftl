@@ -10,11 +10,11 @@
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 
 <div class="cm-overlay ${classOverlay}"<@cm.metadata data=(metadata![]) + [self.content] />>
-  <@bp.optionalLink href=cm.getLink(self.target!cm.UNDEFINED) attr={"target":target}>
+  <@bp.optionalLink href=cm.getLink(self.target!cm.UNDEFINED) attr={"class": "cm-overlay__link", "target":target}>
     <#if self.teaserTitle?has_content && overlay.displayTitle>
-      <div class="cm-overlay__item cm-overlay__item--title"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</div>
+      <span<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</span>
     <#else>
-        <div class="cm-overlay__item cm-overlay__item--title"><@bp.message "button_quickinfo" /></div>
+      <span><@bp.message "button_quickinfo" /></span>
     </#if>
   </@bp.optionalLink>
 </div>

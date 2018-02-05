@@ -27,6 +27,9 @@
 </related>
 <value>Women</value>
 <children>
+<link href="Dress.xml" path="/Settings/Taxonomies/Subject/Dress"/>
+<link href="Hat.xml" path="/Settings/Taxonomies/Subject/Hat"/>
+<link href="Bag.xml" path="/Settings/Taxonomies/Subject/Bag"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

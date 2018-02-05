@@ -55,7 +55,9 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
 
   @Before
   public void setup() {
-    connection = commerce.getConnection("wcs1");
+    connection = commerce.findConnection("wcs1")
+            .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
+
     testConfig.setWcsVersion(storeInfoService.getWcsVersion());
     connection.setStoreContext(testConfig.getStoreContext());
     CurrentCommerceConnection.set(connection);
@@ -83,7 +85,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     productPrice = testling.findDynamicProductPriceByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext("EUR"), null);
     assertNotNull(productPrice.getPriceValue());
     assertEquals("EUR", productPrice.getCurrency());
-    }
+  }
 
   @Betamax(tape = "wcws_testFindStaticProductPricesByExternalId", match = {MatchRule.path, MatchRule.query})
   @Test
@@ -109,7 +111,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
   }
 
   @Test
-  public void testUseSearchRestHandler(){
+  public void testUseSearchRestHandler() {
     StoreContext storeContext = testConfig.getStoreContext();
     assertFalse(testling.useSearchRestHandlerProduct(storeContext));
 
@@ -169,7 +171,6 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     testlingSpy.setUseSearchRestHandlerProductIfAvailable(true);
     testlingSpy.setUseSearchRestHandlerCategoryIfAvailable(false);
 
-
     Field productRestCallFieldSearch = ReflectionUtils.findField(testlingSpy.getClass(), "FIND_PRODUCT_BY_EXTERNAL_ID_SEARCH");
     productRestCallFieldSearch.setAccessible(true);
     Field productRestCallFieldBod = ReflectionUtils.findField(testlingSpy.getClass(), "FIND_PRODUCT_BY_EXTERNAL_ID");
@@ -205,5 +206,4 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
             nullable(UserContext.class));
     Mockito.reset(testlingSpy, restConnectorSpy);
   }
-
 }

@@ -3,9 +3,7 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.blueprint.elastic.social.cae.user.UserFilter;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addErrorMessage;
+import static com.coremedia.common.logging.BaseMarker.AUTHENTICATION;
 
 @Named
 public class LoginHelper {
@@ -82,7 +81,7 @@ public class LoginHelper {
 
       CommunityUser user = elasticSocialUserHelper.getUser(authentication.getPrincipal());
       if (user == null) {
-        LOG.error("Could not get user for principal {}", authentication.getPrincipal());
+        LOG.error(AUTHENTICATION, "Could not get user for principal {}", authentication.getPrincipal());
         addErrorMessage(context, WebflowMessageKeys.LOGIN_FORM_ERROR);
         return false;
       }
@@ -96,7 +95,7 @@ public class LoginHelper {
           sessionAuthenticationStrategy.onAuthentication(authentication, nativeRequest, nativeResponse);
         } catch (SessionAuthenticationException e) {
           // The session strategy can reject the authentication
-          LOG.info("SessionAuthenticationStrategy rejected the authentication object", e);
+          LOG.info(AUTHENTICATION, "SessionAuthenticationStrategy rejected the authentication object", e);
           SecurityContextHolder.clearContext();
 
           //... add error message
@@ -111,7 +110,7 @@ public class LoginHelper {
       UserContext.setUser(user);
       return true;
     } catch (AuthenticationException e) {
-      LOG.debug("Login failed", e);
+      LOG.debug(AUTHENTICATION, "Login failed", e);
       addErrorMessage(context, WebflowMessageKeys.LOGIN_GENERAL_ERROR);
       return false;
     }

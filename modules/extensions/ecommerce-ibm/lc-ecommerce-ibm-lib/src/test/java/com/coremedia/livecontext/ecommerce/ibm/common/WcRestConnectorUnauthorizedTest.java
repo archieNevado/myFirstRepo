@@ -39,7 +39,9 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
 
   @Before
   public void setup() {
-    connection = commerce.getConnection("wcs1");
+    connection = commerce.findConnection("wcs1")
+            .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
+
     String wcsVersion = storeInfoService.getWcsVersion();
     testConfig.setWcsVersion(wcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());

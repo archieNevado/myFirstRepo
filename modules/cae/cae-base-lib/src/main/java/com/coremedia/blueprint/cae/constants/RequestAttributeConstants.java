@@ -17,7 +17,6 @@ public final class RequestAttributeConstants {
 
   private static final String ATTR_NAME_PAGE = ContextHelper.ATTR_NAME_PAGE;
 
-
   /**
    * Hide Utility Class Constructor
    */
@@ -29,8 +28,13 @@ public final class RequestAttributeConstants {
   }
 
   public static void setPageModel(ContentBean bean) {
-    ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-    sra.setAttribute(ATTR_NAME_PAGE_MODEL, bean, RequestAttributes.SCOPE_REQUEST);
+    ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+    if (requestAttributes == null) {
+      throw new IllegalStateException("Servlet request attributes are not available, cannot set page model.");
+    }
+
+    requestAttributes.setAttribute(ATTR_NAME_PAGE_MODEL, bean, RequestAttributes.SCOPE_REQUEST);
   }
 
   public static Page getPage(HttpServletRequest request) {

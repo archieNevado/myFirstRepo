@@ -69,7 +69,7 @@ public class ValidityPeriodValidator<T> extends AbstractValidator<T> implements 
   @Override
   protected void addCustomDependencies(List<? extends T> result) {
 
-    if (validatyPeriodIsUsed(result)) {
+    if (validityPeriodIsUsed(result)) {
       if (preview) {
         // we don't want to cache anything in preview if somewhere a validation period is used
         // (the reason is: it could influence the validity decision at any time if later a previewdate is used)
@@ -91,7 +91,7 @@ public class ValidityPeriodValidator<T> extends AbstractValidator<T> implements 
     }
   }
 
-  private boolean validatyPeriodIsUsed(List<? extends T> result) {
+  private boolean validityPeriodIsUsed(List<? extends T> result) {
     for (T t : result) {
       if (t instanceof ValidityPeriod) {
         ValidityPeriod vp = (ValidityPeriod) t;

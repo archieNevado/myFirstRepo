@@ -26,8 +26,8 @@
     </#if>
     <div class="cm-gap__dimmer"></div>
     <#if (self.teaserTitle?has_content || self.teaserText?has_content)>
-      <#-- with banderole -->
-      <div class="cm-gap__banderole row">
+      <#-- with caption -->
+      <div class="cm-gap__caption row">
         <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
           <#-- headline -->
           <h2 class="cm-gap__headline"<@cm.metadata "properties.teaserTitle" />>

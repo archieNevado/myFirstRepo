@@ -54,6 +54,6 @@ public class FragmentCommerceP13nContextInterceptor extends AbstractCommerceCont
   @Nullable
   protected Site getSite(HttpServletRequest request, String normalizedPath) {
     FragmentParameters parameters = FragmentContextProvider.getFragmentContext(request).getParameters();
-    return liveContextSiteResolver.findSiteFor(parameters);
+    return parameters != null ? liveContextSiteResolver.findSiteFor(parameters) : null;
   }
 }

@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
@@ -8,7 +7,6 @@ import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.transform.TransformImageService;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
@@ -18,7 +16,6 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.transform.TransformedBlob;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +34,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
-import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -49,7 +45,7 @@ import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CMCatalogPictureHandlerTest {
   @InjectMocks
   private ProductCatalogPictureHandler testling = new ProductCatalogPictureHandler();
@@ -63,7 +59,7 @@ public class CMCatalogPictureHandlerTest {
   @Mock
   private AssetService assetService;
   @Mock
-  TransformImageService transformImageService;
+  private TransformImageService transformImageService;
   @Mock
   private CMPicture picture;
   @Mock
@@ -73,25 +69,17 @@ public class CMCatalogPictureHandlerTest {
   @Mock
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
-
-  private BaseCommerceConnection commerceConnection;
-
   private static final CommerceId PRODUCT_REFERENCE = CommerceIdParserHelper.parseCommerceIdOrThrow("vendor:///catalog/product/PC_SUMMER_DRESS");
-  private MockCommerceEnvBuilder envBuilder;
+
 
   @Before
   public void setUp() throws Exception {
-    envBuilder = MockCommerceEnvBuilder.create();
-    commerceConnection = envBuilder.setupEnv();
-    commerceConnection.setAssetService(assetService);
-
     Map<String, String> pictureFormats = new HashMap<>();
     pictureFormats.put("thumbnail", "portrait_ratio20x31/200/310");
     pictureFormats.put("full", "portrait_ratio20x31/646/1000");
     testling.setPictureFormats(pictureFormats);
 
     when(contentBeanFactory.createBeanFor(pictureContent, CMPicture.class)).thenReturn(picture);
-    when(picture.getContent()).thenReturn(pictureContent);
     when(picture.getTransformedData(anyString())).thenReturn(blob);
 
     testling.setTransformImageService(transformImageService);
@@ -99,10 +87,6 @@ public class CMCatalogPictureHandlerTest {
     testling.setCatalogAliasTranslationService(catalogAliasTranslationService);
   }
 
-  @After
-  public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
-  }
 
   @Test
   public void testHandleRequestWithSiteNull() throws Exception {
@@ -128,7 +112,6 @@ public class CMCatalogPictureHandlerTest {
   @Test
   public void testHandleRequestNoPictureFound() throws Exception {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
-    when(assetService.findPictures(any())).thenReturn(emptyList());
 
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
@@ -160,7 +143,7 @@ public class CMCatalogPictureHandlerTest {
   }
 
   @Test
-  public void testResolveCatalogAliasFromId(){
+  public void testResolveCatalogAliasFromId() {
     StoreContext storeContext = mock(StoreContext.class);
     when(storeContext.getSiteId()).thenReturn("siteId");
     when(storeContext.getCatalogAlias()).thenReturn(DEFAULT_CATALOG_ALIAS);

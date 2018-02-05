@@ -15,6 +15,6 @@
   }/>
 <#else>
   <div class="cm-aspect-ratio-box ${classBox}">
-    <img class="cm-aspect-ratio-box__content ${classImage}" <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": true} /> src="${self.url!""}" />
+    <img class="cm-aspect-ratio-box__content ${classImage}" <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": true} /> src="${self.url!""}">
   </div>
 </#if>

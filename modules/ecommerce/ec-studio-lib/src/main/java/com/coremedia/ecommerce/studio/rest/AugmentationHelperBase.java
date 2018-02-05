@@ -107,7 +107,9 @@ abstract class AugmentationHelperBase<T> {
 
     //Each catalog needs a separate folder. If not default catalog use the catalog alias as the basefolder.
     Optional<Catalog> catalog = category.getCatalog();
-    if (!catalog.map(Catalog::isDefaultCatalog).orElse(false)) {
+    //when catalog is empty then we assume that there is only the default catalog
+    boolean isDefaultCatalog = catalog.map(Catalog::isDefaultCatalog).orElse(true);
+    if (!isDefaultCatalog) {
       CatalogAlias catalogAlias = category.getId().getCatalogAlias();
       subPathsToJoin.add(OTHER_CATALOGS_FOLDER_NAME);
       subPathsToJoin.add(catalogAlias.value());

@@ -11,8 +11,6 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -27,8 +25,13 @@ public class WcSearchWrapperService extends AbstractWcWrapperService {
 
   public List<WcSuggestion> getKeywordSuggestionsByTerm(String term, @Nonnull StoreContext storeContext) {
     try {
-      Map<String, String[]> parametersMap = createParametersMap(null, getLocale(storeContext), getCurrency(storeContext), storeContext);
+      Map<String, String[]> parametersMap = buildParameterMap()
+              .withCurrency(storeContext)
+              .withLanguageId(storeContext)
+              .build();
+
       parametersMap.put("catalogId", new String[]{getStoreId(storeContext)});
+
       WcSuggestionViews suggestionViews = getRestConnector().callService(
               GET_KEYWORD_SUGGESTIONS, asList(getStoreId(storeContext), term), parametersMap, null, storeContext, null);
       if (suggestionViews != null && suggestionViews.getSuggestionView().get(0) != null) {

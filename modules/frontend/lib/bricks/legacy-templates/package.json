@@ -1,5 +1,8 @@
 {
   "name": "@coremedia/brick-legacy-templates",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "coremedia": {
+    "type": "brick"
+  }
 }

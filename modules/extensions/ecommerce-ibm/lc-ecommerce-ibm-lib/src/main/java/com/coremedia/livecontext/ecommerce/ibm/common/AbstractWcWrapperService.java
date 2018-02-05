@@ -4,6 +4,9 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTra
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
+import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.google.common.annotations.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -55,56 +58,99 @@ public abstract class AbstractWcWrapperService {
     this.wcLanguageMappingService = wcLanguageMappingService;
   }
 
-  public Map getLanguageMapping() {
+  protected Map<String, String> getLanguageMapping() {
     return wcLanguageMappingService.getLanguageMapping();
   }
 
-  /**
-   * Adds the given parameters to a map.
-   */
   @Nonnull
-  public Map<String, String[]> createParametersMap(@Nullable CatalogAlias catalogAlias, @Nullable Locale locale,
-                                                   @Nullable Currency currency, @Nullable Integer userId,
-                                                   @Nullable String userName, @Nullable String[] contractIds,
-                                                   @Nonnull StoreContext storeContext) {
-    Map<String, String[]> parameters = new TreeMap<>();
+  protected WcParameterMapBuilder buildParameterMap() {
+    return new WcParameterMapBuilder();
+  }
 
-    if (catalogAlias != null) {
-      Optional<CatalogId> catalogId = getCatalogId(catalogAlias, storeContext);
-      catalogId.ifPresent(catalogId1 -> parameters.put(PARAM_CATALOG_ID, new String[]{catalogId1.value()}));
+  protected final class WcParameterMapBuilder {
+
+    private final Map<String, String[]> parameters;
+
+    private WcParameterMapBuilder() {
+      // Tree map keeps keys in order which might help with logging and debugging.
+      parameters = new TreeMap<>();
     }
 
-    if (locale != null) {
-      String languageId = getLanguageId(locale);
-      parameters.put(PARAM_LANG_ID, new String[]{languageId});
+    @Nonnull
+    public WcParameterMapBuilder withCatalogId(@Nonnull CatalogId catalogId) {
+      parameters.put(PARAM_CATALOG_ID, new String[]{catalogId.value()});
+      return this;
     }
 
-    if (currency != null) {
-      parameters.put(PARAM_CURRENCY, new String[]{currency.toString()});
-    }
-
-    if (userId != null) {
-      parameters.put(PARAM_FOR_USER_ID, new String[]{String.valueOf(userId)});
-    } else if (userName != null) {
-      parameters.put(PARAM_FOR_USER, new String[]{userName});
-    } else if (contractIds != null) {
+    @Nonnull
+    public WcParameterMapBuilder withContractIds(@Nonnull String[] contractIds) {
       parameters.put(PARAM_CONTRACT_ID, contractIds);
+      return this;
     }
 
-    return parameters;
-  }
+    @Nonnull
+    public WcParameterMapBuilder withCurrency(@Nonnull StoreContext storeContext) {
+      Currency currency = StoreContextHelper.getCurrency(storeContext);
+      return withCurrency(currency);
+    }
 
-  @Nonnull
-  public Map<String, String[]> createParametersMap(@Nullable CatalogAlias catalogAlias, @Nullable Locale locale,
-                                                   @Nullable Currency currency, StoreContext storeContext) {
-    return createParametersMap(catalogAlias, locale, currency, null, null, null, storeContext);
-  }
+    @Nonnull
+    public WcParameterMapBuilder withCurrency(@Nonnull Currency currency) {
+      parameters.put(PARAM_CURRENCY, new String[]{currency.toString()});
+      return this;
+    }
 
-  @Nonnull
-  public Map<String, String[]> createParametersMap(@Nullable CatalogAlias catalogAlias, @Nullable Locale locale,
-                                                   @Nullable Currency currency, @Nullable String[] contractIds,
-                                                   StoreContext storeContext) {
-    return createParametersMap(catalogAlias, locale, currency, null, null, contractIds, storeContext);
+    @Nonnull
+    public WcParameterMapBuilder withLanguageId(@Nonnull StoreContext storeContext) {
+      Locale locale = StoreContextHelper.getLocale(storeContext);
+      return withLanguageId(locale);
+    }
+
+    @Nonnull
+    public WcParameterMapBuilder withLanguageId(@Nonnull Locale locale) {
+      String languageId = getLanguageId(locale);
+      return withLanguageId(languageId);
+    }
+
+    @Nonnull
+    public WcParameterMapBuilder withLanguageId(@Nonnull String languageId) {
+      parameters.put(PARAM_LANG_ID, new String[]{languageId});
+      return this;
+    }
+
+    @Nonnull
+    public WcParameterMapBuilder withUserIdOrName(@Nullable UserContext userContext) {
+      Integer userId = UserContextHelper.getForUserId(userContext);
+      String userName = UserContextHelper.getForUserName(userContext);
+
+      if (userId != null) {
+        return withUserId(userId);
+      } else if (userName != null) {
+        return withUserName(userName);
+      } else {
+        return this;
+      }
+    }
+
+    @Nonnull
+    public WcParameterMapBuilder withUserId(@Nonnull Integer userId) {
+      parameters.put(PARAM_FOR_USER_ID, new String[]{String.valueOf(userId)});
+      return this;
+    }
+
+    @Nonnull
+    public WcParameterMapBuilder withUserName(@Nonnull String userName) {
+      parameters.put(PARAM_FOR_USER, new String[]{userName});
+      return this;
+    }
+
+    @Nonnull
+    public Map<String, String[]> build() {
+      // Do not return an unmodifiable map here (at least for now) as some
+      // services add parameters on their own (and that makes sense to do).
+      //noinspection ReturnOfCollectionOrArrayField
+      return parameters;
+    }
   }
 
   /**
@@ -119,7 +165,8 @@ public abstract class AbstractWcWrapperService {
   }
 
   @Nonnull
-  private Optional<CatalogId> getCatalogId(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+  @VisibleForTesting
+  protected Optional<CatalogId> findCatalogId(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
     String siteId = storeContext.getSiteId();
     return catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
   }

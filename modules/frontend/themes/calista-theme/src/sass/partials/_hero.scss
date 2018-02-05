@@ -15,7 +15,7 @@
     }
   }
 
-  &__banderole {
+  &__caption {
     margin: 0;
 
     a:hover {
@@ -36,10 +36,6 @@
 
   &__dimmer {
     background: linear-gradient(to bottom, rgba(238, 238, 238, 0) 50%, rgba(51, 51, 51, 0.65) 100%);
-  }
-
-  .cm-quickinfo {
-    display: none;
   }
 
   .cm-product-info {

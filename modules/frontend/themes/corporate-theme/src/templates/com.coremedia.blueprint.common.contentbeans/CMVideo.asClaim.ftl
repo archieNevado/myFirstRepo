@@ -22,7 +22,7 @@
     </#if>
 
     <#-- play overlay icon-->
-    <@cm.include self=self view="_playButton" params={"additionalClass": "cm-claim"}/>
+    <@cm.include self=self view="_playButton" params={"blockClass": "cm-claim"}/>
   </@bp.optionalLink>
 
   <div class="caption">

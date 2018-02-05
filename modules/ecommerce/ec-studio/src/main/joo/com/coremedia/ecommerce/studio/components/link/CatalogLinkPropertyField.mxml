@@ -7,49 +7,44 @@
   xmlns:local="com.coremedia.ecommerce.studio.components.link.*"
   xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
   xmlns:ui="exml:com.coremedia.ui.config"
-  readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}"
+  readOnlyValueExpression="{getReadOnlyVE(config)}"
   dropAreaHandler="{CatalogHelper.getInstance().openCatalog}"
   htmlFeedback="{CatalogDragDropVisualFeedback.getHtmlFeedback}"
   selectedPositionsExpression="{getSelectedPositionsVE()}"
   selectedValuesExpression="{getSelectedVE()}"
+  linkListWrapper="{getLinkListWrapper(config)}"
 >
   <fx:Metadata>
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
   </fx:Metadata>
   <fx:Declarations>
-    <fx:String id="propertyName"/>
     <fx:Array id="additionalToolbarItems"/>
     <fx:Boolean id="hideOpenInTab"/>
     <fx:Boolean id="hideRemove"/>
     <fx:Boolean id="hideCatalog"/>
-    <fx:Array id="linkTypeNames"/>
-    <fx:Function id="createStructFunction"/>
-    <fx:Number id="maxCardinality"/>
   </fx:Declarations>
   <fx:Script><![CDATA[
-    import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
     import com.coremedia.ecommerce.studio.dragdrop.CatalogDragDropVisualFeedback;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
-    import com.coremedia.ui.data.Bean;
+
+    import mx.resources.ResourceManager;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogLinkPropertyField";
 
     private var config:CatalogLinkPropertyField;
 
-    [Bindable]
-    public var model:Bean;
-
     public native function CatalogLinkPropertyField(config:CatalogLinkPropertyField = null);
     ]]></fx:Script>
 
-  <local:linkListWrapper>
-    <ec:CatalogLinkListWrapper bindTo="{config.bindTo}"
-                               model="{config.model}"
-                               propertyName="{config.propertyName}"
-                               maxCardinality="{config.maxCardinality}"
-                               createStructFunction="{config.createStructFunction}"
-                               linkTypeNames="{config.linkTypeNames}"/>
-  </local:linkListWrapper>
+  <local:actionList>
+    <editor:LinkListRemoveAction text="{ResourceManager.getInstance().getString('com.coremedia.cms.editor.sdk.actions.Actions', 'Action_deleteSelectedLinks_text')}"
+                                 tooltip="{ResourceManager.getInstance().getString('com.coremedia.cms.editor.sdk.actions.Actions', 'Action_deleteSelectedLinks_tooltip')}"
+                                 linkListWrapper="{getLinkListWrapper(config)}"
+                                 selectedValuesExpression="{getSelectedVE()}"
+                                 selectedPositionsExpression="{getSelectedPositionsVE()}"/>
+    <editor:OpenEntitiesInTabsAction entitiesValueExpression="{getSelectedVE()}"/>
+  </local:actionList>
+
   <local:fields>
     <ui:DataField name="type"
                   mapping=""
@@ -75,6 +70,7 @@
                   ifUnreadable=""
                   convert_="{convertThumbnail}" />
   </local:fields>
+
   <local:columns>
     <editor:ThumbnailColumn hidden="{config.showThumbnails === false}" />
     <local:CatalogLinkListColumn catalogObjectIdDataIndex="id"
@@ -85,31 +81,22 @@
                                  flex="1"/>
     <editor:StatusColumn/>
   </local:columns>
+
   <local:tbar>
-    <ec:CatalogLinkToolbar additionalToolbarItems="{config.additionalToolbarItems}"
-                           propertyName="{config.propertyName}"
-                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
-                           readOnlyValueExpression="{config.readOnlyValueExpression}"
-                           selectedValuesExpression="{getSelectedVE()}"
-                           selectedPositionsExpression="{getSelectedPositionsVE()}"
+    <ec:CatalogLinkToolbar linkListWrapper="{getLinkListWrapper(config)}"
+                           additionalToolbarItems="{config.additionalToolbarItems}"
                            bindTo="{config.bindTo}"
                            hideOpenInTab="{config.hideOpenInTab}"
                            hideRemove="{config.hideRemove}"/>
   </local:tbar>
+
   <local:plugins exml:mode="append">
     <ui:ContextMenuPlugin>
       <ui:contextMenu>
-        <ec:CatalogLinkContextMenu propertyName="{config.propertyName}"
-                                   bindTo="{config.bindTo}"
-                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
-                                   readOnlyValueExpression="{config.readOnlyValueExpression}"
-                                   selectedValuesExpression="{getSelectedVE()}"
-                                   selectedPositionsExpression="{getSelectedPositionsVE()}"
+        <ec:CatalogLinkContextMenu linkListWrapper="{getLinkListWrapper(config)}"
                                    hideOpenInTab="{config.hideOpenInTab}"
                                    hideRemove="{config.hideRemove}"/>
       </ui:contextMenu>
     </ui:ContextMenuPlugin>
-
   </local:plugins>
-
 </local:CatalogLinkPropertyFieldBase>

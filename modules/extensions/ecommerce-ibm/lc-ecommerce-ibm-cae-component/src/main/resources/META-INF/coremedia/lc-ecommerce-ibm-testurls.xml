@@ -9,7 +9,7 @@
   <bean id="lcStaticTestUrlsController" class="com.coremedia.livecontext.ecommerce.ibm.cae.handler.StaticTestUrlsHandler">
     <property name="siteResolver" ref="siteResolver"/>
     <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionHelper"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
     <property name="testUrlsMap">
       <map>
         <entry key="aurora">

@@ -7,6 +7,8 @@ import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
@@ -35,22 +37,22 @@ public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
 
   @Override
   public String getName() {
-    return DataMapHelper.getValueForKey(getDelegate(), "displayName.value", String.class);
+    return getStringValue(getDelegate(), "displayName.value");
   }
 
   @Override
   public String getDescription() {
-    return DataMapHelper.getValueForKey(getDelegate(), "description.value", String.class);
+    return getStringValue(getDelegate(), "description.value");
   }
 
   @Override
   public String getExternalId() {
-    return DataMapHelper.getValueForKey(getDelegate(), "id", String.class);
+    return getStringValue(getDelegate(), "id");
   }
 
   @Override
   public String getExternalTechId() {
-    return DataMapHelper.getValueForKey(getDelegate(), "id", String.class);
+    return getStringValue(getDelegate(), "id");
   }
 
   public void setSegmentWrapperService(WcSegmentWrapperService segmentWrapperService) {
@@ -59,5 +61,10 @@ public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
 
   public WcSegmentWrapperService getSegmentWrapperService() {
     return segmentWrapperService;
+  }
+
+  @Nullable
+  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+    return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

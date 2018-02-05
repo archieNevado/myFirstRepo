@@ -9,6 +9,7 @@
 <StringProperty Name="description">Light Text</StringProperty>
 <StructProperty Name="style">
 <Struct>
+<StringProperty Name="textCls">cm-richtext--light-shadow</StringProperty>
 <StringProperty Name="color">#fafafa</StringProperty>
 </Struct>
 </StructProperty>

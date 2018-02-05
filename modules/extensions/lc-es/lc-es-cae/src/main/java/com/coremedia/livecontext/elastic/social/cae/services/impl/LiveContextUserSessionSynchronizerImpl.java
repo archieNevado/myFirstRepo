@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.GeneralSecurityException;
 import java.util.Optional;
 
+import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
+
 /**
  * Implements an UserService to integrate with a commerce system.
  */
@@ -45,7 +47,7 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
     if (shopUser == null) {
       UserContextProvider userContextProvider = getUserContextProvider();
       String currentUserId = userContextProvider != null ? userContextProvider.getCurrentContext().getUserId() : null;
-      LOG.warn("Could not find current user '{}' in shop system", currentUserId);
+      LOG.warn(PERSONAL_DATA, "Could not find current user '{}' in shop system", currentUserId);
       return;
     }
 

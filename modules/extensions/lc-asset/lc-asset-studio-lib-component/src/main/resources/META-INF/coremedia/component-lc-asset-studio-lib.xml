@@ -5,7 +5,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
-  <import resource="classpath:/com/coremedia/blueprint/base/livecontext/studio/cache.xml"/>
+  <import resource="classpath:/com/coremedia/ecommerce/studio/rest/cache.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
 
   <import resource="classpath:/com/coremedia/rest/cap/cap-rest-search-service.xml"/>

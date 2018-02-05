@@ -7,10 +7,8 @@ import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import org.springframework.http.HttpMethod;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
@@ -31,8 +29,9 @@ public class WcAvailabilityWrapperService extends AbstractWcWrapperService {
 
     List<String> variableValues = asList(getStoreId(storeContext), skuIds);
 
-    Locale locale = getLocale(storeContext);
-    Map<String, String[]> optionalParameters = createParametersMap(null, locale, null, storeContext);
+    Map<String, String[]> optionalParameters = buildParameterMap()
+            .withLanguageId(storeContext)
+            .build();
 
     Map<String, Object> wcInventoryAvailabilityList = getRestConnector().callService(
             GET_AVAILABILITY_FOR_PRODUCT_VARIANTS, variableValues, optionalParameters, null, storeContext, null);

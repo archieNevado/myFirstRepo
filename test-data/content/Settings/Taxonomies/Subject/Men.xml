@@ -27,6 +27,9 @@
 </related>
 <value>Men</value>
 <children>
+<link href="Trousers.xml" path="/Settings/Taxonomies/Subject/Trousers"/>
+<link href="Shirts.xml" path="/Settings/Taxonomies/Subject/Shirts"/>
+<link href="Suits.xml" path="/Settings/Taxonomies/Subject/Suits"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

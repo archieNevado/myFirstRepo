@@ -19,7 +19,11 @@
     import ext.form.field.ComboBox;
     import ext.tip.ToolTip;
 
+    import com.coremedia.ui.models.bem.BEMBlock;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyFilterPanel";
+
+    public static const BLOCK:BEMBlock = new BEMBlock("cm-taxonomy-filter-panel");
 
     private var config:TaxonomyFilterPanel;
 
@@ -46,10 +50,9 @@
               }}"/>
           </taxonomy:listeners>
         </taxonomy:TaxonomySearchField>
-        <ui:IconButton
-                iconCls="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_icon')}"
-                text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
-                tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}">
+        <ui:IconButton iconCls="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_icon')}"
+                       text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
+                       tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}">
           <ui:baseAction>
             <taxonomy:OpenTaxonomyChooserAction propertyValueExpression="{getSelectionExpression()}"
                                                 taxonomyId="{config.taxonomyId}"/>
@@ -85,6 +88,7 @@
     </Grid>
   </local:items>
   <local:plugins exml:mode="append">
+    <ui:BEMPlugin block="{BLOCK}"/>
     <ui:VerticalSpacingPlugin/>
   </local:plugins>
 

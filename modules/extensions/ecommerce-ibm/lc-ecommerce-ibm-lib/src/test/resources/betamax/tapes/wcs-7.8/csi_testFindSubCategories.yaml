@@ -1,25 +1,25 @@
 !tape
 name: csi_testFindSubCategories
 interactions:
-- recorded: 2016-05-19T09:26:39.663Z
+- recorded: 2017-11-14T15:38:36.127Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:26:40 GMT
+      Date: Tue, 14 Nov 2017 15:38:35 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000C7nMIbBOw3YQSOrgI14jup7:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000luXgvbEorEm5AD5TN2pB7Nw:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
@@ -31,112 +31,182 @@ interactions:
       Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
       Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
       Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
-- recorded: 2016-05-19T09:26:39.788Z
+- recorded: 2017-11-14T15:38:37.380Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:26:40 GMT
+      Date: Tue, 14 Nov 2017 15:38:37 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00008ZnCieLbzaluad_WA3GVz97:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Set-Cookie: JSESSIONID=0000IKqd_4ViqCpxnltmW2KWPiH:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Surrogate-Control: no-store
       Vary: Accept
     body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
-- recorded: 2016-05-19T09:26:39.846Z
+- recorded: 2017-11-14T15:38:37.468Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/@top?catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:26:40 GMT
-      Expires: Thu, 19 May 2016 10:26:40 GMT
-      Set-Cookie: JSESSIONID=0000fc36igVfTeqICmsA4O7RApE:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Tue, 14 Nov 2017 15:38:37 GMT
+      Expires: Tue, 14 Nov 2017 16:38:37 GMT
+      Set-Cookie: JSESSIONID=0000VRbr_YSGoF9AOYpk_tObzPp:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Vary: Accept
-    body: '{"recordSetTotal":"10","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/@top?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"longDescription":"Find
-      everything to make your table special and unforgettable.","shortDescription":"On The Table","metaKeyword":"on the table, tableware","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10201","identifier":"PC_OnTheTable","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10201","name":"On
+    body: '{"recordSetTotal":"10","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/@top?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"longDescription":"Find
+      everything to make your table special and unforgettable.","shortDescription":"On The Table","metaKeyword":"on the table, tableware","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10201","identifier":"PC_OnTheTable","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10201","name":"On
       The Table","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","uniqueID":"10201","xcatgroup_seoSegment":"pc-on-the-table","metaDescription":"On
       The Table","title":"On The Table | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-on-the-table","fullImageAltDescription":"Image for On The Table from AuroraESite"},{"longDescription":"Find the best kitchen tools and gadgets to prepare special meals.","shortDescription":"In
-      The Kitchen","metaKeyword":"in the kitchen, cooking","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10202","identifier":"PC_InTheKitchen","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10202","name":"In
+      The Kitchen","metaKeyword":"in the kitchen, cooking","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10202","identifier":"PC_InTheKitchen","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10202","name":"In
       The Kitchen","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_InTheKitchen.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_InTheKitchen.jpg","uniqueID":"10202","xcatgroup_seoSegment":"pc-in-the-kitchen","metaDescription":"In
       The Kitchen","title":"In The Kitchen | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-in-the-kitchen","fullImageAltDescription":"Image for In The Kitchen from AuroraESite"},{"longDescription":"From fashionwear to cooking magazines - everything a perfect
-      chef needs","shortDescription":"For The Cook","metaKeyword":"for the cook, him, her","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10203","identifier":"PC_ForTheCook","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10203","name":"For
+      chef needs","shortDescription":"For The Cook","metaKeyword":"for the cook, him, her","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10203","identifier":"PC_ForTheCook","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10203","name":"For
       The Cook","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ForTheCook.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_ForTheCook.jpg","uniqueID":"10203","xcatgroup_seoSegment":"pc-for-the-cook","metaDescription":"For
       The Cook","title":"For The Cook | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-for-the-cook","fullImageAltDescription":"Image for For The Cook from AuroraESite"},{"longDescription":"Explore exotic tastes by sampling our selection of exciting ingredients.","shortDescription":"Deli","metaKeyword":"deli,
-      groceries","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10204","identifier":"PC_Deli","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10204","name":"Deli","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Deli.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Deli.jpg","uniqueID":"10204","xcatgroup_seoSegment":"pc-deli","metaDescription":"Deli","title":"Deli
+      groceries","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10204","identifier":"PC_Deli","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10204","name":"Deli","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Deli.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Deli.jpg","uniqueID":"10204","xcatgroup_seoSegment":"pc-deli","metaDescription":"Deli","title":"Deli
       | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-deli","fullImageAltDescription":"Image for Deli from AuroraESite"},{"shortDescription":"The latest styles for the entire family.","metaKeyword":"family apparel, cloths, shirt, pants, tops, bottoms, dresses,
-      dress","identifier":"Apparel","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10101","name":"Apparel","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","uniqueID":"10101","xcatgroup_seoSegment":"apparel","metaDescription":"The
-      latest styles for the entire family.","title":"Apparel | AuroraESite","xcatgroup_cmSeoSegment":"10101_apparel","fullImageAltDescription":"Image for Apparel from AuroraESite"},{"shortDescription":"Electronics","metaKeyword":"Electronics","identifier":"Electronics","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10127","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10127","name":"Electronics","thumbnail":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","fullImage":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","uniqueID":"10127","xcatgroup_seoSegment":"electronics","metaDescription":"Electronics","title":"Electronics
-      | AuroraESite","xcatgroup_cmSeoSegment":"10101_electronics","fullImageAltDescription":"Image for Electronics from AuroraESite"},{"shortDescription":"Grocery","metaKeyword":"Grocery","identifier":"Grocery","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10133","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10133","name":"Grocery","thumbnail":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","fullImage":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","uniqueID":"10133","xcatgroup_seoSegment":"grocery","metaDescription":"Grocery","title":"Grocery
-      | AuroraESite","xcatgroup_cmSeoSegment":"10101_grocery","fullImageAltDescription":"Image for Grocery from AuroraESite"},{"shortDescription":"Health","metaKeyword":"Health","identifier":"Health","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10138","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10138","name":"Health","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png","uniqueID":"10138","xcatgroup_seoSegment":"health","metaDescription":"Health","title":"Health
-      | AuroraESite","xcatgroup_cmSeoSegment":"10101_health","fullImageAltDescription":"Image for Health from AuroraESite"},{"shortDescription":"Home & Furnishing","metaKeyword":"Home & Furnishing","identifier":"Home Furnishings","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10141","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10141","name":"Home
+      dress","identifier":"Apparel","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10101","name":"Apparel","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","uniqueID":"10101","xcatgroup_seoSegment":"apparel","metaDescription":"The
+      latest styles for the entire family.","title":"Apparel | AuroraESite","xcatgroup_cmSeoSegment":"10101_apparel","fullImageAltDescription":"Image for Apparel from AuroraESite"},{"shortDescription":"Electronics","metaKeyword":"Electronics","identifier":"Electronics","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10127","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10127","name":"Electronics","thumbnail":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","fullImage":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","uniqueID":"10127","xcatgroup_seoSegment":"electronics","metaDescription":"Electronics","title":"Electronics
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_electronics","fullImageAltDescription":"Image for Electronics from AuroraESite"},{"shortDescription":"Grocery","metaKeyword":"Grocery","identifier":"Grocery","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10133","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10133","name":"Grocery","thumbnail":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","fullImage":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","uniqueID":"10133","xcatgroup_seoSegment":"grocery","metaDescription":"Grocery","title":"Grocery
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_grocery","fullImageAltDescription":"Image for Grocery from AuroraESite"},{"shortDescription":"Health","metaKeyword":"Health","identifier":"Health","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10138","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10138","name":"Health","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png","uniqueID":"10138","xcatgroup_seoSegment":"health","metaDescription":"Health","title":"Health
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_health","fullImageAltDescription":"Image for Health from AuroraESite"},{"shortDescription":"Home & Furnishing","metaKeyword":"Home & Furnishing","identifier":"Home Furnishings","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10141","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10141","name":"Home
       & Furnishing","thumbnail":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","fullImage":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","uniqueID":"10141","xcatgroup_seoSegment":"home---furnishing","metaDescription":"Home
       & Furnishing","title":"Home & Furnishing | AuroraESite","xcatgroup_cmSeoSegment":"10101_home---furnishing","fullImageAltDescription":"Image for Home & Furnishing from AuroraESite"},{"shortDescription":"Newsletters & Magazines","metaKeyword":"Newsletters
-      & Magazines","identifier":"NewslettersAndMagazines","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10148","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10148","name":"Newsletters
+      & Magazines","identifier":"NewslettersAndMagazines","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10148","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10148","name":"Newsletters
       & Magazines","thumbnail":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","fullImage":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","uniqueID":"10148","xcatgroup_seoSegment":"newsletters---magazines","metaDescription":"Newsletters
       & Magazines","title":"Newsletters & Magazines | AuroraESite","xcatgroup_cmSeoSegment":"10101_newsletters---magazines","fullImageAltDescription":"Image for Newsletters & Magazines from AuroraESite"}],"recordSetCount":"10","MetaData":[{"metaKey":"price","metaData":"1"}]}'
-- recorded: 2016-05-19T09:26:39.954Z
+- recorded: 2017-11-14T15:38:38.316Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byParentCategory/10101?catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:26:40 GMT
-      Expires: Thu, 19 May 2016 10:26:40 GMT
-      Set-Cookie: JSESSIONID=0000kRjukeDkd9LKyZhx1fkHt-U:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Tue, 14 Nov 2017 15:38:38 GMT
+      Expires: Tue, 14 Nov 2017 16:38:38 GMT
+      Set-Cookie: JSESSIONID=0000CKAX0UibIJ7KK_6a_cYxhsd:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Vary: Accept
-    body: '{"recordSetTotal":"4","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byParentCategory\/10101?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Girls","xcatgroup_seoSegment":"girls","identifier":"Girls","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10105","name":"Girls","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10105","thumbnail":"images\/catalog\/apparel\/girls\/category\/catr_app_girls.png","uniqueID":"10105","xcatgroup_cmSeoSegment":"10101_girls"},{"shortDescription":"boys","xcatgroup_seoSegment":"boys","identifier":"Boys","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10104","name":"Boys","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10104","thumbnail":"images\/catalog\/apparel\/boys\/category\/catr_app_boys.png","uniqueID":"10104","xcatgroup_cmSeoSegment":"10101_boys"},{"shortDescription":"Women","xcatgroup_seoSegment":"women","identifier":"Women","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10103","name":"Women","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10103","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_app_women.png","uniqueID":"10103","xcatgroup_cmSeoSegment":"10101_women"},{"shortDescription":"Men","xcatgroup_seoSegment":"men","identifier":"Men","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10102","name":"Men","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10102","thumbnail":"images\/catalog\/apparel\/men\/category\/catr_app_men.png","uniqueID":"10102","xcatgroup_cmSeoSegment":"10101_men"}],"recordSetCount":"4","MetaData":[{"metaKey":"price","metaData":"1"}]}'
-- recorded: 2016-05-19T09:26:39.993Z
+    body: '{"recordSetTotal":"4","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byParentCategory\/10101?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Girls","xcatgroup_seoSegment":"girls","identifier":"Girls","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10105","name":"Girls","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10105","thumbnail":"images\/catalog\/apparel\/girls\/category\/catr_app_girls.png","uniqueID":"10105","xcatgroup_cmSeoSegment":"10101_girls"},{"shortDescription":"boys","xcatgroup_seoSegment":"boys","identifier":"Boys","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10104","name":"Boys","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10104","thumbnail":"images\/catalog\/apparel\/boys\/category\/catr_app_boys.png","uniqueID":"10104","xcatgroup_cmSeoSegment":"10101_boys"},{"shortDescription":"Women","xcatgroup_seoSegment":"women","identifier":"Women","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10103","name":"Women","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10103","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_app_women.png","uniqueID":"10103","xcatgroup_cmSeoSegment":"10101_women"},{"shortDescription":"Men","xcatgroup_seoSegment":"men","identifier":"Men","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10102","name":"Men","parentCatalogGroupID":["10101"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10102","thumbnail":"images\/catalog\/apparel\/men\/category\/catr_app_men.png","uniqueID":"10102","xcatgroup_cmSeoSegment":"10101_men"}],"recordSetCount":"4","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2017-11-14T15:38:38.796Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10105?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:38 GMT
+      Expires: Tue, 14 Nov 2017 16:38:38 GMT
+      Set-Cookie: JSESSIONID=0000veBeFueFlRyd0bYwYAb0UDj:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10105?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Girls","metaKeyword":"casual,
+      sporty, skirt, sweater, kid","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10105","identifier":"Girls","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10105","parentCatalogGroupID":["10101"],"name":"Girls","thumbnail":"images\/catalog\/apparel\/girls\/category\/catr_app_girls.png","fullImage":"images\/catalog\/apparel\/girls\/category\/catr_app_girls.png","uniqueID":"10105","xcatgroup_seoSegment":"girls","metaDescription":"Girls","title":"Girls
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_girls","fullImageAltDescription":"Image for Girls from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2017-11-14T15:38:38.932Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byParentCategory/10105?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:38 GMT
+      Expires: Tue, 14 Nov 2017 16:38:38 GMT
+      Set-Cookie: JSESSIONID=0000FCGOGz3ydM3ACtIjE7wu52i:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"4","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byParentCategory\/10105?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Tops","xcatgroup_seoSegment":"tops","identifier":"Girls
+      Tops","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10123","name":"Tops","parentCatalogGroupID":["10105"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10123","thumbnail":"images\/catalog\/apparel\/girls\/category\/catr_gcl_tops.png","uniqueID":"10123","xcatgroup_cmSeoSegment":"10101_tops"},{"shortDescription":"Pants","xcatgroup_seoSegment":"pants-10121--1","identifier":"Girls
+      Pants","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10121","name":"Pants","parentCatalogGroupID":["10105"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10121","thumbnail":"images\/catalog\/apparel\/girls\/category\/catr_gcl_pants.png","uniqueID":"10121","xcatgroup_cmSeoSegment":"10101_pants-10121--1"},{"shortDescription":"Shoes","xcatgroup_seoSegment":"shoes-10120--1","identifier":"Girls
+      Shoes","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10120","name":"Shoes","parentCatalogGroupID":["10105"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10120","thumbnail":"images\/catalog\/apparel\/girls\/category\/catr_gsh_shoes.png","uniqueID":"10120","xcatgroup_cmSeoSegment":"10101_shoes-10120--1"},{"shortDescription":"Skirts","xcatgroup_seoSegment":"skirts-10122--1","identifier":"Girls
+      Dresses Skirts","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10122","name":"Skirts","parentCatalogGroupID":["10105"],"productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10122","thumbnail":"images\/catalog\/apparel\/girls\/category\/catr_gcl_skirts.png","uniqueID":"10122","xcatgroup_cmSeoSegment":"10101_skirts-10122--1"}],"recordSetCount":"4","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2017-11-14T15:38:39.131Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byCategory/10105?catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 404
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:39 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000kNXW6iU0ckwipZfRkX3h6-b:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: ''
+- recorded: 2017-11-14T15:38:39.469Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10101?catalogId=10152&langId=-1
     headers:
-      Accept-Encoding: gzip,deflate
+      Accept-Encoding: text/plain
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
   response:
     status: 200
     headers:
-      Cache-Control: no-transform, no-cache=set-cookie
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Thu, 19 May 2016 09:26:40 GMT
-      Expires: Thu, 19 May 2016 10:26:40 GMT
-      Set-Cookie: JSESSIONID=0000gRrywG6-XtUwtXjOFUBziHK:-1; Path=/; Domain=.toko-test-06.coremedia.vm
+      Date: Tue, 14 Nov 2017 15:38:39 GMT
+      Expires: Tue, 14 Nov 2017 16:38:39 GMT
+      Set-Cookie: JSESSIONID=0000ASjh_QgBI20UJWQdtXMtkmr:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
       Vary: Accept
       X-Betamax: PLAY
-    body: '{"recordSetTotal":"1","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"The
-      latest styles for the entire family.","metaKeyword":"family apparel, cloths, shirt, pants, tops, bottoms, dresses, dress","identifier":"Apparel","resourceId":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101","productsURL":"http:\/\/toko-fep8-06.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10101","name":"Apparel","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","uniqueID":"10101","xcatgroup_seoSegment":"apparel","metaDescription":"The
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"The
+      latest styles for the entire family.","metaKeyword":"family apparel, cloths, shirt, pants, tops, bottoms, dresses, dress","identifier":"Apparel","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10101","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10101","name":"Apparel","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","uniqueID":"10101","xcatgroup_seoSegment":"apparel","metaDescription":"The
       latest styles for the entire family.","title":"Apparel | AuroraESite","xcatgroup_cmSeoSegment":"10101_apparel","fullImageAltDescription":"Image for Apparel from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

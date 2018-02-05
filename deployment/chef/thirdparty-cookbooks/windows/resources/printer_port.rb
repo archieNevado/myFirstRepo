@@ -22,7 +22,7 @@
 
 require 'resolv'
 
-property :ipv4_address, String, name_attribute: true, required: true, regex: Resolv::IPv4::Regex
+property :ipv4_address, String, name_property: true, required: true, regex: Resolv::IPv4::Regex
 property :port_name, String
 property :port_number, Integer, default: 9100
 property :port_description, String
@@ -42,8 +42,8 @@ end
 load_current_value do |desired|
   name desired.name
   ipv4_address desired.ipv4_address
-  port_name desired.port_name || "IP_#{@new_resource.ipv4_address}"
-  exists port_exists?(desired.port_name)
+  port_name desired.port_name || "IP_#{desired.ipv4_address}"
+  exists port_exists?(desired.port_name || "IP_#{desired.ipv4_address}")
   # TODO: Set @current_resource port properties from registry
 end
 

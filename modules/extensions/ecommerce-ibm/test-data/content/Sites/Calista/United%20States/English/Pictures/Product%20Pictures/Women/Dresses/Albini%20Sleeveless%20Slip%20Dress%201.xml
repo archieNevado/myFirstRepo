@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Calista/United States/English/Pictures/Product Pictures/Women/Dresses" name="Albini Sleeveless Slip Dress 1">
+<CMPicture folder="/Sites/Calista/United States/English/Pictures/Product Pictures/Women/Dresses" name="Albini Sleeveless Slip Dress 1" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-US</locale>
 <master>
 </master>
 <viewtype>
 </viewtype>
 <localSettings>
-  <Struct xmlns="http://www.coremedia.com/2008/struct">
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="transforms">
 <Struct>
 <StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=0;y=72;width=2488;height=3856</StringProperty>

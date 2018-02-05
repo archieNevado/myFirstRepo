@@ -220,6 +220,7 @@
 <StringProperty Name="widgetTypeId">com.coremedia.blueprint.studio.config.esanalytics.esAnalyticsChartWidget</StringProperty>
 <IntProperty Name="rowspan">3</IntProperty>
 <IntProperty Name="column">2</IntProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation"/>
 </Struct>
 <Struct>
 <StringProperty Name="widgetTypeId">com.coremedia.cms.editor.sdk.config.translationStatusWidget</StringProperty>
@@ -231,6 +232,12 @@
 </Struct>
 </StructProperty>
 <StringProperty Name="locale">en</StringProperty>
+<StructProperty Name="controlRoom">
+<Struct>
+<BooleanProperty Name="showAssets">true</BooleanProperty>
+</Struct>
+</StructProperty>
+<BooleanProperty Name="translationWorkflowRemoveEditedContents">false</BooleanProperty>
 <StructListProperty Name="bookmarks">
 <Struct>
 <StringProperty Name="name">Apparel</StringProperty>
@@ -241,7 +248,7 @@
 <Struct>
 <StructListProperty Name="tabs">
 <Struct>
-<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
 <StructProperty Name="state">
 <Struct>
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation"/>

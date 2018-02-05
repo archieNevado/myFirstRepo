@@ -13,9 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -31,6 +34,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT_URL_PREFIX;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandler> {
@@ -45,8 +49,9 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void handleRequestInternalInvalidSegment() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn("invalid segment");
     when(defaultActionBean.getSegment()).thenReturn("invalid segment");
-    assertNotFound("Should not be found.", testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID_STR,
-            DEFAULT_NAVIGATION_PATH, DEFAULT_VANITY_NAME, null, servletRequest));
+    ModelAndView modelAndView = testling.handleRequestInternal(defaultActionBean, DEFAULT_CONTENT_ID_STR,
+            DEFAULT_NAVIGATION_PATH, DEFAULT_VANITY_NAME, null, servletRequest);
+    assertThat(modelAndView.getViewName()).startsWith(REDIRECT_URL_PREFIX);
   }
 
   @Test
@@ -191,7 +196,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
 
     UriComponentsBuilder defaultUriComponentsBuilder = UriComponentsBuilder.newInstance();
 
-    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Cache.currentCache(), null, null, null));
+    when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, Mockito.mock(Cache.class), null, null, null));
     when(defaultNavigation.getVanityUrlMapper()).thenReturn(vanityUrlMapper);
     when(vanityUrlMapper.forPattern(ADDITIONAL_SEGMENT)).thenReturn(defaultNavigation);
     when(contextHelper.findAndSelectContextFor(defaultNavigation, defaultNavigation)).thenReturn(defaultNavigation);
