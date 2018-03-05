@@ -63,6 +63,13 @@ function cmCarousel($carousel) {
       responsiveImages($activeSlide.find(".cm-image--responsive"));
     }
   });
+
+  // Stop carousel, if an item has an open quickinfo
+  $carousel.on('slide.bs.carousel', function (e) {
+    if ($carousel.children(".carousel-inner").hasClass("cm-quickinfo__parent--active")){
+      e.preventDefault();
+    }
+  })
 }
 
 $.fn.cmCarousel = function () {

@@ -21,7 +21,7 @@ Refer to [deployment/chef/README.md](./deployment/chef/README.md) for details.
 
 ## Updating the Workspace
 
-CoreMedia provides this dedicated [DXP Blueprint GitHub mirror repository](https://github.com/coremedia-contributions/blueprint-sfcc) for customers and partners.
+CoreMedia provides this dedicated [DXP Blueprint GitHub mirror repository](https://github.com/coremedia-contributions/dxp-blueprint) for customers and partners.
 
 Simply use GitHubs web frontend to visually compare changes between release versions. Each release is aggregated in a [single git commit](https://github.com/coremedia-contributions/dxp-blueprint/commits/master).
 

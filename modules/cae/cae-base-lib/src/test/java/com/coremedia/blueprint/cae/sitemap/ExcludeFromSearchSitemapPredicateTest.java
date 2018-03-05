@@ -4,7 +4,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertFalse;
@@ -13,10 +12,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ExcludeFromSearchSitemapPredicateTest {
-
-  @Mock
-  private Content content;
-
   private ExcludeFromSearchSitemapPredicate testling;
   private String DOCTYPE = "CMTeasable";
   private String NOT_SEARCHABLE_FLAG = "notSearchable";
@@ -31,7 +26,7 @@ public class ExcludeFromSearchSitemapPredicateTest {
 
   @Test
   public void testTeasableButSearchable() throws Exception {
-    Content content1 = getContent(-244, true);
+    Content content1 = getContent(false, true);
 
     boolean include = testling.include(content1);
     assertTrue(include);
@@ -39,15 +34,7 @@ public class ExcludeFromSearchSitemapPredicateTest {
 
   @Test
   public void testTeasableNotSearchable() throws Exception {
-    Content content1 = getContent(0, true);
-
-    boolean include = testling.include(content1);
-    assertFalse(include);
-  }
-
-  @Test
-  public void testTeasableNotSearchableBigPositive() throws Exception {
-    Content content1 = getContent(2000, true);
+    Content content1 = getContent(true, true);
 
     boolean include = testling.include(content1);
     assertFalse(include);
@@ -59,10 +46,10 @@ public class ExcludeFromSearchSitemapPredicateTest {
     assertFalse(include);
   }
 
-  private Content getContent(int notSearchableReturnValue,
+  private Content getContent(boolean notSearchableReturnValue,
                              boolean isSubTypeOf) {
     Content content = mock(Content.class);
-    when(content.getInt(NOT_SEARCHABLE_FLAG)).thenReturn(notSearchableReturnValue);
+    when(content.getBoolean(NOT_SEARCHABLE_FLAG)).thenReturn(notSearchableReturnValue);
     ContentType mock = mock(ContentType.class);
     when(content.getType()).thenReturn(mock);
     when(mock.isSubtypeOf(DOCTYPE)).thenReturn(isSubTypeOf);

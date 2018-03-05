@@ -21,20 +21,7 @@ public class ExcludeFromSearchSitemapPredicate implements Predicate {
    * @return true if the content is not from given doctype or the searchable flag is not set.
    */
   private boolean checkIsSearchable(Content o) {
-    boolean hasSearchableFlag = o.getType().isSubtypeOf(doctypeName);
-    if (!hasSearchableFlag) {
-      return true;
-    }
-
-    //for simpler reading save it to a positive named variable instead of negotiated variable
-    //notSearchableProperty < 0 means: Searchable!
-    boolean isSearchable = o.getInt(notSearchablePropertyName) < 0;
-
-    if (!isSearchable) {
-      return false;
-    }
-
-    return true;
+    return !o.getType().isSubtypeOf(doctypeName) || !o.getBoolean(notSearchablePropertyName);
   }
 
   @Required

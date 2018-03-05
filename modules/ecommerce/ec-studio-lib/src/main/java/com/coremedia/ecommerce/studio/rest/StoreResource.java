@@ -150,7 +150,6 @@ public class StoreResource extends AbstractCatalogResource<Store> {
       representation.setMultiCatalog(configuredCatalogs.size() > 1);
       representation.setDefaultCatalog(entity.getDefaultCatalog().orElse(null));
       representation.setCatalogs(configuredCatalogs);
-      //TODO uwk raise exception if one of many catalogs is not configured correctly
       representation.setRootCategories(configuredCatalogs.stream()
               .map(Catalog::getRootCategory)
               .collect(toList()));

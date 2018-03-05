@@ -87,6 +87,15 @@ public class ImgCompletionFilterTest {
     assertTrue("", altChecker.invoked);
   }
 
+  @Test
+  public void testIgnoreInvalidAttributes() throws SAXException {
+    AttributesImpl atts = new AttributesImpl();
+    atts.addAttribute("http://www.w3.org/1999/xlink", "href", "xlink:href", "CDATA", "");
+    AltChecker altChecker = new AltChecker(null);
+    testling.setContentHandler(altChecker);
+    testling.startElement("", null, "img", atts);
+    assertTrue("", altChecker.invoked);
+  }
 
   // --- internal ---------------------------------------------------
 

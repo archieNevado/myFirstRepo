@@ -15,7 +15,7 @@
 <#assign imageMapParams=bp.initializeImageMap()/>
 <#assign useQuickinfo=cm.localParameter("imagemap_use_quickinfo", true)/>
 
-<div class="${blockClass} ${blockClass}--imagemap cm-imagemap"<@cm.metadata self.content />
+<div class="${blockClass} ${blockClass}--imagemap cm-imagemap"<@preview.metadata self.content />
      data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${cm.getLink(self.target!cm.UNDEFINED)}"}'>
 
   <#-- picture + hot zones -->
@@ -29,23 +29,25 @@
   />
 
   <#if !self.teaserOverlaySettings.enabled>
-  <#-- with caption -->
-      <div class="${blockClass}__caption cm-imagemap__caption row">
-          <#-- headline --><#if self.teaserTitle?has_content>
-          <@bp.optionalLink href="${link}">
-              <h1 class="${blockClass}__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
-          </@bp.optionalLink></#if>
-          <#-- teaser text -->
-          <#if renderTeaserText && self.teaserText?has_content>
-              <p class="${blockClass}__text"<@cm.metadata "properties.teaserText" />>
-                <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, blockClass+"-max-length", 140)) />
-              </p>
-          </#if>
-          <#-- custom call-to-action button -->
-          <@cm.include self=self view="_callToAction" params={
-            "additionalClass": "${blockClass}__cta"
-          }/>
-      </div>
+    <#-- with caption -->
+    <div class="${blockClass}__caption cm-imagemap__caption row">
+      <#-- headline -->
+      <#if self.teaserTitle?has_content>
+        <@bp.optionalLink href="${link}">
+          <h1 class="${blockClass}__headline"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
+        </@bp.optionalLink>
+      </#if>
+      <#-- teaser text -->
+      <#if renderTeaserText && self.teaserText?has_content>
+        <p class="${blockClass}__text"<@preview.metadata "properties.teaserText" />>
+          <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, blockClass+"-max-length", 140)) />
+        </p>
+      </#if>
+      <#-- custom call-to-action button -->
+      <@cm.include self=self view="_callToAction" params={
+        "additionalClass": "${blockClass}__cta"
+      }/>
+    </div>
   <#else>
     <@cm.include self=self view="_teaserOverlay" />
   </#if>

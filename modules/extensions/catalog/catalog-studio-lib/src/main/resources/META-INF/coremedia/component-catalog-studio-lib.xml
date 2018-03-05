@@ -27,7 +27,7 @@
   </bean>
 
   <bean class="com.coremedia.catalog.studio.lib.validators.RootCategoryInvalidationSource">
-    <property name="capacity" value="10"/>
+    <property name="capacity" value="${studio.rest.eventsCache.capacity:100}"/>
   </bean>
 
 </beans>

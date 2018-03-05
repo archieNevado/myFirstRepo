@@ -30,13 +30,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1801.1</blueprint-base.version>
-    <cms.version>1801.1</cms.version>
-    <personalization.version>1801.1</personalization.version>
-    <elastic.version>1801.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1801.1</studio.version>
-    <caetoolbox.version>1801.1</caetoolbox.version>
-    <livecontext.version>1801.1</livecontext.version>
+    <blueprint-base.version>1801.2</blueprint-base.version>
+    <cms.version>1801.2</cms.version>
+    <personalization.version>1801.2</personalization.version>
+    <elastic.version>1801.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1801.2</studio.version>
+    <caetoolbox.version>1801.2</caetoolbox.version>
+    <livecontext.version>1801.2</livecontext.version>
     <jangaroo.version>4.0.55</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
@@ -71,7 +71,7 @@
     <mongoDb.host>${installation.host}</mongoDb.host>
     <wcs.host>${installation.host}</wcs.host>
     <hybris.host>${installation.host}</hybris.host>
-    <sfcc.host>${installation.host}</sfcc.host>
+    <livecontext.sfcc.host>${installation.host}</livecontext.sfcc.host>
     <proxy.host>${installation.host}</proxy.host>
 
     <!-- logback appender for maven tomcat plugin start -->
@@ -504,7 +504,7 @@
               <mongoDb.host>${mongoDb.host}</mongoDb.host>
               <wcs.host>${wcs.host}</wcs.host>
               <hybris.host>${hybris.host}</hybris.host>
-              <sfcc.host>${sfcc.host}</sfcc.host>
+              <livecontext.sfcc.host>${livecontext.sfcc.host}</livecontext.sfcc.host>
               <proxy.host>${proxy.host}</proxy.host>
               <log.appender>${log.appender}</log.appender>
               <application.name>${project.build.finalName}</application.name>

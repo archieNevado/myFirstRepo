@@ -42,7 +42,9 @@ class TransformedBlobHandlerTestConfiguration extends AbstractHandlerTestConfigu
     testling.setMimeTypeService(mimeTypeService);
     testling.setUrlPathFormattingHelper(urlPathFormattingHelper);
     testling.setContentLinkBuilder(contentLinkBuilder);
-    testling.setSecureHashCodeGeneratorStrategy(new DefaultSecureHashCodeGeneratorStrategy());
+    DefaultSecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy = new DefaultSecureHashCodeGeneratorStrategy();
+    secureHashCodeGeneratorStrategy.setEncoding("UTF-8");
+    testling.setSecureHashCodeGeneratorStrategy(secureHashCodeGeneratorStrategy);
     testling.setTransformImageService(transformImageService);
     testling.setDataViewFactory(dataViewFactory);
     return testling;

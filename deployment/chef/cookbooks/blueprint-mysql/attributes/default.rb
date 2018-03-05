@@ -36,7 +36,7 @@ if node['yum']['mysql57-community']
 end
 
 #<> mysql yum repo gpgkey
-default['blueprint']['mysql']['gpgkey'] = 'https://raw.githubusercontent.com/chef-cookbooks/yum-mysql-community/master/files/default/mysql_pubkey.asc'
+default['blueprint']['mysql']['gpgkey'] = 'https://raw.githubusercontent.com/chef-cookbooks/yum-mysql-community/master/files/mysql_pubkey.asc'
 
 #<> mysql yum repo failovermethod
 default['blueprint']['mysql']['failovermethod'] = 'priority'

@@ -2,13 +2,6 @@
 <!-- this file enables Tomcat to reload changed resources (= templates) from the given directories while running. -->
 <Context logEffectiveWebXml="false" sessionCookieName="CM_SESSIONID" useHttpOnly="false" reloadable="true">
 
-  <!-- Enable this parameter to skip redundant imports -->
-  <!--<Parameter name="skip.redundant.spring.imports" value="true"-->
-      <!--override="false"/>-->
-  <!-- Enable this parameter to disallow spring bean overrides -->
-  <!--<Parameter name="disallow.spring.bean.overrides" value="true"-->
-      <!--override="false"/>-->
-
   <!--
     value for Resources#extraResourcePaths MUST NOT contain any separating character other than a "," 
     and MUST be ended after the last character by a " directly !!!

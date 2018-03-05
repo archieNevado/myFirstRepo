@@ -127,8 +127,6 @@ public class TransformedBlobHandlerTest {
             TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
     ));
 
-    System.out.println(link);
-
     ModelAndView modelAndView = handleRequest(url);
     assertModel(modelAndView, transformedBlob);
   }
