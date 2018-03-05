@@ -2,18 +2,23 @@ include OpenSSLCookbook::Helpers
 
 property :name,        String, name_property: true
 property :key_length,  equal_to: [1024, 2048, 4096, 8192], default: 2048
-property :generator,   equal_to: [2, 5], default: 2
+property :key_pass,    String
 property :owner,       String
 property :group,       String
 property :mode,        [Integer, String]
 
 action :create do
-  unless dhparam_pem_valid?(new_resource.name) # ~FC023
-    converge_by("Create a dhparam file #{@new_resource}") do
-      dhparam_content = gen_dhparam(new_resource.key_length, new_resource.generator).to_pem
-
+  unless key_file_valid?(new_resource.name, new_resource.key_pass)
+    converge_by("Create an RSA key #{@new_resource}") do
       log "Generating #{new_resource.key_length} bit "\
-          "dhparam file at #{new_resource.name}, this may take some time"
+          "RSA key file at #{new_resource.name}, this may take some time"
+
+      if new_resource.key_pass
+        unencrypted_rsa_key = gen_rsa_key(new_resource.key_length)
+        rsa_key_content = encrypt_rsa_key(unencrypted_rsa_key, new_resource.key_pass)
+      else
+        rsa_key_content = gen_rsa_key(new_resource.key_length).to_pem
+      end
 
       file new_resource.name do
         action :create
@@ -21,7 +26,7 @@ action :create do
         group new_resource.group
         mode new_resource.mode
         sensitive true
-        content dhparam_content
+        content rsa_key_content
       end
     end
   end

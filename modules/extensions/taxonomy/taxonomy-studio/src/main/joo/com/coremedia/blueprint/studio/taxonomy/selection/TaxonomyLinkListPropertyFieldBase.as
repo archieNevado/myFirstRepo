@@ -185,6 +185,13 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
   }
 
   protected function handleDropAreaDrop(contents:Array):void {
+    for each(var item:Content in contents) {
+      for each(var link:Content in linkListWrapper.getLinks()) {
+        if (item.getId() === link.getId()) {
+          return;
+        }
+      }
+    }
     selectedValuesVE.setValue(contents);
   }
 

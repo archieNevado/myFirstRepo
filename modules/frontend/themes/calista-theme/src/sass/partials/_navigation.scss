@@ -17,10 +17,10 @@
     &.open {
       @include breakpoint("sm-and-down") {
         padding-bottom: 10px;
-      }
 
-      > .cm-navigation-item__list {
-        margin-top: 15px;
+        > .cm-navigation-item__list {
+          margin-top: 15px;
+        }
       }
     }
 

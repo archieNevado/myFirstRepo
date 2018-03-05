@@ -35,7 +35,6 @@ As of chef-client 13.0+ and 13.4+ windows_task and windows_path are now included
 - `name` - Name attribute. The name of the value to be stored in the registry
 - `program` - The program to be run at login
 - `args` - The arguments for the program
-- `root` - The registry root key to put the entry under--`:machine` (default) or `:user`
 
 #### Examples
 
@@ -152,50 +151,6 @@ windows_certificate_binding "me.acme.com" do
 end
 ```
 
-### windows_dns
-
-Configures A and CNAME records in Windows DNS. This requires the DNSCMD to be installed, which is done by adding the DNS role to the server or installing the Remote Server Admin Tools.
-
-#### Actions
-
-- :create: creates/updates the DNS entry
-- :delete: deletes the DNS entry
-
-#### Properties
-
-- host_name: name attribute. FQDN of the entry to act on.
-- dns_server: the DNS server to update. Default is local machine (.)
-- record_type: the type of record to create. One of A (default) or CNAME
-- target: for A records an array of IP addresses to associate with the host; for CNAME records the FQDN of the host to alias
-- ttl: if > 0 then set the time to live of the record
-
-#### Examples
-
-```ruby
-# Create A record linked to 2 addresses with a 10 minute ttl
-windows_dns "m1.chef.test" do
-    target         ['10.9.8.7', '1.2.3.4']
-    ttl            600
-end
-```
-
-```ruby
-# Delete records. target is mandatory although not used
-windows_dns "m1.chef.test" do
-    action    :delete
-    target    []
-end
-```
-
-```ruby
-# Set an alias against the node in a role
-nodes = search( :node, "role:my_service" )
-windows_dns "myservice.chef.test" do
-    record_type    'CNAME'
-    target        nodes[0]['fqdn']
-end
-```
-
 ### windows_feature
 
 **BREAKING CHANGE - Version 3.0.0**
@@ -303,7 +258,9 @@ end
 
 ### windows_font
 
-Installs font files. Sources the font by default from the cookbook, but a URI source can be specified as well.
+Installs a font.
+
+Font files should be included in the cookbooks
 
 #### Actions
 
@@ -436,7 +393,7 @@ end
 
 Create Windows printer. Note that this doesn't currently install a printer driver. You must already have the driver installed on the system.
 
-The Windows Printer resource will automatically create a TCP/IP printer port for you using the `ipv4_address` property. If you want more granular control over the printer port, just create it using the `windows_printer_port` resource before creating the printer.
+The Windows Printer LWRP will automatically create a TCP/IP printer port for you using the `ipv4_address` property. If you want more granular control over the printer port, just create it using the `windows_printer_port` LWRP before creating the printer.
 
 #### Actions
 
@@ -804,7 +761,7 @@ end
 
 ## Windows ChefSpec Matchers
 
-The Windows cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefspec) matchers you can use to test your own cookbooks that consume Windows cookbook resources.
+The Windows cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefspec) matchers you can use to test your own cookbooks that consume Windows cookbook LWRPs.
 
 ### Example Matcher Usage
 

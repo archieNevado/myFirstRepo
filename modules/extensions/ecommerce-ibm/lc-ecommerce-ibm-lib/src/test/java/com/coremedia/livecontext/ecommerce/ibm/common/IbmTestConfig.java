@@ -107,7 +107,7 @@ public class IbmTestConfig implements TestConfig {
   @Nonnull
   public StoreContext getGermanStoreContext() {
     StoreContext result = getStoreContext();
-    StoreContextHelper.setLocale(result, "de_DE");
+    StoreContextHelper.setLocale(result, "de");
     return result;
   }
 

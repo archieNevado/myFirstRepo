@@ -96,16 +96,6 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
 
       this.addListener("beforedestroy", onBeforeDestroy, this, {single:true});
     }
-
-    EventManager.on(getEl(), 'keyup', function (evt:KeyEvent, t:*, o:*):void {
-      if(evt.keyCode === KeyEvent.DOM_VK_DELETE) {
-        var values:Array = selectedValuesExpression.getValue();
-        for each(var selection:Content in values) {
-          var ref:String = TaxonomyUtil.parseRestId(selection);
-          plusMinusClicked(ref);
-        }
-      }
-    });
   }
 
   private function onValidationChanged():void {

@@ -2,10 +2,12 @@ package com.coremedia.livecontext.fragment.links.transformers.resolvers;
 
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
+import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.SeoSegmentBuilder;
@@ -30,27 +32,27 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkResolver {
   //common constants to determine the template name
-  public static final String KEY_OBJECT_TYPE = "objectType";
+  private static final String KEY_OBJECT_TYPE = "objectType";
   //these are the supported object types that can be rendered as fragments on commerce site
-  public static final String OBJECT_TYPE_PRODUCT = "product";
-  public static final String OBJECT_TYPE_CONTENT = "content";
-  public static final String OBJECT_TYPE_CATEGORY = "category";
-  public static final String OBJECT_TYPE_LC_PAGE = "page";
+  private static final String OBJECT_TYPE_PRODUCT = "product";
+  private static final String OBJECT_TYPE_CONTENT = "content";
+  private static final String OBJECT_TYPE_CATEGORY = "category";
+  private static final String OBJECT_TYPE_LC_PAGE = "page";
 
-  public static final String KEY_RENDER_TYPE = "renderType";
-  public static final String RENDER_TYPE_URL = "url";
+  private static final String KEY_RENDER_TYPE = "renderType";
+  private static final String RENDER_TYPE_URL = "url";
 
   //additional parameter values to be read from the corresponding JSP
   private static final String EXTERNAL_SEOSEGMENT_PARAMETER_NAME = "externalSeoSegment";
   private static final String EXTERNAL_URI_PATH_PARAMETER_NAME = "externalUriPath";
 
   //the id values of the objects
-  public static final String PRODUCT_ID = "productId";
-  public static final String CATEGORY_ID = "categoryId";
-  public static final String CONTENT_ID = "contentId";
-  public static final String LEVEL = "level";
-  public static final String TOP_CATEGORY_ID = "topCategoryId";
-  public static final String PARENT_CATEGORY_ID = "parentCategoryId";
+  private static final String PRODUCT_ID = "productId";
+  private static final String CATEGORY_ID = "categoryId";
+  private static final String CONTENT_ID = "contentId";
+  private static final String LEVEL = "level";
+  private static final String TOP_CATEGORY_ID = "topCategoryId";
+  private static final String PARENT_CATEGORY_ID = "parentCategoryId";
 
   private SeoSegmentBuilder seoSegmentBuilder;
 
@@ -74,7 +76,12 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
 
   @Override
   public boolean isApplicable(Object bean) {
-    return (bean instanceof CMObject) || (bean instanceof ProductInSite);
+    return bean instanceof CMObject ||
+            bean instanceof ProductInSite ||
+            bean instanceof Product ||
+            bean instanceof CategoryInSite ||
+            bean instanceof Category ||
+            bean instanceof LiveContextNavigation;
   }
 
   /**
@@ -90,9 +97,8 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
    * @param bean       Bean for which URL is to be rendered
    * @param variant    Link variant
    * @param navigation Current navigation of bean for which URL is to be rendered
-   * @param request
+   * @param request    the request
    * @return The JSON object send to commerce.
-   * @throws JSONException
    */
   @Override
   protected JSONObject resolveUrlInternal(Object bean, String variant, CMNavigation navigation, HttpServletRequest request) throws JSONException {
@@ -101,7 +107,7 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
 
     try {
       // Product
-      if (bean instanceof CMProductTeaser || bean instanceof ProductInSite) {
+      if (bean instanceof CMProductTeaser || bean instanceof LiveContextExternalProduct || bean instanceof ProductInSite || bean instanceof Product) {
         Product product;
         // Todo: mbi better logging
         if (bean instanceof CMProductTeaser) {
@@ -109,11 +115,18 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
           if (product == null) {
             throw new IllegalArgumentException("Product cannot be retrieved (product teaser: " + ((CMProductTeaser) bean).getContent().getPath() + ")");
           }
-        } else {
+        } else if (bean instanceof LiveContextExternalProduct) {
+          product = ((LiveContextExternalProduct) bean).getProduct();
+          if (product == null) {
+            throw new IllegalArgumentException("Product cannot be retrieved (augmented Product: " + ((LiveContextExternalProduct) bean).getContent().getPath()  + ")");
+          }
+        } else if (bean instanceof ProductInSite) {
           product = ((ProductInSite) bean).getProduct();
           if (product == null) {
             throw new IllegalArgumentException("Product cannot be retrieved (in site: " + ((ProductInSite) bean).getSite() + ")");
           }
+        } else {
+          product = (Product) bean;
         }
 
         //set type and id
@@ -121,17 +134,30 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
         out.put(PRODUCT_ID, product.getExternalTechId());
 
         //determine the category id too, since a product can be inside different categories
-        List<Category> breadcrumb = product.getCategory().getBreadcrumb();
-        Category parentCategory = (breadcrumb.size() > 0) ? Lists.reverse(breadcrumb).get(0) : null;
-        if (parentCategory != null) {
-          String categoryId = parentCategory.getExternalTechId();
-          out.put(CATEGORY_ID, categoryId);
+        Category category = product.getCategory();
+        if (category != null) {
+          List<Category> breadcrumb = product.getCategory().getBreadcrumb();
+          Category parentCategory = (breadcrumb.size() > 0) ? Lists.reverse(breadcrumb).get(0) : null;
+          if (parentCategory != null) {
+            String categoryId = parentCategory.getExternalTechId();
+            out.put(CATEGORY_ID, categoryId);
+          }
         }
       }
-      // Category in commerce are mapped by "CMExternalChannel" objects, LiveContextExternalChannel are instances of these
-      else if (bean instanceof LiveContextExternalChannelImpl) {
-        LiveContextExternalChannelImpl externalChannel = (LiveContextExternalChannelImpl) bean;
-        Category category = externalChannel.getCategory();
+      // Category in commerce are mapped by "LiveContextNavigation" objects
+      else if (bean instanceof LiveContextNavigation || bean instanceof CategoryInSite || bean instanceof Category) {
+        Category category;
+        if (bean instanceof LiveContextNavigation) {
+          category = ((LiveContextNavigation) bean).getCategory();
+        } else if (bean instanceof CategoryInSite) {
+          category = ((CategoryInSite) bean).getCategory();
+          if (category == null) {
+            throw new IllegalArgumentException("Category cannot be retrieved (in site: " + ((CategoryInSite) bean).getSite() + ")");
+          }
+        } else {
+          category = (Category) bean;
+        }
+
         if (category != null) {
           int level = category.getBreadcrumb().size();
           if (level > 3) {
@@ -157,7 +183,7 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
         if (isNotEmpty(externalChannel.getExternalUriPath())) {
           //pass the fully qualified url to shop system
           out.put(EXTERNAL_URI_PATH_PARAMETER_NAME,
-                  externalNavigationHandler.buildLinkForExternalPage(externalChannel, Collections.<String, Object>emptyMap(), request));
+                  externalNavigationHandler.buildLinkForExternalPage(externalChannel, Collections.emptyMap(), request));
         } else {
           out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalChannel.getExternalId());
         }

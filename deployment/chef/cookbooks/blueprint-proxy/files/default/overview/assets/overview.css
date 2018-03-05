@@ -187,6 +187,13 @@ svg:not(:root) {
   overflow: hidden;
 }
 
+.cm-logo #wide {
+  display: none;
+}
+.cm-logo #square {
+  display: block;
+}
+
 .cm-hero {
   position: relative;
 }
@@ -226,6 +233,7 @@ svg:not(:root) {
 /* content */
 .cm-container {
   padding: 10px;
+  overflow: hidden;
 }
 
 .cm-container::before,
@@ -240,7 +248,7 @@ svg:not(:root) {
 }
 
 .cm-details h2 {
-  margin-top: 22px;
+  margin-top: 40px;
   color: #006cae;
   font-size: 22px;
 }
@@ -254,6 +262,7 @@ svg:not(:root) {
   background: #fff;
   padding: 10px 20px;
   list-style: none;
+  margin: 0 -20px 20px -20px;
 }
 
 .cm-details li {
@@ -271,8 +280,10 @@ svg:not(:root) {
 
 .cm-details table {
   width: 100%;
+  width: calc(100% + 40px);
   background: #fff;
   padding: 10px 20px;
+  margin: 0 -20px;
 }
 
 .cm-details table tr {
@@ -435,6 +446,40 @@ svg:not(:root) {
 }
 
 /* responsive */
+@media (max-width: 400px) {
+  .cm-hero__image::before {
+    padding-top: 75%;
+  }
+}
+
+@media (max-width: 767px) {
+  .cm-grid {
+    padding-top: 50px;
+  }
+  .cm-header__container {
+    height: 50px;
+    justify-content: center;
+  }
+
+  .cm-logo {
+    flex: 0 0 40px;
+  }
+
+  .cm-hero__image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cm-hero__image::before {
+    padding-top: 50%;
+  }
+
+  .cm-hero__image img {
+    width: auto;
+    height: 100%;
+  }
+}
+
 @media (min-width: 768px) {
   .cm-grid {
     margin-bottom: 20px;
@@ -445,12 +490,19 @@ svg:not(:root) {
     width: 768px
   }
 
+  .cm-logo #wide {
+    display: block;
+  }
+  .cm-logo #square {
+    display: none;
+  }
+
   .cm-container {
     padding: 20px;
   }
 
   .cm-hero__content {
-    top: 70px;
+    top: 30px;
     left: 20px;
   }
 
@@ -541,7 +593,7 @@ svg:not(:root) {
 
   .cm-hero__content {
     position: absolute;
-    top: 80px;
+    top: 60px;
     left: 100px;
   }
 
@@ -550,8 +602,12 @@ svg:not(:root) {
   }
 
   .cm-details h2 {
-    margin-top: 30px;
+    margin-top: 60px;
     font-size: 30px;
+  }
+
+  .cm-details h2:first-child {
+    margin-top: 30px;
   }
 
   .cm-footer__container {

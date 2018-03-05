@@ -6,8 +6,8 @@
     overflow: hidden;
   }
 
-  // the default is 4x3 aspect ratio. this should be overwritten by a theme or view
-  &__picture-box {
+  // the fallback is 4x3 aspect ratio. this should be overwritten by a theme or view
+  &__picture-box:not(.cm-hero__picture-box) {
     @include aspect-ratio-box(4, 3);
   }
 
@@ -39,15 +39,6 @@
 
     &--active.#{$cm-imagemap-prefix}__hotzone--icon {
       background-image: url("../../img/imagemap-icon-hover.svg");
-    }
-  }
-
-  // button alignment to bottom right
-  &__button {
-    &.cm-button {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
     }
   }
 

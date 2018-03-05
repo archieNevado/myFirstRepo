@@ -44,7 +44,7 @@ import mx.resources.ResourceManager;
 public class CatalogStudioPluginBase extends StudioPlugin {
 
   public function CatalogStudioPluginBase(config:CatalogStudioPlugin = null) {
-    super(config)
+    super(config);
   }
 
   override public function init(editorContext:IEditorContext):void {
@@ -208,9 +208,9 @@ public class CatalogStudioPluginBase extends StudioPlugin {
    * @param catalogSearch
    */
   private static function openSearch(contentSite:Site, searchType:String, catalogSearch:Boolean):void {
-    ValueExpressionFactory.createFromFunction(function():Content {
+    ValueExpressionFactory.createFromFunction(function ():Content {
       return getCatalogRootForSite(contentSite);
-    }).loadValue(function(catalogRoot:Content):void {
+    }).loadValue(function (catalogRoot:Content):void {
       var collectionViewModel:CollectionViewModel = EditorContextImpl(editorContext).getCollectionViewModel();
       var state:SearchState = new SearchState();
       state.contentType = searchType;
@@ -275,10 +275,10 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     EventUtil.invokeLater(function ():void {
       ValueExpressionFactory.createFromFunction(function ():Content {
         var catalogRoot:Content = getCatalogRootForSite(site);
-        if(catalogRoot === undefined) {
+        if (catalogRoot === undefined) {
           return undefined;
         }
-        if(!catalogRoot.getPath()) {
+        if (!catalogRoot.getPath()) {
           return undefined;
         }
         return catalogRoot;
@@ -296,12 +296,12 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     if (undefined === activeStore) {
       return undefined;
     }
-    if(activeStore is Store) {
+    if (activeStore is Store) {
       var rootCategory:Category = activeStore.getRootCategory();
-      if(undefined === rootCategory) {
+      if (undefined === rootCategory) {
         return undefined;
       }
-      if(catalogHelper.isCoreMediaStore(activeStore)) {
+      if (catalogHelper.isCoreMediaStore(activeStore)) {
         var externalTechId:String = rootCategory.getExternalTechId();
         if (undefined === externalTechId) {
           return undefined;
@@ -318,10 +318,10 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     for each (var site:Site in sites) {
       var store:Store = StoreUtil.getStoreForSiteExpression(site).getValue();
       var isCoreMediaStore:Boolean = catalogHelper.isCoreMediaStore(store);
-      if(undefined === isCoreMediaStore) {
+      if (undefined === isCoreMediaStore) {
         return undefined;
       }
-      if(isCoreMediaStore) {
+      if (isCoreMediaStore) {
         result.push(store);
       }
     }
@@ -343,15 +343,25 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     }
 
     var site:Site = editorContext.getSitesService().getSiteFor(selection);
-    if(!site) {
-      return false;
-    }
-    
-    var cmCatalog:Boolean = CatalogHelper.getInstance().isActiveCoreMediaStore();
-    if(!cmCatalog) {
+    if (!site) {
       return false;
     }
 
+    var store:Store = getStoreForSite(site);
+
+    var cmCatalog:Boolean = CatalogHelper.getInstance().isCoreMediaStore(store);
+    if (!cmCatalog) {
+      return false;
+    }
+
+    return showCatalogAsContent();
+  }
+
+  internal static function getStoreForSite(site:Site):Store {
+    return StoreUtil.getStoreForSiteExpression(site).getValue();
+  }
+
+  internal static function showCatalogAsContent():Boolean {
     var preferencesVE:ValueExpression = ValueExpressionFactory.create(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext.getPreferences());
     var showCatalogContent:Boolean = preferencesVE.getValue();
     return showCatalogContent;

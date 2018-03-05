@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.SiteToStoreContextCacheKeyWithTimeout;
 import com.coremedia.blueprint.base.util.StructUtil;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.multisite.Site;
@@ -16,6 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
@@ -28,6 +30,12 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
   }
 
   // --- StoreContextProvider -------------------------------------
+
+  @Nonnull
+  @Override
+  protected Optional<StoreContext> getStoreContextFromCache(@Nonnull Site site) {
+    return findInCache(new SiteToStoreContextCacheKeyWithTimeout(site, this, 30));
+  }
 
   @Nullable
   @Override

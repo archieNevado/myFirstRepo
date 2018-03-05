@@ -458,9 +458,15 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     }
 
     List<Catalog> catalogs = getCatalogs(storeContext);
-    return catalogs.stream()
+    Optional<Catalog> catalogOpt = catalogs.stream()
             .filter(catalog -> catalog.getName().equals(catalogName))
             .findFirst();
+
+    if (!catalogOpt.isPresent()) {
+      LOG.warn("Could not load Catalog for Alias \'{}\'", alias.value());
+    }
+
+    return catalogOpt;
   }
 
   @Nullable

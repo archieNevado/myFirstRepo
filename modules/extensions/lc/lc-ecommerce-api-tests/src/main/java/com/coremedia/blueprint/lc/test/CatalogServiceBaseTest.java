@@ -627,8 +627,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     StoreContext storeContext = getStoreContext();
     assertThat(storeContext.getLocale()).isNotEqualTo(Locale.GERMAN);
 
-    StoreContext germanStoreContext = testConfig.getStoreContext();
-    germanStoreContext.put(StoreContextImpl.LOCALE, Locale.GERMAN);
+    StoreContext germanStoreContext = testConfig.getGermanStoreContext();
 
     CommerceId productId = getIdProvider().formatProductId(storeContext.getCatalogAlias(), PRODUCT_CODE);
 

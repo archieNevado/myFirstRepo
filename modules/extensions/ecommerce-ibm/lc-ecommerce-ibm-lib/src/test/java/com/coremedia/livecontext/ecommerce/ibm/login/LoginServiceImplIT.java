@@ -14,17 +14,18 @@ import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public class LoginServiceImplIT extends IbmServiceTestBase {
 
   @Inject
+  private
   LoginServiceImpl testling;
-  String origServiceUser;
-  String origServicePassword;
+  private String origServiceUser;
+  private String origServicePassword;
 
   @Before
   @Override
@@ -46,8 +47,8 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   @Betamax(tape = "lsi_testLoginSuccess", match = {MatchRule.path, MatchRule.query})
   public void testLoginSuccess() throws Exception {
     WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
-    assertNotNull(credentials);
-    assertNotNull("WcSession is not available", credentials.getSession());
+    assertThat(credentials).isNotNull();
+    assertThat(credentials.getSession()).isNotNull();
   }
 
   /**
@@ -57,19 +58,18 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
    * "ignoreHosts" configuration and runs only if such a java property is found.
    * <p>
    * The other restriction is, the wcs system has to support workspaces.
-   * Todo: If the reference system supports workspaces please remove the @Ignore flag
    * permanently.
    */
   @Test
   public void testLoginSuccessWithWorkspaces() throws Exception {
-    if (!"*".equals(System.getProperty("betamax.ignoreHosts"))) {
+    if (useBetamaxTapes()) {
       return;
     }
     StoreContext storeContext = testConfig.getStoreContextWithWorkspace();
     StoreContextHelper.setCurrentContext(storeContext);
     WcCredentials credentials = testling.loginServiceIdentity(storeContext);
-    assertNotNull(credentials);
-    assertNotNull("WcSession is not available", credentials.getSession());
+    assertThat(credentials).isNotNull();
+    assertThat(credentials.getSession()).isNotNull();
   }
 
   @Test(expected = InvalidLoginException.class)
@@ -83,9 +83,19 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   @Betamax(tape = "lsi_testLogout", match = {MatchRule.path, MatchRule.query})
   public void testLogout() throws Exception {
     WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
-    assertNotNull(credentials);
+    assertThat(credentials).isNotNull();
     boolean success = testling.logoutServiceIdentity(StoreContextHelper.getCurrentContext());
-    assertTrue(success);
+    assertThat(success).isTrue();
+  }
+
+  @Test
+  public void testGetPreviewToken() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+    WcPreviewToken previewToken = testling.getPreviewToken(StoreContextHelper.getCurrentContext());
+    assertThat(previewToken).isNotNull();
+    assertThat(previewToken.getPreviewToken()).isNotEmpty();
   }
 
 }

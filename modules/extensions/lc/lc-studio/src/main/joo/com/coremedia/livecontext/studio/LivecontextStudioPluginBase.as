@@ -57,6 +57,11 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   internal static const OFFSET_NAME:String = 'offset';
   internal static const MAX_LENGTH_NAME:String = 'maxLength';
 
+  public static const VENDOR_IBM:String = "IBM";
+  public static const VENDOR_CM:String = "coremedia";
+  public static const VENDOR_HYBRIS:String = "SAP Hybris";
+  public static const VENDOR_SFCC:String = "Salesforce";
+
   public function LivecontextStudioPluginBase(config:LivecontextStudioPlugin = null) {
     if (UrlUtil.getHashParam('livecontext') === 'false') {
       delete config['rules'];
@@ -123,6 +128,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
               var config:CatalogLinkPropertyField = CatalogLinkPropertyField(properties);
               config.dropAreaHandler = CatalogHelper.getInstance().openMarketingSpots;
               config.maxCardinality = 1;
+              config.replaceOnDrop = true;
               config.linkTypeNames = [CatalogModel.TYPE_MARKETING_SPOT];
               config.dropAreaText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'MarketingSpot_Link_empty_text');
               config.hideRemove = true;
@@ -141,6 +147,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
             function (data:ProcessingData, properties:Object):Component {
               var config:CatalogLinkPropertyField = CatalogLinkPropertyField(properties);
               config.maxCardinality = 1;
+              config.replaceOnDrop = true;
               config.linkTypeNames = [CatalogModel.TYPE_PRODUCT];
               config.dropAreaText = ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Product_Link_empty_text');
               config.hideRemove = true;
@@ -355,15 +362,17 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   }
 
   internal static function mayCreateProductList(selection:Content):Boolean {
-    return mayCreate(selection, "coremedia", false) && mayCreate(selection, "Demandware, Inc.", false);
+    return mayCreate(selection, VENDOR_CM, false) && mayCreate(selection, VENDOR_SFCC, false);
   }
 
   internal static function mayCreateProductTeaser(selection:Content):Boolean {
-    return mayCreate(selection, "IBM", true) || mayCreate(selection, "SAP Hybris", true);
+    return mayCreate(selection, VENDOR_IBM, true) ||
+           mayCreate(selection, VENDOR_HYBRIS, true) ||
+           mayCreate(selection, VENDOR_SFCC, true);
   }
 
   internal static function mayCreateESpot(selection:Content):Boolean {
-    return mayCreate(selection, "IBM", true);
+    return mayCreate(selection, VENDOR_IBM, true);
   }
 }
 }

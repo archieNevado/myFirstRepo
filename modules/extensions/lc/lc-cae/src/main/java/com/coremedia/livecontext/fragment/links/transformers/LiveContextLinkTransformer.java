@@ -13,7 +13,11 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
+import com.coremedia.livecontext.context.LiveContextNavigation;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
@@ -79,21 +83,18 @@ public class LiveContextLinkTransformer implements LinkTransformer {
       return cmsLink;
     }
 
-    boolean isDeepLink = bean instanceof ProductInSite;
-    boolean isLinkable = bean instanceof CMLinkable;
+    boolean isLinkable = bean instanceof CMLinkable ||
+            bean instanceof LiveContextNavigation ||
+            bean instanceof Product ||
+            bean instanceof ProductInSite ||
+            bean instanceof Category ||
+            bean instanceof CategoryInSite;
     boolean isPage = bean instanceof Page;
-    boolean isCodeRessource = !isLinkable && !isPage && !isDeepLink;
-    if (isCodeRessource) {
+    if (!isLinkable && !isPage) {
       return cmsLink;
     }
 
     if (cmsLink != null && cmsLink.contains("/" + UriConstants.Segments.PREFIX_DYNAMIC + "/")) {
-      return cmsLink;
-    }
-
-    // Transform elastic social business logic links
-    boolean isElasticSocialLink = bean instanceof String;
-    if (isElasticSocialLink) {
       return cmsLink;
     }
 
@@ -114,8 +115,8 @@ public class LiveContextLinkTransformer implements LinkTransformer {
 
   private static boolean isFragmentRequest(HttpServletRequest request) {
     return FragmentContextProvider.findFragmentContext(request)
-                                  .map(FragmentContext::isFragmentRequest)
-                                  .orElse(false);
+            .map(FragmentContext::isFragmentRequest)
+            .orElse(false);
   }
 
   private String transform(String modifiableSource, Object content, Object variant, CMNavigation navigation, HttpServletRequest request) {

@@ -25,8 +25,6 @@ module Opscode
     # Generate secure passwords with OpenSSL
     module Password
       def secure_password(length = 20)
-        Chef::Log.warn('The Opscode::OpenSSL::Password helper "secure_password" has been deprecated. Use the random_password method in OpenSSLCookbook::RandomPassword instead.')
-
         pw = ''
 
         while pw.length < length

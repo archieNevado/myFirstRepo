@@ -27,7 +27,7 @@ This is the wrapper cookbook to install mysql.
 * `node['blueprint']['mysql']['socket']` - mysql socket file path. Defaults to `/var/lib/mysql/mysql.sock`.
 * `node['blueprint']['mysql']['baseurl']` - mysql yum repo base url using attribute node['yum']['mysql57-community'] when avail (used to be backward compatible). Defaults to `node['yum']['mysql57-community']['baseurl'] unless node['yum']['mysql57-community']['baseurl'].nil?`.
 * `node['blueprint']['mysql']['mirrorlist']` - mysql yum repo mirrorlist url using attribute node['yum']['mysql57-community'] when avail (used to be backward compatible). Defaults to `node['yum']['mysql57-community']['mirrorlist'] unless node['yum']['mysql57-community']['mirrorlist'].nil?`.
-* `node['blueprint']['mysql']['gpgkey']` - mysql yum repo gpgkey. Defaults to `https://raw.githubusercontent.com/chef-cookbooks/yum-mysql-community/master/files/default/mysql_pubkey.asc`.
+* `node['blueprint']['mysql']['gpgkey']` - mysql yum repo gpgkey. Defaults to `https://raw.githubusercontent.com/chef-cookbooks/yum-mysql-community/master/files/mysql_pubkey.asc`.
 * `node['blueprint']['mysql']['failovermethod']` - mysql yum repo failovermethod. Defaults to `priority`.
 
 # Recipes
