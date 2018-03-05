@@ -43,8 +43,7 @@
                           deferEmptyText="false"
                           stripeRows="false">
       <ui:plugins>
-        <plugin_GridViewDragDrop ddGroup="ContentLinkDD"
-                                 enableDrop="false"/>
+        <editor:LinkListViewDragDropPlugin linkListWrapper="{config.linkListWrapper}" />
         <ui:BindPropertyPlugin componentProperty="readOnly"
                                bindTo="{config.readOnlyValueExpression || ValueExpressionFactory.createFromValue(false)}"/>
       </ui:plugins>

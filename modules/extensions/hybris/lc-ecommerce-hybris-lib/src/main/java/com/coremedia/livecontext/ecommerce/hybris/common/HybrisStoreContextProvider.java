@@ -26,8 +26,8 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
   private String previewDefaultCatalogVersion;
   private String liveDefaultCatalogVersion;
 
-  @Override
   @Nullable
+  @Override
   protected StoreContext internalCreateContext(@Nonnull Site site) {
     StoreContext result = null;
 

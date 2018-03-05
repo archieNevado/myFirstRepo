@@ -44,6 +44,8 @@ public class InvalidationServiceImplIT extends AbstractServiceTest {
     }
 
     List<InvalidationEvent> invalidations = testling.getInvalidations(10000, getStoreContext());
-    assertThat(invalidations).isEmpty();
+    assertThat(invalidations).isNotEmpty();
+    assertThat(invalidations.size()).isEqualTo(1);
+    assertThat(invalidations.get(0).getContentType()).isEqualTo(InvalidationEvent.CLEAR_ALL_EVENT);
   }
 }

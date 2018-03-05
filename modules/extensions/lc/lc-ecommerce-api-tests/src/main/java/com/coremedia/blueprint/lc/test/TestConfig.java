@@ -6,6 +6,8 @@ public interface TestConfig {
 
   StoreContext getStoreContext();
 
+  StoreContext getGermanStoreContext();
+
   String getConnectionId();
 
   String getCatalogName();

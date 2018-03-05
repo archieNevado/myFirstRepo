@@ -98,6 +98,11 @@ public class ImgCompletionFilter extends Filter implements FilterFactory {
    * Find a suitable alt value for the blob.
    */
   private String altValue(String blobId) {
+    if (blobId == null || blobId.isEmpty()) {
+      // Blob is empty, don't know how to get the alt value.
+      return null;
+    }
+
     if (!CMMedia.DATA.equals(IdHelper.parsePropertyFromBlobId(blobId))) {
       // Blob is no CMMedia.data, don't know how to get the alt value.
       return null;

@@ -19,11 +19,11 @@
         display: inline-block;
       }
     }
+  }
 
-    @include breakpoint("sm-and-down") {
-      &__list > &__label {
-        display:none;
-      }
+  @include breakpoint("sm-and-down") {
+    .#{$cm-navigation-prefix}-list__label {
+      display: none;
     }
   }
 

@@ -19,3 +19,13 @@
 
   }
 }
+
+.cm-hero .cm-cta .cm-cta__button {
+  color: #fff;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: #fff;
+  }
+}

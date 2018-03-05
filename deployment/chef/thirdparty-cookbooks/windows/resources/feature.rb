@@ -3,7 +3,7 @@
 # Cookbook:: windows
 # Resource:: feature
 #
-# Copyright:: 2011-2017, Chef Software, Inc.
+# Copyright:: 2011-2018, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,10 +26,6 @@ property :install_method, Symbol, equal_to: [:windows_feature_dism, :windows_fea
 property :timeout, Integer, default: 600
 
 include Windows::Helper
-
-def whyrun_supported?
-  true
-end
 
 action :install do
   run_default_provider :install

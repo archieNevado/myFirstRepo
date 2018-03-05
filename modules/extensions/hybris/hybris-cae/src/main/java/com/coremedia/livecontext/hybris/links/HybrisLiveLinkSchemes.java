@@ -10,6 +10,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
+import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 
@@ -24,7 +25,7 @@ import static com.coremedia.livecontext.hybris.links.HybrisPreviewLinkScheme.isH
  */
 @Link
 public class HybrisLiveLinkSchemes {
-  @Link(type = {LiveContextExternalChannel.class, LiveContextExternalProduct.class, CommerceBean.class, Category.class, CategoryInSite.class, Product.class, ProductInSite.class, CMProductTeaser.class, CMExternalPage.class}, order = 3)
+  @Link(type = {LiveContextExternalChannel.class, LiveContextCategoryNavigation.class, LiveContextExternalProduct.class, CommerceBean.class, Category.class, CategoryInSite.class, Product.class, ProductInSite.class, CMProductTeaser.class, CMExternalPage.class}, order = 3)
   public Object dummyLiveLinkForHybris(
           final Object object,
           final HttpServletRequest request) {
@@ -36,7 +37,7 @@ public class HybrisLiveLinkSchemes {
     return "hybris";
   }
 
-  @Link(type = {LiveContextExternalChannel.class, LiveContextExternalProduct.class, CommerceBean.class, Category.class, CategoryInSite.class, Product.class, ProductInSite.class, CMProductTeaser.class, CMExternalPage.class}, view = HandlerHelper.VIEWNAME_DEFAULT, order = 3)
+  @Link(type = {LiveContextExternalChannel.class, LiveContextCategoryNavigation.class, LiveContextExternalProduct.class, CommerceBean.class, Category.class, CategoryInSite.class, Product.class, ProductInSite.class, CMProductTeaser.class, CMExternalPage.class}, view = HandlerHelper.VIEWNAME_DEFAULT, order = 3)
   public Object dummyLiveLinkForHybrisWithDefaultView(
           final Object object,
           final HttpServletRequest request) {

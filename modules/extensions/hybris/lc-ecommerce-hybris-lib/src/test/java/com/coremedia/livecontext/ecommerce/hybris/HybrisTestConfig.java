@@ -46,6 +46,14 @@ public class HybrisTestConfig implements TestConfig {
   }
 
   @Override
+  public StoreContext getGermanStoreContext() {
+    StoreContext context = StoreContextHelper.createContext("configid", "apparel-de", "Apparel-Catalog", CATALOG_ID,
+            Locale.GERMAN, "EUR", "Staged");
+    StoreContextHelper.setSiteId(context, "theSiteId");
+    return context;
+  }
+
+  @Override
   public String getConnectionId() {
     return "hybris1";
   }

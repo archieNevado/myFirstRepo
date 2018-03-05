@@ -92,6 +92,22 @@ public class AssetHelperTest {
   }
 
   @Test
+  public void updateStructWithEmptyReferences(){
+    //prepare struct with arbitrary existing settings
+    Struct existingSettings = originStruct.builder().declareString("myIndependentProperty", 256, "moin moin").build();
+    content.checkOut();
+    content.set("localSettings", existingSettings);
+    content.checkIn();
+
+    Struct updatedStruct = testling.updateCMPictureForExternalIds(content, EMPTY_LIST);
+    Struct commerceStruct = StructUtil.getSubstruct(updatedStruct, NAME_COMMERCE);
+    assertTrue(commerceStruct != null);
+
+    //check if existing settings still exists
+    assertTrue(StructUtil.getString(updatedStruct, "myIndependentProperty").equals("moin moin"));
+  }
+
+  @Test
   public void updateStructForExternalIdsCase05Test() {
     List<String> newOriginCatalogObjects = EMPTY_LIST;
 

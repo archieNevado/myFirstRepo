@@ -4,6 +4,7 @@
                                xmlns:exml="http://www.jangaroo.net/exml/0.8"
                                xmlns="exml:ext.config"
                                xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                               xmlns:ui="exml:com.coremedia.ui.config"
                                forceSelection="false"
                                autoSelect="false"
                                enableKeyEvents="true"
@@ -79,6 +80,7 @@
   <local:plugins>
     <editor:BindDisablePlugin bindTo="{config.bindTo}"
                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+    <ui:StopEventPropagationPlugin/>
   </local:plugins>
   <local:store>
     <store_Json autoDestroy="true"

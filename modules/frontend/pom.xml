@@ -78,7 +78,11 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>install --cache-min=Infinity --loglevel=error --no-progress</arguments>
+                  <!--
+                    - do not print out any non errors as the maven-frontend-plugin does not distinct error levels
+                    - do not animate progress to avoid polluting the maven log
+                  -->
+                  <arguments>install --loglevel=error --no-progress</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -88,7 +92,13 @@
                 </goals>
                 <phase>install</phase>
                 <configuration>
-                  <arguments> --production run build</arguments>
+                  <!--
+                    - set node environment to production
+                    - run build script
+                    - do not print out any non errors as the maven-frontend-plugin does not distinct error levels
+                    - make sure that the npm-client is set to yarn
+                  -->
+                  <arguments>--production run build --loglevel=error --npm-client=yarn</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -98,7 +108,12 @@
                 </goals>
                 <phase>test</phase>
                 <configuration>
-                  <arguments>run test</arguments>
+                  <!--
+                    - run test script
+                    - do not print out any non errors as the maven-frontend-plugin does not distinct error levels
+                    - make sure that the npm-client is set to yarn
+                  -->
+                  <arguments>test --loglevel=error --npm-client=yarn</arguments>
                 </configuration>
               </execution>
             </executions>

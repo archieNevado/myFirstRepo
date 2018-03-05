@@ -3,11 +3,10 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "test": "cross-var lerna run test --npm-client=\"$npm_execpath\"",
-    "build": "cross-var lerna run build --npm-client=\"$npm_execpath\"",
+    "test": "lerna run test",
+    "build": "lerna run build",
     "create-theme": "node ./lib/tools/cm-cli/bin/cm-cli.js create-theme",
-    "apidoc": "cross-var lerna run apidoc --npm-client=\"$npm_execpath\"",
-    "lerna": "cross-var lerna --npm-client=\"$npm_execpath\""
+    "apidoc": "lerna run apidoc"
   },
   "workspaces": [
     "lib/bricks/*",
@@ -20,10 +19,10 @@
     "node": ">=8"
   },
   "dependencies": {
-    "lerna": "2.7.1",
-    "cross-var": "1.1.0"
+    "lerna": "2.7.2"
   },
   "coremedia": {
-    "type": "workspace"
+    "type": "workspace",
+    "version": "1801.2"
   }
 }

@@ -3,28 +3,31 @@ package com.coremedia.blueprint.cae.exception.resolver;
 import com.coremedia.blueprint.cae.exception.ExceptionRenderDynamicViewDecorator;
 import com.coremedia.blueprint.cae.exception.handler.ErrorAndExceptionHandler;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * ExceptionResolver that selects a {@link ErrorAndExceptionHandler} and maps an exception to it.
  */
 public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionResolver {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ErrorAndExceptionMappingResolver.class);
+  private static final Logger LOG = getLogger(lookup().lookupClass());
 
   private List<ErrorAndExceptionHandler> errorAndExceptionHandler;
 
   @Override
-  public ModelAndView resolveException(HttpServletRequest request,
-                                       HttpServletResponse response,
+  public ModelAndView resolveException(@Nonnull HttpServletRequest request,
+                                       @Nonnull HttpServletResponse response,
                                        Object handler,
-                                       Exception ex) {
+                                       @Nonnull Exception ex) {
 
     String matchingViewName = determineViewName(ex, request);
 
@@ -33,7 +36,7 @@ public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionReso
   }
 
   @Override
-  protected String determineViewName(Exception ex, HttpServletRequest request) {
+  protected String determineViewName(@Nonnull Exception ex, HttpServletRequest request) {
     if (ex instanceof ExceptionRenderDynamicViewDecorator) {
       ExceptionRenderDynamicViewDecorator exDec = (ExceptionRenderDynamicViewDecorator) ex;
       if (exDec.getView() != null) {
@@ -45,12 +48,12 @@ public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionReso
   }
 
   protected ModelAndView getModelAndView(String viewName, Exception ex, HttpServletRequest request, HttpServletResponse response) {
-    LOG.info("{} was thrown, trying to find a handler: ", ex.getClass().getName());
+    LOG.debug("{} was thrown, trying to find a corresponding handler...", ex.getClass().getName());
 
     for (ErrorAndExceptionHandler exhandler : errorAndExceptionHandler) {
       ModelAndView modelAndView = exhandler.handleException(viewName, ex, request, response);
       if (modelAndView != null) {
-        LOG.debug("Found handler for {}: {}", ex.getClass().getName(), exhandler.toString());
+        LOG.debug("Found handler for {}: {}", ex.getClass().getName(), exhandler);
         return modelAndView;
       }
     }

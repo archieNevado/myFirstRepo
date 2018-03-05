@@ -162,7 +162,7 @@
                                  linkListWrapper="{getLinkListWrapper(config)}"
                                  ddGroups="{['ContentDD', 'ContentLinkDD']}"
                                  defaultFocus="{createComponentSelector().itemId(TAXONOMY_SEARCH_FIELD_ITEM_ID).build()}"
-                                 appendOnDrop="true"
+                                 appendOnDrop="false"
                                  dropHandler="{handleDropAreaDrop}"
                                  readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}">
           <editor:mixins>
@@ -186,10 +186,6 @@
                                           propertyName="{config.propertyName}"
                                           siteSelectionExpression="{getSiteSelectionExpression(config.bindTo)}"
                                           searchResultExpression="{getSearchResultExpression()}">
-              <taxonomy:plugins>
-                <editor:BindDisablePlugin bindTo="{config.bindTo}"
-                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-              </taxonomy:plugins>
             </taxonomy:TaxonomySearchField>
           </editor:items>
         </editor:LinkListDropArea>

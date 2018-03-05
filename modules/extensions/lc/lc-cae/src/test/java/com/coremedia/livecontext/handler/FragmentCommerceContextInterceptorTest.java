@@ -20,7 +20,6 @@ import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.livecontext.fragment.links.context.Context;
 import com.coremedia.livecontext.fragment.links.context.ContextBuilder;
 import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper;
-import com.google.common.base.Strings;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,13 +32,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -226,11 +223,12 @@ public class FragmentCommerceContextInterceptorTest {
     assertThat(storeContext.getUserSegments()).isEqualTo("memberGroup1, memberGroup2");
     assertThat(storeContext.getWorkspaceId()).isEqualTo("4711");
 
-    assertThat(storeContext.getPreviewDate()).isEqualTo("02-07-2014 17:57 Europe/Berlin");
+    String previewDate = storeContext.getPreviewDate();
+    assertThat(previewDate).isEqualTo("02-07-2014 17:57 Europe/Berlin");
 
-    Calendar calendar = parsePreviewDateIntoCalendar(storeContext.getPreviewDate());
+    Calendar calendar = parsePreviewDateIntoCalendar(previewDate);
     SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-    assertThat(storeContext.getPreviewDate()).isEqualTo(sdb.format(calendar.getTime()) + " Europe/Berlin");
+    assertThat(previewDate).isEqualTo(sdb.format(calendar.getTime()) + " Europe/Berlin");
     assertThat(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE)).isEqualTo(calendar);
   }
 
@@ -287,10 +285,11 @@ public class FragmentCommerceContextInterceptorTest {
 
     SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
-    assertThat(storeContext.getPreviewDate()).isEqualTo("02-07-2014 17:57 Europe/Berlin");
+    String previewDate = storeContext.getPreviewDate();
+    assertThat(previewDate).isEqualTo("02-07-2014 17:57 Europe/Berlin");
 
-    Calendar calendar = parsePreviewDateIntoCalendar(storeContext.getPreviewDate());
-    assertThat(storeContext.getPreviewDate()).isEqualTo(sdb.format(calendar.getTime()) + " Europe/Berlin");
+    Calendar calendar = parsePreviewDateIntoCalendar(previewDate);
+    assertThat(previewDate).isEqualTo(sdb.format(calendar.getTime()) + " Europe/Berlin");
   }
 
   @Test
@@ -314,21 +313,16 @@ public class FragmentCommerceContextInterceptorTest {
     assertThat(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE)).isNull();
   }
 
-  @Nullable
-  private static Calendar parsePreviewDateIntoCalendar(@Nullable String previewDate) {
-    if (Strings.isNullOrEmpty(previewDate)) {
-      return null;
-    }
-
-    Calendar calendar = null;
+  @Nonnull
+  private static Calendar parsePreviewDateIntoCalendar(@Nonnull String previewDate) {
+    Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
     try {
-      calendar = Calendar.getInstance();
-      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
       calendar.setTime(sdf.parse(previewDate.substring(0, previewDate.lastIndexOf(' '))));
       calendar.setTimeZone(TimeZone.getTimeZone(previewDate.substring(previewDate.lastIndexOf(' ') + 1)));
-    } catch (ParseException ignored) {
-      // do nothing
+    } catch (ParseException e) {
+      throw new IllegalArgumentException(e);
     }
 
     return calendar;

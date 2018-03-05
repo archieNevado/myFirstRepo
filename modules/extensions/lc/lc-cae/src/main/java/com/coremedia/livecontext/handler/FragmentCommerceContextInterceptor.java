@@ -248,6 +248,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
             .ifPresent(storeContext::setUserSegments);
   }
 
+  @Nullable
   private Calendar createPreviewCalendar(@Nonnull Context fragmentContext) {
     String timestamp = findStringValue(fragmentContext, contextNameTimestamp).orElse(null);
     if (timestamp == null) {
@@ -294,6 +295,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     }
   }
 
+  @Nonnull
   private Collection<String> contractIds(@Nonnull Context fragmentContext) {
     Optional<String> contractIdsStr = findStringValue(fragmentContext, contextNameContractIds);
 
@@ -303,8 +305,10 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
             .orElseGet(Collections::emptyList);
   }
 
-  private static Collection<String> contractIds(@Nonnull ContractService contractService, StoreContext storeContext,
-                                                @Nonnull UserContext userContext, @Nullable String organizationId) {
+  @Nonnull
+  private static Collection<String> contractIds(@Nonnull ContractService contractService,
+                                                @Nonnull StoreContext storeContext, @Nonnull UserContext userContext,
+                                                @Nullable String organizationId) {
     Collection<Contract> contractsForUser = contractService.findContractIdsForUser(userContext, storeContext,
             organizationId);
 
@@ -319,6 +323,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     return Optional.ofNullable(value);
   }
 
+  @Nonnull
   @VisibleForTesting
   static String convertToPreviewDateRequestParameterFormat(@Nonnull Calendar calendar) {
     Format dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm ");

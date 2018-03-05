@@ -76,7 +76,8 @@ public class AssetHelper {
 
     if (noCommerceStructInContent) {
       if (newCommerceReferences.isEmpty()) {
-        return getEmptyStruct();
+        //do nothing --> return original struct
+        return struct;
       } else {
         // case 4 and 6
         // upload with first time XMP data

@@ -47,7 +47,9 @@ export function show($quickinfo) {
         groupHide($(this), config.group);
       });
     }
-    $quickinfo.addClass(classQuickInfoActive);
+    $quickinfo.addClass(classQuickInfoActive)
+            .parents('.carousel-inner')
+            .addClass(identifier + "__parent--active");
     if (config.modal) {
       // use magnificPopup to open quickinfo as full screen overlay
       magnificPopupApi.open({
@@ -91,7 +93,9 @@ export function hide($quickinfo) {
     });
 
     // Hide quick in
-    $quickinfo.removeClass(classQuickInfoActive);
+    $quickinfo.removeClass(classQuickInfoActive)
+            .parents('.carousel-inner')
+            .removeClass(identifier + "__parent--active");
     $quickinfo.trigger(EVENT_QUICKINFO_CHANGED, [false]);
 
     // Re-enable transition feature for cm-button

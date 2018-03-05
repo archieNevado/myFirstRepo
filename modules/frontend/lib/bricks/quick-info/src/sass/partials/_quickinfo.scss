@@ -24,6 +24,12 @@
     flex: 1;
   }
 
+  @include breakpoint("xs") {
+    &__parent--active {
+      z-index: 1;
+    }
+  }
+
   &__content {
     display: flex;
     flex-direction: column;
