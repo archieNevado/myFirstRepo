@@ -1,0 +1,35 @@
+*.iml
+*.ipr
+*.iws
+.idea/
+# maven:
+target/
+overlays/
+# eclipse:
+.classpath
+.project
+.settings/
+# Logs:
+*.log
+*.out
+# git:
+*.orig
+# OS X
+.DS_Store
+# Emacs
+*~
+# Grunt/NPM:
+node/
+node_modules/
+**/*-theme/node
+# Logs:
+*.log
+*.out
+.npm-debug.log
+# Sass:
+.sass-cache/
+*.css.map
+# chef deployment
+.kitchen
+.kitchen.local.yml
+.rakeTasks
