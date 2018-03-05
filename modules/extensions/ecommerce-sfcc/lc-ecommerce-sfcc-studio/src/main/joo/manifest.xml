@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<componentPackage>
+  <component class="com.coremedia.livecontext.sfcc.studio.EcommerceSfccStudioPlugin"/>
+  <component class="com.coremedia.livecontext.sfcc.studio.action.OpenBusinessManagerAction"/>
+  <component class="com.coremedia.livecontext.sfcc.studio.action.OpenInBusinessManagerAction"/>
+  <component class="com.coremedia.livecontext.sfcc.studio.components.OpenBusinessManagerButton"/>
+</componentPackage>

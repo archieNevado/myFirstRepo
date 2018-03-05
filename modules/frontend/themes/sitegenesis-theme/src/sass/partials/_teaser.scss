@@ -1,0 +1,124 @@
+.#{$cm-teasable-prefix} {
+  &__caption {
+    bottom: 5.25%;
+    top: inherit;
+    transform: inherit;
+  }
+
+  &__headline {
+    font-size: 2em;
+    margin: 1.5em auto 1em;
+  }
+
+  &__text {
+    font-size: 1.2em;
+    margin: 0 auto 1.5em;
+  }
+
+  &__cta {
+    margin: 0 auto 1.5em;
+  }
+
+  &:hover &__dimmer {
+    display: block;
+  }
+
+  .cm-product-info {
+    &__title {
+      display: none;
+    }
+    .cm-price--teaser {
+      font-size: 1rem;
+    }
+  }
+}
+
+@mixin fiftyFiftyBox() {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: $grid-gutter-width;
+  background-color: palette(black);
+  width: auto;
+}
+
+.cm-collection--tiles- {
+
+  &50-50- {
+    &portrait {
+      .#{$cm-teasable-prefix} {
+        &__caption {
+          @include fiftyFiftyBox;
+        }
+      }
+    }
+
+    &landscape {
+      .#{$cm-teasable-prefix} {
+        &__caption {
+          @include fiftyFiftyBox;
+        }
+        &__text {
+          display: none;
+        }
+        &__cta {
+          display: none;
+        }
+        &__headline {
+          font-size: 1.5em;
+          margin: 1em auto;
+        }
+      }
+    }
+  }
+
+  &square {
+    .#{$cm-teasable-prefix} {
+      &__text {
+        display: none;
+      }
+    }
+  }
+
+  &portrait {
+    .#{$cm-teasable-prefix} {
+      &__caption {
+        @include fiftyFiftyBox;
+      }
+    }
+  }
+
+  &landscape {
+    .#{$cm-teasable-prefix} {
+      &__caption {
+        @include fiftyFiftyBox;
+      }
+      &__text {
+        display: none;
+      }
+      &__cta {
+        display: none;
+      }
+      &__headline {
+        font-size: 1.5em;
+        margin: 1em auto;
+      }
+    }
+  }
+}
+
+.cta {
+  border: 1px solid;
+  padding: 5px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  display: inline-block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  min-width: 100px;
+}

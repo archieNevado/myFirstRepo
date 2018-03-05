@@ -1,0 +1,8 @@
+{
+  "studioPlugins": [
+    {
+      "mainClass": "com.coremedia.livecontext.sfcc.studio.EcommerceSfccStudioPlugin",
+      "name": "ecommerce-sfcc extension"
+    }
+  ]
+}

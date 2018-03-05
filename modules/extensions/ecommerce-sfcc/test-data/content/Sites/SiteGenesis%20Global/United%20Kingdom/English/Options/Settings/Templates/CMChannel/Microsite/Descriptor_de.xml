@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSymbol folder="/Sites/SiteGenesis Global/United Kingdom/English/Options/Settings/Templates/CMChannel/Microsite" name="Descriptor_de" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-GB</locale>
+<master>
+</master>
+<description>Microsite Vorlage</description>
+<icon href="Descriptor_de.icon.png" mimetype="image/png"/>
+</CMSymbol>

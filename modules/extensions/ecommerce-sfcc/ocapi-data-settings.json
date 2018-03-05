@@ -1,0 +1,41 @@
+{
+  "_v": "17.8",
+  "clients": [
+    {
+      "client_id": "client_id",
+      "resources": [
+        {"resource_id": "/catalogs",                              "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/catalogs/*",                            "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/catalogs/*/categories/*",               "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/catalogs/*/categories/*/category_product_assignment_search",     "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/code_versions",                         "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/code_versions/*",                       "methods": ["get","put","patch","delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/customer_search",                       "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/customers",                             "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/customers/*",                           "methods": ["get","patch","delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/customers/*/addresses",                 "methods": ["get", "post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/customers/*/addresses/*",               "methods": ["get", "patch", "delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/libraries/*/content/*",                 "methods": ["get","put", "patch", "delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/libraries/*/content/*/folders",         "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/libraries/*/folder_assignments/*/*",    "methods": ["get", "put", "delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/libraries/*/folders/*",                 "methods": [ "get", "put", "patch", "delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/libraries/*/folders/*/content",         "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/libraries/*/folders/*/sub_folders",     "methods": ["get"],"read_attributes": "(**)","write_attributes": "(**)"},
+        {"resource_id": "/product_search",                        "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/products/*",                            "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites",                                 "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*",                               "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/locale_info/locales",           "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/promotions/*",                  "methods": ["get", "patch", "put", "delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/promotion_search",              "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/slot_configuration_search",     "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/slot_configurations",           "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/slot_configurations/*",         "methods": ["get", "patch", "delete"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/slot_search",                   "methods": ["post"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/slots",                         "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/slots/*/*",                     "methods": ["get"], "read_attributes": "(**)", "write_attributes": "(**)"},
+        {"resource_id": "/sites/*/slots/*/slot_configurations/*", "methods": ["get", "patch", "put", "delete"], "read_attributes": "(**)", "write_attributes": "(**)"}
+      ]
+    }
+  ]
+}
