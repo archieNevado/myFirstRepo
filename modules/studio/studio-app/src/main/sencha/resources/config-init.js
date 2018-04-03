@@ -16,6 +16,9 @@ joo = {
   // CMS-11086
   delete window.ontouchend;
 
+  Object.defineProperty(navigator, "msMaxTouchPoints", {get: function () {return 0}, set: function (v) {}});
+  Object.defineProperty(navigator, "maxTouchPoints", {get: function () {return 0}, set: function (v) {}});
+
   // http://stackoverflow.com/questions/984510/what-is-my-script-src-url
   var configLocationPath = (function() {
     var scripts = document.getElementsByTagName('script'),

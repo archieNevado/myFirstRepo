@@ -62,13 +62,11 @@ action :install do
       package 'bison'
       package 'gnu-coreutils'
       package 'flex'
-      # lock gcc versions because we don't use 5 yet
-      %w(gcc gcc-c gcc-c++).each do |pkg|
-        package pkg do # ~FC009
-          accept_license true
-          version '4.8.2'
-        end
+      package 'gcc' do
+        # lock because we don't use 5 yet
+        version '4.8.2'
       end
+      package 'gcc-3'
       package 'gnu-grep'
       package 'gnu-make'
       package 'gnu-patch'

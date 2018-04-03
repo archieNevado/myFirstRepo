@@ -19,21 +19,15 @@
 
 case node['platform_family']
 when 'debian', 'ubuntu'
-  packages = if platform?('debian') && node['platform_version'].to_i >= 9
-               %w(libssl1.0.2 openssl)
-             else
-               %w(libssl1.0.0 openssl)
-             end
+  packages = %w(libssl1.0.0 openssl)
 when 'rhel', 'fedora', 'suse', 'amazon'
   packages = %w(openssl)
 else
   packages = []
 end
 
-if packages.empty?
-  Chef::Log.warn("The openssl::upgrade recipe does not currently support #{node['platform']}. If you believe it could please open a PR at https://github.com/chef-cookbooks/openssl")
-else
-  package packages do
+packages.each do |ssl_pkg|
+  package ssl_pkg do
     action :upgrade
     node['openssl']['restart_services'].each do |ssl_svc|
       notifies :restart, "service[#{ssl_svc}]"

@@ -3,7 +3,7 @@
 # Cookbook:: windows
 # Provider:: feature_servermanagercmd
 #
-# Copyright:: 2011-2018, Chef Software, Inc.
+# Copyright:: 2011-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,24 +18,25 @@
 # limitations under the License.
 #
 
-property :feature_name, [Array, String], coerce: proc { |x| to_array(x) }, name_property: true
+property :feature_name, [Array, String], name_attribute: true
 property :all, [true, false], default: false
 property :timeout, Integer, default: 600
 
+include Chef::Mixin::ShellOut
 include Windows::Helper
 
 action :install do
   unless installed?
-    converge_by("install Windows feature #{new_resource.feature_name.join(',')}") do
-      check_reboot(shell_out("#{servermanagercmd} -install #{new_resource.feature_name.join(',')}", returns: [0, 42, 127, 1003, 3010], timeout: new_resource.timeout), new_resource.feature_name)
+    converge_by("install Windows feature #{new_resource.feature_name}") do
+      check_reboot(shell_out("#{servermanagercmd} -install #{to_array(new_resource.feature_name).join(' ')}", returns: [0, 42, 127, 1003, 3010], timeout: new_resource.timeout), new_resource.feature_name)
     end
   end
 end
 
 action :remove do
   if installed?
-    converge_by("removing Windows feature #{new_resource.feature_name.join(',')}") do
-      check_reboot(shell_out("#{servermanagercmd} -remove #{new_resource.feature_name.join(',')}", returns: [0, 42, 127, 1003, 3010], timeout: new_resource.timeout), new_resource.feature_name)
+    converge_by("removing Windows feature #{new_resource.feature_name}") do
+      check_reboot(shell_out("#{servermanagercmd} -remove #{to_array(new_resource.feature_name).join(' ')}", returns: [0, 42, 127, 1003, 3010], timeout: new_resource.timeout), new_resource.feature_name)
     end
   end
 end

@@ -336,15 +336,23 @@
   </bean>
 
   <util:map id="uriToCacheSecondsMapping" map-class="java.util.LinkedHashMap">
-    <!-- time to cache blobs: 180 days -->
+    <!-- time to cache blobs: "forever", aka 180 days -->
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.CapBlobHandler).URI_PATTERN}" value="15552000"/>
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.CapBlobHandler).CODERESOURCEBLOB_URI_PATTERN}" value="15552000"/>
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.TransformedBlobHandler).URI_PATTERN}" value="15552000"/>
-    <!-- time to cache code: 7 days -->
-    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).CSS_PATTERN_BULK}" value="604800"/>
-    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).JS_PATTERN_BULK}" value="604800"/>
-    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).URI_PATTERN_SINGLE}" value="604800"/>
-    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).URI_PATTERN_SINGLE_CSS_LINK}" value="604800"/>
+
+    <!-- Bulk urls contain a hash value, thus they are immutable and may be cached "forever". -->
+    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).CSS_PATTERN_BULK}" value="15552000"/>
+    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).JS_PATTERN_BULK}" value="15552000"/>
+
+    <!--
+      Single code resources are subject to changes.
+      Do not cache them at all (default) in the preview. (Frontend development!)
+      Cache them for a moment, e.g. 180 sec, in the live cae in order to reduce load.
+    -->
+    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).URI_PATTERN_SINGLE}" value="${cae.coderesources.maxAge:0}"/>
+    <entry key="#{T(com.coremedia.blueprint.cae.handlers.CodeResourceHandler).URI_PATTERN_SINGLE_CSS_LINK}" value="${cae.coderesources.maxAge:0}"/>
+
     <!-- do not cache preview urls and dynamic requests -->
     <entry key="#{T(com.coremedia.blueprint.links.BlueprintUriConstants.Patterns).DYNAMIC_URI_PATTERN}" value="0"/>
     <entry key="#{T(com.coremedia.blueprint.cae.handlers.PreviewHandler).URI_PATTERN}" value="0"/>

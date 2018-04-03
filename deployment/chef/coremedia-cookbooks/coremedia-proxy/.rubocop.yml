@@ -27,7 +27,7 @@ Style/FileName:
 # otherwise knife-cookbook-doc style complains
 Style/LeadingCommentSpace:
   Enabled: false
-Style/SpaceBeforeFirstArg:
+SingleSpaceBeforeFirstArg:
   Enabled: false
 Metrics/AbcSize:
   Enabled: false

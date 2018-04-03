@@ -71,7 +71,7 @@
                                   bindTo="{config.bindTo}"
                                   maxCardinality="1">
       <editor:linkSuggester>
-        <editor:SearchContentLinkSuggester content="{config.bindTo.getValue()}"
+        <editor:SearchContentLinkSuggester contentValueExpression="{config.bindTo}"
                                            linkTypeName="CMProductTeaser"/>
       </editor:linkSuggester>
     </editor:LinkListPropertyField>

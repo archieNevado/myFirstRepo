@@ -13,7 +13,6 @@
   <component class="com.coremedia.livecontext.studio.components.CommerceWorkspaceSelector"/>
   <component class="com.coremedia.livecontext.studio.components.ProductAttributeLabel"/>
   <component class="com.coremedia.livecontext.studio.components.SelectSubCategoriesRadioGroup"/>
-  <component class="com.coremedia.livecontext.studio.components.TimeZoneInfoIconDisplayField"/>
   <component class="com.coremedia.livecontext.studio.components.link.CatalogAssetsProperty"/>
   <component class="com.coremedia.livecontext.studio.components.product.ProductDescriptionTextArea"/>
   <component class="com.coremedia.livecontext.studio.components.product.ViewSettingsRadioGroup"/>
@@ -46,4 +45,5 @@
   <component class="com.coremedia.livecontext.studio.pbe.ShopPageOpenInBackgroundMenuItem"/>
   <component class="com.coremedia.livecontext.studio.pbe.ShopPageOpenInTabMenuItem"/>
   <component class="com.coremedia.livecontext.studio.pbe.ShopPageShowInLibraryMenuItem"/>
+  <component class="com.coremedia.livecontext.studio.plugins.AddTimeZoneValidationPlugin"/>
 </componentPackage>

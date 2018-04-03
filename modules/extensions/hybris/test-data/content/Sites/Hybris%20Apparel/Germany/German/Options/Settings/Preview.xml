@@ -101,6 +101,7 @@
 <Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/hybris/css/preview%2Ecss.xml" cmexport:path="/Themes/hybris/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
+<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/hybris/js/preview%2Ejs.xml" cmexport:path="/Themes/hybris/js/preview%2Ejs"/>
 </LinkListProperty>
 <LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
 <Link xlink:href="coremedia:///cap/resources/hybris-apparel-style%2Ecss.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/hybris-apparel-style%2Ecss"/>

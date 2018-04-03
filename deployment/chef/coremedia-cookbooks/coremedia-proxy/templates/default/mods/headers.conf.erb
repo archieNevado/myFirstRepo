@@ -1,3 +1,19 @@
+# ------------------------------------------------------------------------------
+# | Web fonts access                                                           |
+# ------------------------------------------------------------------------------
+
+# Allow access from all domains for web fonts
+
+<IfModule mod_headers.c>
+  # Filesystem
+  <FilesMatch "\.(eot|font.css|otf|ttc|ttf|woff|woff2|svg)$">
+  Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+  # Proxy
+  <LocationMatch "\.(eot|font.css|otf|ttc|ttf|woff|woff2|svg)$">
+  Header set Access-Control-Allow-Origin "*"
+  </LocationMatch>
+</IfModule>
 
 # ##############################################################################
 # # INTERNET EXPLORER                                                          #

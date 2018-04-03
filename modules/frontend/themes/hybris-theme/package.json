@@ -8,6 +8,7 @@
     "theme-importer": "cm theme-importer"
   },
   "dependencies": {
+    "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/brick-360-spinner": "^1.0.0",
     "@coremedia/brick-bootstrap": "^1.0.0",
     "@coremedia/brick-cta": "^1.0.0",
@@ -27,7 +28,6 @@
     "@coremedia/brick-video": "^1.0.0",
     "@coremedia/js-basic": "^1.0.0",
     "@coremedia/js-logger": "^1.0.0",
-    "@coremedia/sass-utils": "^1.0.0",
     "jquery": "3.2.1",
     "magnific-popup": "1.1.0",
     "mediaelement": "2.23.5",

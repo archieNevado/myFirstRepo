@@ -6,7 +6,7 @@
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StringListProperty Name="features">
-  <String>Externally Visible Date Form</String>
+<String>Externally Visible Date Form</String>
 </StringListProperty>
 </Struct>
 </settings>

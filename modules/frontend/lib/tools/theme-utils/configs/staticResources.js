@@ -1,10 +1,11 @@
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const closestPackage = require("closest-package");
+const fs = require("fs");
 const path = require("path");
 
 const deepMerge = require("./utils/deepMerge");
 const {
-  dependencies: { getFlattenedDependencies },
+  dependencies: { getFlattenedDependencies, Dependency },
   workspace: { isBrickDependency, getThemeConfig },
 } = require("@coremedia/tool-utils");
 const JoinWebpackPlugin = require("../plugins/JoinWebpackPlugin");
@@ -16,70 +17,73 @@ const PROPERTIES_GLOB = "*_*.properties";
 const themeConfig = getThemeConfig();
 
 /**
- * Creates a CopyWebpackPlugin instance for every given brick dependencies that will copy the templates to the target
+ * Creates a CopyWebpackPlugin instance for the given node modules that will copy the templates to the target
  * folder.
  *
  * Important: We cannot use a single instance as the order the templates are copied is not guaranteed in that case as
  * all patterns are executed simultaneously.
  *
- * @param relativeTemplatesSrc the relative source folder of the templates (must be the same for all bricks)
+ * @param relativeTemplatesSrc the relative source folder of the templates (must be the same for all node modules)
  * @param relativeTemplatesTarget the relative target folder for the templates
- * @param brickDependencies the brick dependencies
- * @return {Array<CopyWebpackPlugin>} an plugin instance for every brick dependency
+ * @param nodeModules the node modules
+ * @return {Array<CopyWebpackPlugin>} an plugin instance for every node module
  */
-function configureCopyWebpackPluginsForBrickTemplates(
+function configureCopyWebpackPluginsForTemplates(
   relativeTemplatesSrc,
   relativeTemplatesTarget,
-  brickDependencies
+  nodeModules
 ) {
-  const patterns = brickDependencies
-    .map(brickDependency => [
+  const patterns = nodeModules
+    // build path
+    .map(nodeModule =>
+      path.resolve(path.dirname(nodeModule.getPkgPath()), relativeTemplatesSrc)
+    )
+
+    // check for existence (otherwise the CopyWebpackPlugin will fail)
+    .filter(templatePath => fs.existsSync(templatePath))
+
+    // transform into configuration
+    .map(templatePath =>
       // templates
-      {
-        from: path.resolve(
-          path.dirname(brickDependency.getPkgPath()),
-          relativeTemplatesSrc
-        ),
+      ({
+        from: templatePath,
         to: relativeTemplatesTarget,
         force: true,
         cache: true,
-      },
-    ])
-    .reduce(
-      (dependencyPatternsA, dependencyPatternsB) =>
-        dependencyPatternsA.concat(dependencyPatternsB),
-      []
+      })
     );
   return patterns.map(pattern => new CopyWebpackPlugin([pattern]));
 }
 
 /**
- * Creates single a JoinWebpackPlugin instance for the given brick dependencies to join the resource bundles into a
+ * Creates a single JoinWebpackPlugin instance for the given node modules to join the resource bundles into a
  * single resource bundle (one property file for every language) which is stored in the target folder.
  *
- * @param relativeResourceBundleSrc the relative source folder of the resource bundles (must be the same in all bricks)
+ * @param prefix the prefix to use
+ * @param relativeResourceBundleSrc the relative source folder of the resource bundles (must be the same in all node modules)
  * @param relativeResourceBundleTarget the relative target folder for the single bundles
- * @param brickDependencies the brick dependencies
+ * @param nodeModules the node modules
  * @returns {JoinWebpackPlugin} the instance of the plugin
  */
-function configureJoinWebpackPluginForBrickResourceBundles(
+function configureJoinWebpackPluginForResourceBundles(
+  prefix,
   relativeResourceBundleSrc,
   relativeResourceBundleTarget,
-  brickDependencies
+  nodeModules
 ) {
-  // add search patterns for brick resource bundles, already filtered by actual dependencies to reduce overhead
-  const searchPatterns = brickDependencies
-    .map(brickDependency => path.dirname(brickDependency.getPkgPath()))
-    .map(brickDependencyPkgPath =>
+  // add search patterns for resource bundles, already filtered by actual dependencies to reduce overhead
+  const searchPatterns = nodeModules
+    .map(nodeModule => path.dirname(nodeModule.getPkgPath()))
+    .map(nodeModulePkgPath =>
       path.resolve(
-        brickDependencyPkgPath,
+        nodeModulePkgPath,
         relativeResourceBundleSrc,
         PROPERTIES_GLOB
       )
     );
 
   return new JoinWebpackPlugin({
-    name: path.join(relativeResourceBundleTarget, `Bricks_[1].properties`),
+    name: path.join(relativeResourceBundleTarget, `${prefix}_[1].properties`),
     search: searchPatterns,
     join: function(common, addition, filename) {
       // gather resource bundles using a map (with package name as key), so they can be ordered before being stored
@@ -98,8 +102,8 @@ function configureJoinWebpackPluginForBrickResourceBundles(
     },
     save: function(common) {
       // join the map by iterating of the flattened dependency order
-      const orderedContent = brickDependencies.map(
-        brickDependency => common[brickDependency.getName()] || ""
+      const orderedContent = nodeModules.map(
+        nodeModule => common[nodeModule.getName()] || ""
       );
       // join resource bundles, omit empty / non-existing entries
       return orderedContent.filter(content => !!content).join("\n");
@@ -110,23 +114,57 @@ function configureJoinWebpackPluginForBrickResourceBundles(
 }
 
 /**
+ * Create patterns for the given relative theme paths to be used in the CopyWebpackPlugin. If a path does not exists,
+ * no pattern will be generated for the path.
+ *
+ * @param themePaths {Array} The paths to configure
+ */
+function createPatternsCopyOverThemePaths(themePaths) {
+  return themePaths
+    .map(relativeThemePath => path.join(themeConfig.srcPath, relativeThemePath))
+    .filter(fs.existsSync)
+    .map(themePath => ({
+      from: themePath,
+      to: path.relative(themeConfig.srcPath, themePath),
+      force: true,
+      cache: true,
+    }));
+}
+
+/**
  * @module contains the webpack configuration for static resources like templates and resource bundles
  */
 module.exports = () => config => {
+  const themeAsDependency = new Dependency(
+    themeConfig.name,
+    themeConfig.version,
+    themeConfig.pkgPath
+  );
   const brickDependencies = getFlattenedDependencies(
-    themeConfig.pkgPath,
+    themeAsDependency.getPkgPath(),
     isBrickDependency
   );
 
-  const copyWebpackPluginsBrickTemplates = configureCopyWebpackPluginsForBrickTemplates(
-    path.join("src", "templates"),
-    path.relative(
-      themeConfig.themeTargetPath,
-      themeConfig.brickTemplatesTargetPath
+  const copyWebpackPluginsForTemplates = [].concat(
+    configureCopyWebpackPluginsForTemplates(
+      path.join("src", "templates"),
+      path.relative(
+        themeConfig.themeTargetPath,
+        themeConfig.brickTemplatesTargetPath
+      ),
+      brickDependencies
     ),
-    brickDependencies
+    configureCopyWebpackPluginsForTemplates(
+      path.join("src", "templates"),
+      path.relative(
+        themeConfig.themeTargetPath,
+        themeConfig.themeTemplatesTargetPath
+      ),
+      [themeAsDependency]
+    )
   );
-  const joinWebpackPlugin = configureJoinWebpackPluginForBrickResourceBundles(
+  const joinWebpackPlugin = configureJoinWebpackPluginForResourceBundles(
+    "Bricks",
     path.join("src", "l10n"),
     "l10n",
     brickDependencies
@@ -166,56 +204,18 @@ module.exports = () => config => {
       ],
     },
     plugins: [
-      ...copyWebpackPluginsBrickTemplates,
+      ...copyWebpackPluginsForTemplates,
       joinWebpackPlugin,
       // configure for themes
       new CopyWebpackPlugin([
-        {
-          context: themeConfig.srcPath,
-          from: "css/**",
-          force: true,
-          cache: true,
-        },
-        {
-          context: themeConfig.srcPath,
-          from: "fonts/**",
-          force: true,
-          cache: true,
-        },
-        {
-          context: themeConfig.srcPath,
-          from: "img/**",
-          force: true,
-          cache: true,
-        },
-        {
-          context: themeConfig.srcPath,
-          from: "images/**",
-          force: true,
-          cache: true,
-        },
-        {
-          context: themeConfig.srcPath,
-          from: "l10n/**",
-          force: true,
-          cache: true,
-        },
-        {
-          context: path.join(themeConfig.srcPath, "templates"),
-          from: "**",
-          to: path.relative(
-            themeConfig.themeTargetPath,
-            themeConfig.themeTemplatesTargetPath
-          ),
-          force: true,
-          cache: true,
-        },
-        {
-          context: themeConfig.srcPath,
-          from: "vendor/**",
-          force: true,
-          cache: true,
-        },
+        ...createPatternsCopyOverThemePaths([
+          "css",
+          "fonts",
+          "img",
+          "images",
+          "l10n",
+          "vendor",
+        ]),
         {
           context: themeConfig.path,
           from: path.basename(themeConfig.descriptorTargetPath),

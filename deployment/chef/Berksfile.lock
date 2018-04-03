@@ -35,6 +35,8 @@ DEPENDENCIES
     path: thirdparty-cookbooks/chef-sugar
   chef_handler
     path: thirdparty-cookbooks/chef_handler
+  chef_nginx
+    path: thirdparty-cookbooks/chef_nginx
   compat_resource
     path: thirdparty-cookbooks/compat_resource
   coremedia-proxy
@@ -45,6 +47,8 @@ DEPENDENCIES
     path: coremedia-cookbooks/coremedia_tomcat
   fpm-tng
     path: thirdparty-cookbooks/fpm-tng
+  gpg
+    path: thirdparty-cookbooks/gpg
   mingw
     path: thirdparty-cookbooks/mingw
   mongodb3
@@ -59,6 +63,12 @@ DEPENDENCIES
     path: thirdparty-cookbooks/packagecloud
   postgresql
     path: thirdparty-cookbooks/postgresql
+  repository
+    path: thirdparty-cookbooks/repository
+  reprepro
+    path: thirdparty-cookbooks/reprepro
+  ruby_installer
+    path: thirdparty-cookbooks/ruby_installer
   runit
     path: thirdparty-cookbooks/runit
   seven_zip
@@ -75,8 +85,12 @@ DEPENDENCIES
     path: thirdparty-cookbooks/yum
   yum-centos
     path: thirdparty-cookbooks/yum-centos
+  yum-epel
+    path: thirdparty-cookbooks/yum-epel
   yum-pgdg
     path: thirdparty-cookbooks/yum-pgdg
+  zypper
+    path: thirdparty-cookbooks/zypper
 
 GRAPH
   apache2 (3.2.2)
@@ -136,7 +150,7 @@ GRAPH
   blueprint-yum (1.0.0)
     yum (~> 4.2)
     yum-centos (~> 2.3.0)
-  build-essential (8.0.4)
+  build-essential (8.0.3)
     mingw (>= 1.1)
     seven_zip (>= 0.0.0)
   chef-sugar (3.6.0)
@@ -147,8 +161,8 @@ GRAPH
     ohai (>= 4.1.0)
     yum-epel (>= 0.0.0)
     zypper (>= 0.0.0)
-  compat_resource (12.19.1)
-  coremedia-proxy (0.3.5)
+  compat_resource (12.19.0)
+  coremedia-proxy (0.3.2)
     apache2 (~> 3.2.0)
     chef-sugar (~> 3.0)
   coremedia_maven (2.0.4)
@@ -160,7 +174,7 @@ GRAPH
     reprepro (>= 0.0.0)
     ruby_installer (>= 0.0.0)
   gpg (0.2.2)
-  mingw (2.0.2)
+  mingw (2.0.1)
     seven_zip (>= 0.0.0)
   mongodb3 (5.3.0)
     apt (>= 0.0.0)
@@ -168,8 +182,8 @@ GRAPH
     user (>= 0.0.0)
     yum (>= 0.0.0)
   mysql (8.3.1)
-  ohai (5.2.2)
-  openssl (8.1.2)
+  ohai (5.2.0)
+  openssl (7.1.0)
   packagecloud (0.3.0)
   postgresql (6.1.1)
     build-essential (>= 2.0.0)
@@ -195,12 +209,13 @@ GRAPH
     ohai (>= 0.0.0)
   ulimit (0.3.3)
   user (0.7.0)
-  windows (3.5.2)
+  windows (3.2.0)
     ohai (>= 4.0.0)
   yum (4.2.0)
   yum-centos (2.3.0)
     compat_resource (>= 12.16.3)
-  yum-epel (3.1.0)
+  yum-epel (2.1.2)
+    compat_resource (>= 12.16.3)
   yum-pgdg (2.0.1)
     compat_resource (>= 12.16.3)
   zypper (0.4.0)

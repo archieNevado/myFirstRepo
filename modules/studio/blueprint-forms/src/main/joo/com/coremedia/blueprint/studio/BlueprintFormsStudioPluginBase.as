@@ -7,10 +7,16 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
+import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
+import com.coremedia.cms.editor.sdk.desktop.MainNavigationToolbar;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
+import com.coremedia.ui.data.dependencies.DependencyTracker;
 import com.coremedia.ui.data.validation.Issue;
 import com.coremedia.ui.data.validation.Issues;
+
+import ext.Ext;
+import ext.button.Button;
 
 public class BlueprintFormsStudioPluginBase extends StudioPlugin {
 
@@ -51,6 +57,25 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
     editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMPicture", "data"));
     editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSymbol", "icon"));
     editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMTheme", "icon"));
+  }
+
+  /**
+   * Add folder from library tree to quick create menu
+   * @return String
+   */
+  public static function calculateQuickCreateFolder():String {
+    var libToggleBtn:Button = Ext.getCmp(MainNavigationToolbar.LIBRARY_BUTTON_ITEM_ID) as Button;
+    if (libToggleBtn) {
+      DependencyTracker.dependOnObservable(libToggleBtn, "toggle");
+    }
+    var collectionView:CollectionView = Ext.getCmp(CollectionView.COLLECTION_VIEW_ID) as CollectionView;
+    if (collectionView && collectionView.isVisible(true)) {
+      var content:Content = collectionView.getSelectedFolderValueExpression().getValue() as Content;
+      if (content) {
+        return content.getPath();
+      }
+    }
+    return undefined;
   }
 
   /**
