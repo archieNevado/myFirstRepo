@@ -49,7 +49,7 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Accessories/Women%2026c14b10.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Augmentation/Womens/Accessories/Women%20Accessories"/>
+<Link xlink:href="coremedia:///cap/resources/Accessories/Women%20Accessories.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Augmentation/Womens/Accessories/Women%20Accessories"/>
 <Link xlink:href="coremedia:///cap/resources/Clothing/Clothing.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Augmentation/Womens/Clothing/Clothing"/>
 <Link xlink:href="coremedia:///cap/resources/Jewelry/Jewelry.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Augmentation/Womens/Jewelry/Jewelry"/>
 </LinkListProperty>

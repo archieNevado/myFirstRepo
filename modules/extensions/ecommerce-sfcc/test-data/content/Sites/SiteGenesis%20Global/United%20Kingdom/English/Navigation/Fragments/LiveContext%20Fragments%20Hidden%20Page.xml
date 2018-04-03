@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMChannel folder="/Sites/SiteGenesis Global/United Kingdom/English/Navigation/Fragments" name="LiveContext Fragments Hidden Page" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-GB</locale>
-<master/>
-<viewtype/>
-<linkedSettings/>
-<resourceBundles2/>
+<master>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
 <segment></segment>
 <title>LiveContext Fragments Hidden Page</title>
 <htmlTitle></htmlTitle>
 <keywords></keywords>
 <htmlDescription></htmlDescription>
-<subjectTaxonomy/>
-<locationTaxonomy/>
-<contexts/>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
 <teaserTitle></teaserTitle>
-<pictures/>
-<related/>
+<pictures>
+</pictures>
+<related>
+</related>
 <children>
 <link href="../Other%20Pages/About%20Us.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Other%20Pages/About%20Us"/>
 <link href="../Other%20Pages/Privay%20Policy.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Other%20Pages/Privay%20Policy"/>
 </children>
 <hidden>1</hidden>
-<javaScript/>
-<css/>
-<theme/>
-<placement><Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<javaScript>
+</javaScript>
+<css>
+</css>
+<theme>
+</theme>
+<placement>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
 <StructProperty Name="placements">
@@ -51,7 +64,10 @@
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/header"/>
 </Struct>
 </StructListProperty>
-</Struct></placement>
-<header/>
-<footer/>
+</Struct>
+</placement>
+<header>
+</header>
+<footer>
+</footer>
 </CMChannel>

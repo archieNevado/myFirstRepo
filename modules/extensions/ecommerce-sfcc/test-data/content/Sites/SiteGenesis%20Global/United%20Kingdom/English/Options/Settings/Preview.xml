@@ -99,6 +99,7 @@
 <Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/sitegenesis/css/preview%2Ecss.xml" cmexport:path="/Themes/sitegenesis/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
+<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/sitegenesis/js/preview%2Ejs.xml" cmexport:path="/Themes/sitegenesis/js/preview%2Ejs"/>
 </LinkListProperty>
 </Struct>
 </settings>

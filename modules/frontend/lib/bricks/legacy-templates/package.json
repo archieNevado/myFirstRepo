@@ -2,6 +2,7 @@
   "name": "@coremedia/brick-legacy-templates",
   "version": "1.0.0",
   "private": true,
+  "description": "Deprecated: This package will be removed soon.\n\nIt contains unmodified versions of templates that have been integrated into our bricks.",
   "coremedia": {
     "type": "brick"
   }

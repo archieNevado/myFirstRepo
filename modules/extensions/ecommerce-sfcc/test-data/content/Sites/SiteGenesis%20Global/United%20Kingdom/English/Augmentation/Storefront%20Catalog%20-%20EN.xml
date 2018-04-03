@@ -16,7 +16,7 @@
 </linkedSettings>
 <resourceBundles2>
 </resourceBundles2>
-<segment>storefront-catalog---en</segment>
+<segment>storefront-catalog-en</segment>
 <title>Storefront Catalog - EN</title>
 <htmlTitle></htmlTitle>
 <keywords></keywords>
@@ -81,8 +81,25 @@
 <StructProperty Name="placements_2">
 <Struct>
 <LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Layouts/Fragment%20PDP.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Pagegrid/Layouts/Fragment%20PDP"/>
+<StructProperty Name="placements">
+<Struct>
 </Struct>
 </StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Slots/Header/Free%202-Day%20Shipping%20Promo.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Slots/Header/Free%202-Day%20Shipping%20Promo"/>
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/header"/>
+</Struct>
+<Struct>
+<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMLinkable">
+</LinkListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/footer"/>
+</Struct>
+</StructListProperty>
 </Struct>
 </pdpPagegrid>
 <externalId>sfcc:///catalog/category/root</externalId>
