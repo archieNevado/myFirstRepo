@@ -2,6 +2,7 @@ const fs = require("fs");
 const resolveFrom = require("resolve-from");
 const path = require("path");
 const escapeStringRegexp = require("escape-string-regexp");
+const { optimize: { CommonsChunkPlugin }} = require("webpack");
 const { DependencyCheckWebpackPlugin } = require("@coremedia/dependency-check");
 const { workspace: { getThemeConfig } } = require("@coremedia/tool-utils");
 const deepMerge = require("./utils/deepMerge");
@@ -19,6 +20,9 @@ const exclude = [
   new RegExp(escapeStringRegexp(path.sep + "vendor" + path.sep)),
 ];
 
+const DEFAULT_ENTRY_NAME = themeConfig.name;
+const PREVIEW_ENTRY_NAME = "preview";
+
 const entry = {};
 
 // check if a javascript entry point exists for the module
@@ -35,9 +39,9 @@ try {
   mainJsPath = require.resolve("./emptyIndex");
 }
 
-entry[themeConfig.name] = [ mainJsPath ];
+entry[DEFAULT_ENTRY_NAME] = [ mainJsPath ];
 if (previewJsPath) {
-  entry["preview"] = [ previewJsPath ];
+  entry[PREVIEW_ENTRY_NAME] = [ previewJsPath ];
 }
 
 module.exports = () => config => deepMerge(config,
@@ -78,6 +82,15 @@ module.exports = () => config => deepMerge(config,
           plugins: [
             new DependencyCheckWebpackPlugin({
               exclude: exclude
+            }),
+            // preview entry is meant to be loaded after the default entry has been loaded
+            // so common chunks can be moved to the default entry
+            new CommonsChunkPlugin({
+              name: DEFAULT_ENTRY_NAME,
+              chunks: [
+                DEFAULT_ENTRY_NAME,
+                PREVIEW_ENTRY_NAME
+              ]
             })
           ]
         }

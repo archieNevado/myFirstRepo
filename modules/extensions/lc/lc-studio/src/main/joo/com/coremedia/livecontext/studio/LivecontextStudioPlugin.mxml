@@ -28,8 +28,6 @@
     import com.coremedia.cms.editor.sdk.desktop.ActionsToolbar;
     import com.coremedia.cms.editor.sdk.desktop.HeaderToolbarUserMenu;
     import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
-    import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
-    import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
     import com.coremedia.ecommerce.studio.library.EcCatalogTreeFilter;
     import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -301,10 +299,8 @@
     </editor:WorkAreaTabProxiesContextMenu>
     <bpb-components:PreviewDateSelector>
       <bpb-components:plugins>
+        <livecontext:AddTimeZoneValidationPlugin/>
         <ui:AddItemsPlugin>
-          <ui:items>
-            <livecontext:TimeZoneInfoIconDisplayField/>
-          </ui:items>
           <ui:after>
             <Button itemId="reset"/>
           </ui:after>

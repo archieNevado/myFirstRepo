@@ -8,6 +8,7 @@
     "theme-importer": "cm theme-importer"
   },
   "dependencies": {
+    "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/brick-generic-templates": "^1.0.0",
     "@coremedia/brick-bootstrap": "^1.0.0",
     "@coremedia/brick-cta": "^1.0.0",
@@ -25,7 +26,6 @@
     "@coremedia/brick-hero-teaser": "^1.0.0",
     "@coremedia/brick-image-maps": "^1.0.0",
     "@coremedia/js-logger": "^1.0.0",
-    "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/js-device-detector": "^1.0.0",
     "bootstrap-sass": "3.3.7",
     "jquery": "3.2.1",

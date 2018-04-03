@@ -35,6 +35,7 @@ node.default_unless['blueprint']['webapps'][base_service_name]['application.prop
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['cae.is.standalone'] = false
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['view.debug.enabled'] = false
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['cae.coderesources.maxAge'] = 180
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.sitemap.target.root'] = "#{node['blueprint']['cache_dir']}/sitemap"
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['link.urlPrefixType'] = 'live'
 # by default disable periodic sitemap generation.

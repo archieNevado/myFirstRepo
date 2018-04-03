@@ -50,7 +50,7 @@ let wsConfig;
 let themeConfig;
 
 /**
- * @type {Object} a cached mapping of dependencies by name. If a key is not added here, the dependency was not checked
+ * @type {Object} a cached mapping of dependencies by name. If a key is not added here, the dependency has not been checked
  *                yet otherwise specifies if the dependency has been detected as a brick.
  */
 const checkedBrickDependenciesByName = {};
@@ -216,6 +216,7 @@ function getThemeConfig() {
 
     themeConfig = {
       name: themeConfigFromPackageJson.name,
+      version: themeConfigFromPackageJson.version,
       path: cwd,
       srcPath,
       pkgPath: packageJsonPath,

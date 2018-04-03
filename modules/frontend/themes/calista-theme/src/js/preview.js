@@ -1,3 +1,5 @@
+import "@coremedia/brick-preview";
+
 window.coremedia.blueprint.$(function() {
 
   function replaceLoginPreviewURL() {
