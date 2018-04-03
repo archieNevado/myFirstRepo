@@ -210,7 +210,7 @@ Windows Roles and Features can be thought of as built-in operating system packag
 
 This resource allows you to manage these 'features' in an unattended, idempotent way.
 
-There are three methods for the `windows_feature` which map into Microsoft's three major tools for managing roles/features: [Deployment Image Servicing and Management (DISM)](http://msdn.microsoft.com/en-us/library/dd371719%28v=vs.85%29.aspx), [Servermanagercmd](http://technet.microsoft.com/en-us/library/ee344834%28WS.10%29.aspx) (The CLI for Server Manager), and [PowerShell](https://technet.microsoft.com/en-us/library/cc731774(v=ws.11).aspx). As Servermanagercmd is deprecated, Chef will set the default method to `:windows_feature_dism` if `dism.exe` is present on the system being configured. The default method will fall back to `:windows_feature_servermanagercmd`, and then `:windows_feature_powershell`.
+There are two underlying resources that power `windows_feature` which map to the available installation systems on supported releases of Windows: [Deployment Image Servicing and Management (DISM)](http://msdn.microsoft.com/en-us/library/dd371719%28v=vs.85%29.aspx) and [PowerShell](https://technet.microsoft.com/en-us/library/cc731774(v=ws.11).aspx). Chef will set the default method to `:windows_feature_dism` if `dism.exe` is present on the system being configured and otherwise use `:windows_feature_powershell`.
 
 For more information on Roles, Role Services and Features see the [Microsoft TechNet article on the topic](http://technet.microsoft.com/en-us/library/cc754923.aspx). For a complete list of all features that are available on a node type either of the following commands at a command prompt:
 
@@ -218,12 +218,6 @@ For Dism:
 
 ```text
 dism /online /Get-Features
-```
-
-For ServerManagerCmd:
-
-```text
-servermanagercmd -query
 ```
 
 For PowerShell:
@@ -236,15 +230,15 @@ get-windowsfeature
 
 - `:install` - install a Windows role/feature
 - `:remove` - remove a Windows role/feature
-- `:delete` - remove a Windows role/feature from the image (not supported by ServerManagerCmd)
+- `:delete` - remove a Windows role/feature from the image
 
 #### Properties
 
-- `feature_name` - name of the feature/role(s) to install. The same feature may have different names depending on the provider used (ie DHCPServer vs DHCP; DNS-Server-Full-Role vs DNS).
-- `all` - Boolean. Optional. Default: false. DISM and PowerShell providers only. For DISM this is the equivalent of specifying the /All switch to dism.exe, forcing all parent dependencies to be installed. With the PowerShell install method, the `-InstallAllSubFeatures` switch is applied. Note that these two methods may not produce identical results.
-- `management_tools` - Boolean. Optional. Default: false. PowerShell provider only. Includes the `-IncludeManagementTools` switch. Installs all applicable management tools of the roles, role services, or features specified by the feature name.
-- `source` - String. Optional. DISM and PowerShell providers only. Uses local repository for feature install.
-- `timeout` - Integer. Optional. Default: 600. Specifies a timeout (in seconds) for feature install.
+- `feature_name` - name of the feature/role(s) to install. The same feature may have different names depending on the underlying resource being used (ie DHCPServer vs DHCP; DNS-Server-Full-Role vs DNS).
+- `all` - Boolean. Optional. Default: false. For DISM this is the equivalent of specifying the /All switch to dism.exe, forcing all parent dependencies to be installed. With the PowerShell install method, the `-InstallAllSubFeatures` switch is applied. Note that these two methods may not produce identical results.
+- `management_tools` - Boolean. Optional. Default: false. PowerShell only. Includes the `-IncludeManagementTools` switch. Installs all applicable management tools of the roles, role services, or features specified by the feature name.
+- `source` - String. Optional. Uses local repository for feature install.
+- `timeout` - Integer. Optional. Default: 600\. Specifies a timeout (in seconds) for feature install.
 - `install_method` - Symbol. Optional. If not supplied, Chef will determine which method to use (in the order of `:windows_feature_dism`, `:windows_feature_servercmd`, `:windows_feature_powershell`)
 
 #### Examples
@@ -378,8 +372,8 @@ Configures the file that provides virtual memory for applications requiring more
 - `path` - the path to the pagefile, String, name_property: true
 - `system_managed` - configures whether the system manages the pagefile size. [true, false]
 - `automatic_managed` - all of the settings are managed by the system. If this is set to true, other settings will be ignored. [true, false], default: false
-- `initial_size` - initial size of the pagefile in bytes. Integer
-- `maximum_size` - maximum size of the pagefile in bytes. Integer
+- `initial_size` - initial size of the pagefile in megbytes. Integer
+- `maximum_size` - maximum size of the pagefile in megbytes. Integer
 
 ### windows_printer_port
 

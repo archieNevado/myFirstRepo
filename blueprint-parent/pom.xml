@@ -30,13 +30,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1801.2</blueprint-base.version>
-    <cms.version>1801.2</cms.version>
-    <personalization.version>1801.2</personalization.version>
-    <elastic.version>1801.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1801.2</studio.version>
-    <caetoolbox.version>1801.2</caetoolbox.version>
-    <livecontext.version>1801.2</livecontext.version>
+    <blueprint-base.version>1801.3</blueprint-base.version>
+    <cms.version>1801.3</cms.version>
+    <personalization.version>1801.3</personalization.version>
+    <elastic.version>1801.3</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1801.3</studio.version>
+    <caetoolbox.version>1801.3</caetoolbox.version>
+    <livecontext.version>1801.3</livecontext.version>
     <jangaroo.version>4.0.55</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
@@ -94,6 +94,10 @@
     <theme-importer.argument.export-path>-Dexport_path=${project.build.directory}/content</theme-importer.argument.export-path>
     <theme-importer.argument.runner>com.coremedia.blueprint.themeimporter.client.ThemeImporterRunner</theme-importer.argument.runner>
     <jooProxyPathSpec>/rest/*</jooProxyPathSpec>
+
+    <junit.platform.version>1.1.0</junit.platform.version>
+    <junit.jupiter.version>5.1.0</junit.jupiter.version>
+    <junit.vintage.version>${junit.jupiter.version}</junit.vintage.version>
   </properties>
 
   <profiles>
@@ -433,6 +437,24 @@
               <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
             </systemPropertyVariables>
           </configuration>
+          <!-- Workaround for SUREFIRE-1330; expected to be fixed in version 3.0.0+ -->
+          <dependencies>
+            <dependency>
+              <groupId>org.junit.platform</groupId>
+              <artifactId>junit-platform-surefire-provider</artifactId>
+              <version>${junit.platform.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter-engine</artifactId>
+              <version>${junit.jupiter.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.junit.vintage</groupId>
+              <artifactId>junit-vintage-engine</artifactId>
+              <version>${junit.vintage.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -244,8 +245,8 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     //check scripthash
     String eTag = codeResourcesModel.getETag();
     if (!hash.equals(eTag)) {
-      //hash does not match
-      return HandlerHelper.redirectTo(mergeableResources, extension);
+      // eTag does not match any longer, i.e. code resources have changed
+      return HandlerHelper.redirectTo(mergeableResources, extension, HttpStatus.SEE_OTHER);
     }
     if (webRequest.checkNotModified(eTag)) {
       // shortcut exit - no further processing necessary

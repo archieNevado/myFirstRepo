@@ -2,14 +2,87 @@
 
 This file is used to list changes made in each version of the windows cookbook.
 
+## 4.1.4 (2018-03-29)
+
+- Raise in windows_feature_powershell if we're on PS < 3.0
+
+## 4.1.3 (2018-03-28)
+
+- Restore support for Windows 2008 R2 in windows_feature_dism
+
+## 4.1.2 (2018-03-27)
+
+- Improve creation messaging for shares
+- Allow feature names to be case insensitive in windows_feature
+
+## 4.1.1 (2018-03-23)
+
+- Simplify delete action slightly in windows_pagefile
+- Don't use win_friendly_path helper in windows_pagefile since we already coerce the path value
+
+## 4.1.0 (2018-03-21)
+
+- Adds Caching for WIndows Feature Powershell resource using the same sort of logic we use on windows_feature_dism. This gives us a 3.5X speedup when no features need to be changed (subsequent runs after the change)
+- Warn if we're on w2k12 and trying to use source/management properties in windows_feature_powershell since that doesn't work.
+- Properly parse features into arrays so installing an array of features works in dism/powershell. This is the preferred way to install a number of features and will be faster than a large number of feature resources
+- Fix description of properties for pagefile in the readme
+
+## 4.0.2 (2018-03-20)
+
+- Enable FC016 testing
+- Enable FC059 testing
+- Properly calculate available packages if source is passed in windows_feature_dism resource
+
+## 4.0.1 (2018-03-07)
+
+Fix the previous update to windows_feature_dism to use 'override' level of attributes not the normal level which persists to the node. Thanks to @Annih for pointing out the mistake here.
+
+## 4.0.0 (2018-03-05)
+
+### WARNING
+
+This release contains a complete rewrite to windows_feature_dism resource and includes several behavior changes to windows_feature resource. Make sure to read the complete list of changes below before deploying this to production systems.
+
+#### DISM feature caching Ohai plugin replacement
+
+In the 3.X cookbook we installed an Ohai plugin that cached the state of features on the node, and we reloaded that plugin anytime we installed/removed a feature from the system. This greatly sped up Chef runs where no features were actually installed/removed (2nd run and later). Without the caching each resource would take about 1 second longer while it queried current feature state. Using Ohai to cache this data was problematic though due to incompatibilities with Chef Solo, the reliance on the ohai cookbook, and the addition of extra node data which had to be stored on the Chef Server.
+
+In the 4.0 release instead of caching data via an Ohai plugin we just write directly to the node within the resource. This avoids the need to load in the ohai plugin and the various issues that come with that. In the end it's basically the exact same thing, but less impacting on end users and faster when the data needs to be updated.
+
+#### Fail when feature is missing in windows_feature_dism
+
+The windows_feature_dism resource had a rather un-Chef behavior in which it just warned you if a feature wasn't available on your platform and then continued on silently. This isn't how we handle missing packages in any of our package resource and because of that it's not going to be what anyone expects out of the box. If someone really wants SNMP installed and we can't install it we should fail instead of continuing on as if we did install it. So we'll now do the following things:
+
+- When installing a feature that doesn't exist: fail
+- When removing a feature that doesn't exist: continue since it is technically removed
+- When deleting a feature that doesn't exist: continue since it is technically deleted
+
+For some users, particularly those writing community cookbooks, this is going to be a breaking change. I'd highly recommend putting logic within your cookbooks to only install features on supported releases of Windows. If you'd just like it to continue even with a failure you can also use `ignore_failure true` on your resource although this produces a lot of failure messaging in logs.
+
+#### Properly support features as an array in windows_feature_dism
+
+We claimed to support installing features as an array in the windows_feature_dism resource previously, but it didn't actually work. The actual result was a warning that the array of features wasn't available on your platform since we compared the array to available features as if it was a string. We now properly support installation as a array and we do validation on each feature in the array to make sure the features are available on your Windows release.
+
+#### Install as the default action in windows_feature_powershell
+
+Due to some previous refactoring the :install action was not the default action for windows_feature_powershell. For all other package resources in Chef install is the default so this would likely lead to some unexpected behavior in cookbooks. This is technically a breaking change, but I suspect everyone assumed :install was always the default.
+
+#### servermanagercmd.exe Support Removal
+
+This cookbook previously supported servermanagercmd.exe, which was necessary for feature installation on Windows 2003 / 2008 (not R2) systems. Windows 2003 went full EOL in 2015 and 2008 went into extended support in 2015\. Neither releases are supported platforms for Chef or this cookbook so we've chosen to simplify the code and remove support entirely.
+
+#### Remove the undocumented node['windows']['rubyzipversion'] attribute
+
+This attribute was a workaround for a bug in the rubyzip gem YEARS ago that's just not necessary anymore. We also never documented this attribute and a resource shouldn't change behavior based on attributes.
+
 ## 3.5.2 (2018-03-01)
 
 - Remove value_for_feature_provider helper which wasn't being used and was using deprecated methods
 - Add all the Windows Core editions to the version helper
-- Simplify / speedup how we find the font directory
+- Simplify / speedup how we find the font directory in windows_font
 - Don't bother enabling why-run mode in the resources since it's enabled by default
 - Don't include mixlib-shellout in the resources since it's included by default
-- Fix installation messaging for windows_feature_powershell
+- Fix installation messaging for windows_feature_powershell to properly show all features being installed
 - Use powershell for the share creation / deletion in windows_share. This speeds up the runs and fixes some of the failures.
 
 ## 3.5.1 (2018-02-23)

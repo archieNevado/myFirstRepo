@@ -128,11 +128,17 @@
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:after>
-            <Button itemId="{FavoritesToolbar.NEW_MENU_BUTTON_ITEM_ID}" />
+            <Button itemId="{FavoritesToolbar.NEW_MENU_BUTTON_ITEM_ID}"/>
           </ui:after>
         </ui:AddItemsPlugin>
       </editor:plugins>
     </editor:FavoritesToolbar>
+
+    <editor:EditorMainView>
+      <editor:plugins exml:mode="append">
+        <editor:AddDefaultFolderComboEntry lookup="{calculateQuickCreateFolder}"/>
+      </editor:plugins>
+    </editor:EditorMainView>
 
     <editor:TabbedDocumentFormDispatcher>
       <editor:plugins>
@@ -213,7 +219,8 @@
     <editor:ContentUtilConfigurationPlugin expandFolderLimit="100"/>
 
     <!-- Register document types to be allowed to be dropped -->
-    <editor:ConfigureDocumentTypes names="CMTeasable" richTextLinkable="true" />
+    <editor:ConfigureDocumentTypes names="CMTeasable"
+                                   richTextLinkable="true"/>
 
     <!-- register Image Types for thumbnail view and RichText Drag'n'Drop -->
     <editor:ConfigureDocumentTypes names="CMMedia,CMImage"
@@ -294,7 +301,7 @@
       </editor:types>
     </editor:ConfigureDashboardPlugin>
 
-    <editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/>
+    <!--<editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/>-->
   </local:configuration>
 
 

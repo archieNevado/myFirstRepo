@@ -100,6 +100,7 @@
 <LinkListProperty Name="previewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
+<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/js/preview%2Ejs.xml" cmexport:path="/Themes/corporate/js/preview%2Ejs"/>
 </LinkListProperty>
 <LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
 </LinkListProperty>
