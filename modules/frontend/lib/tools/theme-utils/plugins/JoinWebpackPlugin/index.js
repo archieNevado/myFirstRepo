@@ -7,25 +7,25 @@
 // - allow [N] in group and output names as described https://github.com/webpack/loader-utils#interpolatename
 // -> for this added new "regExp" configuration
 
-const async = require('async');
-const glob = require('glob');
-const { interpolateName } = require('loader-utils');
-const { PrefetchPlugin } = require('webpack');
-const { RawSource } = require('webpack-sources');
+const async = require("async");
+const glob = require("glob");
+const { interpolateName } = require("loader-utils");
+const { PrefetchPlugin } = require("webpack");
+const { RawSource } = require("webpack-sources");
 
 let NEXT_ID = 0;
 
 class JoinWebpackPlugin {
   constructor(options) {
-    if (typeof options !== 'object') {
-      throw new Error('options must be object of key:values');
+    if (typeof options !== "object") {
+      throw new Error("options must be object of key:values");
     }
 
-    if (typeof options.join !== 'function') {
+    if (typeof options.join !== "function") {
       throw new Error("'join' option must be function");
     }
 
-    if (typeof options.save !== 'function') {
+    if (typeof options.save !== "function") {
       throw new Error("'save' option must be function");
     }
 
@@ -33,7 +33,7 @@ class JoinWebpackPlugin {
       options.search = [];
     }
 
-    if (typeof options.search === 'string') {
+    if (typeof options.search === "string") {
       options.search = [options.search];
     }
 
@@ -44,24 +44,24 @@ class JoinWebpackPlugin {
     options.skip = options.skip || [];
     options.skip = Array.isArray(options.skip) ? options.skip : [options.skip];
 
-    options.name = options.name || '[hash]';
+    options.name = options.name || "[hash]";
     options.group = options.group || null;
     options.regExp = options.regExp || null;
     this.groups = {};
 
     this.options = options;
-    this.state = 'loading';
+    this.state = "loading";
     this.id = options.id ? options.id : ++NEXT_ID;
   }
 
   group(groupName) {
-    groupName = groupName || '';
+    groupName = groupName || "";
     if (!this.groups[groupName]) {
       this.groups[groupName] = {
         sources: {},
         result: null,
         filetmpl: this.options.name,
-        filename: 'cm-join-webpack-plugin.default',
+        filename: "cm-join-webpack-plugin.default",
       };
     }
     return this.groups[groupName];
@@ -69,9 +69,9 @@ class JoinWebpackPlugin {
 
   addSource(groupName, source, path, module) {
     const group = this.group(groupName);
-    if (this.state === 'loading') {
+    if (this.state === "loading") {
       group.sources[path] = source;
-      return 'cm-join-webpack-plugin.in.process';
+      return "cm-join-webpack-plugin.in.process";
     } else {
       return group.filename;
     }
@@ -113,9 +113,9 @@ class JoinWebpackPlugin {
   apply(compiler) {
     this.doPrefetch(compiler);
 
-    compiler.plugin('this-compilation', compilation => {
-      compilation.plugin('optimize-tree', (chunks, modules, callback) => {
-        this.state = 'building';
+    compiler.plugin("this-compilation", compilation => {
+      compilation.plugin("optimize-tree", (chunks, modules, callback) => {
+        this.state = "building";
 
         Object.keys(this.groups).forEach(groupName => {
           const group = this.group(groupName);
@@ -158,13 +158,13 @@ class JoinWebpackPlugin {
             if (err) {
               return callback(err);
             }
-            this.state = 'loading';
+            this.state = "loading";
             callback();
           }
         );
       });
 
-      compilation.plugin('additional-assets', callback => {
+      compilation.plugin("additional-assets", callback => {
         Object.keys(this.groups).forEach(groupName => {
           const group = this.group(groupName);
           compilation.assets[group.filename] = new RawSource(group.result);
@@ -177,8 +177,8 @@ class JoinWebpackPlugin {
   loader(query = {}) {
     query.id = this.id;
     return (
-      require.resolve('../../loaders/JoinWebpackLoader') +
-      '?' +
+      require.resolve("../../loaders/JoinWebpackLoader") +
+      "?" +
       JSON.stringify(query)
     );
   }

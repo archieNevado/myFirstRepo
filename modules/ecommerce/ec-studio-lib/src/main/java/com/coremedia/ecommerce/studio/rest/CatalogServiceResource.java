@@ -136,7 +136,7 @@ public class CatalogServiceResource {
         return getMarketingSpotService().searchMarketingSpots(query, params, newStoreContextForSite);
       }
     } else {// default: Product
-      return getCatalogService().withStoreContext(newStoreContextForSite).searchProducts(query, params, newStoreContextForSite);
+      return getCatalogService().searchProducts(query, params, newStoreContextForSite);
     }
   }
 

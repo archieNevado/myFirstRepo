@@ -12,8 +12,6 @@
   <fx:Script><![CDATA[
     public static const xtype:String = "com.coremedia.blueprint.studio.config.cmDownloadForm";
 
-    public static const CATEGORY_DOCUMENT_FORM_ID:String = "categoryDocumentFormId";
-
     private var config:CMDownloadForm;
 
     public native function CMDownloadForm(config:CMDownloadForm = null);
@@ -43,13 +41,7 @@
         <bpforms:ViewTypeSelectorForm/>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-      <editor:items>
-        <bpforms:CategoryDocumentForm itemId="{CATEGORY_DOCUMENT_FORM_ID}"/>
-        <bpforms:SEOForm/>
-      </editor:items>
-    </editor:DocumentForm>
+    <bpforms:DefaultExtraDataForm/>
     <bpforms:MultiLanguageDocumentForm/>
     <bpforms:CMDownloadSystemForm bindTo="{config.bindTo}"/>
   </editor:items>

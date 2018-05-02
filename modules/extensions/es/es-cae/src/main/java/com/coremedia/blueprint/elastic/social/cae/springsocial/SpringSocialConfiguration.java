@@ -46,7 +46,9 @@ public class SpringSocialConfiguration {
       throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
     }
 
-    return usersConnectionRepository().createConnectionRepository(authentication.getName());
+    @SuppressWarnings("PersonalData") // ok, create a request-scope ConnectionRepository from user ID
+    String userId = authentication.getName();
+    return usersConnectionRepository().createConnectionRepository(userId);
   }
 
   @Bean

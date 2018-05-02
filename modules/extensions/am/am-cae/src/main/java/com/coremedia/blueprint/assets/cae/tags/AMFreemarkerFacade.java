@@ -4,7 +4,7 @@ import com.coremedia.blueprint.assets.cae.AMUtils;
 import com.coremedia.blueprint.assets.cae.DownloadPortal;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
+import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import org.springframework.beans.factory.annotation.Required;
 
 public class AMFreemarkerFacade {
@@ -28,7 +28,7 @@ public class AMFreemarkerFacade {
   }
 
   public boolean hasDownloadPortal() {
-    return SiteHelper.findSite(FreemarkerUtils.getCurrentRequest())
+    return SiteHelper.findSite(FreemarkerEnvironment.getCurrentRequest())
             .map(site -> AMUtils.getDownloadPortalRootDocument(settingsService, site))
             .isPresent();
   }

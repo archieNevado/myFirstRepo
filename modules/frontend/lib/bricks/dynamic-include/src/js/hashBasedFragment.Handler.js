@@ -14,10 +14,13 @@ const STATE_DATA_ATTRIBUTE_NAME = "hash-based-fragment-handler-state";
  * @returns {boolean}
  */
 function validateHandlerConfig(handlerConfig) {
-  return handlerConfig.baseUrl
-          && (!handlerConfig.fragmentContainer
-          || handlerConfig.fragmentContainer.global === false
-          || handlerConfig.fragmentContainer.global === true && handlerConfig.fragmentContainer.selector);
+  return (
+    handlerConfig.baseUrl &&
+    (!handlerConfig.fragmentContainer ||
+      handlerConfig.fragmentContainer.global === false ||
+      (handlerConfig.fragmentContainer.global === true &&
+        handlerConfig.fragmentContainer.selector))
+  );
 }
 
 export const BASE_CONFIG = {
@@ -26,12 +29,11 @@ export const BASE_CONFIG = {
   modifiedParametersHeaderPrefix: undefined,
   fragmentContainer: {
     selector: undefined,
-    global: false
-  }
+    global: false,
+  },
 };
 
 export default class {
-
   constructor(element, config) {
     this._element = element;
     this._config = config;
@@ -62,7 +64,10 @@ export default class {
   }
 
   _requestParamsChanged(newRequestParams) {
-    if (!this._lastRequestParams && newRequestParams || this._lastRequestParams && !newRequestParams) {
+    if (
+      (!this._lastRequestParams && newRequestParams) ||
+      (this._lastRequestParams && !newRequestParams)
+    ) {
       return true;
     }
     let name;
@@ -91,47 +96,64 @@ export default class {
     }
     const $fragmentContainer = this._getFragmentContainer();
     // disable underlying hashBasedFragmentHandlers so no unnecessary requests are triggered
-    const $subHandlers = $fragmentContainer.find(":data(" + STATE_DATA_ATTRIBUTE_NAME + ")");
-    $subHandlers.each(function () {
-      $(this).data(STATE_DATA_ATTRIBUTE_NAME).instance.disable();
+    const $subHandlers = $fragmentContainer.find(
+      ":data(" + STATE_DATA_ATTRIBUTE_NAME + ")"
+    );
+    $subHandlers.each(function() {
+      $(this)
+        .data(STATE_DATA_ATTRIBUTE_NAME)
+        .instance.disable();
     });
     const requestConfig = {
       url: this._config.baseUrl,
-      params: requestParams
+      params: requestParams,
     };
     const that = this;
-    basic.updateTargetWithAjaxResponse($fragmentContainer, requestConfig, false, function (jqXHR) {
-      if (jqXHR.status === 200) {
-        // only handle modified parameters if header prefix is given
-        if (that._config.modifiedParametersHeaderPrefix) {
-          let requestChanged = false;
-          $.each(that._config.validParameters, function (_, validParameter) {
-            const modifierParameter = jqXHR.getResponseHeader(that._config.modifiedParametersHeaderPrefix + validParameter);
-            if (modifierParameter) {
-              requestChanged = true;
-              requestParams[validParameter] = modifierParameter;
-            }
-          });
+    basic.updateTargetWithAjaxResponse(
+      $fragmentContainer,
+      requestConfig,
+      false,
+      function(jqXHR) {
+        if (jqXHR.status === 200) {
+          // only handle modified parameters if header prefix is given
+          if (that._config.modifiedParametersHeaderPrefix) {
+            let requestChanged = false;
+            $.each(that._config.validParameters, function(_, validParameter) {
+              const modifierParameter = jqXHR.getResponseHeader(
+                that._config.modifiedParametersHeaderPrefix + validParameter
+              );
+              if (modifierParameter) {
+                requestChanged = true;
+                requestParams[validParameter] = modifierParameter;
+              }
+            });
 
-          if (requestChanged) {
-            // adjust state so no reload is triggered
-            that._lastRequestParams = requestParams;
-            const newHash = "#" + hashBasedFragment.requestParamsToString(requestParams);
-            if (history.replaceState) {
-              history.replaceState({}, "", newHash);
+            if (requestChanged) {
+              // adjust state so no reload is triggered
+              that._lastRequestParams = requestParams;
+              const newHash =
+                "#" + hashBasedFragment.requestParamsToString(requestParams);
+              if (history.replaceState) {
+                history.replaceState({}, "", newHash);
+              }
             }
           }
+        } else {
+          $subHandlers.each(function() {
+            $(this)
+              .data(STATE_DATA_ATTRIBUTE_NAME)
+              .instance.enable();
+          });
         }
-      } else {
-        $subHandlers.each(function () {
-          $(this).data(STATE_DATA_ATTRIBUTE_NAME).instance.enable();
-        });
       }
-    });
+    );
   }
 
   _handleHashChange(newHash) {
-    const requestParams = hashBasedFragment.stringToRequestParams(newHash.replace(/^#/, "") || "", this._config.validParameters);
+    const requestParams = hashBasedFragment.stringToRequestParams(
+      newHash.replace(/^#/, "") || "",
+      this._config.validParameters
+    );
     if (this._requestParamsChanged(requestParams)) {
       this._lastRequestParams = requestParams;
       this._changeRef(requestParams);
@@ -139,24 +161,22 @@ export default class {
   }
 
   _init() {
-
     // validate configuration
     if (!validateHandlerConfig(this._config)) {
-      throw("Invalid handler configuration");
+      throw "Invalid handler configuration";
     }
 
     const hash = window.location.hash;
     this._handleHashChange(hash);
 
     const that = this;
-    this._windowListener = function () {
+    this._windowListener = function() {
       that._handleHashChange(window.location.hash);
     };
     $window.on("hashchange", this._windowListener);
   }
 
   destroy() {
-
     // validate configuration
     if (!validateHandlerConfig(this._config)) {
       logger.log("Invalid configuration:", this._config);
@@ -168,4 +188,4 @@ export default class {
       this._windowListener = undefined;
     }
   }
-};
+}

@@ -8,8 +8,8 @@ function defaultGetCandidateRatio(id, responsiveImages, containerRatio) {
   const ratioHeight = format.ratioHeight;
   return {
     name: format.name,
-    difference: Math.abs(containerRatio - (ratioWidth / ratioHeight)),
-    linksForWidth: format.linksForWidth
+    difference: Math.abs(containerRatio - ratioWidth / ratioHeight),
+    linksForWidth: format.linksForWidth,
   };
 }
 
@@ -25,8 +25,8 @@ function legacyGetCandidateRatio(id, responsiveImages, containerRatio) {
     const ratioHeight = parseInt(match[2]);
     return {
       name: id,
-      difference: Math.abs(containerRatio - (ratioWidth / ratioHeight)),
-      linksForWidth: responsiveImages[id]
+      difference: Math.abs(containerRatio - ratioWidth / ratioHeight),
+      linksForWidth: responsiveImages[id],
     };
   }
   return null;
@@ -40,7 +40,7 @@ function responsiveImage(image) {
       type: "srcChanged",
       src: $image.attr("src"),
       maxWidth: $image.data("lastMaxWidth"),
-      ratio: $image.data("lastRatio")
+      ratio: $image.data("lastRatio"),
     });
   }
 
@@ -62,7 +62,6 @@ function responsiveImage(image) {
 
   // only run if there is at least one aspect ratio defined
   if (typeof responsiveImages !== "undefined") {
-
     const $imageContainer = $image.parent();
     let containerWidth = $imageContainer.width();
     let containerHeight = $imageContainer.height();
@@ -85,7 +84,7 @@ function responsiveImage(image) {
     let fittingRatio = {
       name: undefined,
       difference: undefined,
-      linksForWidth: []
+      linksForWidth: [],
     };
 
     // @since 1.6
@@ -95,20 +94,27 @@ function responsiveImage(image) {
     // continue support of the old format that derived the ratio from the name. will be removed in the next major
     // release
     if (!$.isArray(responsiveImages)) {
-      logger.log("Using legacy data structure for responsive image setting. Please consider changing to the new format");
+      logger.log(
+        "Using legacy data structure for responsive image setting. Please consider changing to the new format"
+      );
       getCandidateRatio = legacyGetCandidateRatio;
     }
 
     // determine the best fit in respect of the defined ratios and the container ratio
     for (let id in responsiveImages) {
       if (responsiveImages.hasOwnProperty(id)) {
-        const candidateRatio = getCandidateRatio(id, responsiveImages, containerRatio);
-        if (candidateRatio !== null
-                /* jshint ignore:start */
-                && typeof fittingRatio.name === "undefined"
-                || typeof fittingRatio.difference === "undefined"
-                || (fittingRatio.difference > candidateRatio.difference)
-        /* jshint ignore:end */
+        const candidateRatio = getCandidateRatio(
+          id,
+          responsiveImages,
+          containerRatio
+        );
+        if (
+          (candidateRatio !== null &&
+            /* jshint ignore:start */
+            typeof fittingRatio.name === "undefined") ||
+          typeof fittingRatio.difference === "undefined" ||
+          fittingRatio.difference > candidateRatio.difference
+          /* jshint ignore:end */
         ) {
           fittingRatio = candidateRatio;
         }
@@ -117,43 +123,43 @@ function responsiveImage(image) {
 
     // only run if a valid ratio is defined
     if (typeof fittingRatio.name !== "undefined") {
-
       // find fitting link
       let fittingImage = {
         maxWidth: undefined,
-        link: undefined
+        link: undefined,
       };
       for (let maxWidth in fittingRatio.linksForWidth) {
-
         if (!fittingRatio.linksForWidth.hasOwnProperty(maxWidth)) {
           continue;
         }
 
         const candidateImage = {
           maxWidth: parseInt(maxWidth),
-          link: fittingRatio.linksForWidth[maxWidth]
+          link: fittingRatio.linksForWidth[maxWidth],
         };
 
         // calculate fitting image, allow no quality loss
         /* jshint ignore:start */
-        if (// case: no fitting image is set
-        // -> take the candidate image
-        typeof fittingImage.maxWidth === "undefined"
-        || typeof fittingImage.link === "undefined"
-        // case: fittingImage and candidate are smaller than the container
-        // -> take candidate if the image is bigger (lesser quality loss)
-        || (fittingImage.maxWidth < containerWidth
-        && candidateImage.maxWidth < containerWidth
-        && candidateImage.maxWidth > fittingImage.maxWidth)
-        // case: fittingImage is smaller and candidate is bigger than the container
-        // -> take candidate image (no quality loss is better than any quality loss)
-        || (fittingImage.maxWidth < containerWidth
-        && candidateImage.maxWidth >= containerWidth)
-        // case: fittingImage and candidate are bigger than the container
-        // -> take candidate if the image is smaller (no quality loss and smaller size)
-        || (fittingImage.maxWidth >= containerWidth
-        && candidateImage.maxWidth >= containerWidth
-        && candidateImage.maxWidth < fittingImage.maxWidth)) {
+        if (
+          // case: no fitting image is set
+          // -> take the candidate image
+          typeof fittingImage.maxWidth === "undefined" ||
+          typeof fittingImage.link === "undefined" ||
+          // case: fittingImage and candidate are smaller than the container
+          // -> take candidate if the image is bigger (lesser quality loss)
+          (fittingImage.maxWidth < containerWidth &&
+            candidateImage.maxWidth < containerWidth &&
+            candidateImage.maxWidth > fittingImage.maxWidth) ||
+          // case: fittingImage is smaller and candidate is bigger than the container
+          // -> take candidate image (no quality loss is better than any quality loss)
+          (fittingImage.maxWidth < containerWidth &&
+            candidateImage.maxWidth >= containerWidth) ||
+          // case: fittingImage and candidate are bigger than the container
+          // -> take candidate if the image is smaller (no quality loss and smaller size)
+          (fittingImage.maxWidth >= containerWidth &&
+            candidateImage.maxWidth >= containerWidth &&
+            candidateImage.maxWidth < fittingImage.maxWidth)
+        ) {
           fittingImage = candidateImage;
         }
         /* jshint ignore:end */
@@ -161,16 +167,23 @@ function responsiveImage(image) {
 
       // @since 1.3
       // image can be an <img> tag
-      const retinaSuffix = retinaImagesEnabled ? ` (Retina Images enabled with deviceRatio: ${deviceRatio})` : "";
+      const retinaSuffix = retinaImagesEnabled
+        ? ` (Retina Images enabled with deviceRatio: ${deviceRatio})`
+        : "";
       if ($image.is("img")) {
         // replace link if not the same
         if (fittingImage.link !== $image.attr("src")) {
-          logger.log(`Change Responsive Image to aspect ratio: '${fittingRatio.name}' and maxWidth: '${fittingImage.maxWidth}'${retinaSuffix}`, $imageContainer);
+          logger.log(
+            `Change Responsive Image to aspect ratio: '${
+              fittingRatio.name
+            }' and maxWidth: '${fittingImage.maxWidth}'${retinaSuffix}`,
+            $imageContainer
+          );
           $image.trigger({
             type: "srcChanging",
             src: $image.attr("src"),
             maxWidth: fittingImage.maxWidth,
-            ratio: fittingRatio.name
+            ratio: fittingRatio.name,
           });
           $image.data("lastMaxWidth", fittingImage.maxWidth);
           $image.data("lastRatio", fittingRatio.name);
@@ -182,20 +195,31 @@ function responsiveImage(image) {
         // or a background image via style attribute
       } else {
         // replace link if not the same
-        if ("background-image: url('" + fittingImage.link + "');" !== $image.attr("style")) {
-          logger.log(`Change Responsive Background Image to aspect ratio: '${fittingRatio.name}' and maxWidth: '${fittingImage.maxWidth}'${retinaSuffix}`, $imageContainer);
+        if (
+          "background-image: url('" + fittingImage.link + "');" !==
+          $image.attr("style")
+        ) {
+          logger.log(
+            `Change Responsive Background Image to aspect ratio: '${
+              fittingRatio.name
+            }' and maxWidth: '${fittingImage.maxWidth}'${retinaSuffix}`,
+            $imageContainer
+          );
           $image.data("lastMaxWidth", fittingImage.maxWidth);
           $image.data("lastRatio", fittingRatio.name);
-          $image.attr("style", "background-image: url('" + fittingImage.link + "');");
+          $image.attr(
+            "style",
+            "background-image: url('" + fittingImage.link + "');"
+          );
         }
       }
     }
   }
 }
 
-export default function (domElementOrJQueryResult) {
+export default function(domElementOrJQueryResult) {
   if (domElementOrJQueryResult instanceof $) {
-    $.each(domElementOrJQueryResult, function (index, item) {
+    $.each(domElementOrJQueryResult, function(index, item) {
       responsiveImage(item);
     });
   } else {

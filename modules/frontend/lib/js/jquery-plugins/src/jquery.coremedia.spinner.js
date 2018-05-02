@@ -24,8 +24,8 @@ import threeSixtySpinner from "../../360-spinner/src/360-spinner";
  */
 
 /*! 360° Spinner Plugin | Copyright (c) CoreMedia AG */
-$.fn.threeSixtySpinner = function () {
-  return this.each(function () {
+$.fn.threeSixtySpinner = function() {
+  return this.each(function() {
     threeSixtySpinner($(this));
   });
 };

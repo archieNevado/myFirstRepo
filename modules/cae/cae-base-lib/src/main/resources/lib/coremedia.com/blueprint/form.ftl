@@ -3,22 +3,13 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
-
-<#--
- * Renders a label associated to spring forms
- *
- * @param path the name of the field to bind to
- * @param text (optional) the text of the label. By default localization for the bound field will be applied.
- * @param bindPath (optional) prevents the rebinding of the path, e.g. if you already know that the path is bound
- * @param attr (optional) additional attributes for label tag
- * todo: CMS-11137 move to elasticsocial
- -->
+<#-- LABEL -->
 <#macro labelFromSpring path text="" bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>
   <label for="${_getIdFromExpression(spring.status.expression)}" <@util.renderAttr attr />>${text}</label>

@@ -1,0 +1,61 @@
+// reset defaults
+$slick-prev-character: "";
+$slick-next-character: "";
+$slick-dot-character: "";
+
+// import slick
+@import "~slick-carousel-no-font-no-png/slick/slick";
+@import "~slick-carousel-no-font-no-png/slick/slick-theme";
+
+
+// add margins left right for arrows
+.slick-list {
+  @media (min-width: $cm-responsive-carousel-mobile-breakpoint) {
+    margin-left: 35px - $cm-responsive-carousel-item-margin;
+    margin-right: 35px - $cm-responsive-carousel-item-margin;
+  }
+  @media (min-width: $cm-responsive-carousel-tablet-breakpoint) {
+    margin-left: 62px - $cm-responsive-carousel-item-margin;
+    margin-right: 62px - $cm-responsive-carousel-item-margin;
+  }
+}
+
+// show left/right icons as arrows
+.slick-prev,
+.slick-next {
+  &::before {
+    display: block;
+    height: $cm-responsive-carousel-arrow-size;
+    width: $cm-responsive-carousel-arrow-size;
+    transform: rotate(45deg);
+    border: 1px solid $cm-responsive-carousel-arrow-color;
+  }
+}
+
+// move left icon inside the carousel
+.slick-prev {
+  left: 0;
+
+  @media (min-width: $cm-responsive-carousel-tablet-breakpoint) {
+    left: 20px;
+  }
+
+  &::before {
+    border-width: 0 0 $cm-responsive-carousel-arrow-line $cm-responsive-carousel-arrow-line;
+    transform-origin: 8px 13px;
+  }
+}
+
+// move right icon inside the carousel
+.slick-next {
+  right: 0;
+
+  @media (min-width: $cm-responsive-carousel-tablet-breakpoint) {
+    right: 20px;
+  }
+
+  &::before {
+    border-width: $cm-responsive-carousel-arrow-line $cm-responsive-carousel-arrow-line 0 0;
+    transform-origin: 6px 7px;
+  }
+}

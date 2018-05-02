@@ -13,18 +13,18 @@ const nodeDecorators = [];
  */
 const nodeUndecorators = [];
 
-const getSelectorFunction = function (selector, handler) {
-  return function ($target) {
-    findAndSelf($target, selector).each(function () {
+const getSelectorFunction = function(selector, handler) {
+  return function($target) {
+    findAndSelf($target, selector).each(function() {
       handler($(this));
     });
   };
 };
 
 function getDataFunction(baseConfig, identifier, handler) {
-  return function ($target) {
+  return function($target) {
     const selector = "[data-" + identifier + "]";
-    findAndSelf($target, selector).each(function () {
+    findAndSelf($target, selector).each(function() {
       const $this = $(this);
       const config = $.extend({}, baseConfig, $this.data(identifier));
       const state = $.extend({}, $this.data(identifier + "-state"));
@@ -58,9 +58,15 @@ export function addNodeDecorator(nodeDecorator, nodeUndecorator) {
  * @param {nodeDecoratorBySelectorCallback=} decorationHandler
  * @param {nodeDecoratorBySelectorCallback=} undecorationHandler
  */
-export function addNodeDecoratorBySelector(selector, decorationHandler, undecorationHandler) {
-  decorationHandler && nodeDecorators.push(getSelectorFunction(selector, decorationHandler));
-  undecorationHandler && nodeUndecorators.push(getSelectorFunction(selector, undecorationHandler));
+export function addNodeDecoratorBySelector(
+  selector,
+  decorationHandler,
+  undecorationHandler
+) {
+  decorationHandler &&
+    nodeDecorators.push(getSelectorFunction(selector, decorationHandler));
+  undecorationHandler &&
+    nodeUndecorators.push(getSelectorFunction(selector, undecorationHandler));
 }
 
 /**
@@ -71,21 +77,32 @@ export function addNodeDecoratorBySelector(selector, decorationHandler, undecora
 /**
  * Adds a node decorator and already performs selection, configuration and state tasks.
  *
- * @param {object} baseConfig
+ * @param {Object} baseConfig
  * @param {String} identifier
  * @param {nodeDecoratorByDataCallback=} decorationHandler
  * @param {nodeDecoratorByDataCallback=} undecorationHandler
  */
-export function addNodeDecoratorByData(baseConfig, identifier, decorationHandler, undecorationHandler) {
-  decorationHandler && nodeDecorators.push(getDataFunction(baseConfig, identifier, decorationHandler));
-  undecorationHandler && nodeUndecorators.push(getDataFunction(baseConfig, identifier, undecorationHandler));
+export function addNodeDecoratorByData(
+  baseConfig,
+  identifier,
+  decorationHandler,
+  undecorationHandler
+) {
+  decorationHandler &&
+    nodeDecorators.push(
+      getDataFunction(baseConfig, identifier, decorationHandler)
+    );
+  undecorationHandler &&
+    nodeUndecorators.push(
+      getDataFunction(baseConfig, identifier, undecorationHandler)
+    );
 }
 
 /**
  * @callback nodeDecoratorByDataCallback
  * @param {jQuery} $target
- * @param {object} config
- * @param {object} state
+ * @param {Object} config
+ * @param {Object} state
  */
 
 /**
@@ -100,7 +117,7 @@ export function decorateNode(node) {
   } else {
     $target = $(node);
   }
-  nodeDecorators.forEach(function (functionality) {
+  nodeDecorators.forEach(function(functionality) {
     functionality($target);
   });
 }
@@ -117,7 +134,7 @@ export function undecorateNode(node) {
   } else {
     $target = $(node);
   }
-  nodeUndecorators.forEach(function (functionality) {
+  nodeUndecorators.forEach(function(functionality) {
     functionality($target);
   });
 }

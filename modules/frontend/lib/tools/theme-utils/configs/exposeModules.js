@@ -5,8 +5,8 @@ const deepMerge = require("./utils/deepMerge");
 // provide some modules as global variable as long as the ui tests and the "cm-wcs" workspace still rely on it
 // the mapping is: moduleName => globalVariableName
 const modulesToExpose = {
-  "jquery": "coremedia.blueprint.$",
-  "@coremedia/js-basic": "coremedia.blueprint.basic"
+  jquery: "coremedia.blueprint.$",
+  "@coremedia/js-basic": "coremedia.blueprint.basic",
 };
 
 const themeConfig = getThemeConfig();
@@ -18,17 +18,16 @@ for (let module of Object.keys(modulesToExpose)) {
     const path = resolveFrom(themeConfig.path, module);
     rules.push({
       test: path,
-      loader: `expose-loader?${globalVariableName}`
+      loader: `expose-loader?${globalVariableName}`,
     });
   } catch (e) {
     // module not found, nothing to expose
   }
 }
 
-module.exports = () => config => deepMerge(config,
-        {
-          module: {
-            rules: rules
-          }
-        }
-);
+module.exports = () => config =>
+  deepMerge(config, {
+    module: {
+      rules: rules,
+    },
+  });

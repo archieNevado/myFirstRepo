@@ -3,15 +3,15 @@ package com.coremedia.blueprint.cae.web.links;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.objectserver.web.links.TokenResolver;
-import com.coremedia.util.StringUtil;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Splitter;
 import org.springframework.core.annotation.Order;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * A {@link TokenResolver} that resolves tokens against the {@link SettingsService}.
@@ -58,7 +58,7 @@ public class SettingsTokenResolver implements TokenResolver {
     }
 
     // 2. Interpret the token as nested setting
-    ArrayList<String> names = StringUtil.tokenizeToList(token, ".");
+    List<String> names = Splitter.on('.').omitEmptyStrings().splitToList(token);
     return names.size() > 1 ? settingsService.nestedSetting(names, String.class, beans) : null;
   }
 

@@ -7,4 +7,4 @@
 <#assign attr=cm.localParameters().attr!"" />
 <#assign link=cm.localParameters().link!cm.getLink(self.target!cm.UNDEFINED) />
 
-<a class="${cssClass}" href="${link}" ${attr?no_esc} <@cm.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>
+<a class="${cssClass}" href="${link}" ${attr?no_esc} <@preview.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>

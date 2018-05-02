@@ -237,12 +237,6 @@
     </list>
   </customize:prepend>
 
-  <customize:append id="addCommonPreviewJs" bean="previewResourcesJsList">
-    <list>
-      <value>/com/coremedia/cae/js/coremedia.preview.basic.js</value>
-    </list>
-  </customize:append>
-
   <customize:append id="addCommonPreviewCss" bean="previewResourcesCssList">
     <list>
       <value>/com/coremedia/cae/css/coremedia.preview.basic.css</value>

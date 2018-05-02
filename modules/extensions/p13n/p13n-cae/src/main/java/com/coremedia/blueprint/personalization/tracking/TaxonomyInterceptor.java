@@ -3,6 +3,7 @@ package com.coremedia.blueprint.personalization.tracking;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.scoring.ScoringContext;
@@ -119,7 +120,7 @@ public class TaxonomyInterceptor extends HandlerInterceptorAdapter {
   }
 
   private void updateContext(final List<String> taxonomies, String contextName) {
-    final ScoringContext context = contextCollection.getContext(contextName, ScoringContext.class);
+    final @PersonalData ScoringContext context = contextCollection.getContext(contextName, ScoringContext.class);
     if (context != null) {
       LOG.debug("registering scores for context {}: {}", contextName, taxonomies);
       context.processEvents(taxonomies);

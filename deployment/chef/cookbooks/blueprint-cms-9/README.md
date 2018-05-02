@@ -13,7 +13,7 @@ This is the wrapper cookbook to deploy this CoreMedia Blueprint variant.
 * blueprint-base
 * blueprint-tomcat
 * blueprint-proxy
-* coremedia-proxy (~> 0.3.2)
+* coremedia-proxy (~> 1.0.0)
 
 # Attributes
 
@@ -22,7 +22,7 @@ This is the wrapper cookbook to deploy this CoreMedia Blueprint variant.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['cluster']['default']['host']` -  Defaults to `node['blueprint']['cms-9']['cms_host']`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['cluster']['default']['port']` -  Defaults to `42180`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['context']` -  Defaults to `blueprint`.
-* `node['blueprint']['cms-9']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['cms-9']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['server_name']` -  Defaults to `corporate.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['default_site']` -  Defaults to `corporate`.
 * `node['blueprint']['cms-9']['virtual_host']['delivery']['sites']['corporate']['site_id']` - The id property of the CMSite content associated with this site. Defaults to `abffe57734feeee`.

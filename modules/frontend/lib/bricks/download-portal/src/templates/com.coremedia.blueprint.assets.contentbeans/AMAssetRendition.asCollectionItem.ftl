@@ -10,7 +10,7 @@
     "asset": self.asset.contentId
   }
 } />
-<div class="am-download-collection-item ${classBox}" <@cm.dataAttribute name="data-am-rendition-collection-item" data=renditionCollectionItemData /><@cm.metadata data="properties." + self.name />>
+<div class="am-download-collection-item ${classBox}" <@cm.dataAttribute name="data-am-rendition-collection-item" data=renditionCollectionItemData /><@preview.metadata data="properties." + self.name />>
   <@cm.include self=self.asset view="asPictureBox" params={"classBox": "am-download-collection-item__picture-box", "classImage": "am-download-collection-item__picture", "scalePicture": true} />
   <div class="am-download-collection-item__info">
     <h3 class="am-download-collection-item__title am-heading-3">

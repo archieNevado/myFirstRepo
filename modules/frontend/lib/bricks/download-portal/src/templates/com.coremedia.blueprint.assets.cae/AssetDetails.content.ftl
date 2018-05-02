@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.assets.cae.AssetDetails" -->
 
-<div class="am-asset-details"<@cm.metadata data=self.asset.content />>
+<div class="am-asset-details"<@preview.metadata data=self.asset.content />>
 
   <div class="am-asset-details__left">
     <@cm.include self=self.asset view="asPictureBox" params={"classBox": "am-asset-details__picture"}  />
@@ -17,7 +17,7 @@
   </div>
 
   <div class="am-asset-details__right">
-    <div class="am-asset-details__info"<@cm.metadata data="properties.metadata" />>
+    <div class="am-asset-details__info"<@preview.metadata data="properties.metadata" />>
       <#if self.metadataProperties?has_content>
         <table class="am-asset-info">
           <#list self.metadataProperties?keys as key>

@@ -3,10 +3,10 @@ package com.coremedia.blueprint.common.services.context;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.cotopaxi.common.CacheUtil;
+import com.coremedia.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.coremedia.springframework.request.ContextAttributes;
+import com.coremedia.blueprint.common.util.ContextAttributes;
 
 public class CurrentContextServiceImpl implements CurrentContextService {
   private static final Logger LOG = LoggerFactory.getLogger(CurrentContextServiceImpl.class);
@@ -21,7 +21,7 @@ public class CurrentContextServiceImpl implements CurrentContextService {
    */
   @Override
   public CMContext getContext() {
-    CacheUtil.uncacheable(); // ensure that this method is not cached
+    Cache.uncacheable(); // ensure that this method is not cached
     Navigation navigation = ContextAttributes.getRequestAttribute(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION, Navigation.class);
     if (navigation == null) {
       LOG.debug("Navigation context not found in request");

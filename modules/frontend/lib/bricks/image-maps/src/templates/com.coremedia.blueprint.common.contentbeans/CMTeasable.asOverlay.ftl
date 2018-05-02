@@ -8,13 +8,14 @@
   "displayTitle": false
 } + overlay!{} />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
+<#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
-<div class="cm-overlay ${classOverlay}"<@cm.metadata data=(metadata![]) + [self.content] />>
-  <@bp.optionalLink href=cm.getLink(self.target!cm.UNDEFINED) attr={"class": "cm-overlay__link", "target":target}>
+<div class="cm-overlay ${classOverlay}"<@preview.metadata data=(metadata![]) + [self.content] />>
+  <@bp.optionalLink href=cm.getLink(self.target!cm.UNDEFINED) attr={"class":"cm-overlay__link", "target":target,"rel":rel}>
     <#if self.teaserTitle?has_content && overlay.displayTitle>
-      <span<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</span>
+      <span <#if !self.target?has_content>class="cm-overlay__link"</#if> <@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</span>
     <#else>
-      <span><@bp.message "button_quickinfo" /></span>
+      <span <#if !self.target?has_content>class="cm-overlay__link"</#if>><@bp.message "button_quickinfo" /></span>
     </#if>
   </@bp.optionalLink>
 </div>

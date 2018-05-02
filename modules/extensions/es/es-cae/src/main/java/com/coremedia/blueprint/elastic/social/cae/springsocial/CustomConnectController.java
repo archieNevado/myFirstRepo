@@ -86,6 +86,10 @@ public class CustomConnectController extends ConnectController {
   private RedirectView createRedirectView(@Nonnull NativeWebRequest request) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Principal principal = (Principal) authentication.getPrincipal();
+
+    // Suppress warning about passing @PersonalData Principal#getName() to #getUserById.
+    // If the Principal's name is just an ID, then it's safe to lookup the user by that ID.
+    @SuppressWarnings("PersonalData")
     CommunityUser user = communityUserService.getUserById(principal.getName());
 
     HttpServletRequest httpServletRequest = (HttpServletRequest) request.getNativeRequest();

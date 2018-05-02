@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.elastic.social.demodata;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.coremedia.elastic.core.api.tenant.TenantService;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
@@ -9,16 +8,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.coremedia.elastic.core.api.tenant.TenantService;
 
 import static com.coremedia.blueprint.elastic.social.demodata.DemoDataGenerator.STATE_RUNNING;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Named("demoDataGeneratorController")
 public class DemoDataGeneratorController extends AbstractController {
-
-  private static final Logger LOG = LoggerFactory.getLogger(DemoDataGeneratorController.class);
-
   static final String INTERVAL_PARAM = "interval";
   static final String TENANT_PARAM = "tenant";
   static final String BOOST_PARAM = "boost";
@@ -39,11 +34,7 @@ public class DemoDataGeneratorController extends AbstractController {
 
     String tenant = request.getParameter(TENANT_PARAM);
     if (!isBlank(tenant)) {
-      if (!tenantService.getRegistered().contains(tenant)) {
-        LOG.info("Register previously unknown tenant '{}'", tenant);
-        tenantService.register(tenant);
-      }
-      tenantService.setCurrent(tenant);
+      tenantService.setCurrent(tenant, true);
     }
 
     try {

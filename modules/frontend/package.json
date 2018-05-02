@@ -7,6 +7,7 @@
     "build": "lerna run build",
     "create-theme": "node ./lib/tools/cm-cli/bin/cm-cli.js create-theme",
     "apidoc": "lerna run apidoc",
+    "prettier": "lerna run prettier",
     "lerna": "lerna"
   },
   "workspaces": [
@@ -24,6 +25,6 @@
   },
   "coremedia": {
     "type": "workspace",
-    "version": "1801.3"
+    "version": "1804.1"
   }
 }

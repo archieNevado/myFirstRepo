@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const closestPackage = require('closest-package');
-const fs = require('fs');
-const path = require('path');
-const semver = require('semver');
-const { getInstalledPathSync } = require('get-installed-path');
+const closestPackage = require("closest-package");
+const fs = require("fs");
+const path = require("path");
+const semver = require("semver");
+const { getInstallationPath } = require("./workspace");
 
 /**
  * Represents a dependency with sub dependencies.
@@ -15,7 +15,7 @@ const { getInstalledPathSync } = require('get-installed-path');
  * @param dependencies (optional) the subdependencies of the dependency
  * @constructor
  */
-class Dependency {
+class NodeModule {
   constructor(name, version, pkgPath, dependencies = null) {
     this._name = name;
     this._version = version;
@@ -49,7 +49,7 @@ class Dependency {
 
   /**
    * The direct dependencies of the dependency
-   * @return {Array<Dependency>}
+   * @return {Array<NodeModule>}
    */
   getDependencies() {
     return this._dependencies;
@@ -57,7 +57,7 @@ class Dependency {
 
   /**
    * Adds a given direct dependency
-   * @param {Dependency} dependency
+   * @param {NodeModule} dependency
    */
   addDependency(dependency) {
     this.getDependencies().push(dependency);
@@ -68,7 +68,7 @@ const ACCEPT_ALL = () => true;
 
 /**
  * @callback resolveDependenciesAcceptCallback
- * @param {Dependency} dependencyName the dependency to check
+ * @param {NodeModule} dependencyName the dependency to check
  * @param {string} requiredFrom the path to the pkg that depends on the given dependency
  * @return {boolean} if false the resolving will be stopped at that branch.
  */
@@ -79,7 +79,7 @@ const ACCEPT_ALL = () => true;
  * @param accept  {resolveDependenciesAcceptCallback} (optional) checks if a dependency is included in the result
  * @param parentDependency
  * @param resolvedDependenciesByName {Array} a list of already resolved dependencies
- * @return {Dependency} the resolved dependency tree
+ * @return {NodeModule} the resolved dependency tree
  */
 function resolveDependencies(
   pkgPath,
@@ -91,7 +91,7 @@ function resolveDependencies(
   if (!pkg) {
     return null;
   }
-  const me = new Dependency(pkg.name, pkg.version, pkgPath);
+  const me = new NodeModule(pkg.name, pkg.version, pkgPath);
   if (parentDependency !== null && !accept(me, parentDependency)) {
     return null;
   }
@@ -101,18 +101,9 @@ function resolveDependencies(
       if (resolvedDependenciesByName.indexOf(dependencyName) > -1) {
         continue;
       }
-      const nodeModulePaths = [path.join(path.dirname(pkgPath), "node_modules")].concat(process.mainModule.paths);
-      let dependencyPkgPath;
-      try {
-        const moduleInstallationPath = getInstalledPathSync(dependencyName, {
-          paths: nodeModulePaths,
-        });
-        dependencyPkgPath = closestPackage.sync(moduleInstallationPath);
-      } catch (e) {
-        throw new Error(
-          `Could not find installation folder for dependency '${dependencyName}' of '${pkg.name}', searched in ${nodeModulePaths}`
-        );
-      }
+      const dependencyPkgPath = closestPackage.sync(
+        getInstallationPath(dependencyName, pkgPath)
+      );
 
       resolvedDependenciesByName.push(dependencyName);
       const resolvedDependency = resolveDependencies(
@@ -135,7 +126,7 @@ function resolveDependencies(
  *
  * @param pkgPath the path to the package.json
  * @param accept  {resolveDependenciesAcceptCallback} (optional) checks if a dependency is included in the result
- * @return {Array<Dependency>}
+ * @return {Array<NodeModule>}
  */
 function getDependencies(pkgPath, accept = ACCEPT_ALL) {
   const dependency = resolveDependencies(pkgPath, accept);
@@ -150,7 +141,7 @@ function getDependencies(pkgPath, accept = ACCEPT_ALL) {
  *
  * @param pkgPath the path to the package.json
  * @param accept  {resolveDependenciesAcceptCallback} (optional) checks if a dependency is included in the result
- * @return {Array<Dependency>}
+ * @return {Array<NodeModule>}
  */
 function getFlattenedDependencies(pkgPath, accept = ACCEPT_ALL) {
   function collect(dependencies, target) {
@@ -172,21 +163,21 @@ function isFileDependency(version) {
 }
 
 /**
- * Resolves a given file dependency by using the given "rootPkgPath" and {@link Dependency#getVersion} to resolve
+ * Resolves a given file dependency by using the given "rootPkgPath" and {@link NodeModule#getVersion} to resolve
  * the path of the file dependency.
  *
  * @param rootPkgPath the path to the pkg that contains the dependency
  * @param fileDependency the file dependency to resolve
- * @return {Dependency} The resolved file dependency, {@link Dependency#getPkgPath} points to the local
+ * @return {NodeModule} The resolved file dependency, {@link NodeModule#getPkgPath} points to the local
  *                         package (not the installation)
  */
 function resolveFileDependency(rootPkgPath, fileDependency) {
   const absolutePath = path.resolve(
     path.dirname(rootPkgPath),
-    fileDependency.getVersion().replace(/^file:/, '')
+    fileDependency.getVersion().replace(/^file:/, "")
   );
-  const pkgPath = path.join(absolutePath, 'package.json');
-  return new Dependency(fileDependency.getName(), 'latest', pkgPath);
+  const pkgPath = path.join(absolutePath, "package.json");
+  return new NodeModule(fileDependency.getName(), "latest", pkgPath);
 }
 
 /**
@@ -197,7 +188,7 @@ function resolveFileDependency(rootPkgPath, fileDependency) {
  *
  * @param pkgPath the path to the package.json
  * @param resolvedDependencies an array of already resolved dependencies, defaults to an empty array
- * @return {Array<Dependency>} The resolved file dependencies, {@link Dependency#getPkgPath}
+ * @return {Array<NodeModule>} The resolved file dependencies, {@link NodeModule#getPkgPath}
  *                                points to the local package (not the installation)
  */
 function resolveFileDependencies(pkgPath, resolvedDependencies = []) {
@@ -207,7 +198,7 @@ function resolveFileDependencies(pkgPath, resolvedDependencies = []) {
     const fileDependencies = Object.keys(pkg.dependencies)
       .map(
         dependencyName =>
-          new Dependency(dependencyName, pkg.dependencies[dependencyName], null)
+          new NodeModule(dependencyName, pkg.dependencies[dependencyName], null)
       )
       .filter(dependency => isFileDependency(dependency.getVersion()))
       .map(dependency => resolveFileDependency(pkgPath, dependency))
@@ -231,7 +222,7 @@ function resolveFileDependencies(pkgPath, resolvedDependencies = []) {
 }
 
 module.exports = {
-  Dependency,
+  NodeModule,
   getDependencies,
   getFlattenedDependencies,
   resolveFileDependencies,

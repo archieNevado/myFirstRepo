@@ -36,6 +36,8 @@
 <link href="Product%20Overview/Products%20Overview%20Page.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
 <link href="Aurora%20B2B/Aurora%20B2B%20Page.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Aurora%20B2B/Aurora%20B2B%20Page"/>
 <link href="Service/Services%20Page.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Service/Services%20Page"/>
+<link href="Feel%20the%20Passion%20%28Female%20Chefs%29%20Page/Feela9278de6.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Feel%20the%20Passion%20%28Female%20Chefs%29%20Page/Feel%20the%20Passion%20%28Female%20Chefs%29%20Page"/>
+<link href="Enjoy%20your%20Passion%20%28Senior%20Chefs%29%20Page/En86a5b8de.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Enjoy%20your%20Passion%20%28Senior%20Chefs%29%20Page/Enjoy%20your%20Passion%20%28Senior%20Chefs%29%20Page"/>
 </children>
 <javaScript>
 </javaScript>
@@ -60,6 +62,7 @@
 <Link xlink:href="coremedia:///cap/resources/Product%20Overview/Products%20Overview%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
 <Link xlink:href="coremedia:///cap/resources/Aurora%20B2B/Aurora%20B2B%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Aurora%20B2B/Aurora%20B2B%20Page"/>
 <Link xlink:href="coremedia:///cap/resources/Service/Services%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Service/Services%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/../Dynamic%20Content/Latest%20Articles%20for%20Professionals.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Dynamic%20Content/Latest%20Articles%20for%20Professionals"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>
@@ -72,10 +75,9 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/For%20Professionals%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/For%20Professionals%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Unsere%20Produkte.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Editorial/Content/Unsere%20Produkte"/>
+<Link xlink:href="coremedia:///cap/resources/../Kitchen%20Dreams/Senior%20Chef%27s%20Cooking%20Passion%20Video.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Kitchen%20Dreams/Senior%20Chef%27s%20Cooking%20Passion%20Video"/>
 </LinkListProperty>
-<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Viewtypes/CMChannel/hero"/>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/superhero.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Viewtypes/CMChannel/superhero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 <Struct>

@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import java.util.Currency;
 import java.util.Locale;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONFIG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
@@ -46,7 +45,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @Override
   @Nullable
-  public StoreContext findContextByContent(@Nullable Content content) {
+  public StoreContext findContextByContent(@Nonnull Content content) {
     return createContext();
   }
 
@@ -57,16 +56,12 @@ public class StoreContextProviderMock implements StoreContextProvider {
   }
 
   private StoreContext createContext() {
-    return createContext("myConfigId", "10001", "aurora", "10001", "en_US", "USD");
+    return createContext("10001", "aurora", "10001", "en_US", "USD");
   }
 
-  private StoreContext createContext(@Nullable String configId, @Nullable String storeId, @Nullable String storeName,
-                                     String catalogId, @Nullable String localeStr, @Nullable String currency) {
+  private StoreContext createContext(@Nullable String storeId, @Nullable String storeName, String catalogId,
+                                     @Nullable String localeStr, @Nullable String currency) {
     StoreContext context = newStoreContext();
-
-    if (configId != null) {
-      context.put(CONFIG_ID, parseString(configId, CONFIG_ID));
-    }
 
     if (storeId != null) {
       context.put(STORE_ID, parseString(storeId, STORE_ID));
@@ -114,7 +109,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
   @Nonnull
   @Override
   public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
-    return new StoreContextBuilderImpl().from(source);
+    return StoreContextBuilderImpl.from(source);
   }
 
   @Nonnull

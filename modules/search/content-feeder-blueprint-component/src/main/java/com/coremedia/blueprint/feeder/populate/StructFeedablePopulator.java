@@ -30,6 +30,10 @@ public class StructFeedablePopulator implements FeedablePopulator<Object> {
     }
 
     Content content = (Content) source;
+    if (content.isFolder()) {
+      return;
+    }
+
     StringBuilder indexContent = new StringBuilder();
     for (String propertyName : propertyNames) {
       Struct struct;

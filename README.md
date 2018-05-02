@@ -21,9 +21,9 @@ Refer to [deployment/chef/README.md](./deployment/chef/README.md) for details.
 
 ## Updating the Workspace
 
-CoreMedia provides this dedicated [DXP Blueprint GitHub mirror repository](https://github.com/coremedia-contributions/dxp-blueprint) for customers and partners.
+CoreMedia provides this dedicated [CoreMedia Blueprint GitHub mirror repository](https://github.com/coremedia-contributions/coremedia-blueprints-workspace) for customers and partners.
 
-Simply use GitHubs web frontend to visually compare changes between release versions. Each release is aggregated in a [single git commit](https://github.com/coremedia-contributions/dxp-blueprint/commits/master).
+Simply use GitHubs web frontend to visually compare changes between release versions. Each release is aggregated in a [single git commit](https://github.com/coremedia-contributions/coremedia-blueprints-workspace/commits/master).
 
 CoreMedia heavily encourages you to use one of the following approaches:
 
@@ -35,7 +35,7 @@ Instead of extracting the ZIP archive from the CoreMedia download site, you can 
 
 Although CoreMedia recommends to use Git, you can keep using your favorite source code management system by applying release changes patch by patch.
 
-For example, DXP release changes are mirrored in https://github.com/coremedia-contributions/dxp-blueprint
+For example, CoreMedia release changes are mirrored in https://github.com/coremedia-contributions/coremedia-blueprints-workspace
 
 Simply add ``.patch`` to the commit URL to be able to download in patch format (hidden GitHub feature).
 

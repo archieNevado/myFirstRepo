@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.common.personaldata.PersonalData;
+
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -18,7 +20,7 @@ public class MinimumLengthPasswordPolicy implements PasswordPolicy, Serializable
    * @return true, if password meets the requirements, false otherwise
    */
   @Override
-  public boolean verify(String password) {
+  public boolean verify(@PersonalData String password) {
     return password.length() >= ValidationUtil.MINIMUM_PASSWORD_LENGTH;
   }
 }

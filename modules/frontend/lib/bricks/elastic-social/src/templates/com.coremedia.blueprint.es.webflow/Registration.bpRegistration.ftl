@@ -13,7 +13,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="cm-form cm-form--registration well col-xs-12 col-md-6 col-md-push-3"<@cm.metadata data=[registrationAction.content!"", "properties.id"]/>>
+    <div class="cm-form cm-form--registration well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[registrationAction.content!"", "properties.id"]/>>
       <h1 class="cm-form__headline"><@bp.message "registration_register" /></h1>
       <form method="post" enctype="multipart/form-data" data-cm-form--registration=""${(elasticSocialConfiguration.recaptchaForRegistrationRequired!false)?then(' onsubmit="substituteRecaptchaBindElement();"'?no_esc,'')}>
         <input type="hidden" name="execution" value="${flowExecutionKey!""}">
@@ -115,8 +115,8 @@
         <#-- terms of use -->
         <@spring.bind path="bpRegistration.acceptTermsOfUse"/>
         <#outputformat "plainText">
-          <#assign privacyPolicy><a href="${privacyPolicyLink!""}" target="_blank"><@bp.message "registration_linkPrivacyPolicy_label" /></a></#assign>
-          <#assign termsOfUse><a href="${termsOfUseLink!""}" target="_blank"><@bp.message "registration_linkTermsOfUse_label" /></a></#assign>
+          <#assign privacyPolicy><a href="${privacyPolicyLink!""}" target="_blank" rel="noopener"><@bp.message "registration_linkPrivacyPolicy_label" /></a></#assign>
+          <#assign termsOfUse><a href="${termsOfUseLink!""}" target="_blank" rel="noopener"><@bp.message "registration_linkTermsOfUse_label" /></a></#assign>
           <#assign text=bp.getMessage("registration_acceptTermsOfUse_label", ["#privacyPolicy#", "#termsOfUse#"])/>
         </#outputformat>
         <div class="form-group<#if spring.status.error> has-error</#if>">

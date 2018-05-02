@@ -30,26 +30,27 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class DownloadPortalFactoryTest {
 
   @InjectMocks
   private DownloadPortalFactory factory;
 
   @Mock
-  private  DownloadPortalSearchService  downloadPortalSearchService;
+  private DownloadPortalSearchService downloadPortalSearchService;
 
   @Mock
   private DataViewFactory dataViewFactory;
+
   @Mock
   private SettingsService settingsService;
 
@@ -64,15 +65,12 @@ public class DownloadPortalFactoryTest {
 
   @Mock
   private AMAsset asset1;
+
   @Mock
   private AMAsset asset2;
 
-
   @Mock
   private Content content;
-
-  @Mock
-  private Content navigationContent;
 
   @Mock
   private Content categoryContent;
@@ -87,15 +85,11 @@ public class DownloadPortalFactoryTest {
   public void setUp() {
     when(dataViewFactory.loadAllCached(anyList(), nullable(String.class))).then(returnsFirstArg());
 
-    when(navigation.getContent()).thenReturn(navigationContent);
-    when(navigationContent.isInProduction()).thenReturn(true);
-
     when(category.getContent()).thenReturn(categoryContent);
     when(categoryContent.isInProduction()).thenReturn(true);
 
     when(content.isInProduction()).thenReturn(true);
 
-    when(category.getContentId()).thenReturn(123);
     when(category.getContent()).thenReturn(content);
     when(category.getContent().isInProduction()).thenReturn(true);
 
@@ -130,7 +124,7 @@ public class DownloadPortalFactoryTest {
 
   @Test
   public void testCreateCategoryOverview() {
-    ImmutableList<AMTaxonomy> subCategories  = ImmutableList.of(subTaxonomy1);
+    ImmutableList<AMTaxonomy> subCategories = ImmutableList.of(subTaxonomy1);
     doReturn(subCategories).when(downloadPortalSearchService).getSubCategories(category);
 
     CategoryOverview categoryOverview = factory.createCategoryOverview(category);
@@ -141,7 +135,7 @@ public class DownloadPortalFactoryTest {
   }
 
   @Test
-  public void testCreateAssetDetails_assetDetailPageWithIllegalCategory_returnsNull() throws Exception {
+  public void testCreateAssetDetails_assetDetailPageWithIllegalCategory_returnsNull() {
     AMTaxonomy illegalCategory = mock(AMTaxonomy.class, "Illegal Category");
     AMAsset requestedAsset = mock(AMAsset.class, "Requested Asset");
     when(requestedAsset.getContent()).thenReturn(content);
@@ -154,7 +148,7 @@ public class DownloadPortalFactoryTest {
   }
 
   @Test
-  public void testCreateAssetDetails_assetDetailPageWithCategory_returnsAssetDetails() throws Exception {
+  public void testCreateAssetDetails_assetDetailPageWithCategory_returnsAssetDetails() {
     AMTaxonomy anotherCategory = mock(AMTaxonomy.class, "Another Category");
     AMAsset requestedAsset = mock(AMAsset.class, "Requested Asset");
 
@@ -176,11 +170,10 @@ public class DownloadPortalFactoryTest {
   }
 
   @Test
-  public void testCreateAssetDetails_assetDetailPageWithNullCategory_returnsAssetWithPrimaryCategory() throws Exception {
+  public void testCreateAssetDetails_assetDetailPageWithNullCategory_returnsAssetWithPrimaryCategory() {
     AMAsset requestedAsset = mock(AMAsset.class, "Requested Asset");
     when(requestedAsset.getContent()).thenReturn(content);
     when(requestedAsset.getPrimaryCategory()).thenReturn(category);
-    when(requestedAsset.getAssetCategories()).thenReturn(Collections.singletonList(category));
     when(requestedAsset.getMetadata()).thenReturn(struct);
 
     final AssetDetails assetDetails = factory.createAssetDetails(navigation, requestedAsset, null);
@@ -197,8 +190,8 @@ public class DownloadPortalFactoryTest {
     PaginatedAssets paginatedCategoryAssets = factory.createPaginatedCategoryAssets(null, navigation, 1);
     PaginatedAssets paginatedSubjectAssets = factory.createPaginatedSubjectAssets(null, navigation, 1);
 
-    validatePaginatedAssets(paginatedCategoryAssets, 1, 1, Collections.<AMAsset>emptyList());
-    validatePaginatedAssets(paginatedSubjectAssets, 1, 1, Collections.<AMAsset>emptyList());
+    validatePaginatedAssets(paginatedCategoryAssets, 1, 1, Collections.emptyList());
+    validatePaginatedAssets(paginatedSubjectAssets, 1, 1, Collections.emptyList());
   }
 
   @Test

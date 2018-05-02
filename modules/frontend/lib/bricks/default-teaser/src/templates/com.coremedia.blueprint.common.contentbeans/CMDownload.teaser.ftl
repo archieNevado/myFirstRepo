@@ -10,7 +10,7 @@
 <#assign renderDimmer=cm.localParameter("renderDimmer", true) />
 <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
 
-<div class="${blockClass} ${blockClass}--download ${cssClasses} ${additionalClass}"<@cm.metadata self.content />>
+<div class="${blockClass} ${blockClass}--download ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
     <div class="${blockClass}__wrapper">
       <@bp.optionalLink href="${link}">
         <#-- picture -->
@@ -20,7 +20,7 @@
         <@bp.optionalLink href="${link}">
           <#-- teaser title -->
           <#if self.teaserTitle?has_content>
-              <h3 class="${blockClass}__headline" <@cm.metadata "properties.teaserTitle" />>
+              <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
           <span>
             <#if link?has_content>
                 <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
@@ -30,9 +30,9 @@
           </#if>
           <#-- teaser text -->
           <#if renderTeaserText && self.teaserText?has_content>
-              <p class="${blockClass}__text" <@cm.metadata "properties.teaserText" />>
+              <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
                 <#if self.data?has_content>
-                    <span<@cm.metadata "properties.data" />>(${cm.getLink(self)?keep_after_last(".")?keep_before("?") + ", "} ${bp.getDisplaySize(self.data.size)})</span>
+                    <span<@preview.metadata "properties.data" />>(${cm.getLink(self)?keep_after_last(".")?keep_before("?") + ", "} ${bp.getDisplaySize(self.data.size)})</span>
                     <br>
                 </#if>
                 <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "square.max.length", 115)) />

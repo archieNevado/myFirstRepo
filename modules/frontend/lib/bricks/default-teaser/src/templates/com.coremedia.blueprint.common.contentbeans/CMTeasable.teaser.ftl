@@ -5,6 +5,7 @@
 <#assign cssClasses=self.teaserText?has_content?then(" is-text", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "_self") />
+<#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
 <#assign renderTeaserTitle=cm.localParameter("renderTeaserTitle", true) />
 <#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
@@ -13,9 +14,9 @@
 <#assign limitAspectRatiosKey="default_aspect_ratios_for_" + cm.localParameter("limitAspectRatiosKey", "teaser") />
 <#assign limitAspectRatios=cm.localParameter("limitAspectRatios", bp.setting(cmpage.navigation, limitAspectRatiosKey, [])) />
 
-<div class="${blockClass} ${cssClasses} ${additionalClass}"<@cm.metadata self.content />>
+<div class="${blockClass} ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
   <div class="${blockClass}__wrapper">
-    <@bp.optionalLink href="${link}" attr={"target":target}>
+    <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
     <#-- picture -->
       <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=blockClass displayEmptyImage=renderEmptyImage displayDimmer=renderDimmer limitAspectRatios=limitAspectRatios/>
     </@bp.optionalLink>
@@ -25,8 +26,8 @@
 
           <#-- teaser title -->
           <#if self.teaserTitle?has_content>
-            <@bp.optionalLink href="${link}" attr={"target":target}>
-              <h3 class="${blockClass}__headline" <@cm.metadata "properties.teaserTitle" />>
+            <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
+              <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
                 <span>${self.teaserTitle!""}</span>
               </h3>
             </@bp.optionalLink>
@@ -34,7 +35,7 @@
 
           <#-- teaser text -->
           <#if renderTeaserText &&  self.teaserText?has_content>
-            <p class="${blockClass}__text" <@cm.metadata "properties.teaserText" />>
+            <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
               <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "square.max.length", 115)) />
             </p>
           </#if>

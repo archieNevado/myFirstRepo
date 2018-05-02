@@ -32,6 +32,7 @@
 <link href="Corporate%20Commmunications.xml" path="/Settings/Taxonomies/Subject/Corporate%20Commmunications"/>
 <link href="Target%20Age.xml" path="/Settings/Taxonomies/Subject/Target%20Age"/>
 <link href="Chef.xml" path="/Settings/Taxonomies/Subject/Chef"/>
+<link href="Dream.xml" path="/Settings/Taxonomies/Subject/Dream"/>
 <link href="Kitchen.xml" path="/Settings/Taxonomies/Subject/Kitchen"/>
 <link href="Restaurant.xml" path="/Settings/Taxonomies/Subject/Restaurant"/>
 </children>

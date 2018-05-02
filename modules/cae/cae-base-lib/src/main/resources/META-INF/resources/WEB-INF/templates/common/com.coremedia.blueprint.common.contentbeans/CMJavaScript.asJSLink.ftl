@@ -13,7 +13,7 @@
 <#assign jsLink=cm.getLink(self)/>
 
 <#if self.ieExpression?has_content>
-  <!--[if ${self.ieExpression}]><script src="${jsLink}"<@cm.metadata self.content />></script><![endif]-->
+  <!--[if ${self.ieExpression}]><script src="${jsLink}"<@preview.metadata self.content />></script><![endif]-->
 <#else>
-  <script src="${jsLink}"<@cm.metadata self.content />></script>
+  <script src="${jsLink}"<@preview.metadata self.content />></script>
 </#if>

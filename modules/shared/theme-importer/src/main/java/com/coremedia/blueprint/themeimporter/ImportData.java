@@ -3,7 +3,7 @@ package com.coremedia.blueprint.themeimporter;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.mimetype.MimeTypeService;
-import com.coremedia.util.PathUtil;
+import com.coremedia.common.util.PathUtil;
 import com.coremedia.xml.XmlUtil5;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.IOUtils;

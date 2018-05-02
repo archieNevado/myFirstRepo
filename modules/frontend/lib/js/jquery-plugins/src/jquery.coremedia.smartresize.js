@@ -21,6 +21,8 @@ import { debounce } from "@coremedia/js-utils";
  * @param trigger {function} a callback function to execute. if no callback function is provided a "smartresize" event
  *                          will be triggered.
  */
-$.fn.smartresize = function (trigger) {
-  return trigger ? this.bind('resize', debounce(trigger)) : this.trigger('smartresize');
+$.fn.smartresize = function(trigger) {
+  return trigger
+    ? this.bind("resize", debounce(trigger))
+    : this.trigger("smartresize");
 };

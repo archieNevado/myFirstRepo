@@ -114,9 +114,8 @@ public class DemoDataGeneratorTest {
     when(queryService.poseContentQuery("TYPE CMArticle AND isInProduction")).thenReturn(contents);
     String tenant = "tenant";
     tenantService.initialize();
-    tenantService.register(tenant);
     tenantService.start();
-    tenantService.setCurrent(tenant);
+    tenantService.setCurrent(tenant, true);
     inject(demoDataGenerator, tenantService);
     when(contributionTargetHelper.getContentFromTarget(any())).thenCallRealMethod();
   }

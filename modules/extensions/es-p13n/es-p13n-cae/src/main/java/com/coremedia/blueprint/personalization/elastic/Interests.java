@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.CMActionState;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 
 import java.util.Collections;
@@ -33,7 +34,7 @@ public class Interests implements CMActionState {
   }
 
 
-  public Map<CMTaxonomy, Double> getImplicitSubjectTaxonomies() {
+  public @PersonalData Map<CMTaxonomy, Double> getImplicitSubjectTaxonomies() {
     if( isEnabled("show.implicit.subject.taxonomies")) {
       return service.getImplicitSubjectTaxonomies();
     }
@@ -42,7 +43,7 @@ public class Interests implements CMActionState {
     }
   }
 
-  public Map<CMTaxonomy, Double> getImplicitLocationTaxonomies() {
+  public @PersonalData Map<CMTaxonomy, Double> getImplicitLocationTaxonomies() {
     if( isEnabled("show.implicit.location.taxonomies")) {
       return service.getImplicitLocationTaxonomies();
     }

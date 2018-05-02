@@ -69,7 +69,7 @@ public class ListPanelBase extends GridPanel {
   }
 
   /**
-   * Triggerd when the user has defined a new search.
+   * Triggered when the user has defined a new search.
    * @param ve
    */
   private function filterChanged(ve:ValueExpression):void {
@@ -80,7 +80,7 @@ public class ListPanelBase extends GridPanel {
     }
   }
 
-  private function getDataSourceIndex():Number {
+  private function getDataSourceIndex():* /* Number | null */ {
     var record:Model = dataSourceValueExpression.getValue();
     if (record) {
       return record.data.index;

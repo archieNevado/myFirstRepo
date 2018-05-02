@@ -2,6 +2,8 @@ package com.coremedia.blueprint.personalization.interceptors;
 
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.common.logging.PersonalDataLogger;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProfile;
@@ -24,6 +26,8 @@ import static java.lang.Math.min;
 public class LastVisitedInterceptor extends HandlerInterceptorAdapter {
 
   private static final Logger LOG = LoggerFactory.getLogger(LastVisitedInterceptor.class);
+  private static final PersonalDataLogger PERSONAL_DATA_LOG = new PersonalDataLogger(LOG);
+
   private static final int DEFAULT_LIST_SIZE = 3;
   public static final String PAGES_VISITED = "pagesVisited";
 
@@ -94,26 +98,30 @@ public class LastVisitedInterceptor extends HandlerInterceptorAdapter {
   }
 
   private void updateContext(Integer id) {
-    final Object contextObject = contextCollection.getContext(contextName);
+    final @PersonalData Object contextObject = contextCollection.getContext(contextName);
     // we check for a PropertyProfile instance here so that we can store a list in it (com.coremedia.personalization.context.BasicPropertyMaintainer supports primitive values only)
     if (contextObject instanceof PropertyProfile) {
-      final PropertyProfile context = (PropertyProfile) contextObject;
+      final @PersonalData PropertyProfile context = (PropertyProfile) contextObject;
 
       // store ids in a list of size #listSize
-      final List<Integer> currentValue = new ArrayList<>(listSize);
+      final @PersonalData List<Integer> currentValue = new ArrayList<>(listSize);
       currentValue.add(id); //
 
-      final Object contextProperty = context.getProperty(PAGES_VISITED);
+      final @PersonalData Object contextProperty = context.getProperty(PAGES_VISITED);
       if(contextProperty instanceof List) {
         @SuppressWarnings("unchecked")
-        final List<Integer> lastVisited = (List<Integer>) contextProperty;
-        lastVisited.removeAll(currentValue);
+        final @PersonalData List<Integer> lastVisited = (List<Integer>) contextProperty;
+
+        @SuppressWarnings("PersonalData") // safe to pass @PersonalData List to #removeAll
+        List<Integer> removeAll = currentValue;
+        lastVisited.removeAll(removeAll);
+
         currentValue.addAll(lastVisited.subList(0,min(lastVisited.size(), listSize -1)));
       } else {
         LOG.debug("cannot handle context property of type {}", contextProperty != null ? contextProperty.getClass() : null);
       }
 
-      LOG.debug("last visited pages: {}", currentValue);
+      PERSONAL_DATA_LOG.debug("last visited pages: {}", currentValue);
       context.setProperty(PAGES_VISITED, currentValue);
     } else {
       LOG.debug("cannot handle context of type {}", contextObject != null ? contextObject.getClass() : null);

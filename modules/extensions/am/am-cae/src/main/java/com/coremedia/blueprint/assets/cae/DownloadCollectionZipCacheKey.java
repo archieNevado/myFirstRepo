@@ -9,7 +9,6 @@ import com.coremedia.cap.common.TempFileService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.transform.BlobHelper;
-import com.coremedia.cotopaxi.common.CacheFactory;
 import com.coremedia.mimetype.MimeTypeService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -37,6 +36,8 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
   private static final String ZIP_FILE_EXTENSION = "zip";
 
   public static final int DOWNLOAD_COLLECTION_DATA_EXPIRATION_MINUTES = 10;
+
+  static final String CACHE_CLASS_DISK = "com.coremedia.cap.disk";
 
   private List<AMAssetRendition> renditions;
   private ContentRepository contentRepository;
@@ -77,7 +78,7 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
 
   @Override
   public String cacheClass(Cache cache, File value) {
-    return CacheFactory.CACHE_CLASS_DISK;
+    return CACHE_CLASS_DISK;
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRef;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -23,25 +24,25 @@ public class UserDetails implements Serializable {
   private static final long serialVersionUID = 42L;
 
   private String id;
-  private String username;
+  private @PersonalData String username;
   private Date registrationDate;
   private Date lastLoginDate;
-  private String emailAddress;
-  private BlobRef profileImage;
+  private @PersonalData String emailAddress;
+  private @PersonalData BlobRef profileImage;
   private long numberOfLogins;
   private long numberOfComments;
   private long numberOfRatings;
   private long numberOfLikes;
   private long numberOfReviews;
-  private LocalizedLocale localizedLocale;
-  private String timeZoneId;
+  private @PersonalData LocalizedLocale localizedLocale;
+  private @PersonalData String timeZoneId;
   private boolean viewOwnProfile = false;
   private boolean preModerationChanged = false;
-  private String givenname;
-  private String surname;
-  private String password;
-  private String newPassword;
-  private String newPasswordRepeat;
+  private @PersonalData String givenname;
+  private @PersonalData String surname;
+  private @PersonalData String password;
+  private @PersonalData String newPassword;
+  private @PersonalData String newPasswordRepeat;
   private boolean receiveCommentReplyEmails;
   private PasswordPolicy passwordPolicy;
   private boolean deleteProfileImage = false;
@@ -57,11 +58,11 @@ public class UserDetails implements Serializable {
     this.id = id;
   }
 
-  public String getUsername() {
+  public @PersonalData String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
+  public void setUsername(@PersonalData String username) {
     this.username = username;
   }
 
@@ -87,11 +88,11 @@ public class UserDetails implements Serializable {
     this.lastLoginDate = lastLoginDate == null ? null : new Date(lastLoginDate.getTime());
   }
 
-  public String getEmailAddress() {
+  public @PersonalData String getEmailAddress() {
     return emailAddress;
   }
 
-  public void setEmailAddress(String emailAddress) {
+  public void setEmailAddress(@PersonalData String emailAddress) {
     this.emailAddress = emailAddress;
   }
 
@@ -155,19 +156,19 @@ public class UserDetails implements Serializable {
   /**
    * @cm.template.api
    */
-  public BlobRef getProfileImage() {
+  public @PersonalData BlobRef getProfileImage() {
     return profileImage;
   }
 
-  public void setProfileImage(BlobRef profileImage) {
+  public void setProfileImage(@PersonalData BlobRef profileImage) {
     this.profileImage = profileImage;
   }
 
-  public LocalizedLocale getLocalizedLocale() {
+  public @PersonalData LocalizedLocale getLocalizedLocale() {
     return localizedLocale;
   }
 
-  public void setLocalizedLocale(LocalizedLocale localizedLocale) {
+  public void setLocalizedLocale(@PersonalData LocalizedLocale localizedLocale) {
     this.localizedLocale = localizedLocale;
   }
 
@@ -182,43 +183,43 @@ public class UserDetails implements Serializable {
     this.viewOwnProfile = viewOwnProfile;
   }
 
-  public String getGivenname() {
+  public @PersonalData String getGivenname() {
     return givenname;
   }
 
-  public void setGivenname(String givenname) {
+  public void setGivenname(@PersonalData String givenname) {
     this.givenname = givenname;
   }
 
-  public String getSurname() {
+  public @PersonalData String getSurname() {
     return surname;
   }
 
-  public void setSurname(String surname) {
+  public void setSurname(@PersonalData String surname) {
     this.surname = surname;
   }
 
-  public String getPassword() {
+  public @PersonalData String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(@PersonalData String password) {
     this.password = password;
   }
 
-  public String getNewPassword() {
+  public @PersonalData String getNewPassword() {
     return newPassword;
   }
 
-  public void setNewPassword(String newPassword) {
+  public void setNewPassword(@PersonalData String newPassword) {
     this.newPassword = newPassword;
   }
 
-  public String getNewPasswordRepeat() {
+  public @PersonalData String getNewPasswordRepeat() {
     return newPasswordRepeat;
   }
 
-  public void setNewPasswordRepeat(String newPasswordRepeat) {
+  public void setNewPasswordRepeat(@PersonalData String newPasswordRepeat) {
     this.newPasswordRepeat = newPasswordRepeat;
   }
 
@@ -238,7 +239,7 @@ public class UserDetails implements Serializable {
     this.deleteProfileImage = deleteProfileImage;
   }
 
-  public Locale getLocale() {
+  public @PersonalData Locale getLocale() {
     return localizedLocale != null ? localizedLocale.getLocale() : null;
   }
 
@@ -339,10 +340,13 @@ public class UserDetails implements Serializable {
     result |= !StringUtils.equals(givenname, user.getProperty("givenName", String.class));
     result |= !StringUtils.equals(surname, user.getProperty("surName", String.class));
     result |= (file != null && file.getSize() > 0) || isDeleteProfileImage();
-    result |= file == null && !isDeleteProfileImage() && profileImage != null;
+    @SuppressWarnings("PersonalData") // while the profile image is @PersonalData, its presence is not
+    boolean hasProfileImage = profileImage != null;
+    result |= file == null && !isDeleteProfileImage() && hasProfileImage;
     return result;
   }
 
+  @SuppressWarnings("PersonalData") // Safe comparison of @PersonalData: user's locale and time zone.
   public boolean hasChangesWhichDoNotNeedModeration(CommunityUser user) {
     boolean result;
     result = !user.getLocale().equals(getLocale());
@@ -381,11 +385,11 @@ public class UserDetails implements Serializable {
     this.receiveCommentReplyEmails = receiveCommentReplyEmails;
   }
 
-  public String getTimeZoneId() {
+  public @PersonalData String getTimeZoneId() {
     return timeZoneId;
   }
 
-  public void setTimeZoneId(String timeZoneId) {
+  public void setTimeZoneId(@PersonalData String timeZoneId) {
     this.timeZoneId = timeZoneId;
   }
 }

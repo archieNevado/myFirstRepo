@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AMUtilsTest {
 
   @Test
@@ -87,7 +87,6 @@ public class AMUtilsTest {
     when(contentType1.getName()).thenReturn("Test1");
 
     when(contentType2.isConcrete()).thenReturn(false);
-    when(contentType2.getName()).thenReturn("Test2");
 
     List<String> expectedAssetSubtypes = ImmutableList.of("Test1");
 

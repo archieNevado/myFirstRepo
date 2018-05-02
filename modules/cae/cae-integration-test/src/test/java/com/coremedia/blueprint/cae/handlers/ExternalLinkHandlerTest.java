@@ -10,6 +10,7 @@ public class ExternalLinkHandlerTest extends ContentBeanTestBase {
   @Test
   public void testBuildLinkForExternalLink() throws Exception {
     CMExternalLink cmExternalLink = getContentBean(92);
-    Assert.assertTrue(new ExternalLinkHandler().buildLinkForExternalLink(cmExternalLink) != null);
+    String view = "someView";
+    Assert.assertTrue(new ExternalLinkHandler().buildLinkForExternalLink(cmExternalLink, view) != null);
   }
 }

@@ -1,12 +1,14 @@
 import * as hashBasedFragment from "./hashBasedFragment";
 
 export const BASE_CONFIG = {
-  requestParams: []
+  requestParams: [],
 };
 
 export default class {
-
   constructor($link, linkConfig) {
-    $link.attr("href", "#" + hashBasedFragment.requestParamsToString(linkConfig.requestParams));
+    $link.attr(
+      "href",
+      "#" + hashBasedFragment.requestParamsToString(linkConfig.requestParams)
+    );
   }
 }

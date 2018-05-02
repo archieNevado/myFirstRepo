@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Validate parameter theme.
@@ -6,7 +6,7 @@
  * @return {boolean}
  */
 const validateThemeName = themeName =>
-  typeof themeName === 'string' && themeName.length > 0;
+  typeof themeName === "string" && themeName.length > 0;
 
 /**
  * Validate parameter fileList.
@@ -21,7 +21,7 @@ const validateFileList = fileList =>
  * @param {string} file
  * @return {boolean}
  */
-const validateFile = file => typeof file === 'string' && file.length > 0;
+const validateFile = file => typeof file === "string" && file.length > 0;
 
 /**
  * Return Preview URL including userVariant Parameter for current user.
@@ -32,7 +32,7 @@ const validateFile = file => typeof file === 'string' && file.length > 0;
 const getPreviewUrlDevMode = (previewUrl, userId) => {
   let previewUrlDevMode;
   if (previewUrl) {
-    previewUrlDevMode = previewUrl.replace(/\/$/, '');
+    previewUrlDevMode = previewUrl.replace(/\/$/, "");
     const userVariantParam = `userVariant=${userId}`;
 
     if (/userVariant=[0-9]*/.test(previewUrlDevMode)) {
@@ -43,7 +43,7 @@ const getPreviewUrlDevMode = (previewUrl, userId) => {
       );
     } else {
       // append userVariant parameter
-      const delimiter = /\?/.test(previewUrlDevMode) ? '&' : '?';
+      const delimiter = /\?/.test(previewUrlDevMode) ? "&" : "?";
       previewUrlDevMode += `${delimiter}${userVariantParam}`;
     }
   }

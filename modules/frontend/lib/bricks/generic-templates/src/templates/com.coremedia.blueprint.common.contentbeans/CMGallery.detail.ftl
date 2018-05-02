@@ -11,24 +11,24 @@
 
 <#assign carouselParams=carouselParams + {"additionalClass": "${blockClass}__medias", "viewItems": "_header", "modifier": "details"}/>
 
-<article class="${blockClass}"<@cm.metadata self.content />>
+<article class="${blockClass}"<@preview.metadata self.content />>
 
   <#-- title -->
-  <h1 class="${blockClass}__headline"<@cm.metadata "properties.title"/>>${self.title!""}</h1>
+  <h1 class="${blockClass}__headline"<@preview.metadata "properties.title"/>>${self.title!""}</h1>
 
   <#-- media -->
   <@cm.include self=bp.getContainer(self.items) view="asGrid" params={"itemsPerRow": 3, "viewItems": "${viewItems}", "additionalClass": "cm_details__media ${itemsClass}"} />
 
   <#-- text -->
   <#if self.detailText?has_content>
-    <div class="${blockClass}__text cm-richtext"<@cm.metadata "properties.detailText"/>>
+    <div class="${blockClass}__text cm-richtext"<@preview.metadata "properties.detailText"/>>
       <@cm.include self=self.detailText!cm.UNDEFINED />
     </div>
   </#if>
 
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
-    <div class="${blockClass}__date"<@cm.metadata "properties.externallyDisplayedDate"/>>
+    <div class="${blockClass}__date"<@preview.metadata "properties.externallyDisplayedDate"/>>
       <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
     </div>
   </#if>

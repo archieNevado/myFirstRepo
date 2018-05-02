@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.common.personaldata.PersonalData;
 import org.springframework.webflow.execution.RequestContext;
 
 import java.io.Serializable;
@@ -13,32 +14,32 @@ public class PasswordReset implements Serializable {
   private static final long serialVersionUID = 42L;
   protected static final String PASSWORD = "password"; // NOSONAR false positive: Credentials should not be hard-coded
 
-  private String emailAddress;
-  private String password;
-  private String confirmPassword;
+  private @PersonalData String emailAddress;
+  private @PersonalData String password;
+  private @PersonalData String confirmPassword;
   private PasswordPolicy passwordPolicy;
 
-  public String getEmailAddress() {
+  public @PersonalData String getEmailAddress() {
     return emailAddress;
   }
 
-  public void setEmailAddress(String emailAddress) {
+  public void setEmailAddress(@PersonalData String emailAddress) {
     this.emailAddress = emailAddress;
   }
 
-  public String getPassword() {
+  public @PersonalData String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(@PersonalData String password) {
     this.password = password;
   }
 
-  public String getConfirmPassword() {
+  public @PersonalData String getConfirmPassword() {
     return confirmPassword;
   }
 
-  public void setConfirmPassword(String confirmPassword) {
+  public void setConfirmPassword(@PersonalData String confirmPassword) {
     this.confirmPassword = confirmPassword;
   }
 
@@ -62,7 +63,9 @@ public class PasswordReset implements Serializable {
       return;
     }
 
-    if (!password.equals(confirmPassword)) {
+    @SuppressWarnings("PersonalData") // safe to pass @PersonalData confirmPassword to #equals
+    boolean equal = password.equals(confirmPassword);
+    if (!equal) {
       MessageHelper.addErrorMessageWithSource(context, WebflowMessageKeys.CONFIRM_PASSWORD_RESET_PASSWORDS_DO_NOT_MATCH, PASSWORD);
     }
 

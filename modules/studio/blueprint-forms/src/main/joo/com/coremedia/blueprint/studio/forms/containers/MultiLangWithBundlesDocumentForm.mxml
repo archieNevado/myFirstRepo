@@ -30,7 +30,7 @@
         <editor:AvailableLocalesPropertyField propertyName="locale"/>
         <editor:LinkListPropertyField propertyName="master"/>
         <editor:MasterVersionPropertyField propertyName="masterVersion"/>
-        <editor:DerivedContentsList/>
+        <editor:DerivedContentsList showThumbnails="true"/>
       </editor:items>
     </editor:PropertyFieldGroup>
     <editor:PropertyFieldGroup

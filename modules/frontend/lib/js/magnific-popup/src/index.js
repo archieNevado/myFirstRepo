@@ -22,7 +22,9 @@ if (window) {
     delete window.jQuery;
   }
 } else {
-  throw new Error("Magnific Popup was not loaded because it relies on a 'window' object that does not exist.");
+  throw new Error(
+    "Magnific Popup was not loaded because it relies on a 'window' object that does not exist."
+  );
 }
 
 /**

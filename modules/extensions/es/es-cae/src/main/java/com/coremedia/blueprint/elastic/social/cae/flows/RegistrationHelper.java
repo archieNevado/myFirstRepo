@@ -10,6 +10,8 @@ import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
 import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.common.logging.PersonalDataLogger;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
 import com.coremedia.elastic.core.api.blobs.BlobService;
@@ -59,7 +61,6 @@ import java.util.TimeZone;
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addErrorMessage;
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addErrorMessageWithSource;
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addInfoMessage;
-import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 import static com.coremedia.common.logging.BaseMarker.UNCLASSIFIED_PERSONAL_DATA;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -72,6 +73,7 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 public class RegistrationHelper {
 
   private static final Logger LOG = getLogger(RegistrationHelper.class);
+  private static final PersonalDataLogger PERSONAL_DATA_LOG = new PersonalDataLogger(LOG);
 
   private static final String PROFILE_IMAGE_ID = "profileImage";
 
@@ -116,18 +118,23 @@ public class RegistrationHelper {
 
   public void preProcess(Registration registration, RequestContext context) {
     Connection<?> connection = providerSignInUtils.getConnectionFromSession(getRequestAttributes(context)); // NOSONAR
-    registration.setRegisteringWithProvider(connection != null);
-    if (connection != null) {
+
+    // The Connection class is annotated as @PersonalData but the presence of a Connection is not personal data.
+    @SuppressWarnings("PersonalData")
+    boolean hasConnection = connection != null;
+
+    registration.setRegisteringWithProvider(hasConnection);
+    if (hasConnection) {
       org.springframework.social.connect.UserProfile userProfile = connection.fetchUserProfile();
 
-      String email = userProfile.getEmail();
-      String userName = userProfile.getUsername();
+      @PersonalData String email = userProfile.getEmail();
+      @PersonalData String userName = userProfile.getUsername();
 
       registration.setUsername(userName);
       registration.setGivenname(userProfile.getFirstName());
       registration.setSurname(userProfile.getLastName());
       registration.setEmailAddress(email);
-      String imageUrl = connection.getImageUrl();
+      @PersonalData String imageUrl = connection.getImageUrl();
       if (imageUrl != null) {
         getProfileImage(connection, context, registration, userProfile.getUsername(), imageUrl);
       }
@@ -151,13 +158,18 @@ public class RegistrationHelper {
   }
 
   private void getProfileImage(Connection<?> connection, RequestContext context, Registration registration,
-                               String userName, String imageUrl) {
+                               @PersonalData String userName, @PersonalData String imageUrl) {
     try {
+      @SuppressWarnings("PersonalData") // the imageUrl is @PersonalData and intentionally requested here
       HttpGet request = new HttpGet(new URI(imageUrl));
       HttpResponse response = httpClient.execute(request);
       try {
         if (response.getStatusLine().getStatusCode() == org.apache.http.HttpStatus.SC_OK) {
           HttpEntity entity = response.getEntity();
+
+          // @PersonalData userName passed to BlobService with profile image data (which is personal data as well)
+          // This is as intended. We store the personal data such as the profile image in MongoDB.
+          @SuppressWarnings("PersonalData")
           Blob profileImage = blobService.put(entity.getContent(), entity.getContentType().getValue(), userName);
           registration.setProfileImage(new BlobRefImpl(profileImage.getId()));
         }
@@ -166,7 +178,7 @@ public class RegistrationHelper {
       }
     } catch (URISyntaxException | IOException e) {
       addErrorMessage(context, "registration.imageFetch.error", connection.getKey().getProviderId());
-      LOG.error(UNCLASSIFIED_PERSONAL_DATA, "error while retrieving profile image from {}", imageUrl, e);
+      PERSONAL_DATA_LOG.error(UNCLASSIFIED_PERSONAL_DATA, "error while retrieving profile image from {}", imageUrl, e);
     }
   }
 
@@ -186,17 +198,13 @@ public class RegistrationHelper {
     }
 
     try {
-      Map<String, Object> userProperties = new HashMap<>();
+      @PersonalData Map<String, Object> userProperties = new HashMap<>();
 
       if (additionalProperties != null) {
         userProperties.putAll(additionalProperties);
       }
 
-      userProperties.put("givenName", registration.getGivenname());
-      userProperties.put("surName", registration.getSurname());
-      if (registration.getProfileImage() != null && !registration.isDeleteProfileImage()) {
-        userProperties.put("image", blobService.get(registration.getProfileImage().getId()));
-      }
+      addUserProperties(registration, userProperties);
 
       ServletRequest servletRequest = (ServletRequest) context.getExternalContext().getNativeRequest();
       Optional<Site> siteFromRequest = SiteHelper.findSite(servletRequest);
@@ -219,7 +227,7 @@ public class RegistrationHelper {
       providerSignInUtils.doPostSignUp(user.getId(), getRequestAttributes(context));
 
       if (isAutomaticActivationEnabled(context)) {
-        LOG.info(PERSONAL_DATA, "Automatically activate user '{}'", registration.getUsername());
+        PERSONAL_DATA_LOG.info("Automatically activate user '{}'", registration.getUsername());
         activate(user.getProperty("token", String.class), context);
       }
 
@@ -233,6 +241,15 @@ public class RegistrationHelper {
       addErrorMessage(context, WebflowMessageKeys.REGISTRATION_ACTIVATION_MESSAGE_ERROR);
     }
     return null;
+  }
+
+  @SuppressWarnings("PersonalData") // okay to add @PersonalData properties from Registration to @PersonalData map
+  private void addUserProperties(Registration registration, @PersonalData Map<String, Object> userProperties) {
+    userProperties.put("givenName", registration.getGivenname());
+    userProperties.put("surName", registration.getSurname());
+    if (registration.getProfileImage() != null && !registration.isDeleteProfileImage()) {
+      userProperties.put("image", blobService.get(registration.getProfileImage().getId()));
+    }
   }
 
   /**
@@ -289,7 +306,7 @@ public class RegistrationHelper {
    * @param context       the executing flow's {@link RequestContext}
    * @return true if the activation succeeded, false otherwise
    */
-  public boolean activate(String activationKey, @Nonnull RequestContext context) {
+  public boolean activate(@PersonalData String activationKey, @Nonnull RequestContext context) {
     try {
       CommunityUser user = registrationService.getUserByToken(activationKey);
 

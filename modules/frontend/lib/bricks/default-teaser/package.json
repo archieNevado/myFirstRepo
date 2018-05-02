@@ -9,12 +9,13 @@
     "@coremedia/brick-responsive-images": "^1.0.0"
   },
   "devDependencies": {
-    "jsdoc-to-markdown": "3.0.0"
+    "jsdoc-to-markdown": "3.0.0",
+    "prettier": "1.11.1"
   },
   "scripts": {
-    "apidoc": "jsdoc2md src/js/*.js > API.md"
+    "apidoc": "jsdoc2md src/js/*.js > API.md",
+    "prettier": "prettier \"**/*\" --write"
   },
-  "main": "src/js/index.js",
   "coremedia": {
     "type": "brick"
   }

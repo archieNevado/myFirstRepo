@@ -154,6 +154,13 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
 
     ContentBeanBackedPageGridPlacement that = (ContentBeanBackedPageGridPlacement) o;
 
+    // prevent that DataView is loading placement from wrong pagegrid
+    ContentBackedPageGridService thisPGService = contentBackedPageGridService;
+    ContentBackedPageGridService thatPGService = that.contentBackedPageGridService;
+    if (thisPGService != thatPGService) {
+      return false;
+    }
+
     if (colIndex != that.colIndex) {
       return false;
     }
@@ -173,6 +180,10 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
     int result = (bean != null ? bean.hashCode() : 0);
     result = 31 * result + row;
     result = 31 * result + colIndex;
+
+    // prevent that DataView is loading placement from wrong pagegrid
+    result = (contentBackedPageGridService != null) ? 31 * result + contentBackedPageGridService.hashCode() : result;
+
     return result;
   }
 

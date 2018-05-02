@@ -30,7 +30,7 @@
   <#assign additionalTextCssClass="col-sm-6 col-sm-pull-6"/>
 </#if>
 
-<div class="cm-teasable cm-teasable--video ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@cm.metadata self.content />>
+<div class="cm-teasable cm-teasable--video ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@preview.metadata self.content />>
 <#if hasImage>
   <div class="col-xs-12 ${additionalImgCssClass}">
     <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": "", "class":"cm-teasable__popup-opener"}>
@@ -60,13 +60,13 @@
         </#if>
 
         <#-- headline -->
-        <h3 class="cm-teasable__headline"<@cm.metadata "properties.teaserTitle" />>
+        <h3 class="cm-teasable__headline"<@preview.metadata "properties.teaserTitle" />>
           <span>${self.teaserTitle!""}</span>
         </h3>
         <#-- teaser text -->
         <#assign truncatedTeaserText=bp.truncateText(self.teaserText!"", bp.setting(cmpage, "teaser.max.length", 140)) />
         <#if truncatedTeaserText?has_content>
-          <p class="cm-teasable__text"<@cm.metadata "properties.teaserText" />>
+          <p class="cm-teasable__text"<@preview.metadata "properties.teaserText" />>
             <@bp.renderWithLineBreaks truncatedTeaserText />
           </p>
         </#if>

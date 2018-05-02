@@ -16,7 +16,6 @@ node.default_unless['blueprint']['webapps'][service_name]['application.propertie
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['solr.url'] = cm_webapp_url('solr')
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['solr.collection.content'] = 'studio'
-node.default_unless['blueprint']['webapps'][service_name]['application.properties']['caplist'] = 'com.coremedia.cotopaxi.list.elastic.mongodb.MongoCapListConnectorFactory'
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['elastic.solr.url'] = cm_webapp_url('solr')
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024

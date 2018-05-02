@@ -14,11 +14,11 @@
   <div class="cm-details__caption carousel-caption">
     <#-- media title -->
     <#if renderTitle && self.title?has_content>
-      <div class="cm-caption__title"<@cm.metadata "properties.title"/>>${self.title!""}</div>
+      <div class="cm-caption__title"<@preview.metadata "properties.title"/>>${self.title!""}</div>
     </#if>
     <#-- media caption -->
     <#if renderText && self.detailText?has_content>
-      <div class="cm-caption__text cm-richtext"<@cm.metadata "properties.detailText"/>>
+      <div class="cm-caption__text cm-richtext"<@preview.metadata "properties.detailText"/>>
         <@cm.include self=self.detailText!cm.UNDEFINED />
       </div>
     </#if>

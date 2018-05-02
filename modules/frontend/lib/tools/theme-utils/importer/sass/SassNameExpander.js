@@ -42,10 +42,13 @@ class SassNameExpander {
       //    - path/to/_foo.scss
       //    - path/to/_foo.sass
       //    - path/to/_foo.css
-      withFileVariants(path.basename(fullLocation), function (name) {
-        const dir = path.dirname(fullLocation);
-        this.files.add(path.join(dir, name));
-      }.bind(this));
+      withFileVariants(
+        path.basename(fullLocation),
+        function(name) {
+          const dir = path.dirname(fullLocation);
+          this.files.add(path.join(dir, name));
+        }.bind(this)
+      );
 
       // if the full location does not contain a valid extension...
       if (!hasValidImportExtension(fullLocation)) {
@@ -57,9 +60,12 @@ class SassNameExpander {
         //   - path/to/foo/_index.scss
         //   - path/to/foo/_index.sass
         //   - path/to/foo/_index.css
-        withFileVariants("index", function (name) {
-          this.files.add(path.join(fullLocation, name));
-        }.bind(this));
+        withFileVariants(
+          "index",
+          function(name) {
+            this.files.add(path.join(fullLocation, name));
+          }.bind(this)
+        );
       }
     }
   }
@@ -112,7 +118,7 @@ function withFileVariants(name, callback) {
  */
 function hasValidImportExtension(file) {
   const extension = path.extname(file);
-  return (validExtensions.indexOf(extension) !== -1);
+  return validExtensions.indexOf(extension) !== -1;
 }
 
 module.exports = SassNameExpander;

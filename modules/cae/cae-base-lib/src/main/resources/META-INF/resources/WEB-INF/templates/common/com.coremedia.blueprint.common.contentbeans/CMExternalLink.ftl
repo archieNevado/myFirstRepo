@@ -7,9 +7,10 @@
     Please check brick "generic-templates" for a more detailed version.
 -->
 <#assign target=self.openInNewTab?then("_blank", "") />
+<#assign rel=self.openInNewTab?then("noopener", "") />
 
 <div class="cm-teasable cm-teasable--externallink">
-  <@bp.optionalLink href=self.url attr={"target":target}>
+  <@bp.optionalLink href=self.url attr={"target":target,"rel":rel}>
     <h1 class="cm-teasable_title">${self.teaserTitle!""}</h1>
     <div class="cm-teasable__picture">
       <@cm.include self=self.picture!cm.UNDEFINED />

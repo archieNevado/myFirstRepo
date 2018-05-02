@@ -6,7 +6,7 @@
 <#assign additionalClass=cm.localParameters().additionalClass!"" />
 <#assign link=cm.getLink(self) />
 
-<div class="${blockClass} ${blockClass}--category ${additionalClass}"<@cm.metadata metadata![] />>
+<div class="${blockClass} ${blockClass}--category ${additionalClass}"<@preview.metadata metadata![] />>
   <div class="${blockClass}__wrapper">
     <@bp.optionalLink href="${link}">
       <#-- picture -->
