@@ -18,15 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
-
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 
 public class PriceServiceImpl extends AbstractHybrisService implements PriceService {
 
@@ -100,8 +97,10 @@ public class PriceServiceImpl extends AbstractHybrisService implements PriceServ
     if (priceRefDocuments == null) {
       return prices;
     }
+
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
     for (PriceRefDocument priceRefDocument: priceRefDocuments) {
-      PriceDocument priceDocument = catalogResource.getPriceDocumentById(priceRefDocument.getKey(), StoreContextHelper.getCurrentContext());
+      PriceDocument priceDocument = catalogResource.getPriceDocumentById(priceRefDocument.getKey(), storeContext);
       if (priceDocument == null) {
         LOG.warn("Cannot find price " + priceRefDocument.getKey() + " for product " + product.getExternalId());
       }
@@ -160,12 +159,6 @@ public class PriceServiceImpl extends AbstractHybrisService implements PriceServ
     return product.getListPrice();
   }
 
-
-  @Nonnull
-  @Override
-  public PriceService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, PriceService.class);
-  }
 
   protected BigDecimal convertStringToBigDecimal(String value) {
     if (NumberUtils.isNumber(value)) {

@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 
 /**
@@ -57,6 +58,7 @@ public class OAuthConnector {
    * Example:
    * https://localhost:9002/authorizationserver/oauth/token?grant_type=password&username=admin&password=nimda&client_id=coremedia_preview&client_secret=secret
    */
+  @Nullable
   private AccessToken requestAccessToken() {
     UriComponents uriComponents = UriComponentsBuilder.newInstance()
             .scheme(protocol)
@@ -96,6 +98,7 @@ public class OAuthConnector {
     return null;
   }
 
+  @Nullable
   public AccessToken getOrRequestAccessToken() {
     if (accessToken == null || accessToken.isExpired()) {
       accessToken = requestAccessToken();
@@ -103,6 +106,7 @@ public class OAuthConnector {
     return accessToken;
   }
 
+  @Nullable
   public AccessToken renewAccessToken() {
     accessToken = requestAccessToken();
     return accessToken;

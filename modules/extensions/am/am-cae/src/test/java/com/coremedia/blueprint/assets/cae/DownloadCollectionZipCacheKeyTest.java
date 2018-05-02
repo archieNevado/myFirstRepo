@@ -8,7 +8,6 @@ import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.common.TempFileService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cotopaxi.common.CacheFactory;
 import com.coremedia.mimetype.MimeTypeService;
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
@@ -225,7 +224,7 @@ public class DownloadCollectionZipCacheKeyTest {
     File evaluatedZipFile = cacheKey.evaluate(cache);
     String cacheClass = cacheKey.cacheClass(cache, evaluatedZipFile);
 
-    assertThat(cacheClass).isEqualTo(CacheFactory.CACHE_CLASS_DISK);
+    assertThat(cacheClass).isEqualTo(DownloadCollectionZipCacheKey.CACHE_CLASS_DISK);
   }
 
   private DownloadCollectionZipCacheKey newDownloadCollectionZipCacheKeyWithRenditions(

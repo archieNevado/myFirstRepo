@@ -1,5 +1,7 @@
 .#{$cm-shoppable-prefix} {
   .cm-teasable {
+    padding-bottom: 0;
+    
     &__caption {
       position: absolute;
       top: auto;
@@ -7,6 +9,7 @@
       transform: none;
       background-color: rgba(255, 255, 255, 0.8);
       padding: 0;
+      border-top: none;
     }
 
     &__headline {

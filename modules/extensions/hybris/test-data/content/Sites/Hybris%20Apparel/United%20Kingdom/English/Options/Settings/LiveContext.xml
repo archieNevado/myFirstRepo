@@ -5,7 +5,7 @@
 </master>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<BooleanProperty Name="livecontext.manageNavigation">true</BooleanProperty>
+<BooleanProperty Name="livecontext.manageNavigation">false</BooleanProperty>
 <StringProperty Name="livecontext.connectionId">hybris1</StringProperty>
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>

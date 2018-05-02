@@ -5,46 +5,39 @@ import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cap.themeimporter.ThemeImporterResult;
 import com.coremedia.mimetype.TikaMimeTypeService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DeletionTest.LocalConfig.class)
+@Configuration
+@ComponentScan("com.coremedia.cap.common.xml")
+@Import(XmlRepoConfiguration.class)
+@TestPropertySource(properties = {
+        "repository.params.contentschemaxml=classpath:framework/doctypes/blueprint/blueprint-doctypes.xml"
+
+})
+@ContextConfiguration(classes = DeletionTest.class)
 public class DeletionTest {
-  private static final String THEMES = "/Themes";
+
   @SuppressWarnings("SpringJavaAutowiringInspection")
   @Inject
   private CapConnection capConnection;
-
-  @Configuration
-  @Import(XmlRepoConfiguration.class)
-  public static class LocalConfig {
-    @Bean
-    @Scope(SCOPE_SINGLETON)
-    public XmlUapiConfig xmlUapiConfig() {
-      return XmlUapiConfig.builder().withContentTypes("classpath:framework/doctypes/blueprint/blueprint-doctypes.xml").build();
-    }
-  }
 
   @Mock
   private LocalizationService localizationService;
@@ -52,7 +45,7 @@ public class DeletionTest {
   private ThemeImporterImpl themeImporter;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     initMocks(this);
     TikaMimeTypeService tikaMimeTypeService = new TikaMimeTypeService();
     tikaMimeTypeService.init();
@@ -60,42 +53,43 @@ public class DeletionTest {
   }
 
   @Test
-  public void testDeleteCheckedOut() throws Exception {
+  public void testDeleteCheckedOut() {
     String themePath = "/any/where";
     String originalPath = "/dir/file";
 
     ContentRepository contentRepository = capConnection.getContentRepository();
     Content document = contentRepository.getContentType("CMCSS").create(contentRepository.getRoot(), themePath + originalPath);
-    assertFalse(document.isDeleted());
-    assertTrue(document.isCheckedOut());
+
+    assertThat(document.isDeleted()).isFalse();
+    assertThat(document.isCheckedOut()).isTrue();
 
     themeImporter.deleteCodeResource(themePath, originalPath);
-    assertTrue(document.isDeleted());
-    assertFalse(document.isCheckedOut());
+
+    assertThat(document.isDeleted()).isTrue();
+    assertThat(document.isCheckedOut()).isFalse();
   }
 
   @Test
-  public void testDeleteCheckedIn() throws Exception {
+  public void testDeleteCheckedIn() {
     String themePath = "/any/where";
     String originalPath = "/dir/file";
 
     ContentRepository contentRepository = capConnection.getContentRepository();
     Content document = contentRepository.getContentType("CMCSS").create(contentRepository.getRoot(), themePath + originalPath);
     document.checkIn();
-    assertFalse(document.isDeleted());
-    assertFalse(document.isCheckedOut());
+
+    assertThat(document.isDeleted()).isFalse();
+    assertThat(document.isCheckedOut()).isFalse();
 
     ThemeImporterResult themeImporterResult = themeImporter.deleteCodeResource(themePath, originalPath);
 
-    assertTrue(themeImporterResult.getFailedPaths().isEmpty());
-    assertEquals(Collections.singletonMap(themePath + originalPath, document),
-            themeImporterResult.getUpdatedContents());
-
-    assertTrue(document.isDeleted());
+    assertThat(themeImporterResult.getFailedPaths()).isEmpty();
+    assertThat(Collections.singletonMap(themePath + originalPath, document)).isEqualTo(themeImporterResult.getUpdatedContents());
+    assertThat(document.isDeleted()).isTrue();
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testDeleteBadPath() throws Exception {
+  public void testDeleteBadPath() {
     String themePath = "/any/where";
     String originalPath = "../file";
 

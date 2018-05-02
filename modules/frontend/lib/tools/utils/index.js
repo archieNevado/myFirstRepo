@@ -3,5 +3,5 @@ const workspace = require("./workspace");
 
 module.exports = {
   dependencies,
-  workspace
+  workspace,
 };

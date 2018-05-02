@@ -11,11 +11,14 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.linking.RemoteBeanLink;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Store representation for JSON.
@@ -33,12 +36,13 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
   private List<Category> rootCategories;
 
   private boolean marketingEnabled = false;
+  private String timeZoneId;
+
   private RemoteBeanLink rootCategory;
 
   public void setContext(StoreContext context) {
     this.context = context;
   }
-
 
   public boolean isMultiCatalog() {
     return multiCatalog;
@@ -61,30 +65,35 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
   // The entries correspond to those of #getChildrenByName()
   public List<Object> getTopLevel() {
     List<Object> topLevel = new ArrayList<>();
+
     if (isMarketingEnabled()) {
       topLevel.add(getMarketing());
     }
 
     List<Catalog> catalogs = getCatalogs();
-    if (catalogs != null && !catalogs.isEmpty()) {
-      topLevel.addAll(getCatalogs().stream()
+    if (!catalogs.isEmpty()) {
+      List<Category> catalogRootCategories = catalogs.stream()
               .map(Catalog::getRootCategory)
-              .collect(Collectors.toList()));
+              .collect(toList());
+
+      topLevel.addAll(catalogRootCategories);
     } else {
       topLevel.add(rootCategory);
     }
+
     return topLevel;
   }
 
   // The entries correspond to those of #getTopLevel()
   public Map<String, ChildRepresentation> getChildrenByName() {
     Map<String, ChildRepresentation> result = new LinkedHashMap<>();
+
     if (isMarketingEnabled()) {
       result.put("store-marketing", new ChildRepresentation("store-marketing", getMarketing()));
     }
 
     List<Catalog> catalogs = getCatalogs();
-    if (catalogs != null && !catalogs.isEmpty()) {
+    if (!catalogs.isEmpty()) {
       for (Catalog catalog : catalogs) {
         String catalogName = catalog.getName().value();
         //let the root category of the catalog represent it as the root category can be augmented etc.
@@ -146,8 +155,12 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-  public Map<String, String> getWcsTimeZone() {
-    return (Map<String, String>) context.get("wcsTimeZone");
+  public String getTimeZoneId() {
+    return timeZoneId;
+  }
+
+  public void setTimeZoneId(String timeZoneId) {
+    this.timeZoneId = timeZoneId;
   }
 
   public void setRootCategory(RemoteBeanLink rootCategory) {
@@ -158,8 +171,9 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
     return rootCategory;
   }
 
+  @Nonnull
   public List<Catalog> getCatalogs() {
-    return catalogs;
+    return (catalogs != null) ? catalogs : emptyList();
   }
 
   public void setCatalogs(List<Catalog> catalogs) {

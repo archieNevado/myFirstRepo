@@ -24,7 +24,7 @@
     </map>
   </customize:append>
 
-  <bean id="stringAbbreviator" class="com.coremedia.util.WordAbbreviator">
+  <bean id="stringAbbreviator" class="com.coremedia.common.util.WordAbbreviator">
     <property name="appendToEnd" value="..."/>
   </bean>
 

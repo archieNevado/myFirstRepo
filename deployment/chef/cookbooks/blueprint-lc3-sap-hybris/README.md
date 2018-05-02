@@ -14,7 +14,7 @@ Livecontext for SAP Hybris.
 * blueprint-base
 * blueprint-tomcat
 * blueprint-proxy
-* coremedia-proxy (~> 0.3.2)
+* coremedia-proxy (~> 1.0.0)
 
 # Attributes
 
@@ -25,18 +25,18 @@ Livecontext for SAP Hybris.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['cluster']['default']['host']` -  Defaults to `node['blueprint']['lc3-sap-hybris']['cms_host']`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['cluster']['default']['port']` -  Defaults to `42180`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['context']` -  Defaults to `blueprint`.
-* `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['sites']['apparel']['server_name']` -  Defaults to `apparel.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['sites']['apparel']['default_site']` -  Defaults to `apparelhomepage`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['delivery']['sites']['apparel']['site_id']` - The id property of the CMSite content associated with this site. Defaults to `Hybris-Apparel-UK-Site-ID`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['server_name']` -  Defaults to `shop-preview-apparel.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['time_travel_alias']` -  Defaults to `shop-preview-apparel.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['server_aliases']` -  Defaults to `[ ... ]`.
-* `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop-preview']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['server_name']` -  Defaults to `shop-apparel.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['time_travel_alias']` -  Defaults to `shop-apparel.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['server_aliases']` -  Defaults to `[ ... ]`.
-* `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['lc3-sap-hybris']['virtual_host']['shop']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['lc3-sap-hybris']['ssl_proxy_verify']` -  Defaults to `true`.
 
 # Recipes

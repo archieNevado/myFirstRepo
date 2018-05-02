@@ -1,5 +1,9 @@
 {
   "name": "@coremedia/sass-utils",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "coremedia": {
+    "type": "lib",
+    "smartImport": ["default", "preview"]
+  }
 }

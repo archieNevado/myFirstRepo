@@ -7,10 +7,10 @@
 <#assign renderTags=cm.localParameter("renderTags", true) />
 <#assign renderRelated=cm.localParameter("renderRelated", true) />
 
-<article class="${blockClass} ${blockClass}--video"<@cm.metadata self.content />>
+<article class="${blockClass} ${blockClass}--video"<@preview.metadata self.content />>
 
   <#-- title -->
-  <h1 class="${blockClass}__headline"<@cm.metadata "properties.title"/>>${self.title!""}</h1>
+  <h1 class="${blockClass}__headline"<@preview.metadata "properties.title"/>>${self.title!""}</h1>
 
   <#-- video or picture -->
   <div class="${blockClass}__medias">
@@ -39,14 +39,14 @@
 
   <#-- text -->
   <#if self.detailText?has_content>
-    <div class="${blockClass}__text cm-richtext"<@cm.metadata "properties.detailText"/>>
+    <div class="${blockClass}__text cm-richtext"<@preview.metadata "properties.detailText"/>>
       <@cm.include self=self.detailText!cm.UNDEFINED />
     </div>
   </#if>
 
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
-    <div class="${blockClass}__date"<@cm.metadata "properties.externallyDisplayedDate"/>>
+    <div class="${blockClass}__date"<@preview.metadata "properties.externallyDisplayedDate"/>>
       <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
     </div>
   </#if>

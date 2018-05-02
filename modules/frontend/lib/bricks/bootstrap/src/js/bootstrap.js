@@ -13,7 +13,7 @@ import $ from "jquery";
  * Auto-initialization is not supported for a back-to-top button that is added to the DOM after jQuery's ready event
  * has fired.
  */
-const $backToTop = $('#back-to-top');
+const $backToTop = $("#back-to-top");
 const $window = $(window);
 
 function toggleButton() {
@@ -26,17 +26,20 @@ function toggleButton() {
 
 function scrollToTop() {
   // call Bootstrap jQuery Plugin tooltip
-  $backToTop.tooltip('hide');
-  $('body,html').animate({
-    scrollTop: 0
-  }, 800);
+  $backToTop.tooltip("hide");
+  $("body,html").animate(
+    {
+      scrollTop: 0,
+    },
+    800
+  );
   return false;
 }
 
 // --- DOCUMENT READY ---
-$(function () {
+$(function() {
   $window.scroll(toggleButton);
   $backToTop.click(scrollToTop);
   // call Bootstrap jQuery Plugin tooltip
-  $backToTop.tooltip('show');
+  $backToTop.tooltip("show");
 });

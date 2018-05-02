@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.assets.contentbeans.AMAssetRendition" -->
 
-<tr class="am-renditions__item am-rendition"<@cm.metadata data="properties." + self.name />>
+<tr class="am-renditions__item am-rendition"<@preview.metadata data="properties." + self.name />>
   <td class="am-rendition__name">${bp.getMessage("am_rendition_${self.name}")}</td>
   <td class="am-rendition__size">${bp.getDisplaySize(self.size)}</td>
   <td class="am-rendition__type">

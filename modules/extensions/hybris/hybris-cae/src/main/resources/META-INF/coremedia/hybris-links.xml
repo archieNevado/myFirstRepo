@@ -17,6 +17,8 @@
     <property name="previewStoreFrontUrl" value="${livecontext.hybris.storeFrontUrl}"/>
     <property name="hybrisPreviewServiceUrl" value="${livecontext.hybris.previewServiceUrl}"/>
     <property name="previewTokenService" ref="hybrisPreviewTokenService"/>
+    <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder"/>
+    <property name="contextHelper" ref="contextHelper"/>
     <property name="commerceLedLinkBuilderHelper" ref="commerceLedLinkBuilderHelper"/>
   </bean>
 

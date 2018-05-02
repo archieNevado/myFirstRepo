@@ -12,7 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 public class ExternalLinkHandler extends HandlerBase {
 
   @Link(type = CMExternalLink.class)
-  public LiteralLink buildLinkForExternalLink(CMExternalLink externalLink) {
+  public LiteralLink buildLinkForExternalLink(CMExternalLink externalLink, String view) {
+    if (FRAGMENT_PREVIEW.equals(view)) {
+      // Do not build the external link for the fragment preview. Let other handlers build the link instead.
+      return null;
+    }
     String url = externalLink.getUrl();
     if (StringUtils.isBlank(url)) {
       return null;

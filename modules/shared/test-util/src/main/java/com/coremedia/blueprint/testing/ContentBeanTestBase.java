@@ -121,15 +121,15 @@ public abstract class ContentBeanTestBase {
     return cache;
   }
 
-  public void setUpPreviewDate() {
-    setUpPreviewDate(2005, Calendar.JANUARY, 1);
+  public void setUpPreviewDate(String requestAttributePreviewDateName) {
+    setUpPreviewDate(requestAttributePreviewDateName, 2005, Calendar.JANUARY, 1);
   }
 
-  public void setUpPreviewDate(int year, int month, int day) {
-    setUpPreviewDate(this.request, year, month, day);
+  public void setUpPreviewDate(String requestAttributePreviewDateName, int year, int month, int day) {
+    setUpPreviewDate(this.request, requestAttributePreviewDateName, year, month, day);
   }
 
-  public static void setUpPreviewDate(MockHttpServletRequest mockRequest, int year, int month, int day) {
+  public static void setUpPreviewDate(MockHttpServletRequest mockRequest, String requestAttributePreviewDateName, int year, int month, int day) {
     Calendar now = GregorianCalendar.getInstance();
     now.set(Calendar.YEAR, year);
     now.set(Calendar.MONTH, month);
@@ -138,8 +138,7 @@ public abstract class ContentBeanTestBase {
     RequestAttributes requestAttributes = new ServletRequestAttributes(mockRequest);
     RequestContextHolder.setRequestAttributes(requestAttributes);
 
-    //TODO: Use the constant ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE.
-    setRequestAttribute(mockRequest, now, "previewDateObj", ServletRequestAttributes.SCOPE_REQUEST);
+    setRequestAttribute(mockRequest, now, requestAttributePreviewDateName, ServletRequestAttributes.SCOPE_REQUEST);
   }
 
   public void setRequestAttribute(Object value, String attributeName, int scope) {

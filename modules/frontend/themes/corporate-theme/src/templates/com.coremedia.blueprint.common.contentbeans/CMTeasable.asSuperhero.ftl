@@ -5,8 +5,9 @@
 <#assign index=cm.localParameters().index!0 />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
+<#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
-<div class="cm-superhero ${additionalClass!""}"<@cm.metadata self.content /> data-cm-module="superhero">
+<div class="cm-superhero ${additionalClass!""}"<@preview.metadata self.content /> data-cm-module="superhero">
   <#-- picture -->
   <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix="cm-superhero" background=true/>
 
@@ -15,11 +16,11 @@
     <div class="cm-superhero__caption row">
       <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
         <#-- headline -->
-        <@bp.optionalLink href="${link}" attr={"target":target}>
-          <h1 class="cm-superhero__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
+        <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
+          <h1 class="cm-superhero__headline"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
         </@bp.optionalLink>
         <#-- teaser text -->
-        <p class="cm-superhero__text"<@cm.metadata "properties.teaserText" />>
+        <p class="cm-superhero__text"<@preview.metadata "properties.teaserText" />>
           <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "superhero.max.length", 140)) />
         </p>
         <#-- custom call-to-action button -->

@@ -18,9 +18,7 @@
 # limitations under the License.
 #
 
-include Windows::Helper
-
-property :source, String, name_property: true, required: true
+property :source, String, name_property: true
 property :pfx_password, String
 property :private_key_acl, Array
 property :store_name, String, default: 'MY', equal_to: ['TRUSTEDPUBLISHER', 'TrustedPublisher', 'CLIENTAUTHISSUER', 'REMOTE DESKTOP', 'ROOT', 'TRUSTEDDEVICES', 'WEBHOSTING', 'CA', 'AUTHROOT', 'TRUSTEDPEOPLE', 'MY', 'SMARTCARDROOT', 'TRUST', 'DISALLOWED']
@@ -95,6 +93,8 @@ EOH
 end
 
 action_class do
+  include Windows::Helper
+
   def cert_location
     @location ||= new_resource.user_store ? 'CurrentUser' : 'LocalMachine'
   end
@@ -106,7 +106,7 @@ action_class do
     if ::File.extname(file.downcase) == '.pfx'
       cert_script << ", \"#{new_resource.pfx_password}\""
       if persist && new_resource.user_store
-        cert_script << ', [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::PersistKeySet'
+        cert_script << ', ([System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::PersistKeySet)'
       elsif persist
         cert_script << ', ([System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::PersistKeySet -bor [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::MachineKeyset)'
       end

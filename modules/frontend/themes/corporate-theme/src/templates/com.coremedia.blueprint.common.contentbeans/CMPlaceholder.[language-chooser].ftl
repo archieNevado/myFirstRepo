@@ -1,8 +1,8 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMPlaceholder" -->
 
 <#if (cmpage.content.localizations)?has_content>
-<div class="cm-placeholder cm-language-chooser"<@cm.metadata self.content />>
-  <label class="sr-only" <@cm.metadata "properties.title"/>>${self.title!""}</label>
+<div class="cm-placeholder cm-language-chooser"<@preview.metadata self.content />>
+  <label class="sr-only" <@preview.metadata "properties.title"/>>${self.title!""}</label>
   <#-- selected language -->
   <#assign localizations=cmpage.content.localizations![] />
   <#if (localizations?size > 1)>

@@ -15,7 +15,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Currency;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONFIG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
@@ -45,7 +44,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @Override
   @Nullable
-  public StoreContext findContextByContent(@Nullable Content content) {
+  public StoreContext findContextByContent(@Nonnull Content content) {
     return createContext();
   }
 
@@ -56,20 +55,12 @@ public class StoreContextProviderMock implements StoreContextProvider {
   }
 
   private StoreContext createContext() {
-    return createContext("myConfigId", "10001", "aurora", "10001", "en_US", "USD");
+    return createContext("10001", "aurora", "10001", "en_US", "USD");
   }
 
-  private StoreContext createContext(String configId, String storeId, String storeName, String catalogId, String locale,
+  private StoreContext createContext(String storeId, String storeName, String catalogId, String locale,
                                      String currency) {
     StoreContext context = StoreContextImpl.newStoreContext();
-
-    if (configId != null) {
-      if (StringUtils.isBlank(configId)) {
-        throw new InvalidContextException("configId has wrong format: \"" + storeId + "\"");
-      }
-
-      context.put(CONFIG_ID, configId);
-    }
 
     if (storeId != null) {
       if (StringUtils.isBlank(storeId)) {
@@ -109,7 +100,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
   @Nonnull
   @Override
   public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
-    return new StoreContextBuilderImpl().from(source);
+    return StoreContextBuilderImpl.from(source);
   }
 
   @Nonnull

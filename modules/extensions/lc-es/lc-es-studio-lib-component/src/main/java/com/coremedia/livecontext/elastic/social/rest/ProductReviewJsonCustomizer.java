@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.elastic.social.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.ecommerce.studio.rest.CommerceBeanResource;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.rest.api.JsonCustomizer;
@@ -26,7 +27,7 @@ public class ProductReviewJsonCustomizer implements JsonCustomizer<Comment> {
   private ContentRepositoryResource contentRepositoryResource;
 
   @Override
-  public void customize(Comment comment, Map<String, Object> serializedObject) {
+  public void customize(Comment comment, @PersonalData Map<String, Object> serializedObject) {
     if (comment.getTarget() instanceof ProductInSite) {
       Product product = ((ProductInSite) comment.getTarget()).getProduct();
       try {
@@ -38,7 +39,7 @@ public class ProductReviewJsonCustomizer implements JsonCustomizer<Comment> {
     }
   }
 
-  private void addPreviewUrl(Product product, Map<String, Object> serializedObject) {
+  private void addPreviewUrl(Product product, @PersonalData Map<String, Object> serializedObject) {
     String previewControllerUriPattern = contentRepositoryResource.getPreviewControllerUrlPattern();
     String id = CommerceIdFormatterHelper.format(product.getId());
     String previewUrl = CommerceBeanResource.formatPreviewUrl(previewControllerUriPattern, id, product.getContext().getSiteId());

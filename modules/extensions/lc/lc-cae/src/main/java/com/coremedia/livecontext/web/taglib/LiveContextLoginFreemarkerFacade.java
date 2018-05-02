@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.web.taglib;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.handler.LoginStatusHandler;
 import com.coremedia.objectserver.util.RequestServices;
-import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 
 import javax.annotation.Nonnull;
@@ -22,7 +22,7 @@ public class LiveContextLoginFreemarkerFacade {
    */
   public String getStatusUrl() {
     String link = buildLink(LoginStatusHandler.LinkType.STATUS);
-    HttpServletRequest request = FreemarkerUtils.getCurrentRequest();
+    HttpServletRequest request = FreemarkerEnvironment.getCurrentRequest();
     return getLiveContextLoginUrlsProvider().transformLoginStatusUrl(link, request);
   }
 
@@ -33,7 +33,7 @@ public class LiveContextLoginFreemarkerFacade {
    */
   public String getLoginFormUrl() {
     LiveContextLoginUrlsProvider provider = getLiveContextLoginUrlsProvider();
-    HttpServletRequest request = FreemarkerUtils.getCurrentRequest();
+    HttpServletRequest request = FreemarkerEnvironment.getCurrentRequest();
     return provider.buildLoginFormUrl(request);
   }
 
@@ -43,7 +43,7 @@ public class LiveContextLoginFreemarkerFacade {
    * @return absolute url to logout the current user.
    */
   public String getLogoutUrl() {
-    HttpServletRequest request = FreemarkerUtils.getCurrentRequest();
+    HttpServletRequest request = FreemarkerEnvironment.getCurrentRequest();
     return getLiveContextLoginUrlsProvider().buildLogoutUrl(request);
   }
 
@@ -57,8 +57,8 @@ public class LiveContextLoginFreemarkerFacade {
   }
 
   private static String buildLink(LoginStatusHandler.LinkType bean) {
-    HttpServletRequest request = FreemarkerUtils.getCurrentRequest();
+    HttpServletRequest request = FreemarkerEnvironment.getCurrentRequest();
     LinkFormatter linkFormatter = (LinkFormatter) request.getAttribute(RequestServices.LINK_FORMATTER);
-    return linkFormatter.formatLink(bean, null, request, FreemarkerUtils.getCurrentResponse(), false);
+    return linkFormatter.formatLink(bean, null, request, FreemarkerEnvironment.getCurrentResponse(), false);
   }
 }

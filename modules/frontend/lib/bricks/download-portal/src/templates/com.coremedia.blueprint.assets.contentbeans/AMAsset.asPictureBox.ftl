@@ -15,7 +15,7 @@
 <#assign scaleModifierClass=scalePicture?string("am-picture-box--scale", "") />
 <#assign metadata=cm.localParameters().metadata![] />
 
-<div class="am-picture-box ${emptyModifierClass} ${scaleModifierClass} ${classBox}"<@cm.metadata data=metadata + ["properties.thumbnail"] />>
+<div class="am-picture-box ${emptyModifierClass} ${scaleModifierClass} ${classBox}"<@preview.metadata data=metadata + ["properties.thumbnail"] />>
   <#if self.thumbnail?has_content>
     <#assign imageSrc=cm.getLink(self.thumbnail)!"" />
     <img src="${imageSrc}"

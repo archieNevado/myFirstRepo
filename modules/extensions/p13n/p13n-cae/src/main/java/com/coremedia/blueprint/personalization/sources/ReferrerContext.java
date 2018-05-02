@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.personalization.sources;
 
+import com.coremedia.common.logging.PersonalDataExceptions;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.personalization.context.CoDecException;
 import com.coremedia.personalization.context.ContextCoDec;
 import com.coremedia.personalization.context.DirtyFlagMaintainer;
@@ -51,26 +53,34 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
     }
 
     @Override
-    public Object contextFromString(String str) {
+    public @PersonalData Object contextFromString(@PersonalData String str) {
       if (str == null) {
         throw new IllegalArgumentException("supplied str must not be null");
       }
 
       try {
+        // Suppress warning about assigning @PolyPersonalData result from #readValue to non-annotated local variable
+        // Okay, because the properties are added to the returned context, and the return type is @PolyPersonalData
+        @SuppressWarnings("PersonalData")
         Map props = objectMapper.readValue(str, Map.class);
+
         ReferrerContext context = (ReferrerContext) createNewContext();
         context.referrers.putAll(props);
         context.isDirty = false;
         return context;
       } catch (IOException ex) {
-        throw new CoDecException("unable to decode context", ex);
+        throw PersonalDataExceptions
+                .logCauseAndCreateException(getClass(), ex, CoDecException::new, "unable to decode context");
       }
     }
 
     @Override
-    public String stringFromContext(Object context) {
+    public @PersonalData String stringFromContext(@PersonalData Object context) {
+      if (context == null) {
+        throw new IllegalArgumentException("Supplied context is null");
+      }
       if (!(context instanceof ReferrerContext)) {
-        throw new IllegalArgumentException("supplied context is not of required type ScoringContext: " + context);
+        throw new IllegalArgumentException("supplied context is not of required type ReferrerContext: " + context.getClass());
       }
 
       try {
@@ -81,7 +91,7 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
 
         HttpServletRequest request = attributes.getRequest();
 
-        ReferrerContext ctx = (ReferrerContext) context;
+        @PersonalData ReferrerContext ctx = (ReferrerContext) context;
         String referer = request.getHeader("referer");
         if (referer != null) {
           ctx.referrers.put(URL_PROP, referer);
@@ -91,7 +101,8 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
         }
         return objectMapper.writeValueAsString(((ReferrerContext) context).referrers);
       } catch (Exception ex) { // NOSONAR
-        throw new CoDecException("unable to encode context", ex);
+        throw PersonalDataExceptions
+                .logCauseAndCreateException(getClass(), ex, CoDecException::new, "unable to encode context");
       }
     }
 
@@ -169,18 +180,18 @@ public class ReferrerContext implements PropertyProvider, DirtyFlagMaintainer {
   }
 
   @Override
-  public Object getProperty(String key) {
+  public @PersonalData Object getProperty(String key) {
     return referrers.get(key);
   }
 
   @Override
-  public <T> T getProperty(String key, T defaultValue) {
+  public <T> @PersonalData T getProperty(String key, T defaultValue) {
     T score = (T) referrers.get(key);
     return score != null ? score : defaultValue;
   }
 
   @Override
-  public Collection<String> getPropertyNames() {
+  public @PersonalData Collection<String> getPropertyNames() {
     return referrers.keySet();
   }
 

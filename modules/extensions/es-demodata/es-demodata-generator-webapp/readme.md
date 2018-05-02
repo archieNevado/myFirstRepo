@@ -19,7 +19,7 @@ mvn tomcat7:run
   <id>test-system.coremedia</id>
     <properties>
       <installation.host>test-system.coremedia.vm</installation.host>
-      <wcs.host>test-system-wcs.coremedia.vm</wcs.host>
+      <livecontext.ibm.wcs.host>test-system-wcs.coremedia.vm</livecontext.ibm.wcs.host>
       <db.host>test-system.coremedia.vm</db.host>
       <mongoDb.host>test-system.coremedia.vm</mongoDb.host>             
       <skipZip>true</skipZip>

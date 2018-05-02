@@ -2,7 +2,6 @@ package com.coremedia.blueprint.elastic.base;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.cap.multisite.impl.SitesServiceImpl;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.elastic.core.test.Injection;
@@ -21,6 +20,7 @@ import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TenantInitializerTest.LocalConfig.class,
@@ -56,7 +56,7 @@ public class TenantHelperTest {
     }
     @Bean
     public SitesService sitesService() {
-      return new SitesServiceImpl();
+      return mock(SitesService.class);
     }
 
   }

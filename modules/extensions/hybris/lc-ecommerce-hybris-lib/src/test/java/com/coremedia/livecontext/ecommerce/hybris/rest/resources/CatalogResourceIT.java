@@ -4,7 +4,6 @@ import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.lc.test.AbstractServiceTest;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupRefDocument;
@@ -33,7 +32,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testGetCategory", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetCategory() {
-    CategoryDocument cat = catalogResource.getCategoryById("40500", StoreContextHelper.getCurrentContext());
+    CategoryDocument cat = catalogResource.getCategoryById("40500", getStoreContext());
 
     assertThat(cat).isNotNull();
     assertThat(cat.getCode()).isEqualTo("40500");
@@ -42,7 +41,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testGetCategoryProducts", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetCategoryProducts() {
-    CategoryDocument cat = catalogResource.getCategoryById("Vans", StoreContextHelper.getCurrentContext());
+    CategoryDocument cat = catalogResource.getCategoryById("Vans", getStoreContext());
 
     assertThat(cat).isNotNull();
     assertThat(cat.getProducts()).isNotEmpty();
@@ -51,7 +50,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testListUserGroups", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testListUserGroups() {
-    List<UserGroupRefDocument> userGroups = catalogResource.getAllUserGroups(StoreContextHelper.getCurrentContext());
+    List<UserGroupRefDocument> userGroups = catalogResource.getAllUserGroups(getStoreContext());
 
     assertThat(userGroups).isNotEmpty();
   }
@@ -59,7 +58,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testGetUserGroup", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetUserGroup() {
-    UserGroupDocument userGroup = catalogResource.getUserGroup("customergroup", StoreContextHelper.getCurrentContext());
+    UserGroupDocument userGroup = catalogResource.getUserGroup("customergroup", getStoreContext());
 
     assertThat(userGroup).isNotNull();
     assertThat(userGroup.getUid()).isEqualTo("customergroup");

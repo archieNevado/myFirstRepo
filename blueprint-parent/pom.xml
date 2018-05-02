@@ -19,6 +19,7 @@
   <properties>
     <failOnWarning>true</failOnWarning>
     <coremedia.enforcer.fail>true</coremedia.enforcer.fail>
+    <enforcer.enforce-test>true</enforcer.enforce-test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <compile.source.jdk>1.8</compile.source.jdk>
@@ -30,14 +31,14 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1801.3</blueprint-base.version>
-    <cms.version>1801.3</cms.version>
-    <personalization.version>1801.3</personalization.version>
-    <elastic.version>1801.3</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1801.3</studio.version>
-    <caetoolbox.version>1801.3</caetoolbox.version>
-    <livecontext.version>1801.3</livecontext.version>
-    <jangaroo.version>4.0.55</jangaroo.version>
+    <blueprint-base.version>1804.1</blueprint-base.version>
+    <cms.version>1804.1</cms.version>
+    <personalization.version>1804.1</personalization.version>
+    <elastic.version>1804.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1804.1</studio.version>
+    <caetoolbox.version>1804.1</caetoolbox.version>
+    <livecontext.version>1804.1</livecontext.version>
+    <jangaroo.version>4.0.56</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
@@ -69,9 +70,9 @@
     <cae-live.host>${installation.host}</cae-live.host>
     <db.host>${installation.host}</db.host>
     <mongoDb.host>${installation.host}</mongoDb.host>
-    <wcs.host>${installation.host}</wcs.host>
-    <hybris.host>${installation.host}</hybris.host>
-    <livecontext.sfcc.host>${installation.host}</livecontext.sfcc.host>
+    <wcs.host>commerce-wcs-host</wcs.host>
+    <hybris.host>commerce-hybris-host</hybris.host>
+    <sfcc.host>commerce-sfcc-host</sfcc.host>
     <proxy.host>${installation.host}</proxy.host>
 
     <!-- logback appender for maven tomcat plugin start -->
@@ -119,6 +120,63 @@
             <configuration>
               <skip>false</skip>
               <jooUnitTestExecutionTimeout>30000</jooUnitTestExecutionTimeout>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--
+        Profile to let the build fail if personal data escapes its intended scope in non-test Java code.
+
+        This profile enables an annotation processor based on the Checker Framework that analyzes the data flow
+        of Java types annotated with com.coremedia.common.personaldata.PersonalData. The check will run for all
+        modules with a (transitive) dependency to com.coremedia.cms:coremedia-personal-data.
+
+        To verify that the checker actually runs, search for "Checking @PersonalData usage" in the Maven output.
+      -->
+      <id>checkPersonalData</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.checkerframework</groupId>
+          <artifactId>checker</artifactId>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-compile</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <compilerArgs>
+                    <!-- Add <arg>-Awarns</arg> to not let the build fail but just show warnings -->
+                    <arg>-AcheckPersonalData=true</arg>
+                    <arg>-AprintErrorStack</arg>
+                  </compilerArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <configuration>
+              <ignoredDependencies combine.children="append">
+                <!-- The Checker Framework possibly adds annotations from checker-qual.jar to compiled classes
+                     (e.g. @Pure, @SideEffectFree). The dependency analyzer warns about an "used undeclared dependency"
+                     then, even though no annotations from checker-qual.jar are used in source files.
+                     Details: https://groups.google.com/forum/#!msg/checker-framework-discuss/v0K0f05Uk50/U7quKT1dAwAJ
+                -->
+                <ignoredDependency>org.checkerframework:checker-qual</ignoredDependency>
+              </ignoredDependencies>
             </configuration>
           </plugin>
         </plugins>
@@ -252,6 +310,60 @@
         <groupId>com.atlassian.crowd</groupId>
         <artifactId>crowd-integration-client-common</artifactId>
         <version>${atlassian.crowd.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.apis</groupId>
+        <artifactId>google-api-services-youtube</artifactId>
+        <version>${google.api.services.youtube.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-jdk5</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.api-client</groupId>
+        <artifactId>google-api-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-jdk5</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client-jackson2</artifactId>
+        <version>${google.api.client.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.oauth-client</groupId>
+        <artifactId>google-oauth-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
@@ -512,7 +624,11 @@
               <!--
                | By passing these through, we do not have to define them each time in any submodule.
                | If however, you want to suppress them, you need to set the attribute combine.self="override" on the
-               | systemProperties element, see https://maven.apache.org/pom.html for more information
+               | systemProperties element, see https://maven.apache.org/pom.html for more information.
+               |
+               | Be aware to always define system property names, which do not clash with the effective ones, since
+               | otherwise in combination with other spring property sources these system properties always win.
+               | This would for example break the candy-setup.
               -->
               <solr.host>${solr.host}</solr.host>
               <content-management-server.host>${content-management-server.host}</content-management-server.host>
@@ -526,7 +642,7 @@
               <mongoDb.host>${mongoDb.host}</mongoDb.host>
               <wcs.host>${wcs.host}</wcs.host>
               <hybris.host>${hybris.host}</hybris.host>
-              <livecontext.sfcc.host>${livecontext.sfcc.host}</livecontext.sfcc.host>
+              <sfcc.host>${sfcc.host}</sfcc.host>
               <proxy.host>${proxy.host}</proxy.host>
               <log.appender>${log.appender}</log.appender>
               <application.name>${project.build.finalName}</application.name>
@@ -639,11 +755,6 @@
           <version>1.12</version>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>buildnumber-maven-plugin</artifactId>
-          <version>1.4</version>
-        </plugin>
-        <plugin>
           <groupId>com.lazerycode.jmeter</groupId>
           <artifactId>jmeter-maven-plugin</artifactId>
           <version>2.0.3</version>
@@ -706,23 +817,6 @@
 
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-buildnumber-of-git-revision</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
@@ -744,6 +838,8 @@
               <ignoredUnusedDeclaredDependencies>
                 <!--ignore analyzing swc-->
                 <ignoredUnusedDeclaredDependency>::swc</ignoredUnusedDeclaredDependency>
+                <!--process configuration properties classes-->
+                <ignoredDependency>org.springframework.boot:spring-boot-configuration-processor</ignoredDependency>
               </ignoredUnusedDeclaredDependencies>
             </configuration>
           </execution>
@@ -817,7 +913,11 @@
                     <exclude>javax.servlet.jsp:jsp-api</exclude>
                     <exclude>javax.servlet.jsp.jstl:jstl-api</exclude>
                     <exclude>javax.el:el-api</exclude>
+                    <!-- too old -->
+                    <exclude>jmock:jmock</exclude>
+                    <exclude>jmock:jmock-cglib</exclude>
                     <!-- exclude, and include only with scope "provided" -->
+                    <exclude>com.google.code.findbugs:jsr305</exclude>
                     <exclude>javax.servlet:javax.servlet-api</exclude>
                     <!-- junit:junit vs. junit:junit-dep: Since JUnit 4.11 junit-dep just relocates to
                          junit and files a warning when used. Thus excluding it here. -->
@@ -836,11 +936,65 @@
                       Do not even allow scope "test", since it overrides a transitive "provided".
                       S. http://www.sonatype.com/books/mvnref-book/reference/pom-relationships-sect-project-dependencies.html#pom-relationships-sect-transitive
                     -->
+                    <include>com.google.code.findbugs:jsr305:*:*:provided</include>
                     <include>javax.servlet:javax.servlet-api:*:*:provided</include>
                   </includes>
                 </bannedDependencies>
               </rules>
               <fail>true</fail>
+            </configuration>
+          </execution>
+          <execution>
+            <id>enforce-test</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <rules>
+                <bannedDependencies>
+                  <excludes>
+                    <!-- exclude, and include only with scope "test" -->
+                    <exclude>com.coremedia.blueprint.base:bpbase-test-util</exclude>
+                    <exclude>com.coremedia.cms:cap-unit-test</exclude>
+                    <exclude>com.coremedia.cms:coremedia-aws-test</exclude>
+                    <exclude>com.coremedia.cms:coremedia-common-test</exclude>
+                    <exclude>com.coremedia.elastic.core:core-test</exclude>
+                    <exclude>com.coremedia.elastic.core:core-solr-test</exclude>
+                    <exclude>com.coremedia.ui:coremedia-rest-test</exclude>
+                    <exclude>org.assertj:*</exclude>
+                    <exclude>org.jmock:*</exclude>
+                    <exclude>org.junit:*</exclude>
+                    <exclude>org.junit.jupiter:*</exclude>
+                    <exclude>org.junit.platform:*</exclude>
+                    <exclude>org.mockito:*</exclude>
+                    <exclude>org.powermock:*</exclude>
+                    <exclude>org.springframework:spring-test</exclude>
+                    <exclude>org.springframework.boot:spring-boot-test</exclude>
+                  </excludes>
+                  <includes>
+                    <!-- enforce scope "test" -->
+                    <include>com.coremedia.blueprint.base:bpbase-test-util:*:*:test</include>
+                    <include>com.coremedia.cms:cap-unit-test:*:*:test</include>
+                    <include>com.coremedia.cms:coremedia-aws-test:*:*:test</include>
+                    <include>com.coremedia.cms:coremedia-common-test:*:*:test</include>
+                    <include>com.coremedia.elastic.core:core-test:*:*:test</include>
+                    <include>com.coremedia.elastic.core:core-solr-test:*:*:test</include>
+                    <include>com.coremedia.ui:coremedia-rest-test:*:*:test</include>
+                    <include>org.assertj:*:*:*:test</include>
+                    <include>org.jmock:*:*:*:test</include>
+                    <include>org.junit:*:*:*:test</include>
+                    <include>org.junit.jupiter:*:*:*:test</include>
+                    <include>org.junit.platform:*:*:*:test</include>
+                    <include>org.mockito:*:*:*:test</include>
+                    <include>org.powermock:*:*:*:test</include>
+                    <include>org.springframework:spring-test:*:*:test</include>
+                    <include>org.springframework.boot:spring-boot-test:*:*:test</include>
+                  </includes>
+                  <searchTransitive>true</searchTransitive>
+                </bannedDependencies>
+              </rules>
+              <fail>${enforcer.enforce-test}</fail>
             </configuration>
           </execution>
         </executions>

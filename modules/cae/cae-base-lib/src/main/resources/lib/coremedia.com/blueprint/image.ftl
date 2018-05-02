@@ -3,17 +3,18 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
-
+<#-- SET ASPECT RATIOS -->
 <#function responsiveImageLinksData picture aspectRatios=[]>
   <#return blueprintFreemarkerFacade.responsiveImageLinksData(picture, cmpage, aspectRatios)>
 </#function>
 
+<#-- GET IMAGE LINK -->
 <#function getBiggestImageLink picture aspectRatio="">
   <#return blueprintFreemarkerFacade.getLinkForBiggestImageWithRatio(picture, cmpage, aspectRatio)>
 </#function>
@@ -22,7 +23,7 @@
 <#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
 
 
-<#-- DEPRECATED use cm.getLink(picture.data) instead -->
+<#-- DEPRECATED, use cm.getLink(picture.data) instead -->
 <#function uncroppedImageLink picture>
   <#return blueprintFreemarkerFacade.uncroppedImageLink(picture)>
 </#function>
@@ -34,7 +35,7 @@
  * @param view (optional) the view to render the image with
  * @param limitAspectRatios (optional) A list of allowed aspect ratios.
  * @param classPrefix Set the classPrefix.
- * @param metadata (optional) if metadata shall be rendered it contains the value of param data for cm.metadata, default to ["properties.pictures"]
+ * @param metadata (optional) if metadata shall be rendered it contains the value of param data for preview.metadata, default to ["properties.pictures"]
  * @param displayEmptyImage (optional) if set to true, a special div is rendered as a placeholder for a non existing image
  * @param displayDimmer (optional) render a dimmer on top of the image
  * @param background (optional) renders the image as a background attribute of a div instead of a standard img tag
@@ -59,7 +60,7 @@
     <div class="${cssClassDimmer}"></div>
     </#if>
   <#elseif displayEmptyImage>
-  <div class="${cssClassBox}" <@cm.metadata "properties.pictures" />>
+  <div class="${cssClassBox}" <@preview.metadata "properties.pictures" />>
     <div class="${cssClassImage} cm-image--missing"></div>
   </div>
   </#if>

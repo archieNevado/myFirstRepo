@@ -34,11 +34,6 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-common</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-xml</artifactId>
     </dependency>
 
@@ -144,6 +139,7 @@
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>

@@ -8,10 +8,10 @@
   "displayTitle": false
 } + overlay!{} />
 
-<div class="cm-overlay ${classOverlay}"<@cm.metadata data=(metadata![]) + [self.content] />>
+<div class="cm-overlay ${classOverlay}"<@preview.metadata data=(metadata![]) + [self.content] />>
   <@bp.optionalLink href=cm.getLink(self)>
     <#if self.title?has_content && overlay.displayTitle>
-      <div class="cm-overlay__item cm-overlay__item--title"<@cm.metadata "properties.teaserTitle" />>${self.title}</div>
+      <div class="cm-overlay__item cm-overlay__item--title"<@preview.metadata "properties.teaserTitle" />>${self.title}</div>
     <#else>
       <div class="cm-overlay__item cm-overlay__item--title"><@bp.message "button_quickinfo" /></div>
     </#if>

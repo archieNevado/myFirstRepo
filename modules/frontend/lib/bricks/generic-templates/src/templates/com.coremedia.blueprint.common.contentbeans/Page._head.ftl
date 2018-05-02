@@ -5,11 +5,11 @@
 <#assign defaultTitleSuffix=bp.getMessage('title_suffix') />
 <#assign titleSuffix=bp.setting(self, "customTitleSuffixText", (defaultTitleSuffix!='[---title_suffix---]')?then(defaultTitleSuffix, ''))/>
 
-<head<@cm.metadata data=studioExtraFilesMetadata/>>
+<head<@preview.metadata data=studioExtraFilesMetadata/>>
 <#-- add encoding first! -->
     <meta charset="UTF-8">
 <#-- SEO: title -->
-    <title<@cm.metadata "properties.htmlTitle" />>${self.content.htmlTitle!"CoreMedia CMS - No Page Title"}${' ' + titleSuffix}</title>
+    <title<@preview.metadata "properties.htmlTitle" />>${self.content.htmlTitle!"CoreMedia CMS - No Page Title"}${' ' + titleSuffix}</title>
 <#-- SEO: description -->
 <#if self.content.htmlDescription?has_content>
     <meta name="description" content="${self.content.htmlDescription}">
@@ -24,7 +24,7 @@
     <meta name="generator" content="CoreMedia CMS">
 <#-- favicon -->
 <#if self.favicon?has_content>
-    <link rel="shortcut icon" href="${cm.getLink(self.favicon)}"<@cm.metadata "properties.favicon" />>
+    <link rel="shortcut icon" href="${cm.getLink(self.favicon)}"<@preview.metadata "properties.favicon" />>
 </#if>
 <#-- SEO: canonical -->
 <#if self.content?has_content>

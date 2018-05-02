@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
-import com.coremedia.util.Base64;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Stopwatch;
 import org.apache.http.client.HttpClient;
@@ -33,6 +32,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -148,6 +148,7 @@ public class HybrisRestConnector {
     }
   }
 
+  @Nullable
   public <T, P> T performPost(String resourcePath,
                               Class<T> responseType,
                               @Nullable List<String> uriTemplateParameters,
@@ -264,7 +265,7 @@ public class HybrisRestConnector {
 
         String plainCredentials = getUser() + ':' + getPassword();
         byte[] plainCredentialsBytes = plainCredentials.getBytes();
-        String basicAuthCredentials = Base64.encode(plainCredentialsBytes);
+        String basicAuthCredentials = Base64.getEncoder().encodeToString(plainCredentialsBytes);
 
         authenticationHeader.add(AUTHORIZATION_HEADER, "Basic " + basicAuthCredentials);
         authenticationHeader.add("Accept", MediaType.APPLICATION_JSON_VALUE);

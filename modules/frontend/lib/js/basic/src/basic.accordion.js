@@ -27,13 +27,28 @@ export const EVENT_ACCORDION_CHANGED = EVENT_PREFIX + "accordionChanged";
  * @param {jQuery} $activeItem the item to be active
  */
 export function change($accordion, $activeItem) {
-  $accordion.find(".cm-accordion-item").not($activeItem).each(function () {
-    const $item = $(this);
-    $item.find("." + classAccordionItemHeader).first().removeClass(classAccordionItemHeaderActive);
-    $item.find("." + classAccordionItemContent).first().removeClass(classAccordionItemContentActive);
-  });
-  $activeItem.find("." + classAccordionItemHeader).first().addClass(classAccordionItemHeaderActive);
-  $activeItem.find("." + classAccordionItemContent).first().addClass(classAccordionItemContentActive);
+  $accordion
+    .find(".cm-accordion-item")
+    .not($activeItem)
+    .each(function() {
+      const $item = $(this);
+      $item
+        .find("." + classAccordionItemHeader)
+        .first()
+        .removeClass(classAccordionItemHeaderActive);
+      $item
+        .find("." + classAccordionItemContent)
+        .first()
+        .removeClass(classAccordionItemContentActive);
+    });
+  $activeItem
+    .find("." + classAccordionItemHeader)
+    .first()
+    .addClass(classAccordionItemHeaderActive);
+  $activeItem
+    .find("." + classAccordionItemContent)
+    .first()
+    .addClass(classAccordionItemContentActive);
   $accordion.trigger(EVENT_ACCORDION_CHANGED, [$activeItem]);
   $document.trigger(basic.EVENT_LAYOUT_CHANGED);
 }

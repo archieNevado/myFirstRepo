@@ -5,7 +5,7 @@
 <#assign cssClasses = cm.localParameter("cssClass", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign videoLink = bp.getVideoLink(self) />
 
-<div class="cm-claim cm-claim--video thumbnail ${cssClasses}"<@cm.metadata self.content />>
+<div class="cm-claim cm-claim--video thumbnail ${cssClasses}"<@preview.metadata self.content />>
   <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": "", "class":"cm-claim__popup-opener"}>
     <#-- picture -->
     <#if self.picture?has_content>
@@ -27,13 +27,13 @@
 
   <div class="caption">
     <#-- headline -->
-    <h3 class="cm-claim__headline thumbnail-label"<@cm.metadata "properties.teaserTitle" />>
+    <h3 class="cm-claim__headline thumbnail-label"<@preview.metadata "properties.teaserTitle" />>
       <span>
         ${self.teaserTitle!""}
       </span>
     </h3>
     <#-- teaser text, 3 lines ~ 120 chars -->
-    <p class="cm-claim__text"<@cm.metadata "properties.teaserText" />>
+    <p class="cm-claim__text"<@preview.metadata "properties.teaserText" />>
       <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "claim.max.length", 115)) />
     </p>
   </div>

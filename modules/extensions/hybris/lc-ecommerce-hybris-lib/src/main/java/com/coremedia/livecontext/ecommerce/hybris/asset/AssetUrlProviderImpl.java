@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.hybris.asset;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -35,20 +34,14 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
     return null;
   }
 
+  @Nonnull
   private String getCaeUrlPrefix() {
-    StoreContext storeContext = StoreContextHelper.getCurrentContext();
-    if (storeContext != null) {
-      String siteId = storeContext.getSiteId();
-      if (siteId != null) {
-        Site site = sitesService.getSite(siteId);
-        if (site != null) {
-          return urlPrefixResolver.getUrlPrefix(siteId, site.getSiteRootDocument(), null);
-        }
-      }
-    }
-    return "";
+    return StoreContextHelper.findCurrentContext()
+            .map(StoreContext::getSiteId)
+            .flatMap(sitesService::findSite)
+            .map(site -> urlPrefixResolver.getUrlPrefix(site.getId(), site.getSiteRootDocument(), null))
+            .orElse("");
   }
-
 
   @Override
   @Required

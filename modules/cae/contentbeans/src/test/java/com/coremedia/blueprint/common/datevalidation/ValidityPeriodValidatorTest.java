@@ -1,11 +1,9 @@
 package com.coremedia.blueprint.common.datevalidation;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.testing.ContentBeanTestBase;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.mockito.Mockito;
@@ -14,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * There are five content items
@@ -77,7 +75,7 @@ public class ValidityPeriodValidatorTest {
   }
 
   private ValidityPeriodValidator preparePreviewDate(int day, int month, int year) {
-    ContentBeanTestBase.setUpPreviewDate(new MockHttpServletRequest(), year, month, day);
+    ContentBeanTestBase.setUpPreviewDate(new MockHttpServletRequest(), REQUEST_ATTRIBUTE_PREVIEW_DATE, year, month, day);
     return new ValidityPeriodValidator<>();
   }
 

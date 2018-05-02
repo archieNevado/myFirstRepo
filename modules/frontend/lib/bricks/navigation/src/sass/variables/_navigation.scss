@@ -1,3 +1,7 @@
 //default variables
 $cm-navigation-prefix: "cm-navigation" !default;
-$cm-navigation-header-height: 51px;
+$cm-navigation-header-height: 51px !default;
+$cm-navigation-image-aspect-ratio-x: 16 !default;
+$cm-navigation-image-aspect-ratio-y: 9 !default;
+$cm-navigation-delay: 0.4s !default; // time until the navigation vanishes when not hovered anymore
+$cm-navigation-flex: 0 0 20% !default;

@@ -3,68 +3,48 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
-
+<#-- GET PAGE METADATA -->
 <#function getPageMetadata page>
   <#return blueprintFreemarkerFacade.getPageContext(page).content />
 </#function>
 
+<#-- GET PLACEMENT NAME -->
 <#function getPlacementPropertyName placement>
   <#return blueprintFreemarkerFacade.getPlacementPropertyName(placement) />
 </#function>
 
-<#--
- * Returns the metadata that was determined for the container, either as list or as plain object
- *
- * @param container The container the metadata should be determined for
- -->
+<#-- GET CONTAINER METADATA -->
 <#function getContainerMetadata container>
   <#return blueprintFreemarkerFacade.getContainerMetadata(container) />
 </#function>
 
-<#--
- * Utility function to allow rendering of containers with custom items, e.g. partial containers with a subset of
- * the items the original container had.
- *
- * @param items The items to be put inside the new container
- * @return a new container
- -->
+<#-- GET CONTAINER WITH ITEMS -->
 <#function getContainer items=[]>
   <#return blueprintFreemarkerFacade.getContainer(items) />
 </#function>
 
-<#--
- * Utility function to allow rendering of containers with custom items, e.g. partial containers with a subset of
- * the items the original container had.
- *
- * @param baseContainer The base container the new container shall be created from
- * @param items The items to be put inside the new container
- -->
+<#-- GET CONTAINER WITH ITEMS OF GIVEN CONTAINER -->
 <#function getContainerFromBase baseContainer items=[]>
   <#return blueprintFreemarkerFacade.getContainer(baseContainer, items) />
 </#function>
 
+<#-- GET LOCALE -->
 <#function getPageLanguageTag object>
   <#return blueprintFreemarkerFacade.getLanguageTag(object) />
 </#function>
 
+<#-- GET DIRECTION -->
 <#function getPageDirection object>
   <#return blueprintFreemarkerFacade.getDirection(object) />
 </#function>
-<#--
- * get offset for given element for bootstrap grid
- *
- * @param index Integer
- * @param numberOfItems Integer
- * @param itemsPerRow Integer
- * @param prefix (optional) String, put in front of offset class
- * @param force (optional) Boolean, force offset class, even if it's zero
--->
+
+<#-- GET OFFSET -->
 <#function getOffsetClass index numberOfItems itemsPerRow  prefix="" force=false>
   <#-- bootstrap default grid = 12 rows -->
   <#assign width=12/itemsPerRow />
@@ -84,13 +64,7 @@
   <#return offsetClass>
 </#function>
 
-<#--
- * render closing and opening div for bootstrap grid
- *
- * @param index Integer
- * @param itemsPerRow Integer
- * @param additionalClass (optional) String
--->
+<#-- RENDER NEW ROW -->
 <#macro renderNewRow index itemsPerRow additionalClass="">
   <#-- bootstrap default grid = 12 rows -->
   <#assign width=12/itemsPerRow />
@@ -102,6 +76,7 @@
   </#if>
 </#macro>
 
+<#-- GET METADATA OF GIVEN PLACEMENT -->
 <#function getPlacementHighlightingMetaData placement>
   <#return blueprintFreemarkerFacade.getPlacementHighlightingMetaData(placement)>
 </#function>

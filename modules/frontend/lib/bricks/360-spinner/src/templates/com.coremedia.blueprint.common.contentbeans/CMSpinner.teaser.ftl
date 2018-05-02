@@ -12,7 +12,7 @@
 <#assign limitAspectRatiosKey="default_aspect_ratios_for_" + cm.localParameter("limitAspectRatiosKey", "teaser") />
 <#assign limitAspectRatios=cm.localParameter("limitAspectRatios", bp.setting(cmpage.navigation, limitAspectRatiosKey, [])) />
 
-<div class="${blockClass} ${blockClass}--spinner ${cssClasses} ${additionalClass}"<@cm.metadata self.content />>
+<div class="${blockClass} ${blockClass}--spinner ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
   <div class="${blockClass}__wrapper">
     <#-- spinner (with at least 2 images) -->
     <#if (self.sequence![])?size gt 2 && renderType != "plain">
@@ -25,13 +25,13 @@
       <div class="${blockClass}__caption">
         <#-- teaser title -->
         <#if self.teaserTitle?has_content>
-          <h3 class="${blockClass}__headline" <@cm.metadata "properties.teaserTitle" />>
+          <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
             <span>${self.teaserTitle!""}</span>
           </h3>
         </#if>
         <#-- teaser text -->
         <#if renderTeaserText &&  self.teaserText?has_content>
-          <p class="${blockClass}__text" <@cm.metadata "properties.teaserText" />>
+          <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
             <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "square.max.length", 115)) />
           </p>
         </#if>

@@ -76,6 +76,10 @@ public class RepositoryCatalogTreeModel extends ContentTreeModel {
     }
 
     var content:Content = beanFactory.getRemoteBean(nodeId) as Content;
+    if(content === null) {
+      return null;
+    }
+    
     if(!content.isLoaded()) {
       content.load();
       return undefined;

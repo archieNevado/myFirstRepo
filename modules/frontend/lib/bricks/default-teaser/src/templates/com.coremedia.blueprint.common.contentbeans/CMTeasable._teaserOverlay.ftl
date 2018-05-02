@@ -32,7 +32,7 @@
   </#if>
 
   <div class="cm-teaser-overlay ${additionalClass} ${overlayClass}"<@cm.optionalAttributes {"style": overlayStyle?join(" ")} />>
-    <div class="cm-teaser-overlay__text cm-richtext ${textClass}"<@cm.metadata ["properties.teaserText"] />>
+    <div class="cm-teaser-overlay__text cm-richtext ${textClass}"<@preview.metadata ["properties.teaserText"] />>
       <#-- get the teaser text without falling back to the detail text (see CMS-9680) -->
       <#assign rawTeaserText=self.content.getMarkup("teaserText")!"" />
       <#if rawTeaserText?has_content>

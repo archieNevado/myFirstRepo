@@ -90,6 +90,16 @@
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
 </StructListProperty>
+<StructListProperty Name="CMExternalLink">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asTeaserHero</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+</StructListProperty>
 </Struct>
 </StructProperty>
 <LinkListProperty Name="studioPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">

@@ -9,7 +9,7 @@
 
 <#-- Pagegrid: Iterate over each row -->
 <#if cmpage.pageGrid?has_content>
-<div class="cm-grid cm-container ${self.pageGrid.cssClassName!""}" <@cm.metadata data=bp.getPageMetadata(cmpage)!"" />>
+<div class="cm-grid cm-container ${self.pageGrid.cssClassName!""}" <@preview.metadata data=bp.getPageMetadata(cmpage)!"" />>
 <#-- Iterator over each row -->
   <#list self.pageGrid.rows![] as row>
   <#-- Iterate over each placement-->

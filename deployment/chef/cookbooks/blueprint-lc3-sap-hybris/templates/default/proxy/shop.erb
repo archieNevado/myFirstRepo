@@ -1,6 +1,6 @@
 <%- if @params[:ssl] -%>
   SSLProxyEngine On
-  <%- if node['apache']['version'] == '2.4' && !@params[:ssl_proxy_verify] -%>
+  <%- unless @params[:ssl_proxy_verify] -%>
   SSLProxyVerify none
   SSLProxyCheckPeerCN off
   SSLProxyCheckPeerName off

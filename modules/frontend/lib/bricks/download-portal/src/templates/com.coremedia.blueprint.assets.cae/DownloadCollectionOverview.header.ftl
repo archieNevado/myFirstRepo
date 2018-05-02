@@ -15,4 +15,4 @@
   <@cm.include self=self view="search"/>
 </div>
 
-<h1 class="am-download-portal__title am-heading-1"<@cm.metadata data="properties.name" />>${bp.getMessage("am_download_collection_overview_title")}</h1>
+<h1 class="am-download-portal__title am-heading-1"<@preview.metadata data="properties.name" />>${bp.getMessage("am_download_collection_overview_title")}</h1>

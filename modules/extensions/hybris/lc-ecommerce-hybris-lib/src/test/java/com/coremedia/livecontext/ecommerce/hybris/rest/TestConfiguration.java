@@ -1,10 +1,8 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.HttpClientFactory;
-import com.coremedia.springframework.context.support.RequiredPropertySourcesPlaceholderConfigurerConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.ConversionService;
@@ -12,7 +10,6 @@ import org.springframework.core.convert.support.DefaultConversionService;
 
 @Configuration
 @PropertySource("classpath:/com/coremedia/livecontext/ecommerce/hybris/test-hybris-services.properties")
-@Import(RequiredPropertySourcesPlaceholderConfigurerConfiguration.class)
 public class TestConfiguration {
 
   @Bean

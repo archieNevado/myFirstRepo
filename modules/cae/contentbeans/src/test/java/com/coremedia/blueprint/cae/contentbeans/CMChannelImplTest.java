@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
+
 /**
  * Unit test for {@link com.coremedia.blueprint.cae.contentbeans.CMChannelImpl}.
  */
@@ -42,7 +44,7 @@ public class CMChannelImplTest extends ContentBeanTestBase {
     teasable2 = getContentBean(6);
     css = getContentBean(48);
     javaScript = getContentBean(50);
-    setUpPreviewDate();
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE);
   }
 
   @Test

@@ -522,8 +522,16 @@
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men"/>
 </Struct>
 <Struct>
-<StringProperty Name="name">CM Action Goggles</StringProperty>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Goggles/CM%20Action%20Goggles.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Goggles/CM%20Action%20Goggles"/>
+<StringProperty Name="name">Shoppable Video</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Shoppable%20Video.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Shoppable%20Video"/>
+</Struct>
+<Struct>
+<StringProperty Name="name">CM Action Goggles - Augmented</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Goggles/CM%20Action%20Goggles%20-%20Augmented.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Goggles/CM%20Action%20Goggles%20-%20Augmented"/>
+</Struct>
+<Struct>
+<StringProperty Name="name">CM Action Goggles - Classic</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/CM%20Action%20Goggles%20-%20Classic.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/CM%20Action%20Goggles%20-%20Classic"/>
 </Struct>
 <Struct>
 <StringProperty Name="name">Snowboarders Group Image Map</StringProperty>
@@ -534,11 +542,14 @@
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Blog/Blog%20Query%20List.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Blog/Blog%20Query%20List"/>
 </Struct>
 <Struct>
-<StringProperty Name="name">Shoppable Video</StringProperty>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Shoppable%20Video.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Videos/Shoppable%20Video"/>
+<StringProperty Name="name">Top Products Collection</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Top%20Products%20Collection.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Top%20Products%20Collection"/>
+</Struct>
+<Struct>
+<StringProperty Name="name">Speed Riding Challenge in Chamonix</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Speed%20Riding%20Challenge%20in%20Chamonix.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Speed%20Riding%20Challenge%20in%20Chamonix"/>
 </Struct>
 </StructListProperty>
-<BooleanProperty Name="publicationWorkflowRemoveEditedContents">true</BooleanProperty>
 <StructProperty Name="workarea">
 <Struct>
 <StructListProperty Name="tabs">

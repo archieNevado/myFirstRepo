@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {api as magnificPopupApi} from "@coremedia/js-magnific-popup";
+import { api as magnificPopupApi } from "@coremedia/js-magnific-popup";
 
 /**
  * Quickinfo functionality
@@ -21,11 +21,14 @@ export const EVENT_QUICKINFO_CHANGED = EVENT_PREFIX + "quickInfoChanged";
 /**
  * Return the configuration of the given quickinfo.
  * @param {jQuery} $quickinfo - quickinfo
- * @returns {object} configuration of the quickinfo
+ * @returns {Object} configuration of the quickinfo
  * @ignore
  */
 function getConfig($quickinfo) {
-  return $.extend({modal: false, group: undefined}, $quickinfo.data(identifier));
+  return $.extend(
+    { modal: false, group: undefined },
+    $quickinfo.data(identifier)
+  );
 }
 
 function isActive($quickinfo) {
@@ -43,26 +46,29 @@ export function show($quickinfo) {
     const config = getConfig($quickinfo);
     if (config.group !== undefined) {
       // notify all other quickinfos in group
-      $("[data-" + identifier + "]").not($quickinfo).each(function () {
-        groupHide($(this), config.group);
-      });
+      $("[data-" + identifier + "]")
+        .not($quickinfo)
+        .each(function() {
+          groupHide($(this), config.group);
+        });
     }
-    $quickinfo.addClass(classQuickInfoActive)
-            .parents('.carousel-inner')
-            .addClass(identifier + "__parent--active");
+    $quickinfo
+      .addClass(classQuickInfoActive)
+      .parents(".carousel-inner")
+      .addClass(identifier + "__parent--active");
     if (config.modal) {
       // use magnificPopup to open quickinfo as full screen overlay
       magnificPopupApi.open({
         closeBtnInside: false,
         items: {
           src: $quickinfo,
-          type: "inline"
+          type: "inline",
         },
         callbacks: {
-          close: function () {
+          close: function() {
             hide($quickinfo);
-          }
-        }
+          },
+        },
       });
     }
     $quickinfo.trigger(EVENT_QUICKINFO_CHANGED, [true]);
@@ -87,19 +93,20 @@ export function hide($quickinfo) {
     }
 
     // Disable transition feature for cm-button
-    $.each(buttons, function () {
+    $.each(buttons, function() {
       transition.push($(this).css("transition"));
       $(this).css("transition", "none");
     });
 
     // Hide quick in
-    $quickinfo.removeClass(classQuickInfoActive)
-            .parents('.carousel-inner')
-            .removeClass(identifier + "__parent--active");
+    $quickinfo
+      .removeClass(classQuickInfoActive)
+      .parents(".carousel-inner")
+      .removeClass(identifier + "__parent--active");
     $quickinfo.trigger(EVENT_QUICKINFO_CHANGED, [false]);
 
     // Re-enable transition feature for cm-button
-    $.each(buttons, function (index, button) {
+    $.each(buttons, function(index, button) {
       transition.push($(this).css("transition"));
       $(button).css("transition", transition[index]);
     });
@@ -141,13 +148,16 @@ export function groupHide($quickinfo, group) {
  */
 export function closeQuickInfo($quickinfo) {
   // close quickinfo on X button
-  $quickinfo.find(prefixcss + "quickinfo__close").on('click touch', function () {
+  $quickinfo.find(prefixcss + "quickinfo__close").on("click touch", function() {
     hide($quickinfo);
   });
   // close quickinfo on click outside it
-  $(document).on('click touch', function (event) {
-    const $activeQuickinfo = $(prefixcss + 'quickinfo--active');
-    if ($activeQuickinfo.length && !$(event.target).closest($activeQuickinfo).length) {
+  $(document).on("click touch", function(event) {
+    const $activeQuickinfo = $(prefixcss + "quickinfo--active");
+    if (
+      $activeQuickinfo.length &&
+      !$(event.target).closest($activeQuickinfo).length
+    ) {
       hide($quickinfo);
     }
   });
@@ -161,7 +171,7 @@ export function closeQuickInfo($quickinfo) {
  * @param {jQuery} $config - The given config.
  */
 export function toggleQuickInfo($button, $config) {
-  $button.click(function () {
+  $button.click(function() {
     const $quickInfo = $("#" + $config.target);
     toggle($quickInfo);
     return false;
@@ -176,9 +186,9 @@ export function toggleQuickInfo($button, $config) {
  * @param {jQuery} $config - The given config.
  */
 export function switchQuickInfo($button) {
-  $button.click(function(event){
+  $button.click(function(event) {
     event.stopPropagation();
-    const $nextQuickInfo = $('#' + $button.data('cm-target'));
+    const $nextQuickInfo = $("#" + $button.data("cm-target"));
     show($nextQuickInfo);
   });
 }

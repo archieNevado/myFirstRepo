@@ -10,9 +10,9 @@ import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.CMVideo;
-import com.coremedia.xml.MarkupUtil;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
+import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.xml.MarkupUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -121,7 +122,7 @@ public class CMArticleImplTest extends ContentBeanTestBase {
 
   @Test
   public void testGetLocalizations() throws Exception {
-    setUpPreviewDate();
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE);
     Collection<? extends CMArticle> localizations = article_en.getLocalizations();
     // the article_de is filtered by validation date
     assertEquals(1, localizations.size());
@@ -131,20 +132,20 @@ public class CMArticleImplTest extends ContentBeanTestBase {
 
   @Test
   public void testGetPictures() throws Exception {
-    setUpPreviewDate();
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE);
     assertEquals(2, article_de.getPictures().size());
     assertEquals(article_de.getPicture(), article_de.getPictures().get(0));
   }
 
   @Test
   public void testGetRelatedByReferrers() throws Exception {
-    setUpPreviewDate(2010, Calendar.FEBRUARY, 1);
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE, 2010, Calendar.FEBRUARY, 1);
     assertEquals(1, article_en.getRelatedByReferrers().size());
   }
 
   @Test
   public void testGetRelatedBySimilarTaxonomies() throws Exception {
-    setUpPreviewDate(2010, Calendar.FEBRUARY, 1);
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE, 2010, Calendar.FEBRUARY, 1);
     CurrentContextService ccs = mockCurrentContextTo14();
     CMArticleImpl impl = (CMArticleImpl) article_de;
     impl.setCurrentContextService(ccs);

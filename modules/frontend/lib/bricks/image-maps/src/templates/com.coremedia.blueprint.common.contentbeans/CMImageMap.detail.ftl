@@ -16,11 +16,11 @@
 <#assign imageMapParams=bp.initializeImageMap()/>
 <#assign useQuickinfo=cm.localParameter("imagemap_use_quickinfo", true)/>
 
-<article class="${blockClass} ${blockClass}--imagemap cm-imagemap"<@cm.metadata self.content />
+<article class="${blockClass} ${blockClass}--imagemap cm-imagemap"<@preview.metadata self.content />
          data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${cm.getLink(self.target!cm.UNDEFINED)}"}'>
 
   <#-- title -->
-  <h1 class="${blockClass}__headline"<@cm.metadata "properties.teaserTitle"/>>${self.teaserTitle!""}</h1>
+  <h1 class="${blockClass}__headline"<@preview.metadata "properties.teaserTitle"/>>${self.teaserTitle!""}</h1>
 
   <#-- picture + hot zones -->
   <@cm.include self=self view="_picture" params={
@@ -32,14 +32,14 @@
 
   <#-- text -->
   <#if self.teaserText?has_content>
-    <div class="${blockClass}__text cm-richtext"<@cm.metadata "properties.teaserText"/>>
+    <div class="${blockClass}__text cm-richtext"<@preview.metadata "properties.teaserText"/>>
       <@cm.include self=self.teaserText!cm.UNDEFINED />
     </div>
   </#if>
 
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
-    <div class="${blockClass}__date"<@cm.metadata "properties.externallyDisplayedDate"/>>
+    <div class="${blockClass}__date"<@preview.metadata "properties.externallyDisplayedDate"/>>
       <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
     </div>
   </#if>

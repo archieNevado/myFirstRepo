@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.personalization.sources;
 
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.models.Model;
 import com.coremedia.elastic.core.api.models.ModelService;
 import com.coremedia.elastic.core.api.users.User;
@@ -90,7 +91,7 @@ public final class ElasticSocialContextSource extends AbstractContextSource {
  ----------------------------------------------- */
 
   // persist Context in Elastic Social
-  private void storeContext(User user, Object context) {
+  private void storeContext(User user, @PersonalData Object context) {
     Model codecModel = modelService.get(getContextModelKey(user), P13N_CONTEXT_COLLECTION);
     if (codecModel == null) {
       codecModel = modelService.create(getContextModelKey(user), P13N_CONTEXT_COLLECTION);
@@ -116,16 +117,16 @@ public final class ElasticSocialContextSource extends AbstractContextSource {
     if (user != null) {
       // retrieve the serialized context from Elastic Social
       final Model codecModel = modelService.get(getContextModelKey(user), P13N_CONTEXT_COLLECTION);
-      final String serializedContext = (codecModel != null)
+      final @PersonalData String serializedContext = (codecModel != null)
               ? codecModel.getProperty(CONTEXT_PROPERTY, String.class)
               : null;
 
       // deserialize the context
       if (serializedContext != null) {
-        final Object context = codec.contextFromString(serializedContext);
+        final @PersonalData Object context = codec.contextFromString(serializedContext);
         contextCollection.setContext(contextName, context);
       } else {
-        LOGGER.debug(PERSONAL_DATA, "no existing context of name '{}' found for Elastic Social user '{}'; creating new context.", contextName, user);
+        LOGGER.debug(PERSONAL_DATA, "no existing context of name '{}' found for Elastic Social user '{}'; creating new context.", contextName, user.toIdString());
         contextCollection.setContext(contextName, codec.createNewContext());
       }
     } else {
@@ -145,7 +146,7 @@ public final class ElasticSocialContextSource extends AbstractContextSource {
 
     final User user = UserHelper.getLoggedInUser();
     if (user != null) {
-      final Object context = contextCollection.getContext(contextName);
+      final @PersonalData Object context = contextCollection.getContext(contextName);
       if (context != null) {
         if (context instanceof DirtyFlagMaintainer) {
           if (((DirtyFlagMaintainer) context).isDirty()) {

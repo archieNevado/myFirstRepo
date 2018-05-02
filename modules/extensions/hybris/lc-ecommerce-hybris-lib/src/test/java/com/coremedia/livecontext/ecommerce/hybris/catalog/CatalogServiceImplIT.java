@@ -8,7 +8,6 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.hybris.HybrisTestConfig;
 import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider;
@@ -503,10 +502,4 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     super.testWithStoreContext();
   }
 
-  @Betamax(tape = "hy_testWithStoreContextRethrowException", match = {MatchRule.path, MatchRule.query})
-  @Test(expected = CommerceException.class)
-  @Override
-  public void testWithStoreContextRethrowException() {
-    super.testWithStoreContextRethrowException();
-  }
 }

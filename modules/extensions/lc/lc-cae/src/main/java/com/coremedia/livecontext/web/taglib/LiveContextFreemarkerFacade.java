@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.web.taglib;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
@@ -18,7 +19,6 @@ import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
-import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
@@ -174,7 +174,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   public FragmentContext fragmentContext() {
-    return FragmentContextProvider.getFragmentContext(FreemarkerUtils.getCurrentRequest());
+    return FragmentContextProvider.getFragmentContext(FreemarkerEnvironment.getCurrentRequest());
   }
 
   @Override //Overriden for mocking in test.

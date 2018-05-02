@@ -4,7 +4,6 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTra
 import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,21 +34,21 @@ import static org.mockito.Mockito.when;
 )
 public class HybrisTestConfig implements TestConfig {
 
-  static final String CATALOG_ID = "apparelProductCatalog";
+  private static final CatalogId CATALOG_ID = CatalogId.of("apparelProductCatalog");
 
   @Override
   public StoreContext getStoreContext() {
-    StoreContext context = StoreContextHelper.createContext("configid", "apparel-uk", "Apparel-Catalog", CATALOG_ID,
+    StoreContext context = HybrisTestStoreContextBuilder.build("apparel-uk", "Apparel-Catalog", CATALOG_ID,
             Locale.ENGLISH, "GBP", "Staged");
-    StoreContextHelper.setSiteId(context, "theSiteId");
+    context.setSiteId("theSiteId");
     return context;
   }
 
   @Override
   public StoreContext getGermanStoreContext() {
-    StoreContext context = StoreContextHelper.createContext("configid", "apparel-de", "Apparel-Catalog", CATALOG_ID,
+    StoreContext context = HybrisTestStoreContextBuilder.build("apparel-de", "Apparel-Catalog", CATALOG_ID,
             Locale.GERMAN, "EUR", "Staged");
-    StoreContextHelper.setSiteId(context, "theSiteId");
+    context.setSiteId("theSiteId");
     return context;
   }
 
@@ -72,7 +71,7 @@ public class HybrisTestConfig implements TestConfig {
   @Primary
   CatalogAliasTranslationService theCatalogAliasTranslationService() {
     CatalogAliasTranslationService catalogAliasTranslationService = mock(CatalogAliasTranslationService.class);
-    when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any())).thenReturn(Optional.of(CatalogId.of(CATALOG_ID)));
+    when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any())).thenReturn(Optional.of(CATALOG_ID));
     return catalogAliasTranslationService;
   }
 }

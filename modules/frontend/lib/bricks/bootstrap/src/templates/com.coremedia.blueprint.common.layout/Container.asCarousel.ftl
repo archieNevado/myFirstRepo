@@ -32,7 +32,7 @@
     <#assign clsModifier="cm-carousel__control--${modifier}" />
   </#if>
 
-<div id="${carouselId}" class="cm-carousel carousel slide ${additionalClass}" data-cm-carousel='{"interval":"6000"}'<@cm.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
+<div id="${carouselId}" class="cm-carousel carousel slide ${additionalClass}" data-cm-carousel='{"interval":"6000"}'<@preview.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
 <#-- Indicators -->
   <#if displayIndicators && (items?size > 1) >
       <ol class="cm-carousel-indicators carousel-indicators">

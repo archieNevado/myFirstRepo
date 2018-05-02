@@ -62,7 +62,7 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Editorial/Products/Goggles/CM%20Action%20Goggles.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Products/Goggles/CM%20Action%20Goggles"/>
+<Link xlink:href="coremedia:///cap/resources/../../Editorial/Products/Goggles/CM%20Action%20Goggles%20-%20Augmented.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Editorial/Products/Goggles/CM%20Action%20Goggles%20-%20Augmented"/>
 </LinkListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Viewtypes/CMChannel/hero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Pagegrid/Placements/placement3"/>

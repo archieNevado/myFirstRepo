@@ -62,10 +62,13 @@ public class DateTimeTestContextSource extends AbstractContextSource {
     // if not set as timetravel, try to get preview dateandtime from
     // already parsed p13n (test) context - concrete: from a persona
     if (now == null && contextCollection != null) {
+      @SuppressWarnings("PersonalData") // the system context is not personal data
       Object o = contextCollection.getContext(contextName);
       if (o instanceof PropertyProvider) {
         PropertyProvider systemContext = (PropertyProvider) o;
-        now = (Calendar) systemContext.getProperty("dateandtime");
+        @SuppressWarnings("PersonalData") // This is not personal data.
+        Calendar dateandtime = (Calendar) systemContext.getProperty("dateandtime");
+        now = dateandtime;
       }
     }
 

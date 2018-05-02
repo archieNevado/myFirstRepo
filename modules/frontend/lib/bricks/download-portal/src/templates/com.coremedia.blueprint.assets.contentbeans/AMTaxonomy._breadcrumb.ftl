@@ -11,7 +11,7 @@
       <#if showAsLink>
         <@cm.include self=category view="asLink" params={"class": "am-breadcrumb-item__text"} />
       <#else>
-        <span class="am-breadcrumb-item__text"<@cm.metadata data=[category.content, "properties.value"] />>${category.value!""}</span>
+        <span class="am-breadcrumb-item__text"<@preview.metadata data=[category.content, "properties.value"] />>${category.value!""}</span>
       </#if>
     </li>
   </#list>

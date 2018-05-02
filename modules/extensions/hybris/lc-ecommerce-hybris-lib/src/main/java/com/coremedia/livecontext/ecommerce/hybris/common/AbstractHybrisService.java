@@ -65,11 +65,6 @@ public abstract class AbstractHybrisService {
 
     AbstractHybrisCommerceBean bean = (AbstractHybrisCommerceBean) commerceBeanFactory
             .createBeanFor(commerceId, storeContext);
-
-    if (bean == null) {
-      throw new IllegalStateException(String.format("Could not create commerce bean for commerce ID '%s'.", commerceId));
-    }
-
     bean.setDelegate(delegate);
     LOG.debug("Created commerce bean for '{}'", commerceId);
 

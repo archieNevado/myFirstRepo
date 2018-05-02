@@ -13,7 +13,7 @@
           <#if placement.items?has_content || (placement.name == "header") || (placement.name == "main")>
             <@cm.include self=placement />
           <#else>
-            <div class="col-xs-12 col-md-${placement.colspan!1}" <@cm.metadata data=[bp.getPlacementPropertyName(placement)!"",bp.getPlacementHighlightingMetaData(placement)!""]/>></div>
+            <div class="col-xs-12 col-md-${placement.colspan!1}" <@preview.metadata data=[bp.getPlacementPropertyName(placement)!"",bp.getPlacementHighlightingMetaData(placement)!""]/>></div>
           </#if>
         </#list>
       </div>

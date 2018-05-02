@@ -7,6 +7,7 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.tree.LibraryTree;
+import com.coremedia.cms.editor.sdk.desktop.ComponentBasedEntityWorkAreaTabType;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -70,6 +71,10 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
     //use ECommerceStudioPlugin to add CatalogRepositoryListContainer, CatalogSearchListContainer etc.
     new ECommerceStudioPlugin();
     new LivecontextCollectionViewActionsPlugin();
+
+    // For the sake of the test, let's assume everything can be opened in a tab.
+    // Cleaner alternative: Register all tab types.
+    ComponentBasedEntityWorkAreaTabType.canBeOpenedInTab = function ():Boolean {return true};
   }
 
   private function createTestling():void {

@@ -12,6 +12,10 @@
 
   <artifactId>lc-ecommerce-api-tests</artifactId>
 
+  <properties>
+    <enforcer.enforce-test>false</enforcer.enforce-test>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.coremedia.livecontext</groupId>
@@ -67,6 +71,7 @@
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

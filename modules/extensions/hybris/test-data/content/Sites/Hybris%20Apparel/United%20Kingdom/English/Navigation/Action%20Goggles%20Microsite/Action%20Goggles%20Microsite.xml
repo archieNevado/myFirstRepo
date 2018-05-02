@@ -23,7 +23,7 @@
 <teaserTitle>Experience the new Action Goggles</teaserTitle>
 <teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>4K Image Quality, Top Speed and Maximized Fun</p></div></teaserText>
 <pictures>
-<link href="../../Pictures/CM%20Action%20Goggles%2003.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Pictures/CM%20Action%20Goggles%2003"/>
+<link href="../../Pictures/CM%20Action%20Goggles%2001.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Pictures/CM%20Action%20Goggles%2001"/>
 </pictures>
 <related>
 </related>
@@ -49,7 +49,7 @@
 <StructListProperty Name="placements">
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Editorial/Products/Goggles/CM%20Action%20Goggles.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Goggles/CM%20Action%20Goggles"/>
+<Link xlink:href="coremedia:///cap/resources/../../Editorial/Products/Goggles/CM%20Action%20Goggles%20-%20Augmented.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Products/Goggles/CM%20Action%20Goggles%20-%20Augmented"/>
 <Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Snow/Action%20Goggle%20Microsite%20Content/Action%20Gogge7389b45.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Action%20Goggle%20Microsite%20Content/Action%20Goggles%20Related%20Products"/>
 <Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Snow/Action%20Goggle%20Microsite%20Content/Action%20Gogg7be92a78.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Snow/Action%20Goggle%20Microsite%20Content/Action%20Goggles%20Related%20Content"/>
 </LinkListProperty>

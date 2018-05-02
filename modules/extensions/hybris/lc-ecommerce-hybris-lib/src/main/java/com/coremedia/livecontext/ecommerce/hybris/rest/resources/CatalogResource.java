@@ -24,27 +24,21 @@ import java.util.Map;
 public class CatalogResource extends AbstractHybrisResource {
 
   private static final String CATALOG_PATH = "/catalogs/{catalogId}/catalogversions/{catalogVersion}/";
-
   private static final String CATEGORIES_PATH = "/catalogs/{catalogId}/catalogversions/{catalogVersion}/categories/{categoryId}";
-
-//  private static final String PRODUCTS_FOR_CATEGORY_PATH = "/{storeId}/cmocc/{catalogId}/{catalogVersion}/category/{categoryId}/products";
-
   private static final String PRICES_PATH = "/pricerows/{priceId}";
-
   private static final String PRODUCTS_PATH = "/catalogs/{catalogId}/catalogversions/{catalogVersion}/products/{productId}";
-  //private static final String PRODUCTS_SKU_PATH = PRODUCTS_PATH + "/{sku}";
-
   private static final String PRODUCT_SEARCH_PATH = "/{storeId}/products/search";
-
   private static final String USER_GROUPS_PATH = "/usergroups/";
   private static final String USER_GROUP_BY_ID_PATH = "/usergroups/{groupId}";
   private static final String FIELDS_PARAM = "fields";
 
   @Nullable
   public CatalogDocument getCatalog(@Nonnull StoreContext storeContext) {
-    String catalogId = StoreContextHelper.getCatalogId();
-    String catalogVersion = StoreContextHelper.getCatalogVersion();
+    String catalogId = getCatalogId();
+    String catalogVersion = getCatalogVersion();
+
     List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion);
+
     return getConnector().performGet(CATALOG_PATH, storeContext, CatalogDocument.class, uriTemplateParameters);
   }
 
@@ -57,6 +51,7 @@ public class CatalogResource extends AbstractHybrisResource {
   @Nullable
   public UserGroupDocument getUserGroup(String userGroupId, @Nonnull StoreContext storeContext) {
     List<String> uriTemplateParameters = newUriTemplateParameters("userGroupId", userGroupId);
+
     return getConnector().performGet(USER_GROUP_BY_ID_PATH, storeContext, UserGroupDocument.class, uriTemplateParameters);
   }
 
@@ -64,21 +59,26 @@ public class CatalogResource extends AbstractHybrisResource {
   public CategoryDocument getCategoryById(@Nonnull String categoryId, @Nonnull StoreContext storeContext) {
     String catalogId = storeContext.getCatalogId();
     String catalogVersion = storeContext.getCatalogVersion();
+
     List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion, categoryId);
+
     return getConnector().performGet(CATEGORIES_PATH, storeContext, CategoryDocument.class, uriTemplateParameters);
   }
 
   @Nullable
   public ProductDocument getProductById(String productId, @Nonnull StoreContext storeContext) {
-    String catalogId = StoreContextHelper.getCatalogId();
-    String catalogVersion = StoreContextHelper.getCatalogVersion();
-    List<String> uriTemplateParameters  = newUriTemplateParameters(storeContext, catalogId, catalogVersion, productId);
+    String catalogId = getCatalogId();
+    String catalogVersion = getCatalogVersion();
+
+    List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion, productId);
+
     return getConnector().performGet(PRODUCTS_PATH, storeContext, ProductDocument.class, uriTemplateParameters);
   }
 
   @Nullable
   public PriceDocument getPriceDocumentById(String priceId, @Nonnull StoreContext storeContext) {
     List<String> uriTemplateParameters = newUriTemplateParameters("priceId", priceId);
+
     return getConnector().performGet(PRICES_PATH, storeContext, PriceDocument.class, uriTemplateParameters);
   }
 
@@ -94,24 +94,32 @@ public class CatalogResource extends AbstractHybrisResource {
   }
 
   @Nonnull
-  private static MultiValueMap<String, String> prepareQueryParams(@Nonnull String searchTerm, @Nonnull Map<String, String> searchParams) {
-
+  private static MultiValueMap<String, String> prepareQueryParams(@Nonnull String searchTerm,
+                                                                  @Nonnull Map<String, String> searchParams) {
     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+
     String sortParam = "sort";
     if (searchParams.containsKey(CatalogService.SEARCH_PARAM_ORDERBY)) {
       queryParams.add(sortParam, mapOrderByType(searchParams.get(CatalogService.SEARCH_PARAM_ORDERBY)));
     } else {
       queryParams.add(sortParam, OrderByType.ORDER_BY_DEFAULT.getValue());
     }
+
     if (searchParams.containsKey(CatalogService.SEARCH_PARAM_PAGENUMBER)) {
-      queryParams.add(CatalogServiceImpl.SEARCH_PARAM_PAGENUMBER, searchParams.get(CatalogService.SEARCH_PARAM_PAGENUMBER));
+      queryParams.add(CatalogServiceImpl.SEARCH_PARAM_PAGENUMBER,
+              searchParams.get(CatalogService.SEARCH_PARAM_PAGENUMBER));
     }
+
     if (searchParams.containsKey(CatalogService.SEARCH_PARAM_PAGESIZE)) {
-      queryParams.add(CatalogServiceImpl.SEARCH_PARAM_PAGESIZE, searchParams.get(CatalogService.SEARCH_PARAM_PAGESIZE));
+      queryParams.add(CatalogServiceImpl.SEARCH_PARAM_PAGESIZE,
+              searchParams.get(CatalogService.SEARCH_PARAM_PAGESIZE));
     }
+
     if (searchParams.containsKey(CatalogService.SEARCH_PARAM_CATEGORYID)) {
-      queryParams.add(CatalogServiceImpl.SEARCH_PARAM_CATEGORYID, searchParams.get(CatalogService.SEARCH_PARAM_CATEGORYID));
+      queryParams.add(CatalogServiceImpl.SEARCH_PARAM_CATEGORYID,
+              searchParams.get(CatalogService.SEARCH_PARAM_CATEGORYID));
     }
+
     if (searchParams.containsKey(FIELDS_PARAM)) {
       queryParams.add(FIELDS_PARAM, searchParams.get(FIELDS_PARAM));
     }
@@ -119,7 +127,7 @@ public class CatalogResource extends AbstractHybrisResource {
     StringBuilder queryTerm = new StringBuilder("*".equals(searchTerm) ? "" : searchTerm);
     queryTerm.append(":");
     queryTerm.append("");
-    for(String key : queryParams.keySet()) {
+    for (String key : queryParams.keySet()) {
       String value = queryParams.getFirst(key);
       if (!sortParam.equals(key)) {
         queryTerm.append(":");
@@ -128,6 +136,7 @@ public class CatalogResource extends AbstractHybrisResource {
         queryTerm.append(value);
       }
     }
+
     if (searchParams.containsKey(CatalogService.SEARCH_PARAM_FACET)) {
       String facet = searchParams.get(CatalogService.SEARCH_PARAM_FACET);
       if (!StringUtils.isEmpty(facet)) {
@@ -151,5 +160,15 @@ public class CatalogResource extends AbstractHybrisResource {
     }
   }
 
+  private static String getCatalogId() {
+    return getStoreContext().getCatalogId();
+  }
 
+  private static String getCatalogVersion() {
+    return getStoreContext().getCatalogVersion();
+  }
+
+  private static StoreContext getStoreContext() {
+    return StoreContextHelper.getCurrentContextOrThrow();
+  }
 }

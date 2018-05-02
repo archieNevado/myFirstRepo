@@ -5,12 +5,15 @@
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
-        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config">
+        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
+        xmlns:ui="exml:com.coremedia.ui.config">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.forms.columns.ValidityColumn;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.cmGalleryForm";
 
     /**
@@ -40,12 +43,26 @@
             <editor:LinkListPropertyField linkType="CMPicture"
                                           showThumbnails="true"
                                           propertyName="{ITEMS_PROPERTY_NAME}">
+
               <editor:additionalToolbarItems>
                 <TbSeparator/>
                 <bpb-components:QuickCreateToolbarButton contentType="CMPicture"
                                                          propertyName="{ITEMS_PROPERTY_NAME}"
                                                          bindTo="{config.bindTo}"/>
               </editor:additionalToolbarItems>
+              <editor:fields>
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+              </editor:fields>
+              <editor:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn flex="1"/>
+                <bpforms:ValidityColumn/>
+                <editor:StatusColumn/>
+              </editor:columns>
             </editor:LinkListPropertyField>
             <editor:LinkListPropertyField linkType="CMPicture"
                                           showThumbnails="true"
@@ -56,6 +73,19 @@
                                                          propertyName="{PICTURE_PROPERTY_NAME}"
                                                          bindTo="{config.bindTo}"/>
               </editor:additionalToolbarItems>
+              <editor:fields>
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+              </editor:fields>
+              <editor:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn flex="1"/>
+                <bpforms:ValidityColumn/>
+                <editor:StatusColumn/>
+              </editor:columns>
             </editor:LinkListPropertyField>
           </editor:items>
         </editor:PropertyFieldGroup>
@@ -63,12 +93,7 @@
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-      <editor:items>
-        <bpforms:SEOForm/>
-      </editor:items>
-    </editor:DocumentForm>
+    <bpforms:DefaultExtraDataForm/>
     <bpforms:MultiLanguageDocumentForm/>
     <bpforms:MetaDataInformationForm/>
   </editor:items>

@@ -5,7 +5,7 @@
 <schema name="content" version="1.6">
 
   <!--
-    Field to use to determine and enforce document uniqueness.
+    Field to use to determine and enforce index document uniqueness.
   -->
   <uniqueKey>id</uniqueKey>
 
@@ -22,79 +22,79 @@
   <field name="_version_" type="long" indexed="false" stored="false" docValues="true"/>
 
   <!--
-    The ID of the document.
+    The ID of the index document. For indexed CoreMedia content this is the numeric content ID.
     This field is required.
   -->
   <field name="id" type="string" indexed="true" stored="true" required="true"/>
 
   <!--
-    The state of the indexed document. Successfully indexed documents
+    The state of the index document. Successfully indexed CoreMedia contents
     contain the value SUCCESS. Use feederstate:SUCCESS as part of
-    search queries to only find successfully indexed documents.
+    search queries to only find successfully indexed contents.
 
     This field is required for the Content Feeder.
 
     Possible values:
-     SUCCESS:  Denotes a successfully indexed document.
-     ERROR:    Denotes an error document, which serves as placeholder
-               for a document that failed to be indexed.
+     SUCCESS:  Denotes a successfully indexed content.
+     ERROR:    Denotes an error index document, which serves as placeholder
+               for a content that failed to be indexed.
                See field feederinfo for a description of the error.
-     INTERNAL: Denotes an internally used document such as a timestamp.
-     PARTIAL:  Denotes a partially indexed document which is caused
-               by a partial update on a non-existing document.
+     INTERNAL: Denotes an internally used index document such as a timestamp.
+     PARTIAL:  Denotes a partially indexed content which is caused
+               by a partial update on a non-existing index document.
                See field feederinfo for a description of the error.
   -->
   <field name="feederstate" type="string" indexed="true" stored="true" required="true"/>
 
   <!--
-    Additional information about the document such as error messages.
+    Additional information about the index document such as error messages.
     This field is required for the Content Feeder.
   -->
   <field name="feederinfo" type="string" indexed="false" stored="true"/>
 
   <!--
-    The time when the document was created or updated by the Feeder.
+    The time when the index document was created or updated by the Feeder.
     This field is required for the Content Feeder.
   -->
   <field name="feedertime" type="tdate" indexed="true" stored="true" required="true"/>
 
   <!--
-    A date field that represents the freshness of the document.
-    The Content Feeder fills it with the modification date of the CoreMedia document.
+    A date field that represents the freshness of the index document.
+    The Content Feeder fills it with the modification date of the CoreMedia content.
     If not set explicitly, this field contains the same value as feedertime.
   -->
   <field name="freshness" type="tdate" indexed="true" stored="true"/>
 
   <!--
-    The ID in numeric form.
+    The content ID in numeric form.
   -->
   <field name="numericid" type="content" indexed="true" stored="true"/>
 
   <!--
-    The name of the document, used for language detection and for searching.
+    The name of the content, used for language detection and for searching.
   -->
   <field name="name_tokenized" type="text_general" indexed="true" stored="true"/>
 
   <!--
-    The name of the document, used for sorting.
+    The name of the content, used for sorting.
     This field is required for the Content Feeder.
   -->
   <field name="name" type="string" indexed="true" stored="true"/>
 
   <!--
-    The ID of the folder of the CoreMedia document.
+    The ID of the parent folder of the CoreMedia content.
     This field is required for the Content Feeder.
   -->
   <field name="folderid" type="content" indexed="true" stored="true"/>
 
   <!--
-    The ID of the last folder of the CoreMedia document.
+    The ID of the last folder of the CoreMedia content, set if the content is deleted.
     This field is required for the Content Feeder.
   -->
   <field name="lastfolderid" type="content" indexed="true" stored="true"/>
 
   <!--
-    The path of the folder of the CoreMedia document.
+    The path of the folder of the CoreMedia content.
 
     The Content Feeder feeds this field
     if feeder.indexPath is set to true in feeder.properties.
@@ -103,7 +103,7 @@
   <field name="folder" type="string" indexed="true" stored="true"/>
 
   <!--
-    The folder path of the CoreMedia document as numeric folder IDs
+    The folder path of the CoreMedia content as numeric folder IDs
     from the root folder up to the parent folder.
 
     This field is required for the Content Feeder.
@@ -111,7 +111,11 @@
   <field name="folderpath" type="content" indexed="true" stored="true" multiValued="true" useDocValuesAsStored="false"/>
 
   <!--
-    The type of the document.
+    The type of the content.
+
+    (The field name is "documenttype" instead of "contenttype" just for backwards-compatibility.
+     For indexed CoreMedia folders, this field contains the value "Folder_")
+
     This field is required for the Content Feeder.
   -->
   <field name="documenttype" type="string" indexed="true" stored="true"/>
@@ -123,24 +127,24 @@
   <field name="type" type="string" indexed="true" stored="true"/>
 
   <!--
-    All types of the object.
+    All types of the object including parent content types.
 
     This field is required for the Content Feeder.
   -->
   <field name="types" type="string" indexed="true" stored="true" multiValued="true"/>
 
   <!--
-    The isDeleted state of the CoreMedia document.
+    The isDeleted state of the CoreMedia content.
     This field is required for the Content Feeder.
   -->
   <field name="isdeleted" type="boolean" indexed="true" stored="true"/>
 
   <!--
     A list of IDs of CoreMedia groups which potentially have read rights on the
-    CoreMedia document. This can be used to restrict the number of candidate
+    CoreMedia content. This can be used to restrict the number of candidate
     search results.
 
-    The Content Feeder feeds this field with the correct groups that have read rights on the document
+    The Content Feeder feeds this field with the correct groups that have read rights on the content
     as long as the following constructs of the rights system are not used:
     - revoking rights in subgroups
     - revoking rights in other groups of the same user (denial-on-path)
@@ -150,14 +154,14 @@
   <field name="groups" type="group" indexed="true" stored="true" multiValued="true"/>
 
   <!--
-    Contains the language of the document as ISO 639-1 two-letter code.
-    If the language is not set by the feeder, the language is detected
-    based on the document's content.
+    Contains the language of the content as ISO 639-1 two-letter code.
+    If the language is not set by the Content Feeder, the language is detected
+    based on the content as configured in solrconfig.xml.
   -->
   <field name="language" type="string" indexed="true" stored="true"/>
 
   <!--
-    The following fields are set with meta-properties of CoreMedia documents
+    The following fields are set with meta-properties of CoreMedia contents
     by the CoreMedia Content Feeder.
   -->
   <field name="basefolderid"         type="content" indexed="true" stored="true"/>
@@ -186,7 +190,7 @@
   <field name="latestversion"        type="int"     indexed="true" stored="true"/>
 
   <!--
-    The document status indicated whether a document is in production (not
+    The status indicates whether a content is in production (not
     approved and not deleted), approved, published or deleted.
     .......................
     |Status         | Value|
@@ -202,7 +206,7 @@
   <field name="status" type="int" indexed="true" stored="true"/>
 
   <!--
-    Contains the name of the site this document belongs to.
+    Contains the name of the site this content belongs to.
 
     This field is used by the Blueprint.
   -->
@@ -286,8 +290,8 @@
     This field and the field name_tokenized are used as default search fields
     for the /editor search request handler.
 
-    For the Content Feeder the text of all indexed fields of
-    the CoreMedia document is stored in this field.
+    The Content Feeder stores the text of all indexed fields of
+    the CoreMedia content in this field.
   -->
   <field name="textbody" type="text_general" indexed="true" stored="true" multiValued="true"/>
 
@@ -338,14 +342,14 @@
   <fieldType name="user"    class="solr.TrieIntField" docValues="true" precisionStep="0" positionIncrementGap="0"/>
 
   <!--
-      Numeric field types that index values using KD-trees. *Point fields are faster and more efficient than Trie* fields both, at
-      search time and at index time, but some features are still not supported.
-      Point fields don't support FieldCache, so they must have docValues="true" if needed for sorting, faceting, functions, etc.
-    -->
-    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
-    <fieldType name="pfloat" class="solr.FloatPointField" docValues="true"/>
-    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
-    <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
+    Numeric field types that index values using KD-trees. *Point fields are faster and more efficient than Trie* fields both, at
+    search time and at index time, but some features are still not supported.
+    Point fields don't support FieldCache, so they must have docValues="true" if needed for sorting, faceting, functions, etc.
+  -->
+  <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+  <fieldType name="pfloat" class="solr.FloatPointField" docValues="true"/>
+  <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+  <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
 
   <!--
       Default numeric field types. For faster range queries, consider *PointFields (pint/pfloat/plong/pdouble), or the

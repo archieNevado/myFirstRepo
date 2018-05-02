@@ -33,6 +33,8 @@
   <component class="com.coremedia.blueprint.studio.forms.CMVideoForm"/>
   <component class="com.coremedia.blueprint.studio.forms.CMViewtypeForm"/>
   <component class="com.coremedia.blueprint.studio.forms.EditorPreferencesForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.columns.HiddenChannelColumn"/>
+  <component class="com.coremedia.blueprint.studio.forms.columns.ValidityColumn"/>
   <component class="com.coremedia.blueprint.studio.forms.components.CMArticleMetaDataTab"/>
   <component class="com.coremedia.blueprint.studio.forms.components.CMArticleSystemForm"/>
   <component class="com.coremedia.blueprint.studio.forms.components.CMDownloadSystemForm"/>
@@ -42,6 +44,7 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.CollapsibleBlobPropertyForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.CollapsibleStringPropertyForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.DataDocumentForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.components.DefaultExtraDataForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.DetailsDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ExternallyVisibleDateForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.FixedIndexConfigurationForm"/>

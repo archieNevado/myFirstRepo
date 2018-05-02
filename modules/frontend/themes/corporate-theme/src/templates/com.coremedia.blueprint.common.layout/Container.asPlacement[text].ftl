@@ -4,7 +4,7 @@
 <#assign numberOfItems=items?size />
 <#assign itemsPerRow=3 />
 
-<div class="cm-container cm-container--text"<@cm.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
+<div class="cm-container cm-container--text"<@preview.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
 <#if (numberOfItems > 0)>
     <div class="cm-row--full-height row">
       <#list items as item>

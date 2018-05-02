@@ -1,6 +1,4 @@
-@import "~@coremedia/sass-utils/src/partials";
-@import "~@coremedia/brick-dynamic-include/src/sass/partials";
-
+@import "?smart-import-partials";
 @import "partials/general";
 @import "partials/comments";
 @import "partials/notifications";

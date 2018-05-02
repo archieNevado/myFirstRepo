@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -224,12 +223,6 @@ public class AssetServiceImpl implements AssetService {
   @Autowired
   public void setAssetResolvingStrategy(AssetResolvingStrategy assetResolvingStrategy) {
     this.assetResolvingStrategy = assetResolvingStrategy;
-  }
-
-  @Nonnull
-  @Override
-  public AssetService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, AssetService.class);
   }
 
   @Nullable

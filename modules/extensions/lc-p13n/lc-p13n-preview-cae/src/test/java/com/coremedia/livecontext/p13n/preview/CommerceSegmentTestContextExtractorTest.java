@@ -11,7 +11,6 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
 import com.coremedia.personalization.context.PropertyProfile;
-import com.coremedia.util.StringUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +73,7 @@ public class CommerceSegmentTestContextExtractorTest {
   public void testExtractTestContextsFromContent() {
     String userSegmentsStr = "vendor:///catalog/segment/segment1,vendor:///catalog/segment/segment2";
     String userSegmentIds = "segment1,segment2";
-    List<String> userSegments = StringUtil.tokenizeToList(userSegmentsStr, ",");
+    List<String> userSegments = Arrays.asList(userSegmentsStr.split(","));
     when(contentBeanFactory.createBeanFor(content)).thenReturn(cmUserProfile);
     when(cmUserProfile.getProfileExtensions()).thenReturn(profileExtensions);
     when(profileExtensions.get(CommerceSegmentTestContextExtractor.PROPERTIES_PREFIX)).thenReturn(properties);

@@ -1,8 +1,8 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.assets.cae.AssetDetails" -->
 
-<!-- todo: <@cm.metadata data=self.asset.content /> -->
+<!-- todo: <@preview.metadata data=self.asset.content /> -->
 
-<div class="am-download-portal__breadcrumb"<@cm.metadata data="properties.assetTaxonomy" />>
+<div class="am-download-portal__breadcrumb"<@preview.metadata data="properties.assetTaxonomy" />>
 <#if self.category?has_content>
     <@cm.include self=self.category view="_breadcrumb" params={"lastItemAsLink": true} />
 </#if>
@@ -15,4 +15,4 @@
 <@cm.include self=self view="search"/>
 </div>
 
-<h1 class="am-download-portal__title am-heading-1"<@cm.metadata data="properties.name" />>${self.asset.title!""}</h1>
+<h1 class="am-download-portal__title am-heading-1"<@preview.metadata data="properties.name" />>${self.asset.title!""}</h1>

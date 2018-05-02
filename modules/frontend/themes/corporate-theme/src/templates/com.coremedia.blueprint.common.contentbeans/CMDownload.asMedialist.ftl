@@ -3,7 +3,7 @@
 
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
-<div class="cm-medialist"<@cm.metadata self.content />>
+<div class="cm-medialist"<@preview.metadata self.content />>
   <@bp.optionalLink href="${link}">
     <#-- picture -->
     <#if self.picture?has_content>
@@ -26,7 +26,7 @@
       </#if>
       <#-- headline -->
       <#if self.teaserTitle?has_content>
-        <h3 class="cm-medialist__headline"<@cm.metadata "properties.teaserTitle" />>
+        <h3 class="cm-medialist__headline"<@preview.metadata "properties.teaserTitle" />>
           <#if link?has_content>
             <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
           </#if>
@@ -34,7 +34,7 @@
         </h3>
       </#if>
       <#-- teaser text, 3 lines ~ 160 chars -->
-      <p class="cm-medialist__text"<@cm.metadata "properties.teaserText" />>
+      <p class="cm-medialist__text"<@preview.metadata "properties.teaserText" />>
         <@cm.include self=self view="infos" /><br>
         <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "medialist.max.length", 160)) />
       </p>

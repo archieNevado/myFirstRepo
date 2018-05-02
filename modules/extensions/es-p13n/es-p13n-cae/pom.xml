@@ -64,6 +64,10 @@
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-logging</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-personal-data</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>com.coremedia.elastic.social</groupId>
@@ -194,6 +198,17 @@
             <usedDependency>${project.groupId}:es-cae</usedDependency>
           </usedDependencies>
         </configuration>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <configuration>
+              <!-- Workaround MDEP-594: The dependency is used but usages of type annotations are not correctly detected -->
+              <ignoredUnusedDeclaredDependencies combine.children="append">
+                <ignoredUnusedDeclaredDependency>com.coremedia.cms:coremedia-personal-data</ignoredUnusedDeclaredDependency>
+              </ignoredUnusedDeclaredDependencies>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -120,8 +121,7 @@ public class LiveContextExternalChannelImplTest {
     now.set(Calendar.YEAR, year);
     now.set(Calendar.MONTH, month);
     now.set(Calendar.DAY_OF_MONTH, day);
-    //TODO: Use the constant ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE.
-    setRequestAttribute(now, "previewDateObj", ServletRequestAttributes.SCOPE_REQUEST);
+    setRequestAttribute(now, REQUEST_ATTRIBUTE_PREVIEW_DATE, ServletRequestAttributes.SCOPE_REQUEST);
   }
 
   public static void setRequestAttribute(Object value, String attributeName, int scope) {

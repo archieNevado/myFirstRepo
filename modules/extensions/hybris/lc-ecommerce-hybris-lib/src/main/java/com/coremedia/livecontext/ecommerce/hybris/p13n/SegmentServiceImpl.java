@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SEGMENT;
 import static java.util.Collections.emptyList;
 
@@ -59,9 +58,4 @@ public class SegmentServiceImpl extends AbstractHybrisService implements Segment
     return emptyList();
   }
 
-  @Nonnull
-  @Override
-  public SegmentService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, SegmentService.class);
-  }
 }

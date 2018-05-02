@@ -76,7 +76,7 @@ public class SendToTranslationServiceAction extends LongActionBase {
       return null;
     }
 
-    // todo: translate
+    //  implement the sending / receiving of contents to / from a translation agency
 
     return parameters.derivedContents;
   }

@@ -17,11 +17,6 @@
      */
     public static const SEQUENCE_PROPERTY_NAME:String = "sequence";
 
-    /**
-     * A constant for the linklist property name
-     */
-    public static const PICTURE_PROPERTY_NAME:String = "pictures";
-
     public static const COPYRIGHT_FORM_ITEM_ID:String = "copyrightFormItemId";
 
     private var config:CMSpinnerForm;
@@ -62,6 +57,7 @@
             <editor:StringPropertyField propertyName="copyright"/>
           </editor:items>
         </editor:PropertyFieldGroup>
+        <bpforms:SEOForm bindTo="{config.bindTo}"/>
       </editor:items>
     </editor:DocumentForm>
     <bpforms:MultiLanguageDocumentForm/>

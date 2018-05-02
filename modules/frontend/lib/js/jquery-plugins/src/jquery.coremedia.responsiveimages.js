@@ -38,6 +38,6 @@ import responsiveImages from "@coremedia/js-responsive-images";
  *    "2x1" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}}" >
  * ```
  */
-$.fn.responsiveImages = function () {
+$.fn.responsiveImages = function() {
   responsiveImages(this);
 };

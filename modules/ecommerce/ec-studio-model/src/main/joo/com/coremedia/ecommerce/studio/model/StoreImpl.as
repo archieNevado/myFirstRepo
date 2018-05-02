@@ -97,8 +97,8 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
     return get(CatalogObjectPropertyNames.VENDOR_VERSION);
   }
 
-  public function getWcsTimeZone():Object {
-    return get("wcsTimeZone");
+  public function getTimeZoneId():String {
+    return get("timeZoneId");
   }
 
   public function getVendorName():String {

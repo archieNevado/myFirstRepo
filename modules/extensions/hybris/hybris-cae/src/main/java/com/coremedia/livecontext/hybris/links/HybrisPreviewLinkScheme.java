@@ -3,6 +3,9 @@ package com.coremedia.livecontext.hybris.links;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
+import com.coremedia.blueprint.common.contentbeans.CMHasContexts;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
@@ -17,6 +20,8 @@ import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceConnection;
 import com.coremedia.livecontext.ecommerce.hybris.preview.PreviewTokenService;
+import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
+import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.SeoSegmentBuilder;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
@@ -29,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper.getCurrentContext;
+import static com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper.getCurrentContextOrThrow;
 import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.P13N_URI_PARAMETER;
 
 /**
@@ -57,11 +62,16 @@ import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.P13N_
 @Link
 public class HybrisPreviewLinkScheme {
 
+  private static final String SAP_HYBRIS_VENDOR_ID = "SAP Hybris";
+  private static final String FRAGMENT_PREVIEW = "fragmentPreview";
+
   private String previewStoreFrontUrl;
   private String hybrisPreviewServiceUrl;
   private CommerceLedLinkBuilderHelper commerceLedLinkBuilderHelper;
 
   private PreviewTokenService previewTokenService;
+  private SeoSegmentBuilder seoSegmentBuilder;
+  private ContextHelper contextHelper;
 
   @Link(type = {LiveContextExternalChannel.class, LiveContextExternalChannelImpl.class}, order = 2)
   public Object buildPreviewLinkForAugmentedCategory(LiveContextExternalChannel navigation, String viewName,
@@ -208,6 +218,26 @@ public class HybrisPreviewLinkScheme {
     return buildLinkInternal(seoSegmentForChannel, "content", previewTicketId);
   }
 
+  @Link(type = CMHasContexts.class, order = 3)
+  public Object buildLinkforFragmentPreview(@Nonnull CMHasContexts cmHasContexts, @Nonnull String viewName,
+                                            @Nonnull Map<String, Object> linkParameters, HttpServletRequest request,
+                                            HttpServletResponse response) {
+    if (!(isApplicable(request) && viewName.contains(FRAGMENT_PREVIEW))) {
+      return null;
+    }
+
+    String previewTicketId = previewTokenService.getPreviewTicketId();
+    if (previewTicketId == null) {
+      return null;
+    }
+
+    CMNavigation navigation = contextHelper.contextFor(cmHasContexts);
+
+    String seoSegment = seoSegmentBuilder.asSeoSegment(navigation, cmHasContexts);
+
+    return buildLinkInternal(seoSegment, "content", previewTicketId);
+  }
+
   static boolean isHybris() {
     return CurrentCommerceConnection.find()
             .filter(HybrisCommerceConnection.class::isInstance)
@@ -245,7 +275,7 @@ public class HybrisPreviewLinkScheme {
   }
 
   private String addUserSegmentParamIfAvailable() {
-    String userSegments = getCurrentContext().getUserSegments();
+    String userSegments = getCurrentContextOrThrow().getUserSegments();
 
     if (StringUtils.isEmpty(userSegments)) {
       return "";
@@ -276,5 +306,15 @@ public class HybrisPreviewLinkScheme {
   @Required
   public void setCommerceLedLinkBuilderHelper(CommerceLedLinkBuilderHelper commerceLedLinkBuilderHelper) {
     this.commerceLedLinkBuilderHelper = commerceLedLinkBuilderHelper;
+  }
+
+  @Required
+  public void setContextHelper(ContextHelper contextHelper) {
+    this.contextHelper = contextHelper;
+  }
+
+  @Required
+  public void setSeoSegmentBuilder(ExternalSeoSegmentBuilder seoSegmentBuilder) {
+    this.seoSegmentBuilder = seoSegmentBuilder;
   }
 }

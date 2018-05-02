@@ -16,7 +16,6 @@ import com.coremedia.livecontext.ecommerce.hybris.cache.CatalogCacheKey;
 import com.coremedia.livecontext.ecommerce.hybris.cache.CategoryCacheKey;
 import com.coremedia.livecontext.ecommerce.hybris.cache.ProductCacheKey;
 import com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService;
-import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CatalogDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryRefDocument;
@@ -46,7 +45,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATALOG;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
@@ -122,7 +120,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   @Override
   public List<Category> findTopCategories(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
-    String catalogId = StoreContextHelper.getCatalogId(storeContext);
+    String catalogId = storeContext.getCatalogId();
     CommerceCache cache = getCommerceCache();
 
     CommerceId catalogCommerceId = commerceId(CATALOG).withExternalId(catalogId).build();
@@ -466,18 +464,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
             .withCatalogAlias(catalogAlias)
             .build();
 
-    Category rootCategoryBean = (Category) getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
-    if (rootCategoryBean == null) {
-      throw new NotFoundException("Cannot create root category for id " + commerceId);
-    }
-
-    return rootCategoryBean;
-  }
-
-  @Nonnull
-  @Override
-  public CatalogService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, CatalogService.class);
+    return (Category) getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
   }
 
   @Required

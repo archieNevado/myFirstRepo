@@ -23,12 +23,6 @@
   <context:component-scan base-package="com.coremedia.blueprint.themeimporter.configuration" />
   <context:component-scan base-package="com.coremedia.blueprint.coderesources.configuration" />
 
-  <bean id="pictureBlobInterceptor" class="com.coremedia.rest.cap.content.interceptors.PictureBlobInterceptor">
-    <property name="type" value="CMPicture"/>
-    <property name="imageProperty" value="data"/>
-    <property name="imageParser" ref="imageTransformerInputAdapter"/>
-  </bean>
-
   <bean id="channelWriteInterceptor" class="com.coremedia.blueprint.base.rest.intercept.ChannelWriteInterceptor">
     <property name="type" value="CMLinkable"/>
     <property name="interceptingSubtypes" value="true"/>
@@ -123,9 +117,18 @@
   </bean>
 
 
-  <bean id="pictureUploadInterceptor" class="com.coremedia.blueprint.studio.rest.intercept.PictureUploadInterceptor">
+  <bean id="pictureUploadInterceptor" class="com.coremedia.rest.cap.intercept.PictureUploadInterceptor">
+    <property name="priority" value="2"/>
     <property name="type" value="CMPicture"/>
     <property name="imageProperty" value="data"/>
+    <property name="widthProperty" value="width"/>
+    <property name="heightProperty" value="height"/>
+
+    <!-- uploadLimit: max image size (width * height) in pixels. Images are not uploaded if too big to prevent
+         OutOfMemoryExceptions. -->
+    <property name="uploadLimit" value="100000000"/>
+    <!-- maxDimension: max width and height in pixels of stored images in the database. Images are scaled down
+         if too big. -->
     <property name="maxDimension" value="4000"/>
     <property name="blobTransformer" ref="blobTransformer"/>
     <property name="extractor" ref="imageDimensionsExtractor"/>
@@ -137,8 +140,7 @@
     <property name="themeImporter" ref="themeImporter"/>
   </bean>
 
-  <bean id="blobFilenameWriteInterceptor"
-        class="com.coremedia.blueprint.studio.rest.intercept.BlobFilenameWriteInterceptor">
+  <bean id="blobFilenameWriteInterceptor" class="com.coremedia.rest.cap.intercept.BlobFilenameWriteInterceptor">
     <property name="type" value="CMDownload"/>
     <property name="blobProperty" value="data"/>
     <property name="filenameProperty" value="filename"/>

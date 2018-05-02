@@ -143,17 +143,45 @@
 </StructListProperty>
 </Struct>
 </StructProperty>
+<StringProperty Name="preferredSite">d9e18920c4f0fb5ab3b68ef9ad788b18</StringProperty>
+<StructProperty Name="controlRoom">
+<Struct>
+<BooleanProperty Name="showAssets">true</BooleanProperty>
+</Struct>
+</StructProperty>
+<StringProperty Name="semanticSettings">nameMatching</StringProperty>
+<StructProperty Name="userMenu">
+<Struct>
+<BooleanProperty Name="disableSiteName">false</BooleanProperty>
+<BooleanProperty Name="disableSiteLocale">false</BooleanProperty>
+<BooleanProperty Name="disableUserName">false</BooleanProperty>
+</Struct>
+</StructProperty>
+<BooleanProperty Name="disablePreviewHoverFrames">false</BooleanProperty>
+<BooleanProperty Name="enablePreviewScrollbars">false</BooleanProperty>
+<IntProperty Name="previewReloadDelay">1</IntProperty>
+<StringProperty Name="locale">de</StringProperty>
+<StructListProperty Name="bookmarks">
+<Struct>
+<StringProperty Name="name">Hybris Apparel</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/Germany/German/Navigation/Hybris%20Apparel.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Navigation/Hybris%20Apparel"/>
+</Struct>
+</StructListProperty>
 <StructProperty Name="workarea">
 <Struct>
 <StructListProperty Name="tabs">
 <Struct>
-<StringProperty Name="type">com.coremedia.cms.editor.sdk.config.startTab</StringProperty>
+<StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StructProperty Name="state">
+<Struct>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/Germany/German/Navigation/Hybris%20Apparel.xml" cmexport:path="/Sites/Hybris%20Apparel/Germany/German/Navigation/Hybris%20Apparel"/>
+</Struct>
+</StructProperty>
 </Struct>
 </StructListProperty>
 <IntProperty Name="activeTabIndex">0</IntProperty>
 </Struct>
 </StructProperty>
-<StringProperty Name="preferredSite">Hybris-Apparel-UK-Site-ID</StringProperty>
 </Struct>
 </data>
 </EditorPreferences>

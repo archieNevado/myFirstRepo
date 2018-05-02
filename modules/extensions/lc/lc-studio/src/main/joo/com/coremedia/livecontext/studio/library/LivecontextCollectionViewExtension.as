@@ -15,7 +15,7 @@ public class LivecontextCollectionViewExtension extends ECommerceCollectionViewE
   private var treeRelation:LivecontextContentTreeRelation = new LivecontextContentTreeRelation();
 
   protected static const DEFAULT_TYPE_MARKETING_SPOT_RECORD:Object = {
-    name: ContentTypeNames.DOCUMENT,
+    name: ContentTypeNames.CONTENT,
     label: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'MarketingSpot_label'),
     icon: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'MarketingSpot_icon')
   };

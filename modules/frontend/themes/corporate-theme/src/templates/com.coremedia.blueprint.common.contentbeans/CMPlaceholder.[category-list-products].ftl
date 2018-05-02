@@ -7,9 +7,9 @@
 <#assign itemsPerRow=4 />
 
 <#if (numberOfItems > 0)>
-<div class="cm-placeholder cm-placeholder--category"<@cm.metadata self.content />>
+<div class="cm-placeholder cm-placeholder--category"<@preview.metadata self.content />>
   <#-- headline -->
-  <h2 class="cm-placeholder__headline"<@cm.metadata "properties.title" />>${self.title}</h2>
+  <h2 class="cm-placeholder__headline"<@preview.metadata "properties.title" />>${self.title}</h2>
   <#-- list of products -->
   <div class="row">
     <#list products as item>

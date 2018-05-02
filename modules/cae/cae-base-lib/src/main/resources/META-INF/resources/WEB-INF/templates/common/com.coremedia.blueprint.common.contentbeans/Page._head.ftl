@@ -10,9 +10,9 @@
 
 <#assign studioExtraFilesMetadata=preview.getStudioAdditionalFilesMetadata(bp.setting(self, "studioPreviewCss"), bp.setting(self, "studioPreviewJs"))/>
 
-<head<@cm.metadata data=studioExtraFilesMetadata/>>
+<head<@preview.metadata data=studioExtraFilesMetadata/>>
   <meta charset="UTF-8">
-  <title<@cm.metadata "properties.htmlTitle" />>${self.content.htmlTitle!"CoreMedia CMS"}</title>
+  <title<@preview.metadata "properties.htmlTitle" />>${self.content.htmlTitle!"CoreMedia CMS"}</title>
   <#if self.content.htmlDescription?has_content>
     <meta name="description" content="${self.content.htmlDescription}">
   </#if>
@@ -22,7 +22,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="CoreMedia CMS">
   <#if self.favicon?has_content>
-    <link rel="shortcut icon" href="${cm.getLink(self.favicon)}"<@cm.metadata "properties.favicon" />>
+    <link rel="shortcut icon" href="${cm.getLink(self.favicon)}"<@preview.metadata "properties.favicon" />>
   </#if>
   <#if self.content?has_content>
     <link rel="canonical" href="${cm.getLink(self.content, {"absolute":true})}">

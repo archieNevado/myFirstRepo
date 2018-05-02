@@ -4,7 +4,7 @@
 
 <#assign ownPictureCssClass="" />
 
-<div class="cm-lightbox ${classBox}"<@cm.metadata self.content />>
+<div class="cm-lightbox ${classBox}"<@preview.metadata self.content />>
   <div class="cm-teasable cm-teasable--video" data-cm-teasable--video='{"preview": ".cm-teasable__content", "player": ".cm-teasable--video__video", "play": ".cm-play-button"}'>
     <#if self.picture?has_content>
       <#assign ownPictureCssClass="cm-hidden" />

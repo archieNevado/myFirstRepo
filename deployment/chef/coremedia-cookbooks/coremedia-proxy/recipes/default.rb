@@ -15,7 +15,7 @@ include_recipe 'apache2::mod_mime'
 include_recipe 'apache2::mod_filter'
 include_recipe 'apache2::mod_setenvif'
 include_recipe 'apache2::mod_proxy_balancer'
-include_recipe 'apache2::mod_lbmethod_byrequests' if version(node['apache']['version']).satisfies?('>= 2.3')
+include_recipe 'apache2::mod_lbmethod_byrequests'
 include_recipe 'apache2::mod_proxy_http'
 include_recipe 'apache2::mod_proxy_ajp'
 
@@ -24,9 +24,24 @@ apache_conf 'global-settings' do
   cookbook 'coremedia-proxy'
 end
 
-%w(autoindex deflate expires headers mime rewrite setenv).each do |mod|
+# load default apache config for defined mods
+node.default_unless['apache']['mods']['default_config']['autoindex'] = true
+node.default_unless['apache']['mods']['default_config']['deflate'] = true
+node.default_unless['apache']['mods']['default_config']['expires'] = true
+node.default_unless['apache']['mods']['default_config']['headers'] = true
+node.default_unless['apache']['mods']['default_config']['mime'] = true
+node.default_unless['apache']['mods']['default_config']['rewrite'] = true
+node.default_unless['apache']['mods']['default_config']['cors'] = true
+
+node['apache']['mods']['default_config'].each_pair do |mod, enabled|
   apache_conf mod do
     source "mods/#{mod}.conf.erb"
     cookbook 'coremedia-proxy'
+    enable enabled
+  end
+  # because apache_conf definition only enables configuration, we need to call
+  # apache_config separatelyto disable if needed
+  apache_config mod do
+    enable enabled
   end
 end

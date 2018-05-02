@@ -1,22 +1,30 @@
 "use strict";
 
+const inquirer = require("inquirer");
 const path = require("path");
 const cmLogger = require("@coremedia/cm-logger");
-const { getWorkspaceConfig } = require("@coremedia/tool-utils/workspace");
+const { getWorkspaceConfig, getAvailableBricks } = require("@coremedia/tool-utils/workspace");
 
 const args = require("../lib/args");
 const {
   convertThemeName,
   isThemeNameInUse,
   createTheme,
-} = require("../lib/themeUtils");
+} = require("@coremedia/theme-creator");
 const { PKG_NAME } = require("../lib/constants");
 
 const command = "create-theme <name>";
 const desc = "Create a blank, minimal theme";
 const builder = yargs =>
   yargs
+    .option("interactive", {
+      alias: "I",
+      default: false,
+      describe: "Enable interactive mode for theme creation.",
+      type: "boolean"
+    })
     .option("verbose", {
+      alias: "V",
       default: false,
       describe: "Enable verbose mode for more information output.",
       type: "boolean",
@@ -53,16 +61,80 @@ const handler = argv => {
     process.exit(1);
   }
 
-  log.info(`Generating new theme "${themeName}".`);
-  try {
-    createTheme(wsConfig, themePath, themeName, log);
-    log.success(`Done.`);
-  } catch (e) {
-    log.error(
-      `An error occured while trying to create theme "${themeName}": ${
-        e.message
-      }`
+  const availableBricks = getAvailableBricks();
+  let bricksToActivate = [];
+  let bricksToCommentOut = availableBricks;
+
+  function doIt() {
+    log.info(`Generating new theme "${themeName}".`);
+    try {
+      createTheme(wsConfig, themePath, themeName, bricksToActivate, bricksToCommentOut, log);
+      log.success(`Done.`);
+    } catch (e) {
+      log.error(
+              `An error occured while trying to create theme "${themeName}": ${
+                      e.message
+                      }`
+      );
+    }
+  }
+
+  if (argv.interactive) {
+
+    const brickChoices = Object.keys(availableBricks).map(
+      brickName => ({
+        name: brickName.replace("@coremedia/brick-", ""),
+        short: brickName.replace("@coremedia/brick-", ""),
+        value: {
+          [brickName]: availableBricks[brickName]
+        },
+      })
     );
+
+    // Ask for bricks to auto activate
+    inquirer
+      .prompt([
+        {
+          type: "checkbox",
+          name: "chosenBricks",
+          message: "Which bricks should be activated:",
+          choices: brickChoices,
+          default: []
+        },
+        {
+          type: "confirm",
+          name: "commentOutBricks",
+          message: "Should non-activated bricks be passed as commented out dependencies?",
+          default: false
+        }
+      ])
+            .then(args => {
+              bricksToActivate = args.chosenBricks.reduce(
+                      (aggregator, newValue) => ({
+                        ...aggregator,
+                        ...newValue
+                      }),
+                      {}
+              );
+              if (args.commentOutBricks) {
+                bricksToCommentOut = Object.keys(availableBricks).filter(
+                        brickName => !(brickName in bricksToActivate)
+                ).reduce(
+                        (aggregator, brickName) => ({
+                          ...aggregator,
+                          [brickName]: availableBricks[brickName]
+                        }),
+                        {}
+                );
+              } else {
+                bricksToCommentOut = {};
+              }
+              doIt();
+            });
+
+
+  } else {
+    doIt();
   }
 };
 

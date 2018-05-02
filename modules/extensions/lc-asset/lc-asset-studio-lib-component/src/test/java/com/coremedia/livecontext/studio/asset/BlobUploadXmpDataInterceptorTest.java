@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.studio.asset;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
@@ -7,15 +8,14 @@ import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.ecommerce.common.ProductIdExtractor;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
+import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.livecontext.asset.util.AssetHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -51,7 +52,10 @@ public class BlobUploadXmpDataInterceptorTest {
   private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Mock
-  private CommerceConnection commerceConnection;
+  private BaseCommerceConnection commerceConnection;
+
+  @Mock
+  private CatalogService catalogService;
 
   @Mock
   private ContentWriteRequest contentWriteRequest;
@@ -74,13 +78,10 @@ public class BlobUploadXmpDataInterceptorTest {
   @Mock
   private AssetHelper assetHelper;
 
-  @Mock
-  private StoreContext defaultContext;
-
   private Map<String, Object> properties;
 
   private BlobUploadXmpDataInterceptor testling;
-  private MockCommerceEnvBuilder envBuilder;
+
   private StoreContext storeContext;
 
   @Before
@@ -95,17 +96,16 @@ public class BlobUploadXmpDataInterceptorTest {
     when(blob.getContentType()).thenReturn(blobMimeType);
     when(blob.getInputStream()).thenReturn(blobInputStream);
 
-    envBuilder = MockCommerceEnvBuilder.create();
-    commerceConnection = envBuilder.setupEnv();
-    storeContext = commerceConnection.getStoreContext();
+    commerceConnection = new BaseCommerceConnection();
+
+    storeContext = newStoreContext();
+    commerceConnection.setStoreContext(storeContext);
+
+    commerceConnection.setCatalogService(catalogService);
+    commerceConnection.setIdProvider(TestVendors.getIdProvider("vendor"));
 
     when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
             .thenReturn(Optional.of(commerceConnection));
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
   }
 
   @Test

@@ -73,8 +73,8 @@ public class AMStudioPluginBase extends StudioPlugin {
   }
 
   private static function removeDoctype(contentTypeName:String):void {
-    addToArrayIfNotAlreadyContained(editorContext.getDocumentTypesExcludedFromSearch(), contentTypeName);
-    addToArrayIfNotAlreadyContained(editorContext.getDocumentTypesExcludedFromSearchResult(), contentTypeName);
+    addToArrayIfNotAlreadyContained(editorContext.getContentTypesExcludedFromSearch(), contentTypeName);
+    addToArrayIfNotAlreadyContained(editorContext.getContentTypesExcludedFromSearchResult(), contentTypeName);
   }
 
   private static function addToArrayIfNotAlreadyContained(array:Array, item:*):void {

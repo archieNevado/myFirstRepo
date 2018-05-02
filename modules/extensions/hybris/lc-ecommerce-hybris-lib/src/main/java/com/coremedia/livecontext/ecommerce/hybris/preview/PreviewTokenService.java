@@ -17,6 +17,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,36 +38,42 @@ public class PreviewTokenService extends AbstractHybrisService {
 
   private static final String REQUEST_ATTRIB_PREVIEW_TOKEN = PreviewTokenService.class.getName() + "#previewToken";
 
+  @Nullable
   protected PreviewTokenDocument getPreviewToken() {
-    StoreContext storeContext = StoreContextHelper.getCurrentContext();
+    StoreContext storeContext = StoreContextHelper.findCurrentContext().orElse(null);
+    if (storeContext == null) {
+      return null;
+    }
+
     PreviewTokenDocument result = null;
-    if (storeContext != null) {
-      HttpServletRequest request = getRequest();
-      if (request != null) {
-        result = (PreviewTokenDocument) request.getAttribute(REQUEST_ATTRIB_PREVIEW_TOKEN);
-      }
-      if (result == null) {
-        try {
-          result = requestPreviewToken(oAuthConnector.getOrRequestAccessToken());
+    HttpServletRequest request = getRequest();
 
-          if (request != null) {
-            request.setAttribute(REQUEST_ATTRIB_PREVIEW_TOKEN, result);
-          }
+    if (request != null) {
+      result = (PreviewTokenDocument) request.getAttribute(REQUEST_ATTRIB_PREVIEW_TOKEN);
+    }
 
-        } catch (UnauthorizedException e) {
-          LOG.warn("Getting \"Unauthorized\" when requesting the preview token for store context: {}, message: {}. Try again...", storeContext, e.getMessage());
-          result = requestPreviewToken(oAuthConnector.renewAccessToken());
+    if (result == null) {
+      try {
+        result = requestPreviewToken(oAuthConnector.getOrRequestAccessToken());
+
+        if (request != null) {
+          request.setAttribute(REQUEST_ATTRIB_PREVIEW_TOKEN, result);
         }
+      } catch (UnauthorizedException e) {
+        LOG.warn("Getting \"Unauthorized\" when requesting the preview token for store context: {}, message: {}. Try again...",
+                storeContext, e.getMessage());
+        result = requestPreviewToken(oAuthConnector.renewAccessToken());
       }
     }
+
     return result;
   }
 
-  private PreviewTokenDocument requestPreviewToken(AccessToken accessToken) {
-    StoreContext storeContext = StoreContextHelper.getCurrentContext();
-    if (storeContext == null) {
-      throw new NoStoreContextAvailable("requesting preview token");
-    }
+  @Nullable
+  private PreviewTokenDocument requestPreviewToken(@Nonnull AccessToken accessToken) {
+    StoreContext storeContext = StoreContextHelper.findCurrentContext()
+            .orElseThrow(() -> new NoStoreContextAvailable("requesting preview token"));
+
     return tokenResource.getPreviewToken(preparePreviewTokenParams(storeContext), accessToken);
   }
 
@@ -73,7 +81,8 @@ public class PreviewTokenService extends AbstractHybrisService {
     return getPreviewToken().getTicketId();
   }
 
-  private Map<String, Object> preparePreviewTokenParams(StoreContext storeContext) {
+  @Nonnull
+  private Map<String, Object> preparePreviewTokenParams(@Nonnull StoreContext storeContext) {
     /*{
       "catalog" : "apparel-ukContentCatalog",
             "catalogVersion" : "Staged",
@@ -83,7 +92,7 @@ public class PreviewTokenService extends AbstractHybrisService {
             "user" : "anonymous",
             "userGroup" : "regulargroup"
     }*/
-    HashMap<String, Object> result = new HashMap<String, Object>();
+    Map<String, Object> result = new HashMap<>();
 
     // fetch catalogId from specific bean for CMS-9516 (multi catalog support for hybris)
 
@@ -95,7 +104,8 @@ public class PreviewTokenService extends AbstractHybrisService {
     return result;
   }
 
-  private HttpServletRequest getRequest() {
+  @Nullable
+  private static HttpServletRequest getRequest() {
     RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
     if (requestAttributes instanceof ServletRequestAttributes) {
       return ((ServletRequestAttributes) requestAttributes).getRequest();

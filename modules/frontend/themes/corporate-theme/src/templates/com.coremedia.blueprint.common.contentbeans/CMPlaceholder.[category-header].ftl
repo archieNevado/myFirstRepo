@@ -3,7 +3,7 @@
 
 <#-- load page/category as mini gap (only on categories/channels) -->
 <#if (cmpage.content.header)?has_content>
-<div class="cm-placeholder"<@cm.metadata self.content />>
+<div class="cm-placeholder"<@preview.metadata self.content />>
   <@cm.include self=cmpage.content view="asMiniGap" />
 </div>
 </#if>

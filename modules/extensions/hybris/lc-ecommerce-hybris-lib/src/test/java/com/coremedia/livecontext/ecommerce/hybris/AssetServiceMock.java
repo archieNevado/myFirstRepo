@@ -5,7 +5,6 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,9 +60,4 @@ public class AssetServiceMock implements AssetService {
     return null;
   }
 
-  @Nonnull
-  @Override
-  public AssetService withStoreContext(StoreContext storeContext) {
-    return this;
-  }
 }

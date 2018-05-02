@@ -15,7 +15,7 @@ export const EVENT_DEVICE_CHANGED = EVENT_PREFIX + "deviceChanged";
 const lastDevice = {
   type: undefined,
   orientation: undefined,
-  isTouch: undefined
+  isTouch: undefined,
 };
 
 /**
@@ -23,7 +23,10 @@ const lastDevice = {
  * @returns {string} "mobile"|"tablet"|"desktop"
  */
 function detectDeviceType() {
-  return window.getComputedStyle(document.body, ":after").getPropertyValue("content").replace(/\'|\"/g, "");
+  return window
+    .getComputedStyle(document.body, ":after")
+    .getPropertyValue("content")
+    .replace(/\'|\"/g, "");
 }
 
 /**
@@ -31,7 +34,10 @@ function detectDeviceType() {
  * @returns {string} "portrait"|"landscape"
  */
 function detectDeviceOrientation() {
-  return window.getComputedStyle(document.body, ":before").getPropertyValue("content").replace(/\'|\"/g, "");
+  return window
+    .getComputedStyle(document.body, ":before")
+    .getPropertyValue("content")
+    .replace(/\'|\"/g, "");
 }
 
 /**
@@ -39,7 +45,7 @@ function detectDeviceOrientation() {
  * @returns {boolean} true if touch device otherwise false
  */
 function isTouchDevice() {
-  return 'ontouchstart' in window || navigator.msMaxTouchPoints;
+  return "ontouchstart" in window || navigator.msMaxTouchPoints;
 }
 
 /**
@@ -50,7 +56,7 @@ export function getLastDevice() {
   return {
     type: lastDevice.type,
     orientation: lastDevice.orientation,
-    isTouch: lastDevice.isTouch
+    isTouch: lastDevice.isTouch,
   };
 }
 
@@ -61,14 +67,16 @@ function update() {
   const newDevice = {
     type: detectDeviceType(),
     orientation: detectDeviceOrientation(),
-    isTouch: isTouchDevice()
+    isTouch: isTouchDevice(),
   };
-  if (lastDevice.type === undefined
-          || lastDevice.orientation === undefined
-          || lastDevice.isTouch === undefined
-          || lastDevice.type !== newDevice.type
-          || lastDevice.orientation !== newDevice.orientation
-          || lastDevice.isTouch !== newDevice.isTouch) {
+  if (
+    lastDevice.type === undefined ||
+    lastDevice.orientation === undefined ||
+    lastDevice.isTouch === undefined ||
+    lastDevice.type !== newDevice.type ||
+    lastDevice.orientation !== newDevice.orientation ||
+    lastDevice.isTouch !== newDevice.isTouch
+  ) {
     $document.trigger(EVENT_DEVICE_CHANGED, [newDevice, lastDevice]);
 
     lastDevice.type = newDevice.type;
@@ -81,11 +89,15 @@ function update() {
  * inits the device detector
  */
 export function init() {
-  $window.on("resize", {}, debounce(function () {
-    update();
-  }));
+  $window.on(
+    "resize",
+    {},
+    debounce(function() {
+      update();
+    })
+  );
   // delay initial update after all other document ready functions have been called
-  setTimeout(function () {
+  setTimeout(function() {
     update();
   }, 1);
 }

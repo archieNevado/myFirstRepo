@@ -14,8 +14,10 @@ public class PreviewTokenResource extends AbstractHybrisResource {
 
   private static final String PREVIEW_TOKEN_PATH = "/preview/";
 
+  @Nullable
   public PreviewTokenDocument getPreviewToken(@Nullable Map bodyData, @Nonnull AccessToken accessToken) {
     List<String> uriTemplateParameters = newUriTemplateParameters("accessToken", accessToken.getToken());
+
     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
     queryParams.add("access_token", accessToken.getToken());
 

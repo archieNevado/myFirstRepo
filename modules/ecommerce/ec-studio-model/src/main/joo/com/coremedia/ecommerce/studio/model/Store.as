@@ -43,7 +43,7 @@ public interface Store extends CatalogObject {
 
   function getVendorVersion():String;
 
-  function getWcsTimeZone():Object;
+  function getTimeZoneId():String;
 
   function resolveShopUrlForPbe(url:String):RemoteBean;
 

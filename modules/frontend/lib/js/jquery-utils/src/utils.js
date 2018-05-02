@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 import * as bem from "./utils.bem";
 
 export { bem };
@@ -25,24 +23,8 @@ export function findAndSelf($self, selector) {
  * @returns {jQuery} the search result of the given selector
  */
 export function findRelativeOrAbsolute($self, selector) {
-  if (typeof selector === typeof "string" && (/^\s*[>|+~]/).test(selector)) {
+  if (typeof selector === typeof "string" && /^\s*[>|+~]/.test(selector)) {
     return $self.find(selector);
   }
   return $self.constructor(selector);
 }
-
-/**
- * Add pseudo for selection by data attribute managed by jQuery (not equal to search for [data-...])
- */
-$.extend($.expr[":"], {
-  data: $.expr.createPseudo ?
-          $.expr.createPseudo(function( dataName ) {
-            return function( elem ) {
-              return !!$.data( elem, dataName );
-            };
-          }) :
-    // support: jQuery <1.8
-          function( elem, i, match ) {
-            return !!$.data( elem, match[ 3 ] );
-          }
-});

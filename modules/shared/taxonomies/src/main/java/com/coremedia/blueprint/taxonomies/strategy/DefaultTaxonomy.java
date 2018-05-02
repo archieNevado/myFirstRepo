@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic complexity
 
-  public static final String ROOT_TYPE = "root";
+  private static final String ROOT_TYPE = "root";
 
   private static final Logger LOG = LoggerFactory.getLogger(DefaultTaxonomy.class);
 
@@ -42,6 +42,10 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   private static final String CHILDREN = "children";
 
   private static final String NEW_KEYWORD = "new keyword";
+  private static final String ROOT_SETTINGS_DOCUMENT = "_root";
+  private static final String TYPE_SETTINGS = "CMSettings";
+  private static final String SETTINGS_STRUCT = "settings";
+  private static final String ROOTS_LIST = "roots";
 
   private ContentRepository contentRepository;
   private ContentType taxonomyContentType = null;
@@ -136,6 +140,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       for (Content ref : child.getReferrers()) {
         if (!result.contains(ref)
                 && ref.isInProduction()
+                && ref.getName().equals(ROOT_SETTINGS_DOCUMENT)
                 && !ref.getType().isSubtypeOf(taxonomyContentType)
                 && !ref.getType().isSubtypeOf("EditorPreferences")) {
           result.add(ref);
@@ -162,6 +167,9 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
     for (Content child : allChildren) {
       for (Content ref : child.getReferrers()) {
+        if(ref.getName().equals(ROOT_SETTINGS_DOCUMENT)) {
+          continue;
+        }
         if (!result.contains(ref) && ref.isInProduction() && !ref.getType().isSubtypeOf(taxonomyContentType)) {
           if(!isWeakLinked(child, ref)) {
             result.add(ref);
@@ -334,6 +342,13 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
         approveAndPublish(parent);
       }
     }
+    else {
+      List<Content> rootNodesFromSettings = getRootNodesFromSettings();
+      if(rootNodesFromSettings != null) {
+        rootNodesFromSettings.remove(child);
+        updateRootNodeSettings(rootNodesFromSettings);
+      }
+    }
   }
 
   @Override
@@ -361,6 +376,13 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       children.add(content);
       parent.set(CHILDREN, children);
       parent.checkIn();
+    }
+    else {
+      List<Content> rootNodesFromSettings = getRootNodesFromSettings();
+      if(rootNodesFromSettings != null) {
+        rootNodesFromSettings.add(content);
+        updateRootNodeSettings(rootNodesFromSettings);
+      }
     }
 
     return asNode(content);
@@ -435,6 +457,30 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   }
 
   // === HELPER ========================================================================================================
+
+  private List<Content> getRootNodesFromSettings() {
+    Content rootSettings = rootFolder.getChild(ROOT_SETTINGS_DOCUMENT);
+    if(rootSettings != null && rootSettings.getType().getName().equals(TYPE_SETTINGS)) {
+      Struct settings = rootSettings.getStruct(SETTINGS_STRUCT);
+      return new ArrayList<>(settings.getLinks(ROOTS_LIST));
+    }
+
+    return null;
+  }
+
+  private void updateRootNodeSettings(List<Content> topNodes) {
+    Content rootSettings = rootFolder.getChild(ROOT_SETTINGS_DOCUMENT);
+    if(rootSettings != null && rootSettings.getType().getName().equals(TYPE_SETTINGS)) {
+      if(!rootSettings.isCheckedOut()) {
+        rootSettings.checkOut();
+      }
+
+      Struct settings = rootSettings.getStruct(SETTINGS_STRUCT);
+      settings = settings.builder().set(ROOTS_LIST, topNodes).build();
+      rootSettings.set(SETTINGS_STRUCT, settings);
+      rootSettings.checkIn();
+    }
+  }
 
   /**
    * Returns true if the linked content is linked has weak link inside the linking content
@@ -684,7 +730,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   private List<Content> getValidChildren(Content content) {
     List<Content> validChildren = new ArrayList<>();
     for (Content child : content.getLinks(CHILDREN)) {
-      if (!child.isDestroyed() && child.isInProduction()) {
+      if (!child.isDestroyed() && child.isInProduction() && !validChildren.contains(child)) {
         validChildren.add(child);
       }
     }
@@ -715,6 +761,12 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * @param matches
    */
   private void findRootNodes(Content folder, List<Content> matches) {
+    List<Content> rootNodesFromSettings = getRootNodesFromSettings();
+    if(rootNodesFromSettings != null) {
+      matches.addAll(rootNodesFromSettings);
+      return;
+    }
+
     Collection<Content> nodes = folder.getChildren();
     for (Content child : nodes) {
       if (child.isDocument()

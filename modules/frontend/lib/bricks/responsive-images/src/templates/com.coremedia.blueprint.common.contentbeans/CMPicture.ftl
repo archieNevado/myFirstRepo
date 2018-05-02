@@ -11,7 +11,7 @@
 <#assign classBox=cm.localParameters().classBox!""/>
 <#assign classImage=cm.localParameters().classImage!""/>
 
-<div class="${classBox!""}"<@cm.metadata (metadata![]) + [self.content]/>>
+<div class="${classBox!""}"<@preview.metadata (metadata![]) + [self.content]/>>
   <#if self.data?has_content>
     <#assign imageLink=""/>
     <#assign classResponsive=""/>
@@ -56,12 +56,12 @@
     <#assign classImage += " cm-image"/>
     <#if background>
       <div class="cm-image--background ${classImage!""} ${classResponsive!""}" <@bp.renderAttr attributes/>
-        <@cm.metadata data=["properties.data"]/>>
+        <@preview.metadata data=["properties.data"]/>>
       </div>
     <#else>
       <#assign attributes += {"alt": alt, "src": imageLink}/>
       <img class="cm-image--loading ${classImage!""} ${classResponsive!""}" <@bp.renderAttr attributes/>
-        <@cm.metadata data=["properties.data" + crop?has_content?then(".", "") + crop!""]/>>
+        <@preview.metadata data=["properties.data" + crop?has_content?then(".", "") + crop!""]/>>
     </#if>
   </#if>
 </div>

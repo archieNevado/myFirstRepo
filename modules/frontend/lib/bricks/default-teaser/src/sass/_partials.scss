@@ -1,6 +1,3 @@
-@import "~@coremedia/sass-utils/src/partials";
-@import "~@coremedia/brick-bootstrap/src/sass/partials";
-@import "~@coremedia/brick-cta/src/sass/partials";
-@import "~@coremedia/brick-responsive-images/src/sass/partials";
+@import "?smart-import-partials";
 @import "partials/default-teaser";
 @import "partials/default-teaser-overlay";

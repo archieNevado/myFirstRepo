@@ -41,5 +41,7 @@ export function addBEMModifier($jQueryResult, bemBlock, bemModifier) {
  * @return {jQuery} the given $jQueryResult for chaining
  */
 export function removeBEMModifier($jQueryResult, bemBlock, bemModifier) {
-  return $jQueryResult.removeClass(getBEMModifierClassName(bemBlock, bemModifier));
+  return $jQueryResult.removeClass(
+    getBEMModifierClassName(bemBlock, bemModifier)
+  );
 }

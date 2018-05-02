@@ -12,7 +12,7 @@ This is a wrapper cookbook for the apache2 cookbook with a library cookbook styl
 
 ## Cookbooks:
 
-* apache2 (~> 3.2.0)
+* apache2 (~> 5.0.1)
 * chef-sugar (~> 3.0)
 
 # Attributes

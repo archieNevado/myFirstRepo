@@ -74,12 +74,12 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
   }
 
   @Nullable
-  private Content getRootCategoryContent(@Nullable Content content) {
+  private Content getRootCategoryContent(@Nonnull Content content) {
     try {
       CommerceConnection commerceConnection = CurrentCommerceConnection.get();
 
       StoreContext storeContext = commerceConnection.getStoreContextProvider().findContextByContent(content);
-      Category rootCategory = commerceConnection.getCatalogService().withStoreContext(storeContext).findRootCategory(storeContext.getCatalogAlias(), storeContext);
+      Category rootCategory = commerceConnection.getCatalogService().findRootCategory(storeContext.getCatalogAlias(), storeContext);
       return augmentationService.getContent(rootCategory);
     } catch (CommerceException e) {
       LOG.warn("Could not retrieve root category for Content {}.", content, e);

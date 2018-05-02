@@ -94,7 +94,6 @@ public class CMMarketingSpotImplTest {
     when(connection.getMarketingSpotService()).thenReturn(marketingSpotService);
 
     when(marketingSpotService.findMarketingSpotById(any(), any(StoreContext.class))).thenReturn(marketingSpot);
-    when(marketingSpotService.withStoreContext(storeContext)).thenReturn(marketingSpotService);
     when(marketingSpot.getName()).thenReturn(MY_MARKETING_SPOT_NAME);
 
     when(content.getString(CMMarketingSpotImpl.EXTERNAL_ID)).thenReturn("test:///me/marketingspot/myExternalId");

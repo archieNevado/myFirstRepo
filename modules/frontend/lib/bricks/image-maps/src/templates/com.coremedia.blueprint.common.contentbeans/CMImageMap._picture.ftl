@@ -29,7 +29,7 @@
 
 <#-- display missing-image placeholder-->
 <#elseif renderEmptyImage>
-  <div class="${blockClass}__picture-box cm-imagemap__picture-box" <@cm.metadata "properties.pictures" />>
+  <div class="${blockClass}__picture-box cm-imagemap__picture-box" <@preview.metadata "properties.pictures" />>
     <div class="${blockClass}__picture cm-imagemap__picture"></div>
   </div>
 </#if>

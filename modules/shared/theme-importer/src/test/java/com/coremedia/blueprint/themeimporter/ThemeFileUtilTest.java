@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 

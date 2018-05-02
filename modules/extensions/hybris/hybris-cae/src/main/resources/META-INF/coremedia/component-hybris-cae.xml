@@ -10,7 +10,7 @@
   <import resource="classpath:/META-INF/coremedia/hybris-links.xml"/>
   <import resource="classpath:/framework/spring/livecontext-hybris-services.xml"/>
 
-  <customize:append id="liveContextHybrisCrossDomainWhiteList" bean="crossDomainEnabler" property="crossDomainWhitelist"
+  <customize:append id="liveContextHybrisCaeCorsConfiguration" bean="caeCorsConfiguration" property="allowedOrigins"
                     custom-value="${livecontext.hybris.crossdomain.whitelist}"/>
 
 </beans>

@@ -2,6 +2,34 @@ coremedia-proxy Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia-proxy cookbook.
 
+1.0.0
+-----
+- update `apache2` cookbook dependency to `~> 5.0.1`, this removes support for:
+   * Chef `< 12.1`
+   * CentOS 6, RHEL 6
+   * Apache 2.2
+
+  For a detailed list of changes see [apache2 changelog](https://supermarket.chef.io/cookbooks/apache2#changelog).
+
+0.3.6
+-----
+- Fix name collisions between servlet context and servlets in `ProxyPass` rules in `templates/default/proxy/servlet.erb`.
+
+0.3.5
+-----
+- use `node.default_unless` instead of `node.normal` for attributes of the `apache2` cookbook. This way they can be overridden
+  in cookbooks, wrapping `coremedia-proxy`.
+
+0.3.4
+-----
+- bugfix release to avoid bugs introduced in 0.3.3
+
+0.3.3
+-----
+- default configuration of <modulename> can now be enabled and disabled
+ - example: ```node['apache']['mods']['default_config'][<modulename>] = true```
+- currently supported values for <modulename>: autoindex, deflate, expires, headers, mime, rewrite, cors
+
 0.3.2
 -----
 - add `text/javascript` to `deflate.conf.erb` template
@@ -53,9 +81,9 @@ is no longer set globally in the `/etc/httpd/ports.conf`
 - rename parameter `rewrite_rules_template` to `rewrite_template`
 - rename parameter `rewrite_rules_template_cookbook` to `rewrite_template_cookbook`
 - definition should not fail if `servlet_context` is not defined. If a custom `proxy_template` is defined it may not be used at all.
-- remove default for `default_servlet` argument so it can be omitted if desired. 
+- remove default for `default_servlet` argument so it can be omitted if desired.
 
 0.1.0
 --------
 
-- initial commit. 
+- initial commit.

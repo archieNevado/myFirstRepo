@@ -13,7 +13,7 @@
   "requestParams": requestParams
 } />
 
-<div class="am-asset-teaser am-asset-teaser--dimmer am-asset-teaser--overlay" data-am-asset-id="${self.contentId}"<@cm.metadata data=self.content />>
+<div class="am-asset-teaser am-asset-teaser--dimmer am-asset-teaser--overlay" data-am-asset-id="${self.contentId}"<@preview.metadata data=self.content />>
   <div class="am-asset-teaser__wrapper">
     <#-- picture with link -->
     <a <@cm.dataAttribute name="data-hash-based-fragment-link" data=linkData />>
@@ -24,6 +24,6 @@
   </div>
   <#-- caption with link -->
   <a <@cm.dataAttribute name="data-hash-based-fragment-link" data=linkData />>
-    <h3 class="am-asset-teaser__caption am-heading-3"<@cm.metadata data="properties.name" />>${self.title!""}</h3>
+    <h3 class="am-asset-teaser__caption am-heading-3"<@preview.metadata data="properties.name" />>${self.title!""}</h3>
   </a>
 </div>

@@ -42,7 +42,6 @@ public class CatalogLinkListWrapper extends LinkListWrapperBase {
   private var catalogObjRemoteBean:RemoteBean;
 
   public function CatalogLinkListWrapper(config:CatalogLinkListWrapper = null) {
-    super(config);
     bindTo = config.bindTo;
     propertyName = config.propertyName;
     linkTypeNames = config.linkTypeNames;

@@ -252,7 +252,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
         String key = kvPair.substring(0, index);
         String value = kvPair.substring(index + 1);
         if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
-          result.add(new AxisFilter(key, value));
+          result.add(AxisFilter.on(key, value));
         }
       }
     }
@@ -270,7 +270,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
         String key = tokens[i];
         String value = i + 1 <= tokens.length - 1 ? tokens[i + 1] : "";
         if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
-          result.add(new AxisFilter(key, value));
+          result.add(AxisFilter.on(key, value));
         }
       }
     }
