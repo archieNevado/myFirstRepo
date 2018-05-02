@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
@@ -355,9 +354,4 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
     super.testWithStoreContext();
   }
 
-  @Test(expected = CommerceException.class)
-  @Override
-  public void testWithStoreContextRethrowException() {
-    super.testWithStoreContextRethrowException();
-  }
 }

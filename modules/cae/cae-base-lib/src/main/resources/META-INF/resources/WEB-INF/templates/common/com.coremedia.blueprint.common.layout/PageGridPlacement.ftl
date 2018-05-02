@@ -7,7 +7,7 @@
     Please check the brick "livecontext" or "generic templates" for a more detailed version.
 -->
 
-<div id="cm-placement-${self.name!""}" class="cm-placement"<@cm.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
+<div id="cm-placement-${self.name!""}" class="cm-placement"<@preview.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
 
   <#-- replace main section with the content in detailView -->
   <#if self.name! == "main" && cmpage.detailView>

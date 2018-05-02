@@ -1,0 +1,9 @@
+// Mark scss files to be excluded from the theme build process
+
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/scaffolding.scss?exclude";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/type.scss?exclude";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/forms.scss?exclude";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/navbar.scss?exclude";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/labels.scss?exclude";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/panels.scss?exclude";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/utilities.scss?exclude";

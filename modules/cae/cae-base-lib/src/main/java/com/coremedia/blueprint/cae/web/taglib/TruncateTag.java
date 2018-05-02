@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.web.taglib;
 
 import com.coremedia.objectserver.view.ViewException;
-import com.coremedia.util.WordAbbreviator;
+import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
 import org.slf4j.Logger;

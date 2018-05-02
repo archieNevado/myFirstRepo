@@ -7,7 +7,11 @@ const {
   getDependencyCheckNodeSassImporter,
 } = require("@coremedia/dependency-check");
 const deepMerge = require("./utils/deepMerge");
-const { sassExcludeImport, sassImportOnce } = require("../importer/sass");
+const {
+  sassSmartImport,
+  sassExcludeImport,
+  sassImportOnce,
+} = require("../importer/sass");
 
 const themeConfig = getThemeConfig();
 
@@ -30,10 +34,17 @@ const exclude = [
   /\/vendor\//,
 ];
 
+// Create entry point(s)
+
 const entry = {};
+
+// 1) Theme entry point
+
 entry[themeConfig.name] = [
   path.resolve(themeConfig.path, `src/sass/${themeConfig.name}.scss`),
 ];
+
+// 2) Preview entry point (special handling)
 
 const previewScssPath = path.resolve(themeConfig.path, "src/sass/preview.scss");
 if (fs.existsSync(previewScssPath)) {
@@ -82,6 +93,7 @@ module.exports = () => config =>
                   sourceMap: true,
                   precision: 10,
                   importer: [
+                    sassSmartImport,
                     sassExcludeImport,
                     getDependencyCheckNodeSassImporter(include, exclude),
                     sassImportOnce,
@@ -90,6 +102,11 @@ module.exports = () => config =>
                     "encodeBase64($string)": function($string) {
                       const buffer = new Buffer($string.getValue());
                       return nodeSass.types.String(buffer.toString("base64"));
+                    },
+                    "encodeURIComponent($string)": function($string) {
+                      return nodeSass.types.String(
+                        encodeURIComponent($string.getValue())
+                      );
                     },
                   },
                 },

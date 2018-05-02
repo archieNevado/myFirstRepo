@@ -7,6 +7,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class CatalogImpl extends AbstractIbmCommerceBean implements Catalog {
@@ -35,6 +36,7 @@ public class CatalogImpl extends AbstractIbmCommerceBean implements Catalog {
     return getExternalId();
   }
 
+  @Nullable
   @Override
   public CatalogName getName() {
     return DataMapHelper.findStringValue(getDelegate(), "catalogIdentifier")

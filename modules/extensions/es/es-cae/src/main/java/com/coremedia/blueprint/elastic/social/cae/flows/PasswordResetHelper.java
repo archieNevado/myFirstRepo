@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.mail.MailException;
 import com.coremedia.elastic.social.api.registration.RegistrationService;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
@@ -45,7 +46,7 @@ public class PasswordResetHelper {
     return !context.getMessageContext().hasErrorMessages();
   }
   
-  public boolean validateToken(String token) {
+  public boolean validateToken(@PersonalData String token) {
     return registrationService.getUserByToken(token) != null;
   }
 
@@ -57,7 +58,7 @@ public class PasswordResetHelper {
    * @param context  the calling flow's {@link org.springframework.webflow.execution.RequestContext}
    * @return if successful
    */
-  public boolean confirm(String token, PasswordReset passwordReset, RequestContext context) {
+  public boolean confirm(@PersonalData String token, PasswordReset passwordReset, RequestContext context) {
     passwordReset.validateResetForm(context);
     if (context.getMessageContext().hasErrorMessages()) {
       return false;

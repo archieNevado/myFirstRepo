@@ -11,8 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
-
 /**
  * An {@link RatingGenerator} generates ratings for a article.
  */
@@ -70,7 +68,7 @@ public class RatingGenerator {
     int rating = random.nextInt(DEFAULT_RATING_INTERVAL) + 1;  //only values from 1 - 5
     ratingService.updateRating(user, target, categories, rating);
     ratingCount++;
-    LOG.debug(PERSONAL_DATA, "Created rating for user {}, anonymous {}, rating {} and target with id: {}", user.getId(), user.isAnonymous(), rating, target);
+    LOG.debug("Created rating for user {}, anonymous {}, rating {} and target with id: {}", user.getId(), user.isAnonymous(), rating, target);
   }
 
   public int getRatingCount() {

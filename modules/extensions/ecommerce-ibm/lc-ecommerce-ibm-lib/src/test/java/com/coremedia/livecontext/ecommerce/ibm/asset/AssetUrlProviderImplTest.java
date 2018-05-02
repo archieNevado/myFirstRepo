@@ -2,20 +2,15 @@ package com.coremedia.livecontext.ecommerce.ibm.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
-import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import javax.inject.Inject;
-
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class AssetUrlProviderImplTest {
@@ -29,13 +24,19 @@ public class AssetUrlProviderImplTest {
   private static final String VALID_PREFIX_TRAILED_AND_LEADING_SLASH = "/ExtendedCatalog/perfectchef/";
 
   private AssetUrlProviderImpl testling = new AssetUrlProviderImpl();
+
   private String productImageSegment = "product/url";
   private String productImageSegmentWithLeadingSlash = VALID_PREFIX_TRAILED_AND_LEADING_SLASH + productImageSegment; // happens when Search based REST handlers are used
 
   @Before
   public void setUp() {
-    //CurrentCommerceConnection.set(new BaseCommerceConnection());
-    MockCommerceEnvBuilder.create().setupEnv();
+    CommerceConnection commerceConnection = new BaseCommerceConnection();
+    CurrentCommerceConnection.set(commerceConnection);
+
+    StoreContext storeContext = newStoreContext();
+    storeContext.put(StoreContextImpl.STORE_ID, "10001");
+    storeContext.put(StoreContextImpl.CATALOG_ID, "catalog");
+    commerceConnection.setStoreContext(storeContext);
 
     testling.setCmsHost("localhost");
     testling.setCommercePreviewUrl("//preview/url");
@@ -75,7 +76,7 @@ public class AssetUrlProviderImplTest {
   public void whenAValidHostAndImageUrlIsGiven_AValidURLMustBeBuild() {
     testling.setCommerceProductionUrl(HTTP_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
-    Assert.assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
   }
 
   @Test
@@ -91,7 +92,7 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(HTTP_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    Assert.assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
   }
 
   @Test
@@ -99,7 +100,7 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(HTTPS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    Assert.assertEquals("https://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("https://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
   }
 
   @Test
@@ -107,13 +108,13 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    Assert.assertEquals("//url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("//url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
   }
 
   @Test
   public void whenAnAbsoluteAssetUrlIsGiven_ASchemelessURLMustBeReturned() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
-    Assert.assertEquals("//url/to/storefront/product/url", testling.getImageUrl("http://url/to/storefront/product/url"));
+    assertEquals("//url/to/storefront/product/url", testling.getImageUrl("http://url/to/storefront/product/url"));
   }
 
   //TEST CHECK LOGIC - With path prefix
@@ -122,7 +123,7 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    Assert.assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
   }
 
   @Test
@@ -130,7 +131,7 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_LEADING_SLASH);
 
-    Assert.assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
   }
 
   @Test
@@ -138,7 +139,7 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_LEADING_SLASH);
 
-    Assert.assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegmentWithLeadingSlash, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegmentWithLeadingSlash, true));
   }
 
   @Test
@@ -146,7 +147,7 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_TRAILED_SLASH);
 
-    Assert.assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
   }
 
   @Test
@@ -154,7 +155,7 @@ public class AssetUrlProviderImplTest {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_TRAILED_AND_LEADING_SLASH);
 
-    Assert.assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
   }
 
   @Test
@@ -166,6 +167,6 @@ public class AssetUrlProviderImplTest {
     String storeId = storeContext.getStoreId();
     String catalogId = storeContext.getCatalogId();
 
-    Assert.assertEquals("//localhost/" + storeId + "/" + catalogId, testling.getImageUrl("//[cmsHost]/[storeId]/[catalogId]", true));
+    assertEquals("//localhost/" + storeId + "/" + catalogId, testling.getImageUrl("//[cmsHost]/[storeId]/[catalogId]", true));
   }
 }

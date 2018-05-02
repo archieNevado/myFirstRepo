@@ -12,6 +12,7 @@
             <!-- in order to define topic pages, global site managers need write access to taxonomies. -->
             <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>
             <members>
+              <user id="rickcal" name="Rick Cal" home="/Home/Rick Cal"/>
               <user id="carol" name="Carol" home="/Home/Carol"/>
             </members>
           </group>
@@ -31,7 +32,17 @@
                 <rule content="/Sites/Calista/United States/English" type="CMObject" rights="RMDAP"/>
                 <rule content="/Sites/Calista/United States/English" type="Folder_" rights="RMDAP"/>
                 <members>
+                  <user id="petercal" name="Peter Cal" home="/Home/Peter Cal"/>
+                  <!-- Rick must be member of the master site group as translation workflow role. -->
+                  <userref id="rickcal"/>
                   <userref id="carol"/>
+                </members>
+              </group>
+              <group name="manager-calista-de-DE" contentgroup="true" livegroup="false" administrative="false">
+                <rule content="/Sites/Calista/Germany/German" type="CMObject" rights="RMDAP"/>
+                <rule content="/Sites/Calista/Germany/German" type="Folder_" rights="RMDAP"/>
+                <members>
+                  <user id="pietcal" name="Piet Cal" home="/Home/Piet Cal"/>
                 </members>
               </group>
             </members>

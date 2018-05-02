@@ -15,7 +15,6 @@ public class StoreContextHelperExceptionFormattingTest extends StoreContextHelpe
   public void testInvalidContextExceptionFormattingForLocale() throws Exception {
     thrown.expect(InvalidContextException.class);
     thrown.expectMessage("invalid commerce context: missing locale ("
-            + "configId: configId, "
             + "storeId: 4711, "
             + "storeName: toko, "
             + "catalogId: 0815, "

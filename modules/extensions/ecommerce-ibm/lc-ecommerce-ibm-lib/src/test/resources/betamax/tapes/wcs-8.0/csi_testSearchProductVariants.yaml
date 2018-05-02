@@ -21,6 +21,7 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000eDp3Xnp5JFm-tdsDUAJGBRM:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
@@ -49,6 +50,7 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000nv6OVSCPgdNyk2Et_0oDUgB:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
 - recorded: 2017-09-06T11:17:39.791Z
@@ -71,6 +73,7 @@ interactions:
       Expires: Wed, 06 Sep 2017 12:17:42 GMT
       Set-Cookie: JSESSIONID=00003wyIlHNbdGR4qZ7N7EuyvPD:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":"8","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/bySearchTerm\/shoe sport?currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102","recordSetCount":"8","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"uniqueID":"3074457345616678688","parentCategoryID":"3074457345616676686","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","productType":"ItemBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616678688","parentProductID":"3074457345616678687","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","shortDescription":"An
       athletic shoe with style to spare","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"59.0"}],"name":"Baril Goforit Sport Shoe","longDescription":"With Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable
@@ -112,7 +115,6 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000A5XyBPIt7OMfMQk3oAGJoVC:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":3,"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
       Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
@@ -145,3 +147,63 @@ interactions:
       100} 100)","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"count":"0","label":"({100 200} 200)","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"count":"0","label":"({200 300} 300)","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"count":"0","label":"({300
       400} 400)","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"count":"0","label":"({400 500} 500)","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"count":"1","label":"({500 *})","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD","value":"price_USD"},{"Entry":[{"count":"1","label":"Electronics","entryValue":"3074457345616676694"},{"count":"1","label":"Laptops","entryValue":"3074457345616676697"}],"name":"ParentCatalogGroup","value":"parentCatgroup_id_search"},{"Entry":[{"count":"1","label":"DVR
       Technics","entryValue":"mfName_ntk_cs%3A%22DVR+Technics%22"}],"name":"ManufacturerName","value":"mfName_ntk_cs"}],"resourceName":"productview"}'
+- recorded: 2018-04-09T14:30:10.147Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/shoe%20sport?catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_144)
+  response:
+    status: 404
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 09 Apr 2018 14:30:09 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000F5--9cdjRITgZ5y_ZYVciqX:-1; HTTPOnly; Path=/; Domain=.1804-ci-staging-cms-2.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: ''
+- recorded: 2018-04-09T14:30:10.326Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/CLA022_2203?catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_144)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 09 Apr 2018 14:30:10 GMT
+      Expires: Mon, 09 Apr 2018 15:30:10 GMT
+      Set-Cookie: JSESSIONID=0000Vz8C62ZTY1IqaxmcYqLNnBC:-1; HTTPOnly; Path=/; Domain=.1804-ci-staging-cms-2.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/1804-ci-staging-wcs-2.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/CLA022_2203?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"hasSingleSKU":"true","Attributes":[{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"2
+      GB","uniqueID":"7741124012283334912","identifier":"2 GB"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Memory","name":"Memory","uniqueID":"7741124012283333421","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsMemory","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"DVR
+      Technics","uniqueID":"7741124012283334907","identifier":"DVR Technics"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Brand","name":"Brand","uniqueID":"7741124012283333419","usage":"Defining","displayable":"true","comparable":"false","identifier":"ComputersLaptopsBrand","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"1
+      lb","uniqueID":"7741124012283334915","identifier":"1 lb"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Weight","name":"Weight","uniqueID":"7741124012283333422","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsWeight","searchable":"false"},{"Values":[{"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"values":"6
+      hours","uniqueID":"7741124012283334910","identifier":"6 hours"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Battery Life","name":"Battery Life","uniqueID":"7741124012283333420","usage":"Defining","displayable":"true","comparable":"true","identifier":"ComputersLaptopsBattery
+      Life","searchable":"false"},{"Values":[{"values":"2 GB","uniqueID":"7741124012283334919","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Memory","name":"Memory","uniqueID":"7741124012283333417","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Memory","searchable":"false"},{"Values":[{"values":"1
+      lb","uniqueID":"7741124012283334931","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Weight","name":"Weight","uniqueID":"7741124012283333424","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Weight","searchable":"false"},{"Values":[{"values":"6
+      hours","uniqueID":"7741124012283334928","identifier":"CLA022_2203"}],"extendedValue":[{"value":"C62","key":"UnitOfMeasure"}],"dataType":"STRING","description":"Battery Life","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","displayable":"true","comparable":"false","identifier":"Battery
+      Life","searchable":"false"}],"metaDescription":"A lightweight and portable laptop with excellent battery life.","subscriptionType":"NONE","uniqueID":"3074457345616679331","parentCategoryID":"3074457345616676697","singleSKUUniqueID":"3074457345616679332","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","productType":"ProductBean","disallowRecOrder":"true","resourceId":"http:\/\/1804-ci-staging-wcs-2.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679331","title":"Travel
+      Laptop | AuroraESite","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","SKUs":[{"Attributes":[{"Values":[{"values":"DVR Technics","uniqueID":"7741124012283334907","identifier":"DVR
+      Technics"}],"name":"Brand","usage":"Defining","uniqueID":"7741124012283333419","comparable":"false","displayable":"true","identifier":"ComputersLaptopsBrand","searchable":"false"},{"Values":[{"values":"2 GB","uniqueID":"7741124012283334912","identifier":"2
+      GB"}],"name":"Memory","usage":"Defining","uniqueID":"7741124012283333421","comparable":"true","displayable":"true","identifier":"ComputersLaptopsMemory","searchable":"false"},{"Values":[{"values":"6 hours","uniqueID":"7741124012283334910","identifier":"6
+      hours"}],"name":"Battery Life","usage":"Defining","uniqueID":"7741124012283333420","comparable":"true","displayable":"true","identifier":"ComputersLaptopsBattery Life","searchable":"false"},{"Values":[{"values":"1 lb","uniqueID":"7741124012283334915","identifier":"1
+      lb"}],"name":"Weight","usage":"Defining","uniqueID":"7741124012283333422","comparable":"true","displayable":"true","identifier":"ComputersLaptopsWeight","searchable":"false"}],"SKUUniqueID":"3074457345616679332","Price":[{"SKUPriceValue":"575.0","SKUPriceDescription":"I","SKUPriceUsage":"Offer"}]}],"shortDescription":"A
+      lightweight and portable laptop with excellent battery life.","manufacturer":"DVR Technics","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"575.0"}],"name":"Travel Laptop","buyable":"true","longDescription":"This tiny laptop is made
+      with portability and battery life in mind, so that you can take it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel companion.","xcatentry_seoSegment":"travel-laptop","storeID":"715837934","metaKeyword":"
+      DVR Technics","fullImageAltDescription":"Image for Travel Laptop from AuroraESite","numberOfSKUs":"1","partNumber":"CLA022_2203"}],"recordSetStartNumber":"0","resourceName":"productview"}'

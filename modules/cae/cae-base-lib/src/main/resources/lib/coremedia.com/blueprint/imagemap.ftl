@@ -2,14 +2,16 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
+ *
  * Use the brick "image-maps" instead of direct accessing the following imagemap functions.
  *
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
+<#-- --- PRIVATE --------------------------------------------------------------------------------------------------- -->
 
 <#--
  * The width all image transformations are based on.
@@ -54,7 +56,6 @@
     </#list>
   </#if>
   <#assign quickInfoIdList = quickInfoIdList?join(",") />
-
 
   <#assign imageMapParams={
   "imageMapId": imageMapId,

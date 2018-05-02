@@ -2,9 +2,9 @@
 <#assign link=cm.getLink(self!cm.UNDEFINED)/>
 <#assign uniqueId=bp.generateId("dm")/>
 <#assign additionalCssClass=cm.localParameter("additionalCssClass","hidden")/>
-<li<#if additionalCssClass?has_content> class="${additionalCssClass}"</#if><@cm.metadata self.content />>
+<li<#if additionalCssClass?has_content> class="${additionalCssClass}"</#if><@preview.metadata self.content />>
   <a id="departmentButton_${uniqueId}" href="${link}" class="departmentButton" role="menuitem"<#if self.visibleChildren?has_content> aria-haspopup="true" data-toggle="departmentMenu_${uniqueId}"</#if>>
-    <span<@cm.metadata "properties.title" />>${self.title}</span>
+    <span<@preview.metadata "properties.title" />>${self.title}</span>
     <#if self.visibleChildren?has_content>
       <div class="arrow_button_icon"></div>
     </#if>
@@ -15,7 +15,7 @@
       <a id="departmentToggle_${uniqueId}" href="#" class="toggle" role="button" data-toggle="departmentMenu_${uniqueId}" aria-labelledby="departmentLink_${uniqueId}"><span role="presentation"></span></a>
     </div>
   <#list self.visibleChildren>
-    <ul class="categoryList" <@cm.metadata "properties.visibleChildren" />>
+    <ul class="categoryList" <@preview.metadata "properties.visibleChildren" />>
       <#items as child >
         <li>
           <@cm.include self=child view="asSubNavigation" params={"parentLevelId": uniqueId, "level": 1}/>

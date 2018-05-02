@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.annotation.Nonnull;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 
 public class UserServiceImpl implements UserService {
@@ -73,9 +72,4 @@ public class UserServiceImpl implements UserService {
     return user;
   }
 
-  @Nonnull
-  @Override
-  public UserService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, UserService.class);
-  }
 }

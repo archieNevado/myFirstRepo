@@ -9,13 +9,16 @@
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:alx="exml:com.coremedia.blueprint.studio.config.analytics"
         xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
-        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config">
+        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
+        xmlns:ui="exml:com.coremedia.ui.config">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
     [ResourceBundle('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPlugin')]
     [ResourceBundle('com.coremedia.blueprint.studio.analytics.AnalyticsStudioPluginDocTypes')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.forms.columns.ValidityColumn;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.analytics.cmalxEventListForm";
 
     private var config:CMALXEventListForm;
@@ -41,6 +44,19 @@
                 <bpb-components:QuickCreateLinklistMenu bindTo="{config.bindTo}"
                                                         propertyName="items"/>
               </editor:additionalToolbarItems>
+              <editor:fields>
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+              </editor:fields>
+              <editor:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn flex="1"/>
+                <bpforms:ValidityColumn/>
+                <editor:StatusColumn/>
+              </editor:columns>
             </editor:LinkListPropertyField>
           </editor:items>
         </editor:PropertyFieldGroup>
@@ -62,6 +78,7 @@
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>
+    <bpforms:DefaultExtraDataForm/>
     <bpforms:MultiLanguageDocumentForm/>
     <bpforms:MetaDataWithoutSettingsForm/>
   </editor:items>

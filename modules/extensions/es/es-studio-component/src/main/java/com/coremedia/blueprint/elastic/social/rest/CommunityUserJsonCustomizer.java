@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.elastic.social.rest;
 
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.rest.api.JsonCustomizer;
 import com.coremedia.elastic.social.rest.api.JsonProperties;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Order(0)
 public class CommunityUserJsonCustomizer implements JsonCustomizer<CommunityUser> {
   @Override
-  public void customize(CommunityUser communityUser, Map<String, Object> serializedObject) {  // NOSONAR unused parameters
+  public void customize(CommunityUser communityUser, @PersonalData Map<String, Object> serializedObject) {  // NOSONAR unused parameters
     serializedObject.put(JsonProperties.PREVIEW_URL, null);
   }
 }

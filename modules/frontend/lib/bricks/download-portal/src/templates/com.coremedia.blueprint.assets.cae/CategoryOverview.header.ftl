@@ -17,7 +17,7 @@
 <h1 class="am-download-portal__title am-heading-1">
   ${bp.getMessage("am_download_portal")}
   <#if self.category?has_content>
-    - <span class="am-download-portal__category"<@cm.metadata data=[self.category.content, "properties.value"] />>${self.category.value!""}</span>
+    - <span class="am-download-portal__category"<@preview.metadata data=[self.category.content, "properties.value"] />>${self.category.value!""}</span>
   </#if>
 </h1>
 

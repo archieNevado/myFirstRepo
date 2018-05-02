@@ -40,13 +40,13 @@ import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATALOG;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
@@ -394,15 +394,38 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
                                                             @Nonnull StoreContext storeContext) {
     UserContext userContext = getUserContext();
 
-    SearchResult<Map<String, Object>> wcSearchResult = getCatalogWrapperService().searchProducts(
-            searchTerm, searchParams, storeContext, SearchType.SEARCH_TYPE_PRODUCT_VARIANTS, userContext);
-
     String catalogAliasStr = searchParams.get(CatalogService.SEARCH_PARAM_CATALOG_ALIAS);
     CatalogAlias catalogAlias = CatalogAlias.ofNullable(catalogAliasStr).orElseGet(storeContext::getCatalogAlias);
 
+    List<ProductVariant> searchResultList = Collections.emptyList();
+
+    Map<String, Object> wcProductMap = getCatalogWrapperService().findProductByExternalId(searchTerm, catalogAlias, storeContext, userContext);
+    if (wcProductMap != null) {
+      Product product = createProductBeanFor(wcProductMap, catalogAlias, storeContext, false);
+      if (product != null) {
+        if (product.isVariant()) {
+          searchResultList = Collections.singletonList((ProductVariant)product);
+        } else {
+          searchResultList = product.getVariants();
+        }
+      }
+    }
+
+    if (!searchResultList.isEmpty()) {
+      SearchResult<ProductVariant> result = new SearchResult<>();
+      result.setSearchResult(searchResultList);
+      result.setTotalCount(searchResultList.size());
+      result.setPageNumber(1);
+      result.setPageSize(searchResultList.size());
+      return result;
+    }
+
+    SearchResult<Map<String, Object>> wcSearchResult = getCatalogWrapperService().searchProducts(
+            searchTerm, searchParams, storeContext, SearchType.SEARCH_TYPE_PRODUCT_VARIANTS, userContext);
+
     SearchResult<ProductVariant> result = new SearchResult<>();
-    List<ProductVariant> productBeansFor = createProductBeansFor(wcSearchResult.getSearchResult(), catalogAlias, storeContext);
-    result.setSearchResult(productBeansFor);
+    searchResultList = createProductBeansFor(wcSearchResult.getSearchResult(), catalogAlias, storeContext);
+    result.setSearchResult(searchResultList);
     result.setTotalCount(wcSearchResult.getTotalCount());
     result.setPageNumber(wcSearchResult.getPageNumber());
     result.setPageSize(wcSearchResult.getPageSize());
@@ -622,12 +645,6 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
             .collect(toList());
 
     return unmodifiableList(result);
-  }
-
-  @Nonnull
-  @Override
-  public CatalogService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, CatalogService.class);
   }
 
   private static UserContext getUserContext() {

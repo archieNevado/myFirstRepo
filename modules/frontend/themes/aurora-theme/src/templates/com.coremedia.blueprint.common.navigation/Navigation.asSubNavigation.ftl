@@ -5,9 +5,9 @@
 <#assign link=cm.getLink(self!cm.UNDEFINED)/>
 <#assign navigationDepth=bp.setting(self, "livecontext.navigation.depth", 2)/>
 <#if level <= navigationDepth>
-  <a id="${idPrefix}categoryLink_${uniqueId}" href="${link}" aria-label="${self.title}" class="menuLink" role="menuitem" tabindex="-1"<#if self.content?has_content><@cm.metadata self.content /></#if>>${self.title}</a>
+  <a id="${idPrefix}categoryLink_${uniqueId}" href="${link}" aria-label="${self.title}" class="menuLink" role="menuitem" tabindex="-1"<#if self.content?has_content><@preview.metadata self.content /></#if>>${self.title}</a>
   <#list self.visibleChildren>
-  <ul class="subcategoryList" <@cm.metadata "properties.visibleChildren" />>
+  <ul class="subcategoryList" <@preview.metadata "properties.visibleChildren" />>
     <#items as child>
       <li>
         <@cm.include self=child view="asSubNavigation" params={"parentLevelId": uniqueId, "idPrefix": "sub", "level":level+1}/>

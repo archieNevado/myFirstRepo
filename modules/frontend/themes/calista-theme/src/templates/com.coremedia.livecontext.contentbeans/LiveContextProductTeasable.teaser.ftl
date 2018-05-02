@@ -8,7 +8,7 @@
 <#assign renderDimmer=cm.localParameter("renderDimmer", true) />
 <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
 
-<div class="${blockClass} ${blockClass}--product ${cssClasses}"<@cm.metadata self.content />>
+<div class="${blockClass} ${blockClass}--product ${additionalClass} ${cssClasses}"<@preview.metadata self.content />>
   <div class="${blockClass}__wrapper">
   <#-- picture -->
     <div class="picture-wrapper">
@@ -30,7 +30,7 @@
     <#-- teaser title -->
       <#if self.teaserTitle?has_content>
         <@bp.optionalLink href="${link}">
-          <h3 class="${blockClass}__headline" <@cm.metadata "properties.teaserTitle" />>
+          <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
             <span>${self.teaserTitle!""}</span>
           </h3>
         </@bp.optionalLink>
@@ -39,7 +39,7 @@
       <#if renderTeaserText>
         <#if self.teaserText?has_content>
           <#-- teaser text -->
-          <p class="${blockClass}__text" <@cm.metadata "properties.teaserText" />>
+          <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
             <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, blockClass + "-max-length", 115)) />
           </p>
         <#elseif self.product?has_content>
@@ -55,4 +55,3 @@
   </div>
 <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_TEASER />
 </div>
-

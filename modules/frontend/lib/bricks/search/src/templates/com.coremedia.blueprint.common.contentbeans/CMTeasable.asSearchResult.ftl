@@ -7,10 +7,11 @@
 <#assign teaserLength=bp.setting(cmpage, "teaser.max.length", 200)/>
 <#assign htmlDescription=bp.truncateHighlightedText((highlightedItem["htmlDescription"][0])!self.htmlDescription!"", teaserLength) />
 <#assign teaserText=bp.truncateHighlightedText((highlightedItem["teaserText"][0])!self.teaserText!"", teaserLength) />
-<#assign target=(self.target?has_content && self.target.openInNewTab)?then(' target="_blank"', "") />
+<#assign target=(self.target?has_content && self.target.openInNewTab)?then('target="_blank"', "") />
+<#assign rel=(self.target?has_content && self.target.openInNewTab)?then('rel="noopener"', "") />
 
-<div class="cm-search__item ${cssClasses}"<@cm.metadata self.content />>
-  <a href="${cm.getLink(self.target!cm.UNDEFINED)}"${target?no_esc}>
+<div class="cm-search__item ${cssClasses}"<@preview.metadata self.content />>
+  <a href="${cm.getLink(self.target!cm.UNDEFINED)}" ${target?no_esc} ${rel?no_esc}>
     <#-- image -->
     <#if self.picture?has_content>
       <@cm.include self=self.picture params={
@@ -22,16 +23,16 @@
     </#if>
     <div class="cm-search__caption">
       <#-- teaserTitle -->
-      <h3<@cm.metadata "properties.teaserTitle" />>
+      <h3<@preview.metadata "properties.teaserTitle" />>
         ${(highlightedItem["teaserTitle"][0])!self.teaserTitle}
       </h3>
       <#-- htmlDescription or teaserText -->
       <#if htmlDescription?has_content>
-        <p<@cm.metadata "properties.htmlDescription" />>
+        <p<@preview.metadata "properties.htmlDescription" />>
           <@bp.renderWithLineBreaks htmlDescription />
         </p>
       <#elseif teaserText?has_content>
-        <p<@cm.metadata "properties.teaserText" />>
+        <p<@preview.metadata "properties.teaserText" />>
           <@bp.renderWithLineBreaks teaserText />
         </p>
       </#if>

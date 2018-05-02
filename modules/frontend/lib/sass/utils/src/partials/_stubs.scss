@@ -7,3 +7,11 @@
  * @return [Sass::Script::Value::String] The result string.
  */
 @function encodeBase64($string) { /* stub */ }
+
+/**
+ * Encodes the given $string to be used as an URI component (using JavaScript function encodeURIComponent)
+ *
+ * @param $string [Sass::Script::Value::String] the string to encode
+ * @return [Sass::Script::Value::String] The result string.
+ */
+@function encodeURIComponent($string) { /* stub */ }

@@ -2,7 +2,7 @@
 <#assign items=self.items/>
 
 <#if (items?size > 0) >
-<div class="cm-container cm-collection--tiles-center" <@cm.metadata data=bp.getContainerMetadata(self) />>
+<div class="cm-container cm-collection--tiles-center" <@preview.metadata data=bp.getContainerMetadata(self) />>
     <div class="row-grid row">
         <div class="col-xs-12 col-sm-4">
             <div class="row-grid row">

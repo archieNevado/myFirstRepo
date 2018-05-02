@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMChannel folder="/Sites/Calista/Germany/German/Navigation/Microsites" name="Microsite Root Page" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../United%20States/English/Navigation/Microsites/Microsite%20Root%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Microsites/Microsite%20Root%20Page"/>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment>microsites</segment>
+<title>Microsites Versteckte Navigationsseite</title>
+<htmlTitle></htmlTitle>
+<keywords>CoreMedia, Perfect Chef, PerfectChef, Demo, Blueprint, LiveContext, CoreMedia LiveContext 3.0 für IBM WebSphere Commerce</keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<children>
+</children>
+<hidden>1</hidden>
+<hiddenInSitemap>1</hiddenInSitemap>
+<javaScript>
+</javaScript>
+<css>
+</css>
+<theme>
+</theme>
+<placement>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<StructProperty Name="placements">
+<Struct>
+</Struct>
+</StructProperty>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_"/>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+</StructListProperty>
+</Struct>
+</placement>
+<header>
+</header>
+<footer>
+</footer>
+</CMChannel>

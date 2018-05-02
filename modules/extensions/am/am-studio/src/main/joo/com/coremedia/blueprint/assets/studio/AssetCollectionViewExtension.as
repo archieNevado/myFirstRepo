@@ -76,12 +76,12 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
   override public function applySearchParameters(folder:Content, filterQueryFragments:Array, searchParameters:SearchParameters):SearchParameters {
     var assetDocTypeNames:Array = AssetDoctypeUtil.getAllAssetContentTypeNames();
 
-    var docTypeExclusions:Array = editorContext.getDocumentTypesExcludedFromSearchResult().filter(
+    var docTypeExclusions:Array = editorContext.getContentTypesExcludedFromSearchResult().filter(
             function (docType:String):Boolean {
               return assetDocTypeNames.indexOf(docType) === -1;
             });
 
-    var excludeDoctypesQuery:String = SearchQueryUtil.buildExcludeDocumentTypesQuery(docTypeExclusions);
+    var excludeDoctypesQuery:String = SearchQueryUtil.buildExcludeContentTypesQuery(docTypeExclusions);
     searchParameters.filterQuery = [filterQueryFragments.join(" AND ")];
     searchParameters.filterQuery.push(excludeDoctypesQuery);
 

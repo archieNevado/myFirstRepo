@@ -6,6 +6,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.TimeZone;
@@ -41,6 +42,7 @@ public class StoreInfoService {
     return commerceCache.get(storeInfoCacheKey);
   }
 
+  @Nonnull
   public TimeZone getTimeZone() {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     String sTimeZoneId = DataMapHelper.findStringValue(storeInfos, "serverTimezoneId").orElse(null);

@@ -7,7 +7,7 @@
   }
 } />
 
-<div class="am-category-teaser am-category-teaser--dimmer" data-am-category-id="${self.contentId}"<@cm.metadata data=self.content />>
+<div class="am-category-teaser am-category-teaser--dimmer" data-am-category-id="${self.contentId}"<@preview.metadata data=self.content />>
   <a <@cm.dataAttribute name="data-hash-based-fragment-link" data=linkData />>
     <#-- picture -->
     <@cm.include self=self view="asPictureBox" params={"classBox": "am-category-teaser__picture-box", "classImage": "am-category-teaser__picture", "scalePicture": true}  />

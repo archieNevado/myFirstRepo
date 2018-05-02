@@ -1,6 +1,3 @@
 @import "variables/default-teaser";
 @import "variables/default-teaser-overlay";
-@import "~@coremedia/brick-responsive-images/src/sass/variables";
-@import "~@coremedia/brick-cta/src/sass/variables";
-@import "~@coremedia/brick-bootstrap/src/sass/variables";
-@import "~@coremedia/sass-utils/src/variables";
+@import "?smart-import-variables";

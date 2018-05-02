@@ -8,7 +8,7 @@
 <root>
 <link href="Calista.xml" path="/Sites/Calista/United%20States/English/Navigation/Calista"/>
 </root>
-<siteManagerGroup>manager-en-US</siteManagerGroup>
+<siteManagerGroup>manager-calista-en-US</siteManagerGroup>
 <linkedSettings>
 <link href="../Options/Settings/SiteSettings.xml" path="/Sites/Calista/United%20States/English/Options/Settings/SiteSettings"/>
 </linkedSettings>

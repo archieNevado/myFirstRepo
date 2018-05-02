@@ -8,7 +8,7 @@
 <#assign limitAspectRatiosKey="default_aspect_ratios_for_" + cm.localParameter("limitAspectRatiosKey", "teaser") />
 <#assign limitAspectRatios=cm.localParameter("limitAspectRatios", bp.setting(cmpage.navigation, limitAspectRatiosKey, [])) />
 
-<div class="cm-lightbox cm-lightbox--inline ${classBox}" data-cm-popup-class="cm-spinner--popup ${classBox}" <@cm.metadata self.content />>
+<div class="cm-lightbox cm-lightbox--inline ${classBox}" data-cm-popup-class="cm-spinner--popup ${classBox}" <@preview.metadata self.content />>
   <#-- inline -->
   <#if (self.sequence![])?size gt 2>
     <div class="cm-teaser cm-teaser--spinner cm-spinner">

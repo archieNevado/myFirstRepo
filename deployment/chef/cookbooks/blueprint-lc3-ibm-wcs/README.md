@@ -17,7 +17,7 @@ To enable WCS deployment overwrite the default roles with the ones found here be
 * blueprint-base
 * blueprint-tomcat
 * blueprint-proxy
-* coremedia-proxy (~> 0.3.2)
+* coremedia-proxy (~> 1.0.0)
 
 # Attributes
 
@@ -37,7 +37,7 @@ To enable WCS deployment overwrite the default roles with the ones found here be
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']['default']['host']` -  Defaults to `node['blueprint']['lc3-ibm-wcs']['cms_host']`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']['default']['port']` -  Defaults to `42180`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['context']` -  Defaults to `blueprint`.
-* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['server_name']` -  Defaults to `helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['server_aliases']` -  Defaults to `[ ... ]`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['default_site']` -  Defaults to `aurora`.
@@ -48,11 +48,11 @@ To enable WCS deployment overwrite the default roles with the ones found here be
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['calista']['site_id']` -  Defaults to `ced8921aa7b7f9b736b90e19afc2dd2a`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['server_name']` -  Defaults to `shop-helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['server_aliases']` -  Defaults to `[ ... ]`.
-* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['server_name']` -  Defaults to `shop-preview-production-helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['time_travel_alias']` -  Defaults to `shop-preview-helios.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['server_aliases']` -  Defaults to `[ ... ]`.
-* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['server_aliases']['lc3-ibm-wcs']` -  Defaults to `preview-fragment.supplier.blueprint-box.vagrant`.
 
 # Recipes

@@ -14,7 +14,6 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERS
 
 public class IbmTestConfig implements TestConfig {
 
-  private static final String STORE_CONFIG_ID = System.getProperty("lc.test.configID", "aurora");
   private static final String STORE_ID = System.getProperty("lc.test.storeId", "10201");
   static final String STORE_NAME = System.getProperty("lc.test.storeName", "AuroraESite");
   private static final String B2B_STORE_ID = System.getProperty("lc.test.storeId", "10303");
@@ -56,12 +55,12 @@ public class IbmTestConfig implements TestConfig {
     }
   }
 
-  public static final StoreContext STORE_CONTEXT_WITH_WORKSPACE = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+  public static final StoreContext STORE_CONTEXT_WITH_WORKSPACE = StoreContextHelper.createContext(STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
   {
     STORE_CONTEXT_WITH_WORKSPACE.setWorkspaceId(WORKSPACE_ID);
   }
 
-  public static final StoreContext STORE_CONTEXT_WITHOUT_CATALOG_ID = StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, null, LOCALE, CURRENCY);
+  public static final StoreContext STORE_CONTEXT_WITHOUT_CATALOG_ID = StoreContextHelper.createContext(STORE_ID, STORE_NAME, null, LOCALE, CURRENCY);
   {
     STORE_CONTEXT_WITH_WORKSPACE.setWorkspaceId(WORKSPACE_ID);
   }
@@ -91,11 +90,11 @@ public class IbmTestConfig implements TestConfig {
   private StoreContext createInitialStoreContext(@Nullable String currency) {
     switch (wcsVersion) {
       case WCS_VERSION_8_0:
-        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, currency);
+        return StoreContextHelper.createContext(STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, currency);
       case WCS_VERSION_7_8:
-        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, currency);
+        return StoreContextHelper.createContext(STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, currency);
       default:
-        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, currency);
+        return StoreContextHelper.createContext(STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, currency);
     }
   }
 
@@ -132,11 +131,11 @@ public class IbmTestConfig implements TestConfig {
   private StoreContext createInitialB2BStoreContext() {
     switch (wcsVersion) {
       case WCS_VERSION_8_0:
-        return StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
+        return StoreContextHelper.createContext(B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
       case WCS_VERSION_7_8:
-        return StoreContextHelper.createContext(STORE_CONFIG_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
+        return StoreContextHelper.createContext(B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
       default:
-        return StoreContextHelper.createContext(STORE_CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+        return StoreContextHelper.createContext(STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
     }
   }
 

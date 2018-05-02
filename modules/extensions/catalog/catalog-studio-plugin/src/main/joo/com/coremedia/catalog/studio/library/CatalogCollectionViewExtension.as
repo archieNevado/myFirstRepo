@@ -27,7 +27,7 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
   }
 
   protected static const ALL_TYPE_RECORD:Object = {
-    name: ContentTypeNames.DOCUMENT,
+    name: ContentTypeNames.CONTENT,
     label: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Catalog_show_all'),
     icon: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'All_icon')
   };
@@ -82,13 +82,13 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
     searchParameters.folder = null;
 
     //re-apply doctype filtering without catalog doctypes
-    var docTypeExclusions:Array = editorContext.getDocumentTypesExcludedFromSearchResult().filter(
+    var docTypeExclusions:Array = editorContext.getContentTypesExcludedFromSearchResult().filter(
             function (excludedDocType:String):Boolean {
               return excludedDocType !== CatalogTreeRelation.CONTENT_TYPE_CATEGORY &&
                       excludedDocType !== CatalogTreeRelation.CONTENT_TYPE_PRODUCT
             });
 
-    var excludeDoctypesQuery:String = SearchQueryUtil.buildExcludeDocumentTypesQuery(docTypeExclusions);
+    var excludeDoctypesQuery:String = SearchQueryUtil.buildExcludeContentTypesQuery(docTypeExclusions);
     searchParameters.filterQuery = [filterQueryFragments.join(" AND ")];
     searchParameters.filterQuery.push(excludeDoctypesQuery);
 

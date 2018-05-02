@@ -1,13 +1,12 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +16,13 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class WebCommerceContextInterceptorTest {
 
   @Mock
@@ -34,29 +34,25 @@ public class WebCommerceContextInterceptorTest {
   @Mock
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
-  @Mock
-  private CommerceConnection connection;
+  private BaseCommerceConnection connection;
 
-  private WebCommerceContextInterceptor testling = new WebCommerceContextInterceptor();
-  private MockCommerceEnvBuilder envBuilder;
+  private WebCommerceContextInterceptor testling;
 
   @Before
   public void setup() {
-    envBuilder = MockCommerceEnvBuilder.create();
-    connection = envBuilder.setupEnv();
-    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
+    testling = new WebCommerceContextInterceptor();
+    StoreContext storeContext = newStoreContext();
+
+    connection = new BaseCommerceConnection();
+    connection.setStoreContext(storeContext);
+    CurrentCommerceConnection.set(connection);
+
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(this.connection));
 
     testling.setSiteResolver(siteLinkHelper);
     testling.setInitUserContext(false);
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
     testling.setPreview(false);
-
-    when(siteLinkHelper.findSiteBySegment("helios")).thenReturn(site);
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
   }
 
   // --- test base class features -----------------------------------

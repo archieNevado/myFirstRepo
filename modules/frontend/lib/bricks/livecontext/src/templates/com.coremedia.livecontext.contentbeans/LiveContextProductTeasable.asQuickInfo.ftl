@@ -25,7 +25,7 @@
   <#assign quickInfoData=quickInfoData + {"group": quickInfoGroup!""} />
 </#if>
 
-<div id="${quickInfoId!bp.generateId("quickinfo")}" class="cm-quickinfo <#if !overlay.displayPicture>cm-quickinfo--no-image</#if> ${classQuickInfo!""}" <@cm.dataAttribute name="data-cm-quickinfo" data=quickInfoData /><@cm.metadata (metadata![]) + [self.content] />>
+<div id="${quickInfoId!bp.generateId("quickinfo")}" class="cm-quickinfo <#if !overlay.displayPicture>cm-quickinfo--no-image</#if> ${classQuickInfo!""}" <@cm.dataAttribute name="data-cm-quickinfo" data=quickInfoData /><@preview.metadata (metadata![]) + [self.content] />>
 
   <#-- image -->
   <#if overlay.displayPicture>
@@ -51,7 +51,7 @@
       <#-- teaserTitle -->
       <div class="cm-quickinfo__header">
         <#if showTitle>
-          <h5 class="cm-quickinfo__title cm-heading5"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
+          <h5 class="cm-quickinfo__title cm-heading5"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
         </#if>
         <#-- close button -->
         <@bp.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
@@ -65,7 +65,7 @@
       </#if>
       <#-- teaserText -->
       <#if showTeaserText>
-        <div class="cm-quickinfo__text"<@cm.metadata "properties.teaserText" />>
+        <div class="cm-quickinfo__text"<@preview.metadata "properties.teaserText" />>
           <#-- strip wrong <p/> tags from ecommerce, happens in hybris -->
           <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", 175)?replace("&lt;p&gt;", "")?replace("&lt;/p&gt;", "") />
         </div>

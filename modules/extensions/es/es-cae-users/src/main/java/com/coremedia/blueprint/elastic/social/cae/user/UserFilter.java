@@ -3,6 +3,7 @@ package com.coremedia.blueprint.elastic.social.cae.user;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
@@ -86,7 +87,7 @@ public class UserFilter implements Filter {
   }
 
   @Nullable
-  public CommunityUser getUser(Object principal) {
+  public CommunityUser getUser(@PersonalData Object principal) {
     if (principal instanceof String) {
       CommunityUser user = communityUserService.getUserByName((String) principal);
       if (user != null) {

@@ -5,6 +5,7 @@
                            xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
                            xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
                            xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                           xmlns:ui="exml:com.coremedia.ui.config"
                            title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Teaser_label')}"
                            itemId="teaserDocumentForm"
                            collapsed="true"
@@ -41,14 +42,26 @@
                                        settingsPath="{TeaserOverlayConstants.DEFAULT_SETTINGS_PATH}"
                                        styleDescriptorFolderPaths="{TeaserOverlayConstants.DEFAULT_STYLE_DESCRIPTOR_FOLDER_PATHS}"/>
     <editor:LinkListPropertyField propertyName="{PICTURE_PROPERTY_NAME}"
-                                  showThumbnails="true"
-                                  maxCardinality="1">
+                                  showThumbnails="true">
       <editor:additionalToolbarItems>
         <TbSeparator/>
         <bpb-components:QuickCreateToolbarButton contentType="CMPicture"
                                                  propertyName="{PICTURE_PROPERTY_NAME}"
                                                  bindTo="{config.bindTo}"/>
       </editor:additionalToolbarItems>
+      <editor:fields>
+        <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                      ifUnreadable=""
+                      mapping=""
+                      convert_="{ValidityColumn.convert}"/>
+      </editor:fields>
+      <editor:columns>
+        <editor:ThumbnailColumn/>
+        <editor:TypeIconColumn/>
+        <editor:NameColumn flex="1"/>
+        <bpforms:ValidityColumn/>
+        <editor:StatusColumn/>
+      </editor:columns>
     </editor:LinkListPropertyField>
     <bpforms:CallToActionConfigurationForm useLegacyCTASettings="true"/>
   </editor:items>

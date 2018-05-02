@@ -70,6 +70,8 @@
       padding: 8px;
       background-color: #FFFFFF;
       border: 1px solid #000000;
+      max-height: calc(100vh - 100px);
+      overflow-y: scroll;
       
       // do not display the cart popup on mobile since a click 
       // on the icon will not open the overlay, but lead you to the cart page.

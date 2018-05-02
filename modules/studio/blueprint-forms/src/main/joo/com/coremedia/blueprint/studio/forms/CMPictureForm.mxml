@@ -66,6 +66,7 @@
         <media:MetaDataDocumentForm propertyName="data"
                                     metadataSectionName="exif"
                                     label="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'Meta_data_exif')}"/>
+        <bpforms:SEOForm bindTo="{config.bindTo}"/>
       </editor:items>
     </editor:DocumentForm>
     <bpforms:MultiLanguageDocumentForm/>

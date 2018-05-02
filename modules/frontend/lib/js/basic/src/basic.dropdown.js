@@ -22,7 +22,7 @@ export const EVENT_DROPDOWN_CHANGED = EVENT_PREFIX + "dropdownChanged";
 /**
  * Sets the state of an menu or menu item
  *
- * @param {object} item menu or menu item
+ * @param {Object} item menu or menu item
  * @param {string} state "opened", "sub-opened" or ""
  */
 export function setState(item, state) {
@@ -63,14 +63,14 @@ export function open(menu) {
   // Full reset
 
   // remove open or sub-open from all menus
-  $root.find("." + classMenu).each(function () {
+  $root.find("." + classMenu).each(function() {
     setState(this, "");
   });
 
   const $items = $root.find("." + classItem);
 
   // remove open or sub-open from all menu items
-  $items.each(function () {
+  $items.each(function() {
     setState(this, "");
   });
 
@@ -78,41 +78,49 @@ export function open(menu) {
   $items.addClass(classItemLeaf);
 
   // set open for all openclose buttons having submenu (there can be more than one dropdown-menu-openclose per menu)
-  $items.has("." + classMenu).find("." + classButton + ":first").each(function () {
-    const $item = $(this).parent(":first");
+  $items
+    .has("." + classMenu)
+    .find("." + classButton + ":first")
+    .each(function() {
+      const $item = $(this).parent(":first");
 
-    // indicate that item is no leaf
-    $item.removeClass(classItemLeaf);
+      // indicate that item is no leaf
+      $item.removeClass(classItemLeaf);
 
-    $item.children("." + classButton).each(function () {
-      const $this = $(this);
-      $this.removeClass(additionalClassButtonClose);
-      $this.removeClass(classButtonClose);
-      $this.addClass(classButtonOpen);
-      $this.addClass(additionalClassButtonOpen);
+      $item.children("." + classButton).each(function() {
+        const $this = $(this);
+        $this.removeClass(additionalClassButtonClose);
+        $this.removeClass(classButtonClose);
+        $this.addClass(classButtonOpen);
+        $this.addClass(additionalClassButtonOpen);
+      });
     });
-  });
 
   setState(menu, "opened");
 
   // set sub-opened to all parent menus
-  $menu.parents("." + classMenu).each(function () {
+  $menu.parents("." + classMenu).each(function() {
     setState(this, "sub-opened");
   });
 
   // set sub-opened to all parent menu items
   // set close to openclose buttons of menu item
-  $menu.parents("." + classItem).each(function () {
+  $menu.parents("." + classItem).each(function() {
     setState(this, "sub-opened");
-    $(this).find("." + classButton + ":first").each(function () {
-      $(this).parent(":first").children("." + classButton).each(function () {
-        const $this = $(this);
-        $this.removeClass(additionalClassButtonOpen);
-        $this.removeClass(classButtonOpen);
-        $this.addClass(classButtonClose);
-        $this.addClass(additionalClassButtonClose);
+    $(this)
+      .find("." + classButton + ":first")
+      .each(function() {
+        $(this)
+          .parent(":first")
+          .children("." + classButton)
+          .each(function() {
+            const $this = $(this);
+            $this.removeClass(additionalClassButtonOpen);
+            $this.removeClass(classButtonOpen);
+            $this.addClass(classButtonClose);
+            $this.addClass(additionalClassButtonClose);
+          });
       });
-    });
   });
 
   // set opened to parent menu item if menu is not the root menu
@@ -126,7 +134,7 @@ export function open(menu) {
 /**
  * Closes the delivered menu.
  *
- * @param {object} menu The menu to be closed
+ * @param {Object} menu The menu to be closed
  */
 export function close(menu) {
   const parent = menu.parents("." + classMenu + ":first");
@@ -137,7 +145,7 @@ export function close(menu) {
 /**
  * Initializes a dropdown menu
  *
- * @param {object} menu The menu to be initialized
+ * @param {Object} menu The menu to be initialized
  */
 export function init(menu) {
   const $menu = $(menu);
@@ -156,17 +164,19 @@ export function init(menu) {
   }
 
   // every menu items get an openclose button (initialized with no action to be performed)
-  $menu.find("." + classItem).prepend("<button class=\"" + classButton + "\"></button>");
+  $menu
+    .find("." + classItem)
+    .prepend('<button class="' + classButton + '"></button>');
 
   // recursively add levels
-  const addLevel = function (menu, level) {
+  const addLevel = function(menu, level) {
     const $menu = $(menu);
     $menu.addClass(classMenuLevel + level);
     for (let i = 1; i <= level; i++) {
       $menu.addClass(classMenuMinLevel + i);
     }
     const $items = $menu.children("." + classItem);
-    $items.each(function () {
+    $items.each(function() {
       const $item = $(this);
       $item.addClass(classItemLevel + level);
       for (let i = 1; i <= level; i++) {
@@ -174,14 +184,14 @@ export function init(menu) {
       }
 
       // min 0, max 1
-      $item.children("." + classButton).each(function () {
+      $item.children("." + classButton).each(function() {
         const $button = $(this);
         $button.addClass(classButtonLevel + level);
         for (let i = 1; i <= level; i++) {
           $button.addClass(classButtonMinLevel + i);
         }
       });
-      $item.children("." + classMenu).each(function () {
+      $item.children("." + classMenu).each(function() {
         addLevel(this, level + 1);
       });
     });
@@ -192,9 +202,11 @@ export function init(menu) {
   open(menu);
 
   // bind click-listener to openclose button
-  $menu.find("." + classButton).bind("click", function () {
+  $menu.find("." + classButton).bind("click", function() {
     const $this = $(this);
-    const $parent = $(this).closest("." + classItem).find("." + classMenu + ":first");
+    const $parent = $(this)
+      .closest("." + classItem)
+      .find("." + classMenu + ":first");
     if ($this.hasClass(classButtonOpen)) {
       open($parent);
     } else if ($this.hasClass(classButtonClose)) {
@@ -204,11 +216,14 @@ export function init(menu) {
   });
 
   // bind delegation from empty link to openclose button
-  $menu.find("." + classItem + " > a").each(function () {
+  $menu.find("." + classItem + " > a").each(function() {
     const $this = $(this);
     if (!$this.attr("href")) {
-      $this.bind("click", function () {
-        $this.closest("." + classItem).find("." + classButton + ":first").trigger("click");
+      $this.bind("click", function() {
+        $this
+          .closest("." + classItem)
+          .find("." + classButton + ":first")
+          .trigger("click");
         return false;
       });
     }

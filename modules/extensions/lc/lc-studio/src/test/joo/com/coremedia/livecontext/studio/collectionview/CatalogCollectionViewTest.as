@@ -8,6 +8,7 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchArea;
+import com.coremedia.cms.editor.sdk.desktop.ComponentBasedEntityWorkAreaTabType;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -99,6 +100,10 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
     editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT));
     editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT_VARIANT));
 
+    // For the sake of the test, let's assume everything can be opened in a tab.
+    // Cleaner alternative: Register all tab types.
+    ComponentBasedEntityWorkAreaTabType.canBeOpenedInTab = function ():Boolean {return true};
+
     QtipUtil.registerQtipFormatter();
   }
 
@@ -134,6 +139,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
             waitUntilProductVariantIsLoadedInSearchList(),
             waitUntilCatalogSearchListIsLoadedAndNotEmpty(2, HERMITAGE_RUCHED_BODICE_COCKTAIL_DRESS),
             //now test that the variant search is hidden on product variants themselves
+            selectFirstItemOfSearchList(),
             openContextMenuOnFirstItemOfSearchList(),
             waitUntilSearchListContextMenuOpened(),
             waitUntilSearchProductVariantToolbarButtonIsHidden(),
@@ -497,10 +503,28 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
 
   }
 
-  private function openContextMenuOnFirstItemOfSearchList():Step {
+  private function selectFirstItemOfSearchList():Step {
     return new Step("Open Context Menu on the first item of the searhc list",
             function ():Boolean {
               return true;
+            },
+            function ():void {
+              var sm:RowSelectionModel = getSearchList().getSelectionModel() as RowSelectionModel;
+              sm.select(0);
+            }
+    );
+
+  }
+
+  private function openContextMenuOnFirstItemOfSearchList():Step {
+    return new Step("Open Context Menu on the first item of the searhc list",
+            function ():Boolean {
+              var contextMenu:CatalogSearchContextMenu = ComponentManager.getAll().filter(function (component:Component):Boolean {
+                return component.isXType(CatalogSearchContextMenu.xtype);
+              })[0] as CatalogSearchContextMenu;
+              return contextMenu.itemCollection.getRange().some(function (item:Item):Boolean {
+                return !!item.baseAction && !item.isHidden();
+              })
             },
             function ():void {
               openContextMenu(getSearchList(), 0);
@@ -534,8 +558,6 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
       },
       type: ContextMenuEventAdapter.EVENT_NAME
     });
-    var sm:RowSelectionModel = grid.getSelectionModel() as RowSelectionModel;
-    sm.select(row);
     grid.fireEvent("rowcontextmenu", grid, null, null, row, event);
   }
 

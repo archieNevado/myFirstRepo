@@ -20,10 +20,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.emptyMap;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -89,55 +90,72 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
    * into a JSON map. The JSON is passed to the CoreMedia Content Widget and is
    * used to evaluate the corresponding JSP that is used to generate the link on commerce site.
    * Additional values, like SEO segments are already evaluated here so that the JSP can process them.
-   *
+   * <p>
    * The JSP on the commerce site will be determined by the KEY_OBJECT_TYPE and KEY_RENDER_TYPE, e.g.
    * for a ProductTeaser or a ProductInSite object the KEY_OBJECT_TYPE is "product" and the KEY_RENDER_TYPE value
    * is "url", result in the template "Product.url.jsp".
    *
+   * @param source     source link
    * @param bean       Bean for which URL is to be rendered
    * @param variant    Link variant
    * @param navigation Current navigation of bean for which URL is to be rendered
    * @param request    the request
    * @return The JSON object send to commerce.
+   * @throws JSONException if something JSON-related goes wrong
    */
   @Override
-  protected JSONObject resolveUrlInternal(Object bean, String variant, CMNavigation navigation, HttpServletRequest request) throws JSONException {
+  protected JSONObject resolveUrlInternal(String source, Object bean, String variant, CMNavigation navigation,
+                                          HttpServletRequest request) {
     JSONObject out = new JSONObject();
     out.put(KEY_RENDER_TYPE, RENDER_TYPE_URL);
 
     try {
       // Product
-      if (bean instanceof CMProductTeaser || bean instanceof LiveContextExternalProduct || bean instanceof ProductInSite || bean instanceof Product) {
+      if (bean instanceof CMProductTeaser
+              || bean instanceof LiveContextExternalProduct
+              || bean instanceof ProductInSite
+              || bean instanceof Product) {
         Product product;
         // Todo: mbi better logging
         if (bean instanceof CMProductTeaser) {
-          product = ((CMProductTeaser) bean).getProduct();
+          CMProductTeaser productTeaser = (CMProductTeaser) bean;
+
+          product = productTeaser.getProduct();
+
           if (product == null) {
-            throw new IllegalArgumentException("Product cannot be retrieved (product teaser: " + ((CMProductTeaser) bean).getContent().getPath() + ")");
+            throw new IllegalArgumentException(
+                    "Product cannot be retrieved (product teaser: " + productTeaser.getContent().getPath() + ")");
           }
         } else if (bean instanceof LiveContextExternalProduct) {
-          product = ((LiveContextExternalProduct) bean).getProduct();
+          LiveContextExternalProduct lcExternalProduct = (LiveContextExternalProduct) bean;
+
+          product = lcExternalProduct.getProduct();
+
           if (product == null) {
-            throw new IllegalArgumentException("Product cannot be retrieved (augmented Product: " + ((LiveContextExternalProduct) bean).getContent().getPath()  + ")");
+            throw new IllegalArgumentException(
+                    "Product cannot be retrieved (augmented Product: " + lcExternalProduct.getContent().getPath() + ")");
           }
         } else if (bean instanceof ProductInSite) {
-          product = ((ProductInSite) bean).getProduct();
+          ProductInSite productInSite = (ProductInSite) bean;
+
+          product = productInSite.getProduct();
+
           if (product == null) {
-            throw new IllegalArgumentException("Product cannot be retrieved (in site: " + ((ProductInSite) bean).getSite() + ")");
+            throw new IllegalArgumentException("Product cannot be retrieved (in site: " + productInSite.getSite() + ")");
           }
         } else {
           product = (Product) bean;
         }
 
-        //set type and id
+        // Set type and id.
         out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_PRODUCT);
         out.put(PRODUCT_ID, product.getExternalTechId());
 
-        //determine the category id too, since a product can be inside different categories
+        // Determine the category id, too, since a product can be in multiple categories.
         Category category = product.getCategory();
         if (category != null) {
           List<Category> breadcrumb = product.getCategory().getBreadcrumb();
-          Category parentCategory = (breadcrumb.size() > 0) ? Lists.reverse(breadcrumb).get(0) : null;
+          Category parentCategory = !breadcrumb.isEmpty() ? Lists.reverse(breadcrumb).get(0) : null;
           if (parentCategory != null) {
             String categoryId = parentCategory.getExternalTechId();
             out.put(CATEGORY_ID, categoryId);
@@ -151,70 +169,91 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
           category = ((LiveContextNavigation) bean).getCategory();
         } else if (bean instanceof CategoryInSite) {
           category = ((CategoryInSite) bean).getCategory();
+
           if (category == null) {
-            throw new IllegalArgumentException("Category cannot be retrieved (in site: " + ((CategoryInSite) bean).getSite() + ")");
+            throw new IllegalArgumentException(
+                    "Category cannot be retrieved (in site: " + ((CategoryInSite) bean).getSite() + ")");
           }
         } else {
           category = (Category) bean;
         }
 
         if (category != null) {
-          int level = category.getBreadcrumb().size();
-          if (level > 3) {
-            level = 3;
-          }
-
-          //determine type and id
-          out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_CATEGORY);
-          out.put(CATEGORY_ID, category.getExternalTechId());
-          out.put(LEVEL, level);
-          if (level >= 2) {
-            out.put(TOP_CATEGORY_ID, category.getBreadcrumb().get(0).getExternalTechId());
-          }
-          if (level >= 3) {
-            Category parent = category.getParent();
-            out.put(PARENT_CATEGORY_ID, parent != null ? parent.getExternalTechId() : category.getExternalTechId());
-          }
+          processCategory(category, out);
         }
-      }
-      else if (bean instanceof CMExternalPage) {
+      } else if (bean instanceof CMExternalPage) {
         CMExternalPage externalChannel = (CMExternalPage) bean;
-        out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_LC_PAGE);
-        if (isNotEmpty(externalChannel.getExternalUriPath())) {
-          //pass the fully qualified url to shop system
-          out.put(EXTERNAL_URI_PATH_PARAMETER_NAME,
-                  externalNavigationHandler.buildLinkForExternalPage(externalChannel, Collections.emptyMap(), request));
-        } else {
-          out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalChannel.getExternalId());
-        }
+        processExternalPage(externalChannel, request, out);
       }
       // Content
       else if (bean instanceof CMObject) {
         CMObject contentBean = (CMObject) bean;
-        String contentId = ExternalReferenceResolver.CONTENT_ID_FRAGMENT_PREFIX + navigation.getContentId() + "-" + contentBean.getContentId();
-
-        //set type and id
-        out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_CONTENT);
-        out.put(CONTENT_ID, contentId);
-
-        // read url prefix for coremedia content
-        if (commerceLedLinkBuilderHelper.isCommerceLedChannel(contentBean)) {
-          String contentURLKeyword = commerceLedLinkBuilderHelper.getContentURLKeyword();
-          if (StringUtils.isNotBlank(contentURLKeyword)) {
-            out.put("staticContentURLKeyword", contentURLKeyword);
-          }
-        }
-
-        // SEO Segments
-        String externalSeoSegment = seoSegmentBuilder.asSeoSegment(navigation, contentBean);
-        if (StringUtils.isNotBlank(externalSeoSegment)) {
-          out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalSeoSegment);
-        }
+        processContent(contentBean, navigation, out);
       }
     } catch (Exception e) {
       LOG.error("Error creating placeholder JSON representation", e);
     }
 
     return out;
+  }
+
+  private static void processCategory(@Nonnull Category category, @Nonnull JSONObject out) {
+    List<Category> breadcrumbPath = category.getBreadcrumb();
+
+    int level = breadcrumbPath.size();
+    if (level > 3) {
+      level = 3;
+    }
+
+    // Determine type and id.
+    out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_CATEGORY);
+    out.put(CATEGORY_ID, category.getExternalTechId());
+
+    out.put(LEVEL, level);
+
+    if (level >= 2) {
+      out.put(TOP_CATEGORY_ID, breadcrumbPath.get(0).getExternalTechId());
+    }
+
+    if (level >= 3) {
+      Category parent = category.getParent();
+      out.put(PARENT_CATEGORY_ID, parent != null ? parent.getExternalTechId() : category.getExternalTechId());
+    }
+  }
+
+  private void processExternalPage(@Nonnull CMExternalPage externalChannel, HttpServletRequest request,
+                                   @Nonnull JSONObject out) {
+    out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_LC_PAGE);
+
+    if (isNotEmpty(externalChannel.getExternalUriPath())) {
+      // Pass fully qualified URL to shop system.
+      out.put(EXTERNAL_URI_PATH_PARAMETER_NAME,
+              externalNavigationHandler.buildLinkForExternalPage(externalChannel, emptyMap(), request));
+    } else {
+      out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalChannel.getExternalId());
+    }
+  }
+
+  private void processContent(@Nonnull CMObject contentBean, @Nonnull CMNavigation navigation, @Nonnull JSONObject out) {
+    String contentId = ExternalReferenceResolver.CONTENT_ID_FRAGMENT_PREFIX + navigation.getContentId()
+            + "-" + contentBean.getContentId();
+
+    // Set type and id.
+    out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_CONTENT);
+    out.put(CONTENT_ID, contentId);
+
+    // Read URL prefix for CoreMedia content.
+    if (commerceLedLinkBuilderHelper.isCommerceLedChannel(contentBean)) {
+      String contentURLKeyword = commerceLedLinkBuilderHelper.getContentURLKeyword();
+      if (StringUtils.isNotBlank(contentURLKeyword)) {
+        out.put("staticContentURLKeyword", contentURLKeyword);
+      }
+    }
+
+    // SEO segments
+    String externalSeoSegment = seoSegmentBuilder.asSeoSegment(navigation, contentBean);
+    if (StringUtils.isNotBlank(externalSeoSegment)) {
+      out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalSeoSegment);
+    }
   }
 }

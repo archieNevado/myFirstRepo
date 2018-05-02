@@ -6,7 +6,6 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cap.themeimporter.ThemeImporterResult;
 import com.coremedia.mimetype.TikaMimeTypeService;
 import org.apache.commons.io.IOUtils;
@@ -16,45 +15,40 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ThemeImporterImplTest.LocalConfig.class)
+@Configuration
+@ComponentScan("com.coremedia.cap.common.xml")
+@Import(XmlRepoConfiguration.class)
+@TestPropertySource(properties = {
+        "repository.params.contentschemaxml=classpath:framework/doctypes/blueprint/blueprint-doctypes.xml"
+
+})
+@ContextConfiguration(classes = ThemeImporterImplTest.class)
 public class ThemeImporterImplTest {
+
   private static final String THEMES = "/Themes";
+
   @SuppressWarnings("SpringJavaAutowiringInspection")
   @Inject
   private CapConnection capConnection;
-
-  @Configuration
-  @Import(XmlRepoConfiguration.class)
-  public static class LocalConfig {
-    @Bean
-    @Scope(SCOPE_SINGLETON)
-    public XmlUapiConfig xmlUapiConfig() {
-      return XmlUapiConfig.builder().withContentTypes("classpath:framework/doctypes/blueprint/blueprint-doctypes.xml").build();
-    }
-  }
 
   @Mock
   private LocalizationService localizationService;
@@ -78,17 +72,19 @@ public class ThemeImporterImplTest {
   }
 
   @Test
-  public void extractFromZip() throws Exception {
+  public void extractFromZip() {
     String corporateThemePath = THEMES + "/corporate/Corporate Theme";
 
-    ThemeImporterResult themeImporterResult = themeImporter.importThemes(THEMES, Collections.singletonList(corporateTheme), true, true);
-    assertTrue(themeImporterResult.isSuccessful());
-    assertTrue(themeImporterResult.getFailedPaths().isEmpty());
+    ThemeImporterResult themeImporterResult = themeImporter.importThemes(THEMES, singletonList(corporateTheme), true, true);
+
+    assertThat(themeImporterResult.isSuccessful()).isTrue();
+    assertThat(themeImporterResult.getFailedPaths()).isEmpty();
     assertThat(themeImporterResult.getUpdatedContents().keySet(),
             CoreMatchers.hasItems(CoreMatchers.startsWith(corporateThemePath)));
 
     Content corporateTheme = capConnection.getContentRepository().getChild(corporateThemePath);
-    assertNotNull(corporateTheme);
+
+    assertThat(corporateTheme).isNotNull();
     checkLinkList(corporateTheme, "css", 1);
     checkLinkList(corporateTheme, "javaScripts", 16);
     checkLinkList(corporateTheme, "javaScriptLibs", 6);
@@ -99,7 +95,7 @@ public class ThemeImporterImplTest {
   }
 
   @Test
-  public void cleanAndExtractFromZip() throws Exception {
+  public void cleanAndExtractFromZip() {
     ContentRepository contentRepository = capConnection.getContentRepository();
 
     String testPathCleaned = THEMES + "/corporate/x";
@@ -108,30 +104,29 @@ public class ThemeImporterImplTest {
     String testPathNotCleaned = THEMES + "/cawporate/x";
     Content testDocumentNotCleaned = contentRepository.getContentType("CMCSS").create(contentRepository.getRoot(), testPathNotCleaned);
 
-    ThemeImporterResult themeImporterResult = themeImporter.importThemes(THEMES, Collections.singletonList(corporateTheme), true, true);
-    assertTrue(testDocumentCleaned.isDeleted());
-    assertFalse(testDocumentNotCleaned.isDeleted());
-    assertTrue(themeImporterResult.isSuccessful());
+    ThemeImporterResult themeImporterResult = themeImporter.importThemes(THEMES, singletonList(corporateTheme), true, true);
+    assertThat(testDocumentCleaned.isDeleted()).isTrue();
+    assertThat(testDocumentNotCleaned.isDeleted()).isFalse();
+    assertThat(themeImporterResult.isSuccessful()).isTrue();
   }
 
   @Test
   public void writeOnlyChanges() throws IOException {
-    assertTrue(themeImporter.importThemes(THEMES, Collections.singletonList(corporateTheme), true, true).isSuccessful());
+    assertTrue(themeImporter.importThemes(THEMES, singletonList(corporateTheme), true, true).isSuccessful());
     IOUtils.closeQuietly(corporateTheme);
     checkOneCheckedInVersion(capConnection.getContentRepository().getChild(THEMES).getChild("corporate"));
     // same theme again:
     try (InputStream theme = getClass().getResource("./corporate-theme.zip").openStream()) {
-      assumeTrue(themeImporter.importThemes(THEMES, Collections.singletonList(theme), true, false).isSuccessful());
+      assertThat(themeImporter.importThemes(THEMES, singletonList(theme), true, false).isSuccessful()).isTrue();
     }
     checkOneCheckedInVersion(capConnection.getContentRepository().getChild(THEMES).getChild("corporate"));
   }
 
-
   // --- internal ---------------------------------------------------
 
   private void checkLinkList(Content corporateTheme, String propertyName, int expected) {
-    assertNotNull(corporateTheme.getProperties().get(propertyName));
-    assertEquals(expected, ((List) corporateTheme.getProperties().get(propertyName)).size());
+    assertThat(corporateTheme.getProperties().get(propertyName)).isNotNull();
+    assertThat(((List) corporateTheme.getProperties().get(propertyName)).size()).isEqualTo(expected);
   }
 
   private void checkOneCheckedInVersion(Content folder) {
@@ -139,8 +134,8 @@ public class ThemeImporterImplTest {
       if (child.isFolder()) {
         checkOneCheckedInVersion(child);
       } else {
-        assertTrue(child.isCheckedIn());
-        assertEquals(child.getId() + ", " + child.getPath(), 1, IdHelper.parseVersionId(child.getCheckedInVersion().getId()));
+        assertThat(child.isCheckedIn()).isTrue();
+        assertThat(IdHelper.parseVersionId(child.getCheckedInVersion().getId())).as(child.getId() + ", " + child.getPath()).isEqualTo(1);
       }
     }
   }

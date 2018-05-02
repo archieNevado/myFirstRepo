@@ -16,10 +16,11 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
 import com.coremedia.security.encryption.util.EncryptionServiceUtil;
-import com.coremedia.util.Base64;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.CountingInputStream;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -27,6 +28,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
@@ -45,6 +47,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -53,6 +56,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
@@ -61,6 +65,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +76,7 @@ import java.util.regex.Pattern;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static java.util.Collections.emptyList;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.http.client.utils.HttpClientUtils.closeQuietly;
 
 // make the service call once
@@ -105,6 +111,7 @@ public class WcRestConnector {
   private static final String WCS_SECURE_COOKIE_PATTERN_STRING = "(^|;)" + WCS_SECURE_COOKIE_PREFIX + "(;|$)";
   private static final Pattern WCS_SECURE_COOKIE_PATTERN = Pattern.compile(WCS_SECURE_COOKIE_PATTERN_STRING);
   private static final String POSITION_RELATIVE_TEMPLATE_VARIABLE = "{ignored}";
+  private static final int BYTES_PER_KILO_BYTE = 1024;
 
   private String serviceEndpoint;
   private String searchServiceEndpoint;
@@ -118,6 +125,9 @@ public class WcRestConnector {
   private int socketTimeout = -1;
   private int connectionPoolSize = 200;
 
+  private String authHeaderName;
+  private String authHeaderValue;
+
   private String contractPreviewUserName;
   private String contractPreviewUserPassword;
 
@@ -127,6 +137,8 @@ public class WcRestConnector {
   protected LoginService loginService;
 
   private CommerceCache commerceCache;
+  //default: log all responses >200KB
+  private int responseSizeThresholdBytes = 200 * BYTES_PER_KILO_BYTE;
 
   // BOD based service methods
 
@@ -381,18 +393,17 @@ public class WcRestConnector {
     try {
       HttpClient client = getHttpClient();
 
-      long start = 0L;
+      Stopwatch stopwatch = null;
       if (LOG.isTraceEnabled()) {
-        start = System.currentTimeMillis();
+        stopwatch = Stopwatch.createStarted();
       }
 
       HttpResponse response = client.execute(httpClientRequest);
       StatusLine statusLine = response.getStatusLine();
       int statusCode = statusLine.getStatusCode();
 
-      if (LOG.isTraceEnabled()) {
-        long time = System.currentTimeMillis() - start;
-        LOG.trace(serviceMethod.getMethod() + " " + uri + ": " + statusCode + " took " + time + " ms");
+      if (LOG.isTraceEnabled() && stopwatch != null && stopwatch.isRunning()) {
+        stopwatch.stop();
       }
 
       try {
@@ -403,7 +414,21 @@ public class WcRestConnector {
         if (statusCode >= 200 && statusCode != 204 && statusCode < 300) {
           entity = response.getEntity();
           if (entity != null) {
-            result = parseFromJson(entity, serviceMethod.getReturnType());
+            CountingInputStream countingInputStream = new CountingInputStream(entity.getContent());
+            result = parseFromJson(countingInputStream, serviceMethod.getReturnType());
+
+            //add warning to log, if json response > xx MB
+            if (countingInputStream.getCount() > responseSizeThresholdBytes){
+              double sizeInKBytes = countingInputStream.getCount() / 1024.;
+              LOG.warn("Very large JSON Data: {} {} size: {} kByte. Try to reduce response size.",
+                      serviceMethod.getMethod(), uri,  String.format("%.2f", sizeInKBytes));
+            }
+
+            if (LOG.isTraceEnabled()) {
+              double sizeInKBytes = countingInputStream.getCount() / 1024.;
+              LOG.trace(serviceMethod.getMethod() + " " + uri + ": " + statusCode + " took " + stopwatch.elapsed(MILLISECONDS) + " ms "
+                      + String.format("%.2f", sizeInKBytes) + " kByte");
+            }
           } else {
             LOG.trace("response entity is null");
           }
@@ -462,7 +487,9 @@ public class WcRestConnector {
     } catch (IOException e) {
       LOG.warn("Network error occurred while calling WCS: {} ({})", httpClientRequest.getURI(), e.getMessage());
       LOG.trace("The corresponding stacktrace is...", e);
-      StoreContextHelper.setCommerceSystemIsUnavailable(storeContext, true);
+      if (storeContext != null) {
+        StoreContextHelper.setCommerceSystemIsUnavailable(storeContext, true);
+      }
       throw new CommerceException(e);
     } catch (Exception e) {
       LOG.warn("Error while calling WCS: {} ({})", httpClientRequest.getURI(), e.getMessage());
@@ -506,7 +533,7 @@ public class WcRestConnector {
     }
 
     try {
-      WcServiceErrors errorsContainer = parseFromJson(entity, WcServiceErrors.class);
+      WcServiceErrors errorsContainer = parseFromJson(entity.getContent(), WcServiceErrors.class);
       if (errorsContainer == null) {
         return emptyList();
       }
@@ -524,8 +551,8 @@ public class WcRestConnector {
   }
 
   @Nullable
-  private static <T> T parseFromJson(@Nonnull HttpEntity entity, @Nonnull Class<T> classOfT) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+  private static <T> T parseFromJson(@Nonnull InputStream inputStream, @Nonnull Class<T> classOfT) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
     return parseFromJson(reader, classOfT);
   }
 
@@ -541,7 +568,7 @@ public class WcRestConnector {
    * Returns true if REST request can be executed.
    */
   private static boolean isCommerceAvailable(HttpMethod method, URI uriComponents, @Nullable StoreContext storeContext) {
-    if (!StoreContextHelper.isCommerceSystemUnavailable(storeContext)) {
+    if (storeContext == null || !StoreContextHelper.isCommerceSystemUnavailable(storeContext)) {
       return true;
     }
 
@@ -652,7 +679,7 @@ public class WcRestConnector {
         //use basic authentication for wcs >= 7.8
         String user = CommercePropertyHelper.replaceTokens(serviceUser, storeContext);
         String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
-        String credentials = Base64.encode((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
+        String credentials = Base64.getEncoder().encodeToString((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
         headers.put("Authorization", "Basic " + credentials);
       } else if (mustBeAuthenticated && !WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
         //use WCToken for wcsVersion < 7.8
@@ -822,9 +849,13 @@ public class WcRestConnector {
     }
   }
 
-  private static void addRequestHeaders(@Nonnull HttpUriRequest request,
+  private void addRequestHeaders(@Nonnull HttpUriRequest request,
                                         @Nonnull Map<String, String> additionalHeaders) {
     request.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_JSON);
+
+    if (!StringUtils.isEmpty(authHeaderName)) {
+      request.setHeader(authHeaderName, authHeaderValue);
+    }
 
     for (Map.Entry<String, String> header : additionalHeaders.entrySet()) {
       request.addHeader(header.getKey(), header.getValue());
@@ -973,6 +1004,31 @@ public class WcRestConnector {
   @SuppressWarnings("unused")
   public void setConnectionRequestTimeout(int connectionRequestTimeout) {
     this.connectionRequestTimeout = connectionRequestTimeout;
+  }
+
+  @Value("${livecontext.rest.connector.responseSizeThresholdKBytes:200}")
+  public void setResponseSizeThresholdKBytes(int responseSizeThresholdKBytes) {
+    this.responseSizeThresholdBytes = BYTES_PER_KILO_BYTE * responseSizeThresholdKBytes;
+  }
+
+  @SuppressWarnings("unused")
+  public String getAuthHeaderName() {
+    return authHeaderName;
+  }
+
+  @SuppressWarnings("unused")
+  public void setAuthHeaderName(String authHeaderName) {
+    this.authHeaderName = authHeaderName;
+  }
+
+  @SuppressWarnings("unused")
+  public String getAuthHeaderValue() {
+    return authHeaderValue;
+  }
+
+  @SuppressWarnings("unused")
+  public void setAuthHeaderValue(String authHeaderValue) {
+    this.authHeaderValue = authHeaderValue;
   }
 
   private static class MapDeserializer implements JsonDeserializer<Map<String, Object>> {

@@ -11,7 +11,7 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 
 * blueprint-base
 * blueprint-tomcat
-* coremedia-proxy (~> 0.3.2)
+* coremedia-proxy (~> 1.0.0)
 
 # Attributes
 
@@ -20,12 +20,12 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 * `node['blueprint']['proxy']['virtual_host']['studio']['port']` -  Defaults to `41080`.
 * `node['blueprint']['proxy']['virtual_host']['studio']['context']` -  Defaults to `studio`.
 * `node['blueprint']['proxy']['virtual_host']['studio']['server_name']` -  Defaults to `studio.#{node['blueprint']['hostname']}`.
-* `node['blueprint']['proxy']['virtual_host']['studio']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['proxy']['virtual_host']['studio']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['proxy']['virtual_host']['studio']['server_aliases']` -  Defaults to `[ ... ]`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['host']` -  Defaults to `node['blueprint']['proxy']['cms_host']`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['port']` -  Defaults to `40980`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['context']` -  Defaults to `blueprint`.
-* `node['blueprint']['proxy']['virtual_host']['preview']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['proxy']['virtual_host']['preview']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['server_name']` -  Defaults to `preview.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['server_aliases']` -  Defaults to `{ ... }`.
 * `node['blueprint']['proxy']['virtual_host']['preview']['live_servlet_context']` -  Defaults to `blueprint`.
@@ -34,10 +34,9 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['port']` -  Defaults to `41380`.
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['context']` -  Defaults to `editor-webstart`.
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['server_name']` -  Defaults to `sitemanager.#{node['blueprint']['hostname']}`.
-* `node['blueprint']['proxy']['virtual_host']['sitemanager']['server_aliases']` -  Defaults to `[ ... ]`.
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['cms_ior_url']` -  Defaults to `http://#{node['blueprint']['proxy']['cms_host']}:41080/coremedia/ior`.
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['wfs_ior_url']` -  Defaults to `http://#{node['blueprint']['proxy']['cms_host']}:43080/workflow/ior`.
-* `node['blueprint']['proxy']['virtual_host']['sitemanager']['rewrite_log_level']` -  Defaults to `rewrite_log_level`.
+* `node['blueprint']['proxy']['virtual_host']['sitemanager']['rewrite_log_level']` -  Defaults to `trace1`.
 * `node['blueprint']['proxy']['overview_template']['cookbook']` - The cookbook from which to load the test system overview template. Defaults to `blueprint-proxy`.
 * `node['blueprint']['proxy']['overview_template']['source']` - The source parameter of the overview template resource. Defaults to `overview/overview.html.erb`.
 

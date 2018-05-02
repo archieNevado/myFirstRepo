@@ -11,6 +11,8 @@ import com.coremedia.blueprint.personalization.forms.PersonalizationForm;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.common.logging.PersonalDataLogger;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
@@ -38,6 +40,7 @@ import java.util.TreeMap;
 public class InterestsService {
 
   private static final Logger LOG = LoggerFactory.getLogger(InterestsService.class);
+  private static final PersonalDataLogger PERSONAL_DATA_LOG = new PersonalDataLogger(LOG);
 
   private static final String NUMBER_OF_EXPLICIT_INTERESTS = "numberOfExplicitInterests";
   public static final String EXPLICIT_PERSONALIZATION = "explicit.personalization";
@@ -69,11 +72,11 @@ public class InterestsService {
     return new Interests(action, this, contentBeanFactory, settingsService);
   }
 
-  public Map<CMTaxonomy, Double> getImplicitSubjectTaxonomies() {
+  public @PersonalData Map<CMTaxonomy, Double> getImplicitSubjectTaxonomies() {
     return getImplicitTaxonomies(interestsConfiguration.getImplicitSubjectTaxonomyContextName());
   }
 
-  public Map<CMTaxonomy, Double> getImplicitLocationTaxonomies() {
+  public @PersonalData Map<CMTaxonomy, Double> getImplicitLocationTaxonomies() {
     return getImplicitTaxonomies(interestsConfiguration.getImplicitLocationTaxonomyContextName());
   }
 
@@ -85,7 +88,7 @@ public class InterestsService {
   public List<CMTaxonomy> getExplicitUserInterests() {
     final List<CMTaxonomy> result = new ArrayList<>();
     final String explicitContextName = interestsConfiguration.getExplicitContextName();
-    final PropertyProvider profile = contextCollection.getContext(explicitContextName, PropertyProvider.class);
+    final @PersonalData PropertyProvider profile = contextCollection.getContext(explicitContextName, PropertyProvider.class);
     if (profile != null) {
       for (String key : profile.getPropertyNames()) {
         if (IdHelper.isContentId(key)) {
@@ -118,10 +121,10 @@ public class InterestsService {
       final List<CMObject> fieldNames = (List<CMObject>) entries.get("items");
       if (!fieldNames.isEmpty()) {
         final String explicitContextName = interestsConfiguration.getExplicitContextName();
-        final PropertyProvider profile = contextCollection.getContext(explicitContextName, PropertyProvider.class);
+        final @PersonalData PropertyProvider profile = contextCollection.getContext(explicitContextName, PropertyProvider.class);
         for (CMObject field : fieldNames) {
 
-          Number number = null;
+          @PersonalData Number number = null;
           if (profile != null) {
             number = (Number) profile.getProperty(field.getContent().getId());
           }
@@ -155,7 +158,7 @@ public class InterestsService {
    * Resets the current user's 'explicit' context to those active in the given PersonalizationForm
    */
   public Object updateExplicitInterests(CMTeasable teasable, PersonalizationForm profileForm, BindingResult validationResult) {
-    final BasicPropertyMaintainer context = getOrCreateExplicitContext();
+    final @PersonalData BasicPropertyMaintainer context = getOrCreateExplicitContext();
     // create the set of names of the 'checked' properties
     final List<FormField> formProperties = profileForm.getEntries();
     context.clear();
@@ -177,15 +180,17 @@ public class InterestsService {
    *
    * @return the 'explicit' context as an instance of BasicPropertyMaintainer
    */
-  private BasicPropertyMaintainer getOrCreateExplicitContext() {
+  private @PersonalData BasicPropertyMaintainer getOrCreateExplicitContext() {
     final String explicitContextName = interestsConfiguration.getExplicitContextName();
-    BasicPropertyMaintainer context = contextCollection.getContext(explicitContextName, BasicPropertyMaintainer.class);
+    @PersonalData BasicPropertyMaintainer context = contextCollection.getContext(explicitContextName, BasicPropertyMaintainer.class);
     if (context == null) {
       // check if context has wrong type
-      final Object o = contextCollection.getContext(explicitContextName);
-      if (o != null && LOG.isWarnEnabled()) {
-        LOG.warn("Context '" + explicitContextName + "' is not of required type " +
-                BasicPropertyMaintainer.class.getCanonicalName() + ", will overwrite previous context '" + o + "'");
+      final @PersonalData Object o = contextCollection.getContext(explicitContextName);
+      if (o != null) {
+        String msg = "Context '{}' is not of required type " + BasicPropertyMaintainer.class.getCanonicalName()
+                     + ", will overwrite previous context";
+        PERSONAL_DATA_LOG.debug(msg + ": {}", explicitContextName, o);
+        LOG.warn(msg, explicitContextName);
 
       }
       context = new PropertyProfile();
@@ -200,9 +205,9 @@ public class InterestsService {
    * @param contextName the context to read
    * @return a map sorted by their scores
    */
-  private Map<CMTaxonomy, Double> getImplicitTaxonomies(final String contextName) {
+  private @PersonalData Map<CMTaxonomy, Double> getImplicitTaxonomies(final String contextName) {
     final Map<CMTaxonomy, Double> result = new HashMap<>();
-    final PropertyProvider context = contextCollection.getContext(contextName, PropertyProvider.class);
+    final @PersonalData PropertyProvider context = contextCollection.getContext(contextName, PropertyProvider.class);
     if (context != null) {
 
       for (String key : context.getPropertyNames()) {
@@ -214,7 +219,9 @@ public class InterestsService {
             // we might deal with ids referring to content from a different repository, therefore the id might belong to a type other than CMTaxonomy
             if (contentBean instanceof CMTaxonomy) {
               final CMTaxonomy taxonomy = (CMTaxonomy) dataViewFactory.loadCached(contentBean, null);
-              result.put(taxonomy, (Double) context.getProperty(key));
+              @SuppressWarnings("PersonalData") // Safe to put @PersonalData value into result. It's returned as @PersonalData.
+              Double value = (Double) context.getProperty(key);
+              result.put(taxonomy, value);
             } else {
               LOG.warn("Got unexpected content bean {} for content of type {} (expecting {})", new Object[]{contentBean, content.getType(), CMTaxonomy.class});
             }
@@ -223,8 +230,9 @@ public class InterestsService {
           }
         }
       }
+      @SuppressWarnings("PersonalData") // @PersonalData from result variable just used for sorting
       final ValueComparator bvc = new ValueComparator(result);
-      final TreeMap<CMTaxonomy, Double> sortedMap = new TreeMap<>(bvc);
+      final @PersonalData TreeMap<CMTaxonomy, Double> sortedMap = new TreeMap<>(bvc);
       sortedMap.putAll(result);
       return sortedMap;
 

@@ -3,7 +3,7 @@
 <#assign items=self.items![] />
 <#assign numberOfItems=items?size />
 
-<div class="cm-container cm-container--details"<@cm.metadata data=bp.getContainerMetadata(self) />>
+<div class="cm-container cm-container--details"<@preview.metadata data=bp.getContainerMetadata(self) />>
   <#list items as item>
     <@cm.include self=item />
   </#list>

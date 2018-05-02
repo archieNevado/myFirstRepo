@@ -2,18 +2,15 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 
 import com.coremedia.livecontext.ecommerce.event.InvalidationService;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
-import com.coremedia.springframework.context.support.RequiredPropertySourcesPlaceholderConfigurerConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration
-@Import(RequiredPropertySourcesPlaceholderConfigurerConfiguration.class)
 @ImportResource(value = {
         "classpath:/framework/spring/livecontext-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)

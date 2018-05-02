@@ -3,7 +3,7 @@
 <#assign sliderMetadata=(cmpage?has_content)?then(bp.setting(cmpage, "sliderMetaData", ""), '')/>
 
 <!DOCTYPE html>
-<html class="no-js" lang="${bp.getPageLanguageTag(cmpage!self)}" dir="${bp.getPageDirection(cmpage!self)!'ltr'}" <@cm.metadata data=bp.getPageMetadata(cmpage!self)!"" />>
+<html class="no-js" lang="${bp.getPageLanguageTag(cmpage!self)}" dir="${bp.getPageDirection(cmpage!self)!'ltr'}" <@preview.metadata data=bp.getPageMetadata(cmpage!self)!"" />>
 
 <#if cmpage?has_content>
   <@cm.include self=cmpage view="_head"/>
@@ -16,7 +16,7 @@
   </head>
 </#if>
 
-<body id="top" class="cm-page-preview"<@cm.metadata sliderMetadata!"" />>
+<body id="top" class="cm-page-preview"<@preview.metadata sliderMetadata!"" />>
 
 <#-- include fragmented preview -->
   <@cm.include self=self view="asPreview"/>

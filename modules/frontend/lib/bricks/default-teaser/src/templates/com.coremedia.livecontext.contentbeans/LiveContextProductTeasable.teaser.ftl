@@ -7,7 +7,7 @@
 <#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
 <#assign renderDimmer=cm.localParameter("renderDimmer", true) />
 <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
-<div class="${blockClass} ${blockClass}--product ${cssClasses} ${additionalClass}"<@cm.metadata self.content />>
+<div class="${blockClass} ${blockClass}--product ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
     <div class="${blockClass}__wrapper">
     <@bp.optionalLink href="${link}">
       <#-- picture -->
@@ -16,7 +16,7 @@
         <div class="${blockClass}__caption">
           <#-- teaser title -->
           <#if self.teaserTitle?has_content>
-              <h3 class="${blockClass}__headline" <@cm.metadata "properties.teaserTitle" />>
+              <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
                   <span>${self.teaserTitle!""}</span>
               </h3>
           </#if>
@@ -24,7 +24,7 @@
           <#if renderTeaserText>
             <#if self.teaserText?has_content>
               <#-- teaser text -->
-              <p class="${blockClass}__text" <@cm.metadata "properties.teaserText" />>
+              <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
                 <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, blockClass + "-max-length", 115)) />
               </p>
             <#else>

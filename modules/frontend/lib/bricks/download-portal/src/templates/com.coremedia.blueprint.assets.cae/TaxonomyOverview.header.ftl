@@ -6,7 +6,7 @@
         <a class="am-breadcrumb-item__text" data-hash-based-fragment-link="">${bp.getMessage("am_download_portal")}</a>
       </li>
         <li class="am-breadcrumb__item am-breadcrumb-item am-breadcrumb-item--child">
-          <span class="am-breadcrumb-item__text"<@cm.metadata data=[self.taxonomy.content, "properties.value"] />>${bp.getMessage("am_tag")}: ${self.taxonomy.value!""}</span>
+          <span class="am-breadcrumb-item__text"<@preview.metadata data=[self.taxonomy.content, "properties.value"] />>${bp.getMessage("am_tag")}: ${self.taxonomy.value!""}</span>
         </li>
     </ul>
 </div>

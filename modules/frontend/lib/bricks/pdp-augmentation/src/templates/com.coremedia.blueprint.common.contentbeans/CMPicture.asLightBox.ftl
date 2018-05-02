@@ -13,7 +13,7 @@
   <#assign fullImageLink=bp.uncroppedImageLink(self) />
 </#if>
 
-<div class="cm-lightbox ${classBox}"<@cm.metadata self.content />>
+<div class="cm-lightbox ${classBox}"<@preview.metadata self.content />>
   <a href="${fullImageLink}" title="${self.title!""}" data-cm-popup="gallery">
     <@bp.responsiveImage self=self!cm.UNDEFINED classPrefix="cm-product-assets" displayDimmer=false limitAspectRatios=limitAspectRatios additionalAttr={"data-zoom-image": fullImageLink }/>
   </a>

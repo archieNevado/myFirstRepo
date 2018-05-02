@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +40,7 @@ public class CMQueryListImplTest extends ContentBeanTestBase {
   @Before
   @SuppressWarnings("unchecked")
   public void setUp() throws Exception {
-    setUpPreviewDate();
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE);
     contentBean = getContentBean(108);
     resultFactoryEmptyResult = mock(SearchResultFactory.class);
     resultFactoryNonEmptyResult = mock(SearchResultFactory.class);

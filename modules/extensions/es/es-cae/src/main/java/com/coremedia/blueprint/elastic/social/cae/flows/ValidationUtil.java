@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
-import java.util.regex.Matcher;
+import com.coremedia.common.personaldata.PersonalData;
+
 import java.util.regex.Pattern;
 
 public final class ValidationUtil {
@@ -16,11 +17,12 @@ public final class ValidationUtil {
   private ValidationUtil() {
   }
 
-  public static boolean validateUsernameLength(String username) {
+  public static boolean validateUsernameLength(@PersonalData String username) {
     return username.length() >= MINIMUM_USERNAME_LENGTH;
   }
 
-  public static boolean validateEmailAddressSyntax(String emailAddress) {
+  @SuppressWarnings("PersonalData") // safe use of personal data
+  public static boolean validateEmailAddressSyntax(@PersonalData String emailAddress) {
     return EMAIL_PATTERN.matcher(emailAddress).matches();
   }
 

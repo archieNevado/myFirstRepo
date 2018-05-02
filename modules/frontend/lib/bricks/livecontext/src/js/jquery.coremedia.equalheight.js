@@ -15,18 +15,18 @@ import $ from "jquery";
  */
 
 /*! Equal Heights Plugin | Copyright (c) CoreMedia AG */
-$.fn.equalHeights = function () {
-  this.each(function () {
-    $(this).height('auto');
+$.fn.equalHeights = function() {
+  this.each(function() {
+    $(this).height("auto");
   });
 
   let tallest = 0;
-  this.each(function () {
+  this.each(function() {
     if ($(this).height() > tallest) {
       tallest = $(this).height();
     }
   });
-  return this.each(function () {
+  return this.each(function() {
     $(this).height(tallest);
   });
 };

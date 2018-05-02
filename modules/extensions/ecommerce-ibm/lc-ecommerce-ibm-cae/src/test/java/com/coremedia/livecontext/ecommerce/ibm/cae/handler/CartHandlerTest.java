@@ -5,21 +5,19 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerce
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
 import com.coremedia.livecontext.ecommerce.order.Cart;
+import com.coremedia.livecontext.ecommerce.order.CartService;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,9 +31,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CartHandlerTest {
 
   private static final String CONTEXT_NAME = "anyChannelName";
@@ -60,38 +66,46 @@ public class CartHandlerTest {
   private LinkFormatter linkFormatter;
 
   private BaseCommerceConnection commerceConnection;
-  private MockCommerceEnvBuilder envBuilder;
 
+  @Mock
+  private CartService cartService;
 
   @Before
   public void beforeEachTest() {
-    envBuilder = MockCommerceEnvBuilder.create();
-    commerceConnection = envBuilder.setupEnv();
+    commerceConnection = new BaseCommerceConnection();
+    CurrentCommerceConnection.set(commerceConnection);
+
+    StoreContext storeContext = newStoreContext();
+    commerceConnection.setStoreContext(storeContext);
+
+    commerceConnection.setCartService(cartService);
   }
 
   @After
   public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
+    CurrentCommerceConnection.remove();
   }
 
   @Test
   public void testHandleRequestNoContextFound() {
     UriComponentsBuilder testUrlBuilder = UriComponentsBuilder.fromUriString("checkoutUrl");
     UriComponents testUrl = testUrlBuilder.build();
-    Mockito.when(checkoutRedirectPropertyProvider.provideValue(any(Map.class), any(), any())).thenReturn(testUrl);
+    when(checkoutRedirectPropertyProvider.provideValue(any(Map.class), any(), any())).thenReturn(testUrl);
 
-    View modelAndView = testling.handleRequest(CONTEXT_NAME, Mockito.mock(HttpServletRequest.class), Mockito.mock(HttpServletResponse.class));
-    Assert.assertTrue(modelAndView instanceof RedirectView);
-    Assert.assertTrue(((RedirectView) modelAndView).getUrl().equals(testUrl.toString()));
+    View modelAndView = testling.handleRequest(CONTEXT_NAME, mock(HttpServletRequest.class),
+            mock(HttpServletResponse.class));
+
+    assertTrue(modelAndView instanceof RedirectView);
+    assertEquals(((RedirectView) modelAndView).getUrl(), testUrl.toString());
   }
 
   @Test
   public void testHandleFragmentRequest() {
-    Navigation context = Mockito.mock(Navigation.class);
+    Navigation context = mock(Navigation.class);
 
     configureContext(context);
 
-    Cart resolvedCart = Mockito.mock(Cart.class);
+    Cart resolvedCart = mock(Cart.class);
     configureResolveCart(resolvedCart);
 
     String viewName = "viewName";
@@ -117,16 +131,16 @@ public class CartHandlerTest {
   public void testHandleAjaxRequestDeleteOrderItem() {
     String orderItemId = "12";
     configureRequestParameter(request, "orderItemId", orderItemId);
-    Cart cart = Mockito.mock(Cart.class);
+    Cart cart = mock(Cart.class);
     configureResolveCart(cart);
-    Cart.OrderItem orderItem = Mockito.mock(Cart.OrderItem.class);
+    Cart.OrderItem orderItem = mock(Cart.OrderItem.class);
     configureCartFindOrderItem(cart, orderItemId, orderItem);
 
     Object result = testling.handleAjaxRequest(CartHandler.ACTION_REMOVE_ORDER_ITEM, request, response);
 
     checkCartServiceIsUsedCorrectly();
     verifyCartDeleteOrderItem(orderItemId);
-    Assert.assertEquals(Collections.emptyMap(), result);
+    assertEquals(Collections.emptyMap(), result);
   }
 
   //Is this really the expected behavior?!
@@ -135,9 +149,9 @@ public class CartHandlerTest {
   public void testHandleAjaxRequestNoOrderItemId() {
     String orderItemId = null;
     configureRequestParameter(request, "orderItemId", orderItemId);
-    Cart cart = Mockito.mock(Cart.class);
+    Cart cart = mock(Cart.class);
     configureResolveCart(cart);
-    Cart.OrderItem orderItem = Mockito.mock(Cart.OrderItem.class);
+    Cart.OrderItem orderItem = mock(Cart.OrderItem.class);
     configureCartFindOrderItem(cart, orderItemId, orderItem);
 
     testling.handleAjaxRequest(CartHandler.ACTION_REMOVE_ORDER_ITEM, request, response);
@@ -145,14 +159,13 @@ public class CartHandlerTest {
     checkCartServiceIsUsedCorrectly();
   }
 
-
   //Is this really the expected behavior?!
   //Action was found but has invalid parameters...
   @Test(expected = CartHandler.NotFoundException.class)
   public void testHandleAjaxRequestNoOrderItem() {
     String orderItemId = "12";
     configureRequestParameter(request, "orderItemId", orderItemId);
-    Cart cart = Mockito.mock(Cart.class);
+    Cart cart = mock(Cart.class);
     configureResolveCart(cart);
     Cart.OrderItem orderItem = null;
     configureCartFindOrderItem(cart, orderItemId, orderItem);
@@ -164,53 +177,55 @@ public class CartHandlerTest {
 
   @Test(expected = CartHandler.NotFoundException.class)
   public void testHandleAjaxRequestUnsupportedAction() {
-    testling.handleAjaxRequest("AnyInvalidAction", Mockito.mock(HttpServletRequest.class), response);
+    testling.handleAjaxRequest("AnyInvalidAction", mock(HttpServletRequest.class), response);
     checkCartServiceIsUsedCorrectly();
   }
 
   //Mock Configurations
 
   private void configureCartFindOrderItem(Cart cart, String orderItemId, Cart.OrderItem orderItem) {
-    Mockito.when(cart.findOrderItemById(orderItemId)).thenReturn(orderItem);
+    when(cart.findOrderItemById(orderItemId)).thenReturn(orderItem);
   }
 
   private void configureRequestParameter(HttpServletRequest request, String parameterKey, String parameterValue) {
-    Mockito.when(request.getParameter(parameterKey)).thenReturn(parameterValue);
+    when(request.getParameter(parameterKey)).thenReturn(parameterValue);
   }
 
   private void configureResolveCart(Cart cart) {
-    Mockito.when(commerceConnection.getCartService().getCart(any(StoreContext.class))).thenReturn(cart);
+    when(commerceConnection.getCartService().getCart(any(StoreContext.class))).thenReturn(cart);
   }
 
   private void configureContext(Navigation navigation) {
-    Mockito.when(navigationSegmentsUriHelper.parsePath(ArgumentMatchers.eq(Collections.singletonList(CONTEXT_NAME)))).thenReturn(navigation);
+    when(navigationSegmentsUriHelper.parsePath(ArgumentMatchers.eq(Collections.singletonList(CONTEXT_NAME))))
+            .thenReturn(navigation);
   }
 
   //Checks and Verifies...
 
   private void checkViewName(String viewName, ModelAndView modelAndView) {
     String actualViewName = modelAndView.getViewName();
-    Assert.assertEquals(viewName, actualViewName);
+    assertEquals(viewName, actualViewName);
   }
 
   private void checkModelContainsCartAndNavigation(Cart expectedCart, Navigation context, ModelAndView modelAndView) {
     Map<String, Object> model = modelAndView.getModel();
     Object self = model.get("self");
-    Assert.assertTrue(self instanceof Cart);
-    Assert.assertSame(expectedCart, self);
+    assertTrue(self instanceof Cart);
+    assertSame(expectedCart, self);
     Object navigation = model.get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION);
-    Assert.assertSame(context, navigation);
+    assertSame(context, navigation);
   }
 
   private void checkCartServiceIsUsedCorrectly() {
-    Mockito.verify(commerceConnection.getCartService(), Mockito.times(1)).getCart(CurrentCommerceConnection.get().getStoreContext());
+    verify(commerceConnection.getCartService(), times(1)).getCart(CurrentCommerceConnection.get().getStoreContext());
   }
 
   private void checkSelfIsHttpError(ModelAndView modelAndView) {
-    Assert.assertTrue(modelAndView.getModel().get("self") instanceof HttpError);
+    assertTrue(modelAndView.getModel().get("self") instanceof HttpError);
   }
 
   private void verifyCartDeleteOrderItem(String orderItemId) {
-    Mockito.verify(commerceConnection.getCartService(), Mockito.times(1)).deleteCartOrderItem(orderItemId, CurrentCommerceConnection.get().getStoreContext());
+    verify(commerceConnection.getCartService(), times(1))
+            .deleteCartOrderItem(orderItemId, CurrentCommerceConnection.get().getStoreContext());
   }
 }

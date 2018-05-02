@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.WORKSPACE;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 import static java.util.Collections.emptyList;
@@ -65,12 +64,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     Workspace workspace = (Workspace) commerceBeanFactory.createBeanFor(commerceId, context);
     ((AbstractIbmCommerceBean) workspace).setDelegate(map);
     return workspace;
-  }
-
-  @Nonnull
-  @Override
-  public WorkspaceService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, WorkspaceService.class);
   }
 
   @Required

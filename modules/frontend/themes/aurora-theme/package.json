@@ -1,3 +1,4 @@
+
 {
   "name": "@coremedia/aurora-theme",
   "version": "1.0.0",
@@ -5,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "start": "cm monitor",
-    "theme-importer": "cm theme-importer"
+    "theme-importer": "cm theme-importer",
+    "prettier": "prettier \"**/*\" --write"
   },
   "dependencies": {
     "@coremedia/sass-utils": "^1.0.0",
@@ -22,6 +24,7 @@
     "@coremedia/brick-video": "^1.0.0",
     "@coremedia/brick-shoppable-video": "^1.0.0",
     "@coremedia/brick-elastic-social": "^1.0.0",
+    "@coremedia/brick-responsive-carousel": "^1.0.0",
     "@coremedia/brick-livecontext": "^1.0.0",
     "@coremedia/brick-pdp-augmentation": "^1.0.0",
     "@coremedia/brick-preview": "^1.0.0",
@@ -30,7 +33,9 @@
     "@coremedia/theme-utils": "^3.0.0",
     "webpack": "3.10.0"
   },
-  "main": "src/js/index.js",
+  "devDependencies": {
+    "prettier": "1.11.1"
+  },
   "coremedia": {
     "type": "theme",
     "name": "aurora"

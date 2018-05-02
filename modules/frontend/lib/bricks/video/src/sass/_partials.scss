@@ -1,6 +1,3 @@
 @import "~mediaelement/build/mediaelementplayer";
-@import "~@coremedia/sass-utils/src/partials";
-@import "~@coremedia/brick-responsive-images/src/sass/partials";
-@import "~@coremedia/brick-generic-templates/src/sass/partials";
-
+@import "?smart-import-partials";
 @import "partials/video";

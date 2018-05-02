@@ -2,14 +2,15 @@ package com.coremedia.livecontext.ecommerce.ibm.pricing;
 
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class WcPrices {
 
-  protected Map<String, WcPrice> prices;
-  protected Map<String, Object> dataMap;
+  protected Map<String, WcPrice> prices = Collections.EMPTY_MAP;
+  protected Map<String, Object> dataMap = Collections.EMPTY_MAP;
 
   public void setDataMap(Map<String, Object> data) {
     if (data != null) {

@@ -30,6 +30,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -154,6 +155,7 @@ public class StoreResource extends AbstractCatalogResource<Store> {
               .map(Catalog::getRootCategory)
               .collect(toList()));
       representation.setRootCategory(RemoteBeanLink.create(rootCategoryUri(connection)));
+      representation.setTimeZoneId(context.getTimeZoneId().map(ZoneId::getId).orElse(null));
     } catch (CommerceException e) {
       LOG.warn("Error loading store bean: {} (site: {})", e.getMessage(), siteId);
       throw e;

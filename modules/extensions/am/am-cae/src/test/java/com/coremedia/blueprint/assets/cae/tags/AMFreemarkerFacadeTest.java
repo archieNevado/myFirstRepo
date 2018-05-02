@@ -5,9 +5,9 @@ import com.coremedia.blueprint.assets.cae.AMUtils;
 import com.coremedia.blueprint.assets.cae.DownloadPortal;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -26,7 +26,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AMUtils.class, SiteHelper.class, FreemarkerUtils.class})
+@PrepareForTest({AMUtils.class, SiteHelper.class, FreemarkerEnvironment.class})
 public class AMFreemarkerFacadeTest {
 
   @Inject
@@ -40,8 +40,8 @@ public class AMFreemarkerFacadeTest {
 
     mockStatic(SiteHelper.class);
     mockStatic(AMUtils.class);
-    mockStatic(FreemarkerUtils.class);
-    when(FreemarkerUtils.getCurrentRequest()).thenReturn(request);
+    mockStatic(FreemarkerEnvironment.class);
+    when(FreemarkerEnvironment.getCurrentRequest()).thenReturn(request);
     when(SiteHelper.findSite(request)).thenReturn(Optional.of(site));
     when(AMUtils.getDownloadPortalRootDocument(settingsService, site)).thenReturn(content);
 
@@ -53,8 +53,8 @@ public class AMFreemarkerFacadeTest {
   @Test
   public void hasNoDownloadPortal() {
     mockStatic(SiteHelper.class);
-    mockStatic(FreemarkerUtils.class);
-    when(FreemarkerUtils.getCurrentRequest()).thenReturn(request);
+    mockStatic(FreemarkerEnvironment.class);
+    when(FreemarkerEnvironment.getCurrentRequest()).thenReturn(request);
     when(SiteHelper.findSite(request)).thenReturn(Optional.empty());
     AMFreemarkerFacade facade = new AMFreemarkerFacade();
     assertFalse(facade.hasDownloadPortal());

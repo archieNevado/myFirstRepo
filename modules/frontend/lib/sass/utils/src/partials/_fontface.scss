@@ -12,8 +12,11 @@
     font-family: "#{$style-name}";
     font-weight: $weight;
     font-style: $style;
-    src: url($filepath + ".woff2") format('woff2'), // Super Modern Browsers
-    url($filepath + ".woff") format('woff'), // Pretty Modern Browsers
-    url($filepath + ".ttf") format('truetype'); // Safari, Android, iOS
+    // woff2: Super Modern Browsers
+    // woff: Pretty Modern Browsers
+    // ttf: Safari, Android, iOS
+    src: url("#{$filepath}.woff2") format('woff2'),
+    url("#{$filepath}.woff") format('woff'),
+    url("#{$filepath}.ttf") format('truetype');
   }
 }

@@ -15,22 +15,22 @@
     <#-- user profile / logout -->
     <#if self.authenticated>
       <#assign logoutLink=cm.getLink(logoutAction)/>
-      <div class="cm-icon cm-icon--logout"<@cm.metadata data=[logoutAction.content, "properties.id"] />>
+      <div class="cm-icon cm-icon--logout"<@preview.metadata data=[logoutAction.content, "properties.id"] />>
         <a href="${logoutLink}" title="<@bp.message "logout_title" />">
           <i class="cm-icon__symbol icon-profile-unlocked-alternative"></i>
           <span class="cm-icon__info cm-visuallyhidden"><@bp.message "logout_title" /></span>
         </a>
       </div>
-      <div class="cm-icon cm-icon--user-details"<@cm.metadata data=[profileAction.content, "properties.id"] />>
+      <div class="cm-icon cm-icon--user-details"<@preview.metadata data=[profileAction.content, "properties.id"] />>
         <a href="${cm.getLink(profileAction)}" title="<@bp.message "userDetails_title" />">
           <i class="cm-icon__symbol icon-profile-unlocked"></i>
           <span class="cm-icon__info cm-visuallyhidden"><@bp.message "userDetails_title" /></span>
         </a>
       </div>
     <#else>
-      <div class="cm-icon cm-icon--login"<@cm.metadata data=[loginAction.content, "properties.id"] />>
+      <div class="cm-icon cm-icon--login"<@preview.metadata data=[loginAction.content, "properties.id"] />>
         <#assign loginLink=cm.getLink(self, {"next": "$nextUrl$", "absolute": true, "scheme": "https"})/>
-        <a data-href="${loginLink}" <@cm.metadata data="properties.teaserTitle" />>
+        <a data-href="${loginLink}" <@preview.metadata data="properties.teaserTitle" />>
           <i class="cm-icon__symbol icon-profile-locked"></i>
           <span class="cm-icon__info cm-visuallyhidden">${self.action.teaserTitle!""}</span>
         </a>

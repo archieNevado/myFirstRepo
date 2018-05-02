@@ -78,6 +78,9 @@ public class SolrSegmentTaxonomies implements SearchFunction {
               " supplied via the '" + CONTEXT_NAME_PARAMETER + "' parameter");
     }
 
+    // Suppress warning about passing @PersonalData PropertyProvider to #getTaxonomySearchString. We assume that this
+    // function is only used in a way that the result string does not suffice to identify a person anymore.
+    @SuppressWarnings("PersonalData")
     final String searchTerm = getTaxonomySearchString(contextCollection.getContext(contextName, PropertyProvider.class));
 
     return StringUtils.isBlank(searchTerm) ? DEFAULT_SEARCH_TERM : searchTerm;

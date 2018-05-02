@@ -24,7 +24,6 @@ import java.util.Optional;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ALIAS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.COMMERCE_SYSTEM_IS_UNAVAILABLE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONFIG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CONTRACT_IDS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
@@ -115,7 +114,6 @@ public class StoreContextHelper {
     }
 
     StoreContext result = StoreContextHelper.createContext(
-            currentStoreContext.getConfigId(),
             currentStoreContext.getStoreId(),
             currentStoreContext.getStoreName(),
             currentStoreContext.getCatalogId(),
@@ -144,12 +142,11 @@ public class StoreContextHelper {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if locale or currency has wrong format
    */
   @Nonnull
-  public static StoreContext createContext(@Nullable String configId, @Nullable String storeId,
-                                           @Nullable String storeName, @Nullable String catalogId,
-                                           @Nullable String localeStr, @Nullable String currency) {
+  public static StoreContext createContext(@Nullable String storeId, @Nullable String storeName,
+                                           @Nullable String catalogId, @Nullable String localeStr,
+                                           @Nullable String currency) {
     StoreContext context = newStoreContext();
 
-    addContextParameterIfNotBlank(context, CONFIG_ID, configId);
     addContextParameterIfNotBlank(context, STORE_ID, storeId);
     addContextParameterIfNotBlank(context, STORE_NAME, storeName);
     addContextParameterIfNotBlank(context, CATALOG_ID, catalogId);
@@ -239,18 +236,6 @@ public class StoreContextHelper {
   @Nonnull
   public static String getStoreNameInLowerCase(@Nonnull StoreContext context) {
     return StringUtils.lowerCase(getStoreName(context));
-  }
-
-  /**
-   * Gets the optional spring config id name from the given store context.
-   * The config id can be used to read other store config credentials from a spring configuration.
-   *
-   * @param context the store context
-   * @return the config id or null if not present
-   */
-  @Nullable
-  public static String getConfigId(@Nonnull StoreContext context) {
-    return (String) context.get(CONFIG_ID);
   }
 
   /**
@@ -427,31 +412,21 @@ public class StoreContextHelper {
     return (String) context.get(USER_SEGMENTS);
   }
 
-  public static boolean isCommerceSystemUnavailable(@Nullable StoreContext context) {
-    if (context == null) {
-      return false;
-    }
-
+  public static boolean isCommerceSystemUnavailable(@Nonnull StoreContext context) {
     Object value = context.get(COMMERCE_SYSTEM_IS_UNAVAILABLE);
     return value instanceof Boolean && (Boolean) value;
   }
 
-  public static void setCommerceSystemIsUnavailable(@Nullable StoreContext context, boolean isUnavailable) {
-    if (context != null) {
-      context.put(COMMERCE_SYSTEM_IS_UNAVAILABLE, isUnavailable);
-    }
+  public static void setCommerceSystemIsUnavailable(@Nonnull StoreContext context, boolean isUnavailable) {
+    context.put(COMMERCE_SYSTEM_IS_UNAVAILABLE, isUnavailable);
   }
 
-  public static void setCredentials(@Nullable StoreContext context, WcCredentials credentials) {
-    if (context != null) {
-      context.put(CREDENTIALS, credentials);
-    }
+  public static void setCredentials(@Nonnull StoreContext context, WcCredentials credentials) {
+    context.put(CREDENTIALS, credentials);
   }
 
-  public static void setPreviewToken(@Nullable StoreContext context, WcPreviewToken previewToken) {
-    if (context != null) {
-      context.put(PREVIEW_TOKEN, previewToken);
-    }
+  public static void setPreviewToken(@Nonnull StoreContext context, WcPreviewToken previewToken) {
+    context.put(PREVIEW_TOKEN, previewToken);
   }
 
   /**
@@ -460,40 +435,16 @@ public class StoreContextHelper {
    * @param context      the store context
    * @param replacements the replacement map
    */
-  public static void setReplacements(@Nullable StoreContext context, Map<String, String> replacements) {
-    if (context != null) {
-      context.put(REPLACEMENTS, replacements);
-    }
+  public static void setReplacements(@Nonnull StoreContext context, Map<String, String> replacements) {
+    context.put(REPLACEMENTS, replacements);
   }
 
-  /**
-   * Set the configId into the given store context.
-   *
-   * @param context  the store context
-   * @param configId the store configuration identifier
-   */
-  public static void setConfigId(@Nullable StoreContext context, String configId) {
-    if (context != null) {
-      context.put(CONFIG_ID, configId);
-    }
+  public static void setSiteId(@Nonnull StoreContext context, String siteId) {
+    context.put(StoreContextImpl.SITE, siteId);
   }
 
-  public static void setSiteId(@Nullable StoreContext context, String siteId) {
-    if (context != null) {
-      context.put(StoreContextImpl.SITE, siteId);
-    }
-  }
-
-  public static void setWcsTimeZone(@Nullable StoreContext context, Map<String, String> timeZone) {
-    if (context != null) {
-      context.put("wcsTimeZone", timeZone);
-    }
-  }
-
-  public static void setCatalogAlias(@Nullable StoreContext context, @Nullable CatalogAlias catalogAlias) {
-    if (context != null) {
-      context.put(CATALOG_ALIAS, catalogAlias);
-    }
+  public static void setCatalogAlias(@Nonnull StoreContext context, @Nullable CatalogAlias catalogAlias) {
+    context.put(CATALOG_ALIAS, catalogAlias);
   }
 
   /**
@@ -514,10 +465,8 @@ public class StoreContextHelper {
    * @param context the store context
    * @param enabled the boolean value
    */
-  public static void setDynamicPricingEnabled(@Nullable StoreContext context, boolean enabled) {
-    if (context != null) {
-      context.put(AbstractStoreContextProvider.CONFIG_KEY_DYNAMIC_PRICING_ENABLED, enabled);
-    }
+  public static void setDynamicPricingEnabled(@Nonnull StoreContext context, boolean enabled) {
+    context.put(AbstractStoreContextProvider.CONFIG_KEY_DYNAMIC_PRICING_ENABLED, enabled);
   }
 
   /**
@@ -549,7 +498,7 @@ public class StoreContextHelper {
 
   @Nonnull
   private static String formatContext(@Nonnull StoreContext context) {
-    List<String> keys = ImmutableList.of(CONFIG_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY, WORKSPACE_ID);
+    List<String> keys = ImmutableList.of(STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY, WORKSPACE_ID);
 
     return keys.stream()
             .map(key -> key + ": " + context.get(key))

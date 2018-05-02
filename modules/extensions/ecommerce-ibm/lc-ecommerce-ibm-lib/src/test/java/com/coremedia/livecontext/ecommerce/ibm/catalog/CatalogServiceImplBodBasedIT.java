@@ -4,7 +4,6 @@ import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
@@ -189,12 +188,6 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
   @Override
   public void testWithStoreContext() {
     super.testWithStoreContext();
-  }
-
-  @Override
-  @Test(expected = CommerceException.class)
-  public void testWithStoreContextRethrowException() {
-    super.testWithStoreContextRethrowException();
   }
 
   @Betamax(tape = "csi_testFindProductById", match = {MatchRule.path, MatchRule.query})

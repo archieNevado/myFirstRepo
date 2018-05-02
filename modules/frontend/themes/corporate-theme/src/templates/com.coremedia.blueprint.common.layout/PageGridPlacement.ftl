@@ -14,7 +14,7 @@
 
 <#-- show placement if detailview or not empty -->
 <#elseif (self.items?size > 0 || cmpage.detailView)>
-  <div class="${cssClasses} col-xs-12 col-md-${self.colspan!1}" <@cm.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
+  <div class="${cssClasses} col-xs-12 col-md-${self.colspan!1}" <@preview.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
     <#-- special placement: main if in detailview -->
     <#if placementName == "main" && cmpage.detailView>
       <#-- replace main placement with the single content and display it in detail view-->

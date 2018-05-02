@@ -20,7 +20,7 @@ const base = flow(
   javascript(),
   exposeModules(),
   process.env.NODE_ENV === "production" ? production() : development(),
-  themeZip(),
+  themeZip()
 );
 
 const entry = {};

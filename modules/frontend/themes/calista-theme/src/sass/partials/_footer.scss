@@ -2,6 +2,7 @@
 .#{$cm-footer-prefix},
 .#{$cm-footer-navigation-prefix} {
   font-family: $font-family-base;
+  clear: left;
 
   &__link {
     font-size: 12px;

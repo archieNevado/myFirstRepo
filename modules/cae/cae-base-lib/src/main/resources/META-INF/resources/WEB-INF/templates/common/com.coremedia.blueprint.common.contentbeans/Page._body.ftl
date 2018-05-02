@@ -10,7 +10,7 @@
     Please check the brick "bootstrap" or "generic templates" for a more detailed version.
 -->
 
-<body<@cm.metadata data=bp.setting(cmpage, "sliderMetaData", "")/>>
+<body<@preview.metadata data=bp.setting(cmpage, "sliderMetaData", "")/>>
 
   <#-- show pagegrid -->
   <@cm.include self=self.pageGrid />

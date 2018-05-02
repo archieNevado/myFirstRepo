@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
-
 public class AvailabilityServiceImpl extends AbstractIbmService implements AvailabilityService {
 
     private WcAvailabilityWrapperService availabilityWrapperService;
@@ -111,9 +109,4 @@ public class AvailabilityServiceImpl extends AbstractIbmService implements Avail
         this.commerceBeanFactory = commerceBeanFactory;
     }
 
-  @Nonnull
-  @Override
-  public AvailabilityService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, AvailabilityService.class);
-  }
 }

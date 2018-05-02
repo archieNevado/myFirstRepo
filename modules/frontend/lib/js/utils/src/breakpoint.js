@@ -5,18 +5,17 @@
  * @private
  */
 const polyfill = () => {
-
   //noinspection JSUnresolvedVariable
-  let styleMedia = (window.styleMedia || window.media);
+  let styleMedia = window.styleMedia || window.media;
 
   // For those that don't support matchMedium
   if (!styleMedia) {
-    const style   = document.createElement("style");
-    const script  = document.getElementsByTagName("script")[0];
-    let info      = null;
+    const style = document.createElement("style");
+    const script = document.getElementsByTagName("script")[0];
+    let info = null;
 
-    style.type  = "text/css";
-    style.id    = "matchmediajs-test";
+    style.type = "text/css";
+    style.id = "matchmediajs-test";
 
     if (!script) {
       document.head.appendChild(style);
@@ -25,10 +24,12 @@ const polyfill = () => {
     }
 
     // "style.currentStyle" is used by IE <= 8 and "window.getComputedStyle" for all other browsers
-    info = ("getComputedStyle" in window) && window.getComputedStyle(style, null) || style.currentStyle;
+    info =
+      ("getComputedStyle" in window && window.getComputedStyle(style, null)) ||
+      style.currentStyle;
 
     styleMedia = {
-      matchMedium: (media) => {
+      matchMedium: media => {
         const text = `@media ${media}{ #matchmediajs-test { width: 1px; } }`;
 
         // "style.styleSheet" is used by IE <= 8 and "style.textContent" for all other browsers
@@ -40,16 +41,15 @@ const polyfill = () => {
 
         // Test if media query is true or false
         return info.width === "1px";
-      }
+      },
     };
   }
 
-  return (media) => ({
+  return media => ({
     matches: styleMedia.matchMedium(media || "all"),
-    media: media || "all"
+    media: media || "all",
   });
 };
-
 
 //noinspection JSUnresolvedVariable
 /**

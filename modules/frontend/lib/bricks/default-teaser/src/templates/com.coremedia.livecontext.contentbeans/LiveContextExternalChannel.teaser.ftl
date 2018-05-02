@@ -8,7 +8,7 @@
 
 <#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
 
-<div class="${blockClass} ${blockClass}--livecontext-external-channel ${cssClasses} ${additionalClass}"<@cm.metadata self.content />>
+<div class="${blockClass} ${blockClass}--livecontext-external-channel ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
     <div class="${blockClass}__wrapper">
       <@bp.optionalLink href="${link}">
         <#-- picture -->
@@ -18,13 +18,13 @@
         <@bp.optionalLink href="${link}">
           <#-- teaser title -->
           <#if self.teaserTitle?has_content>
-              <h3 class="${blockClass}__headline" <@cm.metadata "properties.teaserTitle" />>
+              <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
                   <span>${self.teaserTitle!""}</span>
               </h3>
           </#if>
           <#-- teaser text -->
           <#if renderTeaserText && self.teaserText?has_content>
-              <p class="${blockClass}__text" <@cm.metadata "properties.teaserText" />>
+              <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
                 <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "square.max.length", 115)) />
               </p>
           </#if>

@@ -2,8 +2,8 @@
 
 <#assign fragmentViews=[
 {
-"viewName": "asTeaser",
-"titleKey": "preview_label_teaser"
+"viewName": "",
+"titleKey": "preview_label_DEFAULT"
 }] />
 
 <#assign fragmentedPreviews=bp.previewTypes(cmpage, self, fragmentViews)/>

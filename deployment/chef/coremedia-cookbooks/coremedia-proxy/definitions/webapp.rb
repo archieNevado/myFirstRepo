@@ -76,7 +76,7 @@ define :coremedia_proxy_webapp, :enable_ssl => true, :servlet_context => '' do
   proxy_template_cookbook ||= params[:proxy_template_cookbook] ||= 'coremedia-proxy'
   rewrite_template = params[:rewrite_template] ||= "rewrite/#{params[:name]}.erb"
   rewrite_template_cookbok ||= params[:rewrite_template_cookbok]
-  rewrite_log_level ||= params[:rewrite_log_level] ||= node['apache']['version'] == '2.4' ? 'trace1' : 0
+  rewrite_log_level ||= params[:rewrite_log_level] ||= 'trace1'
   name = params[:name]
   parent_params = params
   web_app name do

@@ -1,0 +1,53 @@
+.#{$cm-responsive-carousel-prefix} {
+  margin-bottom: 48px;
+
+  .cm-teasable__headline {
+    text-transform: uppercase;
+  }
+
+  .cm-teasable__caption {
+    font-size: inherit;
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 24px;
+  }
+
+  // shop now button
+  .cm-teasable {
+    .cm-button-group--shopnow {
+      display: none;
+    }
+
+    @include breakpoint(sm-and-up) {
+      &:hover {
+        .cm-button-group--shopnow {
+          display: block;
+          font-size: $cm-responsive-carousel-item-font-size;
+          left: 0;
+          margin: 0 auto;
+          position: absolute;
+          right: 0;
+          text-align: center;
+          top: 50%;
+          transform: translate(0, -50%);
+          width: auto;
+        }
+      }
+    }
+  }
+
+  .slick-list {
+    @include breakpoint(sm) {
+      margin-left: 62px - $cm-responsive-carousel-item-margin;
+      margin-right: 62px - $cm-responsive-carousel-item-margin;
+    }
+    @include breakpoint(md) {
+      margin-left: 80px - $cm-responsive-carousel-item-margin;
+      margin-right: 80px - $cm-responsive-carousel-item-margin;
+    }
+    @include breakpoint(lg) {
+      margin-left: 96px - $cm-responsive-carousel-item-margin;
+      margin-right: 96px - $cm-responsive-carousel-item-margin;
+    }
+  }
+}

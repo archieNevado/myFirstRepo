@@ -5,8 +5,8 @@
 
 <#assign uniqueId="drop_down_"+bp.generateId()/>
 
-<div dojoType="wc.widget.RefreshArea" widgetId="${uniqueId}" controllerId="departmentSubMenu_Controller" aria-labelledby="departmentsButton" <@cm.metadata self.navigation.content />>
-  <ul id="departmentsMenu" role="menu" data-parent="header" aria-labelledby="departmentsButton"<@cm.metadata "properties.children" />>
+<div dojoType="wc.widget.RefreshArea" widgetId="${uniqueId}" controllerId="departmentSubMenu_Controller" aria-labelledby="departmentsButton" <@preview.metadata self.navigation.content />>
+  <ul id="departmentsMenu" role="menu" data-parent="header" aria-labelledby="departmentsButton"<@preview.metadata "properties.children" />>
     <#list rootNode.visibleChildren as item>
       <#if item?is_last>
         <@cm.include self=item view="asTopNavigation" params={"additionalCssClass":"active"}/>

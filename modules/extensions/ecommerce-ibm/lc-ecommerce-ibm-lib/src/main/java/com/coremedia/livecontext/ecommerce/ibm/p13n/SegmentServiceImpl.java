@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SEGMENT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 import static java.util.stream.Collectors.collectingAndThen;
@@ -104,9 +103,4 @@ public class SegmentServiceImpl implements SegmentService {
             .collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
 
-  @Nonnull
-  @Override
-  public SegmentService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, SegmentService.class);
-  }
 }

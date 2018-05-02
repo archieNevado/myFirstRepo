@@ -78,10 +78,6 @@
       <artifactId>coremedia-encryption</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-common</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
     </dependency>

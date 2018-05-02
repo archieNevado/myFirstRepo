@@ -14,14 +14,15 @@ const BLOCK_NAME_DLC = "am-download-collection";
 const ELEMENT_NAME_DLC_BUTTON = "button";
 const ELEMENT_NAME_DLC_COUNTER = "counter";
 
-const BLOCK_NAME_DLC_RENDITION_CONTROL = "am-download-collection-rendition-control";
+const BLOCK_NAME_DLC_RENDITION_CONTROL =
+  "am-download-collection-rendition-control";
 
 const MODIFIER_NAME_DLC_RENDITION_CONTROL_ADDABLE = "addable";
 const MODIFIER_NAME_DLC_RENDITION_CONTROL_REMOVABLE = "removable";
 
-export const DOWNLOAD_COLLECTION_PROPERTY = 'downloadCollection';
+export const DOWNLOAD_COLLECTION_PROPERTY = "downloadCollection";
 
-export const RENDITION_SELECTION_PROPERTY = 'renditionSelection';
+export const RENDITION_SELECTION_PROPERTY = "renditionSelection";
 
 const EVENT_PREFIX = "coremedia.blueprint.am.downloadCollection.";
 export const EVENT_UPDATED = EVENT_PREFIX + "updated";
@@ -50,7 +51,10 @@ function getRenditionsToDownloadForAsset(downloadCollection, assetId) {
  * @returns {boolean}
  */
 export function isInDownloadCollection(assetId, rendition) {
-  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(getDownloadCollection(), assetId);
+  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(
+    getDownloadCollection(),
+    assetId
+  );
   return renditionsToDownloadForAsset.indexOf(rendition) >= 0;
 }
 
@@ -60,10 +64,14 @@ export function isInDownloadCollection(assetId, rendition) {
  * @returns {boolean}
  */
 export function hasRenditionInDownloadCollection(assetId) {
-  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(getDownloadCollection(), assetId);
-  return renditionsToDownloadForAsset && renditionsToDownloadForAsset.length > 0;
+  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(
+    getDownloadCollection(),
+    assetId
+  );
+  return (
+    renditionsToDownloadForAsset && renditionsToDownloadForAsset.length > 0
+  );
 }
-
 
 /**
  * Counts all renditions for all asset id in download collection.
@@ -123,39 +131,62 @@ export function getRenditionSelection() {
   return JSON.parse(localStorage.getItem(RENDITION_SELECTION_PROPERTY)) || [];
 }
 
-export function  updateDownloadCollectionCounterState($counter) {
+export function updateDownloadCollectionCounterState($counter) {
   const count = getDownloadCollectionCount();
   $counter.text(count);
 }
 
-export function  saveRenditionSelection(renditionSelection) {
+export function saveRenditionSelection(renditionSelection) {
   const renditionSelectionString = JSON.stringify(renditionSelection);
   localStorage.setItem(RENDITION_SELECTION_PROPERTY, renditionSelectionString);
 }
 
 export function updateRenditionLinkTextState($control, config) {
   if (isInDownloadCollection(config.assetId, config.rendition)) {
-    bem.removeBEMModifier($control, BLOCK_NAME_DLC_RENDITION_CONTROL, MODIFIER_NAME_DLC_RENDITION_CONTROL_ADDABLE);
-    bem.addBEMModifier($control, BLOCK_NAME_DLC_RENDITION_CONTROL, MODIFIER_NAME_DLC_RENDITION_CONTROL_REMOVABLE);
+    bem.removeBEMModifier(
+      $control,
+      BLOCK_NAME_DLC_RENDITION_CONTROL,
+      MODIFIER_NAME_DLC_RENDITION_CONTROL_ADDABLE
+    );
+    bem.addBEMModifier(
+      $control,
+      BLOCK_NAME_DLC_RENDITION_CONTROL,
+      MODIFIER_NAME_DLC_RENDITION_CONTROL_REMOVABLE
+    );
   } else {
-    bem.removeBEMModifier($control, BLOCK_NAME_DLC_RENDITION_CONTROL, MODIFIER_NAME_DLC_RENDITION_CONTROL_REMOVABLE);
-    bem.addBEMModifier($control, BLOCK_NAME_DLC_RENDITION_CONTROL, MODIFIER_NAME_DLC_RENDITION_CONTROL_ADDABLE);
+    bem.removeBEMModifier(
+      $control,
+      BLOCK_NAME_DLC_RENDITION_CONTROL,
+      MODIFIER_NAME_DLC_RENDITION_CONTROL_REMOVABLE
+    );
+    bem.addBEMModifier(
+      $control,
+      BLOCK_NAME_DLC_RENDITION_CONTROL,
+      MODIFIER_NAME_DLC_RENDITION_CONTROL_ADDABLE
+    );
   }
 }
 
 /**
  * Checks whether the Download Collection Button is disabled (no contents in local storage) or not (there is at least one rendition in local storage)
  */
-export function  updateDownloadCollectionButtonState($button, $counter) {
+export function updateDownloadCollectionButtonState($button, $counter) {
   // TODO: remove fallback
   const $collection = $("." + BLOCK_NAME_DLC);
-  $button = $button || bem.findBEMElement($collection, BLOCK_NAME_DLC, ELEMENT_NAME_DLC_BUTTON);
-  $counter = $counter || bem.findBEMElement($collection, BLOCK_NAME_DLC, ELEMENT_NAME_DLC_COUNTER);
+  $button =
+    $button ||
+    bem.findBEMElement($collection, BLOCK_NAME_DLC, ELEMENT_NAME_DLC_BUTTON);
+  $counter =
+    $counter ||
+    bem.findBEMElement($collection, BLOCK_NAME_DLC, ELEMENT_NAME_DLC_COUNTER);
 
   const $buttons = $button.add($counter);
 
   const downloadCollection = getDownloadCollection();
-  const disabled = (!downloadCollection || downloadCollection.length == 0 || $.isEmptyObject(downloadCollection));
+  const disabled =
+    !downloadCollection ||
+    downloadCollection.length == 0 ||
+    $.isEmptyObject(downloadCollection);
   $buttons.prop("disabled", disabled);
 }
 
@@ -165,17 +196,26 @@ export function  updateDownloadCollectionButtonState($button, $counter) {
  * @param {Number} assetId
  * @param {String} renditionName
  */
-export function  addOrRemoveRenditionFromDownloadCollection(assetId, renditionName) {
+export function addOrRemoveRenditionFromDownloadCollection(
+  assetId,
+  renditionName
+) {
   const downloadCollection = getDownloadCollection();
 
-  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(downloadCollection, assetId);
+  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(
+    downloadCollection,
+    assetId
+  );
 
   const indexOfRendition = renditionsToDownloadForAsset.indexOf(renditionName);
   if (indexOfRendition === -1) {
     if (getDownloadCollectionCount() < DOWNLOAD_COLLECTION_MAX_QUANTITY) {
       renditionsToDownloadForAsset.push(renditionName);
     } else {
-      console.error("Maximum number of items in Asset Download Collection reached", DOWNLOAD_COLLECTION_MAX_QUANTITY);
+      console.error(
+        "Maximum number of items in Asset Download Collection reached",
+        DOWNLOAD_COLLECTION_MAX_QUANTITY
+      );
     }
   } else {
     renditionsToDownloadForAsset.splice(indexOfRendition, 1);
@@ -187,28 +227,36 @@ export function  addOrRemoveRenditionFromDownloadCollection(assetId, renditionNa
   saveDownloadCollection(downloadCollection);
 }
 
-export function  addRenditionToDownloadCollection(assetId, renditionName) {
+export function addRenditionToDownloadCollection(assetId, renditionName) {
   const downloadCollection = getDownloadCollection();
 
-  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(downloadCollection, assetId);
+  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(
+    downloadCollection,
+    assetId
+  );
 
   const indexOfRendition = renditionsToDownloadForAsset.indexOf(renditionName);
   if (indexOfRendition === -1) {
     if (getDownloadCollectionCount() < DOWNLOAD_COLLECTION_MAX_QUANTITY) {
       renditionsToDownloadForAsset.push(renditionName);
     } else {
-      console.error("Maximum number of items in Asset Download Collection reached", DOWNLOAD_COLLECTION_MAX_QUANTITY);
+      console.error(
+        "Maximum number of items in Asset Download Collection reached",
+        DOWNLOAD_COLLECTION_MAX_QUANTITY
+      );
     }
   }
 
   saveDownloadCollection(downloadCollection);
-
 }
 
 export function removeRenditionFromDownloadCollection(assetId, renditionName) {
   const downloadCollection = getDownloadCollection();
 
-  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(downloadCollection, assetId);
+  const renditionsToDownloadForAsset = getRenditionsToDownloadForAsset(
+    downloadCollection,
+    assetId
+  );
 
   const indexOfRendition = renditionsToDownloadForAsset.indexOf(renditionName);
   if (indexOfRendition > -1) {
@@ -219,10 +267,9 @@ export function removeRenditionFromDownloadCollection(assetId, renditionName) {
   }
 
   saveDownloadCollection(downloadCollection);
-
 }
 
-export function  clearDefaultRenditionSelection() {
+export function clearDefaultRenditionSelection() {
   saveRenditionSelection([]);
 }
 
@@ -243,7 +290,7 @@ export function removeDefaultRenditionSelection(rendition) {
   saveRenditionSelection(renditionSelection);
 }
 
-export function  getDefaultRenditionSelection(rendition) {
+export function getDefaultRenditionSelection(rendition) {
   const renditionSelection = getRenditionSelection();
   return renditionSelection.indexOf(rendition) >= 0;
 }

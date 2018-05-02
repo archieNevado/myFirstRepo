@@ -119,10 +119,6 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
     StoreContext storeContext = commerceConnection.getStoreContext();
     Product product = (Product) commerceConnection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
 
-    if (product == null) {
-      return null;
-    }
-
     ExternalChannelContentTreeRelation treeRelation = (ExternalChannelContentTreeRelation) getTreeRelation();
     return treeRelation.getNearestContentForCategory(product.getCategory(), site);
   }

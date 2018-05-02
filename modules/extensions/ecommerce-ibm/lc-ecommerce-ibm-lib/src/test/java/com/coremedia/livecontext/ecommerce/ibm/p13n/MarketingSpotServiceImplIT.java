@@ -44,6 +44,8 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
   private static final String MARKETING_SPOT_EXTERNAL_ID1 = "ApparelRow1_Content";
   private static final String MARKETING_SPOT_EXTERNAL_ID2 = "BoysRow4_CatEntries";
   private static final String MARKETING_SPOT_EXTERNAL_ID3 = "PC_Homepage_Offer";
+  private static final String MARKETING_SPOT_WS_EXTERNAL_ID = "PC_Anniversary_Offer_Products";
+  private static final String WORKSPACE_ID = "10001";
 
   @Inject
   MarketingSpotServiceImpl testling;
@@ -66,6 +68,50 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
     assertNotNull(spot.getName());
     assertNotNull(spot.getId());
     assertNotNull(spot.getExternalId());
+  }
+
+  @Test
+  public void testFindAllMarketingSpotsInWorkspace() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+    StoreContext storeContext = testConfig.getStoreContext();
+    StoreContextHelper.setCurrentContext(storeContext);
+
+    UserContext userContext = UserContext.builder().build();
+    UserContextHelper.setCurrentContext(userContext);
+
+    List<MarketingSpot> marketingSpotsWithoutWorkspace = testling.findMarketingSpots(storeContext);
+    assertTrue(marketingSpotsWithoutWorkspace.size() > 100);
+
+    storeContext.setWorkspaceId(WORKSPACE_ID);
+    List<MarketingSpot> marketingSpotsWithWorkspace = testling.findMarketingSpots(storeContext);
+    assertEquals(marketingSpotsWithWorkspace.size(), marketingSpotsWithoutWorkspace.size() + 2);
+  }
+
+  @Test
+  public void testFindMarketingSpotInWSByExternalId() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+    StoreContext storeContext = testConfig.getStoreContext();
+    storeContext.setWorkspaceId(WORKSPACE_ID);
+    StoreContextHelper.setCurrentContext(storeContext);
+
+    UserContext userContext = UserContext.builder().build();
+    UserContextHelper.setCurrentContext(userContext);
+
+    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_WS_EXTERNAL_ID);
+    assertNotNull(spot);
+    assertNotNull(spot.getId());
+    assertEquals(MARKETING_SPOT_WS_EXTERNAL_ID, spot.getName());
+
+    List<CommerceObject> entities = spot.getEntities();
+    assertNotNull(entities);
+    assertEquals("entities should have size of 3", entities.size(), 3);
+
+    CommerceObject item = entities.get(0);
+    assertTrue("Product expected", item instanceof Product);
   }
 
   @Betamax(tape = "csi_testFindMarketingSpotByExternalId1", match = {MatchRule.path, MatchRule.query})

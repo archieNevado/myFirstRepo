@@ -6,7 +6,7 @@
 <#assign searchAction=bp.setting(cmpage.context,"searchAction", {})/>
 
 <div class="container">
-  <header id="cm-${self.name!""}" class="cm-header navbar"<@cm.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
+  <header id="cm-${self.name!""}" class="cm-header navbar">
     <#-- mobile hamburger menu -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -21,7 +21,7 @@
 
     <#-- cart widget -->
     <#if cartAction?has_content>
-      <div class="cm-header__cart navbar-right">
+      <div class="cm-header__cart navbar-right" <@preview.metadata [cartAction.content]/>>
         <@cm.include self=cartAction view="asHeader" />
       </div>
     </#if>
@@ -31,7 +31,7 @@
       <div class="cm-search__open-mobile-search-button">
         <span></span>
       </div>
-      <div id="cmSearchWrapper" class="cm-search navbar-form navbar-right">
+      <div id="cmSearchWrapper" class="cm-search navbar-form navbar-right" <@preview.metadata [searchAction.content]/>>
         <button type="button" class="navbar-toggle pull-left cm-search-form__close">
           <span class="sr-only">${bp.getMessage('search_close')}</span>
           <span class="icon-bar"></span>
@@ -85,7 +85,7 @@
         <#-- additional header items -->
         <#if (numberOfItems > 0)>
           <#list self.items![] as item>
-            <li class="cm-header__item">
+            <li class="cm-header__item" <@preview.metadata [cmpage.context.getContentId(), bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!"", item.content]/>>
               <@cm.include self=item view="asHeader" />
             </li>
           </#list>

@@ -57,11 +57,29 @@
 <StringProperty Name="viewName">DEFAULT</StringProperty>
 </Struct>
 <Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
+<Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMTeaser">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+</StructListProperty>
+<StructListProperty Name="CMExternalLink">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
 <Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>

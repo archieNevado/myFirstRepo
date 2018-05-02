@@ -36,51 +36,55 @@ function cmCarousel($carousel) {
   if (!$carousel || $carousel.length === 0) {
     return;
   }
-  const data = $carousel.data('cm-carousel');
+  const data = $carousel.data("cm-carousel");
   // pause the carousel from sliding if needed.
   const pause = Boolean(data.pause) || false;
 
   $carousel.carousel({
-    interval: Number(data.interval) || 5000
+    interval: Number(data.interval) || 5000,
   });
 
   if (pause) {
-    $carousel.carousel('pause');
+    $carousel.carousel("pause");
   }
 
   // EVENT BOOTSTRAP CAROUSEL, see http://getbootstrap.com/javascript/#carousel-events
-  $carousel.on('slid.bs.carousel', function () {
+  $carousel.on("slid.bs.carousel", function() {
     const $theCarousel = $(this);
-    const $slides = $theCarousel.find('.item');
-    const $activeSlide = $theCarousel.find('.item.active');
+    const $slides = $theCarousel.find(".item");
+    const $activeSlide = $theCarousel.find(".item.active");
     const index = $slides.index($activeSlide);
     const $pagination = $theCarousel.find(".cm-carousel__pagination-index");
     //set pagination
     $pagination.text(String(index + 1));
     // reload responsive image for active slide, hidden slides had no image because of height/width=0
     // (not in superhero, they are already loaded, avoid flickering in studio)
-    if (!$theCarousel.parent().hasClass('.cm-container--superhero')) {
+    if (!$theCarousel.parent().hasClass(".cm-container--superhero")) {
       responsiveImages($activeSlide.find(".cm-image--responsive"));
     }
   });
 
   // Stop carousel, if an item has an open quickinfo
-  $carousel.on('slide.bs.carousel', function (e) {
-    if ($carousel.children(".carousel-inner").hasClass("cm-quickinfo__parent--active")){
+  $carousel.on("slide.bs.carousel", function(e) {
+    if (
+      $carousel
+        .children(".carousel-inner")
+        .hasClass("cm-quickinfo__parent--active")
+    ) {
       e.preventDefault();
     }
-  })
+  });
 }
 
-$.fn.cmCarousel = function () {
-  return this.each(function () {
+$.fn.cmCarousel = function() {
+  return this.each(function() {
     cmCarousel($(this));
   });
 };
 
 // --- DOCUMENT READY ---
-$(function () {
-  const $carousels = $('[data-cm-carousel]');
+$(function() {
+  const $carousels = $("[data-cm-carousel]");
   cmCarousel($carousels);
   // Touch support for carousel
   $carousels.bcSwipe({ threshold: 50 });

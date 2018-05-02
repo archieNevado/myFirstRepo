@@ -26,10 +26,6 @@
       <artifactId>cap-multisite</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-logging</artifactId>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>es-demousers</artifactId>
       <version>${project.version}</version>
@@ -93,6 +89,7 @@
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>

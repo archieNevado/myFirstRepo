@@ -679,12 +679,23 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
 }
 
 
-#MiniShopCartProductAdded {
-  @include breakpoint("xs") {
-    left: 15px !important;
+div#MiniShopCartProductAdded {
+  $_base-padding: 30px;
+  $_padding_lg: $_base-padding + 15px;
+  $_padding_md: $_base-padding + 8px;
+
+  // override wcs styles for different media query width
+  @media screen and (max-width: 600px) {
+    left: 3px !important;
+  }
+  @include breakpoint("sm") {
+    left: auto !important;
   }
   @include breakpoint("md") {
-    right: 10% !important;
+    right: calc((100vw - #{$screen-md-min - $_padding_md})/2) !important;
+  }
+  @include breakpoint("lg") {
+    right: calc((100vw - #{$screen-lg-min - $_padding_lg})/2) !important;
   }
 }
 

@@ -14,7 +14,7 @@
     <#-- user profile / logout -->
     <#if self.authenticated>
       <#assign logoutLink=cm.getLink(logoutAction)/>
-      <div class="cm-placeholder cm-user-chooser" <@cm.metadata data=[logoutAction.content, "properties.id"] />>
+      <div class="cm-placeholder cm-user-chooser" <@preview.metadata data=[logoutAction.content, "properties.id"] />>
         <a class="cm-user-chooser__button" title="${self.user.givenName}" data-toggle="collapse"
            data-target=".cm-user-chooser__items">
           <span class="cm-user-chooser__givenname">${self.user.givenName!""}</span>
@@ -24,13 +24,13 @@
         <ul class="cm-user-chooser__items collapse">
           <li class="cm-user-chooser__item">
             <a href="${cm.getLink(profileAction)}"
-               title="${bp.getMessage("userDetails_title")}" <@cm.metadata data=[profileAction.content, "properties.id"] />>
+               title="${bp.getMessage("userDetails_title")}" <@preview.metadata data=[profileAction.content, "properties.id"] />>
               <span class="cm-icon__info"><@bp.message "userDetails_title" /></span>
             </a>
           </li>
           <li class="cm-user-chooser__item">
             <a href="${logoutLink}"
-               title="${bp.getMessage("logout_title")}" <@cm.metadata data=[logoutAction.content, "properties.id"] />>
+               title="${bp.getMessage("logout_title")}" <@preview.metadata data=[logoutAction.content, "properties.id"] />>
               <span class="cm-icon__info"><@bp.message "logout_title" /></span>
             </a>
           </li>
@@ -38,9 +38,9 @@
       </div>
     <#-- login -->
     <#else>
-      <div class="cm-placeholder cm-user-chooser" <@cm.metadata data=[loginAction.content, "properties.id"] />>
+      <div class="cm-placeholder cm-user-chooser" <@preview.metadata data=[loginAction.content, "properties.id"] />>
         <#assign loginLink=cm.getLink(self, {"next": "$nextUrl$", "absolute": true, "scheme": "https"})/>
-        <a data-href="${loginLink}" <@cm.metadata data="properties.teaserTitle" />>
+        <a data-href="${loginLink}" <@preview.metadata data="properties.teaserTitle" />>
           ${self.action.teaserTitle!""}
         </a>
       </div>

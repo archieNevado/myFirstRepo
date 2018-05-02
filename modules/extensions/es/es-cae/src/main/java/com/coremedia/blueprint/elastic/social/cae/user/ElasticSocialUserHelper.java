@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.user;
 
 import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
@@ -50,7 +51,7 @@ public class ElasticSocialUserHelper {
       user = communityUserService.createAnonymousUser(userId);
     }
     user.save();
-    LOGGER.info(PERSONAL_DATA, "created new community user {}", user);
+    LOGGER.info(PERSONAL_DATA, "created new community user {}", user.toIdString());
     return user;
   }
 
@@ -74,10 +75,15 @@ public class ElasticSocialUserHelper {
 
   public CommunityUser getLoggedInUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return (authentication == null || "anonymousUser".equals(authentication.getName())) ? null : getUser(authentication.getPrincipal());
+    return (authentication == null || isAnonymousUser(authentication)) ? null : getUser(authentication.getPrincipal());
   }
 
-  public CommunityUser getUser(Object principal) {
+  @SuppressWarnings("PersonalData") // safe use of personal data: user name compared with constant
+  private static boolean isAnonymousUser(@Nonnull Authentication authentication) {
+    return "anonymousUser".equals(authentication.getName());
+  }
+
+  public CommunityUser getUser(@PersonalData Object principal) {
     CommunityUser result = null;
     if (principal instanceof String) {
       result = communityUserService.getUserByName((String) principal);

@@ -1,8 +1,8 @@
 const closestPackage = require("closest-package");
 const deepmerge = require("deepmerge");
-const { getInstalledPathSync } = require('get-installed-path');
 const nodeSass = require("node-sass");
-const path = require("path");
+
+const { workspace: { getInstallationPath } } = require("@coremedia/tool-utils");
 
 function getPkgName(file) {
   const pkg = require(closestPackage.sync(file));
@@ -26,11 +26,15 @@ function hasPkgDependencyToCached(sourceFile, requiredFile, cache) {
   const requiredPkgName = getPkgName(requiredFile);
 
   // ignoring babel-runtime here...consider plugging into another phase where the runtime is not yet attached
-  if (sourcePkgName === requiredPkgName || requiredPkgName === "babel-runtime") {
+  if (
+    sourcePkgName === requiredPkgName ||
+    requiredPkgName === "babel-runtime"
+  ) {
     return true;
   }
 
-  cache[sourcePkgName] = cache[sourcePkgName] || getDependenciesByName(sourceFile);
+  cache[sourcePkgName] =
+    cache[sourcePkgName] || getDependenciesByName(sourceFile);
 
   return cache[sourcePkgName].indexOf(requiredPkgName) > -1;
 }
@@ -57,10 +61,14 @@ function hasPkgDependencyTo(sourceFile, requiredFile) {
  */
 function isIncluded(path, includes, excludes) {
   const patternOrStringMatches = patternOrString =>
-          (patternOrString instanceof RegExp && patternOrString.test(path))
-          || (typeof patternOrString === "string" && path.indexOf(patternOrString) > -1);
-  return (!includes || includes.length === 0 || includes.some(patternOrStringMatches))
-          && (!excludes || !excludes.some(patternOrStringMatches));
+    (patternOrString instanceof RegExp && patternOrString.test(path)) ||
+    (typeof patternOrString === "string" && path.indexOf(patternOrString) > -1);
+  return (
+    (!includes ||
+      includes.length === 0 ||
+      includes.some(patternOrStringMatches)) &&
+    (!excludes || !excludes.some(patternOrStringMatches))
+  );
 }
 
 function toArray(o) {
@@ -73,12 +81,16 @@ function toArray(o) {
   return [];
 }
 
-function getMissingDependencyErrorMessage(sourceFile, sourcePackage, requiredFile, requiredPackage) {
+function getMissingDependencyErrorMessage(
+  sourceFile,
+  sourcePackage,
+  requiredFile,
+  requiredPackage
+) {
   return `'${sourceFile}'\nModule:\t\t\t'${sourcePackage}'\nFile To Import:\t\t'${requiredFile}'\nMissing Dependency:\t'${requiredPackage}'`;
 }
 
 function gatherUnmanagedDependencies(sourceModule) {
-
   const result = [];
   const sourceFile = sourceModule && sourceModule.resource;
   if (!sourceFile) {
@@ -100,8 +112,8 @@ function gatherUnmanagedDependencies(sourceModule) {
         sourceFile: sourceFile,
         sourcePackage: getPkgName(sourceFile),
         requiredFile: requiredFile,
-        requiredPackage: getPkgName(requiredFile)
-      })
+        requiredPackage: getPkgName(requiredFile),
+      });
     }
   }
 
@@ -110,7 +122,10 @@ function gatherUnmanagedDependencies(sourceModule) {
 
 class DependencyCheckWebpackPlugin {
   constructor(options) {
-    this.options = deepmerge({ include: undefined, exclude: undefined}, options);
+    this.options = deepmerge(
+      { include: undefined, exclude: undefined },
+      options
+    );
     this.includes = toArray(this.options.include);
     this.excludes = toArray(this.options.exclude);
   }
@@ -118,25 +133,33 @@ class DependencyCheckWebpackPlugin {
   apply(compiler) {
     const plugin = this;
 
-    compiler.plugin('done', function(stats) {
+    compiler.plugin("done", function(stats) {
       const modules = stats.compilation.modules;
 
       for (let module of modules) {
         const unmanagedDependencies = gatherUnmanagedDependencies(module);
         for (let unmanagedDependency of unmanagedDependencies) {
-          if (isIncluded(unmanagedDependency.sourceFile, plugin.includes, plugin.excludes)) {
+          if (
+            isIncluded(
+              unmanagedDependency.sourceFile,
+              plugin.includes,
+              plugin.excludes
+            )
+          ) {
             stats.compilation.errors.push(
-                    new Error(getMissingDependencyErrorMessage(
-                            unmanagedDependency.sourceFile,
-                            unmanagedDependency.sourcePackage,
-                            unmanagedDependency.requiredFile,
-                            unmanagedDependency.requiredPackage
-                    ))
+              new Error(
+                getMissingDependencyErrorMessage(
+                  unmanagedDependency.sourceFile,
+                  unmanagedDependency.sourcePackage,
+                  unmanagedDependency.requiredFile,
+                  unmanagedDependency.requiredPackage
+                )
+              )
             );
           }
         }
       }
-    })
+    });
   }
 }
 
@@ -148,7 +171,7 @@ class DependencyCheckWebpackPlugin {
  * @param options
  */
 function getDependencyCheckNodeSassImporter(options) {
-  options = deepmerge({ include: undefined, exclude: undefined}, options);
+  options = deepmerge({ include: undefined, exclude: undefined }, options);
   const includes = toArray(options.include);
   const excludes = toArray(options.exclude);
 
@@ -164,25 +187,12 @@ function getDependencyCheckNodeSassImporter(options) {
     if (isIncluded(prev, includes, excludes)) {
       const prefixPattern = /^~/;
       if (prefixPattern.test(url)) {
-        url = url.replace(prefixPattern, '');
+        url = url.replace(prefixPattern, "");
 
         const modulePattern = /^((@[^\/]+\/)*[^\/])+/;
         if (modulePattern.test(url)) {
           const moduleName = modulePattern.exec(url)[0];
-          const nodeModulePaths = [path.join(path.dirname(closestPackage.sync(prev)), "node_modules")].concat(process.mainModule.paths);
-          try {
-            const moduleInstallationPath = getInstalledPathSync(moduleName, { paths: nodeModulePaths });
-            if (moduleInstallationPath) {
-              // check if dependency is specified
-              if (!hasPkgDependencyTo(prev, moduleInstallationPath)) {
-                done(new Error(getMissingDependencyErrorMessage(prev, url, getPkgName(prev), moduleName)));
-                return;
-              }
-            }
-          } catch (e) {
-            done(new Error(`Could not find installation folder for dependency '${moduleName}' of '${prev}', searched in ${nodeModulePaths}`));
-            return;
-          }
+          return getInstallationPath(moduleName, prev);
         }
       }
     }
@@ -192,5 +202,5 @@ function getDependencyCheckNodeSassImporter(options) {
 
 module.exports = {
   DependencyCheckWebpackPlugin,
-  getDependencyCheckNodeSassImporter
+  getDependencyCheckNodeSassImporter,
 };

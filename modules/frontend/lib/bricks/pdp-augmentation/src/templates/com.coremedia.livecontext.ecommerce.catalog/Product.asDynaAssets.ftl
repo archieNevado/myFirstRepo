@@ -81,7 +81,7 @@
         <ul class="cm-product-assets-downloads__list">
           <#list downloads![] as download>
             <#if download.data?has_content>
-              <li class="cm-product-assets-downloads__item"<@cm.metadata download.content />><@cm.include self=download view="asLink" /></li>
+              <li class="cm-product-assets-downloads__item"<@preview.metadata download.content />><@cm.include self=download view="asLink" /></li>
             </#if>
           </#list>
         </ul>

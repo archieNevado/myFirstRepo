@@ -22,13 +22,14 @@
   <#assign quickInfoData=quickInfoData + {"group": quickInfoGroup!""} />
 </#if>
 
-<div id="${quickInfoId!bp.generateId("quickinfo")}" class="cm-quickinfo <#if !overlay.displayPicture>cm-quickinfo--no-image</#if> ${classQuickInfo!""}" <@cm.dataAttribute name="data-cm-quickinfo" data=quickInfoData /><@cm.metadata data=(metadata![])+[self.content]/>>
+<div id="${quickInfoId!bp.generateId("quickinfo")}" class="cm-quickinfo <#if !overlay.displayPicture>cm-quickinfo--no-image</#if> ${classQuickInfo!""}" <@cm.dataAttribute name="data-cm-quickinfo" data=quickInfoData /><@preview.metadata data=(metadata![])+[self.content]/>>
 
   <#-- image -->
   <#if overlay.displayPicture>
     <div class="cm-quickinfo__container">
-      <#assign target=(self.target?has_content && self.target.openInNewTab)?then(' target="_blank"', "") />
-      <a href="${cm.getLink(self.target!cm.UNDEFINED)}"${target?no_esc} class="cm-quickinfo__picture-link">
+      <#assign target=(self.target?has_content && self.target.openInNewTab)?then('target="_blank"', "") />
+      <#assign rel=(self.target?has_content && self.target.openInNewTab)?then('rel="noopener"', "") />
+      <a href="${cm.getLink(self.target!cm.UNDEFINED)}" ${target?no_esc} ${rel?no_esc} class="cm-quickinfo__picture-link">
         <@cm.include self=self.picture!cm.UNDEFINED params={
           "classBox": "cm-quickinfo__picture-box",
           "classImage": "cm-quickinfo__picture",
@@ -46,14 +47,14 @@
 
       <div class="cm-quickinfo__header">
         <#if showTitle>
-          <h5 class="cm-quickinfo__title cm-heading5"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
+          <h5 class="cm-quickinfo__title cm-heading5"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
         </#if>
         <@bp.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
       </div>
 
       <#-- teaserText -->
       <#if showTeaserText>
-        <div class="cm-quickinfo__text"<@cm.metadata "properties.teaserText" />><@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", 265) /></div>
+        <div class="cm-quickinfo__text"<@preview.metadata "properties.teaserText" />><@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", 265) /></div>
       <#else>
         <div class="cm-quickinfo__text"></div>
       </#if>

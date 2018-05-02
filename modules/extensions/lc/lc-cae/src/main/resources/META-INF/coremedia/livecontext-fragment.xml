@@ -11,7 +11,6 @@
                            http://www.springframework.org/schema/util/spring-util.xsd">
 
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
-  <import resource="classpath:/com/coremedia/cae/options-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
@@ -111,7 +110,7 @@
     <property name="dataViewFactory" ref="dataViewFactory"/>
   </bean>
 
-  <customize:append id="liveContextCrossDomainWhiteList" bean="crossDomainEnabler" property="crossDomainWhitelist"
+  <customize:append id="liveContextCaeCorsConfiguration" bean="caeCorsConfiguration" property="allowedOrigins"
                     custom-value="${livecontext.crossdomain.whitelist}"/>
 
   <bean id="externalPageContextStrategy" class="com.coremedia.livecontext.fragment.ExternalPageContextStrategy">
@@ -122,11 +121,22 @@
   </bean>
 
   <!-- Former LC1 Integration-->
-  <customize:append id="livecontextLinkTransformerCustomizer" bean="linkTransformers">
+  <!--
+  This link transformer must be the last one in the chain as it needs to pick
+  up the query parameters added by other link transformers before it returns
+  an alternative, final representation (e.g. an HTML comment) which other
+  transformers do not understand.
+  -->
+  <customize:append id="livecontextLinkTransformerCustomizer" bean="linkTransformers" order="100000000">
     <list>
       <ref bean="lcLinkTransformer"/>
     </list>
   </customize:append>
+  <bean id="lcLinkTransformerOrderChecker"
+        class="com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformerOrderChecker">
+    <property name="linkTransformers" ref="linkTransformers"/>
+    <property name="liveContextLinkTransformer" ref="lcLinkTransformer"/>
+  </bean>
 
   <bean id="lcLinkTransformer" class="com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformer">
     <property name="removeJSession" value="true"/>
@@ -137,11 +147,7 @@
   </bean>
 
   <bean id="abstractLinkResolver" abstract="true"
-        class="com.coremedia.livecontext.fragment.links.transformers.resolvers.AbstractLiveContextLinkResolver">
-    <property name="dataViewFactory" ref="dataViewFactory"/>
-    <property name="currentContextService" ref="currentContextService"/>
-    <property name="settingsService" ref="settingsService"/>
-  </bean>
+        class="com.coremedia.livecontext.fragment.links.transformers.resolvers.AbstractLiveContextLinkResolver"/>
 
   <bean id="legacyExternalSeoSegmentBuilder" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.LegacyExternalSeoSegmentBuilder"/>
 

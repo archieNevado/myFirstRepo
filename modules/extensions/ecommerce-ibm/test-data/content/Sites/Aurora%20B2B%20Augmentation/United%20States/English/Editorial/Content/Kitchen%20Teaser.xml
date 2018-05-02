@@ -13,7 +13,7 @@
 <LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Options/Settings/Teaser%20Styles/Dark%20on%20Light.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Dark%20on%20Light"/>
 <IntProperty Name="positionX">-47</IntProperty>
 <IntProperty Name="positionY">-15</IntProperty>
-<IntProperty Name="width">40</IntProperty>
+<IntProperty Name="width">46</IntProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -34,13 +34,23 @@
 <contexts>
 </contexts>
 <teaserTitle></teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1">Growing my business</p><p>Find out more about kitchen products</p></div></teaserText>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-1 align--center">Growing my business</p><p class="align--center">Find out more about kitchen products</p></div></teaserText>
 <pictures>
 <link href="Homepage/Corporate%20Image/Chef%20Corp%20Foundf14a982c.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Homepage/Corporate%20Image/Chef%20Corp%20Founder%20Portrait%20Picture"/>
 </pictures>
 <related>
 </related>
 <target>
-<link href="../../Augmentation/B2B_Kitchen_Products/Kitchen%20Products.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Kitchen_Products/Kitchen%20Products"/>
 </target>
+<targets>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructListProperty Name="links">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMLinkable" xlink:href="coremedia:///cap/resources/../../Augmentation/B2B_Kitchen_Products/Kitchen%20Products.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Augmentation/B2B_Kitchen_Products/Kitchen%20Products"/>
+<BooleanProperty Name="callToActionEnabled">true</BooleanProperty>
+<StringProperty Name="callToActionCustomText"/>
+</Struct>
+</StructListProperty>
+</Struct>
+</targets>
 </CMTeaser>

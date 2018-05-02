@@ -2,10 +2,9 @@ import $ from "jquery";
 import * as logger from "@coremedia/js-logger";
 
 function threeSixtySpinner(spinner) {
-
   const $document = $(document);
   const $container = $(spinner);
-  const images = $container.find('.cm-spinner__image');
+  const images = $container.find(".cm-spinner__image");
 
   // Number of  total frames used in this spinner
   const totalFrames = images.length;
@@ -44,7 +43,7 @@ function threeSixtySpinner(spinner) {
     logger.log("Initialize 360° Spinner with " + totalFrames + " frames");
 
     // Inititialize frames (array of image objects)
-    images.each(function () {
+    images.each(function() {
       frames.push($(this));
     });
 
@@ -59,7 +58,7 @@ function threeSixtySpinner(spinner) {
     /**
      * Adds the jQuery "mousedown" and "touchstart" event to the image slider wrapper.
      */
-    $container.on("mousedown touchstart", function (event) {
+    $container.on("mousedown touchstart", function(event) {
       // leftclick
       if (event.type == "mousedown" && event.which == 1) {
         ready = true;
@@ -79,7 +78,9 @@ function threeSixtySpinner(spinner) {
         logger.log("360° Spinner: start dragging by " + event.type);
         // Remove Icon
         hideIcon();
-        $container.closest(".cm-lightbox--inline").attr("data-stopopening", "false");
+        $container
+          .closest(".cm-lightbox--inline")
+          .attr("data-stopopening", "false");
         $container.closest(".mfp-container").attr("data-stopclosing", "false");
       }
     });
@@ -87,10 +88,12 @@ function threeSixtySpinner(spinner) {
     /**
      * Add the jQuery "mousemove" and "touchmove" event handler, if started dragging inside the $container.
      */
-    $document.on("mousemove touchmove", function (event) {
+    $document.on("mousemove touchmove", function(event) {
       if (ready) {
         dragging = true;
-        $container.closest(".cm-lightbox--inline").attr("data-stopopening", "true");
+        $container
+          .closest(".cm-lightbox--inline")
+          .attr("data-stopopening", "true");
         $container.closest(".mfp-container").attr("data-stopclosing", "true");
 
         event.preventDefault();
@@ -103,15 +106,17 @@ function threeSixtySpinner(spinner) {
     /**
      * Adds the jQuery "mouseup" event to the document for stopping, if started dragging inside the $container.
      */
-    $document.on("mouseup touchend", function (event) {
+    $document.on("mouseup touchend", function(event) {
       ready = false;
       if (dragging) {
         dragging = false;
         event.preventDefault();
         event.stopImmediatePropagation();
         // remove close click stop  to enable outside click again
-        window.setTimeout(function () {
-          $container.closest(".mfp-container").attr("data-stopclosing", "false");
+        window.setTimeout(function() {
+          $container
+            .closest(".mfp-container")
+            .attr("data-stopclosing", "false");
         }, 100);
 
         logger.log("360° Spinner: stop dragging");
@@ -121,17 +126,17 @@ function threeSixtySpinner(spinner) {
     /**
      * Adds the jQuery "keydown" event to the document. You can move the spinner by pressing left or right on the keyboard.
      */
-    $document.on("keydown", function (event) {
+    $document.on("keydown", function(event) {
       // only if spinner is visible
-      if ($container.css("visibility") !== 'hidden') {
+      if ($container.css("visibility") !== "hidden") {
         const key = event.keyCode || event.which;
         switch (key) {
-                // left key, go one frame to the left
+          // left key, go one frame to the left
           case 37:
             endFrame--;
             moved = true;
             break;
-                // right key, go one frame to the right
+          // right key, go one frame to the right
           case 39:
             endFrame++;
             moved = true;
@@ -145,9 +150,10 @@ function threeSixtySpinner(spinner) {
         }
       }
     });
-
   } else {
-    logger.log("Error: Found 360° Spinner without frames, can't initialize it.");
+    logger.log(
+      "Error: Found 360° Spinner without frames, can't initialize it."
+    );
   }
 
   /* --- internal functions ------------------------------------------------------------------------------------- */
@@ -162,7 +168,10 @@ function threeSixtySpinner(spinner) {
       // By adding only 10% we get a nice smooth and eased animation.
       // If the distance is a positive number, we have to ceil the value, if its a negative number, we have to floor it to make sure
       // that the "currentFrame" value surely reaches the "endFrame" value and the rendering doesn't end up in an infinite loop.
-      const frameEasing = endFrame < currentFrame ? Math.floor((endFrame - currentFrame) * 0.1) : Math.ceil((endFrame - currentFrame) * 0.1);
+      const frameEasing =
+        endFrame < currentFrame
+          ? Math.floor((endFrame - currentFrame) * 0.1)
+          : Math.ceil((endFrame - currentFrame) * 0.1);
       // Sets the current image to be hidden
       hidePreviousFrame();
       // Increments / decrements the "currentFrame" value by the 10% of the frame distance
@@ -211,7 +220,7 @@ function threeSixtySpinner(spinner) {
   function getNormalizedCurrentFrame() {
     let c = Math.ceil(currentFrame % totalFrames);
     if (c < 0) {
-      c += (totalFrames - 1);
+      c += totalFrames - 1;
     }
     return c;
   }
@@ -220,7 +229,9 @@ function threeSixtySpinner(spinner) {
    * Returns a simple event regarding the original event is a mouse event or a touch event.
    */
   function getPointerEvent(event) {
-    return event.originalEvent.targetTouches ? event.originalEvent.targetTouches[0] : event;
+    return event.originalEvent.targetTouches
+      ? event.originalEvent.targetTouches[0]
+      : event;
   }
 
   /**
@@ -239,9 +250,21 @@ function threeSixtySpinner(spinner) {
         pointerDistance = pointerEndPosX - pointerStartPosX;
         // Calculates the endFrame using the distance between the pointer X starting and ending positions and the "speedMultiplier" values
         if (pointerDistance > 0) {
-          endFrame = currentFrame + Math.ceil((totalFrames - 1) * speedMultiplier * (pointerDistance / $document.width()));
+          endFrame =
+            currentFrame +
+            Math.ceil(
+              (totalFrames - 1) *
+                speedMultiplier *
+                (pointerDistance / $document.width())
+            );
         } else {
-          endFrame = currentFrame + Math.floor((totalFrames - 1) * speedMultiplier * (pointerDistance / $document.width()));
+          endFrame =
+            currentFrame +
+            Math.floor(
+              (totalFrames - 1) *
+                speedMultiplier *
+                (pointerDistance / $document.width())
+            );
         }
         // Updates the image slider frame animation
         refresh();
@@ -257,16 +280,16 @@ function threeSixtySpinner(spinner) {
    * Fade out overlay icon, if displayed
    */
   function hideIcon() {
-    const $icon = $container.find('.cm-spinner__icon');
+    const $icon = $container.find(".cm-spinner__icon");
     if ($icon.length) {
       $icon.fadeOut();
     }
   }
 }
 
-export default function (domElementOrJQueryResult) {
+export default function(domElementOrJQueryResult) {
   if (domElementOrJQueryResult instanceof $) {
-    $.each(domElementOrJQueryResult, function (index, item) {
+    $.each(domElementOrJQueryResult, function(index, item) {
       threeSixtySpinner(item);
     });
   } else {

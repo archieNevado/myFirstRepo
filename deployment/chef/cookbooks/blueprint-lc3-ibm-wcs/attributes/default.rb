@@ -25,14 +25,13 @@ default['blueprint']['lc3-ibm-wcs']['application.properties']['blueprint.host.he
 
 # set this to true to disable SSLProxyVerify, SSLProxyCheckPeerCN, SSLProxyCheckPeerName
 default['blueprint']['lc3-ibm-wcs']['ssl_proxy_verify'] = true
-rewrite_log_level = node['apache']['version'] == '2.4' ? 'trace1' : 0
 
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']['default']['host'] = node['blueprint']['lc3-ibm-wcs']['cms_host']
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['cluster']['default']['port'] = '42180'
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['context'] = 'blueprint'
 
 # Commerceled-led site, the id property of the CMSite content associated with this site_id
-default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['rewrite_log_level'] = rewrite_log_level
+default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['rewrite_log_level'] = 'trace1'
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['server_name'] = "helios.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['server_aliases'] = ['fragment.supplier.blueprint-box.vagrant']
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['helios']['default_site'] = 'aurora'
@@ -46,11 +45,11 @@ default['blueprint']['lc3-ibm-wcs']['virtual_host']['delivery']['sites']['calist
 
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['server_name'] = "shop-helios.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['server_aliases'] = []
-default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['rewrite_log_level'] = rewrite_log_level
+default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop']['rewrite_log_level'] = 'trace1'
 
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['server_name'] = "shop-preview-production-helios.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['time_travel_alias'] = "shop-preview-helios.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['server_aliases'] = []
-default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['rewrite_log_level'] = rewrite_log_level
+default['blueprint']['lc3-ibm-wcs']['virtual_host']['shop-preview']['rewrite_log_level'] = 'trace1'
 # there is only one preview, we need to register an alias for the shop-preview-production fragment augmentation
 default['blueprint']['proxy']['virtual_host']['preview']['server_aliases']['lc3-ibm-wcs'] = 'preview-fragment.supplier.blueprint-box.vagrant'

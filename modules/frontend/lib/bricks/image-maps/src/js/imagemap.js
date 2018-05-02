@@ -12,17 +12,17 @@ import * as quickInfo from "@coremedia/brick-quick-info";
 function coordsToRect(coords) {
   // coords = left,top,right,bottom
   // browsers also support flipped rects (so right < left and bottom < top are valid)
-  const coordsAsInts = coords.split(",").map(function (i) {
+  const coordsAsInts = coords.split(",").map(function(i) {
     return Math.floor(parseInt(i));
   });
 
   let result = [];
   if (coordsAsInts.length === 4) {
     result = [
-      {x: coordsAsInts[0], y: coordsAsInts[1]},
-      {x: coordsAsInts[2], y: coordsAsInts[1]},
-      {x: coordsAsInts[2], y: coordsAsInts[3]},
-      {x: coordsAsInts[0], y: coordsAsInts[3]}
+      { x: coordsAsInts[0], y: coordsAsInts[1] },
+      { x: coordsAsInts[2], y: coordsAsInts[1] },
+      { x: coordsAsInts[2], y: coordsAsInts[3] },
+      { x: coordsAsInts[0], y: coordsAsInts[3] },
     ];
   }
   return result;
@@ -117,7 +117,7 @@ function defaultToCoords() {
 }
 
 /**
- * @typedef {object} converterMap
+ * @typedef {Object} converterMap
  * @prop {function} rect
  * @prop {function} circle
  * @prop {function} poly
@@ -130,34 +130,34 @@ function defaultToCoords() {
 /**
  * Maps possible values for the attribute shape of the HTML map element to converter functions (both directions).
  *
- * @member {object} coordsConverter
+ * @member {Object} coordsConverter
  * @prop {converterMap} coordsTo
  * @prop {converterMap} toCoords
  */
 export const coordsConverter = {
   coordsTo: {
     // W3C
-    "rect": coordsToRect,
-    "circle": coordsToCircle,
-    "poly": coordsToPoly,
+    rect: coordsToRect,
+    circle: coordsToCircle,
+    poly: coordsToPoly,
     // supported in many browsers
-    "rectangle": coordsToRect,
-    "circ": coordsToCircle,
-    "polygon": coordsToPoly,
+    rectangle: coordsToRect,
+    circ: coordsToCircle,
+    polygon: coordsToPoly,
     // default is ignored (no transformation needed and no hotzone indicator)
-    "default": coordsToDefault
+    default: coordsToDefault,
   },
   toCoords: {
     // W3C
-    "rect": rectToCoords,
-    "circle": circleToCoords,
-    "poly": polyToCoords,
+    rect: rectToCoords,
+    circle: circleToCoords,
+    poly: polyToCoords,
     // supported in many browsers
-    "rectangle": rectToCoords,
-    "circ": circleToCoords,
-    "polygon": polyToCoords,
-    "default": defaultToCoords
-  }
+    rectangle: rectToCoords,
+    circ: circleToCoords,
+    polygon: polyToCoords,
+    default: defaultToCoords,
+  },
 };
 
 /**
@@ -166,14 +166,14 @@ export const coordsConverter = {
  *
  * @function calculateBoundingBox
  * @param {Array} coordsAsPoints
- * @return {object}
+ * @return {Object}
  */
 export function calculateBoundingBox(coordsAsPoints) {
   let result = {
     x1: undefined,
     y1: undefined,
     x2: undefined,
-    y2: undefined
+    y2: undefined,
   };
   for (let i = 0; i < coordsAsPoints.length; i++) {
     const point = coordsAsPoints[i];
@@ -181,7 +181,7 @@ export function calculateBoundingBox(coordsAsPoints) {
       x1: Math.min(result.x1 !== undefined ? result.x1 : point.x, point.x),
       x2: Math.max(result.x2 !== undefined ? result.x2 : point.x, point.x),
       y1: Math.min(result.y1 !== undefined ? result.y1 : point.y, point.y),
-      y2: Math.max(result.y2 !== undefined ? result.y2 : point.y, point.y)
+      y2: Math.max(result.y2 !== undefined ? result.y2 : point.y, point.y),
     };
   }
   return result;
@@ -196,7 +196,10 @@ export function calculateBoundingBox(coordsAsPoints) {
  */
 export function update($imagemap, newRatio) {
   // get configuration of imagemap
-  const config = $.extend({coordsBaseWidth: 1}, $imagemap.data("cm-imagemap"));
+  const config = $.extend(
+    { coordsBaseWidth: 1 },
+    $imagemap.data("cm-imagemap")
+  );
   const $areas = $imagemap.find(".cm-imagemap__areas");
   const $image = $imagemap.find(".cm-imagemap__picture");
   const $wrapper = $imagemap.find(".cm-imagemap__wrapper");
@@ -212,7 +215,7 @@ export function update($imagemap, newRatio) {
   const fraction = width / config.coordsBaseWidth;
 
   // iterate over all areas having shape and data-coords set
-  $areas.find("area[data-coords][shape]").each(function () {
+  $areas.find("area[data-coords][shape]").each(function() {
     const $area = $(this);
     let coords = $area.data("current-coords");
     const shape = $area.attr("shape");
@@ -233,42 +236,52 @@ export function update($imagemap, newRatio) {
 
     // There have to be at least 3 points, otherwise no shape can be drawn
     if (coordsAsPoints.length >= 3) {
-
       let i;
       // transform and normalize coordinates
       // smooth normalization needed taking left and right coordinate into account (for polygons)
       for (i = 0; i < coordsAsPoints.length; i++) {
-        coordsAsPoints[i].x = Math.min(Math.max(coordsAsPoints[i].x * fraction, 0), width);
-        coordsAsPoints[i].y = Math.min(Math.max(coordsAsPoints[i].y * fraction, 0), height);
+        coordsAsPoints[i].x = Math.min(
+          Math.max(coordsAsPoints[i].x * fraction, 0),
+          width
+        );
+        coordsAsPoints[i].y = Math.min(
+          Math.max(coordsAsPoints[i].y * fraction, 0),
+          height
+        );
       }
 
       const hotzoneBox = calculateBoundingBox(coordsAsPoints);
 
       // check visibility of hotzone:
       // surface area of bounding box must be greater than zero
-      let visible = (Math.abs(hotzoneBox.x1 - hotzoneBox.x2) * Math.abs(hotzoneBox.y1 - hotzoneBox.y2)) > 0;
+      let visible =
+        Math.abs(hotzoneBox.x1 - hotzoneBox.x2) *
+          Math.abs(hotzoneBox.y1 - hotzoneBox.y2) >
+        0;
 
       // hotzone indicator must fit into image
       const hotzoneCenter = {
         x: (hotzoneBox.x1 + hotzoneBox.x2) / 2,
-        y: (hotzoneBox.y1 + hotzoneBox.y2) / 2
+        y: (hotzoneBox.y1 + hotzoneBox.y2) / 2,
       };
       const $hotzoneIndicator = $area.next(".cm-imagemap__hotzone");
       const hotzoneIndicatorWidth = Math.abs($hotzoneIndicator.width());
       const hotzoneIndicatorHeight = Math.abs($hotzoneIndicator.height());
       const hotzoneIndicatorBox = {
-        x1: hotzoneCenter.x - (hotzoneIndicatorWidth / 2),
-        x2: hotzoneCenter.x + (hotzoneIndicatorWidth / 2),
-        y1: hotzoneCenter.y - (hotzoneIndicatorHeight / 2),
-        y2: hotzoneCenter.y + (hotzoneIndicatorHeight / 2)
+        x1: hotzoneCenter.x - hotzoneIndicatorWidth / 2,
+        x2: hotzoneCenter.x + hotzoneIndicatorWidth / 2,
+        y1: hotzoneCenter.y - hotzoneIndicatorHeight / 2,
+        y2: hotzoneCenter.y + hotzoneIndicatorHeight / 2,
       };
 
       // short formular, assuming x1 <= x2, y1 <= y2
       /* jshint ignore:start */
-      visible = visible && hotzoneIndicatorBox.x1 >= 0
-              && hotzoneIndicatorBox.x2 < width
-              && hotzoneIndicatorBox.y1 >= 0
-              && hotzoneIndicatorBox.y2 < height;
+      visible =
+        visible &&
+        hotzoneIndicatorBox.x1 >= 0 &&
+        hotzoneIndicatorBox.x2 < width &&
+        hotzoneIndicatorBox.y1 >= 0 &&
+        hotzoneIndicatorBox.y2 < height;
       /* jshint ignore:end */
 
       if (visible) {
@@ -280,16 +293,19 @@ export function update($imagemap, newRatio) {
           $area.removeAttr("coords");
         }
 
-        $hotzoneIndicator.each(function () {
+        $hotzoneIndicator.each(function() {
           const $hotzoneIndicator = $(this);
           // the area's marker div must be repositioned if ratio has changed
-          if (newRatio !== undefined || $hotzoneIndicator.data("cm-hotzone-indicator-disabled")) {
+          if (
+            newRatio !== undefined ||
+            $hotzoneIndicator.data("cm-hotzone-indicator-disabled")
+          ) {
             $hotzoneIndicator.data("cm-hotzone-indicator-disabled", false);
             $hotzoneIndicator.css({
-              "top": hotzoneCenter.y * 100 / $wrapper.height() + "%",
-              "left": hotzoneCenter.x * 100 / $wrapper.width() + "%",
+              top: hotzoneCenter.y * 100 / $wrapper.height() + "%",
+              left: hotzoneCenter.x * 100 / $wrapper.width() + "%",
               //"display": "",
-              "transform": ""
+              transform: "",
             });
           }
         });
@@ -298,10 +314,10 @@ export function update($imagemap, newRatio) {
         $area.attr("coords", [rWidth, rHeight, rWidth, rHeight].join(","));
         $hotzoneIndicator.data("cm-hotzone-indicator-disabled", true);
         $hotzoneIndicator.css({
-          "transform": "none",
+          transform: "none",
           //"display": "none"
-          "top": "100%",
-          "left": "100%"
+          top: "100%",
+          left: "100%",
         });
       }
     }
@@ -321,11 +337,11 @@ export function init($imagemap) {
 
   // Handle responsive and non-responsive images
   if ($image.data("cm-responsive-image-state") !== undefined) {
-    $image.on("srcChanging", function () {
+    $image.on("srcChanging", function() {
       // hide hotzones if src is changing
       $imagemap.find(".cm-imagemap__hotzone").css("display", "none");
     });
-    $image.on("srcChanged", function (event) {
+    $image.on("srcChanged", function(event) {
       // display hotzones if src has changed (and is fully loaded)
       $imagemap.find(".cm-imagemap__hotzone").css("display", "");
       update($imagemap, event.ratio);
@@ -337,16 +353,19 @@ export function init($imagemap) {
   }
 
   // imagemap plugin doesn't rely on quickinfos being elements of the imagemap
-  const areasConfig = $.extend({quickInfoMainId: undefined}, $areas.data("cm-areas"));
+  const areasConfig = $.extend(
+    { quickInfoMainId: undefined },
+    $areas.data("cm-areas")
+  );
   function openQuickInfoMain() {
     if (areasConfig.quickInfoMainId !== undefined) {
-      $("#" + areasConfig.quickInfoMainId).each(function () {
+      $("#" + areasConfig.quickInfoMainId).each(function() {
         quickInfo.show($(this));
       });
     }
   }
 
-  $image.on("click", function () {
+  $image.on("click", function() {
     openQuickInfoMain();
   });
 
@@ -354,29 +373,40 @@ export function init($imagemap) {
 
   function mouseenter() {
     const $this = $(this);
-    const $button = $this.is(".cm-imagemap__hotzone") ? $this : $this.next(".cm-imagemap__hotzone");
+    const $button = $this.is(".cm-imagemap__hotzone")
+      ? $this
+      : $this.next(".cm-imagemap__hotzone");
     $button.addClass("cm-imagemap__hotzone--hover");
   }
   function mouseleave() {
     const $this = $(this);
-    const $button = $this.is(".cm-imagemap__hotzone") ? $this : $this.next(".cm-imagemap__hotzone");
+    const $button = $this.is(".cm-imagemap__hotzone")
+      ? $this
+      : $this.next(".cm-imagemap__hotzone");
     $button.removeClass("cm-imagemap__hotzone--hover");
   }
 
   // delegate click to button
-  $imagemap.find(".cm-imagemap__area").click(function () {
-    $(this).next(".cm-imagemap__hotzone").trigger("click");
+  $imagemap.find(".cm-imagemap__area").click(function() {
+    $(this)
+      .next(".cm-imagemap__hotzone")
+      .trigger("click");
     return false;
   });
 
-  $imagemap.find(".cm-imagemap__area, " + ".cm--imagemap__hotzone").hover(mouseenter, mouseleave);
+  $imagemap
+    .find(".cm-imagemap__area, " + ".cm--imagemap__hotzone")
+    .hover(mouseenter, mouseleave);
 
   // listen to quickinfo changed event and adjust hotzone state accordingly
-  $areas.find(".cm-imagemap__area").each(function () {
+  $areas.find(".cm-imagemap__area").each(function() {
     const $area = $(this);
     const quickInfoId = $area.data("quickinfo");
     const $button = $area.next(".cm-imagemap__hotzone");
-    $("#" + quickInfoId).on(quickInfo.EVENT_QUICKINFO_CHANGED, function (event, active) {
+    $("#" + quickInfoId).on(quickInfo.EVENT_QUICKINFO_CHANGED, function(
+      event,
+      active
+    ) {
       if (active) {
         $button.addClass("cm-imagemap__hotzone--active");
         $areas.addClass("cm-imagemap__areas--active");

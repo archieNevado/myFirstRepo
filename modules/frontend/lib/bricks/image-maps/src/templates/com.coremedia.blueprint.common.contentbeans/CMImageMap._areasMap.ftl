@@ -69,7 +69,8 @@
       </#if>
     </#if>
   <#else>
-    <#assign target=(self.target?has_content && self.target.openInNewTab)?then(' target="_blank"', "") />
-    <area shape="default" href="${cm.getLink(self.target!cm.UNDEFINED)}"${target?no_esc} class="cm-imagemap__area">
+    <#assign target=(self.target?has_content && self.target.openInNewTab)?then('target="_blank"', "") />
+    <#assign rel=(self.target?has_content && self.target.openInNewTab)?then('rel="noopener"', "") />
+    <area shape="default" href="${cm.getLink(self.target!cm.UNDEFINED)}" ${target?no_esc} ${rel?no_esc} class="cm-imagemap__area">
   </#list>
 </map>

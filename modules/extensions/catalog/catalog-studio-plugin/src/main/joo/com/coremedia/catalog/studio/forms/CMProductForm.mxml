@@ -5,7 +5,8 @@
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
-        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config">
+        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
+        xmlns:ui="exml:com.coremedia.ui.config">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
@@ -65,6 +66,19 @@
                                                         contentTypes="CMDownload"
                                                         propertyName="downloads"/>
               </editor:additionalToolbarItems>
+              <editor:fields>
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+              </editor:fields>
+              <editor:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn flex="1"/>
+                <bpforms:ValidityColumn/>
+                <editor:StatusColumn/>
+              </editor:columns>
             </editor:LinkListPropertyField>
           </editor:items>
         </editor:PropertyFieldGroup>

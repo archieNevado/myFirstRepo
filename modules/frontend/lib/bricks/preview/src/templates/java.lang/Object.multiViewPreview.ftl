@@ -6,7 +6,7 @@
 <#-- @ftlvariable name="fragmentView.titleKey" type="java.lang.String" -->
 <#-- @ftlvariable name="fragmentView.title" type="java.lang.String" -->
 
-<div<@bp.renderAttr additionalAttr!{} /> <@cm.metadata self.content!cm.UNDEFINED />>
+<div<@bp.renderAttr additionalAttr!{} /> <@preview.metadata self.content!cm.UNDEFINED />>
   <#-- iterate over all views as requested by the including template -->
   <#list fragmentViews![] as fragmentView>
     <#assign bean=fragmentView.bean!self />
@@ -25,7 +25,7 @@
         </#if>
       </a>
       <div class="toggle-container cm-preview-item__container">
-        <div class="cm-preview-content cm-clearfix">
+        <div class="cm-preview-content">
           <#if viewName =="asListItem">
             <ol class="list">
               <@cm.include self=bean view=viewName />

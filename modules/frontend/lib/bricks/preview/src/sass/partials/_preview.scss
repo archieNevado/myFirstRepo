@@ -1,3 +1,75 @@
+/*! CoreMedia Studio - Styles for Preview */
+
+// ### FRAGMENT PREVIEW ###
+
+/* images */
+.cm-preview__image .cm-image {
+  position: relative; /* reset responsive image */
+  /* at least show the spinning icon of the background (32x32) */
+  display: inline-block;
+  min-width: 35px;
+  min-height: 35px;
+}
+
+.cm-page-preview {
+  background: none transparent; /* same color as Studio frame */
+  margin: 0;
+  padding: 0;
+  height: auto; /* reset 100% height by themes to avoid scrollbars caused by margin of items */
+}
+
+/* fragmented item */
+.cm-preview-item {
+  margin-top: 2px;
+}
+
+/* studio look like buttons in fragment preview */
+.cm-page-preview .toggle-button {
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADNJREFUeNpiYBgFgxPIA/F7IP6PBb+HyhME+lgMeQ8VJxogG0KyZmRD7pOreRTQCwAEGABc9hDJtWMwowAAAABJRU5ErkJggg==') 6px center no-repeat #C8C6C6;
+}
+
+.cm-page-preview .toggle-button.toggle-off {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADFJREFUeNpiYBgF+IA8pQa8B2J9Sgz4T6kh/yk15D8Svj9gLqAoDCiOBfkRkt4BAgwACLgQycQ7s9wAAAAASUVORK5CYII=');
+}
+
+.cm-page-preview .toggle-container-off {
+  display: none;
+}
+
+/* headline */
+.cm-preview-item__headline {
+  display: block;
+  padding: 4px 6px 4px 24px;
+  font: 700 12px/32px 'Roboto', 'Segoe UI', 'Trebuchet MS', 'Lucida Grande', 'Helvetica', sans-serif;
+  color: #000;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cm-preview-item__headline:hover,
+.cm-preview-item__headline:focus,
+.cm-preview-item__headline:active {
+  color: #000;
+  text-decoration: none;
+}
+
+/* content */
+.cm-preview-item__container {
+  display: block;
+  padding: 12px;
+}
+
+.cm-preview-content {
+  padding: 15px;
+  background-color: #ffffff;
+  transition: box-shadow 0.25s;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.6);
+
+  .content {
+    @include clearfix();
+  }
+}
+
 /* image with details (description and copyright) */
 .cm-image-box {
   &--details {

@@ -29,6 +29,8 @@
     <property name="serviceUser" value="${livecontext.service.credentials.username}"/>
     <property name="servicePassword" value="${livecontext.service.credentials.password}"/>
     <property name="commerceCache" ref="commerceCache"/>
+    <property name="authHeaderName" value="${livecontext.rest.connector.authHeaderName:}"/>
+    <property name="authHeaderValue" value="${livecontext.rest.connector.authHeaderValue:}"/>
   </bean>
 
   <bean id="storeFrontConnector" class="com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector">

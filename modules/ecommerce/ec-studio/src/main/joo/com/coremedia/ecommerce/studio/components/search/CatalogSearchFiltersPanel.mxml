@@ -31,7 +31,7 @@
   </fx:Declarations>
 
   <header>
-    <Header enableFocusableContainer="false"/>
+    <Header u:focusableContainer="false"/>
   </header>
   <items>
     <!--<editor:searchFilters/>-->

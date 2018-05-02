@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.MARTETING_SPOT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 import static java.util.Arrays.asList;
@@ -42,7 +40,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
             new MarketingSpotsCacheKey(storeContext, UserContextHelper.getCurrentContext(),
                     marketingSpotWrapperService, commerceCache));
 
-    return createMarketingSpotBeansFor(wcMarketingSpot);
+    return createMarketingSpotBeansFor(wcMarketingSpot, storeContext);
   }
 
   @Nullable
@@ -52,7 +50,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     Map<String, Object> wcMarketingSpot = commerceCache.get(
             new MarketingSpotCacheKey(id, storeContext, userContext, marketingSpotWrapperService, commerceCache));
 
-    return createMarketingSpotBeanFor(wcMarketingSpot, false);
+    return createMarketingSpotBeanFor(wcMarketingSpot, false, storeContext);
   }
 
   @VisibleForTesting
@@ -73,7 +71,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     Map<String, Object> wcMarketingSpots = marketingSpotWrapperService.searchMarketingSpots(searchTerm, searchParams,
             storeContext, UserContextHelper.getCurrentContext());
 
-    List<MarketingSpot> spots = createMarketingSpotBeansFor(wcMarketingSpots);
+    List<MarketingSpot> spots = createMarketingSpotBeansFor(wcMarketingSpots, storeContext);
 
     SearchResult<MarketingSpot> result = new SearchResult<>();
     result.setSearchResult(spots);
@@ -84,7 +82,8 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
   }
 
   @Nullable
-  protected MarketingSpot createMarketingSpotBeanFor(@Nullable Map<String, Object> marketingSpotWrapper, boolean reloadById) {
+  protected MarketingSpot createMarketingSpotBeanFor(@Nullable Map<String, Object> marketingSpotWrapper, boolean reloadById,
+                                                     @Nonnull StoreContext storeContext) {
     if (marketingSpotWrapper == null) {
       return null;
     }
@@ -97,9 +96,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
             toMarketingSpotTechId(getStringValueForKey(marketingSpotWrapper,
                     isESpotResult(marketingSpotWrapper) ? "MarketingSpotData[0].marketingSpotIdentifier" : "MarketingSpot[0].spotId"));
 
-    StoreContext currentContext = StoreContextHelper.getCurrentContextOrThrow();
-
-    final MarketingSpotImpl spot = (MarketingSpotImpl) commerceBeanFactory.createBeanFor(id, currentContext);
+    final MarketingSpotImpl spot = (MarketingSpotImpl) commerceBeanFactory.createBeanFor(id, storeContext);
     Transformer transformer = null;
     if (reloadById) {
       transformer = new Transformer() {
@@ -122,7 +119,8 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     return spot;
   }
 
-  protected List<MarketingSpot> createMarketingSpotBeansFor(Map<String, Object> marketingSpotWrappers) {
+  protected List<MarketingSpot> createMarketingSpotBeansFor(Map<String, Object> marketingSpotWrappers,
+                                                            @Nonnull StoreContext storeContext) {
     if (marketingSpotWrappers == null || marketingSpotWrappers.isEmpty()) {
       return Collections.emptyList();
     }
@@ -138,7 +136,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
         outerWrapper.put("resourceId", marketingSpotWrappers.get("resourceId"));
         outerWrapper.put("resourceName", marketingSpotWrappers.get("resourceName"));
         outerWrapper.put(isESpotResult(outerWrapper) ? "MarketingSpotData" : "MarketingSpot", asList(wrapper));
-        result.add(createMarketingSpotBeanFor(outerWrapper, true));
+        result.add(createMarketingSpotBeanFor(outerWrapper, true, storeContext));
       }
     }
 
@@ -200,9 +198,4 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     this.useExternalIdForBeanCreation = useExternalIdForBeanCreation;
   }
 
-  @Nonnull
-  @Override
-  public MarketingSpotService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, MarketingSpotService.class);
-  }
 }

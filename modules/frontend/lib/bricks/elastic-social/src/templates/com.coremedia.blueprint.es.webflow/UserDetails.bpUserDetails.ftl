@@ -8,7 +8,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="cm-form cm-form--userdetails well col-xs-12 col-md-6 col-md-push-3"<@cm.metadata data=[self.action.content!"", "properties.id"]/>>
+    <div class="cm-form cm-form--userdetails well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
       <#-- show user detauils-->
       <#if userDetails?has_content>
 

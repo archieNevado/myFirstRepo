@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
-    "mediaelement": "2.23.5",
+    "mediaelement": "4.2.8",
     "@coremedia/js-jquery-utils": "^1.0.0",
     "@coremedia/js-logger": "^1.0.0",
     "@coremedia/js-node-decoration-service": "^1.0.0",
@@ -14,13 +14,16 @@
     "@coremedia/brick-generic-templates": "^1.0.0"
   },
   "devDependencies": {
-    "jsdoc-to-markdown": "3.0.0"
+    "jsdoc-to-markdown": "3.0.0",
+    "prettier": "1.11.1"
   },
   "scripts": {
-    "apidoc": "jsdoc2md src/js/*.js > API.md"
+    "apidoc": "jsdoc2md src/js/*.js > API.md",
+    "prettier": "prettier \"**/*\" --write"
   },
   "main": "src/js/index.js",
   "coremedia": {
-    "type": "brick"
+    "type": "brick",
+    "init": "src/js/init.js"
   }
 }

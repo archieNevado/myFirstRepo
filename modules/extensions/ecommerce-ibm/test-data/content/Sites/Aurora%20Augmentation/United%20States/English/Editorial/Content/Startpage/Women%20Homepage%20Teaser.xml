@@ -10,7 +10,7 @@
 <StructProperty Name="teaserOverlay">
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
-<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Dark%20on%20Light.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Dark%20on%20Light"/>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Light.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Light"/>
 <IntProperty Name="positionY">0</IntProperty>
 <IntProperty Name="positionX">-25</IntProperty>
 <IntProperty Name="width">30</IntProperty>
@@ -41,6 +41,16 @@
 <related>
 </related>
 <target>
-<link href="../../../Augmentation/Apparel/Women/Women.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
 </target>
+<targets>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructListProperty Name="links">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMLinkable" xlink:href="coremedia:///cap/resources/../../../Augmentation/Apparel/Women/Women.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Augmentation/Apparel/Women/Women"/>
+<BooleanProperty Name="callToActionEnabled">true</BooleanProperty>
+<StringProperty Name="callToActionCustomText">Explore</StringProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</targets>
 </CMTeaser>

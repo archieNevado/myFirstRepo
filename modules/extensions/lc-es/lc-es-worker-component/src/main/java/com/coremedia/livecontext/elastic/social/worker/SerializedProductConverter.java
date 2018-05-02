@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.elastic.social.worker;
 
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.serializer.TypeConverter;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 
@@ -26,7 +27,7 @@ public class SerializedProductConverter implements TypeConverter<SerializedProdu
   }
 
   @Override
-  public void serialize(@Nonnull SerializedProductInSite product, @Nonnull Map<String, Object> serializedObject) {
+  public void serialize(@PersonalData @Nonnull SerializedProductInSite product, @PersonalData @Nonnull Map<String, Object> serializedObject) {
     serializedObject.put(PRODUCT_ID, product.getProductId());
     serializedObject.put(SITE_ID, product.getSiteId());
   }

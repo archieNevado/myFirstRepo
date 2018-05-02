@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contentRepository xmlns="http://www.coremedia.com/2010/content"
+                   xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="classpath:framework/doctypes/blueprint/blueprint-doctypes.xml"/>
 <content>
   <folder id="1" name="">
     <folder id="11" name="Sites">
@@ -127,3 +131,4 @@
     </folder>
   </folder>
 </content>
+</contentRepository>

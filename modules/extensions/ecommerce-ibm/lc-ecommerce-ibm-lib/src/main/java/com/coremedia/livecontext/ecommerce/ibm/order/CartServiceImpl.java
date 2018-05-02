@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CART;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 
@@ -97,9 +96,4 @@ public class CartServiceImpl implements CartService {
     this.commerceBeanFactory = commerceBeanFactory;
   }
 
-  @Nonnull
-  @Override
-  public CartService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, CartService.class);
-  }
 }

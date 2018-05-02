@@ -26,7 +26,7 @@
     class="cm-video cm-video--vimeo ${classVideo}"
     frameborder="0" width="100%" height="100%" webkitAllowFullScreen="" mozallowfullscreen="" allowFullScreen=""
     ${muted?then('data-muted="true"','')}
-    <@cm.metadata "properties.dataUrl" />>
+    <@preview.metadata "properties.dataUrl" />>
     <@bp.notification type="warn" text=bp.getMessage("error_iframe_not_available") dismissable=true />
   </iframe>
 </#if>

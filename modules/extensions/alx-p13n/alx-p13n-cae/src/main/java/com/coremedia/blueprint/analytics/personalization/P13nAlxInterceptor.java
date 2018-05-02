@@ -3,6 +3,7 @@ package com.coremedia.blueprint.analytics.personalization;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProvider;
 import org.slf4j.Logger;
@@ -141,7 +142,7 @@ public final class P13nAlxInterceptor extends HandlerInterceptorAdapter {
     void build() {
       assert contextCollection != null;
 
-      final PropertyProvider segmentContext = contextCollection.getContext(segmentContextName, PropertyProvider.class);
+      final @PersonalData PropertyProvider segmentContext = contextCollection.getContext(segmentContextName, PropertyProvider.class);
 
       final List<String> segmentIdList = new ArrayList<>();
       final List<String> segmentNameList = new ArrayList<>();

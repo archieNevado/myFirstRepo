@@ -11,7 +11,7 @@ const LINK_PLACEHOLDER = "NEXT_URL_PLACEHOLDER";
  * @param $btn
  */
 function urlParams($btn) {
-  let btnUrl = $btn.attr('href');
+  let btnUrl = $btn.attr("href");
   if (!btnUrl) {
     return;
   }
@@ -19,7 +19,7 @@ function urlParams($btn) {
   let nexturl = encodeUrlForWcsAndSpring(window.location.href);
 
   btnUrl = btnUrl.replace(LINK_PLACEHOLDER, nexturl);
-  $btn.attr('href', btnUrl);
+  $btn.attr("href", btnUrl);
 }
 
 /**
@@ -55,35 +55,37 @@ function encodeUrlForWcsAndSpring($url) {
  */
 function handleLogin() {
   const $document = $(document);
-  const loginStatusURL = $('.cm-header__login').data('cm-loginstatus');
-  const $loginBtn = $('#cm-login');
-  const $logoutBtn = $('#cm-logout');
+  const loginStatusURL = $(".cm-header__login").data("cm-loginstatus");
+  const $loginBtn = $("#cm-login");
+  const $logoutBtn = $("#cm-logout");
 
   if (loginStatusURL) {
     $.ajax({
       url: loginStatusURL,
-      dataType: 'json',
-      headers: {'X-Requested-With': 'XMLHttpRequest'},
-      xhrFields: {withCredentials: true},
-      global: false
-    }).done(function (data) {
-      if (data.loggedIn) {
-        $logoutBtn.css('display', 'inline-block');
-        urlParams($logoutBtn);
-      } else {
-        $loginBtn.css('display', 'inline-block');
-        urlParams($loginBtn);
-      }
-      $document.trigger(EVENT_CHECK_LOGIN_STATUS);
-    }).fail(function () {
-      logger.error(`Login error!`);
-    });
+      dataType: "json",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+      xhrFields: { withCredentials: true },
+      global: false,
+    })
+      .done(function(data) {
+        if (data.loggedIn) {
+          $logoutBtn.css("display", "inline-block");
+          urlParams($logoutBtn);
+        } else {
+          $loginBtn.css("display", "inline-block");
+          urlParams($loginBtn);
+        }
+        $document.trigger(EVENT_CHECK_LOGIN_STATUS);
+      })
+      .fail(function() {
+        logger.error(`Login error!`);
+      });
   }
 }
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
 
-$(function () {
+$(function() {
   "use strict";
 
   logger.log("Welcome to CoreMedia Calista Integration");
@@ -91,63 +93,28 @@ $(function () {
   // init device detection
   deviceDetector.init();
 
-  /* --- Touch detection --- */
-  const deviceAgent = navigator.userAgent.toLowerCase();
-  let isTouchDevice = (deviceAgent.match(/(iphone|ipod|ipad)/) || deviceAgent.match(/(android)/) || deviceAgent.match(/(iemobile)/) || deviceAgent.match(/iphone/i) || deviceAgent.match(/ipad/i) || deviceAgent.match(/ipod/i) || deviceAgent.match(/blackberry/i) || deviceAgent.match(/bada/i));
-
-  /* --- Navigation --- */
-  const $navbar = $('#navbar');
-  const $navigationEntry = $('.cm-navigation > .cm-navigation-item__list > .cm-navigation-item');
-  const $navigationRoot = $(".cm-navigation > ul.cm-navigation-item__list");
-
-  function isMobileOrTablet() {
-    return deviceDetector.getLastDevice().type !== "desktop";
-  }
-
-  $navbar.on('show.bs.collapse', function () {
-    $('body').addClass('fixed');
+  const $navbar = $("#navbar");
+  $navbar.on("show.bs.collapse", function() {
+    $("body").addClass("fixed");
   });
-  $navbar.on('hidden.bs.collapse', function () {
-    $('body').removeClass('fixed');
-  });
-  $navigationEntry.mouseover(function () {
-    $navigationRoot.addClass("cm-navigation--hovered");
-  });
-  $navigationEntry.mouseout(function () {
-    $navigationRoot.removeClass("cm-navigation--hovered");
-  });
-  $navigationEntry.on('click', function (e) {
-    // prevent further code from beeing executed if a sublist of the list is clicked
-    if (e.target.parentNode !== this) return;
-    // ignore click on touch devices. we don't want to trigger the link, just display the subnavigation
-    if (isTouchDevice && !isMobileOrTablet()) {
-      e.preventDefault();
-    }
-  });
-
-  // Previously hovered menus could still be visible since they won't disappear until the end of their transition.
-  // To make sure that only one menu is visible, we need to set the opacity of all other menus to 0.
-  $navigationEntry.mouseover(function () {
-    $navigationEntry.not(this).each(function() {
-      const $this = $(this);
-      $this.find("ul.cm-navigation-item__list").css("opacity",0);
-      $this.css("border-bottom-width", 0);
-    });
-    $navigationEntry.find("ul.cm-navigation-item__list").css("opacity",1);
-    $(this).css("border-bottom-width", 4);
+  $navbar.on("hidden.bs.collapse", function() {
+    $("body").removeClass("fixed");
   });
 
   /* --- Mobile Search --- */
-  const $search = $('#cmSearchWrapper');
-  const $searchInput = $('.search_input');
-  $('.cm-search__open-mobile-search-button, .cm-search-form__close').on('click', function () {
-    $search.toggleClass('open');
-    if ($search.hasClass('open')) {
-      $searchInput.focus();
+  const $search = $("#cmSearchWrapper");
+  const $searchInput = $(".search_input");
+  $(".cm-search__open-mobile-search-button, .cm-search-form__close").on(
+    "click",
+    function() {
+      $search.toggleClass("open");
+      if ($search.hasClass("open")) {
+        $searchInput.focus();
+      }
     }
-  });
-  $('#cm-search-form__button').on('click', function (e) {
-    if($searchInput.val().length === 0){
+  );
+  $("#cm-search-form__button").on("click", function(e) {
+    if ($searchInput.val().length === 0) {
       e.preventDefault();
       $searchInput.focus();
     }
@@ -155,5 +122,4 @@ $(function () {
 
   /* --- Login --- */
   handleLogin();
-
 });

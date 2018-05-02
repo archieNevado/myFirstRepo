@@ -36,6 +36,7 @@
 <related>
 </related>
 <children>
+<link href="Fragments/Aurora%20Categories/Apparel/New%20Arrivals.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/New%20Arrivals"/>
 <link href="../Augmentation/Apparel/Women/Women.xml" path="/Sites/Calista/United%20States/English/Augmentation/Apparel/Women/Women"/>
 <link href="../Augmentation/Apparel/Men/Men.xml" path="/Sites/Calista/United%20States/English/Augmentation/Apparel/Men/Men"/>
 <link href="Microsites/Editorial%20Blog%20Microsite.xml" path="/Sites/Calista/United%20States/English/Navigation/Microsites/Editorial%20Blog%20Microsite"/>
@@ -110,8 +111,8 @@
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
 <Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/The%20Black%20and%20White%20Collection.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/The%20Black%20and%20White%20Collection"/>
+<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/New%20Arrivals%20Collection.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/New%20Arrivals%20Collection"/>
 </LinkListProperty>
-<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/portrait.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/portrait"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/placement3"/>
 </Struct>
 <Struct>

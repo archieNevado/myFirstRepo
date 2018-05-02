@@ -16,7 +16,7 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.undoc.multisite.SitesService;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
@@ -212,7 +212,6 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(site.getLocale()).thenReturn(LOCALE);
     when(site.getSiteRootDocument()).thenReturn(rootChannel);
     when(sitesService.getSites()).thenReturn(sites);
-    when(sitesService.getSiteFor(any(Content.class))).thenReturn(site);
     when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
 
     when(fragmentParameters.getExternalRef()).thenReturn(EXTERNAL_REF);

@@ -30,7 +30,7 @@
         <bpforms:ValidityDocumentForm bindTo="{config.bindTo}"/>
       </editor:items>
     </editor:DocumentForm>
-    <bpforms:CMArticleMetaDataTab bindTo="{config.bindTo}"/>
+    <bpforms:DefaultExtraDataForm/>
     <bpforms:MultiLanguageDocumentForm bindTo="{config.bindTo}"/>
     <bpforms:CMArticleSystemForm bindTo="{config.bindTo}"/>
   </editor:items>

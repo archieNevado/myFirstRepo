@@ -30,7 +30,7 @@
   <#assign additionalTextCssClass="col-sm-6 col-sm-pull-6"/>
 </#if>
 
-<div class="cm-teasable cm-teasable--download ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@cm.metadata self.content />>
+<div class="cm-teasable cm-teasable--download ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@preview.metadata self.content />>
   <#if hasImage>
     <div class="col-xs-12 ${additionalImgCssClass}">
       <@bp.optionalLink href=link>
@@ -49,7 +49,7 @@
       <div class="cm-teasable__text-content">
         <#-- headline -->
         <@bp.optionalLink href="${link}">
-          <h3 class="cm-teasable__headline"<@cm.metadata "properties.teaserTitle" />>
+          <h3 class="cm-teasable__headline"<@preview.metadata "properties.teaserTitle" />>
             <#if link?has_content>
               <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
             </#if>
@@ -58,7 +58,7 @@
         </@bp.optionalLink>
         <#-- teaser text -->
         <#assign truncatedTeaserText=bp.truncateText(self.teaserText!"", bp.setting(cmpage, "teaser.max.length", 140)) />
-        <p class="cm-teasable__text"<@cm.metadata "properties.teaserText" />>
+        <p class="cm-teasable__text"<@preview.metadata "properties.teaserText" />>
           <@cm.include self=self view="infos" /><br>
           <@bp.renderWithLineBreaks truncatedTeaserText!"" />
         </p>

@@ -11,16 +11,21 @@
     "@coremedia/brick-dynamic-include": "^1.0.0"
   },
   "devDependencies": {
+    "babel-core": "6.26.0",
     "babel-preset-env": "1.6.0",
+    "babel-jest": "22.0.4",
     "jest": "22.0.4",
-    "jsdoc-to-markdown": "3.0.0"
+    "jsdoc-to-markdown": "3.0.0",
+    "prettier": "1.11.1"
   },
   "scripts": {
     "apidoc": "jsdoc2md src/js/*.js > API.md",
+    "prettier": "prettier \"**/*\" --write",
     "test": "jest"
   },
   "main": "src/js/index.js",
   "coremedia": {
-    "type": "brick"
+    "type": "brick",
+    "init": "src/js/downloadCollection.init.js"
   }
 }

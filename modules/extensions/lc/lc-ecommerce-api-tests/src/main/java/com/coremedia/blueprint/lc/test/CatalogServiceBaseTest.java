@@ -9,12 +9,12 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Nonnull;
@@ -32,7 +32,6 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogA
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
@@ -579,9 +578,22 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     assertThat(searchResult2).isNotNull();
 
     List<ProductVariant> searchResult2ProductVariants = searchResult2.getSearchResult();
-    assertThat(searchResult2ProductVariants)
-            .as("Search result must not be empty (search product variants by parent part number)")
+
+    CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE);
+    Product product = testling.findProductById(productId, getStoreContext());
+
+    assertThat(product).isNotNull();
+
+    List<ProductVariant> variants = product.getVariants();
+
+    assertThat(variants)
+            .as("Variants must not be empty (product variants of a product)")
             .isNotEmpty();
+
+    assertThat(searchResult2ProductVariants)
+            .as("Search result must have the same size as when asking the product directly (search product variants by parent part number)")
+            .hasSize(variants.size());
+
     assertThat(checkIfClassIsContained(searchResult2ProductVariants, "ProductVariantImpl")).isTrue();
     assertThat(!checkIfClassIsContained(searchResult2ProductVariants, "ProductImpl")).isTrue();
   }
@@ -634,24 +646,6 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     Product product = testling.findProductById(productId, germanStoreContext);
 
     assertThat(product.getLocale()).isEqualTo(Locale.GERMAN);
-  }
-
-  protected void testWithStoreContextRethrowException() {
-    CatalogService catalogServiceWithTempStoreContext = null;
-
-    StoreContext storeContext = StoreContextImpl.newStoreContext();
-    try {
-      catalogServiceWithTempStoreContext = testling.withStoreContext(storeContext);
-    } catch (CommerceException e) {
-      e.printStackTrace();
-      fail("Exception not expected here, but later...");
-    }
-
-    assertThat(catalogServiceWithTempStoreContext).isNotNull();
-
-    // should fail with commerce exception
-    CommerceId productId = getIdProvider().formatProductId(storeContext.getCatalogAlias(), PRODUCT_CODE);
-    catalogServiceWithTempStoreContext.findProductById(productId, getStoreContext()); // NOSONAR
   }
 
   protected void assertCategory(Category category) {
@@ -710,7 +704,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     // test axis filter
     List<String> variantAxisNames = product.getVariantAxisNames();
     if (!variantAxisNames.isEmpty()) {
-      List<ProductVariant> filteredVariants = product.getVariants(new AxisFilter(variantAxisNames.get(0), "*"));
+      List<ProductVariant> filteredVariants = product.getVariants(AxisFilter.onAnyValue(variantAxisNames.get(0)));
       assertThat(variants.size()).isGreaterThanOrEqualTo(filteredVariants.size());
     }
   }

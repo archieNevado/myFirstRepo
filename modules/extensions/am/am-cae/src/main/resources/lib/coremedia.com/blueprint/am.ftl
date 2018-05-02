@@ -3,17 +3,18 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
-
+<#-- GET DOWNLOAD PORTAL -->
 <#function getDownloadPortal>
   <#return amFreemarkerFacade.getDownloadPortal() />
 </#function>
 
+<#-- HAS DOWNLOAD PORTAL -->
 <#function hasDownloadPortal>
   <#return amFreemarkerFacade.hasDownloadPortal() />
 </#function>

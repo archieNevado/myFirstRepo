@@ -241,8 +241,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(defaultLocale);
     CommerceId categoryId = getCommerceIdProvider().formatCategoryId(getCatalogAlias(), getExternalId());
 
-    CategoryImpl master = (CategoryImpl) getCatalogService().withStoreContext(newStoreContext)
-            .findCategoryById(categoryId, newStoreContext);
+    CategoryImpl master = (CategoryImpl) getCatalogService().findCategoryById(categoryId, newStoreContext);
 
     if (master != null && !equals(master)) {
       cmLocalizedSeoSegment = master.getCmSeoSegment();
@@ -293,7 +292,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
 
       StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(defaultLocale);
       CommerceId commerceId = getCommerceIdProvider().formatCategoryId(getCatalogAlias(), getExternalId());
-      Category master = getCatalogService().withStoreContext(newStoreContext).findCategoryById(commerceId, newStoreContext);
+      Category master = getCatalogService().findCategoryById(commerceId, newStoreContext);
 
       if (master != null && !equals(master)) {
         localizedSeoSegment = master.getSeoSegment();

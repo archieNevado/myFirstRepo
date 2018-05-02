@@ -16,24 +16,23 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cache.Cache;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.ImmutableList;
-import com.coremedia.cap.multisite.SitesService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
@@ -52,8 +51,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 /**
  * Tests for {@link SearchService}
@@ -61,8 +58,12 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SearchServiceTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
+@TestPropertySource(properties = {
+        "repository.params.contentxml=classpath:/com/coremedia/blueprint/cae/action/search/searchservice/content.xml",
+})
 public class SearchServiceTest {
   @Configuration
+  @ComponentScan("com.coremedia.cap.common.xml")
   @ImportResource(
           value = {
                   CACHE,
@@ -70,20 +71,14 @@ public class SearchServiceTest {
                   ID_PROVIDER,
                   "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
                   "classpath:/framework/spring/blueprint-search.xml",
+                  "classpath:/framework/spring/blueprint-contentbeans.xml"
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
-  @Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
+  @Import({ContentTestConfiguration.class})
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "SearchServiceTest";
-    private static final String CONTENT_REPOSITORY = "classpath:/com/coremedia/blueprint/cae/action/search/searchservice/content.xml";
-
-    @Bean
-    @Scope(SCOPE_SINGLETON)
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig(CONTENT_REPOSITORY);
-    }
   }
 
   private static final String TERM_NAME = "london";
@@ -102,6 +97,9 @@ public class SearchServiceTest {
   private Page page;
 
   @Inject
+  private Cache cache;
+
+  @Inject
   private ContentTestHelper contentTestHelper;
   @Inject
   private SitesService sitesService;
@@ -115,7 +113,7 @@ public class SearchServiceTest {
     CMArticle article = contentTestHelper.getContentBean(ARTICLE_ID);
     navigation = contentTestHelper.getContentBean(ROOT_NAVIGATION_ID);
 
-    page = new PageImpl(navigation, article, true, sitesService, null, null, null, null);
+    page = new PageImpl(navigation, article, true, sitesService, cache, null, null, null);
   }
 
   @Test

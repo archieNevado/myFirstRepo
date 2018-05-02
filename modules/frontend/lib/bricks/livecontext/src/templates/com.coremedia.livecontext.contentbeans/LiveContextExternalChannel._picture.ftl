@@ -13,7 +13,7 @@
 <#elseif self.category.catalogPicture?has_content>
   <@cm.include self=(self.category.catalogPicture)!cm.UNDEFINED params=pictureParams />
 <#else>
-<div class="${blockClass}__picture-box" <@cm.metadata "properties.pictures" />>
+<div class="${blockClass}__picture-box" <@preview.metadata "properties.pictures" />>
     <div class="${blockClass}__picture"></div>
 </div>
 </#if>

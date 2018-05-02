@@ -18,6 +18,7 @@ import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPrice;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPriceParam;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPriceV7_6;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPrices;
+import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -119,7 +120,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
           SEARCH_PRODUCTS_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/productview/bySearchTerm/{term}?profileName={profilePrefix}_findProductsBySearchTerm", false, false, Map.class);
 
   private static final WcRestServiceMethod<Map, Void>
-          FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/price?q=byPartNumbers&partNumber={partNumber}", false, true, true, true, Void.class, Map.class);
+          FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/price?q=byPartNumbers&partNumber={partNumber}", false, true, true, true, true, Void.class, Map.class);
 
   private static final WcRestServiceMethod<Map, WcPriceParam>
           FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_7 = WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/price", false, true, true, true, true, WcPriceParam.class, Map.class);
@@ -292,11 +293,18 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
 
       String storeId = getStoreId(storeContext);
 
-      Map<String, String[]> parameters = buildParameterMap()
+      // make sure not to pass the anomymous user ID to the call
+      WcParameterMapBuilder wcParameterMapBuilder = buildParameterMap()
               .withCurrency(storeContext)
-              .withLanguageId(storeContext)
-              .withUserIdOrName(userContext)
-              .build();
+              .withLanguageId(storeContext);
+      Integer forUserId = UserContextHelper.getForUserId(userContext);
+      String userName = UserContextHelper.getForUserName(userContext);
+      if (forUserId != null && forUserId > 0) {
+        wcParameterMapBuilder = wcParameterMapBuilder.withUserId(forUserId);
+      } else if (userName != null){
+        wcParameterMapBuilder = wcParameterMapBuilder.withUserName(userName);
+      }
+      Map<String, String[]> parameters = wcParameterMapBuilder.build();
 
       Optional<Map<String, Object>> data;
       if (StoreContextHelper.getWcsVersion(storeContext) == WCS_VERSION_7_7) {
@@ -748,8 +756,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
                                                    UserContext userContext) {
     checkArgument(!searchTerm.isEmpty(), "Search term must not be empty.");
 
-    Map<String, String[]> params = new TreeMap<>();
-    params.putAll(createSearchParametersMap(searchParams));
+    Map<String, String[]> params = createSearchParametersMap(searchParams, searchType);
 
     String catalogAliasStr = searchParams.get(CatalogService.SEARCH_PARAM_CATALOG_ALIAS);
     CatalogAlias catalogAlias = CatalogAlias.ofNullable(catalogAliasStr).orElse(null);
@@ -760,8 +767,6 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     findContractIds(storeContext).ifPresent(builder::withContractIds);
     Map<String, String[]> parametersMap = builder.build();
     params.putAll(parametersMap);
-
-    params.put(SEARCH_QUERY_PARAM_SEARCHTYPE, new String[]{searchType.getValue()});
 
     try {
       return getMapSearchResult(searchTerm, storeContext, params, userContext);
@@ -938,13 +943,11 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * Converts a search parameters map into a IBM-specific search parameters map.
    */
   @Nonnull
-  private Map<String, String[]> createSearchParametersMap(@Nonnull Map<String, String> searchParams) {
+  private Map<String, String[]> createSearchParametersMap(@Nonnull Map<String, String> searchParams,
+                                                          @Nonnull SearchType searchType) {
     Map<String, String[]> parameters = new TreeMap<>();
 
-    if (!searchParams.containsKey(SEARCH_QUERY_PARAM_SEARCHTYPE)) {
-      //IBM reverse engineering: 0 means searchTypeAll
-      parameters.put(SEARCH_QUERY_PARAM_SEARCHTYPE, new String[]{SearchType.SEARCH_TYPE_PRODUCTS.getValue()});
-    }
+    parameters.put(SEARCH_QUERY_PARAM_SEARCHTYPE, new String[]{searchType.getValue()});
 
     findValueInMap(searchParams, CatalogService.SEARCH_PARAM_ORDERBY)
             .map(OrderByType::valueOf)

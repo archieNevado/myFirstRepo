@@ -1,5 +1,5 @@
 <%- if @params[:servlet_context] != @params[:live_servlet_context] -%>
-  RewriteRule ^/<%= @params[:live_servlet_context] %>/(.*) /<%= @params[:servlet_context] %>/$1 [R=302,L]
+  RewriteRule ^/<%= @params[:live_servlet_context] %>/(.*) /<%= @params[:servlet_context] %>/$1 [R=302,NE,L]
 <%- end -%>
   # Internal services, served only by Tomcat. Deny external invocation.
   RewriteRule ^/internal/(.*) - [F,PT,L]

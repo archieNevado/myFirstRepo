@@ -2,10 +2,10 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
@@ -33,6 +33,8 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -87,9 +89,55 @@ public class UserSessionServiceImplTest {
 
   private BaseCommerceConnection commerceConnection;
 
+  @Mock
+  private UserService userService;
+
   @InjectMocks
   private UserSessionServiceImpl testling;
-  private MockCommerceEnvBuilder envBuilder;
+
+  @SuppressWarnings("unchecked")
+  @Before
+  public void defaultSetup() throws GeneralSecurityException {
+    commerceConnection = new BaseCommerceConnection();
+    CurrentCommerceConnection.set(commerceConnection);
+
+    StoreContext storeContext = newStoreContext();
+    storeContext.put(StoreContextImpl.STORE_ID, "10001");
+    storeContext.put(StoreContextImpl.CATALOG_ID, "catalog");
+    commerceConnection.setStoreContext(storeContext);
+
+    UserContext userContext = UserContext.builder().withUserId(USERID).build();
+    commerceConnection.setUserContext(userContext);
+
+    commerceConnection.setUserService(userService);
+
+    CommerceCache commerceCache = new CommerceCache();
+    commerceCache.setEnabled(false);
+    commerceCache.setCacheTimesInSeconds(emptyMap());
+    testling.setCommerceCache(commerceCache);
+
+    when(storeFrontConnector.executeGet(contains("Logon"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
+    when(storeFrontConnector.executeGet(contains("Logoff"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
+
+    when(userActivityCookie.getName()).thenReturn(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID);
+    when(userActivityCookie.getValue()).thenReturn("irrelevant");
+
+    UserService userService = commerceConnection.getUserService();
+    testling.setUserService(userService);
+
+    when(anonymousUser.getLogonId()).thenReturn(null);
+    when(registeredUser.getLogonId()).thenReturn("yes");
+
+    when(storeFrontResponse.getCookies()).thenReturn(emptyMap());
+  }
+
+  @After
+  public void teardown() {
+    commerceConnection.setUserContext(null);
+    commerceConnection.setStoreContext(null);
+
+    CurrentCommerceConnection.remove();
+  }
 
   @Test
   public void loginUserNoStoreId() {
@@ -248,47 +296,8 @@ public class UserSessionServiceImplTest {
     assertEquals("k1=v1", resultingHeader);
   }
 
-  @SuppressWarnings("unchecked")
-  @Before
-  public void defaultSetup() throws GeneralSecurityException {
-
-    envBuilder = MockCommerceEnvBuilder.create();
-    commerceConnection = envBuilder.setupEnv();
-    UserContext userContext = UserContext.buildCopyOf(commerceConnection.getUserContext())
-                                             .withUserId(USERID)
-                                             .build();
-    commerceConnection.setUserContext(userContext);
-
-    CommerceCache commerceCache = new CommerceCache();
-    commerceCache.setEnabled(false);
-    commerceCache.setCacheTimesInSeconds(Collections.EMPTY_MAP);
-    testling.setCommerceCache(commerceCache);
-
-    when(storeFrontConnector.executeGet(contains("Logon"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
-    when(storeFrontConnector.executeGet(contains("Logoff"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
-
-    when(userActivityCookie.getName()).thenReturn(UserSessionServiceImpl.IBM_WC_USERACTIVITY_COOKIE_NAME + GUEST_OR_LOGGEDIN_USER_ID);
-    when(userActivityCookie.getValue()).thenReturn("irrelevant");
-
-    UserService userService = commerceConnection.getUserService();
-    testling.setUserService(userService);
-
-    when(anonymousUser.getLogonId()).thenReturn(null);
-    when(registeredUser.getLogonId()).thenReturn("yes");
-
-    when(storeFrontResponse.getCookies()).thenReturn(Collections.emptyMap());
-  }
-
-  @After
-  public void teardown() {
-    commerceConnection.setUserContext(null);
-    commerceConnection.setStoreContext(null);
-    envBuilder.tearDownEnv();
-  }
-
   private void verifyNoCookiesAtAll() {
     verify(sourceResponse, never()).addHeader(any(String.class), any(String.class));
     verify(sourceResponse, never()).setHeader(any(String.class), any(String.class));
   }
-
 }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-import static com.coremedia.blueprint.base.livecontext.util.CommerceServiceHelper.getServiceProxyForStoreContext;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -40,9 +39,4 @@ public class SearchServiceImpl implements SearchService {
     this.searchWrapperService = searchWrapperService;
   }
 
-  @Nonnull
-  @Override
-  public SearchService withStoreContext(StoreContext storeContext) {
-    return getServiceProxyForStoreContext(storeContext, this, SearchService.class);
-  }
 }

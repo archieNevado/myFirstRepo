@@ -131,7 +131,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   public void testGetRequestCookieHeader() throws Exception {
     String cookieHeader = "myCookieHeader";
 
-    StoreContext storeContext = StoreContextHelper.createContext("configId", "storeId", "storeName", "catalogId", "de", "EUR");
+    StoreContext storeContext = StoreContextHelper.createContext("storeId", "storeName", "catalogId", "de", "EUR");
     storeContext.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, testConfig.getWcsVersion());
     UserContext userContext = mock(UserContext.class);
     when(userContext.getCookieHeader()).thenReturn(cookieHeader);
@@ -163,7 +163,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    StoreContext storeContext = StoreContextHelper.createContext("configId", "storeId", "storeName", "catalogId", "de", "EUR");
+    StoreContext storeContext = StoreContextHelper.createContext("storeId", "storeName", "catalogId", "de", "EUR");
     storeContext.setContractIds(new String[]{"contractA", "contractB"});
     StoreContextHelper.setWcsVersion(storeContext, "7.8");
     commerceConnection.setStoreContext(storeContext);

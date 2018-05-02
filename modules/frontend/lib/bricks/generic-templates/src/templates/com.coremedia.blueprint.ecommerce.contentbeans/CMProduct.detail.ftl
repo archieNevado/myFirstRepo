@@ -8,29 +8,29 @@
 <#assign renderRelated=cm.localParameter("renderRelated", true) />
 <#assign carouselParams=carouselParams + {"additionalClass": "${blockClass}__medias", "viewItems": "_header", "modifier": "details"}/>
 
-<article class="${blockClass} ${blockClass}--product"<@cm.metadata self.content />>
+<article class="${blockClass} ${blockClass}--product"<@preview.metadata self.content />>
 
   <#-- title -->
-  <h1 class="${blockClass}__headline"<@cm.metadata "properties.productName"/>>${self.productName!""}</h1>
+  <h1 class="${blockClass}__headline"<@preview.metadata "properties.productName"/>>${self.productName!""}</h1>
 
   <#-- media -->
   <@cm.include self=bp.getContainer(self.media) view="asCarousel" params={"modifier": "details", "additionalClass": "${blockClass}__medias", "controlIcon": "triangle", "viewItems": "_header", "displayPagination": true, "metadataItemsName":"pictures"}/>
 
   <#-- product code -->
-  <div class="${blockClass}__code"<@cm.metadata "properties.productCode"/>>
+  <div class="${blockClass}__code"<@preview.metadata "properties.productCode"/>>
       <span>${bp.getMessage("product_code")}</span> ${self.productCode!""}
   </div>
 
   <#-- text -->
   <#if self.detailText?has_content>
-    <div class="${blockClass}__text cm-richtext"<@cm.metadata "properties.detailText"/>>
+    <div class="${blockClass}__text cm-richtext"<@preview.metadata "properties.detailText"/>>
       <@cm.include self=self.detailText!cm.UNDEFINED />
     </div>
   </#if>
 
   <#-- downloads -->
   <#if self.downloads?has_content>
-    <div class="${blockClass}__downloads cm-downloads"<@cm.metadata "properties.downloads"/>>
+    <div class="${blockClass}__downloads cm-downloads"<@preview.metadata "properties.downloads"/>>
       <h3>${bp.getMessage("download_label")}</h3>
       <ul class="cm-downloads__items">
         <#list self.downloads![] as download>
@@ -46,7 +46,7 @@
 
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
-    <div class="${blockClass}__date"<@cm.metadata "properties.externallyDisplayedDate"/>>
+    <div class="${blockClass}__date"<@preview.metadata "properties.externallyDisplayedDate"/>>
       <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
     </div>
   </#if>

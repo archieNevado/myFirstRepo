@@ -74,6 +74,16 @@
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
 </StructListProperty>
+<StructListProperty Name="CMExternalLink">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+</StructListProperty>
 <StructListProperty Name="CMCollection">
 <Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
@@ -93,11 +103,11 @@
 </Struct>
 </StructProperty>
 <LinkListProperty Name="studioPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
-<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/css/preview%2Ecss.xml" cmexport:path="/Themes/corporate/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="studioPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>
 <LinkListProperty Name="previewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
+<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/css/preview%2Ecss.xml" cmexport:path="/Themes/corporate/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 <Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/js/preview%2Ejs.xml" cmexport:path="/Themes/corporate/js/preview%2Ejs"/>

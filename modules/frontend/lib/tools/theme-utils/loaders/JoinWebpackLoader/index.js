@@ -8,9 +8,9 @@
  * -> for this added new "regExp" configuration
  */
 
-const JoinPlugin = require('../../plugins/JoinWebpackPlugin');
+const JoinPlugin = require("../../plugins/JoinWebpackPlugin");
 
-const { interpolateName, parseQuery } = require('loader-utils');
+const { interpolateName, parseQuery } = require("loader-utils");
 
 function namePreTmpl(context, name, regExp) {
   let preTmpl = name;
@@ -18,12 +18,12 @@ function namePreTmpl(context, name, regExp) {
   let hashMatch = name.match(hashRegex);
   if (hashMatch) {
     if (hashMatch.length > 1) {
-      throw Error('only one hash supported');
+      throw Error("only one hash supported");
     }
     hashMatch = hashMatch[0];
-    preTmpl = name.replace(hashRegex, 'THE::HASH');
+    preTmpl = name.replace(hashRegex, "THE::HASH");
   }
-  preTmpl = interpolateName(context, preTmpl, { content: '', regExp: regExp });
+  preTmpl = interpolateName(context, preTmpl, { content: "", regExp: regExp });
   if (hashMatch) {
     preTmpl = preTmpl.replace(/THE::HASH/g, hashMatch);
   }
@@ -43,7 +43,7 @@ module.exports = function(source) {
       : plugins.length > 0 && query.id === null ? plugins[0] : null;
 
   if (!plugin) {
-    throw new Error('associated webpack plugin not found');
+    throw new Error("associated webpack plugin not found");
   }
 
   let name = query.name || plugin.options.name;
@@ -52,7 +52,7 @@ module.exports = function(source) {
 
   if (groupName !== null) {
     groupName = interpolateName(this, groupName, {
-      content: '',
+      content: "",
       regExp: regExp,
     });
   }
@@ -62,7 +62,7 @@ module.exports = function(source) {
   name = plugin.addSource(groupName, source, this.resourcePath, this._module);
 
   return (
-    'module.exports = __webpack_public_path__ + ' + JSON.stringify(name) + ';'
+    "module.exports = __webpack_public_path__ + " + JSON.stringify(name) + ";"
   );
 };
 

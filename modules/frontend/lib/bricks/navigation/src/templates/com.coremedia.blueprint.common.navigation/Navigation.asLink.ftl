@@ -7,4 +7,4 @@
 <#assign attr=cm.localParameters().attr!"" />
 <#assign link=cm.localParameters().link!cm.getLink(self) />
 
-<a class="${cssClass}" href="${link}" ${attr?no_esc}<@preview.metadata "properties.title"/>>${self.title!""}</a>
+<a class="${cssClass} cm-navigation-item__title" href="${link}" ${attr?no_esc}<@preview.metadata "properties.title"/>>${self.title!""}</a>

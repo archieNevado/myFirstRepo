@@ -16,7 +16,7 @@
     "metadata": ["properties.assetThumbnail", self.assetThumbnail.content]
   } />
 <#else>
-  <div class="am-picture-box am-picture-box--empty ${classBox}"<@cm.metadata data=["properties.assetThumbnail"]/>>
+  <div class="am-picture-box am-picture-box--empty ${classBox}"<@preview.metadata data=["properties.assetThumbnail"]/>>
     <div class="am-picture-box__picture ${classImage}"></div>
   </div>
 </#if>

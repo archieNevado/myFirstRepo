@@ -1,1 +1,0 @@
-import "@coremedia/brick-bootstrap";

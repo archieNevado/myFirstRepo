@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.elastic.social.demodata;
 
 import com.coremedia.elastic.core.api.tenant.TenantService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -52,8 +51,7 @@ public class DemoDataGeneratorControllerTest {
 
     when(demoDataGenerator.getStatus()).thenReturn(STATE_STOPPED);
     ModelAndView mv = demoDataGeneratorController.handleRequestInternal(httpServletRequest, httpServletResponse);
-    verify(tenantService).register(tenant);
-    verify(tenantService).setCurrent(tenant);
+    verify(tenantService).setCurrent(tenant, true);
     verify(tenantService).clearCurrent();
     verify(demoDataGenerator).setInterval(10);
     verify(demoDataGenerator).start();
@@ -66,8 +64,7 @@ public class DemoDataGeneratorControllerTest {
     when(httpServletRequest.getParameter("tenant")).thenReturn(tenant);
     when(demoDataGenerator.getStatus()).thenReturn(DemoDataGenerator.STATE_STOPPED);
     ModelAndView mv = demoDataGeneratorController.handleRequestInternal(httpServletRequest, httpServletResponse);
-    verify(tenantService).register(tenant);
-    verify(tenantService).setCurrent(tenant);
+    verify(tenantService).setCurrent(tenant, true);
     verify(demoDataGenerator).start();
     assertTrue(mv.getModel().entrySet().size() > 25);
   }

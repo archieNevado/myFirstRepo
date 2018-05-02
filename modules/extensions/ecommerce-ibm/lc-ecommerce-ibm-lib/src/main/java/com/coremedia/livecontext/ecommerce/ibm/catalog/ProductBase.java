@@ -231,7 +231,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
                 getName(), getLocale(), getDefaultLocale());
         StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(getDefaultLocale());
         CommerceId commerceId = getCommerceIdProvider().formatProductId(getCatalogAlias(), getExternalId());
-        ProductBase master = (ProductBase) getCatalogService().withStoreContext(newStoreContext).findProductById(commerceId, newStoreContext);
+        ProductBase master = (ProductBase) getCatalogService().findProductById(commerceId, newStoreContext);
         if (master != null && !equals(master)) {
           cmLocalizedSeoSegment = master.getCmSeoSegment();
         }
@@ -273,7 +273,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
         StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(getDefaultLocale());
 
         CommerceId commerceId = getCommerceIdProvider().formatProductId(getCatalogAlias(), getExternalId());
-        Product master = getCatalogService().withStoreContext(newStoreContext).findProductById(commerceId, newStoreContext);
+        Product master = getCatalogService().findProductById(commerceId, newStoreContext);
         if (master != null && !equals(master)) {
           localizedSeoSegment = master.getSeoSegment();
         }

@@ -130,21 +130,16 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
     if (contentType != null) {
       switch (contentType) {
         case CONTENT_IDENTIFIER_CLEAR_ALL:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), CLEAR_ALL_EVENT, timestamp
-          );
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), CLEAR_ALL_EVENT, timestamp);
         case CONTENT_IDENTIFIER_PRODUCT:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), PRODUCT_EVENT, timestamp
-          );
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), PRODUCT_EVENT, timestamp);
         case CONTENT_IDENTIFIER_CATEGORY: // same as top category
         case CONTENT_IDENTIFIER_TOP_CATEGORY:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), CATEGORY_EVENT, timestamp
-          );
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), CATEGORY_EVENT, timestamp);
         case CONTENT_IDENTIFIER_MARKETING_SPOT:
-          return new InvalidationEvent(getStringValueForKey(event, "name"), MARKETING_SPOT_EVENT, timestamp
-          );
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), MARKETING_SPOT_EVENT, timestamp);
         case CONTENT_IDENTIFIER_SEGMENT:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), SEGMENT_EVENT, timestamp
-          );
+          return new InvalidationEvent(getStringValueForKey(event, "techId"), SEGMENT_EVENT, timestamp);
       }
     }
 

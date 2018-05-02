@@ -256,7 +256,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     //test axis filter
     List<String> variantAxisNames = product.getVariantAxisNames();
     if (!variantAxisNames.isEmpty()) {
-      List<ProductVariant> filteredVariants = product.getVariants(new AxisFilter(variantAxisNames.get(0), "*"));
+      List<ProductVariant> filteredVariants = product.getVariants(AxisFilter.onAnyValue(variantAxisNames.get(0)));
       assertTrue(variants.size() >= filteredVariants.size());
     }
   }
