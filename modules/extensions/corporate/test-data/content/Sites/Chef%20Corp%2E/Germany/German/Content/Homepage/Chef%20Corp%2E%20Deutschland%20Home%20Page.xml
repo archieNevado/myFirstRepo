@@ -16,6 +16,7 @@
 <linkedSettings>
 <link href="../../Options/Settings/CAEConfig.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/CAEConfig"/>
 <link href="../../Options/Settings/Responsive%20Image%20Settings.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Responsive%20Image%20Settings"/>
+<link href="../../Options/Settings/Asset%20Management%20Configuration.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Asset%20Management%20Configuration"/>
 <link href="../../Options/Settings/Robots%2Etxt.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Robots%2Etxt"/>
 <link href="../../Options/Settings/Preview.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Preview"/>
 <link href="../../Options/Settings/Google%20Analytics%20Settings.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Google%20Analytics%20Settings"/>
@@ -124,7 +125,7 @@
 <Link xlink:href="coremedia:///cap/resources/../Site-Wide/Personalization/Personalized%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Personalization/Personalized%20Teaser"/>
 <Link xlink:href="coremedia:///cap/resources/Professionals/Product%20Overview/Products%20Overview%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
 <Link xlink:href="coremedia:///cap/resources/Product%20Highlights%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Product%20Highlights%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/Professionals/Service/Services%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Service/Services%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/Services%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Services%20Teaser"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>

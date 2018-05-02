@@ -1,11 +1,11 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.rest.cap.exception.ParameterizedException;
-import com.coremedia.util.Util;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.ws.rs.core.Response;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +14,9 @@ import java.util.Map;
  */
 public class CatalogRestException extends ParameterizedException {
 
-  private static Map<String, String> errorNames = new HashMap<>();
+  static final String DEFAULT_ERROR_CODE_PREFIX = "LIVECONTEXT_ERROR_";
+
+  private static final Map<String, String> errorNames = new HashMap<>();
 
   public CatalogRestException(Response.Status status, String errorCode, String message) {
     super(status, errorCode, getErrorName(errorCode), message);
@@ -26,13 +28,22 @@ public class CatalogRestException extends ParameterizedException {
    * @param errorCode code to translate
    * @return a human-readable error name of this exception
    */
-  @Nullable
   public static synchronized String getErrorName(String errorCode) {
     return errorNames.computeIfAbsent(errorCode, k -> fetchErrorName(errorCode));
   }
 
-  @Nullable
   private static String fetchErrorName(@Nonnull String errorCode) {
-    return Util.getConstantName(CatalogRestErrorCodes.class, "LIVECONTEXT_ERROR_", errorCode);
+    for (Field f : CatalogRestErrorCodes.class.getDeclaredFields()) {
+      try {
+        if (f.getType() == String.class && Modifier.isStatic(f.getModifiers()) && errorCode.equals(f.get(null))) {
+          return f.getName();
+        }
+      } catch (IllegalAccessException e) {
+        // cannot happen as long as CatalogRestErrorCodes fields are public
+        throw new IllegalStateException("Cannot access field '" + f + "'. Fields of class '"
+                                        + CatalogRestErrorCodes.class + "' must be public", e);
+      }
+    }
+    return DEFAULT_ERROR_CODE_PREFIX + errorCode;
   }
 }

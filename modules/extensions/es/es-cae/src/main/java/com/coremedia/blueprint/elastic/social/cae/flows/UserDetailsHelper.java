@@ -8,6 +8,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
 import com.coremedia.elastic.core.api.blobs.BlobService;
@@ -279,7 +280,8 @@ public class UserDetailsHelper {
         details.setEmailAddress(communityUser.getEmail());
         details.setGivenname(communityUser.getGivenName());
         details.setSurname(communityUser.getSurName());
-        @SuppressWarnings({"unchecked"}) Collection<String> providerIds = communityUser.getProperty("providerIds", Collection.class);
+        @SuppressWarnings({"unchecked"})
+        @PersonalData Collection<String> providerIds = communityUser.getProperty("providerIds", Collection.class);
         details.setConnectedWithTwitter(isConnectedWithProvider("twitter", providerIds));
         details.setConnectedWithFacebook(isConnectedWithProvider("facebook", providerIds));
       }
@@ -293,8 +295,15 @@ public class UserDetailsHelper {
       details.setNumberOfRatings(ratingService.getNumberOfRatingsFromUser(communityUser));
       details.setNumberOfLikes(likeService.getNumberOfLikesFromUser(communityUser));
       details.setNumberOfReviews(reviewService.getNumberOfApprovedReviews(communityUser));
-      details.setLocalizedLocale(communityUser.getLocale() != null ? new LocalizedLocale(communityUser.getLocale(),
-              communityUser.getLocale().getDisplayLanguage(requestLocale)) : null);
+
+      @PersonalData Locale userLocale = communityUser.getLocale();
+
+      // safe to pass @PersonalData userLocale to LocalizedLocale as it's assigned to @PersonalData variable afterwards
+      @SuppressWarnings("PersonalData")
+      @PersonalData LocalizedLocale localizedLocale = userLocale != null
+                                                      ? new LocalizedLocale(userLocale, userLocale.getDisplayLanguage(requestLocale))
+                                                      : null;
+      details.setLocalizedLocale(localizedLocale);
       details.setPasswordPolicy(passwordPolicy);
       details.setPreview(preview);
       details.setReceiveCommentReplyEmails(communityUser.isReceiveCommentReplyEmails());
@@ -313,9 +322,9 @@ public class UserDetailsHelper {
     return new UserDetails();
   }
 
-  private boolean isConnectedWithProvider(String providerId, Collection<String> providerIds) {
+  private boolean isConnectedWithProvider(String providerId, @PersonalData Collection<String> providerIds) {
     if (providerIds != null) {
-      for (String id : providerIds) {
+      for (@PersonalData String id : providerIds) {
         if (id.startsWith(providerId + ":")) {
           return true;
         }
@@ -330,7 +339,7 @@ public class UserDetailsHelper {
   }
 
   private CommunityUser setChangesForModeration(UserDetails userDetails, CommunityUser user, CommonsMultipartFile file, RequestContext context) {
-    Blob profileImage = null;
+    @PersonalData Blob profileImage = null;
     if (!userDetails.isDeleteProfileImage()) {
       profileImage = saveProfileImage(context, file);
     }
@@ -365,7 +374,7 @@ public class UserDetailsHelper {
     return communityUserService.createFrom(user);
   }
 
-  private Blob saveProfileImage(RequestContext context, CommonsMultipartFile file) {
+  private @PersonalData Blob saveProfileImage(RequestContext context, CommonsMultipartFile file) {
     if (file != null && file.getSize() > 0) {
       Page page = RequestAttributeConstants.getPage((HttpServletRequest) context.getExternalContext().getNativeRequest());
       ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin.getElasticSocialConfiguration(page);
@@ -385,7 +394,8 @@ public class UserDetailsHelper {
     return null;
   }
 
-  protected boolean validatePassword(CommunityUser user, RequestContext context, String oldPassword, String newPassword) {
+  protected boolean validatePassword(CommunityUser user, RequestContext context,
+                                     @PersonalData String oldPassword, @PersonalData String newPassword) {
     if (isNotBlank(newPassword)) {
       try {
         if (user.validatePassword(oldPassword)) {

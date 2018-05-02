@@ -12,7 +12,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="cm-form cm-form--userdetailsform well col-xs-12 col-md-6 col-md-push-3"<@cm.metadata data=[self.action.content!"", "properties.id"]/>>
+    <div class="cm-form cm-form--userdetailsform well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
       <h1 class="cm-form__headline"><@bp.message "userDetails_personalDetails" /></h1>
 
       <#if userDetails?has_content>

@@ -14,7 +14,7 @@
 <#elseif (self.product?has_content && self.product.catalogPicture?has_content)>
   <@cm.include self=(self.product.catalogPicture)!cm.UNDEFINED params=pictureParams />
 <#elseif renderEmptyImage>
-  <div class="${blockClass}__picture-box" <@cm.metadata "properties.pictures" />>
+  <div class="${blockClass}__picture-box" <@preview.metadata "properties.pictures" />>
       <div class="${blockClass}__picture"></div>
   </div>
 </#if>

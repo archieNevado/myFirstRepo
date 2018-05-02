@@ -20,19 +20,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,12 +55,19 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {
         "classpath:/com/coremedia/blueprint/analytics/elastic/retrieval/EsAlxRetrievalApplicationContextTest-context.xml",
-        "classpath:/spring/test/test-repository.xml",
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"
-}, initializers = {EsAlxRetrievalApplicationContextTest.PropertySourcesInitializer.class})
+})
 @Configuration
-@TestPropertySource(properties = "elastic.core.persistence=memory")
+@ComponentScan("com.coremedia.cap.common.xml")
+@TestPropertySource(properties = {
+        "elastic.core.persistence=memory",
+        "repository.params.contentxml=classpath:/com/coremedia/testing/contenttest.xml",
+        "repository.params.userxml=classpath:/com/coremedia/testing/usertest.xml",
+        "tenant.default=tenant",
+        "models.createIndexes=false",
+        "elastic.solr.lazyIndexCreation=true"
+})
 public class EsAlxRetrievalApplicationContextTest {
 
   private static final String SERVICE = "service"; // compare with 12345settings.xml
@@ -232,19 +235,6 @@ public class EsAlxRetrievalApplicationContextTest {
   @Scope("singleton")
   public AnalyticsServiceProvider analyticsServiceProvider(){
     return mock(AnalyticsServiceProvider.class);
-  }
-
-  static class PropertySourcesInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-      try {
-        final MutablePropertySources propertySources = applicationContext.getEnvironment().getPropertySources();
-        propertySources.addFirst(new ResourcePropertySource("testProperties", "classpath:/com/coremedia/blueprint/analytics/elastic/retrieval/es-alx-retrieval-test.properties"));
-      } catch (IOException e) {
-        throw new IllegalStateException(e);
-      }
-    }
   }
 
 }

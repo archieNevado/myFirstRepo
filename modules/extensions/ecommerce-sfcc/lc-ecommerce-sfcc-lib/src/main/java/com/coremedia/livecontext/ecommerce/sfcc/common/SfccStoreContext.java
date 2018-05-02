@@ -7,10 +7,12 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.time.ZoneId;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An SFCC-specific store context.
@@ -19,7 +21,6 @@ public class SfccStoreContext implements StoreContext {
 
   private final ImmutableMap<String, String> replacements;
   private final String siteId;
-  private final String configId;
   private final String storeId;
   private final String storeName;
   private final CatalogId catalogId;
@@ -30,7 +31,7 @@ public class SfccStoreContext implements StoreContext {
 
   SfccStoreContext(
           @Nonnull Map<String, String> replacements,
-          @Nonnull String siteId, String configId,
+          @Nonnull String siteId,
           @Nonnull String storeId,
           @Nonnull String storeName,
           @Nonnull CatalogId catalogId,
@@ -40,7 +41,6 @@ public class SfccStoreContext implements StoreContext {
           @Nullable String previewDate) {
     this.replacements = ImmutableMap.copyOf(replacements);
     this.siteId = siteId;
-    this.configId = configId;
     this.storeId = storeId;
     this.storeName = storeName;
     this.catalogId = catalogId;
@@ -75,11 +75,6 @@ public class SfccStoreContext implements StoreContext {
   @Override
   public void setSiteId(String siteId) {
     // Nothing to do, instance is immutable.
-  }
-
-  @Override
-  public String getConfigId() {
-    return configId;
   }
 
   @Override
@@ -120,6 +115,12 @@ public class SfccStoreContext implements StoreContext {
   @Override
   public Locale getLocale() {
     return locale;
+  }
+
+  @Nonnull
+  @Override
+  public Optional<ZoneId> getTimeZoneId() {
+    return Optional.empty();
   }
 
   @Override
@@ -201,7 +202,6 @@ public class SfccStoreContext implements StoreContext {
     SfccStoreContext that = (SfccStoreContext) o;
     return Objects.equals(replacements, that.replacements) &&
             Objects.equals(siteId, that.siteId) &&
-            Objects.equals(configId, that.configId) &&
             Objects.equals(storeId, that.storeId) &&
             Objects.equals(storeName, that.storeName) &&
             Objects.equals(catalogId, that.catalogId) &&
@@ -213,7 +213,7 @@ public class SfccStoreContext implements StoreContext {
 
   @Override
   public int hashCode() {
-    return Objects.hash(replacements, siteId, configId, storeId, storeName, catalogId, catalogAlias, currency, locale,
+    return Objects.hash(replacements, siteId, storeId, storeName, catalogId, catalogAlias, currency, locale,
             previewDate);
   }
 }

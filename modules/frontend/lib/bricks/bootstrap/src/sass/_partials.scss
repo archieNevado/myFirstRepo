@@ -1,4 +1,4 @@
 @import "partials/bootstrap-sass";
-@import "~@coremedia/sass-utils/src/partials";
+@import "?smart-import-partials";
 @import "partials/carousel";
 @import "partials/page";

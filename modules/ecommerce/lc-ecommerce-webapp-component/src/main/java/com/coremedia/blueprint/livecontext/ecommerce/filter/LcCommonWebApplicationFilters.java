@@ -1,11 +1,10 @@
 package com.coremedia.blueprint.livecontext.ecommerce.filter;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.springframework.web.RegistrationBeanBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.servlet.Filter;
 
 /**
  * Set up filter proxy for commerce connection filter
@@ -16,16 +15,12 @@ public class LcCommonWebApplicationFilters {
   private static final String COMMERCE_CONNECTION_FILTER = "commerceConnectionFilter";
 
   @Bean
-  public FilterRegistrationBean createRegistrationBeans() {
+  public FilterRegistrationBean createRegistrationBeans(CommerceConnectionInitializer commerceConnectionInitializer) {
     return RegistrationBeanBuilder
-            .forFilter(commerceConnectionFilter())
+            .forFilter(new CommerceConnectionFilter(commerceConnectionInitializer))
             .name(COMMERCE_CONNECTION_FILTER)
             .order(2000)
             .build();
   }
 
-  @Bean
-  public Filter commerceConnectionFilter() {
-    return new CommerceConnectionFilter();
-  }
 }

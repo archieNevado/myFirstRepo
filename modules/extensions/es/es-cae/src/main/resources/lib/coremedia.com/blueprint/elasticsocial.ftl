@@ -3,37 +3,43 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
-
+<#-- GET PAGE CONFIGURATION -->
 <#function getElasticSocialConfiguration page>
   <#return elasticSocialFreemarkerFacade.getElasticSocialConfiguration(page)>
 </#function>
 
+<#-- CURRENT USER CHECK -->
 <#function isAnonymousUser>
   <#return elasticSocialFreemarkerFacade.isAnonymousUser()>
 </#function>
 
+<#-- COMMUNITY USER CHECK -->
 <#function isAnonymous communityUser>
   <#return elasticSocialFreemarkerFacade.isAnonymous(communityUser)>
 </#function>
 
+<#-- GET TENANT -->
 <#function getCurrentTenant>
   <#return elasticSocialFreemarkerFacade.getCurrentTenant()>
 </#function>
 
+<#-- GET WRITTEN REVIEW -->
 <#function hasUserWrittenReview target>
   <#return elasticSocialFreemarkerFacade.hasUserWrittenReview(target)>
 </#function>
 
-  <#function hasUserRated target>
-    <#return elasticSocialFreemarkerFacade.hasUserRated(target)>
-  </#function>
+<#-- GET RATING SCORE -->
+<#function hasUserRated target>
+  <#return elasticSocialFreemarkerFacade.hasUserRated(target)>
+</#function>
 
+<#-- GET COMMENT -->
 <#function getCommentView comment>
   <#local isPreview=cm.isPreviewCae() />
   <#local currentUser=getCurrentUser() />
@@ -68,32 +74,27 @@
   <#return view />
 </#function>
 
-<#-- same as getCommentView -->
+<#-- GET COMMENT REVIEW -->
 <#function getReviewView review>
   <#return getCommentView(review) />
 </#function>
 
-
+<#-- MAX RATING SCORE -->
 <#function getMaxRating>
   <#return 5 />
 </#function>
 
+<#-- MAX REVIEW RATING SCORE -->
 <#function getReviewMaxRating>
   <#return 5 />
 </#function>
 
+<#-- LOGIN CHECK -->
 <#function getLogin>
   <#return bp.setting(cmpage!cm.UNDEFINED, "flowLogin", cm.UNDEFINED) />
 </#function>
 
-<#--
-  @param value {boolean} The complain value
-  @param id {String} The DHTML id prefix for this component
-  @param collection {String}
-  @param itemId {String}
-  @param navigationId {String}
-  @param customClass {String} (optional, defaults to empty string)
--->
+<#-- USER SPECIFIC DATA -->
 <#macro complaining value id collection itemId navigationId customClass="">
 <span id="complainTag_${id}" class="complaint">
   <#if value?has_content>
@@ -132,7 +133,7 @@
 </#function>
 
 
-<#-- --- DEPRECATED/UNUSED ----------------------------------------------------------------------------------------- -->
+<#-- ---  UNUSED --------------------------------------------------------------------------------------------------- -->
 
 
 <#-- UNUSED -->
@@ -159,5 +160,3 @@
 <#function isLoginAction bean>
   <#return elasticSocialFreemarkerFacade.isLoginAction(bean)>
 </#function>
-
-

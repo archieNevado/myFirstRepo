@@ -14,106 +14,72 @@ import java.util.Map;
 
 public class SfccStoreContextBuilder implements StoreContextBuilder {
 
-  private ImmutableMap<String, String> replacements;
-  private String siteId;
-  private String configId;
-  private String storeId;
-  private String storeName;
-  private CatalogId catalogId;
-  private CatalogAlias catalogAlias;
-  private Currency currency;
-  private Locale locale;
+  private final ImmutableMap<String, String> replacements;
+  private final String siteId;
+  private final String storeId;
+  private final String storeName;
+  private final CatalogId catalogId;
+  private final CatalogAlias catalogAlias;
+  private final Currency currency;
+  private final Locale locale;
   private String previewDate;
+
+  @SuppressWarnings({"MethodWithTooManyParameters", "squid:S00107"}) // "Methods should not have too many parameters"
+  private SfccStoreContextBuilder(
+          @Nonnull Map<String, String> replacements,
+          @Nonnull String siteId,
+          @Nonnull String storeId,
+          @Nonnull String storeName,
+          @Nonnull CatalogId catalogId,
+          @Nonnull CatalogAlias catalogAlias,
+          @Nonnull Currency currency,
+          @Nonnull Locale locale) {
+    this.replacements = ImmutableMap.copyOf(replacements);
+    this.siteId = siteId;
+    this.storeId = storeId;
+    this.storeName = storeName;
+    this.catalogId = catalogId;
+    this.catalogAlias = catalogAlias;
+    this.currency = currency;
+    this.locale = locale;
+  }
 
   @Nonnull
   @SuppressWarnings({"MethodWithTooManyParameters", "squid:S00107"}) // "Methods should not have too many parameters"
   public static SfccStoreContextBuilder from(
           @Nonnull Map<String, String> replacements,
           @Nonnull String siteId,
-          @Nonnull String configId,
           @Nonnull String storeId,
           @Nonnull String storeName,
           @Nonnull CatalogId catalogId,
           @Nonnull CatalogAlias catalogAlias,
           @Nonnull Currency currency,
-          @Nonnull Locale locale,
-          @Nullable String previewDate) {
-    return new SfccStoreContextBuilder()
-            .withReplacements(replacements)
-            .withSiteId(siteId)
-            .withConfigId(configId)
-            .withStoreId(storeId)
-            .withStoreName(storeName)
-            .withCatalog(catalogId, catalogAlias)
-            .withCurrency(currency)
-            .withLocale(locale)
-            .withPreviewDate(previewDate);
+          @Nonnull Locale locale) {
+    return new SfccStoreContextBuilder(
+            replacements,
+            siteId,
+            storeId,
+            storeName,
+            catalogId,
+            catalogAlias,
+            currency,
+            locale
+    );
   }
 
   @Nonnull
-  @Override
-  public SfccStoreContextBuilder from(@Nonnull StoreContext storeContext) {
+  public static SfccStoreContextBuilder from(@Nonnull StoreContext storeContext) {
     return from(
             storeContext.getReplacements(),
             storeContext.getSiteId(),
-            storeContext.getConfigId(),
             storeContext.getStoreId(),
             storeContext.getStoreName(),
             CatalogId.of(storeContext.getCatalogId()),
             storeContext.getCatalogAlias(),
             storeContext.getCurrency(),
-            storeContext.getLocale(),
-            storeContext.getPreviewDate()
-    );
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withReplacements(@Nonnull Map<String, String> replacements) {
-    this.replacements = ImmutableMap.copyOf(replacements);
-    return this;
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withSiteId(@Nonnull String siteId) {
-    this.siteId = siteId;
-    return this;
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withConfigId(@Nonnull String configId) {
-    this.configId = configId;
-    return this;
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withStoreId(@Nonnull String storeId) {
-    this.storeId = storeId;
-    return this;
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withStoreName(@Nonnull String storeName) {
-    this.storeName = storeName;
-    return this;
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withCatalog(@Nonnull CatalogId catalogId, @Nonnull CatalogAlias catalogAlias) {
-    this.catalogId = catalogId;
-    this.catalogAlias = catalogAlias;
-    return this;
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withCurrency(@Nonnull Currency currency) {
-    this.currency = currency;
-    return this;
-  }
-
-  @Nonnull
-  public SfccStoreContextBuilder withLocale(@Nonnull Locale locale) {
-    this.locale = locale;
-    return this;
+            storeContext.getLocale()
+    )
+            .withPreviewDate(storeContext.getPreviewDate());
   }
 
   @Nonnull
@@ -136,7 +102,6 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
     return new SfccStoreContext(
             replacements,
             siteId,
-            configId,
             storeId,
             storeName,
             catalogId,

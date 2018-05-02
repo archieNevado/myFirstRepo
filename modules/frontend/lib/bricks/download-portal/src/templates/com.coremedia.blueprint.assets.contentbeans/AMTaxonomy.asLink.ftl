@@ -7,4 +7,4 @@
     "category": self.contentId
   }
 } />
-<a class="${class}" <@cm.dataAttribute name="data-hash-based-fragment-link" data=linkData /><@cm.metadata data=[self.content, "properties.value"] />>${self.value!""}</a>
+<a class="${class}" <@cm.dataAttribute name="data-hash-based-fragment-link" data=linkData /><@preview.metadata data=[self.content, "properties.value"] />>${self.value!""}</a>

@@ -7,12 +7,6 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<BooleanProperty Name="livecontext.policy.commerce-microsite-links">false</BooleanProperty>
-<BooleanProperty Name="livecontext.policy.commerce-page-links">false</BooleanProperty>
-<BooleanProperty Name="pricesInImage">false</BooleanProperty>
-<StringProperty Name="fromName">Aurora</StringProperty>
-<StringProperty Name="fromAddress">testmail@silverpop.com</StringProperty>
-<StringProperty Name="replyTo">testmail@silverpop.com</StringProperty>
 <StringListProperty Name="legacyUrls">
 <String/>
 </StringListProperty>

@@ -18,10 +18,10 @@
 <!--
   <customize:append id="feederContentPropertyIncludesCustomizer" bean="feederContentPropertyIncludes">
     <description>
-      Mapping from document types to comma-separated list of indexed properties. Properties are only indexed if
-      document type and property type are configured for indexing as well. See configuration in feeder.properties
+      Mapping from content types to comma-separated list of indexed properties. Properties are only indexed if
+      content type and property type are configured for indexing as well. See configuration in feeder.properties
       (properties starting with 'feeder.content.').
-      Note that for a certain document type you can either configure included properties in this map or excluded
+      Note that for a certain content type you can either configure included properties in this map or excluded
       properties in map 'feederContentPropertyExcludes' but not in both. Mappings for more specific types override
       rules for less specific types. Property lists from different entries will not be merged.
       The default is to include all properties.
@@ -36,10 +36,10 @@
 
   <customize:append id="feederContentPropertyExcludesCustomizer" bean="feederContentPropertyExcludes">
     <description>
-      Mapping from document types to comma-separated list of properties excluded from indexing. Properties are only
-      indexed if document type and property type are configured for indexing as well. See configuration in
+      Mapping from content types to comma-separated list of properties excluded from indexing. Properties are only
+      indexed if content type and property type are configured for indexing as well. See configuration in
       feeder.properties (properties starting with 'feeder.content.').
-      Note that for a certain document type you can either configure excluded properties in this map or included
+      Note that for a certain content type you can either configure excluded properties in this map or included
       properties in map 'feederContentPropertyIncludes' but not in both. Mappings for more specific types override
       rules for less specific types. Property lists from different entries will not be merged.
       The default is to include all properties.
@@ -73,7 +73,7 @@
 
   <customize:append id="addCustomPropertyFields" bean="contentConfiguration" property="propertyFields">
     <description>
-      Configures feeding of document properties into special index fields.
+      Configures feeding of content properties into special index fields.
     </description>
     <list>
 
@@ -106,7 +106,7 @@
     <list>
       <!--
         The following FeedablePopulator sets an additional field 'tabletext' with text that
-        appears in tables of the richtext property 'Text' of documents of type 'Text'.
+        appears in tables of the richtext property 'Text' of contents of type 'Text'.
       -->
       <!--
       <bean class="com.coremedia.cap.feeder.populate.XPathFeedablePopulator">

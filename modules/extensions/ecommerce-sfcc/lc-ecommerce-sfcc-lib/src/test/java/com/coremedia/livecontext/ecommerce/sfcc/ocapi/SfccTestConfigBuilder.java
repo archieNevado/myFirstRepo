@@ -27,21 +27,18 @@ class SfccTestConfigBuilder {
             .put("currency", currency.getCurrencyCode())
             .build();
 
-    String previewDate = null;
     CatalogAlias catalogAlias = CatalogAlias.of("catalog");
 
     return SfccStoreContextBuilder
             .from(
                     replacements,
                     siteId,
-                    "configId",
                     storeId,
                     storeName,
                     catalogId,
                     catalogAlias,
                     currency,
-                    LocaleUtils.toLocale(locale),
-                    previewDate
+                    LocaleUtils.toLocale(locale)
             )
             .build();
   }

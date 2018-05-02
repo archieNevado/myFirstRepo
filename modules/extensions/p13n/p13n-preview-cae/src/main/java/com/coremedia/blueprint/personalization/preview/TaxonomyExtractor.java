@@ -77,9 +77,11 @@ public final class TaxonomyExtractor implements TestContextExtractor {
     final List<CMTaxonomy> linkedTaxonomies = getLinkedTaxonomies(profileExtensions, propertyPath);
     final List<Integer> countsForTaxonomies = getCountsForTaxonomies(profileExtensions, propertyPath);
     final PropertyProfile propertyProfile = createContext(linkedTaxonomies, countsForTaxonomies);
-    if(LOGGER.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
+      @SuppressWarnings("PersonalData") // A test context is not @PersonalData
       final Object oldContext = contextCollection.removeContext(contextName);
-      LOGGER.debug("replacing context {}: old value is {}, new value is{}", new Object[]{contextName, oldContext, propertyProfile});
+      LOGGER.debug("replacing context {}: old value is {}, new value is{}",
+                   new Object[]{contextName, oldContext, propertyProfile});
     }
     contextCollection.setContext(contextName, propertyProfile);
   }

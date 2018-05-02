@@ -18,7 +18,12 @@ function resetNonAdaptiveContent($content) {
  *                  if true content will be cut to fit the box after proper resizing
  *                  if false content will not be cut after proper resizing creating horizontal or veritical borders
  */
-function adjustNonAdaptiveContent($content, baseRatio, boxRatio, allowOverflow) {
+function adjustNonAdaptiveContent(
+  $content,
+  baseRatio,
+  boxRatio,
+  allowOverflow
+) {
   // add class cm-non-adaptive-content
   $content.addClass("cm-non-adaptive-content");
   // add class to parent container
@@ -27,19 +32,22 @@ function adjustNonAdaptiveContent($content, baseRatio, boxRatio, allowOverflow) 
   let adjustment;
 
   // detect if a horizontal repositioning is needed
-  if ((allowOverflow && baseRatio > boxRatio) || (!allowOverflow && baseRatio <= boxRatio)) {
+  if (
+    (allowOverflow && baseRatio > boxRatio) ||
+    (!allowOverflow && baseRatio <= boxRatio)
+  ) {
     // horizontal repositioning is needed
     adjustment = (1 - baseRatio / boxRatio) / 2;
     $content.addClass("cm-non-adaptive-content--fit-height");
     // adjust positioning to the left to match the expected result using percentage (for responsive layout)
     $content.css("margin-top", "");
-    $content.css("margin-left", (adjustment * 100) + "%");
+    $content.css("margin-left", adjustment * 100 + "%");
   } else {
     // vertical repositioning is needed
-    adjustment = ((1 / boxRatio - 1 / baseRatio) / 2);
+    adjustment = (1 / boxRatio - 1 / baseRatio) / 2;
     $content.removeClass("cm-non-adaptive-content--fit-height");
     // adjust positioning to the top to match the expected result using percentage (for responsive layout)
-    $content.css("margin-top", (adjustment * 100) + "%");
+    $content.css("margin-top", adjustment * 100 + "%");
     $content.css("margin-left", "");
   }
 }
@@ -53,7 +61,10 @@ export function updateNonAdaptiveImage(image) {
 
   resetNonAdaptiveContent($image);
 
-  const config = $.extend({overflow: false}, $image.data("cm-non-adaptive-content"));
+  const config = $.extend(
+    { overflow: false },
+    $image.data("cm-non-adaptive-content")
+  );
   const $box = $image.parent();
 
   const baseImage = new Image();
@@ -74,7 +85,10 @@ export function updateNonAdaptiveVideo(video) {
 
   resetNonAdaptiveContent($video);
 
-  const config = $.extend({overflow: false}, $video.data("cm-non-adaptive-content"));
+  const config = $.extend(
+    { overflow: false },
+    $video.data("cm-non-adaptive-content")
+  );
   const $box = $video.parent();
 
   let baseRatio = $video.width() / $video.height();
@@ -90,12 +104,16 @@ export function updateNonAdaptiveVideo(video) {
  * updates non adaptive images and videos for the whole page
  */
 export function updateNonAdaptiveContents() {
-  $(document.body).find("img[data-cm-non-adaptive-content]").each(function () {
-    updateNonAdaptiveImage(this);
-  });
-  $(document.body).find("video[data-cm-non-adaptive-content]").each(function () {
-    updateNonAdaptiveVideo(this);
-  });
+  $(document.body)
+    .find("img[data-cm-non-adaptive-content]")
+    .each(function() {
+      updateNonAdaptiveImage(this);
+    });
+  $(document.body)
+    .find("video[data-cm-non-adaptive-content]")
+    .each(function() {
+      updateNonAdaptiveVideo(this);
+    });
 }
 
 /**

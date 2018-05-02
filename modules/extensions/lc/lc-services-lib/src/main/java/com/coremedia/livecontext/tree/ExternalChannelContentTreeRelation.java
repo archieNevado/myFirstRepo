@@ -151,21 +151,22 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
     return item != null && item.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL) && isLinkedCategoryValid(item);
   }
 
-  private boolean isLinkedCategoryValid(Content item) {
+  private static boolean isLinkedCategoryValid(@Nonnull Content item) {
     return getCommerceIdFrom(item)
-            .map(this::getCategoryFor)
-            .map(Objects::nonNull)
-            .orElse(false);
+            .map(ExternalChannelContentTreeRelation::getCategoryFor)
+            .isPresent();
   }
 
-  private Optional<CommerceId> getCommerceIdFrom(Content content) {
+  @Nonnull
+  private static Optional<CommerceId> getCommerceIdFrom(@Nonnull Content content) {
     String reference = content.getString(EXTERNAL_ID);
     return CommerceIdParserHelper.parseCommerceId(reference);
   }
 
   @Nullable
-  private Category getCategoryFor(@Nonnull CommerceId commerceId){
+  private static Category getCategoryFor(@Nonnull CommerceId commerceId) {
     CommerceConnection connection = CurrentCommerceConnection.get();
+
     StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
     CommerceBeanFactory commerceBeanFactory = requireNonNull(connection.getCommerceBeanFactory(), "commerce bean factory not available");
 

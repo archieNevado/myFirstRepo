@@ -31,7 +31,7 @@ import mx.resources.ResourceManager;
 public class ECommerceCollectionViewExtension implements CollectionViewExtension {
 
   protected static const DEFAULT_TYPE_PRODUCT_RECORD:Object = {
-    name: ContentTypeNames.DOCUMENT,
+    name: ContentTypeNames.CONTENT,
     label: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_label'),
     icon: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_icon')
   };
@@ -89,7 +89,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     searchParameters.query = searchText || "*";
 
 
-    if (!catalogType || catalogType === ContentTypeNames.DOCUMENT) {
+    if (!catalogType || catalogType === ContentTypeNames.CONTENT) {
       // Cannot search in 'All' catalog objects, so fall back to guessed type depending on catalogObject type:
       catalogType = (catalogObject is Marketing) ? CatalogModel.TYPE_MARKETING_SPOT : CatalogModel.TYPE_PRODUCT;
     }

@@ -6,6 +6,9 @@ import com.coremedia.blueprint.testing.ContentBeanTestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
+
 public class CMCollectionImplTest extends ContentBeanTestBase {
 
   private CMCollection collection;
@@ -52,7 +55,7 @@ public class CMCollectionImplTest extends ContentBeanTestBase {
 
   @Test
   public void testItems() throws Exception {
-    setUpPreviewDate();
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE);
     Assert.assertEquals(4, collection.getItems().size());
   }
 }

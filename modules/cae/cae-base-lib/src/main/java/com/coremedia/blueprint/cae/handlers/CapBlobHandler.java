@@ -64,7 +64,6 @@ import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
 @RequestMapping
 public class CapBlobHandler extends HandlerBase {
 
-  private static final String FRAGMENT_PREVIEW = "fragmentPreview";
   private static final String CLASSIFIER_BLOB = "blob";
   private static final String CLASSIFIER_CODERESOURCEBLOB = "crblob";
   private static final String EMPTY_ETAG = "-";

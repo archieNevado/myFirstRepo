@@ -18,7 +18,7 @@
     <#if loop>loop="loop"</#if>
     <#if muted>muted="muted"</#if>
     <#if adaptive><@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": false} /></#if>
-    <@cm.metadata "properties.data"/>>
+    <@preview.metadata "properties.data"/>>
       <@bp.notification type="warn" text=bp.getMessage("error_video_tag_not_supported") dismissable=true />
   </video>
 </#if>

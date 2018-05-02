@@ -6,7 +6,7 @@
 <#assign hasVideo=self.data?has_content || self.dataUrl?has_content />
 <#assign additionalClasses=(cm.localParameters().additionalClass!"") + hasVideo?then(" cm-superhero--video", "") />
 
-<div class="cm-superhero ${additionalClasses!""}" data-cm-module="superhero" <@cm.metadata self.content />>
+<div class="cm-superhero ${additionalClasses!""}" data-cm-module="superhero" <@preview.metadata self.content />>
 
   <#-- video -->
   <#if hasVideo>
@@ -28,9 +28,9 @@
     <div class="cm-superhero__caption row">
       <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
         <#-- headline -->
-        <h1 class="cm-superhero__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
+        <h1 class="cm-superhero__headline"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
         <#-- teaser text -->
-        <p class="cm-superhero__text"<@cm.metadata "properties.teaserText" />>
+        <p class="cm-superhero__text"<@preview.metadata "properties.teaserText" />>
           <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "superhero.max.length", 140)) />
         </p>
       </div>

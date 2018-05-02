@@ -2,10 +2,11 @@
 
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
+<#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
-<div class="cm-gap" data-cm-module="gap"<@cm.metadata self.content />>
+<div class="cm-gap" data-cm-module="gap"<@preview.metadata self.content />>
   <#-- picture -->
-  <@bp.optionalLink href="${link}" attr={"target":target}>
+  <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
     <#if self.picture?has_content>
       <div class="cm-gap__embed">
         <div class="cm-gap__embed-item">
@@ -19,7 +20,7 @@
       </div>
     <#else>
       <div class="cm-gap__embed-item">
-        <div class="cm-gap__picture-box" <@cm.metadata "properties.pictures" />>
+        <div class="cm-gap__picture-box" <@preview.metadata "properties.pictures" />>
           <div class="cm-gap__picture cm-image--missing"></div>
         </div>
       </div>
@@ -30,13 +31,13 @@
       <div class="cm-gap__caption row">
         <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
           <#-- headline -->
-          <h2 class="cm-gap__headline"<@cm.metadata "properties.teaserTitle" />>
+          <h2 class="cm-gap__headline"<@preview.metadata "properties.teaserTitle" />>
             <span>${self.teaserTitle!""} 
             <#if link?has_content><i class="cm-gap__arrow"></i></#if>
             </span>
           </h2>
           <#-- teaser text -->
-          <p class="cm-gap__text"<@cm.metadata "properties.teaserText" />>
+          <p class="cm-gap__text"<@preview.metadata "properties.teaserText" />>
             <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "gap.max.length", 140)) />
           </p>
         </div>

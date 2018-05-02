@@ -4,10 +4,10 @@
 <#assign cssClasses = cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
-<div class="cm-text thumbnail ${cssClasses}"<@cm.metadata self.content />>
+<div class="cm-text thumbnail ${cssClasses}"<@preview.metadata self.content />>
   <#-- headline -->
   <@bp.optionalLink href="${link}">
-    <h3 class="cm-text__headline"<@cm.metadata "properties.teaserTitle" />>
+    <h3 class="cm-text__headline"<@preview.metadata "properties.teaserTitle" />>
       <#if link?has_content>
         <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
       </#if>
@@ -15,7 +15,7 @@
     </h3>
   </@bp.optionalLink>
   <#-- teaser text, 9 lines ~ 600 chars -->
-  <p class="cm-text__text"<@cm.metadata "properties.teaserText" />>
+  <p class="cm-text__text"<@preview.metadata "properties.teaserText" />>
     <@cm.include self=self view="infos" /><br>
     <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "text.max.length", 600)) />
   </p>

@@ -15,7 +15,7 @@ include_recipe 'apache2::mod_mime'
 include_recipe 'apache2::mod_filter'
 include_recipe 'apache2::mod_setenvif'
 include_recipe 'apache2::mod_proxy_balancer'
-include_recipe 'apache2::mod_lbmethod_byrequests' if version(node['apache']['version']).satisfies?('>= 2.3')
+include_recipe 'apache2::mod_lbmethod_byrequests'
 include_recipe 'apache2::mod_proxy_http'
 include_recipe 'apache2::mod_proxy_ajp'
 

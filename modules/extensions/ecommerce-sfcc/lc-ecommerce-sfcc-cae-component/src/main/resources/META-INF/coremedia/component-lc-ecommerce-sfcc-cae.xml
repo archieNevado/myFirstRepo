@@ -13,8 +13,10 @@
   <bean id="sfccCaeConfiguration" class="com.coremedia.livecontext.ecommerce.sfcc.cae.SfccCaeConfiguration"/>
 
   <!-- CORS whitelist -->
-  <customize:append id="liveContextSFCCCrossDomainWhiteList" bean="crossDomainEnabler" property="crossDomainWhitelist"
-                    custom-value="${livecontext.sfcc.crossDomainWhitelist}"/>
+  <!-- List of all the origins that are allowed to receive cross origin AJAX requests. -->
+  <!-- Entries must have the form http://my.host.something and be comma separated -->
+  <customize:append id="liveContextSfccCaeCorsConfiguration" bean="caeCorsConfiguration" property="allowedOrigins"
+                    custom-value="http://${livecontext.sfcc.host},https://${livecontext.sfcc.host}"/>
 
   <customize:prepend id="sfccLinkResolverCustomizer" bean="liveContextLinkResolvers">
     <list>

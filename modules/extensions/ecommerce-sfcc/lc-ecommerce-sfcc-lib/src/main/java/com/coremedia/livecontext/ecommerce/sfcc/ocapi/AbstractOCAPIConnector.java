@@ -53,10 +53,7 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
   private final String host;
   private final String apiVersion;
   private final String basePath;
-
   private final RestTemplate restTemplate;
-
-
 
   protected AbstractOCAPIConnector(@Nonnull SfccOcapiConfigurationProperties properties, @Nonnull String basePath, @Nullable String apiVersion) {
     this.protocol = properties.getProtocol();

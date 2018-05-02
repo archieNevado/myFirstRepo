@@ -4,17 +4,17 @@
  the fixed index behaviour. A combination of integer field and reset button.
 -->
 <local:FixedIndexConfigurationFormBase
-  xmlns:fx="http://ns.adobe.com/mxml/2009"
-  xmlns:local="com.coremedia.blueprint.studio.forms.containers.*"
-  xmlns:exml="http://www.jangaroo.net/exml/0.8"
-  xmlns="exml:ext.config"
-  xmlns:ui="exml:com.coremedia.ui.config"
-  itemId="fixedIndexConfigurationForm"
-  header="{false}"
-  hideSingleComponentLabel="false"
-  propertyNames="{[]}"
-  collapsed="{config.collapsed || true}"
-  settingsVE="{config.bindTo.extendBy('properties','extendedItems')}">
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.coremedia.blueprint.studio.forms.containers.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        itemId="fixedIndexConfigurationForm"
+        header="{false}"
+        hideSingleComponentLabel="false"
+        propertyNames="{[]}"
+        collapsed="{config.collapsed || true}"
+        settingsVE="{config.bindTo.extendBy('properties','extendedItems')}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
   </fx:Metadata>
@@ -36,7 +36,8 @@
 
   </local:plugins>
   <local:items>
-    <FieldContainer fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMQueryList_fixedIndex_title')}">
+    <FieldContainer
+            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMQueryList_fixedIndex_title')}">
       <items>
         <ui:AdvancedFieldContainer ui="{LabelableSkin.PLAIN_LABEL.getSkin()}"
                                    labelAlign="top"
@@ -51,8 +52,9 @@
                                     itemId="fixedIndex">
               <ui:plugins>
                 <ui:BlockEnterPlugin/>
-                <ui:BindPropertyPlugin bindTo="{ValueExpressionFactory.create(FixedIndexViewModel.INDEX_PROPERTY_NAME, indexViewModel)}"
-                                       bidirectional="true"/>
+                <ui:BindPropertyPlugin
+                        bindTo="{ValueExpressionFactory.create(FixedIndexViewModel.INDEX_PROPERTY_NAME, indexViewModel)}"
+                        bidirectional="true"/>
               </ui:plugins>
             </ui:StatefulNumberField>
           </ui:items>

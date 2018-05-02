@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.sfcc.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ProductsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.pricing.PriceServiceImpl;
@@ -46,7 +45,7 @@ public class SfccCaeConfiguration {
   }
 
   @Bean
-  SfccCommerceUrlProvider sfccPageHandlerUrlProvider(@Nonnull @Value("${livecontext.sfcc.storefront.url}") String storefrontUrl) {
+  SfccCommerceUrlProvider sfccPageHandlerUrlProvider(@Nonnull @Value("${livecontext.sfcc.storefront.url:https://${livecontext.sfcc.host}/on/demandware.store}") String storefrontUrl) {
     return new SfccCommerceUrlProvider(storefrontUrl);
   }
 }

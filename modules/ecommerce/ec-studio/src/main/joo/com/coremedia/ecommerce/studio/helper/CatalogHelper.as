@@ -431,8 +431,6 @@ public class CatalogHelper {
       var errorMsg:String = error.message;
       // only process livecontext errors
       if (errorCode === LC_ERROR_CODE_CATALOG_ITEM_UNAVAILABLE) {
-        MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogItemNotFoundError_title'),
-                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceCatalogItemNotFoundError_message'), errorMsg));
         doHandleError(error, source);
       } else if (errorCode === LC_ERROR_CODE_CONNECTION_UNAVAILABLE) {
         MessageBoxUtil.showError(ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'commerceConnectionError_title'),

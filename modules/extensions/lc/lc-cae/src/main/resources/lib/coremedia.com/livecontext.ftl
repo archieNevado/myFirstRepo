@@ -5,24 +5,14 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
 
-<#--
- * Renders an addToCart button
- * If product has only one variant the button has add to cart functionality
- * otherwise its just a link to the product detail page
- *
- * @param product the product that needs to be added to cart
- * @param alwaysShow (optional) if true, forces the button to be shown even if product is not available
- * @param alwaysClickable (optional) always attached add to cart functionality even if there is more than one variant
- * @param withLink (optional) link to product detail page
- * @param enableShopNow (optional, default:true) enable "addToCart" functionality. If "false", only show the "Details" button
- -->
+<#-- BUTTON -->
 <#macro addToCartButton product alwaysShow=false alwaysClickable=false enableShopNow=true withLink="" attr={}>
   <#local numberOfVariants=(product.variants?size)!0 />
   <#local hasSingleSKU=(numberOfVariants == 1) />
@@ -58,60 +48,56 @@
   <@bp.button text=buttonLabel href=link baseClass="cm-button" iconClass=iconClass attr=(attr + buttonData) />
 </#macro>
 
-<#--Format Utils-->
+<#-- FORMAT PRICE -->
 <#function formatPrice amount currency locale>
   <#return liveContextFreemarkerFacade.formatPrice(amount, currency, locale)>
 </#function>
 
+<#-- PRODUCT -->
 <#function createProductInSite product>
   <#return liveContextFreemarkerFacade.createProductInSite(product)/>
 </#function>
 
+<#-- PREVIEW METADATA -->
 <#function previewMetaData>
   <#return liveContextFreemarkerFacade.getPreviewMetadata()>
 </#function>
 
+<#-- AUGMENTED CHECK -->
 <#function augmentedContent>
   <#return liveContextFreemarkerFacade.isAugmentedContent()>
 </#function>
 
-
-<#-- Returns name of eCommerce Vendor like IBM or SAP Hybris -->
+<#-- GET VENDOR NAME -->
 <#function getVendorName>
   <#return liveContextFreemarkerFacade.getVendorName()>
 </#function>
 
-<#--
- * Builds the url for the status handler to retrieve the actual state (logged in/logged out) of the user.
- -->
+<#-- GET LOGIN STATUS URL -->
 <#function getStatusUrl>
   <#return liveContextLoginFreemarkerFacade.getStatusUrl()>
 </#function>
 
-<#--
- * Builds the absolute url to the login formular of a commerce system.
- -->
+<#-- GET ABSOLUTE URL -->
 <#function getLoginFormUrl>
   <#return liveContextLoginFreemarkerFacade.getLoginFormUrl()>
 </#function>
 
-<#--
- * Builds a logout url of a commerce system to logout the current user.
- -->
+<#-- GET LOGOUT URL -->
 <#function getLogoutUrl>
   <#return liveContextLoginFreemarkerFacade.getLogoutUrl()>
 </#function>
 
 
+<#-- --- DEPRECATED, UNUSED ---------------------------------------------------------------------------------------- -->
 
-<#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
 
 <#-- DEPRECATED, use bp.getPlacementHighlightingMetaData instead -->
 <#function fragmentHighlightingMetaData placement>
   <#return blueprintFreemarkerFacade.getPlacementHighlightingMetaData(placement)>
 </#function>
 
-<#-- UNUSED -->
+<#-- DEPRECATED, UNUSED -->
 <#function fragmentContext>
   <#return liveContextFreemarkerFacade.fragmentContext()>
 </#function>

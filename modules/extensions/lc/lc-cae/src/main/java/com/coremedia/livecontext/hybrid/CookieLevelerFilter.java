@@ -3,7 +3,7 @@ package com.coremedia.livecontext.hybrid;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.context.SaveContextOnUpdateOrErrorResponseWrapper;
 
@@ -72,7 +72,7 @@ public class CookieLevelerFilter implements Filter {
   public void destroy() {
   }
 
-  @Required
+  @Value("${livecontext.cookie.domain}")
   public void setCookieDomain(String[] cookieDomain) {
     this.cookieDomains = cookieDomain;
   }

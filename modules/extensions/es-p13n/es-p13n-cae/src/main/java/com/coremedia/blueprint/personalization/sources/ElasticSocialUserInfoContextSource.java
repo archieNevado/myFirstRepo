@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.personalization.sources;
 
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.comments.CommentService;
 import com.coremedia.elastic.social.api.ratings.LikeService;
 import com.coremedia.elastic.social.api.ratings.RatingService;
@@ -88,7 +89,7 @@ public class ElasticSocialUserInfoContextSource extends AbstractContextSource {
   private final class UserPropertiesPropertyProvider implements PropertyProvider {
 
     private final CommunityUser communityUser;
-    private final Map<String,Object> communityUserProperties;
+    private final @PersonalData Map<String,Object> communityUserProperties;
     private final List<String> propertyNames = new ArrayList<>(VIRTUAL_PROPERTIES);
 
     private UserPropertiesPropertyProvider(CommunityUser communityUser) {
@@ -98,7 +99,7 @@ public class ElasticSocialUserInfoContextSource extends AbstractContextSource {
     }
 
     @Override
-    public Object getProperty(String key) {
+    public @PersonalData Object getProperty(String key) {
       if(VIRTUAL_PROPERTIES.contains(key)) {
         if(NUMBER_OF_COMMENTS.equals(key)) {
           return getNumberOfComments(communityUser);
@@ -113,10 +114,10 @@ public class ElasticSocialUserInfoContextSource extends AbstractContextSource {
     }
 
     @Override
-    public <T> T getProperty(String key, T defaultValue) {
-      final Object property = getProperty(key);
+    public <T> @PersonalData T getProperty(String key, T defaultValue) {
+      final @PersonalData Object property = getProperty(key);
       //noinspection unchecked
-      return (defaultValue != null && defaultValue.getClass().isInstance(property) )? (T) property : defaultValue;
+      return (defaultValue != null && defaultValue.getClass().isInstance(property) )? (@PersonalData T) property : defaultValue;
     }
 
     @Override

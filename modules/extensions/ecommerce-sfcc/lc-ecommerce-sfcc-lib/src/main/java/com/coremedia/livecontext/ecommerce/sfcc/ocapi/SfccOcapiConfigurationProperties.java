@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SfccOcapiConfigurationProperties {
 
-  private String host;
+  @Value("${livecontext.sfcc.host}")
+  private String host = "sandbox.demandware.net";
   private String protocol = "https";
 
   private int connectionRequestTimeoutMs = 60_000;
@@ -40,7 +41,7 @@ public class SfccOcapiConfigurationProperties {
   private String shopBasePath = "/dw/shop/";
 
   @Value("${livecontext.sfcc.ocapi.meta.basePath:/dw/meta/}")
-  private String metaBasePath = "/dw/shop/";
+  private String metaBasePath = "/dw/meta/";
 
   public String getHost() {
     return host;

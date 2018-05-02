@@ -19,6 +19,11 @@ joo = {
   Object.defineProperty(navigator, "msMaxTouchPoints", {get: function () {return 0}, set: function (v) {}});
   Object.defineProperty(navigator, "maxTouchPoints", {get: function () {return 0}, set: function (v) {}});
 
+  // Fix for Chrome 62 / chromedriver 2.32, to be removed as soon as possible
+  if (window.location.href.indexOf("testMode=true")) {
+    delete window.PointerEvent;
+  }
+
   // http://stackoverflow.com/questions/984510/what-is-my-script-src-url
   var configLocationPath = (function() {
     var scripts = document.getElementsByTagName('script'),

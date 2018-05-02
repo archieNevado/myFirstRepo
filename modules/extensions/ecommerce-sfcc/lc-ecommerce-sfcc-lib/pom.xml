@@ -145,8 +145,16 @@
     </dependency>
 
     <dependency>
+      <!-- generate spring-configuration-metadata.json during build -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>

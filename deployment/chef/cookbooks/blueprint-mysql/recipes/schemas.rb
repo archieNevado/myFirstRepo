@@ -15,7 +15,7 @@ end
 node['blueprint']['mysql']['schemas'].each do |schema|
   sql = "CREATE SCHEMA #{schema} CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; \
          GRANT ALL PRIVILEGES ON #{schema}.* TO '#{schema}'@'localhost' IDENTIFIED BY '#{schema}'; \
-         GRANT ALL PRIVILEGES ON #{schema}.* TO '#{schema}'@'#{node['fqdn']}' IDENTIFIED BY '#{schema}'; \
+         GRANT ALL PRIVILEGES ON #{schema}.* TO '#{schema}'@'#{node['ipaddress']}' IDENTIFIED BY '#{schema}'; \
          GRANT ALL PRIVILEGES ON #{schema}.* TO '#{schema}'@'%' IDENTIFIED BY '#{schema}';"
   execute "create #{schema} schema" do
     command "mysql --user=root --password=coremedia --execute=\"#{sql}\""

@@ -13,12 +13,14 @@
   <#assign text=bp.getMessage("button_read_more") />
 </#if>
 <#assign target=self.openInNewTab?then("_blank", "_self") />
+<#assign rel=self.openInNewTab?then("noopener", "") />
 
 <#if enabled>
   <#assign attr={
     "class": "cm-cta-button ${additionalClass}",
     "role": "button",
     "target": target,
+    "rel": rel,
     "metadata": metadata
   } />
   <@bp.optionalLink href="${cm.getLink(self)}" attr=attr>${text}</@bp.optionalLink>

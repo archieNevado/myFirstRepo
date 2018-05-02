@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSymbol folder="/Sites/SiteGenesis Global/France/French/Options/Settings/Templates/CMChannel/Newsletter (Campaign)" name="Descriptor" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>fr-FR</locale>
+<master>
+<link href="../../../../../../../United%20Kingdom/English/Options/Settings/Templates/CMChannel/Newsletter%20%28Campaign%29/Descriptor.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Templates/CMChannel/Newsletter%20%28Campaign%29/Descriptor"/>
+</master>
+<description>Newsletter (Campagne)</description>
+<icon md5="25fc77d7aa8e777674dc8ec31d434337" size="8068" href="../../../../../../../../../__blob/25fc77d7aa8e777674dc8ec31d434337.blob" mimetype="image/png"/>
+</CMSymbol>

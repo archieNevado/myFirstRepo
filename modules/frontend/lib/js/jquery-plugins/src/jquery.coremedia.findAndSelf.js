@@ -8,6 +8,6 @@ import { findAndSelf } from "@coremedia/js-jquery-utils";
  * @param selector {string} the selector to search for
  * @return {jQuery} the search result as jQuery result
  */
-$.fn.findAndSelf = function (selector) {
+$.fn.findAndSelf = function(selector) {
   return findAndSelf(this, selector);
 };

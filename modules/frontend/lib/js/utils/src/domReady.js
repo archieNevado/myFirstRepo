@@ -6,27 +6,25 @@
  * @param {readyCallback} f - Callback function to be executed.
  * @function
  */
-export const domReady = (f) => {
+export const domReady = f => {
   // DOM is ready
-  if (document.readyState !== 'loading') {
+  if (document.readyState !== "loading") {
     f();
-  }
-  // modern Browsers (Firefox, Chrome, Safari, Opera, IE 9-up
-  else if (document.addEventListener) {
+  } else if (document.addEventListener) {
+    // modern Browsers (Firefox, Chrome, Safari, Opera, IE 9-up
     const handler = () => {
-      document.removeEventListener('DOMContentLoaded', handler, false);
+      document.removeEventListener("DOMContentLoaded", handler, false);
       f();
     };
-    document.addEventListener('DOMContentLoaded', handler, false);
-  }
-  // IE <9
-  else {
+    document.addEventListener("DOMContentLoaded", handler, false);
+  } else {
+    // IE <9
     const handler = () => {
-      if (document.readyState !== 'complete') {
-        document.detachEvent('onreadystatechange', handler);
+      if (document.readyState !== "complete") {
+        document.detachEvent("onreadystatechange", handler);
         f();
       }
     };
-    document.attachEvent('onreadystatechange', handler);
+    document.attachEvent("onreadystatechange", handler);
   }
 };

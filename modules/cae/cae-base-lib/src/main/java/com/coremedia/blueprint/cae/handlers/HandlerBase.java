@@ -30,6 +30,8 @@ public abstract class HandlerBase {
   private static final Splitter PATH_SPLITTER = Splitter.on('/').omitEmptyStrings();
   private static final Joiner PATH_JOINER = Joiner.on('/');
 
+  static final String FRAGMENT_PREVIEW = "fragmentPreview";
+
   protected static final Logger LOG = LoggerFactory.getLogger(HandlerBase.class);
   protected ContentLinkBuilder contentLinkBuilder;
   protected UrlPathFormattingHelper urlPathFormattingHelper;

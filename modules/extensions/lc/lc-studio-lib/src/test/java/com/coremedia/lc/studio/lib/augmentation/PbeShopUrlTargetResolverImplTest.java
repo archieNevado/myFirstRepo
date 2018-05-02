@@ -6,8 +6,8 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImp
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.After;
@@ -18,13 +18,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class PbeShopUrlTargetResolverImplTest {
 
   @InjectMocks
@@ -40,27 +41,32 @@ public class PbeShopUrlTargetResolverImplTest {
   private AugmentationService externalPageAugmentationService;
 
   @Mock
+  private CatalogService catalogService;
+
+  @Mock
   private Site site;
-  private MockCommerceEnvBuilder envBuilder;
+
   private StoreContext storeContext;
 
   @Before
   public void setup() {
-    envBuilder = MockCommerceEnvBuilder.create();
-    commerceConnection = envBuilder.setupEnv();
+    commerceConnection = new BaseCommerceConnection();
+    CurrentCommerceConnection.set(commerceConnection);
 
-    storeContext = CurrentCommerceConnection.get().getStoreContext();
+    storeContext = newStoreContext();
     storeContext.put(StoreContextImpl.SITE, "theSiteId");
     storeContext.put(StoreContextImpl.STORE_NAME, "storeName");
+    commerceConnection.setStoreContext(storeContext);
 
     when(sitesService.getSite("theSiteId")).thenReturn(site);
 
+    commerceConnection.setCatalogService(catalogService);
     when(commerceConnection.getCatalogService().findCategoryBySeoSegment(anyString(), any(StoreContext.class))).thenReturn(null);
   }
 
   @After
   public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
+    CurrentCommerceConnection.remove();
   }
 
   @Test

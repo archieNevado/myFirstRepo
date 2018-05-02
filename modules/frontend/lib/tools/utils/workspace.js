@@ -2,14 +2,19 @@
 
 const path = require("path");
 const fs = require("fs");
+const glob = require("glob");
 const closestPackage = require("closest-package");
 const selfsigned = require("selfsigned");
+const { getInstalledPathSync } = require("get-installed-path");
+
 const cmLogger = require("@coremedia/cm-logger");
 
 const PKG_NAME = "@coremedia/tool-utils";
 const DEFAULT_CONFIG_PATH = "config";
 const DEFAULT_THEMES_PATH = "themes";
 const DEFAULT_TARGET_PATH = "target";
+
+const DEFAULT_VARIANT = "default";
 
 /**
  * Extended Error Class for errors handling env.json or apikey.txt files.
@@ -50,16 +55,38 @@ let wsConfig;
 let themeConfig;
 
 /**
- * @type {Object} a cached mapping of dependencies by name. If a key is not added here, the dependency has not been checked
- *                yet otherwise specifies if the dependency has been detected as a brick.
+ * @type {Object} a cached mapping of node modules by name and their {@type CoreMediaEntry}. If a key is not added here,
+ *                the module has not been checked yet otherwise the value specifies at least an empty object
  */
-const checkedBrickDependenciesByName = {};
+const cachedPackageJsonsByName = {};
+
+/**
+ * Represents a "coremedia"-Entry in the package.json
+ * @class CoreMediaEntry
+ */
+class CoreMediaEntry {
+  constructor(applyFrom) {
+    applyFrom = applyFrom || {};
+    /**
+     * @member {String} indicates the type of the CoreMedia package
+     */
+    this.type = applyFrom.type || null;
+    /**
+     * @member {String} indicates the initialization script for the CoreMedia package
+     */
+    this.init = applyFrom.init || null;
+    /**
+     * @member {Array} indicates in which variants the smart import mechanism will apply
+     */
+    this.smartImport = applyFrom.smartImport || [DEFAULT_VARIANT];
+  }
+}
 
 /**
  * Returns the root of the CoreMedia Frontend Workspace
  * @return {[type]} [description]
  */
-const getWSPath = () => {
+const getWSPackageJson = () => {
   let cwd = process.cwd();
 
   const check = () => {
@@ -76,7 +103,7 @@ const getWSPath = () => {
       packageJson.coremedia.type &&
       packageJson.coremedia.type === "workspace"
     ) {
-      return path.dirname(packageJsonPath);
+      return packageJsonPath;
     }
     return next();
   };
@@ -96,7 +123,8 @@ const getWSPath = () => {
  */
 const getWorkspaceConfig = () => {
   if (!wsConfig) {
-    const wsPath = getWSPath();
+    const packageJsonPath = getWSPackageJson();
+    const wsPath = path.dirname(packageJsonPath);
     const configPath = path.join(wsPath, DEFAULT_CONFIG_PATH);
     const envFile = path.join(configPath, "env.json");
     const certFile = path.join(configPath, "livereload.pem");
@@ -106,6 +134,7 @@ const getWorkspaceConfig = () => {
 
     wsConfig = {
       path: wsPath,
+      pkgPath: packageJsonPath,
       configPath,
       envFile,
       certFile,
@@ -217,6 +246,7 @@ function getThemeConfig() {
     themeConfig = {
       name: themeConfigFromPackageJson.name,
       version: themeConfigFromPackageJson.version,
+      buildConfig: themeConfigFromPackageJson.buildConfig || {},
       path: cwd,
       srcPath,
       pkgPath: packageJsonPath,
@@ -236,24 +266,147 @@ function getThemeConfig() {
   return themeConfig;
 }
 
-function isBrickDependencyByPackageJsonConfig(dependency) {
-  const packageJson = require(dependency.getPkgPath());
-  return packageJson.coremedia && packageJson.coremedia.type === "brick";
+function getCoreMediaEntryFromPackageJson(nodeModule) {
+  const packageJson = require(nodeModule.getPkgPath());
+  return new CoreMediaEntry(packageJson.coremedia);
 }
 
 /**
- * Checks if the given dependency is a brick dependency
- * @param dependency {Dependency} the dependency
+ * @param nodeModule {NodeModule}
+ * @returns {CoreMediaEntry}
+ */
+function getCoreMediaEntry(nodeModule) {
+  const moduleName = nodeModule.getName();
+  if (!(moduleName in cachedPackageJsonsByName)) {
+    cachedPackageJsonsByName[moduleName] = getCoreMediaEntryFromPackageJson(
+      nodeModule
+    );
+  }
+  return cachedPackageJsonsByName[moduleName];
+}
+
+function getPackageType(nodeModule) {
+  return getCoreMediaEntry(nodeModule).type;
+}
+
+function getSmartImportType(nodeModule) {
+  return getCoreMediaEntry(nodeModule).smartImport;
+}
+
+/**
+ * Returns an absolute path to the initialization script of the package if defined.
+ *
+ * @param nodeModule The module
+ * @returns {String} if an JavaScript for initialization is given, return absolute path, otherwise NULL
+ */
+function getInitJs(nodeModule) {
+  const init = getCoreMediaEntry(nodeModule).init;
+  if (!init) {
+    return null;
+  }
+  const pkgPath = nodeModule.getPkgPath();
+  const pkgDir = path.dirname(pkgPath);
+  return path.resolve(pkgDir, init);
+}
+
+/**
+ * Checks if the given node module is a brick module
+ * @param nodeModule {NodeModule} the module
  * @return {boolean}
  */
-function isBrickDependency(dependency) {
-  const dependencyName = dependency.getName();
-  if (!(dependencyName in checkedBrickDependenciesByName)) {
-    checkedBrickDependenciesByName[
-      dependencyName
-    ] = isBrickDependencyByPackageJsonConfig(dependency);
+function isBrickModule(nodeModule) {
+  return getPackageType(nodeModule) === "brick";
+}
+
+/**
+ * Checks if the given node module is a lib module
+ * @param nodeModule {NodeModule} the module
+ * @return {boolean}
+ */
+function isLibraryModule(nodeModule) {
+  return getPackageType(nodeModule) === "lib";
+}
+
+/**
+ * Checks if the given node module is meant to be smart imported from this variant. If variant is set to null it will
+ * ignore the variant check.
+ *
+ * @param {String} variant the variant to check (if null variant check will be ignored, defaults to {@link DEFAULT_VARIANT}).
+ * @returns {function(NodeModule=): boolean}
+ */
+function getIsSmartImportModuleFor(variant = DEFAULT_VARIANT) {
+  return nodeModule =>
+    (isBrickModule(nodeModule) || isLibraryModule(nodeModule)) &&
+    (!variant || getSmartImportType(nodeModule).includes(variant));
+}
+
+/**
+ * Finds the installation path of the given module name. Optionally a file path can be provided to indicate where to
+ * start look from.
+ *
+ * @param moduleName
+ * @param relativeFrom
+ * @throws Error in case the installation path could not be found
+ */
+function getInstallationPath(moduleName, relativeFrom) {
+  let nodeModulePaths = process.mainModule.paths;
+  if (relativeFrom) {
+    nodeModulePaths = [
+      path.join(
+        path.dirname(closestPackage.sync(relativeFrom)),
+        "node_modules"
+      ),
+    ].concat(nodeModulePaths);
   }
-  return checkedBrickDependenciesByName[dependencyName];
+  try {
+    return getInstalledPathSync(moduleName, { paths: nodeModulePaths });
+  } catch (e) {
+    // could not find module
+    throw new Error(
+      `Could not find installation folder for module '${moduleName}', searched in ${nodeModulePaths}`
+    );
+  }
+}
+
+/**
+ * Collects all available bricks in the frontend workspace.
+ *
+ * @returns {Object} an object containing the name of the package as key and the version as value
+ */
+function getAvailableBricks() {
+  const wsPatterns = require(wsConfig.pkgPath).workspaces || [];
+  const wsDirectories = wsPatterns.map(
+          wsPattern => glob.sync(wsPattern, {
+            cwd: wsConfig.path
+          })
+  ).reduce((all, newValue) => all.concat(newValue), []);
+
+  const packageJsonPaths = wsDirectories
+          .map(
+                  directory => path.join(wsConfig.path, directory, "package.json")
+          )
+          .filter(
+                  fs.existsSync
+          )
+          .filter(
+                  packageJsonPath => {
+                    const packageJson = require(packageJsonPath);
+                    return packageJson.coremedia && packageJson.coremedia.type === "brick";
+                  }
+          );
+
+  return packageJsonPaths
+          .map(
+                  packageJsonPath => {
+                    const packageJson = require(packageJsonPath);
+                    return {
+                      [packageJson.name]: `^${packageJson.version}`
+                    }
+                  }
+          ).reduce((aggregator, newValue) => ({
+            ...aggregator,
+            ...newValue
+          }), {});
 }
 
 /**
@@ -384,8 +537,7 @@ const getEnv = () => {
     throw new ConfigFileError("No environment file found. Please login.");
   }
   try {
-    const env = JSON.parse(fs.readFileSync(wsConfig.envFile, "utf8"));
-    return env;
+    return JSON.parse(fs.readFileSync(wsConfig.envFile, "utf8"));
   } catch (e) {
     throw new ConfigFileError("The environment file couldn´t be read.");
   }
@@ -513,9 +665,14 @@ const getApiKey = () => {
 };
 
 module.exports = {
+  DEFAULT_VARIANT,
   getWorkspaceConfig,
   getThemeConfig,
-  isBrickDependency,
+  isBrickModule,
+  getInitJs,
+  getIsSmartImportModuleFor,
+  getInstallationPath,
+  getAvailableBricks,
   getMonitorConfig,
   createEnvFile,
   getEnv,

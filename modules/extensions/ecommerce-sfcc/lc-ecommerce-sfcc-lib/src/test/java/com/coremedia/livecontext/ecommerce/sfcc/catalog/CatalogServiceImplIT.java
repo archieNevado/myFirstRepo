@@ -270,15 +270,6 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     super.testWithStoreContext();
   }
 
-  @Test
-  public void testWithStoreContextRethrowException() {
-    if (useBetamaxTapes()) {
-      return;
-    }
-
-    super.testWithStoreContextRethrowException();
-  }
-
   protected void assertProduct(Product product) {
     assertThat(product).isNotNull();
     assertThat(product.getName()).isNotEmpty();

@@ -8,6 +8,7 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.elastic.social.cae.tags.ElasticSocialFunctions;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
+import com.coremedia.common.logging.PersonalDataLogger;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.reviews.DuplicateReviewException;
@@ -21,7 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
+import static com.coremedia.common.logging.BaseMarker.UNCLASSIFIED_PERSONAL_DATA;
+
 public abstract class AbstractReviewsResultHandler extends ElasticContentHandler<ReviewsResult> {
+
+  private static final PersonalDataLogger PERSONAL_DATA_LOGGER = new PersonalDataLogger(LOG);
 
   /* TODO min_length is currently duplicated translations for labels */
   private static final int REVIEW_TEXT_MIN_LENGTH = 5;
@@ -71,10 +76,11 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
         }
         result.addMessage(SUCCESS_MESSAGE, null, message);
       } catch (DuplicateReviewException e) {  // NOSONAR no need to log a stacktrace for this
-        LOG.info("Could not write a review, the author {} has already written a review for the target {}", e.getAuthor(), e.getTarget());
+        String authorId = e.getAuthor() != null ? e.getAuthor().toIdString() : "";
+        PERSONAL_DATA_LOGGER.info("Could not write a review, the author {} has already written a review for the target {}", authorId, e.getTarget());
         addErrorMessage(result, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_ALREADY_REVIEWED);
       } catch (Exception e) {
-        LOG.error("Could not write a review", e);
+        PERSONAL_DATA_LOGGER.error(UNCLASSIFIED_PERSONAL_DATA, "Could not write a review", e);
         addErrorMessage(result, null, navigation, developer, ContributionMessageKeys.REVIEW_FORM_ERROR);
       }
     }

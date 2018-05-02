@@ -4,7 +4,6 @@ import com.coremedia.blueprint.assets.cae.AMLocalizationKeys;
 import com.coremedia.blueprint.assets.cae.AssetDetails;
 import com.coremedia.blueprint.assets.cae.CategoryOverview;
 import com.coremedia.blueprint.assets.cae.DownloadCollectionOverview;
-import com.coremedia.blueprint.assets.cae.DownloadPortal;
 import com.coremedia.blueprint.assets.cae.DownloadPortalFactory;
 import com.coremedia.blueprint.assets.cae.Notification;
 import com.coremedia.blueprint.assets.cae.PaginatedAssets;
@@ -17,13 +16,11 @@ import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.blueprint.common.contentbeans.CMPlaceholder;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.view.ViewUtils;
@@ -43,7 +40,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collections;
 
 import static com.coremedia.blueprint.assets.cae.handlers.DownloadPortalHandler.CATEGORY_REQUEST_PARAMETER_NAME;
@@ -52,27 +48,24 @@ import static com.google.common.collect.ImmutableMap.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class DownloadPortalHandlerTest {
 
-  public static final int ASSET_CONTENT_ID = 60001;
-  public static final int CATEGORY_CONTENT_ID = 10001;
+  private static final int ASSET_CONTENT_ID = 60001;
+  private static final int CATEGORY_CONTENT_ID = 10001;
   private static final int CATEGORY_CONTENT_ID_2 = 10002;
 
   @InjectMocks
   private DownloadPortalHandler handler = new DownloadPortalHandler();
-
-  @Mock
-  private DownloadPortal downloadPortal;
 
   @Mock
   private DownloadPortalFactory factory;
@@ -91,9 +84,6 @@ public class DownloadPortalHandlerTest {
 
   @Mock
   private AssetDetails assetDetails;
-
-  @Mock
-  private CMPlaceholder page;
 
   @Mock
   private CMChannel navigation;
@@ -144,10 +134,7 @@ public class DownloadPortalHandlerTest {
   private ValidationService<ContentBean> validationService;
 
   @Mock
-  private MimeTypeService mimeTypeService;
-
-  @Mock
-  protected UriTemplate uriTemplate;
+  private UriTemplate uriTemplate;
 
   private MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -157,17 +144,13 @@ public class DownloadPortalHandlerTest {
   public void setUp() throws Exception {
     String segmentName = "corporate";
 
-    when(contentRepository.getContent(eq(CATEGORY_CONTENT_ID + ""))).thenReturn(taxonomyContent);
     when(taxonomy.getContentId()).thenReturn(CATEGORY_CONTENT_ID);
     when(taxonomy.getContent()).thenReturn(taxonomyContent);
     when(taxonomy.getContent().isInProduction()).thenReturn(true);
-    when(contentBeanFactory.createBeanFor(eq(taxonomyContent))).thenReturn(taxonomy);
 
-    when(contentRepository.getContent(eq(CATEGORY_CONTENT_ID_2 + ""))).thenReturn(taxonomyContent2);
     when(taxonomy2.getContentId()).thenReturn(CATEGORY_CONTENT_ID_2);
     when(taxonomy2.getContent()).thenReturn(taxonomyContent2);
     when(taxonomy2.getContent().isInProduction()).thenReturn(true);
-    when(contentBeanFactory.createBeanFor(eq(taxonomyContent2))).thenReturn(taxonomy2);
 
     when(asset.getContentId()).thenReturn(ASSET_CONTENT_ID);
     when(asset.getContent()).thenReturn(assetContent);
@@ -179,7 +162,6 @@ public class DownloadPortalHandlerTest {
 
     when(factory.createCategoryOverview(null)).thenReturn(categoryOverview);
     when(factory.createCategoryOverview(taxonomy)).thenReturn(categoryOverview);
-    when(factory.createCategoryOverview(taxonomy2)).thenReturn(categoryOverview);
     when(factory.createAssetDetails(navigation, asset, taxonomy)).thenReturn(assetDetails);
     when(factory.createAssetDetails(navigation, asset, taxonomy2)).thenReturn(null);
     when(factory.createAssetDetails(navigation, asset, null)).thenReturn(assetDetails);
@@ -194,7 +176,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleCategoryRootRequest() throws Exception {
+  public void testHandleCategoryRootRequest() {
     final ModelAndView modelAndView = handler.handleDownloadPortalRequest(navigation, null, null, null, null);
 
     assertEquals(2, modelAndView.getModel().size());
@@ -205,7 +187,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleCategoryRequest() throws Exception {
+  public void testHandleCategoryRequest() {
     final ModelAndView modelAndView = handler.handleDownloadPortalRequest(navigation, taxonomy, taxonomy.getContentId() + "", null, null);
 
     assertEquals(2, modelAndView.getModel().size());
@@ -216,7 +198,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleAssetInCategoryRequest() throws Exception {
+  public void testHandleAssetInCategoryRequest() {
     final ModelAndView modelAndView = handler.handleDownloadPortalRequest(navigation, taxonomy, taxonomy.getContentId() + "", asset, asset.getContentId() + "");
 
     assertEquals(2, modelAndView.getModel().size());
@@ -227,8 +209,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleAssetWithoutCategoryRequest() throws Exception {
-    when(asset.getPrimaryCategory()).thenReturn(taxonomy2);
+  public void testHandleAssetWithoutCategoryRequest() {
     final ModelAndView modelAndView = handler.handleDownloadPortalRequest(navigation, null, null, asset, asset.getContentId() + "");
 
     assertEquals(2, modelAndView.getModel().size());
@@ -239,7 +220,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testInvalidTaxonomyId() throws Exception {
+  public void testInvalidTaxonomyId() {
     final ModelAndView modelAndView = handler.handleDownloadPortalRequest(navigation, null, "abcdef", null, null);
     verifyErrorModelExists(modelAndView);
     verify(factory, never()).createAssetDetails(any(CMChannel.class), any(AMAsset.class), any(AMTaxonomy.class));
@@ -247,7 +228,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testInvalidAssetId() throws Exception {
+  public void testInvalidAssetId() {
     final ModelAndView modelAndView = handler.handleDownloadPortalRequest(navigation, null, null, null, "abcdef");
     verifyErrorModelExists(modelAndView);
     verify(factory, never()).createAssetDetails(any(CMChannel.class), any(AMAsset.class), any(AMTaxonomy.class));
@@ -255,7 +236,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleAssetWithInvalidCategoryRequest() throws Exception {
+  public void testHandleAssetWithInvalidCategoryRequest() {
     final ModelAndView modelAndView = handler.handleDownloadPortalRequest(navigation, taxonomy2, taxonomy2.getContentId() + "", asset, asset.getContentId() + "");
     verifyErrorModelExists(modelAndView);
     verify(factory).createAssetDetails(eq(navigation), eq(asset), eq(taxonomy2));
@@ -263,7 +244,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testBuildAmDownloadPortalLink() throws Exception {
+  public void testBuildAmDownloadPortalLink() {
     when(navigation.getContext()).thenReturn(cmContext);
 
     final UriComponents uriComponents = handler.buildAmDownloadPortalLink(uriTemplate);
@@ -271,7 +252,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test(expected=IllegalArgumentException.class)
-  public void testBuildAmDownloadPortalLinkWithNavigationNull() throws Exception {
+  public void testBuildAmDownloadPortalLinkWithNavigationNull() {
     when(navigation.getContext()).thenReturn(null);
 
     // cannot handle navigation without context
@@ -279,7 +260,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void buildAmPaginatedCategoryAssetsLink() throws URISyntaxException {
+  public void buildAmPaginatedCategoryAssetsLink() {
     when(navigation.getContext()).thenReturn(cmContext);
 
     final UriComponents uriComponents = handler.buildAmPaginatedCategoryAssetsLink(uriTemplate);
@@ -287,7 +268,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void buildAmPaginatedSubjectAssetsLink() throws URISyntaxException {
+  public void buildAmPaginatedSubjectAssetsLink() {
     when(navigation.getContext()).thenReturn(cmContext);
 
 
@@ -297,7 +278,7 @@ public class DownloadPortalHandlerTest {
 
 
   @Test
-  public void buildDownloadCollectionLink() throws URISyntaxException {
+  public void buildDownloadCollectionLink(){
     when(navigation.getContext()).thenReturn(cmContext);
 
 
@@ -306,7 +287,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void buildAmPaginatedSearchAssetsLink() throws URISyntaxException {
+  public void buildAmPaginatedSearchAssetsLink() {
     when(navigation.getContext()).thenReturn(cmContext);
 
 
@@ -363,7 +344,7 @@ public class DownloadPortalHandlerTest {
   }
   
   @Test
-  public void buildDownloadCollectionPrepareLink() throws URISyntaxException {
+  public void buildDownloadCollectionPrepareLink() {
     when(navigation.getContext()).thenReturn(cmContext);
 
     final UriComponents uriComponents = handler.buildDownloadCollectionPrepareLink(uriTemplate);
@@ -371,7 +352,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void buildDownloadCollectionDownloadLink() throws URISyntaxException {
+  public void buildDownloadCollectionDownloadLink() {
     when(navigation.getContext()).thenReturn(cmContext);
 
     final UriComponents uriComponents = handler.buildDownloadCollectionDownloadLink(uriTemplate);
@@ -379,7 +360,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void buildDownloadCollectionOverviewLink() throws URISyntaxException {
+  public void buildDownloadCollectionOverviewLink() {
     when(navigation.getContext()).thenReturn(cmContext);
 
     final UriComponents uriComponents = handler.buildDownloadCollectionOverviewLink(uriTemplate);
@@ -413,7 +394,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleSearchTooShortRequest() throws Exception {
+  public void testHandleSearchTooShortRequest() {
 
     when(factory.createEmptyPaginatedAssets()).thenReturn(paginatedAssets);
     String queryTooShort = "me";
@@ -432,7 +413,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleSearchRequest() throws Exception {
+  public void testHandleSearchRequest() {
 
     String searchString = "searchme";
     when(factory.createPaginatedSearchAssets(searchString, navigation, 1)).thenReturn(paginatedAssets);
@@ -452,7 +433,7 @@ public class DownloadPortalHandlerTest {
   }
 
   @Test
-  public void testHandleSearchRequestNoResult() throws Exception {
+  public void testHandleSearchRequestNoResult() {
 
     String searchString = "searchme";
     when(factory.createPaginatedSearchAssets(searchString, navigation, 1)).thenReturn(paginatedAssets);
@@ -472,7 +453,7 @@ public class DownloadPortalHandlerTest {
     assertEquals(AMLocalizationKeys.SEARCH_NOTIFICATION_NO_RESULTS, notification.getKey());  }
 
   @Test
-  public void testHandleSearchRequestOneResult() throws Exception {
+  public void testHandleSearchRequestOneResult() {
 
     String searchString = "searchme";
     when(factory.createPaginatedSearchAssets(searchString, navigation, 1)).thenReturn(paginatedAssets);
@@ -513,7 +494,7 @@ public class DownloadPortalHandlerTest {
 
     handler.handleDownloadCollectionOverviewRequest(navigation);
 
-    verify(factory).createDownloadCollectionOverview(Collections.<AMAssetRendition>emptyList());
+    verify(factory).createDownloadCollectionOverview(Collections.emptyList());
   }
 
   private void verifyErrorModelExists(ModelAndView modelAndView) {

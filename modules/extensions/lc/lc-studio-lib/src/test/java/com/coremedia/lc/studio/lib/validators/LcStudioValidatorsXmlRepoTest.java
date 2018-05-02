@@ -10,11 +10,13 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import com.coremedia.rest.cap.validation.CapTypeValidator;
 import com.coremedia.rest.cap.validation.impl.ApplicationContextCapTypeValidators;
 import com.coremedia.rest.validation.impl.Issue;
@@ -25,6 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -44,6 +47,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -51,6 +55,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -78,6 +83,15 @@ public class LcStudioValidatorsXmlRepoTest {
 
   private BaseCommerceConnection commerceConnection;
 
+  @Mock
+  private CommerceBeanFactory commerceBeanFactory;
+
+  @Mock
+  private StoreContextProvider storeContextProvider;
+
+  @Mock
+  private WorkspaceService workspaceService;
+
   @Inject
   private CatalogLinkValidator marketingSpotExternalIdValidator;
 
@@ -92,41 +106,27 @@ public class LcStudioValidatorsXmlRepoTest {
 
   private Site site;
 
-  Iterable<Issue> validate(int contentId) {
-    Content content = contentRepository.getContent(String.valueOf(contentId));
-    IssuesImpl issues = new IssuesImpl<>(content, emptySet());
-
-    testling.validate(content, issues);
-
-    //noinspection unchecked
-    return (Iterable<Issue>) issues.getByProperty().get(PROPERTY_NAME);
-  }
-
-  Iterable<Issue> validate(CapTypeValidator validator, int contentId) {
-    return validate(validator, contentId, PROPERTY_NAME);
-  }
-
-  Iterable<Issue> validate(CapTypeValidator validator, int contentId, @Nullable String propertyName) {
-    Content content = contentRepository.getContent(String.valueOf(contentId));
-    IssuesImpl issues = new IssuesImpl<>(content, emptySet());
-
-    validator.validate(content, issues);
-
-    //noinspection unchecked
-    return propertyName == null ? issues.getGlobal() : (Iterable<Issue>) issues.getByProperty().get(propertyName);
-  }
-
   @Before
   public void setup() {
+    initMocks(this);
+
     String siteId = "theSiteId";
     site = sitesService.getSite(siteId);
 
-    commerceConnection = MockCommerceEnvBuilder.create().setupEnv();
+    commerceConnection = new BaseCommerceConnection();
+
+    StoreContext storeContext = newStoreContext();
+    storeContext.put(StoreContextImpl.SITE, siteId);
+    commerceConnection.setStoreContext(storeContext);
+
+    when(storeContextProvider.cloneContext(any())).thenReturn(storeContext.getClone());
+
+    commerceConnection.setCommerceBeanFactory(commerceBeanFactory);
+    commerceConnection.setStoreContextProvider(storeContextProvider);
+    commerceConnection.setWorkspaceService(workspaceService);
 
     commerceConnectionInitializer = mock(CommerceConnectionInitializer.class);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
-
-    commerceConnection.getStoreContext().put(StoreContextImpl.SITE, siteId);
   }
 
   @After
@@ -282,6 +282,30 @@ public class LcStudioValidatorsXmlRepoTest {
     Iterable<Issue> issues = validate(validator, 110, null);
 
     assertIssueCode(issues, "not_in_navigation");
+  }
+
+  private Iterable<Issue> validate(int contentId) {
+    Content content = contentRepository.getContent(String.valueOf(contentId));
+    IssuesImpl issues = new IssuesImpl<>(content, emptySet());
+
+    testling.validate(content, issues);
+
+    //noinspection unchecked
+    return (Iterable<Issue>) issues.getByProperty().get(PROPERTY_NAME);
+  }
+
+  private Iterable<Issue> validate(CapTypeValidator validator, int contentId) {
+    return validate(validator, contentId, PROPERTY_NAME);
+  }
+
+  private Iterable<Issue> validate(CapTypeValidator validator, int contentId, @Nullable String propertyName) {
+    Content content = contentRepository.getContent(String.valueOf(contentId));
+    IssuesImpl issues = new IssuesImpl<>(content, emptySet());
+
+    validator.validate(content, issues);
+
+    //noinspection unchecked
+    return propertyName == null ? issues.getGlobal() : (Iterable<Issue>) issues.getByProperty().get(propertyName);
   }
 
   @Configuration

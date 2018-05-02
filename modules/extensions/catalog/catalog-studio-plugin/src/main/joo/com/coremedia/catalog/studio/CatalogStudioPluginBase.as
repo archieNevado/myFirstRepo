@@ -123,34 +123,34 @@ public class CatalogStudioPluginBase extends StudioPlugin {
   }
 
   private static function addToSearch(contentTypeName:String):void {
-    for (var i:int = 0; i < editorContext.getDocumentTypesExcludedFromSearch().length; i++) {
-      if (editorContext.getDocumentTypesExcludedFromSearch()[i] === contentTypeName) {
+    for (var i:int = 0; i < editorContext.getContentTypesExcludedFromSearch().length; i++) {
+      if (editorContext.getContentTypesExcludedFromSearch()[i] === contentTypeName) {
         return;
       }
     }
-    editorContext.getDocumentTypesExcludedFromSearch().push(contentTypeName);
+    editorContext.getContentTypesExcludedFromSearch().push(contentTypeName);
   }
 
   private static function addToSearchResult(contentTypeName:String):void {
-    for (var i:int = 0; i < editorContext.getDocumentTypesExcludedFromSearchResult().length; i++) {
-      if (editorContext.getDocumentTypesExcludedFromSearchResult()[i] === contentTypeName) {
+    for (var i:int = 0; i < editorContext.getContentTypesExcludedFromSearchResult().length; i++) {
+      if (editorContext.getContentTypesExcludedFromSearchResult()[i] === contentTypeName) {
         return;
       }
     }
-    editorContext.getDocumentTypesExcludedFromSearchResult().push(contentTypeName);
+    editorContext.getContentTypesExcludedFromSearchResult().push(contentTypeName);
   }
 
   private static function removeFromSearchResult(contentTypeName:String):void {
-    for (var i:int = 0; i < editorContext.getDocumentTypesExcludedFromSearch().length; i++) {
-      if (editorContext.getDocumentTypesExcludedFromSearch()[i] === contentTypeName) {
-        editorContext.getDocumentTypesExcludedFromSearch().splice(i, 1);
+    for (var i:int = 0; i < editorContext.getContentTypesExcludedFromSearch().length; i++) {
+      if (editorContext.getContentTypesExcludedFromSearch()[i] === contentTypeName) {
+        editorContext.getContentTypesExcludedFromSearch().splice(i, 1);
         break;
       }
     }
 
-    for (var j:int = 0; j < editorContext.getDocumentTypesExcludedFromSearchResult().length; j++) {
-      if (editorContext.getDocumentTypesExcludedFromSearchResult()[j] === contentTypeName) {
-        editorContext.getDocumentTypesExcludedFromSearchResult().splice(j, 1);
+    for (var j:int = 0; j < editorContext.getContentTypesExcludedFromSearchResult().length; j++) {
+      if (editorContext.getContentTypesExcludedFromSearchResult()[j] === contentTypeName) {
+        editorContext.getContentTypesExcludedFromSearchResult().splice(j, 1);
         break;
       }
     }

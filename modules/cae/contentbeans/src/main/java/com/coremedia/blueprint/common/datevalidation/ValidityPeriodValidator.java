@@ -6,7 +6,7 @@ import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.cae.search.solr.SolrSearchFormatHelper;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.cache.Cache;
-import com.coremedia.springframework.request.ContextAttributes;
+import com.coremedia.blueprint.common.util.ContextAttributes;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSettings folder="/Sites/Chef Corp./Germany/German/Options/Settings/Teaser Styles" name="Light on Dark" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<CMSettings folder="/Sites/Chef Corp./Germany/German/Options/Settings/Teaser Styles" name="Light on Dark" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>en-US</locale>
 <master>
+<link href="../../../../../United%20States/English/Options/Settings/Teaser%20Styles/Light%20on%20Dark.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Teaser%20Styles/Light%20on%20Dark"/>
 </master>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">

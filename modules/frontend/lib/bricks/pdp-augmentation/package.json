@@ -12,13 +12,15 @@
     "@coremedia/brick-livecontext": "^1.0.0"
   },
   "devDependencies": {
-    "jsdoc-to-markdown": "3.0.0"
+    "jsdoc-to-markdown": "3.0.0",
+    "prettier": "1.11.1"
   },
   "scripts": {
-    "apidoc": "jsdoc2md src/js/*.js > API.md"
+    "apidoc": "jsdoc2md src/js/*.js > API.md",
+    "prettier": "prettier \"**/*\" --write"
   },
-  "main": "src/js/index.js",
   "coremedia": {
-    "type": "brick"
+    "type": "brick",
+    "init": "src/js/init.js"
   }
 }

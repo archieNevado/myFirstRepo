@@ -14,7 +14,8 @@
     [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.blueprint.studio.util.HiddenChannelRenderer;
+    import com.coremedia.blueprint.studio.forms.columns.HiddenChannelColumn;
+    import com.coremedia.blueprint.studio.util.ViewtypeRenderer;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.cmExternalPageForm";
 
@@ -42,7 +43,31 @@
                 itemId="cmExternalChannelPlacementForm">
           <editor:items>
             <bppm:PageGridPropertyField propertyName="placement"
-                                        hideLabel="true"/>
+                                        hideLabel="true">
+              <bppm:fields>
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+                <ui:DataField name="viewtypeStatus"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ViewtypeRenderer.convert}"/>
+              </bppm:fields>
+              <bppm:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn/>
+                <bpforms:ValidityColumn/>
+                <GridColumn stateId="viewTypeUrl"
+                            width="40"
+                            sortable="false"
+                            dataIndex="viewtypeStatus"
+                            fixed="true"
+                            renderer="{ViewtypeRenderer.renderer}"/>
+                <editor:StatusColumn/>
+              </bppm:columns>
+            </bppm:PageGridPropertyField>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:TeaserWithPictureDocumentForm/>
@@ -61,20 +86,20 @@
                                           propertyName="children"
                                           itemId="{CHILDREN_LIST_ITEM_ID}">
               <editor:fields>
-                <ui:DataField name="hiddenStatus"
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+                <ui:DataField name="{HiddenChannelColumn.STATUS_ID}"
                               ifUnreadable=""
                               mapping="properties.hidden"/>
               </editor:fields>
               <editor:columns>
+                <editor:ThumbnailColumn/>
                 <editor:TypeIconColumn/>
                 <editor:NameColumn/>
-                <GridColumn width="25"
-                            sortable="false"
-                            dataIndex="hiddenStatus"
-                            stateId="hidden"
-                            fixed="true"
-                            renderer="{HiddenChannelRenderer.hiddenStatusIconRenderer}"/>
-
+                <bpforms:ValidityColumn/>
+                <bpforms:HiddenChannelColumn/>
                 <editor:StatusColumn/>
               </editor:columns>
             </editor:LinkListPropertyField>

@@ -1,31 +1,29 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
 import com.coremedia.blueprint.base.links.UriConstants;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AbstractCommerceContextInterceptorTest {
 
   @Mock
@@ -37,31 +35,25 @@ public class AbstractCommerceContextInterceptorTest {
   @Mock
   private HttpServletRequest request;
 
-  @Mock
-  private SiteResolver siteResolver;
-
+  @Spy
   private AbstractCommerceContextInterceptor testling;
-  private MockCommerceEnvBuilder envBuilder;
+
+  @Spy
+  private AbstractStoreContextProvider storeContextProvider;
 
   // --- setup ------------------------------------------------------
 
   @Before
   public void setup() {
-    envBuilder = MockCommerceEnvBuilder.create();
-    BaseCommerceConnection connection = envBuilder.setupEnv();
-    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
+    StoreContext storeContext = newStoreContext();
 
-    testling = new NonAbstractTestling();
+    BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
+    commerceConnection.setStoreContextProvider(storeContextProvider);
+    commerceConnection.setStoreContext(storeContext);
 
-    // Set all @Required properties to make it afterPropertiesSet safe.
-    // Tests may override, so do not call afterPropertiesSet yet.
-    testling.setSiteResolver(siteResolver);
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
+
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    envBuilder.tearDownEnv();
   }
 
   // --- tests ------------------------------------------------------
@@ -87,9 +79,7 @@ public class AbstractCommerceContextInterceptorTest {
 
   @Test
   public void testNormalizePathWithNull() {
-    String path = null;
-
-    String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(path);
+    String normalizedPath = AbstractCommerceContextInterceptor.normalizePath(null);
 
     assertThat(normalizedPath).isNull();
   }
@@ -100,7 +90,10 @@ public class AbstractCommerceContextInterceptorTest {
     MockHttpServletRequest request = new MockHttpServletRequest();
 
     Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
-    assertThat(connection).hasValueSatisfying(c -> assertThat(c.getStoreContext()).isNotNull());
+    assertThat(connection)
+            .isNotEmpty()
+            .map(CommerceConnection::getStoreContext)
+            .isNotEmpty();
   }
 
   @Test
@@ -109,25 +102,16 @@ public class AbstractCommerceContextInterceptorTest {
     when(request.getParameter(AbstractCommerceContextInterceptor.QUERY_PARAMETER_WORKSPACE_ID)).thenReturn("aWorkspaceId");
     testling.setPreview(true);
 
-    testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
+    Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    StoreContext context = CurrentCommerceConnection.find()
+    assertThat(connection)
+            .isNotEmpty()
             .map(CommerceConnection::getStoreContext)
-            .orElse(null);
-
-    assertThat(context).isNotNull();
-    assertThat(context.getPreviewDate()).isNotNull();
-    assertThat(context.getWorkspaceId()).isNotNull();
-  }
-
-  // --- internal ---------------------------------------------------
-
-  private class NonAbstractTestling extends AbstractCommerceContextInterceptor {
-
-    @Nullable
-    @Override
-    protected Site getSite(HttpServletRequest request, String normalizedPath) {
-      throw new UnsupportedOperationException("This dummy impl is not sufficient for your test.");
-    }
+            .hasValueSatisfying(
+                    context -> {
+                      assertThat(context.getPreviewDate()).isNotNull();
+                      assertThat(context.getWorkspaceId()).isNotNull();
+                    }
+            );
   }
 }

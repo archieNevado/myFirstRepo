@@ -18,7 +18,7 @@
   </#if>
 </#if>
 
-<div class="cm-review" data-cm-review-id="${self.id}" itemscope="itemscope" itemtype="http://data-vocabulary.org/Review" <@cm.metadata self/>>
+<div class="cm-review" data-cm-review-id="${self.id}" itemscope="itemscope" itemtype="http://data-vocabulary.org/Review" <@preview.metadata self/>>
   <#if (self.target)?has_content>
     <span itemprop="itemreviewed" class="cm-visuallyhidden">${self.target}</span>
   </#if>

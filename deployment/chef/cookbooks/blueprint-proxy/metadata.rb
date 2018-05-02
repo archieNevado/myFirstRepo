@@ -8,5 +8,5 @@ version '1.0.0'
 
 depends 'blueprint-base'
 depends 'blueprint-tomcat'
-depends 'coremedia-proxy', '~> 0.3.2'
+depends 'coremedia-proxy', '~> 1.0.0'
 depends 'blueprint-tomcat'

@@ -18,6 +18,7 @@
     [ResourceBundle('com.coremedia.livecontext.asset.studio.LivecontextAssetStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.blueprint.studio.forms.components.DefaultExtraDataForm;
     import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
     import com.coremedia.livecontext.studio.LivecontextStudioPlugin;
 
@@ -35,6 +36,7 @@
      */
     public static const SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID:String = "searchProductPictures";
 
+    //noinspection JSUnusedLocalSymbols
     private var config:LivecontextAssetStudioPlugin;
 
     public native function LivecontextAssetStudioPlugin(config:LivecontextAssetStudioPlugin = null);
@@ -98,7 +100,7 @@
             <asset:CommerceReferencesForm/>
           </ui:items>
           <ui:after>
-            <Component itemId="{CMDownloadForm.CATEGORY_DOCUMENT_FORM_ID}"/>
+            <Component itemId="{DefaultExtraDataForm.CATEGORY_DOCUMENT_FORM_ID}"/>
           </ui:after>
         </ui:AddItemsPlugin>
       </bpforms:plugins>

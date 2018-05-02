@@ -5,6 +5,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRef;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import com.coremedia.common.personaldata.PersonalData;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.binding.validation.ValidationContext;
 import org.springframework.web.context.WebApplicationContext;
@@ -27,66 +28,66 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class Registration implements Serializable {
   private static final long serialVersionUID = 42L;
 
-  private String username;
-  private String givenname;
-  private String surname;
-  private String password;
-  private String confirmPassword;
-  private String emailAddress;
+  private @PersonalData String username;
+  private @PersonalData String givenname;
+  private @PersonalData String surname;
+  private @PersonalData String password;
+  private @PersonalData String confirmPassword;
+  private @PersonalData String emailAddress;
   private PasswordPolicy passwordPolicy;
   private boolean registeringWithProvider;
-  private BlobRef profileImage;
+  private @PersonalData BlobRef profileImage;
   private boolean deleteProfileImage = false;
   private boolean acceptTermsOfUse = false;
   private String timeZoneId;
   private String recaptchaResponse;
 
 
-  public String getUsername() {
+  public @PersonalData String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
+  public void setUsername(@PersonalData String username) {
     this.username = username;
   }
 
-  public String getGivenname() {
+  public @PersonalData String getGivenname() {
     return givenname;
   }
 
-  public void setGivenname(String givenname) {
+  public void setGivenname(@PersonalData String givenname) {
     this.givenname = givenname;
   }
 
-  public String getSurname() {
+  public @PersonalData String getSurname() {
     return surname;
   }
 
-  public void setSurname(String surname) {
+  public void setSurname(@PersonalData String surname) {
     this.surname = surname;
   }
 
-  public String getPassword() {
+  public @PersonalData String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(@PersonalData String password) {
     this.password = password;
   }
 
-  public String getConfirmPassword() {
+  public @PersonalData String getConfirmPassword() {
     return confirmPassword;
   }
 
-  public void setConfirmPassword(String confirmPassword) {
+  public void setConfirmPassword(@PersonalData String confirmPassword) {
     this.confirmPassword = confirmPassword;
   }
 
-  public String getEmailAddress() {
+  public @PersonalData String getEmailAddress() {
     return emailAddress;
   }
 
-  public void setEmailAddress(String emailAddress) {
+  public void setEmailAddress(@PersonalData String emailAddress) {
     this.emailAddress = emailAddress;
   }
 
@@ -109,11 +110,11 @@ public class Registration implements Serializable {
     this.registeringWithProvider = registeringWithProvider;
   }
 
-  public BlobRef getProfileImage() {
+  public @PersonalData BlobRef getProfileImage() {
     return profileImage;
   }
 
-  public void setProfileImage(BlobRef profileImage) {
+  public void setProfileImage(@PersonalData BlobRef profileImage) {
     this.profileImage = profileImage;
   }
 
@@ -222,7 +223,9 @@ public class Registration implements Serializable {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_CONFIRM_PASSWORD_ERROR, "confirmPassword");
     }
 
-    if (!isBlank(password) && !password.equals(confirmPassword)) {
+    @SuppressWarnings("PersonalData") // safe to pass @PersonalData confirmPassword to #equals
+    boolean doNotMatch = !isBlank(password) && !password.equals(confirmPassword);
+    if (doNotMatch) {
       addErrorMessageWithSource(context, WebflowMessageKeys.REGISTRATION_PASSWORDS_DO_NOT_MATCH, "confirmPassword");
     }
 

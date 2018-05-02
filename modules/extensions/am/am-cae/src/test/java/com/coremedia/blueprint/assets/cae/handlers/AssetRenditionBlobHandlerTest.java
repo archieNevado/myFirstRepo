@@ -2,9 +2,7 @@ package com.coremedia.blueprint.assets.cae.handlers;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMAssetRendition;
-import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.cae.handlers.CapBlobHandler;
-import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
@@ -18,16 +16,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssetRenditionBlobHandlerTest {
 
   @InjectMocks
@@ -46,9 +43,6 @@ public class AssetRenditionBlobHandlerTest {
   private AMAssetRendition amAssetRenditionWithoutBlob;
 
   @Mock
-  private CapBlobRef capBlobRef;
-
-  @Mock
   private HttpServletResponse response;
 
   @Mock
@@ -56,8 +50,6 @@ public class AssetRenditionBlobHandlerTest {
 
   @Before
   public void setUp() {
-    when(amAssetRendition.getBlob()).thenReturn(capBlobRef);
-    when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.<String, String>emptyMap());
     when(capBlobHandler.handleRequest(any(ContentBean.class), nullable(String.class), anyString(), nullable(String.class), nullable(WebRequest.class))).thenReturn(modelAndView);
   }
 
@@ -90,7 +82,6 @@ public class AssetRenditionBlobHandlerTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void buildLink_validBean_assetWithoutBlob() {
-    when(capBlobHandler.linkParameters(any(CapBlobRef.class))).thenReturn(Collections.singletonMap(UriConstants.Segments.SEGMENT_NAME, "asset-name"));
     assetRenditionBlobHandler.buildRenditionLink(amAssetRenditionWithoutBlob);
   }
 

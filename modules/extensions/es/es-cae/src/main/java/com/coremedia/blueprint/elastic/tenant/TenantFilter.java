@@ -92,16 +92,18 @@ public class TenantFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     String tenantName = determineTenant(request);
     if (tenantName != null) {
-      //todo the following calls should be combined to a new method, e.g. TenantService#useTenant()
-      tenantService.register(tenantName);
-      registeredTenants.add(tenantName);
-      tenantService.setCurrent(tenantName);
+      useTenant(tenantName);
     }
     try {
       chain.doFilter(request, response);
     } finally {
       tenantService.clearCurrent();
     }
+  }
+
+  private void useTenant(String tenantName){
+    tenantService.setCurrent(tenantName, true);
+    registeredTenants.add(tenantName);
   }
 
   @Override

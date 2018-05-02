@@ -56,8 +56,7 @@ public class DemoUserCreationServiceTest {
 
   @Test
   public void testTenantSpecific() throws Exception {
-    tenantService.register("test");
-    tenantService.setCurrent("test");
+    tenantService.setCurrent("test", true);
 
     verify(communityUserService, times(3)).createUser(anyString(), anyString(), anyString());
     verify(blobService, times(2)).put(any(InputStream.class), anyString(), anyString());
@@ -65,8 +64,7 @@ public class DemoUserCreationServiceTest {
 
   @Test
   public void testArbitraryTenant() throws Exception {
-    tenantService.register("anothertest");
-    tenantService.setCurrent("anothertest");
+    tenantService.setCurrent("anothertest", true);
 
     verify(communityUserService, times(2)).createUser(anyString(), anyString(), anyString());
     verify(blobService, times(2)).put(any(InputStream.class), anyString(), anyString());

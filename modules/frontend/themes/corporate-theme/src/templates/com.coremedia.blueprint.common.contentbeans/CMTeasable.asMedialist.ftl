@@ -3,9 +3,10 @@
 
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
+<#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
-<div class="cm-medialist"<@cm.metadata self.content />>
-  <@bp.optionalLink href="${link}" attr={"target":target}>
+<div class="cm-medialist"<@preview.metadata self.content />>
+  <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
     <#-- picture -->
     <#if self.picture?has_content>
       <@cm.include self=self.picture params={
@@ -27,10 +28,10 @@
       </#if>
       <#-- headline -->
       <#if self.teaserTitle?has_content>
-        <h3 class="cm-medialist__headline"<@cm.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h3>
+        <h3 class="cm-medialist__headline"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h3>
       </#if>
       <#-- teaser text, 3 lines ~ 160 chars -->
-      <p class="cm-medialist__text"<@cm.metadata "properties.teaserText" />>
+      <p class="cm-medialist__text"<@preview.metadata "properties.teaserText" />>
         <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "medialist.max.length", 160)) />
       </p>
     </div>

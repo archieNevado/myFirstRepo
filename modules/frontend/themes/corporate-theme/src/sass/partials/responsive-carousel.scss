@@ -1,0 +1,9 @@
+.#{$cm-responsive-carousel-prefix} {
+  margin: $padding-base-horizontal 0;
+
+  .cm-teasable {
+    &__caption {
+      padding: $cm-responsive-carousel-item-font-size 0;
+    }
+  }
+}

@@ -4,7 +4,7 @@
 
 <#assign commentView=es.getCommentView(self) />
 
-<div class="cm-comment" data-cm-comment-id="${self.id}"<@cm.metadata self/>>
+<div class="cm-comment" data-cm-comment-id="${self.id}"<@preview.metadata self/>>
 
   <#assign strAuthorName=self.authorName!"" />
   <#assign strDate=self.creationDate?datetime?string.long_short />

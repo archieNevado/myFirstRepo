@@ -17,8 +17,6 @@ import com.coremedia.livecontext.ecommerce.sfcc.common.SfccStoreContextProvider;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.AbstractOCAPIConnector;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoryProductAssignmentSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductSearchResource;
-import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ProductsResource;
-import com.coremedia.livecontext.ecommerce.sfcc.pricing.PriceServiceImpl;
 import com.coremedia.livecontext.ecommerce.sfcc.user.UserContextProviderImpl;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -27,15 +25,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.Nonnull;
 
 @Configuration
-@PropertySource(value = {
-        "classpath:/com/coremedia/livecontext/ecommerce/sfcc/configuration/lc-ecommerce-sfcc.properties"
-})
 @ImportResource(reader = ResourceAwareXmlBeanDefinitionReader.class,
         value = {
                 "classpath:/framework/spring/livecontext-cache.xml",

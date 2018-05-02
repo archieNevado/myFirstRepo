@@ -228,18 +228,18 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
   @Nonnull
   private static StoreContext createStoreContext(@Nonnull StoreContextValuesHolder valuesHolder,
                                                  @Nonnull Map<String, String> replacements) {
-    SfccStoreContextBuilder builder = new SfccStoreContextBuilder();
-
-    builder.withSiteId(valuesHolder.siteId);
-    builder.withStoreId(valuesHolder.storeId);
-    builder.withStoreName(valuesHolder.storeName);
-    builder.withCatalog(valuesHolder.catalogId, valuesHolder.catalogAlias);
-    builder.withCurrency(valuesHolder.currency);
-    builder.withLocale(valuesHolder.locale);
-
-    builder.withReplacements(replacements);
-
-    return builder.build();
+    return SfccStoreContextBuilder
+            .from(
+                    replacements,
+                    valuesHolder.siteId,
+                    valuesHolder.storeId,
+                    valuesHolder.storeName,
+                    valuesHolder.catalogId,
+                    valuesHolder.catalogAlias,
+                    valuesHolder.currency,
+                    valuesHolder.locale
+            )
+            .build();
   }
 
   private static class StoreContextValuesHolder {
@@ -256,8 +256,7 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
   @Nonnull
   @Override
   public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
-    return new SfccStoreContextBuilder()
-            .from(source);
+    return SfccStoreContextBuilder.from(source);
   }
 
   @Nonnull

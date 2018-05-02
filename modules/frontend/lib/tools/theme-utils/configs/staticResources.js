@@ -5,8 +5,8 @@ const path = require("path");
 
 const deepMerge = require("./utils/deepMerge");
 const {
-  dependencies: { getFlattenedDependencies, Dependency },
-  workspace: { isBrickDependency, getThemeConfig },
+  dependencies: { getFlattenedDependencies, NodeModule },
+  workspace: { isBrickModule, getThemeConfig },
 } = require("@coremedia/tool-utils");
 const JoinWebpackPlugin = require("../plugins/JoinWebpackPlugin");
 const { ZipperWebpackPlugin } = require("../plugins/ZipperWebpackPlugin");
@@ -15,6 +15,14 @@ const PROPERTIES_REG_EXP = /.+_(.+).properties$/;
 const PROPERTIES_GLOB = "*_*.properties";
 
 const themeConfig = getThemeConfig();
+
+const buildConfig = themeConfig.buildConfig;
+
+// inline all images that are smaller than 10000 bytes if not specified differently
+const imageEmbedThreshold =
+  buildConfig["imageEmbedThreshold"] !== undefined
+    ? buildConfig["imageEmbedThreshold"]
+    : 10000;
 
 /**
  * Creates a CopyWebpackPlugin instance for the given node modules that will copy the templates to the target
@@ -135,14 +143,14 @@ function createPatternsCopyOverThemePaths(themePaths) {
  * @module contains the webpack configuration for static resources like templates and resource bundles
  */
 module.exports = () => config => {
-  const themeAsDependency = new Dependency(
+  const themeModule = new NodeModule(
     themeConfig.name,
     themeConfig.version,
     themeConfig.pkgPath
   );
   const brickDependencies = getFlattenedDependencies(
-    themeAsDependency.getPkgPath(),
-    isBrickDependency
+    themeModule.getPkgPath(),
+    isBrickModule
   );
 
   const copyWebpackPluginsForTemplates = [].concat(
@@ -160,7 +168,7 @@ module.exports = () => config => {
         themeConfig.themeTargetPath,
         themeConfig.themeTemplatesTargetPath
       ),
-      [themeAsDependency]
+      [themeModule]
     )
   );
   const joinWebpackPlugin = configureJoinWebpackPluginForResourceBundles(
@@ -173,11 +181,23 @@ module.exports = () => config => {
   return deepMerge(config, {
     module: {
       rules: [
+        // let svgParamLoader process the svg files to inject parameters if needed
         {
-          test: /\.(svg|png|gif)$/,
-          loader: "file-loader",
+          test: /\.param\.svg$/,
+          loader: require.resolve("../loaders/SvgParamLoader"),
           options: {
             name: "[name].[ext]",
+            limit: 0, // always inline svg with parameters
+            outputPath: "svg/", // if for whatever reasons limit 0 does not work
+          },
+        },
+        {
+          test: /\.(svg|jpg|jpeg|png|gif)$/,
+          loader: "url-loader",
+          exclude: /\.param\.svg$/, // do not double load svg files with injected parameters
+          options: {
+            name: "[name].[ext]",
+            limit: imageEmbedThreshold,
             outputPath: "img/",
           },
         },
@@ -190,7 +210,7 @@ module.exports = () => config => {
           },
         },
         {
-          test: /\.(swf)$/,
+          test: /\.swf$/,
           loader: "file-loader",
           options: {
             name: "[name].[ext]",

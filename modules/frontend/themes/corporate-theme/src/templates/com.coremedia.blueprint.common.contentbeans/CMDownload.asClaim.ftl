@@ -5,7 +5,7 @@
 <#assign cssClasses = cm.localParameter("cssClass", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
-<div class="cm-claim thumbnail ${cssClasses}"<@cm.metadata self.content />>
+<div class="cm-claim thumbnail ${cssClasses}"<@preview.metadata self.content />>
   <#-- picture -->
   <@bp.optionalLink href="${link}">
     <#if self.picture?has_content>
@@ -24,7 +24,7 @@
   <div class="caption">
     <#-- headline -->
     <@bp.optionalLink href="${link}">
-      <h3 class="cm-claim__headline thumbnail-label"<@cm.metadata "properties.teaserTitle" />>
+      <h3 class="cm-claim__headline thumbnail-label"<@preview.metadata "properties.teaserTitle" />>
         <span>
           <#if link?has_content>
               <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
@@ -34,7 +34,7 @@
       </h3>
     </@bp.optionalLink>
     <#-- teaser text, 3 lines ~ 120 chars -->
-    <p class="cm-claim__text"<@cm.metadata "properties.teaserText" />>
+    <p class="cm-claim__text"<@preview.metadata "properties.teaserText" />>
       <@cm.include self=self view="infos" /><br>
       <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "claim.max.length", 115)) />
     </p>

@@ -9,6 +9,8 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.Locale;
 
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
+
 
 public class CMSiteImplTest extends ContentBeanTestBase {
 
@@ -31,13 +33,13 @@ public class CMSiteImplTest extends ContentBeanTestBase {
 
   @Test
   public void testGetRoot1() throws Exception {
-    setUpPreviewDate();
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE);
     Assert.assertEquals(10, contentBean.getRoot().getContentId());
   }
 
   @Test
   public void testGetRoot2() throws Exception {
-    setUpPreviewDate(2010, Calendar.JANUARY, 1);
+    setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE, 2010, Calendar.JANUARY, 1);
     Assert.assertNull(contentBean.getRoot());
   }
 

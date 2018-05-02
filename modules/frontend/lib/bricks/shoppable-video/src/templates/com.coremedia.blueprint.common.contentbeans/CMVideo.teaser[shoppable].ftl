@@ -20,7 +20,7 @@
 <#if (timelineEntries?size > 0 || self.timeLineDefaultTarget?has_content)>
 <div class="cm-shoppable cm-container">
   <#-- video on the left -->
-  <div class="${blockClass} ${cssClasses} ${blockClass}--video cm-shoppable__video ${additionalClass}" data-cm-teasable--video='{"preview": ".cm-teaser__content", "player": ".${blockClass}--video__video", "play": ".cm-play-button"}'<@cm.metadata (metadata![]) + [self.content] />>
+  <div class="${blockClass} ${cssClasses} ${blockClass}--video cm-shoppable__video ${additionalClass}" data-cm-teasable--video='{"preview": ".cm-teaser__content", "player": ".${blockClass}--video__video", "play": ".cm-play-button"}'<@preview.metadata (metadata![]) + [self.content] />>
     <div class="${blockClass}__wrapper">
       <#assign ownPictureCssClass="" />
       <#if self.picture?has_content>
@@ -39,13 +39,13 @@
       <div class="${blockClass}__caption">
       <#-- teaser title -->
         <#if self.teaserTitle?has_content>
-          <h3 class="${blockClass}__headline" <@cm.metadata "properties.teaserTitle" />>
+          <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
             <span>${self.teaserTitle!""}</span>
           </h3>
         </#if>
       <#-- teaser text -->
         <#if renderTeaserText && self.teaserText?has_content>
-          <p class="${blockClass}__text" <@cm.metadata "properties.teaserText" />>
+          <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
             <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "square.max.length", 115)) />
           </p>
         </#if>
@@ -57,7 +57,7 @@
     </div>
   </div>
 <#-- teaser on the right -->
-  <div class="cm-shoppable__teasers"<@cm.metadata "properties.timeLine" />>
+  <div class="cm-shoppable__teasers"<@preview.metadata "properties.timeLine" />>
   <#-- default teaser -->
     <#if self.timeLineDefaultTarget?has_content>
       <div class="cm-shoppable__teaser cm-shoppable__default">

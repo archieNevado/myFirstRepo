@@ -53,6 +53,19 @@
                                                          propertyName="target"
                                                          bindTo="{config.bindTo}"/>
               </editor:additionalToolbarItems>
+              <editor:fields>
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+              </editor:fields>
+              <editor:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn flex="1"/>
+                <bpforms:ValidityColumn/>
+                <editor:StatusColumn/>
+              </editor:columns>
             </editor:LinkListPropertyField>
           </editor:items>
         </editor:PropertyFieldGroup>
@@ -98,13 +111,7 @@
         </editor:PropertyFieldGroup>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-      <editor:items>
-        <bpforms:CategoryDocumentForm/>
-        <bpforms:SEOForm/>
-      </editor:items>
-    </editor:DocumentForm>
+    <bpforms:DefaultExtraDataForm/>
     <bpforms:MultiLanguageDocumentForm/>
     <bpforms:MetaDataWithoutSearchableForm/>
   </editor:items>

@@ -7,6 +7,7 @@ import com.coremedia.blueprint.elastic.social.util.RepositoryFileNameHelper;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.models.ModelException;
 import com.coremedia.elastic.social.api.comments.Comment;
@@ -144,7 +145,11 @@ public class CuratedTransferResource extends AbstractLinkingResource {
       if (bbCodeBuilder.length() > 0) {
         bbCodeBuilder.append(LINEBREAK);
       }
-      bbCodeBuilder.append(formatComment(comment));
+      // Suppress warning about assigning @PersonalData result from #formatComment to non-annotated variable
+      // This class is designed to store personal data from Elastic Social comments in Content.
+      @SuppressWarnings("PersonalData")
+      String formattedContent = formatComment(comment);
+      bbCodeBuilder.append(formattedContent);
     }
 
     if (bbCodeBuilder.length() > 0) {
@@ -202,7 +207,9 @@ public class CuratedTransferResource extends AbstractLinkingResource {
     return createdPicture;
   }
 
-  private String formatComment(Comment comment) {
+  // Suppress warning about adding @PersonalData values to StringBuilder. Okay, the result is returned as @PersonalData
+  @SuppressWarnings("PersonalData")
+  private @PersonalData String formatComment(Comment comment) {
     String formattedDateString = COMMENT_DATE_FORMAT.get().format(comment.getCreationDate());
 
     StringBuilder result = new StringBuilder();
@@ -217,8 +224,8 @@ public class CuratedTransferResource extends AbstractLinkingResource {
     return result.toString();
   }
 
-  private String getAuthorName(Comment comment) {
-    String name = comment.getAuthorName();
+  private @PersonalData String getAuthorName(Comment comment) {
+    @PersonalData String name = comment.getAuthorName();
 
     CommunityUser author = comment.getAuthor();
     if (author != null) {

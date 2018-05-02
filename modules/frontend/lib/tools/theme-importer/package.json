@@ -16,5 +16,12 @@
     "amazon-cognito-identity-js": "1.23.0",
     "request": "2.81.0"
   },
+  "devDependencies": {
+    "prettier": "1.11.1"
+  },
+  "scripts": {
+    "apidoc": "jsdoc2md src/js/*.js > API.md",
+    "prettier": "prettier \"**/*\" --write"
+  },
   "main": "src/index.js"
 }

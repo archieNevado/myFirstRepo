@@ -3,26 +3,14 @@
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
- * Please check the section "Freemarker API" in chapter "Reference" in the frontend manual for details and examples
- * for the following directives.
+ * Please check the section "CoreMedia FreeMarker API" in chapter "Reference" in the "Frontend Developer Guide" for
+ * details and examples for the following directives.
  * Any changes, additions or removals need to be documented in the manual.
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
 
-<#--
- * Renders a button based on given parameters
- *
- * @param text (optional) if the button should contain text, this defines the text to be rendered
- * @param href (optional) if the button should be a link, this defines the href
- *                        If href is empty <button> tag will be used, otherwise <a> tag
- * @param baseClass (optional) if the button and its elements should have a baseClass attached this defines the base
- *                  class (default: cm-button). If empty not baseClasses will be attached
- * @param iconClass (optional) defines a class attached to the icon element of the button (defining the icon)
- * @param iconText (optional) defines the fallback text for the icon if icon cannot be displayed
- * @param textClass (optional) defines a class attached to the text element of the button
- * @param attr (optional) additional attributes to be rendered with the button element
- -->
+<#-- BUTTON -->
 <#macro button text="" href="" baseClass="cm-button" iconClass="" iconText="" textClass="" attr={}>
   <#if href?has_content>
     <#if iconClass?has_content && text?has_content>

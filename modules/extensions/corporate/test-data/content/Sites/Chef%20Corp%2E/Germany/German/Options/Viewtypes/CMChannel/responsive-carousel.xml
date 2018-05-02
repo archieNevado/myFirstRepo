@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMViewtype folder="/Sites/Chef Corp./Germany/German/Options/Viewtypes/CMChannel" name="responsive-carousel" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<description>Zeigt Inhalte als Karussell an. Es können mehrere Teaser auf einmal dargestellt werden.</description>
+<icon href="responsive-carousel.icon.svg%2Bxml" mimetype="image/svg+xml"/>
+<layout>responsive-carousel</layout>
+</CMViewtype>

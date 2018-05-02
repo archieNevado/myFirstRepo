@@ -17,11 +17,11 @@
 <#if (timelineEntries?size > 0 || self.timeLineDefaultTarget?has_content)>
 <div class="cm-shoppable cm-container">
   <#-- video on the left -->
-  <div class="cm-shoppable__video"<@cm.metadata self.content />>
+  <div class="cm-shoppable__video"<@preview.metadata self.content />>
     <@cm.include self=self view="video" />
   </div>
   <#-- teaser on the right -->
-  <div class="cm-shoppable__teasers"<@cm.metadata "properties.timeLine" />>
+  <div class="cm-shoppable__teasers"<@preview.metadata "properties.timeLine" />>
     <#-- default teaser -->
     <#if self.timeLineDefaultTarget?has_content>
       <div class="cm-shoppable__teaser cm-shoppable__default">
@@ -48,6 +48,10 @@
 </div>
 <#else>
   <#-- open default hero teaser without shoppable extras -->
-  <@cm.include self=self view="hero[]" />
+  <@cm.include self=self view="hero[]" params={
+  "blockClass": "cm-teaser--hero",
+  "renderTeaserText": false,
+  "renderDimmer": false
+  }/>
   <@bp.notification type="error" text="This is a shoppable video without timeline entries." />
 </#if>

@@ -58,24 +58,30 @@
                                    title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Placements_label')}">
           <editor:items>
             <bppm:PageGridPropertyField propertyName="placement"
-            hideLabel="true">
-            <bppm:fields>
-            <ui:DataField name="viewtypeStatus"
-            ifUnreadable=""
-            mapping=""
-            convert_="{ViewtypeRenderer.convert}"/>
-            </bppm:fields>
-            <bppm:columns>
-            <editor:TypeIconColumn/>
-            <editor:NameColumn/>
-            <GridColumn stateId="viewTypeUrl"
-            width="40"
-            sortable="false"
-            dataIndex="viewtypeStatus"
-            fixed="true"
-            renderer="{ViewtypeRenderer.renderer}"/>
-            <editor:StatusColumn/>
-            </bppm:columns>
+                                        hideLabel="true">
+              <bppm:fields>
+                <ui:DataField name="{ValidityColumn.STATUS_ID}"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ValidityColumn.convert}"/>
+                <ui:DataField name="viewtypeStatus"
+                              ifUnreadable=""
+                              mapping=""
+                              convert_="{ViewtypeRenderer.convert}"/>
+              </bppm:fields>
+              <bppm:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn/>
+                <bpforms:ValidityColumn/>
+                <GridColumn stateId="viewTypeUrl"
+                            width="40"
+                            sortable="false"
+                            dataIndex="viewtypeStatus"
+                            fixed="true"
+                            renderer="{ViewtypeRenderer.renderer}"/>
+                <editor:StatusColumn/>
+              </bppm:columns>
             </bppm:PageGridPropertyField>
           </editor:items>
         </editor:PropertyFieldGroup>

@@ -32,7 +32,7 @@ public class PreviewPanelTimeZoneValidationPlugin extends AbstractPlugin {
   [Bindable]
   public var previewPanel:PreviewPanel;
 
-  private var wcsTimeZoneValueExpression:ValueExpression;
+  private var timeZoneIdValueExpression:ValueExpression;
 
   public function PreviewPanelTimeZoneValidationPlugin(config:PreviewPanelTimeZoneValidationPlugin = null) {
     super(config);
@@ -50,9 +50,9 @@ public class PreviewPanelTimeZoneValidationPlugin extends AbstractPlugin {
     }
   }
 
-  private function getWcsTimeZoneValueExpression(config:PreviewPanelTimeZoneValidationPlugin):ValueExpression {
-    if (!wcsTimeZoneValueExpression) {
-      wcsTimeZoneValueExpression = ValueExpressionFactory.createFromFunction(function ():String {
+  private function getTimeZoneIdValueExpression(config:PreviewPanelTimeZoneValidationPlugin):ValueExpression {
+    if (!timeZoneIdValueExpression) {
+      timeZoneIdValueExpression = ValueExpressionFactory.createFromFunction(function ():String {
         var text:String;
         var entityExpression:ValueExpression = config.previewPanel.getCurrentPreviewContentValueExpression();
         var storeExpression:ValueExpression;
@@ -61,18 +61,23 @@ public class PreviewPanelTimeZoneValidationPlugin extends AbstractPlugin {
         } else if (entityExpression.getValue() is CatalogObject) {
           storeExpression = entityExpression.extendBy(CatalogObjectPropertyNames.STORE);
         }
-        if (storeExpression && storeExpression.getValue() && Store(storeExpression.getValue()).getWcsTimeZone()) {
-          text = Store(storeExpression.getValue()).getWcsTimeZone()["id"];
+
+        if (storeExpression && storeExpression.getValue()) {
+          var timeZoneId:String = Store(storeExpression.getValue()).getTimeZoneId();
+          if (timeZoneId) {
+            text = timeZoneId;
+          }
         }
+
         return text;
       });
     }
-    return wcsTimeZoneValueExpression;
+    return timeZoneIdValueExpression;
   }
 
   internal function getWarningValueExpression(config:PreviewPanelTimeZoneValidationPlugin):ValueExpression {
     return ValueExpressionFactory.createFromFunction(function ():Boolean {
-      var commerceTimeZoneId:String = getWcsTimeZoneValueExpression(config).getValue();
+      var commerceTimeZoneId:String = getTimeZoneIdValueExpression(config).getValue();
       if (!commerceTimeZoneId) {
         return undefined;
       }

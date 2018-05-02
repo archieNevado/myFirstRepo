@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 import static com.coremedia.elastic.core.api.SortOrder.ASCENDING;
 import static com.coremedia.elastic.social.api.ModerationType.POST_MODERATION;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
@@ -30,6 +29,7 @@ import static java.util.Locale.ENGLISH;
 /**
  * An {@link CommentGenerator} generates comments and complaints on comments for a specific tenant.
  */
+@SuppressWarnings("PersonalData") // Suppress @PersonalData warnings. Demo users don't have personal data.
 public class CommentGenerator {
   private static final Logger LOG = LoggerFactory.getLogger(CommentGenerator.class);
 
@@ -165,7 +165,7 @@ public class CommentGenerator {
       noModerationCommentCount++;
     }
     commentCount++;
-    LOG.debug(PERSONAL_DATA, "Created comment for {} with id={} with {} attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
+    LOG.debug("Created comment for {} with id={} with {} attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
             comment.getId(), comment.getAttachments().size());
     return comment;
   }

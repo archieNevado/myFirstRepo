@@ -100,7 +100,7 @@ public class FragmentCommerceContextInterceptorTest {
     commerceConnection.setStoreContext(storeContext);
     commerceConnection.setContractService(contractService);
 
-    when(storeContextProvider.buildContext(any())).thenReturn(new StoreContextBuilderImpl().from(storeContext));
+    when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
     when(userContextProvider.createContext(any())).thenReturn(userContext);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 

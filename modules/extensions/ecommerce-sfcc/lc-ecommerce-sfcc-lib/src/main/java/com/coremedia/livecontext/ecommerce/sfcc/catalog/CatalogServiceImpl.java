@@ -252,12 +252,12 @@ public class CatalogServiceImpl implements CatalogService {
     Set<String> setOfSearchCategoryIds = new HashSet<>();
     setOfSearchCategoryIds.add(categoryId);
 
-    CommerceId build = SfccCommerceIdProvider
+    CommerceId commerceId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.CATEGORY)
             .withExternalId(categoryId)
             .build();
 
-    CommerceBean category = commerceBeanFactory.loadBeanFor(build, storeContext);
+    CommerceBean category = commerceBeanFactory.loadBeanFor(commerceId, storeContext);
 
     if (category != null) {
       setOfSearchCategoryIds.addAll(
@@ -304,12 +304,6 @@ public class CatalogServiceImpl implements CatalogService {
   @Override
   public Optional<Catalog> getDefaultCatalog(@Nonnull StoreContext storeContext) {
     return Optional.empty();
-  }
-
-  @Nonnull
-  @Override
-  public CatalogService withStoreContext(StoreContext storeContext) {
-    return this;
   }
 
 }

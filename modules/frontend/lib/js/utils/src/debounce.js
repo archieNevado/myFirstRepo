@@ -23,8 +23,7 @@ export default function debounce(func, threshold, execAsap) {
 
     if (timeout) {
       clearTimeout(timeout);
-    }
-    else if (execAsap) {
+    } else if (execAsap) {
       func.apply(obj, args);
     }
 

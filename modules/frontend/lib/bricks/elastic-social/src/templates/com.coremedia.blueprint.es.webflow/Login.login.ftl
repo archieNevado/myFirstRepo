@@ -16,7 +16,7 @@
 <#if elasticSocialConfiguration?has_content>
 <div class="container">
   <div class="row">
-    <div class="cm-form cm-form--login well col-xs-12 col-md-6 col-md-push-3"<@cm.metadata data=[loginAction.content!"", "properties.id"] />>
+    <div class="cm-form cm-form--login well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[loginAction.content!"", "properties.id"] />>
       <#-- login -->
       <h1 class="cm-form__headline"><@bp.message "login_sign_in" /></h1>
       <form method="post">

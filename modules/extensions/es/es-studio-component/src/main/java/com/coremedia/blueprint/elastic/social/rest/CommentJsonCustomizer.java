@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.elastic.social.rest;
 
 import com.coremedia.cap.content.Content;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.elastic.social.api.comments.Comment;
@@ -28,7 +29,7 @@ public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
   ContentRepositoryResource contentRepositoryResource;
 
   @Override
-  public void customize(Comment comment, Map<String, Object> serializedObject) {
+  public void customize(Comment comment, @PersonalData Map<String, Object> serializedObject) {
     try {
       Object target = comment.getTarget();
       if (target instanceof ContentWithSite) {
@@ -50,12 +51,12 @@ public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
     // add customization for special views like to preview URL (if necessary)
   }
 
-  private void addPreviewUrl(Map<String, Object> serializedObject, Content content) {
+  private void addPreviewUrl(@PersonalData Map<String, Object> serializedObject, Content content) {
     String url = format(contentRepositoryResource.getPreviewControllerUrlPattern(), content.getId());
     serializedObject.put(PREVIEW_URL, url);
   }
 
-  private void addTitle(Map<String, Object> serializedObject, Content content) {
+  private void addTitle(@PersonalData Map<String, Object> serializedObject, Content content) {
     String title = content.getString("title");
     if (StringUtils.isNotBlank(title)) {
       serializedObject.put(SUBJECT, title);

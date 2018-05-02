@@ -8,7 +8,7 @@ import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.util.StringUtil;
+import com.google.common.collect.ImmutableList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,9 +64,9 @@ public class CommerceContractIdTestContextExtractorTest {
 
   @Test
   public void testExtractTestContextsFromContent() {
-    String userContractsStr = "vendor:///catalog/contract/contract1,vendor:///catalog/contract/contract2";
     String[] userContractIds = new String[]{"contract1", "contract2"};
-    List<String> contracts = StringUtil.tokenizeToList(userContractsStr, ",");
+    List<String> contracts = ImmutableList.of("vendor:///catalog/contract/contract1",
+                                              "vendor:///catalog/contract/contract2");
     when(contentBeanFactory.createBeanFor(content)).thenReturn(cmUserProfile);
     when(cmUserProfile.getProfileExtensions()).thenReturn(profileExtensions);
     when(profileExtensions.get(CommerceContractIdTestContextExtractor.PROPERTIES_PREFIX)).thenReturn(properties);

@@ -8,6 +8,7 @@
 <StringProperty Name="livecontext.connectionId">sfcc1</StringProperty>
 <BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
+<BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-microsite-links">true</BooleanProperty>
 <StructProperty Name="livecontext.store.config">
 <Struct>

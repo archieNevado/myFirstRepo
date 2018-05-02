@@ -3,6 +3,7 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 import com.coremedia.blueprint.elastic.social.cae.springsocial.SpringSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
+import com.coremedia.common.logging.PersonalDataLogger;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import static com.coremedia.common.logging.BaseMarker.AUTHENTICATION;
 @Named
 public class LoginHelper {
   private static final Logger LOG = LoggerFactory.getLogger(LoginHelper.class);
+  private static final PersonalDataLogger PERSONAL_DATA_LOG = new PersonalDataLogger(LOG);
 
   @Inject
   private AuthenticationManager authenticationManager;
@@ -81,7 +83,7 @@ public class LoginHelper {
 
       CommunityUser user = elasticSocialUserHelper.getUser(authentication.getPrincipal());
       if (user == null) {
-        LOG.error(AUTHENTICATION, "Could not get user for principal {}", authentication.getPrincipal());
+        PERSONAL_DATA_LOG.error(AUTHENTICATION, "Could not get user for principal {}", authentication.getPrincipal());
         addErrorMessage(context, WebflowMessageKeys.LOGIN_FORM_ERROR);
         return false;
       }

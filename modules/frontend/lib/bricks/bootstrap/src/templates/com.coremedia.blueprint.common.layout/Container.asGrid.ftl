@@ -21,9 +21,9 @@
 <#assign addRows=cm.localParameters().addRows!true />
 <#assign showHeadline=cm.localParameters().showHeadline!true />
 
-<div class="cm-container ${additionalClass}" <@cm.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
+<div class="cm-container ${additionalClass}" <@preview.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
   <#if showHeadline && self.teaserTitle?has_content>
-    <h2 class="cm-container__headline" <@cm.metadata "properties.teaserTitle"/>><span>${self.teaserTitle}</span></h2>
+    <h2 class="cm-container__headline" <@preview.metadata "properties.teaserTitle"/>><span>${self.teaserTitle}</span></h2>
   </#if>
   <#if (numberOfItems > 0)>
     <div class="row-grid row">

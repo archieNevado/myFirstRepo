@@ -104,12 +104,7 @@
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
-      <editor:items>
-        <bpforms:SEOForm/>
-      </editor:items>
-    </editor:DocumentForm>
+    <bpforms:DefaultExtraDataForm/>
     <bpforms:MultiLanguageDocumentForm/>
     <bpforms:MetaDataWithoutSearchableForm/>
   </editor:items>

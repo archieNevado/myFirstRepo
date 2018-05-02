@@ -9,7 +9,7 @@
 
 // video play button for teaser
 @function playicon($circle-background-color: rgba(0,0,0,0.5), $circle-color: '#FFFFFF', $color: '#FFFFFF') {
-  @return svg-url(#{'<svg viewBox="0 0 512 512"><style>.st0{fill:#{$circle-background-color};stroke:#{$circle-color};stroke-width:30;stroke-miterlimit:10;}.st1{fill:#{$color};}</style><circle cx="256" cy="256" r="231" class="st0"/><path d="M348.1 245.6l-134-78.2c-12.2-7.1-22.1-1.4-22 12.7l.7 155.2c.1 14.1 10 19.9 22.3 12.8l133-76.8c12.2-7.1 12.3-18.6 0-25.7z" class="st1"/></svg>'});
+  @return url("../../img/playicon.param.svg?circleBackgroundColor=#{encodeColor($circle-background-color)}&circleColor=#{encodeColor($circle-color)}&color=#{encodeColor($color)}");
 }
 
 .#{$cm-play-button} {
@@ -18,7 +18,7 @@
   //avoid icon larger than container, e.g. in pdp
   max-width: 75%;
   max-height: 75%;
-  background: transparent playicon($cm-play-button-color, $cm-play-button-fill, $cm-play-button-fill) no-repeat;
+  background: transparent playicon($cm-play-button-color) no-repeat;
   transition: all $cm-play-button-transition-duration ease(in-out-quad);
 
   // when parent is hovered or focused button changes color and fill

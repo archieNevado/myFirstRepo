@@ -11,6 +11,8 @@
 <#assign childrenCssClass=cm.localParameters().childrenCssClass!""/>
 <#assign isTopLevel=cm.localParameters().isTopLevel!false/>
 <#assign showNavigationLabel=cm.localParameters().showNavigationLabel!false/>
+<#assign depth=cm.localParameters().depth!0/>
+<#assign showPicturesInNavigation=cm.localParameters().showPicturesInNavigation!true/>
 
 <#-- check if navigation has visible children and max tree depth isn't reached yet -->
 <#if self.visibleChildren?has_content && (!(maxDepth?has_content) || (maxDepth > 0))>
@@ -20,10 +22,10 @@
   </#if>
 
   <#-- list children -->
-  <ul class="${cssClass} cm-navigation-item__list" <#if isRoot><@preview.metadata self.content/></#if>>
+  <ul class="${cssClass} cm-navigation-item-depth-${depth}__list cm-navigation-item__list" <#if isRoot><@preview.metadata self.content/></#if>>
     <#if showNavigationLabel>
-      <li class="cm-navigation-list__label">
-        <@cm.include self=self view="asLink" params={"cssClass": "cm-navigation-item__label"}/>
+      <li class="cm-navigation-list-depth-${depth}__label cm-navigation-list__label">
+        <@cm.include self=self view="asLink" params={"cssClass": "cm-navigation-item-label"}/>
       </li>
     </#if>
     <#list self.visibleChildren![] as child>
@@ -31,6 +33,8 @@
         "maxDepth": maxDepth!0,
         "cssClass": childrenCssClass,
         "isTopLevel": isTopLevel,
+        "depth": depth,
+        "showPicturesInNavigation": showPicturesInNavigation,
         "showNavigationLabel": isTopLevel
       } />
     </#list>

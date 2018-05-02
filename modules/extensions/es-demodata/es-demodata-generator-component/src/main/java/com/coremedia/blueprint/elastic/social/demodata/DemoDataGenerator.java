@@ -175,10 +175,7 @@ public class DemoDataGenerator implements Runnable {
   public void run() {
     if (isInitialized) {
       try {
-        if (!tenantService.getRegistered().contains(tenant)) {
-          tenantService.register(tenant);
-        }
-        tenantService.setCurrent(tenant);
+        tenantService.setCurrent(tenant, true);
 
         if (!currentTargetDoctype.equals(targetDoctype)) {
           commentGenerator.reset();

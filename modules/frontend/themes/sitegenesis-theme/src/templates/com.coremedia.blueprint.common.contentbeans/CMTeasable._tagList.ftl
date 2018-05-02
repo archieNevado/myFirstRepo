@@ -9,7 +9,7 @@
     <#--tags -->
     <ul class="cm-tag__items">
       <#list tags as tag>
-        <li class="cm-tag__item"><span <@cm.metadata data=[tag.content, "properties.teaserTitle"] />>${tag.teaserTitle!""}</span></li>
+        <li class="cm-tag__item"><span <@preview.metadata data=[tag.content, "properties.teaserTitle"] />>${tag.teaserTitle!""}</span></li>
       </#list>
     </ul>
   </div>

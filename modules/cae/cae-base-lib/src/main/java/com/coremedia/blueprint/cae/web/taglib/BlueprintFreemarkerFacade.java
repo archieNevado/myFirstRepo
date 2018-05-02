@@ -8,6 +8,7 @@ import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
+import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import com.coremedia.blueprint.cae.web.links.ThemeResourceLinkBuilder;
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
@@ -31,9 +32,8 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import com.coremedia.objectserver.view.freemarker.FreemarkerUtils;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
-import com.coremedia.util.WordAbbreviator;
+import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
 import com.google.common.base.Predicate;
@@ -175,7 +175,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   public String generateId(String prefix) {
-    return UniqueIdGenerator.generateId(prefix, FreemarkerUtils.getCurrentRequest());
+    return UniqueIdGenerator.generateId(prefix, FreemarkerEnvironment.getCurrentRequest());
   }
 
   public String cssClassFor(Boolean itemHasNext, Integer index, Boolean createCssClassAttribute) {
@@ -226,8 +226,8 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
       aspectRatiosToUse = new ArrayList<>(responsiveImageSettings.keySet());
     }
 
-    HttpServletRequest currentRequest = FreemarkerUtils.getCurrentRequest();
-    HttpServletResponse currentResponse = FreemarkerUtils.getCurrentResponse();
+    HttpServletRequest currentRequest = FreemarkerEnvironment.getCurrentRequest();
+    HttpServletResponse currentResponse = FreemarkerEnvironment.getCurrentResponse();
     List<TransformationLinks> result = new ArrayList<>();
     for (String aspectRatioName : aspectRatiosToUse) {
       @SuppressWarnings("unchecked")
@@ -282,7 +282,9 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     Map<String, ?> biggestSize = ImageFunctions.getBiggestSize((Map<String, Map<String, Object>>) aspectRatioSizes);
     if (biggestSize != null) {
       link = ImageFunctions.getImageLinkForAspectRatio(picture.getTransformedData(aspectRatio),
-              aspectRatio, biggestSize, FreemarkerUtils.getCurrentRequest(), FreemarkerUtils.getCurrentResponse());
+                                                       aspectRatio, biggestSize,
+                                                       FreemarkerEnvironment.getCurrentRequest(),
+                                                       FreemarkerEnvironment.getCurrentResponse());
     }
     return link;
   }
@@ -333,8 +335,9 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     }
 
     Blob blob = picture.getData();
-    return ImageFunctions.uncroppedImageLink(blob, FreemarkerUtils.getCurrentRequest(),
-            FreemarkerUtils.getCurrentResponse());
+    return ImageFunctions.uncroppedImageLink(blob,
+                                             FreemarkerEnvironment.getCurrentRequest(),
+                                             FreemarkerEnvironment.getCurrentResponse());
   }
 
   public CMContext getPageContext(Page page) throws IOException {
@@ -396,7 +399,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   public boolean isWebflowRequest() {
-    HttpServletRequest currentRequest = FreemarkerUtils.getCurrentRequest();
+    HttpServletRequest currentRequest = FreemarkerEnvironment.getCurrentRequest();
     return currentRequest.getRequestURL().toString().contains(UriConstants.Segments.PREFIX_DYNAMIC)
             && currentRequest.getParameterMap().containsKey(BlueprintFlowUrlHandler.FLOW_EXECUTION_KEY_PARAMETER);
   }
@@ -541,7 +544,9 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
    * @return the URL path that belongs to a theme resource or an empty link
    */
   public String getLinkToThemeResource(String pathToResource) {
-    return themeResourceLinkBuilder.getLinkToThemeResource(pathToResource, FreemarkerUtils.getCurrentRequest(), FreemarkerUtils.getCurrentResponse());
+    return themeResourceLinkBuilder.getLinkToThemeResource(pathToResource,
+                                                           FreemarkerEnvironment.getCurrentRequest(),
+                                                           FreemarkerEnvironment.getCurrentResponse());
   }
 
   /**

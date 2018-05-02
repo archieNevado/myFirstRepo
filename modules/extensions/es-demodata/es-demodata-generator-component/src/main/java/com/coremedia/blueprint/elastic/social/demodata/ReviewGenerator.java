@@ -16,12 +16,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 import static com.coremedia.elastic.social.api.ModerationType.POST_MODERATION;
 import static com.coremedia.elastic.social.api.ModerationType.PRE_MODERATION;
 
 @Scope("tenant")
 @Named
+@SuppressWarnings("PersonalData") // Suppress @PersonalData warnings. Demo users don't have personal data.
 public class ReviewGenerator extends CommentGenerator {
 
   private static final int REVIEW_TITLE_MAX_LENGTH = 50;
@@ -67,7 +67,7 @@ public class ReviewGenerator extends CommentGenerator {
 
     commentCount++;
 
-    LOG.debug(PERSONAL_DATA, "Created comment for {} with id={} with {} attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
+    LOG.debug("Created comment for {} with id={} with {} attachment(s)", user.isAnonymous() ? "anonymous" : user.getName(),
             review.getId(), review.getAttachments().size());
     return review;
   }

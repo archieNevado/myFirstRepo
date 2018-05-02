@@ -6,6 +6,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConne
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.models.UnresolvableReferenceException;
 import com.coremedia.elastic.core.base.serializer.AbstractTypeConverter;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
@@ -46,7 +47,7 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
   }
 
   @Override
-  public void serialize(ProductInSite productInSite, Map<String, Object> serializedObject) {
+  public void serialize(@PersonalData ProductInSite productInSite, @PersonalData Map<String, Object> serializedObject) {
     Product product = productInSite.getProduct();
     Site site = productInSite.getSite();
     String productId = format(getNormalizeProductId(product, site));

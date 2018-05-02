@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.personalization.search;
 
 import com.coremedia.blueprint.personalization.interceptors.LastVisitedInterceptor;
+import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.beans.ContentBeanIdScheme;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProvider;
@@ -65,9 +66,13 @@ public class SolrLastVisitedIDs implements SearchFunction {
 
     // build result string
     final StringBuilder builder = new StringBuilder();
-    final Object contextObject = contextCollection.getContext(contextName);
+    final @PersonalData Object contextObject = contextCollection.getContext(contextName);
     if (contextObject instanceof PropertyProvider) {
-      final PropertyProvider context = (PropertyProvider) contextObject;
+      final @PersonalData PropertyProvider context = (PropertyProvider) contextObject;
+
+      // Suppress warning about assigning @PersonalData to non-annotated variable. We assume that the visited
+      // pages as encoded in the result of this SearchFunction do not alone suffice to identify a person anymore.
+      @SuppressWarnings("PersonalData")
       final Object contextProperty = context.getProperty(LastVisitedInterceptor.PAGES_VISITED);
       if(contextProperty instanceof Collection) {
         @SuppressWarnings("unchecked")

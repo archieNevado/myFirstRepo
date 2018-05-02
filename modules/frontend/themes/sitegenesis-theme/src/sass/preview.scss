@@ -10,15 +10,13 @@
 
 // Dependency variables
 
-@import "~@coremedia/brick-preview/src/sass/variables";
-@import "~@coremedia/sass-utils/src/variables";
+@import "?smart-import-variables";
 
 // ### PARTIALS ###
 
 // Dependency partials
 
-@import "~@coremedia/sass-utils/src/partials";
-@import "~@coremedia/brick-preview/src/sass/partials";
+@import "?smart-import-partials";
 
 // Own partials
 

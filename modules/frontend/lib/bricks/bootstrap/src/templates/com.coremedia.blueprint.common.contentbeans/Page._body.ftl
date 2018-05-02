@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 <#-- @ftlvariable name="self.content" type="com.coremedia.blueprint.common.contentbeans.CMChannel" -->
 
-<body id="top" <@cm.metadata data=bp.setting(cmpage, "sliderMetaData", "") />>
+<body id="top" <@preview.metadata data=bp.setting(cmpage, "sliderMetaData", "") />>
 
   <#-- skiplinks -->
   <#if bp.setting(cmpage.navigation, "render_skip_links", true)>

@@ -90,7 +90,6 @@ public class MockCommerceEnvBuilder {
     initMocks(this);
     StoreContext storeContext = newStoreContext();
 
-    storeContext.put(StoreContextImpl.CONFIG_ID, "aurora");
     storeContext.put(StoreContextImpl.STORE_ID, "10001");
     storeContext.put(StoreContextImpl.STORE_NAME, "aurora");
     storeContext.put(StoreContextImpl.CATALOG_ID, "catalog");
@@ -98,7 +97,7 @@ public class MockCommerceEnvBuilder {
     storeContext.put(StoreContextImpl.CURRENCY, Currency.getInstance("USD"));
 
     when(storeContextProvider.findContextBySite(any())).thenReturn(storeContext);
-    when(storeContextProvider.buildContext(any())).thenReturn(new StoreContextBuilderImpl().from(storeContext));
+    when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
     when(storeContextProvider.cloneContext(any())).thenReturn(storeContext.getClone());
 
     UserContext userContext = UserContext.builder().build();

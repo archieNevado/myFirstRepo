@@ -1,4 +1,4 @@
-import 'console-polyfill';
+import "console-polyfill";
 
 import jQuery from "jquery";
 
@@ -20,7 +20,7 @@ export const LEVEL = {
   WARN: 400,
   INFO: 300,
   LOG: 200,
-  ALL: Number.MIN_VALUE
+  ALL: Number.MIN_VALUE,
 };
 
 /**
@@ -30,7 +30,7 @@ export const LEVEL = {
  */
 let settings = {
   level: LEVEL.OFF,
-  prefix: '[CoreMedia]'
+  prefix: "[CoreMedia]",
 };
 
 /**
@@ -43,8 +43,15 @@ let settings = {
  * @private
  */
 const print = (type, args) => {
-  if (type !== 'log' && type !== 'info' && type !== 'warn' && type !== 'error') {
-    throw new RangeError('Parameter type must be one of "log", "info", "warn" or "error".');
+  if (
+    type !== "log" &&
+    type !== "info" &&
+    type !== "warn" &&
+    type !== "error"
+  ) {
+    throw new RangeError(
+      'Parameter type must be one of "log", "info", "warn" or "error".'
+    );
   }
   // add prefix as first argument to arguments
   args.unshift(settings.prefix);
@@ -53,7 +60,7 @@ const print = (type, args) => {
     console[type](...args);
   } catch (e) {
     // fallback if anything goes wrong
-    console[type](args.join(' '));
+    console[type](args.join(" "));
   }
 };
 
@@ -66,7 +73,7 @@ const print = (type, args) => {
  */
 export const log = (...args) => {
   if (settings.level <= LEVEL.LOG) {
-    print('log', args);
+    print("log", args);
   }
 };
 
@@ -79,7 +86,7 @@ export const log = (...args) => {
  */
 export const info = (...args) => {
   if (settings.level <= LEVEL.INFO) {
-    print('info', args);
+    print("info", args);
   }
 };
 
@@ -92,7 +99,7 @@ export const info = (...args) => {
  */
 export const warn = (...args) => {
   if (settings.level <= LEVEL.WARN) {
-    print('warn', args);
+    print("warn", args);
   }
 };
 
@@ -105,7 +112,7 @@ export const warn = (...args) => {
  */
 export const error = (...args) => {
   if (settings.level <= LEVEL.ERROR) {
-    print('error', args);
+    print("error", args);
   }
 };
 
@@ -115,12 +122,12 @@ export const error = (...args) => {
  * @param {boolean} log - Provide true to enable and false to disable logger.
  * @private
  */
-const toggleCycleLogger = (log) => {
+const toggleCycleLogger = log => {
   try {
-    if (jQuery && typeof jQuery.fn.cycle !== 'undefined') {
+    if (jQuery && typeof jQuery.fn.cycle !== "undefined") {
       jQuery.fn.cycle.defaults.log = log;
     }
-  } catch(e) {
+  } catch (e) {
     // no jQuery available
   }
 };
@@ -145,14 +152,14 @@ export const getCurrentLevelName = () => {
  * @param {LEVEL} level - Level to be set.
  * @return {LEVEL}
  */
-export const setLevel = (level) => {
-  if (typeof level !== 'number') {
-    throw new TypeError('Value of parameter level must be of type number.');
+export const setLevel = level => {
+  if (typeof level !== "number") {
+    throw new TypeError("Value of parameter level must be of type number.");
   }
   settings.level = level;
   if (settings.level !== LEVEL.OFF) {
     // call print() instead of log() to print to console even if logging is set to a high level
-    print('log', [`Logging level has been set to ${getCurrentLevelName()}`]);
+    print("log", [`Logging level has been set to ${getCurrentLevelName()}`]);
   }
 
   // Can be removed, if Cycle2 isn´t in use anymore
@@ -171,9 +178,9 @@ export const setLevel = (level) => {
  * @param {string} prefix
  * @return {string}
  */
-export const setPrefix = (prefix) => {
-  if (typeof prefix !== 'string') {
-    throw new TypeError('Value of parameter prefix must be of type string.')
+export const setPrefix = prefix => {
+  if (typeof prefix !== "string") {
+    throw new TypeError("Value of parameter prefix must be of type string.");
   }
   settings.prefix = prefix;
   return settings.prefix;

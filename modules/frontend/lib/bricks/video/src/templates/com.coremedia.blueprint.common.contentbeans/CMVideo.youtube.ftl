@@ -29,6 +29,7 @@
     <#-- add supported video settings to url -->
     <#assign video +=
       autoplay?then('&autoplay=1','') +
+      muted?then('&mute=1','') +
       loop?then('&loop=1','') +
       hideControls?then('&controls=0', '') +
       youtube!""
@@ -38,9 +39,8 @@
       id="${videoId}"
       src="//www.youtube.com/embed/${video}"
       class="cm-video cm-video--youtube ${classVideo}"
-      ${muted?then('data-muted="true"','')}
       frameborder="0" width="100%" height="100%" webkitAllowFullScreen="" mozallowfullscreen="" allowFullScreen=""
-      <@cm.metadata "properties.dataUrl"/>>
+      <@preview.metadata "properties.dataUrl"/>>
       <@bp.notification type="warn" text=bp.getMessage("error_iframe_not_available") dismissable=true />
     </iframe>
   </#if>

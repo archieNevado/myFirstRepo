@@ -11,8 +11,8 @@
 <#if loginAction?has_content && logoutAction?has_content && profileAction?has_content>
   <#if self.authenticated>
   <a href="${cm.getLink(self.profileAction!cm.UNDEFINED)}"
-     title=""<@cm.metadata data=[profileAction.content, "properties.id"] />><@bp.message "userDetails_title" /></a>
+     title=""<@preview.metadata data=[profileAction.content, "properties.id"] />><@bp.message "userDetails_title" /></a>
   <#else>
-  <a data-href="${cm.getLink(self, {"next": "$nextUrl$", "absolute": true, "scheme": lc.getSecureScheme()})}"<@cm.metadata data=[loginAction.content, "properties.id"] />><@bp.message "login_title" /></a>
+  <a data-href="${cm.getLink(self, {"next": "$nextUrl$", "absolute": true, "scheme": lc.getSecureScheme()})}"<@preview.metadata data=[loginAction.content, "properties.id"] />><@bp.message "login_title" /></a>
   </#if>
 </#if>

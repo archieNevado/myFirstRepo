@@ -9,12 +9,7 @@ ServerTokens Prod
 
 
 <Proxy *>
-<%- if node['apache']['version'] == '2.4' -%>
   Require all granted
-<%- else -%>
-  Order Deny,Allow
-  Allow from all
-<%- end -%>
 </Proxy>
 
 
@@ -23,11 +18,5 @@ ServerTokens Prod
 # danger when anyone has access to them.
 
 <FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sw[op])|~)$">
-<%- if node['apache']['version'] == '2.4' -%>
   Require all denied
-<%- else -%>
-  Order allow,deny
-  Deny from all
-  Satisfy All
-<%- end -%>
 </FilesMatch>

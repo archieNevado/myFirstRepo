@@ -35,6 +35,8 @@
 <link href="Product%20Overview/Products%20Overview%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
 <link href="Aurora%20B2B/Aurora%20B2B%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Aurora%20B2B/Aurora%20B2B%20Page"/>
 <link href="Service/Services%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Service/Services%20Page"/>
+<link href="Feel%20the%20Passion%20%28Female%20Chefs%29%209b1248c.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Feel%20the%20Passion%20%28Female%20Chefs%29%20Page/Feel%20the%20Passion%20%28Female%20Chefs%29%20Page"/>
+<link href="Enjoy%20your%20Passion%20%28Senior%20Chefs%29%a72a8049.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Enjoy%20your%20Passion%20%28Senior%20Chefs%29%20Page/Enjoy%20your%20Passion%20%28Senior%20Chefs%29%20Page"/>
 </children>
 <javaScript>
 </javaScript>
@@ -59,6 +61,7 @@
 <Link xlink:href="coremedia:///cap/resources/Product%20Overview/Products%20Overview%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
 <Link xlink:href="coremedia:///cap/resources/Aurora%20B2B/Aurora%20B2B%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Aurora%20B2B/Aurora%20B2B%20Page"/>
 <Link xlink:href="coremedia:///cap/resources/Service/Services%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Service/Services%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/../Dynamic%20Content/Latest%20Articles%20for%20Professionals.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Dynamic%20Content/Latest%20Articles%20for%20Professionals"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>

@@ -12,6 +12,7 @@
 <#assign additionalTextCssClass=""/>
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
+<#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
 <#if !hasEvenIndex>
   <#assign additionalVariantCssClass="cm-teasable--alternative" />
@@ -30,10 +31,10 @@
   <#assign additionalTextCssClass="col-sm-6 col-sm-pull-6"/>
 </#if>
 
-<div class="cm-teasable ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@cm.metadata self.content />>
+<div class="cm-teasable ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@preview.metadata self.content />>
   <#if hasImage>
     <div class="col-xs-12 ${additionalImgCssClass}">
-      <@bp.optionalLink href=link attr={"target":target}>
+      <@bp.optionalLink href=link attr={"target":target,"rel":rel}>
         <#-- picture -->
         <@cm.include self=self.picture params={
           "limitAspectRatios": [ "portrait_ratio1x1", "landscape_ratio16x9" ],
@@ -48,15 +49,15 @@
     <div class="cm-teasable__text-content-box">
       <div class="cm-teasable__text-content">
         <#-- headline -->
-        <@bp.optionalLink href="${link}" attr={"target":target}>
-          <h3 class="cm-teasable__headline"<@cm.metadata "properties.teaserTitle" />>
+        <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
+          <h3 class="cm-teasable__headline"<@preview.metadata "properties.teaserTitle" />>
             <span>${self.teaserTitle!""}</span>
           </h3>
         </@bp.optionalLink>
         <#-- teaser text -->
         <#assign truncatedTeaserText=bp.truncateText(self.teaserText!"", bp.setting(cmpage, "teaser.max.length", 140)) />
         <#if truncatedTeaserText?has_content>
-          <p class="cm-teasable__text"<@cm.metadata "properties.teaserText" />>
+          <p class="cm-teasable__text"<@preview.metadata "properties.teaserText" />>
             <@bp.renderWithLineBreaks truncatedTeaserText />
           </p>
         </#if>

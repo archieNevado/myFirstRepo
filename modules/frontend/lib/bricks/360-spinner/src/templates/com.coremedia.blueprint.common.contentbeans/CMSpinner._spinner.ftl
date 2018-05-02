@@ -7,7 +7,7 @@
 
 <#if (self.sequence![])?size gt 2>
   <div id="${spinnerId!""}" class="cm-spinner__canvas">
-    <ol class="${spinnerCssClass}"<@cm.metadata "properties.sequence"/>>
+    <ol class="${spinnerCssClass}"<@preview.metadata "properties.sequence"/>>
     <#list self.sequence as image>
       <li class="cm-spinner__image">
         <@bp.responsiveImage self=image!cm.UNDEFINED classPrefix=imagesCssClass displayDimmer=false limitAspectRatios=limitAspectRatios classSuffix=imagesCssClassSuffix/>
