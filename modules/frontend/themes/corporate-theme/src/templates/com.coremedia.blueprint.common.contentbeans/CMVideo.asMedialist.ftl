@@ -6,25 +6,23 @@
 
 <div class="cm-medialist cm-medialist--video"<@preview.metadata self.content />>
   <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": ""}>
-    <#-- picture -->
-    <#if self.picture?has_content>
-      <#if hasVideo> <#-- include a wrapper for positioning if image and video are present -->
-        <div class="cm-medialist__wrapper">
+    <div class="cm-medialist__wrapper">
+      <#-- picture -->
+      <#if self.picture?has_content>
+        <@cm.include self=self.picture params={
+        "limitAspectRatios": [ "portrait_ratio1x1" ],
+        "classBox": "cm-medialist__picture-box",
+        "classImage": "cm-medialist__picture",
+        "metadata": ["properties.pictures"]
+        }/>
+      <#else>
+        <div class="cm-medialist__picture-box">
+          <div class="cm-medialist__picture cm-image--blank"></div>
+        </div>
       </#if>
-      <@cm.include self=self.picture params={
-      "limitAspectRatios": [ "portrait_ratio1x1" ],
-      "classBox": "cm-medialist__picture-box",
-      "classImage": "cm-medialist__picture",
-      "metadata": ["properties.pictures"]
-      }/>
-    <#else>
-      <div class="cm-medialist__picture-box">
-        <div class="cm-medialist__picture cm-image--blank"></div>
-      </div>
-    </#if>
-
-    <#-- play overlay icon-->
-    <@cm.include self=self view="_playButton" params={"blockClass": "cm-medialist"}/>
+      <#-- play overlay icon-->
+      <@cm.include self=self view="_playButton" params={"blockClass": "cm-medialist"}/>
+    </div>
 
     <#-- caption -->
     <div class="cm-medialist__caption">

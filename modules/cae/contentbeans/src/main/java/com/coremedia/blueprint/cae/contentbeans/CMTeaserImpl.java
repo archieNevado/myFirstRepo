@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cap.struct.Struct;
@@ -63,6 +64,15 @@ public class CMTeaserImpl extends CMTeaserBase {
       pictures = ((CMTeasable) this.getTarget()).getPictures();
     }
     return pictures;
+  }
+
+  @Override
+  public List<CMMedia> getMedia() {
+    List<CMMedia> media = super.getMedia();
+    if (media.isEmpty() && this.getTarget() instanceof CMTeasable && !this.getTarget().equals(this)) {
+      media = ((CMTeasable) this.getTarget()).getMedia();
+    }
+    return media;
   }
 }
   

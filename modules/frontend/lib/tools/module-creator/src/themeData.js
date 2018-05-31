@@ -1,11 +1,6 @@
 "use strict";
 
-/**
- * Returns the string in title case
- * @param  {string} str
- * @return {string}
- */
-const titleCase = str => str.replace(str[0], str[0].toUpperCase());
+const sharedData = require("./sharedData");
 
 /**
  * returns content for package.json
@@ -23,6 +18,7 @@ const initPackageJson = (themeName, mainJSFile, bricksToActivate, bricksToCommen
     scripts: {
       build: "webpack",
       start: "cm monitor",
+      "prettier": "prettier \"**/*\" --write",
       "theme-importer": "cm theme-importer",
     },
     __comment__dependencies__: {
@@ -38,6 +34,9 @@ const initPackageJson = (themeName, mainJSFile, bricksToActivate, bricksToCommen
       "@coremedia/cm-cli": "^2.0.0",
       "@coremedia/theme-utils": "^3.0.0",
       webpack: "3.10.0",
+    },
+    devDependencies: {
+      "prettier": "1.11.1"
     },
     main: mainJSFile,
     coremedia: {
@@ -92,7 +91,7 @@ const initThemedescriptorXml = (themeName, usingBricks) => `<?xml version="1.0" 
 </templateSets>
 <resourceBundles>
   <!-- add theme resource bundles here -->
-  <resourceBundle>l10n/${titleCase(themeName)}_en.properties</resourceBundle>
+  <resourceBundle>l10n/${sharedData.titleCase(themeName)}_en.properties</resourceBundle>
   <!-- merged resource bundles of all bricks${!usingBricks ? ", activate this if you are using bricks" : ""} -->
   ${!usingBricks ? "<!-- " : ""}<resourceBundle>l10n/Bricks_en.properties</resourceBundle>${!usingBricks ? " -->" : ""}
 </resourceBundles>
@@ -173,6 +172,17 @@ import "./${themeName}.js";
 `;
 
 /**
+ * returns content for .prettierignore
+ * @return {string}
+ */
+const initThemePrettierignore = () => `/*
+/*
+!/src
+/src/*
+!/src/js
+`;
+
+/**
  * returns content for <themeName>.js
  * @param  {string} themeName
  * @return {string}
@@ -195,8 +205,8 @@ const initPreviewJs = themeName => `/*! Theme ${themeName}: Preview JS */
 `;
 
 module.exports = {
-  titleCase,
   initPackageJson,
+  initThemePrettierignore,
   initWebpackConfigJs,
   initThemedescriptorXml,
   initThemeSass,

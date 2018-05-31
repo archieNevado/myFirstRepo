@@ -54,6 +54,12 @@ _Run this command by executing `cm create-theme <name>`._
 
 This command creates a new empty theme skeleton as a development starting point in the themes folder of the frontend workspace.
 
+### create-brick
+
+_Run this command by executing `cm create-brick <name>`._
+
+This command creates a new hello world brick as a development starting point in the bricks folder of the frontend workspace.
+
 #### Options
 
 ##### --help

@@ -28,6 +28,9 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 
+/**
+ * The {@link GuidFilter} sets/gets a globally unique identifier in the guid cookie to identify anonymous users.
+ */
 @Named
 public class GuidFilter implements Filter {
 

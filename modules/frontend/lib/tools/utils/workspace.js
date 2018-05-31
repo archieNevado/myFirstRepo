@@ -13,6 +13,7 @@ const PKG_NAME = "@coremedia/tool-utils";
 const DEFAULT_CONFIG_PATH = "config";
 const DEFAULT_THEMES_PATH = "themes";
 const DEFAULT_TARGET_PATH = "target";
+const DEFAULT_BRICKS_PATH = "bricks";
 
 const DEFAULT_VARIANT = "default";
 
@@ -130,6 +131,7 @@ const getWorkspaceConfig = () => {
     const certFile = path.join(configPath, "livereload.pem");
     const apiKeyFile = path.join(configPath, "apikey.txt");
     const themesPath = path.join(wsPath, DEFAULT_THEMES_PATH);
+    const bricksPath = path.join(wsPath, DEFAULT_BRICKS_PATH);
     const targetPath = path.join(wsPath, DEFAULT_TARGET_PATH);
 
     wsConfig = {
@@ -140,6 +142,7 @@ const getWorkspaceConfig = () => {
       certFile,
       apiKeyFile,
       themesPath,
+      bricksPath,
       targetPath,
     };
   }

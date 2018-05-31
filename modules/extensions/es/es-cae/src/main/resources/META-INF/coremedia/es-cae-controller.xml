@@ -66,33 +66,6 @@
     <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
   </bean>
 
-<!-- Features not yet implemented -->
-<!--
-  <bean id="complaintResultHandler"
-        class="com.coremedia.blueprint.elastic.social.cae.controller.ComplaintResultHandler"
-        parent="handlerBase">
-            <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
-  </bean>
-
-  <bean id="ratingResultHandler"
-        class="com.coremedia.blueprint.elastic.social.cae.controller.RatingResultHandler"
-        parent="handlerBase">
-    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
-  </bean>
-
-  <bean id="likeResultHandler"
-        class="com.coremedia.blueprint.elastic.social.cae.controller.LikeResultHandler"
-        parent="handlerBase">
-    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
-  </bean>
-
-  <bean id="shareResultHandler"
-        class="com.coremedia.blueprint.elastic.social.cae.controller.ShareResultHandler"
-        parent="handlerBase">
-    <property name="permittedLinkParameterNames" ref="esPermittedLinkParameterNames"/>
-  </bean>
-  -->
-
   <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
     <property name="customEditors">
       <map>

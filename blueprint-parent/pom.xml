@@ -31,13 +31,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1804.1</blueprint-base.version>
-    <cms.version>1804.1</cms.version>
-    <personalization.version>1804.1</personalization.version>
-    <elastic.version>1804.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1804.1</studio.version>
-    <caetoolbox.version>1804.1</caetoolbox.version>
-    <livecontext.version>1804.1</livecontext.version>
+    <blueprint-base.version>1804.2</blueprint-base.version>
+    <cms.version>1804.2</cms.version>
+    <personalization.version>1804.2</personalization.version>
+    <elastic.version>1804.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1804.2</studio.version>
+    <caetoolbox.version>1804.2</caetoolbox.version>
+    <livecontext.version>1804.2</livecontext.version>
     <jangaroo.version>4.0.56</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
@@ -99,28 +99,88 @@
     <junit.platform.version>1.1.0</junit.platform.version>
     <junit.jupiter.version>5.1.0</junit.jupiter.version>
     <junit.vintage.version>${junit.jupiter.version}</junit.vintage.version>
+
+    <skip-joo-unit-tests>${skipTests}</skip-joo-unit-tests>
+    <skip-unit-tests>${skipTests}</skip-unit-tests>
+    <skip-sfcc-tests>${skipTests}</skip-sfcc-tests>
+    <skip-ibm-tests>${skipTests}</skip-ibm-tests>
+    <skip-hybris-tests>${skipTests}</skip-hybris-tests>
   </properties>
 
   <profiles>
     <profile>
-      <id>joo-unit-tests</id>
+      <id>skip-joo-unit-tests</id>
+      <properties>
+        <skip-joo-unit-tests>true</skip-joo-unit-tests>
+      </properties>
+    </profile>
+    <profile>
+      <id>skip-unit-tests</id>
+      <properties>
+        <skip-unit-tests>true</skip-unit-tests>
+      </properties>
+    </profile>
+    <profile>
+      <id>skip-sfcc-tests</id>
       <activation>
-        <file>
-          <exists>/usr/local/bin/phantomjs</exists>
-        </file>
         <property>
-          <name>phantomjs.bin</name>
+          <name>sfcc.host</name>
         </property>
       </activation>
+      <properties>
+        <skip-sfcc-tests>false</skip-sfcc-tests>
+      </properties>
+    </profile>
+    <profile>
+      <id>skip-ibm-tests</id>
+      <activation>
+        <property>
+          <name>wcs.host</name>
+        </property>
+      </activation>
+      <properties>
+        <skip-ibm-tests>false</skip-ibm-tests>
+      </properties>
+    </profile>
+    <profile>
+      <id>skip-hybris-tests</id>
+      <activation>
+        <property>
+          <name>hybris.host</name>
+        </property>
+      </activation>
+      <properties>
+        <skip-hybris-tests>false</skip-hybris-tests>
+      </properties>
+    </profile>
+    <profile>
+      <id>check-dependencies-owasp</id>
       <build>
         <plugins>
           <plugin>
-            <groupId>net.jangaroo</groupId>
-            <artifactId>jangaroo-maven-plugin</artifactId>
-            <configuration>
-              <skip>false</skip>
-              <jooUnitTestExecutionTimeout>30000</jooUnitTestExecutionTimeout>
-            </configuration>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>check-sonar</id>
+      <properties>
+        <!-- Skip all other checks -->
+        <skip-joo-unit-tests>true</skip-joo-unit-tests>
+        <skip-unit-tests>true</skip-unit-tests>
+        <enforcer.skip>true</enforcer.skip>
+        <coremedia.enforcer.skip>true</coremedia.enforcer.skip>
+        <mdep.analyze.skip>true</mdep.analyze.skip>
+        <withoutDocumentation>true</withoutDocumentation>
+        <withoutBlueprint>true</withoutBlueprint>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>
@@ -548,6 +608,7 @@
             <systemPropertyVariables>
               <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
             </systemPropertyVariables>
+            <skipTests>${skip-unit-tests}</skipTests>
           </configuration>
           <!-- Workaround for SUREFIRE-1330; expected to be fixed in version 3.0.0+ -->
           <dependencies>
@@ -793,6 +854,8 @@
           <version>${jangaroo.version}</version>
           <configuration>
             <jooProxyPathSpec>${jooProxyPathSpec}</jooProxyPathSpec>
+            <skipJooUnitTests>${skip-joo-unit-tests}</skipJooUnitTests>
+            <jooUnitTestExecutionTimeout>30000</jooUnitTestExecutionTimeout>
           </configuration>
         </plugin>
         <plugin>
@@ -810,6 +873,16 @@
           <groupId>org.primefaces.extensions</groupId>
           <artifactId>resources-optimizer-maven-plugin</artifactId>
           <version>2.2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>2.1.0</version>
         </plugin>
       </plugins>
 
@@ -831,6 +904,7 @@
             <goals>
               <goal>analyze-only</goal>
             </goals>
+            <phase>process-test-classes</phase>
             <configuration>
               <failOnWarning>${failOnWarning}</failOnWarning>
               <ignoreNonCompile>true</ignoreNonCompile>

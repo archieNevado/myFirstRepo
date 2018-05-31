@@ -19,7 +19,8 @@
           "${self.contentId!""}",
           "${self.contentType!""}",
           "${self.navigationPathIds?join('_')}",
-          "${currentPageUrl!""}"
+          "${currentPageUrl!""}", null, null, null,
+          ${self.advertisingFeaturesPluginDisabled?c}
   );
 
   gaTrackPageview(ga, gaAccountData, gaPageData);

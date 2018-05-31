@@ -15,6 +15,9 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * Public/private key pair generated dependent on JDK (IBM JDK or Oracle JDK)
+ */
 class RSAKeyPair {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RSAKeyPair.class);
@@ -64,6 +67,21 @@ class RSAKeyPair {
         }
       }
     }
+
+    if (LOGGER.isWarnEnabled()) {
+      StringBuilder sb = new StringBuilder();
+
+      if (privateKeyToken == null && publicKeyString == null) {
+        sb.append("Missing mandatory properties signCookie.privateKey and signCookie.publicKey. ");
+      } else if (privateKeyToken == null) {
+        sb.append("Missing mandatory property signCookie.privateKey. ");
+      } else if (publicKeyString == null) {
+        sb.append("Missing mandatory property signCookie.publicKey. ");
+      }
+      sb.append("Generating a new key pair to be used instead.");
+      LOGGER.warn(sb.toString());
+    }
+
     return generateKeyPair();
   }
 
@@ -77,17 +95,26 @@ class RSAKeyPair {
     KeyPair kp = kpg.genKeyPair();
     final PublicKey publicKey = kp.getPublic();
     final PrivateKey privateKey = kp.getPrivate();
-    // should always be a RSAPrivateKey, just to make it really safe here
-    if (privateKey instanceof RSAPrivateKey) {
-      final RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) kp.getPrivate();
-      LOGGER.warn("store newly generated key pair (privateKey/publicKey) in signCookie settings: ({}#{}#{},{})",
-              new Object[]{Base64.encodeBase64String(privateKey.getEncoded()), rsaPrivateKey.getPrivateExponent().toString(),
-                      rsaPrivateKey.getModulus().toString(), Base64.encodeBase64String(publicKey.getEncoded())});
-    } else {
-      LOGGER.warn("store newly generated key pair (privateKey/publicKey) in signCookie settings: ({},{})",
-              new Object[]{Base64.encodeBase64String(privateKey.getEncoded()), Base64.encodeBase64String(publicKey.getEncoded())});
-    }
 
+    if (LOGGER.isWarnEnabled()) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("Please add the following newly generated key values to the settings of all existing CAEs: ")
+              .append("signCookie.privateKey=")
+              .append(Base64.encodeBase64String(privateKey.getEncoded()));
+
+      // should always be a RSAPrivateKey, just to make it really safe here
+      if (privateKey instanceof RSAPrivateKey) {
+        final RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) kp.getPrivate();
+        sb.append('#')
+                .append(rsaPrivateKey.getPrivateExponent())
+                .append('#')
+                .append(rsaPrivateKey.getModulus());
+      }
+
+      sb.append(" , signCookie.publicKey=")
+              .append(Base64.encodeBase64String(publicKey.getEncoded()));
+      LOGGER.warn(sb.toString());
+    }
 
     return new RSAKeyPair(privateKey, publicKey);
   }

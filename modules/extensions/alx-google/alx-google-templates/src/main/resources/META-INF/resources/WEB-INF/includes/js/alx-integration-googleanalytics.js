@@ -25,8 +25,9 @@ function GaAccountData(webPropertyId, domainName) {
  * @param query the internal search query, if any
  * @param userSegments string representing the currently active CoreMedia Personalization user segments separated
  *    by '#', if any
+ * @param disableAdFeaturesPlugin to disable Google's advertising feature plugin set to 'true' (default 'false')
  */
-function GaPageviewData(contentId, contentType, navigationPath, pageUrl, queryParameter, query, userSegments) {
+function GaPageviewData(contentId, contentType, navigationPath, pageUrl, queryParameter, query, userSegments, disableAdFeaturesPlugin) {
   this.contentId = contentId;
   this.contentType = contentType;
   this.navigationPath = navigationPath;
@@ -34,6 +35,7 @@ function GaPageviewData(contentId, contentType, navigationPath, pageUrl, queryPa
   this.queryParameter = queryParameter;
   this.query = query;
   this.userSegments = userSegments;
+  this.disableAdvertisingFeaturesPlugin = typeof disableAdFeaturesPlugin !== 'undefined' ? disableAdFeaturesPlugin : false;
 }
 
 /**
@@ -74,7 +76,9 @@ function gaTrackPageview(ga, gaAccountData, gaPageviewData, trackerName) {
     ga('create', gaAccountData.webPropertyId, gaAccountData.domainName);
   }
   ga(t.concat('set'), 'anonymizeIp', true);
-  ga(t.concat('require'), 'displayfeatures');
+  if (!gaPageviewData.disableAdvertisingFeaturesPlugin) {
+    ga(t.concat('require'), 'displayfeatures');
+  }
 
   //set custom vars
   ga(t.concat('set'), 'dimension1', gaPageviewData.contentId);
@@ -112,7 +116,9 @@ function gaTrackEvent(ga, gaAccountData, gaPageviewData, gaEventData, trackerNam
     ga('create', gaAccountData.webPropertyId, gaAccountData.domainName);
   }
   ga(t.concat('set'), 'anonymizeIp', true);
-  ga(t.concat('require'), 'displayfeatures');
+  if (!gaPageviewData.disableAdvertisingFeaturesPlugin) {
+    ga(t.concat('require'), 'displayfeatures');
+  }
 
   //set custom vars
   ga(t.concat('set'), 'dimension1', gaPageviewData.contentId);

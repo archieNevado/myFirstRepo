@@ -3,7 +3,7 @@
     "name": "CoreMedia",
     "url": "http://www.coremedia.com"
   },
-  "name": "@coremedia/theme-creator",
+  "name": "@coremedia/module-creator",
   "private": true,
   "version": "1.0.0",
   "engines": {

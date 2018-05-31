@@ -34,6 +34,7 @@ Contains styling definitions for all content types as cm-text.
   // position the button
   &__cta {
     margin-top: $padding-large-vertical;
+    width: 88%;
 
     @include breakpoint(sm-and-up) {
       position: absolute;
