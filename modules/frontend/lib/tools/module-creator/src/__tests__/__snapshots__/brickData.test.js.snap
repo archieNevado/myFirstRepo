@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`initBrickCustomTextPartialsScss() returns data for partials/_custom-text.scss 1`] = `
+"// css rules in partials may use variables, defined in the sass/variables folder
+.custom-text {
+  color: $custom-text-color;
+}
+"
+`;
+
+exports[`initBrickCustomTextVariablesScss() returns data for variables/_custom-text.scss 1`] = `
+"// brick scss variables to be used in partials files
+// use the !default flag to make this variable configurable in themes
+$custom-text-color: #FF0000 !default;
+"
+`;
+
+exports[`initBrickDeProperties() returns data for <brickName>_de.properties 1`] = `"welcomeText=Hallo Welt!"`;
+
+exports[`initBrickEnProperties() returns data for <brickName>_en.properties 1`] = `"welcomeText=Hello World!"`;
+
+exports[`initBrickIndexJs() returns data for index.js 1`] = `
+"import \\"./test.js\\";
+"
+`;
+
+exports[`initBrickInitJs() returns data for intit.js 1`] = `
+"//import $ from \\"jquery\\";
+import * as test from \\"./test\\";
+// --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
+//$(function () {
+//  test.consolePrint(\\"Brick test is used.\\");
+//});
+"
+`;
+
+exports[`initBrickJs() returns data for <brickName>.js 1`] = `
+"//import * as logger from \\"@coremedia/js-logger\\";
+
+/**
+ * Displays a simple text in the console.
+ *
+ * @function consolePrint
+ * @param {String} $text - The text to be displayed in the console.
+ */
+export function consolePrint($text) {
+//  logger.log($text);
+}
+"
+`;
+
+exports[`initBrickPageBodyFtl() returns data for Page._body.ftl 1`] = `
+"<#-- Use bp.getMessage to display a localized hello world message --> 
+<div>
+  <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
+</div>
+"
+`;
+
+exports[`initBrickPartialsScss() returns data for _partials.scss 1`] = `
+"// make sure to import partials sass files in _partials.scss
+// the smart-import ensures, that all sass partials from depending bricks are loaded
+@import \\"?smart-import-partials\\";
+@import \\"partials/custom-text\\";
+
+"
+`;
+
+exports[`initBrickPrettierignore() returns data for .prettierignore 1`] = `
+"/*
+!/src
+/src/__tests__/__snapshots__/
+!/bin
+"
+`;
+
+exports[`initBrickVariablesScss() returns data for _variables.scss 1`] = `
+"// make sure to import variables sass files in _variables.scss
+@import \\"variables/custom-text\\";
+// the smart-import ensures, that all sass variables from depending bricks are loaded 
+@import \\"?smart-import-variables\\";
+"
+`;
+
+exports[`initPackageJson() returns data for package.json 1`] = `
+"{
+  \\"name\\": \\"@coremedia/brick-test\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
+  },
+  \\"devDependencies\\": {
+    \\"prettier\\": \\"1.11.1\\"
+  },
+  \\"__comment__dependencies__\\": {
+    \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
+    \\"@coremedia/js-logger\\": \\"^1.0.0\\",
+    \\"jquery\\": \\"3.2.1\\"
+  },
+  \\"dependencies\\": {},
+  \\"main\\": \\"src/js/index.js\\",
+  \\"coremedia\\": {
+    \\"type\\": \\"brick\\",
+    \\"init\\": \\"src/js/init.js\\"
+  }
+}"
+`;

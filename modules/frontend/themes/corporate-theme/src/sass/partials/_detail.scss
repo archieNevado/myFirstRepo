@@ -18,4 +18,14 @@
       }
     }
   }
+
+  &__caption.carousel-caption {
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    text-shadow: none;
+    text-align: left;
+  }
 }

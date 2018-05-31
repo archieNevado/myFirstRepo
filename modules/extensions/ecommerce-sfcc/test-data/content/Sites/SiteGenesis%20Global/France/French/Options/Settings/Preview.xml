@@ -102,7 +102,6 @@
 <LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/Content_">
 </LinkListProperty>
 <LinkListProperty Name="studioPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
-<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/sitegenesis/css/preview%2Ecss.xml" cmexport:path="/Themes/sitegenesis/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="studioPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>
@@ -110,6 +109,7 @@
 <Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/sitegenesis/css/preview%2Ecss.xml" cmexport:path="/Themes/sitegenesis/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
+<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/sitegenesis/js/preview%2Ejs.xml" cmexport:path="/Themes/sitegenesis/js/preview%2Ejs"/>
 </LinkListProperty>
 </Struct>
 </settings>

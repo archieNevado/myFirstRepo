@@ -30,18 +30,6 @@
   &__image.cm-aspect-ratio-box {
     @include aspect-ratio-box(8, 3);
   }
-
-  &__areas {
-    @include breakpoint(xs) {
-      display: none;
-    }
-  }
-
-  &__quickinfo {
-    @include breakpoint(xs) {
-      display: none;
-    }
-  }
 }
 
 /*---OVERLAYs--*/

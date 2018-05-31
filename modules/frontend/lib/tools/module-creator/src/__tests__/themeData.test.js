@@ -4,6 +4,7 @@ const {
   initPackageJson,
   initWebpackConfigJs,
   initThemedescriptorXml,
+  initThemePrettierignore,
   initThemeSass,
   initPreviewSass,
   initThemeIndexJs,
@@ -17,6 +18,12 @@ describe("initPackageJson()", () => {
       "some-brick": "^1.0.0",
       "some-other-brick": "^1.0.0"
     })).toMatchSnapshot();
+  });
+});
+
+describe("initThemePrettierignore()", () => {
+  it("returns data for .prettierignore", () => {
+    expect(initThemePrettierignore()).toMatchSnapshot();
   });
 });
 

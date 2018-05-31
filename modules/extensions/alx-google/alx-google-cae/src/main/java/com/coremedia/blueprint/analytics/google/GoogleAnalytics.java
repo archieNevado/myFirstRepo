@@ -12,6 +12,9 @@ public class GoogleAnalytics extends AnalyticsProvider {
   public static final String GOOGLE_ANALYTICS_SERVICE_KEY = "googleAnalytics";
 
   private static final String WEB_PROPERTY_ID_KEY = "webPropertyId";
+
+  // visible for testing
+  static final String DISABLE_AD_FEATURES_PLUGIN = "disableAdvertisingFeaturesPlugin";
   private static final String DOMAIN_NAME_KEY = "domainName";
   private static final String DEFAULT_DOMAIN_NAME = "auto";
 
@@ -26,6 +29,11 @@ public class GoogleAnalytics extends AnalyticsProvider {
 
   public Object getWebPropertyId() {
     return getSettings().get(WEB_PROPERTY_ID_KEY);
+  }
+
+  public boolean isAdvertisingFeaturesPluginDisabled() {
+    final Object isDisabledAdFeaturesPlugin = getSettings().get(DISABLE_AD_FEATURES_PLUGIN);
+    return isDisabledAdFeaturesPlugin != null && Boolean.valueOf(isDisabledAdFeaturesPlugin.toString());
   }
 
   public String getDomainName() {

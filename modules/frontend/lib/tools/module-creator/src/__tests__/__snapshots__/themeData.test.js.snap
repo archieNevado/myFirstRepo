@@ -8,6 +8,7 @@ exports[`initPackageJson() returns data for package.json 1`] = `
   \\"scripts\\": {
     \\"build\\": \\"webpack\\",
     \\"start\\": \\"cm monitor\\",
+    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\",
     \\"theme-importer\\": \\"cm theme-importer\\"
   },
   \\"__comment__dependencies__\\": {
@@ -22,6 +23,9 @@ exports[`initPackageJson() returns data for package.json 1`] = `
     \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
     \\"@coremedia/theme-utils\\": \\"^3.0.0\\",
     \\"webpack\\": \\"3.10.0\\"
+  },
+  \\"devDependencies\\": {
+    \\"prettier\\": \\"1.11.1\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
@@ -85,6 +89,15 @@ exports[`initThemeJs() returns data for <themeName>.js 1`] = `
 //$(function () {
 //  logger.log(\\"Theme test is used.\\");
 //});
+"
+`;
+
+exports[`initThemePrettierignore() returns data for .prettierignore 1`] = `
+"/*
+/*
+!/src
+/src/*
+!/src/js
 "
 `;
 

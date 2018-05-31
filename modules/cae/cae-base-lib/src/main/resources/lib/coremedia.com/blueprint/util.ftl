@@ -1,4 +1,5 @@
 <#ftl strip_whitespace=true>
+<#-- @ftlvariable name="springMacroRequestContext" type="org.springframework.web.servlet.support.RequestContext" -->
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
@@ -29,39 +30,40 @@
   </#if>
 </#macro>
 
-<#-- LOCALIZED MESSAGE -->
-<#outputformat "plainText">
-  <#macro message key args=[] highlightErrors=true>
-    <#compress>
-      <#if key?has_content>
-        <#local messageText><@spring.messageText key key/></#local>
-        <#if messageText?has_content && messageText != key>
-          <#if args?has_content>
-            <#local messageText><@spring.messageArgs key args/></#local>
-          </#if>
-          ${messageText}
-        <#elseif ((cmpage.developerMode)!false) && highlightErrors>
-          <span title="key '${key}' is missing" class="cm-preview-missing-key">[---${key}---]</span>
-        <#else>
-          [---${key}---]
-        </#if>
-      </#if>
-    </#compress>
-  </#macro>
-</#outputformat>
+<#-- LOCALIZED MESSAGE as function -->
+<#function getMessage key args=[] highlightErrors=false>
+  <#-- get message text with args -->
+  <#if args?has_content>
+    <#assign messageText=springMacroRequestContext.getMessage(key, args, "")/>
+  <#-- get message text -->
+  <#else>
+    <#assign messageText=springMacroRequestContext.getMessage(key, "")/>
+  </#if>
+  <#-- if developerMode is enabled, show error message -->
+  <#if !messageText?has_content && (cmpage.developerMode)!false>
+    <#if highlightErrors>
+      <#assign messageText><span title="key '${key}' is missing" class="cm-preview-missing-key">Translation for key '${key}' is missing in the ResourceBundle.</span></#assign>
+    <#else>
+      <#assign messageText="Translation for key '${key}' is missing in the ResourceBundle." />
+    </#if>
+  </#if>
+  <#return messageText!"" />
+</#function>
 
-<#-- LOCALIZED MESSAGE -->
-<#outputformat "plainText">
-  <#function getMessage key args=[] highlightErrors=false>
-    <#local result><@message key=key args=args highlightErrors=highlightErrors /></#local>
-    <#return result />
-  </#function>
-</#outputformat>
+<#-- LOCALIZED MESSAGE as macro -->
+<#macro message key args=[] escaping=false highlightErrors=true>
+  <#compress>
+    <#if escaping>
+      ${getMessage(key, args, highlightErrors)}
+    <#else>
+      ${getMessage(key, args, highlightErrors)?no_esc}
+    </#if>
+  </#compress>
+</#macro>
 
 <#-- CHECK MESSAGE KEY -->
-<#function hasMessage key>
-  <#local messageText><@spring.messageText key ""/></#local>
-  <#return messageText?has_content />
+<#function hasMessage key="">
+  <#return springMacroRequestContext.getMessage(key, "")?has_content />
 </#function>
 
 <#-- OPTIONAL LINK -->

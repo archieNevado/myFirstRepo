@@ -5,7 +5,8 @@
     "lib/js/*",
     "lib/sass/*",
     "lib/tools/*",
-    "themes/*"
+    "themes/*",
+    "bricks/*"
   ],
   "npmClient": "yarn",
   "hoist": true,

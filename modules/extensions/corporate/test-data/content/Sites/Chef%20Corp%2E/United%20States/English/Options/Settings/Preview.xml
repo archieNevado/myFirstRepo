@@ -63,6 +63,26 @@
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asPreviewForClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asPreviewForMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
+</Struct>
 </StructListProperty>
 <StructListProperty Name="CMTeaser">
 <Struct>
@@ -72,6 +92,26 @@
 <Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asPreviewForClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asPreviewForMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMExternalLink">
@@ -83,11 +123,81 @@
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asPreviewForClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asPreviewForMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
+</Struct>
 </StructListProperty>
-<StructListProperty Name="CMCollection">
+<StructListProperty Name="CMGallery">
+<Struct>
+<StringProperty Name="titleKey">preview_label_default</StringProperty>
+<StringProperty Name="viewName">DEFAULT</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
 <Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
+</Struct>
+</StructListProperty>
+<StructListProperty Name="CMCollection">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asPlacement[hero]</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPlacement[square]</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPlacement[squarelist]</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPlacement[text]</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMImageMap">

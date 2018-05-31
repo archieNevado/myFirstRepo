@@ -32,3 +32,13 @@
     pointer-events: auto;
   }
 }
+
+// prevent collapsing teaser with no picture and text-on-image enabled
+.#{$cm-teasable-prefix}.has-no-image .#{$cm-teaser-overlay-prefix} {
+  left: 0!important;
+  top: 0!important;
+  margin: 0!important;
+  transform: none!important;
+  width: auto!important;
+  position: relative;
+}

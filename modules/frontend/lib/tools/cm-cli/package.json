@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@coremedia/cm-logger": "^1.0.0",
-    "@coremedia/theme-creator": "^1.0.0",
+    "@coremedia/module-creator": "^1.0.0",
     "@coremedia/theme-importer": "^1.0.0",
     "@coremedia/tool-utils": "^1.0.0",
     "inquirer": "5.0.0",

@@ -64,6 +64,26 @@
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asPreviewForClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asPreviewForMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
+</Struct>
 </StructListProperty>
 <StructListProperty Name="CMTeaser">
 <Struct>
@@ -73,6 +93,26 @@
 <Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asPreviewForClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asPreviewForMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMExternalLink">
@@ -84,11 +124,81 @@
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asPreviewForClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asPreviewForMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
+</Struct>
 </StructListProperty>
-<StructListProperty Name="CMCollection">
+<StructListProperty Name="CMGallery">
+<Struct>
+<StringProperty Name="titleKey">preview_label_default</StringProperty>
+<StringProperty Name="viewName">DEFAULT</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
 <Struct>
 <StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquare</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPreviewForSquarelist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPreviewForText</StringProperty>
+</Struct>
+</StructListProperty>
+<StructListProperty Name="CMCollection">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asPlacement[hero]</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_claim</StringProperty>
+<StringProperty Name="viewName">asClaim</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_medialist</StringProperty>
+<StringProperty Name="viewName">asMedialist</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_square</StringProperty>
+<StringProperty Name="viewName">asPlacement[square]</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_squarelist</StringProperty>
+<StringProperty Name="viewName">asPlacement[squarelist]</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_text</StringProperty>
+<StringProperty Name="viewName">asPlacement[text]</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMImageMap">
@@ -104,11 +214,11 @@
 </Struct>
 </StructProperty>
 <LinkListProperty Name="studioPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
-<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/css/preview%2Ecss.xml" cmexport:path="/Themes/corporate/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="studioPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 </LinkListProperty>
 <LinkListProperty Name="previewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
+<Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/css/preview%2Ecss.xml" cmexport:path="/Themes/corporate/css/preview%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 <Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/corporate/js/preview%2Ejs.xml" cmexport:path="/Themes/corporate/js/preview%2Ejs"/>

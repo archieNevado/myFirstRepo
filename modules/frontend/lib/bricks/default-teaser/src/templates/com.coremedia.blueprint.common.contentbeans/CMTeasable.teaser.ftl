@@ -14,6 +14,11 @@
 <#assign limitAspectRatiosKey="default_aspect_ratios_for_" + cm.localParameter("limitAspectRatiosKey", "teaser") />
 <#assign limitAspectRatios=cm.localParameter("limitAspectRatios", bp.setting(cmpage.navigation, limitAspectRatiosKey, [])) />
 
+<#-- prevent collapsing teaser with no picture and text-on-image enabled -->
+<#if self.teaserOverlaySettings.enabled && !renderEmptyImage  && !self.picture?has_content>
+  <#assign cssClasses=cssClasses + " has-no-image" />
+</#if>
+
 <div class="${blockClass} ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
   <div class="${blockClass}__wrapper">
     <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>

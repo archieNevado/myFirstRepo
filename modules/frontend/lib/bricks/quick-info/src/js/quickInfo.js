@@ -72,6 +72,8 @@ export function show($quickinfo) {
       });
     }
     $quickinfo.trigger(EVENT_QUICKINFO_CHANGED, [true]);
+    // trigger resize to set the correct image aspect ratio to source
+    $quickinfo.trigger("resize");
   }
 }
 
