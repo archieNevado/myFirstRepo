@@ -18,6 +18,7 @@
   @include breakpoint("sm-and-up") {
     width: $cm-quickinfo-width;
     flex-direction: row;
+    margin: $cm-quickinfo-margin;
   }
 
   &__container {

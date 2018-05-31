@@ -22,18 +22,32 @@
 <#assign imageMapParams=bp.initializeImageMap()/>
 <#assign useQuickinfo=cm.localParameter("imagemap_use_quickinfo", true)/>
 
-<div class="${blockClass} ${blockClass}--imagemap cm-imagemap ${cssClasses} ${additionalClass}"<@preview.metadata self.content />
-     data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
+<#-- prevent collapsing teaser with no picture and text-on-image enabled -->
+<#if self.teaserOverlaySettings.enabled && !renderEmptyImage  && !self.picture?has_content>
+  <#assign cssClasses=cssClasses + " has-no-image" />
+</#if>
+
+<div class="${blockClass} ${blockClass}--imagemap ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
   <div class="${blockClass}__wrapper">
 
-    <#-- picture + hot zones -->
-    <@cm.include self=self view="_picture" params={
-      "blockClass": blockClass,
-      "renderDimmer": renderDimmer,
-      "renderEmptyImage": renderEmptyImage,
-      "useQuickinfo": useQuickinfo} +
-      imageMapParams
-    />
+    <div class="cm-imagemap"
+         data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
+
+      <#-- picture + hot zones -->
+      <@cm.include self=self view="_picture" params={
+        "blockClass": blockClass,
+        "renderDimmer": renderDimmer,
+        "renderEmptyImage": renderEmptyImage,
+        "useQuickinfo": useQuickinfo} +
+        imageMapParams
+      />
+
+      <#--include imagemap quick icons-->
+      <#if useQuickinfo>
+        <@cm.include self=self view="_areasQuickInfo" params=imageMapParams/>
+      </#if>
+
+    </div>
 
     <#if !self.teaserOverlaySettings.enabled>
       <#if renderTeaserTitle || renderTeaserText>
@@ -65,11 +79,6 @@
       <@cm.include self=self view="_teaserOverlay" />
     </#if>
   </div>
-
-  <#--include imagemap quick icons-->
-  <#if useQuickinfo>
-    <@cm.include self=self view="_areasQuickInfo" params=imageMapParams/>
-  </#if>
 
   <#-- extensions -->
   <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_TEASER />

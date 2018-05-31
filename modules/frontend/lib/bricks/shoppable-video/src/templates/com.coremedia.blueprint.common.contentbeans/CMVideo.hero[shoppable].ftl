@@ -1,8 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMVideo" -->
-<#-- @ftlvariable name="entry.link" type="com.coremedia.blueprint.common.contentbeans.CMVideo" -->
-<#-- @ftlvariable name="entry.startTimeMillis" type="java.lang.Integer" -->
 
-
+<#assign additionalClass=cm.localParameters().additionalClass!"" />
+<#assign blockClass=cm.localParameters().blockClass!"cm-hero" />
 <#assign renderTeaserText=cm.localParameter("renderTeaserText", false) />
 <#assign timelineEntries=self.timeLineSequences![] />
 <#assign overlay={
@@ -15,41 +14,19 @@
 } />
 
 <#if (timelineEntries?size > 0 || self.timeLineDefaultTarget?has_content)>
-<div class="cm-shoppable cm-container">
-  <#-- video on the left -->
-  <div class="cm-shoppable__video"<@preview.metadata self.content />>
-    <@cm.include self=self view="video" />
-  </div>
-  <#-- teaser on the right -->
-  <div class="cm-shoppable__teasers"<@preview.metadata "properties.timeLine" />>
-    <#-- default teaser -->
-    <#if self.timeLineDefaultTarget?has_content>
-      <div class="cm-shoppable__teaser cm-shoppable__default">
-        <@cm.include self=self.timeLineDefaultTarget!cm.UNDEFINED view="asQuickInfo" params={
-        "classQuickInfo":"cm-quickinfo--shoppable",
-        "overlay": overlay
-        }/>
-      </div>
-    </#if>
-    <#-- list all timeline teaser -->
-    <#if (timelineEntries?size > 0)>
-      <#list timelineEntries as entry>
-        <#if entry.startTimeMillis?has_content && entry.link?has_content>
-          <div class="cm-shoppable__teaser" data-cm-video-shoppable-time="${entry.startTimeMillis}">
-            <@cm.include self=entry.link view="asQuickInfo" params={
-            "classQuickInfo":"cm-quickinfo--shoppable",
-            "overlay": overlay
-            }/>
-          </div>
-        </#if>
-      </#list>
-    </#if>
-  </div>
-</div>
+  <#-- including the shoppable video html -->
+  <@cm.include self=self view="_shoppable" params={
+  "additionalClass": additionalClass,
+  "blockClass": blockClass,
+  "renderTeaserText": renderTeaserText,
+  "timelineEntries": timelineEntries,
+  "overlay": overlay
+  }/>
 <#else>
   <#-- open default hero teaser without shoppable extras -->
   <@cm.include self=self view="hero[]" params={
-  "blockClass": "cm-teaser--hero",
+  "blockClass": blockClass,
+  "additionalClass": additionalClass,
   "renderTeaserText": false,
   "renderDimmer": false
   }/>

@@ -1,0 +1,563 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createBrick() creates folder structure and files of a new brick 1`] = `
+Array [
+  "/path/to/brick/newest-brick/src/js",
+  "/path/to/brick/newest-brick/src/sass",
+  "/path/to/brick/newest-brick/src/sass/partials",
+  "/path/to/brick/newest-brick/src/sass/variables",
+  "/path/to/brick/newest-brick/src/img",
+  "/path/to/brick/newest-brick/src/fonts",
+  "/path/to/brick/newest-brick/src/l10n",
+  "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans",
+]
+`;
+
+exports[`createBrick() creates folder structure and files of a new brick 2`] = `
+Object {
+  "/path/to/brick/newest-brick": Object {
+    ".prettierignore": "/*
+!/src
+/src/__tests__/__snapshots__/
+!/bin
+",
+    ".prettierrc": "{
+  \\"trailingComma\\": \\"es5\\"
+}
+",
+    "package.json": "{
+  \\"name\\": \\"@coremedia/brick-newest\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
+  },
+  \\"devDependencies\\": {
+    \\"prettier\\": \\"1.11.1\\"
+  },
+  \\"__comment__dependencies__\\": {
+    \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
+    \\"@coremedia/js-logger\\": \\"^1.0.0\\",
+    \\"jquery\\": \\"3.2.1\\"
+  },
+  \\"dependencies\\": {},
+  \\"main\\": \\"src/js/index.js\\",
+  \\"coremedia\\": {
+    \\"type\\": \\"brick\\",
+    \\"init\\": \\"src/js/init.js\\"
+  }
+}",
+  },
+  "/path/to/brick/newest-brick/src/js": Object {
+    "index.js": "import \\"./newest.js\\";
+",
+    "init.js": "//import $ from \\"jquery\\";
+import * as newest from \\"./newest\\";
+// --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
+//$(function () {
+//  newest.consolePrint(\\"Brick newest is used.\\");
+//});
+",
+    "newest.js": "//import * as logger from \\"@coremedia/js-logger\\";
+
+/**
+ * Displays a simple text in the console.
+ *
+ * @function consolePrint
+ * @param {String} $text - The text to be displayed in the console.
+ */
+export function consolePrint($text) {
+//  logger.log($text);
+}
+",
+  },
+  "/path/to/brick/newest-brick/src/l10n": Object {
+    "Newest_de.properties": "welcomeText=Hallo Welt!",
+    "Newest_en.properties": "welcomeText=Hello World!",
+  },
+  "/path/to/brick/newest-brick/src/sass": Object {
+    "_partials.scss": "// make sure to import partials sass files in _partials.scss
+// the smart-import ensures, that all sass partials from depending bricks are loaded
+@import \\"?smart-import-partials\\";
+@import \\"partials/custom-text\\";
+
+",
+    "_variables.scss": "// make sure to import variables sass files in _variables.scss
+@import \\"variables/custom-text\\";
+// the smart-import ensures, that all sass variables from depending bricks are loaded 
+@import \\"?smart-import-variables\\";
+",
+  },
+  "/path/to/brick/newest-brick/src/sass/partials": Object {
+    "_custom-text.scss": "// css rules in partials may use variables, defined in the sass/variables folder
+.custom-text {
+  color: $custom-text-color;
+}
+",
+  },
+  "/path/to/brick/newest-brick/src/sass/variables": Object {
+    "_custom-text.scss": "// brick scss variables to be used in partials files
+// use the !default flag to make this variable configurable in themes
+$custom-text-color: #FF0000 !default;
+",
+  },
+  "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans": Object {
+    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message --> 
+<div>
+  <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
+</div>
+",
+  },
+}
+`;
+
+exports[`createBrickFiles() creates files of a new brick 1`] = `
+Object {
+  "/path/to/brick/newest-brick": Object {
+    ".prettierignore": "/*
+!/src
+/src/__tests__/__snapshots__/
+!/bin
+",
+    ".prettierrc": "{
+  \\"trailingComma\\": \\"es5\\"
+}
+",
+    "package.json": "{
+  \\"name\\": \\"@coremedia/brick-newest\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
+  },
+  \\"devDependencies\\": {
+    \\"prettier\\": \\"1.11.1\\"
+  },
+  \\"__comment__dependencies__\\": {
+    \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
+    \\"@coremedia/js-logger\\": \\"^1.0.0\\",
+    \\"jquery\\": \\"3.2.1\\"
+  },
+  \\"dependencies\\": {},
+  \\"main\\": \\"src/js/index.js\\",
+  \\"coremedia\\": {
+    \\"type\\": \\"brick\\",
+    \\"init\\": \\"src/js/init.js\\"
+  }
+}",
+  },
+  "/path/to/brick/newest-brick/src/js": Object {
+    "index.js": "import \\"./newest.js\\";
+",
+    "init.js": "//import $ from \\"jquery\\";
+import * as newest from \\"./newest\\";
+// --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
+//$(function () {
+//  newest.consolePrint(\\"Brick newest is used.\\");
+//});
+",
+    "newest.js": "//import * as logger from \\"@coremedia/js-logger\\";
+
+/**
+ * Displays a simple text in the console.
+ *
+ * @function consolePrint
+ * @param {String} $text - The text to be displayed in the console.
+ */
+export function consolePrint($text) {
+//  logger.log($text);
+}
+",
+  },
+  "/path/to/brick/newest-brick/src/l10n": Object {
+    "Newest_de.properties": "welcomeText=Hallo Welt!",
+    "Newest_en.properties": "welcomeText=Hello World!",
+  },
+  "/path/to/brick/newest-brick/src/sass": Object {
+    "_partials.scss": "// make sure to import partials sass files in _partials.scss
+// the smart-import ensures, that all sass partials from depending bricks are loaded
+@import \\"?smart-import-partials\\";
+@import \\"partials/custom-text\\";
+
+",
+    "_variables.scss": "// make sure to import variables sass files in _variables.scss
+@import \\"variables/custom-text\\";
+// the smart-import ensures, that all sass variables from depending bricks are loaded 
+@import \\"?smart-import-variables\\";
+",
+  },
+  "/path/to/brick/newest-brick/src/sass/partials": Object {
+    "_custom-text.scss": "// css rules in partials may use variables, defined in the sass/variables folder
+.custom-text {
+  color: $custom-text-color;
+}
+",
+  },
+  "/path/to/brick/newest-brick/src/sass/variables": Object {
+    "_custom-text.scss": "// brick scss variables to be used in partials files
+// use the !default flag to make this variable configurable in themes
+$custom-text-color: #FF0000 !default;
+",
+  },
+  "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans": Object {
+    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message --> 
+<div>
+  <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
+</div>
+",
+  },
+}
+`;
+
+exports[`createBrickFolderStructure() creates folder structure of a new brick 1`] = `
+Array [
+  "/path/to/bricks/newest-brick/src/js",
+  "/path/to/bricks/newest-brick/src/sass",
+  "/path/to/bricks/newest-brick/src/sass/partials",
+  "/path/to/bricks/newest-brick/src/sass/variables",
+  "/path/to/bricks/newest-brick/src/img",
+  "/path/to/bricks/newest-brick/src/fonts",
+  "/path/to/bricks/newest-brick/src/l10n",
+  "/path/to/bricks/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans",
+]
+`;
+
+exports[`createTheme() creates folder structure and files of a new theme 1`] = `
+Array [
+  "/path/to/themes/newest-theme/src/js",
+  "/path/to/themes/newest-theme/src/sass",
+  "/path/to/themes/newest-theme/src/img",
+  "/path/to/themes/newest-theme/src/fonts",
+  "/path/to/themes/newest-theme/src/l10n",
+  "/path/to/themes/newest-theme/src/templates/com.coremedia.blueprint.common.contentbeans",
+]
+`;
+
+exports[`createTheme() creates folder structure and files of a new theme 2`] = `
+Object {
+  "/path/to/themes/newest-theme": Object {
+    ".prettierignore": "/*
+/*
+!/src
+/src/*
+!/src/js
+",
+    ".prettierrc": "{
+  \\"trailingComma\\": \\"es5\\"
+}
+",
+    "newest-theme.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<themeDefinition modelVersion=\\"1\\">
+<name>newest</name>
+<!-- <description>a short description</description> -->
+<!-- <thumbnail>img/theme-preview.jpg</thumbnail> -->
+<javaScriptLibraries>
+  <!-- add thirdparty js files that are not bundled via webpack here -->
+  <!-- <javaScript>vendor/some-vendor-script.js</javaScript> -->
+</javaScriptLibraries>
+<javaScripts>
+  <!-- add own js files that are not bundled via webpack here -->
+  <!-- <javaScript>js/your-code.js</javaScript> -->
+  <javaScript disableCompress=\\"true\\">js/newest.js</javaScript>
+</javaScripts>
+<styleSheets>
+  <css disableCompress=\\"true\\">css/newest.css</css>
+</styleSheets>
+<templateSets>
+  <templateSet>templates/newest-templates.jar</templateSet>
+  <!-- aggregated templates of all bricks, activate this if you are using bricks -->
+  <!-- <templateSet>templates/bricks-templates.jar</templateSet> -->
+</templateSets>
+<resourceBundles>
+  <!-- add theme resource bundles here -->
+  <resourceBundle>l10n/Newest_en.properties</resourceBundle>
+  <!-- merged resource bundles of all bricks, activate this if you are using bricks -->
+  <!-- <resourceBundle>l10n/Bricks_en.properties</resourceBundle> -->
+</resourceBundles>
+</themeDefinition>
+",
+    "package.json": "{
+  \\"name\\": \\"@coremedia/newest-theme\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"build\\": \\"webpack\\",
+    \\"start\\": \\"cm monitor\\",
+    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\",
+    \\"theme-importer\\": \\"cm theme-importer\\"
+  },
+  \\"__comment__dependencies__\\": {
+    \\"__comment__\\": \\"List of all brick dependencies. In order to add a dependency, move the entry to 'dependencies'\\",
+    \\"@coremedia/js-logger\\": \\"^1.0.0\\",
+    \\"@coremedia/sass-utils\\": \\"^1.0.0\\",
+    \\"jquery\\": \\"3.2.1\\"
+  },
+  \\"dependencies\\": {
+    \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
+    \\"@coremedia/theme-utils\\": \\"^3.0.0\\",
+    \\"webpack\\": \\"3.10.0\\"
+  },
+  \\"devDependencies\\": {
+    \\"prettier\\": \\"1.11.1\\"
+  },
+  \\"main\\": \\"src/js/index.js\\",
+  \\"coremedia\\": {
+    \\"type\\": \\"theme\\",
+    \\"name\\": \\"newest\\"
+  },
+  \\"browserslist\\": [
+    \\"last 1 Chrome version\\",
+    \\"last 1 Firefox version\\",
+    \\"last 1 Edge version\\",
+    \\"Explorer >= 11\\"
+  ]
+}",
+    "webpack.config.js": "const webpackTheme = require(\\"@coremedia/theme-utils/webpack.config.js\\");
+module.exports = webpackTheme;
+",
+  },
+  "/path/to/themes/newest-theme/src/js": Object {
+    "index.js": "/*! Theme newest */
+import \\"./newest.js\\";
+",
+    "newest.js": "//import $ from \\"jquery\\";
+//import logger from \\"@coremedia/js-logger\\";
+// --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
+//$(function () {
+//  logger.log(\\"Theme newest is used.\\");
+//});
+",
+    "preview.js": "/*! Theme newest: Preview JS */
+// add preview specific code here...
+",
+  },
+  "/path/to/themes/newest-theme/src/l10n": Object {
+    "Newest_en.properties": "",
+  },
+  "/path/to/themes/newest-theme/src/sass": Object {
+    "newest.scss": "/*! Theme newest */
+// ### VARIABLES ###
+
+// Own variables (need to be loaded first, so default values can be overridden)
+// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+
+//@import \\"variables/...\\";
+
+// Dependency variables
+
+@import \\"?smart-import-variables\\";
+
+// ... add third-party dependencies here (after smart-import-variables)
+
+// ### PARTIALS ###
+
+// Dependency partials
+
+// ... add third-party dependencies here (before smart-import-partials)
+
+@import \\"?smart-import-partials\\";
+
+// Own partials
+
+//@import \\"partials/...\\";
+",
+    "preview.scss": "/*! Theme newest: Preview Styles */
+// ### VARIABLES ###
+
+// Own variables (need to be loaded first, so default values can be overridden)
+// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+
+//@import \\"variables/...\\";
+
+// Dependency variables
+
+@import \\"?smart-import-variables\\";
+
+// ... add third-party dependencies here (after smart-import-variables)
+
+// ### PARTIALS ###
+
+// Dependency partials
+
+// ... add third-party dependencies here (before smart-import-partials)
+
+@import \\"?smart-import-partials\\";
+
+// Own partials
+
+//@import \\"partials/...\\";
+",
+  },
+}
+`;
+
+exports[`createThemeFiles() creates files of a new theme 1`] = `
+Object {
+  "/path/to/themes/newest-theme": Object {
+    ".prettierignore": "/*
+/*
+!/src
+/src/*
+!/src/js
+",
+    ".prettierrc": "{
+  \\"trailingComma\\": \\"es5\\"
+}
+",
+    "newest-theme.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<themeDefinition modelVersion=\\"1\\">
+<name>newest</name>
+<!-- <description>a short description</description> -->
+<!-- <thumbnail>img/theme-preview.jpg</thumbnail> -->
+<javaScriptLibraries>
+  <!-- add thirdparty js files that are not bundled via webpack here -->
+  <!-- <javaScript>vendor/some-vendor-script.js</javaScript> -->
+</javaScriptLibraries>
+<javaScripts>
+  <!-- add own js files that are not bundled via webpack here -->
+  <!-- <javaScript>js/your-code.js</javaScript> -->
+  <javaScript disableCompress=\\"true\\">js/newest.js</javaScript>
+</javaScripts>
+<styleSheets>
+  <css disableCompress=\\"true\\">css/newest.css</css>
+</styleSheets>
+<templateSets>
+  <templateSet>templates/newest-templates.jar</templateSet>
+  <!-- aggregated templates of all bricks -->
+  <templateSet>templates/bricks-templates.jar</templateSet>
+</templateSets>
+<resourceBundles>
+  <!-- add theme resource bundles here -->
+  <resourceBundle>l10n/Newest_en.properties</resourceBundle>
+  <!-- merged resource bundles of all bricks -->
+  <resourceBundle>l10n/Bricks_en.properties</resourceBundle>
+</resourceBundles>
+</themeDefinition>
+",
+    "package.json": "{
+  \\"name\\": \\"@coremedia/newest-theme\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"build\\": \\"webpack\\",
+    \\"start\\": \\"cm monitor\\",
+    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\",
+    \\"theme-importer\\": \\"cm theme-importer\\"
+  },
+  \\"__comment__dependencies__\\": {
+    \\"__comment__\\": \\"List of all brick dependencies. In order to add a dependency, move the entry to 'dependencies'\\",
+    \\"some-brick\\": \\"^1.0.0\\",
+    \\"@coremedia/js-logger\\": \\"^1.0.0\\",
+    \\"@coremedia/sass-utils\\": \\"^1.0.0\\",
+    \\"jquery\\": \\"3.2.1\\"
+  },
+  \\"dependencies\\": {
+    \\"active-brick\\": \\"^1.0.0\\",
+    \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
+    \\"@coremedia/theme-utils\\": \\"^3.0.0\\",
+    \\"webpack\\": \\"3.10.0\\"
+  },
+  \\"devDependencies\\": {
+    \\"prettier\\": \\"1.11.1\\"
+  },
+  \\"main\\": \\"src/js/index.js\\",
+  \\"coremedia\\": {
+    \\"type\\": \\"theme\\",
+    \\"name\\": \\"newest\\"
+  },
+  \\"browserslist\\": [
+    \\"last 1 Chrome version\\",
+    \\"last 1 Firefox version\\",
+    \\"last 1 Edge version\\",
+    \\"Explorer >= 11\\"
+  ]
+}",
+    "webpack.config.js": "const webpackTheme = require(\\"@coremedia/theme-utils/webpack.config.js\\");
+module.exports = webpackTheme;
+",
+  },
+  "/path/to/themes/newest-theme/src/js": Object {
+    "index.js": "/*! Theme newest */
+import \\"./newest.js\\";
+",
+    "newest.js": "//import $ from \\"jquery\\";
+//import logger from \\"@coremedia/js-logger\\";
+// --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
+//$(function () {
+//  logger.log(\\"Theme newest is used.\\");
+//});
+",
+    "preview.js": "/*! Theme newest: Preview JS */
+// add preview specific code here...
+",
+  },
+  "/path/to/themes/newest-theme/src/l10n": Object {
+    "Newest_en.properties": "",
+  },
+  "/path/to/themes/newest-theme/src/sass": Object {
+    "newest.scss": "/*! Theme newest */
+// ### VARIABLES ###
+
+// Own variables (need to be loaded first, so default values can be overridden)
+// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+
+//@import \\"variables/...\\";
+
+// Dependency variables
+
+@import \\"?smart-import-variables\\";
+
+// ... add third-party dependencies here (after smart-import-variables)
+
+// ### PARTIALS ###
+
+// Dependency partials
+
+// ... add third-party dependencies here (before smart-import-partials)
+
+@import \\"?smart-import-partials\\";
+
+// Own partials
+
+//@import \\"partials/...\\";
+",
+    "preview.scss": "/*! Theme newest: Preview Styles */
+// ### VARIABLES ###
+
+// Own variables (need to be loaded first, so default values can be overridden)
+// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+
+//@import \\"variables/...\\";
+
+// Dependency variables
+
+@import \\"?smart-import-variables\\";
+
+// ... add third-party dependencies here (after smart-import-variables)
+
+// ### PARTIALS ###
+
+// Dependency partials
+
+// ... add third-party dependencies here (before smart-import-partials)
+
+@import \\"?smart-import-partials\\";
+
+// Own partials
+
+//@import \\"partials/...\\";
+",
+  },
+}
+`;
+
+exports[`createThemeFolderStructure() creates folder structure of a new theme 1`] = `
+Array [
+  "/path/to/themes/newest-theme/src/js",
+  "/path/to/themes/newest-theme/src/sass",
+  "/path/to/themes/newest-theme/src/img",
+  "/path/to/themes/newest-theme/src/fonts",
+  "/path/to/themes/newest-theme/src/l10n",
+  "/path/to/themes/newest-theme/src/templates/com.coremedia.blueprint.common.contentbeans",
+]
+`;

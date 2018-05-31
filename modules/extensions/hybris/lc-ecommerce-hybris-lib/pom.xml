@@ -218,6 +218,10 @@
   <profiles>
     <profile>
       <id>integration-test</id>
+      <properties>
+        <skip-joo-unit-tests>true</skip-joo-unit-tests>
+        <skip-unit-tests>true</skip-unit-tests>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -240,12 +244,42 @@
               </execution>
             </executions>
           </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>remote-tests</id>
+      <properties>
+        <skip-joo-unit-tests>true</skip-joo-unit-tests>
+        <skip-unit-tests>true</skip-unit-tests>
+        <hybris.host/>
+      </properties>
+      <build>
+        <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
+            <artifactId>maven-failsafe-plugin</artifactId>
             <configuration>
-              <skipTests>true</skipTests>
+              <skipTests>${skip-hybris-tests}</skipTests>
+              <skipITs>false</skipITs>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <!-- override default security settings (if possible) -->
+              <argLine>-Djava.security.properties=${project.build.testOutputDirectory}/java.security</argLine>
+              <systemPropertyVariables>
+                <betamax.proxyPort>${betamax.proxyPort}</betamax.proxyPort>
+                <betamax.ignoreHosts>*</betamax.ignoreHosts>
+                <livecontext.hybris.host>${hybris.host}</livecontext.hybris.host>
+              </systemPropertyVariables>
             </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>

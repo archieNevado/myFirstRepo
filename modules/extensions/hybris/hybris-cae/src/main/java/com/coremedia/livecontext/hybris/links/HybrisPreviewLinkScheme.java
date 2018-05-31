@@ -62,7 +62,6 @@ import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.P13N_
 @Link
 public class HybrisPreviewLinkScheme {
 
-  private static final String SAP_HYBRIS_VENDOR_ID = "SAP Hybris";
   private static final String FRAGMENT_PREVIEW = "fragmentPreview";
 
   private String previewStoreFrontUrl;
@@ -219,20 +218,23 @@ public class HybrisPreviewLinkScheme {
   }
 
   @Link(type = CMHasContexts.class, order = 3)
-  public Object buildLinkforFragmentPreview(@Nonnull CMHasContexts cmHasContexts, @Nonnull String viewName,
-                                            @Nonnull Map<String, Object> linkParameters, HttpServletRequest request,
-                                            HttpServletResponse response) {
-    if (!(isApplicable(request) && viewName.contains(FRAGMENT_PREVIEW))) {
+  public Object buildLinkForStudioTeaserTargets(@Nonnull CMHasContexts cmHasContexts, @Nonnull HttpServletRequest request) {
+    //exit if not hybris
+    if (!isHybris()
+            //or if the current request is the initial /preview studio request
+            || PreviewHandler.isStudioPreviewRequest(request)
+            //or if the current page view is not the studio fragmentPreview
+            || !FRAGMENT_PREVIEW.equals(request.getParameter("view"))) {
       return null;
     }
 
+    //try to render shop url
     String previewTicketId = previewTokenService.getPreviewTicketId();
     if (previewTicketId == null) {
       return null;
     }
 
     CMNavigation navigation = contextHelper.contextFor(cmHasContexts);
-
     String seoSegment = seoSegmentBuilder.asSeoSegment(navigation, cmHasContexts);
 
     return buildLinkInternal(seoSegment, "content", previewTicketId);

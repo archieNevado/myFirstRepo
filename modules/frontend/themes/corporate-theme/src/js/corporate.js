@@ -585,7 +585,7 @@ export function gaps() {
 export function affix() {
   let compareMain = true;
   // desktop = set sticky
-  if ($(window).width() > 1024) {
+  if (window.innerWidth > 1024) {
     const $mainContainer = $("#cm-main");
     if ($mainContainer.length) {
       compareMain = true;

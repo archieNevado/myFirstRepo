@@ -11,12 +11,12 @@
       <div class="cm-fieldset__item cm-field cm-field--detail">
         <@bp.notification type="inactive" text="" dismissable=false additionalClasses=["cm-field__notification"] attr={"data-cm-notification": '{"path": "comment"}'} />
         <#assign idText=bp.generateId("cm-new-comment__textarea-") />
-        <label for="${idText}" class="cm-field__name"><@bp.message es.messageKeys.COMMENT_FORM_LABEL_TEXT /></label>
-        <textarea name="comment" class="cm-field__value cm-textarea" id="${idText}" required="" placeholder="${bp.getMessage(es.messageKeys.COMMENT_FORM_ERROR_COMMENT_BLANK"commentForm-error-commentBlank")}"></textarea>
+        <label for="${idText}" class="cm-field__name"><@bp.message "commentForm_label_text" /></label>
+        <textarea name="comment" class="cm-field__value cm-textarea" id="${idText}" required="" placeholder="${bp.getMessage("commentForm_error_commentBlank")}"></textarea>
       </div>
       <div class="cm-fieldset__item cm-button-group cm-button-group--default">
-        <@bp.button text=bp.getMessage(es.messageKeys.COMMENT_FORM_LABEL_HIDE) attr={"type": "button", "classes": ["btn", "cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
-        <@bp.button text=bp.getMessage(es.messageKeys.COMMENT_FORM_LABEL_SUBMIT) attr={"type": "submit", "classes": ["btn", "cm-button-group__button"], "data-cm-button--submit": ""} />
+        <@bp.button text=bp.getMessage("commentForm_label_hide") attr={"type": "button", "classes": ["btn", "cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
+        <@bp.button text=bp.getMessage("commentForm_label_submit") attr={"type": "submit", "classes": ["btn", "cm-button-group__button"], "data-cm-button--submit": ""} />
       </div>
     </fieldset>
   </form>

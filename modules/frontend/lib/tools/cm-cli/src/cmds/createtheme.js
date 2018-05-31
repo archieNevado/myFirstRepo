@@ -7,10 +7,10 @@ const { getWorkspaceConfig, getAvailableBricks } = require("@coremedia/tool-util
 
 const args = require("../lib/args");
 const {
-  convertThemeName,
-  isThemeNameInUse,
+  convertModuleName,
+  isModuleNameInUse,
   createTheme,
-} = require("@coremedia/theme-creator");
+} = require("@coremedia/module-creator");
 const { PKG_NAME } = require("../lib/constants");
 
 const command = "create-theme <name>";
@@ -45,7 +45,7 @@ const handler = argv => {
     process.exit(1);
   }
 
-  const themeName = convertThemeName(argv.name);
+  const themeName = convertModuleName(argv.name);
   if (!themeName) {
     log.error(
       "No valid theme name was provided. Only characters (A-Z, a-z), numbers (0-9) and hyphens (-) are allowed. Please try again."
@@ -54,7 +54,7 @@ const handler = argv => {
   }
 
   const themePath = path.join(wsConfig.themesPath, `${themeName}-theme`);
-  if (isThemeNameInUse(themePath)) {
+  if (isModuleNameInUse(themePath)) {
     log.error(
       `The theme "${themeName}" already exists. Please choose another name.`
     );

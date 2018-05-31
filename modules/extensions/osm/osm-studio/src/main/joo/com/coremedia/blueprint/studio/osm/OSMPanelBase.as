@@ -121,7 +121,7 @@ public class OSMPanelBase extends Panel {
     vectorLayer = new OpenLayers['Layer'].Vector("Marker Drop Shadows", {
       styleMap:new OpenLayers['StyleMap']({
         // Set the external graphic and background graphic images.
-        externalGraphic:Ext.getResourcePath('osm/img/marker.png', null, 'com.coremedia.blueprint__osm-studio'),
+        externalGraphic:getMarker(),
         graphicYOffset:-25,
 
         // Set the z-indexes of both graphics to make sure the background
@@ -218,6 +218,21 @@ public class OSMPanelBase extends Panel {
     var latLngArray:Array = latLngExpression.getValue().split(',');
     var longitude:Number = Number(latLngArray[1]);
     return longitude;
+  }
+
+  /**
+   * Resolves the marker that is used to show the lat/long value.
+   */
+  private function getMarker():String {
+    var groupId:String = resourceManager.getString('com.coremedia.blueprint.studio.osm.OSMStudioPlugin', 'osm.groupId');
+    if(groupId && groupId.length > 0) {
+      var markerUrl:String = Ext.getResourcePath('osm/img/marker.png', null, groupId);
+      if(markerUrl) {
+        return markerUrl;
+      }
+    }
+
+    return resourceManager.getString('com.coremedia.blueprint.studio.osm.OSMStudioPlugin', 'osm.marker');
   }
 
   /**
