@@ -123,7 +123,7 @@ const getOptions = (url, opts) => {
  * @returns {Promise} - promise resolving to object with url and apiKey attributes
  */
 const login = (url, proxy, username, password) =>
-  getBackendData(url).then(backendData => {
+  getBackendData(url, proxy).then(backendData => {
     if (backendData && backendData.cognitoPoolData) {
       return authenticateCognito(
         backendData.cognitoPoolData,
@@ -198,7 +198,9 @@ const getBackendData = (url, proxy) => {
         })
         .catch(() => {
           const modernUrl = `${url}/rest`;
-          const options = getOptions(`${modernUrl}/api/themeImporter/config`);
+          const options = getOptions(`${modernUrl}/api/themeImporter/config`, {
+            proxy,
+          });
 
           request(options)
             .then(value => {

@@ -199,6 +199,12 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
   private Map<String, Object> findMarketingSpotByExternalIdStudio(String externalId, StoreContext storeContext,
                                                                   UserContext userContext) {
     Map<String, Object> marketingSpotHits = findMarketingSpotsBySearchTerm(externalId, storeContext, userContext);
+    //no eSpot found -> exit early
+    int hits = DataMapHelper.findValue(marketingSpotHits, "recordSetTotal", Integer.class).orElse(0);
+    if (hits == 0) {
+      return null;
+    }
+
     // this method shall return the metadata resourceId and resourceName as well
     // in order to let this wrapper service return a uniform data format, thus
     Map<String, Object> marketingSpotWrappedHit = new HashMap<>();
@@ -215,12 +221,20 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
       return null;
     }
 
+    // read eSpot data from data map.
+    // since the search method also returns hits for substrings,
+    // we need to check if the externalId matches completely.
     for (Map<String, Object> spot : marketingSpotsFromHits) {
       if (externalId.equals(DataMapHelper.getValueForKey(spot, "eSpotName"))) {
         marketingSpotWrappedHit.put("MarketingSpotData", asList(spot));
       } else if (externalId.equals(DataMapHelper.getValueForKey(spot, "spotName"))) {
         marketingSpotWrappedHit.put("MarketingSpot", asList(spot));
       }
+    }
+    // if no externalId matched exactly, return null/no resource found
+    if (!marketingSpotWrappedHit.containsKey("MarketingSpotData")
+            && !marketingSpotWrappedHit.containsKey("MarketingSpot")) {
+      return null;
     }
 
     return marketingSpotWrappedHit;

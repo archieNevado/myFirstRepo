@@ -15,18 +15,27 @@
 <#assign imageMapParams=bp.initializeImageMap()/>
 <#assign useQuickinfo=cm.localParameter("imagemap_use_quickinfo", true)/>
 
-<div class="${blockClass} ${blockClass}--imagemap cm-imagemap"<@preview.metadata self.content />
-     data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${cm.getLink(self.target!cm.UNDEFINED)}"}'>
+<div class="${blockClass} ${blockClass}--imagemap"<@preview.metadata self.content />>
 
-  <#-- picture + hot zones -->
-  <@cm.include self=self view="_picture" params={
-    "blockClass": blockClass,
-    "renderDimmer": renderDimmer,
-    "renderEmptyImage": renderEmptyImage,
-    "limitAspectRatios": bp.setting(cmpage.navigation, "default_aspect_ratios_for_hero_teaser", []),
-    "useQuickinfo": useQuickinfo} +
-    imageMapParams
-  />
+  <div class="cm-imagemap"
+       data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
+
+    <#-- picture + hot zones -->
+    <@cm.include self=self view="_picture" params={
+      "blockClass": blockClass,
+      "renderDimmer": renderDimmer,
+      "renderEmptyImage": renderEmptyImage,
+      "limitAspectRatios": bp.setting(cmpage.navigation, "default_aspect_ratios_for_hero_teaser", []),
+      "useQuickinfo": useQuickinfo} +
+      imageMapParams
+    />
+
+    <#--include imagemap quick icons-->
+    <#if useQuickinfo>
+      <@cm.include self=self view="_areasQuickInfo" params=imageMapParams/>
+    </#if>
+
+  </div>
 
   <#if !self.teaserOverlaySettings.enabled>
     <#-- with caption -->
@@ -50,10 +59,5 @@
     </div>
   <#else>
     <@cm.include self=self view="_teaserOverlay" />
-  </#if>
-
-  <#--include imagemap quick icons-->
-  <#if useQuickinfo>
-    <@cm.include self=self view="_areasQuickInfo" params=imageMapParams/>
   </#if>
 </div>

@@ -50,6 +50,12 @@
 // WCS page wrapper
 #page {
 
+  // Rows should always be followd by a dom element with a .col class
+  // If there is no .col, but another .row, this row should at least use the same width, the column would have used
+  .row > .row {
+    width: 100%;
+  }
+
   // input fields
   input {
     @include cm-input;
@@ -678,24 +684,35 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
   }
 }
 
+// responsive breakpoints cart overlay
+div {
+  &#MiniShopCartProductAdded {
+    top: 67px !important;
+    $_base-padding: 30px;
+    $_padding_lg: $_base-padding + 12px;
+    $_padding_md: $_base-padding + 5px;
 
-div#MiniShopCartProductAdded {
-  $_base-padding: 30px;
-  $_padding_lg: $_base-padding + 15px;
-  $_padding_md: $_base-padding + 8px;
-
-  // override wcs styles for different media query width
-  @media screen and (max-width: 600px) {
-    left: 3px !important;
-  }
-  @include breakpoint("sm") {
-    left: auto !important;
-  }
-  @include breakpoint("md") {
-    right: calc((100vw - #{$screen-md-min - $_padding_md})/2) !important;
-  }
-  @include breakpoint("lg") {
-    right: calc((100vw - #{$screen-lg-min - $_padding_lg})/2) !important;
+    > .dijitDialogPaneContent {
+      width: inherit !important;
+      position: initial !important;
+    }
+    // override wcs styles for different media query width
+    @media screen and (max-width: 600px) {
+      width: 100% !important;
+      #cartDropdown {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+    }
+    @include breakpoint("sm") {
+      left: auto !important;
+    }
+    @include breakpoint("md") {
+      right: calc((100vw - #{$screen-md-min - $_padding_md})/2) !important;
+    }
+    @include breakpoint("lg") {
+      right: calc((100vw - #{$screen-lg-min - $_padding_lg})/2) !important;
+    }
   }
 }
 

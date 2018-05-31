@@ -37,7 +37,7 @@ As of Chef Client 14+ the auto_run, feature, feature_dism, feature_powershell, f
 
 #### Properties
 
-- `program_name` - Name attribute. The name of the value to be stored in the registry
+- `program_name` - Name property. The name of the value to be stored in the registry
 - `path` - The program to be run at login. This property was previous named `program`. Cookbooks using the `program` property will continue to function, but should be updated.
 - `args` - The arguments for the program
 - `root` - The registry root key to put the entry under--`:machine` (default) or `:user`
@@ -490,6 +490,8 @@ end
 ### windows_share
 
 Creates, modifies and removes Windows shares. All properties are idempotent.
+
+`Note`: This resource uses PowerShell cmdlets introduced in Windows 2012/8.
 
 #### Actions
 

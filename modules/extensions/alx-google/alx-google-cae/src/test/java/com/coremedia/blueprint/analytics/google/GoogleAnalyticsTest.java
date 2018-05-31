@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.analytics.google.GoogleAnalytics.GOOGLE_ANALYTICS_SERVICE_KEY;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -44,6 +45,7 @@ public class GoogleAnalyticsTest {
   @Mock
   private CMNavigation cmNavigation;
 
+  private Map<String, Object> settings;
 
   @Before
   public void setup() {
@@ -54,10 +56,10 @@ public class GoogleAnalyticsTest {
     when(page.getNavigation()).thenReturn(navigation);
     doReturn(Arrays.asList(cmNavigation)).when(navigation).getNavigationPathList();
     when(cmNavigation.getContentId()).thenReturn(NAV_ID);
-    Map<String, Object> map = new HashMap<>();
-    map.put("webPropertyId", "UA-12345-678");
-    map.put("domainName", "auto");
-    when(settingsService.settingAsMap(GOOGLE_ANALYTICS_SERVICE_KEY, String.class, Object.class, page)).thenReturn(map);
+    settings = new HashMap<>();
+    settings.put("webPropertyId", "UA-12345-678");
+    settings.put("domainName", "auto");
+    when(settingsService.settingAsMap(GOOGLE_ANALYTICS_SERVICE_KEY, String.class, Object.class, page)).thenReturn(settings);
   }
 
   @Test
@@ -88,5 +90,19 @@ public class GoogleAnalyticsTest {
   @Test
   public void getDomainName() {
     assertEquals("auto", googleAnalytics.getDomainName());
+  }
+
+  @Test
+  public void testIsDisabledAdFeaturesPlugin_settingNotSet_returnsFalseAsDefault() {
+    settings.put(GoogleAnalytics.DISABLE_AD_FEATURES_PLUGIN,  null);
+    boolean isFeatureDisabled = googleAnalytics.isAdvertisingFeaturesPluginDisabled();
+    assertFalse(isFeatureDisabled);
+  }
+
+  @Test
+  public void testIsDisabledAdFeaturesPlugin_settingReturnsTrue_returnsTrue() {
+    settings.put(GoogleAnalytics.DISABLE_AD_FEATURES_PLUGIN,  true);
+    boolean isFeatureDisabled = googleAnalytics.isAdvertisingFeaturesPluginDisabled();
+    assertTrue(isFeatureDisabled);
   }
 }

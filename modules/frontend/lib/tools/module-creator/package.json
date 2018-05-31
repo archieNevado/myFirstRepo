@@ -1,0 +1,25 @@
+{
+  "author": {
+    "name": "CoreMedia",
+    "url": "http://www.coremedia.com"
+  },
+  "name": "@coremedia/module-creator",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {
+    "@coremedia/cm-logger": "^1.0.0",
+    "@coremedia/tool-utils": "^1.0.0",
+    "mkdirp": "0.5.1",
+    "semver": "5.3.0"
+  },
+  "devDependencies": {
+    "jest": "22.0.4"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "main": "src/index.js"
+}

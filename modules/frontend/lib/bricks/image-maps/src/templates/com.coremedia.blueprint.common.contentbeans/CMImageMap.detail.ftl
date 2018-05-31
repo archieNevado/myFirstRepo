@@ -8,27 +8,36 @@
 
 <#assign blockClass=cm.localParameters().blockClass!"cm-details" />
 <#assign relatedView=cm.localParameters().relatedView!"related" />
-<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
-
 <#assign renderDate=cm.localParameter("renderDate", true) />
 <#assign renderTags=cm.localParameter("renderTags", false) />
 <#assign renderRelated=cm.localParameter("renderRelated", false) />
-<#assign imageMapParams=bp.initializeImageMap()/>
 <#assign useQuickinfo=cm.localParameter("imagemap_use_quickinfo", true)/>
 
-<article class="${blockClass} ${blockClass}--imagemap cm-imagemap"<@preview.metadata self.content />
-         data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${cm.getLink(self.target!cm.UNDEFINED)}"}'>
+<#assign imageMapParams=bp.initializeImageMap()/>
+<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+
+<article class="${blockClass} ${blockClass}--imagemap"<@preview.metadata self.content />>
 
   <#-- title -->
   <h1 class="${blockClass}__headline"<@preview.metadata "properties.teaserTitle"/>>${self.teaserTitle!""}</h1>
 
-  <#-- picture + hot zones -->
-  <@cm.include self=self view="_picture" params={
-    "blockClass": blockClass,
-    "renderDimmer": false,
-    "useQuickinfo": useQuickinfo
-  } + imageMapParams
-  />
+  <div class="cm-imagemap"
+       data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
+
+    <#-- picture + hot zones -->
+    <@cm.include self=self view="_picture" params={
+      "blockClass": blockClass,
+      "renderDimmer": false,
+      "useQuickinfo": useQuickinfo
+    } + imageMapParams
+    />
+
+    <#--include imagemap quickinfos -->
+    <#if useQuickinfo>
+      <@cm.include self=self view="_areasQuickInfo" params=imageMapParams/>
+    </#if>
+
+  </div>
 
   <#-- text -->
   <#if self.teaserText?has_content>
@@ -47,11 +56,6 @@
   <#-- tags -->
   <#if renderTags>
     <@cm.include self=self view="_tagList"/>
-  </#if>
-
-  <#--include imagemap quickinfos -->
-  <#if useQuickinfo>
-    <@cm.include self=self view="_areasQuickInfo" params=imageMapParams/>
   </#if>
 </article>
 

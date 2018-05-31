@@ -32,6 +32,7 @@
 <Struct>
 <BooleanProperty Name="enabled">true</BooleanProperty>
 <LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Dark%20on%20Light.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Teaser%20Styles/Dark%20on%20Light"/>
+<IntProperty Name="positionX">50</IntProperty>
 </Struct>
 </StructProperty>
 </Struct>

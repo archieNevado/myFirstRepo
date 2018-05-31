@@ -65,9 +65,23 @@
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
 </StructListProperty>
-<StructListProperty Name="CMCollection">
+<StructListProperty Name="CMGallery">
 <Struct>
 <StringProperty Name="titleKey">preview_label_default</StringProperty>
+<StringProperty Name="viewName">DEFAULT</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asTeaserHero</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
+<StringProperty Name="viewName">asTeaser</StringProperty>
+</Struct>
+</StructListProperty>
+<StructListProperty Name="CMCollection">
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
 <StringProperty Name="viewName">asTeaser</StringProperty>
 </Struct>
 </StructListProperty>

@@ -6,11 +6,6 @@
     overflow: hidden;
   }
 
-  // the fallback is 4x3 aspect ratio. this should be overwritten by a theme or view
-  &__picture-box:not(.cm-hero__picture-box) {
-    @include aspect-ratio-box(4, 3);
-  }
-
   &__picture {
     user-select: none;
   }
@@ -113,4 +108,14 @@
     padding: $cm-imagemap-overlay-padding;
     display: block;
   }
+}
+
+// prevent collapsing teaser with no picture and text-on-image enabled
+.#{$cm-imagemap-overlay-prefix}.has-no-image .#{$cm-teaser-overlay-prefix} {
+  left: 0!important;
+  top: 0!important;
+  margin: 0!important;
+  transform: none!important;
+  width: auto!important;
+  position: relative;
 }

@@ -16,7 +16,8 @@ The following parameters can be set:
  - additionalClass (String): to set a specific CSS class. It automatically defaults to "cm-hero"
 -->
 <@cm.include self=self view="hero" params={
-"blockClass": "cm-teaser--hero",
-"renderTeaserText": false,
-"renderDimmer": false
+ "blockClass": "cm-hero",
+ "additionalClass": "cm-teaser--hero",
+ "renderTeaserText": false,
+ "renderDimmer": false
 }/>

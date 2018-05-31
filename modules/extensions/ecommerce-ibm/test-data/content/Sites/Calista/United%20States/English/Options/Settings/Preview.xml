@@ -60,8 +60,12 @@
 <StringProperty Name="viewName">asHero</StringProperty>
 </Struct>
 <Struct>
-<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
-<StringProperty Name="viewName">asTeaser</StringProperty>
+<StringProperty Name="titleKey">preview_label_teaser_landscape</StringProperty>
+<StringProperty Name="viewName">asPreviewForLandscape</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_portrait</StringProperty>
+<StringProperty Name="viewName">asPreviewForPortrait</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMTeaser">
@@ -70,8 +74,12 @@
 <StringProperty Name="viewName">asHero</StringProperty>
 </Struct>
 <Struct>
-<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
-<StringProperty Name="viewName">asTeaser</StringProperty>
+<StringProperty Name="titleKey">preview_label_teaser_landscape</StringProperty>
+<StringProperty Name="viewName">asPreviewForLandscape</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_portrait</StringProperty>
+<StringProperty Name="viewName">asPreviewForPortrait</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMProductTeaser">
@@ -80,8 +88,12 @@
 <StringProperty Name="viewName">asHero</StringProperty>
 </Struct>
 <Struct>
-<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
-<StringProperty Name="viewName">asTeaser</StringProperty>
+<StringProperty Name="titleKey">preview_label_teaser_landscape</StringProperty>
+<StringProperty Name="viewName">asPreviewForLandscape</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_portrait</StringProperty>
+<StringProperty Name="viewName">asPreviewForPortrait</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMExternalLink">
@@ -90,14 +102,44 @@
 <StringProperty Name="viewName">asHero</StringProperty>
 </Struct>
 <Struct>
-<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
-<StringProperty Name="viewName">asTeaser</StringProperty>
+<StringProperty Name="titleKey">preview_label_teaser_landscape</StringProperty>
+<StringProperty Name="viewName">asPreviewForLandscape</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_portrait</StringProperty>
+<StringProperty Name="viewName">asPreviewForPortrait</StringProperty>
+</Struct>
+</StructListProperty>
+<StructListProperty Name="CMGallery">
+<Struct>
+<StringProperty Name="titleKey">preview_label_default</StringProperty>
+<StringProperty Name="viewName">DEFAULT</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_landscape</StringProperty>
+<StringProperty Name="viewName">asPreviewForLandscape</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_portrait</StringProperty>
+<StringProperty Name="viewName">asPreviewForPortrait</StringProperty>
 </Struct>
 </StructListProperty>
 <StructListProperty Name="CMCollection">
 <Struct>
-<StringProperty Name="titleKey">preview_label_teaser</StringProperty>
-<StringProperty Name="viewName">asTeaser</StringProperty>
+<StringProperty Name="titleKey">preview_label_teaser_hero</StringProperty>
+<StringProperty Name="viewName">asHero</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_landscape</StringProperty>
+<StringProperty Name="viewName">asLandscape</StringProperty>
+</Struct>
+<Struct>
+<StringProperty Name="titleKey">preview_label_teaser_portrait</StringProperty>
+<StringProperty Name="viewName">asPortrait</StringProperty>
 </Struct>
 </StructListProperty>
 </Struct>

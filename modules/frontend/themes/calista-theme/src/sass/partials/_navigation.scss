@@ -6,6 +6,15 @@
       border-top: 1px solid #fff;
       margin: 0 15px;
     }
+
+    .dropdown-menu>li>a {
+      text-align: center;
+      &:focus,
+      &:hover {
+        background-color: transparent;
+        text-decoration: underline;
+      }
+    }
   }
 }
 

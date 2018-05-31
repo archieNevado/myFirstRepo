@@ -6,6 +6,7 @@
     "test": "lerna run test",
     "build": "lerna run build",
     "create-theme": "node ./lib/tools/cm-cli/bin/cm-cli.js create-theme",
+    "create-brick": "node ./lib/tools/cm-cli/bin/cm-cli.js create-brick",
     "apidoc": "lerna run apidoc",
     "prettier": "lerna run prettier",
     "lerna": "lerna"
@@ -15,7 +16,8 @@
     "lib/js/*",
     "lib/sass/*",
     "lib/tools/*",
-    "themes/*"
+    "themes/*",
+    "bricks/*"
   ],
   "engines": {
     "node": ">=8"
@@ -25,6 +27,6 @@
   },
   "coremedia": {
     "type": "workspace",
-    "version": "1804.1"
+    "version": "1804.2"
   }
 }
