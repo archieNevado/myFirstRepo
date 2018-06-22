@@ -31,13 +31,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1804.2</blueprint-base.version>
-    <cms.version>1804.2</cms.version>
-    <personalization.version>1804.2</personalization.version>
-    <elastic.version>1804.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1804.2</studio.version>
-    <caetoolbox.version>1804.2</caetoolbox.version>
-    <livecontext.version>1804.2</livecontext.version>
+    <blueprint-base.version>1804.3</blueprint-base.version>
+    <cms.version>1804.3</cms.version>
+    <personalization.version>1804.3</personalization.version>
+    <elastic.version>1804.3</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1804.3</studio.version>
+    <caetoolbox.version>1804.3</caetoolbox.version>
+    <livecontext.version>1804.3</livecontext.version>
     <jangaroo.version>4.0.56</jangaroo.version>
     <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
 
@@ -102,9 +102,9 @@
 
     <skip-joo-unit-tests>${skipTests}</skip-joo-unit-tests>
     <skip-unit-tests>${skipTests}</skip-unit-tests>
-    <skip-sfcc-tests>${skipTests}</skip-sfcc-tests>
-    <skip-ibm-tests>${skipTests}</skip-ibm-tests>
-    <skip-hybris-tests>${skipTests}</skip-hybris-tests>
+    <skip-sfcc-tests>true</skip-sfcc-tests>
+    <skip-ibm-tests>true</skip-ibm-tests>
+    <skip-hybris-tests>true</skip-hybris-tests>
   </properties>
 
   <profiles>
@@ -166,16 +166,6 @@
     </profile>
     <profile>
       <id>check-sonar</id>
-      <properties>
-        <!-- Skip all other checks -->
-        <skip-joo-unit-tests>true</skip-joo-unit-tests>
-        <skip-unit-tests>true</skip-unit-tests>
-        <enforcer.skip>true</enforcer.skip>
-        <coremedia.enforcer.skip>true</coremedia.enforcer.skip>
-        <mdep.analyze.skip>true</mdep.analyze.skip>
-        <withoutDocumentation>true</withoutDocumentation>
-        <withoutBlueprint>true</withoutBlueprint>
-      </properties>
       <build>
         <plugins>
           <plugin>

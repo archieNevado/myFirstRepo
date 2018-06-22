@@ -89,7 +89,7 @@
                                          minValue="1"/>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <bpforms:ViewTypeSelectorForm collapsed="false"/>
+        <bpforms:ContainerViewTypeSelectorForm collapsed="false"/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>

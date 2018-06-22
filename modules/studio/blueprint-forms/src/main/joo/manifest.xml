@@ -43,6 +43,7 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.ChannelMetaDataInformationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.CollapsibleBlobPropertyForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.CollapsibleStringPropertyForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.ContainerViewTypeSelectorForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.DataDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.components.DefaultExtraDataForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.DetailsDocumentForm"/>

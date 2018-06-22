@@ -171,3 +171,16 @@
     }
   }
 }
+
+// using bootstrap vars to style PageGridPlacement.asNavigationHeader as navigation example only
+.cm-header {
+  &--navigation {
+    border-color: $navbar-default-toggle-hover-bg;
+    .navbar-toggle {
+      border-color: $navbar-default-toggle-hover-bg;
+      .icon-bar {
+        background-color: $navbar-default-border;
+      }
+    }
+  }
+}
