@@ -48,9 +48,7 @@
                                          hideLabel="true"/>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <bpforms:ViewTypeSelectorForm
-                paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
-                collapsed="false"/>
+        <bpforms:ContainerViewTypeSelectorForm collapsed="false"/>
       </editor:items>
     </editor:DocumentForm>
     <bpforms:MultiLanguageDocumentForm/>
