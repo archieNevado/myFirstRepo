@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.contentbeans.CMMarketingSpot" -->
 
-<#if self.items?has_content>
+<#if self?has_content && self.externalId?has_content && self.items?has_content>
 <#-- there is at least 1 marketing spot, so zero does not need to be defined -->
   <#assign itemsPerRow=3 />
   <#switch self.items?size>

@@ -37,7 +37,8 @@
                                  collapsed="true">
         <editor:items>
           <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_THUMBNAIL}"
-                                            hideLabel="true"/>
+                                            hideLabel="true"
+                                            showImageThumbnail="false"/>
         </editor:items>
       </editor:PropertyFieldGroup>
     </fx:Array>

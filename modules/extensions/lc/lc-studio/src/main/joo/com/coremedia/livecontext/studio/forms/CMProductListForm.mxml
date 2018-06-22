@@ -95,9 +95,7 @@
       <editor:items>
         <bpforms:TeaserDocumentForm/>
         <bpforms:FixedIndexItemsForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMQueryList_extendedItems_title')}"/>
-        <bpforms:ViewTypeSelectorForm
-                paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
-                collapsed="false"/>
+        <bpforms:ContainerViewTypeSelectorForm collapsed="false"/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>

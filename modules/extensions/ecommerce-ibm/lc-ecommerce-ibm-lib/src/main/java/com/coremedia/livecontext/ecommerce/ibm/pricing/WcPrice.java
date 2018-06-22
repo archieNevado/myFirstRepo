@@ -24,7 +24,7 @@ public class WcPrice {
   }
 
   public String getPriceValue() {
-    return priceValue;
+    return priceValue != null ? priceValue : "";
   }
 
   public void setPriceValue(String priceValue) {

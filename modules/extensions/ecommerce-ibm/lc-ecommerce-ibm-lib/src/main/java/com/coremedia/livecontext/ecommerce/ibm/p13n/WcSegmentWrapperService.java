@@ -169,6 +169,10 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
 
       return null;
     } catch (CommerceException e) {
+      // Commerce returns 403 when the user being queried does not belong to any member groups
+      if (e.getResultCode() == 403) {
+        return emptyMap();
+      }
       throw e;
     } catch (Exception e) {
       throw new CommerceException(e);

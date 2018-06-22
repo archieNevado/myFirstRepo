@@ -57,7 +57,7 @@
 
         <#-- navigation -->
         <li class="cm-header-navbar__divider"></li>
-          <@cm.include self=self view="navigation"/>
+          <@cm.include self=cmpage view="navigation"/>
         <li class="cm-header-navbar__divider"></li>
 
         <#-- language/country chooser widget -->
