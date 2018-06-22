@@ -149,9 +149,7 @@
             </perso:SelectionRulesField>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <bpforms:ViewTypeSelectorForm
-                paths="{['/Settings/Options/Viewtypes/CMChannel/', 'Options/Viewtypes/CMChannel/']}"
-                collapsed="false"/>
+        <bpforms:ContainerViewTypeSelectorForm collapsed="false"/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>

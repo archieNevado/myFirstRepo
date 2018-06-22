@@ -37,6 +37,7 @@ This is an application cookbook, it provides recipes to set up a webserver (apac
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['cms_ior_url']` -  Defaults to `http://#{node['blueprint']['proxy']['cms_host']}:41080/coremedia/ior`.
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['wfs_ior_url']` -  Defaults to `http://#{node['blueprint']['proxy']['cms_host']}:43080/workflow/ior`.
 * `node['blueprint']['proxy']['virtual_host']['sitemanager']['rewrite_log_level']` -  Defaults to `trace1`.
+* `node['apache']['mods']['default_config']['cors']` - cors is now handled by the application, no more apache related config needed. Defaults to `false`.
 * `node['blueprint']['proxy']['overview_template']['cookbook']` - The cookbook from which to load the test system overview template. Defaults to `blueprint-proxy`.
 * `node['blueprint']['proxy']['overview_template']['source']` - The source parameter of the overview template resource. Defaults to `overview/overview.html.erb`.
 

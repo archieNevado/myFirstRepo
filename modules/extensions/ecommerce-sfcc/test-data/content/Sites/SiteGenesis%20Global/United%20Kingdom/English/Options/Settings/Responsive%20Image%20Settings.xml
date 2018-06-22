@@ -15,6 +15,7 @@
 <StringListProperty Name="default_aspect_ratios_for_hero_teaser">
 <String>portrait_ratio3x4</String>
 <String>portrait_ratio1x1</String>
+<String>landscape_ratio4x3</String>
 <String>landscape_ratio16x9</String>
 <String>landscape_ratio8x3</String>
 </StringListProperty>

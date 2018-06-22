@@ -2,6 +2,7 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.multisite.Site;
@@ -25,11 +26,12 @@ class SearchLandingPagesLinkBuilderHelper {
   private String keywordsProperty;
   private String segmentPath;
   private TreeRelation<Content> navigationTreeRelation;
+  private Cache cache;
 
   boolean isSearchLandingPage(@Nonnull CMChannel channel, @Nonnull Site site) {
     Content content = channel.getContent();
 
-    Content context = getNavigationContext(site);
+    Content context = getNavigationContextCached(site);
 
     return context != null && context.getLinks(CMChannel.CHILDREN).contains(content);
   }
@@ -58,7 +60,7 @@ class SearchLandingPagesLinkBuilderHelper {
    * @return navigation, null if not found
    */
   @Nullable
-  private Content getNavigationContext(@Nonnull Site site) {
+  Content getNavigationContext(@Nonnull Site site) {
     Preconditions.checkArgument(!segmentPath.startsWith("/"),
             "Segment path must be relative and not start with a slash: " + segmentPath);
     Iterable<String> segments = Splitter.on('/').omitEmptyStrings().split(segmentPath);
@@ -78,6 +80,11 @@ class SearchLandingPagesLinkBuilderHelper {
     return context;
   }
 
+  // fixes CMS-12190
+  private Content getNavigationContextCached(@Nonnull Site site) {
+    return cache.get(new SearchLandingPageContextCacheKey(this, site));
+  }
+
   // ---------------- Config --------------------------------
 
   @Required
@@ -93,5 +100,10 @@ class SearchLandingPagesLinkBuilderHelper {
   @Required
   public void setNavigationTreeRelation(TreeRelation<Content> navigationTreeRelation) {
     this.navigationTreeRelation = navigationTreeRelation;
+  }
+
+  @Required
+  public void setCache(Cache cache) {
+    this.cache = cache;
   }
 }

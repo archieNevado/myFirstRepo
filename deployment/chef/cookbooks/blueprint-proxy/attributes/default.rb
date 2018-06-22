@@ -25,6 +25,9 @@ default['blueprint']['proxy']['virtual_host']['sitemanager']['cms_ior_url'] = "h
 default['blueprint']['proxy']['virtual_host']['sitemanager']['wfs_ior_url'] = "http://#{node['blueprint']['proxy']['cms_host']}:43080/workflow/ior"
 default['blueprint']['proxy']['virtual_host']['sitemanager']['rewrite_log_level'] = 'trace1'
 
+#<> cors is now handled by the application, no more apache related config needed
+default['apache']['mods']['default_config']['cors'] = false
+
 ####################################
 ###     DEVELOPMENT ATTRIBUTES   ###
 ####################################

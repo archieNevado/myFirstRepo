@@ -18,9 +18,22 @@
     <module>blueprint-forms</module>
     <module>blueprint-studio-theme</module>
     <module>controlroom-studio-plugin</module>
-    <module>studio-app</module>
     <module>studio-blueprint-component</module>
     <module>studio-webapp</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>with-sencha-app</id>
+      <activation>
+        <property>
+          <name>!withoutSenchaApp</name>
+        </property>
+      </activation>
+      <modules>
+        <module>studio-app</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>

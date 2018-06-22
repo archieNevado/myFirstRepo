@@ -42,7 +42,7 @@
       <#if self.category.picture?has_content>
         <#assign picture=bp.createBeanFor(self.category.picture)/>
       <#elseif self.category.catalogPicture?has_content>
-        <#assign picture=bp.createBeanFor(self.category.catalogPicture)/>
+        <#assign picture=self.category.catalogPicture/>
       <#elseif self.picture?has_content>
         <#assign picture=self.picture/>
       </#if>

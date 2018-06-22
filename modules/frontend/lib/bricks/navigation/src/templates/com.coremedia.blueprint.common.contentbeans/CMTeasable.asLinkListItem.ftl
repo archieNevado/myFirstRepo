@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="collectionProperty" type="java.util.List" -->
 
 <#assign cssClass=cm.localParameters().cssClass!""/>
-<#assign depth=cm.localParameters().depth+1!1/>
+<#assign depth=(cm.localParameters().depth!0)+1/>
 <#assign showPicturesInNavigation=cm.localParameters().showPicturesInNavigation!true/>
 
 <#-- add css class active, if this item is the actual page -->

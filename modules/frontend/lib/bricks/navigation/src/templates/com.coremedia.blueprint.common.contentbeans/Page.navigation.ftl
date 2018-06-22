@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.layout.PageGridPlacement" -->
+<#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 <#-- @ftlvariable name="cssClass" type="java.lang.String" -->
 <#-- @ftlvariable name="childrenCssClass" type="java.lang.String" -->
 

@@ -28,6 +28,7 @@
       <editor:items>
         <am:AssetDetailsBlobPropertyField propertyName="{AssetConstants.PROPERTY_ASSET_WEB}"
                                           hideLabel="true"
+                                          showImageThumbnail="false"
                                           visiblePropertyName="metadata.renditions.web.show"/>
         <Component height="20px"/>
         <editor:ReferrerListPanel propertyName="asset"
